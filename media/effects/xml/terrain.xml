@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<library>
+  <include file="standard_material.xml"/>
+
+ <parameterGroup id="terrain_parameters">
+    <parameter type="sampler2D" name="heightMap" semantic="OBJECT">
+      <state id="borderColor" value="0.0 0.0 0.0 0.0" />
+      <state id="magFilter" value="nearest" />
+      <state id="minFilter" value="nearest" />
+      <state id="wrapModeS" value="repeat" />
+      <state id="wrapModeT" value="repeat" />
+      <state id="wrapModeR" value="repeat" />
+    </parameter>
+    <parameter type="vec3" name="resolution" semantic="VALUE" value="1.0 1.0 1.0" />
+    <parameter type="vec3" name="offset" semantic="VALUE" value="0.0 0.0 0.0" />
+ </parameterGroup>
+  
+  <effect id="terrain_vs" domain="vertex">
+   <parameterGroup ref="terrain_parameters" />
+   <technique type="forward">
+      <glsl signature="v3f_n3f_t02f">
+        <source input="vec4" name="attrPosition" location="0"/>
+        <source output="vec3" name="varNormal"/>
+        <source output="vec3" name="varWorldPos"/>
+        <source output="vec3" name="varEyePos"/>
+        <source output="vec2" name="varTexCoord0"/> 
+        <source file="terrain/glsl/terrain_vs.glsl" />
+      </glsl>
+    </technique>
+  </effect>
+
+  <PipelineSpec id="terrain"
+                vertex="terrain_vs"
+                fragment="standardMaterialFragmentShader" />
+  
+  <effect id="terrain_geometry_vs" domain="vertex">
+   <parameterGroup ref="terrain_parameters" />
+   <technique type="forward">
+      <glsl signature="v3f_n3f_t02f">
+        <source file="terrain/glsl/terrain_vs_gs.glsl" />
+      </glsl>
+    </technique>
+  </effect>  
+  
+  <effect id="terrain_geometry_gs" domain="geometry">
+    <parameterGroup ref="terrain_parameters" />
+    <technique type="forward">
+      <glsl signature="v3f_n3f_t02f">
+        <source file="terrain/glsl/terrain_gs.glsl"/>
+      </glsl>
+    </technique>
+  </effect>
+  
+  <PipelineSpec id="terrain_geometry"
+                vertex="terrain_geometry_vs"
+                geometry="terrain_geometry_gs"
+                fragment="standardMaterialFragmentShader" />
+
+
+  <effect id="terrain_tessellation_vs" domain="vertex">
+   <parameterGroup ref="terrain_parameters" />
+   <technique type="forward">
+      <glsl signature="v3f_n3f_t02f">
+        <source file="terrain/glsl/terrain_ts_vs.glsl" />
+      </glsl>
+    </technique>
+  </effect>  
+  
+  <effect id="terrain_tessellation_control" domain="tessellation_control">
+   <parameterGroup ref="terrain_parameters" />
+   <technique type="forward">
+      <glsl signature="v3f_n3f_t02f">
+        <source file="terrain/glsl/terrain_ts_tc.glsl" />
+      </glsl>
+    </technique>
+  </effect>  
+
+  <effect id="terrain_tessellation_evaluation" domain="tessellation_evaluation">
+   <parameterGroup ref="terrain_parameters" />
+   <technique type="forward">
+      <glsl signature="v3f_n3f_t02f">
+        <source file="terrain/glsl/terrain_ts_te.glsl" />
+      </glsl>
+    </technique>
+  </effect>  
+
+  <PipelineSpec id="terrain_tessellation"
+                vertex="terrain_tessellation_vs"
+                tessellation_control="terrain_tessellation_control"
+                tessellation_evaluation="terrain_tessellation_evaluation"
+                fragment="standardMaterialFragmentShader" />
+  
+</library>

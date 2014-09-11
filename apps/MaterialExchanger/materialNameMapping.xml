@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<library>
+  <exchange from="phong1-fx" to="phong_red"/>
+  <exchange from="phong2-fx" to="phong_green"/>
+  <exchange from="phong3-fx" to="phong_blue"/>
+  <exchange from="phong4-fx" to="phong_white"/>
+</library>

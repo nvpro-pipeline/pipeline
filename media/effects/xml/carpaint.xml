@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<library>
+  <include file="standard_material.xml" />
+
+  <effect id="carpaint_fs" domain="fragment" >
+    <parameterGroup id="carpaint_parameters">
+      <parameter type="vec4" name="diffuse" semantic="COLOR" value="0.8 0.8 0.8 1.0"/>
+      <parameter type="vec4" name="diffuseFade" semantic="COLOR" value="0.4 0.4 0.4 1.0"/>
+      <parameter type="vec4" name="specular" semantic="COLOR" value="0.2 0.2 0.2 1.0"/>
+      <parameter type="float" name="reflectivityFalloff" semantic="VALUE" value="0.2"/>
+      <parameter type="float" name="reflectivityMin" semantic="VALUE" value="0.2"/>
+      <parameter type="float" name="reflectivityMax" semantic="VALUE" value="0.7"/>
+      <parameter type="vec4" name="reflective" semantic="VALUE" value="0.1 0.1 0.1 1.0"/>
+      <parameter type="float" name="shininess" semantic="VALUE" value="0.1"/>
+    </parameterGroup>
+    <technique type="forward">
+      <glsl signature="v3f_n3f">
+        <source input="vec3" name="varNormal"/>
+        <source input="vec3" name="varWorldPos"/>
+        <source input="vec3" name="varEyePos"/>
+        <source input="vec2" name="varTexCoord0"/>
+        <source file="spherical_environment.glsl" />
+        <source file="standard_lights/glsl/ambient_diffuse_specular.glsl" />
+        <source file="carpaint/glsl/eval_glossy.glsl"/>
+        <source file="carpaint/glsl/carpaint.glsl"/>
+      </glsl>
+    </technique>
+  </effect>
+
+  <PipelineSpec id="carpaint"
+                vertex="standardMaterialVertexShader"
+                fragment="carpaint_fs" />
+</library>

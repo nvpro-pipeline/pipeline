@@ -1,0 +1,2 @@
+param1;--shadermanager rixfx:ssbo140 --renderengine VBO --headlight --duration 2
+param1;--shadermanager rixfx:ssbo140 --renderengine Bindless --headlight --duration 2

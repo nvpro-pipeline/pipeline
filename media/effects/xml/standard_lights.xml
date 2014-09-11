@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<library>
+  <enum type="lightingModel" values="LM_CONSTANT LM_LAMBERT LM_BLINN LM_PHONG" />
+  <effect id="standardDirectedLightEffect" domain="light">
+    <parameterGroup id="standardDirectedLightParameters">
+      <parameter type="vec3" name="ambient" semantic="COLOR" value="0.0 0.0 0.0" />
+      <parameter type="vec3" name="diffuse" semantic="COLOR" value="1.0 1.0 1.0" />
+      <parameter type="vec3" name="specular" semantic="COLOR" value="1.0 1.0 1.0" />
+      <parameter type="vec3" name="direction" semantic="DIRECTION" value="0.0 0.0 -1.0" />
+    </parameterGroup>
+  </effect>
+  <effect id="standardPointLightEffect" domain="light">
+    <parameterGroup id="standardPointLightParameters">
+      <parameter type="vec3" name="ambient" semantic="COLOR" value="0.0 0.0 0.0" />
+      <parameter type="vec3" name="diffuse" semantic="COLOR" value="1.0 1.0 1.0" />
+      <parameter type="vec3" name="specular" semantic="COLOR" value="1.0 1.0 1.0" />
+      <parameter type="vec3" name="position" semantic="POSITION" value="0.0 0.0 1.0" />
+      <parameter type="float" size="3" name="attenuations" semantic="VALUE" value="1.0 0.0 0.0" />
+    </parameterGroup>
+  </effect>
+  <effect id="standardSpotLightEffect" domain="light">
+    <parameterGroup id="standardSpotLightParameters">
+      <parameter type="vec3" name="ambient" semantic="COLOR" value="0.0 0.0 0.0" />
+      <parameter type="vec3" name="diffuse" semantic="COLOR" value="1.0 1.0 1.0" />
+      <parameter type="vec3" name="specular" semantic="COLOR" value="1.0 1.0 1.0" />
+      <parameter type="vec3" name="position" semantic="POSITION" value="0.0 0.0 1.0" />
+      <parameter type="float" size="3" name="attenuations" semantic="VALUE" value="1.0 0.0 0.0" />
+      <parameter type="vec3" name="direction" semantic="DIRECTION" value="0.0 0.0 -1.0" />
+      <parameter type="float" name="exponent" semantic="VALUE" value="0.0" />
+      <parameter type="float" name="cutoff" semantic="VALUE" value="45.0" />
+    </parameterGroup>
+  </effect>
+</library>

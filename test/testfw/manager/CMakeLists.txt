@@ -1,0 +1,21 @@
+add_definitions(
+  "-D_CRT_SECURE_NO_WARNINGS"
+)
+
+set( MANAGER_SOURCES
+  Manager.cpp
+  Manager.h
+)
+  
+source_group(headers FILES Manager.h)
+source_group(sources FILES Manager.cpp)
+  
+add_library( DPTestManager STATIC
+   ${MANAGER_SOURCES}
+)
+
+add_dependencies( DPTestManager DPTcore )
+  
+add_perforce_to_target( DPTestManager )
+  
+set_target_properties( DPTestManager PROPERTIES FOLDER "DPT" LINK_INTERFACE_LIBRARIES "")

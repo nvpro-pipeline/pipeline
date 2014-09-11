@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<library>
+  <include file="standard_material.xml"/>
+  
+  <parameterGroup id="ColladaCommonParameters">
+    <parameter type="lightingModel" name="lighting" semantic="VALUE" value="LM_PHONG" />
+    <parameter type="vec4" name="emissionColor" semantic="COLOR" value="0.0 0.0 0.0 1.0"/>
+    <parameter type="sampler2D" name="emissionSampler" semantic="OBJECT"/>
+    <parameter type="int" name="emissionTC" semantic="VALUE" value="-1"/>
+    <parameter type="vec4" name="ambientColor" semantic="COLOR" value="0.2 0.2 0.2 1.0"/>
+    <parameter type="sampler2D" semantic="OBJECT" name="ambientSampler"/>
+    <parameter type="int" name="ambientTC" semantic="VALUE" value="-1"/>
+    <parameter type="vec4" name="diffuseColor" semantic="COLOR" value="0.8 0.8 0.8 1.0"/>
+    <parameter type="sampler2D" name="diffuseSampler" semantic="OBJECT" />
+    <parameter type="int" name="diffuseTC" semantic="VALUE" value="-1"/>
+    <parameter type="vec4" name="specularColor" semantic="COLOR" value="0.0 0.0 0.0 1.0"/>
+    <parameter type="sampler2D" name="specularSampler" semantic="OBJECT"/>
+    <parameter type="int" name="specularTC" semantic="VALUE" value="-1"/>
+    <parameter type="float" name="shininess" semantic="VALUE" value="1.0"/>
+    <parameter type="vec4" name="reflectiveColor" semantic="COLOR" value="0.0 0.0 0.0 1.0"/>
+    <parameter type="sampler2D" name="reflectiveSampler" semantic="VALUE"/>
+    <parameter type="int" name="reflectiveTC" semantic="VALUE" value="-1"/>
+    <parameter type="float" name="reflectivity" semantic="VALUE" value="0.0"/>
+    <parameter type="bool" name="rgbTransparency" semantic="VALUE" value="false"/>
+    <parameter type="vec4" name="transparentColor" semantic="COLOR" value="1.0 1.0 1.0 1.0"/>
+    <parameter type="sampler2D" name="transparentSampler" semantic="OBJECT"/>
+    <parameter type="int" name="transparentTC" semantic="VALUE" value="-1"/>
+    <parameter type="float" name="transparency" semantic="VALUE" value="1.0"/>
+    <parameter type="float" name="indexOfRefraction" semantic="VALUE" value="1.0"/>
+    <parameter type="sampler2D" name="bumpSampler" semantic="OBJECT"/>
+    <parameter type="int" name="bumpTC" semantic="VALUE" value="-1"/>
+  </parameterGroup>
+  
+  <effect id="ColladaCommonEffect_fs" domain="fragment" transparent="true">
+    <parameterGroup ref="ColladaCommonParameters"/>
+    <technique type="forward">
+      <glsl signature="v3f_n3f_t02f_ta3f_bi3f">
+        <source input="vec3" name="varNormal"/>
+        <source input="vec3" name="varWorldPos"/>
+        <source input="vec3" name="varEyePos"/>
+        <source input="vec2" name="varTexCoord0"/>
+        <source input="vec2" name="varTexCoord1"/>
+        <source input="vec2" name="varTexCoord2"/>
+        <source input="vec2" name="varTexCoord3"/>
+        <source input="vec2" name="varTexCoord4"/>
+        <source input="vec2" name="varTexCoord5"/>
+        <source input="vec2" name="varTexCoord6"/>
+        <source input="vec2" name="varTexCoord7"/>
+        <source input="vec3" name="varTangent"/>
+        <source input="vec3" name="varBinormal"/>
+        <source file="spherical_environment.glsl" />
+        <source file="standard_lights/glsl/ambient_diffuse_specular.glsl" />
+        <source file="collada/glsl/colladaCommonTexture.glsl" />
+        <source file="collada/glsl/colladaCommonBumpmap.glsl" />
+        <source file="collada/glsl/colladaCommon.glsl" />
+      </glsl>
+    </technique>
+    <technique type="depthPass">
+      <glsl signature="v3f">
+        <source input="vec2" name="varTexCoord0"/>
+        <source input="vec2" name="varTexCoord1"/>
+        <source input="vec2" name="varTexCoord2"/>
+        <source input="vec2" name="varTexCoord3"/>
+        <source input="vec2" name="varTexCoord4"/>
+        <source input="vec2" name="varTexCoord5"/>
+        <source input="vec2" name="varTexCoord6"/>
+        <source input="vec2" name="varTexCoord7"/>
+        <source file="collada/glsl/colladaCommonTexture.glsl" />
+        <source file="collada/glsl/colladaDepthPass_fs.glsl"/>
+      </glsl>
+    </technique>
+  </effect>
+
+  <PipelineSpec id="ColladaCommonEffect"
+                vertex="standardMaterialVertexShader"
+                fragment="ColladaCommonEffect_fs" />
+
+</library>
+  

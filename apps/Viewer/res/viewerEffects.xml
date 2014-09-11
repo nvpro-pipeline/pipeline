@@ -1,0 +1,125 @@
+<?xml version="1.0"?>
+<library>
+  <effect id="stencilToColor_vs" domain="vertex">
+    <technique type="forward">
+      <glsl signature="v3f">
+        <source input="vec4" name="attrPosition" location="0"/>
+        <source file="stencilToColorVertex.glsl" />
+      </glsl>
+    </technique>
+  </effect>
+  
+  <effect id="stencilToColor_fs" domain="fragment">
+    <technique type="forward">
+      <glsl signature="v3f">
+        <source output="vec4" name="Color" location="0"/>
+        <source file="stencilToColorFragment.glsl"/>
+      </glsl>
+    </technique>
+  </effect>
+  
+  <PipelineSpec id="stencilToColor"
+                vertex="stencilToColor_vs"
+                fragment="stencilToColor_fs" />
+
+  <effect id="highlight_vs" domain="vertex">
+    <technique type="forward">
+      <glsl signature="v3f_t02f_t12f">
+        <source input="vec4" name="attrPosition" location="0"/>
+        <source input="vec2" name="attrTexCoord0" location="8"/>
+        <source input="vec2" name="attrTexCoord1" location="9"/>
+        <source output="vec2" name="varTexCoord0"/>
+        <source file="highlightVertex.glsl" />
+      </glsl>
+    </technique>
+  </effect>
+  
+  <effect id="highlight_fs" domain="fragment">
+    <parameterGroup id="highlightParameters">
+      <parameter type="sampler2D" name="selection" semantic="OBJECT">
+        <state id="magFilter" value="nearest"/>
+        <state id="minFilter" value="nearest"/>
+      </parameter>
+    </parameterGroup>
+    <technique type="forward">
+      <glsl signature="v3f_t02f_t12f">
+        <source input="vec2" name="varTexCoord0"/>
+        <source output="vec4" name="Color" location="0"/>
+        <source file="highlightFragment.glsl"/>
+      </glsl>
+    </technique>
+  </effect>
+  
+  <PipelineSpec id="highlight" 
+                vertex="highlight_vs"
+                fragment="highlight_fs" />
+
+  <effect id="environmentBackdrop_vs" domain="vertex">
+    <technique type="forward">
+      <glsl signature="v3f_t24f">
+        <source input="vec4" name="attrPosition" location="0"/>
+        <source input="vec4" name="attrTexCoord2" location="10"/>
+        <source output="vec3" name="varTexCoord0"/>
+        <source file="environmentBackdropVertex.glsl" />
+      </glsl>
+    </technique>
+  </effect>
+
+  <effect id="environmentBackdrop_fs" domain="fragment">
+    <parameterGroup id="environmentBackdropParameters">
+      <parameter type="sampler2D" name="environment" semantic="OBJECT">
+        <state id="magFilter" value="linear"/>
+        <state id="minFilter" value="linear"/>
+      </parameter>
+    </parameterGroup>
+      <technique type="forward">
+      <glsl signature="v3f_t24f">
+        <source input="vec3" name="varTexCoord0"/>
+        <source output="vec4" name="Color" location="0"/>
+        <source file="environmentBackdropFragment.glsl"/>
+      </glsl>
+    </technique>
+  </effect>
+  
+  <PipelineSpec id="environmentBackdrop"
+                vertex="environmentBackdrop_vs"
+                fragment="environmentBackdrop_fs" />
+
+  <effect id="tonemap_vs" domain="vertex">
+    <technique type="forward">
+      <glsl signature="v3f_t02f_t12f">
+        <source input="vec4" name="attrPosition" location="0"/>
+        <source input="vec2" name="attrTexCoord0" location="8"/>
+        <source input="vec2" name="attrTexCoord1" location="9"/>
+        <source output="vec2" name="varTexCoord0"/>
+        <source file="tonemapVertex.glsl" />
+      </glsl>
+    </technique>
+  </effect>
+  
+  <effect id="tonemap_fs" domain="fragment">
+    <parameterGroup id="tonemapParameters">
+      <parameter type="sampler2D" name="tonemapHDR" semantic="OBJECT">
+        <state id="magFilter" value="nearest"/>
+        <state id="minFilter" value="nearest"/>
+      </parameter>
+      <parameter type="float" name="invGamma" semantic="VALUE" value="1.0" />
+      <parameter type="float" name="invWhitePoint" semantic="VALUE" value="1.0" />
+      <parameter type="float" name="saturation" semantic="VALUE" value="1.0" />
+      <parameter type="float" name="crushBlacks" semantic="VALUE" value="1.0" />
+      <parameter type="float" name="burnHighlights" semantic="VALUE" value="1.0" />
+    </parameterGroup>
+    <technique type="forward">
+      <glsl signature="v3f_t02f_t12f">
+        <source input="vec2" name="varTexCoord0"/>
+        <source output="vec4" name="Color" location="0"/>
+        <source file="tonemapFragment.glsl"/>
+      </glsl>
+    </technique>
+  </effect>
+  
+  <PipelineSpec id="tonemapper"
+                vertex="tonemap_vs"
+                fragment="tonemap_fs" />
+
+</library>

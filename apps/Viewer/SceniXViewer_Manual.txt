@@ -1,0 +1,680 @@
+SceniX Viewer
+
+SceniX 7 includes a Qt 4.7 based Viewer example which shows many of SceniX 7
+capabilities in a single application.
+
+Before you evaluate SceniX 7 using the Viewer:
+==============================================
+It was our first bigger Qt project and since we've learned on the go, the
+application has some rough edges. Due to some Qt mechanisms used inside the
+various QDockWidgets creating most of the GUI it is not going to show the
+maximum performance of SceniX 7.
+For example building the QAbstractItemModels is slow with big scenes or
+scenes with hundreds of materials. There would be faster methods to implement
+that.
+If you want to benchmark load times or pure rendering performance more
+reliably, use QtMinimal with --continuous on the command line for example.
+
+
+  
+Menus
+=====
+
+File
+----
+- Open... 
+  Loading scenes using the provided loader plug-ins for various file formats
+  (*.nbf, *.nvsg, *.3ds, *.dae, *.flt, *.obj, *.ply, *.wrl, *.xml)
+
+- Close
+  Clear loaded scene. No safety check!
+  Normally the Viewer loads a new scene and replaces the old one in all opened
+  viewports using the resp. currently activated render engine. Under 32-bit
+  systems using both render engines and big models might run into memory
+  issues. 
+  Use Close to clear the current scene first, which will reset the viewport
+  layout of the new scene to one viewport.
+
+- Save...
+  Saving of the scene in a supported file format (*.nbf, *.nvsg, *.obj)
+  Mind the readable ASCII format *.nvsg is only meant for debugging and will
+  not be compatible across SceniX versions.
+  The *.obj format does not support advanced materials.
+
+- Analyze Scene
+  Runs an AnalyzeTraverser over the whole scene and reports redundancies,
+  unnormalized normals, etc. in a dialog.
+  If the scene cannot be optimized by the provided optimize traversers the
+  AnalyzeTraverser will report "No results found!".
+
+- Statistics
+  Runs a StatisticTraverser over the scene and reports the results inside a
+  dialog. This will give a histogram-like overview about the nodes and their
+  contents inside the scene.
+- Preferences
+  A dialog controlling 
+  - the GUI Icon sizes for the color, material, and texture icons;
+  - if the fixed-function material should be translated to a fixed-function
+    CgFX state.
+  - the global search paths.
+  When starting the application the first time these search paths are filled
+  with the media folder under the SCENIXHOME environment variable.
+  The Preferences as well as the last window layout are stored into the
+  registry under
+      Computer/HKEY_CURRENT_USER/Software/NVIDIA Corporation/Viewer
+  when exiting the application.
+
+- Quit
+  Exit the application. No safety check!
+ 
+Edit
+----
+Warning: None of these scene manipulations provide an Undo operation!
+Save the scene if you want to revert back.
+
+- Convert Scene
+  - Destrip Scene
+    Enabled when the scene contains Primitives of the types triangle strips
+    or quad strips. Running the DestripTraverser will convert these to
+    independent triangles or quads.
+  - Strip Scene
+    Enabled when there are independent lines, triangles or quads inside the
+    scene. The StripTraverser will try to combine these to stripped primitives
+    with maximum length.
+  - Triangulate Scene
+    Convert all face Primitives to use triangles or triangle strips instead of
+    quads and quad strips.
+  - Bezier Interpolate Scene
+    Try to convert triangle and quads meshes to triangle or quad patches to
+    use with hardware tessellation control and evaluation CgFX shaders.
+    Requires NVIDIA Fermi architecture GPUs to render!
+  - Bezier Extrapolate Scene
+    Convert triangles and quads to triangle or quad patches to use with
+    hardware tessellation control and evaluation CgFX shaders.
+    Requires NVIDIA Fermi architecture GPUs to render!
+    Note that a single triangle will generate 10 control points and a single
+    quad will generate 16 control points!
+    This functionality is implemented to show how tessellation works because
+    there are no established art paths for HW tessellated patches today.
+
+- Modify Scene
+  - Normalize Scene...
+    Opens a dialog which allows to pick vertex attributes which should be
+    normalized. Only the conventional generic attributes are shown, and only
+    the ones used inside the scene are enabled.
+    This normally applies to tangents, binormals and normals, but the dialog
+    offers all possible vertex attributes in case there are models which use
+    texture coordinates as arbitrary vectors.
+    (Normalizing the position will result in "spherical" objects (depending on
+    the geometry detail) and can look quite funny. Try that on a single
+    detailed model like the Stanford bunny.)
+  - Smooth Scene
+    Smooth normals across shared vertices with a crease threshold.
+    Zero degrees will result in a facetted look (effectively generating face
+    normals), 180 degrees smoothes across all adjacent faces.
+    The sizes of the adjacent faces control the weighting of the averaged
+    normals, bigger faces have more influence.
+    Works best with independent primitives which have been run through the
+    UnifyTraverser (see Optimize Scene...)
+
+- Optimize Scene...
+  All optimizing traversers in one dialog.
+  The most optimal scene performance should be achieved when using all
+  optimizations.
+  The SceniX Optimizers as well as the Analyze and Statistics traversers
+  provide a mean to see where files are suboptimal in their scene graph
+  structure.
+  (Applications often need to preserve the original scene hierarchy though.)
+
+- Tessellation Accuracy...
+  This dialog allows to set the hardware tessellation detail of scenes using
+  patch Primitives with CgFX shaders with tessellation control and evaluation
+  programs.
+  This functionality is only available on NVIDIA Fermi architecture GPUs.
+  If you do not have a scene with patch Primitives and proper CgFX shaders,
+  the Bezier Extrapolate and Interpolate menu entries allow to convert
+  triangles and quads to patches.
+
+- Add Headlight
+  Adds a LightSource of the selected type to the active camera using the resp.
+  LightSource defaults in Camera coordinate system (at camera position
+  pointing in view direction)
+  - Directed Light
+  - Point Light 
+  - Spot Light
+
+- Add Light Source
+  Add a LightSource of the selected type to the scene at root level. The light
+  is placed at the current camera position (point, spot) and pointing in
+  camera direction (directed, spot).
+  - Directed Light
+  - Point Light 
+  - Spot Light
+
+View
+----
+- Render Engine
+  - OpenGL & CgFX
+  Switch render engine to rasterization using the SceneRendererGL2.
+
+- Skinning Engine
+  - CPU 
+  - GPU
+  SceniX provides skinning processors for skinned geometry using the CPU or
+  the GPU (requires OpenGL transform feedback extension, G80 GPUs and above).
+  The CPU skinning normally runs a lot slower than the GPU skinning because
+  all skinned vertex attributes need to be generated and copied from host
+  memory.
+  Try this with the clawbot.nbf, chameleon.nbf, and hatealien.nbf scene
+  inside the media/scenes directory.
+
+- Viewport Formats
+  Selecting the OpenGL pixelformat features.
+  Switching the pixelformat will regenerate the Viewport window because
+  pixelformats can only be set once in the lifetime of a window.
+  The SceniXQGLWidget implementation handles some Qt gotchas when doing this
+  internally. There might be short flicker effect when the viewport window is
+  removed and recreated.
+  - 30 Bit
+    30 bit color depth (or 10 bits per channel) require specific monitors
+    attached to the Display Port connector to actually see a difference.
+    These pixelformats themselves are offered under Windows 7 on the 
+    NVIDIA Quadro boards without such monitor connected. In that case
+    switching  formats to 30 bits is just wasting memory.
+  - sRGB
+    This is normally available on most exported pixelformat and will not have
+    an effect unless sRGB is also enabled inside the OpenGL renderer, which is
+    not the case inside the Viewer today.
+  - Antialiasing
+    Offers a list of available multisampling (MSAA) and coverage sampling
+    (CSAA) antialiasing modes. The menu entries with two numbers are the CSAA
+    formats, where the smaller number indicates the color samples and the
+    larger the coverage samples.
+  - Stencil
+    Request stencil planes for the Viewport rendering. This is normally not
+    needed inside the Viewer and only makes sense with StencilAttributes
+    inside the scene.
+    (Note that the Viewer is rendering highlight outlines with the help of a
+     framebuffer object using stencil planes and that the use of
+     StencilAttributes inside the scene could conflict with the highlight
+     rendering, but that should only affect the highlight itself.)
+  - Stereo
+    Switch to stereoscopic rendering using an OpenGL quadbuffered stereo
+    pixelformat. These are only offered on NVIDIA Quadro workstation boards
+    and need to be enabled inside the 
+    NVIDIA Control Panel -> Manage 3D Setting -> Stereo - Enable -> On
+    Note that stereo pixelformats cannot offer support for desktop composition
+    under OSes using the Microsoft Windows Display Driver Model (WDDM) which 
+    are Vista and Windows 7. Enabled Aero glass effects will be disabled
+    automatically and remain that way for the lifetime of the application
+    process(!) even if the stereoscopic pixelformat is disabled again
+    (Microsoft OS issue).
+
+- Polygon Modes
+  Only available inside the rasterizer.
+  Can be used to visualize polygonal primitives with outlines or points only
+  (effectively an OpenGL PolygonMode default).
+  - Points 
+  - Lines
+  - Faces
+
+- Render Techniques
+  Only available inside the rasterizer.
+  Can be used to override the material handling inside the renderer.
+  - Unlit
+    Render with a single color.
+  - Shaded
+    Render without textures.
+  - Textured
+    Render with materials and textures but no CgFX effect.
+  - Effected
+    Render everything as specified inside the scene.
+
+- Light Model Local Viewer
+  Change the OpenGL lighting model to use a local viewer instead of a fixed
+  viewer direction vector.
+  This changes the positions of the specular highlights to be more accurate.
+  Default off.
+
+- Separate Specular Color
+  Change the OpenGL lighting calculation to apply specular highlights as
+  separate pass instead of modulating with it. 
+  This allows black textured areas to receive specular highlights. Default on.
+
+- Caching...
+  Switches the rasterizer renderer to use Vertex Buffer Objects (default),
+  Display Lists, or None (vertex arrays). Default is vertex buffer objects.
+  Display lists might perform faster for static scenes, but can also consume
+  more memory.
+  "None" will be the slowest method and is likely memory transfer bound
+  because all geometry data needs to be transferred from host memory each
+  frame.
+
+- Culling...
+  Dialog offering Frustum, Face, and Size Culling options. Rasterizer only.
+  - Frustum Culling
+    SceniX OpenGL renderer culls objects against the view frustum planes using
+    the bounding spheres of the objects. Default on.
+    If the object is outside the view it doesn't needs to be rendered.
+    This can result in dramatically different render performance depending on
+    what parts of the scene is visible inside the current view. If you want to
+    check the efficiency of this method, or if you want to have more constant
+    (slower) framerate you can try to disable this feature.
+  - Face Culling
+    OpenGL glCullFace mode default.
+    Mind that this setting is no override. If there is a CgFX shader which
+    sets the face culling, that will take precedence. For example the COLLADA
+    loader disables face culling if the file specifies to use two sided
+    lighting.
+    - Off will render front and back faces.
+    - Front Face culling will only render back faces.
+    - Back Face culling will only render the front faces which is enough for
+      closed opaque objects.
+    - Front And Back Face culling will not render any filled geometry.
+      This can be used to check of a scene's performance is raster bound.
+  - Size Culling 
+    SceniX implements a fast small feature culling mechanism using the
+    projected object screen size. Default is off.
+    This is normally used to improve the rendering performance with scenes
+    containing a huge amount of small objects while being not interested to
+    view objects below a certain size on the screen.
+    Try enabling this feature and increase the Size Factor parameter (this
+    does not mean pixels!) until objects start to disappear. Press ok and dolly
+    the scene in and out using the mouse wheel or resize the window and you'll
+    see the effect.
+
+- Stereo...
+  Dialog to enable stereo pixelformats (same as View -> Viewport Formats ->
+  Stereo) plus the parameters controlling the stereo separation.
+  SceniX uses an automatic eye distance adjustment by default which is
+  controlled with a distance factor applied to the scene size (or more
+  precisely the bounding sphere size of the root node).
+  If the automatic distance adjustment is disabled the eye separation distance
+  can also be set explicitly in world coordinates.
+  The Reverse Eyes checkbox exchanges the images rendered to the left and
+  right RenderTarget. This should not be needed with standard stereoscopic
+  hardware setups.
+
+
+  Help
+----
+- About
+
+
+Tool Bar
+========
+- Open
+  Same as Menu File -> Open
+
+- Save
+  Same as Menu File -> Save
+
+- Viewport Layout
+  The Viewer supports six layouts of the four available viewports.
+  The combobox visualizes these layouts.
+  When switching layouts the currently selected viewport (green border) will
+  always be put into the top left viewport of the new layout.
+  If the number of viewports decreased the remaining viewports are filled in
+  the order of last recently active viewports.
+  
+  Each viewport has its own camera.   
+  If there are less than four cameras inside the scene, the Viewer has added
+  perspective cameras named SVCamera00 to SVCamera03 to the scene as needed.
+  Caveats: There is no way to assign a camera from within the scene today.
+  Though there are ways to change the current viewport's camera parameters
+  to the ones of another camera inside the scene.
+  
+  All viewports have a context menu which offers available selections from
+  the View menu for the currently selected render engine.
+  If there are multiple viewports visible, the active one has a green border.
+  That is the one manipulated with the View menu.
+    
+- Continuous Rendering
+  Continuously render the current viewport and print a frame per seconds score
+  into it.
+  (Remember that the Viewer is not maxing out the SceniX 7 core performance
+   due to some Qt mechanism the Viewer uses.)
+
+- Zoom All
+  In case the scene is not visible anymore inside the viewport, the zoom all
+  function will reorient the camera to show the whole scene again.
+  (This is most useful after having used the walk manipulator which implements
+   a free look and switching back to another manipulator normally looks away
+   from the scene.)
+
+- Camera Cycling
+  If there are more than four cameras inside the scene, the parameters of the
+  ones which are not used to display the four viewports are used to animate
+  the current camera to those values. That animation step takes two seconds,
+  followed by one second pause.
+  The orientation is interpolated spherically, all other parameters are
+  interpolated linearly.
+  This can be used to define some nice viewing locations of a scene by adding
+  cameras to the scene using the viewport context menu and animating between
+  them as a demo.
+
+- Orbit X
+  Orbit the camera around the X-axis (horizontal axis). 
+
+- Orbit Y
+  Orbit the camera around the Y-axis (vertical axis).
+
+- Orbit Z
+  Orbit the camera around the Z-axis (view direction).
+  (These three functions were meant for benchmarking.)
+
+- Show Normals
+  Opens a dialog which allows to insert lines geometry into the scene which
+  shows the normal attributes on all objects.
+  This is a debug feature to check if geometry has the normals always defined
+  on the front face, otherwise lighting calculation will not work properly.
+  The length of the created lines is in world coordinates and should be
+  adjusted depending on the loaded scene.
+  Note: The lines' material is purely emissive, but it will only be used with
+  lighting enabled, otherwise the lines get black.
+  Remember to disable the normals display before saving a file.
+   
+- Undo
+  Walk through the Viewer's undo stack.
+  Which operation is undone can be seen inside the button's tool tip or inside
+  the Undo Stack dock widget.
+
+- Redo
+  Walk through the Viewer's undo stack.
+  Which operation is undone can be seen inside the button's tool tip or inside
+  the Undo Stack dock widget.
+
+- Trackball Camera Manipulator
+  Standard SceniX camera manipulator.
+  Note that the SceniX 7 manipulator implementation does not diverge from the
+  original orientation when continuously circling with the mouse.
+  
+  (LMB = Left Mouse Button, 
+   MMB = Middle Mouse Button,
+   RMB = Right Mouse Button)
+  
+  LMB: Orbit around the point at target distance. The axis is depending on the
+       initial mouse position on the viewport (virtual trackball).
+  MMB: Pan. 
+  Mouse Wheel or LMB+MMB: Dolly camera.
+  Control+MMB: Roll the camera.
+  Control+LMB+MMB: Zoom. Change the camera's field of view.
+  Control+LMB: Rotate the camera.
+  Control+Shift+LMB+MMB: "Vertigo" effect. Zoom and dolly in opposite
+                         directions. Keeps the focused object at the same size
+                         while changing the field of view.
+  Key 'H': Set the Hotspot used to orbit around.
+           Puts the clicked surface point into the center of the view.
+  
+  Normally the TrackballCameraManipulator uses the Shift modifier to lock the
+  major axis for orbit and pan, but the Viewer uses Shift+LMB to highlight
+  an object.
+  This highlighting isn't used for anything today, except for demonstrating
+  how to pipeline multiple render passes with different renderers to different
+  render targets using the Viewer's SceneRendererPipelineGL class.
+  Click with Shift+LMB on an empty area to unselect the highlight.
+  
+- Cylindrical Camera Manipulator
+  Same as the Trackball Camera Manipulator, except that the horizontal orbit
+  is around the world y-axis which makes this orbit roll-free.
+  This won't work nicely with scenes which are modeled with a different
+  up-axis than the y-axis. Use the Trackball camera manipulator with those.
+  Setting the hotspot has an implicit roll though, you can adjust that with
+  Control + MMB.
+
+- Flight Camera Manipulator
+  Time-based camera flight without banking. Constant speed independent of the
+  framerate.
+  Hold the LMB down to fly forward, MMB to fly backward.
+  The direction is controlled with the mouse position. Keep the mouse near the
+  center of the viewport for straight flight.
+  The Mouse Wheel can be used to adjust the speed.
+  Roll forward for faster speed, roll backwards for slower speed.
+  If you lost the scene, use Zoom All to center it again.
+  
+- Walk Camera Manipulator
+  The walk manipulator implements a WASD keys controller with free mouse look.
+  It uses the RayIntersectTraverser to shoot a ray straight down (could be
+  slow depending on the scene complexity). If it finds geometry beneath the
+  camera it keeps the height above that ground constant when moving.
+  Per default the camera is placed two units above the ground which looks ok
+  if the scene is modeled in meters. Use the 'Q' and 'E' keys to adjust the
+  height above ground.
+  If there is no intersection it will continue to move in the last direction.
+  
+
+
+Dock Widgets
+============
+
+The Viewer is built with a QMainWindow and lots of QDockWidgets which can be
+placed anywhere around the central widget and allow floating, stacking and
+hiding.
+If a dock widget is hidden with the small X button in its caption bar you can
+show it again by right-clicking on an empty space in the menu bar or tool bar
+and check the dock widget.
+Toggle floating with the small rectangles button in the caption bar or by
+double clicking on the caption bar.
+Dock widgets can also be stacked. Use the tab buttons at the bottom to select
+the visible one.
+
+- Log
+  Contains all messages reported by loaders, errors, etc. 
+  Watch this window when loading a scene which doesn't look as expected,
+  e.g. missing textures.
+
+- Script Sandbox
+  Some properties inside the widgets can be scripted with Qt. This was meant
+  for automatic testing. You can ignore this.
+
+- Undo Stack
+  Some of the actions inside the Viewer can be undone. That includes adding
+  and removing lights, adding and removing cameras, changing material
+  assignments.
+  The Undo stack window shows which operations have been done and you can pick
+  to which operation you want to revert.
+  If there are elements inside the undo stack the Undo and Redo buttons inside
+  the tool bar can be used to walk through the stack.
+  
+- Scene Tree
+  This contains a QTreeView onto a QAbstractItemModel which is generated by
+  the Viewer when any change to the scene happens. This allows to see the
+  basic structure of the scene, but since this is a tree view and the scene is
+  a graph, nodes which are shared will appear multiple times inside the tree.
+  The four buttons inside the Scene Tree's tool bar allow to expand and
+  collapse the tree nodes, and show two more columns with annotations and
+  class names of the nodes.
+  Annotations are normally empty, classes are also reflected in the different
+  icons in front of the nodes.
+  
+  The scene tree allows to delete scene elements. The deletion can be undone.
+  It offers a context menu which works on Groups, Transforms, GeoNodes,
+  LightSources, and Cameras.
+  Cameras also allow to add more headlights inside the scene, similar to the
+  context menu inside the viewports.
+  
+- Object Properties
+  If you select an object inside the scene tree with the left mouse button,
+  its properties will be displayed inside the Object Properties.
+  You can manipulate the values in there by double clicking on the Value
+  field. This is just using the standard Qt string based default delegates,
+  values need to be typed in manually today.
+  
+- Material Browser
+  The Material Browser shows the materials (StateSets) inside the loaded scene
+  as rasterized icon bitmaps with their node name.
+  The size of the icons can be changed inside the File -> Preferences.
+  Either restart the Viewer or load a scene to let that change take effect.
+  They use the preview sphere of the Material Editor to generate these. 
+  The default is an icon view (icon on top, name below, possibly truncated).
+  If you right click into the widget you can change the layout to a list view
+  which shows the icons on the left and the name on the right, this time never
+  truncated.
+  
+  Double click on a material inside the Material Browser to load it into the
+  Material Editor.
+  Single click an already selected material inside the Material Browser to
+  show its colors and textures inside the Material Properties.
+  That feature has been added to be able to drag and drop colors and textures
+  from another material to the one loaded inside the Material Editor.
+  
+  The Material Browser supports Drag-and-Drop of materials to the Viewport.
+  The object under the mouse cursor will be highlighted with a yellow outline
+  and if you drop the material onto it, its material will be replaced with the
+  dragged one if it was different. This operation can be undone.
+  Note that since this operation uses one material of the scene to replace
+  another one, you will actually have one material less inside the Material
+  Browser and the scene afterwards.
+  (The intended usage of this feature was to have a separate Material Library
+   which can be used as source for different materials to pick from. This has
+   not been implemented in this version of the Viewer.)
+
+  The Material Browser also supports dragging one material onto another inside
+  the Material Browser. This does NOT replace the material, but assigns the
+  CgFX and RTFx shaders of the dragged material to the destination and tries
+  to keep as many matching parameters of the destination intact.
+  The intended use is for example to change a red flat paint shader to a
+  glossy paint shader while keeping the same red diffuse color if the shaders
+  use matching parameters.
+  
+  The material icons will be regenerated automatically after the materials
+  have been changed inside the Material Editor, though not immediately while
+  manipulating them.
+
+- Material Properties
+  When clicking on an already selected material inside the Material Browser
+  the color texture parameters of that material are shown inside the Material
+  Properties window.
+  You can drag and drop those to parameters of the same type inside the
+  Material Editor. This allows to copy colors and texture from other
+  Materials.
+  
+  If a material contains CgFX or RTFx shaders, the source can be viewed inside
+  two additional tabs inside the Material Properties.
+  The shaders get some syntax highlighting of known keywords.
+  The text can be copied from the text fields, but it cannot be edited.
+  This is less interesting for the RTFx shaders, because the source code will
+  be shown in the compiled PTX format.
+  
+- Texture Browser
+  Shows all textures inside the scene.
+  The size of the icons can be changed inside the File -> Preferences.
+  Either restart the Viewer or load a scene to let that change take effect.
+  The texture icons allow drag and drop to the texture sampler parameters
+  inside the Material Editor.
+
+- Material Editor
+  Allows to change material parameters interactively.
+  Caveats: It does not implement creating, loading, or exchanging shaders of
+  new materials today. It's designed to cover the standard SceniX provided
+  shaders and does not implement all parameter types. float2 won't be
+  editable, float3 and float4 are interpreted as colors, where the alpha value
+  is assumed to be 1.0.
+  It supports some Standard Annotations and Semantics (SAS) to create the
+  proper GUI element as specified inside a shader code.
+  
+  Double click a material inside the Material Browser to load it into the
+  Material Editor.
+  The preview window at the top contains a sphere with position, tangent,
+  binormal, normal, texcoord0, and (identical) texcoord1 attributes which
+  covers most standard material requirements.
+  The preview window is just another viewport, so the same context menus
+  apply.
+ 
+  The material editor maintains an own undo stack for the individual
+  parameter changes.
+  
+  The material parameters are grouped into three nodes inside a tree view.
+  - Linked Parameters
+    If material contains both CgFX and RTFx nodes, the parameters which have
+    the same name and the same type will be shown inside the Linked Parameter
+    list. If the parameters do not have the same values initially, the ones
+    from the CgFX shader are displayed.
+    Editing parameters inside the linked node will set the same values in the
+    CgFX and RTFx shaders.
+  - CgFX parameters
+    Contains the list of CgFX parameters.
+    Parameters edited here will only affect the CgFX shader.
+  - RTFx parameters
+    Contains the list of RTFx parameters.
+    Parameters edited here will only affect the RTFx shader.
+
+  The color parameters and the texture sampler parameters allow drag and drop
+  to another parameter of the same type.
+  
+  Editing a parameter can be done by double clicking on its value. 
+  The Material Editor will create a GUI delegate to edit that parameter.
+ 
+  In case of colors the Color Picker will be made visible (dock widget shown
+  and brought to front) and the color parameter will be fed into the color
+  picker input color and linked to the Color Picker output color.
+  Qt issue: This linking does not work if the Material Editor is floating,
+  because the window focus change when using the Color Picker will remove the
+  delegate and its link.
+  Qt bug: Exiting the application while a delegate inside the material
+  editor is active might crash with an access violation because Qt tries to
+  determine the size of an already destroyed delegate widget. Missing null
+  pointer check.
+ 
+  Texture samplers can also be updated with a new texture by dragging a bitmap
+  file from a Windows Explorer onto the texture sampler parameter.
+  
+- Color Picker
+  The Color Picker is used to select an RGB color (24-bit).
+  It consists of 
+  - a 2D color area which third dimension can be selected with the six radio
+    buttons right to it.
+  - six color bars for Hue, Saturation, Value, Red, Green, Blue,
+  - a current color swatch on the top right, that is the color which is linked
+    back to the material editor.
+  - an incoming color swatch on the bottom right which holds the original
+    color.
+  
+  Selecting a color is straight forward, basically click on or drag to the
+  color you want inside the six color bars or the 2D area. Any RGB color can
+  be reached with two of these actions.
+  Changing the color will be immediately applied to the preview sphere and the
+  scene in all viewports and render engines.
+  
+  The two color swatches at the right also support drag and drop from one to
+  the other, or to or from the material editor. When dropping on the bottom
+  color swatch the old and current color are set to the same values, when
+  dropping on the top color swatch only the current color is set.
+ 
+  The current color's integer values are shown in the center of the color
+  bars. The floating point RGB colors in the range [0, 1] are shown at the
+  right end of the red, green, and blue bars. The hexadecimal RGB value is
+  shown inside the color swatches. Care has been taken to make these always
+  legible.
+  
+- Animation Control
+  If a scene contains a camera animation or animated or skinned geometry the
+  Animation Control dock widget gets enabled.
+  It contains 
+  - a slider controlling the current animation frame.
+  - five buttons to run the animation: first frame, previous frame, play/stop,
+    next frame, last frame.
+  - two buttons to toggle the direction and the loop mode (loop/ping-pong) 
+  - a spin box controlling the number of animation steps it does on each
+    iteration.
+  
+  When animating a skinned model, also try the two View -> Skinning Engine
+  modes.
+
+
+Known Application issues:
+-------------------------
+- The Material Editor loses the color delegate when using the Color Picker
+  floated. That is because the Qt window focus change event removes the
+  delegate. Dock the Color Picker or use drag and drop of colors.
+
+- Keyboard modifier changes inside the Dock Widgets are not registered inside
+  the viewports. When Shift+LMB clicking inside the scene tree the
+  viewport camera manipulator might not react until Shift is hit while the
+  mouse is inside the viewport area. Some Qt detail we haven't got around yet.
+
+- Textures on fixed-function materials will not be displayed inside the
+  Texture Browser unless the Preferences are switched to generate CgFX state
+  shaders for the fixed-function materials.
+
+END OF FILE

@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<library>
+  <include file="standard_effects_library.xml" />
+  <effect type="Material" id="tangent_visualization">
+    <technique type="forward">
+      <glsl domain="fragment" signature="v3f_n3f_t02f_ta3f_bi3f">
+        <source input="vec3" name="varTangent"/>
+        <source output="vec4" name="Color" location="0"/>
+        <source file="tangent_fs.glsl" />
+      </glsl>
+    </technique>
+    <technique type="optix">
+      <cuda domain="anyhit" signature="v3f_n3f">
+        <source file="anyhit_tangent_visualization.cu" />
+      </cuda>
+      <cuda domain="closesthit" signature="v3f_n3f_t02f_ta3f_bi3f">
+        <source file="closesthit_tangent_visualization.cu" />
+      </cuda>
+    </technique>
+  </effect>
+  <effect type="Material" id="binormal_visualization">
+    <technique type="forward">
+      <glsl domain="fragment" signature="v3f_n3f_t02f_ta3f_bi3f">
+        <source input="vec3" name="varBinormal"/>
+        <source output="vec4" name="Color" location="0"/>
+        <source file="binormal_fs.glsl" />
+      </glsl>
+    </technique>
+    <technique type="optix">
+      <cuda domain="anyhit" signature="v3f_n3f">
+        <source file="anyhit_binormal_visualization.cu" />
+      </cuda>
+      <cuda domain="closesthit" signature="v3f_n3f_t02f_ta3f_bi3f">
+        <source file="closesthit_binormal_visualization.cu" />
+      </cuda>
+    </technique>
+  </effect>
+  <effect type="Material" id="normal_visualization">
+    <technique type="forward">
+      <glsl domain="fragment" signature="v3f_n3f">
+        <source input="vec3" name="varNormal"/>
+        <source output="vec4" name="Color" location="0"/>
+        <source file="normal_fs.glsl" />
+      </glsl>
+    </technique>
+    <technique type="optix">
+      <cuda domain="anyhit" signature="v3f_n3f">
+        <source file="anyhit_normal_visualization.cu" />
+      </cuda>
+      <cuda domain="closesthit" signature="v3f_n3f">
+        <source file="closesthit_normal_visualization.cu" />
+      </cuda>
+    </technique>
+  </effect>
+</library>

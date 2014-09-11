@@ -1,0 +1,50 @@
+
+find_package(OpenGL REQUIRED )
+find_package(NVGLEW REQUIRED)
+
+FILE (GLOB tests ${linkunit}/*)
+
+set( LINK_SOURCES "" )
+
+add_definitions(
+  "-D_CRT_SECURE_NO_WARNINGS"
+)
+
+FOREACH( test ${tests} )
+  if( IS_DIRECTORY ${test} )
+    if( EXISTS ${test}/CMakeLists.txt )
+      string( REGEX REPLACE "^.*/([^/]*)$" "\\1" TEST_NAME ${test} )
+        if( NOT (${TEST_NAME} MATCHES "^__") )
+          add_subdirectory( ${TEST_NAME} )
+        endif()
+    endif()
+  endif()
+ENDFOREACH( test ${tests} )
+
+include_directories(
+  "${GLEW_INCLUDES}"
+)
+
+add_library( ${LINK_NAME} SHARED
+   ${LINK_SOURCES}
+)
+
+target_link_libraries( ${LINK_NAME}
+  "${OPENGL_gl_LIBRARY}"
+  ${GLEW_LIB}
+  DPTcore
+  DPUtil
+  DPTRiX
+  RiXCore
+  RiXGL
+  DPTestManager
+  DPHelpers
+  DPTSgRdr
+  DPSgUI
+  DPSgIO
+  DPSgGenerator
+  DPSgCore
+  DPSgRdrRiXGL
+)
+
+add_dependencies( ${LINK_NAME} DPHelpers )

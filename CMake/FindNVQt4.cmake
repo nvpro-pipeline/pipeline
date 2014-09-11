@@ -1,0 +1,51 @@
+if (WIN32)
+
+  set (QTVERSION "4.7.4")
+  # Configure Qt to use the BUILD_TOOLS_DIR
+  if(MSVC90)
+    set (ENV{QMAKESPEC} "win32-msvc2008")
+    set (COMPILER "win32-msvc2008")
+  elseif(MSVC10)
+    set (ENV{QMAKESPEC} "win32-msvc2010")
+    set (COMPILER "win32-msvc2010")
+  elseif(CMAKE_COMPILER_IS_GNUCC)
+    execute_process(COMMAND ${CMAKE_C_COMPILER} -dumpversion OUTPUT_VARIABLE GCC_VERSION)
+    string(STRIP "${GCC_VERSION}" GCC_VERSION)
+    set (ENV{QMAKESPEC} "win32-g++")
+    set (COMPILER "win32-gcc-${GCC_VERSION}-mingw")
+  endif(MSVC90)
+
+  file( TO_CMAKE_PATH "$ENV{DP_3RDPARTY_PATH}/Qt/${QTVERSION}/${COMPILER}-${DP_ARCH}" QTPATH)
+
+  if ( EXISTS "${QTPATH}" )
+    file ( TO_NATIVE_PATH ${QTPATH} QTPATH )
+    set( ENV{QTDIR} "${QTPATH}" )
+    # Always use the 32bit tools, otherwise cross-compiling 32->64 breaks.
+
+    if ( NOT CMAKE_COMPILER_IS_GNUCC )
+      file( TO_CMAKE_PATH "$ENV{DP_3RDPARTY_PATH}/Qt/${QTVERSION}/$ENV{QMAKESPEC}-x86" TMP)
+      get_filename_component( QT32PATH ${TMP} ABSOLUTE )
+      set( QT_QMAKE_EXECUTABLE "${QT32PATH}/bin/qmake.exe" CACHE FILEPATH "" )
+      set( QT_UIC_EXECUTABLE "${QT32PATH}/bin/uic.exe" CACHE FILEPATH "" )
+      set( QT_MOC_EXECUTABLE "${QT32PATH}/bin/moc.exe" CACHE FILEPATH "" )
+      set( QT_RCC_EXECUTABLE "${QT32PATH}/bin/rcc.exe" CACHE FILEPATH "" )
+    endif()
+  endif()
+  
+endif()
+
+if (UNIX)
+  set( QTVERSION "4.7.1" )
+  set( ENV{WS_PROJECT_COMPILER} "gcc-4.1" )
+  set( ENV{WS_PROJECT_ARCH} ${DP_ARCH} ) 
+
+  file( TO_CMAKE_PATH "$ENV{DP_3RDPARTY_PATH}/Qt/${QTVERSION}" QTDIR)
+  if ( EXISTS "${QTDIR}" )
+    file ( TO_NATIVE_PATH ${QTDIR} QTDIR )
+    set( ENV{QTDIR} "${QTDIR}" )
+    set( QT_QMAKE_EXECUTABLE "${QTDIR}/bin/$ENV{WS_PROJECT_COMPILER}-$ENV{WS_PROJECT_ARCH}/qmake" CACHE FILEPATH "" )
+    set( QT_UIC_EXECUTABLE "${QTDIR}/bin/$ENV{WS_PROJECT_COMPILER}-$ENV{WS_PROJECT_ARCH}/uic" CACHE FILEPATH "" )
+    set( QT_MOC_EXECUTABLE "${QTDIR}/bin/$ENV{WS_PROJECT_COMPILER}-$ENV{WS_PROJECT_ARCH}/moc" CACHE FILEPATH "" )
+    set( QT_RCC_EXECUTABLE "${QTDIR}/bin/$ENV{WS_PROJECT_COMPILER}-$ENV{WS_PROJECT_ARCH}/rcc" CACHE FILEPATH "" )
+  endif()
+endif()

@@ -1,0 +1,82 @@
+  <?xml version="1.0" ?>
+  <library>
+    <include file="phong.xml" />
+
+    <parameterGroupData id="phong_red" spec="phongParameters">
+      <parameter name="emissiveColor" value="0.0 0.0 0.0" />
+      <parameter name="ambientColor" value="0.0 0.0 0.0" />
+      <parameter name="diffuseColor" value="1.0 0.0 0.0" />
+      <parameter name="specularColor" value="0.0 0.0 0.0" />
+      <parameter name="specularExponent" value="40.0" />
+    </parameterGroupData>
+    <PipelineData id="phong_red" spec="phong">
+      <parameterGroupData ref="phong_red" />
+    </PipelineData>
+
+    <parameterGroupData id="phong_yellow" spec="phongParameters">
+      <parameter name="emissiveColor" value="0.0 0.0 0.0" />
+      <parameter name="ambientColor" value="0.0 0.0 0.0" />
+      <parameter name="diffuseColor" value="1.0 1.0 0.0" />
+      <parameter name="specularColor" value="0.0 0.0 0.0" />
+      <parameter name="specularExponent" value="40.0" />
+    </parameterGroupData>
+    <PipelineData id="phong_yellow" spec="phong">
+      <parameterGroupData ref="phong_yellow" />
+    </PipelineData>
+
+    <parameterGroupData id="phong_green" spec="phongParameters">
+      <parameter name="emissiveColor" value="0.0 0.0 0.0" />
+      <parameter name="ambientColor" value="0.0 0.0 0.0" />
+      <parameter name="diffuseColor" value="0.0 1.0 0.0" />
+      <parameter name="specularColor" value="0.0 0.0 0.0" />
+      <parameter name="specularExponent" value="40.0" />
+    </parameterGroupData>
+    <PipelineData id="phong_green" spec="phong">
+      <parameterGroupData ref="phong_green" />
+    </PipelineData>
+
+    <parameterGroupData id="phong_cyan" spec="phongParameters">
+      <parameter name="emissiveColor" value="0.0 0.0 0.0" />
+      <parameter name="ambientColor" value="0.0 0.0 0.0" />
+      <parameter name="diffuseColor" value="0.0 1.0 1.0" />
+      <parameter name="specularColor" value="0.0 0.0 0.0" />
+      <parameter name="specularExponent" value="40.0" />
+    </parameterGroupData>
+    <PipelineData id="phong_cyan" spec="phong">
+      <parameterGroupData ref="phong_cyan" />
+    </PipelineData>
+
+    <parameterGroupData id="phong_blue" spec="phongParameters">
+      <parameter name="emissiveColor" value="0.0 0.0 0.0" />
+      <parameter name="ambientColor" value="0.0 0.0 0.0" />
+      <parameter name="diffuseColor" value="0.0 0.0 1.0" />
+      <parameter name="specularColor" value="0.0 0.0 0.0" />
+      <parameter name="specularExponent" value="40.0" />
+    </parameterGroupData>
+    <PipelineData id="phong_blue" spec="phong">
+      <parameterGroupData ref="phong_blue" />
+    </PipelineData>
+
+    <parameterGroupData id="phong_magenta" spec="phongParameters">
+      <parameter name="emissiveColor" value="0.0 0.0 0.0" />
+      <parameter name="ambientColor" value="0.0 0.0 0.0" />
+      <parameter name="diffuseColor" value="1.0 0.0 1.0" />
+      <parameter name="specularColor" value="0.0 0.0 0.0" />
+      <parameter name="specularExponent" value="40.0" />
+    </parameterGroupData>
+    <PipelineData id="phong_magenta" spec="phong">
+      <parameterGroupData ref="phong_magenta" />
+    </PipelineData>
+
+    <parameterGroupData id="phong_white" spec="phongParameters">
+      <parameter name="emissiveColor" value="0.0 0.0 0.0" />
+      <parameter name="ambientColor" value="0.0 0.0 0.0" />
+      <parameter name="diffuseColor" value="1.0 1.0 1.0" />
+      <parameter name="specularColor" value="0.0 0.0 0.0" />
+      <parameter name="specularExponent" value="40.0" />
+    </parameterGroupData>
+    <PipelineData id="phong_white" spec="phong">
+      <parameterGroupData ref="phong_white" />
+    </PipelineData>
+
+</library>

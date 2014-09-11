@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<library>
+  <include file="standard_material.xml" />
+
+  <effect id="visualize_normal_fs" domain="fragment">
+    <technique type="forward">
+      <glsl signature="v3f_n3f">
+        <source input="vec3" name="varNormal"/>
+        <source file="visualize_normal/glsl/normal_fs.glsl" />
+      </glsl>
+    </technique>
+  </effect>
+
+  <PipelineSpec id="visualize_normal"
+                vertex="standardMaterialVertexShader"
+                fragment="visualize_normal_fs" />
+
+</library>

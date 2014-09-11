@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<library>
+  <include file="standard_material.xml" />
+  
+  <parameterGroup id="phongParameters">
+    <parameter type="vec3"  name="emissiveColor" semantic="COLOR" value="0.0 0.0 0.0" />
+    <parameter type="vec3"  name="ambientColor" semantic="COLOR" value="0.2 0.2 0.2" />
+    <parameter type="vec3"  name="diffuseColor" semantic="COLOR" value="0.8 0.0 0.8" />
+    <parameter type="vec3"  name="specularColor" semantic="COLOR" value="0.0 0.0 0.0" />
+    <parameter type="float" name="specularExponent" semantic="VALUE" value="0.0" />
+  </parameterGroup>
+  
+  <effect id="phong_fs" domain="fragment">
+    <parameterGroup ref="phongParameters" />
+    <technique type="forward">
+      <glsl signature="v3f_n3f">
+        <source input="vec3" name="varNormal"/>
+        <source input="vec3" name="varWorldPos"/>
+        <source input="vec3" name="varEyePos"/>
+        <source file="standard_lights/glsl/ambient_diffuse_specular.glsl" />
+        <source file="phong/glsl/phong_fs.glsl" />
+      </glsl>
+    </technique>
+    <technique type="depthPass">
+      <glsl signature="v3f">
+        <source file="standard_material/glsl/trivial_depth_pass_fs.glsl"/>
+      </glsl>
+    </technique>
+  </effect>
+
+  <PipelineSpec id="phong"
+                vertex="standardMaterialVertexShader"
+                fragment="phong_fs" />
+
+</library>

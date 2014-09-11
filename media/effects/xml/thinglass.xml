@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<library>
+  <include file="standard_material.xml" />
+
+  <effect id="thinglass_fs" domain="fragment" transparent="true">
+    <parameterGroup id="thinglass_parameters">
+      <parameter type="float" name="IOR" semantic="VALUE" value="1.93"/>
+      <parameter type="vec4" name="transparentColor" semantic="COLOR" value="0.99 0.99 0.99 1.0"/>
+      <parameter type="vec4" name="reflectiveColor" semantic="COLOR" value="0.99 0.99 0.99 1.0"/>
+    </parameterGroup>
+    <technique type="forward">
+      <glsl signature="v3f_n3f">
+        <source input="vec3" name="varNormal"/>
+        <source input="vec3" name="varWorldPos"/>
+        <source input="vec3" name="varEyePos"/>
+        <source file="spherical_environment.glsl" />
+        <source file="standard_lights/glsl/ambient_diffuse_specular.glsl" />
+        <source file="thinglass/glsl/thinglass.glsl"/>
+      </glsl>
+    </technique>
+  </effect>
+
+  <PipelineSpec id="thinglass"
+                vertex="standardMaterialVertexShader"
+                fragment="thinglass_fs" />
+</library>

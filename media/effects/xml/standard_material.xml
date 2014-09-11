@@ -1,0 +1,218 @@
+<?xml version="1.0"?>
+<library>
+  <enum type="compare" values="AF_NEVER AF_LESS AF_EQUAL AF_LEQUAL AF_GREATER AF_NOTEQUAL AF_GEQUAL AF_ALWAYS" />
+  <enum type="texEnvMode" values="TEM_REPLACE TEM_MODULATE TEM_DECAL TEM_BLEND TEM_ADD TEM_ADD_SIGNED TEM_SUBTRACT TEM_INTERPOLATE TEM_DOT3_RGB TEM_DOT3_RGBA" />
+  <enum type="texGenMode" values="TGM_OFF TGM_OBJECT_LINEAR TGM_EYE_LINEAR TGM_SPHERE_MAP TGM_REFLECTION_MAP TGM_NORMAL_MAP" />
+
+  <effect id="standardMaterialVertexShader" domain="vertex">
+    <parameterGroup id="standardGeometryParameters"> <!-- DAR HACK Move all parameterGroup declarations outside and add ref? -->
+      <parameter type="bool" name="faceWindingCCW" semantic="VALUE" value="true" />
+      <parameter type="float" name="lineWidth" semantic="VALUE" value="1.0" />
+      <parameter type="float" name="pointSize" semantic="VALUE" value="1.0" />
+    </parameterGroup>
+    <technique type="forward">
+      <glsl signature="v3f_n3f">
+        <source input="vec4" name="attrPosition" location="0"/>
+        <source input="vec3" name="attrNormal" location="2"/>
+        <source output="vec3" name="varNormal"/>
+        <source output="vec3" name="varWorldPos"/>
+        <source output="vec3" name="varEyePos"/>
+        <source file="standard_material/glsl/gl_PerVertex.glsl"/>
+        <source file="standard_material/glsl/standard_material_v3f_n3f_vs.glsl" />
+      </glsl>
+      <glsl signature="v3f_n3f_t02f">
+        <source input="vec4" name="attrPosition" location="0"/>
+        <source input="vec3" name="attrNormal" location="2"/>
+        <source input="vec2" name="attrTexCoord0" location="8"/>
+        <source output="vec3" name="varNormal"/>
+        <source output="vec3" name="varWorldPos"/>
+        <source output="vec3" name="varEyePos"/>
+        <source output="vec2" name="varTexCoord0"/>
+        <source file="standard_material/glsl/gl_PerVertex.glsl"/>
+        <source file="standard_material/glsl/standard_material_v3f_n3f_tex0_vs.glsl" />
+      </glsl>
+      <glsl signature="v3f_n3f_t02f_ta3f_bi3f">
+        <source input="vec4" name="attrPosition" location="0"/>
+        <source input="vec3" name="attrNormal" location="2"/>
+        <source input="vec2" name="attrTexCoord0" location="8"/>
+        <source input="vec3" name="attrTangent" location="14"/>
+        <source input="vec3" name="attrBinormal" location="15"/>
+        <source output="vec3" name="varNormal"/>
+        <source output="vec3" name="varWorldPos"/>
+        <source output="vec3" name="varEyePos"/>
+        <source output="vec2" name="varTexCoord0"/>
+        <source output="vec3" name="varTangent"/>
+        <source output="vec3" name="varBinormal"/>
+        <source file="standard_material/glsl/gl_PerVertex.glsl"/>
+        <source file="standard_material/glsl/standard_material_v3f_n3f_tex0_ta3f_bi3f_vs.glsl" />
+      </glsl>
+    </technique>
+    <technique type="depthPass">
+      <glsl signature="v3f">
+        <source input="vec4" name="attrPosition" location="0"/>
+        <source input="vec2" name="attrTexCoord0" location="8"/>
+        <source output="vec2" name="varTexCoord0"/>
+        <source file="standard_material/glsl/gl_PerVertex.glsl"/>
+        <source file="standard_material/glsl/standard_material_depth_pass_vs.glsl"/>
+      </glsl>
+    </technique>
+  </effect>
+
+  <parameterGroup id="standardMaterialParameters">
+    <parameter type="vec3"  name="frontEmissiveColor" semantic="COLOR" value="0.0 0.0 0.0" />
+    <parameter type="vec3"  name="frontAmbientColor" semantic="COLOR" value="0.2 0.2 0.2" />
+    <parameter type="vec3"  name="frontDiffuseColor" semantic="COLOR" value="0.8 0.8 0.8" />
+    <parameter type="vec3"  name="frontSpecularColor" semantic="COLOR" value="0.0 0.0 0.0" />
+    <parameter type="float" name="frontSpecularExponent" semantic="VALUE" value="0.0" />
+    <parameter type="float" name="frontOpacity" semantic="VALUE" value="1.0" />
+    <parameter type="vec3"  name="frontOpacityColor" semantic="COLOR" value="1.0 1.0 1.0" />
+    <parameter type="float" name="frontReflectivity" semantic="VALUE" value="0.0" />
+    <parameter type="vec3"  name="frontReflectivityColor" semantic="COLOR" value="0.0 0.0 0.0" />
+    <parameter type="float" name="frontIOR" semantic="VALUE" value="1.0" />
+    <parameter type="vec3"  name="backEmissiveColor" semantic="COLOR" value="0.0 0.0 0.0" />
+    <parameter type="vec3"  name="backAmbientColor" semantic="COLOR" value="0.2 0.2 0.2" />
+    <parameter type="vec3"  name="backDiffuseColor" semantic="COLOR" value="0.8 0.8 0.8" />
+    <parameter type="vec3"  name="backSpecularColor" semantic="COLOR" value="0.0 0.0 0.0" />
+    <parameter type="float" name="backSpecularExponent" semantic="VALUE" value="0.0" />
+    <parameter type="float" name="backOpacity" semantic="VALUE" value="1.0" />
+    <parameter type="vec3"  name="backOpacityColor" semantic="COLOR" value="1.0 1.0 1.0" />
+    <parameter type="float" name="backReflectivity" semantic="VALUE" value="0.0" />
+    <parameter type="vec3"  name="backReflectivityColor" semantic="COLOR" value="0.0 0.0 0.0" />
+    <parameter type="float" name="backIOR" semantic="VALUE" value="1.0" />
+    <parameter type="compare" name="alphaFunction" semantic="VALUE" value="AF_ALWAYS" />
+    <parameter type="float" name="alphaThreshold" semantic="VALUE" value="0.0" />
+    <parameter type="bool" name="lightingEnabled" semantic="VALUE" value ="TRUE" />
+    <parameter type="bool"  name="twoSidedLighting" semantic="VALUE" value ="TRUE" />
+    <parameter type="ushort" name="lineStippleFactor" semantic="VALUE" value="1" />
+    <parameter type="ushort" name="lineStipplePattern" semantic="VALUE" value="0xFFFF" />
+    <parameter type="vec4" name="unlitColor" semantic="COLOR" value="0.8 0.8 0.8 1.0" />
+  </parameterGroup>
+
+  <parameterGroup id="standardTextureParameters"> <!-- DAR FIXME Rename to standardMaterialTextureParameters -->
+    <parameter type="bool" name="textureEnable" semantic="VALUE" value="0" />
+    <parameter type="vec4" name="envColor" semantic="COLOR" value="0.0 0.0 0.0 0.0" />
+    <parameter type="texEnvMode" name="envMode" semantic="VALUE" value="TEM_MODULATE" />
+    <parameter type="char" name="envScale" semantic="SCALING" value="1" />
+    <parameter type="texGenMode" name="genMode" semantic="VALUE" size="4" value="TGM_OFF TGM_OFF TGM_OFF TGM_OFF" />
+    <parameter type="vec4" name="texGenPlane" semantic="VALUE" size="4" value="1.0 0.0 0.0 0.0  0.0 1.0 0.0 0.0  0.0 0.0 1.0 0.0  0.0 0.0 0.0 1.0" />
+    <parameter type="mat4x4" name="textureMatrix" semantic="VALUE" value="1.0 0.0 0.0 0.0  0.0 1.0 0.0 0.0  0.0 0.0 1.0 0.0  0.0 0.0 0.0 1.0" />
+    <parameter type="sampler2D" name="sampler" semantic="OBJECT">
+      <state id="borderColor" value="0.0 0.0 0.0 0.0" />
+      <state id="magFilter" value="nearest" />
+      <state id="minFilter" value="nearest" />
+      <state id="wrapModeS" value="repeat" />
+      <state id="wrapModeT" value="repeat" />
+      <state id="wrapModeR" value="repeat" />
+    </parameter>
+  </parameterGroup>
+
+  <effect id="standardMaterialFragmentShader" domain="fragment" transparent="true">
+    <parameterGroup ref="standardMaterialParameters" />
+    <parameterGroup ref="standardTextureParameters" /> <!-- DAR FIXME Rename to standardMaterialTextureParameters -->
+    <technique type="forward">
+      <glsl signature="v3f_n3f_t02f">
+        <source input="vec3" name="varNormal"/>
+        <source input="vec3" name="varWorldPos"/>
+        <source input="vec3" name="varEyePos"/>
+        <source input="vec2" name="varTexCoord0"/>
+        <source file="standard_lights/glsl/ambient_diffuse_specular.glsl" />
+        <source file="standard_material/glsl/standard_material_v3f_n3f_tex0_fs.glsl" />
+      </glsl>
+    </technique>
+    <technique type="depthPass">
+      <glsl signature="v3f">
+        <source input="vec2" name="varTexCoord0"/>
+        <source file="standard_material/glsl/standard_material_depth_pass_fs.glsl"/>
+      </glsl>
+    </technique>
+  </effect>
+
+  <PipelineSpec id="standardMaterial"
+                vertex="standardMaterialVertexShader"
+                fragment="standardMaterialFragmentShader" />
+
+  <effect id="standardMaterialPassThroughVertexShader" domain="vertex">
+    <technique type="forward">
+      <glsl signature="v3f_n3f">
+        <source input="vec4" name="attrPosition" location="0"/>
+        <source input="vec3" name="attrNormal" location="2"/>
+        <source output="vec3" name="vPosition"/>
+        <source output="vec3" name="vNormal"/>
+        <source file="standard_material/glsl/pass_through_v3f_n3f_vs.glsl" />
+      </glsl>
+      <glsl signature="v3f_n3f_t02f">
+        <source input="vec4" name="attrPosition" location="0"/>
+        <source input="vec3" name="attrNormal" location="2"/>
+        <source input="vec2" name="attrTexCoord0" location="8"/>
+        <source output="vec3" name="vPosition"/>
+        <source output="vec3" name="vNormal"/>
+        <source output="vec2" name="vTexCoord0"/>
+        <source file="standard_material/glsl/pass_through_v3f_n3f_tex0_vs.glsl" />
+      </glsl>
+    </technique>
+  </effect>
+
+  <parameterGroup id="standardMaterialTessellationControlParameters">
+    <parameter type="float" name="tessellationAccuracy" semantic="VALUE" value="1"/>
+  </parameterGroup>
+
+  <effect id="standardMaterialTriangle2TessellationControlShader" domain="tessellation_control">
+    <parameterGroup ref="standardMaterialTessellationControlParameters"/>
+    <technique type="forward">
+      <glsl signature="v3f_n3f">
+        <source input="vec3" name="vPosition[]"/>
+        <source input="vec3" name="vNormal[]"/>
+        <source output="vec3" name="tcPosition[]"/>
+        <source output="vec3" name="tcNormal[]"/>
+        <source file="standard_material/glsl/calculateTessLevels_t2.glsl"/>
+        <source file="standard_material/glsl/standard_material_t2_v3f_n3f_tcs.glsl"/>
+      </glsl>
+      <glsl signature="v3f_n3f_t02f">
+        <source input="vec3" name="vPosition[]"/>
+        <source input="vec3" name="vNormal[]"/>
+        <source input="vec2" name="vTexCoord0[]"/>
+        <source output="vec3" name="tcPosition[]"/>
+        <source output="vec3" name="tcNormal[]"/>
+        <source output="vec2" name="tcTexCoord0[]"/>
+        <source file="standard_material/glsl/calculateTessLevels_t2.glsl"/>
+        <source file="standard_material/glsl/standard_material_t2_v3f_n3f_tex0_tcs.glsl"/>
+      </glsl>
+    </technique>
+  </effect>
+
+  <effect id="standardMaterialPNTriangleTessellationEvaluationShader" domain="tessellation_evaluation">
+    <technique type="forward">
+      <glsl signature="v3f_n3f">
+        <source input="vec3" name="tcPosition[]"/>
+        <source input="vec3" name="tcNormal[]"/>
+        <source output="vec3" name="varNormal"/>
+        <source output="vec3" name="varWorldPos"/>
+        <source output="vec3" name="varEyePos"/>
+        <source file="standard_material/glsl/gl_PerVertex.glsl"/>
+        <source file="standard_material/glsl/BezierTriangle.glsl"/>
+        <source file="standard_material/glsl/PNTriangle.glsl"/>
+        <source file="standard_material/glsl/pntriangles_v3f_n3f_tes.glsl"/>
+      </glsl>
+      <glsl signature="v3f_n3f_t02f">
+        <source input="vec3" name="tcPosition[]"/>
+        <source input="vec3" name="tcNormal[]"/>
+        <source input="vec2" name="tcTexCoord0[]"/>
+        <source output="vec3" name="varNormal"/>
+        <source output="vec2" name="varTexCoord0"/>
+        <source output="vec3" name="varWorldPos"/>
+        <source output="vec3" name="varEyePos"/>
+        <source file="standard_material/glsl/gl_PerVertex.glsl"/>
+        <source file="standard_material/glsl/BezierTriangle.glsl"/>
+        <source file="standard_material/glsl/PNTriangle.glsl"/>
+        <source file="standard_material/glsl/pntriangles_v3f_n3f_tex0_tes.glsl"/>
+      </glsl>
+    </technique>
+  </effect>
+
+  <PipelineSpec id="standardMaterialTessellationPNTriangles"
+                vertex="standardMaterialPassThroughVertexShader"
+                tessellation_control="standardMaterialTriangle2TessellationControlShader"
+                tessellation_evaluation="standardMaterialPNTriangleTessellationEvaluationShader"
+                fragment="standardMaterialFragmentShader"/>
+
+</library>
