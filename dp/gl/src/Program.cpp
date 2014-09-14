@@ -338,7 +338,8 @@ namespace dp
         Uniform uniform;
         
         // get uniform name
-        uniform.name.resize(values[0]);
+	// some drivers do not add the trailing 0 to the name lenght. increase by 1 to get all characters.
+        uniform.name.resize(values[0] + 1);
         glGetProgramResourceName( getGLId(), GL_UNIFORM, index, GLsizei(uniform.name.size()), NULL, &uniform.name[0]);
 
         uniform.blockIndex = values[1];
@@ -385,7 +386,8 @@ namespace dp
         Uniform uniform;
 
         // get uniform name
-        uniform.name.resize(values[0]);
+	// some drivers do not add the trailing 0 to the name lenght. increase by 1 to get all characters.
+        uniform.name.resize(values[0] + 1);
         glGetProgramResourceName( getGLId(), GL_BUFFER_VARIABLE, index, GLsizei(uniform.name.size()), NULL, &uniform.name[0]);
 
         uniform.blockIndex = values[1];

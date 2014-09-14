@@ -104,7 +104,11 @@ namespace dp
             m_primitive = Primitive::create( PRIMITIVE_QUADS );
             m_primitive->setVertexAttributeSet( m_vertexAttributeSet );
 
+#if defined(DP_OS_WINDOWS)
             m_rendererGLLib = DynamicLibrary::createFromFile( "RiXGL.rdr" );
+#else
+            m_rendererGLLib = DynamicLibrary::createFromFile( "libRiXGL.rdr" );
+#endif
             DP_ASSERT( m_rendererGLLib );
 
             dp::rix::core::PFNCREATERENDERER createRenderer = (RiX::PFNCREATERENDERER)m_rendererGLLib->getSymbol( "createRenderer" );

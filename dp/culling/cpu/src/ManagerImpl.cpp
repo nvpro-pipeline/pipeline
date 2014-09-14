@@ -31,7 +31,8 @@
 #include <dp/culling/ResultBitSet.h>
 #include <dp/util/FrameProfiler.h>
 
-#if defined(DP_ARCH_X86_64)
+// TODO figure out alignment issues on linux
+#if defined(DP_ARCH_X86_64) && defined(DP_OS_WINDOWS)
   #define SSE
 #endif
 

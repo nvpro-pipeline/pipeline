@@ -24,13 +24,13 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#include "MaterialBrowser.h"
-#include "Viewer.h"
 #include <QDir>
 #include <QDrag>
 #include <QDragEnterEvent>
 #include <QMimeData>
 #include <QUrl>
+#include "MaterialBrowser.h"
+#include "Viewer.h"
 #include <dp/fx/EffectLibrary.h>
 
 MaterialBrowser::MaterialBrowser( const QString & title, QWidget * parent )

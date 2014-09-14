@@ -41,6 +41,8 @@ typedef uintptr_t UINT_PTR;   //!< Linux specific type definition for UINT_PTR, 
 #include <dp/util/DPAssert.h>
 #include <dp/util/SmartPtr.h>
 
+#include <boost/type_traits/is_base_of.hpp>
+
 namespace dp
 {
   namespace sg

@@ -54,7 +54,7 @@ target_link_libraries( DPSgUIQt5
   ${OPENGL_gl_LIBRARY}
 )
 
-qt5_use_modules(DPSgUIQt5 Widgets OpenGL)
+qt5_use_modules(DPSgUIQt5 Widgets OpenGL X11Extras )
 
 CopyGLEW( DPSgUIQt5 "${DP_BINARY_PATH}" )
 

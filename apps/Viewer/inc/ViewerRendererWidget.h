@@ -27,14 +27,13 @@
 #pragma once
 
 #include <QMenu>
-#include <dp/sg/ui/qt5/SceniXQGLSceneRendererWidget.h>
-#include "SceneRendererPipeline.h"
 
 #include <dp/sg/algorithm/RayIntersectTraverser.h>
-#include <dp/sg/ui/RendererOptions.h>
 #include <dp/util/Timer.h>
 #include <dp/math/Vecnt.h>
-
+#include <dp/sg/ui/RendererOptions.h>
+#include <dp/sg/ui/qt5/SceniXQGLSceneRendererWidget.h>
+#include "SceneRendererPipeline.h"
 
 // Qt Uses Bool which is defined by X11. Undef it here.
 #if defined(Bool)

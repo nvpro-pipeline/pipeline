@@ -31,8 +31,8 @@
 #include <QPushButton>
 #include <QRadioButton>
 #include <QVBoxLayout>
-#include "TransparencyDialog.h"
 #include "Viewer.h"
+#include "TransparencyDialog.h"
 
 TransparencyDialog::TransparencyDialog( QWidget * parent, ViewerRendererWidget * vrw )
   : QDialog( parent )

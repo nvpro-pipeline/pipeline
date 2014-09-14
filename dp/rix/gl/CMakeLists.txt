@@ -1,33 +1,7 @@
 project( RiXGL )
 
-file(TO_CMAKE_PATH $ENV{DP_3RDPARTY_PATH} DP_3RDPARTY_PATH)
-set(CMAKE_MODULE_PATH "${DP_3RDPARTY_PATH}/CMake")
-
-
 find_package(OpenGL REQUIRED )
 find_package(NVGLEW REQUIRED )
-
-###############################################################################
-# Detect pieces of the bin/lib path
-if( CMAKE_SIZEOF_VOID_P EQUAL 8 )
-  add_definitions("-DX86_64")
-else ()
-  set ( MSVC_CXX_FLAGS "/arch:SSE2" )
-endif()
-
-if(MSVC10)
-  set (CRT "crt100")
-  set ( COMPILER_ARCH "win32-msvc2010-${DP_ARCH}" )
-  #enable multiprocessor build on visual studio 2010
-  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP ${MSVC_CXX_FLAGS}")
-elseif(MSVC11)
-  set (CRT "crt110")
-  set ( COMPILER_ARCH "win32-msvc2012-${DP_ARCH}" )
-  #enable multiprocessor build on visual studio 2012
-  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP ${MSVC_CXX_FLAGS}")
-else()
-  message(FATAL_ERROR "Compiler version not supported")
-endif()
 
 #includes
 include_directories(
@@ -176,7 +150,9 @@ target_link_libraries( RiXGL
   ${OPENGL_gl_LIBRARY}
 )
 
+if(WIN32)
 CopyGLEW( RiXGL "${DP_BINARY_PATH}" )
+endif()
 
 set_target_properties( RiXGL PROPERTIES SUFFIX ".rdr" FOLDER "RiX" )
 

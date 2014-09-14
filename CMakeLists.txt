@@ -28,11 +28,16 @@ file(TO_CMAKE_PATH "$ENV{DPHOME}" DP_HOME)
 
 # check for DP_3RDPARTY_PATH environment variable
 if ( "$ENV{DP_3RDPARTY_PATH}" STREQUAL "" )
-  message( FATAL_ERROR "DP_3RDPARTY_PATH environment variable not set!" )
+  #message( FATAL_ERROR "DP_3RDPARTY_PATH environment variable not set!" )
+  file(TO_CMAKE_PATH "$ENV{DPHOME}" DP_3RDPARTY_PATH)
+  message("a $ENV{DPHOME}, ${DP_3RDPARTY_PATH}")
+else()
+  file(TO_CMAKE_PATH "$ENV{DP_3RDPARTY_PATH}" DP_3RDPARTY_PATH)
 endif()
-file(TO_CMAKE_PATH "$ENV{DP_3RDPARTY_PATH}" DP_3RDPARTY_PATH)
 
 file(TO_CMAKE_PATH "$ENV{BUILD_TOOLS_DIR}" BUILD_TOOLS_DIR)
+
+message("b $ENV{DPHOME}, ${DP_3RDPARTY_PATH}")
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMake" "${DP_3RDPARTY_PATH}/CMake")
 

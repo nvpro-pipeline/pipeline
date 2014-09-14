@@ -1,15 +1,8 @@
 project( RiXFx )
 
-file(TO_CMAKE_PATH $ENV{DP_3RDPARTY_PATH} DP_3RDPARTY_PATH)
-set(CMAKE_MODULE_PATH "${DP_3RDPARTY_PATH}/CMake")
-
-#find_package( NVBoost REQUIRED )
-#find_package( Boost COMPONENTS REQUIRED )
-
 #includes
 include_directories(
   "${PROJECT_SOURCE_DIR}/inc"
-  #${Boost_INCLUDE_DIRS}
   ${GLEW_INCLUDES}
 )
 #definitions
@@ -17,9 +10,6 @@ add_definitions(
   "-DRIX_FX_EXPORTS"
   "-D_CRT_SECURE_NO_WARNINGS"
 )
-if ( BUILD_DPFX_CUDA_COMPILATION_SUPPORT )
-  add_definitions( "-DDPFX_CUDA_COMPILATION_SUPPORT" )
-endif()
 
 #sources
 set( SOURCES 

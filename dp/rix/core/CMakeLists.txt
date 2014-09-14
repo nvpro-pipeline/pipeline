@@ -1,8 +1,5 @@
 project( RiXCore )
 
-file(TO_CMAKE_PATH $ENV{DP_3RDPARTY_PATH} DP_3RDPARTY_PATH)
-set(CMAKE_MODULE_PATH "${DP_3RDPARTY_PATH}/CMake")
-
 find_package( NVBoost REQUIRED )
 find_package( Boost COMPONENTS REQUIRED )
 

@@ -1,3 +1,5 @@
+# Uses secure crt functions from msvc
+if(WIN32)
 #includes
 include_directories(
   "${CMAKE_CURRENT_SOURCE_DIR}/inc"
@@ -45,3 +47,4 @@ target_link_libraries( CSFSaver
 )
 
 set_target_properties( CSFSaver PROPERTIES SUFFIX ".nxm" FOLDER "Savers" )
+endif(WIN32)

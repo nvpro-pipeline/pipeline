@@ -29,12 +29,13 @@
 #include <QApplication>
 
 #include "LogWidget.h"
-#include "MainWindow.h"
 #include "Preferences.h"
 #include "ScriptSystem.h"
 #include "ViewerCommand.h"
 
+#include "MainWindow.h"
 #include <dp/sg/ui/qt5/SceniXQGLWidget.h>
+
 
 #define VIEWER_APPLICATION_NAME   "Viewer"
 #define VIEWER_APPLICATION_VENDOR "NVIDIA Corporation"

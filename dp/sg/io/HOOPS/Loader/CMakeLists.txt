@@ -1,4 +1,5 @@
-
+# adopt NVHOOPS3D and make it optional
+if(WIN32)
 include( CopyFile )
 find_package( NVHOOPS3D REQUIRED )
 
@@ -70,3 +71,4 @@ foreach( file ${hoops3ddlls} )
   file( TO_CMAKE_PATH "${file}" FSOURCE )
   copy_file_if_changed( HOOPSLoader "${FSOURCE}" "${DP_BINARY_PATH}" )
 endforeach()
+endif()

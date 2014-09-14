@@ -28,6 +28,10 @@
 #include <dp/util/File.h>
 #include <boost/filesystem.hpp>
 
+#if defined(DP_OS_LINUX)
+#include <linux/limits.h>
+#endif
+
 #include <cstdlib>
 
 namespace dp

@@ -2559,7 +2559,7 @@ PrimitiveSharedPtr NVSGLoader::readPrimitive( const char *name )
 
   if ( token == "{" )
   {
-    PrimitiveData primitiveData = { PRIMITIVE_UNINITIALIZED, PATCHES_NO_PATCHES, PATCHES_MODE_TRIANGLES, PATCHES_SPACING_EQUAL, PATCHES_ORDERING_CCW, ~0u, ~0u, nullptr, ~0u, nullptr };
+    PrimitiveData primitiveData = { PRIMITIVE_UNINITIALIZED, PATCHES_NO_PATCHES, PATCHES_MODE_TRIANGLES, PATCHES_SPACING_EQUAL, PATCHES_ORDERING_CCW, ~0u, ~0u, dp::sg::core::IndexSetSharedPtr::null, ~0u, dp::sg::core::VertexAttributeSetSharedPtr::null };
 
     token = getNextToken();
     while ( token != "}" )

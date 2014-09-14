@@ -32,8 +32,8 @@
 #include <QPushButton>
 #include <QRadioButton>
 #include <QVBoxLayout>
-#include "TonemapperDialog.h"
 #include "Viewer.h"
+#include "TonemapperDialog.h"
 
 TonemapperDialog::TonemapperDialog( QWidget * parent, ViewerRendererWidget * vrw )
   : QDialog( parent )

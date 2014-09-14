@@ -28,8 +28,15 @@
 #include <boost/thread.hpp>
 
 #include <GL/glew.h>
+
 #if defined(DP_OS_WINDOWS)
 #include <GL/wglew.h>
+#endif
+
+#if 0
+#if defined(DP_OS_LINUX)
+#include <GL/glxew.h>
+#endif
 #endif
 
 
@@ -85,7 +92,7 @@ namespace dp
       }
 
     }
-  #elif defined(LINUX)
+  #elif defined(DP_OS_LINUX)
     RenderContext::NativeContext::NativeContext( GLXContext context, bool destroyContext, GLXDrawable drawable, bool destroyDrawable, GLXPbuffer pbuffer, bool destroypbuffer, Display *display, bool destroyDisplay )
       : m_context(context)
       , m_destroyContext( destroyContext )
@@ -785,6 +792,10 @@ namespace dp
         screen = creation.screen;
       }
 
+      glXQueryDrawable = (PFNGLXQUERYDRAWABLEPROC)glXGetProcAddress((GLubyte*)"glXQueryDrawable");
+      glXChooseFBConfig = (PFNGLXCHOOSEFBCONFIGPROC)glXGetProcAddress((GLubyte*)"glXChooseFBConfig");
+      glXCreateNewContext = (PFNGLXCREATENEWCONTEXTPROC)glXGetProcAddress((GLubyte*)"glXCreateNewContext");
+#if 0
       unsigned int glxFBConfigId = 0;
       glXQueryDrawable( display, creation.drawable, GLX_FBCONFIG_ID, &glxFBConfigId );
       DP_ASSERT( glxFBConfigId );
@@ -795,12 +806,28 @@ namespace dp
       GLXFBConfig *glxFBConfigs = glXChooseFBConfig( display, screen, glxFBConfigAttributes, &numElements );
       DP_ASSERT( glxFBConfigs );
 
-      GLXDrawable drawable = creation.drawable;
+#else
+      int numElements = 0;
+      static int fb_attribs[] = {
+        GLX_RENDER_TYPE, GLX_RGBA_BIT,
+        GLX_X_RENDERABLE, True,
+        GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
+	GLX_DOUBLEBUFFER, True,
+        GLX_RED_SIZE, 8,
+        GLX_BLUE_SIZE, 8,
+        GLX_GREEN_SIZE, 8,
+        0
+      };
+      GLXFBConfig *glxFBConfigs = glXChooseFBConfig(display, screen, fb_attribs, &numElements);
+#endif
 
+      GLXDrawable drawable = creation.drawable;
       GLXContext context = createContext( display, glxFBConfigs[0], creation.shared ? creation.shared->m_context->m_context : 0 );
       DP_ASSERT( context );
 
       SmartNativeContext nativeContext = new NativeContext( context, true, drawable, false, 0, false, display, true );
+      nativeContext->makeCurrent();
+      glewInit();
 
       SmartShareGroup shareGroup = creation.shared ? creation.shared->getShareGroup() : createShareGroup( nativeContext );
       return new RenderContext( nativeContext, shareGroup );

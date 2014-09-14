@@ -35,7 +35,8 @@
 
 #include <limits>
 
-#if defined(DP_ARCH_X86_64)
+// verify alignment of vectors/matrices on linux!
+#if defined(DP_ARCH_X86_64) && defined(DP_OS_WINDOWS)
 #define SSE
 #endif
 

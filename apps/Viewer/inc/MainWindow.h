@@ -37,8 +37,8 @@
 #include "SceneTreeBrowser.h"
 #include "ScriptWidget.h"
 #include "UndoWidget.h"
-#include "ViewerRendererWidget.h"
 #include "ViewportLayout.h"
+#include "ViewerRendererWidget.h"
 #include <dp/sg/core/Camera.h>
 #include <dp/sg/core/Path.h>
 

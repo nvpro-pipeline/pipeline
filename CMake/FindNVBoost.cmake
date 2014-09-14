@@ -1,9 +1,9 @@
-set (BOOSTVERSION 1.54.0)
-set(Boost_USE_STATIC_LIBS "ON")
-file( TO_CMAKE_PATH "$ENV{DP_3RDPARTY_PATH}/Boost/${BOOSTVERSION}" BOOSTROOT)
-if ( EXISTS "${BOOSTROOT}" )
-  if ( NOT "${BOOSTROOT}" STREQUAL "${BOOST_ROOT}" )
-    if (WIN32)
+if (WIN32)
+  set (BOOSTVERSION 1.54.0)
+  file( TO_CMAKE_PATH "$ENV{DP_3RDPARTY_PATH}/Boost/${BOOSTVERSION}" BOOSTROOT)
+  set(Boost_USE_STATIC_LIBS "ON")
+  if ( EXISTS "${BOOSTROOT}" )
+    if ( NOT "${BOOSTROOT}" STREQUAL "${BOOST_ROOT}" )
 
       # Configure boost to use the BUILD_TOOLS_DIR
       if(MSVC90)

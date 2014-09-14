@@ -1,4 +1,5 @@
-
+# TODO no packages for openflight available
+if(WIN32)
 find_package( NVfltLib )
 
 #includes
@@ -56,3 +57,5 @@ target_link_libraries( FLTLoader
 )
 
 set_target_properties( FLTLoader PROPERTIES SUFFIX ".nxm" FOLDER "Loaders")
+
+endif(WIN32)

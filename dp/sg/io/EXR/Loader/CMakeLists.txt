@@ -5,7 +5,7 @@ find_package( NVOpenEXR )
 include(CopyFile)
 
 include_directories(
-  ${OPENEXR_INCDIR}
+  ${OPENEXR_INCLUDE_DIRS}
 )
 
 #definitions
@@ -62,8 +62,14 @@ add_perforce_to_target( EXRLoader )
 target_link_libraries( EXRLoader
   DPSgCore
   DPSgIO
+  ${OPENEXR_LIBRARIES}
+)
+
+if(WIN32)
+target_link_libraries( EXRLoader
   ${OPENEXR_LIBDIR}/Release/IlmImf.lib
 )
+endif()
 
 if(TARGET SceniX)
   add_dependencies( EXRLoader SceniX )

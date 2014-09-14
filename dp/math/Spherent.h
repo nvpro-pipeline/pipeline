@@ -28,6 +28,7 @@
 /** @file */
 
 #include <dp/math/Vecnt.h>
+#include <dp/math/Boxnt.h>
 
 namespace dp
 {
