@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2005
+// Copyright NVIDIA Corporation 2002-2014
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -2559,8 +2559,8 @@ PrimitiveSharedPtr NVSGLoader::readPrimitive( const char *name )
 
   if ( token == "{" )
   {
-    PrimitiveData primitiveData = { PRIMITIVE_UNINITIALIZED, PATCHES_NO_PATCHES, PATCHES_MODE_TRIANGLES, PATCHES_SPACING_EQUAL, PATCHES_ORDERING_CCW, ~0u, ~0u, nullptr, ~0u, nullptr };
-
+    PrimitiveData primitiveData = { PRIMITIVE_UNINITIALIZED, PATCHES_NO_PATCHES, PATCHES_MODE_TRIANGLES, PATCHES_SPACING_EQUAL, PATCHES_ORDERING_CCW, ~0u, ~0u, dp::sg::core::IndexSetSharedPtr::null, ~0u, dp::sg::core::VertexAttributeSetSharedPtr::null };
+ 
     token = getNextToken();
     while ( token != "}" )
     {

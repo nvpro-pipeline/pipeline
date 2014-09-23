@@ -12,16 +12,13 @@
 cmake_minimum_required(VERSION 2.6)
 cmake_policy(SET CMP0020 OLD)
 
-# Qt+OpenGL not available on arm yet
-if ( NOT "${DP_ARCH}" STREQUAL "armv7l")
+find_package( Qt5Widgets QUIET )
+
+if (Qt5Widgets_FOUND AND TARGET DPSgUIQt5)
   project( QtMinimal )
 
-  find_package(OpenGL REQUIRED )
-  find_package(NVQt5  QUIET )
-  find_package(Qt5Core REQUIRED )
-  find_package(NVGLEW REQUIRED )
-
-  find_package( NVBoost )
+  find_package( OpenGL REQUIRED )
+  find_package( GLEW REQUIRED )
   find_package( Boost COMPONENTS program_options REQUIRED )
 
   set( SCENIX_COMMON_BASE "${SCENIX_HOME}/samples/common" )
@@ -38,7 +35,7 @@ if ( NOT "${DP_ARCH}" STREQUAL "armv7l")
                      )
 
   include_directories( "inc" )
-  include_directories( ${GLEW_INCLUDES} )
+  include_directories( ${GLEW_INCLUDE_DIRS} )
 
   add_definitions( ${GLEW_DEFINITIONS} )
 
@@ -50,7 +47,7 @@ if ( NOT "${DP_ARCH}" STREQUAL "armv7l")
   target_link_libraries( QtMinimal
     ${QT_LIBRARIES}
     ${OPENGL_gl_LIBRARY}
-    ${GLEW_LIBS}
+    ${GLEW_LIBRARY}
     ${Boost_LIBRARIES}
     DPSgAlgorithm
     DPSgCore
@@ -66,10 +63,8 @@ if ( NOT "${DP_ARCH}" STREQUAL "armv7l")
 
   CopyGLEW( QtMinimal "${DP_BINARY_PATH}" )
 
-  if(TARGET SceniX)
-    add_dependencies( QtMinimal SceniX SceniXxbar SceniXUtils )
-    add_perforce_to_target( QtMinimal )
-  endif()
-
   set_target_properties( QtMinimal PROPERTIES FOLDER "Apps")
+else()
+  message("Qt5Widgets or DpSgUIQt5 not found, skipping QtMinimal")
 endif()
+

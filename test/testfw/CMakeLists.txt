@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 2.6)
 
-include( Perforce )
-
 project( dpt )
 
 set( DPUTIL_INCLUDES

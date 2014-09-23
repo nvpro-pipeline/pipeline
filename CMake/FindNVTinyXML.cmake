@@ -1,32 +1,20 @@
-set (TINYXMLVERSION 2.6.2)
+# - Try to find TinyXML
+# Once done this will define
+#  TINYXML_FOUND - System has TinyXML
+#  TINYXML_INCLUDE_DIRS - The TinyXML include directories
+#  TINYXML_LIBRARIES - The libraries needed to use TinyXML
+#  TINYXML_DEFINITIONS - Compiler switches required for using TinyXML
 
-if (WIN32)
-  # Configure tinyxml directory
-  if(MSVC10)
-    set (COMPILER "win32-msvc2010-${DP_ARCH}")
-  elseif(MSVC11)
-    set (COMPILER "win32-msvc2012-${DP_ARCH}")
-  elseif(CMAKE_COMPILER_IS_GNUCC)
-    execute_process(COMMAND ${CMAKE_C_COMPILER} -dumpversion OUTPUT_VARIABLE GCC_VERSION)
-    string(STRIP "${GCC_VERSION}" GCC_VERSION)
-    set (COMPILER "mingw-gcc-${GCC_VERSION}-${DP_ARCH}")
-  else()
-    message(FATAL_ERROR "Compiler version not supported")
-  endif()
-  
-  set( TINYXML_INCLUDES "$ENV{DP_3RDPARTY_PATH}/tinyxml/${TINYXMLVERSION}/include" )
-  if (MSVC)
-    set( TINYXML_LIBS optimized "$ENV{DP_3RDPARTY_PATH}/tinyxml/${TINYXMLVERSION}/lib/${COMPILER}/tinyxml.lib" 
-                      debug     "$ENV{DP_3RDPARTY_PATH}/tinyxml/${TINYXMLVERSION}/lib/${COMPILER}/tinyxmld.lib" )
-  elseif(CMAKE_COMPILER_IS_GNUCC)
-    set( TINYXML_LIBS optimized "$ENV{DP_3RDPARTY_PATH}/tinyxml/${TINYXMLVERSION}/lib/${COMPILER}/libtinyxml.a" 
-                      debug     "$ENV{DP_3RDPARTY_PATH}/tinyxml/${TINYXMLVERSION}/lib/${COMPILER}/libtinyxmld.a" )
-  endif()
-  
-endif(WIN32)
+find_path(TINYXML_INCLUDE_DIR "tinyxml.h")
+find_library(TINYXML_LIBRARY NAMES tinyxml.lib)
 
-if ( UNIX )
-  set( TINYXML_LIBS tinyxml )
-endif( UNIX )
+set(TINYXML_LIBRARIES ${TINYXML_LIBRARY} )
+set(TINYXML_INCLUDE_DIRS ${TINYXML_INCLUDE_DIR} )
 
+include(FindPackageHandleStandardArgs)
+# handle the QUIETLY and REQUIRED arguments and set TINYXML_FOUND to TRUE
+# if all listed variables are TRUE
+find_package_handle_standard_args(TinyXML  DEFAULT_MSG
+                                  TINYXML_LIBRARY TINYXML_INCLUDE_DIR)
 
+mark_as_advanced(TINYXML_INCLUDE_DIR TINYXML_LIBRARY )

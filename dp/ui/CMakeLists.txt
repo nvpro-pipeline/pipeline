@@ -1,9 +1,8 @@
 find_package( OpenGL REQUIRED )
-find_package( NVBoost REQUIRED )
 
 #includes
 include_directories(
-  ${GLEW_INCLUDES}
+  ${GLEW_INCLUDE_DIRS}
 )
 #definitions
 add_definitions(
@@ -34,8 +33,6 @@ add_library( DPUI SHARED
   ${PUBLIC_HEADERS}
   ${PRIVATE_HEADERS}
 )
-
-add_perforce_to_target( DPUI )
 
 target_link_libraries( DPUI
   DPUtil

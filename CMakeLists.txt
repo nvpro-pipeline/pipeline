@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 2.8)
 
 PROJECT( Pipeline )
 
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake")
+include("dp")
+include("dp3rdParty")
+
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 if(WIN32)
@@ -44,7 +48,6 @@ else ()
   set (DP_ARCH "x86" CACHE STRING "CPU Architecture")
 endif()
 
-find_package( NVBoost )
 find_package( Boost REQUIRED )
 
 if(MSVC10)
@@ -148,10 +151,10 @@ include_directories(${Boost_INCLUDE_DIR})
 
 # find some libraries
 
-if (WIN32)
-  find_package(NVPMAPI REQUIRED)
-  add_definitions("-DHAVE_NVPMAPI")
-endif()
+#if (WIN32)
+#  find_package(NVPMAPI REQUIRED)
+#  add_definitions("-DHAVE_NVPMAPI")
+#endif()
 
 add_subdirectory( dp )
 

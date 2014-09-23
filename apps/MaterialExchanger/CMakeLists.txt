@@ -20,7 +20,7 @@ add_definitions(
 )
 
 include_directories(
-  ${TINYXML_INCLUDES}
+  ${TINYXML_INCLUDE_DIRS}
 )
 
 set (SOURCES
@@ -33,7 +33,7 @@ add_executable(MaterialExchanger
 )
 
 target_link_libraries(MaterialExchanger
-  ${TINYXML_LIBS}
+  ${TINYXML_LIBRARIES}
   DPSgAlgorithm
   DPSgIO
 )

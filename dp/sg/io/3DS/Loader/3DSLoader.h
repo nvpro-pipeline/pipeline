@@ -45,8 +45,8 @@
 
 #include <dp/util/PlugInCallback.h>
 
-#include <lib3ds.h>
-#include <lib3ds_impl.h>
+#include <lib3ds/lib3ds.h>
+#include <lib3ds/lib3ds_impl.h>
 
 #ifdef _WIN32
 // microsoft specific storage-class defines

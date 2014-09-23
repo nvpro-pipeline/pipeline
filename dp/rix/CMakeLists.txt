@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
 
-include( Perforce )
-
 project( RiX )
 
 SET( BUILD_DPT ON CACHE BOOL "Build DPT framework" )

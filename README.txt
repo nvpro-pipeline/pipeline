@@ -1,23 +1,22 @@
-How to build the RiX Pipeline
+=== nvpro-pipeline ===
 
 Requirements:
-- Visual C++ 2008 or Visual C++ 2010
-- A recent CMake from http://cmake.org/cmake/resources/software.html
+- Visual C++ 2012 x64. Further platforms need to be added to the 3rdparty build scripts.
+- CMake 2.8.12
+- The pipeline should also build on Linux. This feature is less tested.
 
 Building:
-- Uncompress 3rdparty.zip to an empty folder and create an environment variable DP_3RDPARTY_PATH pointing to this folder.
-- Uncompress dphome.zip to an empty folder and create an environment variable DPHOME pointing to this folder.
+- Set DPHOME to the folder with the nvpro-pipeline sources
+- Set DP_3RDPARTY_PATH to nvpro-pipeline/3rdparty
+- Install Qt 5.2.1 MSVC 2012 OpenGL through the installer from http://qt.io
+- Start a 'VS2012 x64 Native Tools Command Prompt'. Ensure that cmake can be launched from the command line.
+- Call 3rdPartyBuild.cmd. This will download and build all required dependencies.
+- Start the CMake GUI, specify the source code location and choose a subfolder, i.e. build/vc11-amd64, to build the binaries. Use 'Visual Studio 11 Win64' as generator.
+- Open build/vc11-amd64/Pipeline.sln in Visual Studio and hit build.
 
-- Launch the CMake GUI and choose DPHOME as source folder. Create a new subfolder within DPHOME for each configuration you want to build.
-- Enable BUILD/BUILD_OPENGL_APPS to build our samples. This will build QtMinimalXBAR, the Viewer, and some other examples. Using QtMinimalXBAR you can configure the pipeline when loading a scene.
-- Press first Configure and then Generate to generate a Visual C++ Solution.
-- Build the solution.
+The binaries can be found in the folder build\vc11-amd64\bin\(Debug|Release). You'll have to copy the required 3rd party dlls from the 3rdparty folders to the binary directory. This will be done automatically soon.
 
-The binaries can be found in bin/(your arch)/win/(your visual studio version)/(debug|release).
-
-QtMinimalXBAR is the viewer for this pipeline. It can configure the glsl code generation of dp::fx and the way how the vertex buffers are passed to GL.
-
-Small overview over the pipleine:
+Small overview over the pipeline:
 
 ShaderGenerators:
 
@@ -53,8 +52,8 @@ Important modules in the dphome folder:
 - dp::rix::fx Connection between dp::fx and dp::rix::gl
 - dp::math our math functions
 - dp::util misc utility functions
-- dp::sg Will contain our scenegraph in the future. Currently content is in SCENIXHOME
+- dp::sg Scenegraph
 - dp::sg::xbar crossbar interface which converts a scenegraph to a flat list. SceniXXBAR is the rix-gl interface for this
-- dp::culling Culling interface we're going to use in the xbar in the future.
+- dp::culling culling interface we're going to use in the xbar in the future.
 
 

@@ -47,8 +47,6 @@ add_library( DPSgIO SHARED
   ${PUBLIC_HEADERS}
 )
 
-add_perforce_to_target( DPSgIO )
-
 target_link_libraries( DPSgIO
   DPSgCore
   DPSgUI

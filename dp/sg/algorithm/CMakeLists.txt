@@ -77,8 +77,6 @@ add_library( DPSgAlgorithm SHARED
   ${PUBLIC_HEADERS}
 )
 
-add_perforce_to_target( DPSgAlgorithm )
-
 target_link_libraries( DPSgAlgorithm
   DPSgCore
   DPSgUI

@@ -31,9 +31,6 @@ add_library( NBFSaver SHARED
   ${NBFSAVER_HEADERS}
 )
 
-add_perforce_to_target( NBFSaver )
-
-
 target_link_libraries( NBFSaver 
   DP
   DPSgCore

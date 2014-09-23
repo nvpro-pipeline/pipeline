@@ -1,16 +1,12 @@
 project(DPUtil)
 
-find_package( NVBoost )
-find_package( Boost COMPONENTS filesystem system REQUIRED )
-find_package(OpenGL REQUIRED)
-find_package(NVDevIL REQUIRED)
-find_package(NVGLEW REQUIRED)
+find_package(Boost COMPONENTS filesystem system REQUIRED )
+find_package(DevIL REQUIRED)
 
 include( CopyFile )
 
 include_directories( ${Boost_INCLUDE_DIRS}
-                     ${DEVIL_INCLUDES}
-                     ${GLEW_INCLUDES}
+                     ${IL_INCLUDE_DIR}
                      ${NVPMAPI_INCLUDE_DIR} 
                    )
 
@@ -130,9 +126,7 @@ CopyGLEW( DPUtil "${DP_BINARY_PATH}" )
 
 target_link_libraries( DPUtil
     ${Boost_LIBRARIES}
-    ${DEVIL_LIBS}
-    ${OPENGL_gl_LIBRARY}
-    ${GLEW_LIBS}
+    ${IL_LIBRARIES}
 )
 
 if (MSVC)

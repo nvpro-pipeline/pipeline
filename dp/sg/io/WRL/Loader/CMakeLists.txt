@@ -30,8 +30,6 @@ add_library( WRLLoader SHARED
   ${WRLLOADER_HEADERS}
 )
 
-add_perforce_to_target( WRLLoader )
-
 target_link_libraries( WRLLoader
   DP
   DPSgCore

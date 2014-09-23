@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2005
+// Copyright NVIDIA Corporation 2002-2014
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -100,6 +100,6 @@
   #endif //BETA
 #endif
 
-#define NVSG_COPYRIGHT   SDK_VENDOR" "SDK_NAME" Version "VERSION_STR"\n© Copyright 2009 NVIDIA Corporation\n";
+#define NVSG_COPYRIGHT   SDK_VENDOR " " SDK_NAME " Version " VERSION_STR "\n(c) Copyright 2014 NVIDIA Corporation\n";
 
 #endif  //  DOXYGEN_IGNORE

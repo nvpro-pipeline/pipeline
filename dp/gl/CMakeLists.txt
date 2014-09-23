@@ -1,11 +1,10 @@
 find_package( OpenGL REQUIRED )
-find_package( NVGLEW REQUIRED )
-find_package( NVBoost REQUIRED )
+find_package( GLEW REQUIRED )
 find_package( Boost COMPONENTS chrono date_time system thread )
 
 #includes
 include_directories(
-  ${GLEW_INCLUDES}
+  ${GLEW_INCLUDE_DIRS}
 )
 #definitions
 add_definitions(
@@ -65,13 +64,11 @@ add_library( DPGL SHARED
   ${PRIVATE_HEADERS}
 )
 
-add_perforce_to_target( DPGL )
-
 target_link_libraries( DPGL
   DPUtil
   DPUI
   ${OPENGL_gl_LIBRARY}
-  ${GLEW_LIBS}
+  ${GLEW_LIBRARY}
   ${Boost_LIBRARIES}
 )
 

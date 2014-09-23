@@ -86,10 +86,24 @@ void AnimatorColor::update( float time )
   float ix;
   sx = std::modf( (float(m_x) / m_objectCount[0]) + time, &ix);
   float sy = float(m_y) / m_objectCount[1];
-  dp::math::Vec3f color( sx, sy, sx * sy );
 
-  m_parameterGroupData->setParameter( m_itParameter, color );
+  if( (m_itParameter->first.getType() & dp::fx::PT_SCALAR_MODIFIER_MASK) == dp::fx::PT_VECTOR3 )
+  {
+    dp::math::Vec3f color( sx, sy, sx * sy );
+    m_parameterGroupData->setParameter( m_itParameter, color );
+  }
+  else if( (m_itParameter->first.getType() & dp::fx::PT_SCALAR_MODIFIER_MASK) == dp::fx::PT_VECTOR4 )
+  {
+    dp::math::Vec4f color( sx, sy, sx * sy, 1.0f );
+    m_parameterGroupData->setParameter( m_itParameter, color );
+  }
+  else
+  {
+    DP_ASSERT( !"unknown parameter type" );
+  }
 }
+
+
 
 /************************************************************************/
 /* Animator Bumpiness                                  */
@@ -139,18 +153,22 @@ AnimatedScene::AnimatedScene( const dp::math::Vec2f& gridSize, const dp::math::V
   m_itColors = m_effectSpec->findParameterGroupSpec( std::string("standardMaterialParameters") );
 
   std::vector<std::string> searchPaths;
-  searchPaths.push_back( dp::home() + "/media/effects/mdl" );
+  searchPaths.push_back( dp::home() + "/media/effects/xml" );
   searchPaths.push_back( dp::home() + "/media/textures" );
-  dp::fx::EffectLibrary::instance()->loadEffects( "material_catalog/plastic/rubber_studded_black.xml", searchPaths );
-  dp::fx::EffectLibrary::instance()->loadEffects( "material_catalog/plastic/resin_polyurethane_coated.xml", searchPaths );
-  dp::fx::EffectLibrary::instance()->loadEffects( "material_catalog/wood/mahogany_floorboards.xml", searchPaths );
-  dp::fx::EffectLibrary::instance()->loadEffects( "material_catalog/wood/mahogany_floorboards.xml", searchPaths );
-  dp::fx::EffectLibrary::instance()->loadEffects( "material_catalog/metal/steel_milled_concentric.xml", searchPaths );
+  dp::fx::EffectLibrary::instance()->loadEffects( "carpaint.xml", searchPaths );
+  dp::fx::EffectLibrary::instance()->loadEffects( "phong.xml", searchPaths );
+  dp::fx::EffectLibrary::instance()->loadEffects( "standard_material.xml", searchPaths );
+  dp::fx::EffectLibrary::instance()->loadEffects( "thinglass.xml", searchPaths );
   
-  m_rubber_studded_black = dp::sg::core::EffectData::create( dp::fx::EffectLibrary::instance()->getEffectData("rubber_studded_black") );
-  m_resin_polyurethane_coated = dp::sg::core::EffectData::create( dp::fx::EffectLibrary::instance()->getEffectData("resin_polyurethane_coated") );
-  m_mahogany_floorboards = dp::sg::core::EffectData::create( dp::fx::EffectLibrary::instance()->getEffectData("mahogany_floorboards") );
-  m_steel_milled_concentric = dp::sg::core::EffectData::create( dp::fx::EffectLibrary::instance()->getEffectData("steel_milled_concentric") );
+  m_carpaint = dp::sg::core::EffectData::create( dp::fx::EffectLibrary::instance()->getEffectData("carpaint") );
+  m_phong = dp::sg::core::EffectData::create( dp::fx::EffectLibrary::instance()->getEffectData("phong") );
+  m_standard_material = dp::sg::core::EffectData::create( dp::fx::EffectLibrary::instance()->getEffectData("standardMaterial") );
+  m_thinglass = dp::sg::core::EffectData::create( dp::fx::EffectLibrary::instance()->getEffectData("thinglass") );
+
+  DP_ASSERT( m_carpaint );
+  DP_ASSERT( m_phong );
+  DP_ASSERT( m_standard_material );
+  DP_ASSERT( m_thinglass );
 
   createGrid( );
 }
@@ -186,24 +204,24 @@ dp::sg::core::EffectDataSharedPtr AnimatedScene::createMaterial( size_t x, size_
     }
     break;
   case 1:
-    effect = m_rubber_studded_black.clone();
+    effect = m_carpaint.clone();
 
-    m_animators[index] = boost::make_shared<AnimatorColor>(effect, "rubber_studded_blackFragmentParameters", "base_color", int(x), int(y), m_objectCount );
+    m_animators[index] = boost::make_shared<AnimatorColor>(effect, "carpaint_parameters", "diffuse", int(x), int(y), m_objectCount );
     break;
   case 2:
-    effect = m_resin_polyurethane_coated.clone();
+    effect = m_phong.clone();
 
-    m_animators[index] = boost::make_shared<AnimatorColor>(effect, "resin_polyurethane_coatedFragmentParameters", "resin_color", int(x), int(y), m_objectCount );
+    m_animators[index] = boost::make_shared<AnimatorColor>(effect, "phongParameters", "diffuseColor", int(x), int(y), m_objectCount );
     break;
   case 3:
-    effect = m_mahogany_floorboards.clone();
+    effect = m_standard_material.clone();
 
-    m_animators[index] = boost::make_shared<AnimatorBumpiness>(effect, "mahogany_floorboardsFragmentParameters", "bump_amount", int(x), int(y), m_objectCount );
+    m_animators[index] = boost::make_shared<AnimatorColor>(effect, "standardMaterialParameters", "frontDiffuseColor", int(x), int(y), m_objectCount );
     break;
   case 4:
-    effect = m_steel_milled_concentric.clone();
+    effect = m_thinglass.clone();
 
-    m_animators[index] = boost::make_shared<AnimatorBumpiness>(effect, "steel_milled_concentricFragmentParameters", "material_ior", int(x), int(y), m_objectCount );
+    m_animators[index] = boost::make_shared<AnimatorColor>(effect, "thinglass_parameters", "transparentColor", int(x), int(y), m_objectCount );
     break;
   }
 

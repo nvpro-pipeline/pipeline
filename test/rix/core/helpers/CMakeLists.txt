@@ -26,14 +26,12 @@ add_dependencies( DPHelpers RiXCore )
 
 target_link_libraries( DPHelpers
   "${OPENGL_gl_LIBRARY}"
-  ${GLEW_LIB}
+  ${GLEW_LIBRARY}
   DPTcore
   DPUtil
   DPTRiX
   RiXCore
   DPMath
 )
-  
-add_perforce_to_target( DPHelpers )
   
 set_target_properties( DPHelpers PROPERTIES FOLDER "DPT/RiX/Core")

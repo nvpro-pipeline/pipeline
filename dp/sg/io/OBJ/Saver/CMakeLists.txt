@@ -29,8 +29,6 @@ add_library( OBJSaver SHARED
   ${OBJSAVER_HEADERS}
 )
 
-add_perforce_to_target( OBJSaver )
-
 target_link_libraries( OBJSaver
   DPSgCore
   DPSgUI

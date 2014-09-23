@@ -138,10 +138,12 @@ namespace dp
           {
             m_mf = new core::MeasurementFunctorGoldImage();
           }
+#if defined(HAVE_NVPMAPI)
           else if( mf.compare("perfmon") == 0 )
           {
             m_mf = new core::MeasurementFunctorNVPM();
           }
+#endif
           else if( mf.compare("timer") == 0 )
           {
             m_mf = new core::MeasurementFunctorTimer();

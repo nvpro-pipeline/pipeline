@@ -1,17 +1,20 @@
-file( TO_CMAKE_PATH "$ENV{DP_3RDPARTY_PATH}/fltLib/" FLTLIBROOT)
+# - Try to find fltlib
+# Once done this will define
+#  FLTLIB_FOUND - System has fltlib
+#  FLTLIB_INCLUDE_DIRS - The fltlib include directories
+#  FLTLIB_LIBRARIES - The libraries needed to use fltlib
+#  FLTLIB_DEFINITIONS - Compiler switches required for using fltlib
 
-if ( EXISTS "${FLTLIBROOT}" )
+find_path(FLTLIB_INCLUDE_DIR "flt.h")
+find_library(FLTLIB_LIBRARY NAMES OpenFlight.lib)
 
-  # we only have windows version at the moment
-  if (WIN32)
-  elseif ( UNIX )
-  endif()
+set(FLTLIB_LIBRARIES ${FLTLIB_LIBRARY} )
+set(FLTLIB_INCLUDE_DIRS ${FLTLIB_INCLUDE_DIR} )
 
-  file ( TO_NATIVE_PATH "${FLTLIBROOT}" FLTLIBROOT )
-  set( ENV{FLTLIBROOT} "${FLTLIBROOT}" )
-  set( FLTLIB_BINDIR "$ENV{FLTLIBROOT}/win32-msvc${MSVC_VERSION}-${DP_ARCH}/bin" )
-  set( FLTLIB_LIBDIR "$ENV{FLTLIBROOT}/win32-msvc${MSVC_VERSION}-${DP_ARCH}/lib" )
-  set( FLTLIB_INCDIR "$ENV{FLTLIBROOT}" )
+include(FindPackageHandleStandardArgs)
+# handle the QUIETLY and REQUIRED arguments and set FLTLIB_FOUND to TRUE
+# if all listed variables are TRUE
+find_package_handle_standard_args(fltlib  DEFAULT_MSG
+                                  FLTLIB_LIBRARY FLTLIB_INCLUDE_DIR)
 
-endif()
-
+mark_as_advanced(FLTLIB_INCLUDE_DIR FLTLIB_LIBRARY )

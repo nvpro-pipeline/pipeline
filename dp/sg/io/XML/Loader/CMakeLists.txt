@@ -4,7 +4,7 @@ find_package( NVTinyXML )
 include_directories(
   "${CMAKE_CURRENT_SOURCE_DIR}"
   "${CMAKE_CURRENT_SOURCE_DIR}/inc"
-  include_directories( ${TINYXML_INCLUDES} )
+  include_directories( ${TINYXML_INCLUDE_DIRS} )
 )
 
 #definitions
@@ -36,8 +36,6 @@ add_library( XMLLoader SHARED
   ${XMLLOADER_HEADERS}
 )
 
-add_perforce_to_target( XMLLoader )
-
 target_link_libraries( XMLLoader
   DP
   DPSgCore
@@ -45,7 +43,7 @@ target_link_libraries( XMLLoader
   DPMath
   DPUtil
   DPSgIO
-  ${TINYXML_LIBS}
+  ${TINYXML_LIBRARIES}
 )
 
 set_target_properties( XMLLoader PROPERTIES SUFFIX ".nxm" FOLDER "Loaders")

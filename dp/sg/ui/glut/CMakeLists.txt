@@ -1,9 +1,9 @@
-find_package( NVGLEW REQUIRED )
-find_package( NVGLUT REQUIRED)
+find_package( GLEW REQUIRED )
+find_package( GLUT REQUIRED)
 
 #includes
 include_directories(
-  ${GLEW_INCLUDES}
+  ${GLEW_INCLUDE_DIRS}
   ${GLUT_INCLUDE_DIR}
 )
 
@@ -39,13 +39,11 @@ add_library( DPSgUIGLUT SHARED
   ${PUBLIC_HEADERS}
 )
 
-add_perforce_to_target( DPSgUIGLUT )
-
 target_link_libraries( DPSgUIGLUT
   DPSgCore
   DPSgUI
   DPGL
-  ${GLEW_LIBS}
+  ${GLEW_LIBRARY}
   ${GLUT_LIBRARIES}
   ${OPENGL_gl_LIBRARY}
 )

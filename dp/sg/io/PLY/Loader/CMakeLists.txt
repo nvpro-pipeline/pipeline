@@ -31,8 +31,6 @@ add_library( PLYLoader SHARED
   ${PLYLOADER_HEADERS}
 )
 
-add_perforce_to_target( PLYLoader )
-
 target_link_libraries( PLYLoader
   DP
   DPSgCore

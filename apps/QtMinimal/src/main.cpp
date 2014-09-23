@@ -26,6 +26,7 @@
 
 #include <QApplication>
 #include <QElapsedTimer>
+#include <dp/sg/ui/qt5/SceniXQGLSceneRendererWidget.h>
 
 #include <fstream>
 
@@ -47,7 +48,6 @@
 #include <dp/sg/io/IO.h>
 #include <dp/sg/renderer/rix/gl/SceneRenderer.h>
 #include <dp/sg/ui/manipulator/TrackballCameraManipulatorHIDSync.h>
-#include <dp/sg/ui/qt5/SceniXQGLSceneRendererWidget.h>
 #include <dp/util/File.h>
 
 namespace options = boost::program_options;

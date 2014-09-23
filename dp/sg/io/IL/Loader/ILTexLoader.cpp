@@ -45,7 +45,7 @@
 #include <dp/util/Tools.h>
 
 #include "ILTexLoader.h"
-#include "IL/il.h"
+#include "il.h"
 
 using namespace dp::util;
 using namespace dp::sg::core;

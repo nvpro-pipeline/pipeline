@@ -270,7 +270,7 @@ namespace dp
       }
 
       template<typename HandleType>
-      void handleAssign( typename HandleTrait<HandleType>::Type & lhs, SmartHandle<HandleType> & rhs )
+      void handleAssign( typename HandleTrait<HandleType>::Type & lhs, SmartHandle<HandleType> const & rhs )
       {
         if ( lhs != rhs.get() )
         {

@@ -1,4 +1,3 @@
-find_package( NVBoost REQUIRED )
 find_package( Boost COMPONENTS system filesystem REQUIRED )
 
 add_definitions(

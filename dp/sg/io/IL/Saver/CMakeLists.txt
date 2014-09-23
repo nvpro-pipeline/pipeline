@@ -1,7 +1,7 @@
 #includes
 include_directories(
   "${CMAKE_CURRENT_SOURCE_DIR}"
-  ${DEVIL_INCLUDES}
+  ${IL_INCLUDE_DIR}
 )
 
 #definitions
@@ -27,15 +27,13 @@ add_library( ILTexSaver SHARED
   ${ILTEXSAVER_HEADERS}
 )
 
-add_perforce_to_target( ILTexSaver )
-
 target_link_libraries( ILTexSaver
   DPSgCore
   DPSgUI
   DPSgAlgorithm
   DPUtil
   DPSgIO
-  ${DEVIL_LIBS}
+  ${IL_LIBRARIES}
 )
 
 set_target_properties( ILTexSaver PROPERTIES SUFFIX ".nxm" FOLDER "Savers")

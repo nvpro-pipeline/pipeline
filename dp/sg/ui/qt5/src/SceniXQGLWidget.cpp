@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2009-2013
+// Copyright NVIDIA Corporation 2009-2014
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -33,6 +33,10 @@
 #include <dp/gl/RenderTarget.h>
 #include <dp/gl/RenderTargetFB.h>
 #include <dp/gl/RenderContextFormat.h>
+
+#if defined(DP_OS_LINUX)
+#include <QX11Info>
+#endif
 
 namespace dp
 {
@@ -1393,11 +1397,14 @@ namespace dp
           setAttribute( Qt::WA_NativeWindow );
           setAttribute( Qt::WA_PaintOnScreen ); // don't let qt paint anything on screen
           
-#if defined(WIN32)
+#if defined(DP_OS_WINDOWS)
           dp::gl::SmartRenderContext renderContextGL = dp::gl::RenderContext::create( dp::gl::RenderContext::FromHWND( (HWND)winId()
             , &m_format, m_shareWidget ? m_shareWidget->getRenderContext() : dp::gl::SmartRenderContext::null ) );
-          m_renderTarget = dp::gl::RenderTargetFB::create( renderContextGL );
+#elif defined(DP_OS_LINUX)
+          // TODO support format
+          dp::gl::SmartRenderContext renderContextGL = dp::gl::RenderContext::create( dp::gl::RenderContext::FromDrawable( QX11Info::display(), QX11Info::appScreen(), winId(), m_shareWidget ? m_shareWidget->getRenderContext() : dp::gl::SmartRenderContext::null ) );
 #endif
+          m_renderTarget = dp::gl::RenderTargetFB::create( renderContextGL );
         }
 
         SceniXQGLWidget::SceniXQGLWidgetPrivate::~SceniXQGLWidgetPrivate()
@@ -1437,7 +1444,9 @@ namespace dp
 
         void SceniXQGLWidget::SceniXQGLWidgetPrivate::resizeEvent( QResizeEvent * resizeEvent )
         {
-          DP_ASSERT( m_renderTarget );
+          if (!m_renderTarget) {
+            return;
+          }
 
           m_renderTarget->setSize( resizeEvent->size().width(), resizeEvent->size().height() );
 

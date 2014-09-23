@@ -57,8 +57,6 @@ add_library( DPSgXbar SHARED
   ${XBAR_PRIVATE_HEADERS}
 )
 
-add_perforce_to_target( DPSgXbar )
-
 target_link_libraries( DPSgXbar
   DPSgCore
   DPSgAlgorithm

@@ -36,3 +36,6 @@ if ( EXISTS "${NV_TOOLS_EXT_ROOT}" AND IS_DIRECTORY "${NV_TOOLS_EXT_ROOT}" )
     endif()
   ENDMACRO()
 endif()
+
+  MACRO( CopyNV_TOOLS_EXT target )
+  ENDMACRO()

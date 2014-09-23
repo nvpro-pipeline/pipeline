@@ -1,10 +1,10 @@
 
-find_package( NVGLEW REQUIRED )
+find_package( GLEW REQUIRED )
 find_package( NVToolsExt REQUIRED )
 
 #includes
 include_directories(
-  ${GLEW_INCLUDES}
+  ${GLEW_INCLUDE_DIRS}
   ${NV_TOOLS_EXT_INCLUDE_DIR}
 )
 
@@ -106,8 +106,6 @@ add_library( DPSgRdrRiXGL SHARED
   ${RESOURCES}
 )
 
-add_perforce_to_target( DPSgRdrRiXGL )
-
 target_link_libraries( DPSgRdrRiXGL
   RiXCore
   RiXGL
@@ -122,7 +120,7 @@ target_link_libraries( DPSgRdrRiXGL
   DPSgIO
   DPMath
   DPCulling
-  ${GLEW_LIBS}
+  ${GLEW_LIBRARY}
   ${NV_TOOLS_EXT_LIB}
 )
 

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2011
+// Copyright NVIDIA Corporation 2010-2014
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -104,7 +104,11 @@ namespace dp
             m_primitive = Primitive::create( PRIMITIVE_QUADS );
             m_primitive->setVertexAttributeSet( m_vertexAttributeSet );
 
-            m_rendererGLLib = DynamicLibrary::createFromFile( "RiXGL.rdr" );
+#if defined(DP_OS_WINDOWS)
+             m_rendererGLLib = DynamicLibrary::createFromFile( "RiXGL.rdr" );
+#else
+            m_rendererGLLib = DynamicLibrary::createFromFile( "libRiXGL.rdr" );
+#endif            
             DP_ASSERT( m_rendererGLLib );
 
             dp::rix::core::PFNCREATERENDERER createRenderer = (RiX::PFNCREATERENDERER)m_rendererGLLib->getSymbol( "createRenderer" );

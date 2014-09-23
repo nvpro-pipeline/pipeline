@@ -1,9 +1,9 @@
 find_package( OpenGL REQUIRED )
-find_package( NVGLEW REQUIRED )
+find_package( GLEW REQUIRED )
 
 #includes
 include_directories(
-  ${GLEW_INCLUDES}
+  ${GLEW_INCLUDE_DIRS}
 )
 
 #definitions
@@ -54,8 +54,6 @@ add_library( DPSgUIManipulator SHARED
   ${PUBLIC_HEADERS}
 )
 
-add_perforce_to_target( DPSgUIManipulator )
-
 target_link_libraries( DPSgUIManipulator
   DPSgCore
   DPFx
@@ -63,7 +61,8 @@ target_link_libraries( DPSgUIManipulator
   DPSgAlgorithm
   DPSgUI
   ${OPENGL_glu_LIBRARY}
-  ${GLEW_LIBS}
+  ${OPENGL_gl_LIBRARY}
+  ${GLEW_LIBRARY}
 )
 
 set_target_properties( DPSgUIManipulator PROPERTIES FOLDER "SG" )

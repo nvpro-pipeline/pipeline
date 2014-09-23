@@ -24,7 +24,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#include <GL\glew.h>
+#include <GL/glew.h>
 #if defined(GL_VERSION_4_3)
 
 #include <dp/culling/opengl/inc/GroupImpl.h>

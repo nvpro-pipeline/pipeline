@@ -9,7 +9,7 @@ add_definitions(
 )
 
 include_directories( "${CMAKE_CURRENT_SOURCE_DIR}/inc" )
-include_directories( ${TINYXML_INCLUDES} )
+include_directories( ${TINYXML_INCLUDE_DIRS} )
 
 set(PUBLIC_HEADERS
   Config.h
@@ -29,7 +29,7 @@ add_library(DPFxXML STATIC
   ${SOURCES}
 )
 
-target_link_libraries( DPFxXML DPUtil DPFxGLSL ${TINYXML_LIBS} )
+target_link_libraries( DPFxXML DPUtil DPFxGLSL ${TINYXML_LIBRARIES} )
 
 set_target_properties( DPFxXML PROPERTIES FOLDER "Fx" )
 

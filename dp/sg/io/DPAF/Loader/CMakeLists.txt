@@ -30,8 +30,6 @@ add_library( NVSGLoader SHARED
   ${NVSGLOADER_HEADERS}
 )
 
-add_perforce_to_target( NVSGLoader )
-
 target_link_libraries( NVSGLoader
   DP
   DPSgCore

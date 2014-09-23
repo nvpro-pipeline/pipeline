@@ -1,16 +1,25 @@
-file( TO_CMAKE_PATH "$ENV{DP_3RDPARTY_PATH}/OpenEXR/" OPENEXRROOT)
+# - Try to find OpenEXR
+# Once done this will define
+#  OPENEXR_FOUND - System has OpenEXR
+#  OPENEXR_INCLUDE_DIRS - The OpenEXR include directories
+#  OPENEXR_LIBRARIES - The libraries needed to use OpenEXR
+#  OPENEXR_DEFINITIONS - Compiler switches required for using OpenEXR
 
-if ( EXISTS "${OPENEXRROOT}" )
+find_path(OPENEXR_INCLUDE_DIR "Iex.h")
+foreach(LIB Iex IlmImf IlmThread Imath Half)
+  find_library(OPENEXR_${LIB}_LIBRARY_DEBUG NAMES ${LIB} PATH_SUFFIXES "/win32-${DP_ARCH}/lib/Debug")
+  find_library(OPENEXR_${LIB}_LIBRARY_RELEASE NAMES ${LIB} PATH_SUFFIXES "/win32-${DP_ARCH}/lib/Release")
+  
+  list(APPEND OPENEXR_LIBRARIES debug ${OPENEXR_${LIB}_LIBRARY_DEBUG} optimized ${OPENEXR_${LIB}_LIBRARY_RELEASE})
+  list(APPEND OPENEXR_LIBRARIES_REQUIRED OPENEXR_${LIB}_LIBRARY_DEBUG OPENEXR_${LIB}_LIBRARY_RELEASE)
+endforeach()
 
-  # we only have windows version at the moment
-  if (WIN32)
-  elseif ( UNIX )
-  endif()
+set(OPENEXR_INCLUDE_DIRS ${OPENEXR_INCLUDE_DIR} )
 
-  set( ENV{OPENEXRROOT} "${OPENEXRROOT}" )
-  set( OPENEXR_BINDIR "$ENV{OPENEXRROOT}/win32-${DP_ARCH}/bin" )
-  set( OPENEXR_LIBDIR "$ENV{OPENEXRROOT}/win32-${DP_ARCH}/lib" )
-  set( OPENEXR_INCDIR "$ENV{OPENEXRROOT}/include" )
-
-endif()
-
+include(FindPackageHandleStandardArgs)
+# handle the QUIETLY and REQUIRED arguments and set LIBXML2_FOUND to TRUE
+# if all listed variables are TRUE
+find_package_handle_standard_args(OpenEXR DEFAULT_MSG
+                                  ${OPENEXR_LIBRARIES_REQUIRED} OPENEXR_INCLUDE_DIR)
+                                  
+mark_as_advanced(OPENEXR_INCLUDE_DIR ${OPENEXR_LIBRARIES_REQUIRED} )

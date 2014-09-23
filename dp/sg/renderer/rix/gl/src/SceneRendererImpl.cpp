@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2011
+// Copyright NVIDIA Corporation 2010-2014
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -40,7 +40,7 @@
 #include <dp/util/Profile.h>
 #include <dp/util/File.h>
 
-#define ENABLE_NSIGHT_PROFILING 1
+#define ENABLE_NSIGHT_PROFILING 0
 #if ENABLE_NSIGHT_PROFILING
 #include <nvToolsExt.h>
 #define GL_SHADER_GLOBAL_ACCESS_BARRIER_BIT_NV 0x00000010

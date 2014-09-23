@@ -26,9 +26,9 @@
 
 #pragma once
 
-#include "ViewerRendererWidget.h"
 #include <QDialog>
 #include <QSpinBox>
+#include "ViewerRendererWidget.h"
 
 class TonemapperDialog : public QDialog
 {

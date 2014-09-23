@@ -38,8 +38,6 @@ add_library( DPSgGenerator SHARED
   ${PUBLIC_HEADERS}
 )
 
-add_perforce_to_target( DPSgGenerator )
-
 target_link_libraries( DPSgGenerator
   DP
   DPSgCore

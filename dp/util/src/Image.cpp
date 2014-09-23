@@ -28,7 +28,7 @@
 #include <dp/util/Image.h>
 #include <dp/util/File.h>
 #include <dp/util/Types.h>
-#include <IL/il.h>
+#include <il.h>
 
 #include <iostream>
 #include <cstring>

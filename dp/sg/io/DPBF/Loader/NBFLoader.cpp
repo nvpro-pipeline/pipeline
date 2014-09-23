@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2005
+// Copyright NVIDIA Corporation 2002-2014
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -5190,7 +5190,7 @@ TextureHostSharedPtr NBFLoader::loadTextureHost(uint_t offset, std::string& file
   if ( !offset )
   {
     // 0-offset is regular and means no TextureHost saved -> return NULL 
-    return NULL;
+    return TextureHostSharedPtr::null;
   }
 
   TextureHostSharedPtr imgHdl;
@@ -5246,7 +5246,7 @@ TextureHostSharedPtr NBFLoader::loadTextureHost_nbf_4b(uint_t offset, std::strin
   if ( !offset )
   {
     // 0-offset is regular and means no TextureHost saved -> return NULL 
-    return NULL;
+    return TextureHostSharedPtr::null;
   }
 
   TextureHostSharedPtr imgHdl;
@@ -5412,7 +5412,8 @@ bool NBFLoader::loadSharedObject( typename ObjectTraits<ObjectType>::SharedPtr &
      )
   { // copy construct the object
     DP_ASSERT( m_sharedObjectsMap[objPtr->objectDataID].isPtrTo<ObjectType>() );
-    objHdl = m_sharedObjectsMap[objPtr->objectDataID].clone().staticCast<ObjectType>();
+    dp::sg::core::ObjectSharedPtr obj = m_sharedObjectsMap[objPtr->objectDataID].clone();
+    objHdl = obj.staticCast<ObjectType>();
     // override general object data!
     // objects do not share general object data, e.g. the name, even if they are shared!
     readObject( objHdl, objPtr);

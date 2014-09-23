@@ -42,7 +42,7 @@
 #include <dp/util/Tools.h>
 
 #include "ILTexSaver.h"
-#include "IL/il.h"
+#include "il.h"
 
 using namespace dp::sg::core;
 using namespace dp::util;

@@ -568,7 +568,7 @@ namespace dp
   #else
   #define CALLCONVENTION
   #endif
-      static void CALLCONVENTION debugMessageCallback( unsigned int /*source*/, unsigned int type, unsigned int /*id*/, unsigned int severity, int /*length*/, const char* message, void* /*userParam*/ )
+      static void CALLCONVENTION debugMessageCallback( unsigned int /*source*/, unsigned int type, unsigned int /*id*/, unsigned int severity, int /*length*/, const char* message, const void* /*userParam*/ )
       {
         std::string header = "OpenGL ";
 

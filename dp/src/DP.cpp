@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2013
+// Copyright NVIDIA Corporation 2013-2014
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -27,6 +27,10 @@
 #include <dp/DP.h>
 #include <dp/util/File.h>
 #include <boost/filesystem.hpp>
+
+#if defined(DP_OS_LINUX)
+#include <linux/limits.h>
+#endif
 
 #include <cstdlib>
 

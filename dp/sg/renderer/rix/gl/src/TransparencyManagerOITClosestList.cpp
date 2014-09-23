@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2012
+// Copyright NVIDIA Corporation 2011-2014
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -118,7 +118,7 @@ namespace dp
 
               m_counterTextureGL = dp::gl::Texture1D::create( GL_R32UI, GL_RED_INTEGER, GL_UNSIGNED_INT, 1 );
 
-              unsigned int fragmentsCount = unsigned int( m_fragmentsCountFactor * getViewportSize()[0] * getViewportSize()[1] );
+              unsigned int fragmentsCount = (unsigned int)( m_fragmentsCountFactor * getViewportSize()[0] * getViewportSize()[1] );
               m_fragmentsTextureGL = dp::gl::TextureBuffer::create( GL_RGBA32UI, fragmentsCount * 4 + sizeof(GLuint), nullptr, GL_DYNAMIC_COPY );
 
               renderer->textureSetData( m_counterTexture, dp::rix::gl::TextureDataGLTexture( m_counterTextureGL ) );

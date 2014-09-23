@@ -1,64 +1,67 @@
 cmake_policy(SET CMP0020 NEW)
 
-find_package( NVGLEW REQUIRED )
-find_package( OpenGL REQUIRED )
-find_package( NVQt5  QUIET )
-find_package( Qt5Core REQUIRED )
+find_package( Qt5Widgets QUIET )
 
-#includes
-include_directories(
-  ${GLEW_INCLUDES}
-)
+if( Qt5Widgets_FOUND )
+  find_package( GLEW REQUIRED )
+  find_package( OpenGL REQUIRED )
 
-#definitions
-add_definitions(
-  -DDP_SG_UI_QT5_EXPORTS
-  ${GLEW_DEFINITIONS}
-)
+  #includes
+  include_directories(
+    ${GLEW_INCLUDE_DIRS}
+  )
 
-#sources
-set(SOURCES
-  src/SceniXQGLSceneRendererWidget.cpp
-  src/SceniXQGLWidget.cpp
-  src/SceniXQtUtil.cpp
-)
+  #definitions
+  add_definitions(
+    -DDP_SG_UI_QT5_EXPORTS
+    ${GLEW_DEFINITIONS}
+  )
 
-set(PRIVATE_HEADERS
-)
+  #sources
+  set(SOURCES
+    src/SceniXQGLSceneRendererWidget.cpp
+    src/SceniXQGLWidget.cpp
+    src/SceniXQtUtil.cpp
+  )
 
-set(PUBLIC_HEADERS
-  Config.h
-  SceniXQGLSceneRendererWidget.h
-  SceniXQGLWidget.h
-  SceniXQtUtil.h
-)
+  set(PRIVATE_HEADERS
+  )
 
-source_group(source FILES ${SOURCES})
-source_group(header FILES ${PRIVATE_HEADERS})
-source_group(""     FILES ${PUBLIC_HEADERS})
+  set(PUBLIC_HEADERS
+    Config.h
+    SceniXQGLSceneRendererWidget.h
+    SceniXQGLWidget.h
+    SceniXQtUtil.h
+  )
 
-#target
-add_library( DPSgUIQt5 SHARED
-  ${SOURCES}
-  ${HEADERS}
-  ${PUBLIC_HEADERS}
-)
+  source_group(source FILES ${SOURCES})
+  source_group(header FILES ${PRIVATE_HEADERS})
+  source_group(""     FILES ${PUBLIC_HEADERS})
 
-add_perforce_to_target( DPSgUIQt5 )
+  #target
+  add_library( DPSgUIQt5 SHARED
+    ${SOURCES}
+    ${HEADERS}
+    ${PUBLIC_HEADERS}
+  )
 
-target_link_libraries( DPSgUIQt5
-  DPSgCore
-  DPSgUI
-  DPGL
-  ${GLEW_LIBS}
-  ${OPENGL_gl_LIBRARY}
-)
+  target_link_libraries( DPSgUIQt5
+    DPSgCore
+    DPSgUI
+    DPGL
+    ${GLEW_LIBRARY}
+    ${OPENGL_gl_LIBRARY}
+  )
 
-qt5_use_modules(DPSgUIQt5 Widgets OpenGL)
+  if(UNIX)
+    qt5_use_modules(DPSgUIQt5 Widgets X11Extras)
+  else()
+    qt5_use_modules(DPSgUIQt5 Widgets)
+  endif()
 
-CopyGLEW( DPSgUIQt5 "${DP_BINARY_PATH}" )
+  CopyGLEW( DPSgUIQt5 "${DP_BINARY_PATH}" )
 
-set_target_properties( DPSgUIQt5 PROPERTIES FOLDER "SG" )
-
-
-message("Qt5")
+  set_target_properties( DPSgUIQt5 PROPERTIES FOLDER "SG" )
+else()
+  message("Qt5Widgets not found, skipping dp::sg::ui::qt5")
+endif()

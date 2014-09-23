@@ -1,7 +1,7 @@
 #includes
 include_directories(
   "${CMAKE_CURRENT_SOURCE_DIR}"
-  ${DEVIL_INCLUDES}
+  ${IL_INCLUDE_DIR}
 )
 
 #definitions
@@ -28,8 +28,6 @@ add_library( ILTexLoader SHARED
   ${ILTEXLOADER_HEADERS}
 )
 
-add_perforce_to_target( ILTexLoader )
-
 target_link_libraries( ILTexLoader
   DPSgCore
   DPSgUI
@@ -37,7 +35,7 @@ target_link_libraries( ILTexLoader
   DPUtil
   DPFx
   DPSgIO
-  ${DEVIL_LIBS}
+  ${IL_LIBRARIES}
 )
 
 set_target_properties( ILTexLoader PROPERTIES SUFFIX ".nxm" FOLDER "Loaders" )

@@ -27,8 +27,6 @@ add_library( NBFLoader SHARED
   ${NBFLOADER_HEADERS}
 )
 
-add_perforce_to_target( NBFLoader )
-
 target_link_libraries( NBFLoader 
   DP
   DPSgCore

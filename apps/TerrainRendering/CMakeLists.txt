@@ -16,10 +16,9 @@ if ( NOT "${DP_ARCH}" STREQUAL "armv7l")
   project( TerrainRendering )
 
   find_package(OpenGL REQUIRED )
-  find_package(NVGLUT REQUIRED )
-  find_package(NVGLEW REQUIRED )
+  find_package(GLUT REQUIRED )
+  find_package(GLEW REQUIRED )
 
-  find_package( NVBoost )
   find_package( Boost COMPONENTS program_options REQUIRED )
 
   set( SOURCES
@@ -32,7 +31,7 @@ if ( NOT "${DP_ARCH}" STREQUAL "armv7l")
   include_directories( "."
                        "inc"
                        ${Boost_INCLUDE_DIRS}
-                       ${GLEW_INCLUDES}
+                       ${GLEW_INCLUDE_DIRS}
                        ${GLUT_INCLUDE_DIR}
                      )
 
@@ -46,7 +45,7 @@ if ( NOT "${DP_ARCH}" STREQUAL "armv7l")
   target_link_libraries( TerrainRendering
     ${GLUT_LIBRARIES}
     ${OPENGL_gl_LIBRARY}
-    ${GLEW_LIBS}
+    ${GLEW_LIBRARY}
     ${Boost_LIBRARIES}
     DPSgAlgorithm
     DPSgCore
@@ -60,8 +59,6 @@ if ( NOT "${DP_ARCH}" STREQUAL "armv7l")
 
   CopyGLEW( TerrainRendering "${DP_BINARY_PATH}" )
   CopyGLUT( TerrainRendering "${DP_BINARY_PATH}" )
-
-  add_perforce_to_target( TerrainRendering )
 
   set_target_properties( TerrainRendering PROPERTIES FOLDER "Apps")
 endif()

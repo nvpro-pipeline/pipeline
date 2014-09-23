@@ -31,8 +31,6 @@ add_library( NVSGSaver SHARED
   ${NVSGSAVER_HEADERS}
 )
 
-add_perforce_to_target( NVSGSaver )
-
 target_link_libraries( NVSGSaver 
   DP
   DPSgCore

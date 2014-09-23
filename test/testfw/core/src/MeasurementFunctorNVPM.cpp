@@ -32,6 +32,8 @@
 
 #include <boost/program_options.hpp>
 
+#if defined(HAVE_NVPMAPI)
+
 using namespace dp::util;
 using std::pair;
 using std::string;
@@ -233,3 +235,6 @@ namespace dp
     } // namespace core
   } // namespace testfw
 } // namespace dp
+
+// HAVE_NVPMAPI
+#endif

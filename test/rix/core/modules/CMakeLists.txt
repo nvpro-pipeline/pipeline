@@ -1,6 +1,6 @@
 #Automatically adds all directories not starting with "__". No need to add tests here manually.
 
-find_package(NVGLEW REQUIRED )
+find_package(GLEW REQUIRED )
 
 #includes
 include_directories(

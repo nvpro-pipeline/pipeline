@@ -599,7 +599,7 @@ void  fprintfInt2Array( FILE *fh, const char *prefix, unsigned int count, const 
   if ( count == 1 )
   {
     const IntType *f = reinterpret_cast<const IntType *>(ptr);
-    fprintf( fh, "%s[ 0x%X, 0x%X ]\n", prefix, f[0], f[1], f[2] );
+    fprintf( fh, "%s[ 0x%X, 0x%X ]\n", prefix, f[0], f[1] );
   }
   else
   {
@@ -699,7 +699,7 @@ void  fprintfFloat2Array( FILE *fh, const char *prefix, unsigned int count, cons
   if ( count == 1 )
   {
     const FloatType *f = reinterpret_cast<const FloatType *>(ptr);
-    fprintf( fh, "%s[ %f, %f ]\n", prefix, f[0], f[1], f[2] );
+    fprintf( fh, "%s[ %f, %f ]\n", prefix, f[0], f[1] );
   }
   else
   {
@@ -2240,10 +2240,10 @@ void  NVSGSaveTraverser::primitiveData( const Primitive *p )
   objectData( p );
 
   // primitive data
-  fprintf( m_fh, "\tprimitiveType\t", primitiveTypeToName( p->getPrimitiveType() ).c_str() );
+  fprintf( m_fh, "\tprimitiveType\t%s", primitiveTypeToName( p->getPrimitiveType() ).c_str() );
   if ( p->getPrimitiveType() == PRIMITIVE_PATCHES )
   {
-    fprintf( m_fh, "\tpatchesType\t", patchesTypeToName( p->getPatchesType() ).c_str() );
+    fprintf( m_fh, "\tpatchesType\t%s", patchesTypeToName( p->getPatchesType() ).c_str() );
     fprintfPatchesMode( m_fh, "\tpatchesMode\t", p->getPatchesMode() );
     fprintfPatchesOrdering( m_fh, "\tpatchesOrdering\t", p->getPatchesOrdering() );
     fprintfPatchesSpacing( m_fh, "\tpatchesSpacing\t", p->getPatchesSpacing() );
@@ -2315,7 +2315,7 @@ void  NVSGSaveTraverser::textureImage( const TextureHostSharedPtr & tih )
       fprintf( m_fh, "\timages\n\t[\n" );
       for ( unsigned int i=0 ; i<tih->getNumberOfImages() ; i++ )
       {
-        fprintf( m_fh, "\t\t{\n", i );
+        fprintf( m_fh, "\t\t{\n" );
         fprintfPixelFormat( m_fh, "\t\t\tpixelFormat\t", tih->getFormat(i,0) );
         fprintfPixelType( m_fh, "\t\t\tpixelType\t", tih->getType(i,0) );
         fprintf( m_fh, "\t\t\twidth\t%u\n", tih->getWidth(i,0) );
@@ -2329,7 +2329,7 @@ void  NVSGSaveTraverser::textureImage( const TextureHostSharedPtr & tih )
           fprintf( m_fh, "\t\t\tmipmaps\n\t\t\t{\n" );
           for ( unsigned int j=0 ; j<=tih->getNumberOfMipmaps(i) ; j++ )
           {
-            fprintf( m_fh, "\t\t\t\t[\n", j );
+            fprintf( m_fh, "\t\t\t\t[\n" );
             fprintfPixels( m_fh, "\t\t\t\t\t", tih, i, j );
             fprintf( m_fh, "\t\t\t\t]\n" );
           }

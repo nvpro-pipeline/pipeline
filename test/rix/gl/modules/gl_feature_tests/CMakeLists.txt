@@ -1,6 +1,5 @@
-
 find_package(OpenGL REQUIRED )
-find_package(NVGLEW REQUIRED)
+find_package(GLEW REQUIRED)
 
 FILE (GLOB tests ${linkunit}/*)
 
@@ -24,7 +23,7 @@ ENDFOREACH( test ${tests} )
 string( REGEX REPLACE "^.*/([^/]*)$" "\\1" CUR_TEST_MODULE_NAME ${CMAKE_CURRENT_SOURCE_DIR} )
 
 include_directories(
-  "${GLEW_INCLUDES}"
+  "${GLEW_INCLUDE_DIRS}"
 )
 
 add_definitions(
@@ -40,8 +39,7 @@ add_library( ${LINK_NAME} SHARED
 add_dependencies( ${LINK_NAME} DPTestManager DPHelpers )
 
 target_link_libraries( ${LINK_NAME}
-  ${GLEW_LIB}
-  ${OPENGL_gl_LIBRARY}
+  ${GLEW_LIBRARY}
   DPTcore
   DPUtil
   DPTRiX

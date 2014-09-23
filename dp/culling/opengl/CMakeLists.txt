@@ -1,13 +1,13 @@
 project(DPCullingOpenGL)
 
-find_package(NVGLEW REQUIRED )
+find_package(GLEW REQUIRED )
 
 add_definitions(
   "-DDP_CULLING_EXPORTS"
   "-D_CRT_SECURE_NO_WARNINGS"
 )
 
-include_directories( ${GLEW_INCLUDES} )
+include_directories( ${GLEW_INCLUDE_DIRS} )
 
 #definitions
 add_definitions(
@@ -41,7 +41,12 @@ add_library(DPCullingOpenGL STATIC
 
 CopyGLEW( DPCullingOpenGL "${DP_BINARY_PATH}" )
 
-target_link_libraries( DPCullingOpenGL DPUtil DPMath ${GLEW_LIBS} ${OPENGL_gl_LIBRARY} )
+target_link_libraries( DPCullingOpenGL
+  DPUtil
+  DPMath
+  ${OPENGL_gl_LIBRARY}
+  ${GLEW_LIBRARY}
+)
 
 set_property(TARGET DPCullingOpenGL PROPERTY LINK_INTERFACE_LIBRARIES "")
 

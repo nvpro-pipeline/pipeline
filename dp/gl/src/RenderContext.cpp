@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2009-2011
+// Copyright NVIDIA Corporation 2009-2014
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -28,12 +28,12 @@
 #include <boost/thread.hpp>
 
 #include <GL/glew.h>
+
 #if defined(DP_OS_WINDOWS)
 #include <GL/wglew.h>
 #endif
 
-
-#if defined(LINUX)
+#if defined(DP_OS_LINUX)
 #define INIT_CONTEXT_VARIABLES m_display(0), m_context(0), m_drawable(0)
 #endif
 
@@ -60,7 +60,7 @@ namespace dp
       }
     }
 
-  #if defined(_WIN32)
+  #if defined(DP_OS_WINDOWS)
     RenderContext::NativeContext::NativeContext( HWND hwnd, bool destroyHWND, HDC hdc, bool destroyHDC, HGLRC hglrc, bool destroyHGLRC )
       : m_hwnd( hwnd )
       , m_hdc( hdc )
@@ -85,7 +85,7 @@ namespace dp
       }
 
     }
-  #elif defined(LINUX)
+  #elif defined(DP_OS_LINUX)
     RenderContext::NativeContext::NativeContext( GLXContext context, bool destroyContext, GLXDrawable drawable, bool destroyDrawable, GLXPbuffer pbuffer, bool destroypbuffer, Display *display, bool destroyDisplay )
       : m_context(context)
       , m_destroyContext( destroyContext )
@@ -102,7 +102,7 @@ namespace dp
     RenderContext::NativeContext::~NativeContext()
     {
       // destroy
-  #if defined(_WIN32)
+  #if defined(DP_OS_WINDOWS)
       if (m_destroyHGLRC)
       {
         wglDeleteContext( m_hglrc );
@@ -121,7 +121,7 @@ namespace dp
         m_hwnd = 0;
       }
 
-  #elif defined(LINUX)
+  #elif defined(DP_OS_LINUX)
       if ( m_destroyContext )
       {
         glXDestroyContext( m_display, m_context );
@@ -147,13 +147,13 @@ namespace dp
       }
       m_hdc = 0;
       m_hwnd = 0;
-  #elif defined(LINUX)
+  #elif defined(DP_OS_LINUX)
   #endif
     }
 
     bool RenderContext::NativeContext::makeCurrent()
     {
-  #if defined(_WIN32)
+  #if defined(DP_OS_WINDOWS)
       if ( wglGetCurrentDC() != m_hdc || wglGetCurrentContext() != m_hglrc )
       {
         BOOL result = wglMakeCurrent( m_hdc, m_hglrc );
@@ -164,26 +164,26 @@ namespace dp
       {
         return true;
       }
-  #elif defined(LINUX)
+  #elif defined(DP_OS_LINUX)
       return !!glXMakeCurrent( m_display, m_drawable, m_context);
   #endif
     }
 
     void RenderContext::NativeContext::makeNoncurrent()
     {
-  #if defined(_WIN32)
+  #if defined(DP_OS_WINDOWS)
       // FIXME check for failure
       wglMakeCurrent( 0, 0);
-  #elif defined(LINUX)
+  #elif defined(DP_OS_LINUX)
       glXMakeCurrent( m_display, 0, 0 );
   #endif
     }
 
     void RenderContext::NativeContext::swap()
     {
-  #if defined(_WIN32)
+  #if defined(DP_OS_WINDOWS)
       DP_VERIFY( SwapBuffers( m_hdc ) );
-  #elif defined(LINUX)
+  #elif defined(DP_OS_LINUX)
       glXSwapBuffers( m_display, m_drawable );
   #endif
     }
@@ -207,7 +207,7 @@ namespace dp
       return m_format;
     }
 
-  #if defined(_WIN32)
+  #if defined(DP_OS_WINDOWS)
     HWND RenderContext::getHWND() const
     {
       return m_context->m_hwnd;
@@ -222,7 +222,7 @@ namespace dp
     {
       return m_context->m_hglrc;
     }
-  #elif defined(LINUX)
+  #elif defined(DP_OS_LINUX)
     GLXContext RenderContext::getContext()  const
     {
       return m_context->m_context;
@@ -238,7 +238,7 @@ namespace dp
     }
   #endif
 
-  #if defined(_WIN32)
+  #if defined(DP_OS_WINDOWS)
     LRESULT CALLBACK RenderContext::RenderContextWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
       return DefWindowProc( hWnd, message, wParam, lParam );
@@ -391,7 +391,7 @@ namespace dp
   // WIN32
   #endif 
 
-  #if defined(LINUX)
+  #if defined(DP_OS_LINUX)
 
     GLXPbuffer RenderContext::createPbuffer( Display *display, GLXFBConfig config )
     {
@@ -445,7 +445,7 @@ namespace dp
 
     SmartShareGroup RenderContext::createShareGroup( const RenderContext::SmartNativeContext &shareContext )
     {
-  #if defined(WIN32)
+  #if defined(DP_OS_WINDOWS)
       DP_ASSERT( shareContext && shareContext->m_hglrc );
 
       // First create a headless context for the ShareGroup
@@ -474,7 +474,7 @@ namespace dp
       DP_ASSERT( hglrc );
 
       return ShareGroup::create( new RenderContext::NativeContext( hwnd, true, hdc, true, hglrc, true ) );
-  #elif defined(LINUX)
+  #elif defined(DP_OS_LINUX)
       Display *display = XOpenDisplay( DisplayString(shareContext->m_display) );
       DP_ASSERT( display );
 
@@ -494,7 +494,7 @@ namespace dp
 
     SmartRenderContext RenderContext::create( const Attach &creation )
     {
-  #if defined(WIN32)
+  #if defined(DP_OS_WINDOWS)
       HDC hdc = wglGetCurrentDC();
       DP_ASSERT( hdc );
 
@@ -512,7 +512,7 @@ namespace dp
   #endif
       }
 
-  #elif defined(LINUX)
+  #elif defined(DP_OS_LINUX)
       // query the current render context, drawable and display
       GLXContext context  = glXGetCurrentContext();
       DP_ASSERT(context);
@@ -540,7 +540,7 @@ namespace dp
 
     SmartRenderContext RenderContext::create( const Clone &creation )
     {
-  #if defined(WIN32)
+  #if defined(DP_OS_WINDOWS)
       HDC hdc = creation.getContext()->m_context->m_hdc;
       DP_ASSERT( hdc );
 
@@ -549,7 +549,7 @@ namespace dp
       DP_ASSERT( hglrc );
 
       SmartNativeContext nativeContext = new RenderContext::NativeContext( 0, false, hdc, true, hglrc, true );
-  #elif defined(LINUX)
+  #elif defined(DP_OS_LINUX)
       Display *display = XOpenDisplay( DisplayString(creation.getContext()->getDisplay()) );
       DP_ASSERT( display );
 
@@ -568,7 +568,7 @@ namespace dp
 
     SmartRenderContext RenderContext::create( const Headless &creation )
     {
-  #if defined(WIN32)
+  #if defined(DP_OS_WINDOWS)
       int pixelFormat = creation.getFormat()->getPixelFormat();
       if (!pixelFormat)
       {
@@ -609,7 +609,7 @@ namespace dp
         WGLShareLists( creation.getContext()->m_context->m_hglrc, hglrc );
   #endif
       }
-  #elif defined(LINUX)
+  #elif defined(DP_OS_LINUX)
       Display *display = XOpenDisplay( creation.getContext() ? DisplayString(creation.getContext()->m_context->m_context ) : creation.getDisplay() );
       DP_ASSERT( display );
 
@@ -644,7 +644,7 @@ namespace dp
 
     SmartRenderContext RenderContext::create( const Windowed &creation )
     {
-  #if defined(WIN32)
+  #if defined(DP_OS_WINDOWS)
       int pixelFormat = creation.getFormat()->getPixelFormat();
       if (!pixelFormat)
       {
@@ -674,7 +674,7 @@ namespace dp
         WGLShareLists( creation.getContext()->m_context->m_hglrc, hglrc );
   #endif
       }
-  #elif defined(LINUX)
+  #elif defined(DP_OS_LINUX)
       assert(0 && "not yet supported"); 
       /*
       Display *display = XOpenDisplay( creation.getContext() ? DisplayString(creation.getContext()->m_context->m_context ) : creation.getDisplay() );
@@ -711,7 +711,7 @@ namespace dp
 
     }
 
-  #if defined(WIN32)
+  #if defined(DP_OS_WINDOWS)
     SmartRenderContext RenderContext::create( const FromHDC &creation )
     {
       HGLRC hglrc = createContext( creation.getHDC(), creation.getContext() ? creation.getContext()->m_context->m_hglrc : 0 );
@@ -769,7 +769,7 @@ namespace dp
 
       return new RenderContext( nativeContext, shareGroup, *creation.getFormat() );
     }
-  #elif defined(LINUX)
+  #elif defined(DP_OS_LINUX)
     SmartRenderContext RenderContext::create( const FromDrawable &creation )
     {
       Display *display = creation.shared ? XOpenDisplay( DisplayString(creation.shared->m_context->m_context ) ): creation.display;
@@ -785,6 +785,10 @@ namespace dp
         screen = creation.screen;
       }
 
+      glXQueryDrawable = (PFNGLXQUERYDRAWABLEPROC)glXGetProcAddress((GLubyte*)"glXQueryDrawable");
+      glXChooseFBConfig = (PFNGLXCHOOSEFBCONFIGPROC)glXGetProcAddress((GLubyte*)"glXChooseFBConfig");
+      glXCreateNewContext = (PFNGLXCREATENEWCONTEXTPROC)glXGetProcAddress((GLubyte*)"glXCreateNewContext");
+#if 0
       unsigned int glxFBConfigId = 0;
       glXQueryDrawable( display, creation.drawable, GLX_FBCONFIG_ID, &glxFBConfigId );
       DP_ASSERT( glxFBConfigId );
@@ -795,12 +799,28 @@ namespace dp
       GLXFBConfig *glxFBConfigs = glXChooseFBConfig( display, screen, glxFBConfigAttributes, &numElements );
       DP_ASSERT( glxFBConfigs );
 
-      GLXDrawable drawable = creation.drawable;
+#else
+      int numElements = 0;
+      static int fb_attribs[] = {
+        GLX_RENDER_TYPE, GLX_RGBA_BIT,
+        GLX_X_RENDERABLE, True,
+        GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
+        GLX_DOUBLEBUFFER, True,
+        GLX_RED_SIZE, 8,
+        GLX_BLUE_SIZE, 8,
+        GLX_GREEN_SIZE, 8,
+        0
+      };
+      GLXFBConfig *glxFBConfigs = glXChooseFBConfig(display, screen, fb_attribs, &numElements);
+#endif
 
+      GLXDrawable drawable = creation.drawable;
       GLXContext context = createContext( display, glxFBConfigs[0], creation.shared ? creation.shared->m_context->m_context : 0 );
       DP_ASSERT( context );
 
       SmartNativeContext nativeContext = new NativeContext( context, true, drawable, false, 0, false, display, true );
+      nativeContext->makeCurrent();
+      glewInit();
 
       SmartShareGroup shareGroup = creation.shared ? creation.shared->getShareGroup() : createShareGroup( nativeContext );
       return new RenderContext( nativeContext, shareGroup );
@@ -811,9 +831,9 @@ namespace dp
       : m_context(nativeContext)
       , m_shareGroup(shareGroup)
     {
-  #if defined(WIN32)
+  #if defined(DP_OS_WINDOWS)
       m_format.syncFormat( getHDC() );
-  #elif defined(LINUX)
+  #elif defined(DP_OS_LINUX)
       m_format.syncFormat( getDisplay(), getContext() );
   #endif
     }
@@ -833,21 +853,21 @@ namespace dp
     }
 
     RenderContextStack::StackEntry::StackEntry()
-  #if defined(WIN32)
+  #if defined(DP_OS_WINDOWS)
       : hdc(0)
       , hglrc(0)
       , hwnd(0)
-  #elif defined(LINUX)
+  #elif defined(DP_OS_LINUX)
   #endif
     {
     }
 
     RenderContextStack::StackEntry::StackEntry( const StackEntry &rhs )
-  #if defined(WIN32)
+  #if defined(DP_OS_WINDOWS)
       : hdc(rhs.hdc)
       , hglrc( rhs.hglrc )
       , hwnd( rhs.hwnd )
-  #elif defined(LINUX)
+  #elif defined(DP_OS_LINUX)
       : context(rhs.context)
       , drawable(rhs.drawable)
       , display(rhs.display)      
@@ -865,7 +885,7 @@ namespace dp
     {
       StackEntry entry;
       entry.renderContextGL = RenderContext::getCurrentRenderContext();
-  #if defined(_WIN32)
+  #if defined(DP_OS_WINDOWS)
       entry.hdc = wglGetCurrentDC();
       entry.hglrc = wglGetCurrentContext();
       if (    !(entry.renderContextGL == renderContextGL)
@@ -876,7 +896,7 @@ namespace dp
         renderContextGL->makeCurrent();
       }
 
-  #elif defined(LINUX)
+  #elif defined(DP_OS_LINUX)
       entry.context = glXGetCurrentContext();
       if (entry.context)
       {
@@ -909,7 +929,7 @@ namespace dp
       }
 
       const StackEntry& entry = m_stack.top();
-  #if defined(_WIN32)
+  #if defined(DP_OS_WINDOWS)
       if (entry.hglrc != wglGetCurrentContext())
       {
         wglMakeCurrent( entry.hdc, entry.hglrc );
@@ -919,7 +939,7 @@ namespace dp
         DP_ASSERT( wglGetCurrentDC() == entry.hdc );
       }
       getThreadData()->currentRenderContext = entry.renderContextGL;
-  #elif defined(LINUX)
+  #elif defined(DP_OS_LINUX)
       if (entry.context != glXGetCurrentContext() || entry.drawable != glXGetCurrentDrawable() || entry.display != glXGetCurrentDisplay() )
       {
         if ( entry.context && entry.drawable && entry.display )

@@ -29,10 +29,10 @@
 #include <QApplication>
 
 #include "LogWidget.h"
-#include "MainWindow.h"
 #include "Preferences.h"
 #include "ScriptSystem.h"
 #include "ViewerCommand.h"
+#include "MainWindow.h"
 
 #include <dp/sg/ui/qt5/SceniXQGLWidget.h>
 

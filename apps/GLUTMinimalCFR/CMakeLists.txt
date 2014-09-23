@@ -14,11 +14,10 @@ cmake_minimum_required(VERSION 2.6)
 if(WIN32)
   project( GLUTMinimalCFR )
 
-  find_package(OpenGL REQUIRED )
-  find_package(NVGLUT REQUIRED )
-  find_package(NVGLEW REQUIRED )
+  find_package( OpenGL REQUIRED )
+  find_package( GLUT REQUIRED )
+  find_package( GLEW REQUIRED )
 
-  find_package( NVBoost )
   find_package( Boost COMPONENTS program_options REQUIRED )
 
   set( SOURCES
@@ -37,7 +36,7 @@ if(WIN32)
   include_directories( "."
                        "inc"
                        ${Boost_INCLUDE_DIRS}
-                       ${GLEW_INCLUDES}
+                       ${GLEW_INCLUDE_DIRS}
                        ${GLUT_INCLUDE_DIR}
                      )
 
@@ -51,7 +50,7 @@ if(WIN32)
   target_link_libraries( GLUTMinimalCFR
     ${GLUT_LIBRARIES}
     ${OPENGL_gl_LIBRARY}
-    ${GLEW_LIBS}
+    ${GLEW_LIBRARY}
     ${Boost_LIBRARIES}
     DPSgAlgorithm
     DPSgCore
@@ -65,8 +64,6 @@ if(WIN32)
 
   CopyGLEW( GLUTMinimalCFR "${DP_BINARY_PATH}" )
   CopyGLUT( GLUTMinimalCFR "${DP_BINARY_PATH}" )
-
-  add_perforce_to_target( GLUTMinimalCFR )
 
   set_target_properties( GLUTMinimalCFR PROPERTIES FOLDER "Apps")
 endif()

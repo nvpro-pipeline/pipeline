@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2010
+// Copyright NVIDIA Corporation 2002-2014
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -40,6 +40,8 @@ typedef uintptr_t UINT_PTR;   //!< Linux specific type definition for UINT_PTR, 
 #include <dp/util/Allocator.h>
 #include <dp/util/DPAssert.h>
 #include <dp/util/SmartPtr.h>
+
+#include <boost/type_traits/is_base_of.hpp>
 
 namespace dp
 {

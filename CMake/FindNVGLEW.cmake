@@ -1,58 +1,39 @@
-include(CopyFile)
+# - Find the OpenGL Extension Wrangler Library (GLEW)
+# This module defines the following variables:
+#  GLEW_INCLUDE_DIRS - include directories for GLEW
+#  GLEW_LIBRARIES - libraries to link against GLEW
+#  GLEW_FOUND - true if GLEW has been found and can be used
 
-if (WIN32)
+#=============================================================================
+# Copyright 2012 Benjamin Eikel
+#
+# Distributed under the OSI-approved BSD License (the "License");
+# see accompanying file Copyright.txt for details.
+#
+# This software is distributed WITHOUT ANY WARRANTY; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the License for more information.
+#=============================================================================
+# (To distribute this file outside of CMake, substitute the full
+#  License text for the above reference.)
 
-  set (NV_GLEW_VERSION "1.10.0")
-  
+find_path(GLEW_INCLUDE_DIR GL/glew.h)
+
+if(WIN32)
   if( CMAKE_SIZEOF_VOID_P EQUAL 8 )
-    set ( NV_GLEW_ARCH "amd64" CACHE STRING "GLEW library architecture" )
-  else ()
-    set ( NV_GLEW_ARCH "x86" CACHE STRING "GLEW library architecture" )
+    find_library(GLEW_LIBRARY NAMES GLEW glew32 glew glew32s PATH_SUFFIXES "lib/Release/x64" )
+  else()
+    find_library(GLEW_LIBRARY NAMES GLEW glew32 glew glew32s PATH_SUFFIXES "lib/Release/Win32" )
   endif()
-  
-  set (NV_GLEW_COMPILER "win32-${NV_GLEW_ARCH}" CACHE STRING "GLEW compiler")
-  
-  file( TO_CMAKE_PATH "$ENV{DP_3RDPARTY_PATH}/glew/${NV_GLEW_VERSION}" NV_GLEW_PATH_TMP )
-
-  set( NV_GLEW_ROOT_PATH ${NV_GLEW_PATH_TMP} CACHE STRING "Path to glew" )
-  
-  #if ( CMAKE_COMPILER_IS_GNUCC )
-  #  set(GLEW_LIBS "${NV_GLEW_ROOT_PATH}/lib/${NV_GLEW_COMPILER}/libglew.a" CACHE STRING "GLEW libraries")
-  #else()
-  set(GLEW_LIBS "${NV_GLEW_ROOT_PATH}/lib/${NV_GLEW_COMPILER}/glew32.lib" CACHE STRING "GLEW libraries" )
-  #endif()
-  
-  set( GLEW_INCLUDES "${NV_GLEW_ROOT_PATH}/include" CACHE STRING "GLEW includes" )
-  #set( GLEW_DEFINITIONS "-DGLEW_STATIC" CACHE STRING "GLEW definitions" )
-  
-  FUNCTION(CopyGLEW target path)
-    copy_file_if_changed( ${target} "${NV_GLEW_ROOT_PATH}/bin/${NV_GLEW_COMPILER}/glew32.dll" "${path}" )
-  ENDFUNCTION()
-
+else()
+  find_library(GLEW_LIBRARY NAMES GLEW glew32 glew glew32s PATH_SUFFIXES lib64 )
 endif()
 
-if (UNIX)
-  find_path( GLEW_INCLUDES GL/glew.h
-    /usr/include
-    /usr/local/include
-    /sw/include
-    /opt/local/include
-    DOC "The directory where GL/glew.h resides"
-  )
+set(GLEW_INCLUDE_DIRS ${GLEW_INCLUDE_DIR})
+set(GLEW_LIBRARIES ${GLEW_LIBRARY})
 
-  find_library( GLEW_LIBS
-    NAMES GLEW glew
-    PATHS
-    /usr/lib64
-    /usr/lib
-    /usr/local/lib64
-    /usr/local/lib
-    /sw/lib
-    /opt/local/lib
-    DOC "The GLEW library"
-  )
+include(${CMAKE_CURRENT_LIST_DIR}/FindPackageHandleStandardArgs.cmake)
+find_package_handle_standard_args(GLEW
+                                  REQUIRED_VARS GLEW_INCLUDE_DIR GLEW_LIBRARY)
 
-  FUNCTION(CopyGLEW target path)
-  ENDFUNCTION()
-
-endif()
+mark_as_advanced(GLEW_INCLUDE_DIR GLEW_LIBRARY)

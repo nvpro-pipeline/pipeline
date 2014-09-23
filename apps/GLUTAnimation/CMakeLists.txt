@@ -14,8 +14,8 @@ cmake_minimum_required(VERSION 2.6)
 project( GLUTAnimation )
 
 find_package(OpenGL REQUIRED )
-find_package(NVGLUT REQUIRED )
-find_package(NVGLEW REQUIRED )
+find_package(GLUT REQUIRED )
+find_package(GLEW REQUIRED )
 
 set( SCENIX_COMMON_BASE "${SCENIX_HOME}/samples/common" )
 
@@ -30,7 +30,7 @@ set (GLUTANIMATION_HEADERS
 
 include_directories( "." )
 include_directories( "inc" )
-include_directories( ${GLEW_INCLUDES} )
+include_directories( ${GLEW_INCLUDE_DIRS} )
 include_directories( ${GLUT_INCLUDE_DIR} )
 
 add_definitions( ${GLEW_DEFINITIONS} )
@@ -42,7 +42,7 @@ add_executable( GLUTAnimation
 
 target_link_libraries( GLUTAnimation
   ${OPENGL_gl_LIBRARY}
-  ${GLEW_LIBS}
+  ${GLEW_LIBRARY}
   DPSgAlgorithm
   DPSgCore
   DPSgGL

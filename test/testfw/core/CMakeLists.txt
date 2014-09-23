@@ -1,7 +1,6 @@
 
 find_package(NVPMAPI REQUIRED)
 
-find_package( NVBoost )
 find_package( Boost COMPONENTS program_options REQUIRED )
 
 #includes
@@ -72,10 +71,5 @@ target_link_libraries( DPTcore
 )
 
 add_dependencies( DPTcore DPUtil )
-
-if(TARGET SceniX)
-  add_perforce_to_target( DPTcore )
-endif()
-
 
 set_target_properties( DPTcore PROPERTIES FOLDER "DPT")

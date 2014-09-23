@@ -1,10 +1,6 @@
 project( RiXCore )
 
-file(TO_CMAKE_PATH $ENV{DP_3RDPARTY_PATH} DP_3RDPARTY_PATH)
-set(CMAKE_MODULE_PATH "${DP_3RDPARTY_PATH}/CMake")
-
-find_package( NVBoost REQUIRED )
-find_package( Boost COMPONENTS REQUIRED )
+find_package( Boost REQUIRED )
 
 #includes
 include_directories(
@@ -38,8 +34,6 @@ add_library( RiXCore SHARED
 )
 
 target_link_libraries( RiXCore DPUtil )
-
-add_perforce_to_target( RiXCore )
 
 set_target_properties( RiXCore PROPERTIES FOLDER "RiX"  )
 

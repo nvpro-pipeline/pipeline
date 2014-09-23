@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2005
+// Copyright NVIDIA Corporation 2002-2014
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -235,9 +235,9 @@ namespace dp
   namespace util
   {
 
-    const std::string EnumReflection<dp::sg::core::Billboard::Alignment>::name = "BillboardAlignment";
+    template <> const std::string EnumReflection<dp::sg::core::Billboard::Alignment>::name = "BillboardAlignment";
 
-    const std::map<unsigned int,std::string> EnumReflection<dp::sg::core::Billboard::Alignment>::values = boost::assign::map_list_of
+    template <> const std::map<unsigned int,std::string> EnumReflection<dp::sg::core::Billboard::Alignment>::values = boost::assign::map_list_of
       ( dp::sg::core::Billboard::BA_AXIS,   "axis" )
       ( dp::sg::core::Billboard::BA_VIEWER, "viewer" )
       ( dp::sg::core::Billboard::BA_SCREEN, "screen" );

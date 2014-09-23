@@ -40,12 +40,9 @@ target_link_libraries( DPTapp
   DPTcore
 )
 
-CopyNvPmApi( DPTapp )
-
-if(TARGET SceniX)
-  add_perforce_to_target( DPTapp )
+if (NVPMAPI_FOUND)
+  CopyNvPmApi( DPTapp )
 endif()
-
 
 add_dependencies( DPTapp DPTcore DPFx )
 

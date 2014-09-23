@@ -104,8 +104,6 @@ add_library( DPSgCore SHARED
   ${CORE_PRIVATE_HEADERS}
 )
 
-add_perforce_to_target( DPSgCore )
-
 target_link_libraries( DPSgCore
   DPFx
   DPMath

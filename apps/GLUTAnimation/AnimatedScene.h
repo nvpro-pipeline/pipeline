@@ -83,8 +83,8 @@ protected:
   Animators  m_animators;
 
   // effect templates for cloning to ensure that TextureFile 
-  dp::sg::core::EffectDataSharedPtr m_rubber_studded_black;
-  dp::sg::core::EffectDataSharedPtr m_resin_polyurethane_coated;
-  dp::sg::core::EffectDataSharedPtr m_mahogany_floorboards;
-  dp::sg::core::EffectDataSharedPtr m_steel_milled_concentric;
+  dp::sg::core::EffectDataSharedPtr m_carpaint;
+  dp::sg::core::EffectDataSharedPtr m_phong;
+  dp::sg::core::EffectDataSharedPtr m_standard_material;
+  dp::sg::core::EffectDataSharedPtr m_thinglass;
 };

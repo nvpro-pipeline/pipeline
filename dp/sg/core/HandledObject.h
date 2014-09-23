@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2010
+// Copyright NVIDIA Corporation 2002-2014
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -50,7 +50,7 @@ namespace dp
 
           virtual HandledObjectSharedPtr clone() const = 0;
 
-          template<typename T> typename SharedPtr<T> getSharedPtr() const;
+          template<typename T> SharedPtr<T> getSharedPtr() const;
 
         protected:
           HandledObject();
@@ -82,7 +82,7 @@ namespace dp
       }
 
       template <typename T>
-      inline typename SharedPtr<T> HandledObject::getSharedPtr() const
+      inline SharedPtr<T> HandledObject::getSharedPtr() const
       {
         DP_STATIC_ASSERT(( boost::is_base_of<HandledObject,T>::value ));
         return( HandledObjectSharedPtr( const_cast<HandledObject*>(this)->shared_from_this() ).staticCast<T>() );

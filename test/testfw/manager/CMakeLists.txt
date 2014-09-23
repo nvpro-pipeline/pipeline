@@ -16,6 +16,4 @@ add_library( DPTestManager STATIC
 
 add_dependencies( DPTestManager DPTcore )
   
-add_perforce_to_target( DPTestManager )
-  
 set_target_properties( DPTestManager PROPERTIES FOLDER "DPT" LINK_INTERFACE_LIBRARIES "")

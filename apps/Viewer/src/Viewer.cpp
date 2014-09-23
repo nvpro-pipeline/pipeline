@@ -173,11 +173,6 @@ Viewer::Viewer( int & argc, char ** argv )
   // resources are cleaned up.
   m_globalShareGLWidget = new dp::sg::ui::qt5::SceniXQGLWidget(0, dp::gl::RenderContextFormat() );
   
-  if (m_globalShareGLWidget->getRenderContext())
-  {
-    m_globalShareGLWidget->getRenderContext()->makeCurrent();
-  }
- 
   // add script system
   // DAR FIXME: The ScriptSystem generates memory leak reports on program exit!
   m_scriptSystem = new ScriptSystem();

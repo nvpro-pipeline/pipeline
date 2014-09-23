@@ -38,8 +38,6 @@ add_library( DPSgUI SHARED
   ${PUBLIC_HEADERS}
 )
 
-add_perforce_to_target( DPSgUI )
-
 target_link_libraries( DPSgUI
   DPSgCore
   DPFx

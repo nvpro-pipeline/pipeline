@@ -12,15 +12,12 @@
 cmake_minimum_required(VERSION 2.8)
 cmake_policy(SET CMP0020 NEW)
 
-# Qt+OpenGL not available on arm yet
-if ( NOT "${DP_ARCH}" STREQUAL "armv7l")
-  find_package(OpenGL REQUIRED)
-  find_package(NVQt5 QUIET)
-  find_package(Qt5Core REQUIRED)
-  find_package(Qt5Widgets REQUIRED)
-  find_package(NVGLEW REQUIRED )
+find_package( Qt5Widgets QUIET )
 
-  find_package( NVBoost )
+if(Qt5Widgets_FOUND AND TARGET DPSgUIQt5)
+  find_package( OpenGL REQUIRED )
+  find_package( GLEW REQUIRED )
+
   find_package( Boost COMPONENTS program_options REQUIRED )
 
   set( SCENIX_COMMON_BASE "${SCENIX_HOME}/samples/common" )
@@ -28,7 +25,7 @@ if ( NOT "${DP_ARCH}" STREQUAL "armv7l")
   # Set include directories
   include_directories("inc")
   include_directories("res/ui")
-  include_directories( ${GLEW_INCLUDES} )
+  include_directories( ${GLEW_INCLUDE_DIRS} )
 
   add_definitions(
     ${GLEW_DEFINITIONS}
@@ -180,7 +177,7 @@ if ( NOT "${DP_ARCH}" STREQUAL "armv7l")
     ${QT_LIBRARIES}
     ${QT_QTMAIN_LIBRARY}
     ${QT_LIB_SCRIPT}
-    ${GLEW_LIBS}
+    ${GLEW_LIBRARY}
     ${Boost_LIBRARIES}
     DP
     DPSgAlgorithm
@@ -248,4 +245,6 @@ if ( NOT "${DP_ARCH}" STREQUAL "armv7l")
   set_target_properties( Viewer PROPERTIES FOLDER "Apps")
   set_target_properties( CopyQtDlls PROPERTIES FOLDER "Tools")
   set_target_properties( makenbf PROPERTIES FOLDER "Tools")
+else()
+  message("Qt5Widgets or DpSgUIQt5 not found, skipping Viewer")
 endif()

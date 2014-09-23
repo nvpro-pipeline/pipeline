@@ -1,12 +1,12 @@
 
 find_package(OpenGL REQUIRED )
-find_package(NVGLUT REQUIRED )
-find_package(NVGLEW REQUIRED)
+find_package(GLUT REQUIRED )
+find_package(GLEW REQUIRED)
 
 #includes
 include_directories(
   "${CMAKE_CURRENT_SOURCE_DIR}/inc"
-  "${GLEW_INCLUDES}"
+  "${GLEW_INCLUDE_DIRS}"
   "${GLUT_INCLUDE_DIR}"
 )
 

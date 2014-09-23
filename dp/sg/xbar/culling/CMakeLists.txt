@@ -35,8 +35,6 @@ add_library( DPSgXbarCulling SHARED
   ${XBAR_CULLING_PRIVATE_HEADERS}
 )
 
-add_perforce_to_target( DPSgXbarCulling )
-
 target_link_libraries( DPSgXbarCulling
   DPSgCore
   DPUtil

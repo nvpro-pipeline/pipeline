@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright NVIDIA Corporation 2012-2014
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -334,16 +334,16 @@ namespace dp
 {
   namespace util
   {
-    const std::string EnumReflection<dp::sg::core::TextureMagFilterMode>::name = "TextureMagFilterMode";
+    template <> const std::string EnumReflection<dp::sg::core::TextureMagFilterMode>::name = "TextureMagFilterMode";
 
-    const std::map<unsigned int,std::string> EnumReflection<dp::sg::core::TextureMagFilterMode>::values = boost::assign::map_list_of
+    template <> const std::map<unsigned int,std::string> EnumReflection<dp::sg::core::TextureMagFilterMode>::values = boost::assign::map_list_of
       ( dp::sg::core::TFM_MAG_NEAREST, "nearest" )
       ( dp::sg::core::TFM_MAG_LINEAR,  "linear" );
 
 
-    const std::string EnumReflection<dp::sg::core::TextureMinFilterMode>::name = "TextureMinFilterMode";
+    template <> const std::string EnumReflection<dp::sg::core::TextureMinFilterMode>::name = "TextureMinFilterMode";
 
-    const std::map<unsigned int,std::string> EnumReflection<dp::sg::core::TextureMinFilterMode>::values = boost::assign::map_list_of
+    template <> const std::map<unsigned int,std::string> EnumReflection<dp::sg::core::TextureMinFilterMode>::values = boost::assign::map_list_of
       ( dp::sg::core::TFM_MIN_NEAREST,                "nearest" )
       ( dp::sg::core::TFM_MIN_LINEAR,                 "linear" )
       ( dp::sg::core::TFM_MIN_LINEAR_MIPMAP_LINEAR,   "linear_mipmap_linear" )
@@ -352,9 +352,9 @@ namespace dp
       ( dp::sg::core::TFM_MIN_LINEAR_MIPMAP_NEAREST,  "linear_mipmap_nearest" );
 
 
-    const std::string EnumReflection<dp::sg::core::TextureWrapMode>::name = "TextureWrapMode";
+    template <> const std::string EnumReflection<dp::sg::core::TextureWrapMode>::name = "TextureWrapMode";
 
-    const std::map<unsigned int,std::string> EnumReflection<dp::sg::core::TextureWrapMode>::values = boost::assign::map_list_of
+    template <> const std::map<unsigned int,std::string> EnumReflection<dp::sg::core::TextureWrapMode>::values = boost::assign::map_list_of
       ( dp::sg::core::TWM_REPEAT,                 "repeat" )
       ( dp::sg::core::TWM_CLAMP,                  "clamp" )
       ( dp::sg::core::TWM_MIRROR_REPEAT,          "mirror_repeat" )

@@ -1,8 +1,8 @@
 
-find_package( NVGLEW REQUIRED )
+find_package( GLEW REQUIRED )
 
 #includes
-include_directories( ${GLEW_INCLUDES} )
+include_directories( ${GLEW_INCLUDE_DIRS} )
 
 #definitions
 add_definitions(
@@ -78,8 +78,6 @@ add_library( DPSgRdrRiXGL SHARED
   ${PRIVATE_HEADERS}
   ${PUBLIC_HEADERS}
 )
-
-add_perforce_to_target( DPSgRdrRiXGL )
 
 target_link_libraries( DPSgRdrRiXGL
   RiXCore

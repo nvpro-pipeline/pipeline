@@ -23,8 +23,9 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
 #pragma once
+
+#if defined(HAVE_NVPMAPI)
 
 #include <memory>
 
@@ -88,3 +89,6 @@ namespace dp
     } // namespace core
   } // namespace testfw
 } // namespace dp
+
+// HAVE_NVPMAPI
+#endif

@@ -1,6 +1,5 @@
-
-find_package(OpenGL REQUIRED )
-find_package(NVGLEW REQUIRED)
+find_package( OpenGL REQUIRED )
+find_package( GLEW REQUIRED )
 
 FILE (GLOB tests ${linkunit}/*)
 
@@ -22,7 +21,7 @@ FOREACH( test ${tests} )
 ENDFOREACH( test ${tests} )
 
 include_directories(
-  "${GLEW_INCLUDES}"
+  "${GLEW_INCLUDE_DIRS}"
 )
 
 add_library( ${LINK_NAME} SHARED
@@ -30,7 +29,7 @@ add_library( ${LINK_NAME} SHARED
 )
 
 target_link_libraries( ${LINK_NAME}
-  "${OPENGL_gl_LIBRARY}"
+  ${OPENGL_gl_LIBRARY}
   ${GLEW_LIB}
   DPTcore
   DPUtil

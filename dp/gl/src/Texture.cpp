@@ -1191,7 +1191,7 @@ namespace dp
       resize( width, layers );
     }
 
-    inline void Texture1DArray::setData( const void *data, GLint layer, GLuint mipLevel /*= 0 */ )
+    void Texture1DArray::setData( const void *data, GLint layer, GLuint mipLevel /*= 0 */ )
     {
       DP_ASSERT( isMipMapLevelValid( mipLevel) );
       DP_ASSERT( layer < getLayers() );
@@ -1490,7 +1490,7 @@ namespace dp
       resize( width, height, depth );
     }
 
-    inline void Texture3D::setData( const void *data, GLuint mipLevel /*= 0 */ )
+    void Texture3D::setData( const void *data, GLuint mipLevel /*= 0 */ )
     {
       DP_ASSERT( isMipMapLevelValid( mipLevel) );
 
@@ -1554,7 +1554,7 @@ namespace dp
       resize( width, height );
     }
 
-    inline void TextureCubemap::setData( const void *data, int face, GLuint mipLevel /*= 0 */ )
+    void TextureCubemap::setData( const void *data, int face, GLuint mipLevel /*= 0 */ )
     {
       DP_ASSERT( 0 <= face && face <= 6);
       DP_ASSERT( isMipMapLevelValid( mipLevel ) );
@@ -1635,7 +1635,7 @@ namespace dp
       resize( width, height, layers );
     }
 
-    inline void TextureCubemapArray::setData( const void *data, GLint layer, GLuint mipLevel /*= 0 */ )
+    void TextureCubemapArray::setData( const void *data, GLint layer, GLuint mipLevel /*= 0 */ )
     {
       DP_ASSERT( isMipMapLevelValid( mipLevel) );
       DP_ASSERT( layer < getLayers() );
