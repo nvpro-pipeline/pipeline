@@ -27,9 +27,10 @@
 #pragma once
 
 #include <dp/culling/opengl/Manager.h>
+#include <GL/glew.h>
+#include <dp/gl/Program.h>
 
 #if defined(GL_VERSION_4_3)
-#include <GL/glew.h>
 
 namespace dp
 {

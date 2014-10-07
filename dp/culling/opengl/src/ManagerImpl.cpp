@@ -202,9 +202,8 @@ namespace dp
       ResultHandle ManagerImpl::groupCreateResult( GroupHandle const& group )
       {
         const GroupImplHandle& groupImpl = dp::util::smart_cast<GroupImpl>(group);
-        GroupImplHandle changed = new GroupImpl();
 
-        return new ResultBitSet( groupImpl, changed );
+        return new ResultBitSet( groupImpl );
       }
 
       void ManagerImpl::initializeComputeShader()
@@ -213,9 +212,9 @@ namespace dp
         {
           glewInit();
 
-          m_program = dp::gl::SmartProgram::create( dp::gl::ComputeShader::create( shader ) );
+          m_program = dp::gl::Program::create( dp::gl::ComputeShader::create( shader ) );
           m_shaderInitialized = true;
-          m_uniformViewProjection = m_program->getUniformLocation( "viewProjection" );
+          m_uniformViewProjection = m_program->getActiveUniform( m_program->getActiveUniformIndex( "viewProjection" ) ).location;
         }
       }
 
@@ -229,25 +228,22 @@ namespace dp
         dp::math::Mat44f vp = viewProjection;
         dp::math::Mat44f modelViewProjection;
 
-        resultImpl->getChangedGroup()->clearObjects();
-
         initializeComputeShader();
         groupImpl->update( WORKGROUP_SIZE );
 
         // initialize output buffer
         size_t numberOfWorkingGroups = (groupImpl->getObjectCount() + WORKGROUP_SIZE - 1) / WORKGROUP_SIZE;
 
-        dp::gl::ProgramUseGuard( m_program );
+        dp::gl::ProgramUseGuard useGuard( m_program );
         glUniformMatrix4fv( m_uniformViewProjection, 1, false, viewProjection[0].getPtr() );
 
-        glBindBufferBase( GL_SHADER_STORAGE_BUFFER, OBJECT_BINDING, groupImpl->getInputBuffer() );
-        glBindBufferBase( GL_SHADER_STORAGE_BUFFER, MATRIX_BINDING, groupImpl->getMatrixBuffer() );
-        glBindBufferBase( GL_SHADER_STORAGE_BUFFER, VISIBILITY_BINDING, groupImpl->getOutputBuffer() );
+        glBindBufferBase( GL_SHADER_STORAGE_BUFFER, OBJECT_BINDING, groupImpl->getInputBuffer()->getGLId() );
+        glBindBufferBase( GL_SHADER_STORAGE_BUFFER, MATRIX_BINDING, groupImpl->getMatrixBuffer()->getGLId() );
+        glBindBufferBase( GL_SHADER_STORAGE_BUFFER, VISIBILITY_BINDING, groupImpl->getOutputBuffer()->getGLId() );
         glDispatchCompute( static_cast<GLuint>(numberOfWorkingGroups), 1, 1 );
-        //glMemoryBarrier( GL_BUFFER_UPDATE_BARRIER_BIT ); // TODO This is way too slow to use, but correct.
-
+        glMemoryBarrier( GL_BUFFER_UPDATE_BARRIER_BIT ); // TODO This is way too slow to use, but correct.
         glMemoryBarrier( GL_SHADER_STORAGE_BARRIER_BIT );
-        dp::gl::MapBuffer<dp::util::Uint32> visibleShader( groupImpl->getOutputBuffer(), GL_SHADER_STORAGE_BUFFER, GL_READ_ONLY );
+        dp::gl::MappedBuffer<dp::util::Uint32> visibleShader( groupImpl->getOutputBuffer(), GL_SHADER_STORAGE_BUFFER, GL_READ_WRITE );
         resultImpl->updateChanged( visibleShader );
       }
 

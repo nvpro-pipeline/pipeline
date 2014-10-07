@@ -42,6 +42,7 @@ add_library(DPCullingOpenGL STATIC
 CopyGLEW( DPCullingOpenGL "${DP_BINARY_PATH}" )
 
 target_link_libraries( DPCullingOpenGL
+  DPGL
   DPUtil
   DPMath
   ${OPENGL_gl_LIBRARY}

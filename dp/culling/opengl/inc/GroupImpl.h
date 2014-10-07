@@ -48,6 +48,10 @@ namespace dp
 
         void update( size_t workGroupSize );
 
+        dp::gl::SmartBuffer const & getInputBuffer() { return m_inputBuffer; }
+        dp::gl::SmartBuffer const & getMatrixBuffer() { return m_matricesBuffer; }
+        dp::gl::SmartBuffer const & getOutputBuffer() { return m_outputBuffer; }
+
       protected:
         void updateMatrices( );
         void updateInputBuffer( size_t workGroupSize );
