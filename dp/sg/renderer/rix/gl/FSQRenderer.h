@@ -126,7 +126,7 @@ namespace dp
           class FSQRenderer : public dp::sg::ui::Renderer
           {
             public:
-              DP_SG_RDR_RIX_GL_API static dp::util::SmartPtr<FSQRenderer> create( const dp::gl::SmartRenderTarget &renderTarget = dp::gl::SmartRenderTarget() );
+              DP_SG_RDR_RIX_GL_API static dp::util::SmartPtr<FSQRenderer> create( const dp::gl::SharedRenderTarget &renderTarget = dp::gl::SharedRenderTarget() );
               DP_SG_RDR_RIX_GL_API virtual ~FSQRenderer(void);
 
               DP_SG_RDR_RIX_GL_API virtual void setEffect( const dp::sg::core::EffectDataSharedPtr & effect ) = 0;
@@ -165,7 +165,7 @@ namespace dp
                *  \param callRTBeginEnd Whether to wrap the Quad rendering with target->beginRendering() and target->endRendering().  In some 
                *  cases the RenderTarget may be current and calling begin/endRendering may be either unnecessary or detremental.
                **/
-              DP_SG_RDR_RIX_GL_API static void presentTexture2D( const dp::gl::SmartTexture2D &tex2d, const dp::gl::SmartRenderTarget &target, bool callRTBeginEnd = true );
+              DP_SG_RDR_RIX_GL_API static void presentTexture2D( const dp::gl::SharedTexture2D &tex2d, const dp::gl::SharedRenderTarget &target, bool callRTBeginEnd = true );
 
               /*! \brief Fill the viewport with the given dp::gl::TextureRectangle.
                *  \remarks This is a convenience function to render the given dp::gl::TextureRectangle in a viewport-filling quad.
@@ -174,14 +174,14 @@ namespace dp
                *  \param callRTBeginEnd Whether to wrap the Quad rendering with target->beginRendering() and target->endRendering().  In some 
                *  cases the RenderTarget may be current and calling begin/endRendering may be either unnecessary or detremental.
                **/
-              DP_SG_RDR_RIX_GL_API static void presentTextureRectangle( const dp::gl::SmartTextureRectangle &tex2d, const dp::gl::SmartRenderTarget &target, bool callRTBeginEnd = true );
+              DP_SG_RDR_RIX_GL_API static void presentTextureRectangle( const dp::gl::SharedTextureRectangle &tex2d, const dp::gl::SharedRenderTarget &target, bool callRTBeginEnd = true );
 
               REFLECTION_INFO_API( DP_SG_RDR_RIX_GL_API, RendererGLFSQImpl );
               BEGIN_DECLARE_STATIC_PROPERTIES
               END_DECLARE_STATIC_PROPERTIES
 
             protected:
-              DP_SG_RDR_RIX_GL_API FSQRenderer( const dp::gl::SmartRenderTarget &target );
+              DP_SG_RDR_RIX_GL_API FSQRenderer( const dp::gl::SharedRenderTarget &target );
           };
 
           typedef dp::util::SmartPtr<FSQRenderer> SmartFSQRenderer;

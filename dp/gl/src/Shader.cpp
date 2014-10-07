@@ -46,7 +46,7 @@ namespace dp
       }
     }
 
-    SmartShader Shader::create( GLenum type, std::string const& source )
+    SharedShader Shader::create( GLenum type, std::string const& source )
     {
       switch( type )
       {
@@ -90,24 +90,31 @@ namespace dp
 
     Shader::~Shader( )
     {
-      class CleanupTask : public ShareGroupTask
+      if ( getGLId() )
       {
-        public:
-          CleanupTask( GLuint id ) : m_id( id ) {}
-
-          virtual void execute() { glDeleteShader( m_id ); }
-
-        private:
-          GLuint m_id;
-      };
-
-      if ( getGLId() && getShareGroup() )
-      {
-        // make destructor exception safe
-        try
+        if ( getShareGroup() )
         {
-          getShareGroup()->executeTask( new CleanupTask( getGLId() ) );
-        } catch (...) {}
+          class CleanupTask : public ShareGroupTask
+          {
+            public:
+              CleanupTask( GLuint id ) : m_id( id ) {}
+
+              virtual void execute() { glDeleteShader( m_id ); }
+
+            private:
+              GLuint m_id;
+          };
+
+          // make destructor exception safe
+          try
+          {
+            getShareGroup()->executeTask( SharedShareGroupTask( new CleanupTask( getGLId() ) ) );
+          } catch (...) {}
+        }
+        else
+        {
+          glDeleteShader( getGLId() );
+        }
       }
     }
 
@@ -122,9 +129,9 @@ namespace dp
     }
 
 
-    SmartVertexShader VertexShader::create( std::string const& source )
+    SharedVertexShader VertexShader::create( std::string const& source )
     {
-      return( new VertexShader( source ) );
+      return( SharedVertexShader( new VertexShader( source ) ) );
     }
 
     VertexShader::VertexShader( std::string const& source )
@@ -138,9 +145,9 @@ namespace dp
     }
 
 
-    SmartTessControlShader TessControlShader::create( std::string const& source )
+    SharedTessControlShader TessControlShader::create( std::string const& source )
     {
-      return( new TessControlShader( source ) );
+      return( SharedTessControlShader( new TessControlShader( source ) ) );
     }
 
     TessControlShader::TessControlShader( std::string const& source )
@@ -154,9 +161,9 @@ namespace dp
     }
 
 
-    SmartTessEvaluationShader TessEvaluationShader::create( std::string const& source )
+    SharedTessEvaluationShader TessEvaluationShader::create( std::string const& source )
     {
-      return( new TessEvaluationShader( source ) );
+      return( SharedTessEvaluationShader( new TessEvaluationShader( source ) ) );
     }
 
     TessEvaluationShader::TessEvaluationShader( std::string const& source )
@@ -170,9 +177,9 @@ namespace dp
     }
 
 
-    SmartGeometryShader GeometryShader::create( std::string const& source )
+    SharedGeometryShader GeometryShader::create( std::string const& source )
     {
-      return( new GeometryShader( source ) );
+      return( SharedGeometryShader( new GeometryShader( source ) ) );
     }
 
     GeometryShader::GeometryShader( std::string const& source )
@@ -186,9 +193,9 @@ namespace dp
     }
 
 
-    SmartFragmentShader FragmentShader::create( std::string const& source )
+    SharedFragmentShader FragmentShader::create( std::string const& source )
     {
-      return( new FragmentShader( source ) );
+      return( SharedFragmentShader( new FragmentShader( source ) ) );
     }
 
     FragmentShader::FragmentShader( std::string const& source )
@@ -202,9 +209,9 @@ namespace dp
     }
 
 
-    SmartComputeShader ComputeShader::create( std::string const& source )
+    SharedComputeShader ComputeShader::create( std::string const& source )
     {
-      return( new ComputeShader( source ) );
+      return( SharedComputeShader( new ComputeShader( source ) ) );
     }
 
     ComputeShader::ComputeShader( std::string const& source )

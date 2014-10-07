@@ -26,6 +26,7 @@
 
 #include "DataTypeConversionGL.h"
 #include "TextureGL2DRectangle.h"
+#include <dp/util/SharedPtr.h>
 
 namespace dp
 {
@@ -67,8 +68,7 @@ namespace dp
           /* TODO throw exception */
         }
 
-        DP_ASSERT( dp::util::isSmartPtrOf<dp::gl::TextureRectangle>( getTexture() ) );
-        dp::util::smart_cast<dp::gl::TextureRectangle>( getTexture() )->setData( data );
+        dp::util::shared_cast<dp::gl::TextureRectangle>( getTexture() )->setData( data );
       }
 
     } // namespace gl

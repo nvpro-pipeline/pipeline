@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2013
+// Copyright NVIDIA Corporation 2010-2014
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -107,13 +107,6 @@ namespace dp
       SceneTree::~SceneTree()
       {
         m_sceneObserver.reset();
-
-        // remove all drawables from DrawableManager
-        ObjectTreeIndex treeSize = ObjectTreeIndex(m_objectTree.size());
-        for ( ObjectTreeIndex index = 0; index < treeSize;++index )
-        {
-          drawableInstanceRemove( index );
-        }
       }
 
       SceneTreeSharedPtr SceneTree::create( SceneSharedPtr const & scene )
@@ -178,7 +171,7 @@ namespace dp
         m_geoNodeObserver->popDirtyGeoNodes(dirtyGeoNodes);
         for ( ObjectTreeIndexSet::const_iterator it = dirtyGeoNodes.begin(); it != dirtyGeoNodes.end(); ++it )
         {
-          drawableInstanceUpdate( *it );
+          notify( EventObject( *it, m_objectTree[*it], EventObject::Changed) );
         }
 
         {
@@ -422,21 +415,6 @@ namespace dp
         m_lightSources.insert(index);
       }
 
-      void SceneTree::drawableInstanceUpdate( ObjectTreeIndex index )
-      {
-        DP_ASSERT( m_objectTree[index].m_isDrawable );
-        notify( EventObject( index, m_objectTree[index], EventObject::Changed) );
-      }
-
-      void SceneTree::drawableInstanceRemove( ObjectTreeIndex index )
-      {
-        if ( m_objectTree[index].m_isDrawable )
-        {
-          notify( EventObject( index, m_objectTree[index], EventObject::Removed) );
-          m_geoNodeObserver->detach( index );
-        }
-      }
-
       void SceneTree::removeObjectTreeIndex( ObjectTreeIndex index )
       {
         // initialize the trafo index for the trafo search with the parent's trafo index
@@ -463,7 +441,11 @@ namespace dp
             DP_VERIFY( m_lightSources.erase( currentIndex ) == 1 );
           }
 
-          drawableInstanceRemove( currentIndex );
+          if ( m_objectTree[currentIndex].m_isDrawable )
+          {
+            notify( EventObject( currentIndex, m_objectTree[currentIndex], EventObject::Removed) );
+            m_geoNodeObserver->detach( currentIndex );
+          }
 
           current.m_clipPlaneGroup.reset();
 
@@ -554,11 +536,6 @@ namespace dp
       ObjectTree& SceneTree::getObjectTree()
       {
         return m_objectTree;
-      }
-
-      TransformTreeNode& SceneTree::getTransformTreeNodeInternal( TransformTreeIndex index )
-      {
-        return m_transformTree[index];
       }
 
       TransformTreeNode const& SceneTree::getTransformTreeNode( TransformTreeIndex index ) const

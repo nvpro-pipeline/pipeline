@@ -76,7 +76,7 @@ namespace dp
 
         protected:
           dp::gl::RenderContextFormat m_format;
-          dp::gl::SmartRenderContext  m_context;
+          dp::gl::SharedRenderContext m_context;
           int                         m_windowId;
 
           dp::sg::ui::SmartSceneRenderer m_renderer;

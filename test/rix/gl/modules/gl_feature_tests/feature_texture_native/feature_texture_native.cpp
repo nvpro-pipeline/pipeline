@@ -29,6 +29,7 @@
 
 #include <dp/gl/RenderTarget.h>
 #include <dp/math/Trafo.h>
+#include <dp/util/SharedPtr.h>
 
 #include <test/rix/core/framework/RiXBackend.h>
 #include <test/rix/core/helpers/GeometryHelper.h>
@@ -56,7 +57,7 @@ bool Feature_texture_native::onInit()
 {
   DP_ASSERT( dynamic_cast<test::framework::RiXBackend*>(&(*m_backend)) );
   m_rix = static_cast<test::framework::RiXBackend*>(&(*m_backend))->getRenderer();
-  util::smart_cast<dp::gl::RenderTarget>( m_displayTarget )->setClearColor( 0.46f, 0.72f, 0.0f, 1.0f );
+  dp::util::shared_cast<dp::gl::RenderTarget>( m_displayTarget )->setClearColor( 0.46f, 0.72f, 0.0f, 1.0f );
 
   m_renderData = new test::framework::RenderDataRiX;
 
@@ -182,7 +183,7 @@ void Feature_texture_native::createScene()
 
   TextureSharedHandle texture = m_rix->textureCreate( textureDescription );
 
-  dp::gl::SmartTexture2D glTexture = dp::gl::Texture2D::create( GL_RGBA16, tex2DWidth, tex2DHeight, GL_RGBA, GL_FLOAT );
+  dp::gl::SharedTexture2D glTexture = dp::gl::Texture2D::create( GL_RGBA16, tex2DWidth, tex2DHeight, GL_RGBA, GL_FLOAT );
   glTexture->setFilterParameters( GL_NEAREST, GL_LINEAR );
   glTexture->setWrapParameters( GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE );
 

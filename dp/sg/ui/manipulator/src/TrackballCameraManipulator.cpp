@@ -24,13 +24,12 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#include <dp/sg/ui/manipulator/TrackballCameraManipulator.h>
-
+#include <dp/gl/RenderTarget.h>
 #include <dp/sg/algorithm/RayIntersectTraverser.h>
 #include <dp/sg/core/FrustumCamera.h>
-
+#include <dp/sg/ui/manipulator/TrackballCameraManipulator.h>
+#include <dp/util/SharedPtr.h>
 #include <GL/glew.h>
-#include <dp/gl/RenderTarget.h>
 
 using namespace dp::math;
 using namespace dp::sg::core;
@@ -535,8 +534,8 @@ namespace dp
 
                 GLint viewport[4];
                 unsigned int width, height;
-                dp::util::smart_cast<dp::gl::RenderTarget>(getRenderTarget())->getPosition( viewport[0], viewport[1] );
-                dp::util::smart_cast<dp::gl::RenderTarget>(getRenderTarget())->getSize( width, height );
+                dp::util::shared_cast<dp::gl::RenderTarget>(getRenderTarget())->getPosition( viewport[0], viewport[1] );
+                dp::util::shared_cast<dp::gl::RenderTarget>(getRenderTarget())->getSize( width, height );
                 width = GLint(width);
                 height = GLint(height);
 

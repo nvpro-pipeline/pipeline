@@ -82,16 +82,16 @@ namespace dp
               dp::rix::core::TextureSharedHandle              m_perFragmentSpinLockTexture;
               dp::rix::core::TextureSharedHandle              m_samplesTexture;
 
-              dp::gl::SmartProgram        m_clearProgram;
-              dp::gl::SmartBuffer         m_fullScreenQuad;
+              dp::gl::SharedProgram       m_clearProgram;
+              dp::gl::SharedBuffer        m_fullScreenQuad;
               bool                        m_initializedBuffers;
               bool                        m_initializedHandles;
-              dp::gl::SmartTexture2D      m_perFragmentCountTextureGL;
-              dp::gl::SmartTexture2D      m_perFragmentIndexTextureGL;
-              dp::gl::SmartTexture2D      m_perFragmentSamplesAccuTextureGL;
-              dp::gl::SmartTexture2D      m_perFragmentSpinLockTextureGL;
-              dp::gl::SmartProgram        m_resolveProgram;
-              dp::gl::SmartTextureBuffer  m_samplesTextureGL;
+              dp::gl::SharedTexture2D     m_perFragmentCountTextureGL;
+              dp::gl::SharedTexture2D     m_perFragmentIndexTextureGL;
+              dp::gl::SharedTexture2D     m_perFragmentSamplesAccuTextureGL;
+              dp::gl::SharedTexture2D     m_perFragmentSpinLockTextureGL;
+              dp::gl::SharedProgram       m_resolveProgram;
+              dp::gl::SharedTextureBuffer m_samplesTextureGL;
           };
 
         } // namespace gl

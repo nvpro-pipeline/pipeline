@@ -27,13 +27,14 @@
 #pragma once
 
 #include <dp/ui/Config.h>
-#include <dp/util/Reflection.h>
 #include <dp/util/Image.h>
 
 namespace dp
 {
   namespace ui
   {
+    class RenderTarget;
+    typedef std::shared_ptr<RenderTarget> SmartRenderTarget;
 
     /** \brief An dp::ui::RenderTarget specifies a render surface to be used in conjunction with an dp::sg::ui::Renderer.
                devtech platform supports RenderTargets for OpenGL (dp::gl::RenderTargetFB, dp::gl::RenderTargetFBO) .
@@ -44,8 +45,7 @@ namespace dp
                A RenderTarget is also prepared to support stereoscopic rendering in conjunction with dp::sg::ui::SceneRenderer.
         \remarks For mono rendering the LEFT surface is used as default. 
     **/
-    class RenderTarget : public dp::util::Reflection
-                       , public dp::util::RCObject
+    class RenderTarget
     {
     public:
       enum StereoTarget { LEFT = 0,         //!< Left eye only. Mono is aliased to the left eye.
@@ -164,6 +164,5 @@ namespace dp
       return ratio;
     }
 
-    typedef dp::util::SmartPtr<RenderTarget> SmartRenderTarget;
   } // namespace ui
 } // namespace dp

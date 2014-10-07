@@ -55,8 +55,8 @@ namespace dp
           SceniXQGLWidgetPrivate( SceniXQGLWidget *parent, const dp::gl::RenderContextFormat &format, SceniXQGLWidgetPrivate *shareWidget );
           virtual ~SceniXQGLWidgetPrivate();
           
-          const dp::gl::SmartRenderContext & getRenderContext() const;
-          const dp::gl::SmartRenderTarget  & getRenderTarget() const;
+          const dp::gl::SharedRenderContext & getRenderContext() const;
+          const dp::gl::SharedRenderTarget  & getRenderTarget() const;
           
           QPaintEngine *paintEngine() const;
           
@@ -65,7 +65,7 @@ namespace dp
           virtual void paintEvent( QPaintEvent * paintEvent );
           virtual void resizeEvent( QResizeEvent *resizeEvent ); 
           
-          dp::gl::SmartRenderTarget     m_renderTarget;
+          dp::gl::SharedRenderTarget    m_renderTarget;
           bool                          m_initialized;
           SceniXQGLWidgetPrivate      * m_shareWidget;
           dp::gl::RenderContextFormat   m_format;
@@ -1374,12 +1374,12 @@ namespace dp
           m_glWidget->resize( event->size() );
         }
 
-        const dp::gl::SmartRenderContext & SceniXQGLWidget::getRenderContext() const
+        const dp::gl::SharedRenderContext & SceniXQGLWidget::getRenderContext() const
         {
           return m_glWidget->getRenderContext();
         }
 
-        const dp::gl::SmartRenderTarget & SceniXQGLWidget::getRenderTarget() const
+        const dp::gl::SharedRenderTarget & SceniXQGLWidget::getRenderTarget() const
         {
           return m_glWidget->getRenderTarget();
         }
@@ -1398,18 +1398,18 @@ namespace dp
           setAttribute( Qt::WA_PaintOnScreen ); // don't let qt paint anything on screen
           
 #if defined(DP_OS_WINDOWS)
-          dp::gl::SmartRenderContext renderContextGL = dp::gl::RenderContext::create( dp::gl::RenderContext::FromHWND( (HWND)winId()
-            , &m_format, m_shareWidget ? m_shareWidget->getRenderContext() : dp::gl::SmartRenderContext::null ) );
+          dp::gl::SharedRenderContext renderContextGL = dp::gl::RenderContext::create( dp::gl::RenderContext::FromHWND( (HWND)winId()
+            , &m_format, m_shareWidget ? m_shareWidget->getRenderContext() : nullptr ) );
 #elif defined(DP_OS_LINUX)
           // TODO support format
-          dp::gl::SmartRenderContext renderContextGL = dp::gl::RenderContext::create( dp::gl::RenderContext::FromDrawable( QX11Info::display(), QX11Info::appScreen(), winId(), m_shareWidget ? m_shareWidget->getRenderContext() : dp::gl::SmartRenderContext::null ) );
+          dp::gl::SharedRenderContext renderContextGL = dp::gl::RenderContext::create( dp::gl::RenderContext::FromDrawable( QX11Info::display(), QX11Info::appScreen(), winId(), m_shareWidget ? m_shareWidget->getRenderContext() : dp::gl::SharedRenderContext::null ) );
 #endif
           m_renderTarget = dp::gl::RenderTargetFB::create( renderContextGL );
         }
 
         SceniXQGLWidget::SceniXQGLWidgetPrivate::~SceniXQGLWidgetPrivate()
         {
-          dp::gl::SmartRenderContext renderContextGL = m_renderTarget->getRenderContext();
+          dp::gl::SharedRenderContext renderContextGL = m_renderTarget->getRenderContext();
           m_renderTarget.reset();
 
           if ( dp::gl::RenderContext::getCurrentRenderContext() == renderContextGL )
@@ -1423,12 +1423,12 @@ namespace dp
           return 0;
         }
 
-        const dp::gl::SmartRenderContext & SceniXQGLWidget::SceniXQGLWidgetPrivate::getRenderContext() const
+        const dp::gl::SharedRenderContext & SceniXQGLWidget::SceniXQGLWidgetPrivate::getRenderContext() const
         {
           return m_renderTarget->getRenderContext();
         }
 
-        const dp::gl::SmartRenderTarget & SceniXQGLWidget::SceniXQGLWidgetPrivate::getRenderTarget() const
+        const dp::gl::SharedRenderTarget & SceniXQGLWidget::SceniXQGLWidgetPrivate::getRenderTarget() const
         {
           return m_renderTarget;
         }
@@ -1664,7 +1664,7 @@ namespace dp
           update();
         }
 
-        void SceniXQGLWidget::onRenderTargetChanged( const dp::gl::SmartRenderTarget &oldTarget, const dp::gl::SmartRenderTarget &newTarget)
+        void SceniXQGLWidget::onRenderTargetChanged( const dp::gl::SharedRenderTarget &oldTarget, const dp::gl::SharedRenderTarget &newTarget)
         {
         }
 

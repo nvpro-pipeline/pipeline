@@ -33,7 +33,7 @@ namespace dp
 {
   namespace gl
   {
-    RenderTargetFB::RenderTargetFB( const SmartRenderContext &glContext )
+    RenderTargetFB::RenderTargetFB( const SharedRenderContext &glContext )
      : RenderTarget( glContext)
      , m_swapBuffersEnabled(false)
      , m_stereoEnabled( glContext->getFormat().isStereo() )
@@ -52,9 +52,9 @@ namespace dp
       this->setSize(viewport[2]-viewport[0], viewport[3]-viewport[1]);
     }
 
-    dp::util::SmartPtr<RenderTargetFB> RenderTargetFB::create( const SmartRenderContext &glContext )
+    SharedRenderTargetFB RenderTargetFB::create( const SharedRenderContext &glContext )
     {
-      return new RenderTargetFB( glContext );
+      return( SharedRenderTargetFB( new RenderTargetFB( glContext ) ) );
     }
 
     RenderTargetFB::~RenderTargetFB()

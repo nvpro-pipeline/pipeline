@@ -48,9 +48,9 @@ namespace dp
 
         void update( size_t workGroupSize );
 
-        dp::gl::SmartBuffer const & getInputBuffer() { return m_inputBuffer; }
-        dp::gl::SmartBuffer const & getMatrixBuffer() { return m_matricesBuffer; }
-        dp::gl::SmartBuffer const & getOutputBuffer() { return m_outputBuffer; }
+        dp::gl::SharedBuffer const & getInputBuffer() { return m_inputBuffer; }
+        dp::gl::SharedBuffer const & getMatrixBuffer() { return m_matricesBuffer; }
+        dp::gl::SharedBuffer const & getOutputBuffer() { return m_outputBuffer; }
 
       protected:
         void updateMatrices( );
@@ -58,10 +58,10 @@ namespace dp
         void updateOutputBuffer( size_t workGroupSize );
 
       private:
-        dp::gl::SmartBuffer m_inputBuffer;
-        dp::gl::SmartBuffer m_matricesBuffer;
-        dp::gl::SmartBuffer m_outputBuffer;
-        GLsizei             m_outputBufferSize;
+        dp::gl::SharedBuffer  m_inputBuffer;
+        dp::gl::SharedBuffer  m_matricesBuffer;
+        dp::gl::SharedBuffer  m_outputBuffer;
+        GLsizei               m_outputBufferSize;
       };
 
       typedef dp::util::SmartPtr<GroupImpl> GroupImplHandle;

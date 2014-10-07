@@ -101,7 +101,7 @@ namespace dp
             {
             case BM_BUFFER_SUBDATA:
               {
-                dp::gl::SmartBuffer ubo = dp::gl::Buffer::create();
+                dp::gl::SharedBuffer ubo = dp::gl::Buffer::create();
                 if ( glNamedBufferSubDataEXT /** GLEW_EXT_direct_state_access, glew has a bug not reporting this extension because the double versions are missing **/)
                 {
                   parameterState.m_parameterRenderer.reset( new ParameterRendererBufferDSA( parameterCacheEntries, ubo, GL_UNIFORM_BUFFER, binding, 0, blockSize ) );
@@ -148,7 +148,7 @@ namespace dp
             {
             case BM_BUFFER_SUBDATA:
               {
-                dp::gl::SmartBuffer ubo = dp::gl::Buffer::create();
+                dp::gl::SharedBuffer ubo = dp::gl::Buffer::create();
                 if ( glNamedBufferSubDataEXT /** GLEW_EXT_direct_state_access, glew has a bug not reporting this extension because the double versions are missing **/)
                 {
                   parameterState.m_parameterRenderer.reset( new ParameterRendererBufferDSA( parameterCacheEntries, ubo, GL_SHADER_STORAGE_BUFFER, binding, 0, blockSize ) );

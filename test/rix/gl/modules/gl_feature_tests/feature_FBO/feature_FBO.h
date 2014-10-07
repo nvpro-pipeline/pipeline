@@ -90,8 +90,8 @@ private:
   GLuint m_textureName;
   GLuint m_depthTextureName;
 
-  dp::gl::SmartTexture2D m_colorBuf;
-  dp::gl::SmartTexture2D m_depthBuf;
+  dp::gl::SharedTexture2D m_colorBuf;
+  dp::gl::SharedTexture2D m_depthBuf;
 
   dp::ui::SmartRenderTarget m_fbo;
   bool m_screenshotFBO;

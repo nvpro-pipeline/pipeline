@@ -45,7 +45,7 @@ namespace dp
       struct ThreadData
       {
         ~ThreadData() {}
-        SmartRenderContext currentRenderContext;
+        SharedRenderContext currentRenderContext;
       };
 
       boost::thread_specific_ptr<ThreadData> t_threadData;
@@ -422,7 +422,7 @@ namespace dp
       bool result = m_context->makeCurrent();
       if ( result && ( getThreadData()->currentRenderContext.get() != this ) )
       {
-        getThreadData()->currentRenderContext = this;
+        getThreadData()->currentRenderContext = shared_from_this();
       }
 
       return result;
@@ -443,7 +443,7 @@ namespace dp
     {
     }
 
-    SmartShareGroup RenderContext::createShareGroup( const RenderContext::SmartNativeContext &shareContext )
+    SharedShareGroup RenderContext::createShareGroup( const RenderContext::SharedNativeContext &shareContext )
     {
   #if defined(DP_OS_WINDOWS)
       DP_ASSERT( shareContext && shareContext->m_hglrc );
@@ -473,7 +473,7 @@ namespace dp
       HGLRC hglrc = createContext( hdc, shareContext->m_hglrc );
       DP_ASSERT( hglrc );
 
-      return ShareGroup::create( new RenderContext::NativeContext( hwnd, true, hdc, true, hglrc, true ) );
+      return ShareGroup::create( SharedNativeContext( new RenderContext::NativeContext( hwnd, true, hdc, true, hglrc, true ) ) );
   #elif defined(DP_OS_LINUX)
       Display *display = XOpenDisplay( DisplayString(shareContext->m_display) );
       DP_ASSERT( display );
@@ -492,7 +492,7 @@ namespace dp
   #endif
     }
 
-    SmartRenderContext RenderContext::create( const Attach &creation )
+    SharedRenderContext RenderContext::create( const Attach &creation )
     {
   #if defined(DP_OS_WINDOWS)
       HDC hdc = wglGetCurrentDC();
@@ -503,7 +503,7 @@ namespace dp
 
       glewInit();
 
-      SmartNativeContext nativeContext =  new RenderContext::NativeContext( 0, false, hdc, false, hglrc, false);
+      SharedNativeContext nativeContext =  SharedNativeContext( new RenderContext::NativeContext( 0, false, hdc, false, hglrc, false) );
 
       if ( creation.getContext() )
       {
@@ -522,10 +522,10 @@ namespace dp
 
       Display* display = glXGetCurrentDisplay();
 
-      SmartNativeContext nativeContext = new RenderContext::NativeContext( context, false, drawable, false, 0, false, display, false );
+      SharedNativeContext nativeContext = new RenderContext::NativeContext( context, false, drawable, false, 0, false, display, false );
   #endif
 
-      SmartShareGroup shareGroup;
+      SharedShareGroup shareGroup;
       if ( creation.getContext() )
       {
         shareGroup = creation.getContext()->getShareGroup();
@@ -535,10 +535,10 @@ namespace dp
         shareGroup = createShareGroup( nativeContext );
       }
 
-      return new RenderContext( nativeContext, shareGroup );
+      return( SharedRenderContext( new RenderContext( nativeContext, shareGroup ) ) );
     }
 
-    SmartRenderContext RenderContext::create( const Clone &creation )
+    SharedRenderContext RenderContext::create( const Clone &creation )
     {
   #if defined(DP_OS_WINDOWS)
       HDC hdc = creation.getContext()->m_context->m_hdc;
@@ -548,7 +548,7 @@ namespace dp
       HGLRC hglrc = createContext( hdc, creation.isShared() ? creation.getContext()->m_context->m_hglrc : NULL );
       DP_ASSERT( hglrc );
 
-      SmartNativeContext nativeContext = new RenderContext::NativeContext( 0, false, hdc, true, hglrc, true );
+      SharedNativeContext nativeContext = SharedNativeContext( new RenderContext::NativeContext( 0, false, hdc, true, hglrc, true ) );
   #elif defined(DP_OS_LINUX)
       Display *display = XOpenDisplay( DisplayString(creation.getContext()->getDisplay()) );
       DP_ASSERT( display );
@@ -559,14 +559,14 @@ namespace dp
       GLXContext newContext = createContext( display, config, creation.isShared() ? creation.getContext()->getContext() : 0 );
       DP_ASSERT( newContext );
 
-      SmartNativeContext nativeContext = new NativeContext( newContext, true, drawable, false, 0, false, display, true );
+      SharedNativeContext nativeContext = new NativeContext( newContext, true, drawable, false, 0, false, display, true );
   #endif
-      SmartShareGroup shareGroup = creation.isShared() ? creation.getContext()->getShareGroup() : createShareGroup( nativeContext );
-      return new RenderContext( nativeContext, shareGroup );
+      SharedShareGroup shareGroup = creation.isShared() ? creation.getContext()->getShareGroup() : createShareGroup( nativeContext );
+      return( SharedRenderContext( new RenderContext( nativeContext, shareGroup ) ) );
 
     }
 
-    SmartRenderContext RenderContext::create( const Headless &creation )
+    SharedRenderContext RenderContext::create( const Headless &creation )
     {
   #if defined(DP_OS_WINDOWS)
       int pixelFormat = creation.getFormat()->getPixelFormat();
@@ -600,7 +600,7 @@ namespace dp
       HGLRC hglrc = createContext( hdc, creation.getContext() ? creation.getContext()->m_context->m_hglrc : 0 );
       DP_ASSERT( hglrc );
 
-      SmartNativeContext nativeContext = new NativeContext( hwnd, true, hdc, true, hglrc, true );
+      SharedNativeContext nativeContext( new NativeContext( hwnd, true, hdc, true, hglrc, true ) );
 
       if (creation.getContext())
       {
@@ -635,14 +635,13 @@ namespace dp
       GLXContext context = createContext( display, config, creation.getContext() ? creation.getContext()->m_context->m_context : 0 );
       DP_ASSERT( context );
 
-      SmartNativeContext nativeContext = new NativeContext( context, true, drawable, false, pbuffer, true, display, true );
+      SharedNativeContext nativeContext = new NativeContext( context, true, drawable, false, pbuffer, true, display, true );
   #endif
-      SmartShareGroup shareGroup = creation.getContext() ? creation.getContext()->getShareGroup() : createShareGroup( nativeContext );
-      return new RenderContext( nativeContext, shareGroup, *creation.getFormat() );
-
+      SharedShareGroup shareGroup = creation.getContext() ? creation.getContext()->getShareGroup() : createShareGroup( nativeContext );
+      return( SharedRenderContext( new RenderContext( nativeContext, shareGroup, *creation.getFormat() ) ) );
     }
 
-    SmartRenderContext RenderContext::create( const Windowed &creation )
+    SharedRenderContext RenderContext::create( const Windowed &creation )
     {
   #if defined(DP_OS_WINDOWS)
       int pixelFormat = creation.getFormat()->getPixelFormat();
@@ -665,7 +664,7 @@ namespace dp
       HGLRC hglrc = createContext( hdc, creation.getContext() ? creation.getContext()->m_context->m_hglrc : 0 );
       DP_ASSERT( hglrc );
 
-      SmartNativeContext nativeContext = new NativeContext( hwnd, true, hdc, true, hglrc, true );
+      SharedNativeContext nativeContext( new NativeContext( hwnd, true, hdc, true, hglrc, true ) );
 
       if (creation.getContext())
       {
@@ -702,24 +701,24 @@ namespace dp
       GLXContext context = createContext( display, config, creation.getContext() ? creation.getContext()->m_context->m_context : 0 );
       DP_ASSERT( context );
 
-      SmartNativeContext nativeContext = new NativeContext( context, true, drawable, false, pbuffer, true, display, true );
+      SharedNativeContext nativeContext = new NativeContext( context, true, drawable, false, pbuffer, true, display, true );
       */
-      SmartNativeContext nativeContext;
+      SharedNativeContext nativeContext;
   #endif
-      SmartShareGroup shareGroup = creation.getContext() ? creation.getContext()->getShareGroup() : createShareGroup( nativeContext );
-      return new RenderContext( nativeContext, shareGroup, *creation.getFormat() );
+      SharedShareGroup shareGroup = creation.getContext() ? creation.getContext()->getShareGroup() : createShareGroup( nativeContext );
+      return( SharedRenderContext( new RenderContext( nativeContext, shareGroup, *creation.getFormat() ) ) );
 
     }
 
   #if defined(DP_OS_WINDOWS)
-    SmartRenderContext RenderContext::create( const FromHDC &creation )
+    SharedRenderContext RenderContext::create( const FromHDC &creation )
     {
       HGLRC hglrc = createContext( creation.getHDC(), creation.getContext() ? creation.getContext()->m_context->m_hglrc : 0 );
       DP_ASSERT( hglrc );
 
-      SmartNativeContext nativeContext = new NativeContext( 0, false, creation.getHDC(), false, hglrc, true );
+      SharedNativeContext nativeContext( new NativeContext( 0, false, creation.getHDC(), false, hglrc, true ) );
 
-      SmartShareGroup shareGroup;
+      SharedShareGroup shareGroup;
       if (creation.getContext())
       {
         shareGroup = creation.getContext()->getShareGroup();
@@ -733,10 +732,10 @@ namespace dp
         shareGroup = createShareGroup( nativeContext );
       }
 
-      return new RenderContext( nativeContext, shareGroup );
+      return( SharedRenderContext( new RenderContext( nativeContext, shareGroup ) ) );
     }
 
-    SmartRenderContext RenderContext::create( const FromHWND &creation )
+    SharedRenderContext RenderContext::create( const FromHWND &creation )
     {
       int pixelFormat = creation.getFormat()->getPixelFormat();
       if ( !pixelFormat )
@@ -754,9 +753,9 @@ namespace dp
       HGLRC hglrc = createContext( hdc, creation.getContext() ? creation.getContext()->m_context->m_hglrc : 0 );
       DP_ASSERT( hglrc );
 
-      SmartNativeContext nativeContext = new NativeContext( creation.getHWND(), false, hdc, false, hglrc, true );
+      SharedNativeContext nativeContext( new NativeContext( creation.getHWND(), false, hdc, false, hglrc, true ) );
 
-      SmartShareGroup shareGroup;
+      SharedShareGroup shareGroup;
       if (creation.getContext())
       {
         shareGroup = creation.getContext()->getShareGroup();
@@ -767,10 +766,10 @@ namespace dp
         shareGroup = createShareGroup( nativeContext );
       }
 
-      return new RenderContext( nativeContext, shareGroup, *creation.getFormat() );
+      return( SharedRenderContext( new RenderContext( nativeContext, shareGroup, *creation.getFormat() ) ) );
     }
   #elif defined(DP_OS_LINUX)
-    SmartRenderContext RenderContext::create( const FromDrawable &creation )
+    SharedRenderContext RenderContext::create( const FromDrawable &creation )
     {
       Display *display = creation.shared ? XOpenDisplay( DisplayString(creation.shared->m_context->m_context ) ): creation.display;
       DP_ASSERT( display );
@@ -818,16 +817,16 @@ namespace dp
       GLXContext context = createContext( display, glxFBConfigs[0], creation.shared ? creation.shared->m_context->m_context : 0 );
       DP_ASSERT( context );
 
-      SmartNativeContext nativeContext = new NativeContext( context, true, drawable, false, 0, false, display, true );
+      SharedNativeContext nativeContext = new NativeContext( context, true, drawable, false, 0, false, display, true );
       nativeContext->makeCurrent();
       glewInit();
 
-      SmartShareGroup shareGroup = creation.shared ? creation.shared->getShareGroup() : createShareGroup( nativeContext );
+      SharedShareGroup shareGroup = creation.shared ? creation.shared->getShareGroup() : createShareGroup( nativeContext );
       return new RenderContext( nativeContext, shareGroup );
     }
   #endif
 
-    RenderContext::RenderContext( const RenderContext::SmartNativeContext &nativeContext, const SmartShareGroup &shareGroup )
+    RenderContext::RenderContext( const RenderContext::SharedNativeContext &nativeContext, const SharedShareGroup &shareGroup )
       : m_context(nativeContext)
       , m_shareGroup(shareGroup)
     {
@@ -838,7 +837,7 @@ namespace dp
   #endif
     }
 
-    RenderContext::RenderContext( const RenderContext::SmartNativeContext &nativeContext, const SmartShareGroup &shareGroup, const RenderContextFormat &format )
+    RenderContext::RenderContext( const RenderContext::SharedNativeContext &nativeContext, const SharedShareGroup &shareGroup, const RenderContextFormat &format )
       : m_context(nativeContext)
       , m_shareGroup(shareGroup)
     {
@@ -881,7 +880,7 @@ namespace dp
       DP_ASSERT( empty() );
     }
 
-    void RenderContextStack::push( const SmartRenderContext &renderContextGL )
+    void RenderContextStack::push( const SharedRenderContext &renderContextGL )
     {
       StackEntry entry;
       entry.renderContextGL = RenderContext::getCurrentRenderContext();
@@ -958,12 +957,12 @@ namespace dp
     }
 
 
-    const SmartRenderContext & RenderContext::getCurrentRenderContext()
+    const SharedRenderContext & RenderContext::getCurrentRenderContext()
     {
       return getThreadData()->currentRenderContext;
     }
 
-    SmartShareGroup RenderContext::getShareGroup() const
+    SharedShareGroup RenderContext::getShareGroup() const
     {
       return m_shareGroup;
     }
@@ -974,24 +973,24 @@ namespace dp
     class ShareGroupImpl
     {
     public:
-      ShareGroupImpl( const RenderContext::SmartNativeContext &nativeContext );
+      ShareGroupImpl( const RenderContext::SharedNativeContext &nativeContext );
       virtual ~ShareGroupImpl();
 
-      void executeTask( const SmartShareGroupTask &task );
+      void executeTask( const SharedShareGroupTask &task );
 
       void cleanupThread( );
     protected:
-      RenderContext::SmartNativeContext m_context;
+      RenderContext::SharedNativeContext m_context;
       volatile bool m_exit;
       volatile bool m_exitDone;
       boost::thread m_thread;
       boost::mutex  m_mutex;
       boost::condition_variable m_taskDoWork;
       boost::condition_variable m_taskDone;
-      SmartShareGroupTask m_task;
+      SharedShareGroupTask m_task;
     };
 
-    ShareGroupImpl::ShareGroupImpl( const RenderContext::SmartNativeContext &nativeContext )
+    ShareGroupImpl::ShareGroupImpl( const RenderContext::SharedNativeContext &nativeContext )
       : m_context( nativeContext )
       , m_exit( false )
       , m_exitDone( false )
@@ -1017,7 +1016,7 @@ namespace dp
       }
     }
 
-    void ShareGroupImpl::executeTask( const SmartShareGroupTask &task )
+    void ShareGroupImpl::executeTask( const SharedShareGroupTask &task )
     {
       {
         boost::mutex::scoped_lock lock( m_mutex );
@@ -1069,12 +1068,12 @@ namespace dp
     /****************/
     /* ShareGroup */
     /****************/
-    SmartShareGroup ShareGroup::create( const RenderContext::SmartNativeContext &nativeContext )
+    SharedShareGroup ShareGroup::create( const RenderContext::SharedNativeContext &nativeContext )
     {
-      return( new ShareGroup( nativeContext ) );
+      return( SharedShareGroup( new ShareGroup( nativeContext ) ) );
     }
 
-    ShareGroup::ShareGroup( const RenderContext::SmartNativeContext &nativeContext )
+    ShareGroup::ShareGroup( const RenderContext::SharedNativeContext &nativeContext )
       : m_nativeContext( nativeContext )
       , m_impl( new ShareGroupImpl( nativeContext ) )
     {
@@ -1092,13 +1091,13 @@ namespace dp
       delete m_impl;
     }
 
-    SmartShareGroupResource ShareGroup::registerResource( size_t key, unsigned int type, const dp::util::SmartRCObject &resource )
+    SharedShareGroupResource ShareGroup::registerResource( size_t key, unsigned int type, const SharedObject &resource )
     {
       if ( m_resources.find( Key(key, type ) ) == m_resources.end() )
       {
-        ShareGroupResourceHolder *resourceHolder = new ShareGroupResourceHolder( this, Key(key, type), resource );
+        ShareGroupResourceHolder *resourceHolder = new ShareGroupResourceHolder( shared_from_this(), Key(key, type), resource );
         m_resources[ Key(key, type) ] = std::pair<int, ShareGroupResourceHolder *>(1, resourceHolder);
-        return new ShareGroupResourceHolder(*resourceHolder);
+        return( SharedShareGroupResource( new ShareGroupResourceHolder(*resourceHolder) ) );
       }
       else
       {
@@ -1107,13 +1106,13 @@ namespace dp
       }
     }
 
-    SmartShareGroupResource ShareGroup::getResource( size_t key, unsigned int type )
+    SharedShareGroupResource ShareGroup::getResource( size_t key, unsigned int type )
     {
       ResourceMap::iterator it = m_resources.find( Key(key, type ) );
       if (it != m_resources.end() )
       {
         ++it->second.first;
-        return new ShareGroupResourceHolder( *(it->second.second)); // create a new sharedptr here to ensure unregister gets called
+        return( SharedShareGroupResource( new ShareGroupResourceHolder( *(it->second.second) ) ) ); // create a new sharedptr here to ensure unregister gets called
       }
       return 0;
     }
@@ -1132,12 +1131,12 @@ namespace dp
       }
     }
 
-    void ShareGroup::executeTask( const SmartShareGroupTask &task, bool async )
+    void ShareGroup::executeTask( const SharedShareGroupTask &task, bool async )
     {
       m_impl->executeTask(task);
     }
 
-    ShareGroupResourceHolder::ShareGroupResourceHolder( const SmartShareGroup &shareGroup, ShareGroup::Key key, const dp::util::SmartRCObject &resource )
+    ShareGroupResourceHolder::ShareGroupResourceHolder( const SharedShareGroup &shareGroup, ShareGroup::Key key, const SharedObject &resource )
       : m_shareGroup( shareGroup )
       , m_key( key )
       , m_resource( resource )
@@ -1156,7 +1155,7 @@ namespace dp
       m_shareGroup->unregisterResource( m_key );
     }
 
-    dp::util::SmartRCObject ShareGroupResourceHolder::getResource()
+    SharedObject ShareGroupResourceHolder::getResource()
     {
       return m_resource;
     }

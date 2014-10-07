@@ -33,6 +33,7 @@
 #include <dp/sg/core/TextureHost.h>
 #include <dp/sg/core/Primitive.h>
 #include <dp/sg/core/VertexAttributeSet.h>
+#include <dp/util/SharedPtr.h>
 
 using namespace dp::fx;
 using namespace dp::math;
@@ -61,7 +62,7 @@ namespace dp
             GL_TEXTURE_CUBE_MAP, GL_TEXTURE_1D_ARRAY_EXT,
             GL_TEXTURE_2D_ARRAY_EXT, GL_TEXTURE_RECTANGLE_ARB }; 
 
-          void RendererFSQImpl::setTexCoord1( const dp::gl::SmartRenderTarget & target )
+          void RendererFSQImpl::setTexCoord1( const dp::gl::SharedRenderTarget & target )
           {
             int x, y;
             unsigned int w, h;
@@ -85,7 +86,7 @@ namespace dp
             }
           }
 
-          RendererFSQImpl::RendererFSQImpl( const dp::gl::SmartRenderTarget &target )
+          RendererFSQImpl::RendererFSQImpl( const dp::gl::SharedRenderTarget &target )
             : FSQRenderer( target )
             , m_effectsValid(false)
             , m_rendererGLLib(nullptr)
@@ -121,7 +122,7 @@ namespace dp
             DP_ASSERT( m_resourceManager );
           }
 
-          dp::util::SmartPtr<FSQRenderer> RendererFSQImpl::create( const dp::gl::SmartRenderTarget &renderTarget )
+          dp::util::SmartPtr<FSQRenderer> RendererFSQImpl::create( const dp::gl::SharedRenderTarget &renderTarget )
           {
             return new RendererFSQImpl( renderTarget );
           }
@@ -155,7 +156,7 @@ namespace dp
           //
           void RendererFSQImpl::doRender( const dp::ui::SmartRenderTarget &renderTarget )
           {
-            dp::gl::SmartRenderTarget rtgl = dynamic_cast< dp::gl::RenderTarget * >( renderTarget.get() );
+            dp::gl::SharedRenderTarget rtgl = dp::util::shared_cast<dp::gl::RenderTarget>( renderTarget );
 
             if( !rtgl )
             {

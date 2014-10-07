@@ -28,20 +28,17 @@
 
 #include <dp/gl/Config.h>
 #include <dp/gl/Object.h>
-#include <dp/util/SmartPtr.h>
 
 namespace dp
 {
   namespace gl
   {
-    class Buffer;
-    typedef dp::util::SmartPtr<Buffer> SmartBuffer;
-
     class Buffer : public Object
     {
       public:
-        DP_GL_API static SmartBuffer create();
-        DP_GL_API static SmartBuffer create( GLenum target, size_t size, GLvoid const* data, GLenum usage );
+        DP_GL_API static SharedBuffer create();
+        DP_GL_API static SharedBuffer create( GLenum target, size_t size, GLvoid const* data, GLenum usage );
+        DP_GL_API virtual ~Buffer();
 
       public:
         DP_GL_API GLuint64EXT getAddress();
@@ -54,7 +51,6 @@ namespace dp
 
       protected:
         DP_GL_API Buffer();
-        DP_GL_API virtual ~Buffer();
 
       private:
         GLuint64EXT m_address; // 64-bit bindless address
@@ -62,29 +58,29 @@ namespace dp
     };
 
 
-    DP_GL_API void bind( GLenum target, SmartBuffer const& buffer );
-    DP_GL_API void copy( SmartBuffer const& src, SmartBuffer const& dst, size_t srcOffset, size_t dstOffset, size_t size );
+    DP_GL_API void bind( GLenum target, SharedBuffer const& buffer );
+    DP_GL_API void copy( SharedBuffer const& src, SharedBuffer const& dst, size_t srcOffset, size_t dstOffset, size_t size );
 
 
     template <typename T>
     class MappedBuffer
     {
       public:
-        MappedBuffer( SmartBuffer const& buffer, GLenum target, GLenum access );
+        MappedBuffer( SharedBuffer const& buffer, GLenum target, GLenum access );
         ~MappedBuffer();
 
       public:
         operator T*() const;
 
       private:
-        SmartBuffer   m_buffer;
+        SharedBuffer  m_buffer;
         GLenum        m_target;
         T           * m_ptr;
     };
 
 
     template <typename T>
-    inline MappedBuffer<T>::MappedBuffer( SmartBuffer const& buffer, GLenum target, GLenum access )
+    inline MappedBuffer<T>::MappedBuffer( SharedBuffer const& buffer, GLenum target, GLenum access )
       : m_buffer( buffer )
       , m_target( target )
     {

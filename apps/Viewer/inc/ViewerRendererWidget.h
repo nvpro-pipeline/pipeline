@@ -161,7 +161,7 @@ protected:
   double determineDurationFactor();
 
   void enableHighlighting( bool onOff );
-  void onRenderTargetChanged( const dp::gl::SmartRenderTarget &oldTarget, const dp::gl::SmartRenderTarget &newTarget );
+  void onRenderTargetChanged( const dp::gl::SharedRenderTarget &oldTarget, const dp::gl::SharedRenderTarget &newTarget );
 
 public slots:
   void addCamera();

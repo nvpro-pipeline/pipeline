@@ -32,23 +32,31 @@ namespace dp
   {
     DisplayList::~DisplayList()
     {
-      class CleanupTask : public ShareGroupTask
+      if ( getGLId() )
       {
-      public:
-        inline CleanupTask( GLuint id ) : m_id( id ) {}
-
-        inline virtual void execute() { glDeleteLists( m_id, 1 ); }
-      protected:
-        GLuint m_id;
-      };
-    
-      if ( getGLId() && getShareGroup() )
-      {
-        // make destructor exception safe
-        try
+        if ( getShareGroup() )
         {
-          getShareGroup()->executeTask( new CleanupTask( getGLId() ) );
-        } catch (...) {}
+          class CleanupTask : public ShareGroupTask
+          {
+            public:
+              CleanupTask( GLuint id ) : m_id( id ) {}
+
+              virtual void execute() { glDeleteLists( m_id, 1 ); }
+
+            private:
+              GLuint m_id;
+          };
+
+          // make destructor exception safe
+          try
+          {
+            getShareGroup()->executeTask( SharedShareGroupTask( new CleanupTask( getGLId() ) ) );
+          } catch (...) {}
+        }
+        else
+        {
+          glDeleteLists( getGLId(), 1 );
+        }
       }
     }
   } // namespace gl

@@ -72,7 +72,7 @@ namespace dp
         ProgramGL( const dp::rix::core::ProgramDescription& description );
         ~ProgramGL();
 
-        dp::gl::SmartProgram const& getProgram()  { return m_program; }
+        dp::gl::SharedProgram const& getProgram()  { return m_program; }
 
         unsigned int getPosition( const ContainerDescriptorGLHandle & descriptorHandle ) const;
         std::vector<ContainerDescriptorGLSharedHandle> const & getDescriptors() const          { return m_descriptors; }
@@ -95,7 +95,7 @@ namespace dp
         void initEffect( dp::rix::core::ProgramShaderCode const& psc );
 
       private:
-        dp::gl::SmartProgram                           m_program;
+        dp::gl::SharedProgram                          m_program;
         std::vector<ContainerDescriptorGLSharedHandle> m_descriptors;
         DescriptorIndexMap                             m_descriptorToPosition;
       };

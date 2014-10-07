@@ -33,15 +33,14 @@ namespace dp
 {
   namespace gl
   {
-    class Shader;
-    typedef dp::util::SmartPtr<Shader> SmartShader;
-
     DP_GL_API std::string shaderTypeToName( GLenum type );
+
 
     class Shader : public Object
     {
       public:
-        DP_GL_API static SmartShader create( GLenum type, std::string const& source );
+        DP_GL_API static SharedShader create( GLenum type, std::string const& source );
+        DP_GL_API virtual ~Shader();
 
       public:
         DP_GL_API std::string getSource() const;
@@ -49,17 +48,13 @@ namespace dp
 
       protected:
         DP_GL_API Shader( GLenum type, std::string const& source );
-        DP_GL_API virtual ~Shader();
     };
 
-
-    class VertexShader;
-    typedef dp::util::SmartPtr<VertexShader> SmartVertexShader;
 
     class VertexShader : public Shader
     {
       public:
-        DP_GL_API static SmartVertexShader create( std::string const& source );
+        DP_GL_API static SharedVertexShader create( std::string const& source );
 
       public:
         DP_GL_API virtual GLenum getType() const;
@@ -69,13 +64,10 @@ namespace dp
     };
 
 
-    class TessControlShader;
-    typedef dp::util::SmartPtr<TessControlShader> SmartTessControlShader;
-
     class TessControlShader : public Shader
     {
       public:
-        DP_GL_API static SmartTessControlShader create( std::string const& source );
+        DP_GL_API static SharedTessControlShader create( std::string const& source );
 
       public:
         DP_GL_API virtual GLenum getType() const;
@@ -85,13 +77,10 @@ namespace dp
     };
 
 
-    class TessEvaluationShader;
-    typedef dp::util::SmartPtr<TessEvaluationShader> SmartTessEvaluationShader;
-
     class TessEvaluationShader : public Shader
     {
       public:
-        DP_GL_API static SmartTessEvaluationShader create( std::string const& source );
+        DP_GL_API static SharedTessEvaluationShader create( std::string const& source );
 
       public:
         DP_GL_API virtual GLenum getType() const;
@@ -101,13 +90,10 @@ namespace dp
     };
 
 
-    class GeometryShader;
-    typedef dp::util::SmartPtr<GeometryShader> SmartGeometryShader;
-
     class GeometryShader : public Shader
     {
       public:
-        DP_GL_API static SmartGeometryShader create( std::string const& source );
+        DP_GL_API static SharedGeometryShader create( std::string const& source );
 
       public:
         DP_GL_API virtual GLenum getType() const;
@@ -117,13 +103,10 @@ namespace dp
     };
 
 
-    class FragmentShader;
-    typedef dp::util::SmartPtr<FragmentShader> SmartFragmentShader;
-
     class FragmentShader : public Shader
     {
       public:
-        DP_GL_API static SmartFragmentShader create( std::string const& source );
+        DP_GL_API static SharedFragmentShader create( std::string const& source );
 
       public:
         DP_GL_API virtual GLenum getType() const;
@@ -132,14 +115,10 @@ namespace dp
         DP_GL_API FragmentShader( std::string const& source );
     };
 
-
-    class ComputeShader;
-    typedef dp::util::SmartPtr<ComputeShader> SmartComputeShader;
-
     class ComputeShader : public Shader
     {
       public:
-        DP_GL_API static SmartComputeShader create( std::string const& source );
+        DP_GL_API static SharedComputeShader create( std::string const& source );
 
       public:
         DP_GL_API virtual GLenum getType() const;

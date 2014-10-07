@@ -38,7 +38,7 @@ namespace dp
       {
       }
 
-      ParameterRendererBufferRange::ParameterRendererBufferRange( ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::SmartBuffer const& ubo, GLenum target, size_t uboBinding, GLsizeiptr uboBlockSize )
+      ParameterRendererBufferRange::ParameterRendererBufferRange( ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::SharedBuffer const& ubo, GLenum target, size_t uboBinding, GLsizeiptr uboBlockSize )
         : m_parameters( parameterCacheEntries )
         , m_ubo( ubo->getGLId() )
         , m_target( target )

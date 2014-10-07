@@ -29,7 +29,7 @@
 #include <dp/gl/Program.h>
 #include <dp/gl/RenderContext.h>
 #include <dp/gl/Texture.h>
-
+#include <dp/util/SmartPtr.h>
 #include <map>
 
 class TextureTransfer;
@@ -37,38 +37,38 @@ typedef dp::util::SmartPtr<TextureTransfer> SmartTextureTransfer;
 class TextureTransfer : public dp::util::RCObject
 {
 public:
-  TextureTransfer( dp::gl::SmartRenderContext const& dstContext, dp::gl::SmartRenderContext const& srcContext );
+  TextureTransfer( dp::gl::SharedRenderContext const& dstContext, dp::gl::SharedRenderContext const& srcContext );
   ~TextureTransfer();
 
   void setTileSize( size_t width, size_t height );
   void setMaxIndex( size_t maxIndex );
 
   void transfer( size_t index
-               , dp::gl::SmartTexture2D dstTexture
-               , dp::gl::SmartTexture2D srcTexture );
+               , dp::gl::SharedTexture2D dstTexture
+               , dp::gl::SharedTexture2D srcTexture );
 
 private:
   void constructComputeShaders();
   void destroyComputeShaders();
-  dp::gl::SmartProgram compileShader( dp::gl::SmartRenderContext const& context, char const* source );
+  dp::gl::SharedProgram compileShader( dp::gl::SharedRenderContext const& context, char const* source );
 
   // get a texture for the given context 
-  dp::gl::SmartTexture2D const& getTmpTexture( dp::gl::SmartRenderContext const& context, size_t width, size_t height );
+  dp::gl::SharedTexture2D const& getTmpTexture( dp::gl::SharedRenderContext const& context, size_t width, size_t height );
 
 private:
-  typedef std::map< dp::gl::SmartRenderContext, dp::gl::SmartTexture2D > Textures;
+  typedef std::map< dp::gl::SharedRenderContext, dp::gl::SharedTexture2D > Textures;
 
 private:
-  dp::gl::SmartRenderContext m_dstContext;
-  dp::gl::SmartRenderContext m_srcContext;
+  dp::gl::SharedRenderContext m_dstContext;
+  dp::gl::SharedRenderContext m_srcContext;
 
   size_t m_tileWidth;
   size_t m_tileHeight;
   size_t m_maxIndex;
 
-  dp::gl::SmartProgram  m_compressProgram;
-  dp::gl::SmartProgram  m_decompressProgram;
-  dp::gl::SmartProgram  m_copyProgram;
+  dp::gl::SharedProgram  m_compressProgram;
+  dp::gl::SharedProgram  m_decompressProgram;
+  dp::gl::SharedProgram  m_copyProgram;
   bool m_shadersInitialized;
 
   Textures m_tmpTextures;

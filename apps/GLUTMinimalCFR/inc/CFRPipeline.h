@@ -41,18 +41,18 @@ protected:
   CFRPipeline( const char* renderEngine = 0,
                dp::fx::Manager shaderManagerType = dp::fx::MANAGER_SHADERBUFFER,
                dp::culling::Mode cullingMode = dp::culling::MODE_AUTO,
-               const dp::gl::SmartRenderTarget &renderTarget = dp::gl::SmartRenderTarget() );
+               const dp::gl::SharedRenderTarget &renderTarget = dp::gl::SharedRenderTarget() );
   ~CFRPipeline();
 
 public:
   static SmartCFRPipeline create( const char* renderEngine = 0,
                                   dp::fx::Manager shaderManagerType = dp::fx::MANAGER_SHADERBUFFER,
                                   dp::culling::Mode cullingMode = dp::culling::MODE_AUTO,
-                                  const dp::gl::SmartRenderTarget &renderTarget = dp::gl::SmartRenderTarget() );
+                                  const dp::gl::SharedRenderTarget &renderTarget = dp::gl::SharedRenderTarget() );
 
   void setTileSize( size_t width, size_t height );
 
-  bool init(const dp::gl::SmartRenderContext &renderContext, const dp::gl::SmartRenderTarget &renderTarget);
+  bool init(const dp::gl::SharedRenderContext &renderContext, const dp::gl::SharedRenderTarget &renderTarget);
   void resize( size_t width, size_t height );
 
   virtual std::map<dp::fx::Domain,std::string> getShaderSources( const dp::sg::core::GeoNodeSharedPtr & geoNode, bool depthPass ) const;
@@ -87,12 +87,12 @@ private:
   struct GpuData
   {
     dp::sg::ui::SmartSceneRenderer  m_sceneRenderer;
-    dp::gl::SmartRenderTarget       m_renderTarget;
+    dp::gl::SharedRenderTarget      m_renderTarget;
     SmartTextureTransfer            m_textureTransfer;
   };
 
 private:
-  void generateStencilPattern( dp::gl::SmartRenderTarget renderTarget );
+  void generateStencilPattern( dp::gl::SharedRenderTarget renderTarget );
 
 private:
   std::string       m_renderEngine;    // the render engine used to render the images
@@ -111,7 +111,7 @@ private:
   std::vector< GpuData > m_gpuData;
 
   dp::sg::renderer::rix::gl::SmartFSQRenderer m_outputRenderer;   // renderer for compositing the output image
-  dp::gl::SmartTexture2D                      m_compositeTexture; // texture to composite the image data from the different contexts
+  dp::gl::SharedTexture2D                     m_compositeTexture; // texture to composite the image data from the different contexts
 
   dp::util::SmartPtr<MonoViewStateProvider> m_monoViewStateProvider;
 

@@ -37,8 +37,6 @@ namespace dp
 {
   namespace gl
   {
-
-
     typedef dp::util::Uint32 TargetBufferMask;
 
     static const TargetBufferMask TBM_COLOR_BUFFER   = BIT0;
@@ -138,10 +136,10 @@ namespace dp
       /** \brief Get the OpenGL context used by this RenderTarget
           \return RenderContext used by this RenderTarget
       **/
-      DP_GL_API SmartRenderContext const& getRenderContext();
+      DP_GL_API SharedRenderContext const& getRenderContext();
 
     protected:
-      DP_GL_API RenderTarget( const SmartRenderContext &glContext );
+      DP_GL_API RenderTarget( const SharedRenderContext &glContext );
 
       /** \brief Check if this RenderTarget is current
           \return true if this RenderTarget is current, false otherwise.
@@ -178,7 +176,7 @@ namespace dp
 
     private:
       bool                m_current;
-      SmartRenderContext  m_renderContext;
+      SharedRenderContext m_renderContext;
 
     protected:
       int                 m_x;
@@ -189,9 +187,7 @@ namespace dp
       RenderContextStack  m_contextStack;
     };
 
-    typedef dp::util::SmartPtr<RenderTarget> SmartRenderTarget;
-
-    inline SmartRenderContext const& RenderTarget::getRenderContext()
+    inline SharedRenderContext const& RenderTarget::getRenderContext()
     {
       return m_renderContext;
     }

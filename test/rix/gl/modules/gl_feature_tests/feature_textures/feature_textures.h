@@ -62,7 +62,7 @@ protected:
 
 protected:
 
-  dp::gl::SmartBuffer  m_buf;
+  dp::gl::SharedBuffer  m_buf;
 
   dp::rix::core::VertexAttributesSharedHandle m_vertexAttributes;
 

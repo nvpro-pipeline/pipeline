@@ -1153,12 +1153,13 @@ namespace dp
           }
         }
 
-        dp::gl::SmartRenderContext const& Widget::getRenderContext() const
+        dp::gl::SharedRenderContext const& Widget::getRenderContext() const
         {
-          return m_renderTarget ? m_renderTarget->getRenderContext() : dp::gl::SmartRenderContext::null;
+          static dp::gl::SharedRenderContext dummy;
+          return m_renderTarget ? m_renderTarget->getRenderContext() : dummy;
         }
 
-        dp::gl::SmartRenderTarget  const& Widget::getRenderTarget() const
+        dp::gl::SharedRenderTarget  const& Widget::getRenderTarget() const
         {
           return m_renderTarget;
         }

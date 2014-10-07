@@ -44,7 +44,7 @@ namespace dp
       {
       public:
         ParameterRendererBuffer();
-        ParameterRendererBuffer( ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::SmartBuffer const& ubo, GLenum target, size_t uboBinding, size_t uboOffset, GLsizeiptr uboBlockSize );
+        ParameterRendererBuffer( ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::SharedBuffer const& ubo, GLenum target, size_t uboBinding, size_t uboOffset, GLsizeiptr uboBlockSize );
 
         virtual void activate();
 
@@ -54,7 +54,7 @@ namespace dp
 
       protected:
         ParameterCacheEntryStreamBuffers m_parameters;
-        dp::gl::SmartBuffer              m_ubo;
+        dp::gl::SharedBuffer             m_ubo;
         GLenum                           m_target;
         GLint                            m_uboBinding;
         GLintptr                         m_uboOffset;

@@ -26,6 +26,7 @@ set(SOURCES
   src/RenderTargetFBO.cpp
   src/Shader.cpp
   src/Texture.cpp
+  src/VertexArrayObject.cpp
 )
 
 set(PUBLIC_HEADERS
@@ -42,6 +43,8 @@ set(PUBLIC_HEADERS
   RenderTargetFBO.h
   Shader.h
   Texture.h
+  Types.h
+  VertexArrayObject.h
 )
 
 set(PRIVATE_HEADERS
@@ -65,7 +68,6 @@ add_library( DPGL SHARED
 )
 
 target_link_libraries( DPGL
-  DPUtil
   DPUI
   ${OPENGL_gl_LIBRARY}
   ${GLEW_LIBRARY}

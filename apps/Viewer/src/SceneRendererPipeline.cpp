@@ -32,6 +32,7 @@
 #include <dp/sg/core/FrustumCamera.h>
 #include <dp/fx/EffectLibrary.h>
 #include <dp/sg/gl/TextureGL.h>
+#include <dp/util/SharedPtr.h>
 #include "SceneRendererPipeline.h"
 
 using namespace dp::fx;
@@ -74,8 +75,8 @@ SceneRendererPipeline::~SceneRendererPipeline()
 }
 
 // This is called from initializeGL().
-bool SceneRendererPipeline::init(const dp::gl::SmartRenderContext &renderContext,
-                                 const dp::gl::SmartRenderTarget  &renderTarget)
+bool SceneRendererPipeline::init(const dp::gl::SharedRenderContext &renderContext,
+                                 const dp::gl::SharedRenderTarget  &renderTarget)
 {
   m_renderTarget = renderTarget;
 
@@ -101,7 +102,7 @@ bool SceneRendererPipeline::init(const dp::gl::SmartRenderContext &renderContext
   m_highlightFBO->setAttachment(dp::gl::RenderTargetFBO::COLOR_ATTACHMENT0,
                                 dp::gl::Texture2D::create(GL_RGBA8, GL_BGRA, GL_UNSIGNED_BYTE));
   // Depth and Stencil are Renderbuffers.
-  dp::gl::SmartRenderbuffer depthStencil(dp::gl::Renderbuffer::create(GL_DEPTH24_STENCIL8)); // Shared depth stencil buffer between the tonemap and hightlight FBOs.
+  dp::gl::SharedRenderbuffer depthStencil(dp::gl::Renderbuffer::create(GL_DEPTH24_STENCIL8)); // Shared depth stencil buffer between the tonemap and hightlight FBOs.
   m_highlightFBO->setAttachment(dp::gl::RenderTargetFBO::DEPTH_ATTACHMENT,   depthStencil);
   m_highlightFBO->setAttachment(dp::gl::RenderTargetFBO::STENCIL_ATTACHMENT, depthStencil);
 
@@ -137,8 +138,8 @@ bool SceneRendererPipeline::init(const dp::gl::SmartRenderContext &renderContext
   m_rendererHighlight->setEffect( dp::sg::core::EffectData::create( EffectLibrary::instance()->getEffectSpec( std::string("highlight") ) ) );
 
   // m_rendererHighlight uses the previously rendered texture rectangle as input for the shader.
-  const dp::gl::RenderTargetFBO::SmartAttachment &attachment = m_highlightFBO->getAttachment(dp::gl::RenderTargetFBO::COLOR_ATTACHMENT0);
-  const dp::gl::RenderTargetFBO::SmartAttachmentTexture &texAtt = dp::util::smart_cast<dp::gl::RenderTargetFBO::AttachmentTexture>(attachment);
+  const dp::gl::RenderTargetFBO::SharedAttachment &attachment = m_highlightFBO->getAttachment(dp::gl::RenderTargetFBO::COLOR_ATTACHMENT0);
+  const dp::gl::RenderTargetFBO::SharedAttachmentTexture &texAtt = dp::util::shared_cast<dp::gl::RenderTargetFBO::AttachmentTexture>(attachment);
   if (texAtt)
   {
     const dp::sg::gl::TextureGLSharedPtr texGL = dp::sg::gl::TextureGL::create( texAtt->getTexture() );
@@ -234,7 +235,7 @@ void SceneRendererPipeline::doRenderBackdrop(dp::sg::ui::ViewStateSharedPtr cons
 
 void SceneRendererPipeline::doRenderStandard(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::SmartRenderTarget const& renderTarget)
 {
-  dp::gl::SmartRenderTarget const & renderTargetGL = dp::util::smart_cast<dp::gl::RenderTarget>(renderTarget);
+  dp::gl::SharedRenderTarget const & renderTargetGL = dp::util::shared_cast<dp::gl::RenderTarget>(renderTarget);
   dp::gl::TargetBufferMask clearMask = renderTargetGL->getClearMask();
 
   if (m_backdropEnabled)
@@ -264,7 +265,7 @@ void SceneRendererPipeline::doRenderStandard(dp::sg::ui::ViewStateSharedPtr cons
 
 void SceneRendererPipeline::doRenderTonemap(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::SmartRenderTarget const& renderTarget)
 {
-  dp::gl::SmartRenderTarget const & renderTargetGL = dp::util::smart_cast<dp::gl::RenderTarget>(renderTarget);
+  dp::gl::SharedRenderTarget const & renderTargetGL = dp::util::shared_cast<dp::gl::RenderTarget>(renderTarget);
   dp::gl::TargetBufferMask clearMask = renderTargetGL->getClearMask();
 
   // Match the size of the tonemapFBO to the destination renderTarget.
@@ -371,7 +372,7 @@ void SceneRendererPipeline::doRenderHighlight(dp::sg::ui::ViewStateSharedPtr con
   glPopAttrib();
 
   // Render the outline around the highlighted object onto the main renderTarget (framebuffer).
-  dp::gl::SmartRenderTarget const & renderTargetGL = dp::util::smart_cast<dp::gl::RenderTarget>(renderTarget);
+  dp::gl::SharedRenderTarget const & renderTargetGL = dp::util::shared_cast<dp::gl::RenderTarget>(renderTarget);
   dp::gl::TargetBufferMask clearMask = renderTargetGL->getClearMask();
   
   // keep the following render call from clearing the previous rendered content
@@ -572,8 +573,8 @@ void SceneRendererPipeline::initTonemapper()
   m_tonemapperData = dp::sg::core::EffectData::create( dp::fx::EffectLibrary::instance()->getEffectData("tonemapper") );
   m_tonemapper->setEffect( m_tonemapperData );
 
-  const dp::gl::RenderTargetFBO::SmartAttachment &attachmentTonemap = m_tonemapFBO->getAttachment(dp::gl::RenderTargetFBO::COLOR_ATTACHMENT0);
-  const dp::gl::RenderTargetFBO::SmartAttachmentTexture &texAttTonemap = dp::util::smart_cast<dp::gl::RenderTargetFBO::AttachmentTexture>(attachmentTonemap);
+  const dp::gl::RenderTargetFBO::SharedAttachment &attachmentTonemap = m_tonemapFBO->getAttachment(dp::gl::RenderTargetFBO::COLOR_ATTACHMENT0);
+  const dp::gl::RenderTargetFBO::SharedAttachmentTexture &texAttTonemap = dp::util::shared_cast<dp::gl::RenderTargetFBO::AttachmentTexture>(attachmentTonemap);
   if ( texAttTonemap )
   {
     const dp::sg::gl::TextureGLSharedPtr texGL = dp::sg::gl::TextureGL::create( texAttTonemap->getTexture() );

@@ -93,7 +93,7 @@ namespace dp
 
       void ProgramGL::initEffect( dp::rix::core::ProgramShaderCode const& psc )
       {
-        std::vector<dp::gl::SmartShader> shaders;
+        std::vector<dp::gl::SharedShader> shaders;
         for ( unsigned int i=0 ; i<psc.m_numShaders ; i++ )
         {
           shaders.push_back( dp::gl::Shader::create( getGLProgramDomain( psc.m_shaderTypes[i] ), psc.m_codes[i] ) );
@@ -120,7 +120,7 @@ namespace dp
           nameShader << std::setw(4) << shaderId;
           nameShader << "s.txt";
           std::ofstream outputShader( tmp + "\\" + nameShader.str() );
-          for ( std::vector<dp::gl::SmartShader>::const_iterator it = shaders.begin() ; it != shaders.end() ; ++it )
+          for ( std::vector<dp::gl::SharedShader>::const_iterator it = shaders.begin() ; it != shaders.end() ; ++it )
           {
             outputShader << dp::gl::shaderTypeToName( (*it)->getType() ) << std::endl;
             outputShader << (*it)->getSource();
@@ -302,17 +302,14 @@ namespace dp
 
         UniformInfos uniformInfos;
 
-        std::vector<std::string> names;
         for ( size_t index = 0; index < numParameters; ++index )
         {
-          names.push_back( containerDescriptor->m_parameterInfos[index].m_name );
-        }
-
-        dp::gl::Program::Uniforms activeUniforms = m_program->getActiveUniforms( names );
-
-        for ( dp::gl::Program::Uniforms::iterator it = activeUniforms.begin(); it != activeUniforms.end(); ++it )
-        {
-          uniformInfos[containerDescriptor->getEntry(it->second.name.c_str())] = it->second;
+          std::string name = containerDescriptor->m_parameterInfos[index].m_name;
+          size_t uniformIndex = m_program->getActiveUniformIndex( name );
+          if ( uniformIndex != ~0 )
+          {
+            uniformInfos[containerDescriptor->getEntry( name.c_str() )] = m_program->getActiveUniform( uniformIndex );
+          }
         }
         return uniformInfos;
       }
@@ -323,18 +320,16 @@ namespace dp
 
         UniformInfos uniformInfos;
 
-        std::vector<std::string> names;
         for ( size_t index = 0; index < numParameters; ++index )
         {
-          names.push_back( containerDescriptor->m_parameterInfos[index].m_name );
+          std::string name = containerDescriptor->m_parameterInfos[index].m_name;
+          size_t bufferVariableIndex = m_program->getActiveBufferVariableIndex( name );
+          if ( bufferVariableIndex != ~0 )
+          {
+            uniformInfos[containerDescriptor->getEntry( name.c_str() )] = m_program->getActiveBufferVariable( bufferVariableIndex );
+          }
         }
 
-        dp::gl::Program::Uniforms activeBufferVariables = m_program->getActiveBufferVariables( names );
-
-        for ( dp::gl::Program::Uniforms::iterator it = activeBufferVariables.begin(); it != activeBufferVariables.end(); ++it )
-        {
-          uniformInfos[containerDescriptor->getEntry(it->second.name.c_str())] = it->second;
-        }
         return uniformInfos;
       }
 

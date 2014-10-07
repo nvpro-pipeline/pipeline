@@ -43,14 +43,14 @@ namespace dp
       }
     }
 
-    SmartBuffer Buffer::create()
+    SharedBuffer Buffer::create()
     {
-      return( new Buffer );
+      return( SharedBuffer( new Buffer ) );
     }
 
-    SmartBuffer Buffer::create( GLenum target, size_t size, GLvoid const* data, GLenum usage )
+    SharedBuffer Buffer::create( GLenum target, size_t size, GLvoid const* data, GLenum usage )
     {
-      SmartBuffer buffer = Buffer::create();
+      SharedBuffer buffer = Buffer::create();
       buffer->setData( target, size, data, usage );
       return( buffer );
     }
@@ -66,24 +66,32 @@ namespace dp
 
     Buffer::~Buffer( )
     {
-      class CleanupTask : public ShareGroupTask
+      if ( getGLId() )
       {
-        public:
-          CleanupTask( GLuint id ) : m_id( id ) {}
-
-          virtual void execute() { glDeleteBuffers( 1, &m_id ); }
-
-        private:
-          GLuint m_id;
-      };
-
-      if ( getGLId() && getShareGroup() )
-      {
-        // make destructor exception safe
-        try
+        if ( getShareGroup() )
         {
-          getShareGroup()->executeTask( new CleanupTask( getGLId() ) );
-        } catch (...) {}
+          class CleanupTask : public ShareGroupTask
+          {
+            public:
+              CleanupTask( GLuint id ) : m_id( id ) {}
+
+              virtual void execute() { glDeleteBuffers( 1, &m_id ); }
+
+            private:
+              GLuint m_id;
+          };
+
+          // make destructor exception safe
+          try
+          {
+            getShareGroup()->executeTask( SharedShareGroupTask( new CleanupTask( getGLId() ) ) );
+          } catch (...) {}
+        }
+        else
+        {
+          GLuint id = getGLId();
+          glDeleteBuffers( 1, &id );
+        }
       }
     }
 
@@ -135,7 +143,7 @@ namespace dp
       return( getGLInterface()->unmap( getGLId(), target ) );
     }
 
-    void bind( GLenum target, SmartBuffer const& buffer )
+    void bind( GLenum target, SharedBuffer const& buffer )
     {
 #if !defined(NDEBUG)
       DP_ASSERT( RenderContext::getCurrentRenderContext() );
@@ -157,7 +165,7 @@ namespace dp
       glBindBuffer( target, buffer ? buffer->getGLId() : 0 );
     }
 
-    void copy( SmartBuffer const& srcBuffer, SmartBuffer const& dstBuffer, size_t srcOffset, size_t dstOffset, size_t size )
+    void copy( SharedBuffer const& srcBuffer, SharedBuffer const& dstBuffer, size_t srcOffset, size_t dstOffset, size_t size )
     {
       DP_ASSERT( ( srcOffset <= srcOffset + size ) && ( srcOffset + size <= srcBuffer->getSize() ) );
       DP_ASSERT( ( dstOffset <= dstOffset + size ) && ( dstOffset + size <= dstBuffer->getSize() ) );

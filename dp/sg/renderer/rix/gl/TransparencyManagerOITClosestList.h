@@ -76,16 +76,16 @@ namespace dp
               dp::rix::core::ContainerDescriptorSharedHandle  m_parameterContainerDescriptor;
               dp::rix::core::TextureSharedHandle              m_offsetsTexture;
 
-              dp::gl::SmartProgram        m_clearProgram;
-              dp::gl::SmartTexture1D      m_counterTextureGL;
+              dp::gl::SharedProgram       m_clearProgram;
+              dp::gl::SharedTexture1D     m_counterTextureGL;
               unsigned int                m_fragmentsCount;
               float                       m_fragmentsCountFactor;
-              dp::gl::SmartTextureBuffer  m_fragmentsTextureGL;
-              dp::gl::SmartBuffer         m_fullScreenQuad;
+              dp::gl::SharedTextureBuffer m_fragmentsTextureGL;
+              dp::gl::SharedBuffer        m_fullScreenQuad;
               bool                        m_initializedBuffers;
               bool                        m_initializedHandles;
-              dp::gl::SmartTexture2D      m_perFragmentOffsetsTextureGL;
-              dp::gl::SmartProgram        m_resolveProgram;
+              dp::gl::SharedTexture2D     m_perFragmentOffsetsTextureGL;
+              dp::gl::SharedProgram       m_resolveProgram;
               GLuint                      m_samplesPassedQuery;
           };
 

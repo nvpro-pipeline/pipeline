@@ -28,6 +28,7 @@
 #include "DataTypeConversionGL.h"
 #include "TextureGLBuffer.h"
 #include "SamplerStateGL.h"
+#include <dp/util/SharedPtr.h>
 #include <cmath>
 
 namespace dp
@@ -64,8 +65,7 @@ namespace dp
             DP_ASSERT( handleIsTypeOf<BufferGL>( dataBuffer.m_buffer ) );
             BufferGLHandle buffer = handleCast<BufferGL>( dataBuffer.m_buffer.get() );
 
-            DP_ASSERT( dp::util::isSmartPtrOf<dp::gl::TextureBuffer>( getTexture() ) );
-            dp::util::smart_cast<dp::gl::TextureBuffer>( getTexture() )->setBuffer( buffer->getBuffer() );
+            dp::util::shared_cast<dp::gl::TextureBuffer>( getTexture() )->setBuffer( buffer->getBuffer() );
 
             m_textureBuffer = buffer;
           }

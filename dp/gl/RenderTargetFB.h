@@ -33,10 +33,6 @@ namespace dp
 {
   namespace gl
   {
-
-    class RenderTargetFB;
-    typedef dp::util::SmartPtr<RenderTargetFB> SmartRenderTargetFB;
-
     /** \brief RenderTarget for the OpenGL framebuffer. If the attached OpenGL context has a stereo 
                pixelformat stereo will be enabled automatically.
     **/
@@ -44,7 +40,7 @@ namespace dp
     {
     public:
       // RenderTarget interface
-      DP_GL_API static SmartRenderTargetFB create( const SmartRenderContext &glContext );
+      DP_GL_API static SharedRenderTargetFB create( const SharedRenderContext &glContext );
 
       DP_GL_API virtual ~RenderTargetFB();
 
@@ -86,7 +82,7 @@ namespace dp
       GLenum getStereoTargetBuffer( StereoTarget stereoTarget, bool backbuffer );
       void setDrawBuffer( StereoTarget stereoTarget );
 
-      DP_GL_API RenderTargetFB( const SmartRenderContext &glContext );
+      DP_GL_API RenderTargetFB( const SharedRenderContext &glContext );
 
       GLbitfield   m_clearMaskGL;
       GLclampf     m_clearColorR, m_clearColorG, m_clearColorB, m_clearColorA;

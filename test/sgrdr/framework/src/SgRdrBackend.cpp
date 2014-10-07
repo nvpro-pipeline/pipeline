@@ -34,6 +34,7 @@
 #include <windows.h>
 #include <GL/freeglut.h>
 
+#include <dp/util/SharedPtr.h>
 #include <dp/util/DPAssert.h>
 #include <iostream>
 #include <tchar.h>
@@ -224,7 +225,7 @@ namespace dp
 
           dp::ui::SmartRenderTarget displayTarget = dp::gl::RenderTargetFB::create( dp::gl::RenderContext::create( dp::gl::RenderContext::Attach() ) );
           displayTarget->setSize(width, height);
-          util::smart_cast<dp::gl::RenderTargetFB>(displayTarget)->setClearMask( dp::gl::TBM_COLOR_BUFFER | dp::gl::TBM_DEPTH_BUFFER );
+          dp::util::shared_cast<dp::gl::RenderTargetFB>(displayTarget)->setClearMask( dp::gl::TBM_COLOR_BUFFER | dp::gl::TBM_DEPTH_BUFFER );
 
           return displayTarget;
         }

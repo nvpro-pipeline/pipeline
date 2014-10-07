@@ -63,7 +63,7 @@ namespace dp
           class SceneRenderer : public dp::sg::ui::SceneRenderer
           {    
           protected:
-            DP_SG_RDR_RIX_GL_API SceneRenderer( const dp::gl::SmartRenderTarget &renderTarget = dp::gl::SmartRenderTarget() );
+            DP_SG_RDR_RIX_GL_API SceneRenderer( const dp::gl::SharedRenderTarget &renderTarget = dp::gl::SharedRenderTarget() );
             DP_SG_RDR_RIX_GL_API virtual ~SceneRenderer();
 
           public:
@@ -75,7 +75,7 @@ namespace dp
                                                                                   dp::fx::Manager shaderManagerType = dp::fx::MANAGER_SHADERBUFFER,
                                                                                   dp::culling::Mode cullingMode = dp::culling::MODE_AUTO,
                                                                                   TransparencyMode transparencyMode = TM_ORDER_INDEPENDENT_CLOSEST_LIST,
-                                                                                  const dp::gl::SmartRenderTarget &renderTarget = dp::gl::SmartRenderTarget() );
+                                                                                  const dp::gl::SharedRenderTarget &renderTarget = dp::gl::SharedRenderTarget() );
 
             // HACK HACK HACK
             void setDepthPass( bool depthPass ) { m_depthPass = depthPass; }

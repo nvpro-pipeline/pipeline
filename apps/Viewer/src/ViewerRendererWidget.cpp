@@ -1427,7 +1427,7 @@ ViewerRendererWidget::ManipulatorType ViewerRendererWidget::getManipulatorType()
   return m_manipulatorType;
 }
 
-void ViewerRendererWidget::onRenderTargetChanged( const dp::gl::SmartRenderTarget &oldTarget, const dp::gl::SmartRenderTarget &newTarget )
+void ViewerRendererWidget::onRenderTargetChanged( const dp::gl::SharedRenderTarget &oldTarget, const dp::gl::SharedRenderTarget &newTarget )
 {
   switch( getRendererType() )
   {

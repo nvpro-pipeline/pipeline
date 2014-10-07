@@ -30,6 +30,7 @@
 #include <dp/sg/core/CoreTypes.h>
 #include <dp/fx/EffectLibrary.h>
 #include <dp/sg/gl/TextureGL.h>
+#include <dp/util/SharedPtr.h>
 
 #include "CFRPipeline.h"
 #include "TextureTransfer.h"
@@ -52,7 +53,7 @@ dp::util::SmartPtr<CFRPipeline::MonoViewStateProvider> CFRPipeline::MonoViewStat
 CFRPipeline::CFRPipeline( const char *renderEngine,
                           dp::fx::Manager shaderManagerType,
                           dp::culling::Mode cullingMode,
-                          const dp::gl::SmartRenderTarget &renderTarget)
+                          const dp::gl::SharedRenderTarget &renderTarget)
   : dp::sg::ui::SceneRenderer( renderTarget )
   , m_renderEngine( renderEngine )
   , m_shaderManager( shaderManagerType )
@@ -74,7 +75,7 @@ CFRPipeline::~CFRPipeline()
 SmartCFRPipeline CFRPipeline::create( const char *renderEngine,
                                       dp::fx::Manager shaderManagerType,
                                       dp::culling::Mode cullingMode,
-                                      const dp::gl::SmartRenderTarget &renderTarget)
+                                      const dp::gl::SharedRenderTarget &renderTarget)
 {
   return new CFRPipeline( renderEngine, shaderManagerType, cullingMode, renderTarget );
 }
@@ -87,8 +88,8 @@ void CFRPipeline::setTileSize( size_t width, size_t height )
 }
 
 // This needs to be called on-demand in doRender
-bool CFRPipeline::init( const dp::gl::SmartRenderContext &renderContext,
-                        const dp::gl::SmartRenderTarget  &renderTarget )
+bool CFRPipeline::init( const dp::gl::SharedRenderContext &renderContext,
+                        const dp::gl::SharedRenderTarget  &renderTarget )
 {
   // collect information about available GPUs
   unsigned int gpuIndex = 0;
@@ -150,9 +151,9 @@ bool CFRPipeline::init( const dp::gl::SmartRenderContext &renderContext,
       gpu.push_back( gpus[i] );
 
       dp::gl::RenderContextFormat format;
-      dp::gl::SmartRenderContext context = dp::gl::RenderContext::create( dp::gl::RenderContext::Headless( &format, dp::gl::SmartRenderContext::null, gpu ) );
+      dp::gl::SharedRenderContext context = dp::gl::RenderContext::create( dp::gl::RenderContext::Headless( &format, nullptr, gpu ) );
 
-      dp::gl::SmartRenderTargetFBO rt = dp::gl::RenderTargetFBO::create(context);
+      dp::gl::SharedRenderTargetFBO rt = dp::gl::RenderTargetFBO::create(context);
       gpuData.m_renderTarget = rt;
 
       rt->beginRendering();
@@ -160,7 +161,7 @@ bool CFRPipeline::init( const dp::gl::SmartRenderContext &renderContext,
       rt->setAttachment(dp::gl::RenderTargetFBO::COLOR_ATTACHMENT0, dp::gl::Texture2D::create(GL_RGBA8, GL_BGRA, GL_UNSIGNED_BYTE));
 
       // Depth and Stencil are Renderbuffers.
-      dp::gl::SmartRenderbuffer depthStencil0(dp::gl::Renderbuffer::create(GL_DEPTH24_STENCIL8)); // maybe use GL_DEPTH32F_STENCIL8
+      dp::gl::SharedRenderbuffer depthStencil0(dp::gl::Renderbuffer::create(GL_DEPTH24_STENCIL8)); // maybe use GL_DEPTH32F_STENCIL8
       rt->setAttachment(dp::gl::RenderTargetFBO::DEPTH_ATTACHMENT,   depthStencil0);
       rt->setAttachment(dp::gl::RenderTargetFBO::STENCIL_ATTACHMENT, depthStencil0);
 
@@ -211,7 +212,7 @@ void CFRPipeline::resize( size_t width, size_t height )
 // Mind, this is called for left and right eye independently.
 void CFRPipeline::doRender(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::SmartRenderTarget const& renderTarget)
 {
-  const dp::gl::SmartRenderTarget renderTargetGL = dp::util::smart_cast<dp::gl::RenderTarget>(renderTarget);
+  const dp::gl::SharedRenderTarget renderTargetGL = dp::util::shared_cast<dp::gl::RenderTarget>(renderTarget);
   DP_ASSERT( renderTargetGL );
   if( m_gpuData.empty() )
   {
@@ -249,8 +250,8 @@ void CFRPipeline::doRender(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::
 
     GpuData& gpuData = m_gpuData[i];
 
-    const dp::gl::RenderTargetFBO::SmartAttachment &attachment = dp::util::smart_cast<dp::gl::RenderTargetFBO>(gpuData.m_renderTarget)->getAttachment(dp::gl::RenderTargetFBO::COLOR_ATTACHMENT0);
-    const dp::gl::RenderTargetFBO::SmartAttachmentTexture &texAtt = dp::util::smart_cast<dp::gl::RenderTargetFBO::AttachmentTexture>(attachment);
+    const dp::gl::RenderTargetFBO::SharedAttachment &attachment = dp::util::shared_cast<dp::gl::RenderTargetFBO>(gpuData.m_renderTarget)->getAttachment(dp::gl::RenderTargetFBO::COLOR_ATTACHMENT0);
+    const dp::gl::RenderTargetFBO::SharedAttachmentTexture &texAtt = dp::util::shared_cast<dp::gl::RenderTargetFBO::AttachmentTexture>(attachment);
 
     DP_ASSERT( texAtt );
 
@@ -258,7 +259,7 @@ void CFRPipeline::doRender(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::
     gpuData.m_renderTarget->setClearMask(0);
     gpuData.m_renderTarget->beginRendering();
 
-    gpuData.m_textureTransfer->transfer( i, m_compositeTexture, dp::util::smart_cast<dp::gl::Texture2D>(texAtt->getTexture()) );
+    gpuData.m_textureTransfer->transfer( i, m_compositeTexture, dp::util::shared_cast<dp::gl::Texture2D>(texAtt->getTexture()) );
 
     gpuData.m_renderTarget->endRendering();
     gpuData.m_renderTarget->setClearMask( dp::gl::TBM_COLOR_BUFFER | dp::gl::TBM_DEPTH_BUFFER );
@@ -366,7 +367,7 @@ dp::fx::Manager CFRPipeline::getShaderManager( ) const
   return( m_shaderManager );
 }
 
-void CFRPipeline::generateStencilPattern( dp::gl::SmartRenderTarget renderTarget )
+void CFRPipeline::generateStencilPattern( dp::gl::SharedRenderTarget renderTarget )
 {
   unsigned int width;
   unsigned int height;

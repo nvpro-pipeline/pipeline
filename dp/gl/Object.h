@@ -28,16 +28,13 @@
 
 #include <dp/gl/Config.h>
 #include <dp/gl/RenderContext.h>
-#include <dp/util/SmartPtr.h>
+#include <dp/gl/Types.h>
 
 namespace dp
 {
   namespace gl
   {
-    class Object;
-    typedef dp::util::SmartPtr<Object> SmartObject;
-
-    class Object : public dp::util::RCObject
+    class Object
     {
       public:
         DP_GL_API GLuint getGLId() const;
@@ -46,12 +43,12 @@ namespace dp
         DP_GL_API Object();
         DP_GL_API virtual ~Object();
 
-        DP_GL_API SmartShareGroup getShareGroup() const;
+        DP_GL_API SharedShareGroup getShareGroup() const;
         DP_GL_API void setGLId( GLuint id );
 
       private:
-        GLuint          m_id;           //!< OpenGL id
-        SmartShareGroup m_shareGroup;   //!< The share group holding this texture
+        GLuint            m_id;           //!< OpenGL id
+        SharedShareGroup  m_shareGroup;   //!< The share group holding this texture
     };
 
   } // namespace gl

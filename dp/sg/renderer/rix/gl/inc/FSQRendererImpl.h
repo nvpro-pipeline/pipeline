@@ -132,7 +132,7 @@ namespace dp
           class RendererFSQImpl : public FSQRenderer
           {
             public:
-              static dp::util::SmartPtr<FSQRenderer> create( const dp::gl::SmartRenderTarget &renderTarget = dp::gl::SmartRenderTarget() );
+              static dp::util::SmartPtr<FSQRenderer> create( const dp::gl::SharedRenderTarget &renderTarget = dp::gl::SharedRenderTarget() );
               virtual ~RendererFSQImpl(void);
 
               void setEffect( const dp::sg::core::EffectDataSharedPtr & effect );
@@ -171,7 +171,7 @@ namespace dp
                *  \param callRTBeginEnd Whether to wrap the Quad rendering with target->beginRendering() and target->endRendering().  In some 
                *  cases the RenderTarget may be current and calling begin/endRendering may be either unnecessary or detremental.
                **/
-              static void presentTextureGL2D( GLuint textureId, const dp::gl::SmartRenderTarget &target, bool callRTBeginEnd = true );
+              static void presentTextureGL2D( GLuint textureId, const dp::gl::SharedRenderTarget &target, bool callRTBeginEnd = true );
 
               /*! \brief Fill the viewport with the given TextureGL2D.
                *  \remarks This is a convenience function to render the given TextureGL2D in a viewport-filling quad.
@@ -180,7 +180,7 @@ namespace dp
                *  \param callRTBeginEnd Whether to wrap the Quad rendering with target->beginRendering() and target->endRendering().  In some 
                *  cases the RenderTarget may be current and calling begin/endRendering may be either unnecessary or detremental.
                **/
-              static void presentTextureGL2D( const dp::gl::SmartTexture2D &tex2d, const dp::gl::SmartRenderTarget &target, bool callRTBeginEnd = true );
+              static void presentTextureGL2D( const dp::gl::SharedTexture2D &tex2d, const dp::gl::SharedRenderTarget &target, bool callRTBeginEnd = true );
 
               /*! \brief Fill the viewport with the given TextureGLRectangle.
                *  \remarks This is a convenience function to render the given TextureGLRectangle in a viewport-filling quad.
@@ -189,18 +189,18 @@ namespace dp
                *  \param callRTBeginEnd Whether to wrap the Quad rendering with target->beginRendering() and target->endRendering().  In some 
                *  cases the RenderTarget may be current and calling begin/endRendering may be either unnecessary or detremental.
                **/
-              static void presentTextureGLRectangle( const dp::gl::SmartTextureRectangle &tex2d, const dp::gl::SmartRenderTarget &target, bool callRTBeginEnd = true );
+              static void presentTextureGLRectangle( const dp::gl::SharedTextureRectangle &tex2d, const dp::gl::SharedRenderTarget &target, bool callRTBeginEnd = true );
 
               REFLECTION_INFO( RendererFSQImpl );
               BEGIN_DECLARE_STATIC_PROPERTIES
               END_DECLARE_STATIC_PROPERTIES
 
             protected:
-              RendererFSQImpl( const dp::gl::SmartRenderTarget &target );
+              RendererFSQImpl( const dp::gl::SharedRenderTarget &target );
               virtual void doRender( const dp::ui::SmartRenderTarget &renderTarget );
 
             private:
-              void setTexCoord1( const dp::gl::SmartRenderTarget & target );
+              void setTexCoord1( const dp::gl::SharedRenderTarget & target );
 
             private:
               int                                           m_targetX;

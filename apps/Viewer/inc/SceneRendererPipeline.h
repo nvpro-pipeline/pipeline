@@ -47,7 +47,7 @@ public:
   SceneRendererPipeline();
   ~SceneRendererPipeline();
 
-  bool init(const dp::gl::SmartRenderContext &renderContext, const dp::gl::SmartRenderTarget &renderTarget);
+  bool init(const dp::gl::SharedRenderContext &renderContext, const dp::gl::SharedRenderTarget &renderTarget);
 
   void setSceneRenderer(const dp::sg::ui::SmartSceneRenderer &sceneRenderer);
   dp::sg::ui::SmartSceneRenderer getSceneRenderer() const; 
@@ -103,9 +103,9 @@ private:
   dp::sg::ui::SmartSceneRenderer            m_sceneRenderer; // The renderer for the main image on the framebuffer (rasterizer or ray tracer).  
   dp::util::SmartPtr<MonoViewStateProvider> m_monoViewStateProvider;
 
-  dp::gl::SmartRenderTarget                     m_renderTarget;             // The render target passed into init.
-  dp::gl::SmartRenderTargetFBO                  m_tonemapFBO;               // The monoscopic FBO for the tonemap texture rendering and processing.
-  dp::gl::SmartRenderTargetFBO                  m_highlightFBO;             // The monoscopic FBO for the highlight rendering and processing.
+  dp::gl::SharedRenderTarget                    m_renderTarget;             // The render target passed into init.
+  dp::gl::SharedRenderTargetFBO                 m_tonemapFBO;               // The monoscopic FBO for the tonemap texture rendering and processing.
+  dp::gl::SharedRenderTargetFBO                 m_highlightFBO;             // The monoscopic FBO for the highlight rendering and processing.
   dp::sg::renderer::rix::gl::SmartSceneRenderer m_sceneRendererHighlight;   // The renderer for the highlighted objects into the FBO.
   dp::sg::renderer::rix::gl::SmartFSQRenderer   m_rendererStencilToColor;
   dp::sg::renderer::rix::gl::SmartFSQRenderer   m_rendererHighlight;

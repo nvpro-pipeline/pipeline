@@ -26,6 +26,7 @@
 
 #include <dp/sg/renderer/rix/gl/FSQRenderer.h>
 #include <dp/sg/renderer/rix/gl/inc/FSQRendererImpl.h>
+#include <dp/util/SharedPtr.h>
 
 namespace dp
 {
@@ -47,12 +48,12 @@ namespace dp
             GL_TEXTURE_CUBE_MAP, GL_TEXTURE_1D_ARRAY_EXT,
             GL_TEXTURE_2D_ARRAY_EXT, GL_TEXTURE_RECTANGLE_ARB }; 
 
-          FSQRenderer::FSQRenderer( const dp::gl::SmartRenderTarget &target )
-            : Renderer( dp::util::smart_cast<dp::ui::RenderTarget>(target) )
+          FSQRenderer::FSQRenderer( const dp::gl::SharedRenderTarget &target )
+            : Renderer( dp::util::shared_cast<dp::ui::RenderTarget>(target) )
           {  
           }
 
-          dp::util::SmartPtr<FSQRenderer> FSQRenderer::create( const dp::gl::SmartRenderTarget &renderTarget )
+          dp::util::SmartPtr<FSQRenderer> FSQRenderer::create( const dp::gl::SharedRenderTarget &renderTarget )
           {
             return RendererFSQImpl::create( renderTarget );
           }
@@ -99,7 +100,7 @@ namespace dp
           //
           // NOTE: leaves with GL_TEXTURE_2D disabled GL_DEPTH_TEST enabled, and ActiveTexture = 0
           //
-          void FSQRenderer::presentTexture2D( const dp::gl::SmartTexture2D &tex2d, const dp::gl::SmartRenderTarget &target, bool callRTBeginEnd )
+          void FSQRenderer::presentTexture2D( const dp::gl::SharedTexture2D &tex2d, const dp::gl::SharedRenderTarget &target, bool callRTBeginEnd )
           {
             DP_ASSERT( tex2d );
 
@@ -139,7 +140,7 @@ namespace dp
           //
           // NOTE: leaves with GL_TEXTURE_RECTANGLE_ARB disabled, GL_DEPTH_TEST enabled, and ActiveTexture = 0
           //
-          void FSQRenderer::presentTextureRectangle( const dp::gl::SmartTextureRectangle &tex, const dp::gl::SmartRenderTarget &target, bool callRTBeginEnd )
+          void FSQRenderer::presentTextureRectangle( const dp::gl::SharedTextureRectangle &tex, const dp::gl::SharedRenderTarget &target, bool callRTBeginEnd )
           {
             DP_ASSERT( tex );
 

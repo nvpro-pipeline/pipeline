@@ -29,7 +29,6 @@
 #include <dp/gl/Config.h>
 #include <dp/gl/Buffer.h>
 #include <dp/gl/Object.h>
-#include <dp/util/SmartPtr.h>
 #include <dp/math/math.h>
 
 // TODO Image capturing is currently not implemented. The code sequences using 
@@ -48,9 +47,6 @@ namespace dp
     DP_GL_API bool isLayeredTarget( GLenum target );
     DP_GL_API bool isSamplerType( GLenum type );
     DP_GL_API bool isImageType( GLenum type );
-
-    class Texture;
-    typedef dp::util::SmartPtr<Texture> SmartTexture;
 
     /*! \brief Base class to represent an OpenGL texture.
      *  \remarks Various sub classes exist that represent specific OpenGL textures.
@@ -203,9 +199,6 @@ namespace dp
     }
 
 
-    class Texture1D;
-    typedef dp::util::SmartPtr< Texture1D > SmartTexture1D;
-
     /*! \brief Class for 1D OpenGL textures.
      */
     class Texture1D : public Texture
@@ -217,7 +210,7 @@ namespace dp
        *  \param type The OpenGL texture client type used in resize operations (e.g. GL_UNSIGNED_BYTE).
        *  \param width The texture width.
        *  \sa setData, resize */
-      DP_GL_API static SmartTexture1D create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width = 0 );
+      DP_GL_API static SharedTexture1D create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width = 0 );
 
     public:
       /*! \brief Transfers data to the OpenGL texture, keeping current internal format and size.
@@ -259,9 +252,6 @@ namespace dp
     }
 
 
-    class Texture1DArray;
-    typedef dp::util::SmartPtr< Texture1DArray > SmartTexture1DArray;
-
     /*! \brief Class for 1D array OpenGL textures.
      *  \remarks This texture type requires additional hardware support.
      *  Array textures store multiple 1D textures in stacked layers.
@@ -278,7 +268,7 @@ namespace dp
        *  \param width The texture width.
        *  \param layers The amount of texture layers.
        *  \sa setData, resize */
-      DP_GL_API static SmartTexture1DArray create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width = 0, GLsizei layers = 0 );
+      DP_GL_API static SharedTexture1DArray create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width = 0, GLsizei layers = 0 );
 
     public:
       /*! \brief Transfers data to the OpenGL texture, keeping current internal format and size.
@@ -338,9 +328,6 @@ namespace dp
     }
 
 
-    class Texture2D;
-    typedef dp::util::SmartPtr< Texture2D > SmartTexture2D;
-
     /*! \brief Class for 2D OpenGL textures.
      */
     class Texture2D : public Texture
@@ -353,7 +340,7 @@ namespace dp
        *  \param width The texture width.
        *  \param height The texture height.
        *  \sa setData, resize */
-      DP_GL_API static SmartTexture2D create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width = 0, GLsizei height = 0 );
+      DP_GL_API static SharedTexture2D create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width = 0, GLsizei height = 0 );
 
     public:
       /*! \brief Transfers the buffer data to the OpenGL texture, keeping current internal format and size.
@@ -404,9 +391,6 @@ namespace dp
     }
 
 
-    class TextureRectangle;
-    typedef dp::util::SmartPtr< TextureRectangle > SmartTextureRectangle;
-
     /*! \brief Class for rectangle OpenGL textures.
      *  \remarks Rectangle textures do not support borders or mip map levels and
      *  are sampled using unnormalized texture coordinates.
@@ -421,7 +405,7 @@ namespace dp
        *  \param width The texture width.
        *  \param height The texture height.
        *  \sa setData, resize */
-      DP_GL_API static SmartTextureRectangle create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width = 0, GLsizei height = 0 );
+      DP_GL_API static SharedTextureRectangle create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width = 0, GLsizei height = 0 );
 
     public:
       /*! \brief Transfers data to the OpenGL texture, keeping current internal format and size.
@@ -470,9 +454,6 @@ namespace dp
     }
 
 
-    class Texture2DArray;
-    typedef dp::util::SmartPtr< Texture2DArray > SmartTexture2DArray;
-
     /*! \brief Class for 2D array OpenGL textures.
      *  \remarks This texture type requires additional hardware support.
      *  Array textures store multiple 2D textures in stacked layers.
@@ -490,7 +471,7 @@ namespace dp
        *  \param height The texture height.
        *  \param layers The amount of texture layers.
        *  \sa setData, resize */
-      DP_GL_API static SmartTexture2DArray create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width = 0, GLsizei height = 0, GLsizei layers = 0 );
+      DP_GL_API static SharedTexture2DArray create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width = 0, GLsizei height = 0, GLsizei layers = 0 );
 
     public:
       /*! \brief Transfers data to the OpenGL texture, keeping current internal format and size.
@@ -560,9 +541,6 @@ namespace dp
     }
 
 
-    class Texture3D;
-    typedef dp::util::SmartPtr< Texture3D > SmartTexture3D;
-
     /*! \brief Class for 3D OpenGL textures.
      *  \remarks This type is mostly used for volume rendering.
      */
@@ -577,7 +555,7 @@ namespace dp
        *  \param height The texture height.
        *  \param depth The texture depth.
        *  \sa setData, resize */
-      DP_GL_API static SmartTexture3D create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width = 0, GLsizei height = 0, GLsizei depth = 0 );
+      DP_GL_API static SharedTexture3D create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width = 0, GLsizei height = 0, GLsizei depth = 0 );
 
     public:
       /*! \brief Transfers data to the OpenGL texture, keeping current internal format and size.
@@ -638,9 +616,6 @@ namespace dp
     }
 
 
-    class TextureCubemap;
-    typedef dp::util::SmartPtr< TextureCubemap > SmartTextureCubemap;
-
     /*! \brief Class for cubemap OpenGL textures.
      *  \remarks Cubemaps represent the six inner faces of a cube and are mostly used
      *  for environment effects (e.g. reflections).
@@ -654,7 +629,7 @@ namespace dp
        *  \param format The OpenGL texture client format used in resize operations (e.g. GL_RGBA).
        *  \param type The OpenGL texture client type used in resize operations (e.g. GL_UNSIGNED_BYTE).
        *  \sa setData, resize */
-      DP_GL_API static SmartTextureCubemap create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width = 0, GLsizei height = 0 );
+      DP_GL_API static SharedTextureCubemap create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width = 0, GLsizei height = 0 );
 
     public:
       /*! \brief Transfers data to the OpenGL texture, keeping current internal format and size.
@@ -707,9 +682,6 @@ namespace dp
     }
 
 
-    class TextureCubemapArray;
-    typedef dp::util::SmartPtr< TextureCubemapArray > SmartTextureCubemapArray;
-
     /*! \brief Class for cubemap array OpenGL textures.
      *  \remarks Cubemaps represent the six inner faces of a cube and are mostly used
      *  for environment effects (e.g. reflections).
@@ -729,7 +701,7 @@ namespace dp
        *  \param height The texture height. Width and height must match.
        *  \param layers The amount of texture layers.
        *  \sa setData, resize */
-      DP_GL_API static SmartTextureCubemapArray create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width = 0, GLsizei height = 0, GLsizei layers = 0 );
+      DP_GL_API static SharedTextureCubemapArray create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width = 0, GLsizei height = 0, GLsizei layers = 0 );
 
     public:
       /*! \brief Transfers data to the OpenGL texture, keeping current internal format and size.
@@ -799,9 +771,6 @@ namespace dp
     }
 
 
-    class Texture2DMultisample;
-    typedef dp::util::SmartPtr< Texture2DMultisample > SmartTexture2DMultisample;
-
     /*! \brief Class for 2D multisample OpenGL textures.
      *  \remarks This texture type requires additional hardware support.
      *  Multisample textures store multiple samples per texel and
@@ -819,7 +788,7 @@ namespace dp
        *  \param width The texture width.
        *  \param height The texture height.
        *  \sa resize, setSamples */
-      DP_GL_API static SmartTexture2DMultisample create( GLenum internalFormat, GLsizei samples = 1, GLsizei width = 0, GLsizei height = 0, bool fixedLocations = true );
+      DP_GL_API static SharedTexture2DMultisample create( GLenum internalFormat, GLsizei samples = 1, GLsizei width = 0, GLsizei height = 0, bool fixedLocations = true );
 
     public:
       /*! \brief Resizes the texture. All content and mipmap levels are lost if the size is different from current state.
@@ -902,9 +871,6 @@ namespace dp
     }
 
 
-    class Texture2DMultisampleArray;
-    typedef dp::util::SmartPtr< Texture2DMultisampleArray > SmartTexture2DMultisampleArray;
-
     /*! \brief Class for 2D multisample array OpenGL textures.
      *  \remarks This texture type requires additional hardware support.
      *  Multisample textures store multiple samples per texel and
@@ -926,7 +892,7 @@ namespace dp
        *  \param fixedLocations When set to true, the location of the samples are the same for all internalFormats and depend only on sample count.
        *  Otherwise they can vary with each internalFormat.
        *  \sa resize, setSamples */
-      DP_GL_API static SmartTexture2DMultisampleArray create( GLenum internalFormat, GLsizei samples = 1, GLsizei width = 0, GLsizei height = 0, GLsizei layers = 0, bool fixedLocations = true );
+      DP_GL_API static SharedTexture2DMultisampleArray create( GLenum internalFormat, GLsizei samples = 1, GLsizei width = 0, GLsizei height = 0, GLsizei layers = 0, bool fixedLocations = true );
 
     public:
       /*! \brief Resizes the texture. All content and mipmap levels are lost if the size is different from current state.
@@ -1023,18 +989,16 @@ namespace dp
     }
 
 
-    class TextureBuffer;
-    typedef dp::util::SmartPtr< TextureBuffer > SmartTextureBuffer;
-
     class TextureBuffer : public Texture
     {
       public:
-        DP_GL_API static SmartTextureBuffer create( GLenum internalFormat, SmartBuffer const& buffer );
-        DP_GL_API static SmartTextureBuffer create( GLenum internalFormat, unsigned int size = 0, GLvoid const* data = nullptr, GLenum usage = GL_DYNAMIC_COPY );
+        DP_GL_API static SharedTextureBuffer create( GLenum internalFormat, SharedBuffer const& buffer );
+        DP_GL_API static SharedTextureBuffer create( GLenum internalFormat, unsigned int size = 0, GLvoid const* data = nullptr, GLenum usage = GL_DYNAMIC_COPY );
+        DP_GL_API ~TextureBuffer();
 
       public:
-        DP_GL_API SmartBuffer const& getBuffer() const;
-        DP_GL_API void setBuffer( SmartBuffer const& buffer );
+        DP_GL_API SharedBuffer const& getBuffer() const;
+        DP_GL_API void setBuffer( SharedBuffer const& buffer );
 
         /*! \brief Returns the maximum texture size allowed in the current OpenGL context.
          *  \note Uses GL_MAX_TEXTURE_SIZE for the query.
@@ -1046,11 +1010,10 @@ namespace dp
         DP_GL_API static bool isSupported();
 
       protected:
-        DP_GL_API TextureBuffer( GLenum internalFormat, SmartBuffer const& buffer );
-        DP_GL_API ~TextureBuffer();
+        DP_GL_API TextureBuffer( GLenum internalFormat, SharedBuffer const& buffer );
 
       private:
-        SmartBuffer  m_buffer;
+        SharedBuffer  m_buffer;
     };
 
   } // namespace gl

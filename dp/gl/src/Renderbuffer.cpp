@@ -65,19 +65,19 @@ namespace dp
       init( width, height );
     }
 
-    dp::util::SmartPtr<Renderbuffer> Renderbuffer::create(GLenum internalFormat, int width, int height )
+    SharedRenderbuffer Renderbuffer::create(GLenum internalFormat, int width, int height )
     {
-      return new Renderbuffer( internalFormat, width, height );
+      return( SharedRenderbuffer( new Renderbuffer( internalFormat, width, height ) ) );
     }
 
-    dp::util::SmartPtr<Renderbuffer> Renderbuffer::create(const MSAA &msaa, GLenum internalFormat, int width, int height )
+    SharedRenderbuffer Renderbuffer::create(const MSAA &msaa, GLenum internalFormat, int width, int height )
     {
-      return new Renderbuffer( msaa, internalFormat, width, height );
+      return( SharedRenderbuffer( new Renderbuffer( msaa, internalFormat, width, height ) ) );
     }
 
-    dp::util::SmartPtr<Renderbuffer> Renderbuffer::create(const CSAA &csaa, GLenum internalFormat, int width, int height )
+    SharedRenderbuffer Renderbuffer::create(const CSAA &csaa, GLenum internalFormat, int width, int height )
     {
-      return new Renderbuffer( csaa, internalFormat, width, height );
+      return( SharedRenderbuffer( new Renderbuffer( csaa, internalFormat, width, height ) ) );
     }
 
     void Renderbuffer::init( int width, int height )
@@ -91,24 +91,32 @@ namespace dp
 
     Renderbuffer::~Renderbuffer()
     {
-      class CleanupTask : public ShareGroupTask
+      if ( getGLId() )
       {
-        public:
-          CleanupTask( GLuint id ) : m_id( id ) {}
-
-          virtual void execute() { glDeleteRenderbuffers( 1, &m_id ); }
-
-        private:
-          GLuint m_id;
-      };
-
-      if ( getGLId() && getShareGroup() )
-      {
-        // make destructor exception safe
-        try
+        if ( getShareGroup() )
         {
-          getShareGroup()->executeTask( new CleanupTask( getGLId() ) );
-        } catch (...) {}
+          class CleanupTask : public ShareGroupTask
+          {
+            public:
+              CleanupTask( GLuint id ) : m_id( id ) {}
+
+              virtual void execute() { glDeleteRenderbuffers( 1, &m_id ); }
+
+            private:
+              GLuint m_id;
+          };
+
+          // make destructor exception safe
+          try
+          {
+            getShareGroup()->executeTask( SharedShareGroupTask( new CleanupTask( getGLId() ) ) );
+          } catch (...) {}
+        }
+        else
+        {
+          GLuint id = getGLId();
+          glDeleteRenderbuffers( 1, &id );
+        }
       }
     }
 

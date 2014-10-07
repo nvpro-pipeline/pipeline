@@ -35,6 +35,7 @@
 #include <dp/sg/ui/ViewState.h>
 #include <dp/rix/gl/RiXGL.h>
 #include <dp/sg/core/FrustumCamera.h>
+#include <dp/util/SharedPtr.h>
 
 #define ENABLE_PROFILING 0
 #include <dp/util/Profile.h>
@@ -93,14 +94,14 @@ namespace dp
 
           SmartSceneRenderer SceneRendererImpl::create( const char *renderEngine, dp::fx::Manager shaderManagerType
                                                       , dp::culling::Mode cullingMode, TransparencyMode transparencyMode
-                                                      , const dp::gl::SmartRenderTarget &renderTarget )
+                                                      , const dp::gl::SharedRenderTarget &renderTarget )
           {
             return new SceneRendererImpl( renderEngine, shaderManagerType, cullingMode, transparencyMode, renderTarget );
           }
 
           SceneRendererImpl::SceneRendererImpl( const char *renderEngine, dp::fx::Manager shaderManagerType
                                               , dp::culling::Mode cullingMode, TransparencyMode transparencyMode
-                                              , const dp::gl::SmartRenderTarget &renderTarget )
+                                              , const dp::gl::SharedRenderTarget &renderTarget )
             : SceneRenderer( renderTarget )
             , m_renderer( nullptr )
             , m_drawableManager( nullptr )
@@ -169,7 +170,7 @@ namespace dp
             {
               SceneRenderer::beginRendering( viewState, renderTarget );
 
-              dp::gl::SmartRenderTarget renderTargetGL = dynamic_cast<dp::gl::RenderTarget*>( renderTarget.get() );
+              dp::gl::SharedRenderTarget renderTargetGL = dp::util::shared_cast<dp::gl::RenderTarget>( renderTarget );
               DP_ASSERT( renderTargetGL );
 
               if ( !m_userRenderContext )
@@ -212,7 +213,7 @@ namespace dp
           {
             if ( m_rendererInitialized )
             {
-              dp::gl::SmartRenderTarget renderTargetGL = dynamic_cast<dp::gl::RenderTarget*>( renderTarget.get() );
+              dp::gl::SharedRenderTarget renderTargetGL = dp::util::shared_cast<dp::gl::RenderTarget>( renderTarget );
               DP_ASSERT( renderTargetGL );
               renderTargetGL->endRendering();
 
@@ -229,7 +230,7 @@ namespace dp
           {
             if ( m_rendererInitialized )
             {
-              dp::gl::SmartRenderTarget renderTargetGL = dynamic_cast<dp::gl::RenderTarget*>( renderTarget.get() );
+              dp::gl::SharedRenderTarget renderTargetGL = dp::util::shared_cast<dp::gl::RenderTarget>( renderTarget );
               DP_ASSERT( renderTargetGL );
 
 #if 0
@@ -297,7 +298,7 @@ namespace dp
             return( dmd );
           }
 
-          void SceneRendererImpl::doRenderDrawables( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::gl::SmartRenderTarget const& renderTarget )
+          void SceneRendererImpl::doRenderDrawables( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::gl::SharedRenderTarget const& renderTarget )
           {
             CameraSharedPtr camera = viewState->getCamera();
 

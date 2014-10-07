@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2012
+// Copyright NVIDIA Corporation 2010-2014
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -48,8 +48,6 @@ namespace dp
     namespace xbar
     {
 
-      class DrawableInstance;
-      class DrawableManager;
       class SceneTree;
 
       class UpdateTransformVisitor;
@@ -214,15 +212,6 @@ namespace dp
         void transformSetObjectTreeIndex( TransformTreeIndex transformTreeIndex, ObjectTreeIndex objectTreeIndex );
 
       protected:
-        // TODO only temporary
-        DP_SG_XBAR_API TransformTreeNode &getTransformTreeNodeInternal( TransformTreeIndex index );
-
-        DP_SG_XBAR_API void drawableInstanceUpdate( ObjectTreeIndex index );
-        DP_SG_XBAR_API void drawableInstanceSetActive( DrawableInstance *drawableInstance, bool active );
-        DP_SG_XBAR_API void drawableInstanceSetMask( DrawableInstance *drawableInstance, unsigned int mask );
-
-        DP_SG_XBAR_API void drawableInstanceRemove( ObjectTreeIndex index );
-
         DP_SG_XBAR_API void updateTransformTree( dp::sg::ui::ViewStateSharedPtr const& viewState );
         DP_SG_XBAR_API void updateObjectTree( dp::sg::ui::ViewStateSharedPtr const& viewState );
 
@@ -292,7 +281,7 @@ namespace dp
 
       inline void SceneTree::transformSetObjectTreeIndex( TransformTreeIndex transformTreeIndex, ObjectTreeIndex objectTreeIndex )
       {
-        getTransformTreeNodeInternal( transformTreeIndex ).m_objectTreeIndex = objectTreeIndex;
+        m_transformTree[transformTreeIndex].m_objectTreeIndex = objectTreeIndex;
       }
 
       typedef dp::util::SmartPtr< SceneTree >               SceneTreeSharedPtr;

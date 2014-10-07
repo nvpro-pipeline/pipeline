@@ -57,7 +57,7 @@ namespace dp
 
       ParameterCacheEntryStreamSharedPtr createParameterCacheEntryStream( dp::rix::gl::ProgramGLHandle program
                                                                           , dp::rix::core::ContainerParameterType containerParameterType
-                                                                          , int uniformLocation, size_t cacheOffset
+                                                                          , dp::gl::Program::Uniform const& uniform, size_t cacheOffset
                                                                           , size_t containerOffset, size_t arraySize );
 
       typedef std::vector<ParameterCacheEntryStreamSharedPtr> ParameterCacheEntryStreams;

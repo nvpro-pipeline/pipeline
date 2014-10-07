@@ -95,7 +95,7 @@ namespace dp
           if ( buffer )
           {
             DP_ASSERT( buffer->getBuffer() );
-            dp::gl::SmartBuffer const& b = buffer->getBuffer();
+            dp::gl::SharedBuffer const& b = buffer->getBuffer();
             cacheEntry.m_address = b->getAddress() + vertexData->m_data[streamId].m_offset;
             cacheEntry.m_length =  b->getSize() - vertexData->m_data[streamId].m_offset;
           }
@@ -114,7 +114,7 @@ namespace dp
         if ( indices && indices->getBufferHandle() )
         {
           DP_ASSERT( indices->getBufferHandle()->getBuffer() );
-          dp::gl::SmartBuffer const& b = indices->getBufferHandle()->getBuffer();
+          dp::gl::SharedBuffer const& b = indices->getBufferHandle()->getBuffer();
           geometryInstanceCacheEntry.m_attributeCacheIndices.m_address = b->getAddress();
           geometryInstanceCacheEntry.m_attributeCacheIndices.m_length = b->getSize();
         }

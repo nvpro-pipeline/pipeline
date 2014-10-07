@@ -29,6 +29,7 @@
 
 #include <dp/gl/RenderTarget.h>
 #include <dp/math/Trafo.h>
+#include <dp/util/SharedPtr.h>
 
 #include <test/rix/core/framework/RiXBackend.h>
 #include <test/rix/core/helpers/GeometryHelper.h>
@@ -55,7 +56,7 @@ bool Feature_texture_buffer::onInit()
 {
   DP_ASSERT( dynamic_cast<rix::core::test::framework::RiXBackend*>(&(*m_backend)) );
   m_rix = static_cast<rix::core::test::framework::RiXBackend*>(&(*m_backend))->getRenderer();
-  util::smart_cast<dp::gl::RenderTarget>( m_displayTarget )->setClearColor( 0.46f, 0.72f, 0.0f, 1.0f );
+  dp::util::shared_cast<dp::gl::RenderTarget>( m_displayTarget )->setClearColor( 0.46f, 0.72f, 0.0f, 1.0f );
   
   m_renderData = new rix::core::test::framework::RenderDataRiX;
   

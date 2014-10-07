@@ -93,8 +93,8 @@ namespace dp
 
               glGenQueries( 1, &m_samplesPassedQuery );
 
-              dp::gl::SmartVertexShader vertexShader = dp::gl::VertexShader::create( dp::util::loadStringFromFile( dp::home() + "/media/dpfx/passThroughPosition_vs.glsl" ) );
-              dp::gl::SmartFragmentShader fragmentShader = dp::gl::FragmentShader::create( dp::util::loadStringFromFile( dp::home() + "/media/dpfx/oitClosestListClear_fs.glsl" ) );
+              dp::gl::SharedVertexShader vertexShader = dp::gl::VertexShader::create( dp::util::loadStringFromFile( dp::home() + "/media/dpfx/passThroughPosition_vs.glsl" ) );
+              dp::gl::SharedFragmentShader fragmentShader = dp::gl::FragmentShader::create( dp::util::loadStringFromFile( dp::home() + "/media/dpfx/oitClosestListClear_fs.glsl" ) );
               m_clearProgram = dp::gl::Program::create( vertexShader, fragmentShader );
 
               // create fragment shader source

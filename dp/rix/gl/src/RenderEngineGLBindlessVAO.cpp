@@ -103,7 +103,7 @@ namespace dp
           {
             dp::rix::gl::VertexFormatGL::Format &format = formatHandle->m_format[index];
             DP_ASSERT( vertexData->m_data[format.m_streamId].m_buffer );
-            dp::gl::SmartBuffer const& buffer = vertexData->m_data[format.m_streamId].m_buffer->getBuffer();
+            dp::gl::SharedBuffer const& buffer = vertexData->m_data[format.m_streamId].m_buffer->getBuffer();
             GLuint64EXT address = buffer->getAddress();
             size_t offset = vertexData->m_data[format.m_streamId].m_offset + format.m_offset;
             glBufferAddressRangeNV( GL_VERTEX_ATTRIB_ARRAY_ADDRESS_NV, index, address + offset, buffer->getSize() - offset );
@@ -115,7 +115,7 @@ namespace dp
         if ( indices )
         {
           DP_ASSERT( indices->getBufferHandle() && indices->getBufferHandle()->getBuffer() );
-          dp::gl::SmartBuffer const& buffer = indices->getBufferHandle()->getBuffer();
+          dp::gl::SharedBuffer const& buffer = indices->getBufferHandle()->getBuffer();
           GLuint indexBuffer = buffer->getGLId();
 
           GLuint64EXT address;

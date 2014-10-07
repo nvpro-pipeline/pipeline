@@ -1910,7 +1910,7 @@ namespace dp
         }
       }
       
-      TextureGLSharedPtr TextureGL::create( const dp::gl::SmartTexture& texture )
+      TextureGLSharedPtr TextureGL::create( const dp::gl::SharedTexture& texture )
       {
         return( std::shared_ptr<TextureGL>( new TextureGL( texture ) ) );
       }
@@ -1920,7 +1920,7 @@ namespace dp
         return( std::shared_ptr<TextureGL>( new TextureGL( *this ) ) );
       }
 
-      TextureGL::TextureGL( const dp::gl::SmartTexture& texture )
+      TextureGL::TextureGL( const dp::gl::SharedTexture& texture )
         : m_texture( texture )
       {
         TextureTarget target;
@@ -1957,7 +1957,7 @@ namespace dp
         setTextureTarget(target);
       }
 
-      const dp::gl::SmartTexture& TextureGL::getTexture() const
+      const dp::gl::SharedTexture& TextureGL::getTexture() const
       {
         return m_texture;
       }

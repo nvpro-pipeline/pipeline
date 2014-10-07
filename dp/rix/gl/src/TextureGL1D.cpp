@@ -26,6 +26,7 @@
 
 #include "TextureGL1D.h"
 #include <dp/rix/gl/inc/DataTypeConversionGL.h>
+#include <dp/util/SharedPtr.h>
 #include <cmath>
 
 namespace dp
@@ -60,8 +61,7 @@ namespace dp
         {
           /* TODO throw exception */
         }
-        DP_ASSERT( dp::util::isSmartPtrOf<dp::gl::Texture1D>( getTexture() ) );
-        dp::util::smart_cast<dp::gl::Texture1D>( getTexture() )->setData( data, mipMapLevel );
+        dp::util::shared_cast<dp::gl::Texture1D>( getTexture() )->setData( data, mipMapLevel );
       }
 
     } // namespace gl

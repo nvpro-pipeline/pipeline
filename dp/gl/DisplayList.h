@@ -33,17 +33,14 @@ namespace dp
 {
   namespace gl
   {
-
-    class DisplayList;
-    typedef dp::util::SmartPtr<DisplayList> SmartDisplayList;
-
     class DisplayList : public Object
     {
       public:
         /** \brief Create a new shared displaylist
             \return DisplayListSharedPtr to a new displaylist
         **/
-        DP_GL_API static SmartDisplayList create();
+        DP_GL_API static SharedDisplayList create();
+        DP_GL_API virtual ~DisplayList();
 
         DP_GL_API void beginCompile( );
         DP_GL_API void beginCompileAndExecute( );
@@ -57,7 +54,6 @@ namespace dp
         DP_GL_API DisplayList();
         /** \brief Copy construction not allowed, but required for handles. **/
         DP_GL_API DisplayList( const DisplayList & );
-        DP_GL_API virtual ~DisplayList();
     };
 
     inline DisplayList::DisplayList()
@@ -70,9 +66,9 @@ namespace dp
       DP_ASSERT( 0 && "copy constructor may not be called" );
     }
 
-    inline SmartDisplayList DisplayList::create()
+    inline SharedDisplayList DisplayList::create()
     {
-      return new DisplayList;
+      return( SharedDisplayList( new DisplayList ) );
     }
 
     inline void DisplayList::beginCompile( )

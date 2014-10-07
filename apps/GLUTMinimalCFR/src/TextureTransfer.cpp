@@ -109,7 +109,7 @@ static const char* copyShader =
   ;
 
 
-TextureTransfer::TextureTransfer( dp::gl::SmartRenderContext const& dstContext, dp::gl::SmartRenderContext const& srcContext )
+TextureTransfer::TextureTransfer( dp::gl::SharedRenderContext const& dstContext, dp::gl::SharedRenderContext const& srcContext )
   : m_dstContext( dstContext )
   , m_srcContext( srcContext )
   , m_tileWidth( 0 )
@@ -138,8 +138,8 @@ void TextureTransfer::setMaxIndex( size_t maxIndex )
 }
 
 void TextureTransfer::transfer( size_t index
-                              , dp::gl::SmartTexture2D dstTexture
-                              , dp::gl::SmartTexture2D srcTexture )
+                              , dp::gl::SharedTexture2D dstTexture
+                              , dp::gl::SharedTexture2D srcTexture )
 {
   //PROFILE( "Copy " );
 
@@ -180,7 +180,7 @@ void TextureTransfer::transfer( size_t index
     size_t tmpTexHeight = height;
 
     // compress the image data into src tmp texture
-    dp::gl::SmartTexture2D srcTmpTexture = getTmpTexture( m_srcContext, tmpTexWidth, tmpTexHeight );
+    dp::gl::SharedTexture2D srcTmpTexture = getTmpTexture( m_srcContext, tmpTexWidth, tmpTexHeight );
     m_compressProgram->setImageTexture( "tmp", srcTmpTexture, GL_WRITE_ONLY );
     m_compressProgram->setImageTexture( "srcImg", srcTexture, GL_READ_ONLY );
     {
@@ -195,7 +195,7 @@ void TextureTransfer::transfer( size_t index
     contextStack.pop();
 
     contextStack.push( m_dstContext );
-    dp::gl::SmartTexture2D dstTmpTexture = getTmpTexture( m_dstContext, tmpTexWidth, tmpTexHeight );
+    dp::gl::SharedTexture2D dstTmpTexture = getTmpTexture( m_dstContext, tmpTexWidth, tmpTexHeight );
 
     // copy src into dst tmp texture
     GLuint idSrc = srcTmpTexture->getGLId();
@@ -290,7 +290,7 @@ void TextureTransfer::destroyComputeShaders()
   }
 }
 
-dp::gl::SmartProgram TextureTransfer::compileShader( dp::gl::SmartRenderContext const& context, char const* source )
+dp::gl::SharedProgram TextureTransfer::compileShader( dp::gl::SharedRenderContext const& context, char const* source )
 {
   dp::gl::RenderContextStack contextStack;
   contextStack.push( context );
@@ -301,13 +301,13 @@ dp::gl::SmartProgram TextureTransfer::compileShader( dp::gl::SmartRenderContext 
   ss << "#define TILEHEIGHT " << m_tileHeight << "\n";
   ss << source;
 
-  dp::gl::SmartProgram program = dp::gl::Program::create( dp::gl::ComputeShader::create( ss.str() ) );
+  dp::gl::SharedProgram program = dp::gl::Program::create( dp::gl::ComputeShader::create( ss.str() ) );
 
   contextStack.pop();
   return( program );
 }
 
-dp::gl::SmartTexture2D const& TextureTransfer::getTmpTexture( dp::gl::SmartRenderContext const& context, size_t width, size_t height )
+dp::gl::SharedTexture2D const& TextureTransfer::getTmpTexture( dp::gl::SharedRenderContext const& context, size_t width, size_t height )
 {
   DP_ASSERT( context == dp::gl::RenderContext::getCurrentRenderContext() );
   
@@ -315,7 +315,7 @@ dp::gl::SmartTexture2D const& TextureTransfer::getTmpTexture( dp::gl::SmartRende
   if ( it == m_tmpTextures.end() || it->second->getWidth() != width || it->second->getHeight() != height )
   {
     // element doesn't exist yet, or size does not match, create a new texture with the correct size
-    dp::gl::SmartTexture2D tex = dp::gl::Texture2D::create( GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE, dp::util::checked_cast<GLsizei>(width), dp::util::checked_cast<GLsizei>(height) );
+    dp::gl::SharedTexture2D tex = dp::gl::Texture2D::create( GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE, dp::util::checked_cast<GLsizei>(width), dp::util::checked_cast<GLsizei>(height) );
 
     if ( it == m_tmpTextures.end() )
     {

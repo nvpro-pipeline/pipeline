@@ -998,23 +998,32 @@ namespace dp
 
     Texture::~Texture( )
     {
-      class CleanupTask : public ShareGroupTask
+      if ( getGLId() )
       {
-      public:
-        CleanupTask( GLuint id ) : m_id( id ) {}
-
-        virtual void execute() { glDeleteTextures( 1, &m_id ); }
-      protected:
-        GLuint m_id;
-      };
-
-      if ( getGLId() && getShareGroup() )
-      {
-        // make destructor exception safe
-        try
+        if ( getShareGroup() )
         {
-          getShareGroup()->executeTask( new CleanupTask( getGLId() ) );
-        } catch (...) {}
+          class CleanupTask : public ShareGroupTask
+          {
+            public:
+              CleanupTask( GLuint id ) : m_id( id ) {}
+
+              virtual void execute() { glDeleteTextures( 1, &m_id ); }
+
+            private:
+              GLuint m_id;
+          };
+
+          // make destructor exception safe
+          try
+          {
+            getShareGroup()->executeTask( SharedShareGroupTask( new CleanupTask( getGLId() ) ) );
+          } catch (...) {}
+        }
+        else
+        {
+          GLuint id = getGLId();
+          glDeleteTextures(1, &id );
+        }
       }
     }
 
@@ -1118,9 +1127,9 @@ namespace dp
     /* Texture1D   */
     /***************/
 
-    SmartTexture1D Texture1D::create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width )
+    SharedTexture1D Texture1D::create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width )
     {
-      return( new Texture1D( internalFormat, format, type, width ) );
+      return( SharedTexture1D( new Texture1D( internalFormat, format, type, width ) ) );
     }
 
     Texture1D::Texture1D( GLenum internalFormat, GLenum format, GLenum type, GLsizei width )
@@ -1178,9 +1187,9 @@ namespace dp
     /* Texture1DArray   */
     /********************/
 
-    SmartTexture1DArray Texture1DArray::create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width, GLsizei layers )
+    SharedTexture1DArray Texture1DArray::create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width, GLsizei layers )
     {
-      return( new Texture1DArray( internalFormat, format, type, width, layers ) );
+      return( SharedTexture1DArray( new Texture1DArray( internalFormat, format, type, width, layers ) ) );
     }
 
     Texture1DArray::Texture1DArray( GLenum internalFormat, GLenum format, GLenum type, GLsizei width, GLsizei layers )
@@ -1263,9 +1272,9 @@ namespace dp
     /* Texture2D   */
     /***************/
 
-    SmartTexture2D Texture2D::create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width, GLsizei height )
+    SharedTexture2D Texture2D::create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width, GLsizei height )
     {
-      return( new Texture2D( internalFormat, format, type, width, height ) );
+      return( SharedTexture2D( new Texture2D( internalFormat, format, type, width, height ) ) );
     }
 
     Texture2D::Texture2D( GLenum internalFormat, GLenum format, GLenum type, GLsizei width, GLsizei height )
@@ -1326,9 +1335,9 @@ namespace dp
     /* TextureRectangle     */
     /************************/
 
-    SmartTextureRectangle TextureRectangle::create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width, GLsizei height )
+    SharedTextureRectangle TextureRectangle::create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width, GLsizei height )
     {
-      return( new TextureRectangle( internalFormat, format, type, width, height ) );
+      return( SharedTextureRectangle( new TextureRectangle( internalFormat, format, type, width, height ) ) );
     }
 
     TextureRectangle::TextureRectangle( GLenum internalFormat, GLenum format, GLenum type, GLsizei width, GLsizei height )
@@ -1386,9 +1395,9 @@ namespace dp
     /* Texture2DArray    */
     /*********************/
 
-    SmartTexture2DArray Texture2DArray::create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width, GLsizei height, GLsizei layers )
+    SharedTexture2DArray Texture2DArray::create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width, GLsizei height, GLsizei layers )
     {
-      return( new Texture2DArray( internalFormat, format, type, width, height, layers ) );
+      return( SharedTexture2DArray( new Texture2DArray( internalFormat, format, type, width, height, layers ) ) );
     }
 
     Texture2DArray::Texture2DArray( GLenum internalFormat, GLenum format, GLenum type, GLsizei width, GLsizei height, GLsizei layers )
@@ -1476,9 +1485,9 @@ namespace dp
     /* Texture3D   */
     /***************/
 
-    SmartTexture3D Texture3D::create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width, GLsizei height, GLsizei depth )
+    SharedTexture3D Texture3D::create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width, GLsizei height, GLsizei depth )
     {
-      return( new Texture3D( internalFormat, format, type, width, height, depth ) );
+      return( SharedTexture3D( new Texture3D( internalFormat, format, type, width, height, depth ) ) );
     }
 
     Texture3D::Texture3D( GLenum internalFormat, GLenum format, GLenum type, GLsizei width, GLsizei height, GLsizei depth )
@@ -1541,9 +1550,9 @@ namespace dp
     /* TextureCubemap   */
     /********************/
 
-    SmartTextureCubemap TextureCubemap::create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width, GLsizei height )
+    SharedTextureCubemap TextureCubemap::create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width, GLsizei height )
     {
-      return( new TextureCubemap( internalFormat, format, type, width, height ) );
+      return( SharedTextureCubemap( new TextureCubemap( internalFormat, format, type, width, height ) ) );
     }
 
     TextureCubemap::TextureCubemap( GLenum internalFormat, GLenum format, GLenum type, GLsizei width, GLsizei height )
@@ -1621,9 +1630,9 @@ namespace dp
     /* TextureCubemapArray    */
     /**************************/
 
-    SmartTextureCubemapArray TextureCubemapArray::create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width, GLsizei height, GLsizei layers )
+    SharedTextureCubemapArray TextureCubemapArray::create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width, GLsizei height, GLsizei layers )
     {
-      return( new TextureCubemapArray( internalFormat, format, type, width, height, layers ) );
+      return( SharedTextureCubemapArray( new TextureCubemapArray( internalFormat, format, type, width, height, layers ) ) );
     }
 
     TextureCubemapArray::TextureCubemapArray( GLenum internalFormat, GLenum format, GLenum type, GLsizei width, GLsizei height, GLsizei layers )
@@ -1710,9 +1719,9 @@ namespace dp
     /* Texture2DMultisample    */
     /***************************/
 
-    SmartTexture2DMultisample Texture2DMultisample::create( GLenum internalFormat, GLsizei samples, GLsizei width, GLsizei height, bool fixedLocations )
+    SharedTexture2DMultisample Texture2DMultisample::create( GLenum internalFormat, GLsizei samples, GLsizei width, GLsizei height, bool fixedLocations )
     {
-      return( new Texture2DMultisample( internalFormat, samples, width, height, fixedLocations ) );
+      return( SharedTexture2DMultisample( new Texture2DMultisample( internalFormat, samples, width, height, fixedLocations ) ) );
     }
 
     Texture2DMultisample::Texture2DMultisample( GLenum internalFormat, GLsizei width, GLsizei height, GLsizei samples, bool fixedLocations )
@@ -1801,9 +1810,9 @@ namespace dp
     /* Texture2DMultisampleArray    */
     /********************************/
 
-    SmartTexture2DMultisampleArray Texture2DMultisampleArray::create( GLenum internalFormat, GLsizei samples, GLsizei width, GLsizei height, GLsizei layers, bool fixedLocations )
+    SharedTexture2DMultisampleArray Texture2DMultisampleArray::create( GLenum internalFormat, GLsizei samples, GLsizei width, GLsizei height, GLsizei layers, bool fixedLocations )
     {
-      return( new Texture2DMultisampleArray( internalFormat, samples, width, height, layers, fixedLocations ) );
+      return( SharedTexture2DMultisampleArray( new Texture2DMultisampleArray( internalFormat, samples, width, height, layers, fixedLocations ) ) );
     }
 
     Texture2DMultisampleArray::Texture2DMultisampleArray( GLenum internalFormat, GLsizei samples, GLsizei width, GLsizei height, GLsizei layers, bool fixedLocations )
@@ -1903,17 +1912,17 @@ namespace dp
     /* TextureBuffer    */
     /********************/
 
-    SmartTextureBuffer TextureBuffer::create( GLenum internalFormat, SmartBuffer const& buffer )
+    SharedTextureBuffer TextureBuffer::create( GLenum internalFormat, SharedBuffer const& buffer )
     {
-      return( new TextureBuffer( internalFormat, buffer ) );
+      return( SharedTextureBuffer( new TextureBuffer( internalFormat, buffer ) ) );
     }
 
-    SmartTextureBuffer TextureBuffer::create( GLenum internalFormat, unsigned int size, GLvoid const* data, GLenum usage )
+    SharedTextureBuffer TextureBuffer::create( GLenum internalFormat, unsigned int size, GLvoid const* data, GLenum usage )
     {
-      return( new TextureBuffer( internalFormat, Buffer::create( GL_TEXTURE_BUFFER, size, data, usage ) ) );
+      return( SharedTextureBuffer( new TextureBuffer( internalFormat, Buffer::create( GL_TEXTURE_BUFFER, size, data, usage ) ) ) );
     }
 
-    TextureBuffer::TextureBuffer( GLenum internalFormat, SmartBuffer const& buffer )
+    TextureBuffer::TextureBuffer( GLenum internalFormat, SharedBuffer const& buffer )
       : Texture( GL_TEXTURE_BUFFER, internalFormat, GL_INVALID_ENUM, GL_INVALID_ENUM )
     {
       setBuffer( buffer );
@@ -1923,12 +1932,12 @@ namespace dp
     {
     }
 
-    SmartBuffer const& TextureBuffer::getBuffer() const
+    SharedBuffer const& TextureBuffer::getBuffer() const
     {
       return( m_buffer );
     }
 
-    void TextureBuffer::setBuffer( SmartBuffer const& buffer )
+    void TextureBuffer::setBuffer( SharedBuffer const& buffer )
     {
       if ( m_buffer != buffer )
       {

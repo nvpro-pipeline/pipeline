@@ -69,8 +69,8 @@ private:
   dp::math::Mat44f m_world2View;
   dp::math::Mat44f m_world2ViewLookBack;
 
-  dp::gl::SmartTexture2D m_colorTexture;
-  dp::gl::SmartTexture2D m_depthTexture;
+  dp::gl::SharedTexture2D m_colorTexture;
+  dp::gl::SharedTexture2D m_depthTexture;
 
   GLuint m_framebufferName;
 };

@@ -26,6 +26,7 @@
 
 #include "DataTypeConversionGL.h"
 #include "TextureGL2DArray.h"
+#include <dp/util/SharedPtr.h>
 
 namespace dp
 {
@@ -54,8 +55,7 @@ namespace dp
 
       void TextureGL2DArray::upload( unsigned int mipMapLevel, unsigned int layer, const void* data )
       {
-        DP_ASSERT( dp::util::isSmartPtrOf<dp::gl::Texture3D>( getTexture() ) );
-        dp::util::smart_cast<dp::gl::Texture3D>( getTexture() )->setData( data, mipMapLevel );
+        dp::util::shared_cast<dp::gl::Texture2DArray>( getTexture() )->setData( data, mipMapLevel );
       }
 
     } // namespace gl

@@ -63,7 +63,7 @@ namespace dp
         typedef dp::rix::core::SmartHandle<BindlessReference> SmartBindlessReferenceHandle;
 
       protected:
-        TextureGL( dp::gl::SmartTexture const& texture, bool mipMapped );
+        TextureGL( dp::gl::SharedTexture const& texture, bool mipMapped );
 
       public:
         ~TextureGL();
@@ -78,7 +78,7 @@ namespace dp
         virtual BindlessReferenceHandle getBindlessTextureHandle( SamplerStateGLHandle samplerState );
         virtual BindlessReferenceHandle getBindlessTextureHandle( GLint level, GLboolean layered, GLint layer, GLint format, GLenum access );
 
-        dp::gl::SmartTexture const& getTexture() const;
+        dp::gl::SharedTexture const& getTexture() const;
 
         // TODO: TextureDescriptionGL could be stored here
         bool    m_hasMipmaps;
@@ -96,11 +96,11 @@ namespace dp
 
         static unsigned int getMipMapSize( unsigned int size, unsigned int level );
 
-        void setTexture( dp::gl::SmartTexture const& texture );
+        void setTexture( dp::gl::SharedTexture const& texture );
         unsigned int getNumberOfMipMapLevels() const;
 
       private:
-        dp::gl::SmartTexture  m_texture;
+        dp::gl::SharedTexture m_texture;
       };
 
     } // namespace gl

@@ -33,7 +33,7 @@ namespace dp
   namespace gl
   {
 
-    RenderTarget::RenderTarget( const SmartRenderContext &glContext )
+    RenderTarget::RenderTarget( const SharedRenderContext &glContext )
      : m_renderContext(glContext)
      , m_width(0)
      , m_height(0)

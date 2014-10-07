@@ -40,6 +40,7 @@ set(DPUTIL_INCLUDES
   RCObject.h
   Reflection.h
   Semantic.h
+  SharedPtr.h
   SimplexNoise1234.h
   Singleton.h
   SmartPtr.h

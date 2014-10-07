@@ -33,7 +33,7 @@ namespace dp
     Object::Object()
       : m_id(~0)
     {
-      SmartRenderContext current = RenderContext::getCurrentRenderContext();
+      SharedRenderContext current = RenderContext::getCurrentRenderContext();
       if ( current )
       {
         m_shareGroup = current->getShareGroup();
@@ -44,7 +44,7 @@ namespace dp
     {
     }
 
-    SmartShareGroup Object::getShareGroup() const
+    SharedShareGroup Object::getShareGroup() const
     {
       return( m_shareGroup );
     }

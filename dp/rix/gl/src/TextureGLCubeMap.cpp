@@ -26,6 +26,7 @@
 
 #include "TextureGLCubeMap.h"
 #include "DataTypeConversionGL.h"
+#include <dp/util/SharedPtr.h>
 
 namespace dp
 {
@@ -95,8 +96,7 @@ namespace dp
         DP_ASSERT( layer < 6 );
 
         // compute target from layer in order +x,-x,+y,-y,+z,-z
-        DP_ASSERT( dp::util::isSmartPtrOf<dp::gl::TextureCubemap>( getTexture() ) );
-        dp::util::smart_cast<dp::gl::TextureCubemap>( getTexture() )->setData( data, layer, mipMapLevel );
+        dp::util::shared_cast<dp::gl::TextureCubemap>( getTexture() )->setData( data, layer, mipMapLevel );
       }
 
     } // namespace gl

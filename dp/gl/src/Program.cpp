@@ -26,40 +26,41 @@
 
 #include <dp/gl/Program.h>
 #include <dp/util/Array.h>
+#include <sstream>
 
 namespace dp
 {
   namespace gl
   {
 
-    SmartProgram Program::create( std::vector<SmartShader> const& shaders, Parameters const& programParameters )
+    SharedProgram Program::create( std::vector<SharedShader> const& shaders, Parameters const& programParameters )
     {
-      return( new Program( shaders, programParameters ) );
+      return( SharedProgram( new Program( shaders, programParameters ) ) );
     }
 
-    SmartProgram Program::create( SmartVertexShader const& vertexShader, SmartFragmentShader const& fragmentShader, Parameters const& programParameters )
+    SharedProgram Program::create( SharedVertexShader const& vertexShader, SharedFragmentShader const& fragmentShader, Parameters const& programParameters )
     {
-      std::vector<SmartShader> shaders;
+      std::vector<SharedShader> shaders;
       shaders.push_back( vertexShader );
       shaders.push_back( fragmentShader );
-      return( new Program( shaders, programParameters ) );
+      return( SharedProgram( new Program( shaders, programParameters ) ) );
     }
 
-    SmartProgram Program::create( SmartComputeShader const& computeShader, Parameters const& programParameters )
+    SharedProgram Program::create( SharedComputeShader const& computeShader, Parameters const& programParameters )
     {
-      std::vector<SmartShader> shaders;
+      std::vector<SharedShader> shaders;
       shaders.push_back( computeShader );
-      return( new Program( shaders, programParameters ) );
+      return( SharedProgram( new Program( shaders, programParameters ) ) );
     }
 
-    Program::Program( std::vector<SmartShader> const& shaders, Parameters const& parameters )
+    Program::Program( std::vector<SharedShader> const& shaders, Parameters const& parameters )
       : m_activeAttributesCount(0)
       , m_activeAttributesMask(0)
       , m_shaders( shaders )
     {
 #if !defined(NDEBUG)
       std::set<GLenum> types;
-      for ( std::vector<SmartShader>::const_iterator it = m_shaders.begin() ; it != m_shaders.end() ; ++it )
+      for ( std::vector<SharedShader>::const_iterator it = m_shaders.begin() ; it != m_shaders.end() ; ++it )
       {
         DP_ASSERT( *it && types.insert( (*it)->getType() ).second );
       }
@@ -73,7 +74,7 @@ namespace dp
       glProgramParameteri( id, GL_PROGRAM_BINARY_RETRIEVABLE_HINT, parameters.m_binaryRetrievableHint );
       glProgramParameteri( id, GL_PROGRAM_SEPARABLE, parameters.m_separable );
 
-      for ( std::vector<SmartShader>::const_iterator it = m_shaders.begin() ; it != m_shaders.end() ; ++it )
+      for ( std::vector<SharedShader>::const_iterator it = m_shaders.begin() ; it != m_shaders.end() ; ++it )
       {
         glAttachShader( id, (*it)->getGLId() );
       }
@@ -97,34 +98,134 @@ namespace dp
 
       GLint activeUniformMaxLength = 0;
       glGetProgramiv( id, GL_ACTIVE_UNIFORM_MAX_LENGTH, &activeUniformMaxLength );
-      std::vector<char> name( activeUniformMaxLength );
+      // some drivers do not add the trailing 0 to the name length. increase by 1 to get all characters.
+      std::vector<char> name( activeUniformMaxLength + 1 );
 
-      GLint activeUniformsCount = 0;
-      glGetProgramiv( id, GL_ACTIVE_UNIFORMS, &activeUniformsCount );
-      m_uniforms.resize( activeUniformsCount );
 
-      glUseProgram( id );
-      for ( GLint i=0 ; i<activeUniformsCount ; i++ )
+      GLint numActiveUniforms = 0;
+      glGetProgramInterfaceiv( getGLId(), GL_UNIFORM, GL_ACTIVE_RESOURCES, &numActiveUniforms );
+      m_uniforms.reserve( numActiveUniforms );
+
+      for ( GLint i=0 ; i<numActiveUniforms; i++ )
       {
-        glGetActiveUniform( id, i, activeUniformMaxLength, nullptr, &m_uniforms[i].size, &m_uniforms[i].type, name.data() );
-        m_uniforms[i].name = name.data();
-        m_uniforms[i].location = glGetUniformLocation( id, m_uniforms[i].name.data() );
+        GLenum const properties[] = {
+            GL_NAME_LENGTH  // 0
+          , GL_BLOCK_INDEX  // 1
+          , GL_LOCATION     // 2
+          , GL_TYPE         // 3
+          , GL_ARRAY_SIZE   // 4
+          , GL_OFFSET       // 5
+          , GL_ARRAY_STRIDE // 6
+          , GL_MATRIX_STRIDE// 7
+          , GL_IS_ROW_MAJOR // 8
+        };
+
+        GLsizei const numProperties = sizeof dp::util::array(properties);
+        GLint values[numProperties];
+
+        glGetProgramResourceiv( getGLId(), GL_UNIFORM, i, numProperties, properties, numProperties, NULL, values );
+
+        // get uniform name
+        glGetProgramResourceName( getGLId(), GL_UNIFORM, i, GLsizei(name.size()), NULL, name.data() );
+
+        Uniform uniform;
+        uniform.blockIndex = values[1];
+        uniform.location = values[2];
+        uniform.type = values[3];
+        uniform.arraySize = values[4];
+        uniform.offset = values[5];
+        uniform.arrayStride = values[6];
+        uniform.matrixStride = values[7];
+        uniform.isRowMajor = (values[8] != 0);
+
+        m_uniforms.push_back( uniform );
+        m_uniformsMap[name.data()] = i;
 
         if ( isSamplerType( m_uniforms[i].type ) )
         {
-          DP_ASSERT( m_uniforms[i].size == 1 );
-          glUniform1i( m_uniforms[i].location, dp::util::checked_cast<GLint>(m_samplerUniforms.size() ) );
+          DP_ASSERT( m_uniforms[i].arraySize == 1 );
+          glProgramUniform1i( getGLId(), m_uniforms[i].location, dp::util::checked_cast<GLint>(m_samplerUniforms.size() ) );
           m_samplerUniforms.push_back( i );
         }
         else if ( isImageType( m_uniforms[i].type ) )
         {
-          DP_ASSERT( m_uniforms[i].size == 1 );
-          glUniform1i( m_uniforms[i].location, dp::util::checked_cast<GLint>(m_imageUniforms.size()) );
+          DP_ASSERT( m_uniforms[i].arraySize == 1 );
+          glProgramUniform1i( getGLId(), m_uniforms[i].location, dp::util::checked_cast<GLint>(m_imageUniforms.size()) );
           m_imageUniforms.push_back( ImageData() );
           m_imageUniforms.back().index = i;
         }
       }
-      glUseProgram( 0 );
+
+
+      GLint numActiveBufferVariables;
+      glGetProgramInterfaceiv( getGLId(), GL_BUFFER_VARIABLE, GL_ACTIVE_RESOURCES, &numActiveBufferVariables );
+      m_bufferVariables.reserve( numActiveBufferVariables );
+
+      for ( GLint i=0 ; i<numActiveBufferVariables; i++ )
+      {
+        GLenum const properties[] = {
+            GL_NAME_LENGTH  // 0
+          , GL_BLOCK_INDEX  // 1
+          , GL_TYPE         // 2
+          , GL_ARRAY_SIZE   // 3
+          , GL_OFFSET       // 4
+          , GL_ARRAY_STRIDE // 5
+          , GL_MATRIX_STRIDE// 6
+          , GL_IS_ROW_MAJOR // 7
+        };
+
+        GLsizei const numProperties = sizeof dp::util::array(properties);
+        GLint values[numProperties];
+
+        glGetProgramResourceiv( getGLId(), GL_BUFFER_VARIABLE, i, numProperties, properties, numProperties, NULL, values );
+
+        // get uniform name
+        glGetProgramResourceName( getGLId(), GL_BUFFER_VARIABLE, i, GLsizei(name.size()), NULL, name.data() );
+
+        Uniform uniform;
+        uniform.blockIndex = values[1];
+        uniform.location = -1;
+        uniform.type = values[2];
+        uniform.arraySize = values[3];
+        uniform.offset = values[4];
+        uniform.arrayStride = values[5];
+        uniform.matrixStride = values[6];
+        uniform.isRowMajor = (values[7] != 0);
+
+        m_bufferVariables.push_back( uniform );
+        m_bufferVariablesMap[name.data()] = i;
+      }
+
+
+      GLint numActiveUniformBlocks = 0;
+      glGetProgramInterfaceiv( getGLId(), GL_UNIFORM_BLOCK, GL_ACTIVE_RESOURCES, &numActiveUniformBlocks );
+      m_uniformBlocks.reserve( numActiveUniformBlocks );
+
+      for ( GLint i=0 ; i<numActiveUniformBlocks ; i++ )
+      {
+        GLenum const properties[] = {
+            GL_NAME_LENGTH          // 0
+          , GL_BUFFER_BINDING       // 1
+          , GL_BUFFER_DATA_SIZE     // 2
+          //, GL_NUM_ACTIVE_VARIABLES // 3
+        };
+
+        GLsizei const numProperties = sizeof dp::util::array(properties);
+        GLint values[numProperties];
+
+        glGetProgramResourceiv( getGLId(), GL_UNIFORM_BLOCK, i, numProperties, properties, numProperties, NULL, values );
+
+        // get uniform name
+        glGetProgramResourceName( getGLId(), GL_UNIFORM_BLOCK, i, GLsizei(name.size()), NULL, name.data() );
+
+        UniformBlock uniformBlock;
+        uniformBlock.bufferBinding = values[1];
+        uniformBlock.buffer = Buffer::create( GL_UNIFORM_BUFFER, values[2], nullptr, GL_DYNAMIC_DRAW );
+
+        m_uniformBlocks.push_back( uniformBlock );
+        m_uniformBlocksMap[name.data()] = i;
+      }
+
 
       // build mask of active vertex attributes
       GLint activeAttributeMaxLength;
@@ -154,24 +255,31 @@ namespace dp
 
     Program::~Program( )
     {
-      class CleanupTask : public ShareGroupTask
+      if ( getGLId() )
       {
-        public:
-          CleanupTask( GLuint id ) : m_id( id ) {}
-
-          virtual void execute() { glDeleteProgram( m_id ); }
-
-        private:
-          GLuint m_id;
-      };
-
-      if ( getGLId() && getShareGroup() )
-      {
-        // make destructor exception safe
-        try
+        if ( getShareGroup() )
         {
-          getShareGroup()->executeTask( new CleanupTask( getGLId() ) );
-        } catch (...) {}
+          class CleanupTask : public ShareGroupTask
+          {
+            public:
+              CleanupTask( GLuint id ) : m_id( id ) {}
+
+              virtual void execute() { glDeleteProgram( m_id ); }
+
+            private:
+              GLuint m_id;
+          };
+
+          // make destructor exception safe
+          try
+          {
+            getShareGroup()->executeTask( SharedShareGroupTask( new CleanupTask( getGLId() ) ) );
+          } catch (...) {}
+        }
+        else
+        {
+          glDeleteProgram( getGLId() );
+        }
       }
     }
 
@@ -183,6 +291,11 @@ namespace dp
     unsigned int Program::getActiveAttributesMask() const
     {
       return( m_activeAttributesMask );
+    }
+
+    GLint Program::getAttributeLocation( std::string const& name ) const
+    {
+      return( glGetAttribLocation( getGLId(), name.c_str() ) );
     }
 
     std::pair<GLenum,std::vector<char>> Program::getBinary() const
@@ -197,49 +310,24 @@ namespace dp
       return( std::make_pair( binaryFormat, binary ) );
     }
 
-    std::vector<SmartShader> const& Program::getShaders() const
+    std::vector<SharedShader> const& Program::getShaders() const
     {
       return( m_shaders );
     }
 
-    GLint Program::getUniformLocation( std::string const& name ) const
+    void Program::setImageTexture( std::string const& textureName, SharedTexture const& texture, GLenum access )
     {
-      for ( std::vector<UniformData>::const_iterator it = m_uniforms.begin() ; it != m_uniforms.end() ; ++it )
+      std::map<std::string,size_t>::const_iterator uit = m_uniformsMap.find( textureName );
+      DP_ASSERT( uit != m_uniformsMap.end() );
+      for ( std::vector<ImageData>::iterator it = m_imageUniforms.begin() ; it != m_imageUniforms.end() ; ++it )
       {
-        if ( it->name == name )
+        if ( it->index == uit->second )
         {
-          return( it->location );
-        }
-      }
-      return( -1 );
-    }
-
-    GLenum Program::getUniformType( GLint location ) const
-    {
-      for ( std::vector<UniformData>::const_iterator it = m_uniforms.begin() ; it != m_uniforms.end() ; ++it )
-      {
-        if ( it->location == location )
-        {
-          return( it->type );
-        }
-      }
-      DP_ASSERT( false );
-      return( GL_NONE );
-    }
-
-    void Program::setImageTexture( std::string const& textureName, SmartTexture const& texture, GLenum access )
-    {
-      bool found = false;
-      for ( std::vector<ImageData>::iterator it = m_imageUniforms.begin() ; it != m_imageUniforms.end() && !found ; ++it )
-      {
-        if ( m_uniforms[it->index].name == textureName )
-        {
-          it->access  = access;
+          it->access = access;
           it->texture = texture;
-          found = true;
+          break;
         }
       }
-      DP_ASSERT( found );
     }
 
     std::vector<Program::ImageData>::const_iterator Program::beginImageUnits() const
@@ -252,159 +340,80 @@ namespace dp
       return( m_imageUniforms.end() );
     }
 
-    Program::Uniforms Program::getActiveUniforms()
+    Program::Uniforms const& Program::getActiveUniforms() const
     {
-      GLint numActiveUniforms;
-      glGetProgramInterfaceiv( getGLId(), GL_UNIFORM, GL_ACTIVE_RESOURCES, &numActiveUniforms );
-
-      std::vector<GLuint> indices;
-      indices.resize(numActiveUniforms);
-      for (GLint index = 0;index < numActiveUniforms;++index)
-      {
-        indices[index] = index;
-      }
-      return getActiveUniforms(indices);
+      return( m_uniforms );
     }
 
-    Program::Uniforms Program::getActiveBufferVariables()
+    Program::Uniform const& Program::getActiveUniform( size_t index ) const
     {
-      GLint numActiveVariables;
-      glGetProgramInterfaceiv( getGLId(), GL_BUFFER_VARIABLE, GL_ACTIVE_RESOURCES, &numActiveVariables );
-
-      std::vector<GLuint> indices;
-      indices.resize(numActiveVariables);
-      for (GLint index = 0;index < numActiveVariables;++index)
-      {
-        indices[index] = index;
-      }
-      return getActiveBufferVariables(indices);
+      DP_ASSERT( index < m_uniforms.size() );
+      return( m_uniforms[index] );
     }
 
-    Program::Uniforms Program::getActiveUniforms( std::vector<std::string> const & uniformNames )
+    size_t Program::getActiveUniformIndex( std::string const& uniformName ) const
     {
-      std::vector<GLuint> indices;
-      indices.reserve(uniformNames.size());
-      for ( size_t idx = 0; idx < uniformNames.size(); ++idx )
-      {
-        GLuint locationIndex = glGetProgramResourceIndex( getGLId(), GL_UNIFORM, uniformNames[idx].c_str() );
-        if ( locationIndex != GL_INVALID_INDEX )
-        {
-          indices.push_back(GLuint(locationIndex));
-        }
-      }
-      return getActiveUniforms( indices );
+      std::map<std::string,size_t>::const_iterator it = m_uniformsMap.find( uniformName );
+      return( it == m_uniformsMap.end() ? ~0 : it->second );
     }
 
-    Program::Uniforms Program::getActiveBufferVariables( std::vector<std::string> const & names )
+    Program::Uniforms const& Program::getActiveBufferVariables() const
     {
-      std::vector<GLuint> indices;
-      indices.reserve(names.size());
-      for ( size_t idx = 0; idx < names.size(); ++idx )
-      {
-        GLuint locationIndex = glGetProgramResourceIndex( getGLId(), GL_BUFFER_VARIABLE, names[idx].c_str() );
-        if ( locationIndex != GL_INVALID_INDEX )
-        {
-          indices.push_back(GLuint(locationIndex));
-        }
-      }
-      return getActiveBufferVariables( indices );
+      return( m_bufferVariables );
     }
 
-    Program::Uniforms Program::getActiveUniforms( std::vector<GLuint> const & locationIndices )
+    Program::Uniform const& Program::getActiveBufferVariable( size_t index ) const
     {
-      Program::Uniforms uniforms;
-
-      for ( size_t idx = 0; idx < locationIndices.size(); ++idx )
-      {
-        GLuint index = locationIndices[idx];
-
-        GLenum const properties[] = {
-            GL_NAME_LENGTH  // 0
-          , GL_BLOCK_INDEX  // 1
-          , GL_LOCATION     // 2
-          , GL_TYPE         // 3
-          , GL_ARRAY_SIZE   // 4
-          , GL_OFFSET       // 5
-          , GL_ARRAY_STRIDE // 6
-          , GL_MATRIX_STRIDE// 7
-          , GL_IS_ROW_MAJOR // 8
-        };
-
-        GLsizei const numProperties = sizeof dp::util::array(properties);
-        GLint values[numProperties];
-
-        glGetProgramResourceiv( getGLId(), GL_UNIFORM, index, numProperties, properties, numProperties, NULL, values );
-
-        Uniform uniform;
-        
-        // get uniform name
-        // some drivers do not add the trailing 0 to the name lenght. increase by 1 to get all characters.
-        uniform.name.resize(values[0] + 1);
-        glGetProgramResourceName( getGLId(), GL_UNIFORM, index, GLsizei(uniform.name.size()), NULL, &uniform.name[0]);
-
-        uniform.blockIndex = values[1];
-        uniform.uniformLocation = values[2];
-        uniform.type = values[3];
-        uniform.arraySize = values[4];
-        uniform.offset = values[5];
-        uniform.arrayStride = values[6];
-        uniform.matrixStride = values[7];
-        uniform.isRowMajor = (values[8] != 0);
-
-        uniforms[uniform.name] = uniform;
-      }
-      return uniforms;
+      DP_ASSERT( index < m_bufferVariables.size() );
+      return( m_bufferVariables[index] );
     }
 
-    Program::Uniforms Program::getActiveBufferVariables( std::vector<GLuint> const & locationIndices )
+    size_t Program::getActiveBufferVariableIndex( std::string const& bufferVariableName ) const
     {
-      Program::Uniforms uniforms;
-
-      GLint numActiveVariables;
-      glGetProgramInterfaceiv( getGLId(), GL_BUFFER_VARIABLE, GL_ACTIVE_RESOURCES, &numActiveVariables );
-
-      for ( size_t idx = 0; idx < locationIndices.size(); ++idx )
-      {
-        GLuint index = locationIndices[idx];
-
-        GLenum const properties[] = {
-          GL_NAME_LENGTH  // 0
-          , GL_BLOCK_INDEX  // 1
-          , GL_TYPE         // 2
-          , GL_ARRAY_SIZE   // 3
-          , GL_OFFSET       // 4
-          , GL_ARRAY_STRIDE // 5
-          , GL_MATRIX_STRIDE// 6
-          , GL_IS_ROW_MAJOR // 7
-        };
-
-        GLsizei const numProperties = sizeof dp::util::array(properties);
-        GLint values[numProperties];
-
-        glGetProgramResourceiv( getGLId(), GL_BUFFER_VARIABLE, index, numProperties, properties, numProperties, NULL, values );
-
-        Uniform uniform;
-
-        // get uniform name
-        // some drivers do not add the trailing 0 to the name lenght. increase by 1 to get all characters.
-        uniform.name.resize(values[0] + 1);
-        glGetProgramResourceName( getGLId(), GL_BUFFER_VARIABLE, index, GLsizei(uniform.name.size()), NULL, &uniform.name[0]);
-
-        uniform.blockIndex = values[1];
-        uniform.uniformLocation = -1;
-        uniform.type = values[2];
-        uniform.arraySize = values[3];
-        uniform.offset = values[4];
-        uniform.arrayStride = values[5];
-        uniform.matrixStride = values[6];
-        uniform.isRowMajor = (values[7] != 0);
-
-        uniforms[uniform.name] = uniform;
-      }
-      return uniforms;
+      std::map<std::string,size_t>::const_iterator it = m_bufferVariablesMap.find( bufferVariableName );
+      return( it == m_bufferVariablesMap.end() ? ~0 : it->second );
     }
 
-    ProgramUseGuard::ProgramUseGuard( SmartProgram const& program, bool doBinding )
+    Program::UniformBlocks const& Program::getActiveUniformBlocks() const
+    {
+      return( m_uniformBlocks );
+    }
+
+    Program::UniformBlock const& Program::getActiveUniformBlock( size_t index ) const
+    {
+      DP_ASSERT( index < m_uniformBlocks.size() );
+      return( m_uniformBlocks[index] );
+    }
+
+    size_t Program::getActiveUniformBlockIndex( std::string const& uniformName ) const
+    {
+      std::map<std::string,size_t>::const_iterator it = m_uniformBlocksMap.find( uniformName );
+      return( it == m_uniformBlocksMap.end() ? ~0 : it->second );
+    }
+
+    size_t sizeOfType( GLenum type )
+    {
+      switch( type )
+      {
+        case GL_FLOAT      :          return(      sizeof(float) );
+        case GL_FLOAT_VEC3 :          return(  3 * sizeof(float) );
+        case GL_FLOAT_VEC4 :          return(  4 * sizeof(float) );
+        case GL_FLOAT_MAT3 :          return( 12 * sizeof(float) );    // 3 * (3+1) !!
+        case GL_FLOAT_MAT4 :          return( 16 * sizeof(float) );
+        case GL_INT :                 return(      sizeof(int) );
+        case GL_INT_SAMPLER_BUFFER :  return(      sizeof(int) );
+        case GL_INT_VEC4 :            return(  4 * sizeof(int) );
+        case GL_SAMPLER_1D :          return(      sizeof(int) );
+        case GL_SAMPLER_2D :          return(      sizeof(int) );
+        case GL_SAMPLER_3D :          return(      sizeof(int) );
+        case GL_SAMPLER_BUFFER :      return(      sizeof(int) );
+        default :
+          assert( false );
+          return( 0 );
+      }
+    }
+
+    ProgramUseGuard::ProgramUseGuard( SharedProgram const& program, bool doBinding )
       : m_program( program )
       , m_binding( doBinding )
     {

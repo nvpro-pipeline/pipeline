@@ -115,7 +115,7 @@ namespace dp
         **/
         DP_SG_GL_API GLenum getUsage() const;
 
-        DP_SG_GL_API dp::gl::SmartBuffer const& getBuffer() const;
+        DP_SG_GL_API dp::gl::SharedBuffer const& getBuffer() const;
 
         /*! \brief Query the OpenGL buffer object name of this buffer.
             \return OpenGL buffer object name.
@@ -141,7 +141,7 @@ namespace dp
         unsigned int    m_stateFlags;
 
       private:
-        dp::gl::SmartBuffer m_buffer;
+        dp::gl::SharedBuffer m_buffer;
       };
 
       inline void BufferGL::setTarget( GLenum target )

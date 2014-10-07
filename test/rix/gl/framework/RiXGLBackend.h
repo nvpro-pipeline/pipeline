@@ -54,14 +54,14 @@ namespace dp
             DPTRIXGL_API virtual void finish();
 
             template <typename RTGLImpl>
-            static dp::ui::SmartRenderTarget createContextedRenderTarget(dp::gl::SmartRenderContext glContext)
+            static dp::ui::SmartRenderTarget createContextedRenderTarget(dp::gl::SharedRenderContext glContext)
             {
               return RTGLImpl::create( glContext );
             }
 
           protected:
             dp::gl::RenderContextFormat m_format;
-            dp::gl::SmartRenderContext  m_context;
+            dp::gl::SharedRenderContext m_context;
 
             int m_windowId;
           };

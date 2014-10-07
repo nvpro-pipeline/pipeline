@@ -63,7 +63,7 @@ namespace dp
                              , dp::fx::Manager shaderManagerType
                              , dp::culling::Mode cullingMode
                              , TransparencyMode transparencyMode
-                             , const dp::gl::SmartRenderTarget &renderTarget );
+                             , const dp::gl::SharedRenderTarget &renderTarget );
             virtual ~SceneRendererImpl();
 
           public:
@@ -75,7 +75,7 @@ namespace dp
                                             , dp::fx::Manager shaderManagerType
                                             , dp::culling::Mode culling
                                             , TransparencyMode transparencyMode
-                                            , const dp::gl::SmartRenderTarget &renderTarget );
+                                            , const dp::gl::SharedRenderTarget &renderTarget );
 
             /** \brief Add all supported options to the RendererOptions container.
                 \param rendererOptions A container for RendererOptions 
@@ -100,7 +100,7 @@ namespace dp
 
             virtual void doRender( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::SmartRenderTarget const& renderTarget );
 
-            virtual void doRenderDrawables( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::gl::SmartRenderTarget const& renderTarget );
+            virtual void doRenderDrawables( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::gl::SharedRenderTarget const& renderTarget );
             virtual dp::sg::xbar::DrawableManager *createDrawableManager( const SmartResourceManager &resourceManager ) const;
             dp::sg::xbar::DrawableManager* getDrawableManager() const { return m_drawableManager; }
 
@@ -137,7 +137,7 @@ namespace dp
             bool                              m_contextRegistered;
             bool                              m_rendererInitialized;
 
-            dp::gl::SmartRenderContext        m_userRenderContext;     // RenderContext provided by the user in the first render call
+            dp::gl::SharedRenderContext       m_userRenderContext;     // RenderContext provided by the user in the first render call
             dp::util::SmartDynamicLibrary     m_rix;
             dp::culling::Mode                 m_cullingMode;
 
