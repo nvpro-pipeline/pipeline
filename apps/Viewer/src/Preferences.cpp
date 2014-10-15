@@ -49,7 +49,7 @@ Preferences::Preferences( QObject * parent )
   if ( !m_searchPaths.count() )
   {
     m_searchPaths.append( home + QString("/media/effects") );
-    m_searchPaths.append( home + QString("/media/effects/mdl") );
+    m_searchPaths.append( home + QString("/media/effects/xml") );
     m_searchPaths.append( home + QString("/media/textures") );
     m_searchPaths.append( home + QString("/media/textures/maxbench") );
   }
@@ -60,7 +60,7 @@ Preferences::Preferences( QObject * parent )
   }
   if ( m_materialCatalogPath.isEmpty() )
   {
-    m_materialCatalogPath = home + "/media/effects/mdl";
+    m_materialCatalogPath = home + "/media/effects";
   }
   if ( m_sceneSelectionPath.isEmpty() )
   {

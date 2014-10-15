@@ -130,7 +130,7 @@ GLUTMinimal::GLUTMinimal()
   , m_duration( 0.0 )
   , m_engineBindless( true )
   , m_attributeType( ATTRIBUTE_GENERIC )
-  , m_shaderManager( dp::fx::MANAGER_SHADERBUFFER )
+  , m_shaderManager( dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX )
 {
   m_trackballHIDSync->setHID( this );
   m_trackballHIDSync->setRenderTarget( getRenderTarget() );
@@ -753,7 +753,7 @@ int main(int argc, char *argv[])
       ( "renderengine", options::value<std::string>()->default_value("Bindless"), "choose a renderengine from this list: VBO|VAB|BVAB|VBOVAO|Bindless|BindlessVAO|DisplayList" )
       ( "replace", options::value< std::vector<std::string> >()->composing()->multitoken(), "file to load" )
       ( "replaceAll", options::value<std::string>(), "EffectData to replace all EffectData in the scene" )
-      ( "shadermanager", options::value<std::string>()->default_value("rixfx:shaderbufferload"), "rixfx:uniform|rixfx:ubo140|rixfx:ssbo140|rixfx:shaderbufferload|rix:ubo140|rix:ssbo140" )
+      ( "shadermanager", options::value<std::string>()->default_value("rix:ubo140"), "rixfx:uniform|rixfx:ubo140|rixfx:ssbo140|rixfx:shaderbufferload|rix:ubo140|rix:ssbo140" )
       ( "statistics", "show statistics of scene" )
       ( "stereo", "enable stereo" )
       ( "windowSize", options::value< std::vector<size_t> >()->composing()->multitoken(), "Window size: x y" )

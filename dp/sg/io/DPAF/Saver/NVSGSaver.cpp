@@ -87,15 +87,15 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD reason, LPVOID lpReserved)
 #elif defined( LINUX )
 #endif
 
-bool getPlugInterface(const UPIID& piid, PlugIn *& pi)
+bool getPlugInterface(const UPIID& piid, dp::util::SmartPtr<dp::util::PlugIn> & pi)
 {
   // check if UPIID is properly initialized 
   DP_ASSERT(PIID_NVSG_SCENE_SAVER==UPIID(".NVSG", PITID_SCENE_SAVER));
 
   if ( piid==PIID_NVSG_SCENE_SAVER )
   {
-    pi = new NVSGSaver();
-    return pi!=NULL;
+    pi = dp::util::SmartPtr<dp::util::PlugIn>( new NVSGSaver() );
+    return( !!pi );
   }
   return false;
 }

@@ -251,7 +251,7 @@ namespace dp
     class PlugIn;
 
     //! Function pointer type for \c getPlugInterface export function required by a plug-in  
-    typedef bool (*PFNGETPLUGINTERFACE)(const UPIID& piid, PlugIn *& plugIn);
+    typedef bool (*PFNGETPLUGINTERFACE)(const UPIID& piid, dp::util::SmartPtr<PlugIn> & plugIn);
     //! Function pointer type for \c queryPlugInterfacePIIds export function required by a plug-in  
     typedef void (*PFNQUERYPLUGINTERFACEPIIDS)( std::vector<UPIID> & piids );
 
@@ -358,9 +358,9 @@ namespace dp
         * \returns \c true if successfull, false otherwise.
         */
       DP_UTIL_API bool getInterface( 
-        const std::vector<std::string>& searchPath //!< The optional path to search for the plug-ins.
-      , const UPIID& piid                //!< Identifies the interface to search for.
-      , PlugIn *& plugIn                 //!< Holds the interface object (plug-in), if successfull.
+        const std::vector<std::string>& searchPath  //!< The optional path to search for the plug-ins.
+      , const UPIID& piid                           //!< Identifies the interface to search for.
+      , dp::util::SmartPtr<PlugIn> & plugIn         //!< Holds the interface object (plug-in), if successfull.
       );
 
       //! Query for a certain interface type
@@ -423,7 +423,7 @@ namespace dp
     class PlugInServer
     {
     public:
-      friend DP_UTIL_API bool getInterface( const std::vector<std::string> & searchPath, const UPIID & piid, PlugIn *& plugIn );
+      friend DP_UTIL_API bool getInterface( const std::vector<std::string> & searchPath, const UPIID & piid, dp::util::SmartPtr<PlugIn> & plugIn );
       friend DP_UTIL_API bool queryInterfaceType( const std::vector<std::string> & searchPath, const UPITID & pitid, std::vector<UPIID> & piids );
       friend DP_UTIL_API void releaseInterface( const UPIID & piid );
       friend DP_UTIL_API void setPlugInFileFilter( const std::string & filter );
@@ -435,7 +435,7 @@ namespace dp
 
     private:
       // hidden interface
-      bool getInterfaceImpl(const std::vector<std::string>& searchPath, const UPIID& piid, PlugIn *& plugIn);
+      bool getInterfaceImpl(const std::vector<std::string>& searchPath, const UPIID& piid, dp::util::SmartPtr<PlugIn> & plugIn);
       bool queryInterfaceTypeImpl(const std::vector<std::string>& searchPath, const UPITID& pitid, std::vector<UPIID>& piids);
       void releaseInterfaceImpl(const UPIID& piid);
       void setFileFilterImpl(const std::string& filter);

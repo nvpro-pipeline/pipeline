@@ -93,7 +93,7 @@ MainWindow::MainWindow()
 , m_scriptSandbox(nullptr)
 , m_undo(nullptr)
 {
-  setWindowTitle( "Viewer" );
+  setWindowTitle( VIEWER_APPLICATION_NAME );
   resize( 768, 512 );
 
   setupActions();
@@ -640,7 +640,7 @@ void MainWindow::setCurrentFile( const QString & fileName, bool addToRecent )
 
   // set Title Bar name
   // NOTE: we don't attempt to translate this because it wouldn't make any sense..
-  QString title = QString( "SceniX Viewer" ) + QString(" - ") + fileName;
+  QString title = QString( VIEWER_APPLICATION_NAME ) + QString(" - ") + fileName;
   setWindowTitle( title );
 }
 

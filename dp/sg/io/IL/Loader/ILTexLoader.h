@@ -45,7 +45,7 @@
 // exports required for a scene loader plug-in
 extern "C"
 {
-  ILTEXLOADER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::PlugIn *& pi);
+  ILTEXLOADER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPtr<dp::util::PlugIn> & pi);
   ILTEXLOADER_API void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids );
 }
 
@@ -55,7 +55,7 @@ class ILTexLoader : public dp::sg::io::TextureLoader
   public:
     ILTexLoader();
 
-    friend bool getPlugInterface(const dp::util::UPIID& piid, dp::util::PlugIn *& pi);
+    friend bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPtr<dp::util::PlugIn> & pi);
 
     //! Realization of the pure virtual interface function of a PlugIn.
     /** \note Never call \c delete on a PlugIn, always use the member function. */
@@ -86,8 +86,7 @@ class ILTexLoader : public dp::sg::io::TextureLoader
     /*! \brief Single instance of this class.
      *  \remarks To reduce the overhead due to the large number of supported extensions, we only
      *  instantiate this class once. */
-    static ILTexLoader* m_instance;
-    static unsigned int m_refCount;   //!< Reference count of the single instance of this class.
+    static dp::util::SmartPtr<ILTexLoader>  m_instance;
 };
 
 

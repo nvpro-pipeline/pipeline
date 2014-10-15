@@ -55,7 +55,7 @@ namespace dp
 // exports required for a scene loader plug-in
 extern "C"
 {
-  ILTEXSAVER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::PlugIn *& pi);
+  ILTEXSAVER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPtr<dp::util::PlugIn> & pi);
   ILTEXSAVER_API void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids );
 }
 
@@ -66,16 +66,16 @@ class ILTexSaver : public dp::sg::io::TextureSaver
 public:
   ILTexSaver();
 
-  friend bool getPlugInterface(const dp::util::UPIID& piid, dp::util::PlugIn *& pi);
+  friend bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPtr<dp::util::PlugIn> & pi);
 
   void deleteThis( void );
   bool save( const dp::sg::core::TextureHostSharedPtr & image, const std::string& fileName );
 
 protected:   
   virtual ~ILTexSaver();
+
 private:
-  static ILTexSaver* m_instance;
-  static unsigned int m_refCount;
+  static dp::util::SmartPtr<ILTexSaver> m_instance;
 };
 
 

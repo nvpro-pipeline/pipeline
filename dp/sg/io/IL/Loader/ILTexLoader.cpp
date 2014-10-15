@@ -54,8 +54,7 @@ using std::vector;
 using std::string;
 
 // a pointer to our single instance of the Loader
-ILTexLoader * ILTexLoader::m_instance = NULL;
-unsigned int ILTexLoader::m_refCount = 0;
+dp::util::SmartPtr<ILTexLoader> ILTexLoader::m_instance;
 
 // supported Plug Interface ID
 const UPITID PITID_TEXTURE_LOADER(UPITID_TEXTURE_LOADER, UPITID_VERSION); // plug-in type
@@ -117,24 +116,19 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 }
 #endif
 
-bool getPlugInterface(const UPIID& piid, PlugIn *& pi)
+bool getPlugInterface(const UPIID& piid, dp::util::SmartPtr<PlugIn> & pi)
 {
   for( size_t i=0; i<NUM_SUPPORTED_EXTENSIONS; ++i)
   {
     UPIID tempPiid(SUPPORTED_EXTENSIONS[i].c_str(), PITID_TEXTURE_LOADER);
     if( piid==tempPiid )
     {      
-      if(ILTexLoader::m_instance==NULL)
+      if ( !ILTexLoader::m_instance )
       {
-        pi = ILTexLoader::m_instance = new ILTexLoader;
-        ++ILTexLoader::m_refCount;
-      }       
-      else
-      {
-        pi = ILTexLoader::m_instance;
-        ++ILTexLoader::m_refCount;
+        ILTexLoader::m_instance = dp::util::SmartPtr<ILTexLoader>( new ILTexLoader );
       }
-      return pi!=NULL;
+      pi = ILTexLoader::m_instance;
+      return !!pi;
     }
   }
   return false;
@@ -251,11 +245,15 @@ ILTexLoader::~ILTexLoader()
 }
 
 void ILTexLoader::deleteThis()
-{  
-  if( (--m_refCount)==0 )
+{
+  if ( m_instance->isShared() )
+  {
+    m_instance->removeRef();
+  }
+  else
   {
     delete this;
-  }  
+  }
 }
 
 bool ILTexLoader::onLoad( TextureHostSharedPtr const& texImg

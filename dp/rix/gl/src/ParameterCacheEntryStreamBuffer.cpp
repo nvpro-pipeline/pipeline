@@ -128,36 +128,36 @@ namespace dp
 
         case dp::rix::core::CPT_INT_8:
           DP_ASSERT( uniformType == GL_INT );
-          parameterCacheEntry = new CacheEntryMatrix<1, 1, dp::util::Int32, dp::util::Int8>( uniformInfo, containerOffset, newArraySize );
+          parameterCacheEntry = new CacheEntryMatrix<1, 1, dp::util::Int8, dp::util::Int32>( uniformInfo, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_INT2_8:
           DP_ASSERT( uniformType == GL_INT_VEC2 );
-          parameterCacheEntry = new CacheEntryMatrix<1, 2, dp::util::Int32, dp::util::Int8>( uniformInfo, containerOffset, newArraySize );
+          parameterCacheEntry = new CacheEntryMatrix<1, 2, dp::util::Int8, dp::util::Int32>( uniformInfo, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_INT3_8:
           DP_ASSERT( uniformType == GL_INT_VEC3 );
-          parameterCacheEntry = new CacheEntryMatrix<1, 3, dp::util::Int32, dp::util::Int8>( uniformInfo, containerOffset, newArraySize );
+          parameterCacheEntry = new CacheEntryMatrix<1, 3, dp::util::Int8, dp::util::Int32>( uniformInfo, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_INT4_8:
           DP_ASSERT( uniformType == GL_INT_VEC4 );
-          parameterCacheEntry = new CacheEntryMatrix<1, 4, dp::util::Int32, dp::util::Int8>( uniformInfo, containerOffset, newArraySize );
+          parameterCacheEntry = new CacheEntryMatrix<1, 4, dp::util::Int8, dp::util::Int32>( uniformInfo, containerOffset, newArraySize );
           break;
 
         case dp::rix::core::CPT_INT_16:
           DP_ASSERT( uniformType == GL_INT );
-          parameterCacheEntry = new CacheEntryMatrix<1, 1, dp::util::Int32, dp::util::Int16>( uniformInfo, containerOffset, newArraySize );
+          parameterCacheEntry = new CacheEntryMatrix<1, 1, dp::util::Int16, dp::util::Int32>( uniformInfo, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_INT2_16:
           DP_ASSERT( uniformType == GL_INT_VEC2 );
-          parameterCacheEntry = new CacheEntryMatrix<1, 2, dp::util::Int32, dp::util::Int16>( uniformInfo, containerOffset, newArraySize );
+          parameterCacheEntry = new CacheEntryMatrix<1, 2, dp::util::Int16, dp::util::Int32>( uniformInfo, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_INT3_16:
           DP_ASSERT( uniformType == GL_INT_VEC3 );
-          parameterCacheEntry = new CacheEntryMatrix<1, 3, dp::util::Int32, dp::util::Int16>( uniformInfo, containerOffset, newArraySize );
+          parameterCacheEntry = new CacheEntryMatrix<1, 3, dp::util::Int16, dp::util::Int32>( uniformInfo, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_INT4_16:
           DP_ASSERT( uniformType == GL_INT_VEC4 );
-          parameterCacheEntry = new CacheEntryMatrix<1, 4, dp::util::Int32, dp::util::Int16>( uniformInfo, containerOffset, newArraySize );
+          parameterCacheEntry = new CacheEntryMatrix<1, 4, dp::util::Int16, dp::util::Int32>( uniformInfo, containerOffset, newArraySize );
           break;
 
         case dp::rix::core::CPT_INT_32:
@@ -196,36 +196,36 @@ namespace dp
 
         case dp::rix::core::CPT_UINT_8:
           DP_ASSERT( uniformType == GL_UNSIGNED_INT );
-          parameterCacheEntry = new CacheEntryMatrix<1, 1, dp::util::Int32, dp::util::Uint8>( uniformInfo, containerOffset, newArraySize );
+          parameterCacheEntry = new CacheEntryMatrix<1, 1, dp::util::Int8, dp::util::Uint32>( uniformInfo, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_UINT2_8:
           DP_ASSERT( uniformType == GL_UNSIGNED_INT_VEC2 );
-          parameterCacheEntry = new CacheEntryMatrix<1, 2, dp::util::Int32, dp::util::Uint8>( uniformInfo, containerOffset, newArraySize );
+          parameterCacheEntry = new CacheEntryMatrix<1, 2, dp::util::Int8, dp::util::Uint32>( uniformInfo, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_UINT3_8:
           DP_ASSERT( uniformType == GL_UNSIGNED_INT_VEC3 );
-          parameterCacheEntry = new CacheEntryMatrix<1, 3, dp::util::Int32, dp::util::Uint8>( uniformInfo, containerOffset, newArraySize );
+          parameterCacheEntry = new CacheEntryMatrix<1, 3, dp::util::Int8, dp::util::Uint32>( uniformInfo, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_UINT4_8:
           DP_ASSERT( uniformType == GL_UNSIGNED_INT_VEC4 );
-          parameterCacheEntry = new CacheEntryMatrix<1, 4, dp::util::Int32, dp::util::Uint8>( uniformInfo, containerOffset, newArraySize );
+          parameterCacheEntry = new CacheEntryMatrix<1, 4, dp::util::Int8, dp::util::Uint32>( uniformInfo, containerOffset, newArraySize );
           break;
 
         case dp::rix::core::CPT_UINT_16:
           DP_ASSERT( uniformType == GL_UNSIGNED_INT );
-          parameterCacheEntry = new CacheEntryMatrix<1, 1, dp::util::Int32, dp::util::Uint16>( uniformInfo, containerOffset, newArraySize );
+          parameterCacheEntry = new CacheEntryMatrix<1, 1, dp::util::Int16, dp::util::Uint32>( uniformInfo, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_UINT2_16:
           DP_ASSERT( uniformType == GL_UNSIGNED_INT_VEC2 );
-          parameterCacheEntry = new CacheEntryMatrix<1, 2, dp::util::Int32, dp::util::Uint16>( uniformInfo, containerOffset, newArraySize );
+          parameterCacheEntry = new CacheEntryMatrix<1, 2, dp::util::Int16, dp::util::Uint32>( uniformInfo, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_UINT3_16:
           DP_ASSERT( uniformType == GL_UNSIGNED_INT_VEC3 );
-          parameterCacheEntry = new CacheEntryMatrix<1, 3, dp::util::Int32, dp::util::Uint16>( uniformInfo, containerOffset, newArraySize );
+          parameterCacheEntry = new CacheEntryMatrix<1, 3, dp::util::Int16, dp::util::Uint32>( uniformInfo, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_UINT4_16:
           DP_ASSERT( uniformType == GL_UNSIGNED_INT_VEC4 );
-          parameterCacheEntry = new CacheEntryMatrix<1, 4, dp::util::Int32, dp::util::Uint16>( uniformInfo, containerOffset, newArraySize );
+          parameterCacheEntry = new CacheEntryMatrix<1, 4, dp::util::Int16, dp::util::Uint32>( uniformInfo, containerOffset, newArraySize );
           break;
 
         case dp::rix::core::CPT_UINT_32:
@@ -264,19 +264,19 @@ namespace dp
 
         case dp::rix::core::CPT_BOOL:
           DP_ASSERT( uniformType == GL_BOOL );
-          parameterCacheEntry = new CacheEntryMatrix<1, 1, dp::util::Int32, dp::util::Uint8>( uniformInfo, containerOffset, newArraySize );
+          parameterCacheEntry = new CacheEntryMatrix<1, 1, dp::util::Int8, dp::util::Uint32>( uniformInfo, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_BOOL2:
           DP_ASSERT( uniformType == GL_BOOL_VEC2 );
-          parameterCacheEntry = new CacheEntryMatrix<1, 2, dp::util::Int32, dp::util::Uint8>( uniformInfo, containerOffset, newArraySize );
+          parameterCacheEntry = new CacheEntryMatrix<1, 2, dp::util::Int8, dp::util::Uint32>( uniformInfo, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_BOOL3:
           DP_ASSERT( uniformType == GL_BOOL_VEC3 );
-          parameterCacheEntry = new CacheEntryMatrix<1, 3, dp::util::Int32, dp::util::Uint8>( uniformInfo, containerOffset, newArraySize );
+          parameterCacheEntry = new CacheEntryMatrix<1, 3, dp::util::Int8, dp::util::Uint32>( uniformInfo, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_BOOL4:
           DP_ASSERT( uniformType == GL_BOOL_VEC4 );
-          parameterCacheEntry = new CacheEntryMatrix<1, 4, dp::util::Int32, dp::util::Uint8>( uniformInfo, containerOffset, newArraySize );
+          parameterCacheEntry = new CacheEntryMatrix<1, 4, dp::util::Int8, dp::util::Uint32>( uniformInfo, containerOffset, newArraySize );
           break;
 
         case dp::rix::core::CPT_MAT2X2:

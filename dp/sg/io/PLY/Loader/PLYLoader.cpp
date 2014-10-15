@@ -77,15 +77,15 @@ void lib_init()
 }
 #endif
 
-bool getPlugInterface(const UPIID& piid, PlugIn *& pi)
+bool getPlugInterface(const UPIID& piid, dp::util::SmartPtr<dp::util::PlugIn> & pi)
 {
   // Check if UPIID is properly initialized. 
   // DP_ASSERT(PIID_PLY_SCENE_LOADER==UPIID(".PLY", PITID_SCENE_LOADER));
   
   if ( piid==PIID_PLY_SCENE_LOADER )
   {
-    pi = new PLYLoader();
-    return (pi != NULL);
+    pi = dp::util::SmartPtr<dp::util::PlugIn>( new PLYLoader() );
+    return( !!pi );
   }
   return false;
 }

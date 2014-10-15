@@ -51,8 +51,7 @@ using std::vector;
 using std::string;
 
 // a pointer to our single instance of the Loader
-ILTexSaver * ILTexSaver::m_instance = NULL;
-unsigned int ILTexSaver::m_refCount = 0;
+dp::util::SmartPtr<ILTexSaver>  ILTexSaver::m_instance;
 
 // supported Plug Interface ID
 const UPITID PITID_TEXTURE_SAVER(UPITID_TEXTURE_SAVER, UPITID_VERSION); // plug-in type
@@ -97,24 +96,19 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 }
 #endif
 
-bool getPlugInterface(const UPIID& piid, PlugIn *& pi)
+bool getPlugInterface(const UPIID& piid, dp::util::SmartPtr<PlugIn> & pi)
 {
   for( unsigned int i=0; i<NUM_SUPPORTED_EXTENSIONS; ++i)
   {
     UPIID tempPiid(SUPPORTED_EXTENSIONS[i].c_str(), PITID_TEXTURE_SAVER);
     if( piid==tempPiid )
-    {      
-      if(ILTexSaver::m_instance==NULL)
+    {
+      if ( !ILTexSaver::m_instance )
       {
-        pi = ILTexSaver::m_instance = new ILTexSaver;
-        ++ILTexSaver::m_refCount;
-      }       
-      else
-      {
-        pi = ILTexSaver::m_instance;
-        ++ILTexSaver::m_refCount;
+        ILTexSaver::m_instance = dp::util::SmartPtr<ILTexSaver>( new ILTexSaver );
       }
-      return pi!=NULL;
+      pi = ILTexSaver::m_instance;
+      return( !!pi );
     }
   }
   return false;
@@ -261,11 +255,15 @@ ILTexSaver::~ILTexSaver()
 }
 
 void ILTexSaver::deleteThis()
-{  
-  if( (--m_refCount)==0 )
+{
+  if ( m_instance->isShared() )
+  {
+    m_instance->removeRef();
+  }
+  else
   {
     delete this;
-  }  
+  }
 }
 
 bool ILTexSaver::save( const TextureHostSharedPtr & image, const string & fileName )

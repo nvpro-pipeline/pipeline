@@ -1762,12 +1762,12 @@ extern "C"
 {
 #endif
 
-NBFLOADER_API bool getPlugInterface(const UPIID& piid, PlugIn *& pi)
+NBFLOADER_API bool getPlugInterface(const UPIID& piid, dp::util::SmartPtr<dp::util::PlugIn> & pi)
 {
   if ( piid==PIID_NBF_SCENE_LOADER )
   {
-    pi = new NBFLoader();
-    return pi!=NULL;
+    pi = dp::util::SmartPtr<dp::util::PlugIn>( new NBFLoader() );
+    return( !!pi );
   }
   return false;
 }

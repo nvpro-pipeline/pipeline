@@ -73,6 +73,7 @@ namespace dp
             case SceneTree::EventObject::Added:
               DP_ASSERT( !m_drawableManager->m_dis[eventObject.getIndex()] );
               m_drawableManager->m_dis[eventObject.getIndex()] = m_drawableManager->addDrawableInstance( geoNodeWeakPtr , eventObject.getIndex() ); // TODO, don't pass geonode?
+              m_drawableManager->setDrawableInstanceActive( m_drawableManager->m_dis[eventObject.getIndex()], node.m_worldActive );
               break;
             case SceneTree::EventObject::Removed:
               DP_ASSERT( m_drawableManager->m_dis[eventObject.getIndex()] );
@@ -81,7 +82,10 @@ namespace dp
               break;
             case SceneTree::EventObject::Changed:
               DP_ASSERT( m_drawableManager->m_dis[eventObject.getIndex()] );
-              m_drawableManager->updateDrawableInstance( m_drawableManager->m_dis[eventObject.getIndex()] );
+              // Remove/Add to change GeometryInstance
+              m_drawableManager->removeDrawableInstance( m_drawableManager->m_dis[eventObject.getIndex()] );
+              m_drawableManager->m_dis[eventObject.getIndex()] = m_drawableManager->addDrawableInstance( geoNodeWeakPtr , eventObject.getIndex() ); // TODO, don't pass geonode?
+              m_drawableManager->setDrawableInstanceActive( m_drawableManager->m_dis[eventObject.getIndex()], node.m_worldActive );
               break;
             case SceneTree::EventObject::ActiveChanged:
               DP_ASSERT( m_drawableManager->m_dis[eventObject.getIndex()] );
@@ -222,13 +226,6 @@ namespace dp
         dp::sg::xbar::PreOrderTreeTraverser<ObjectTree, Visitor> p;
         Visitor v( this, m_sceneTree->getObjectTree() );
         p.traverse( m_sceneTree->getObjectTree(), v );
-      }
-
-      DrawableManager::Handle const & DrawableManager::getDrawableInstance( ObjectTreeIndex objectTreeIndex )
-      {
-        DP_ASSERT( objectTreeIndex < m_dis.size() );
-        DP_ASSERT( m_dis[objectTreeIndex] );
-        return m_dis[objectTreeIndex];
       }
 
     } // namespace xbar

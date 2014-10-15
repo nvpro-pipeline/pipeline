@@ -98,12 +98,12 @@ void lib_init()
 }
 #endif
 
-bool getPlugInterface(const UPIID& piid, PlugIn *& pi)
+bool getPlugInterface(const UPIID& piid, dp::util::SmartPtr<dp::util::PlugIn> & pi)
 {
   if ( piid==PIID_WRL_SCENE_LOADER )
   {
-    pi = new WRLLoader();
-    return pi!=NULL;
+    pi = dp::util::SmartPtr<dp::util::PlugIn>( new WRLLoader() );
+    return( !!pi );
   }
   return false;
 }

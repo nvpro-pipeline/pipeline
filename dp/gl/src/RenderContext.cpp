@@ -222,6 +222,39 @@ namespace dp
     {
       return m_context->m_hglrc;
     }
+
+    std::vector<HGPUNV> RenderContext::enumGpusNV() const
+    {
+      std::vector<HGPUNV> gpus;
+
+      if(WGLEW_NV_gpu_affinity)
+      {
+        HGPUNV gpu;
+        for (UINT gpuIndex = 0;wglEnumGpusNV(gpuIndex, &gpu);++gpuIndex)
+        {
+          gpus.push_back(gpu);
+        }
+      }
+
+      return gpus;
+    }
+
+    std::vector<GPU_DEVICE> RenderContext::enumGpuDevicesNV(HGPUNV gpu) const
+    {
+      std::vector<GPU_DEVICE> devices;
+
+      if(WGLEW_NV_gpu_affinity)
+      {
+        GPU_DEVICE device;
+        for (UINT deviceIndex = 0;wglEnumGpuDevicesNV(gpu, deviceIndex, &device);++deviceIndex)
+        {
+          devices.push_back(device);
+        }
+      }
+      
+      return devices;
+    }
+
   #elif defined(DP_OS_LINUX)
     GLXContext RenderContext::getContext()  const
     {

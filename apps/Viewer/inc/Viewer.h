@@ -36,7 +36,7 @@
 
 #include <dp/sg/ui/qt5/SceniXQGLWidget.h>
 
-#define VIEWER_APPLICATION_NAME   "Viewer"
+#define VIEWER_APPLICATION_NAME   "NVPro Pipeline Viewer"
 #define VIEWER_APPLICATION_VENDOR "NVIDIA Corporation"
 
 class viewerPlugInCallback;

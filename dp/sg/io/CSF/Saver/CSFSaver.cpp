@@ -54,12 +54,12 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD reason, LPVOID lpReserved)
 #elif defined( LINUX )
 #endif
 
-bool getPlugInterface(const UPIID& piid, PlugIn *& pi)
+bool getPlugInterface(const UPIID& piid, dp::util::SmartPtr<dp::util::PlugIn> & pi)
 {
   if ( piid == PIID_CSF_SCENE_SAVER )
   {
-    pi = new CSFSaver();
-    return pi != NULL;
+    pi = dp::util::SmartPtr<dp::util::PlugIn>( new CSFSaver() );
+    return( !!pi );
   }
   return false;
 }

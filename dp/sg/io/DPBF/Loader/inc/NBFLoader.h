@@ -52,7 +52,7 @@ void lib_init() __attribute__ ((constructor));   // will be called before dlopen
 // exports required for a scene loader plug-in
 extern "C"
 {
-NBFLOADER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::PlugIn *& pi);
+NBFLOADER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPtr<dp::util::PlugIn> & pi);
 NBFLOADER_API void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids );
 }
 

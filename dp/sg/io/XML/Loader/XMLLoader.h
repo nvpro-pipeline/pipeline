@@ -57,7 +57,7 @@
 // exports required for a scene loader plug-in
 extern "C"
 {
-XMLLOADER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::PlugIn *& pi);
+XMLLOADER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPtr<dp::util::PlugIn> & pi);
 XMLLOADER_API void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids );
 }
 

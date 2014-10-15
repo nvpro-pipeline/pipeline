@@ -124,6 +124,8 @@ namespace dp
             public:
               Instance();
 
+              dp::sg::core::GeoNodeSharedPtr               m_geoNode;
+
               // Don't forget to modify the copy constructor when adding new variables!
               dp::rix::core::GeometryInstanceSharedHandle  m_geometryInstance;
               dp::rix::core::GeometryInstanceSharedHandle  m_geometryInstanceDepthPass;
