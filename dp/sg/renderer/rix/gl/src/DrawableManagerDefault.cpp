@@ -145,6 +145,7 @@ namespace dp
             m_instances.push_back( Instance() );
             Instance &di = m_instances.back();
             di.m_handle = handle;
+            di.m_geoNode = geoNode->getSharedPtr<dp::sg::core::GeoNode>();
             di.m_objectTreeIndex = objectTreeIndex;
             di.m_transformIndex = objectTreeNode.m_transformIndex;
             di.m_transparent = false;
@@ -152,6 +153,8 @@ namespace dp
             di.m_isVisible = true; // gis are visible by default
             di.m_payload->setHandle( handle );
             di.m_effectDataAttached = false;
+
+            DP_ASSERT(di.m_geoNode);
 
             // create geometry instance
             di.m_geometryInstance = renderer->geometryInstanceCreate();
@@ -216,16 +219,7 @@ namespace dp
 
             Instance& di = m_instances[handleData->m_index];
 
-            dp::sg::core::GeoNodeSharedPtr geoNode = getSceneTree()->getObjectTreeNode(di.m_objectTreeIndex).m_object->getSharedPtr<dp::sg::core::GeoNode>();
-
-            const ObjectTreeNode& objectTreeNode = getSceneTree()->getObjectTreeNode( di.m_objectTreeIndex );
-
-            // TODO this should be a one-time operation in addDrawableInstance
-            if ( di.m_isActive != objectTreeNode.m_worldActive )
-            {
-              di.m_isActive = objectTreeNode.m_worldActive;
-              di.updateRendererVisibility( renderer );
-            }
+            dp::sg::core::GeoNodeSharedPtr const& geoNode = di.m_geoNode;
 
             // update primitive
             const dp::sg::core::PrimitiveSharedPtr &primitive = geoNode->getPrimitive();

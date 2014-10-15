@@ -72,12 +72,12 @@ namespace dp
         std::string ext = dp::util::getFileExtension( filename );
         dp::util::UPIID piid = dp::util::UPIID( ext.c_str(), dp::util::UPITID( UPITID_SCENE_LOADER, UPITID_VERSION ) );
 
-        dp::util::PlugIn * plug;
+        dp::util::SmartPtr<dp::util::PlugIn> plug;
         if ( !dp::util::getInterface(binSearchPaths, piid, plug) )
         {
           throw std::runtime_error( std::string( "Scene Plugin not found: " + ext ) );
         }
-        dp::util::SmartPtr<SceneLoader> loader( reinterpret_cast<SceneLoader*>(plug) );
+        dp::util::SmartPtr<SceneLoader> loader( dp::util::smart_cast<SceneLoader>(plug) );
         loader->setCallback( callback );
 
         vector<string> sceneSearchPaths = binSearchPaths;
@@ -153,11 +153,10 @@ namespace dp
 
         dp::util::UPIID piid = dp::util::UPIID(dp::util::getFileExtension( filename ).c_str(), PITID_SCENE_SAVER);
 
-        dp::util::PlugIn * plug;
-
+        dp::util::SmartPtr<dp::util::PlugIn> plug;
         if ( getInterface( searchPaths, piid, plug ) )
         {
-          SceneSaver *ss = reinterpret_cast<SceneSaver *>(plug);
+          dp::util::SmartPtr<SceneSaver> ss( dp::util::smart_cast<SceneSaver>(plug) );
           try
           {
             dp::sg::core::SceneSharedPtr scene( viewState->getScene() ); // DAR HACK Change SceneSaver interface later.
@@ -176,30 +175,20 @@ namespace dp
         // load the saver plug-in  - this should be configured
         dp::util::UPIID piid = dp::util::UPIID(dp::util::getFileExtension( filename ).c_str(), dp::util::UPITID(UPITID_TEXTURE_SAVER, UPITID_VERSION) );
 
-        dp::util::PlugIn * plug = 0;
-
         std::vector<std::string> searchPaths;
         searchPaths.push_back( dp::util::getCurrentPath() );
         searchPaths.push_back( dp::util::getModulePath() );
 
+        bool retval = false;
         //
         // MMM - TODO - Update me for stereo images
         //
-        TextureSaver * ts;
+        dp::util::SmartPtr<dp::util::PlugIn> plug;
         if ( getInterface( searchPaths, piid, plug ) )
         {
-          ts = reinterpret_cast<TextureSaver *>(plug);
+          dp::util::SmartPtr<TextureSaver> ts( dp::util::smart_cast<TextureSaver>(plug) );
+          retval = ts->save( tih, filename );
         }
-        else
-        {
-          // signal some kind of error
-          return false;
-        }
-
-        bool retval;
-
-        // save the file
-        retval = ts->save( tih, filename );
 
         return retval;
       }
@@ -222,18 +211,20 @@ namespace dp
           binSearchPaths.push_back(modulePath);
         }
 
-        std::string ext = dp::util::getFileExtension( filename );
-
-        dp::util::UPIID piid = dp::util::UPIID( ext.c_str(), dp::util::UPITID(UPITID_TEXTURE_LOADER, UPITID_VERSION) );
-
-        dp::util::PlugIn * plug = 0;
-
-        // TODO - Update me for stereo images
-        TextureLoader * tls;
-        if ( getInterface( binSearchPaths, piid, plug ) && dp::util::fileExists( filename ) )
+        std::string foundFile = dp::util::findFile( filename, binSearchPaths );
+        if (!foundFile.empty())
         {
-          tls = reinterpret_cast<TextureLoader *>(plug);
-          tih = tls->load( filename );
+          std::string ext = dp::util::getFileExtension( filename );
+
+          dp::util::UPIID piid = dp::util::UPIID( ext.c_str(), dp::util::UPITID(UPITID_TEXTURE_LOADER, UPITID_VERSION) );
+
+          // TODO - Update me for stereo images
+          dp::util::SmartPtr<dp::util::PlugIn> plug;
+          if ( getInterface( binSearchPaths, piid, plug ) )
+          {
+            dp::util::SmartPtr<TextureLoader> tl( dp::util::smart_cast<TextureLoader>(plug) );
+            tih = tl->load( foundFile );
+          }
         }
         return tih;
       }

@@ -56,7 +56,7 @@ NVSGSaver.
   * If the PlugIn ID \a piid equals \c PIID_NVSG_SCENE_SAVER, a NVSGSaver is created and returned in \a pi.
   * \returns  true, if the requested PlugIn could be created, otherwise false
   */
-NVSGSAVER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::PlugIn *& pi);
+NVSGSAVER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPtr<dp::util::PlugIn> & pi);
 
 //! Query the supported types of PlugIn Interfaces.
 NVSGSAVER_API void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids );

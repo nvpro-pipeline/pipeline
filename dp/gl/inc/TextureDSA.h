@@ -128,21 +128,21 @@ namespace dp
     inline void TextureDSA::setImage1D( GLuint texture, GLenum target, GLint level, GLint internalFormat, GLsizei width, GLint border, GLenum format, GLenum type, GLvoid const* pixels )
     {
       glPushClientAttribDefaultEXT( GL_CLIENT_PIXEL_STORE_BIT );
-      glTextureImage1DEXT( texture, target, 0, internalFormat, width, 0, format, type, pixels ); 
+      glTextureImage1DEXT( texture, target, level, internalFormat, width, 0, format, type, pixels ); 
       glPopClientAttrib();
     }
 
     inline void TextureDSA::setImage2D( GLuint texture, GLenum target, GLint level, GLint internalFormat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, GLvoid const* pixels )
     {
       glPushClientAttribDefaultEXT( GL_CLIENT_PIXEL_STORE_BIT );
-      glTextureImage2DEXT( texture, target, 0, internalFormat, width, height, 0, format, type, pixels ); 
+      glTextureImage2DEXT( texture, target, level, internalFormat, width, height, 0, format, type, pixels ); 
       glPopClientAttrib();
     }
 
     inline void TextureDSA::setImage3D( GLuint texture, GLenum target, GLint level, GLint internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type, GLvoid const* pixels )
     {
       glPushClientAttribDefaultEXT( GL_CLIENT_PIXEL_STORE_BIT );
-      glTextureImage3DEXT( texture, target, 0, internalFormat, width, height, depth, 0, format, type, pixels ); 
+      glTextureImage3DEXT( texture, target, level, internalFormat, width, height, depth, 0, format, type, pixels ); 
       glPopClientAttrib();
     }
 

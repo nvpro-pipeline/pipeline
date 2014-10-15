@@ -72,9 +72,10 @@ using std::vector;
 using std::map;
 
 ThreeDSLoader::ThreeDSLoader()
+  : m_wirePresent(false)
+  , m_numMaterials(0)
+  , m_numFrames(0)
 {
-  m_numMaterials = 0;
-  m_numFrames = 0;
 }
 
 ThreeDSLoader::~ThreeDSLoader()
@@ -136,7 +137,36 @@ SceneSharedPtr ThreeDSLoader::load( std::string const& filename
   // now that we've collected all of the camera and spotlight data, add the callbacks
   postProcessCamerasAndLights();
 
-  return m_scene;
+  // keep a reference to the scene before cleaning up the resources
+  SceneSharedPtr scene = m_scene;
+
+  cleanup();
+
+  return scene;
+}
+
+void ThreeDSLoader::cleanup()
+{
+  m_searchPaths.clear();
+  m_scene.reset();
+  m_topLevel.reset();
+
+  m_materials.clear();
+
+  m_hasTexture.clear();
+  m_isWire.clear();
+  m_wirePresent = false;
+
+  // global lists of cameras, spotlights, and targets used for resolving callbacks
+  m_camList.clear();
+  m_spotList.clear();
+  m_camLocationList.clear();
+  m_spotLocationList.clear();
+  m_camTargetList.clear();
+  m_spotTargetList.clear();
+
+  m_numMaterials = 0;
+  m_numFrames = 0;
 }
 
 bool noHierarchy( Lib3dsNode * node )
@@ -2013,13 +2043,6 @@ ParameterGroupDataSharedPtr ThreeDSLoader::createTexture( Lib3dsTextureMap &text
       {
         wrapS = wrapT = TWM_REPEAT;
       }
-    }
-
-    // check for mipmaps
-    // use existing mips if available
-    if( textureHost->getNumberOfMipmaps() < 1 )
-    {
-      textureHost->createMipmaps();
     }
 
     SamplerSharedPtr sampler = Sampler::create( textureHost );

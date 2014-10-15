@@ -62,7 +62,7 @@
 // exports required for a scene loader plug-in
 extern "C"
 {
-THREEDSLOADER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::PlugIn *& pi);
+THREEDSLOADER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPtr<dp::util::PlugIn> & pi);
 THREEDSLOADER_API void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids );
 }
 
@@ -172,6 +172,9 @@ private:
 
   // fill any of the given tracks with zero keys with default values
   void checkTracks(Lib3dsTrack *pTrack, Lib3dsTrack *rTrack, Lib3dsTrack *sTrack, Lib3dsTrack *rollTrack);
+
+  // remove all temporary data
+  void cleanup();
 
 private:
   vector< std::string > m_searchPaths;

@@ -472,12 +472,18 @@ namespace dp
         return m_context->m_majorVersion;
       }
 
-  #if defined(_WIN32)
+  #if defined(DP_OS_WINDOWS)
       DP_GL_API HWND  getHWND()  const;
       DP_GL_API HDC   getHDC()   const;
       DP_GL_API HGLRC getHGLRC() const;
 
-  #elif defined(LINUX)
+      /* \brief Enumerate all GPUs available through the WGL_NV_gpu_affinity extension **/
+      DP_GL_API std::vector<HGPUNV> enumGpusNV() const;
+
+      /* \brief Enumate all devices attached to a GPU **/
+      DP_GL_API std::vector<GPU_DEVICE> enumGpuDevicesNV(HGPUNV gpuHandle) const;
+
+  #elif defined(DP_OS_LINUX)
       GLXContext  getContext()  const;
       GLXDrawable getDrawable() const;
       Display*    getDisplay()  const;

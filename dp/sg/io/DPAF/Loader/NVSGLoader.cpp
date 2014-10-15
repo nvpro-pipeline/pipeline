@@ -87,15 +87,15 @@ void lib_init()
 }
 #endif
 
-bool getPlugInterface(const UPIID& piid, PlugIn *& pi)
+bool getPlugInterface(const UPIID& piid, dp::util::SmartPtr<dp::util::PlugIn> & pi)
 {
   // check if UPIID is properly initialized 
   //DP_ASSERT(PIID_NVSG_SCENE_LOADER==UPIID(".NVSG", PITID_SCENE_LOADER));
   
   if ( piid==PIID_NVSG_SCENE_LOADER )
   {
-    pi = new NVSGLoader();
-    return pi!=NULL;
+    pi = dp::util::SmartPtr<dp::util::PlugIn>( new NVSGLoader() );
+    return( !!pi );
   }
   return false;
 }

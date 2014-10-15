@@ -49,7 +49,7 @@
 // exports required for a scene loader plug-in
 extern "C"
 {
-NBFSAVER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::PlugIn *& pi);
+NBFSAVER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPtr<dp::util::PlugIn> & pi);
 NBFSAVER_API void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids );
 }
 

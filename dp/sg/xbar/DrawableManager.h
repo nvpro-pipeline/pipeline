@@ -61,12 +61,6 @@ namespace dp
 
         typedef dp::util::SmartPtr<HandleData> Handle;
 
-        DP_SG_XBAR_API virtual Handle addDrawableInstance( dp::sg::core::GeoNodeWeakPtr geoNode, ObjectTreeIndex objectTreeIndex ) = 0;
-        DP_SG_XBAR_API virtual void removeDrawableInstance( Handle handle ) = 0;
-        DP_SG_XBAR_API virtual void updateDrawableInstance( Handle handle ) = 0;
-        DP_SG_XBAR_API virtual void setDrawableInstanceActive( Handle handle, bool visible ) = 0;
-        DP_SG_XBAR_API virtual void setDrawableInstanceTraversalMask( Handle handle, dp::util::Uint32 traversalMask ) = 0;
-
         DP_SG_XBAR_API virtual void update( dp::sg::ui::ViewStateSharedPtr const& viewState ) = 0;
         DP_SG_XBAR_API virtual void update( dp::math::Vec2ui const & viewportSize ) = 0;
 
@@ -83,7 +77,13 @@ namespace dp
         void initializeHandles(); 
 
         /** \brief Get handle for given ObjectTreeIndex **/
-        DP_SG_XBAR_API virtual Handle const & getDrawableInstance( ObjectTreeIndex objectTreeIndex );
+        Handle const & getDrawableInstance( ObjectTreeIndex objectTreeIndex );
+
+        DP_SG_XBAR_API virtual Handle addDrawableInstance( dp::sg::core::GeoNodeWeakPtr geoNode, ObjectTreeIndex objectTreeIndex ) = 0;
+        DP_SG_XBAR_API virtual void removeDrawableInstance( Handle handle ) = 0;
+        DP_SG_XBAR_API virtual void updateDrawableInstance( Handle handle ) = 0;
+        DP_SG_XBAR_API virtual void setDrawableInstanceActive( Handle handle, bool visible ) = 0;
+        DP_SG_XBAR_API virtual void setDrawableInstanceTraversalMask( Handle handle, dp::util::Uint32 traversalMask ) = 0;
 
       private:
         /** \brief Detach from current SceneTree. Called from setSceneTree. Calls removeDrawableInstance for all Drawables **/
@@ -101,6 +101,13 @@ namespace dp
 
         std::vector<Handle> m_dis;
       };
+
+      inline DrawableManager::Handle const & DrawableManager::getDrawableInstance( ObjectTreeIndex objectTreeIndex ) 
+      {
+        DP_ASSERT(objectTreeIndex < m_dis.size());
+        return m_dis[objectTreeIndex];
+      }
+      
 
     } // namespace xbar
   } // namespace sg

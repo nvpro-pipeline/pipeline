@@ -175,21 +175,21 @@ namespace dp
     {
       TextureBinding tb( target, texture );
       dp::gl::bind( GL_PIXEL_UNPACK_BUFFER, 0 );    // make sure, GL_PIXEL_UNPACK_BUFFER is unbound !
-      glTexImage1D( target, 0, internalFormat, width, 0, format, type, pixels ); 
+      glTexImage1D( target, level, internalFormat, width, 0, format, type, pixels ); 
     }
 
     inline void TextureBind::setImage2D( GLuint texture, GLenum target, GLint level, GLint internalFormat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, GLvoid const* pixels )
     {
       TextureBinding tb( target, texture );
       dp::gl::bind( GL_PIXEL_UNPACK_BUFFER, 0 );    // make sure, GL_PIXEL_UNPACK_BUFFER is unbound !
-      glTexImage2D( target, 0, internalFormat, width, height, 0, format, type, pixels ); 
+      glTexImage2D( target, level, internalFormat, width, height, 0, format, type, pixels ); 
     }
 
     inline void TextureBind::setImage3D( GLuint texture, GLenum target, GLint level, GLint internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type, GLvoid const* pixels )
     {
       TextureBinding tb( target, texture );
       dp::gl::bind( GL_PIXEL_UNPACK_BUFFER, 0 );    // make sure, GL_PIXEL_UNPACK_BUFFER is unbound !
-      glTexImage3D( target, 0, internalFormat, width, height, depth, 0, format, type, pixels ); 
+      glTexImage3D( target, level, internalFormat, width, height, depth, 0, format, type, pixels ); 
     }
 
     inline void TextureBind::setLODParameters( GLuint texture, GLenum target, float minLOD, float maxLOD, float LODBias )

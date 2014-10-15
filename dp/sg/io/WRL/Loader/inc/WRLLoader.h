@@ -57,7 +57,7 @@ extern "C"
   * If the PlugIn ID \a piid equals \c PIID_WRL_SCENE_LOADER, a WRLLoader is created and returned in \a pi.
   * \returns  true, if the requested PlugIn could be created, otherwise false
   */
-WRLLOADER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::PlugIn *& pi);
+WRLLOADER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPtr<dp::util::PlugIn> & pi);
 
 //! Query the supported types of PlugIn Interfaces.
 WRLLOADER_API void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids );

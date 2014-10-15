@@ -146,12 +146,12 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD  reason, LPVOID lpReserved)
 }
 #endif
 
-bool getPlugInterface(const UPIID& piid, PlugIn *& pi)
+bool getPlugInterface(const UPIID& piid, dp::util::SmartPtr<dp::util::PlugIn> & pi)
 {
   if ( piid==PIID_NBF_SCENE_SAVER )
   {
-    pi = new NBFSaver;
-    return pi!=NULL;
+    pi = dp::util::SmartPtr<dp::util::PlugIn>( new NBFSaver() );
+    return( !!pi );
   }
   return false;
 }
