@@ -116,7 +116,9 @@ namespace dp
 
       DrawableManager::~DrawableManager()
       {
-        m_sceneTreeObserver.reset();
+        if (m_sceneTree) {
+          m_sceneTree->detach( m_sceneTreeObserver.get(), nullptr );
+        }
       }
 
       void DrawableManager::setSceneTree( SceneTreeSharedPtr const & sceneTree)
