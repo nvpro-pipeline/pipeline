@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2013
+// Copyright NVIDIA Corporation 2013-2014
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -54,15 +54,9 @@ namespace dp
       };
 
       typedef dp::util::SmartPtr<ParameterCacheEntryStream> ParameterCacheEntryStreamSharedPtr;
-
-      ParameterCacheEntryStreamSharedPtr createParameterCacheEntryStream( dp::rix::gl::ProgramGLHandle program
-                                                                          , dp::rix::core::ContainerParameterType containerParameterType
-                                                                          , dp::gl::Program::Uniform const& uniform, size_t cacheOffset
-                                                                          , size_t containerOffset, size_t arraySize );
-
       typedef std::vector<ParameterCacheEntryStreamSharedPtr> ParameterCacheEntryStreams;
 
-      ParameterCacheEntryStreams createParameterCacheEntriesStream( dp::rix::gl::ProgramGLHandle program, dp::rix::gl::ContainerDescriptorGLHandle descriptor );
+      ParameterCacheEntryStreams createParameterCacheEntryStreams( dp::rix::gl::ProgramGLHandle program, dp::rix::gl::ContainerDescriptorGLHandle descriptor, bool bindlessUBO );
 
     } // namespace gl
   } // namespace rix

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright NVIDIA Corporation 2011-2014
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -35,6 +35,10 @@
 #include <SamplerStateGL.h>
 
 #include <dp/util/Observer.h>
+
+// bindless UBO defines until glew supports the extension
+#define GL_UNIFORM_BUFFER_UNIFIED_NV                        0x936E
+#define GL_UNIFORM_BUFFER_ADDRESS_NV                        0x936F
 
 namespace dp
 {

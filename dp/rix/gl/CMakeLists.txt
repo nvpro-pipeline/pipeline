@@ -31,6 +31,7 @@ set( SOURCES
   src/ParameterCacheEntryStreamBuffer.cpp
   src/ParameterRenderer.cpp
   src/ParameterRendererBuffer.cpp
+  src/ParameterRendererBufferAddressRange.cpp
   src/ParameterRendererBufferDSA.cpp
   src/ParameterRendererBufferRange.cpp
   src/ParameterRendererUniform.cpp
@@ -83,6 +84,7 @@ set(HEADERS
   inc/ParameterCacheEntryStreamBuffer.h
   inc/ParameterRenderer.h
   inc/ParameterRendererBuffer.h
+  inc/ParameterRendererBufferAddressRange.h
   inc/ParameterRendererBufferDSA.h
   inc/ParameterRendererBufferRange.h
   inc/ParameterRendererStream.h
