@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2013
+// Copyright NVIDIA Corporation 2013-2014
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -138,6 +138,8 @@ namespace dp
 
         ProgramPipelineGLHandle      m_programPipeline;
         std::vector<ContainerDescriptorGLHandle> m_descriptors;
+
+        bool m_isBindlessUBOSupported;                // true if GL_NV_uniform_buffer_unified_memory is supported and should be used
       };
 
 

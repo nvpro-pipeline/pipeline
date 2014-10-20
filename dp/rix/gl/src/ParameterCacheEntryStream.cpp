@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2013
+// Copyright NVIDIA Corporation 2013-2014
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -417,6 +417,71 @@ namespace dp
           }
         }
 
+
+        /************************************************************************/
+        /* CacheEntryBufferBindingBindless<GLenum BufferBinding>                */
+        /************************************************************************/
+        template <GLenum BufferBinding>
+        class CacheEntryBufferBindingBindless : public ParameterCacheEntryStream
+        {
+        public:
+          CacheEntryBufferBindingBindless( dp::util::Int32 bindingIndex, size_t cacheOffset, size_t containerOffset, size_t arraySize );
+          virtual void render( void const* cache ) const;
+          virtual void update( void* cache, void const* container ) const;
+          void doUpdateConverted( void const* converted ) const;
+
+        private:
+          GLuint     m_bindingIndex;
+          struct CacheInfo
+          {
+            GLuint64   m_address;
+            GLuint64   m_length;
+          };
+        };
+
+        template <GLenum BufferBinding>
+        CacheEntryBufferBindingBindless<BufferBinding>::CacheEntryBufferBindingBindless( dp::util::Int32 bindingIndex, size_t cacheOffset, size_t containerOffset, size_t arraySize )
+          : ParameterCacheEntryStream( cacheOffset, containerOffset, arraySize, sizeof(CacheInfo) * arraySize )
+          , m_bindingIndex( bindingIndex )
+        {
+        }
+
+        template <GLenum BufferBinding>
+        void CacheEntryBufferBindingBindless<BufferBinding>::render( void const* cache ) const
+        {
+          void const * cacheData = reinterpret_cast<char const *>(cache) + m_cacheOffset;
+          CacheInfo const * parametersCache = reinterpret_cast<CacheInfo const *>(cacheData);
+
+          glBufferAddressRangeNV( BufferBinding, m_bindingIndex, parametersCache->m_address, parametersCache->m_length );
+        }
+
+        template <GLenum BufferBinding>
+        void CacheEntryBufferBindingBindless<BufferBinding>::update( void* cache, void const* container ) const
+        {
+          void const* offsetData = static_cast<char const*>( container ) + m_containerOffset;
+          ContainerGL::ParameterDataBuffer const* parametersContainer = static_cast<ContainerGL::ParameterDataBuffer const*>( offsetData );
+
+          void * cacheData = reinterpret_cast<char *>(cache) + m_cacheOffset;
+          CacheInfo * parametersCache = reinterpret_cast<CacheInfo *>(cacheData);
+
+          if ( parametersContainer->m_bufferHandle )
+          {
+            DP_ASSERT( parametersContainer->m_bufferHandle->getBuffer() );
+            dp::gl::SharedBuffer const& b = parametersContainer->m_bufferHandle->getBuffer();
+            parametersCache->m_address = b->getAddress() + parametersContainer->m_offset;
+            parametersCache->m_length = GLuint( parametersContainer->m_length == size_t(~0) ? b->getSize() - parametersContainer->m_offset : parametersContainer->m_length );
+
+            DP_ASSERT( parametersCache->m_address );
+            DP_ASSERT( parametersCache->m_length <= b->getSize() );
+          }
+          else
+          {
+            parametersCache->m_address = 0;
+            parametersCache->m_length = 0;
+          }
+        }
+
+
         /************************************************************************/
         /* CacheEntryShaderBuffer                                               */
         /************************************************************************/
@@ -703,7 +768,7 @@ namespace dp
         return parameterCacheEntry;
       }
 
-      ParameterCacheEntryStreamSharedPtr createParameterCacheEntryUniformBuffer( ProgramGL::BufferBinding binding, size_t cacheOffset
+      ParameterCacheEntryStreamSharedPtr createParameterCacheEntryUniformBuffer( ProgramGL::BufferBinding binding, bool bindlessUBO, size_t cacheOffset
                                                                                 , size_t containerOffset, size_t arraySize )
       {
         // arrays not yet supported
@@ -720,14 +785,15 @@ namespace dp
           return new CacheEntryBufferBinding<GL_SHADER_STORAGE_BUFFER>( binding.bufferIndex, cacheOffset, containerOffset, arraySize );
 #endif
         case ProgramGL::BBT_UBO:
-          return new CacheEntryBufferBinding<GL_UNIFORM_BUFFER>( binding.bufferIndex, cacheOffset, containerOffset, arraySize );
+          return bindlessUBO ? ParameterCacheEntryStreamSharedPtr(new CacheEntryBufferBindingBindless<GL_UNIFORM_BUFFER_ADDRESS_NV>( binding.bufferIndex, cacheOffset, containerOffset, arraySize ))
+                          : ParameterCacheEntryStreamSharedPtr(new CacheEntryBufferBinding<GL_UNIFORM_BUFFER>( binding.bufferIndex, cacheOffset, containerOffset, arraySize ));
         default:
           DP_ASSERT( !"unknown buffer binding type " );
           return nullptr;
         }
       }
 
-      ParameterCacheEntryStreams createParameterCacheEntriesStream( dp::rix::gl::ProgramGLHandle program, dp::rix::gl::ContainerDescriptorGLHandle descriptor )
+      ParameterCacheEntryStreams createParameterCacheEntryStreams( dp::rix::gl::ProgramGLHandle program, dp::rix::gl::ContainerDescriptorGLHandle descriptor, bool bindlessUBO )
       {
         std::vector<ParameterCacheEntryStreamSharedPtr> parameterCacheEntries;
         size_t cacheOffset = 0;
@@ -750,7 +816,7 @@ namespace dp
             ProgramGL::BufferBinding bufferBinding = program->getBufferBinding( it->m_name );
             if ( bufferBinding.bufferBindingType != ProgramGL::BBT_NONE )
             {
-              parameterCacheEntries.push_back( createParameterCacheEntryUniformBuffer( bufferBinding, cacheOffset, it->m_offset, it->m_arraySize) );
+              parameterCacheEntries.push_back( createParameterCacheEntryUniformBuffer( bufferBinding, bindlessUBO, cacheOffset, it->m_offset, it->m_arraySize) );
               cacheOffset += parameterCacheEntries.back()->getSize();
             }
           }

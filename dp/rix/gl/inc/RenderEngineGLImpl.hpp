@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright NVIDIA Corporation 2011-2014
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -203,11 +203,20 @@ namespace dp
             renderGroupCache->updateConvertedCache();
           }
         }
+
+        // todo usage of bindless ubos should be a configuration flag
+        if (glewGetExtension("GL_NV_uniform_buffer_unified_memory")) {
+          glEnableClientState(GL_UNIFORM_BUFFER_UNIFIED_NV);
+        }
       }
 
       template <typename VertexCache>
       void RenderEngineGLImpl<VertexCache>::endRender()
       {
+        if (glewGetExtension("GL_NV_uniform_buffer_unified_memory")) {
+          glDisableClientState(GL_UNIFORM_BUFFER_UNIFIED_NV);
+        }
+
         endFrame();
         setVertexFormatMask( 0 );
 

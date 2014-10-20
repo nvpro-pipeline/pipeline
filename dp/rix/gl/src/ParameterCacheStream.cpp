@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2013
+// Copyright NVIDIA Corporation 2013-2014
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -24,9 +24,11 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+#include <dp/rix/gl/inc/BufferGL.h>
 #include <dp/rix/gl/inc/ParameterCacheStream.h>
 #include <dp/rix/gl/inc/ParameterRendererUniform.h>
 #include <dp/rix/gl/inc/ParameterRendererBuffer.h>
+#include <dp/rix/gl/inc/ParameterRendererBufferAddressRange.h>
 #include <dp/rix/gl/inc/ParameterRendererBufferDSA.h>
 #include <dp/rix/gl/inc/ParameterRendererBufferRange.h>
 #include <dp/util/Array.h>
@@ -53,6 +55,7 @@ namespace dp
       ParameterCache<ParameterCacheStream>::ParameterCache( ProgramPipelineGLHandle programPipeline, std::vector<ContainerDescriptorGLHandle> const &descriptors )
         : m_programPipeline( programPipeline )
         , m_descriptors( descriptors )
+        , m_isBindlessUBOSupported(!!glewGetExtension("GL_NV_uniform_buffer_unified_memory"))
       {
         m_uboDataUBO = dp::gl::Buffer::create();
 
@@ -117,7 +120,15 @@ namespace dp
               }
               break;
             case BM_BIND_BUFFER_RANGE:
-              parameterState.m_parameterRenderer.reset( new ParameterRendererBufferRange( parameterCacheEntries, m_uboDataUBO, GL_UNIFORM_BUFFER, binding, blockSize ) );
+              if ( m_isBindlessUBOSupported )
+              {
+                parameterState.m_parameterRenderer.reset( new ParameterRendererBufferAddressRange( parameterCacheEntries, m_uboDataUBO, GL_UNIFORM_BUFFER_ADDRESS_NV, binding, blockSize ) );
+              }
+              else
+              {
+                parameterState.m_parameterRenderer.reset( new ParameterRendererBufferRange( parameterCacheEntries, m_uboDataUBO, GL_UNIFORM_BUFFER, binding, blockSize ) );
+              }
+
               m_isUBOData.push_back(true);
               break;
             default:
@@ -175,7 +186,7 @@ namespace dp
           }
           else
           {
-            ParameterCacheEntryStreams parameterCacheEntries = createParameterCacheEntriesStream( program, m_descriptors[i] );
+            ParameterCacheEntryStreams parameterCacheEntries = createParameterCacheEntryStreams( program, m_descriptors[i], m_isBindlessUBOSupported );
             parameterState.m_parameterRenderer.reset( new ParameterRendererUniform( parameterCacheEntries ) );
             parameterState.m_numParameterObjects = parameterCacheEntries.size();
             m_isUBOData.push_back(false);
