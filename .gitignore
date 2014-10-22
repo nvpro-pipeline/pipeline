@@ -1,1 +1,12 @@
 /.project
+/3rdparty/boost
+/3rdparty/devil
+/3rdparty/freeglut
+/3rdparty/glew
+/3rdparty/HOOPS
+/3rdparty/lib3ds
+/3rdparty/downloads
+/3rdparty/tinyxml
+/builds
+/temp
+/test/scripts/test_launch_site.txt

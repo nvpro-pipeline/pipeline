@@ -11,10 +11,11 @@ Building:
 - Install Qt 5.2.1 MSVC 2012 OpenGL through the installer from http://qt.io
 - Start a 'VS2012 x64 Native Tools Command Prompt'. Ensure that cmake can be launched from the command line.
 - Call 3rdPartyBuild.cmd. This will download and build all required dependencies.
-- Start the CMake GUI, specify the source code location and choose a subfolder, i.e. build/vc11-amd64, to build the binaries. Use 'Visual Studio 11 Win64' as generator.
-- Open build/vc11-amd64/Pipeline.sln in Visual Studio and hit build.
+- Create a builds subfolder. This folder is being ignored by git.
+- Start the CMake GUI, specify the source code location and choose a subfolder in builds, i.e. builds/vc11-amd64, to build the binaries. Use 'Visual Studio 11 Win64' as generator.
+- Open builds/vc11-amd64/Pipeline.sln in Visual Studio and hit build.
 
-The binaries can be found in the folder build\vc11-amd64\bin\(Debug|Release). You'll have to copy the required 3rd party dlls from the 3rdparty folders to the binary directory. This will be done automatically soon.
+The binaries can be found in the folder builds\vc11-amd64\bin\(Debug|Release). You'll have to copy the required 3rd party dlls from the 3rdparty folders to the binary directory. This will be done automatically soon.
 
 Small overview over the pipeline:
 
