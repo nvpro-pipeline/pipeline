@@ -27,6 +27,9 @@
 #pragma once
 /** @file */
 
+#include <dp/util/DPAssert.h>
+#include <memory>
+
 namespace dp
 {
   namespace util

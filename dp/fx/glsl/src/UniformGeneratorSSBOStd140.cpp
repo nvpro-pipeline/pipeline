@@ -29,6 +29,7 @@
 #include <dp/fx/glsl/UniformGeneratorSSBOStd140.h>
 #include <dp/fx/glsl/ParameterInfo.h>
 #include <dp/fx/EffectLibrary.h>
+#include <sstream>
 
 using namespace std;
 

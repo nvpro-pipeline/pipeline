@@ -25,6 +25,7 @@
 
 
 #include <dp/util/File.h>
+#include <dp/util/SharedPtr.h>
 #include <dp/util/Singleton.h>
 #include <dp/util/Tokenizer.h>
 #include <dp/fx/xml/EffectLoader.h>
@@ -75,7 +76,7 @@ namespace dp
         }
       };
 
-      typedef dp::util::SmartPtr<ShaderPipelineImpl> SmartShaderPipelineImpl;
+      typedef std::shared_ptr<ShaderPipelineImpl> SmartShaderPipelineImpl;
 
       /************************************************************************/
       /* Technique                                                            */
@@ -115,7 +116,7 @@ namespace dp
       /************************************************************************/
       SmartDomainSpec DomainSpec::create( std::string const & name, dp::fx::Domain domain, ParameterGroupSpecsContainer const & specs, bool transparent, Techniques const & techniques )
       {
-        return new DomainSpec( name, domain, specs, transparent, techniques );
+        return( std::shared_ptr<DomainSpec>( new DomainSpec( name, domain, specs, transparent, techniques ) ) );
       }
 
       DomainSpec::DomainSpec( std::string const & name, dp::fx::Domain domain, ParameterGroupSpecsContainer const & specs, bool transparent, Techniques const & techniques )
@@ -160,7 +161,7 @@ namespace dp
       /************************************************************************/
       SmartDomainData DomainData::create( SmartDomainSpec const & domainSpec, std::string const & name, std::vector<dp::fx::SmartParameterGroupData> const & parameterGroupDatas, bool transparent )
       {
-        return new DomainData( domainSpec, name, parameterGroupDatas, transparent );
+        return( std::shared_ptr<DomainData>( new DomainData( domainSpec, name, parameterGroupDatas, transparent ) ) );
       }
 
       DomainData::DomainData( SmartDomainSpec const & domainSpec, std::string const & name, std::vector<dp::fx::SmartParameterGroupData> const & parameterGroupDatas, bool transparent )
@@ -209,7 +210,7 @@ namespace dp
       /************************************************************************/
       SmartEffectSpec EffectSpec::create( std::string const & name, DomainSpecs const & domainSpecs )
       {
-        return new EffectSpec( name, domainSpecs );
+        return( std::shared_ptr<EffectSpec>( new EffectSpec( name, domainSpecs ) ) );
       }
 
       EffectSpec::EffectSpec( std::string const & name, DomainSpecs const & domainSpecs )
@@ -449,7 +450,7 @@ namespace dp
       {
         snippets.clear();
 
-        SmartEffectSpec effectSpec = dp::util::smart_cast<EffectSpec>( dp::fx::EffectLibrary::instance()->getEffectSpec( configuration.getName() ) );
+        SmartEffectSpec effectSpec = dp::util::shared_cast<EffectSpec>( dp::fx::EffectLibrary::instance()->getEffectSpec( configuration.getName() ) );
 
         // All other domains have only one set of code snippets per technique and ignore the signature.
         
@@ -546,7 +547,7 @@ namespace dp
         {
           throw std::runtime_error( std::string("EffectLoader::loadSource(): File " + filename + "not found." ) );
         }
-        return new FileSnippet( name );
+        return( std::make_shared<FileSnippet>( name ) );
       }
 
       SmartSnippet EffectLoader::getParameterSnippet( string const & inout, string const & type, TiXmlElement *element )
@@ -561,7 +562,7 @@ namespace dp
         DP_ASSERT( element->Attribute( "name" ) );
         oss << inout + string( " " ) + type + string( " " ) + string( element->Attribute( "name" ) ) + string( ";\n" );
 
-        return new StringSnippet( oss.str() );
+        return( std::make_shared<StringSnippet>( oss.str() ) );
       }
 
       void EffectLoader::parseLibrary( TiXmlElement * root )
@@ -660,7 +661,7 @@ namespace dp
         dp::fx::SmartEffectSpec registeredEffectSpec = getEffectLibrary()->registerSpec( es, this );
         if ( es == registeredEffectSpec )
         {
-          SmartEffectDataPrivate effectData = new EffectDataPrivate( registeredEffectSpec, registeredEffectSpec->getName() );
+          SmartEffectDataPrivate effectData( new EffectDataPrivate( registeredEffectSpec, registeredEffectSpec->getName() ) );
           getEffectLibrary()->registerEffectData( effectData );
           for ( EffectSpec::iterator it = registeredEffectSpec->beginParameterGroupSpecs(); it != registeredEffectSpec->endParameterGroupSpecs(); ++it )
           {
@@ -840,7 +841,7 @@ namespace dp
           SmartParameterGroupSpec registeredSpec = getEffectLibrary()->registerSpec( spec );
           if( registeredSpec == spec ) // a new spec had been added
           {
-            SmartParameterGroupData data = new ParameterGroupDataPrivate( registeredSpec, registeredSpec->getName() );
+            SmartParameterGroupData data = std::make_shared<ParameterGroupDataPrivate>( registeredSpec, registeredSpec->getName() );
             getEffectLibrary()->registerParameterGroupData( data );
           }
           return registeredSpec;
@@ -913,7 +914,7 @@ namespace dp
                   string name = dp::util::findFile( filename, m_localSearchPaths );
                   if ( !name.empty() )
                   {
-                    snippets.push_back( new FileSnippet( name ) );
+                    snippets.push_back( std::make_shared<FileSnippet>( name ) );
                   }
                   else
                   {
@@ -930,7 +931,7 @@ namespace dp
                 }
                 else if ( element->Attribute( "string" ) )
                 {
-                  snippets.push_back( new StringSnippet( element->Attribute( "string" ) ) );
+                  snippets.push_back( std::make_shared<StringSnippet>( element->Attribute( "string" ) ) );
                 }
                 else
                 {
@@ -945,7 +946,7 @@ namespace dp
 
           element = element->NextSiblingElement();
         }
-        return new SnippetListSnippet( snippets );
+        return( std::make_shared<SnippetListSnippet>( snippets ) );
       }
 
       SmartParameterGroupData EffectLoader::parseParameterGroupData( TiXmlElement * pg )
@@ -968,7 +969,7 @@ namespace dp
             throw std::runtime_error( "parameterGroupData for " + id + " already exists" );
           }
 
-          parameterGroupData = new ParameterGroupDataPrivate( parameterGroupSpec, id );
+          parameterGroupData = std::make_shared<ParameterGroupDataPrivate>( parameterGroupSpec, id );
 
           TiXmlHandle xmlHandle = pg->FirstChildElement();
           TiXmlElement *element = xmlHandle.Element();
@@ -987,7 +988,7 @@ namespace dp
             }
             element = element->NextSiblingElement();
           }
-          m_parameterGroupDataLookup[id] = parameterGroupData;
+          m_parameterGroupDataLookup[id] = dp::util::shared_cast<ParameterGroupData>( parameterGroupData );
         }
         else if ( pg->Attribute( "ref" ) )  // Reference existing parameterGroupData defined before.
         {
@@ -998,7 +999,7 @@ namespace dp
           {
             throw std::runtime_error( "parameterGroupData for " + ref + " not found in global scope." );
           }
-          parameterGroupData = itpgd->second;
+          parameterGroupData = dp::util::shared_cast<ParameterGroupDataPrivate>( itpgd->second );
         }
         else
         {
@@ -1080,11 +1081,11 @@ namespace dp
             }
           }
 
-          dp::fx::SmartEffectSpec es = EffectSpec::create( id, domainSpecs );
+          dp::fx::SmartEffectSpec es = dp::util::shared_cast<dp::fx::EffectSpec>( EffectSpec::create( id, domainSpecs ) );
           dp::fx::SmartEffectSpec registeredEffectSpec = getEffectLibrary()->registerSpec( es, this );
           if ( es == registeredEffectSpec )
           {
-            SmartEffectDataPrivate effectData = new EffectDataPrivate( registeredEffectSpec, registeredEffectSpec->getName() );
+            SmartEffectDataPrivate effectData( new EffectDataPrivate( registeredEffectSpec, registeredEffectSpec->getName() ) );
             getEffectLibrary()->registerEffectData( effectData );
             for ( EffectSpec::iterator it = registeredEffectSpec->beginParameterGroupSpecs(); it != registeredEffectSpec->endParameterGroupSpecs(); ++it )
             {
@@ -1155,9 +1156,9 @@ namespace dp
 
       SmartShaderPipeline EffectLoader::generateShaderPipeline( const ShaderPipelineConfiguration& configuration )
       {
-        SmartShaderPipelineImpl shaderPipeline = new ShaderPipelineImpl();
+        SmartShaderPipelineImpl shaderPipeline( new ShaderPipelineImpl() );
 
-        SmartEffectSpec effectSpec = dp::util::smart_cast<EffectSpec>( dp::fx::EffectLibrary::instance()->getEffectSpec( configuration.getName() ) );
+        SmartEffectSpec effectSpec = dp::util::shared_cast<EffectSpec>( dp::fx::EffectLibrary::instance()->getEffectSpec( configuration.getName() ) );
         EffectSpec::DomainSpecs const & domainSpecs = effectSpec->getDomainSpecs();
 
         for ( EffectSpec::DomainSpecs::const_iterator it = domainSpecs.begin(); it != domainSpecs.end(); ++it ) 
@@ -1172,7 +1173,7 @@ namespace dp
           std::vector<dp::fx::SmartSnippet> snippets;
           if ( getShaderSnippets( configuration, stage.domain, stage.entrypoint, snippets ) )
           {
-            stage.source = new SnippetListSnippet( snippets );
+            stage.source = std::make_shared<SnippetListSnippet>( snippets );
 
             if ( stage.domain == DOMAIN_VERTEX
               || stage.domain == DOMAIN_GEOMETRY
@@ -1197,7 +1198,7 @@ namespace dp
       bool EffectLoader::effectHasTechnique( dp::fx::SmartEffectSpec const& effectSpec, std::string const& techniqueName, bool /*rasterizer*/ )
       {
         bool hasTechnique = true;
-        SmartEffectSpec xmlEffectSpec = dp::util::smart_cast<EffectSpec>( effectSpec );
+        SmartEffectSpec xmlEffectSpec = dp::util::shared_cast<EffectSpec>( effectSpec );
         for ( EffectSpec::DomainSpecs::const_iterator it = xmlEffectSpec->getDomainSpecs().begin() ; it != xmlEffectSpec->getDomainSpecs().end() && hasTechnique ; ++it )
         {
             switch( it->second->getDomain() )

@@ -191,7 +191,8 @@ namespace dp
       }
       else
       {
-        return SmartEffectSpec::null;
+        static SmartEffectSpec dummy;
+        return dummy;
       }
     }
 
@@ -218,7 +219,8 @@ namespace dp
       }
       else
       {
-        return SmartParameterGroupSpec::null;
+        static SmartParameterGroupSpec dummy;
+        return( dummy );
       }
     }
 
@@ -261,7 +263,7 @@ namespace dp
         m_effectSpecs[ effectSpec->getName()] = EffectSpecInfo( effectSpec, effectLoader, m_currentFile.top() );
 
         // create EffectData for default values of EffectSpec
-        SmartEffectDataPrivate effectData = new EffectDataPrivate( effectSpec, effectSpec->getName() );
+        SmartEffectDataPrivate effectData( new EffectDataPrivate( effectSpec, effectSpec->getName() ) );
         for ( EffectSpec::iterator it = effectSpec->beginParameterGroupSpecs(); it != effectSpec->endParameterGroupSpecs(); ++it )
         {
           effectData->setParameterGroupData( it, getParameterGroupData( (*it)->getName() ) );
@@ -286,7 +288,7 @@ namespace dp
         m_parameterGroupSpecs[ parameterGroupSpec->getName() ] = parameterGroupSpec;
 
         // register default ParameterGroupData for parameterGroupSpec
-        registerParameterGroupData(new ParameterGroupDataPrivate( parameterGroupSpec, parameterGroupSpec->getName() ) );
+        registerParameterGroupData( std::make_shared<ParameterGroupDataPrivate>( parameterGroupSpec, parameterGroupSpec->getName() ) );
         return parameterGroupSpec;
       }
     }
@@ -332,7 +334,8 @@ namespace dp
       }
       else
       {
-        return SmartEnumSpec::null;
+        static SmartEnumSpec dummy;
+        return( dummy );
       }
     }
 
@@ -345,7 +348,8 @@ namespace dp
       }
       else
       {
-        return SmartParameterGroupData::null;
+        static SmartParameterGroupData dummy;
+        return( dummy );
       }
     }
 
@@ -358,7 +362,8 @@ namespace dp
       }
       else
       {
-        return SmartEffectData::null;
+        static SmartEffectData dummy;
+        return( dummy );
       }
     }
 

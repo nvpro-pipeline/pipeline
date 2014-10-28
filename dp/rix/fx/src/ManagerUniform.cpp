@@ -244,8 +244,8 @@ namespace dp
       if ( stage.source )
       {
         std::vector<dp::fx::SmartSnippet> headerSnippets;
-        headerSnippets.push_back( new dp::fx::VersionSnippet() );
-        headerSnippets.push_back( new dp::fx::ExtensionSnippet() );
+        headerSnippets.push_back( std::make_shared<dp::fx::VersionSnippet>() );
+        headerSnippets.push_back( std::make_shared<dp::fx::ExtensionSnippet>() );
 
         std::vector<dp::fx::SmartSnippet> pgsSnippets;
 
@@ -254,7 +254,7 @@ namespace dp
           it != stage.parameterGroupSpecs.end();
           ++it )
         {
-          pgsSnippets.push_back( new dp::fx::ParameterGroupSnippet( *it ) );
+          pgsSnippets.push_back( std::make_shared<dp::fx::ParameterGroupSnippet>( *it ) );
         }
 
         for( std::vector<std::string>::const_iterator it = stage.systemSpecs.begin(); it != stage.systemSpecs.end(); ++it )
@@ -268,7 +268,7 @@ namespace dp
             it != itSystemSpec->second.m_effectSpec->endParameterGroupSpecs();
             ++it )
           {
-            pgsSnippets.push_back( new dp::fx::ParameterGroupSnippet( *it ) );
+            pgsSnippets.push_back( std::make_shared<dp::fx::ParameterGroupSnippet>( *it ) );
           }
         }
 
@@ -297,7 +297,7 @@ namespace dp
 
         for ( std::set<dp::fx::SmartEnumSpec>::const_iterator it = enumSpecs.begin(); it != enumSpecs.end(); ++it )
         {
-          headerSnippets.push_back( new dp::fx::EnumSpecSnippet( *it ) );
+          headerSnippets.push_back( std::make_shared<dp::fx::EnumSpecSnippet>( *it ) );
         }
 
         // add snippets from renderer
@@ -305,7 +305,7 @@ namespace dp
         std::vector<std::string> const& codeSnippets = configuration.getSourceCodes(domain);
         for( size_t index = 0;index < codeSnippets.size(); ++index )
         {
-          sources.push_back( new dp::fx::StringSnippet( codeSnippets[index] ) );
+          sources.push_back( std::make_shared<dp::fx::StringSnippet>( codeSnippets[index] ) );
         }
 
         // generate code from header, pgs, and shader

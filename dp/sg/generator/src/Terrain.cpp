@@ -382,7 +382,7 @@ namespace dp
           dp::sg::core::TextureHostSharedPtr heightMap = dp::sg::io::loadTextureHost( filenameHeightMap );
           dp::sg::core::TextureHostSharedPtr colorMap = dp::sg::io::loadTextureHost( filenameColorMap );
 
-          return( std::shared_ptr<dp::sg::core::GeoNode>( new TerrainNode( heightMap, colorMap, resolution, offset, TerrainNode::MODE_TESSELLATION ) ) );
+          return( std::make_shared<TerrainNode>( heightMap, colorMap, resolution, offset, TerrainNode::MODE_TESSELLATION ) );
         }
       }
 

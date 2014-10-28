@@ -26,7 +26,6 @@
 
 #pragma once
 
-#include <dp/util/RCObject.h>
 #include <dp/fx/EffectDefs.h>
 #include <dp/fx/ParameterGroupSpec.h>
 
@@ -35,18 +34,18 @@ namespace dp
   namespace fx
   {
     class ParameterGroupLayout;
-    typedef dp::util::SmartPtr<ParameterGroupLayout> SmartParameterGroupLayout;
+    typedef std::shared_ptr<ParameterGroupLayout> SmartParameterGroupLayout;
 
-    class ParameterGroupLayout : public dp::util::RCObject
+    class ParameterGroupLayout
     {
     public:
-      class ParameterInfo : public dp::util::RCObject
+      class ParameterInfo
       {
       public:
         virtual void convert( void* dstBase, void const* src ) const = 0;
       };
 
-      typedef dp::util::SmartPtr<ParameterInfo> SmartParameterInfo;
+      typedef std::shared_ptr<ParameterInfo> SmartParameterInfo;
 
       DP_FX_API static SmartParameterGroupLayout create( dp::fx::Manager manager, const std::vector<SmartParameterInfo>& parameterInfos, const std::string& groupName, size_t bufferSize, bool isInstanced, const SmartParameterGroupSpec& spec );
 

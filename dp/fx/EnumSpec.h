@@ -28,22 +28,25 @@
 /** \file */
 
 #include <dp/fx/Config.h>
-#include <dp/util/RCObject.h>
+#include <memory>
+#include <string>
+#include <vector>
 
 namespace dp
 {
   namespace fx
   {
     class EnumSpec;
-    typedef dp::util::SmartPtr<EnumSpec> SmartEnumSpec;
+    typedef std::shared_ptr<EnumSpec> SmartEnumSpec;
 
-    class EnumSpec : public dp::util::RCObject
+    class EnumSpec
     {
       public:
         typedef int StorageType;
 
       public:
         DP_FX_API static SmartEnumSpec create( const std::string & type, const std::vector<std::string> & values );
+        DP_FX_API virtual ~EnumSpec();
 
       public:
         DP_FX_API const std::string & getType() const;
@@ -56,7 +59,6 @@ namespace dp
       protected:
         DP_FX_API EnumSpec( const std::string & type, const std::vector<std::string> & value );
         DP_FX_API EnumSpec( const EnumSpec & rhs );
-        DP_FX_API virtual ~EnumSpec();
         DP_FX_API EnumSpec & operator=( const EnumSpec & rhs );
 
       private:

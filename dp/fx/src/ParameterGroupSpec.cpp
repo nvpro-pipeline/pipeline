@@ -26,10 +26,10 @@
 
 #include <dp/fx/ParameterGroupSpec.h>
 #include <dp/util/HashGeneratorMurMur.h>
+#include <set>
 
 using namespace dp::util;
 using std::make_pair;
-using std::map;
 using std::string;
 using std::vector;
 
@@ -41,7 +41,7 @@ namespace dp
     SmartParameterGroupSpec ParameterGroupSpec::create( const string & name
                                                       , const vector<ParameterSpec> & specs )
     {
-      return( new ParameterGroupSpec( name, specs ) );
+      return( std::shared_ptr<ParameterGroupSpec>( new ParameterGroupSpec( name, specs ) ) );
     }
 
     bool specSorter( vector<ParameterSpec>::const_iterator it0

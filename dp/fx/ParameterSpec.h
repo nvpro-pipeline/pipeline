@@ -34,7 +34,6 @@
 #include <dp/math/Matmnt.h>
 #include <dp/math/Vecnt.h>
 #include <dp/util/Semantic.h>
-#include <dp/util/SmartPtr.h>
 #include <dp/util/Types.h>
 
 namespace dp

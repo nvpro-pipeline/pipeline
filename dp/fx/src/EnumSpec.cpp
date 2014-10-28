@@ -25,7 +25,7 @@
 
 
 #include <dp/fx/EnumSpec.h>
-#include <dp/util/SmartPtr.h>
+#include <dp/util/Types.h>
 
 using namespace dp::util;
 using std::string;
@@ -38,7 +38,7 @@ namespace dp
 
     SmartEnumSpec EnumSpec::create( const string & type , const vector<string> & values )
     {
-      return( new EnumSpec( type, values ) );
+      return( std::shared_ptr<EnumSpec>( new EnumSpec( type, values ) ) );
     }
 
     EnumSpec::EnumSpec( const string & type , const vector<string> & values )

@@ -139,7 +139,7 @@ namespace dp
       }
     };
 
-    typedef dp::util::SmartPtr<ShaderPipelineImpl> SmartShaderPipelineImpl;
+    typedef std::shared_ptr<ShaderPipelineImpl> SmartShaderPipelineImpl;
 
     /************************************************************************/
     /* EffectLibrary                                                        */
@@ -170,8 +170,11 @@ namespace dp
       case MANAGER_SHADER_STORAGE_BUFFER_OBJECT_RIX:
         return dp::fx::glsl::UniformGeneratorSSBOStd140(false).getParameterGroupLayout(spec);
       default:
-        DP_ASSERT(!"Unsupported manager");
-        return SmartParameterGroupLayout::null;
+        {
+          DP_ASSERT(!"Unsupported manager");
+          static SmartParameterGroupLayout dummy;
+          return( dummy );
+        }
       }
     }
 

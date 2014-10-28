@@ -30,8 +30,6 @@
 #include <dp/fx/Config.h>
 #include <dp/fx/ParameterSpec.h>
 #include <dp/util/HashGenerator.h>
-#include <dp/util/RCObject.h>
-#include <dp/util/SmartPtr.h>
 #include <dp/util/Types.h>
 
 namespace dp
@@ -41,9 +39,9 @@ namespace dp
 
     // The spec for a group of parameters
     class ParameterGroupSpec;
-    typedef dp::util::SmartPtr<ParameterGroupSpec> SmartParameterGroupSpec;
+    typedef std::shared_ptr<ParameterGroupSpec> SmartParameterGroupSpec;
 
-    class ParameterGroupSpec : public dp::util::RCObject
+    class ParameterGroupSpec
     {
       private:
         typedef std::vector<std::pair<ParameterSpec,unsigned int> >  ParameterSpecsContainer;
@@ -53,6 +51,7 @@ namespace dp
       public:
         DP_FX_API static SmartParameterGroupSpec create( const std::string & name
                                                        , const std::vector<ParameterSpec> & specs );
+        DP_FX_API virtual ~ParameterGroupSpec();
 
       public:
         const std::string & getName() const;
@@ -68,7 +67,6 @@ namespace dp
       protected:
         DP_FX_API ParameterGroupSpec( const std::string & name, const std::vector<ParameterSpec> & specs );
         DP_FX_API ParameterGroupSpec( const ParameterGroupSpec &rhs );
-        DP_FX_API virtual ~ParameterGroupSpec();
         DP_FX_API ParameterSpec & operator=( const ParameterSpec & rhs );
 
       private:
@@ -115,7 +113,7 @@ namespace dp
 
     inline bool ParameterGroupSpec::isEquivalent( const SmartParameterGroupSpec & p, bool ignoreNames, bool /*deepCompare*/ ) const
     {
-      return(   ( p == this )
+      return(   ( p.get() == this )
             ||  (   ( ignoreNames ? true : m_name == p->m_name )
                 &&  ( m_dataSize == p->m_dataSize )
                 &&  ( m_specs == p->m_specs ) ) );
