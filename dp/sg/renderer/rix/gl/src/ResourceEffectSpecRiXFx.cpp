@@ -64,9 +64,8 @@ namespace dp
           ResourceEffectSpecRiXFx::ResourceEffectSpecRiXFx( const SmartEffectSpec& effectSpec, const dp::rix::fx::SmartManager& rixfx, const SmartResourceManager& resourceManager )
             : ResourceManager::Resource( reinterpret_cast<size_t>( effectSpec.get() ), resourceManager )
             , m_resourceManager( resourceManager )
+            , m_effectSpec( effectSpec )
           {
-            m_effectSpec = effectSpec.get();
-
             for ( EffectSpec::iterator itpgs = effectSpec->beginParameterGroupSpecs(); itpgs != effectSpec->endParameterGroupSpecs(); ++itpgs )
             {
               dp::sg::core::ParameterGroupDataSharedPtr data = dp::sg::core::ParameterGroupData::create( *itpgs );

@@ -37,9 +37,9 @@ namespace dp
   {
 
     class ParameterGroupData;
-    typedef dp::util::SmartPtr<ParameterGroupData> SmartParameterGroupData;
+    typedef std::shared_ptr<ParameterGroupData> SmartParameterGroupData;
 
-    class ParameterGroupData : public dp::util::RCObject
+    class ParameterGroupData
     {
     public:
       DP_FX_API const dp::fx::SmartParameterGroupSpec & getParameterGroupSpec() const;

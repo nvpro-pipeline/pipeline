@@ -25,6 +25,7 @@
 
 
 #include <EnumSpecSnippet.h>
+#include <sstream>
 
 namespace dp
 {

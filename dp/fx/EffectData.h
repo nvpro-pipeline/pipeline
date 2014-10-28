@@ -36,9 +36,9 @@ namespace dp
   {
 
     class EffectData;
-    typedef dp::util::SmartPtr<EffectData> SmartEffectData;
+    typedef std::shared_ptr<EffectData> SmartEffectData;
 
-    class EffectData : public dp::util::RCObject
+    class EffectData
     {
     public:
       DP_FX_API const dp::fx::SmartEffectSpec& getEffectSpec() const;

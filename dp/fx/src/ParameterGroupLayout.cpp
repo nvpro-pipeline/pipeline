@@ -32,7 +32,7 @@ namespace dp
   {
     SmartParameterGroupLayout ParameterGroupLayout::create( dp::fx::Manager manager, const std::vector<SmartParameterInfo>& parameterInfos, const std::string& groupName, size_t bufferSize, bool isInstanced, const SmartParameterGroupSpec& spec )
     {
-      return new ParameterGroupLayout( manager, parameterInfos, groupName, bufferSize, isInstanced, spec );
+      return( std::shared_ptr<ParameterGroupLayout>( new ParameterGroupLayout( manager, parameterInfos, groupName, bufferSize, isInstanced, spec ) ) );
     }
 
     ParameterGroupLayout::ParameterGroupLayout( dp::fx::Manager manager, const std::vector<SmartParameterInfo>& parameterInfos, const std::string& groupName, size_t bufferSize, bool isInstanced, const SmartParameterGroupSpec& spec )

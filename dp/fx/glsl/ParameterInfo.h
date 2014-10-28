@@ -27,7 +27,6 @@
 #pragma once
 
 #include <dp/fx/glsl/Config.h>
-#include <dp/util/SmartPtr.h>
 #include <dp/fx/ParameterGroupLayout.h>
 
 namespace dp

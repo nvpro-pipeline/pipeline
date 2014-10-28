@@ -34,7 +34,7 @@ namespace dp
   {
 
     class EffectDataPrivate;
-    typedef dp::util::SmartPtr<EffectDataPrivate> SmartEffectDataPrivate;
+    typedef std::shared_ptr<EffectDataPrivate> SmartEffectDataPrivate;
 
     class EffectDataPrivate : public EffectData
     {

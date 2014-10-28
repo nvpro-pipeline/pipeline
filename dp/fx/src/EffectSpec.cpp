@@ -26,6 +26,7 @@
 
 #include <dp/fx/EffectSpec.h>
 #include <dp/util/HashGeneratorMurMur.h>
+#include <set>
 
 using namespace dp::util;
 using std::list;
@@ -39,7 +40,7 @@ namespace dp
 
     SmartEffectSpec EffectSpec::create( const string & name, Type type, const ParameterGroupSpecsContainer & groupSpecs, bool transparent )
     {
-      return( new EffectSpec( name, type, groupSpecs, transparent ) );
+      return( std::shared_ptr<EffectSpec>( new EffectSpec( name, type, groupSpecs, transparent ) ) );
     }
 
     bool specSorter( const SmartParameterGroupSpec & spec0, const SmartParameterGroupSpec & spec1 )

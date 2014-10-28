@@ -26,8 +26,8 @@
 
 #pragma once 
 
+#include <memory>
 #include <string>
-#include <dp/util/SmartPtr.h>
 
 namespace dp
 {
@@ -35,7 +35,7 @@ namespace dp
   {
     class ParameterSpec;
     class ParameterGroupSpec;
-    typedef dp::util::SmartPtr<ParameterGroupSpec> SmartParameterGroupSpec;
+    typedef std::shared_ptr<ParameterGroupSpec> SmartParameterGroupSpec;
 
     namespace glsl
     {

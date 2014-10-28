@@ -33,7 +33,7 @@ namespace dp
   namespace fx
   {
     class ParameterGroupDataPrivate;
-    typedef dp::util::SmartPtr<ParameterGroupDataPrivate> SmartParameterGroupDataPrivate;
+    typedef std::shared_ptr<ParameterGroupDataPrivate> SmartParameterGroupDataPrivate;
 
     class ParameterGroupDataPrivate : public ParameterGroupData
     {

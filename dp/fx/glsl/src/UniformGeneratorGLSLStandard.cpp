@@ -28,6 +28,7 @@
 #include <dp/fx/ParameterGroupLayout.h>
 #include <dp/fx/glsl/UniformGeneratorGLSL.h>
 #include <dp/fx/glsl/UniformGeneratorGLSLStandard.h>
+#include <sstream>
 
 namespace dp
 {

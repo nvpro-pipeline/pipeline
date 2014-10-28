@@ -25,6 +25,7 @@
 
 
 #include <dp/fx/inc/Snippet.h>
+#include <sstream>
 
 namespace dp
 {

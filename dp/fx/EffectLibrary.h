@@ -45,9 +45,9 @@ namespace dp
   {
 
     class ShaderPipeline;
-    typedef dp::util::SmartPtr<ShaderPipeline> SmartShaderPipeline;
+    typedef std::shared_ptr<ShaderPipeline> SmartShaderPipeline;
 
-    class ShaderPipeline : public dp::util::RCObject
+    class ShaderPipeline
     {
     public:
       typedef std::vector<SmartParameterGroupSpec> ParameterGroupSpecContainer;
@@ -96,7 +96,7 @@ namespace dp
 
       DP_FX_API std::string const& getName() const;
 
-      DP_FX_API void addEffectSpec( Domain domain, SmartEffectSpec const& effectSpec, SmartEffectSpec const& systemSpec = SmartEffectSpec::null );
+      DP_FX_API void addEffectSpec( Domain domain, SmartEffectSpec const& effectSpec, SmartEffectSpec const& systemSpec = SmartEffectSpec() );
       DP_FX_API ShaderPipelineConfiguration::EffectSpecPerDomain getEffectSpecs() const;
 
       /** add a piece of sourcecode after the parameter declarations and before the rest of the shader**/

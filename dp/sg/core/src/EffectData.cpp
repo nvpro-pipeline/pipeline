@@ -27,6 +27,7 @@
 #include <dp/sg/core/EffectData.h>
 #include <dp/sg/core/TextureFile.h>
 #include <dp/fx/EffectLibrary.h>
+#include <dp/util/SharedPtr.h>
 
 using namespace dp::math;
 using namespace dp::fx;
@@ -85,7 +86,7 @@ namespace
   };
 
   class EffectDataLocal;
-  typedef dp::util::SmartPtr<EffectDataLocal> SmartEffectDataLocal;
+  typedef std::shared_ptr<EffectDataLocal> SmartEffectDataLocal;
 
   class EffectDataLocal : public dp::fx::EffectData
   {
@@ -96,7 +97,7 @@ namespace
         int i = 0; 
         for ( dp::fx::EffectSpec::iterator it = m_effectSpec->beginParameterGroupSpecs() ; it != m_effectSpec->endParameterGroupSpecs() ; ++it, i++ )
         {
-          m_parameterGroupDatas[i] = new ParameterGroupDataLocal( effectData->getParameterGroupData( it ) );
+          m_parameterGroupDatas[i] = std::make_shared<ParameterGroupDataLocal>( effectData->getParameterGroupData( it ) );
         }
         setTransparent( effectData->getTransparent() );
       }
@@ -364,8 +365,8 @@ namespace dp
 
       bool EffectData::save( const std::string & filename ) const
       {
-        SmartEffectDataLocal edl = new EffectDataLocal( this );
-        return( EffectLibrary::instance()->save( edl, filename ) );
+        SmartEffectDataLocal edl( new EffectDataLocal( this ) );
+        return( EffectLibrary::instance()->save( dp::util::shared_cast<dp::fx::EffectData>( edl ), filename ) );
       }
 
       const SmartEffectSpec& getStandardGeometrySpec()

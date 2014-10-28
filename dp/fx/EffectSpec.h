@@ -28,8 +28,7 @@
 /** \file */
 
 #include <dp/fx/ParameterGroupSpec.h>
-#include <dp/util/RCObject.h>
-#include <dp/util/SmartPtr.h>
+#include <map>
 
 namespace dp
 {
@@ -38,9 +37,9 @@ namespace dp
 
     // The spec for an effect, holding a container of SmartParameterGroupSpecs
     class EffectSpec;
-    typedef dp::util::SmartPtr<EffectSpec> SmartEffectSpec;
+    typedef std::shared_ptr<EffectSpec> SmartEffectSpec;
 
-    class EffectSpec : public dp::util::RCObject
+    class EffectSpec
     {
       public:
         typedef std::vector<SmartParameterGroupSpec>  ParameterGroupSpecsContainer;
@@ -60,6 +59,7 @@ namespace dp
         DP_FX_API static SmartEffectSpec create( const std::string & name, Type type
                                                , const ParameterGroupSpecsContainer & groupSpecs
                                                , bool transparent = false );
+        virtual ~EffectSpec();
 
       public:
                   const std::string & getName() const;
@@ -77,8 +77,6 @@ namespace dp
       protected:
         // new pipeline version
         DP_FX_API EffectSpec( std::string const & name, Type type, ParameterGroupSpecsContainer const & specs, bool transparent );
-
-        virtual ~EffectSpec();
 
       private:
         std::string                   m_name;

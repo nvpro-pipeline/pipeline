@@ -81,9 +81,9 @@ namespace dp
       /* DomainSpec                                                           */
       /************************************************************************/
       class DomainSpec;
-      typedef dp::util::SmartPtr<DomainSpec> SmartDomainSpec;
+      typedef std::shared_ptr<DomainSpec> SmartDomainSpec;
 
-      class DomainSpec : public dp::util::RCObject
+      class DomainSpec
       {
       public:
         typedef std::map<std::string, TechniqueSharedPtr> Techniques;
@@ -112,9 +112,9 @@ namespace dp
       /* DomainData                                                           */
       /************************************************************************/
       class DomainData;
-      typedef dp::util::SmartPtr<DomainData> SmartDomainData;
+      typedef std::shared_ptr<DomainData> SmartDomainData;
 
-      class DomainData : public dp::util::RCObject
+      class DomainData
       {
       public:
         static SmartDomainData create( SmartDomainSpec const & domainSpec, std::string const & name, std::vector<dp::fx::SmartParameterGroupData> const & parameterGroupDatas, bool transparent );
@@ -138,7 +138,7 @@ namespace dp
       /* EffectSpec                                                           */
       /************************************************************************/
       class EffectSpec;
-      typedef dp::util::SmartPtr<EffectSpec> SmartEffectSpec;
+      typedef std::shared_ptr<EffectSpec> SmartEffectSpec;
 
       class EffectSpec : public dp::fx::EffectSpec
       {
