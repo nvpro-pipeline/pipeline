@@ -39,9 +39,14 @@ using namespace dp::fx;
 using std::string;
 using std::vector;
 
-dp::util::SmartPtr<SceneRendererPipeline::MonoViewStateProvider> SceneRendererPipeline::MonoViewStateProvider::create()
+SceneRendererPipeline::SmartMonoViewStateProvider SceneRendererPipeline::MonoViewStateProvider::create()
 {
-  return new SceneRendererPipeline::MonoViewStateProvider();
+  return( std::shared_ptr<MonoViewStateProvider>( new SceneRendererPipeline::MonoViewStateProvider() ) );
+}
+
+SmartSceneRendererPipeline SceneRendererPipeline::create()
+{
+  return( std::shared_ptr<SceneRendererPipeline>( new SceneRendererPipeline() ) );
 }
 
 // This does nothing except for providing the setSceneRenderer() override which 
@@ -390,9 +395,9 @@ void SceneRendererPipeline::setSceneRenderer(const dp::sg::ui::SmartSceneRendere
   m_sceneRenderer->setStereoViewStateProvider(m_monoViewStateProvider);
 
   // If the renderer is a SceneRendererGL2 reuse it for the highlighting to keep the number of RenderLists small.
-  if (dp::util::isSmartPtrOf<dp::sg::renderer::rix::gl::SceneRenderer>(m_sceneRenderer))
+  if ( m_sceneRenderer.isPtrTo<dp::sg::renderer::rix::gl::SceneRenderer>() )
   {
-    m_sceneRendererHighlight = m_sceneRenderer;
+    m_sceneRendererHighlight = m_sceneRenderer.staticCast<dp::sg::renderer::rix::gl::SceneRenderer>();
   }
   else
   {
@@ -473,16 +478,16 @@ dp::fx::Manager SceneRendererPipeline::getShaderManager( ) const
 dp::sg::renderer::rix::gl::TransparencyMode SceneRendererPipeline::getTransparencyMode() const
 {
   DP_ASSERT( m_sceneRenderer );
-  DP_ASSERT( dp::util::isSmartPtrOf<dp::sg::renderer::rix::gl::SceneRenderer>(m_sceneRenderer) );
-  return( dp::util::smart_cast<dp::sg::renderer::rix::gl::SceneRenderer>(m_sceneRenderer)->getTransparencyMode() );
+  DP_ASSERT( m_sceneRenderer.isPtrTo<dp::sg::renderer::rix::gl::SceneRenderer>() );
+  return( m_sceneRenderer.staticCast<dp::sg::renderer::rix::gl::SceneRenderer>()->getTransparencyMode() );
 }
 
 void SceneRendererPipeline::setTransparencyMode( dp::sg::renderer::rix::gl::TransparencyMode mode )
 {
   DP_ASSERT( mode != getTransparencyMode() );
   DP_ASSERT( m_sceneRenderer );
-  DP_ASSERT( dp::util::isSmartPtrOf<dp::sg::renderer::rix::gl::SceneRenderer>(m_sceneRenderer) );
-  dp::util::smart_cast<dp::sg::renderer::rix::gl::SceneRenderer>(m_sceneRenderer)->setTransparencyMode( mode );
+  DP_ASSERT( m_sceneRenderer.isPtrTo<dp::sg::renderer::rix::gl::SceneRenderer>() );
+  m_sceneRenderer.staticCast<dp::sg::renderer::rix::gl::SceneRenderer>()->setTransparencyMode( mode );
 }
 
 void SceneRendererPipeline::setTonemapperEnabled( bool enabled )

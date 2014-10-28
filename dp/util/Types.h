@@ -39,7 +39,12 @@
 
 #include <stdexcept>
 #include <iostream>
-  
+
+#if defined(DP_OS_WINDOWS)
+# define DP_ALIGN(size)   __declspec( align( size ) )
+#else
+# define DP_ALIGN(size)
+#endif
 
 namespace dp
 {

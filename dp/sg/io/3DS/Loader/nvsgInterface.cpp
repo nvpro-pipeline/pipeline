@@ -64,13 +64,13 @@ void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids )
   piids.push_back(dp::util::UPIID(".3DS", PITID_SCENE_LOADER));
 }
 
-bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPtr<dp::util::PlugIn> & pi)
+bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPlugIn & pi)
 {
   const dp::util::UPIID PIID_3DS_SCENE_LOADER = dp::util::UPIID(".3DS", PITID_SCENE_LOADER);
 
   if ( piid == PIID_3DS_SCENE_LOADER )
   {
-    pi = dp::util::SmartPtr<dp::util::PlugIn>( new ThreeDSLoader() );
+    pi = ThreeDSLoader::create();
     return( !!pi );
   }
 

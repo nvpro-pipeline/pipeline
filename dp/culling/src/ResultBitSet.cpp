@@ -33,6 +33,10 @@ namespace dp
 {
   namespace culling
   {
+      ResultBitSetHandle ResultBitSet::create( GroupBitSetHandle const& parentGroup )
+      {
+        return( std::shared_ptr<ResultBitSet>( new ResultBitSet( parentGroup ) ) );
+      }
 
       ResultBitSet::ResultBitSet( GroupBitSetHandle const& parentGroup )
         : m_groupParent( parentGroup )

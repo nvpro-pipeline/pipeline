@@ -28,7 +28,6 @@
 
 #include <dp/ui/RenderTarget.h>
 #include <dp/util/DynamicLibrary.h>
-
 #include <test/testfw/core/inc/Config.h>
 
 namespace dp
@@ -45,7 +44,9 @@ namespace dp
         DPTCORE_API virtual ~RenderData();
       };
 
-      class Backend : public util::RCObject
+      SMART_TYPES( Backend );
+
+      class Backend : public std::enable_shared_from_this<Backend>
       {
         friend class TestRender;
 
@@ -54,11 +55,9 @@ namespace dp
 
         //The back end context interface
         DPTCORE_API virtual dp::ui::SmartRenderTarget createDisplay( int width, int height, bool visible ) = 0;
-        DPTCORE_API virtual void render( RenderData* renderData, dp::ui::SmartRenderTarget renderTarget = nullptr ) = 0;
+        DPTCORE_API virtual void render( RenderData* renderData, dp::ui::SmartRenderTarget renderTarget = dp::ui::SmartRenderTarget::null ) = 0;
         DPTCORE_API virtual void finish() = 0;
       };
-
-      typedef util::SmartPtr<Backend> SmartBackend;
 
     } // namespace core
   } // namespace testfw

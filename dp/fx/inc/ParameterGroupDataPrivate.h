@@ -32,17 +32,20 @@ namespace dp
 {
   namespace fx
   {
-    class ParameterGroupDataPrivate;
-    typedef std::shared_ptr<ParameterGroupDataPrivate> SmartParameterGroupDataPrivate;
+    SMART_TYPES( ParameterGroupDataPrivate );
 
     class ParameterGroupDataPrivate : public ParameterGroupData
     {
     public:
-      ParameterGroupDataPrivate( const dp::fx::SmartParameterGroupSpec& parameterGroupSpec, const std::string& name );
-      ~ParameterGroupDataPrivate();
+      static SmartParameterGroupDataPrivate create( dp::fx::SmartParameterGroupSpec const& parameterGroupSpec, std::string const& name );
+      virtual ~ParameterGroupDataPrivate();
 
       void setParameter( dp::fx::ParameterGroupSpec::iterator it, const void * value );
       void *getValuePointer( dp::fx::ParameterGroupSpec::iterator it );
+
+    protected:
+      ParameterGroupDataPrivate( const dp::fx::SmartParameterGroupSpec& parameterGroupSpec, const std::string& name );
+
     private:
       void updateString( dp::fx::ParameterGroupSpec::iterator it, size_t index, const char* value );
       void updateValue(  dp::fx::ParameterGroupSpec::iterator it, size_t index, const void* value  );

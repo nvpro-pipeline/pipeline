@@ -77,14 +77,14 @@ void lib_init()
 }
 #endif
 
-bool getPlugInterface(const UPIID& piid, dp::util::SmartPtr<dp::util::PlugIn> & pi)
+bool getPlugInterface(const UPIID& piid, dp::util::SmartPlugIn & pi)
 {
   // Check if UPIID is properly initialized. 
   // DP_ASSERT(PIID_PLY_SCENE_LOADER==UPIID(".PLY", PITID_SCENE_LOADER));
   
   if ( piid==PIID_PLY_SCENE_LOADER )
   {
-    pi = dp::util::SmartPtr<dp::util::PlugIn>( new PLYLoader() );
+    pi = PLYLoader::create();
     return( !!pi );
   }
   return false;
@@ -132,7 +132,10 @@ PLYProperty::~PLYProperty()
 }
 
 
-
+SmartPLYLoader PLYLoader::create()
+{
+  return( std::shared_ptr<PLYLoader>( new PLYLoader() ) );
+}
 
 PLYLoader::PLYLoader()
 : m_fm(NULL)

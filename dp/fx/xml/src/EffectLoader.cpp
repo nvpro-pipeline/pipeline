@@ -66,21 +66,35 @@ namespace dp
       /************************************************************************/
       /* ShaderPipelineImpl                                                   */
       /************************************************************************/
+      SMART_TYPES( ShaderPipelineImpl );
+
       class ShaderPipelineImpl : public ShaderPipeline
       {
       public:
+        static SmartShaderPipelineImpl create()
+        {
+          return( std::shared_ptr<ShaderPipelineImpl>( new ShaderPipelineImpl() ) );
+        }
+
         void addStage( const Stage& stage )
         {
           DP_ASSERT( std::find_if( m_stages.begin(), m_stages.end(), boost::bind( &Stage::domain, _1) == stage.domain ) == m_stages.end() );
           m_stages.push_back( stage );
         }
-      };
 
-      typedef std::shared_ptr<ShaderPipelineImpl> SmartShaderPipelineImpl;
+      protected:
+        ShaderPipelineImpl()
+        {}
+      };
 
       /************************************************************************/
       /* Technique                                                            */
       /************************************************************************/
+      TechniqueSharedPtr Technique::create( std::string const& type )
+      {
+        return( std::shared_ptr<Technique>( new Technique( type ) ) );
+      }
+
       Technique::Technique( std::string const & type)
         : m_type( type )
       {
@@ -277,6 +291,11 @@ namespace dp
         throw std::runtime_error("unknown domain type: " + domain );
       }
 
+      SmartEffectLoader EffectLoader::create( EffectLibraryImpl * effectLibrary )
+      {
+        return( std::shared_ptr<EffectLoader>( new EffectLoader( effectLibrary ) ) );
+      }
+
       EffectLoader::EffectLoader( EffectLibraryImpl * effectLibrary )
         : dp::fx::EffectLoader( effectLibrary )
       {
@@ -417,7 +436,7 @@ namespace dp
             m_localSearchPaths.push_back(dir);
           }
 
-          boost::shared_ptr<TiXmlDocument> doc(new TiXmlDocument(filename.c_str()));
+          std::unique_ptr<TiXmlDocument> doc(new TiXmlDocument(filename.c_str()));
           if ( !doc )
           {
             return false;
@@ -661,7 +680,7 @@ namespace dp
         dp::fx::SmartEffectSpec registeredEffectSpec = getEffectLibrary()->registerSpec( es, this );
         if ( es == registeredEffectSpec )
         {
-          SmartEffectDataPrivate effectData( new EffectDataPrivate( registeredEffectSpec, registeredEffectSpec->getName() ) );
+          SmartEffectDataPrivate effectData = EffectDataPrivate::create( registeredEffectSpec, registeredEffectSpec->getName() );
           getEffectLibrary()->registerEffectData( effectData );
           for ( EffectSpec::iterator it = registeredEffectSpec->beginParameterGroupSpecs(); it != registeredEffectSpec->endParameterGroupSpecs(); ++it )
           {
@@ -765,7 +784,7 @@ namespace dp
         char const * type = technique->Attribute( "type" );
         if ( type )
         {
-          TechniqueSharedPtr newTechnique = boost::make_shared<Technique>( type );
+          TechniqueSharedPtr newTechnique = Technique::create( type );
 
           TiXmlHandle xmlHandle = technique->FirstChildElement();
           TiXmlElement *element = xmlHandle.Element();
@@ -841,7 +860,7 @@ namespace dp
           SmartParameterGroupSpec registeredSpec = getEffectLibrary()->registerSpec( spec );
           if( registeredSpec == spec ) // a new spec had been added
           {
-            SmartParameterGroupData data = std::make_shared<ParameterGroupDataPrivate>( registeredSpec, registeredSpec->getName() );
+            SmartParameterGroupData data = ParameterGroupDataPrivate::create( registeredSpec, registeredSpec->getName() );
             getEffectLibrary()->registerParameterGroupData( data );
           }
           return registeredSpec;
@@ -969,7 +988,7 @@ namespace dp
             throw std::runtime_error( "parameterGroupData for " + id + " already exists" );
           }
 
-          parameterGroupData = std::make_shared<ParameterGroupDataPrivate>( parameterGroupSpec, id );
+          parameterGroupData = ParameterGroupDataPrivate::create( parameterGroupSpec, id );
 
           TiXmlHandle xmlHandle = pg->FirstChildElement();
           TiXmlElement *element = xmlHandle.Element();
@@ -1085,7 +1104,7 @@ namespace dp
           dp::fx::SmartEffectSpec registeredEffectSpec = getEffectLibrary()->registerSpec( es, this );
           if ( es == registeredEffectSpec )
           {
-            SmartEffectDataPrivate effectData( new EffectDataPrivate( registeredEffectSpec, registeredEffectSpec->getName() ) );
+            SmartEffectDataPrivate effectData = EffectDataPrivate::create( registeredEffectSpec, registeredEffectSpec->getName() );
             getEffectLibrary()->registerEffectData( effectData );
             for ( EffectSpec::iterator it = registeredEffectSpec->beginParameterGroupSpecs(); it != registeredEffectSpec->endParameterGroupSpecs(); ++it )
             {
@@ -1107,7 +1126,7 @@ namespace dp
           string spec = effect->Attribute( "spec" );
 
           dp::fx::SmartEffectSpec effectSpec = dp::fx::EffectLibrary::instance()->getEffectSpec( spec );
-          SmartEffectDataPrivate newEffectData( new dp::fx::EffectDataPrivate( effectSpec, id ) );
+          SmartEffectDataPrivate newEffectData = dp::fx::EffectDataPrivate::create( effectSpec, id );
 
           // Default initialize the newEffectData! Only the ParameterGroupData specified inside the XML will be overwritten below.
           for ( EffectSpec::iterator it = effectSpec->beginParameterGroupSpecs(); it != effectSpec->endParameterGroupSpecs(); ++it )
@@ -1156,7 +1175,7 @@ namespace dp
 
       SmartShaderPipeline EffectLoader::generateShaderPipeline( const ShaderPipelineConfiguration& configuration )
       {
-        SmartShaderPipelineImpl shaderPipeline( new ShaderPipelineImpl() );
+        SmartShaderPipelineImpl shaderPipeline = ShaderPipelineImpl::create();
 
         SmartEffectSpec effectSpec = dp::util::shared_cast<EffectSpec>( dp::fx::EffectLibrary::instance()->getEffectSpec( configuration.getName() ) );
         EffectSpec::DomainSpecs const & domainSpecs = effectSpec->getDomainSpecs();
@@ -1313,7 +1332,7 @@ namespace
     DP_ASSERT( eli );
     if ( eli )
     {
-      eli->registerEffectLoader( boost::shared_ptr<dp::fx::EffectLoader>( new dp::fx::xml::EffectLoader( eli ) ), ".xml" );
+      eli->registerEffectLoader( dp::fx::xml::EffectLoader::create( eli ), ".xml" );
       return true;
     }
     return false;

@@ -41,6 +41,10 @@ namespace dp
     {
       namespace culling
       {
+        CullingImplSharedPtr CullingImpl::create( SceneTreeSharedPtr const & sceneTree, dp::culling::Mode cullingMode )
+        {
+          return( std::shared_ptr<CullingImpl>( new CullingImpl( sceneTree, cullingMode ) ) );
+        }
 
         CullingImpl::CullingImpl( SceneTreeSharedPtr const & sceneTree, dp::culling::Mode cullingMode )
           : m_sceneTree( sceneTree )
@@ -106,24 +110,22 @@ namespace dp
 
         dp::sg::xbar::culling::ResultHandle CullingImpl::resultCreate()
         {
-          return new ResultImpl( m_culling->groupCreateResult( m_cullingGroup ) );
+          return( ResultImpl::create( m_culling->groupCreateResult( m_cullingGroup ) ) );
         }
 
         bool CullingImpl::resultIsVisible( ResultHandle const & result, ObjectTreeIndex objectTreeIndex ) const
         {
-          ResultImplHandle const & resultImpl = dp::util::smart_cast<ResultImpl>(result);
-          return m_culling->resultObjectIsVisible( resultImpl->getResult(), m_objects[objectTreeIndex] );
+          return( m_culling->resultObjectIsVisible( result.staticCast<ResultImpl>()->getResult(), m_objects[objectTreeIndex] ) );
         }
 
         std::vector<dp::sg::xbar::ObjectTreeIndex> const & CullingImpl::resultGetChangedIndices( ResultHandle const & result ) const
         {
-          ResultImplHandle const & resultImpl = dp::util::smart_cast<ResultImpl>(result);
-          return resultImpl->getChanged();
+          return( result.staticCast<ResultImpl>()->getChanged() );
         }
 
         void CullingImpl::cull( ResultHandle const & result, dp::math::Mat44f const & world2ViewProjection )
         {
-          ResultImplHandle const & resultImpl = dp::util::smart_cast<ResultImpl>(result);
+          ResultImplHandle const & resultImpl = result.staticCast<ResultImpl>();
           dp::sg::xbar::TransformTree const & transformTree = m_sceneTree->getTransformTree();
           m_culling->groupSetMatrices( m_cullingGroup, &transformTree[0].m_worldMatrix, transformTree.size(), sizeof( transformTree[0]) );
           m_culling->cull( m_cullingGroup, resultImpl->getResult(), world2ViewProjection );
@@ -135,7 +137,7 @@ namespace dp
           changedIndices.clear();
           for ( size_t index = 0;index < changedObjects.size(); ++index )
           {
-            dp::util::SmartPtr<Payload> const & p = dp::util::smart_cast<Payload>(m_culling->objectGetUserData(changedObjects[index]));
+            SmartPayload const & p = m_culling->objectGetUserData(changedObjects[index]).staticCast<Payload>();
 
             changedIndices.push_back( p->getObjectTreeIndex() );
           }
@@ -169,7 +171,7 @@ namespace dp
 
           // create a new culling object and add it to the culling group
           ObjectTreeNode const &node = m_sceneTree->getObjectTreeNode( index );
-          m_objects[index] = m_culling->objectCreate( new Payload( index ) );
+          m_objects[index] = m_culling->objectCreate( Payload::create( index ) );
           m_culling->groupAddObject( m_cullingGroup, m_objects[index] );
           m_culling->objectSetTransformIndex( m_objects[index], node.m_transformIndex );
           updateBoundingBox( index );

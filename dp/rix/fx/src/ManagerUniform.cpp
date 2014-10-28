@@ -408,7 +408,10 @@ namespace dp
 
       //////////////////////////////////////////////////////////////////////////
       // System
-      
+      SmartManagerUniform ManagerUniform::create( core::Renderer* renderer, dp::fx::Manager managerType )
+      {
+        return( std::shared_ptr<ManagerUniform>( new ManagerUniform( renderer, managerType ) ) );
+      }
 
       ManagerUniform::ManagerUniform( core::Renderer* renderer, dp::fx::Manager managerType )
         : m_renderer( renderer )

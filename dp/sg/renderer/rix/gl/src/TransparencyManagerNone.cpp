@@ -27,7 +27,6 @@
 #include <dp/DP.h>
 #include <dp/sg/renderer/rix/gl/TransparencyManagerNone.h>
 #include <dp/util/File.h>
-#include <dp/util/SmartPtr.h>
 #include <GL/glew.h>
 
 namespace dp
@@ -43,7 +42,7 @@ namespace dp
 
           SmartTransparencyManagerNone TransparencyManagerNone::create()
           {
-            return( new TransparencyManagerNone() );
+            return( std::shared_ptr<TransparencyManagerNone>( new TransparencyManagerNone() ) );
           }
 
           TransparencyManagerNone::TransparencyManagerNone()

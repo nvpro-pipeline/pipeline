@@ -40,42 +40,36 @@ namespace dp
 {
   namespace gl
   {
-#define TYPES(T)                        \
-    class T;                            \
-    typedef dp::util::SharedPtr<T> Shared##T
-
-    TYPES(Buffer);
-    TYPES(ComputeShader);
-    TYPES(DisplayList);
-    TYPES(FragmentShader);
-    TYPES(GeometryShader);
-    TYPES(Object);
-    TYPES(Program);
-    TYPES(Renderbuffer);
-    TYPES(RenderContext);
-    TYPES(RenderTarget);
-    TYPES(RenderTargetFB);
-    TYPES(RenderTargetFBO);
-    TYPES(Shader);
-    TYPES(ShareGroup);
-    TYPES(TessControlShader);
-    TYPES(TessEvaluationShader);
-    TYPES(Texture);
-    TYPES(Texture1D);
-    TYPES(Texture1DArray);
-    TYPES(Texture2D);
-    TYPES(Texture2DArray);
-    TYPES(Texture3D);
-    TYPES(TextureBuffer);
-    TYPES(TextureCubemap);
-    TYPES(TextureCubemapArray);
-    TYPES(Texture2DMultisample);
-    TYPES(Texture2DMultisampleArray);
-    TYPES(TextureRectangle);
-    TYPES(VertexArrayObject);
-    TYPES(VertexShader);
-
-#undef TYPES
+    SHARED_TYPES(Buffer);
+    SHARED_TYPES(ComputeShader);
+    SHARED_TYPES(DisplayList);
+    SHARED_TYPES(FragmentShader);
+    SHARED_TYPES(GeometryShader);
+    SHARED_TYPES(Object);
+    SHARED_TYPES(Program);
+    SHARED_TYPES(Renderbuffer);
+    SHARED_TYPES(RenderContext);
+    SHARED_TYPES(RenderTarget);
+    SHARED_TYPES(RenderTargetFB);
+    SHARED_TYPES(RenderTargetFBO);
+    SHARED_TYPES(Shader);
+    SHARED_TYPES(ShareGroup);
+    SHARED_TYPES(TessControlShader);
+    SHARED_TYPES(TessEvaluationShader);
+    SHARED_TYPES(Texture);
+    SHARED_TYPES(Texture1D);
+    SHARED_TYPES(Texture1DArray);
+    SHARED_TYPES(Texture2D);
+    SHARED_TYPES(Texture2DArray);
+    SHARED_TYPES(Texture3D);
+    SHARED_TYPES(TextureBuffer);
+    SHARED_TYPES(TextureCubemap);
+    SHARED_TYPES(TextureCubemapArray);
+    SHARED_TYPES(Texture2DMultisample);
+    SHARED_TYPES(Texture2DMultisampleArray);
+    SHARED_TYPES(TextureRectangle);
+    SHARED_TYPES(VertexArrayObject);
+    SHARED_TYPES(VertexShader);
 
     template <typename T>
     class TypeTraits

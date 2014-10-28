@@ -57,11 +57,11 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD reason, LPVOID lpReserved)
 #elif defined( LINUX )
 #endif
 
-bool getPlugInterface(const UPIID& piid, dp::util::SmartPtr<dp::util::PlugIn> & pi)
+bool getPlugInterface(const UPIID& piid, dp::util::SmartPlugIn & pi)
 {
   if ( piid==PIID_OBJ_SCENE_SAVER )
   {
-    pi = dp::util::SmartPtr<dp::util::PlugIn>( new OBJSaver() );
+    pi = OBJSaver::create();
     return( !!pi );
   }
   return false;
@@ -168,6 +168,19 @@ writeMaterialEntry( FILE * f, unsigned int index, OBJMaterial & m )
   }
 
   fprintf( f, "\n" );
+}
+
+SmartOBJSaver OBJSaver::create()
+{
+  return( std::shared_ptr<OBJSaver>( new OBJSaver() ) );
+}
+
+OBJSaver::OBJSaver()
+{
+}
+
+OBJSaver::~OBJSaver()
+{
 }
 
 bool  OBJSaver::save( SceneSharedPtr const& scene, dp::sg::ui::ViewStateSharedPtr const& viewState, string const& filename )

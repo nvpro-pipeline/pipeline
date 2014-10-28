@@ -45,7 +45,7 @@ namespace dp
         return st.getResults();
       }
 
-      const std::vector<const dp::sg::core::Path*> searchClassPaths( const dp::sg::core::NodeSharedPtr & root, const std::string& name, bool baseClassSearch /* = false */ )
+      std::vector<dp::sg::core::PathSharedPtr> const searchClassPaths( const dp::sg::core::NodeSharedPtr & root, const std::string& name, bool baseClassSearch /* = false */ )
       {
         SearchTraverser st;
 

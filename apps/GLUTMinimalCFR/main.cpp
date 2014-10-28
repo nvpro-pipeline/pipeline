@@ -59,7 +59,6 @@
 #include <dp/util/FrameProfiler.h>
 
 #include <boost/program_options.hpp>
-#include <boost/shared_ptr.hpp>
 
 #include <inc/CFRPipeline.h>
 
@@ -99,7 +98,7 @@ protected:
     virtual void onSceneRendererChanged( const dp::sg::ui::SmartSceneRenderer &sceneRenderer );
 
 private:
-  boost::shared_ptr<dp::sg::ui::manipulator::TrackballCameraManipulatorHIDSync> m_trackballHIDSync;
+  std::unique_ptr<dp::sg::ui::manipulator::TrackballCameraManipulatorHIDSync> m_trackballHIDSync;
 
   void updateSceneRendererEngine();
 

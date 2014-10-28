@@ -38,13 +38,13 @@ namespace dp
   {
 
     // The spec for a group of parameters
-    class ParameterGroupSpec;
-    typedef std::shared_ptr<ParameterGroupSpec> SmartParameterGroupSpec;
+    SMART_TYPES( ParameterGroupSpec );
 
     class ParameterGroupSpec
     {
       private:
         typedef std::vector<std::pair<ParameterSpec,unsigned int> >  ParameterSpecsContainer;
+
       public:
         typedef ParameterSpecsContainer::const_iterator iterator;
 
@@ -113,7 +113,7 @@ namespace dp
 
     inline bool ParameterGroupSpec::isEquivalent( const SmartParameterGroupSpec & p, bool ignoreNames, bool /*deepCompare*/ ) const
     {
-      return(   ( p.get() == this )
+      return(   ( p.getWeakPtr() == this )
             ||  (   ( ignoreNames ? true : m_name == p->m_name )
                 &&  ( m_dataSize == p->m_dataSize )
                 &&  ( m_specs == p->m_specs ) ) );

@@ -27,7 +27,6 @@
 #pragma once
 
 #include <dp/rix/core/RiX.h>
-#include <dp/util/SmartPtr.h>
 #include <dp/rix/gl/inc/ProgramGL.h>
 #include <dp/rix/gl/inc/ParameterCacheEntryStream.h>
 
@@ -37,22 +36,23 @@ namespace dp
   {
     namespace gl
     {
+      SHARED_PTR_TYPES( ParameterCacheEntryStreamBuffer );
 
-      class ParameterCacheEntryStreamBuffer : public dp::util::RCObject
+      class ParameterCacheEntryStreamBuffer
       {
       public:
-        ParameterCacheEntryStreamBuffer( size_t cacheOffset, size_t containerOffset, size_t size );
         virtual void update( void * cache, void const * container ) const = 0;
 
         size_t getSize() const { return m_size; }
+
+      protected:
+        ParameterCacheEntryStreamBuffer( size_t cacheOffset, size_t containerOffset, size_t size );
 
       protected:
         size_t m_cacheOffset;
         size_t m_containerOffset;
         size_t m_size;
       };
-
-      typedef dp::util::SmartPtr<ParameterCacheEntryStreamBuffer> ParameterCacheEntryStreamBufferSharedPtr;
 
       ParameterCacheEntryStreamBufferSharedPtr createParameterCacheEntryStreamBuffer( dp::rix::gl::ProgramGLHandle program
         , dp::rix::core::ContainerParameterType containerParameterType

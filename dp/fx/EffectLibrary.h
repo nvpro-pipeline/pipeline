@@ -43,9 +43,7 @@ namespace dp
 {
   namespace fx
   {
-
-    class ShaderPipeline;
-    typedef std::shared_ptr<ShaderPipeline> SmartShaderPipeline;
+    SMART_TYPES( ShaderPipeline );
 
     class ShaderPipeline
     {
@@ -67,7 +65,10 @@ namespace dp
       DP_FX_API iterator beginStages() const;
       DP_FX_API iterator endStages() const;
       DP_FX_API iterator getStage( Domain domain );
-    
+
+    protected:
+      DP_FX_API ShaderPipeline();
+
     protected:
       Stages m_stages;
     };

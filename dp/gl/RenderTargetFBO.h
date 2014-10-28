@@ -103,16 +103,46 @@ namespace dp
         DP_GL_API virtual void unbind( GLenum target ) = 0;
       };
 
-      typedef std::shared_ptr<Attachment> SharedAttachment;
+      typedef dp::util::SharedPtr<Attachment> SharedAttachment;
 
       /*********************/
       /* AttachmentTexture */
       /*********************/
+      class AttachmentTexture;
+      typedef dp::util::SharedPtr<AttachmentTexture> SharedAttachmentTexture;
+
       /** \brief Class to attach a dp::gl::Texture object to a RenderTargetFBO object.
           \sa nvgl::RenderTargetFBO::setAttachment */
       class AttachmentTexture : public Attachment
       {
       public:
+        /** \brief Constructor for 1D textures **/
+        DP_GL_API static SharedAttachmentTexture create( const SharedTexture1D &texture, int level = 0 );
+
+        /** \brief Constructor for 2D textures **/
+        DP_GL_API static SharedAttachmentTexture create( const SharedTexture2D &texture, int level = 0 );
+
+        /** \brief Constructor for 3D textures **/
+        DP_GL_API static SharedAttachmentTexture create( const SharedTexture3D &texture, int zoffset, int level = 0 );
+
+        /** \brief Constructor for 1D array textures **/
+        DP_GL_API static SharedAttachmentTexture create( const SharedTexture1DArray &texture, int layer, int level = 0 );
+
+        /** \brief Constructor for 2D array textures **/
+        DP_GL_API static SharedAttachmentTexture create( const SharedTexture2DArray &texture, int layer, int level = 0);
+
+        /** \brief Constructor for cubemap textures **/
+        DP_GL_API static SharedAttachmentTexture create( const SharedTextureCubemap &texture, int face, int level = 0 );
+
+        /** \brief Constructor for rectangle textures **/
+        DP_GL_API static SharedAttachmentTexture create( const SharedTextureRectangle &texture );
+
+        /** \brief Get the attached textureGL object.
+            \return The attached textureGL object.
+        **/
+        DP_GL_API SharedTexture getTexture() const;
+
+      protected:
         /** \brief Constructor for 1D textures **/
         DP_GL_API AttachmentTexture( const SharedTexture1D &texture, int level = 0 );
 
@@ -133,13 +163,6 @@ namespace dp
 
         /** \brief Constructor for rectangle textures **/
         DP_GL_API AttachmentTexture( const SharedTextureRectangle &texture );
-
-        /** \brief Get the attached textureGL object.
-            \return The attached textureGL object.
-        **/
-        DP_GL_API SharedTexture getTexture() const;
-
-      protected:
         /** \brief Resize the texture to the given size.
             \param width New width for the texture.
             \param height New height for the texture.
@@ -213,23 +236,26 @@ namespace dp
         SharedTexture m_texture;
       };
 
-      typedef std::shared_ptr<AttachmentTexture> SharedAttachmentTexture;
-
       /**************************/
       /* AttachmentRenderbuffer */
       /**************************/
+      class AttachmentRenderbuffer;
+      typedef dp::util::SharedPtr<AttachmentRenderbuffer> SharedAttachmentRenderbuffer;
+
       /** \brief Class to attach an OpenGL renderbuffer to an nvgl::RenderTargetFBO.
           \sa nvgl::RenderTargetFBO::setAttachment */
       class AttachmentRenderbuffer : public Attachment
       {
       public:
-        /** \brief Constructor for an Attachment with a renderbuffer.
-            \param renderbuffer Renderbuffer to use for this attachment.
-        **/
-        DP_GL_API AttachmentRenderbuffer( SharedRenderbuffer renderbuffer );
+        DP_GL_API static SharedAttachmentRenderbuffer create( SharedRenderbuffer const& renderbuffer );
         DP_GL_API virtual ~AttachmentRenderbuffer();
 
       protected:
+        /** \brief Constructor for an Attachment with a renderbuffer.
+            \param renderbuffer Renderbuffer to use for this attachment.
+        **/
+        DP_GL_API AttachmentRenderbuffer( SharedRenderbuffer const& renderbuffer );
+
         /** \brief Resize the renderbuffer.
             \param width New width for the renderbuffer.
             \param height New height for the renderbuffer.
@@ -254,8 +280,6 @@ namespace dp
       private:
         SharedRenderbuffer m_renderbuffer;
       };
-
-      typedef std::shared_ptr<AttachmentRenderbuffer> SharedAttachmentRenderbuffer;
 
       // RenderTarget interface
       enum {

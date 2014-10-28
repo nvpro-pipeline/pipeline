@@ -40,7 +40,7 @@ namespace dp
 
       /** \brief Renderer is the base class for algorithms which operate on an dp::ui::RenderTarget.
       **/
-      class Renderer : public dp::util::Reflection, public dp::util::RCObject
+      class Renderer : public dp::util::Reflection
       {
       protected:
         DP_SG_UI_API Renderer( const dp::ui::SmartRenderTarget &renderTarget = dp::ui::SmartRenderTarget() );
@@ -88,8 +88,6 @@ namespace dp
       private:
         dp::ui::SmartRenderTarget m_renderTarget;
       };
-
-      typedef dp::util::SmartPtr<Renderer> SmartRenderer;
 
     }  // namespace ui
   } // namespace sg

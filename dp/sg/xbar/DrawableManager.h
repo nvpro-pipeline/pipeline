@@ -41,6 +41,7 @@ namespace dp
   {
     namespace xbar
     {
+      SMART_TYPES( GeoNodeObserver );
 
       class SceneTree;
 
@@ -56,11 +57,21 @@ namespace dp
         // A handle cannot be a simple unsigned int. It needs to be able to store more 
         // information like which rendergroup(s) the geonode belongs to. Of course having
         // an indirection would be possible too.
-        DP_SG_XBAR_API class HandleData : public dp::util::RCObject
+        DP_SG_XBAR_API class HandleData
         {
+        public:
+          DP_SG_XBAR_API static dp::util::SharedPtr<HandleData> create()
+          {
+            return( std::shared_ptr<HandleData>( new HandleData() ) );
+          }
+
+          DP_SG_XBAR_API virtual ~HandleData() {}
+
+        protected:
+          DP_SG_XBAR_API HandleData() {}
         };
 
-        typedef dp::util::SmartPtr<HandleData> Handle;
+        typedef dp::util::SharedPtr<HandleData> Handle;
 
         DP_SG_XBAR_API virtual void update( dp::sg::ui::ViewStateSharedPtr const& viewState ) = 0;
         DP_SG_XBAR_API virtual void update( dp::math::Vec2ui const & viewportSize ) = 0;
@@ -105,7 +116,7 @@ namespace dp
         dp::sg::xbar::SceneTreeSharedPtr m_sceneTree;
         boost::scoped_ptr<SceneTreeObserver> m_sceneTreeObserver;
 
-        dp::util::SmartPtr<GeoNodeObserver> m_geoNodeObserver; // observe GeoNodes for changes
+        SmartGeoNodeObserver m_geoNodeObserver; // observe GeoNodes for changes
 
         std::vector<Handle> m_dis;
       };

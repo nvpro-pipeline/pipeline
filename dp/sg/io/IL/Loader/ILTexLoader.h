@@ -45,29 +45,23 @@
 // exports required for a scene loader plug-in
 extern "C"
 {
-  ILTEXLOADER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPtr<dp::util::PlugIn> & pi);
+  ILTEXLOADER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPlugIn & pi);
   ILTEXLOADER_API void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids );
 }
+
+SMART_TYPES( ILTexLoader );
 
 //! A Texture Loader that encapsulates DevIL so it can be used with the SceniX PlugIn mechanism.
 class ILTexLoader : public dp::sg::io::TextureLoader
 {
   public:
-    ILTexLoader();
-
-    friend bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPtr<dp::util::PlugIn> & pi);
-
-    //! Realization of the pure virtual interface function of a PlugIn.
-    /** \note Never call \c delete on a PlugIn, always use the member function. */
-    void deleteThis( void );
-    
-  protected:
-    //! Protected virtual destructor
-    /** Prohibits ordinary client code from  
-    * - creating a \c TextureLoader derived object on stack and
-    * - calling \c delete on a pointer to \c TextureLoader.
-    */
+    static SmartILTexLoader create();
     virtual ~ILTexLoader();  
+
+    friend bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPlugIn & pi);
+
+  protected:
+    ILTexLoader();
     
     /*! \brief Pure virtual interface called on loading a TextureHost file.
      *  \param texImg A pointer to the TextureHost to load the data into.
@@ -86,7 +80,7 @@ class ILTexLoader : public dp::sg::io::TextureLoader
     /*! \brief Single instance of this class.
      *  \remarks To reduce the overhead due to the large number of supported extensions, we only
      *  instantiate this class once. */
-    static dp::util::SmartPtr<ILTexLoader>  m_instance;
+    static SmartILTexLoader m_instance;
 };
 
 

@@ -43,7 +43,7 @@ namespace dp
       public:
         ManagerImpl();
         virtual ~ManagerImpl();
-        virtual ObjectHandle objectCreate( const dp::util::SmartRCObject& userData );
+        virtual ObjectHandle objectCreate( SmartPayload const& userData );
 
         virtual GroupHandle groupCreate();
         virtual ResultHandle groupCreateResult( GroupHandle const& group );

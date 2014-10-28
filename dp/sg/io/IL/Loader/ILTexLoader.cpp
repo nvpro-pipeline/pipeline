@@ -54,7 +54,7 @@ using std::vector;
 using std::string;
 
 // a pointer to our single instance of the Loader
-dp::util::SmartPtr<ILTexLoader> ILTexLoader::m_instance;
+SmartILTexLoader ILTexLoader::m_instance;
 
 // supported Plug Interface ID
 const UPITID PITID_TEXTURE_LOADER(UPITID_TEXTURE_LOADER, UPITID_VERSION); // plug-in type
@@ -116,16 +116,16 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 }
 #endif
 
-bool getPlugInterface(const UPIID& piid, dp::util::SmartPtr<PlugIn> & pi)
+bool getPlugInterface(const UPIID& piid, dp::util::SmartPlugIn & pi)
 {
   for( size_t i=0; i<NUM_SUPPORTED_EXTENSIONS; ++i)
   {
     UPIID tempPiid(SUPPORTED_EXTENSIONS[i].c_str(), PITID_TEXTURE_LOADER);
     if( piid==tempPiid )
-    {      
+    {
       if ( !ILTexLoader::m_instance )
       {
-        ILTexLoader::m_instance = dp::util::SmartPtr<ILTexLoader>( new ILTexLoader );
+        ILTexLoader::m_instance = ILTexLoader::create();
       }
       pi = ILTexLoader::m_instance;
       return !!pi;
@@ -234,6 +234,11 @@ static Image::PixelDataType determinePixelDataType(int type)
   return pixelType;
 }
 
+SmartILTexLoader ILTexLoader::create()
+{
+  return( std::shared_ptr<ILTexLoader>( new ILTexLoader() ) );
+}
+
 ILTexLoader::ILTexLoader()
 {
   ilInit();
@@ -242,18 +247,6 @@ ILTexLoader::ILTexLoader()
 ILTexLoader::~ILTexLoader()
 {
   ilShutDown();
-}
-
-void ILTexLoader::deleteThis()
-{
-  if ( m_instance->isShared() )
-  {
-    m_instance->removeRef();
-  }
-  else
-  {
-    delete this;
-  }
 }
 
 bool ILTexLoader::onLoad( TextureHostSharedPtr const& texImg

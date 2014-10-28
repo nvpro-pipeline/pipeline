@@ -29,7 +29,7 @@
 #include <dp/fx/ParameterSpec.h>
 #include <dp/rix/core/RiX.h>
 #include <dp/sg/renderer/rix/gl/Config.h>
-#include <dp/util/RCObject.h>
+#include <dp/util/SharedPtr.h>
 
 namespace dp
 {
@@ -41,11 +41,9 @@ namespace dp
       {
         namespace gl
         {
+          SMART_TYPES( TransparencyManager );
 
           class ShaderManager;
-
-          class TransparencyManager;
-          typedef dp::util::SmartPtr<TransparencyManager> SmartTransparencyManager;
 
           typedef enum
           {
@@ -57,7 +55,7 @@ namespace dp
           , TM_SORTED_BLENDED
           } TransparencyMode;
 
-          class TransparencyManager : public dp::util::RCObject
+          class TransparencyManager
           {
             public:
               DP_SG_RDR_RIX_GL_API unsigned int getLayersCount() const;
@@ -99,4 +97,3 @@ namespace dp
     } // namespace renderer
   } // namespace sg
 } // namespace dp
-

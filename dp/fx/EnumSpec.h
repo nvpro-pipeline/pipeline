@@ -28,6 +28,7 @@
 /** \file */
 
 #include <dp/fx/Config.h>
+#include <dp/util/SharedPtr.h>
 #include <memory>
 #include <string>
 #include <vector>
@@ -36,8 +37,7 @@ namespace dp
 {
   namespace fx
   {
-    class EnumSpec;
-    typedef std::shared_ptr<EnumSpec> SmartEnumSpec;
+    SMART_TYPES( EnumSpec );
 
     class EnumSpec
     {

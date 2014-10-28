@@ -33,8 +33,7 @@ namespace dp
 {
   namespace ui
   {
-    class RenderTarget;
-    typedef std::shared_ptr<RenderTarget> SmartRenderTarget;
+    SMART_TYPES( RenderTarget );
 
     /** \brief An dp::ui::RenderTarget specifies a render surface to be used in conjunction with an dp::sg::ui::Renderer.
                devtech platform supports RenderTargets for OpenGL (dp::gl::RenderTargetFB, dp::gl::RenderTargetFBO) .
@@ -136,6 +135,10 @@ namespace dp
           \return Currently active surface for stereo rendering.
       **/
       DP_UI_API virtual StereoTarget getStereoTarget() const;
+
+    protected:
+      DP_UI_API RenderTarget()
+      {}
     };
 
     inline unsigned int RenderTarget::getWidth() const

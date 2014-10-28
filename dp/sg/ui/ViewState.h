@@ -39,9 +39,7 @@ namespace dp
   {
     namespace ui
     {
-      class ViewState;
-
-      CORE_TYPES( ViewState );
+      SHARED_PTR_TYPES( ViewState );
 
       /*! \brief The ViewState class encapsulates view-specific state. 
        *  \par Namespace: dp::sg::core
@@ -419,11 +417,3 @@ namespace dp
     };
   } // namespace util
 } // namespace dp
-
-namespace dp
-{
-  namespace util
-  {
-    OBJECT_TRAITS( dp::sg::ui::ViewState, dp::sg::core::HandledObject );
-  }
-}

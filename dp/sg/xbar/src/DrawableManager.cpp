@@ -184,7 +184,7 @@ namespace dp
         m_dis.resize( getSceneTree()->getObjectTree().size() );
 
         // create GeoNodeObserver
-        m_geoNodeObserver = GeoNodeObserver::create( m_sceneTree.get() );
+        m_geoNodeObserver = GeoNodeObserver::create( m_sceneTree.getWeakPtr() );
 
         dp::sg::xbar::PreOrderTreeTraverser<ObjectTree, Visitor> p;
         Visitor v( this, m_sceneTree->getObjectTree() );

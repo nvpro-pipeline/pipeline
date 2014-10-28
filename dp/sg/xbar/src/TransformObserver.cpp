@@ -41,11 +41,11 @@ namespace dp
       {
         DP_ASSERT( m_indexMap.find( index ) == m_indexMap.end() );
 
-        SmartDirtyPayload payload( new DirtyPayload( index ) );
+        SmartDirtyPayload payload( DirtyPayload::create( index ) );
         Observer<TransformTreeIndex>::attach( t, payload );
 
         payload->m_dirty = true;
-        m_dirtyPayloads.push_back( payload.get() );
+        m_dirtyPayloads.push_back( payload.getWeakPtr() );
       }
 
       void TransformObserver::onNotify( const dp::util::Event &event, dp::util::Payload *payload )

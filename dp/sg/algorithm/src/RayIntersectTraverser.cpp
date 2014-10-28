@@ -119,12 +119,9 @@ namespace dp
         {
           m_currentHints.push_back(root->getHints());
 
-          m_curPath = new Path;
-          if (m_curPath)
-          {
-            SharedModelViewTraverser::doApply( root );
-            m_curPath = NULL;
-          }
+          m_curPath = Path::create();
+          SharedModelViewTraverser::doApply( root );
+          m_curPath.reset();
 
           m_currentHints.clear();
         }
@@ -751,8 +748,7 @@ namespace dp
         }
 
         // OK, here we have an intersection, so let's store it
-        Path * pCopy = new Path(*m_curPath);
-        m_intersectionList.push_back(Intersection( pCopy
+        m_intersectionList.push_back(Intersection( dp::sg::core::Path::create( m_curPath )
                                                  , p->getSharedPtr<Primitive>()
                                                  , isp
                                                  , dist

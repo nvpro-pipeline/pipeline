@@ -109,7 +109,7 @@ namespace dp
 
       SceneTreeSharedPtr SceneTree::create( SceneSharedPtr const & scene )
       {
-        return new SceneTree( scene );
+        return( std::shared_ptr<SceneTree>( new SceneTree( scene ) ) );
       }
 
       dp::sg::core::SceneSharedPtr const & SceneTree::getScene() const

@@ -28,24 +28,24 @@
 
 #include <dp/fx/EffectDefs.h>
 #include <dp/fx/ParameterGroupSpec.h>
+#include <dp/util/SharedPtr.h>
 
 namespace dp
 {
   namespace fx
   {
-    class ParameterGroupLayout;
-    typedef std::shared_ptr<ParameterGroupLayout> SmartParameterGroupLayout;
+    SMART_TYPES( ParameterGroupLayout );
 
     class ParameterGroupLayout
     {
     public:
+      SMART_TYPES( ParameterInfo );
+
       class ParameterInfo
       {
       public:
         virtual void convert( void* dstBase, void const* src ) const = 0;
       };
-
-      typedef std::shared_ptr<ParameterInfo> SmartParameterInfo;
 
       DP_FX_API static SmartParameterGroupLayout create( dp::fx::Manager manager, const std::vector<SmartParameterInfo>& parameterInfos, const std::string& groupName, size_t bufferSize, bool isInstanced, const SmartParameterGroupSpec& spec );
 

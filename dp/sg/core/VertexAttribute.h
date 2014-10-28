@@ -29,6 +29,7 @@
 
 #include <dp/sg/core/nvsgapi.h>
 #include <dp/util/HashGenerator.h>
+#include <dp/util/Types.h>
 #include <dp/sg/core/Buffer.h>
 
 namespace dp
@@ -386,6 +387,14 @@ namespace dp
 
     } // namespace core
   } // namespace sg
+
+  namespace util
+  {
+    /*! \brief Specialization of the TypedPropertyEnum template for type VertexAttribute. */
+    template <> struct TypedPropertyEnum< dp::sg::core::VertexAttribute> {
+      enum { type = Property::TYPE_VERTEX_ATTRIBUTE };
+    };
+  } // namespace util
 
   namespace math
   {

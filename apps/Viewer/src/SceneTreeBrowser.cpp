@@ -74,7 +74,7 @@ QTreeWidget * SceneTreeBrowser::getTree() const
   return( m_tree );
 }
 
-void SceneTreeBrowser::selectObject( dp::util::SmartPtr<dp::sg::core::Path> path )
+void SceneTreeBrowser::selectObject( dp::sg::core::PathSharedPtr const& path )
 {
   if ( isVisible() )
   {

@@ -27,7 +27,7 @@
 #pragma once
 
 #include <dp/rix/core/RiX.h>
-#include <dp/util/SmartPtr.h>
+#include <dp/util/SharedPtr.h>
 #include <dp/rix/gl/inc/ProgramGL.h>
 
 namespace dp
@@ -36,15 +36,18 @@ namespace dp
   {
     namespace gl
     {
+      SHARED_PTR_TYPES( ParameterCacheEntryStream );
 
-      class ParameterCacheEntryStream : public dp::util::RCObject
+      class ParameterCacheEntryStream
       {
       public:
-        ParameterCacheEntryStream( size_t cacheOffset, size_t containerOffset, size_t arraySize, size_t size );
         virtual void render( void const* cache ) const = 0;
         virtual void update( void * cache, void const * container ) const = 0;
 
         size_t getSize() const { return m_size; }
+
+      protected:
+        ParameterCacheEntryStream( size_t cacheOffset, size_t containerOffset, size_t arraySize, size_t size );
 
       protected:
         dp::util::Uint32 m_arraySize;
@@ -53,7 +56,6 @@ namespace dp
         size_t m_size;
       };
 
-      typedef dp::util::SmartPtr<ParameterCacheEntryStream> ParameterCacheEntryStreamSharedPtr;
       typedef std::vector<ParameterCacheEntryStreamSharedPtr> ParameterCacheEntryStreams;
 
       ParameterCacheEntryStreams createParameterCacheEntryStreams( dp::rix::gl::ProgramGLHandle program, dp::rix::gl::ContainerDescriptorGLHandle descriptor, bool bindlessUBO );

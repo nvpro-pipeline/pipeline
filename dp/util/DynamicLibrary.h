@@ -27,26 +27,27 @@
 #pragma once
 
 #include <dp/util/Config.h>
-#include <dp/util/SmartPtr.h>
-
+#include <dp/util/SharedPtr.h>
 #include <string>
 
 namespace dp
 {
   namespace util
   {
+    SMART_TYPES( DynamicLibrary );
+
     //! Open a shared library
     /** This function opens a shared library (.dll or .so).
       */
-    class DynamicLibrary : public RCObject
+    class DynamicLibrary
     {
     public:
-      static DP_UTIL_API SmartPtr<DynamicLibrary> createFromFile(const char* name);
-      static             SmartPtr<DynamicLibrary> createFromFile(const std::string& name){ return createFromFile(name.c_str()); }
+      static DP_UTIL_API SmartDynamicLibrary createFromFile(const char* name);
+      static             SmartDynamicLibrary createFromFile(const std::string& name){ return createFromFile(name.c_str()); }
+      DP_UTIL_API ~DynamicLibrary();
 
     private:
       DP_UTIL_API DynamicLibrary( void* dll );
-      DP_UTIL_API ~DynamicLibrary();
 
     public:
       DP_UTIL_API void* getSymbol( const char *name );
@@ -55,8 +56,6 @@ namespace dp
     private:
       void* m_dll;
     };
-
-    typedef SmartPtr<DynamicLibrary> SmartDynamicLibrary;
 
   } // namespace util
 } // namespace dp

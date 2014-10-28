@@ -37,6 +37,7 @@ namespace dp
   {
     namespace xbar
     {
+      SMART_TYPES( ObjectObserver );
 
       class ObjectObserver : public Observer<ObjectTreeIndex>
       {
@@ -49,15 +50,11 @@ namespace dp
         typedef std::map< ObjectTreeIndex, CacheData >  NewCacheData;
 
       public:
-        ObjectObserver( const SceneTreeWeakPtr& sceneTree ) : Observer<ObjectTreeIndex>( sceneTree )
-        {
-        }
-
         virtual ~ObjectObserver();
 
         static SmartObjectObserver create( SceneTreeWeakPtr sceneTree )
         {
-          return( new ObjectObserver( sceneTree ) );
+          return( std::shared_ptr<ObjectObserver>( new ObjectObserver( sceneTree ) ) );
         }
 
         void attach( const dp::sg::core::ObjectWeakPtr& obj, ObjectTreeIndex index );
@@ -70,6 +67,9 @@ namespace dp
         }
 
       protected:
+        ObjectObserver( const SceneTreeWeakPtr& sceneTree ) : Observer<ObjectTreeIndex>( sceneTree )
+        {
+        }
         void onNotify( const dp::util::Event &event, dp::util::Payload *payload );
         virtual void onPreRemoveChild( const dp::sg::core::Group *group, dp::sg::core::NodeSharedPtr const & child, unsigned int index, Payload* payload );
         virtual void onPostAddChild( dp::sg::core::Group const *group, dp::sg::core::NodeSharedPtr const & child, unsigned int index, Payload* payload );

@@ -29,15 +29,15 @@
 
 #include <typeinfo>
 #include <dp/sg/core/nvsgapi.h> // commonly used stuff
-#include <dp/sg/core/Event.h>
-#include "dp/sg/core/HandledObject.h"
 #include <dp/math/Boxnt.h>
 #include <dp/math/Spherent.h>
-#include <dp/util/HashGenerator.h>
-#include <dp/sg/core/CoreTypes.h>
-#include "dp/util/RCObject.h"
 #include <dp/sg/core/ConstIterator.h>
+#include <dp/sg/core/CoreTypes.h>
+#include <dp/sg/core/Event.h>
+#include "dp/sg/core/HandledObject.h"
 #include <dp/util/BitMask.h>
+#include <dp/util/HashGenerator.h>
+#include <dp/util/Types.h>
 
 namespace dp
 {

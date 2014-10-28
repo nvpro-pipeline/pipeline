@@ -36,6 +36,7 @@ namespace dp
     {
       namespace culling
       {
+        HANDLE_TYPES( ResultImpl );
 
         /** \brief Internal result class which holds a dp::culling::ResultHandle and a vector with indices to the objectTree 
                    which visibility has changed since the last cull call.
@@ -43,17 +44,19 @@ namespace dp
         class ResultImpl : public Result
         {
         public:
-          ResultImpl( dp::culling::ResultHandle const & result);
+          static ResultImplHandle create( dp::culling::ResultHandle const & result );
 
+        public:
           dp::culling::ResultHandle getResult() const { return m_result; }
           std::vector<ObjectTreeIndex> & getChanged() { return m_changed; }
+
+        protected:
+          ResultImpl( dp::culling::ResultHandle const & result );
 
         private:
           std::vector<ObjectTreeIndex> m_changed;
           dp::culling::ResultHandle m_result; // result object of dp::culling module
         };
-
-        typedef dp::util::SmartPtr<ResultImpl> ResultImplHandle;
 
       } // namespace culling
     } // namespace xbar

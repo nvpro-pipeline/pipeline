@@ -40,55 +40,70 @@ namespace dp
   {
     namespace io
     {
-    SceneLoader::~SceneLoader()
-    {
-    }
-
-    SceneSaver::~SceneSaver()
-    {
-    }
-
-    TextureLoader::~TextureLoader()
-    {
-    }
-
-    dp::sg::core::TextureHostSharedPtr TextureLoader::load( const string & filename
-                                            , const vector<string> & searchPaths
-                                            , const unsigned int& creationFlags )
-    {
-      // serialize invocations from concurrent threads
-      bool success = true;
-      dp::sg::core::TextureHostSharedPtr texImgHdl( dp::sg::core::TextureHost::create( filename ) );
+      SceneLoader::SceneLoader()
       {
-        texImgHdl->setCreationFlags(creationFlags);
-
-        success = onLoad( texImgHdl, searchPaths );
       }
 
-      if ( !success )
+      SceneLoader::~SceneLoader()
       {
-        texImgHdl.reset();
       }
 
-      return( texImgHdl );
-    }
+      SceneSaver::SceneSaver()
+      {
+      }
 
-    bool TextureLoader::reload( const dp::sg::core::TextureHostSharedPtr & tih, const vector<string> & searchPaths )
-    {
-      // serialize invocations from concurrent threads
-      DP_ASSERT( dp::util::fileExists( tih->getFileName() ) );
-      DP_ASSERT( tih->getNumberOfImages() == 0 );
-      return( onLoad( tih, searchPaths ) );
-    }
+      SceneSaver::~SceneSaver()
+      {
+      }
 
-    TextureSaver::~TextureSaver()
-    {
-    }
+      TextureLoader::TextureLoader()
+      {
+      }
 
-    ShaderLoader::~ShaderLoader()
-    {
-    }
+      TextureLoader::~TextureLoader()
+      {
+      }
 
+      dp::sg::core::TextureHostSharedPtr TextureLoader::load( const string & filename
+                                              , const vector<string> & searchPaths
+                                              , const unsigned int& creationFlags )
+      {
+        // serialize invocations from concurrent threads
+        bool success = true;
+        dp::sg::core::TextureHostSharedPtr texImgHdl( dp::sg::core::TextureHost::create( filename ) );
+        {
+          texImgHdl->setCreationFlags(creationFlags);
+
+          success = onLoad( texImgHdl, searchPaths );
+        }
+
+        if ( !success )
+        {
+          texImgHdl.reset();
+        }
+
+        return( texImgHdl );
+      }
+
+      bool TextureLoader::reload( const dp::sg::core::TextureHostSharedPtr & tih, const vector<string> & searchPaths )
+      {
+        // serialize invocations from concurrent threads
+        DP_ASSERT( dp::util::fileExists( tih->getFileName() ) );
+        DP_ASSERT( tih->getNumberOfImages() == 0 );
+        return( onLoad( tih, searchPaths ) );
+      }
+
+      TextureSaver::TextureSaver()
+      {
+      }
+
+      TextureSaver::~TextureSaver()
+      {
+      }
+
+      ShaderLoader::~ShaderLoader()
+      {
+      }
 
     } // namespace io
   } // namespace sg

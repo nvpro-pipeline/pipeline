@@ -26,6 +26,7 @@
 
 #pragma once 
 
+#include <dp/fx/ParameterGroupSpec.h>
 #include <memory>
 #include <string>
 
@@ -34,8 +35,6 @@ namespace dp
   namespace fx
   {
     class ParameterSpec;
-    class ParameterGroupSpec;
-    typedef std::shared_ptr<ParameterGroupSpec> SmartParameterGroupSpec;
 
     namespace glsl
     {

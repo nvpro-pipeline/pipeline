@@ -35,10 +35,20 @@
 using namespace vrml;
 using std::string;
 
+SharedAnchor Anchor::create()
+{
+  return( std::shared_ptr<Anchor>( new Anchor() ) );
+}
+
 const string & Anchor::getType( void ) const
 {
   static string type = "Anchor";
   return( type );
+}
+
+SharedAppearance Appearance::create()
+{
+  return( std::shared_ptr<Appearance>( new Appearance() ) );
 }
 
 Appearance::Appearance()
@@ -55,6 +65,11 @@ const string & Appearance::getType( void ) const
   return( type );
 }
 
+SharedAudioClip AudioClip::create()
+{
+  return( std::shared_ptr<AudioClip>( new AudioClip() ) );
+}
+
 AudioClip::AudioClip()
 : loop(false)
 , pitch(1.0f)
@@ -69,6 +84,11 @@ const string & AudioClip::getType( void ) const
   return( type );
 }
 
+SharedBackground Background::create()
+{
+  return( std::shared_ptr<Background>( new Background() ) );
+}
+
 Background::Background()
 {
   skyColor.push_back( SFColor( 0.0f, 0.0f, 0.0f ) );
@@ -78,6 +98,11 @@ const string & Background::getType( void ) const
 {
   static string type = "Background";
   return( type );
+}
+
+SharedBillboard Billboard::create()
+{
+  return( std::shared_ptr<Billboard>( new Billboard() ) );
 }
 
 Billboard::Billboard()
@@ -95,6 +120,11 @@ const string & Billboard::getType( void ) const
   return( type );
 }
 
+SharedBox Box::create()
+{
+  return( std::shared_ptr<Box>( new Box() ) );
+}
+
 Box::Box()
 : size(2.0f, 2.0f, 2.0f)
 {
@@ -108,6 +138,11 @@ const string & Box::getType( void ) const
 {
   static string type = "Box";
   return( type );
+}
+
+SharedCollision Collision::create()
+{
+  return( std::shared_ptr<Collision>( new Collision() ) );
 }
 
 Collision::Collision()
@@ -125,6 +160,11 @@ const string & Collision::getType( void ) const
   return( type );
 }
 
+SharedColor Color::create()
+{
+  return( std::shared_ptr<Color>( new Color() ) );
+}
+
 Color::Color()
 : interpreted(false)
 , set_color(NULL)
@@ -137,10 +177,20 @@ const string & Color::getType( void ) const
   return( type );
 }
 
+SharedColorInterpolator ColorInterpolator::create()
+{
+  return( std::shared_ptr<ColorInterpolator>( new ColorInterpolator() ) );
+}
+
 const string & ColorInterpolator::getType( void ) const
 {
   static string type = "ColorInterpolator";
   return( type );
+}
+
+SharedCone Cone::create()
+{
+  return( std::shared_ptr<Cone>( new Cone() ) );
 }
 
 Cone::Cone()
@@ -155,6 +205,11 @@ const string & Cone::getType( void ) const
 {
   static string type = "Cone";
   return( type );
+}
+
+SharedCoordinate Coordinate::create()
+{
+  return( std::shared_ptr<Coordinate>( new Coordinate() ) );
 }
 
 Coordinate::Coordinate()
@@ -172,10 +227,20 @@ const string & Coordinate::getType( void ) const
   return( type );
 }
 
+SharedCoordinateInterpolator CoordinateInterpolator::create()
+{
+  return( std::shared_ptr<CoordinateInterpolator>( new CoordinateInterpolator() ) );
+}
+
 const string & CoordinateInterpolator::getType( void ) const
 {
   static string type = "CoordinateInterpolator";
   return( type );
+}
+
+SharedCylinder Cylinder::create()
+{
+  return( std::shared_ptr<Cylinder>( new Cylinder() ) );
 }
 
 Cylinder::Cylinder()
@@ -193,6 +258,11 @@ const string & Cylinder::getType( void ) const
   return( type );
 }
 
+SharedCylinderSensor CylinderSensor::create()
+{
+  return( std::shared_ptr<CylinderSensor>( new CylinderSensor() ) );
+}
+
 CylinderSensor::CylinderSensor()
 : autoOffset(true)
 , diskAngle(0.262f)
@@ -208,6 +278,11 @@ const string & CylinderSensor::getType( void ) const
   return( type );
 }
 
+SharedDirectionalLight DirectionalLight::create()
+{
+  return( std::shared_ptr<DirectionalLight>( new DirectionalLight() ) );
+}
+
 DirectionalLight::DirectionalLight()
 : direction(0.0f,0.0f,-1.0f)
 {
@@ -221,6 +296,11 @@ const string & DirectionalLight::getType( void ) const
 {
   static string type = "DirectionalLight";
   return( type );
+}
+
+SharedElevationGrid ElevationGrid::create()
+{
+  return( std::shared_ptr<ElevationGrid>( new ElevationGrid() ) );
 }
 
 ElevationGrid::ElevationGrid()
@@ -244,6 +324,11 @@ const string & ElevationGrid::getType( void ) const
 {
   static string type = "ElevationGrid";
   return( type );
+}
+
+SharedExtrusion Extrusion::create()
+{
+  return( std::shared_ptr<Extrusion>( new Extrusion() ) );
 }
 
 Extrusion::Extrusion()
@@ -271,6 +356,11 @@ const string & Extrusion::getType( void ) const
   return( type );
 }
 
+SharedFog Fog::create()
+{
+  return( std::shared_ptr<Fog>( new Fog() ) );
+}
+
 Fog::Fog()
 : color(1.0f,1.0f,1.0f)
 , fogType("LINEAR")
@@ -282,6 +372,11 @@ const string & Fog::getType( void ) const
 {
   static string type = "Fog";
   return( type );
+}
+
+SharedFontStyle FontStyle::create()
+{
+  return( std::shared_ptr<FontStyle>( new FontStyle() ) );
 }
 
 FontStyle::FontStyle()
@@ -308,6 +403,11 @@ const string & Geometry::getType( void ) const
   return( type );
 }
 
+SharedGroup Group::create()
+{
+  return( std::shared_ptr<Group>( new Group() ) );
+}
+
 Group::Group()
 {
 }
@@ -322,6 +422,11 @@ const string & Group::getType( void ) const
   return( type );
 }
 
+SharedImageTexture ImageTexture::create()
+{
+  return( std::shared_ptr<ImageTexture>( new ImageTexture() ) );
+}
+
 ImageTexture::ImageTexture( void )
 {
 }
@@ -334,6 +439,11 @@ const string & ImageTexture::getType( void ) const
 {
   static string type = "ImageTexture";
   return( type );
+}
+
+SharedIndexedFaceSet IndexedFaceSet::create()
+{
+  return( std::shared_ptr<IndexedFaceSet>( new IndexedFaceSet() ) );
 }
 
 IndexedFaceSet::IndexedFaceSet()
@@ -354,6 +464,11 @@ const string & IndexedFaceSet::getType( void ) const
 {
   static string type = "IndexedFaceSet";
   return( type );
+}
+
+SharedIndexedLineSet IndexedLineSet::create()
+{
+  return( std::shared_ptr<IndexedLineSet>( new IndexedLineSet() ) );
 }
 
 IndexedLineSet::IndexedLineSet()
@@ -400,6 +515,11 @@ const string & Light::getType( void ) const
   return( type );
 }
 
+SharedInline Inline::create()
+{
+  return( std::shared_ptr<Inline>( new Inline() ) );
+}
+
 Inline::Inline()
 : bboxCenter(0.0f,0.0f,0.0f)
 , bboxSize(-1.0f,-1.0f,-1.0f)
@@ -416,6 +536,11 @@ const string & Inline::getType( void ) const
   return( type );
 }
 
+SharedLOD LOD::create()
+{
+  return( std::shared_ptr<LOD>( new LOD() ) );
+}
+
 LOD::LOD()
 : center(0.0f,0.0f,0.0f)
 {
@@ -429,6 +554,11 @@ const string & LOD::getType( void ) const
 {
   static string type = "LOD";
   return( type );
+}
+
+SharedMaterial Material::create()
+{
+  return( std::shared_ptr<Material>( new Material() ) );
 }
 
 Material::Material()
@@ -451,6 +581,11 @@ const string & Material::getType( void ) const
   return( type );
 }
 
+SharedMovieTexture MovieTexture::create()
+{
+  return( std::shared_ptr<MovieTexture>( new MovieTexture() ) );
+}
+
 MovieTexture::MovieTexture()
 : loop(false)
 , speed(1.0f)
@@ -463,6 +598,11 @@ const string & MovieTexture::getType( void ) const
 {
   static string type = "MovieTexture";
   return( type );
+}
+
+SharedNavigationInfo NavigationInfo::create()
+{
+  return( std::shared_ptr<NavigationInfo>( new NavigationInfo() ) );
 }
 
 NavigationInfo::NavigationInfo()
@@ -482,6 +622,11 @@ const string & NavigationInfo::getType( void ) const
   return( type );
 }
 
+SharedNormal Normal::create()
+{
+  return( std::shared_ptr<Normal>( new Normal() ) );
+}
+
 Normal::Normal()
 : interpreted(false)
 {
@@ -497,10 +642,20 @@ const string & Normal::getType( void ) const
   return( type );
 }
 
+SharedNormalInterpolator NormalInterpolator::create()
+{
+  return( std::shared_ptr<NormalInterpolator>( new NormalInterpolator() ) );
+}
+
 const string & NormalInterpolator::getType( void ) const
 {
   static string type = "NormalInterpolator";
   return( type );
+}
+
+SharedObject Object::create()
+{
+  return( std::shared_ptr<Object>( new Object() ) );
 }
 
 const string & Object::getType( void ) const
@@ -509,10 +664,20 @@ const string & Object::getType( void ) const
   return( type );
 }
 
+SharedOrientationInterpolator OrientationInterpolator::create()
+{
+  return( std::shared_ptr<OrientationInterpolator>( new OrientationInterpolator() ) );
+}
+
 const string & OrientationInterpolator::getType( void ) const
 {
   static string type = "OrientationInterpolator";
   return( type );
+}
+
+SharedPixelTexture PixelTexture::create()
+{
+  return( std::shared_ptr<PixelTexture>( new PixelTexture() ) );
 }
 
 PixelTexture::PixelTexture()
@@ -529,6 +694,11 @@ const string & PixelTexture::getType( void ) const
   return( type );
 }
 
+SharedPlaneSensor PlaneSensor::create()
+{
+  return( std::shared_ptr<PlaneSensor>( new PlaneSensor() ) );
+}
+
 PlaneSensor::PlaneSensor()
 : autoOffset(true)
 , maxPosition(-1.0f,-1.0f)
@@ -541,6 +711,11 @@ const string & PlaneSensor::getType( void ) const
 {
   static string type = "PlaneSensor";
   return( type );
+}
+
+SharedPointLight PointLight::create()
+{
+  return( std::shared_ptr<PointLight>( new PointLight() ) );
 }
 
 PointLight::PointLight()
@@ -560,6 +735,11 @@ const string & PointLight::getType( void ) const
   return( type );
 }
 
+SharedPointSet PointSet::create()
+{
+  return( std::shared_ptr<PointSet>( new PointSet() ) );
+}
+
 PointSet::PointSet()
 {
 }
@@ -574,10 +754,20 @@ const string & PointSet::getType( void ) const
   return( type );
 }
 
+SharedPositionInterpolator PositionInterpolator::create()
+{
+  return( std::shared_ptr<PositionInterpolator>( new PositionInterpolator() ) );
+}
+
 const string & PositionInterpolator::getType( void ) const
 {
   static string type = "PositionInterpolator";
   return( type );
+}
+
+SharedProximitySensor ProximitySensor::create()
+{
+  return( std::shared_ptr<ProximitySensor>( new ProximitySensor() ) );
 }
 
 ProximitySensor::ProximitySensor()
@@ -590,6 +780,11 @@ const string & ProximitySensor::getType( void ) const
 {
   static string type = "ProximitySensor";
   return( type );
+}
+
+SharedScript Script::create()
+{
+  return( std::shared_ptr<Script>( new Script() ) );
 }
 
 Script::Script()
@@ -646,10 +841,20 @@ SFRotation::SFRotation( const SFVec3f &axis, SFFloat angle )
   setVec( *this, a[0], a[1], a[2], angle );
 }
 
+SharedScalarInterpolator ScalarInterpolator::create()
+{
+  return( std::shared_ptr<ScalarInterpolator>( new ScalarInterpolator() ) );
+}
+
 const string & ScalarInterpolator::getType( void ) const
 {
   static string type = "ScalarInterpolator";
   return( type );
+}
+
+SharedShape Shape::create()
+{
+  return( std::shared_ptr<Shape>( new Shape() ) );
 }
 
 Shape::Shape()
@@ -664,6 +869,11 @@ const string & Shape::getType( void ) const
 {
   static string type = "Shape";
   return( type );
+}
+
+SharedSound Sound::create()
+{
+  return( std::shared_ptr<Sound>( new Sound() ) );
 }
 
 Sound::Sound()
@@ -689,6 +899,11 @@ const string & Sound::getType( void ) const
   return( type );
 }
 
+SharedSphere Sphere::create()
+{
+  return( std::shared_ptr<Sphere>( new Sphere() ) );
+}
+
 Sphere::Sphere()
 : radius(1.0f)
 {
@@ -698,6 +913,11 @@ const string & Sphere::getType( void ) const
 {
   static string type = "Sphere";
   return( type );
+}
+
+SharedSphereSensor SphereSensor::create()
+{
+  return( std::shared_ptr<SphereSensor>( new SphereSensor() ) );
 }
 
 SphereSensor::SphereSensor()
@@ -710,6 +930,11 @@ const string & SphereSensor::getType( void ) const
 {
   static string type = "SphereSensor";
   return( type );
+}
+
+SharedSpotLight SpotLight::create()
+{
+  return( std::shared_ptr<SpotLight>( new SpotLight() ) );
 }
 
 SpotLight::SpotLight()
@@ -732,6 +957,11 @@ const string & SpotLight::getType( void ) const
   return( type );
 }
 
+SharedSwitch Switch::create()
+{
+  return( std::shared_ptr<Switch>( new Switch() ) );
+}
+
 Switch::Switch()
 : whichChoice(-1)
 {
@@ -745,6 +975,11 @@ const string & Switch::getType( void ) const
 {
   static string type = "Switch";
   return( type );
+}
+
+SharedText Text::create()
+{
+  return( std::shared_ptr<Text>( new Text() ) );
 }
 
 Text::Text()
@@ -762,6 +997,11 @@ const string & Text::getType( void ) const
   return( type );
 }
 
+SharedTexture Texture::create()
+{
+  return( std::shared_ptr<Texture>( new Texture() ) );
+}
+
 Texture::Texture()
 : repeatS(true)
 , repeatT(true)
@@ -774,10 +1014,20 @@ const string & Texture::getType( void ) const
   return( type );
 }
 
+SharedTextureCoordinate TextureCoordinate::create()
+{
+  return( std::shared_ptr<TextureCoordinate>( new TextureCoordinate() ) );
+}
+
 const string & TextureCoordinate::getType( void ) const
 {
   static string type = "TextureCoordinate";
   return( type );
+}
+
+SharedTextureTransform TextureTransform::create()
+{
+  return( std::shared_ptr<TextureTransform>( new TextureTransform() ) );
 }
 
 TextureTransform::TextureTransform()
@@ -802,16 +1052,31 @@ TimeSensor::TimeSensor()
 {
 }
 
+SharedTimeSensor TimeSensor::create()
+{
+  return( std::shared_ptr<TimeSensor>( new TimeSensor() ) );
+}
+
 const string & TimeSensor::getType( void ) const
 {
   static string type = "TimeSensor";
   return( type );
 }
 
+SharedTouchSensor TouchSensor::create()
+{
+  return( std::shared_ptr<TouchSensor>( new TouchSensor() ) );
+}
+
 const string & TouchSensor::getType( void ) const
 {
   static string type = "TouchSensor";
   return( type );
+}
+
+SharedTransform Transform::create()
+{
+  return( std::shared_ptr<Transform>( new Transform() ) );
 }
 
 Transform::Transform()
@@ -833,6 +1098,11 @@ const string & Transform::getType( void ) const
   return( type );
 }
 
+SharedViewpoint Viewpoint::create()
+{
+  return( std::shared_ptr<Viewpoint>( new Viewpoint() ) );
+}
+
 Viewpoint::Viewpoint()
 : fieldOfView(0.785398f)
 , jump(true)
@@ -851,6 +1121,11 @@ const string & Viewpoint::getType( void ) const
   return( type );
 }
 
+SharedVisibilitySensor VisibilitySensor::create()
+{
+  return( std::shared_ptr<VisibilitySensor>( new VisibilitySensor() ) );
+}
+
 VisibilitySensor::VisibilitySensor()
 : center(0.0f,0.0f,0.0f)
 , size(0.0f,0.0f,0.0f)
@@ -861,6 +1136,11 @@ const string & VisibilitySensor::getType( void ) const
 {
   static string type = "VisibilitySensor";
   return( type );
+}
+
+SharedWorldInfo WorldInfo::create()
+{
+  return( std::shared_ptr<WorldInfo>( new WorldInfo() ) );
 }
 
 const string & WorldInfo::getType( void ) const

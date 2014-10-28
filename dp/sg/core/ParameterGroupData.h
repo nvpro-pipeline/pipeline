@@ -32,7 +32,6 @@
 #include <dp/sg/core/OwnedObject.h>
 #include <dp/sg/core/EffectData.h>
 #include <dp/sg/core/Sampler.h>
-#include <dp/util/RCObject.h>
 #include <dp/util/Observer.h>
 
 namespace dp

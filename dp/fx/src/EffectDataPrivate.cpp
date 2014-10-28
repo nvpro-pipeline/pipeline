@@ -31,6 +31,11 @@ namespace dp
   namespace fx
   {
 
+    SmartEffectDataPrivate EffectDataPrivate::create( SmartEffectSpec const& effectSpec, std::string const& name )
+    {
+      return( std::shared_ptr<EffectDataPrivate>( new EffectDataPrivate( effectSpec, name ) ) );
+    }
+
     EffectDataPrivate::EffectDataPrivate( const SmartEffectSpec& effectSpec, const std::string& name )
       : EffectData( effectSpec, name )
     {

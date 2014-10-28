@@ -31,7 +31,6 @@
 #include <dp/util/HashGenerator.h>
 #include <dp/sg/core/CoreTypes.h>
 #include <dp/util/Types.h>
-#include "dp/util/RCObject.h" // base class definition
 #include <dp/sg/core/Buffer.h>
 #include <dp/sg/core/Primitive.h>
 #include <dp/sg/core/OwnedObject.h>

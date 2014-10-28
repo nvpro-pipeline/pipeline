@@ -48,7 +48,7 @@ namespace dp
             SmartResourceParameterGroupDataRiXFx resourceParameterGroupData = resourceManager->getResource<ResourceParameterGroupDataRiXFx>( reinterpret_cast<size_t>(parameterGroupData.getWeakPtr()) );
             if ( !resourceParameterGroupData )
             {
-              resourceParameterGroupData = new ResourceParameterGroupDataRiXFx( parameterGroupData, rixFx, resourceManager );
+              resourceParameterGroupData = std::shared_ptr<ResourceParameterGroupDataRiXFx>( new ResourceParameterGroupDataRiXFx( parameterGroupData, rixFx, resourceManager ) );
               resourceParameterGroupData->update();
             }
 

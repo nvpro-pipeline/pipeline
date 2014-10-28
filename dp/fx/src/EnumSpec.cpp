@@ -76,7 +76,7 @@ namespace dp
 
     bool EnumSpec::isEquivalent( const SmartEnumSpec & p, bool /*ignoreNames*/, bool /*deepCompare*/ ) const
     {
-      if ( this == p.get() )
+      if ( p == this )
       {
         return( true );
       }

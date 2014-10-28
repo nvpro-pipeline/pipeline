@@ -74,18 +74,18 @@ class QtMinimalWidget : public dp::sg::ui::qt5::SceniXQGLSceneRendererWidget
     virtual void resizeEvent( QResizeEvent *event );
 
   protected:
-    double                                                        m_benchmarkDuration;
-    unsigned int                                                  m_benchmarkFrameCount;
-    unsigned int                                                  m_benchmarkFrames;
-    double                                                        m_benchmarkTime;
-    unsigned int                                                  m_frameCount;
-    unsigned int                                                  m_framesInSecond;
-    dp::util::Timer                                               m_frameRateTimer;
-    float                                                         m_orbitRadians;
-    std::string                                                   m_sceneName;
-    bool                                                          m_showFPS;
-    dp::sg::ui::manipulator::TrackballCameraManipulatorHIDSync  * m_trackballHIDSync;
-    std::string                                                   m_windowTitle;
+    double                                                                      m_benchmarkDuration;
+    unsigned int                                                                m_benchmarkFrameCount;
+    unsigned int                                                                m_benchmarkFrames;
+    double                                                                      m_benchmarkTime;
+    unsigned int                                                                m_frameCount;
+    unsigned int                                                                m_framesInSecond;
+    dp::util::Timer                                                             m_frameRateTimer;
+    float                                                                       m_orbitRadians;
+    std::string                                                                 m_sceneName;
+    bool                                                                        m_showFPS;
+    std::unique_ptr<dp::sg::ui::manipulator::TrackballCameraManipulatorHIDSync> m_trackballHIDSync;
+    std::string                                                                 m_windowTitle;
 };
 
 QtMinimalWidget::QtMinimalWidget( const dp::gl::RenderContextFormat &format )
@@ -97,22 +97,21 @@ QtMinimalWidget::QtMinimalWidget( const dp::gl::RenderContextFormat &format )
   , m_frameCount( 0 )
   , m_framesInSecond( ~0 )
   , m_orbitRadians( 0.0f )
+  , m_trackballHIDSync(new dp::sg::ui::manipulator::TrackballCameraManipulatorHIDSync( ) )
   , m_windowTitle( "QtMinimal" )
 {
-  m_trackballHIDSync = new dp::sg::ui::manipulator::TrackballCameraManipulatorHIDSync( );
   m_trackballHIDSync->setHID( this );
   m_trackballHIDSync->setRenderTarget( getRenderTarget() );
-  setManipulator( m_trackballHIDSync );
+  setManipulator( m_trackballHIDSync.get() );
 }
 
 QtMinimalWidget::~QtMinimalWidget()
 {
   // Delete SceneRenderer here to cleanup resources before the OpenGL context dies
-  setSceneRenderer( 0 );
+  setSceneRenderer( dp::sg::ui::SmartSceneRenderer::null );
 
   // Reset Manipulator
   setManipulator( 0 );
-  delete m_trackballHIDSync;
 }
 
 void QtMinimalWidget::keyPressEvent( QKeyEvent *event )
@@ -125,7 +124,7 @@ void QtMinimalWidget::keyPressEvent( QKeyEvent *event )
   }
   else if ( event->text().compare( "d" ) == 0 )
   {
-    dp::sg::renderer::rix::gl::SmartSceneRenderer renderer = dp::util::smart_cast<dp::sg::renderer::rix::gl::SceneRenderer>( getSceneRenderer() );
+    dp::sg::renderer::rix::gl::SmartSceneRenderer const& renderer = getSceneRenderer().staticCast<dp::sg::renderer::rix::gl::SceneRenderer>();
     renderer->setDepthPass( ! renderer->getDepthPass() );
   }
   else if ( event->text().compare("s") == 0 )

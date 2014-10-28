@@ -30,7 +30,8 @@
 #include <map>
 
 #include <dp/util/Config.h>
-#include <dp/util/SmartPtr.h>
+#include <dp/util/SharedPtr.h>
+#include <dp/util/Types.h>
 #include <dp/math/Vecnt.h>
 
 namespace dp
@@ -86,11 +87,13 @@ namespace dp
         std::vector<float> m_data;
       };
 
-      class GeometryData : public RCObject
+      SMART_TYPES( GeometryData );
+
+      class GeometryData
       {
       public:
-        DP_UTIL_API GeometryData( GeometryPrimitiveType gpt );
-        DP_UTIL_API GeometryData(const SmartPtr<GeometryData>& rhs);
+        DP_UTIL_API static SmartGeometryData create( GeometryPrimitiveType gpt );
+        DP_UTIL_API static SmartGeometryData create( SmartGeometryData const& rhs );
         DP_UTIL_API ~GeometryData();
 
         std::vector<unsigned int> m_indices;
@@ -99,8 +102,11 @@ namespace dp
 #if !defined(NDEBUG)
         DP_UTIL_API bool checkConsistency() const;
 #endif
+
+      protected:
+        DP_UTIL_API GeometryData( GeometryPrimitiveType gpt );
+        DP_UTIL_API GeometryData( SmartGeometryData const& rhs);
       };
-      typedef SmartPtr<GeometryData> SmartGeometryData;
 
       class AttributeFeed
       {
@@ -273,7 +279,7 @@ namespace dp
 
         if( meshOut == SmartGeometryData::null )
         {
-          meshOut = new GeometryData(*meshIn);
+          meshOut = GeometryData::create(meshIn);
         }
         else
         {

@@ -51,6 +51,11 @@ namespace dp
   {
     namespace opengl
     {
+      GroupImplHandle GroupImpl::create()
+      {
+        return( std::shared_ptr<GroupImpl>( new GroupImpl() ) );
+      }
+
       GroupImpl::GroupImpl()
         : m_outputBufferSize( ~0 )
       {

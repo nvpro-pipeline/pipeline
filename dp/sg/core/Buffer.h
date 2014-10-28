@@ -112,9 +112,9 @@ namespace dp
               \param length in bytes for the mapped range
           **/
           DataReadLock() {};
-          DataReadLock( const BufferSharedPtr &buffer) : m_lock( new ReadLockImpl( buffer ) ) {}
+          DataReadLock( const BufferSharedPtr &buffer) : m_lock( ReadLockImpl::create( buffer ) ) {}
           DataReadLock( const BufferSharedPtr &buffer, size_t offset, size_t length) 
-                             : m_lock( new ReadLockImpl( buffer , offset, length) ) {}
+                             : m_lock( ReadLockImpl::create( buffer , offset, length) ) {}
           DataReadLock( const DataReadLock &rhs ) { m_lock = rhs.m_lock; }
           DataReadLock &operator=( const DataReadLock &rhs ) { m_lock = rhs.m_lock; return *this;}
 
@@ -126,19 +126,24 @@ namespace dp
           const void *getPtr() const { return m_lock->m_ptr; }
 
         protected:
-          class ReadLockImpl : public dp::util::RCObject
+          SMART_TYPES( ReadLockImpl );
+          class ReadLockImpl
           {
           public:
-            ReadLockImpl( const BufferSharedPtr &buffer);
-            ReadLockImpl( const BufferSharedPtr &buffer, size_t offset, size_t length);
+            static SmartReadLockImpl create( BufferSharedPtr const& buffer );
+            static SmartReadLockImpl create( BufferSharedPtr const& buffer, size_t offset, size_t length );
             ~ReadLockImpl();
 
             BufferSharedPtr m_buffer;
             const void *m_ptr;
+
+          protected:
+            ReadLockImpl( const BufferSharedPtr &buffer);
+            ReadLockImpl( const BufferSharedPtr &buffer, size_t offset, size_t length);
           };
 
         private:
-          dp::util::SmartPtr<ReadLockImpl> m_lock;
+          SmartReadLockImpl m_lock;
         };
 
         /** \brief Object to acquire a thread-safe write, read or read-write access to the buffer's data. 
@@ -160,9 +165,9 @@ namespace dp
           **/
           DataWriteLock() {};
           DataWriteLock( const BufferSharedPtr &buffer, Buffer::MapMode mapMode )
-                              : m_lock(new WriteLockImpl( buffer, mapMode ) ) { }
+                              : m_lock(WriteLockImpl::create( buffer, mapMode ) ) { }
           DataWriteLock( const BufferSharedPtr &buffer, Buffer::MapMode mapMode, size_t offset, size_t length )
-                              : m_lock(new WriteLockImpl( buffer, mapMode, offset, length ) ) { }
+                              : m_lock(WriteLockImpl::create( buffer, mapMode, offset, length ) ) { }
           DataWriteLock( const DataWriteLock &rhs ) { m_lock = rhs.m_lock; }
           DataWriteLock &operator=( const DataWriteLock &rhs ) { m_lock = rhs.m_lock; return *this; }
 
@@ -174,19 +179,25 @@ namespace dp
           template <typename ValueType> ValueType *getPtr() const { return reinterpret_cast<ValueType *>(m_lock->m_ptr); }
 
         protected:
-          class WriteLockImpl : public dp::util::RCObject
+          SMART_TYPES( WriteLockImpl );
+
+          class WriteLockImpl
           {
           public:
-            WriteLockImpl( const BufferSharedPtr &buffer, Buffer::MapMode mapMode );
-            WriteLockImpl( const BufferSharedPtr &buffer, Buffer::MapMode mapMode, size_t offset, size_t length );
+            static SmartWriteLockImpl create( const BufferSharedPtr &buffer, Buffer::MapMode mapMode );
+            static SmartWriteLockImpl create( const BufferSharedPtr &buffer, Buffer::MapMode mapMode, size_t offset, size_t length );
             ~WriteLockImpl();
 
             BufferSharedPtr m_buffer;
             void *m_ptr;
+
+          protected:
+            WriteLockImpl( const BufferSharedPtr &buffer, Buffer::MapMode mapMode );
+            WriteLockImpl( const BufferSharedPtr &buffer, Buffer::MapMode mapMode, size_t offset, size_t length );
           };
 
         private:
-          dp::util::SmartPtr<WriteLockImpl> m_lock;
+          SmartWriteLockImpl  m_lock;
         };
 
         // FIXME rename to WriteLockIterator
@@ -359,6 +370,16 @@ namespace dp
         }
       }
 
+      inline Buffer::DataReadLock::SmartReadLockImpl Buffer::DataReadLock::ReadLockImpl::create( BufferSharedPtr const& buffer )
+      {
+        return( std::shared_ptr<ReadLockImpl>( new ReadLockImpl( buffer ) ) );
+      }
+
+      inline Buffer::DataReadLock::SmartReadLockImpl Buffer::DataReadLock::ReadLockImpl::create( BufferSharedPtr const& buffer, size_t offset, size_t length )
+      {
+        return( std::shared_ptr<ReadLockImpl>( new ReadLockImpl( buffer, offset, length ) ) );
+      }
+
       inline Buffer::DataReadLock::ReadLockImpl::ReadLockImpl( const BufferSharedPtr &buffer )
         : m_buffer( buffer )
         , m_ptr(0)
@@ -378,6 +399,16 @@ namespace dp
       inline Buffer::DataReadLock::ReadLockImpl::~ReadLockImpl()
       {
         m_buffer->unlockRead();
+      }
+
+      inline Buffer::DataWriteLock::SmartWriteLockImpl Buffer::DataWriteLock::WriteLockImpl::create( BufferSharedPtr const& buffer, Buffer::MapMode mapMode )
+      {
+        return( std::shared_ptr<WriteLockImpl>( new WriteLockImpl( buffer, mapMode ) ) );
+      }
+
+      inline Buffer::DataWriteLock::SmartWriteLockImpl Buffer::DataWriteLock::WriteLockImpl::create( BufferSharedPtr const& buffer, Buffer::MapMode mapMode, size_t offset, size_t length )
+      {
+        return( std::shared_ptr<WriteLockImpl>( new WriteLockImpl( buffer, mapMode, offset, length ) ) );
       }
 
       inline Buffer::DataWriteLock::WriteLockImpl::WriteLockImpl( const BufferSharedPtr &buffer, Buffer::MapMode mapMode )

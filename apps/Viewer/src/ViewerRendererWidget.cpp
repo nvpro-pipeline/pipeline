@@ -84,7 +84,7 @@ ViewerRendererWidget::ViewerRendererWidget( QWidget *parent, SceniXQGLWidget *sh
   setAcceptDrops( true );
   setFocusPolicy( Qt::StrongFocus ); // TAB or click for keyboard focus
 
-  m_sceneRendererPipeline = new SceneRendererPipeline(); // Allow the setSceneRenderer() API to work!
+  m_sceneRendererPipeline = SceneRendererPipeline::create(); // Allow the setSceneRenderer() API to work!
 
   // use new manipulator
   setManipulatorType( MANIPULATOR_TRACKBALL );
@@ -128,7 +128,7 @@ ViewerRendererWidget::setRendererType( RendererType type )
     switch( type )
     {
       case RENDERER_NONE:
-        setSceneRenderer( nullptr );
+        setSceneRenderer( dp::sg::ui::SmartSceneRenderer::null );
         break;
 
       case RENDERER_RASTERIZE_XBAR:
@@ -1295,7 +1295,7 @@ void ViewerRendererWidget::setOITDepth( unsigned int depth )
   if ( m_oitDepth != depth )
   {
     m_oitDepth = depth;
-    dp::sg::renderer::rix::gl::SmartSceneRenderer sceneRenderer = dp::util::smart_cast<dp::sg::renderer::rix::gl::SceneRenderer>(getSceneRenderer());
+    dp::sg::renderer::rix::gl::SmartSceneRenderer const& sceneRenderer = getSceneRenderer().staticCast<dp::sg::renderer::rix::gl::SceneRenderer>();
     if ( sceneRenderer )
     {
       sceneRenderer->getTransparencyManager()->setLayersCount( m_oitDepth );

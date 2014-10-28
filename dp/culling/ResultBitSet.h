@@ -33,12 +33,13 @@ namespace dp
 {
   namespace culling
   {
+    HANDLE_TYPES( ResultBitSet );
 
     class ResultBitSet : public Result, public dp::util::Observer
     {
     public:
-      DP_CULLING_API ResultBitSet( GroupBitSetHandle const& parentGroup );
-      DP_CULLING_API ~ResultBitSet();
+      DP_CULLING_API static ResultBitSetHandle create( GroupBitSetHandle const& parentGroup );
+      DP_CULLING_API virtual ~ResultBitSet();
 
       DP_CULLING_API std::vector<ObjectHandle> const & getChangedObjects() const;
 
@@ -51,6 +52,9 @@ namespace dp
       DP_CULLING_API virtual void onDestroyed( dp::util::Subject const& subject, dp::util::Payload* payload );
 
       bool isVisible( ObjectBitSetHandle const & object );
+
+    protected:
+      DP_CULLING_API ResultBitSet( GroupBitSetHandle const& parentGroup );
 
     private:
       GroupBitSetHandle m_groupParent;
@@ -70,8 +74,6 @@ namespace dp
 
       return (groupIndex < m_results.getSize()) ? m_results.getBit( groupIndex ) : true;
     }
-
-   typedef dp::util::SmartPtr<ResultBitSet> ResultBitSetHandle;
 
   } // namespace culling
 } // namespace dp

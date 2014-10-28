@@ -87,14 +87,14 @@ void lib_init()
 }
 #endif
 
-bool getPlugInterface(const UPIID& piid, dp::util::SmartPtr<dp::util::PlugIn> & pi)
+bool getPlugInterface(const UPIID& piid, dp::util::SmartPlugIn & pi)
 {
   // check if UPIID is properly initialized 
   //DP_ASSERT(PIID_NVSG_SCENE_LOADER==UPIID(".NVSG", PITID_SCENE_LOADER));
   
   if ( piid==PIID_NVSG_SCENE_LOADER )
   {
-    pi = dp::util::SmartPtr<dp::util::PlugIn>( new NVSGLoader() );
+    pi = NVSGLoader::create();
     return( !!pi );
   }
   return false;
@@ -105,6 +105,11 @@ void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids )
   piids.clear();
 
   piids.push_back(PIID_NVSG_SCENE_LOADER);
+}
+
+SmartNVSGLoader NVSGLoader::create()
+{
+  return( std::shared_ptr<NVSGLoader>( new NVSGLoader() ) );
 }
 
 NVSGLoader::NVSGLoader()

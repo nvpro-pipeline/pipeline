@@ -37,6 +37,8 @@ namespace dp
   {
     namespace ui
     {
+      SMART_TYPES( SceneRenderer );
+
       /** \brief SceneRenderer is the base class for all Renderers which visualize a scene. On a stereo
                  dp::ui::RenderTarget stereo rendering is turned on automatically. SceniX supports a default implementation
                  of dp::sg::ui::SceneRenderer::StereoViewStateProvider which supports dp::sg::core::PerspectiveCamera. For other
@@ -49,7 +51,8 @@ namespace dp
         /** \brief This class generates an dp::sg::ui::ViewState for the left and right eye based on a
                    monoscopic dp::sg::ui::ViewState. 
         **/
-        class StereoViewStateProvider : public RCObject
+        SMART_TYPES( StereoViewStateProvider );
+        class StereoViewStateProvider
         {
         public:
           /** \brief Get an dp::sg::ui::ViewState for the given eye. Implement calculateViewState for custom behaviour.
@@ -58,6 +61,7 @@ namespace dp
               \return dp::sg::ui::ViewState for the given eye.
           **/
           DP_SG_UI_API dp::sg::ui::ViewStateSharedPtr getViewState( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTarget::StereoTarget eye );
+
         protected:
           /** \brief Calculate an dp::sg::ui::ViewState for the given eye. Override this function to implement custom behaviour.
               \param viewState Monoscopic dp::sg::ui::ViewState used as base for the stereo dp::sg::ui::ViewState.
@@ -102,8 +106,8 @@ namespace dp
         /**\brief Set the StereoViewState provider which should be used for stereo ViewState calculation.
            \param viewStateProvider A ViewStateProvider instance with desired behaviour.
         **/
-        DP_SG_UI_API void setStereoViewStateProvider( const dp::util::SmartPtr<StereoViewStateProvider> &viewStateProvider );
-        DP_SG_UI_API dp::util::SmartPtr<StereoViewStateProvider> getStereoViewStateProvider() const;
+        DP_SG_UI_API void setStereoViewStateProvider( SmartStereoViewStateProvider const& viewStateProvider );
+        DP_SG_UI_API SmartStereoViewStateProvider const& getStereoViewStateProvider() const;
 
         DP_SG_UI_API void setEnvironmentSampler( const dp::sg::core::SamplerSharedPtr & sampler );
         DP_SG_UI_API const dp::sg::core::SamplerSharedPtr & getEnvironmentSampler() const;
@@ -170,9 +174,9 @@ namespace dp
         dp::sg::ui::RendererOptionsWeakPtr  m_rendererOptions;
 
       private:
-        dp::util::SmartPtr<StereoViewStateProvider> m_stereoViewStateProvider;
-        unsigned int                                m_traversalMaskOverride;
-        dp::sg::core::SamplerSharedPtr              m_environmentSampler;
+        SmartStereoViewStateProvider    m_stereoViewStateProvider;
+        unsigned int                    m_traversalMaskOverride;
+        dp::sg::core::SamplerSharedPtr  m_environmentSampler;
       };
 
       inline bool SceneRenderer::isPreserveTexturesAfterUpload() const
@@ -203,12 +207,12 @@ namespace dp
         }
       }
 
-      inline void SceneRenderer::setStereoViewStateProvider( const dp::util::SmartPtr<SceneRenderer::StereoViewStateProvider> &viewStateProvider )
+      inline void SceneRenderer::setStereoViewStateProvider( SceneRenderer::SmartStereoViewStateProvider const& viewStateProvider )
       {
         m_stereoViewStateProvider = viewStateProvider;
       }
 
-      inline dp::util::SmartPtr<SceneRenderer::StereoViewStateProvider> SceneRenderer::getStereoViewStateProvider( ) const
+      inline SceneRenderer::SmartStereoViewStateProvider const& SceneRenderer::getStereoViewStateProvider( ) const
       {
         return m_stereoViewStateProvider;
       }
@@ -217,8 +221,6 @@ namespace dp
       {
         return( m_environmentSampler );
       }
-
-      typedef dp::util::SmartPtr<SceneRenderer> SmartSceneRenderer;
 
     } // namespace ui
   } // namespace sg

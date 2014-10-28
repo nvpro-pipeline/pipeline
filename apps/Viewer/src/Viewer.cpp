@@ -221,12 +221,12 @@ bool Viewer::loadScene( const QString & fileName )
   {
     if ( !m_viewerPlugInCallback )
     {
-      m_viewerPlugInCallback = new viewerPlugInCallback();
+      m_viewerPlugInCallback = viewerPlugInCallback::create();
     }
     m_viewState.reset();    // clear the current scene before loading the next one!
     try
     {
-      m_viewState = dp::sg::io::loadScene( fileName.toStdString(), GetPreferences()->getSearchPathsAsStdVector(), m_viewerPlugInCallback.get() );
+      m_viewState = dp::sg::io::loadScene( fileName.toStdString(), GetPreferences()->getSearchPathsAsStdVector(), m_viewerPlugInCallback );
       if ( m_viewState )
       {
         LogMessage( "Loading Scene: '%s' - SUCCESS\n", fileName.toStdString().c_str() );

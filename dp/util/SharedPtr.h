@@ -39,9 +39,52 @@ typedef uintptr_t UINT_PTR;   //!< Linux specific type definition for UINT_PTR, 
 
 #include <dp/util/Allocator.h>
 #include <dp/util/DPAssert.h>
-#include <dp/util/SmartPtr.h>
 
 #include <boost/type_traits/is_base_of.hpp>
+
+#define SHARED_TYPES(T)                     \
+  class T;                                  \
+  typedef dp::util::SharedPtr<T> Shared##T
+
+/*! \brief Macro to define the three standard types for a type T.
+ *  \remark For convenience, for each class T, we define the types TSharedPtr, TWeakPtr, and TLock */
+#define SHARED_PTR_TYPES(T)                     \
+  class T;                                      \
+  typedef dp::util::SharedPtr<T>  T##SharedPtr; \
+  typedef T*                      T##WeakPtr;
+
+#define SMART_TYPES(T)                    \
+  class T;                                \
+  typedef dp::util::SharedPtr<T> Smart##T
+
+#define HANDLE_TYPES(T)                       \
+  class T;                                    \
+  typedef dp::util::SharedPtr<T>  T##Handle;
+
+
+/*! \brief Macro to define ObjectType and our four standard SHARED_TYPES of a base type T as part of a templated struct.
+  *  \remark Using this struct, the standard SHARED_TYPES Handle, SharedPtr, WeakPtr and Lock, as well as
+  *  the ObjectType itself, are easily available within a template context. */
+#define SHARED_OBJECT_TRAITS_BASE(T)          \
+template <> struct ObjectTraits<T>            \
+{                                             \
+  typedef T                       ObjectType; \
+  typedef dp::util::SharedPtr<T>  SharedPtr;  \
+  typedef T*                      WeakPtr;    \
+}
+
+/*! \brief Macro to define ObjectType and our five standard SHARED_TYPES of a type T, with base type BT, as part of a templated struct.
+  *  \remark Using this struct, the standard SHARED_TYPES Handle, SharedPtr, WeakPtr and Lock, as well as
+  *  the ObjectType itself, are easily available within a template context. */
+#define SHARED_OBJECT_TRAITS(T, BT)           \
+template <> struct ObjectTraits<T>            \
+{                                             \
+  typedef T                       ObjectType; \
+  typedef BT                      Base;       \
+  typedef dp::util::SharedPtr<T>  SharedPtr;  \
+  typedef T*                      WeakPtr;    \
+}
+
 
 namespace dp
 {
@@ -53,6 +96,8 @@ namespace dp
     class SharedPtr : public std::shared_ptr<T>
     {
       public:
+        using std::shared_ptr<T>::reset;
+
         SharedPtr();
         SharedPtr( std::shared_ptr<T> const& sp );
 
@@ -71,12 +116,17 @@ namespace dp
         // convenience handling on clone
         SharedPtr<T> clone() const;
 
-        typename ObjectTraits<T>::WeakPtr getWeakPtr() const;
+        typename T * getWeakPtr() const;
 
         template <typename U> bool operator==( U const* rhs ) const;
 
       private:
         T * get() const;    // hide std::shared_ptr<T>::get(), use getWeakPtr(), instead
+
+        // hide some functions from std::shared_ptr<T> to make dp::util::SharedPtr<T> more stable on counting
+        template <class U> void reset (U* p);                 // hide std::shared_ptr<T>::reset( U* p )
+        template <class U, class D> void reset (U* p, D del); // hide std::shared_ptr<T>::reset( U* p, D del )
+        template <class U, class D, class Alloc> void reset (U* p, D del, Alloc alloc);
 
       public:
         static SharedPtr<T> const null;
@@ -138,7 +188,7 @@ namespace dp
     }
 
     template <typename T>
-    inline typename ObjectTraits<T>::WeakPtr SharedPtr<T>::getWeakPtr() const
+    inline T * SharedPtr<T>::getWeakPtr() const
     {
       return( std::shared_ptr<T>::get() );
     }

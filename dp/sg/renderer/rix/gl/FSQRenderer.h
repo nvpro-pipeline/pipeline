@@ -42,6 +42,7 @@ namespace dp
       {
         namespace gl
         {
+          SMART_TYPES( FSQRenderer );
 
           /*! \brief Renderer to draw a "Full Screen" (ie: viewport-filling) quad, using a supplied pair of geometry effect and material effect.
            *  \par Namespace: nvgl
@@ -126,7 +127,7 @@ namespace dp
           class FSQRenderer : public dp::sg::ui::Renderer
           {
             public:
-              DP_SG_RDR_RIX_GL_API static dp::util::SmartPtr<FSQRenderer> create( const dp::gl::SharedRenderTarget &renderTarget = dp::gl::SharedRenderTarget() );
+              DP_SG_RDR_RIX_GL_API static SmartFSQRenderer create( const dp::gl::SharedRenderTarget &renderTarget = dp::gl::SharedRenderTarget::null );
               DP_SG_RDR_RIX_GL_API virtual ~FSQRenderer(void);
 
               DP_SG_RDR_RIX_GL_API virtual void setEffect( const dp::sg::core::EffectDataSharedPtr & effect ) = 0;
@@ -183,8 +184,6 @@ namespace dp
             protected:
               DP_SG_RDR_RIX_GL_API FSQRenderer( const dp::gl::SharedRenderTarget &target );
           };
-
-          typedef dp::util::SmartPtr<FSQRenderer> SmartFSQRenderer;
 
         } // namespace gl
       } // namespace rix

@@ -30,7 +30,6 @@
 #include <dp/sg/core/nvsgapi.h>
 #include <dp/util/Types.h>
 #include <dp/sg/core/CoreTypes.h>
-#include "dp/util/RCObject.h" // base class definition
 
 namespace dp
 {
@@ -45,20 +44,16 @@ namespace dp
         *  pointers to a chain of objects, each being a child of the
         *  previous object. \n
         *  A path can hold any kind of Object-derived objects (even Primitives). */
-      class Path : public dp::util::RCObject
+      class Path
       {
         public:
-          /*! \brief Construct a Path object. */
-          DP_SG_CORE_API Path();
+          DP_SG_CORE_API static PathSharedPtr create();
+          DP_SG_CORE_API static PathSharedPtr create( PathSharedPtr const& rhs );
 
-          /*! \brief Copy constructor.
-           *  \param rhs Reference to a constant Path object.
-           *  \remarks This copy constructor creates an exact copy of the provided Path object.\n
-           *  Internally this class holds a vector of node pointer representing the path through the 
-           *  graph. This copy constructor does not perform a deep copy on the pointers in the vector. 
-           *  It simply copies the pointers.*/
-          DP_SG_CORE_API Path(const Path& rhs);
+          //! Prohibit explicit creation on stack by making the destructor protected.
+          DP_SG_CORE_API virtual ~Path();
 
+        public:
           /*! \brief Get the length of the path through the graph.
            *  \return The number of nodes in the path chain. 
            *  \remarks The path length is the exact number of nodes in the path chain. */
@@ -165,9 +160,18 @@ namespace dp
           bool operator<(const Path& rhs) const;
 
         protected:
-          //! Prohibit explicit creation on stack by making the destructor protected.
-          DP_SG_CORE_API virtual ~Path();
-      
+          /*! \brief Construct a Path object. */
+          DP_SG_CORE_API Path();
+
+          /*! \brief Copy constructor.
+           *  \param rhs Reference to a constant Path object.
+           *  \remarks This copy constructor creates an exact copy of the provided Path object.\n
+           *  Internally this class holds a vector of node pointer representing the path through the 
+           *  graph. This copy constructor does not perform a deep copy on the pointers in the vector. 
+           *  It simply copies the pointers.*/
+          DP_SG_CORE_API Path( PathSharedPtr const& rhs);
+
+
         private:
           std::vector<ObjectWeakPtr> m_path;   //!< Vector of objects representing a path chain.
       };

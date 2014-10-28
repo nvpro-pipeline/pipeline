@@ -28,9 +28,9 @@
 
 #include <dp/fx/EffectLibrary.h>
 #include <dp/math/Vecnt.h>
-#include <dp/util/SmartPtr.h>
 #include <dp/sg/core/CoreTypes.h>
-#include <boost/shared_ptr.hpp>
+
+SHARED_PTR_TYPES( Animator );
 
 class Animator
 {
@@ -39,12 +39,12 @@ public:
   virtual void update( float time ) = 0;
 };
 
-typedef boost::shared_ptr<Animator> AnimatorSharedPtr;
+SHARED_PTR_TYPES( AnimatedScene );
 
-class AnimatedScene : public dp::util::RCObject
+class AnimatedScene
 {
 public:
-  AnimatedScene( const dp::math::Vec2f& gridSize, const dp::math::Vec2i& objectCount );
+  static AnimatedSceneSharedPtr create( const dp::math::Vec2f& gridSize, const dp::math::Vec2i& objectCount );
   virtual ~AnimatedScene();
 
   dp::sg::core::SceneSharedPtr getScene() const;
@@ -53,6 +53,8 @@ public:
   void updateTransforms( float time );
 
 protected:
+  AnimatedScene( const dp::math::Vec2f& gridSize, const dp::math::Vec2i& objectCount );
+
   void setColor( const dp::math::Vec3f& color, size_t x, size_t y );
   void createGrid();
   dp::sg::core::PrimitiveSharedPtr createPrimitive( size_t x, size_t y );

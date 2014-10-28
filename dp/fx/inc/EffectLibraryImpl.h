@@ -31,6 +31,7 @@
 #include <dp/fx/EffectSpec.h>
 #include <dp/fx/EffectData.h>
 #include <dp/fx/inc/Snippet.h>
+#include <dp/util/SharedPtr.h>
 #include <stack>
 
 namespace dp
@@ -38,12 +39,11 @@ namespace dp
   namespace fx
   {
 
-    class EffectLoader;
+    SMART_TYPES( EffectLoader );
 
     class EffectLibraryImpl : public EffectLibrary
     {
     public:
-      EffectLibraryImpl();
       virtual ~EffectLibraryImpl();
 
       static EffectLibrary* instance();
@@ -72,14 +72,17 @@ namespace dp
       virtual std::vector<std::string> getRegisteredExtensions() const;
       virtual bool effectHasTechnique( SmartEffectSpec const& effectSpec, std::string const& techniqueName, bool rasterizer ) const;
 
-      void registerEffectLoader( const boost::shared_ptr<EffectLoader>& effectLoader, const std::string& extension );
+      void registerEffectLoader( SmartEffectLoader const& effectLoader, const std::string& extension );
+
+    protected:
+      EffectLibraryImpl();
 
     private:
 
       typedef std::vector< std::string> SearchPaths;
       SearchPaths m_searchPaths;
 
-      typedef std::map<std::string, boost::shared_ptr<EffectLoader> > EffectLoaders;
+      typedef std::map<std::string, SmartEffectLoader> EffectLoaders;
       EffectLoaders m_effectLoaders;
 
       typedef std::map<std::string, SmartParameterGroupSpec> ParameterGroupSpecs;

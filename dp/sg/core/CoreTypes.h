@@ -29,7 +29,6 @@
 
 #include <dp/util/Reflection.h>
 #include <dp/util/SharedPtr.h>
-#include <dp/util/SmartPtr.h>
 
 // required declaration
 namespace dp
@@ -68,126 +67,41 @@ namespace dp
   }
 }
 
-/*! \brief Macro to define the three standard types for a type T.
- *  \remark For convenience, for each class T, we define the types TSharedPtr, TWeakPtr, and TLock */
-#define CORE_TYPES(T)                           \
-  typedef dp::util::SharedPtr<T>  T##SharedPtr; \
-  typedef T*                      T##WeakPtr;
-
-/*! \brief Macro to define ObjectType and our four standard types of a base type T as part of a templated struct.
- *  \remark Using this struct, the standard types Handle, SharedPtr, WeakPtr and Lock, as well as
- *  the ObjectType itself, are easily available within a template context. */
-#define OBJECT_TRAITS_BASE(T)                 \
-template <> struct ObjectTraits<T>            \
-{                                             \
-  typedef T                       ObjectType; \
-  typedef dp::util::SharedPtr<T>  SharedPtr;  \
-  typedef T*                      WeakPtr;    \
-}
-
-/*! \brief Macro to define ObjectType and our five standard types of a type T, with base type BT, as part of a templated struct.
- *  \remark Using this struct, the standard types Handle, SharedPtr, WeakPtr and Lock, as well as
- *  the ObjectType itself, are easily available within a template context. */
-#define OBJECT_TRAITS(T, BT)                  \
-template <> struct ObjectTraits<T>            \
-{                                             \
-  typedef T                       ObjectType; \
-  typedef BT                      Base;       \
-  typedef dp::util::SharedPtr<T>  SharedPtr;  \
-  typedef T*                      WeakPtr;    \
-}
-
 namespace dp
 {
   namespace sg
   {
     namespace core
     {
-
-      class HandledObject;
-
-      // Object types
-      class Object;
-        // cameras ...
-        class Camera;
-          class FrustumCamera;
-            class ParallelCamera;
-            class PerspectiveCamera;
-          class MatrixCamera;
-        // nodes and node components ...
-        class Node;
-          // ... groups
-          class Group;
-            class Billboard;
-            class LOD;
-            class Transform;
-            class Switch;
-          // ... lights
-          class LightSource;
-          // ... clip plane
-          class ClipPlane;
-          // ... geometry
-          class GeoNode;
-
-        // Primitives
-        class Primitive;
-
-        // VertexAttributes
-        class VertexAttributeSet;
-
-        // Indices
-        class IndexSet;
-
-        // Effects
-        class EffectData;
-        class ParameterGroupData;
-        
-        // Sampler
-        class Sampler;
-
-      // additionally required declarations
-      class Scene;
-      class VertexAttribute;
-
-      // buffer types
-      class Buffer;
-      class BufferHost;
-
-      // texture types
-      class Texture;
-      class TextureFile;
-      class TextureHost;
-
-      // Handle types
-      CORE_TYPES( HandledObject );
-
-      CORE_TYPES( Object );
-      CORE_TYPES( Camera );
-      CORE_TYPES( FrustumCamera );
-      CORE_TYPES( ParallelCamera );
-      CORE_TYPES( PerspectiveCamera );
-      CORE_TYPES( MatrixCamera );
-      CORE_TYPES( Node );
-      CORE_TYPES( Group );
-      CORE_TYPES( Billboard );
-      CORE_TYPES( LOD );
-      CORE_TYPES( Transform );
-      CORE_TYPES( Switch );
-      CORE_TYPES( LightSource );
-      CORE_TYPES( ClipPlane );
-      CORE_TYPES( GeoNode );
-      CORE_TYPES( Primitive );
-      CORE_TYPES( VertexAttributeSet );
-      CORE_TYPES( IndexSet );
-      CORE_TYPES( EffectData );
-      CORE_TYPES( ParameterGroupData );
-      CORE_TYPES( Scene );
-      CORE_TYPES( Buffer );
-      CORE_TYPES( BufferHost );
-      CORE_TYPES( Sampler );
-      CORE_TYPES( Texture );
-      CORE_TYPES( TextureFile );
-      CORE_TYPES( TextureHost );
+      SHARED_PTR_TYPES( Billboard );
+      SHARED_PTR_TYPES( Buffer );
+      SHARED_PTR_TYPES( BufferHost );
+      SHARED_PTR_TYPES( Camera );
+      SHARED_PTR_TYPES( ClipPlane );
+      SHARED_PTR_TYPES( EffectData );
+      SHARED_PTR_TYPES( FrustumCamera );
+      SHARED_PTR_TYPES( GeoNode );
+      SHARED_PTR_TYPES( Group );
+      SHARED_PTR_TYPES( HandledObject );
+      SHARED_PTR_TYPES( IndexSet );
+      SHARED_PTR_TYPES( LightSource );
+      SHARED_PTR_TYPES( LOD );
+      SHARED_PTR_TYPES( MatrixCamera );
+      SHARED_PTR_TYPES( Node );
+      SHARED_PTR_TYPES( Object );
+      SHARED_PTR_TYPES( ParallelCamera );
+      SHARED_PTR_TYPES( ParameterGroupData );
+      SHARED_PTR_TYPES( Path );
+      SHARED_PTR_TYPES( PerspectiveCamera );
+      SHARED_PTR_TYPES( Primitive );
+      SHARED_PTR_TYPES( Sampler );
+      SHARED_PTR_TYPES( Scene );
+      SHARED_PTR_TYPES( Switch );
+      SHARED_PTR_TYPES( Texture );
+      SHARED_PTR_TYPES( TextureFile );
+      SHARED_PTR_TYPES( TextureHost );
+      SHARED_PTR_TYPES( Transform );
+      SHARED_PTR_TYPES( VertexAttributeSet );
 
     } // namespace core
   } // namespace sg
@@ -199,35 +113,37 @@ namespace dp
   namespace util
   {
 
-    OBJECT_TRAITS_BASE( dp::sg::core::HandledObject );
+    SHARED_OBJECT_TRAITS_BASE( dp::sg::core::HandledObject );
+    SHARED_OBJECT_TRAITS_BASE( dp::sg::core::Path );
 
-    OBJECT_TRAITS( dp::sg::core::Object,              dp::sg::core::HandledObject );
-    OBJECT_TRAITS( dp::sg::core::Camera,              dp::sg::core::Object );
-    OBJECT_TRAITS( dp::sg::core::FrustumCamera,       dp::sg::core::Camera );
-    OBJECT_TRAITS( dp::sg::core::ParallelCamera,      dp::sg::core::FrustumCamera );
-    OBJECT_TRAITS( dp::sg::core::PerspectiveCamera,   dp::sg::core::FrustumCamera );
-    OBJECT_TRAITS( dp::sg::core::MatrixCamera,        dp::sg::core::Camera );
-    OBJECT_TRAITS( dp::sg::core::Node,                dp::sg::core::Object );
-    OBJECT_TRAITS( dp::sg::core::Group,               dp::sg::core::Node );
-    OBJECT_TRAITS( dp::sg::core::Billboard,           dp::sg::core::Group );
-    OBJECT_TRAITS( dp::sg::core::LOD,                 dp::sg::core::Group );
-    OBJECT_TRAITS( dp::sg::core::Transform,           dp::sg::core::Group );
-    OBJECT_TRAITS( dp::sg::core::Switch,              dp::sg::core::Group );
-    OBJECT_TRAITS( dp::sg::core::LightSource,         dp::sg::core:: Node );
-    OBJECT_TRAITS( dp::sg::core::ClipPlane,           dp::sg::core::Object );
-    OBJECT_TRAITS( dp::sg::core::GeoNode,             dp::sg::core::Node );
-    OBJECT_TRAITS( dp::sg::core::Primitive,           dp::sg::core::Object );
-    OBJECT_TRAITS( dp::sg::core::VertexAttributeSet,  dp::sg::core::Object );
-    OBJECT_TRAITS( dp::sg::core::IndexSet,            dp::sg::core::Object );
-    OBJECT_TRAITS( dp::sg::core::EffectData,          dp::sg::core::Object );
-    OBJECT_TRAITS( dp::sg::core::ParameterGroupData,  dp::sg::core::Object );
-    OBJECT_TRAITS( dp::sg::core::Scene,               dp::sg::core::Object );
-    OBJECT_TRAITS( dp::sg::core::Buffer,              dp::sg::core::HandledObject );
-    OBJECT_TRAITS( dp::sg::core::BufferHost,          dp::sg::core::Buffer );
-    OBJECT_TRAITS( dp::sg::core::Sampler,             dp::sg::core::Object );
-    OBJECT_TRAITS( dp::sg::core::Texture,             dp::sg::core::HandledObject );
-    OBJECT_TRAITS( dp::sg::core::TextureFile,         dp::sg::core::Texture );
-    OBJECT_TRAITS( dp::sg::core::TextureHost,         dp::sg::core::Texture );
+    SHARED_OBJECT_TRAITS( dp::sg::core::Object,              dp::sg::core::HandledObject );
+    SHARED_OBJECT_TRAITS( dp::sg::core::Camera,              dp::sg::core::Object );
+    SHARED_OBJECT_TRAITS( dp::sg::core::FrustumCamera,       dp::sg::core::Camera );
+    SHARED_OBJECT_TRAITS( dp::sg::core::ParallelCamera,      dp::sg::core::FrustumCamera );
+    SHARED_OBJECT_TRAITS( dp::sg::core::PerspectiveCamera,   dp::sg::core::FrustumCamera );
+    SHARED_OBJECT_TRAITS( dp::sg::core::MatrixCamera,        dp::sg::core::Camera );
+    SHARED_OBJECT_TRAITS( dp::sg::core::Node,                dp::sg::core::Object );
+    SHARED_OBJECT_TRAITS( dp::sg::core::Group,               dp::sg::core::Node );
+    SHARED_OBJECT_TRAITS( dp::sg::core::Billboard,           dp::sg::core::Group );
+    SHARED_OBJECT_TRAITS( dp::sg::core::LOD,                 dp::sg::core::Group );
+    SHARED_OBJECT_TRAITS( dp::sg::core::Transform,           dp::sg::core::Group );
+    SHARED_OBJECT_TRAITS( dp::sg::core::Switch,              dp::sg::core::Group );
+    SHARED_OBJECT_TRAITS( dp::sg::core::LightSource,         dp::sg::core:: Node );
+    SHARED_OBJECT_TRAITS( dp::sg::core::ClipPlane,           dp::sg::core::Object );
+    SHARED_OBJECT_TRAITS( dp::sg::core::GeoNode,             dp::sg::core::Node );
+    SHARED_OBJECT_TRAITS( dp::sg::core::Primitive,           dp::sg::core::Object );
+    SHARED_OBJECT_TRAITS( dp::sg::core::VertexAttributeSet,  dp::sg::core::Object );
+    SHARED_OBJECT_TRAITS( dp::sg::core::IndexSet,            dp::sg::core::Object );
+    SHARED_OBJECT_TRAITS( dp::sg::core::EffectData,          dp::sg::core::Object );
+    SHARED_OBJECT_TRAITS( dp::sg::core::ParameterGroupData,  dp::sg::core::Object );
+    SHARED_OBJECT_TRAITS( dp::sg::core::Scene,               dp::sg::core::Object );
+    SHARED_OBJECT_TRAITS( dp::sg::core::Buffer,              dp::sg::core::HandledObject );
+    SHARED_OBJECT_TRAITS( dp::sg::core::BufferHost,          dp::sg::core::Buffer );
+    SHARED_OBJECT_TRAITS( dp::sg::core::Sampler,             dp::sg::core::Object );
+    SHARED_OBJECT_TRAITS( dp::sg::core::Texture,             dp::sg::core::HandledObject );
+    SHARED_OBJECT_TRAITS( dp::sg::core::TextureFile,         dp::sg::core::Texture );
+    SHARED_OBJECT_TRAITS( dp::sg::core::TextureHost,         dp::sg::core::Texture );
+
 
     /************************************************************************/
     /* Reflection                                                           */
@@ -235,11 +151,6 @@ namespace dp
     /*! \brief Specialization of the TypedPropertyEnum template for type SceneSharedPtr. */
     template <> struct TypedPropertyEnum< dp::sg::core::SceneSharedPtr > {
       enum { type = Property::TYPE_SCENE };
-    };
-
-    /*! \brief Specialization of the TypedPropertyEnum template for type VertexAttribute. */
-    template <> struct TypedPropertyEnum< dp::sg::core::VertexAttribute> {
-      enum { type = Property::TYPE_VERTEX_ATTRIBUTE };
     };
 
     /*! \brief Specialization of the TypedPropertyEnum template for type Texture. */

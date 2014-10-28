@@ -70,12 +70,19 @@ namespace dp
       {
         if ( getShareGroup() )
         {
+          SHARED_TYPES( CleanupTask );
           class CleanupTask : public ShareGroupTask
           {
             public:
-              CleanupTask( GLuint id ) : m_id( id ) {}
+              static SharedCleanupTask create( GLuint id )
+              {
+                return( std::shared_ptr<CleanupTask>( new CleanupTask( id ) ) );
+              }
 
               virtual void execute() { glDeleteBuffers( 1, &m_id ); }
+
+            protected:
+              CleanupTask( GLuint id ) : m_id( id ) {}
 
             private:
               GLuint m_id;
@@ -84,7 +91,7 @@ namespace dp
           // make destructor exception safe
           try
           {
-            getShareGroup()->executeTask( SharedShareGroupTask( new CleanupTask( getGLId() ) ) );
+            getShareGroup()->executeTask( CleanupTask::create( getGLId() ) );
           } catch (...) {}
         }
         else

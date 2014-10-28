@@ -120,7 +120,7 @@ public:
   void setTonemapperValues( const TonemapperValues& tonemapperValues );
 
 signals:
-  void objectSelected( dp::util::SmartPtr<dp::sg::core::Path> );
+  void objectSelected( dp::sg::core::PathSharedPtr );
   void present( ViewerRendererWidget * );
 
 protected:

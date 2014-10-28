@@ -47,7 +47,7 @@ namespace dp
             SmartResourceIndexSet resourceIndexSet = resourceManager->getResource<ResourceIndexSet>( reinterpret_cast<size_t>(indexSet.getWeakPtr()) );
             if ( !resourceIndexSet )
             {
-              resourceIndexSet = new ResourceIndexSet( indexSet, resourceManager );
+              resourceIndexSet = std::shared_ptr<ResourceIndexSet>( new ResourceIndexSet( indexSet, resourceManager ) );
               resourceIndexSet->m_indicesHandle = resourceManager->getRenderer()->indicesCreate();
               resourceIndexSet->update();
             }

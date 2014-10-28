@@ -41,10 +41,12 @@ struct TonemapperValues
   float burnHighlights;
 };
 
+SMART_TYPES( SceneRendererPipeline );
+
 class SceneRendererPipeline : public dp::sg::ui::SceneRenderer
 {
 public:
-  SceneRendererPipeline();
+  static SmartSceneRendererPipeline create();
   ~SceneRendererPipeline();
 
   bool init(const dp::gl::SharedRenderContext &renderContext, const dp::gl::SharedRenderTarget &renderTarget);
@@ -75,14 +77,16 @@ public:
   virtual dp::fx::Manager getShaderManager() const;
 
 protected:
+  SceneRendererPipeline();
   virtual void doRender(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::SmartRenderTarget const& renderTarget);
   virtual void onEnvironmentSamplerChanged();
 
 private:
+  SMART_TYPES( MonoViewStateProvider );
   class MonoViewStateProvider : public SceneRenderer::StereoViewStateProvider
   {
   public:
-    static dp::util::SmartPtr<MonoViewStateProvider> create();
+    static SmartMonoViewStateProvider create();
 
   protected:
     dp::sg::ui::ViewStateSharedPtr calculateViewState( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTarget::StereoTarget eye )
@@ -100,8 +104,8 @@ private:
   void initTonemapper();
 
 private:
-  dp::sg::ui::SmartSceneRenderer            m_sceneRenderer; // The renderer for the main image on the framebuffer (rasterizer or ray tracer).  
-  dp::util::SmartPtr<MonoViewStateProvider> m_monoViewStateProvider;
+  dp::sg::ui::SmartSceneRenderer                m_sceneRenderer; // The renderer for the main image on the framebuffer (rasterizer or ray tracer).  
+  SmartMonoViewStateProvider                    m_monoViewStateProvider;
 
   dp::gl::SharedRenderTarget                    m_renderTarget;             // The render target passed into init.
   dp::gl::SharedRenderTargetFBO                 m_tonemapFBO;               // The monoscopic FBO for the tonemap texture rendering and processing.
@@ -122,5 +126,3 @@ private:
   // Derived tonemapper data in the shader:
   dp::sg::core::EffectDataSharedPtr m_tonemapperData;
 };
-
-typedef dp::util::SmartPtr<SceneRendererPipeline> SmartSceneRendererPipeline;

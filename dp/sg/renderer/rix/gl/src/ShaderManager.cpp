@@ -51,6 +51,33 @@ namespace dp
       {
         namespace gl
         {
+          SmartShaderManagerInstance ShaderManagerInstance::create()
+          {
+            return( std::shared_ptr<ShaderManagerInstance>( new ShaderManagerInstance() ) );
+          }
+
+          ShaderManagerInstance::ShaderManagerInstance()
+            : isTransparent( false )
+          {
+          }
+
+          ShaderManagerInstance::~ShaderManagerInstance()
+          {
+          }
+
+
+          SmartShaderManagerRenderGroup ShaderManagerRenderGroup::create()
+          {
+            return( std::shared_ptr<ShaderManagerRenderGroup>( new ShaderManagerRenderGroup() ) );
+          }
+
+          ShaderManagerRenderGroup::ShaderManagerRenderGroup()
+          {
+          }
+
+          ShaderManagerRenderGroup::~ShaderManagerRenderGroup()
+          {
+          }
 
           ShaderManager::ShaderManager( SceneTree* sceneTree, const SmartResourceManager& resourceManager, SmartTransparencyManager const & transparencyManager )
             : m_sceneTree( sceneTree )
@@ -69,7 +96,7 @@ namespace dp
             if ( m_environmentSampler != sampler )
             {
               m_environmentSampler = sampler;
-              m_environmentResourceSampler = sampler ? ResourceSampler::get( sampler, m_resourceManager ) : nullptr;
+              m_environmentResourceSampler = sampler ? ResourceSampler::get( sampler, m_resourceManager ) : SmartResourceSampler::null;
 
               m_environmentNeedsUpdate = true;
             }

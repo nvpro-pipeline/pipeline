@@ -29,8 +29,7 @@
 
 #include <dp/util/Config.h>
 #include <dp/util/PlugInCallback.h>
-#include <dp/util/SmartPtr.h>
-
+#include <dp/util/SharedPtr.h>
 #include <map>
 
 
@@ -247,18 +246,17 @@ namespace dp
       return !(lhs==rhs); 
     }
 
-    // required forward declarations
-    class PlugIn;
+    SMART_TYPES( PlugIn );
 
     //! Function pointer type for \c getPlugInterface export function required by a plug-in  
-    typedef bool (*PFNGETPLUGINTERFACE)(const UPIID& piid, dp::util::SmartPtr<PlugIn> & plugIn);
+    typedef bool (*PFNGETPLUGINTERFACE)(const UPIID& piid, dp::util::SmartPlugIn & plugIn);
     //! Function pointer type for \c queryPlugInterfacePIIds export function required by a plug-in  
     typedef void (*PFNQUERYPLUGINTERFACEPIIDS)( std::vector<UPIID> & piids );
 
     //! Plug-in base class
     /** Serves as base class for all user defined plug-ins.
       */
-    class PlugIn : public dp::util::RCObject
+    class PlugIn
     {
       //! Plug-in managment
       /** A \c PlugInServer is also responsible for releasing plug-in objects after usage
@@ -267,36 +265,24 @@ namespace dp
       friend class PlugInServer;
 
     public:
-      PlugIn();
+      virtual ~PlugIn();
 
+    public:
       //! Set the callback object to use on this PlugIn.
       /** The PlugInCallback object is used to report errors and warnings that happen while using this PlugIn.  */
-      void setCallback( PlugInCallback *cb                  //!<  callback object to use
+      void setCallback( SmartPlugInCallback const& cb       //!<  callback object to use
                       , bool throwExceptionOnError = true   //!<  true if an exception is thrown on error
                       );
 
     protected:
-      virtual ~PlugIn();
-      //! Plug-in deletion
-      /** Every plug-in must provide this function. It assures that, when deleting the 
-        * plug-in object, always the right heap manager is called to free the associated 
-        * memory.
-        * \note Ordinary client code is not allowed to call \c deleteThis on a plug-in
-        * object. Client code needs to utilize the \c PlugInServer interface for plug-in
-        * managment for this purposes.
-        */
-      virtual void deleteThis(void) = 0;
+      PlugIn();
 
       /*! \brief Get the current callback object as a const pointer.
        *  \returns The current callback object. */
-      const PlugInCallback * callback( void ) const;
-
-      /*! \brief Get the current callback object
-       *  \returns The current callback object. */
-      PlugInCallback * callback( void );
+      SmartPlugInCallback const& callback( void ) const;
 
     private:
-      dp::util::SmartPtr<PlugInCallback> m_cb;
+      dp::util::SmartPlugInCallback m_cb;
     };
 
     inline  PlugIn::PlugIn()
@@ -304,7 +290,7 @@ namespace dp
     {
     }
 
-    inline  void  PlugIn::setCallback( PlugInCallback *cb, bool throwExceptionOnError )
+    inline  void  PlugIn::setCallback( SmartPlugInCallback const& cb, bool throwExceptionOnError )
     {
       m_cb = cb;
       if ( cb )
@@ -313,14 +299,9 @@ namespace dp
       }
     }
 
-    inline  const PlugInCallback * PlugIn::callback( void ) const
+    inline  SmartPlugInCallback const& PlugIn::callback( void ) const
     {
-      return( m_cb.get() );
-    }
-
-    inline  PlugInCallback * PlugIn::callback( void )
-    {
-      return( m_cb.get() );
+      return( m_cb );
     }
 
     inline  PlugIn::~PlugIn()
@@ -360,7 +341,7 @@ namespace dp
       DP_UTIL_API bool getInterface( 
         const std::vector<std::string>& searchPath  //!< The optional path to search for the plug-ins.
       , const UPIID& piid                           //!< Identifies the interface to search for.
-      , dp::util::SmartPtr<PlugIn> & plugIn         //!< Holds the interface object (plug-in), if successfull.
+      , dp::util::SmartPlugIn & plugIn              //!< Holds the interface object (plug-in), if successfull.
       );
 
       //! Query for a certain interface type
@@ -423,7 +404,7 @@ namespace dp
     class PlugInServer
     {
     public:
-      friend DP_UTIL_API bool getInterface( const std::vector<std::string> & searchPath, const UPIID & piid, dp::util::SmartPtr<PlugIn> & plugIn );
+      friend DP_UTIL_API bool getInterface( const std::vector<std::string> & searchPath, const UPIID & piid, dp::util::SmartPlugIn & plugIn );
       friend DP_UTIL_API bool queryInterfaceType( const std::vector<std::string> & searchPath, const UPITID & pitid, std::vector<UPIID> & piids );
       friend DP_UTIL_API void releaseInterface( const UPIID & piid );
       friend DP_UTIL_API void setPlugInFileFilter( const std::string & filter );
@@ -435,7 +416,7 @@ namespace dp
 
     private:
       // hidden interface
-      bool getInterfaceImpl(const std::vector<std::string>& searchPath, const UPIID& piid, dp::util::SmartPtr<PlugIn> & plugIn);
+      bool getInterfaceImpl(const std::vector<std::string>& searchPath, const UPIID& piid, dp::util::SmartPlugIn & plugIn);
       bool queryInterfaceTypeImpl(const std::vector<std::string>& searchPath, const UPITID& pitid, std::vector<UPIID>& piids);
       void releaseInterfaceImpl(const UPIID& piid);
       void setFileFilterImpl(const std::string& filter);
@@ -445,8 +426,8 @@ namespace dp
     private:
       struct PlugInData
       {
-        std::string                 fileName;
-        dp::util::SmartPtr<PlugIn>  plugIn;
+        std::string           fileName;
+        dp::util::SmartPlugIn plugIn;
       };
 
       typedef std::map<UPIID,PlugInData>  PlugInMap;

@@ -32,8 +32,7 @@
 
 #include "TextureTransfer.h"
 
-class CFRPipeline;
-typedef dp::util::SmartPtr<CFRPipeline> SmartCFRPipeline;
+SMART_TYPES( CFRPipeline );
 
 class CFRPipeline : public dp::sg::ui::SceneRenderer
 {
@@ -42,13 +41,13 @@ protected:
                dp::fx::Manager shaderManagerType = dp::fx::MANAGER_SHADERBUFFER,
                dp::culling::Mode cullingMode = dp::culling::MODE_AUTO,
                const dp::gl::SharedRenderTarget &renderTarget = dp::gl::SharedRenderTarget() );
-  ~CFRPipeline();
 
 public:
   static SmartCFRPipeline create( const char* renderEngine = 0,
                                   dp::fx::Manager shaderManagerType = dp::fx::MANAGER_SHADERBUFFER,
                                   dp::culling::Mode cullingMode = dp::culling::MODE_AUTO,
                                   const dp::gl::SharedRenderTarget &renderTarget = dp::gl::SharedRenderTarget() );
+  ~CFRPipeline();
 
   void setTileSize( size_t width, size_t height );
 
@@ -71,10 +70,12 @@ protected:
   virtual void onEnvironmentSamplerChanged();
 
 private:
+  SMART_TYPES( MonoViewStateProvider );
+
   class MonoViewStateProvider : public SceneRenderer::StereoViewStateProvider
   {
   public:
-    static dp::util::SmartPtr<MonoViewStateProvider> create();
+    static SmartMonoViewStateProvider create();
 
   protected:
     dp::sg::ui::ViewStateSharedPtr calculateViewState( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTarget::StereoTarget eye )
@@ -113,7 +114,7 @@ private:
   dp::sg::renderer::rix::gl::SmartFSQRenderer m_outputRenderer;   // renderer for compositing the output image
   dp::gl::SharedTexture2D                     m_compositeTexture; // texture to composite the image data from the different contexts
 
-  dp::util::SmartPtr<MonoViewStateProvider> m_monoViewStateProvider;
+  SmartMonoViewStateProvider m_monoViewStateProvider;
 
 };
 

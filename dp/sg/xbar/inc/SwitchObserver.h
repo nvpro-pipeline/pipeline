@@ -34,32 +34,39 @@ namespace dp
   {
     namespace xbar
     {
+      SMART_TYPES( SwitchObserver );
 
       class SwitchObserver : public Observer<ObjectTreeIndex>
       {
       public:
         static SmartSwitchObserver create()
         {
-          return( new SwitchObserver() );
+          return( std::shared_ptr<SwitchObserver>( new SwitchObserver() ) );
         }
+
       public:
+        SHARED_PTR_TYPES( SwitchObserverPayload );
+
         class SwitchObserverPayload : public Observer<ObjectTreeIndex>::Payload
         {
         public:
+          static SwitchObserverPayloadSharedPtr create( ObjectTreeIndex index, unsigned int hints )
+          {
+            return( std::shared_ptr<SwitchObserverPayload>( new SwitchObserverPayload( index, hints ) ) );
+          }
+
+        public:
+          unsigned int    m_hints;
+
+        protected:
           SwitchObserverPayload( ObjectTreeIndex index, unsigned int hints )
             : Observer<ObjectTreeIndex>::Payload( index )
             , m_hints( hints )
           {
           }
-
-          unsigned int    m_hints;
         };
-        typedef dp::util::SmartPtr<SwitchObserverPayload> SwitchObserverPayloadSharedPtr;
 
       public:
-        SwitchObserver() : Observer<ObjectTreeIndex>( nullptr )
-          , m_changed(false)
-        {}
         ~SwitchObserver()
         {
         }
@@ -75,6 +82,9 @@ namespace dp
         }
 
       protected:
+        SwitchObserver() : Observer<ObjectTreeIndex>( nullptr )
+          , m_changed(false)
+        {}
         void onNotify( const dp::util::Event &event, dp::util::Payload *payload );
         virtual void onDetach( ObjectTreeIndex index );
 

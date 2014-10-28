@@ -27,8 +27,8 @@
 #pragma once
 
 #include <dp/rix/fx/Config.h>
+#include <dp/util/SharedPtr.h>
 #include <dp/rix/core/RiX.h>
-#include <dp/util/SmartPtr.h>
 #include <dp/fx/EffectLibrary.h>
 
 namespace dp
@@ -40,14 +40,13 @@ namespace dp
 
       DEFINE_RIX_HANDLE(GroupData);
       DEFINE_RIX_HANDLE(Instance);
-      DEFINE_RIX_HANDLE(Program)
+      DEFINE_RIX_HANDLE(Program);
 
-      class Manager;
-      typedef dp::util::SmartPtr<Manager> SmartManager;
+      SMART_TYPES( Manager );
 
       typedef std::map<dp::fx::Domain, std::vector<std::string> > SourceFragments;
 
-      class Manager : public dp::util::RCObject
+      class Manager
       {
       public:
         struct EffectSpecInfo
@@ -96,6 +95,9 @@ namespace dp
                                                                            , dp::rix::fx::GroupDataHandle groupHandle) = 0;
 
         RIX_FX_API virtual dp::fx::Manager getManagerType() const = 0;
+
+      protected:
+        RIX_FX_API Manager();
       };
     
         

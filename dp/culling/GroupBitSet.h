@@ -35,6 +35,7 @@ namespace dp
 {
   namespace culling
   {
+    HANDLE_TYPES( GroupBitSet );
 
     class GroupBitSet : public Group, public dp::util::Subject
     {
@@ -57,8 +58,9 @@ namespace dp
         size_t m_newIndex;
       };
 
-      DP_CULLING_API GroupBitSet();
+      DP_CULLING_API static GroupBitSetHandle create();
       DP_CULLING_API virtual ~GroupBitSet();
+
       DP_CULLING_API void addObject( const ObjectBitSetHandle& object );
       DP_CULLING_API void removeObject( const ObjectBitSetHandle& object );
       DP_CULLING_API void clearObjects();
@@ -82,6 +84,9 @@ namespace dp
       void setBoundingBox( dp::math::Box3f const& boundingBox );
 
     protected:
+      DP_CULLING_API GroupBitSet();
+
+    protected:
       dp::util::BitArray              m_dirtyMatrices;
       bool                            m_inputChanged;
       bool                            m_matricesChanged;
@@ -97,8 +102,6 @@ namespace dp
       size_t      m_matricesCount;
       size_t      m_matricesStride; 
     };
-
-    typedef dp::util::SmartPtr<GroupBitSet> GroupBitSetHandle;
 
     /************************************************************************/
     /* Inline functions                                                     */

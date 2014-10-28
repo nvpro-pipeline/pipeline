@@ -27,6 +27,8 @@
 #pragma once
 /** @file */
 
+#include <dp/util/SharedPtr.h>
+
 namespace dp
 {
   namespace sg

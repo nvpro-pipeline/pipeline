@@ -30,7 +30,6 @@
 #include <dp/gl/Texture.h>
 #include <dp/sg/renderer/rix/gl/inc/ShaderManager.h>
 #include <dp/sg/renderer/rix/gl/TransparencyManager.h>
-#include <dp/util/SmartPtr.h>
 #include <GL/glew.h>
 
 namespace dp
@@ -43,14 +42,13 @@ namespace dp
       {
         namespace gl
         {
-
-          class TransparencyManagerOITAll;
-          typedef dp::util::SmartPtr<TransparencyManagerOITAll> SmartTransparencyManagerOITAll;
+          SMART_TYPES( TransparencyManagerOITAll );
 
           class TransparencyManagerOITAll : public TransparencyManager
           {
             public:
-              static SmartTransparencyManagerOITAll create( dp::math::Vec2ui const & size );
+              DP_SG_RDR_RIX_GL_API static SmartTransparencyManagerOITAll create( dp::math::Vec2ui const & size );
+              DP_SG_RDR_RIX_GL_API virtual ~TransparencyManagerOITAll();
 
             public:
               DP_SG_RDR_RIX_GL_API virtual void addFragmentCodeSnippets( bool transparent, bool depth, std::vector<std::string> & snippets );
@@ -63,8 +61,7 @@ namespace dp
               DP_SG_RDR_RIX_GL_API virtual bool supportsDepthPass() const;
 
             protected:
-              TransparencyManagerOITAll( dp::math::Vec2ui const & size );
-              virtual ~TransparencyManagerOITAll();
+              DP_SG_RDR_RIX_GL_API TransparencyManagerOITAll( dp::math::Vec2ui const & size );
 
               DP_SG_RDR_RIX_GL_API virtual void viewportSizeChanged();
 
@@ -96,4 +93,3 @@ namespace dp
     } // namespace renderer
   } // namespace sg
 } // namespace dp
-

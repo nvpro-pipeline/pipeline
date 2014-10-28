@@ -27,23 +27,68 @@
 #pragma once
 
 #include <dp/culling/Config.h>
-#include <dp/util/SmartPtr.h>
 #include <dp/math/Matmnt.h>
 #include <dp/math/Boxnt.h>
+#include <dp/util/SharedPtr.h>
 
 namespace dp
 {
   namespace culling
   {
+    HANDLE_TYPES( Object );
+    class Object
+    {
+      public:
+        ObjectHandle create()
+        {
+          return( std::shared_ptr<Object>( new Object() ) );
+        }
 
-    class Object : public dp::util::RCObject {};
-    typedef dp::util::SmartPtr<Object> ObjectHandle;
+        virtual ~Object() {}
 
-    class Group : public dp::util::RCObject {};
-    typedef dp::util::SmartPtr<Group> GroupHandle;
+      protected:
+        Object() {}
+    };
 
-    class Result : public dp::util::RCObject {};
-    typedef dp::util::SmartPtr<Result> ResultHandle;
+    HANDLE_TYPES( Group );
+    class Group : public std::enable_shared_from_this<Group>
+    {
+      public:
+        GroupHandle create()
+        {
+          return( std::shared_ptr<Group>( new Group() ) );
+        }
+
+        virtual ~Group() {}
+
+      protected:
+        Group() {}
+    };
+
+    HANDLE_TYPES( Result );
+    class Result
+    {
+      public:
+        ResultHandle create()
+        {
+          return( std::shared_ptr<Result>( new Result() ) );
+        }
+
+        virtual ~Result() {}
+
+      protected:
+        Result() {}
+    };
+
+    SMART_TYPES( Payload );
+    class Payload
+    {
+      public:
+        virtual ~Payload() {}
+
+      protected:
+        Payload() {}
+    };
 
 
     enum Mode
@@ -65,11 +110,11 @@ namespace dp
     public:
       DP_CULLING_API virtual ~Manager();
 
-      DP_CULLING_API virtual ObjectHandle objectCreate( dp::util::SmartRCObject const & userData ) = 0;
+      DP_CULLING_API virtual ObjectHandle objectCreate( SmartPayload const & userData ) = 0;
       DP_CULLING_API virtual void objectSetBoundingBox( ObjectHandle const & object, dp::math::Box3f const & boundingBox ) = 0 ;
       DP_CULLING_API virtual void objectSetTransformIndex( ObjectHandle const & object, size_t index ) = 0;
-      DP_CULLING_API virtual void objectSetUserData( ObjectHandle const & object, dp::util::SmartRCObject const & userData ) = 0;
-      DP_CULLING_API virtual dp::util::SmartRCObject const & objectGetUserData( ObjectHandle const & object ) = 0;
+      DP_CULLING_API virtual void objectSetUserData( ObjectHandle const & object, SmartPayload const & userData ) = 0;
+      DP_CULLING_API virtual SmartPayload const & objectGetUserData( ObjectHandle const & object ) = 0;
 
       DP_CULLING_API virtual GroupHandle groupCreate() = 0;
       DP_CULLING_API virtual void groupAddObject( GroupHandle const & group, const ObjectHandle& object ) = 0;

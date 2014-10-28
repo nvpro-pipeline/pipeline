@@ -37,9 +37,6 @@ namespace dp
         namespace gl
         {
 
-          class BufferAllocator;
-          typedef dp::util::SmartPtr<BufferAllocator> BufferAllocatorSharedPtr;
-
           class BufferAllocator {
           public:
               BufferAllocator( dp::rix::core::Renderer *renderer );

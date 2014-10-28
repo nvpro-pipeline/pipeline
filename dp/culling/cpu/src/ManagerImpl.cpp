@@ -77,19 +77,28 @@ namespace dp
         /* GroupCPU                                                             */
         /* This group stores the cached OBB for each object                     */
         /************************************************************************/
+        HANDLE_TYPES( GroupCPU );
+
         class GroupCPU : public GroupBitSet
         {
         public:
-          GroupCPU();
-
+          static GroupCPUHandle create();
           void updateOBBs();
 
           std::vector<OBB> const & getOBBs() const;
-      
+
+        protected:
+          GroupCPU();
+
         private:
           std::vector<OBB> m_obbs;
           size_t m_objectIncarnationOBB;
         };
+
+        GroupCPUHandle GroupCPU::create()
+        {
+          return( std::shared_ptr<GroupCPU>( new GroupCPU() ) );
+        }
 
         GroupCPU::GroupCPU()
           : GroupBitSet()
@@ -154,8 +163,6 @@ namespace dp
 
       } // namespace anonymous
 
-      typedef dp::util::SmartPtr<GroupCPU> GroupCPUHandle;
-
       /************************************************************************/
       /* ManagerImpl                                                          */
       /************************************************************************/
@@ -174,21 +181,19 @@ namespace dp
 
       }
 
-      ObjectHandle ManagerImpl::objectCreate( const dp::util::SmartRCObject& userData )
+      ObjectHandle ManagerImpl::objectCreate( SmartPayload const& userData )
       {
-        return new ObjectBitSet( userData );
+        return ObjectBitSet::create( userData );
       }
 
       GroupHandle ManagerImpl::groupCreate()
       {
-        return new GroupCPU();
+        return GroupCPU::create();
       }
 
       ResultHandle ManagerImpl::groupCreateResult( GroupHandle const& group )
       {
-        const GroupBitSetHandle& groupImpl = dp::util::smart_cast<GroupBitSet>(group);
-
-        return new ResultBitSet( groupImpl );
+        return( ResultBitSet::create( group.staticCast<GroupBitSet>() ) );
       }
 
       inline void determineCullFlags( const dp::math::Vec4f &p, unsigned int & cfo, unsigned int & cfa )
@@ -462,8 +467,7 @@ namespace dp
       void ManagerImpl::cull( GroupHandle const& group, ResultHandle const& result, const dp::math::Mat44f& viewProjection )
       {
         dp::util::ProfileEntry p("cull");
-        GroupCPUHandle const & groupImpl = dp::util::smart_cast<GroupCPU>(group);
-        ResultBitSetHandle const& resultImpl = dp::util::smart_cast<ResultBitSet>(result);
+        GroupCPUHandle const & groupImpl = group.staticCast<GroupCPU>();
 
         groupImpl->updateOBBs();
         std::vector<OBB> const &obbs = groupImpl->getOBBs();
@@ -510,7 +514,7 @@ namespace dp
           }
         }
 
-        resultImpl->updateChanged( reinterpret_cast<dp::util::Uint32 const*>( visible.getBits() ) );
+        result.staticCast<ResultBitSet>()->updateChanged( reinterpret_cast<dp::util::Uint32 const*>( visible.getBits() ) );
       }
 
     } // namespace cpu

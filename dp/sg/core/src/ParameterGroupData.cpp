@@ -536,7 +536,7 @@ namespace dp
 
         // If it's not the last ParameterGroupData to this ParameterGroupSpec, we don't want to delete the
         // PropertyListChain here, as the ParameterGroupSpec holds the master (no refcount!)
-        SpecToPropertyListChainMap::iterator pit = gSpecToPropertyMap.find( m_parameterGroupSpec.get() );
+        SpecToPropertyListChainMap::iterator pit = gSpecToPropertyMap.find( m_parameterGroupSpec.getWeakPtr() );
         DP_ASSERT( pit != gSpecToPropertyMap.end() && pit->second.first );
         pit->second.first--;
         if ( pit->second.first )
@@ -606,7 +606,7 @@ namespace dp
         DP_ASSERT( !m_propertyLists );
 
         // create the PropertyList, if it's not yet there
-        SpecToPropertyListChainMap::iterator it = gSpecToPropertyMap.find( m_parameterGroupSpec.get() );
+        SpecToPropertyListChainMap::iterator it = gSpecToPropertyMap.find( m_parameterGroupSpec.getWeakPtr() );
         if ( it == gSpecToPropertyMap.end() )
         {
           dp::util::PropertyListImpl * pli = new dp::util::PropertyListImpl( false );   // create a non-static, local PropertyList
@@ -619,7 +619,7 @@ namespace dp
           m_propertyLists = new dp::util::PropertyListChain( false );
           m_propertyLists->addPropertyList( pli );
 
-          gSpecToPropertyMap[m_parameterGroupSpec.get()] = std::make_pair( 1, m_propertyLists );
+          gSpecToPropertyMap[m_parameterGroupSpec.getWeakPtr()] = std::make_pair( 1, m_propertyLists );
         }
         else
         {
@@ -756,7 +756,7 @@ namespace dp
       void ParameterGroupData::feedHashGenerator( util::HashGenerator & hg ) const
       {
         OwnedObject<EffectData>::feedHashGenerator( hg );
-        hg.update( reinterpret_cast<const unsigned char *>(m_parameterGroupSpec.get()), sizeof(const ParameterGroupSpec *) );
+        hg.update( m_parameterGroupSpec );
         hg.update( reinterpret_cast<const unsigned char *>(m_data.data()), util::checked_cast<unsigned int>(m_data.size()) );
       }
 

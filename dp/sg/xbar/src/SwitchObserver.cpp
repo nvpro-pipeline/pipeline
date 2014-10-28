@@ -38,7 +38,7 @@ namespace dp
       {
         DP_ASSERT( m_indexMap.find( index ) == m_indexMap.end() );
 
-        SwitchObserverPayloadSharedPtr payload = new SwitchObserverPayload( index, s->getHints() );
+        SwitchObserverPayloadSharedPtr payload = SwitchObserverPayload::create( index, s->getHints() );
         Observer<ObjectTreeIndex>::attach( s.getWeakPtr(), payload );
 
         if( s->getHints(dp::sg::core::Object::DP_SG_HINT_DYNAMIC) )

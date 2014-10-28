@@ -28,16 +28,15 @@
 /** \file */
 
 #include <dp/fx/ParameterGroupSpec.h>
+#include <dp/util/SharedPtr.h>
 #include <map>
 
 namespace dp
 {
   namespace fx
   {
-
     // The spec for an effect, holding a container of SmartParameterGroupSpecs
-    class EffectSpec;
-    typedef std::shared_ptr<EffectSpec> SmartEffectSpec;
+    SMART_TYPES( EffectSpec );
 
     class EffectSpec
     {

@@ -28,7 +28,6 @@
 
 #include <dp/sg/algorithm/BaseRenderElement.h>
 #include <dp/sg/algorithm/RenderElementPool.h>
-#include "dp/util/RCObject.h"
 #include <dp/sg/core/Group.h>
 #include <vector>
 

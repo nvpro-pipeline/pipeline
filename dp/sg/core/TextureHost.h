@@ -32,6 +32,7 @@
 #include <dp/sg/core/CoreTypes.h>
 #include <dp/sg/core/Texture.h>
 #include <dp/util/BitMask.h>
+#include <dp/util/Types.h>
 #include <math.h>
 #include <vector>
 #include <map>
@@ -1493,7 +1494,7 @@ namespace dp
         * Because the scaling process for each row or column is identical, the placement and area of the ScaleFilter
         * is fixed. Therefore the contributors to each destination texel and the corresponding filter weight are
         * precomputed once, using the calling operator, and then applied to each destination texel. */
-      class ScaleFilter : public dp::util::RCObject
+      class ScaleFilter
       {
         public:
           //! Get the support width of this scale filter.

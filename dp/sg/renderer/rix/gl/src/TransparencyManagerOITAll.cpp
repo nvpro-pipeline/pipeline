@@ -43,7 +43,7 @@ namespace dp
 
           SmartTransparencyManagerOITAll TransparencyManagerOITAll::create( dp::math::Vec2ui const & size )
           {
-            return( new TransparencyManagerOITAll( size ) );
+            return( std::shared_ptr<TransparencyManagerOITAll>( new TransparencyManagerOITAll( size ) ) );
           }
 
           TransparencyManagerOITAll::TransparencyManagerOITAll( dp::math::Vec2ui const & size )

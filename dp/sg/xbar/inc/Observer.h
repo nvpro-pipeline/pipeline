@@ -36,21 +36,28 @@ namespace dp
     {
 
       template <typename IndexType>
-      class Observer : public dp::util::Observer, public dp::util::RCObject
+      class Observer : public dp::util::Observer
       {
       public:
-        class Payload : public dp::util::Payload, public dp::util::RCObject
+        SMART_TYPES( Payload );
+
+        class Payload : public dp::util::Payload
         {
         public:
+          static SmartPayload create( IndexType index )
+          {
+            return( std::shared_ptr<Payload>( new Payload( index ) ) );
+          }
+
+        public:
+          IndexType m_index;
+
+        protected:
           Payload( IndexType index )
             : m_index( index )
           {
           }
-
-          IndexType m_index;
         };
-
-        typedef dp::util::SmartPtr<Payload> SmartPayload;
 
         Observer( SceneTreeWeakPtr const& sceneTree );
         virtual ~Observer();
@@ -84,7 +91,7 @@ namespace dp
       void Observer<IndexType>::attach( dp::util::Subject *subject, const SmartPayload &payload )
       {
         m_indexMap.insert( std::make_pair(payload->m_index, std::make_pair( subject, payload ) ) );
-        subject->attach( this, payload.get() );
+        subject->attach( this, payload.getWeakPtr() );
       }
 
       template <typename IndexType>
@@ -95,7 +102,7 @@ namespace dp
         typename IndexMap::iterator it = m_indexMap.find( index );
         DP_ASSERT( it != m_indexMap.end() );
 
-        it->second.first->detach( this, it->second.second.get());
+        it->second.first->detach( this, it->second.second.getWeakPtr());
 
 
         m_indexMap.erase( it );
@@ -107,7 +114,7 @@ namespace dp
         typename IndexMap::iterator it, it_end = m_indexMap.end();
         for( it = m_indexMap.begin(); it != it_end; ++it )
         {
-          it->second.first->detach( this, it->second.second.get() );
+          it->second.first->detach( this, it->second.second.getWeakPtr() );
         }
         m_indexMap.clear();
       }
@@ -116,7 +123,8 @@ namespace dp
       template <typename IndexType>
       void Observer<IndexType>::onDestroyed( dp::util::Subject const& subject, dp::util::Payload* payload )
       {
-        const SmartPayload p = static_cast<Payload*>(payload);
+        DP_ASSERT( dynamic_cast<Payload*>(payload) );
+        Payload const* p = static_cast<Payload const*>(payload);
 
         onDetach( p->m_index );
 

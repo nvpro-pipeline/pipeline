@@ -46,7 +46,7 @@ namespace dp
             SmartResourceSampler resourceSampler = resourceManager->getResource<ResourceSampler>( reinterpret_cast<size_t>(sampler.getWeakPtr()) );
             if ( !resourceSampler )
             {
-              resourceSampler = new ResourceSampler( sampler, resourceManager );
+              resourceSampler = std::shared_ptr<ResourceSampler>( new ResourceSampler( sampler, resourceManager ) );
               resourceSampler->m_samplerHandle = resourceManager->getRenderer()->samplerCreate();
               resourceSampler->update();
             }

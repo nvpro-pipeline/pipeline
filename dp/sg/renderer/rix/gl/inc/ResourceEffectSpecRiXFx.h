@@ -38,9 +38,7 @@ namespace dp
       {
         namespace gl
         {
-
-          class ResourceEffectSpecRiXFx;
-          typedef dp::util::SmartPtr<ResourceEffectSpecRiXFx> SmartResourceEffectSpecRiXFx;
+          SMART_TYPES( ResourceEffectSpecRiXFx );
           typedef ResourceEffectSpecRiXFx* WeakResourceEffectSpecRiXFx;
 
           class ResourceEffectSpecRiXFx : public ResourceManager::Resource

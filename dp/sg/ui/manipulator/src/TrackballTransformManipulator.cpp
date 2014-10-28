@@ -374,19 +374,14 @@ namespace dp
           m_lockMajorAxis = false;
         }
 
-        void TrackballTransformManipulator::setTransformPath(dp::sg::core::Path * transformPath)
+        void TrackballTransformManipulator::setTransformPath( dp::sg::core::PathSharedPtr const& transformPath )
         {
           m_transformPath = transformPath;
         }
 
-        void TrackballTransformManipulator::setTransformPath( const dp::util::SmartPtr<dp::sg::core::Path> & transformPath )
+        dp::sg::core::PathSharedPtr const& TrackballTransformManipulator::getTransformPath() const
         {
-          m_transformPath = transformPath;
-        }
-
-        const dp::sg::core::Path * TrackballTransformManipulator::getTransformPath() const
-        {
-          return m_transformPath.get();
+          return( m_transformPath );
         }
 
       } // namespace manipulator

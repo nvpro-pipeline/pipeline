@@ -34,7 +34,6 @@
 #include <dp/sg/renderer/rix/gl/TransparencyManager.h>
 #include <dp/fx/EffectDefs.h>
 #include <dp/fx/EffectSpec.h>
-#include <dp/util/SmartPtr.h>
 #include <vector>
 
 namespace dp
@@ -57,8 +56,17 @@ namespace dp
             RPT_FORWARD
           };
 
-          class ShaderManagerInstance : public dp::util::RCObject
+          SMART_TYPES( ShaderManagerInstance );
+
+          class ShaderManagerInstance
           {
+          public:
+            SmartShaderManagerInstance create();
+            virtual ~ShaderManagerInstance();
+
+          protected:
+            ShaderManagerInstance();
+
           public:
             dp::rix::core::GeometryInstanceSharedHandle      geometryInstance;
             dp::sg::core::GeoNodeWeakPtr          geoNode;
@@ -66,15 +74,21 @@ namespace dp
             bool                                  isTransparent;
           };
 
-          typedef dp::util::SmartPtr<ShaderManagerInstance> SmartShaderManagerInstance;
 
-          class ShaderManagerRenderGroup : public dp::util::RCObject
+          SMART_TYPES( ShaderManagerRenderGroup );
+
+          class ShaderManagerRenderGroup
           {
+          public:
+            static SmartShaderManagerRenderGroup create();
+            virtual ~ShaderManagerRenderGroup();
+
+          protected:
+            ShaderManagerRenderGroup();
+
           public:
             dp::rix::core::RenderGroupSharedHandle renderGroup;
           };
-
-          typedef dp::util::SmartPtr<ShaderManagerRenderGroup> SmartShaderManagerRenderGroup;
 
           class ShaderManager
           {

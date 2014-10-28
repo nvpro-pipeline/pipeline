@@ -43,9 +43,7 @@ namespace dp
       {
         namespace gl
         {
-
-          class ResourceSampler;
-          typedef dp::util::SmartPtr<ResourceSampler> SmartResourceSampler;
+          SMART_TYPES( ResourceSampler );
 
           class ResourceSampler : public ResourceManager::Resource
           {
@@ -59,7 +57,7 @@ namespace dp
             virtual const dp::sg::core::HandledObjectSharedPtr& getHandledObject() const;
 
             dp::rix::core::SamplerSharedHandle       m_samplerHandle;
-            SmartResourceTexture                    m_resourceTexture;
+            SmartResourceTexture                     m_resourceTexture;
             dp::rix::core::SamplerStateSharedHandle  m_samplerStateHandle;
 
           protected:
@@ -73,8 +71,6 @@ namespace dp
             dp::rix::core::SamplerStateFilterMode minFilterSceniXToRiX( dp::sg::core::TextureMinFilterMode mf );
             dp::rix::core::SamplerStateWrapMode wrapModeSceniXToRiX( dp::sg::core::TextureWrapMode wm );
           };
-
-          typedef dp::util::SmartPtr<ResourceSampler> SmartResourceSampler;
 
         } // namespace gl
       } // namespace rix

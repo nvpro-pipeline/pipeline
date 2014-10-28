@@ -28,7 +28,6 @@
 
 #include <dp/fx/glsl/Config.h>
 #include <dp/fx/glsl/ParameterInfo.h>
-#include <boost/shared_ptr.hpp>
 
 namespace dp
 {

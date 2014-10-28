@@ -39,17 +39,23 @@ namespace dp
     namespace core
     {
 
+      PathSharedPtr Path::create()
+      {
+        return( std::shared_ptr<Path>( new Path() ) );
+      }
+
+      PathSharedPtr Path::create( PathSharedPtr const& rhs )
+      {
+        return( std::shared_ptr<Path>( new Path( rhs ) ) );
+      }
+
       Path::Path()
       {
       }
 
-      Path::Path(const Path& rhs)
-      : RCObject(rhs) // copy base class part
+      Path::Path( PathSharedPtr const& rhs)
       {
-        // !!NOTE: don't deep copy the Node* in m_path!!
-
-        // copy from input and increment reference count for each node
-        m_path = rhs.m_path;
+        m_path = rhs->m_path;
       }
 
       Path::~Path()

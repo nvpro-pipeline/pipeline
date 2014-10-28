@@ -40,13 +40,13 @@ namespace dp
       class ManagerImpl : public Manager
       {
       public:
-        virtual ObjectHandle objectCreate( const dp::util::SmartRCObject& userData );
+        virtual ObjectHandle objectCreate( SmartPayload const& userData );
         virtual void objectSetBoundingBox( const ObjectHandle& object, const dp::math::Box3f& boundingBox );
         virtual void objectSetTransformIndex( const ObjectHandle& object, size_t index );
-        virtual void objectSetUserData( const ObjectHandle& object, const dp::util::SmartRCObject& userData );
+        virtual void objectSetUserData( const ObjectHandle& object, SmartPayload const& userData );
         virtual bool objectIsVisible( const ObjectHandle& object );
 
-        virtual const dp::util::SmartRCObject& objectGetUserData( const ObjectHandle& object );
+        virtual SmartPayload const& objectGetUserData( const ObjectHandle& object );
 
         virtual GroupHandle groupCreate();
         virtual void groupAddObject( const GroupHandle& group, const ObjectHandle& object );
@@ -69,7 +69,7 @@ namespace dp
       public:
         ManagerImpl();
         virtual ~ManagerImpl();
-        virtual ObjectHandle objectCreate( const dp::util::SmartRCObject& userData );
+        virtual ObjectHandle objectCreate( SmartPayload const& userData );
         virtual GroupHandle groupCreate();
         virtual ResultHandle groupCreateResult( GroupHandle const& group );
 

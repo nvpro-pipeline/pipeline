@@ -73,34 +73,42 @@ namespace dp
             RGP_COUNT
           };
 
-          class ShaderManagerInstance;
-          typedef dp::util::SmartPtr<ShaderManagerInstance> SmartShaderManagerInstance;
-
           class ShaderManager;
 
           class DrawableManagerDefault : public dp::sg::xbar::DrawableManager
           {
           public:
-            class DefaultHandleData;
-            typedef dp::util::SmartPtr<DefaultHandleData> DefaultHandleDataHandle;
+            HANDLE_TYPES( DefaultHandleData );
 
             class DefaultHandleData : public HandleData
             {
             public:
+              static DefaultHandleDataHandle create( dp::sg::xbar::ObjectTreeIndex index )
+              {
+                return( std::shared_ptr<DefaultHandleData>( new DefaultHandleData( index ) ) );
+              }
+
+            public:
+              dp::sg::xbar::ObjectTreeIndex m_index;
+
+            protected:
               DefaultHandleData( dp::sg::xbar::ObjectTreeIndex index )
                 : m_index( index )
               {
               }
-
-              dp::sg::xbar::ObjectTreeIndex m_index;
             };
             
             /** \brief Payload for handle **/
+            SMART_TYPES( Payload );
             class Payload : public dp::util::Payload
             {
             public:
-              Payload()
-                : m_handle( nullptr )
+              static SmartPayload create()
+              {
+                return( std::shared_ptr<Payload>( new Payload() ) );
+              }
+
+              virtual ~Payload()
               {
               }
 
@@ -112,6 +120,12 @@ namespace dp
               DrawableManager::Handle getHandle() const
               {
                 return m_handle;
+              }
+
+            protected:
+              Payload()
+                : m_handle( nullptr )
+              {
               }
 
             private:
@@ -155,8 +169,8 @@ namespace dp
               dp::math::Vec4f                  m_boundingBoxExtent;
               dp::sg::xbar::TransformTreeIndex m_transformIndex;
 
-              boost::shared_ptr<Payload> m_payload;
-              bool                       m_effectDataAttached;
+              SmartPayload  m_payload;
+              bool          m_effectDataAttached;
 
               void updateRendererVisibility( dp::rix::core::Renderer* renderer );
             };

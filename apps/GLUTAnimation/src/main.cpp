@@ -75,46 +75,45 @@ public:
   void paint();
   void setNumberOfFrames( int numberOfFrames ) { m_frames = numberOfFrames; }
 protected:
-  AnimatedScene m_animatedScene;
+  AnimatedSceneSharedPtr m_animatedScene;
 
   dp::util::Timer m_animationTimer;
   dp::util::Timer m_elapsedTimer;
   unsigned int m_framesInSecond; // frames rendered within one second
   int m_frames; // frames to render
-  dp::sg::ui::manipulator::TrackballCameraManipulatorHIDSync *m_trackballHIDSync;
+  std::unique_ptr<dp::sg::ui::manipulator::TrackballCameraManipulatorHIDSync> m_trackballHIDSync;
 
   bool m_animateTransforms;
   bool m_animateColors;
 };
 
 GLUTAnimationWidget::GLUTAnimationWidget( const dp::gl::RenderContextFormat &format, int gridSize )
-  : m_animatedScene( Vec2f( gridSize * 4.0f, gridSize * 4.0f), Vec2i( gridSize, gridSize) )
+  : m_animatedScene( AnimatedScene::create( Vec2f( gridSize * 4.0f, gridSize * 4.0f), Vec2i( gridSize, gridSize) ) )
   , m_frames(-1)
   , m_framesInSecond( ~0 )
   , m_animateTransforms( true )
   , m_animateColors( true )
+  , m_trackballHIDSync(new dp::sg::ui::manipulator::TrackballCameraManipulatorHIDSync( ) )
 {
   ViewStateSharedPtr viewState = ViewState::create();
-  viewState->setScene( m_animatedScene.getScene() );
+  viewState->setScene( m_animatedScene->getScene() );
   setupDefaultViewState(viewState);
   viewState->getCamera()->addHeadLight( dp::sg::core::createStandardPointLight() );
   setViewState(viewState);
 
-  m_trackballHIDSync = new dp::sg::ui::manipulator::TrackballCameraManipulatorHIDSync( );
   m_trackballHIDSync->setHID( this );
   m_trackballHIDSync->setRenderTarget( getRenderTarget() );
-  setManipulator( m_trackballHIDSync );
+  setManipulator( m_trackballHIDSync.get() );
   m_animationTimer.start();
 }
 
 GLUTAnimationWidget::~GLUTAnimationWidget()
 {
   // Delete SceneRenderer here to cleanup resources before the OpenGL context dies
-  setSceneRenderer( 0 );
+  setSceneRenderer( SmartSceneRenderer::null );
 
   // Reset Manipulator
   setManipulator( 0 );
-  delete m_trackballHIDSync;
 }
 
 void GLUTAnimationWidget::onHIDEvent( dp::util::PropertyId propertyId )
@@ -153,11 +152,11 @@ void GLUTAnimationWidget::paint()
   dp::util::FrameProfiler::instance().beginFrame();
   if ( m_animateColors )
   {
-    m_animatedScene.update( dp::util::checked_cast<float>(m_animationTimer.getTime()) );
+    m_animatedScene->update( dp::util::checked_cast<float>(m_animationTimer.getTime()) );
   }
   if ( m_animateTransforms )
   {
-    m_animatedScene.updateTransforms( dp::util::checked_cast<float>(m_animationTimer.getTime()) );
+    m_animatedScene->updateTransforms( dp::util::checked_cast<float>(m_animationTimer.getTime()) );
   }
   dp::sg::ui::glut::SceneRendererWidget::paint();
 

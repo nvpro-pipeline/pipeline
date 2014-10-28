@@ -48,7 +48,7 @@ namespace dp
             SmartResourceEffectDataRiXFx resourceEffectData = resourceManager->getResource<ResourceEffectDataRiXFx>( reinterpret_cast<size_t>(effectData.getWeakPtr()) );
             if ( !resourceEffectData )
             {
-              resourceEffectData = new ResourceEffectDataRiXFx( effectData, rixFx, resourceManager );
+              resourceEffectData = std::shared_ptr<ResourceEffectDataRiXFx>( new ResourceEffectDataRiXFx( effectData, rixFx, resourceManager ) );
               resourceEffectData->update();
             }
 

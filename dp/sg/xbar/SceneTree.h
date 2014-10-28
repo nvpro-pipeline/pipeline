@@ -54,26 +54,19 @@ namespace dp
 
       template <typename IndexType> class Observer;
 
-      class SwitchObserver;
-      typedef dp::util::SmartPtr<SwitchObserver> SmartSwitchObserver;
+      SMART_TYPES( SwitchObserver );
+      SMART_TYPES( TransformObserver );
+      SMART_TYPES( ObjectObserver );
+      SMART_TYPES( SceneObserver );
 
-      class TransformObserver;
-      typedef dp::util::SmartPtr<TransformObserver> SmartTransformObserver;
-
-      class ObjectObserver;
-      typedef dp::util::SmartPtr<ObjectObserver> SmartObjectObserver;
-
-      class SceneObserver;
-      typedef dp::util::SmartPtr<SceneObserver> SmartSceneObserver;
-
-      typedef dp::util::SmartPtr<SceneTree> SceneTreeSharedPtr;
+      SHARED_PTR_TYPES( SceneTree );
       typedef SceneTree*                    SceneTreeWeakPtr;
+
       /*===========================================================================*/
-      class SceneTree : public dp::util::RCObject, public dp::util::Subject
+      class SceneTree : public dp::util::Subject
       { 
       protected:
         SceneTree(const dp::sg::core::SceneSharedPtr & scene );
-        virtual ~SceneTree();
 
       public:
         class Event : public dp::util::Event
@@ -149,6 +142,7 @@ namespace dp
 
       public:
         DP_SG_XBAR_API static SceneTreeSharedPtr create( dp::sg::core::SceneSharedPtr const & scene );
+        virtual ~SceneTree();
 
         DP_SG_XBAR_API dp::sg::core::SceneSharedPtr const & getScene() const;
 
@@ -249,7 +243,7 @@ namespace dp
       };
 
       /*===========================================================================*/
-      class ClipPlaneInstance : public dp::util::RCObject
+      class ClipPlaneInstance
       {
       protected:
         ClipPlaneInstance()
@@ -257,7 +251,10 @@ namespace dp
         {}
 
       public:
-        static ClipPlaneInstanceSharedPtr create() { return new ClipPlaneInstance; }
+        static ClipPlaneInstanceSharedPtr create()
+        {
+          return( std::shared_ptr<ClipPlaneInstance>( new ClipPlaneInstance() ) );
+        }
 
       public:
         bool operator<(const ClipPlaneInstance &rhs) const
@@ -279,8 +276,6 @@ namespace dp
       {
         m_transformTree[transformTreeIndex].m_objectTreeIndex = objectTreeIndex;
       }
-
-      typedef dp::util::SmartPtr< SceneTree >               SceneTreeSharedPtr;
 
     } // namespace xbar
   } // namespace sg

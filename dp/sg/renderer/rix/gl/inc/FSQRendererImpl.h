@@ -49,6 +49,8 @@ namespace dp
       {
         namespace gl
         {
+          SMART_TYPES( RendererFSQImpl );
+
           /*! \brief Renderer to draw a "Full Screen" (ie: viewport-filling) quad, using a supplied pair of geometry effect and material effect.
            *  \par Namespace: nvgl
            *  \remarks Many rendering effects in modern applications require a Viewport-filling quad to realize certain screen-space 
@@ -132,7 +134,7 @@ namespace dp
           class RendererFSQImpl : public FSQRenderer
           {
             public:
-              static dp::util::SmartPtr<FSQRenderer> create( const dp::gl::SharedRenderTarget &renderTarget = dp::gl::SharedRenderTarget() );
+              static SmartFSQRenderer create( const dp::gl::SharedRenderTarget &renderTarget = dp::gl::SharedRenderTarget::null );
               virtual ~RendererFSQImpl(void);
 
               void setEffect( const dp::sg::core::EffectDataSharedPtr & effect );

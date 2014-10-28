@@ -55,7 +55,7 @@ namespace dp
             SmartResourceTexture resourceTexture = resourceManager->getResource<ResourceTexture>( reinterpret_cast<size_t>(texture.getWeakPtr()) );
             if ( !resourceTexture )
             {
-              resourceTexture = new ResourceTexture( texture, resourceManager );
+              resourceTexture = std::shared_ptr<ResourceTexture>( new ResourceTexture( texture, resourceManager ) );
             }
     
             return resourceTexture;

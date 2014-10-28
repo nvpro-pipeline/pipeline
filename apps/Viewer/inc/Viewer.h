@@ -39,7 +39,7 @@
 #define VIEWER_APPLICATION_NAME   "NVPro Pipeline Viewer"
 #define VIEWER_APPLICATION_VENDOR "NVIDIA Corporation"
 
-class viewerPlugInCallback;
+SMART_TYPES( viewerPlugInCallback );    // due to circular inclusion, we can't just include viewerPlugInCallback.h !!
 
 class Viewer : public QApplication
 {
@@ -126,7 +126,7 @@ class Viewer : public QApplication
     dp::fx::Manager                               m_shaderManagerType;
     QString                                       m_startupFile;
     dp::sg::renderer::rix::gl::TransparencyMode   m_transparencyMode;
-    dp::util::SmartPtr<viewerPlugInCallback>      m_viewerPlugInCallback;
+    SmartviewerPlugInCallback                     m_viewerPlugInCallback;
     dp::sg::ui::ViewStateSharedPtr                m_viewState;
     int                                           m_width;
     int                                           m_height;

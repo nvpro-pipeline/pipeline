@@ -52,7 +52,7 @@ namespace dp
           \param name The class name that the search should look for
           \return A vector of paths to all objects that were found during the search
       **/
-      DP_SG_ALGORITHM_API const std::vector<const dp::sg::core::Path*> searchClassPaths( const dp::sg::core::NodeSharedPtr& root, const std::string& name, bool baseClassSearch = false );
+      DP_SG_ALGORITHM_API std::vector<dp::sg::core::PathSharedPtr> const searchClassPaths( const dp::sg::core::NodeSharedPtr& root, const std::string& name, bool baseClassSearch = false );
 
       /** \brief Determine whether a scene contains at least one light source
           \param scene The scene that should be searched for lights

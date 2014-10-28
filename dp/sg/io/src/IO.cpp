@@ -47,7 +47,7 @@ namespace dp
     namespace io
     {
 
-      dp::sg::ui::ViewStateSharedPtr loadScene( const std::string & filename, const std::vector<std::string> &searchPaths, dp::util::PlugInCallback *callback )
+      dp::sg::ui::ViewStateSharedPtr loadScene( const std::string & filename, const std::vector<std::string> &searchPaths, dp::util::SmartPlugInCallback const& callback )
       {
         dp::sg::ui::ViewStateSharedPtr viewState;
 
@@ -72,12 +72,12 @@ namespace dp
         std::string ext = dp::util::getFileExtension( filename );
         dp::util::UPIID piid = dp::util::UPIID( ext.c_str(), dp::util::UPITID( UPITID_SCENE_LOADER, UPITID_VERSION ) );
 
-        dp::util::SmartPtr<dp::util::PlugIn> plug;
+        dp::util::SmartPlugIn plug;
         if ( !dp::util::getInterface(binSearchPaths, piid, plug) )
         {
           throw std::runtime_error( std::string( "Scene Plugin not found: " + ext ) );
         }
-        dp::util::SmartPtr<SceneLoader> loader( dp::util::smart_cast<SceneLoader>(plug) );
+        SmartSceneLoader loader = plug.staticCast<SceneLoader>();
         loader->setCallback( callback );
 
         vector<string> sceneSearchPaths = binSearchPaths;
@@ -107,7 +107,7 @@ namespace dp
         catch (...)
         {
           // TODO another non RAII pattern, callback should be passed to load
-          loader->setCallback( NULL );
+          loader->setCallback( dp::util::SmartPlugInCallback::null );
           throw;
         }
         if ( !scene )
@@ -153,10 +153,10 @@ namespace dp
 
         dp::util::UPIID piid = dp::util::UPIID(dp::util::getFileExtension( filename ).c_str(), PITID_SCENE_SAVER);
 
-        dp::util::SmartPtr<dp::util::PlugIn> plug;
+        dp::util::SmartPlugIn plug;
         if ( getInterface( searchPaths, piid, plug ) )
         {
-          dp::util::SmartPtr<SceneSaver> ss( dp::util::smart_cast<SceneSaver>(plug) );
+          SmartSceneSaver ss = plug.staticCast<SceneSaver>();
           try
           {
             dp::sg::core::SceneSharedPtr scene( viewState->getScene() ); // DAR HACK Change SceneSaver interface later.
@@ -183,10 +183,10 @@ namespace dp
         //
         // MMM - TODO - Update me for stereo images
         //
-        dp::util::SmartPtr<dp::util::PlugIn> plug;
+        dp::util::SmartPlugIn plug;
         if ( getInterface( searchPaths, piid, plug ) )
         {
-          dp::util::SmartPtr<TextureSaver> ts( dp::util::smart_cast<TextureSaver>(plug) );
+          SmartTextureSaver ts = plug.staticCast<TextureSaver>();
           retval = ts->save( tih, filename );
         }
 
@@ -219,10 +219,10 @@ namespace dp
           dp::util::UPIID piid = dp::util::UPIID( ext.c_str(), dp::util::UPITID(UPITID_TEXTURE_LOADER, UPITID_VERSION) );
 
           // TODO - Update me for stereo images
-          dp::util::SmartPtr<dp::util::PlugIn> plug;
+          dp::util::SmartPlugIn plug;
           if ( getInterface( binSearchPaths, piid, plug ) )
           {
-            dp::util::SmartPtr<TextureLoader> tl( dp::util::smart_cast<TextureLoader>(plug) );
+            SmartTextureLoader tl = plug.staticCast<TextureLoader>();
             tih = tl->load( foundFile );
           }
         }

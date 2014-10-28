@@ -43,7 +43,7 @@ namespace dp
 
           SmartTransparencyManagerOITClosestList TransparencyManagerOITClosestList::create( dp::math::Vec2ui const & size, unsigned int layersCount, float fragmentsCountFactor )
           {
-            return( new TransparencyManagerOITClosestList( size, layersCount, fragmentsCountFactor ) );
+            return( std::shared_ptr<TransparencyManagerOITClosestList>( new TransparencyManagerOITClosestList( size, layersCount, fragmentsCountFactor ) ) );
           }
 
           TransparencyManagerOITClosestList::TransparencyManagerOITClosestList( dp::math::Vec2ui const & size, unsigned int layersCount, float fragmentsCountFactor )

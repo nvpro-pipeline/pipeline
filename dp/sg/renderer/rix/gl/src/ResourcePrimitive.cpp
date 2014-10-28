@@ -183,9 +183,9 @@ namespace dp
             if ( !resourcePrimitive )
             {
 #if defined(USE_SUBALLOCATOR)
-              resourcePrimitive = new ResourcePrimitiveSubAllocator( primitive, resourceManager );
+              resourcePrimitive = std::shared_ptr<ResourcePrimitive>( new ResourcePrimitiveSubAllocator( primitive, resourceManager ) );
 #else
-              resourcePrimitive = new ResourcePrimitiveStandard( primitive, resourceManager );
+              resourcePrimitive = std::shared_ptr<ResourcePrimitive>( new ResourcePrimitiveStandard( primitive, resourceManager ) );
 #endif
               resourcePrimitive->m_geometryHandle = resourceManager->getRenderer()->geometryCreate();
               resourcePrimitive->update();

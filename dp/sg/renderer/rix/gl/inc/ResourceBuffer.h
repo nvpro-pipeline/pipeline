@@ -40,10 +40,9 @@ namespace dp
       {
         namespace gl
         {
-          class ResourceBuffer;
-          typedef dp::util::SmartPtr<ResourceBuffer> SmartResourceBuffer;
+          SMART_TYPES( ResourceBuffer );
           typedef ResourceBuffer* WeakResourceBuffer;
-    
+
           class ResourceBuffer : public ResourceManager::Resource
           {
           public:

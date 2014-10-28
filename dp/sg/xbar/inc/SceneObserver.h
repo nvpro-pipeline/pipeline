@@ -27,7 +27,7 @@
 #pragma once
 
 #include <dp/util/Observer.h>
-#include <dp/util/SmartPtr.h>
+#include <dp/util/SharedPtr.h>
 
 namespace dp
 {
@@ -35,18 +35,15 @@ namespace dp
   {
     namespace xbar
     {
-
-      class SceneObserver;
-      typedef dp::util::SmartPtr<SceneObserver> SmartSceneObserver;
+      SMART_TYPES( SceneObserver );
 
       class SceneTree;
       typedef SceneTree* SceneTreeWeakPtr;
 
-      class SceneObserver : public dp::util::Observer, public dp::util::RCObject
+      class SceneObserver : public dp::util::Observer
       {
       public:
         static SmartSceneObserver create( SceneTreeWeakPtr sceneTree );
-
         virtual ~SceneObserver();
 
       protected:
