@@ -46,7 +46,6 @@
 #include <dp/util/FrameProfiler.h>
 
 #include <boost/program_options.hpp>
-#include <boost/shared_ptr.hpp>
 
 #include <fstream>
 #include <iomanip>
@@ -82,7 +81,7 @@ protected:
     virtual void onSceneRendererChanged( const dp::sg::ui::SmartSceneRenderer &sceneRenderer );
 
 private:
-  boost::shared_ptr<dp::sg::ui::manipulator::TrackballCameraManipulatorHIDSync> m_trackballHIDSync;
+  std::shared_ptr<dp::sg::ui::manipulator::TrackballCameraManipulatorHIDSync> m_trackballHIDSync;
 
   void updateSceneRendererEngine();
 
@@ -148,7 +147,7 @@ void TerrainRenderer::setDuration( double duration )
 
 void TerrainRenderer::paint()
 {
-  dp::sg::renderer::rix::gl::SmartSceneRenderer renderer = dp::util::smart_cast<dp::sg::renderer::rix::gl::SceneRenderer>( getSceneRenderer() );
+  dp::sg::renderer::rix::gl::SmartSceneRenderer renderer = getSceneRenderer().staticCast<dp::sg::renderer::rix::gl::SceneRenderer>();
   if ( !m_renderEngine.empty() && renderer->getRenderEngine() != m_renderEngine )
   {
     std::cout << "Setting renderengine: " << m_renderEngine << std::endl;

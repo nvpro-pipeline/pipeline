@@ -27,7 +27,6 @@
 #pragma once
 
 #include <dp/util/FileMapping.h>
-#include <dp/util/RCObject.h>
 #include <dp/sg/io/PlugInterface.h>
 #include <NBF.h> // nbf structs 
 #include <map>
@@ -52,7 +51,7 @@ void lib_init() __attribute__ ((constructor));   // will be called before dlopen
 // exports required for a scene loader plug-in
 extern "C"
 {
-NBFLOADER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPtr<dp::util::PlugIn> & pi);
+NBFLOADER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPlugIn & pi);
 NBFLOADER_API void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids );
 }
 
@@ -65,15 +64,14 @@ struct NBFLightSource_nbf_50;
 struct NBFLightSource_nbf_12;
 struct NBFPrimitive_nbf_4d;
 
+SMART_TYPES( NBFLoader );
+
 //! A Scene Loader for nbf files.
 class NBFLoader : public dp::sg::io::SceneLoader
 {
 public:
-  NBFLoader();
-
-  //! Realization of the pure virtual interface function of a PlugIn.
-  /** \note Never call \c delete on a PlugIn, always use the member function. */
-  void deleteThis( void );
+  static SmartNBFLoader create();
+  virtual  ~NBFLoader(void);
 
   //! Realization of the pure virtual interface function of a SceneLoader.
   /** Loads a nvb file given by \a filename. It looks for this file and possibly referenced other files like
@@ -88,8 +86,7 @@ public:
   );
 
 protected:
-  //! Protected destructor to prevent explicit creation on stack.
-  virtual  ~NBFLoader(void);
+  NBFLoader();
 
   //! Load a custom object identified by \a objectCode from the file offset specified by \a offset.
   /** This function is called from the loader's framework if a custom object was detected
@@ -134,7 +131,7 @@ private:
       //! Maps the specified file offset into process memory.
       /** This constructor is called on instantiation. 
       * It maps \a count objects of type T at file offset \a offset into process memory. */
-      Offset_AutoPtr( dp::util::ReadMapping * fm, const dp::util::PlugInCallback * pic, uint_t offset
+      Offset_AutoPtr( dp::util::ReadMapping * fm, dp::util::SmartPlugInCallback const& pic, uint_t offset
                     , unsigned int count=1 );
 
       //! Unmaps the bytes, that have been mapped at instantiation, from process memory. 
@@ -155,9 +152,9 @@ private:
       void reset( uint_t offset, unsigned int count=1 );
 
     private:
-      T * m_ptr;
-      const dp::util::PlugInCallback  * m_pic;
-      dp::util::ReadMapping           * m_fm;
+      T                             * m_ptr;
+      dp::util::SmartPlugInCallback   m_pic;
+      dp::util::ReadMapping         * m_fm;
   };
 
 
@@ -404,11 +401,6 @@ private:
   dp::fx::SmartEffectSpec   m_currentEffectSpec;
 };
 
-inline void NBFLoader::deleteThis()
-{
-  delete this;
-}
-
 inline dp::sg::core::EffectDataSharedPtr NBFLoader::getMaterialEffect()
 {
   if ( ! m_materialEffect )
@@ -432,7 +424,7 @@ inline void NBFLoader::unmapOffset( ubyte_t * offsetPtr )
 
 template<typename T>
 inline NBFLoader::Offset_AutoPtr<T>::Offset_AutoPtr( dp::util::ReadMapping * fm
-                                                   , const dp::util::PlugInCallback * pic
+                                                   , dp::util::SmartPlugInCallback const& pic
                                                    , uint_t offset, unsigned int count )
 : m_ptr(NULL)
 , m_fm(fm)

@@ -53,9 +53,9 @@ namespace dp
           {  
           }
 
-          dp::util::SmartPtr<FSQRenderer> FSQRenderer::create( const dp::gl::SharedRenderTarget &renderTarget )
+          SmartFSQRenderer FSQRenderer::create( const dp::gl::SharedRenderTarget &renderTarget )
           {
-            return RendererFSQImpl::create( renderTarget );
+            return( RendererFSQImpl::create( renderTarget ) );
           }
 
           FSQRenderer::~FSQRenderer(void)

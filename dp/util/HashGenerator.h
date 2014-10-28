@@ -28,6 +28,7 @@
 /** \file */
 
 #include <dp/util/Config.h>
+#include <dp/util/SharedPtr.h>
 #include <string>
 
 namespace dp
@@ -61,6 +62,8 @@ namespace dp
          *  hash of all that data.
          *  \sa finalize */
         DP_UTIL_API void update( const unsigned char * input, unsigned int elementSize, unsigned int stride, unsigned int elementCount );
+
+        template <typename T> void update( SharedPtr<T> const& ptr );
 
         /*! \brief Get the size of the hash
          *  \return The size of the hash.
@@ -102,6 +105,12 @@ namespace dp
       {
         update( input, elementCount * elementSize );
       }
+    }
+
+    template <typename T>
+    inline void HashGenerator::update( SharedPtr<T> const& ptr )
+    {
+      update( reinterpret_cast<const unsigned char *>( ptr.getWeakPtr() ), sizeof(const T *) );
     }
 
   } // namespace util

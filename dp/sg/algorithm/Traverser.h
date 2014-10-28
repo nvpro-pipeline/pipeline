@@ -35,7 +35,6 @@
 #include <dp/sg/core/Path.h>  // for traversal id
 #include <dp/sg/ui/ViewState.h>
 #include <dp/util/BitMask.h>
-#include <dp/util/RCObject.h> // base class definition
 #include <dp/util/Reflection.h>
 #include <boost/scoped_ptr.hpp>
 #include <stack>

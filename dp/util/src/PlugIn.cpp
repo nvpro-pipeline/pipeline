@@ -135,7 +135,7 @@ namespace dp
       }
     }
 
-    bool PlugInServer::getInterfaceImpl(const vector<string>& searchPath, const UPIID& piid, dp::util::SmartPtr<PlugIn> & plugIn)
+    bool PlugInServer::getInterfaceImpl(const vector<string>& searchPath, const UPIID& piid, dp::util::SmartPlugIn & plugIn)
     {
       plugIn.reset();
       if ( m_unsupportedUPIIDs.find( piid ) == m_unsupportedUPIIDs.end() )
@@ -245,7 +245,7 @@ namespace dp
       return !plugIns.empty();
     }
 
-    bool getInterface(const std::vector<std::string>& searchPath, const UPIID& piid, dp::util::SmartPtr<PlugIn> & plugIn)
+    bool getInterface(const std::vector<std::string>& searchPath, const UPIID& piid, dp::util::SmartPlugIn & plugIn)
     {// call the singleton's implementation
       return PIS::instance()->getInterfaceImpl(searchPath, piid, plugIn);
     }

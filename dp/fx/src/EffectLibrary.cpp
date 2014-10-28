@@ -48,6 +48,9 @@ namespace dp
     /* ShaderPipeline                                                       */
     /************************************************************************/
 
+    ShaderPipeline::ShaderPipeline()
+    {}
+
     ShaderPipeline::iterator ShaderPipeline::beginStages() const
     {
       return m_stages.begin();
@@ -129,17 +132,26 @@ namespace dp
     /************************************************************************/
     /* ShaderPipelineImpl                                                   */
     /************************************************************************/
+    SMART_TYPES( ShaderPipelineImpl );
+
     class ShaderPipelineImpl : public ShaderPipeline
     {
     public:
+      static SmartShaderPipelineImpl create()
+      {
+        return( std::shared_ptr<ShaderPipelineImpl>( new ShaderPipelineImpl() ) );
+      }
+
       void addStage( const Stage& stage )
       {
         DP_ASSERT( std::find_if( m_stages.begin(), m_stages.end(), boost::bind( &Stage::domain, _1) == stage.domain ) == m_stages.end() );
         m_stages.push_back( stage );
       }
-    };
 
-    typedef std::shared_ptr<ShaderPipelineImpl> SmartShaderPipelineImpl;
+    protected:
+      ShaderPipelineImpl()
+      {}
+    };
 
     /************************************************************************/
     /* EffectLibrary                                                        */

@@ -56,11 +56,13 @@ OBJSAVER.
   * If the PlugIn ID \a piid equals \c PIID_NVSG_SCENE_SAVER, a OBJSAVER is created and returned in \a pi.
   * \returns  true, if the requested PlugIn could be created, otherwise false
   */
-OBJSAVER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPtr<dp::util::PlugIn> & pi);
+OBJSAVER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPlugIn & pi);
 
 //! Query the supported types of PlugIn Interfaces.
 OBJSAVER_API void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids );
 }
+
+SMART_TYPES( OBJSaver );
 
 //! A Scene Saver for obj files.
 /** NVSG files can be produced with the sample ViewerVR. 
@@ -68,9 +70,8 @@ OBJSAVER_API void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids 
 class OBJSaver : public dp::sg::io::SceneSaver
 {
   public :
-    //! Realization of the pure virtual interface function of a PlugIn.
-    /** \note Never call \c delete on a PlugIn, always use the member function. */
-    void  deleteThis( void ); //!< PlugIn interface
+    static SmartOBJSaver create();
+    virtual ~OBJSaver();
 
     //! Realization of the pure virtual interface function of a SceneSaver.
     /** Saves the \a scene and the \a viewState to \a filename. 
@@ -79,9 +80,7 @@ class OBJSaver : public dp::sg::io::SceneSaver
               , dp::sg::ui::ViewStateSharedPtr  const& viewState  //!<  view state to save
               , std::string                     const& filename   //!<  file name to save to
               );
-};
 
-inline void OBJSaver::deleteThis( void )
-{
-  delete this;
-}
+  protected:
+    OBJSaver();
+};

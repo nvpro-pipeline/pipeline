@@ -36,20 +36,7 @@ namespace dp
   {
     namespace ui
     {
-      class RendererOptions;
-      CORE_TYPES( RendererOptions );
-    } // namespace ui
-  } // namespace sg
-
-  namespace util
-  {
-    OBJECT_TRAITS( dp::sg::ui::RendererOptions, dp::sg::core::HandledObject );
-  } // namespace util
-
-  namespace sg
-  {
-    namespace ui
-    {
+      SHARED_PTR_TYPES( RendererOptions );
 
       /*! \brief   This class is a container for RendererOptions.
           \remarks Use SceneRenderer*::addRendererOptions( const RendererOptionsSharedPtr &options ) to initialize the

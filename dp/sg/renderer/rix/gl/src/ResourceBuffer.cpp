@@ -48,7 +48,7 @@ namespace dp
             SmartResourceBuffer resourceBuffer = resourceManager->getResource<ResourceBuffer>( reinterpret_cast<size_t>(buffer.getWeakPtr()) );
             if ( !resourceBuffer )
             {
-              resourceBuffer = new ResourceBuffer( buffer, resourceManager );
+              resourceBuffer = std::shared_ptr<ResourceBuffer>( new ResourceBuffer( buffer, resourceManager ) );
               if ( buffer.isPtrTo<dp::sg::gl::BufferGL>() )
               {
                 dp::sg::gl::BufferGLSharedPtr const& buffergl = buffer.staticCast<dp::sg::gl::BufferGL>();

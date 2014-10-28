@@ -41,14 +41,14 @@ namespace dp
   namespace util
   {
 
-    SmartPtr<Image> Image::create()
+    SmartImage Image::create()
     {
-      return new Image;
+      return( std::shared_ptr<Image>( new Image() ) );
     }
 
-    SmartPtr<Image> Image::create( size_t width, size_t height, PixelFormat pixelFormat, DataType dataType, void const* const* data, size_t numLayers, size_t mipmapLevels )
+    SmartImage Image::create( size_t width, size_t height, PixelFormat pixelFormat, DataType dataType, void const* const* data, size_t numLayers, size_t mipmapLevels )
     {
-      return new Image( width, height, pixelFormat, dataType, data, numLayers, mipmapLevels );
+      return( std::shared_ptr<Image>( new Image( width, height, pixelFormat, dataType, data, numLayers, mipmapLevels ) ) );
     }
 
     Image::Image()

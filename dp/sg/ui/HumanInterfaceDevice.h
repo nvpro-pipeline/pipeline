@@ -27,7 +27,6 @@
 #pragma once
 
 #include <dp/util/Reflection.h>
-#include <dp/util/RCObject.h>
 #include <string>
 #include <set>
 

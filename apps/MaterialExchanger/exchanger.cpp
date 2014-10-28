@@ -26,7 +26,6 @@
 
 #include <iostream>
 #include <tinyxml.h>
-#include <boost/shared_ptr.hpp>
 #include <dp/fx/EffectLibrary.h>
 #include <dp/sg/algorithm/Replace.h>
 #include <dp/sg/algorithm/Search.h>
@@ -101,7 +100,7 @@ int main( int argc, char *argv[] )
     return( -1 );
   }
 
-  boost::shared_ptr<TiXmlDocument> doc( new TiXmlDocument( mappingsFile.c_str() ) );
+  std::unique_ptr<TiXmlDocument> doc( new TiXmlDocument( mappingsFile.c_str() ) );
   if ( ! doc )
   {
     std::cerr << "Could not open mappingsFile <" << mappingsFile << ">.\n";

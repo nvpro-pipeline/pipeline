@@ -178,7 +178,7 @@ namespace dp
           std::cerr << "Error: Invalid backend '" << m_backendName << "'\n";
           return nullptr;
         }
-        return creator( rendererName.c_str(), &options );
+        return creator( rendererName.c_str(), &options )->shared_from_this();
       }
 
       SmartBackend TestRender::getBackend() const

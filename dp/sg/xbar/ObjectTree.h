@@ -40,13 +40,10 @@ namespace dp
       typedef TreeNodeBaseClass::NodeIndex TransformTreeIndex;
       typedef TreeNodeBaseClass::NodeIndex ObjectTreeIndex;
 
-      class LightInstance;
-      class ClipPlaneInstance;
-      typedef dp::util::SmartPtr< LightInstance >     LightInstanceSharedPtr;
-      typedef dp::util::SmartPtr< ClipPlaneInstance > ClipPlaneInstanceSharedPtr;
+      SHARED_PTR_TYPES( ClipPlaneInstance );
 
       typedef TreeResourceGroup<ClipPlaneInstance>    ClipPlaneGroup;
-      typedef dp::util::SmartPtr<ClipPlaneGroup>      SmartClipPlaneGroup;
+      typedef dp::util::SharedPtr<ClipPlaneGroup>     SmartClipPlaneGroup;
 
       struct ObjectTreeNode : public TreeNodeBaseClass
       {

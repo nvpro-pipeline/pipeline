@@ -36,10 +36,12 @@ namespace dp
   {
     namespace ui
     {
+      SMART_TYPES( FrustumStereoViewStateProvider );
+
       class FrustumStereoViewStateProvider : public SceneRenderer::StereoViewStateProvider
       {
       public:
-        static dp::util::SmartPtr<FrustumStereoViewStateProvider> create();
+        static SmartFrustumStereoViewStateProvider create();
       protected:
         FrustumStereoViewStateProvider();
 
@@ -55,9 +57,9 @@ namespace dp
       {
       }
 
-      dp::util::SmartPtr<FrustumStereoViewStateProvider> FrustumStereoViewStateProvider::create()
+      SmartFrustumStereoViewStateProvider FrustumStereoViewStateProvider::create()
       {
-        return new FrustumStereoViewStateProvider();
+        return( std::shared_ptr<FrustumStereoViewStateProvider>( new FrustumStereoViewStateProvider() ) );
       }
 
       dp::sg::ui::ViewStateSharedPtr FrustumStereoViewStateProvider::calculateViewState( dp::sg::ui::ViewStateSharedPtr const& viewStatePtr, dp::ui::RenderTarget::StereoTarget eye )

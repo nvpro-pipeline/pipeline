@@ -94,7 +94,7 @@ namespace dp
             , m_currentEffectSurface( nullptr )
             , m_effectDataAttached( false )
           {
-            m_payload.reset( new Payload() );
+            m_payload = Payload::create();
           }
 
           inline void DrawableManagerDefault::Instance::updateRendererVisibility( dp::rix::core::Renderer* renderer )
@@ -128,7 +128,7 @@ namespace dp
           DrawableManagerDefault::~DrawableManagerDefault()
           {
             // reset resources
-            setSceneTree( nullptr );
+            setSceneTree( SceneTreeSharedPtr::null );
             detachEffectDataObserver();
             m_effectDataObserver.reset();
           }
@@ -139,7 +139,7 @@ namespace dp
             ObjectTreeNode objectTreeNode = getSceneTree()->getObjectTreeNode( objectTreeIndex );
 
             // generate a new handle and fill it
-            DefaultHandleDataHandle handle = new DefaultHandleData( dp::sg::xbar::ObjectTreeIndex(m_instances.size()) );
+            DefaultHandleDataHandle handle = DefaultHandleData::create( dp::sg::xbar::ObjectTreeIndex(m_instances.size()) );
 
             // generate a new instance
             m_instances.push_back( Instance() );
@@ -171,8 +171,8 @@ namespace dp
 
           void DrawableManagerDefault::removeDrawableInstance( DrawableManager::Handle handle )
           {
-            const DefaultHandleDataHandle& handleData = dp::util::smart_cast<DefaultHandleData>( handle );
-            DP_ASSERT( handleData ); // DAR HACK Fires when loading the mitsuba.obj model.
+            DP_ASSERT( handle.isPtrTo<DefaultHandleData>() );
+            DefaultHandleDataHandle const& handleData = handle.staticCast<DefaultHandleData>();
 
             // TODO really remove data
             dp::rix::core::Renderer *renderer = m_resourceManager->getRenderer();
@@ -180,7 +180,7 @@ namespace dp
 
             if( di.m_effectDataAttached )
             {
-              di.m_currentEffectSurface->detach( m_effectDataObserver.get(), di.m_payload.get() );
+              di.m_currentEffectSurface->detach( m_effectDataObserver.get(), di.m_payload.getWeakPtr() );
               di.m_effectDataAttached = false;
             }
 
@@ -213,7 +213,8 @@ namespace dp
 
           void DrawableManagerDefault::updateDrawableInstance( DrawableManager::Handle handle )
           {
-            const DefaultHandleDataHandle& handleData = dp::util::smart_cast<DefaultHandleData>( handle );
+            DP_ASSERT( handle.isPtrTo<DefaultHandleData>() );
+            DefaultHandleDataHandle const& handleData = handle.staticCast<DefaultHandleData>();
 
             dp::rix::core::Renderer *renderer = m_resourceManager->getRenderer();
 
@@ -259,7 +260,7 @@ namespace dp
               {
                 if ( di.m_effectDataAttached )
                 {
-                  di.m_currentEffectSurface->detach( m_effectDataObserver.get(), di.m_payload.get() );
+                  di.m_currentEffectSurface->detach( m_effectDataObserver.get(), di.m_payload.getWeakPtr() );
                 }
 
                 di.m_currentEffectSurface = effectDataSurface;
@@ -267,7 +268,7 @@ namespace dp
                 di.m_smartShaderObject = m_shaderManager->registerGeometryInstance(geoNode, di.m_objectTreeIndex, di.m_geometryInstance );
                 di.m_smartShaderObjectDepthPass = m_shaderManager->registerGeometryInstance(geoNode, di.m_objectTreeIndex, di.m_geometryInstanceDepthPass, RPT_DEPTH );
 
-                di.m_currentEffectSurface->attach( m_effectDataObserver.get(), di.m_payload.get() );
+                di.m_currentEffectSurface->attach( m_effectDataObserver.get(), di.m_payload.getWeakPtr() );
                 di.m_effectDataAttached = true;
               }
 
@@ -307,12 +308,12 @@ namespace dp
                 {
                   renderer->renderGroupRemoveGeometryInstance( m_renderGroups[di.m_transparent][RGP_DEPTH], di.m_geometryInstanceDepthPass );
                 }
-                di.m_resourcePrimitive = nullptr;
+                di.m_resourcePrimitive = SmartResourcePrimitive::null;
                 di.m_geometryInstance = nullptr;
                 di.m_geometryInstanceDepthPass = nullptr;
                 di.m_currentRenderGroup = nullptr;
-                di.m_smartShaderObject = nullptr;
-                di.m_smartShaderObjectDepthPass = nullptr;
+                di.m_smartShaderObject = SmartShaderManagerInstance::null;
+                di.m_smartShaderObjectDepthPass = SmartShaderManagerInstance::null;
                 di.m_currentEffectSurface.reset();
               }
             }
@@ -320,9 +321,9 @@ namespace dp
 
           void DrawableManagerDefault::setDrawableInstanceActive( Handle handle, bool active )
           {
-            DP_ASSERT( handle );
+            DP_ASSERT( handle.isPtrTo<DefaultHandleData>() );
+            DefaultHandleDataHandle const& handleData = handle.staticCast<DefaultHandleData>();
 
-            const DefaultHandleDataHandle& handleData = dp::util::smart_cast<DefaultHandleData>( handle );
             dp::rix::core::Renderer *renderer = m_resourceManager->getRenderer();
             Instance& di = m_instances[handleData->m_index];
             if ( di.m_isActive != active )
@@ -334,9 +335,9 @@ namespace dp
 
           void DrawableManagerDefault::setDrawableInstanceTraversalMask( Handle handle, dp::util::Uint32 traversalMask )
           {
-            DP_ASSERT( handle );
+            DP_ASSERT( handle.isPtrTo<DefaultHandleData>() );
+            DefaultHandleDataHandle const& handleData = handle.staticCast<DefaultHandleData>();
 
-            const DefaultHandleDataHandle& handleData = dp::util::smart_cast<DefaultHandleData>( handle );
             dp::rix::core::Renderer *renderer = m_resourceManager->getRenderer();
             Instance& di = m_instances[handleData->m_index];
             if ( traversalMask != di.m_activeTraversalMask )
@@ -362,7 +363,8 @@ namespace dp
 
               for ( size_t index = 0;index < changed.size(); ++index )
               {
-                DefaultHandleDataHandle const & defaultHandleData = dp::util::smart_cast<DefaultHandleData>( getDrawableInstance( changed[index] ) );
+                DP_ASSERT( getDrawableInstance( changed[index] ).isPtrTo<DefaultHandleData>() );
+                DefaultHandleDataHandle const& defaultHandleData = getDrawableInstance( changed[index] ).staticCast<DefaultHandleData>();
                 Instance & instance = m_instances[defaultHandleData->m_index];
 
                 bool newVisible = m_cullingManager->resultIsVisible( m_cullingResult, changed[index] );
@@ -515,7 +517,7 @@ namespace dp
             {
               if ( it->m_effectDataAttached )
               {
-                it->m_currentEffectSurface->detach( m_effectDataObserver.get(), it->m_payload.get() );
+                it->m_currentEffectSurface->detach( m_effectDataObserver.get(), it->m_payload.getWeakPtr() );
                 it->m_effectDataAttached = false;
               }
             }
@@ -542,10 +544,10 @@ namespace dp
               case dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX_FX:
               case dp::fx::MANAGER_SHADER_STORAGE_BUFFER_OBJECT:
               case dp::fx::MANAGER_SHADER_STORAGE_BUFFER_OBJECT_RIX:
-                m_shaderManager.reset( new ShaderManagerRiXFx( getSceneTree().get(), m_shaderManagerType, m_resourceManager, m_transparencyManager ) );
+                m_shaderManager.reset( new ShaderManagerRiXFx( getSceneTree().getWeakPtr(), m_shaderManagerType, m_resourceManager, m_transparencyManager ) );
                 break;
               default:
-                m_shaderManager.reset( new ShaderManagerRiXFx( getSceneTree().get(), dp::fx::MANAGER_UNIFORM, m_resourceManager, m_transparencyManager ) );
+                m_shaderManager.reset( new ShaderManagerRiXFx( getSceneTree().getWeakPtr(), dp::fx::MANAGER_UNIFORM, m_resourceManager, m_transparencyManager ) );
               }
 
               dp::rix::core::Renderer *renderer = m_resourceManager->getRenderer();

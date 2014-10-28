@@ -68,7 +68,7 @@ namespace dp
       END_REFLECTION_INFO
 
       SearchTraverser::SearchTraverser(void)
-      : m_currentPath(NULL)
+      : m_currentPath(dp::sg::core::Path::create())
       , m_objectPointer(NULL)
       , m_searchBaseClass( false )
       {
@@ -81,35 +81,25 @@ namespace dp
       void SearchTraverser::addItem( const Object * obj )
       {
         m_foundObjects.insert( obj );
-        m_smartPaths.push_back( new Path( *m_currentPath ) );
+        m_paths.push_back( dp::sg::core::Path::create( m_currentPath ) );
       }
 
       void  SearchTraverser::doApply( const NodeSharedPtr & root )
       {
         DP_ASSERT( root );
-        DP_ASSERT( m_currentPath == NULL );
-  
-        m_currentPath = new Path;
+        DP_ASSERT( m_currentPath->isEmpty() );
+
         m_foundObjects.clear();
         m_paths.clear();
-        m_smartPaths.clear();
         m_results.clear();
 
         SharedTraverser::doApply( root );
 
-        m_currentPath = NULL;
+        m_currentPath.reset();
       }
 
-      const vector<const Path*> & SearchTraverser::getPaths()
+      vector<dp::sg::core::PathSharedPtr> const& SearchTraverser::getPaths()
       {
-        if ( m_paths.empty() && !m_smartPaths.empty() )
-        {
-          m_paths.reserve( m_smartPaths.size() );
-          for ( vector<dp::util::SmartPtr<Path> >::const_iterator it = m_smartPaths.begin() ; it != m_smartPaths.end() ; ++it )
-          {
-            m_paths.push_back( it->get() );
-          }
-        }
         return( m_paths );
       }
 

@@ -39,6 +39,15 @@ namespace dp
 
     namespace generator
     {
+      SmartGeometryData GeometryData::create( GeometryPrimitiveType gpt )
+      {
+        return( std::shared_ptr<GeometryData>( new GeometryData( gpt ) ) );
+      }
+
+      SmartGeometryData GeometryData::create( SmartGeometryData const& rhs )
+      {
+        return( std::shared_ptr<GeometryData>( new GeometryData( rhs ) ) );
+      }
 
       GeometryData::GeometryData( GeometryPrimitiveType gpt )
       {
@@ -49,7 +58,7 @@ namespace dp
       {
       }
 
-      GeometryData::GeometryData( const SmartPtr<GeometryData>& rhs )
+      GeometryData::GeometryData( SmartGeometryData const& rhs )
       {
         m_attributes = rhs->m_attributes;
         m_indices = rhs->m_indices;
@@ -114,7 +123,7 @@ namespace dp
                                   , Vec2f t2 /*= math::Vec2f(0.0f, 1.0f)*/ )
       {
 
-        SmartGeometryData meshOut = new GeometryData(GPT_TRIANGLE_STRIP);
+        SmartGeometryData meshOut = GeometryData::create(GPT_TRIANGLE_STRIP);
 
         AttributeFeed positions(meshOut, ATTRIB_POSITION, attrMask, 3, 4);
         AttributeFeed texCoords(meshOut, ATTRIB_TEXCOORD0, attrMask, 2, 4);
@@ -163,7 +172,7 @@ namespace dp
                                          , Vec2f t2 /*= math::Vec2f(0.0f, 1.0f)*/ )
       {
 
-        SmartGeometryData meshOut = new GeometryData(GPT_TRIANGLE_STRIP);
+        SmartGeometryData meshOut = GeometryData::create(GPT_TRIANGLE_STRIP);
 
         AttributeFeed positions(meshOut, ATTRIB_POSITION, attrMask, 3, 4);
         AttributeFeed texCoords(meshOut, ATTRIB_TEXCOORD0, attrMask, 2, 4);
@@ -219,7 +228,7 @@ namespace dp
                                       , Vec2f t2 /*math::Vec2f(0.0f, 1.0f)*/ )
       {
 
-        SmartGeometryData meshOut = new GeometryData(GPT_TRIANGLES);
+        SmartGeometryData meshOut = GeometryData::create(GPT_TRIANGLES);
 
         AttributeFeed positions(meshOut, ATTRIB_POSITION, attrMask, 3, 3);
         AttributeFeed texCoord(meshOut, ATTRIB_TEXCOORD0, attrMask, 2, 3);
@@ -276,7 +285,7 @@ namespace dp
       {
         const int numVerts = 24;
 
-        SmartGeometryData meshOut = new GeometryData(GPT_TRIANGLES);
+        SmartGeometryData meshOut = GeometryData::create(GPT_TRIANGLES);
 
         AttributeFeed positions(meshOut, ATTRIB_POSITION, attrMask, 3, numVerts);
         AttributeFeed texCoords(meshOut, ATTRIB_TEXCOORD0, attrMask, 2, numVerts);
@@ -466,7 +475,7 @@ namespace dp
         DP_ASSERT(longitudeEnd < 2.0f * PI);
         DP_ASSERT(!(longitudeEnd < 0.0f));
 
-        SmartGeometryData meshOut = new GeometryData(GPT_TRIANGLES);
+        SmartGeometryData meshOut = GeometryData::create(GPT_TRIANGLES);
 
         bool bLongEndSplit = longitudeEnd > 0.0f;
         bool bTube = innerRadius > 0.0f;
@@ -700,7 +709,7 @@ namespace dp
         DP_ASSERT(latitudeBegin < PI);
         DP_ASSERT(latitudeBegin < latitudeEnd);
 
-        SmartGeometryData meshOut = new GeometryData(GPT_TRIANGLES);
+        SmartGeometryData meshOut = GeometryData::create(GPT_TRIANGLES);
 
         bool bLongEndSplit = longitudeEnd > 0.0f;
         bool bLatEndSplit = latitudeEnd < PI;

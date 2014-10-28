@@ -87,14 +87,14 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD reason, LPVOID lpReserved)
 #elif defined( LINUX )
 #endif
 
-bool getPlugInterface(const UPIID& piid, dp::util::SmartPtr<dp::util::PlugIn> & pi)
+bool getPlugInterface(const UPIID& piid, dp::util::SmartPlugIn & pi)
 {
   // check if UPIID is properly initialized 
   DP_ASSERT(PIID_NVSG_SCENE_SAVER==UPIID(".NVSG", PITID_SCENE_SAVER));
 
   if ( piid==PIID_NVSG_SCENE_SAVER )
   {
-    pi = dp::util::SmartPtr<dp::util::PlugIn>( new NVSGSaver() );
+    pi = NVSGSaver::create();
     return( !!pi );
   }
   return false;
@@ -877,6 +877,19 @@ void  fprintfTextureTarget( FILE *fh, const char * prefix, TextureTarget target,
   default:                      name = "TEXTURE_UNSPECIFIED"; break;
   }
   fprintf( fh, "%s%s%s", prefix, name.c_str(), postfix );
+}
+
+SmartNVSGSaver NVSGSaver::create()
+{
+  return( std::shared_ptr<NVSGSaver>( new NVSGSaver() ) );
+}
+
+NVSGSaver::NVSGSaver()
+{
+}
+
+NVSGSaver::~NVSGSaver()
+{
 }
 
 bool  NVSGSaver::save( SceneSharedPtr const& scene, dp::sg::ui::ViewStateSharedPtr const& viewState, string const& filename )

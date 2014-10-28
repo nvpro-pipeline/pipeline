@@ -43,13 +43,13 @@ namespace dp
       class ParameterRendererUniform : public ParameterRendererStream
       {
       public:
-        ParameterRendererUniform();
-        ParameterRendererUniform( ParameterCacheEntryStreams const& parameterCacheEntries );
+        RIX_GL_API ParameterRendererUniform();
+        RIX_GL_API ParameterRendererUniform( ParameterCacheEntryStreams const& parameterCacheEntries );
 
-        virtual void activate();
-        virtual void render( void const* cache );
-        virtual void update( void* cache, void const* container );
-        virtual size_t getCacheSize() const;
+        RIX_GL_API virtual void activate();
+        RIX_GL_API virtual void render( void const* cache );
+        RIX_GL_API virtual void update( void* cache, void const* container );
+        RIX_GL_API virtual size_t getCacheSize() const;
 
       private:
         size_t                     m_numParameterObjects;

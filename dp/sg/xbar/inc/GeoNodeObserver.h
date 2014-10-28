@@ -35,29 +35,23 @@ namespace dp
   {
     namespace xbar
     {
-
-      class GeoNodeObserver;
-      typedef dp::util::SmartPtr<GeoNodeObserver> SmartGeoNodeObserver;
+      SMART_TYPES( GeoNodeObserver );
 
       class GeoNodeObserver : public Observer<ObjectTreeIndex>
       {
       public:
-        GeoNodeObserver( const SceneTreeWeakPtr &sceneTree ) : Observer<ObjectTreeIndex>( sceneTree )
-        {
-        }
-
         virtual ~GeoNodeObserver();
 
         static SmartGeoNodeObserver create( const SceneTreeWeakPtr &sceneTree )
         {
-          return( new GeoNodeObserver( sceneTree ) );
+          return( std::shared_ptr<GeoNodeObserver>( new GeoNodeObserver( sceneTree ) ) );
         }
 
         void attach( dp::sg::core::GeoNodeWeakPtr geoNode, ObjectTreeIndex index )
         {
           DP_ASSERT( m_indexMap.find( index ) == m_indexMap.end() );
 
-          Observer<ObjectTreeIndex>::attach( geoNode, new Payload( index ) );
+          Observer<ObjectTreeIndex>::attach( geoNode, Payload::create( index ) );
         }
 
         virtual void onDetach( ObjectTreeIndex index )
@@ -73,6 +67,9 @@ namespace dp
         }
 
       protected:        
+        GeoNodeObserver( const SceneTreeWeakPtr &sceneTree ) : Observer<ObjectTreeIndex>( sceneTree )
+        {
+        }
         //TODO if the bounding volume has changed
         //TODO bounding volume does not get updated if any child of geonode changes
         virtual void onNotify( const dp::util::Event &event, dp::util::Payload *payload );

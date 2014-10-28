@@ -41,9 +41,7 @@ namespace dp
       {
         namespace gl
         {
-
-          class ResourceVertexAttributeSet;
-          typedef dp::util::SmartPtr<ResourceVertexAttributeSet> SmartResourceVertexAttributeSet;
+          SMART_TYPES( ResourceVertexAttributeSet );
           typedef ResourceVertexAttributeSet* WeakResourceVertexAttributeSet;
     
           class ResourceVertexAttributeSet : public ResourceManager::Resource

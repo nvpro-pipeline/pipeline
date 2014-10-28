@@ -42,13 +42,14 @@ namespace dp
       {
         namespace framework
         {
+          SMART_TYPES( RiXGLBackend );
+
           class RiXGLBackend : public core::test::framework::RiXBackend
           {
           public:
-            DPTRIXGL_API RiXGLBackend(const char* renderer, const char* options);
-
-          public:
+            DPTRIXGL_API static SmartRiXGLBackend create( char const* renderer, char const* options );
             DPTRIXGL_API virtual ~RiXGLBackend();
+
             DPTRIXGL_API virtual dp::ui::SmartRenderTarget createDisplay(int width, int height, bool visible);
             DPTRIXGL_API virtual dp::ui::SmartRenderTarget createAuxiliaryRenderTarget(int width, int height);
             DPTRIXGL_API virtual void finish();
@@ -60,13 +61,14 @@ namespace dp
             }
 
           protected:
+            DPTRIXGL_API RiXGLBackend(const char* renderer, const char* options);
+
+          protected:
             dp::gl::RenderContextFormat m_format;
             dp::gl::SharedRenderContext m_context;
 
             int m_windowId;
           };
-
-          typedef util::SmartPtr<RiXGLBackend> SmartRiXGLBackend;
         } // namespace framework
       } // namespace gl
     } // namespace RiX
@@ -84,7 +86,7 @@ extern "C"
                                ? "Bindless"
                                : (it+1)->c_str();
 
-    return new dp::rix::gl::test::framework::RiXGLBackend( rendererName, renderEngine );
+    return dp::rix::gl::test::framework::RiXGLBackend::create( rendererName, renderEngine ).getWeakPtr();
   }
 
   DPTRIXGL_API int getNumSupportedRenderers()

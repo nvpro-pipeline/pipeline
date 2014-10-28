@@ -39,11 +39,12 @@ namespace dp
   {
     namespace opengl
     {
+      HANDLE_TYPES( GroupImpl );
 
       class GroupImpl : public GroupBitSet
       {
       public:
-        GroupImpl();
+        static GroupImplHandle create();
         virtual ~GroupImpl();
 
         void update( size_t workGroupSize );
@@ -53,6 +54,7 @@ namespace dp
         dp::gl::SharedBuffer const & getOutputBuffer() { return m_outputBuffer; }
 
       protected:
+        GroupImpl();
         void updateMatrices( );
         void updateInputBuffer( size_t workGroupSize );
         void updateOutputBuffer( size_t workGroupSize );
@@ -63,8 +65,6 @@ namespace dp
         dp::gl::SharedBuffer  m_outputBuffer;
         GLsizei               m_outputBufferSize;
       };
-
-      typedef dp::util::SmartPtr<GroupImpl> GroupImplHandle;
 
     } // namespace opengl
   } // namespace culling

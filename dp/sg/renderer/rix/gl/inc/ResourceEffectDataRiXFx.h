@@ -43,8 +43,7 @@ namespace dp
       {
         namespace gl
         {
-          class ResourceEffectDataRiXFx;
-          typedef dp::util::SmartPtr<ResourceEffectDataRiXFx> SmartResourceEffectDataRiXFx;
+          SMART_TYPES( ResourceEffectDataRiXFx );
           typedef ResourceEffectDataRiXFx* WeakResourceEffectDataRiXFx;
 
 

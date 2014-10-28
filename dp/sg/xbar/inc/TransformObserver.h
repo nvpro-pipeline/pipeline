@@ -35,36 +35,41 @@ namespace dp
   {
     namespace xbar
     {
+      SMART_TYPES( TransformObserver );
 
       class TransformObserver : public Observer<TransformTreeIndex>
       {
       public:
+        SMART_TYPES( DirtyPayload );
+
         class DirtyPayload : public Payload
         {
         public:
+          static SmartDirtyPayload create( TransformTreeIndex index )
+          {
+            return( std::shared_ptr<DirtyPayload>( new DirtyPayload( index ) ) );
+          }
+
+        public:
+          bool m_dirty;
+
+        protected:
           DirtyPayload( TransformTreeIndex index )
             : Payload( index )
             , m_dirty( false )
           {
           }
-          bool m_dirty;
         };
-
-        typedef dp::util::SmartPtr<DirtyPayload> SmartDirtyPayload;
 
         typedef std::vector<DirtyPayload*> DirtyPayloads;
 
       public:
-        TransformObserver( SceneTreeWeakPtr sceneTree ) : Observer<TransformTreeIndex>( sceneTree )
-        {
-        }
-
         virtual ~TransformObserver();
 
       public:
         static SmartTransformObserver create( SceneTreeWeakPtr sceneTree )
         {
-          return( new TransformObserver(sceneTree) );
+          return( std::shared_ptr<TransformObserver>( new TransformObserver(sceneTree) ) );
         }
 
         void attach( dp::sg::core::TransformWeakPtr const & t, TransformTreeIndex index );
@@ -80,6 +85,10 @@ namespace dp
         }
 
       protected:
+        TransformObserver( SceneTreeWeakPtr sceneTree ) : Observer<TransformTreeIndex>( sceneTree )
+        {
+        }
+
         void onNotify( const dp::util::Event &event, dp::util::Payload *payload );
         virtual void onDetach( TransformTreeIndex index );
 

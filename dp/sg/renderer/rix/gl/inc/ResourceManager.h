@@ -28,8 +28,6 @@
 
 #include <dp/sg/xbar/xbar.h>
 #include <dp/sg/core/CoreTypes.h>
-#include <dp/util/RCObject.h>
-#include <dp/util/SmartPtr.h>
 #include <dp/sg/core/HandledObject.h>
 #include <dp/sg/renderer/rix/gl/inc/BufferAllocator.h>
 #include <dp/util/Observer.h>
@@ -47,33 +45,37 @@ namespace dp
       {
         namespace gl
         {
+          SMART_TYPES( ResourceManager );
 
-          class ResourceManager;
-          typedef dp::util::SmartPtr<ResourceManager> SmartResourceManager;
-
-          class ResourceManager : public dp::util::RCObject
+          class ResourceManager : public std::enable_shared_from_this<ResourceManager>
           {
           public:
             class Resource;
 
-            class Payload : public dp::util::Payload, public dp::util::RCObject
+            SMART_TYPES( Payload );
+
+            class Payload : public dp::util::Payload
             {
             public:
-              Payload( Resource *resource );
+              static SmartPayload create( Resource * resource );
 
+            public:
               bool                     m_isDirty;
               Resource*                m_resource;
               dp::rix::core::Renderer* m_renderer;
+
+            protected:
+              Payload( Resource *resource );
             };
 
-            typedef dp::util::SmartPtr<Payload> SmartPayload;
+            SMART_TYPES( Resource );
 
             /** Baseclass for all resources managed by the ResourceManager **/
-            class Resource : public dp::util::RCObject
+            class Resource : public std::enable_shared_from_this<Resource>
             {
             public:
-              Resource( );
-              Resource( size_t key, const SmartResourceManager &manager );
+              static SmartResource create();
+              static SmartResource create( size_t key, SmartResourceManager const& manager );
               virtual ~Resource();
 
               virtual void update(); // update resource
@@ -85,8 +87,13 @@ namespace dp
 
               void setPayload( const SmartPayload &payload );
               const SmartPayload &getPayload() const;
-        
+
               virtual const dp::sg::core::HandledObjectSharedPtr& getHandledObject() const;
+
+            protected:
+              Resource( );
+              Resource( size_t key, const SmartResourceManager &manager );
+
             protected:
               friend class ResourceManager;
 
@@ -95,17 +102,17 @@ namespace dp
               size_t                       m_key; // TODO remove key and move unregister to derived classes?
             };
 
-            typedef dp::util::SmartPtr<Resource> SmartResource;
             typedef Resource*                  WeakResource;
 
             /********************/
             /* ResourceObserver */
             /********************/
-            class ResourceObserver : public dp::util::Observer, public dp::util::RCObject
+            SMART_TYPES( ResourceObserver );
+
+            class ResourceObserver : public dp::util::Observer
             {
             public:
-              ResourceObserver();
-
+              static SmartResourceObserver create();
               void subscribe( Resource* resource );
               void unsubscribe( Resource* resource );
 
@@ -113,23 +120,27 @@ namespace dp
               virtual void onDestroyed( const dp::util::Subject& /*subject*/, dp::util::Payload* /*payload*/ ) { }; // TODO make abstract once texture change had been submitted
 
               void updateResources();
+
+            protected:
+              ResourceObserver();
+
             protected:
               std::set<Resource *>      m_subscribedResources;
               mutable std::vector<ResourceManager::SmartPayload> m_dirtyPayloads;
+
             private:
               virtual ResourceObserver* clone() const;
             };
 
-            typedef dp::util::SmartPtr<ResourceObserver> SmartResourceObserver;
             typedef ResourceObserver*                    WeakResourceObserver;
 
             /*******************/
             /* ResourceManager */
             /*******************/
-            ResourceManager( dp::rix::core::Renderer* renderer, dp::fx::Manager shaderManagerType );
+            static SmartResourceManager create( dp::rix::core::Renderer* renderer, dp::fx::Manager shaderManagerType );
             ~ResourceManager();
 
-            template <typename ResourceType> ResourceType* getResource( size_t key );
+            template <typename ResourceType> dp::util::SharedPtr<ResourceType> getResource( size_t key );
             void registerResource( size_t key, const WeakResource &m_resource );
             void unregisterResource( size_t key );
 
@@ -143,6 +154,9 @@ namespace dp
 
             dp::fx::Manager getShaderManagerType() const { return m_shaderManagerType; }
 
+          protected:
+            ResourceManager( dp::rix::core::Renderer* renderer, dp::fx::Manager shaderManagerType );
+
           private:
             typedef std::map<size_t, Resource*> ResourceMap;
 
@@ -155,11 +169,11 @@ namespace dp
 
           // TODO move actual code to cpp and write template wrapper for cast? What about ABI compatibility
           template <typename ResourceType>
-          ResourceType* ResourceManager::getResource( size_t key )
+          dp::util::SharedPtr<ResourceType> ResourceManager::getResource( size_t key )
           {
             ResourceMap::iterator it = m_resources.find( key );
             DP_ASSERT( it == m_resources.end() || (it != m_resources.end() && dynamic_cast<ResourceType*>( it->second )));
-            return it != m_resources.end() ? static_cast<ResourceType*>(it->second) : nullptr;
+            return it != m_resources.end() ? dp::util::SharedPtr<ResourceType>( *reinterpret_cast<std::shared_ptr<ResourceType>*>(&it->second->shared_from_this()) ) : dp::util::SharedPtr<ResourceType>::null;
           }
 
         } // namespace gl

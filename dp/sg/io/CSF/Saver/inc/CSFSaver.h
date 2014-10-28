@@ -56,19 +56,20 @@ CSFSAVER.
   * If the PlugIn ID \a piid equals \c PIID_NVSG_SCENE_SAVER, a CSFSAVER is created and returned in \a pi.
   * \returns  true, if the requested PlugIn could be created, otherwise false
   */
-CSFSAVER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPtr<dp::util::PlugIn> & pi);
+CSFSAVER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPlugIn & pi);
 
 //! Query the supported types of PlugIn Interfaces.
 CSFSAVER_API void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids );
 }
 
+SMART_TYPES( CSFSaver );
+
 //! A Scene Saver for csf files.
 class CSFSaver : public dp::sg::io::SceneSaver
 {
   public :
-    //! Realization of the pure virtual interface function of a PlugIn.
-    /** \note Never call \c delete on a PlugIn, always use the member function. */
-    void  deleteThis( void ); //!< PlugIn interface
+    static SmartCSFSaver create();
+    virtual ~CSFSaver();
 
     //! Realization of the pure virtual interface function of a SceneSaver.
     /** Saves the \a scene and the \a viewState to \a filename. 
@@ -77,9 +78,7 @@ class CSFSaver : public dp::sg::io::SceneSaver
               , dp::sg::ui::ViewStateSharedPtr const& viewState  //!<  view state to save
               , std::string                    const& filename   //!<  file name to save to
               );
-};
 
-inline void CSFSaver::deleteThis( void )
-{
-  delete this;
-}
+  protected :
+    CSFSaver();
+};

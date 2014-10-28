@@ -28,7 +28,6 @@
 
 #include <dp/sg/xbar/culling/Config.h>
 #include <dp/culling/Manager.h>
-#include <dp/util/SmartPtr.h>
 #include <dp/sg/xbar/SceneTree.h>
 
 namespace dp
@@ -39,25 +38,23 @@ namespace dp
     {
       namespace culling
       {
+        SHARED_PTR_TYPES( Culling );
+        HANDLE_TYPES( Result );
 
-        class Culling;
-        typedef dp::util::SmartPtr<Culling> CullingSharedPtr;
-
-        class Result;
-        typedef dp::util::SmartPtr<Result> ResultHandle;
-
-
-        class Result : public dp::util::RCObject
+        class Result
         {
         public:
           DP_SG_XBAR_CULLING_API virtual ~Result();
+
+        protected:
+          DP_SG_XBAR_CULLING_API Result();
         };
 
         /** \brief This class provides culling on all GeoNodes in a SceneTree. It supports multiple viewports at the same time through the ResultHandle.
                    After calling cull the function resultGetChangedIndices returns a list of ObjectTree indices with changed visibility. It is possible
                    to support multiple viewports by creating multiple results.
         **/
-        class Culling : public dp::util::RCObject
+        class Culling
         {
         public:
           DP_SG_XBAR_CULLING_API virtual ~Culling();

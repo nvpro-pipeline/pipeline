@@ -108,6 +108,10 @@ static const char* copyShader =
   "}\n"
   ;
 
+SmartTextureTransfer TextureTransfer::create( dp::gl::SharedRenderContext const& dstContext, dp::gl::SharedRenderContext const& srcContext )
+{
+  return( std::shared_ptr<TextureTransfer>( new TextureTransfer( dstContext, srcContext ) ) );
+}
 
 TextureTransfer::TextureTransfer( dp::gl::SharedRenderContext const& dstContext, dp::gl::SharedRenderContext const& srcContext )
   : m_dstContext( dstContext )

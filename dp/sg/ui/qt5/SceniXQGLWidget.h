@@ -29,7 +29,6 @@
 #include <QWidget>
 #include <QExposeEvent>
 #include <dp/gl/Types.h>
-#include <dp/util/SmartPtr.h>
 
 #include <dp/sg/ui/qt5/Config.h>
 #include <dp/sg/ui/SceneRenderer.h>

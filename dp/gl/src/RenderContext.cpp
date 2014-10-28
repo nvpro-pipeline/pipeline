@@ -61,6 +61,11 @@ namespace dp
     }
 
   #if defined(DP_OS_WINDOWS)
+    RenderContext::SharedNativeContext RenderContext::NativeContext::create( HWND hwnd, bool destroyHWND, HDC hdc, bool destroyHDC, HGLRC hglrc, bool destroyHGLRC )
+    {
+      return( std::shared_ptr<NativeContext>( new NativeContext( hwnd, destroyHWND, hdc, destroyHDC, hglrc, destroyHGLRC ) ) );
+    }
+
     RenderContext::NativeContext::NativeContext( HWND hwnd, bool destroyHWND, HDC hdc, bool destroyHDC, HGLRC hglrc, bool destroyHGLRC )
       : m_hwnd( hwnd )
       , m_hdc( hdc )
@@ -86,6 +91,11 @@ namespace dp
 
     }
   #elif defined(DP_OS_LINUX)
+    RenderContext::SharedNativeContext RenderContext::NativeContext::create( GLXContext context, bool destroyContext, GLXDrawable drawable, bool destroyDrawable, GLXPbuffer pbuffer, bool destroypbuffer, Display *display, bool destroyDisplay )
+    {
+      return( std::shared_ptr<NativeContext>(new NativeContext( context, destroyContext, drawable, destroyDrawable, pbuffer, destroypbuffer, display, destroyDisplay ) ) );
+    }
+
     RenderContext::NativeContext::NativeContext( GLXContext context, bool destroyContext, GLXDrawable drawable, bool destroyDrawable, GLXPbuffer pbuffer, bool destroypbuffer, Display *display, bool destroyDisplay )
       : m_context(context)
       , m_destroyContext( destroyContext )
@@ -506,7 +516,7 @@ namespace dp
       HGLRC hglrc = createContext( hdc, shareContext->m_hglrc );
       DP_ASSERT( hglrc );
 
-      return ShareGroup::create( SharedNativeContext( new RenderContext::NativeContext( hwnd, true, hdc, true, hglrc, true ) ) );
+      return ShareGroup::create( RenderContext::NativeContext::create( hwnd, true, hdc, true, hglrc, true ) );
   #elif defined(DP_OS_LINUX)
       Display *display = XOpenDisplay( DisplayString(shareContext->m_display) );
       DP_ASSERT( display );
@@ -521,7 +531,7 @@ namespace dp
       GLXContext newContext = createContext( display, config, shareContext->m_context );
       DP_ASSERT( newContext );
 
-      return ShareGroup::create( new RenderContext::NativeContext( newContext, true, drawable, false, pbuffer, true, display, true ));
+      return ShareGroup::create( RenderContext::NativeContext::create( newContext, true, drawable, false, pbuffer, true, display, true ));
   #endif
     }
 
@@ -536,7 +546,7 @@ namespace dp
 
       glewInit();
 
-      SharedNativeContext nativeContext =  SharedNativeContext( new RenderContext::NativeContext( 0, false, hdc, false, hglrc, false) );
+      SharedNativeContext nativeContext =  RenderContext::NativeContext::create( 0, false, hdc, false, hglrc, false);
 
       if ( creation.getContext() )
       {
@@ -555,7 +565,7 @@ namespace dp
 
       Display* display = glXGetCurrentDisplay();
 
-      SharedNativeContext nativeContext = new RenderContext::NativeContext( context, false, drawable, false, 0, false, display, false );
+      SharedNativeContext nativeContext = RenderContext::NativeContext::create( context, false, drawable, false, 0, false, display, false );
   #endif
 
       SharedShareGroup shareGroup;
@@ -581,7 +591,7 @@ namespace dp
       HGLRC hglrc = createContext( hdc, creation.isShared() ? creation.getContext()->m_context->m_hglrc : NULL );
       DP_ASSERT( hglrc );
 
-      SharedNativeContext nativeContext = SharedNativeContext( new RenderContext::NativeContext( 0, false, hdc, true, hglrc, true ) );
+      SharedNativeContext nativeContext = RenderContext::NativeContext::create( 0, false, hdc, true, hglrc, true );
   #elif defined(DP_OS_LINUX)
       Display *display = XOpenDisplay( DisplayString(creation.getContext()->getDisplay()) );
       DP_ASSERT( display );
@@ -592,7 +602,7 @@ namespace dp
       GLXContext newContext = createContext( display, config, creation.isShared() ? creation.getContext()->getContext() : 0 );
       DP_ASSERT( newContext );
 
-      SharedNativeContext nativeContext = new NativeContext( newContext, true, drawable, false, 0, false, display, true );
+      SharedNativeContext nativeContext = NativeContext::create( newContext, true, drawable, false, 0, false, display, true );
   #endif
       SharedShareGroup shareGroup = creation.isShared() ? creation.getContext()->getShareGroup() : createShareGroup( nativeContext );
       return( std::shared_ptr<RenderContext>( new RenderContext( nativeContext, shareGroup ) ) );
@@ -632,7 +642,7 @@ namespace dp
       HGLRC hglrc = createContext( hdc, creation.getContext() ? creation.getContext()->m_context->m_hglrc : 0 );
       DP_ASSERT( hglrc );
 
-      SharedNativeContext nativeContext( new NativeContext( hwnd, true, hdc, true, hglrc, true ) );
+      SharedNativeContext nativeContext = NativeContext::create( hwnd, true, hdc, true, hglrc, true );
 
       if (creation.getContext())
       {
@@ -667,7 +677,7 @@ namespace dp
       GLXContext context = createContext( display, config, creation.getContext() ? creation.getContext()->m_context->m_context : 0 );
       DP_ASSERT( context );
 
-      SharedNativeContext nativeContext = new NativeContext( context, true, drawable, false, pbuffer, true, display, true );
+      SharedNativeContext nativeContext = NativeContext::create( context, true, drawable, false, pbuffer, true, display, true );
   #endif
       SharedShareGroup shareGroup = creation.getContext() ? creation.getContext()->getShareGroup() : createShareGroup( nativeContext );
       return( std::shared_ptr<RenderContext>( new RenderContext( nativeContext, shareGroup, *creation.getFormat() ) ) );
@@ -696,7 +706,7 @@ namespace dp
       HGLRC hglrc = createContext( hdc, creation.getContext() ? creation.getContext()->m_context->m_hglrc : 0 );
       DP_ASSERT( hglrc );
 
-      SharedNativeContext nativeContext( new NativeContext( hwnd, true, hdc, true, hglrc, true ) );
+      SharedNativeContext nativeContext = NativeContext::create( hwnd, true, hdc, true, hglrc, true );
 
       if (creation.getContext())
       {
@@ -733,7 +743,7 @@ namespace dp
       GLXContext context = createContext( display, config, creation.getContext() ? creation.getContext()->m_context->m_context : 0 );
       DP_ASSERT( context );
 
-      SharedNativeContext nativeContext = new NativeContext( context, true, drawable, false, pbuffer, true, display, true );
+      SharedNativeContext nativeContext = NativeContext::create( context, true, drawable, false, pbuffer, true, display, true );
       */
       SharedNativeContext nativeContext;
   #endif
@@ -748,7 +758,7 @@ namespace dp
       HGLRC hglrc = createContext( creation.getHDC(), creation.getContext() ? creation.getContext()->m_context->m_hglrc : 0 );
       DP_ASSERT( hglrc );
 
-      SharedNativeContext nativeContext( new NativeContext( 0, false, creation.getHDC(), false, hglrc, true ) );
+      SharedNativeContext nativeContext = NativeContext::create( 0, false, creation.getHDC(), false, hglrc, true );
 
       SharedShareGroup shareGroup;
       if (creation.getContext())
@@ -785,7 +795,7 @@ namespace dp
       HGLRC hglrc = createContext( hdc, creation.getContext() ? creation.getContext()->m_context->m_hglrc : 0 );
       DP_ASSERT( hglrc );
 
-      SharedNativeContext nativeContext( new NativeContext( creation.getHWND(), false, hdc, false, hglrc, true ) );
+      SharedNativeContext nativeContext = NativeContext::create( creation.getHWND(), false, hdc, false, hglrc, true );
 
       SharedShareGroup shareGroup;
       if (creation.getContext())
@@ -849,7 +859,7 @@ namespace dp
       GLXContext context = createContext( display, glxFBConfigs[0], creation.shared ? creation.shared->m_context->m_context : 0 );
       DP_ASSERT( context );
 
-      SharedNativeContext nativeContext = new NativeContext( context, true, drawable, false, 0, false, display, true );
+      SharedNativeContext nativeContext = NativeContext::create( context, true, drawable, false, 0, false, display, true );
       nativeContext->makeCurrent();
       glewInit();
 
@@ -1080,7 +1090,7 @@ namespace dp
           m_taskDoWork.wait( lock );
         }
 
-        if ( m_task.get() )
+        if ( m_task )
         {
           m_context->makeCurrent();
           m_task->execute();
@@ -1123,13 +1133,13 @@ namespace dp
       delete m_impl;
     }
 
-    SharedShareGroupResource ShareGroup::registerResource( size_t key, unsigned int type, const SharedObject &resource )
+    SharedShareGroupResourceHolder ShareGroup::registerResource( size_t key, unsigned int type, const SharedObject &resource )
     {
       if ( m_resources.find( Key(key, type ) ) == m_resources.end() )
       {
         ShareGroupResourceHolder *resourceHolder = new ShareGroupResourceHolder( shared_from_this(), Key(key, type), resource );
         m_resources[ Key(key, type) ] = std::pair<int, ShareGroupResourceHolder *>(1, resourceHolder);
-        return( SharedShareGroupResource( new ShareGroupResourceHolder(*resourceHolder) ) );
+        return( SharedShareGroupResourceHolder( new ShareGroupResourceHolder(*resourceHolder) ) );
       }
       else
       {
@@ -1138,13 +1148,13 @@ namespace dp
       }
     }
 
-    SharedShareGroupResource ShareGroup::getResource( size_t key, unsigned int type )
+    SharedShareGroupResourceHolder ShareGroup::getResource( size_t key, unsigned int type )
     {
       ResourceMap::iterator it = m_resources.find( Key(key, type ) );
       if (it != m_resources.end() )
       {
         ++it->second.first;
-        return( SharedShareGroupResource( new ShareGroupResourceHolder( *(it->second.second) ) ) ); // create a new sharedptr here to ensure unregister gets called
+        return( SharedShareGroupResourceHolder( new ShareGroupResourceHolder( *(it->second.second) ) ) ); // create a new sharedptr here to ensure unregister gets called
       }
       return 0;
     }

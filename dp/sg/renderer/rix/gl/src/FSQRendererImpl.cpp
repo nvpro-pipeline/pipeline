@@ -118,13 +118,13 @@ namespace dp
             m_renderer = (*createRenderer)( "VBO" );
             DP_ASSERT( m_renderer );
 
-            m_resourceManager = new ResourceManager( m_renderer, dp::fx::MANAGER_UNIFORM );
+            m_resourceManager = ResourceManager::create( m_renderer, dp::fx::MANAGER_UNIFORM );
             DP_ASSERT( m_resourceManager );
           }
 
-          dp::util::SmartPtr<FSQRenderer> RendererFSQImpl::create( const dp::gl::SharedRenderTarget &renderTarget )
+          SmartFSQRenderer RendererFSQImpl::create( const dp::gl::SharedRenderTarget &renderTarget )
           {
-            return new RendererFSQImpl( renderTarget );
+            return( std::shared_ptr<RendererFSQImpl>( new RendererFSQImpl( renderTarget ) ) );;
           }
 
           RendererFSQImpl::~RendererFSQImpl(void)

@@ -27,8 +27,8 @@
 #pragma once
 
 #include <dp/util/Config.h>
-#include <dp/util/SmartPtr.h>
-
+#include <dp/util/SharedPtr.h>
+#include <dp/util/Types.h>
 #include <boost/shared_array.hpp>
 #include <string>
 
@@ -36,11 +36,14 @@ namespace dp
 {
   namespace util
   {
-    class Image : public RCObject // a 2D bitmap.
+    SMART_TYPES( Image );
+
+    class Image       // a 2D bitmap.
     {
     public:
-      static DP_UTIL_API SmartPtr<Image> create();
-      static DP_UTIL_API SmartPtr<Image> create( size_t width, size_t height, PixelFormat pixelFormat, DataType dataType, void const* const* data = nullptr, size_t numLayers = 1, size_t mipmapLevels = 0 );
+      static DP_UTIL_API SmartImage create();
+      static DP_UTIL_API SmartImage create( size_t width, size_t height, PixelFormat pixelFormat, DataType dataType, void const* const* data = nullptr, size_t numLayers = 1, size_t mipmapLevels = 0 );
+      virtual DP_UTIL_API ~Image();
 
     public:
       DP_UTIL_API bool operator==( const Image& rhs );
@@ -66,7 +69,6 @@ namespace dp
     private:
       //Default constructor
       DP_UTIL_API Image();
-      virtual DP_UTIL_API ~Image();
 
       //Constructor to allocate a mipmapped 2D image and/or a cubemap and possibly set payload data
       DP_UTIL_API Image( size_t width, size_t height, PixelFormat pixelFormat, DataType dataType, void const* const* data, size_t numLayers, size_t mipmapLevels );
@@ -88,8 +90,6 @@ namespace dp
       size_t m_totalSize;
 
     };
-
-    typedef SmartPtr<Image> SmartImage;
 
     DP_UTIL_API bool       imageToFile(const SmartImage& image, std::string filename, bool layersAsFaces = true);
     DP_UTIL_API SmartImage imageFromFile(const std::string& filename, bool layersAsFaces = true);

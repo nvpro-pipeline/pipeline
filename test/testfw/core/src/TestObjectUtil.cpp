@@ -61,7 +61,7 @@ namespace dp
           else
           {
             std::cerr << "Error: " << filePath << " could not be found or is not a regular file\n";
-            return dp::util::SmartPtr<dp::util::DynamicLibrary>::null;
+            return dp::util::SmartDynamicLibrary::null;
           }
         }
 

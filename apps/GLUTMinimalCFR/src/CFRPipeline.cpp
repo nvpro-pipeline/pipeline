@@ -43,9 +43,9 @@ using std::vector;
 
 #define CFRPIPELINE_PRIMARY_GPU_IMPROVEMENT 0
 
-dp::util::SmartPtr<CFRPipeline::MonoViewStateProvider> CFRPipeline::MonoViewStateProvider::create()
+CFRPipeline::SmartMonoViewStateProvider CFRPipeline::MonoViewStateProvider::create()
 {
-  return new CFRPipeline::MonoViewStateProvider();
+  return( std::shared_ptr<MonoViewStateProvider>( new CFRPipeline::MonoViewStateProvider() ) );
 }
 
 // This does nothing except for providing the setSceneRenderer() override which 
@@ -77,7 +77,7 @@ SmartCFRPipeline CFRPipeline::create( const char *renderEngine,
                                       dp::culling::Mode cullingMode,
                                       const dp::gl::SharedRenderTarget &renderTarget)
 {
-  return new CFRPipeline( renderEngine, shaderManagerType, cullingMode, renderTarget );
+  return( std::shared_ptr<CFRPipeline>( new CFRPipeline( renderEngine, shaderManagerType, cullingMode, renderTarget ) ) );
 }
 
 void CFRPipeline::setTileSize( size_t width, size_t height )
@@ -167,7 +167,7 @@ bool CFRPipeline::init( const dp::gl::SharedRenderContext &renderContext,
 
       rt->endRendering();
 
-      SmartTextureTransfer tt = new TextureTransfer( renderContext, context );
+      SmartTextureTransfer tt = TextureTransfer::create( renderContext, context );
       tt->setTileSize( m_tileWidth, m_tileHeight );
       tt->setMaxIndex( m_rendererCount );
       gpuData.m_textureTransfer = tt;

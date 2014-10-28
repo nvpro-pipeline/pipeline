@@ -71,6 +71,11 @@ using std::string;
 using std::vector;
 using std::map;
 
+SmartThreeDSLoader ThreeDSLoader::create()
+{
+  return( std::shared_ptr<ThreeDSLoader>( new ThreeDSLoader() ) );
+}
+
 ThreeDSLoader::ThreeDSLoader()
   : m_wirePresent(false)
   , m_numMaterials(0)
@@ -80,13 +85,6 @@ ThreeDSLoader::ThreeDSLoader()
 
 ThreeDSLoader::~ThreeDSLoader()
 {
-}
-
-void
-ThreeDSLoader::deleteThis( void )
-{
-  // was instantiated using 'new'. hence kill it with 'delete'
-  delete this;
 }
 
 SceneSharedPtr ThreeDSLoader::load( std::string const& filename

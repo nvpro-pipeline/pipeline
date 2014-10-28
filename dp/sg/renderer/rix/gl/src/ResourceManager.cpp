@@ -46,6 +46,16 @@ namespace dp
           /*******************************/
           /** ResourceManager::Resource **/
           /*******************************/
+          ResourceManager::SmartResource ResourceManager::Resource::create()
+          {
+            return( std::shared_ptr<ResourceManager::Resource>( new ResourceManager::Resource() ) );
+          }
+
+          ResourceManager::SmartResource ResourceManager::Resource::create( size_t key, SmartResourceManager const& resourceManager )
+          {
+            return( std::shared_ptr<ResourceManager::Resource>( new ResourceManager::Resource( key, resourceManager ) ) );
+          }
+
           ResourceManager::Resource::Resource( )
             : m_resourceManager( nullptr )
           {
@@ -100,6 +110,11 @@ namespace dp
           /*******************************/
           /** ResourceManager::Payload  **/
           /*******************************/
+          ResourceManager::SmartPayload ResourceManager::Payload::create( ResourceManager::Resource * resource )
+          {
+            return( std::shared_ptr<ResourceManager::Payload>( new ResourceManager::Payload( resource ) ) );
+          }
+
           ResourceManager::Payload::Payload( ResourceManager::Resource *resource )
             : m_resource( resource )
             , m_isDirty( false )
@@ -109,6 +124,11 @@ namespace dp
           /***************************************/
           /** ResourceManager::ResourceObserver **/
           /***************************************/
+          ResourceManager::SmartResourceObserver ResourceManager::ResourceObserver::create()
+          {
+            return( std::shared_ptr<ResourceManager::ResourceObserver>( new ResourceManager::ResourceObserver() ) );
+          }
+
           ResourceManager::ResourceObserver::ResourceObserver()
           {
           }
@@ -119,11 +139,11 @@ namespace dp
             DP_ASSERT( resource );
             DP_ASSERT( resource->getHandledObject() );
 
-            ResourceManager::SmartPayload payload = new ResourceManager::Payload( resource );
+            ResourceManager::SmartPayload payload = ResourceManager::Payload::create( resource );
             resource->setPayload( payload );
 
             dp::util::Subject* subject = dynamic_cast<dp::util::Subject*>(resource->getHandledObject().operator->());
-            subject->attach( static_cast<dp::util::Observer*>(this), payload.get() );
+            subject->attach( static_cast<dp::util::Observer*>(this), payload.getWeakPtr() );
           }
 
           void ResourceManager::ResourceObserver::unsubscribe( Resource *resource )
@@ -134,7 +154,7 @@ namespace dp
             if ( resource->getHandledObject() )
             {
               dp::util::Subject* subject = dynamic_cast<dp::util::Subject*>(resource->getHandledObject().operator->());
-              subject->detach( static_cast<dp::util::Observer*>(this), resource->getPayload().get() );
+              subject->detach( static_cast<dp::util::Observer*>(this), resource->getPayload().getWeakPtr() );
             }
           }
 
@@ -146,7 +166,7 @@ namespace dp
               if ( !p->m_resource->update( event ) )
               {
                 p->m_isDirty = true;
-                m_dirtyPayloads.push_back( p );
+                m_dirtyPayloads.push_back( std::static_pointer_cast<ResourceManager::Payload>(p->shared_from_this()) );
               }
             }
           }
@@ -172,8 +192,13 @@ namespace dp
           /*********************/
           /** ResourceManager **/
           /*********************/
+          SmartResourceManager ResourceManager::create( dp::rix::core::Renderer* renderer, dp::fx::Manager shaderManagerType )
+          {
+            return( std::shared_ptr<ResourceManager>( new ResourceManager( renderer, shaderManagerType ) ) );
+          }
+
           ResourceManager::ResourceManager( dp::rix::core::Renderer *renderer, dp::fx::Manager shaderManagerType )
-            : m_resourceObserver( new ResourceObserver() )
+            : m_resourceObserver( ResourceObserver::create() )
             , m_renderer ( renderer )
             , m_shaderManagerType( shaderManagerType )
             , m_bufferAllocator( renderer )
@@ -186,7 +211,7 @@ namespace dp
 
           void ResourceManager::registerResource( size_t key, const WeakResource &resource )
           {
-            resource->m_resourceManager = this;
+            resource->m_resourceManager = shared_from_this();
             m_resources[key] = resource;
           }
 
@@ -195,10 +220,10 @@ namespace dp
             ResourceMap::iterator it = m_resources.find( key );
             if ( it != m_resources.end() )
             {
-              DP_ASSERT( isShared() && "There's no reference to the ResourceManager left!" );
+              DP_ASSERT( !shared_from_this().unique() && "There's no reference to the ResourceManager left!" );
               Resource* res = it->second;
               m_resources.erase( it );
-              res->m_resourceManager = nullptr;
+              res->m_resourceManager = SmartResourceManager::null;
             }
           }
 

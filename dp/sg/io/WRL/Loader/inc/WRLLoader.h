@@ -57,7 +57,7 @@ extern "C"
   * If the PlugIn ID \a piid equals \c PIID_WRL_SCENE_LOADER, a WRLLoader is created and returned in \a pi.
   * \returns  true, if the requested PlugIn could be created, otherwise false
   */
-WRLLOADER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPtr<dp::util::PlugIn> & pi);
+WRLLOADER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPlugIn & pi);
 
 //! Query the supported types of PlugIn Interfaces.
 WRLLOADER_API void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids );
@@ -242,11 +242,12 @@ WRLLOADER_API void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids
  *  Additionally, as described in detail above, only a very limited number of events, and no sensors
  *  are supported. No PROTO or EXTERNPROTO is supported.
  *  \sa SceneLoader */
+ SMART_TYPES( WRLLoader );
+
 class WRLLoader : public dp::sg::io::SceneLoader
 {
   public :
-    //  Default constructor/destructor.
-    WRLLoader();
+    static SmartWRLLoader create();
     ~WRLLoader();
 
   public :
@@ -266,10 +267,6 @@ class WRLLoader : public dp::sg::io::SceneLoader
      *  \sa getStepsPerUnit */
     void setStepsPerUnit( unsigned int stepsPerUnit );
 
-    //! Realization of the pure virtual interface function of a PlugIn.
-    /** \note Never call \c delete on a PlugIn, always use the member function. */
-    void deleteThis( void );
-
     //! Realization of the pure virtual interface function of a SceneLoader.
     /** Loads a VRML file given by \a filename. It looks for this file and 
       * possibly referenced other files like textures or effects at the given 
@@ -282,233 +279,187 @@ class WRLLoader : public dp::sg::io::SceneLoader
                                                                                          ViewState stored with the scene. */
                                      );
 
-  private :
-    void                                              createBox( dp::util::SmartPtr<vrml::IndexedFaceSet>& pIndexedFaceSet
-                                                               , const vrml::SFVec3f& size, bool textured );
-    void                                              createCone( dp::util::SmartPtr<vrml::IndexedFaceSet>& pIndexedFaceSet, float radius, float height
-                                                                , bool bottom, bool side, bool textured );
-    void                                              createCylinder( dp::util::SmartPtr<vrml::IndexedFaceSet> & indexedFaceSet, float radius, float height
-                                                                    , bool bottom, bool side, bool top, bool textured );
-    void                                              createSphere( dp::util::SmartPtr<vrml::IndexedFaceSet> & indexedFaceSet
-                                                                  , float radius, bool textured );
-    void                                              determineTexGen( const dp::util::SmartPtr<vrml::IndexedFaceSet> & pIndexedFaceSet
-                                                                     , const dp::sg::core::ParameterGroupDataSharedPtr & parameterGroupData );
-    template<typename VType>
-      void                                            eraseIndex( unsigned int f, unsigned int i, unsigned int count
-                                                                , bool perVertex, vrml::MFInt32 &index, VType &vec );
-    vrml::SFNode                                      findNode( const vrml::SFNode currentNode, std::string name );
-    std::vector<unsigned int>                         getCombinedKeys( const dp::util::SmartPtr<vrml::PositionInterpolator> & center
-                                                                     , const dp::util::SmartPtr<vrml::OrientationInterpolator> & rotation
-                                                                     , const dp::util::SmartPtr<vrml::PositionInterpolator> & scale
-                                                                     , const dp::util::SmartPtr<vrml::PositionInterpolator> & translation );
-    bool                                              getNextLine( void );
-    std::string                                     & getNextToken( void );
-    vrml::SFNode                                      getNode( const std::string &nodeName, std::string &token );
-    void                                              ignoreBlock( const std::string &open, const std::string &close
-                                                                 , std::string &token );
-    dp::sg::core::SceneSharedPtr                      import( const std::string &filename );
-    dp::sg::core::EffectDataSharedPtr                 interpretAppearance( const dp::util::SmartPtr<vrml::Appearance> & pAppearance );
-    void                                              interpretChildren( vrml::MFNode &children, dp::sg::core::GroupSharedPtr const& pNVSGGroup );
-    void                                              interpretBackground( const dp::util::SmartPtr<vrml::Background> & pBackground );
-    dp::sg::core::BillboardSharedPtr                  interpretBillboard( const dp::util::SmartPtr<vrml::Billboard> & pVRMLBillboard );
-    void                                              interpretBox( const dp::util::SmartPtr<vrml::Box> & pBox
-                                                                  , std::vector<dp::sg::core::PrimitiveSharedPtr> &primitives
-                                                                  , bool textured = false );
-    void                                              interpretColor( const dp::util::SmartPtr<vrml::Color> & pColor );
-    void                                              interpretColorInterpolator( const dp::util::SmartPtr<vrml::ColorInterpolator> & pColorInterpolator
-                                                                                , unsigned int colorCount );
-    void                                              interpretCone( const dp::util::SmartPtr<vrml::Cone> & pCone
-                                                                   , std::vector<dp::sg::core::PrimitiveSharedPtr> &primitives
-                                                                   , bool textured = false );
-    void                                              interpretCoordinate( const dp::util::SmartPtr<vrml::Coordinate> & pCoordinate );
-    void                                              interpretCoordinateInterpolator( const dp::util::SmartPtr<vrml::CoordinateInterpolator> & pCoordinateInterpolator
-                                                                                     , unsigned int pointCount );
-    void                                              interpretCylinder( const dp::util::SmartPtr<vrml::Cylinder> & pCylinder
-                                                                       , std::vector<dp::sg::core::PrimitiveSharedPtr> &primitives
-                                                                       , bool textured = false );
-    dp::sg::core::LightSourceSharedPtr                interpretDirectionalLight( const dp::util::SmartPtr<vrml::DirectionalLight> & pDirectionalLight );
-    void                                              interpretElevationGrid( const dp::util::SmartPtr<vrml::ElevationGrid> & pElevationGrid
-                                                                            , std::vector<dp::sg::core::PrimitiveSharedPtr> &primitives );
-    void                                              interpretGeometry( const dp::util::SmartPtr<vrml::Geometry> & pGeometry
-                                                                       , std::vector<dp::sg::core::PrimitiveSharedPtr> &primitives
-                                                                       , bool textured = false );
-    dp::sg::core::GroupSharedPtr                      interpretGroup( const dp::util::SmartPtr<vrml::Group> & pGroup );
-    dp::sg::core::ParameterGroupDataSharedPtr         interpretImageTexture( const dp::util::SmartPtr<vrml::ImageTexture> & pImageTexture );
-    void                                              interpretIndexedFaceSet( const dp::util::SmartPtr<vrml::IndexedFaceSet> & pIndexedFaceSet
-                                                                             , std::vector<dp::sg::core::PrimitiveSharedPtr> &primitives );
-    void                                              interpretIndexedLineSet( const dp::util::SmartPtr<vrml::IndexedLineSet> & pIndexedLineSet
-                                                                             , std::vector<dp::sg::core::PrimitiveSharedPtr> &primitives );
-    dp::sg::core::NodeSharedPtr                       interpretInline( const dp::util::SmartPtr<vrml::Inline> & pInline );
-    dp::sg::core::LODSharedPtr                        interpretLOD( const dp::util::SmartPtr<vrml::LOD> & pVRMLLOD );
-    dp::sg::core::ParameterGroupDataSharedPtr         interpretMaterial( const dp::util::SmartPtr<vrml::Material> & pVRMLMaterial );
-    dp::sg::core::ParameterGroupDataSharedPtr         interpretMovieTexture( const dp::util::SmartPtr<vrml::MovieTexture> & pMovieTexture );
-    void                                              interpretNormal( const dp::util::SmartPtr<vrml::Normal> & pNormal );
-    void                                              interpretNormalInterpolator( const dp::util::SmartPtr<vrml::NormalInterpolator> & pNormalInterpolator
-                                                                                 , unsigned int vectorCount );
-    void                                              interpretOrientationInterpolator( const dp::util::SmartPtr<vrml::OrientationInterpolator> & pOI );
-    dp::sg::core::ParameterGroupDataSharedPtr         interpretPixelTexture( const dp::util::SmartPtr<vrml::PixelTexture> & pPixelTexture );
-    dp::sg::core::LightSourceSharedPtr                interpretPointLight( const dp::util::SmartPtr<vrml::PointLight> & pPointLight );
-    void                                              interpretPointSet( const dp::util::SmartPtr<vrml::PointSet> & pPointSet
-                                                                       , std::vector<dp::sg::core::PrimitiveSharedPtr> &primitives );
-    void                                              interpretPositionInterpolator( const dp::util::SmartPtr<vrml::PositionInterpolator> & pPositionInterpolator );
-    dp::math::Vec3f                                   interpretSFColor( const vrml::SFColor &c );
-    dp::sg::core::ObjectSharedPtr                     interpretSFNode( const vrml::SFNode n );
-    dp::math::Quatf                                   interpretSFRotation( const vrml::SFRotation &r );
-    dp::sg::core::NodeSharedPtr                       interpretShape( const dp::util::SmartPtr<vrml::Shape> & pShape );
-    void                                              interpretSphere( const dp::util::SmartPtr<vrml::Sphere> & pSphere
-                                                                     , std::vector<dp::sg::core::PrimitiveSharedPtr> &primitives
-                                                                     , bool textured = false );
-    dp::sg::core::LightSourceSharedPtr                interpretSpotLight( const dp::util::SmartPtr<vrml::SpotLight> & pVRMLSpotLight );
-    dp::sg::core::SwitchSharedPtr                     interpretSwitch( const dp::util::SmartPtr<vrml::Switch> & pVRMLSwitch );
-    dp::sg::core::ParameterGroupDataSharedPtr         interpretTexture( const dp::util::SmartPtr<vrml::Texture> & pTexture );
-    void                                              interpretTextureTransform( const dp::util::SmartPtr<vrml::TextureTransform> & pTextureTransform
-                                                                               , const dp::sg::core::ParameterGroupDataSharedPtr & textureData );
-    dp::sg::core::TransformSharedPtr                  interpretTransform( const dp::util::SmartPtr<vrml::Transform> & pVRMLTransform );
-    bool                                              interpretURL( const vrml::MFString &url, std::string &fileName );
-    dp::sg::core::VertexAttributeSetSharedPtr         interpretVertexAttributeSet( const dp::util::SmartPtr<vrml::IndexedFaceSet> & pIndexedFaceSet
-                                                                                 , unsigned int numberOfVertices
-                                                                                 , const std::vector<unsigned int> & startIndices
-                                                                                 , const std::vector<unsigned int> & faceIndices );
-    dp::sg::core::ObjectSharedPtr                     interpretViewpoint( const dp::util::SmartPtr<vrml::Viewpoint> & pViewpoint );
-    void                                              interpretVRMLTree( void );
-    bool                                              isValidScaling( const dp::util::SmartPtr<vrml::PositionInterpolator> & pPositionInterpolator ) const;
-    bool                                              isValidScaling( const vrml::SFVec3f &sfVec3f ) const;
-    bool                                              onIncompatibleValues( int value0, int value1, const std::string &node
-                                                                          , const std::string &field0
-                                                                          , const std::string &field1 ) const;
-    template<typename T>
-      bool                                            onInvalidValue( T value, const std::string &node
-                                                                    , const std::string &field ) const;
-    bool                                              onEmptyToken( const std::string &tokenType, const std::string &token ) const;
-    bool                                              onFileNotFound( const vrml::SFString &url ) const;
-    bool                                              onFilesNotFound( bool found, const vrml::MFString &url ) const;
-    void                                              onUnexpectedEndOfFile( bool error ) const;
-    void                                              onUnexpectedToken( const std::string &expected
-                                                                       , const std::string &token ) const;
-    void                                              onUnknownToken( const std::string &tokenType
-                                                                    , const std::string &token ) const;
-    bool                                              onUndefinedToken( const std::string &tokenType
-                                                                      , const std::string &token ) const;
-    bool                                              onUnsupportedToken( const std::string &tokenType
-                                                                        , const std::string &token ) const;
-    dp::util::SmartPtr<vrml::Anchor>                  readAnchor( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::Appearance>              readAppearance( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::AudioClip>               readAudioClip( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::Background>              readBackground( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::Billboard>               readBillboard( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::Box>                     readBox( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::Collision>               readCollision( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::Color>                   readColor( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::ColorInterpolator>       readColorInterpolator( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::Cone>                    readCone( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::Coordinate>              readCoordinate( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::CoordinateInterpolator>  readCoordinateInterpolator( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::Cylinder>                readCylinder( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::CylinderSensor>          readCylinderSensor( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::DirectionalLight>        readDirectionalLight( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::ElevationGrid>           readElevationGrid( const std::string &nodeName );
-    void                                              readEXTERNPROTO( void );
-    dp::util::SmartPtr<vrml::Extrusion>               readExtrusion( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::Fog>                     readFog( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::FontStyle>               readFontStyle( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::Group>                   readGroup( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::ImageTexture>            readImageTexture( const std::string &nodeName );
-    void                                              readIndex( std::vector<vrml::SFInt32> &mf );
-    dp::util::SmartPtr<vrml::IndexedFaceSet>          readIndexedFaceSet( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::IndexedLineSet>          readIndexedLineSet( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::Inline>                  readInline( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::LOD>                     readLOD( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::Material>                readMaterial( const std::string &nodeName );
-    void                                              readMFNode( const dp::util::SmartPtr<vrml::Group> & fatherNode );
-    template<typename SFType>
-      void                                            readMFType( std::vector<SFType> &mf
-                                                                , void (WRLLoader::*readSFType)( SFType &sf, std::string &token ) );
-    dp::util::SmartPtr<vrml::MovieTexture>            readMovieTexture( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::NavigationInfo>          readNavigationInfo( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::Normal>                  readNormal( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::NormalInterpolator>      readNormalInterpolator( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::OrientationInterpolator> readOrientationInterpolator( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::PixelTexture>            readPixelTexture( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::PlaneSensor>             readPlaneSensor( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::PointLight>              readPointLight( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::PointSet>                readPointSet( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::PositionInterpolator>    readPositionInterpolator( const std::string &nodeName );
-    void                                              readPROTO( void );
-    dp::util::SmartPtr<vrml::ProximitySensor>         readProximitySensor( const std::string &nodeName );
-    void                                              readROUTE( const vrml::SFNode currentNode );
-    dp::util::SmartPtr<vrml::ScalarInterpolator>      readScalarInterpolator( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::Script>                  readScript( const std::string &nodeName );
-    void                                              readSFBool( vrml::SFBool &b );
-    void                                              readSFColor( vrml::SFColor &c, std::string &token );
-    void                                              readSFFloat( vrml::SFFloat &f, std::string &token );
-    void                                              readSFImage( vrml::SFImage &i );
-    void                                              readSFInt8( vrml::SFInt8 &i );
-    void                                              readSFInt32( vrml::SFInt32 &i, std::string &token );
-    void                                              readSFNode( const vrml::SFNode fatherNode, vrml::SFNode &n, std::string &token );
-    void                                              readSFRotation( vrml::SFRotation &r, std::string &token );
-    void                                              readSFString( vrml::SFString &s, std::string &token );
-    void                                              readSFTime( vrml::SFTime &t );
-    void                                              readSFVec2f( vrml::SFVec2f &v, std::string &token );
-    void                                              readSFVec3f( vrml::SFVec3f &v, std::string &token );
-    dp::util::SmartPtr<vrml::Shape>                   readShape( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::Sound>                   readSound( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::Sphere>                  readSphere( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::SphereSensor>            readSphereSensor( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::SpotLight>               readSpotLight( const std::string &nodeName );
-    void                                              readStatements( void );
-    dp::util::SmartPtr<vrml::Switch>                  readSwitch( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::Text>                    readText( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::TextureCoordinate>       readTextureCoordinate( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::TextureTransform>        readTextureTransform( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::TimeSensor>              readTimeSensor( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::TouchSensor>             readTouchSensor( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::Transform>               readTransform( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::Viewpoint>               readViewpoint( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::VisibilitySensor>        readVisibilitySensor( const std::string &nodeName );
-    dp::util::SmartPtr<vrml::WorldInfo>               readWorldInfo( const std::string &nodeName );
-    template<typename T>
-      void                                            resampleKeyValues( vrml::MFFloat & keys, std::vector<T> & values
-                                                                       , unsigned int valuesPerKey
-                                                                       , std::vector<unsigned int> & steps
-                                                                       , vrml::SFTime cycleInterval );
-    void                                              setNextToken( void );
-    bool                                              testWRLVersion( const std::string &filename );
+  protected:
+    WRLLoader();
 
   private :
-    std::string                                                 m_currentString;
-    std::string                                                 m_currentToken;
-    std::map<std::string,vrml::SFNode>                          m_defNodes;
-    bool                                                        m_eof;
-    FILE                                                      * m_fh;
-    std::map<vrml::MFString,dp::util::SmartPtr<vrml::Inline> >  m_inlines;
-    char                                                      * m_line;
-    unsigned int                                                m_lineLength;
-    unsigned int                                                m_lineNumber;
-    std::string::size_type                                      m_nextTokenEnd;
-    std::string::size_type                                      m_nextTokenStart;
-    std::vector<vrml::SFNode>                                   m_openNodes;
-    std::set<std::string>                                       m_PROTONames;
-    dp::sg::core::GroupSharedPtr                                m_rootNode;
-    dp::sg::core::SceneSharedPtr                                m_scene;
-    std::vector<std::string>                                    m_searchPaths;
-    std::shared_ptr<dp::sg::algorithm::SmoothTraverser>         m_smoothTraverser;
-    unsigned int                                                m_stepsPerUnit;
-    dp::util::SmartPtr<vrml::Group>                             m_topLevelGroup;
-    bool                                                        m_strict;
-    std::map<std::string,dp::sg::core::TextureHostWeakPtr>      m_textureFiles;
-    std::string                                                 m_ungetToken;
+    void                                        createBox( vrml::SharedIndexedFaceSet & pIndexedFaceSet, const vrml::SFVec3f& size, bool textured );
+    void                                        createCone( vrml::SharedIndexedFaceSet & pIndexedFaceSet, float radius, float height, bool bottom, bool side, bool textured );
+    void                                        createCylinder( vrml::SharedIndexedFaceSet & indexedFaceSet, float radius, float height, bool bottom, bool side, bool top, bool textured );
+    void                                        createSphere( vrml::SharedIndexedFaceSet & indexedFaceSet, float radius, bool textured );
+    void                                        determineTexGen( vrml::SharedIndexedFaceSet const& pIndexedFaceSet, const dp::sg::core::ParameterGroupDataSharedPtr & parameterGroupData );
+    template<typename VType> void               eraseIndex( unsigned int f, unsigned int i, unsigned int count, bool perVertex, vrml::MFInt32 &index, VType &vec );
+    vrml::SFNode                                findNode( const vrml::SFNode currentNode, std::string name );
+    std::vector<unsigned int>                   getCombinedKeys( vrml::SharedPositionInterpolator const& center, vrml::SharedOrientationInterpolator const& rotation
+                                                               , vrml::SharedPositionInterpolator const& scale, vrml::SharedPositionInterpolator const& translation );
+    bool                                        getNextLine( void );
+    std::string                               & getNextToken( void );
+    vrml::SFNode                                getNode( const std::string &nodeName, std::string &token );
+    void                                        ignoreBlock( const std::string &open, const std::string &close, std::string &token );
+    dp::sg::core::SceneSharedPtr                import( const std::string &filename );
+    dp::sg::core::EffectDataSharedPtr           interpretAppearance( vrml::SharedAppearance const& pAppearance );
+    void                                        interpretChildren( vrml::MFNode &children, dp::sg::core::GroupSharedPtr const& pNVSGGroup );
+    void                                        interpretBackground( vrml::SharedBackground const& pBackground );
+    dp::sg::core::BillboardSharedPtr            interpretBillboard( vrml::SharedBillboard const& pVRMLBillboard );
+    void                                        interpretBox( vrml::SharedBox const& pBox, std::vector<dp::sg::core::PrimitiveSharedPtr> &primitives, bool textured = false );
+    void                                        interpretColor( vrml::SharedColor const& pColor );
+    void                                        interpretColorInterpolator( vrml::SharedColorInterpolator const& pColorInterpolator, unsigned int colorCount );
+    void                                        interpretCone( vrml::SharedCone const& pCone, std::vector<dp::sg::core::PrimitiveSharedPtr> &primitives, bool textured = false );
+    void                                        interpretCoordinate( vrml::SharedCoordinate const& pCoordinate );
+    void                                        interpretCoordinateInterpolator( vrml::SharedCoordinateInterpolator const& pCoordinateInterpolator, unsigned int pointCount );
+    void                                        interpretCylinder( vrml::SharedCylinder const& pCylinder, std::vector<dp::sg::core::PrimitiveSharedPtr> &primitives, bool textured = false );
+    dp::sg::core::LightSourceSharedPtr          interpretDirectionalLight( vrml::SharedDirectionalLight const& pDirectionalLight );
+    void                                        interpretElevationGrid( vrml::SharedElevationGrid const& pElevationGrid, std::vector<dp::sg::core::PrimitiveSharedPtr> &primitives );
+    void                                        interpretGeometry( vrml::SharedGeometry const& pGeometry, std::vector<dp::sg::core::PrimitiveSharedPtr> &primitives, bool textured = false );
+    dp::sg::core::GroupSharedPtr                interpretGroup( vrml::SharedGroup const& pGroup );
+    dp::sg::core::ParameterGroupDataSharedPtr   interpretImageTexture( vrml::SharedImageTexture const& pImageTexture );
+    void                                        interpretIndexedFaceSet( vrml::SharedIndexedFaceSet const& pIndexedFaceSet, std::vector<dp::sg::core::PrimitiveSharedPtr> &primitives );
+    void                                        interpretIndexedLineSet( vrml::SharedIndexedLineSet const& pIndexedLineSet, std::vector<dp::sg::core::PrimitiveSharedPtr> &primitives );
+    dp::sg::core::NodeSharedPtr                 interpretInline( vrml::SharedInline const& pInline );
+    dp::sg::core::LODSharedPtr                  interpretLOD( vrml::SharedLOD const& pVRMLLOD );
+    dp::sg::core::ParameterGroupDataSharedPtr   interpretMaterial( vrml::SharedMaterial const& pVRMLMaterial );
+    dp::sg::core::ParameterGroupDataSharedPtr   interpretMovieTexture( vrml::SharedMovieTexture const& pMovieTexture );
+    void                                        interpretNormal( vrml::SharedNormal const& pNormal );
+    void                                        interpretNormalInterpolator( vrml::SharedNormalInterpolator const& pNormalInterpolator, unsigned int vectorCount );
+    void                                        interpretOrientationInterpolator( vrml::SharedOrientationInterpolator const& pOI );
+    dp::sg::core::ParameterGroupDataSharedPtr   interpretPixelTexture( vrml::SharedPixelTexture const& pPixelTexture );
+    dp::sg::core::LightSourceSharedPtr          interpretPointLight( vrml::SharedPointLight const& pPointLight );
+    void                                        interpretPointSet( vrml::SharedPointSet const& pPointSet, std::vector<dp::sg::core::PrimitiveSharedPtr> &primitives );
+    void                                        interpretPositionInterpolator( vrml::SharedPositionInterpolator const& pPositionInterpolator );
+    dp::math::Vec3f                             interpretSFColor( const vrml::SFColor &c );
+    dp::sg::core::ObjectSharedPtr               interpretSFNode( const vrml::SFNode n );
+    dp::math::Quatf                             interpretSFRotation( const vrml::SFRotation &r );
+    dp::sg::core::NodeSharedPtr                 interpretShape( vrml::SharedShape const& pShape );
+    void                                        interpretSphere( vrml::SharedSphere const& pSphere, std::vector<dp::sg::core::PrimitiveSharedPtr> &primitives, bool textured = false );
+    dp::sg::core::LightSourceSharedPtr          interpretSpotLight( vrml::SharedSpotLight const& pVRMLSpotLight );
+    dp::sg::core::SwitchSharedPtr               interpretSwitch( vrml::SharedSwitch const& pVRMLSwitch );
+    dp::sg::core::ParameterGroupDataSharedPtr   interpretTexture( vrml::SharedTexture const& pTexture );
+    void                                        interpretTextureTransform( vrml::SharedTextureTransform const& pTextureTransform, const dp::sg::core::ParameterGroupDataSharedPtr & textureData );
+    dp::sg::core::TransformSharedPtr            interpretTransform( vrml::SharedTransform const& pVRMLTransform );
+    bool                                        interpretURL( const vrml::MFString &url, std::string &fileName );
+    dp::sg::core::VertexAttributeSetSharedPtr   interpretVertexAttributeSet( vrml::SharedIndexedFaceSet const& pIndexedFaceSet, unsigned int numberOfVertices, const std::vector<unsigned int> & startIndices
+                                                                           , const std::vector<unsigned int> & faceIndices );
+    dp::sg::core::ObjectSharedPtr               interpretViewpoint( vrml::SharedViewpoint const& pViewpoint );
+    void                                        interpretVRMLTree( void );
+    bool                                        isValidScaling( vrml::SharedPositionInterpolator const& pPositionInterpolator ) const;
+    bool                                        isValidScaling( const vrml::SFVec3f &sfVec3f ) const;
+    bool                                        onIncompatibleValues( int value0, int value1, const std::string &node, const std::string &field0, const std::string &field1 ) const;
+    template<typename T> bool                   onInvalidValue( T value, const std::string &node, const std::string &field ) const;
+    bool                                        onEmptyToken( const std::string &tokenType, const std::string &token ) const;
+    bool                                        onFileNotFound( const vrml::SFString &url ) const;
+    bool                                        onFilesNotFound( bool found, const vrml::MFString &url ) const;
+    void                                        onUnexpectedEndOfFile( bool error ) const;
+    void                                        onUnexpectedToken( const std::string &expected, const std::string &token ) const;
+    void                                        onUnknownToken( const std::string &tokenType, const std::string &token ) const;
+    bool                                        onUndefinedToken( const std::string &tokenType, const std::string &token ) const;
+    bool                                        onUnsupportedToken( const std::string &tokenType, const std::string &token ) const;
+    vrml::SharedAnchor                          readAnchor( const std::string &nodeName );
+    vrml::SharedAppearance                      readAppearance( const std::string &nodeName );
+    vrml::SharedAudioClip                       readAudioClip( const std::string &nodeName );
+    vrml::SharedBackground                      readBackground( const std::string &nodeName );
+    vrml::SharedBillboard                       readBillboard( const std::string &nodeName );
+    vrml::SharedBox                             readBox( const std::string &nodeName );
+    vrml::SharedCollision                       readCollision( const std::string &nodeName );
+    vrml::SharedColor                           readColor( const std::string &nodeName );
+    vrml::SharedColorInterpolator               readColorInterpolator( const std::string &nodeName );
+    vrml::SharedCone                            readCone( const std::string &nodeName );
+    vrml::SharedCoordinate                      readCoordinate( const std::string &nodeName );
+    vrml::SharedCoordinateInterpolator          readCoordinateInterpolator( const std::string &nodeName );
+    vrml::SharedCylinder                        readCylinder( const std::string &nodeName );
+    vrml::SharedCylinderSensor                  readCylinderSensor( const std::string &nodeName );
+    vrml::SharedDirectionalLight                readDirectionalLight( const std::string &nodeName );
+    vrml::SharedElevationGrid                   readElevationGrid( const std::string &nodeName );
+    void                                        readEXTERNPROTO( void );
+    vrml::SharedExtrusion                       readExtrusion( const std::string &nodeName );
+    vrml::SharedFog                             readFog( const std::string &nodeName );
+    vrml::SharedFontStyle                       readFontStyle( const std::string &nodeName );
+    vrml::SharedGroup                           readGroup( const std::string &nodeName );
+    vrml::SharedImageTexture                    readImageTexture( const std::string &nodeName );
+    void                                        readIndex( std::vector<vrml::SFInt32> &mf );
+    vrml::SharedIndexedFaceSet                  readIndexedFaceSet( const std::string &nodeName );
+    vrml::SharedIndexedLineSet                  readIndexedLineSet( const std::string &nodeName );
+    vrml::SharedInline                          readInline( const std::string &nodeName );
+    vrml::SharedLOD                             readLOD( const std::string &nodeName );
+    vrml::SharedMaterial                        readMaterial( const std::string &nodeName );
+    void                                        readMFNode( vrml::SharedGroup const& fatherNode );
+    template<typename SFType> void              readMFType( std::vector<SFType> &mf, void (WRLLoader::*readSFType)( SFType &sf, std::string &token ) );
+    vrml::SharedMovieTexture                    readMovieTexture( const std::string &nodeName );
+    vrml::SharedNavigationInfo                  readNavigationInfo( const std::string &nodeName );
+    vrml::SharedNormal                          readNormal( const std::string &nodeName );
+    vrml::SharedNormalInterpolator              readNormalInterpolator( const std::string &nodeName );
+    vrml::SharedOrientationInterpolator         readOrientationInterpolator( const std::string &nodeName );
+    vrml::SharedPixelTexture                    readPixelTexture( const std::string &nodeName );
+    vrml::SharedPlaneSensor                     readPlaneSensor( const std::string &nodeName );
+    vrml::SharedPointLight                      readPointLight( const std::string &nodeName );
+    vrml::SharedPointSet                        readPointSet( const std::string &nodeName );
+    vrml::SharedPositionInterpolator            readPositionInterpolator( const std::string &nodeName );
+    void                                        readPROTO( void );
+    vrml::SharedProximitySensor                 readProximitySensor( const std::string &nodeName );
+    void                                        readROUTE( const vrml::SFNode currentNode );
+    vrml::SharedScalarInterpolator              readScalarInterpolator( const std::string &nodeName );
+    vrml::SharedScript                          readScript( const std::string &nodeName );
+    void                                        readSFBool( vrml::SFBool &b );
+    void                                        readSFColor( vrml::SFColor &c, std::string &token );
+    void                                        readSFFloat( vrml::SFFloat &f, std::string &token );
+    void                                        readSFImage( vrml::SFImage &i );
+    void                                        readSFInt8( vrml::SFInt8 &i );
+    void                                        readSFInt32( vrml::SFInt32 &i, std::string &token );
+    void                                        readSFNode( const vrml::SFNode fatherNode, vrml::SFNode &n, std::string &token );
+    void                                        readSFRotation( vrml::SFRotation &r, std::string &token );
+    void                                        readSFString( vrml::SFString &s, std::string &token );
+    void                                        readSFTime( vrml::SFTime &t );
+    void                                        readSFVec2f( vrml::SFVec2f &v, std::string &token );
+    void                                        readSFVec3f( vrml::SFVec3f &v, std::string &token );
+    vrml::SharedShape                           readShape( const std::string &nodeName );
+    vrml::SharedSound                           readSound( const std::string &nodeName );
+    vrml::SharedSphere                          readSphere( const std::string &nodeName );
+    vrml::SharedSphereSensor                    readSphereSensor( const std::string &nodeName );
+    vrml::SharedSpotLight                       readSpotLight( const std::string &nodeName );
+    void                                        readStatements( void );
+    vrml::SharedSwitch                          readSwitch( const std::string &nodeName );
+    vrml::SharedText                            readText( const std::string &nodeName );
+    vrml::SharedTextureCoordinate               readTextureCoordinate( const std::string &nodeName );
+    vrml::SharedTextureTransform                readTextureTransform( const std::string &nodeName );
+    vrml::SharedTimeSensor                      readTimeSensor( const std::string &nodeName );
+    vrml::SharedTouchSensor                     readTouchSensor( const std::string &nodeName );
+    vrml::SharedTransform                       readTransform( const std::string &nodeName );
+    vrml::SharedViewpoint                       readViewpoint( const std::string &nodeName );
+    vrml::SharedVisibilitySensor                readVisibilitySensor( const std::string &nodeName );
+    vrml::SharedWorldInfo                       readWorldInfo( const std::string &nodeName );
+    template<typename T> void                   resampleKeyValues( vrml::MFFloat & keys, std::vector<T> & values, unsigned int valuesPerKey, std::vector<unsigned int> & steps, vrml::SFTime cycleInterval );
+    void                                        setNextToken( void );
+    bool                                        testWRLVersion( const std::string &filename );
+
+  private :
+    std::string                                               m_currentString;
+    std::string                                               m_currentToken;
+    std::map<std::string,vrml::SFNode>                        m_defNodes;
+    bool                                                      m_eof;
+    FILE                                                    * m_fh;
+    std::map<vrml::MFString,vrml::SharedInline>               m_inlines;
+    char                                                    * m_line;
+    unsigned int                                              m_lineLength;
+    unsigned int                                              m_lineNumber;
+    std::string::size_type                                    m_nextTokenEnd;
+    std::string::size_type                                    m_nextTokenStart;
+    std::vector<vrml::SFNode>                                 m_openNodes;
+    std::set<std::string>                                     m_PROTONames;
+    dp::sg::core::GroupSharedPtr                              m_rootNode;
+    dp::sg::core::SceneSharedPtr                              m_scene;
+    std::vector<std::string>                                  m_searchPaths;
+    std::unique_ptr<dp::sg::algorithm::SmoothTraverser>       m_smoothTraverser;
+    unsigned int                                              m_stepsPerUnit;
+    vrml::SharedGroup                                         m_topLevelGroup;
+    bool                                                      m_strict;
+    std::map<std::string,dp::sg::core::TextureHostWeakPtr>    m_textureFiles;
+    std::string                                               m_ungetToken;
     // Circular and rectangular subdivision limits. The creation functions attempt to subdivide with square sized quads.
     // Minimum, standard at radius 1.0, and maximum subdivisions for a full circle of a sphere, cylinder, cone tessellation depending on their radii and heights.
     // Minimum, standard at size 1.0, and maximum subdivisions for a Box depending on its size.
     // These six values can be defined by the user via the environment variable NVSG_WRL_SUBDIVISIONS. 
     // Defaults are NVSG_WRL_SUBDIVISIONS = 12 36 90  2 4 8
-    int                                                         m_subdivisions[6];
+    int                                                       m_subdivisions[6];
 };
-
-inline void WRLLoader::deleteThis( void )
-{
-  delete this;
-}
 
 inline unsigned int WRLLoader::getStepsPerUnit() const
 {

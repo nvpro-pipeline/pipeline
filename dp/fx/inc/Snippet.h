@@ -28,6 +28,7 @@
 
 #include <dp/fx/EffectDefs.h>
 #include <dp/fx/EnumSpec.h>
+#include <dp/util/SharedPtr.h>
 #include <memory>
 #include <set>
 
@@ -42,6 +43,8 @@ namespace dp
       dp::fx::Manager manager;
     };
 
+    SMART_TYPES( Snippet );
+
     class Snippet
     {
     public:
@@ -54,10 +57,7 @@ namespace dp
       std::set<SmartEnumSpec>  m_requiredEnumSpecs;
     };
 
-    typedef std::shared_ptr<Snippet> SmartSnippet;
-
     DP_FX_API std::string generateSnippets( std::vector<SmartSnippet> snippets, GeneratorConfiguration& config );
-
 
   } // namespace fx
 } // namespace dp

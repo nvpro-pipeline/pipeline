@@ -60,17 +60,27 @@ AnimatorBase::AnimatorBase( dp::sg::core::EffectDataSharedPtr const & effectData
 }
 
 
+SHARED_PTR_TYPES( AnimatorColor );
+
 class AnimatorColor : public AnimatorBase
 {
 public:
-  AnimatorColor( dp::sg::core::EffectDataSharedPtr &effect, std::string const & parameterGroup, std::string const & parameter, int x, int y, dp::math::Vec2i const & objectCount );
+  static AnimatorColorSharedPtr create( dp::sg::core::EffectDataSharedPtr &effect, std::string const & parameterGroup, std::string const & parameter, int x, int y, dp::math::Vec2i const & objectCount );
   virtual void update( float time );
+
+protected:
+  AnimatorColor( dp::sg::core::EffectDataSharedPtr &effect, std::string const & parameterGroup, std::string const & parameter, int x, int y, dp::math::Vec2i const & objectCount );
 
 private:
   int m_x;
   int m_y;
   dp::math::Vec2i m_objectCount;
 };
+
+AnimatorColorSharedPtr AnimatorColor::create( dp::sg::core::EffectDataSharedPtr &effect, std::string const & parameterGroup, std::string const & parameter, int x, int y, dp::math::Vec2i const & objectCount )
+{
+  return( std::shared_ptr<AnimatorColor>( new AnimatorColor( effect, parameterGroup, parameter, x, y, objectCount ) ) );
+}
 
 AnimatorColor::AnimatorColor( dp::sg::core::EffectDataSharedPtr &effect, std::string const & parameterGroup, std::string const & parameter, int x, int y, dp::math::Vec2i const & objectCount )
   : AnimatorBase( effect, parameterGroup, parameter )
@@ -139,6 +149,11 @@ void AnimatorBumpiness::update( float time )
 /************************************************************************/
 /* AnimatedScene                                                        */
 /************************************************************************/
+AnimatedSceneSharedPtr AnimatedScene::create( const dp::math::Vec2f& gridSize, const dp::math::Vec2i& objectCount )
+{
+  return( std::shared_ptr<AnimatedScene>( new AnimatedScene( gridSize, objectCount ) ) );
+}
+
 AnimatedScene::AnimatedScene( const dp::math::Vec2f& gridSize, const dp::math::Vec2i& objectCount )
   : m_gridSize( gridSize )
   , m_objectCount( objectCount )
@@ -200,28 +215,28 @@ dp::sg::core::EffectDataSharedPtr AnimatedScene::createMaterial( size_t x, size_
 
       dp::sg::core::ParameterGroupDataSharedPtr parameterGroupDataSharedPtr = dp::sg::core::ParameterGroupData::create( *m_itColors );
       effect->setParameterGroupData( parameterGroupDataSharedPtr );
-      m_animators[( y * m_objectCount[0] + x)] = boost::make_shared<AnimatorColor>(effect, "standardMaterialParameters", "frontDiffuseColor", int(x), int(y), m_objectCount );
+      m_animators[( y * m_objectCount[0] + x)] = AnimatorColor::create(effect, "standardMaterialParameters", "frontDiffuseColor", int(x), int(y), m_objectCount );
     }
     break;
   case 1:
     effect = m_carpaint.clone();
 
-    m_animators[index] = boost::make_shared<AnimatorColor>(effect, "carpaint_parameters", "diffuse", int(x), int(y), m_objectCount );
+    m_animators[index] = AnimatorColor::create(effect, "carpaint_parameters", "diffuse", int(x), int(y), m_objectCount );
     break;
   case 2:
     effect = m_phong.clone();
 
-    m_animators[index] = boost::make_shared<AnimatorColor>(effect, "phongParameters", "diffuseColor", int(x), int(y), m_objectCount );
+    m_animators[index] = AnimatorColor::create(effect, "phongParameters", "diffuseColor", int(x), int(y), m_objectCount );
     break;
   case 3:
     effect = m_standard_material.clone();
 
-    m_animators[index] = boost::make_shared<AnimatorColor>(effect, "standardMaterialParameters", "frontDiffuseColor", int(x), int(y), m_objectCount );
+    m_animators[index] = AnimatorColor::create(effect, "standardMaterialParameters", "frontDiffuseColor", int(x), int(y), m_objectCount );
     break;
   case 4:
     effect = m_thinglass.clone();
 
-    m_animators[index] = boost::make_shared<AnimatorColor>(effect, "thinglass_parameters", "transparentColor", int(x), int(y), m_objectCount );
+    m_animators[index] = AnimatorColor::create(effect, "thinglass_parameters", "transparentColor", int(x), int(y), m_objectCount );
     break;
   }
 

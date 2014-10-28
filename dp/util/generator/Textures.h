@@ -30,7 +30,7 @@
 #include <map>
 
 #include <dp/util/Config.h>
-#include <dp/util/SmartPtr.h>
+#include <dp/util/SharedPtr.h>
 #include <dp/math/Vecnt.h>
 
 namespace dp
@@ -39,17 +39,20 @@ namespace dp
   {
     namespace generator
     {
-      class TextureObjectData : public RCObject
+      SMART_TYPES( TextureObjectData );
+
+      class TextureObjectData
       {
       public:
-        DP_UTIL_API TextureObjectData();
-        DP_UTIL_API TextureObjectData(const SmartPtr<TextureObjectData>& rhs);
-        DP_UTIL_API ~TextureObjectData();
+        static SmartTextureObjectData create();
+        DP_UTIL_API virtual ~TextureObjectData();
 
         math::Vec2ui m_size;
         std::vector<math::Vec4f> m_data;
+
+      protected:
+        DP_UTIL_API TextureObjectData();
       };
-      typedef SmartPtr<TextureObjectData> SmartTextureObjectData;
 
       // Creates a plain-colored texture
       DP_UTIL_API SmartTextureObjectData createTextureColored(const math::Vec2ui& size     // Dimensions of the texture

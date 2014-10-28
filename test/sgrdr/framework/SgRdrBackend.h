@@ -69,7 +69,7 @@ namespace dp
           DPTSGRDR_API virtual ~SgRdrBackend();
           DPTSGRDR_API virtual dp::ui::SmartRenderTarget createDisplay(int width, int height, bool visible);
 
-          DPTSGRDR_API virtual void render( dp::testfw::core::RenderData* renderData, dp::ui::SmartRenderTarget renderTarget = nullptr );
+          DPTSGRDR_API virtual void render( dp::testfw::core::RenderData* renderData, dp::ui::SmartRenderTarget renderTarget = dp::ui::SmartRenderTarget::null );
           DPTSGRDR_API virtual void finish();
 
           DPTSGRDR_API dp::sg::ui::SmartSceneRenderer getRenderer() const;
@@ -82,7 +82,6 @@ namespace dp
           dp::sg::ui::SmartSceneRenderer m_renderer;
         };
 
-        typedef util::SmartPtr<SgRdrBackend> SmartSgRdrBackend;
       } // namespace framework
     } // namespace test
   } // namespace sgrdr

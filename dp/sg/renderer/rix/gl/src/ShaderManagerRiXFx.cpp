@@ -175,28 +175,55 @@ namespace dp
           /************************************************************************/
           /* ShaderManagerRiXFxInstance                                           */
           /************************************************************************/
+          SMART_TYPES( ShaderManagerRiXFxInstance );
+
           class ShaderManagerRiXFxInstance : public ShaderManagerInstance
           {
+          public:
+            static SmartShaderManagerRiXFxInstance create();
+          protected:
+            ShaderManagerRiXFxInstance();
+
           public:
             dp::rix::fx::ProgramSharedHandle program;
             dp::rix::fx::InstanceSharedHandle instance;
 
             SmartResourceEffectDataRiXFx resourceEffectDataRiXFx;
-
           };
 
-          typedef dp::util::SmartPtr<ShaderManagerRiXFxInstance> SmartShaderManagerRiXFxInstance;
+          SmartShaderManagerRiXFxInstance ShaderManagerRiXFxInstance::create()
+          {
+            return( std::shared_ptr<ShaderManagerRiXFxInstance>( new ShaderManagerRiXFxInstance() ) );
+          }
+
+          ShaderManagerRiXFxInstance::ShaderManagerRiXFxInstance()
+          {
+          }
 
           /************************************************************************/
           /* ShaderManagerRiXFxRenderGroup                                        */
           /************************************************************************/
+          SMART_TYPES( ShaderManagerRiXFxRenderGroup );
+
           class ShaderManagerRiXFxRenderGroup : public ShaderManagerRenderGroup
           {
+          public:
+            static SmartShaderManagerRiXFxRenderGroup create();
+          protected:
+            ShaderManagerRiXFxRenderGroup();
+
           public:
             dp::rix::fx::InstanceSharedHandle instance;
           };
 
-          typedef dp::util::SmartPtr<ShaderManagerRiXFxRenderGroup> SmartShaderManagerRiXFxRenderGroup;
+          SmartShaderManagerRiXFxRenderGroup ShaderManagerRiXFxRenderGroup::create()
+          {
+            return( std::shared_ptr<ShaderManagerRiXFxRenderGroup>( new ShaderManagerRiXFxRenderGroup() ) );
+          }
+
+          ShaderManagerRiXFxRenderGroup::ShaderManagerRiXFxRenderGroup()
+          {
+          }
 
           ShaderManagerRiXFx::ShaderManagerRiXFx( SceneTree *sceneTree, dp::fx::Manager managerType, const SmartResourceManager& resourceManager, SmartTransparencyManager const & transparencyManager )
             : ShaderManager( sceneTree, resourceManager, transparencyManager )
@@ -298,10 +325,10 @@ namespace dp
 
           SmartShaderManagerRenderGroup ShaderManagerRiXFx::registerRenderGroup( dp::rix::core::RenderGroupSharedHandle const & renderGroup )
           {
-            SmartShaderManagerRiXFxRenderGroup rixFxRenderGroup = new ShaderManagerRiXFxRenderGroup;
+            SmartShaderManagerRiXFxRenderGroup rixFxRenderGroup = ShaderManagerRiXFxRenderGroup::create();
             rixFxRenderGroup->renderGroup = renderGroup;
             rixFxRenderGroup->instance = m_rixFxManager->instanceCreate( renderGroup.get() );
-            addSystemContainers( dp::util::smart_cast<ShaderManagerRenderGroup>(rixFxRenderGroup) );
+            addSystemContainers( rixFxRenderGroup.inplaceCast<ShaderManagerRenderGroup>() );
 
             return rixFxRenderGroup;
           }
@@ -311,14 +338,14 @@ namespace dp
             const dp::rix::core::GeometryInstanceSharedHandle& geometryInstance = shaderObject->geometryInstance;
             const dp::sg::xbar::ObjectTreeNode &objectTreeNode = m_sceneTree->getObjectTreeNode( shaderObject->objectTreeIndex );
 
-            SmartShaderManagerRiXFxInstance o = dp::util::smart_cast<ShaderManagerRiXFxInstance>(shaderObject);
+            SmartShaderManagerRiXFxInstance o = shaderObject.staticCast<ShaderManagerRiXFxInstance>();
 
             m_rixFxManager->instanceUseGroupData( o->instance.get(), m_shaderManagerTransforms->getGroupData( objectTreeNode.m_transformIndex ).get() );
           }
 
           void ShaderManagerRiXFx::addSystemContainers( SmartShaderManagerRenderGroup const & renderGroup )
           {
-            SmartShaderManagerRiXFxRenderGroup o = dp::util::smart_cast<ShaderManagerRiXFxRenderGroup>(renderGroup);
+            SmartShaderManagerRiXFxRenderGroup o = renderGroup.staticCast<ShaderManagerRiXFxRenderGroup>();
 
             m_rixFxManager->instanceUseGroupData( o->instance.get(), m_groupDataCamera.get() );
             m_renderer->renderGroupUseContainer( renderGroup->renderGroup, m_containerEnvironment );
@@ -350,7 +377,7 @@ namespace dp
               SmartShaderManagerRiXFxInstance o = nullptr;
               if ( program )
               {
-                o = new ShaderManagerRiXFxInstance();
+                o = ShaderManagerRiXFxInstance::create();
                 o->geometryInstance = geometryInstance;
                 o->geoNode = nullptr; // no updating supported
                 o->objectTreeIndex = objectTreeIndex;
@@ -365,7 +392,7 @@ namespace dp
                 ResourceEffectDataRiXFx::GroupDatas gec = resourceEffectData->getGroupDatas();
                 std::copy( gec.begin(), gec.end(), std::back_inserter(groupDatas) ) ;
 
-                addSystemContainers( dp::util::smart_cast<ShaderManagerInstance>(o) );
+                addSystemContainers( o.inplaceCast<ShaderManagerInstance>() );
                 for (size_t i = 0; i < groupDatas.size(); i++)
                 {
                   m_rixFxManager->instanceUseGroupData( o->instance.get(), groupDatas[i].get() );

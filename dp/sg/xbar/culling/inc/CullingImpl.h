@@ -37,11 +37,12 @@ namespace dp
     {
       namespace culling
       {
+        SHARED_PTR_TYPES( CullingImpl );
 
         class CullingImpl : public Culling, dp::util::Observer
         {
         public:
-          CullingImpl( SceneTreeSharedPtr const & sceneTree, dp::culling::Mode cullingMode );
+          static CullingImplSharedPtr create( SceneTreeSharedPtr const & sceneTree, dp::culling::Mode cullingMode );
           virtual ~CullingImpl();
 
           virtual ResultHandle resultCreate();
@@ -51,6 +52,7 @@ namespace dp
           virtual dp::math::Box3f getBoundingBox();
 
         protected:
+          CullingImpl( SceneTreeSharedPtr const & sceneTree, dp::culling::Mode cullingMode );
 
           // observer framework
           virtual void onNotify( dp::util::Event const & event, dp::util::Payload * payload );
@@ -69,19 +71,26 @@ namespace dp
           // culling data
 
           //! \brief Payload class which assigns an ObjectTreeIndex to each culling object.
-          class Payload : public dp::util::RCObject
+          SMART_TYPES( Payload );
+          class Payload : public dp::culling::Payload
           {
           public:
-            Payload( ObjectTreeIndex objectTreeIndex )
-              : m_objectTreeIndex( objectTreeIndex )
+            static SmartPayload create( ObjectTreeIndex objectTreeIndex )
             {
+              return( std::shared_ptr<Payload>( new Payload( objectTreeIndex ) ) );
             }
 
-            ~Payload()
+            virtual ~Payload()
             {
             }
 
             ObjectTreeIndex getObjectTreeIndex() const { return m_objectTreeIndex; }
+
+          protected:
+            Payload( ObjectTreeIndex objectTreeIndex )
+              : m_objectTreeIndex( objectTreeIndex )
+            {
+            }
 
           private:
             ObjectTreeIndex m_objectTreeIndex;

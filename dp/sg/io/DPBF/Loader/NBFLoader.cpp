@@ -1762,11 +1762,11 @@ extern "C"
 {
 #endif
 
-NBFLOADER_API bool getPlugInterface(const UPIID& piid, dp::util::SmartPtr<dp::util::PlugIn> & pi)
+NBFLOADER_API bool getPlugInterface(const UPIID& piid, dp::util::SmartPlugIn & pi)
 {
   if ( piid==PIID_NBF_SCENE_LOADER )
   {
-    pi = dp::util::SmartPtr<dp::util::PlugIn>( new NBFLoader() );
+    pi = NBFLoader::create();
     return( !!pi );
   }
   return false;
@@ -1782,6 +1782,11 @@ NBFLOADER_API void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids
 #if defined(LINUX)
 }
 #endif
+
+SmartNBFLoader NBFLoader::create()
+{
+  return( std::shared_ptr<NBFLoader>( new NBFLoader() ) );
+}
 
 NBFLoader::NBFLoader()
 {

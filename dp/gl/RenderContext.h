@@ -49,8 +49,7 @@ namespace dp
     class RenderContext : public std::enable_shared_from_this<RenderContext>
     {
     protected:
-      class NativeContext;
-      typedef std::shared_ptr<NativeContext> SharedNativeContext;
+      SHARED_TYPES( NativeContext );
 
     public:
       // Constructor parameters
@@ -515,9 +514,9 @@ namespace dp
       {
       public:
   #if defined(WIN32)
-        DP_GL_API NativeContext( HWND hwnd, bool destroyHWND, HDC hdc, bool destroyHDC, HGLRC hglrc, bool destroyHGLRC );
+        DP_GL_API static SharedNativeContext create( HWND hwnd, bool destroyHWND, HDC hdc, bool destroyHDC, HGLRC hglrc, bool destroyHGLRC );
   #elif defined(LINUX)
-        DP_GL_API NativeContext( GLXContext context, bool destroyContext, GLXDrawable drawable, bool destroyDrawable, GLXPbuffer pbuffer, bool destroyPbuffer, Display *display, bool destroyDisplay );
+        DP_GL_API static SharedNativeContext create( GLXContext context, bool destroyContext, GLXDrawable drawable, bool destroyDrawable, GLXPbuffer pbuffer, bool destroyPbuffer, Display *display, bool destroyDisplay );
   #endif
         DP_GL_API virtual ~NativeContext();
 
@@ -527,6 +526,14 @@ namespace dp
 
         DP_GL_API void notifyDestroyed();
 
+      protected:
+  #if defined(WIN32)
+        DP_GL_API NativeContext( HWND hwnd, bool destroyHWND, HDC hdc, bool destroyHDC, HGLRC hglrc, bool destroyHGLRC );
+  #elif defined(LINUX)
+        DP_GL_API NativeContext( GLXContext context, bool destroyContext, GLXDrawable drawable, bool destroyDrawable, GLXPbuffer pbuffer, bool destroyPbuffer, Display *display, bool destroyDisplay );
+  #endif
+
+      public:
         GLint                   m_majorVersion;
         GLint                   m_minorVersion;
 
@@ -601,12 +608,10 @@ namespace dp
     /* ShareGroup classes */
     /**********************/
 
-    class ShareGroupResourceHolder;
-    typedef std::shared_ptr<ShareGroupResourceHolder> ShareGroupResource;
-  
     /** \brief A ShareGroupTask is a small task which can be executed in the GL thread of a ShareGroup.
     **/
     // FIXME does it make sense to introduce a generic task function?
+    SHARED_TYPES( ShareGroupTask );
     class ShareGroupTask
     {
     public:
@@ -618,10 +623,8 @@ namespace dp
       DP_GL_API virtual void execute() = 0;
     };
 
-    typedef std::shared_ptr<ShareGroupTask> SharedShareGroupTask;
-
     class ShareGroupResourceHolder;
-    typedef std::shared_ptr<ShareGroupResourceHolder> SharedShareGroupResource;
+    typedef std::shared_ptr<ShareGroupResourceHolder> SharedShareGroupResourceHolder;
 
     class ShareGroup : public std::enable_shared_from_this<ShareGroup>
     {
@@ -629,8 +632,8 @@ namespace dp
       DP_GL_API static SharedShareGroup create( const RenderContext::SharedNativeContext &nativeContext );
       DP_GL_API virtual ~ShareGroup();
 
-      DP_GL_API SharedShareGroupResource registerResource( size_t key, unsigned int type, const SharedObject &resource );
-      DP_GL_API SharedShareGroupResource getResource( size_t key, unsigned int type );
+      DP_GL_API SharedShareGroupResourceHolder registerResource( size_t key, unsigned int type, const SharedObject &resource );
+      DP_GL_API SharedShareGroupResourceHolder getResource( size_t key, unsigned int type );
 
       DP_GL_API void executeTask( const SharedShareGroupTask &task, bool async = true );
 

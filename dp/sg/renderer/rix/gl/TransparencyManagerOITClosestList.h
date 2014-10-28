@@ -30,7 +30,6 @@
 #include <dp/gl/Texture.h>
 #include <dp/sg/renderer/rix/gl/inc/ShaderManager.h>
 #include <dp/sg/renderer/rix/gl/TransparencyManager.h>
-#include <dp/util/SmartPtr.h>
 #include <GL/glew.h>
 
 namespace dp
@@ -43,14 +42,13 @@ namespace dp
       {
         namespace gl
         {
-
-          class TransparencyManagerOITClosestList;
-          typedef dp::util::SmartPtr<TransparencyManagerOITClosestList> SmartTransparencyManagerOITClosestList;
+          SMART_TYPES( TransparencyManagerOITClosestList );
 
           class TransparencyManagerOITClosestList : public TransparencyManager
           {
             public:
-              static SmartTransparencyManagerOITClosestList create( dp::math::Vec2ui const & size, unsigned int layersCount, float fragmentsCountFactor = 1.0f );
+              DP_SG_RDR_RIX_GL_API static SmartTransparencyManagerOITClosestList create( dp::math::Vec2ui const & size, unsigned int layersCount, float fragmentsCountFactor = 1.0f );
+              DP_SG_RDR_RIX_GL_API virtual ~TransparencyManagerOITClosestList();
 
             public:
               DP_SG_RDR_RIX_GL_API virtual void addFragmentCodeSnippets( bool transparent, bool depth, std::vector<std::string> & snippets );
@@ -61,8 +59,7 @@ namespace dp
               DP_SG_RDR_RIX_GL_API virtual bool needsSortedRendering() const;
 
             protected:
-              TransparencyManagerOITClosestList( dp::math::Vec2ui const & size, unsigned int layersCount, float fragmentsCountFactor );
-              virtual ~TransparencyManagerOITClosestList();
+              DP_SG_RDR_RIX_GL_API TransparencyManagerOITClosestList( dp::math::Vec2ui const & size, unsigned int layersCount, float fragmentsCountFactor );
 
               DP_SG_RDR_RIX_GL_API virtual void viewportSizeChanged();
 
@@ -94,4 +91,3 @@ namespace dp
     } // namespace renderer
   } // namespace sg
 } // namespace dp
-

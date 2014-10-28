@@ -36,7 +36,6 @@
 #include <dp/math/Vecnt.h>
 #include <dp/util/Observer.h>
 #include <dp/util/Semantic.h>
-#include <dp/util/SmartPtr.h>
 
 namespace dp
 {

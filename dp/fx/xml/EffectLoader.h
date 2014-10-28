@@ -35,8 +35,7 @@
 #include <dp/fx/EffectSpec.h>
 #include <dp/fx/ParameterGroupSpec.h>
 #include <dp/rix/core/RiX.h>
-
-#include <boost/shared_ptr.hpp>
+#include <dp/util/SharedPtr.h>
 
 #include <map>
 #include <memory>
@@ -56,6 +55,8 @@ namespace dp
       /************************************************************************/
       /* Technique                                                            */
       /************************************************************************/
+      SHARED_PTR_TYPES( Technique );
+
       class Technique
       {
       public:
@@ -63,25 +64,24 @@ namespace dp
         typedef std::map<dp::fx::Domain, SignatureSnippets> DomainSignatures;
 
       public:
-        Technique( std::string const & type);
-
+        static TechniqueSharedPtr create( std::string const& type );
         std::string const & getType() const;
 
         void addDomainSnippet( dp::fx::Domain domain, std::string const & signature, dp::fx::SmartSnippet const & snippet );
         SignatureSnippets const & getSignatures( dp::fx::Domain domain ) const;
+
+      protected:
+        Technique( std::string const & type);
 
       private:
         std::string    m_type;
         DomainSignatures m_domainSignatures;
       };
 
-      typedef boost::shared_ptr<Technique> TechniqueSharedPtr;
-
       /************************************************************************/
       /* DomainSpec                                                           */
       /************************************************************************/
-      class DomainSpec;
-      typedef std::shared_ptr<DomainSpec> SmartDomainSpec;
+      SMART_TYPES( DomainSpec );
 
       class DomainSpec
       {
@@ -111,8 +111,7 @@ namespace dp
       /************************************************************************/
       /* DomainData                                                           */
       /************************************************************************/
-      class DomainData;
-      typedef std::shared_ptr<DomainData> SmartDomainData;
+      SMART_TYPES( DomainData );
 
       class DomainData
       {
@@ -137,8 +136,7 @@ namespace dp
       /************************************************************************/
       /* EffectSpec                                                           */
       /************************************************************************/
-      class EffectSpec;
-      typedef std::shared_ptr<EffectSpec> SmartEffectSpec;
+      SMART_TYPES( EffectSpec );
 
       class EffectSpec : public dp::fx::EffectSpec
       {
@@ -161,10 +159,13 @@ namespace dp
         DomainSpecs m_domainSpecs;
       };
 
+
+      SMART_TYPES( EffectLoader );
+
       class EffectLoader : public dp::fx::EffectLoader
       {
       public:
-        DP_FX_XML_API EffectLoader( EffectLibraryImpl * effectLibrary );
+        DP_FX_XML_API static SmartEffectLoader create( EffectLibraryImpl * effectLibrary );
         DP_FX_XML_API ~EffectLoader();
 
         DP_FX_XML_API virtual bool loadEffects( const std::string& filename );
@@ -177,6 +178,9 @@ namespace dp
 
         DP_FX_XML_API virtual SmartShaderPipeline generateShaderPipeline( const dp::fx::ShaderPipelineConfiguration& configuration );
         DP_FX_XML_API virtual bool effectHasTechnique( dp::fx::SmartEffectSpec const& effectSpec, std::string const& techniqueName, bool rasterizer );
+
+      protected:
+        DP_FX_XML_API EffectLoader( EffectLibraryImpl * effectLibrary );
 
       private:
         enum EffectElementType

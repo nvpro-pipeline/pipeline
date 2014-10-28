@@ -27,14 +27,14 @@
 #pragma once
 
 #include <dp/culling/Manager.h>
+#include <dp/util/Types.h>
 
 namespace dp
 {
   namespace culling
   {
-
-    class GroupBitSet;
-    typedef dp::util::SmartPtr<GroupBitSet> GroupBitSetHandle;
+    HANDLE_TYPES( GroupBitSet );
+    HANDLE_TYPES( ObjectBitSet );
 
     /************************************************************************/
     /* Keep this class always aligned to 16 bytes!                          */
@@ -42,7 +42,7 @@ namespace dp
     class ObjectBitSet : public Object
     {
     public:
-      DP_CULLING_API ObjectBitSet( const dp::util::SmartRCObject& userData );
+      DP_CULLING_API static ObjectBitSetHandle create( SmartPayload const& userData );
 
       void setTransformIndex( size_t transformIndex );
       size_t getTransformIndex() const;
@@ -53,8 +53,8 @@ namespace dp
       void setExtent( dp::math::Vec4f const& lowerLeft );
       dp::math::Vec4f const& getExtent( ) const;
 
-      void setUserData( dp::util::SmartRCObject const& userData );
-      dp::util::SmartRCObject const& getUserData( ) const;
+      void setUserData( SmartPayload const& userData );
+      SmartPayload const& getUserData( ) const;
 
       void setGroupIndex( size_t groupIndex );
       size_t getGroupIndex() const;
@@ -63,10 +63,14 @@ namespace dp
       GroupBitSetHandle getGroup( ) const;
 
     protected:
+      DP_CULLING_API ObjectBitSet( SmartPayload const& userData );
+
+    protected:
+      DP_ALIGN(16)                              // align to 16 bytes to allow usage with SSE
       dp::math::Vec4f         m_lowerLeft;
       dp::math::Vec4f         m_extent;
       size_t                  m_transformIndex;
-      dp::util::SmartRCObject m_userData;
+      SmartPayload            m_userData;
       size_t                  m_groupIndex;
       GroupBitSet*            m_group;
     };
@@ -101,12 +105,12 @@ namespace dp
       return m_extent;
     }
 
-    inline void ObjectBitSet::setUserData( dp::util::SmartRCObject const& userData )
+    inline void ObjectBitSet::setUserData( SmartPayload const& userData )
     {
       m_userData = userData;
     }
 
-    inline dp::util::SmartRCObject const& ObjectBitSet::getUserData( ) const
+    inline SmartPayload const& ObjectBitSet::getUserData( ) const
     {
       return m_userData;
     }
@@ -120,8 +124,6 @@ namespace dp
     {
       return m_groupIndex;
     }
-
-    typedef dp::util::SmartPtr<ObjectBitSet> ObjectBitSetHandle;
 
   } // namespace culling
 } // namespace dp

@@ -32,6 +32,7 @@
 #include <dp/fx/EffectSpec.h>
 #include <dp/fx/EffectLibrary.h>
 #include <dp/fx/inc/Snippet.h>
+#include <dp/util/SharedPtr.h>
 #include <string>
 
 namespace dp
@@ -40,10 +41,11 @@ namespace dp
   {
     class EffectLibraryImpl;
 
+    SMART_TYPES( EffectLoader );
+
     class EffectLoader
     {
     public:
-      DP_FX_API EffectLoader( EffectLibraryImpl * effectLibrary );
       DP_FX_API virtual ~EffectLoader();
 
       DP_FX_API virtual bool loadEffects( const std::string & filename ) = 0;
@@ -53,6 +55,7 @@ namespace dp
       DP_FX_API virtual bool effectHasTechnique( SmartEffectSpec const& effectSpec, std::string const& techniqueName, bool rasterizer ) = 0;
 
     protected:
+      DP_FX_API EffectLoader( EffectLibraryImpl * effectLibrary );
       EffectLibraryImpl * getEffectLibrary() const;
 
     private:

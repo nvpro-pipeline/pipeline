@@ -34,9 +34,7 @@ namespace dp
 {
   namespace fx
   {
-
-    class EffectData;
-    typedef std::shared_ptr<EffectData> SmartEffectData;
+    SMART_TYPES( EffectData );
 
     class EffectData
     {

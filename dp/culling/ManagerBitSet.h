@@ -40,8 +40,8 @@ namespace dp
       DP_CULLING_API virtual ~ManagerBitSet();
       DP_CULLING_API virtual void objectSetBoundingBox( const ObjectHandle& object, const dp::math::Box3f& boundingBox );
       DP_CULLING_API virtual void objectSetTransformIndex( const ObjectHandle& object, size_t index );
-      DP_CULLING_API virtual void objectSetUserData( const ObjectHandle& object, const dp::util::SmartRCObject& userData );
-      DP_CULLING_API virtual const dp::util::SmartRCObject& objectGetUserData( const ObjectHandle& object );
+      DP_CULLING_API virtual void objectSetUserData( const ObjectHandle& object, SmartPayload const& userData );
+      DP_CULLING_API virtual SmartPayload const& objectGetUserData( const ObjectHandle& object );
 
       DP_CULLING_API virtual void groupAddObject( const GroupHandle& group, const ObjectHandle& object );
       DP_CULLING_API virtual ObjectHandle groupGetObject( const GroupHandle& group, size_t index );

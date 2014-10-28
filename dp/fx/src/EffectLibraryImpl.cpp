@@ -66,7 +66,7 @@ namespace dp
     {
     }
 
-    void EffectLibraryImpl::registerEffectLoader( const boost::shared_ptr<EffectLoader>& effectLoader, const std::string& extension )
+    void EffectLibraryImpl::registerEffectLoader( SmartEffectLoader const& effectLoader, const std::string& extension )
     {
       DP_ASSERT( m_effectLoaders.find(extension) == m_effectLoaders.end() );
       m_effectLoaders[extension] = effectLoader;
@@ -191,8 +191,7 @@ namespace dp
       }
       else
       {
-        static SmartEffectSpec dummy;
-        return dummy;
+        return( SmartEffectSpec::null );
       }
     }
 
@@ -219,8 +218,7 @@ namespace dp
       }
       else
       {
-        static SmartParameterGroupSpec dummy;
-        return( dummy );
+        return( SmartParameterGroupSpec::null );
       }
     }
 
@@ -263,7 +261,7 @@ namespace dp
         m_effectSpecs[ effectSpec->getName()] = EffectSpecInfo( effectSpec, effectLoader, m_currentFile.top() );
 
         // create EffectData for default values of EffectSpec
-        SmartEffectDataPrivate effectData( new EffectDataPrivate( effectSpec, effectSpec->getName() ) );
+        SmartEffectDataPrivate effectData = EffectDataPrivate::create( effectSpec, effectSpec->getName() );
         for ( EffectSpec::iterator it = effectSpec->beginParameterGroupSpecs(); it != effectSpec->endParameterGroupSpecs(); ++it )
         {
           effectData->setParameterGroupData( it, getParameterGroupData( (*it)->getName() ) );
@@ -288,7 +286,7 @@ namespace dp
         m_parameterGroupSpecs[ parameterGroupSpec->getName() ] = parameterGroupSpec;
 
         // register default ParameterGroupData for parameterGroupSpec
-        registerParameterGroupData( std::make_shared<ParameterGroupDataPrivate>( parameterGroupSpec, parameterGroupSpec->getName() ) );
+        registerParameterGroupData( ParameterGroupDataPrivate::create( parameterGroupSpec, parameterGroupSpec->getName() ) );
         return parameterGroupSpec;
       }
     }
@@ -334,8 +332,7 @@ namespace dp
       }
       else
       {
-        static SmartEnumSpec dummy;
-        return( dummy );
+        return( SmartEnumSpec::null );
       }
     }
 
@@ -348,8 +345,7 @@ namespace dp
       }
       else
       {
-        static SmartParameterGroupData dummy;
-        return( dummy );
+        return( SmartParameterGroupData::null );
       }
     }
 
@@ -362,8 +358,7 @@ namespace dp
       }
       else
       {
-        static SmartEffectData dummy;
-        return( dummy );
+        return( SmartEffectData::null );
       }
     }
 

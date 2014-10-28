@@ -47,7 +47,7 @@ namespace dp
        *  \sa saveScene */
       DP_SG_IO_API dp::sg::ui::ViewStateSharedPtr loadScene( std::string const& filename
                                                            , std::vector<std::string> const& searchPaths = std::vector<std::string>()
-                                                           , dp::util::PlugInCallback *callback = 0 );
+                                                           , dp::util::SmartPlugInCallback const& callback = dp::util::SmartPlugInCallback::null );
 
       /*! \brief Save a scene, internally doing all the SceneSaver handling.
        *  \param filename The name of the file to save to.

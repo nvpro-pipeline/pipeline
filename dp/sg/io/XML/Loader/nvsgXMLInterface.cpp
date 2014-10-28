@@ -74,13 +74,13 @@ void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids )
   piids.push_back(dp::util::UPIID(".XML", PITID_SCENE_LOADER));
 }
 
-bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPtr<dp::util::PlugIn> & pi)
+bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPlugIn & pi)
 {
   const dp::util::UPIID PIID_XML_SCENE_LOADER = dp::util::UPIID(".XML", PITID_SCENE_LOADER);
 
   if ( piid == PIID_XML_SCENE_LOADER )
   {
-    pi = dp::util::SmartPtr<dp::util::PlugIn>( new XMLLoader() );
+    pi = XMLLoader::create();
     return( !!pi );
   }
 

@@ -40,22 +40,20 @@ namespace dp
   {
     namespace xbar
     {
-
-      class SceneTree;
-      typedef dp::util::SmartPtr< SceneTree >  SceneTreeSharedPtr;
+      SHARED_PTR_TYPES( SceneTree );
       typedef SceneTree*                       SceneTreeWeakPtr;
 
       class DrawableInstance;
       typedef DrawableInstance* DrawableInstanceWeakPtr;
 
-      class GeneratorState;
-      typedef dp::util::SmartPtr< GeneratorState > GeneratorStateSharedPtr;
-      class GeneratorState : public dp::util::RCObject
+      SHARED_PTR_TYPES( GeneratorState );
+
+      class GeneratorState
       {
       public:
         static GeneratorStateSharedPtr create( const SceneTreeWeakPtr& sceneTree )
         {
-          return new GeneratorState( sceneTree );
+          return( std::shared_ptr<GeneratorState>( new GeneratorState( sceneTree ) ) );
         }
 
       public:

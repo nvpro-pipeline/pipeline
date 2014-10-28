@@ -29,7 +29,6 @@
 
 #include <dp/DP.h>
 #include <dp/fx/EffectLibrary.h>
-#include <dp/util/RCObject.h>
 #include <dp/util/PlugInCallback.h>
 #include <dp/sg/core/Billboard.h>
 #include <dp/sg/core/ClipPlane.h>
@@ -146,11 +145,11 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD  reason, LPVOID lpReserved)
 }
 #endif
 
-bool getPlugInterface(const UPIID& piid, dp::util::SmartPtr<dp::util::PlugIn> & pi)
+bool getPlugInterface(const UPIID& piid, dp::util::SmartPlugIn & pi)
 {
   if ( piid==PIID_NBF_SCENE_SAVER )
   {
-    pi = dp::util::SmartPtr<dp::util::PlugIn>( new NBFSaver() );
+    pi = NBFSaver::create();
     return( !!pi );
   }
   return false;
@@ -161,6 +160,11 @@ void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids )
   piids.clear();
 
   piids.push_back(PIID_NBF_SCENE_SAVER);
+}
+
+SmartNBFSaver NBFSaver::create()
+{
+  return( std::shared_ptr<NBFSaver>( new NBFSaver() ) );
 }
 
 NBFSaver::NBFSaver()

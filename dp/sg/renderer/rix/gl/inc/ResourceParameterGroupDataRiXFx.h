@@ -44,8 +44,7 @@ namespace dp
       {
         namespace gl
         {
-          class ResourceParameterGroupDataRiXFx;
-          typedef dp::util::SmartPtr<ResourceParameterGroupDataRiXFx> SmartResourceParameterGroupDataRiXFx;
+          SMART_TYPES( ResourceParameterGroupDataRiXFx );
           typedef ResourceParameterGroupDataRiXFx* WeakResourceParameterGroupDataRiXFx;
 
 

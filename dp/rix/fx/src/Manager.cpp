@@ -45,11 +45,15 @@ namespace dp
         case dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX_FX:
         case dp::fx::MANAGER_SHADER_STORAGE_BUFFER_OBJECT:
         case dp::fx::MANAGER_SHADER_STORAGE_BUFFER_OBJECT_RIX:
-          return new ManagerUniform( rdr, managerType );
+          return ManagerUniform::create( rdr, managerType );
         default:
           DP_ASSERT(0 && "unsupported manager");
           return nullptr;
         }
+      }
+
+      Manager::Manager()
+      {
       }
 
     }

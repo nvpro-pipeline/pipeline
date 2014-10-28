@@ -62,11 +62,13 @@ extern "C"
   * If the PlugIn ID \a piid equals \c PIID_NVSG_SCENE_LOADER, a NVSGLoader is created and returned in \a pi.
   * \returns  true, if the requested PlugIn could be created, otherwise false
   */
-NVSGLOADER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPtr<dp::util::PlugIn> & pi);
+NVSGLOADER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPlugIn & pi);
 
 //! Query the supported types of PlugIn Interfaces.
 NVSGLOADER_API void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids );
 }
+
+SMART_TYPES( NVSGLoader );
 
 //! A Scene Loader for nvsg files.
 /** NVSG files can be produced with the sample SceniX Viewer. 
@@ -74,14 +76,10 @@ NVSGLOADER_API void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piid
 class NVSGLoader : public dp::sg::io::SceneLoader
 {
   public :
-    //  Default constructor.
-    NVSGLoader();
-    ~NVSGLoader();
+    static SmartNVSGLoader create();
+    virtual ~NVSGLoader();
 
   public :
-    //! Realization of the pure virtual interface function of a PlugIn.
-    /** \note Never call \c delete on a PlugIn, always use the member function. */
-    void  deleteThis( void );
 
     //! Realization of the pure virtual interface function of a SceneLoader.
     /** Loads a nvsg file given by \a filename. It looks for this file and 
@@ -94,6 +92,9 @@ class NVSGLoader : public dp::sg::io::SceneLoader
                                      , dp::sg::ui::ViewStateSharedPtr & viewState   /*!< If the function succeeded, this points to the optional
                                                                                          ViewState stored with the scene. */
                                      );
+
+  protected:
+    NVSGLoader();
 
   private:
     struct PrimitiveData
@@ -234,11 +235,6 @@ class NVSGLoader : public dp::sg::io::SceneLoader
     std::map<std::string,dp::sg::core::VertexAttributeSetSharedPtr> m_vertexAttributeSets;
     dp::util::StrTokenizer                                          m_strTok;
 };
-
-inline void NVSGLoader::deleteThis( void )
-{
-  delete this;
-}
 
 template <typename ObjectType>
 inline void NVSGLoader::storeNamedObject( const std::string & name

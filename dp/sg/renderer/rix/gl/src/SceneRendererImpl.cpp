@@ -96,7 +96,7 @@ namespace dp
                                                       , dp::culling::Mode cullingMode, TransparencyMode transparencyMode
                                                       , const dp::gl::SharedRenderTarget &renderTarget )
           {
-            return new SceneRendererImpl( renderEngine, shaderManagerType, cullingMode, transparencyMode, renderTarget );
+            return( std::shared_ptr<SceneRendererImpl>( new SceneRendererImpl( renderEngine, shaderManagerType, cullingMode, transparencyMode, renderTarget ) ) );
           }
 
           SceneRendererImpl::SceneRendererImpl( const char *renderEngine, dp::fx::Manager shaderManagerType
@@ -495,7 +495,7 @@ namespace dp
               m_renderer = dynamic_cast<RiX::GL::RiXGL*>((*createRenderer)( m_renderEngine.c_str() ));
               DP_ASSERT( m_renderer && "Could not create RiXGL renderer" );
 
-              m_resourceManager = new ResourceManager( m_renderer, m_shaderManager );
+              m_resourceManager = ResourceManager::create( m_renderer, m_shaderManager );
 
               m_rendererInitialized = m_renderer && m_resourceManager;
 

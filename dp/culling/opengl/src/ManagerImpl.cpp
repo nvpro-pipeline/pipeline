@@ -190,20 +190,18 @@ namespace dp
 
       GroupHandle ManagerImpl::groupCreate()
       {
-        return new GroupImpl();
+        return GroupImpl::create();
       }
 
-      ObjectHandle ManagerImpl::objectCreate( const dp::util::SmartRCObject& userData )
+      ObjectHandle ManagerImpl::objectCreate( SmartPayload const& userData )
       {
-        return new ObjectBitSet( userData );
+        return ObjectBitSet::create( userData );
       }
 
 
       ResultHandle ManagerImpl::groupCreateResult( GroupHandle const& group )
       {
-        const GroupImplHandle& groupImpl = dp::util::smart_cast<GroupImpl>(group);
-
-        return new ResultBitSet( groupImpl );
+        return( ResultBitSet::create( group.staticCast<GroupImpl>() ) );
       }
 
       void ManagerImpl::initializeComputeShader()
@@ -222,8 +220,7 @@ namespace dp
       {
         dp::util::ProfileEntry p("cull");
 
-        const GroupImplHandle& groupImpl = dp::util::smart_cast<GroupImpl>(group);
-        const ResultBitSetHandle& resultImpl = dp::util::smart_cast<ResultBitSet>(result);
+        const GroupImplHandle& groupImpl = group.staticCast<GroupImpl>();
 
         dp::math::Mat44f vp = viewProjection;
         dp::math::Mat44f modelViewProjection;
@@ -244,7 +241,7 @@ namespace dp
         glMemoryBarrier( GL_BUFFER_UPDATE_BARRIER_BIT ); // TODO This is way too slow to use, but correct.
         glMemoryBarrier( GL_SHADER_STORAGE_BARRIER_BIT );
         dp::gl::MappedBuffer<dp::util::Uint32> visibleShader( groupImpl->getOutputBuffer(), GL_SHADER_STORAGE_BUFFER, GL_READ_WRITE );
-        resultImpl->updateChanged( visibleShader );
+        result.staticCast<ResultBitSet>()->updateChanged( visibleShader );
       }
 
       Manager* Manager::create()

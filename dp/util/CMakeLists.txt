@@ -37,13 +37,11 @@ set(DPUTIL_INCLUDES
   PlugIn.h
   PlugInCallback.h
   Profile.h
-  RCObject.h
   Reflection.h
   Semantic.h
   SharedPtr.h
   SimplexNoise1234.h
   Singleton.h
-  SmartPtr.h
   StridedIterator.h
   Timer.h
   Tokenizer.h
@@ -87,7 +85,6 @@ set(DPUTIL_SOURCES
   src/Observer.cpp
   src/PlugIn.cpp
   src/Profile.cpp
-  src/RCObject.cpp
   src/Reflection.cpp
   src/SimplexNoise1234.cpp
   src/Timer.cpp

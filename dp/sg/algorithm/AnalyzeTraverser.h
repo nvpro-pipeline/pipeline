@@ -255,10 +255,10 @@ namespace dp
        *  \par Example
        *  To get the results of the AnalyzeTraverser on a given Scene, do something like that:
        *  \code
-       *    SmartPtr<AnalyzeTraverser> analyzeTraverser( new AnalyzeTraverser );
-       *    analyzeTraverser->apply( pScene );
+       *    AnalyzeTraverser analyzeTraverser;
+       *    analyzeTraverser.apply( pScene );
        *    std::vector<AnalyzeResult *> results;
-       *    unsigned int numberOfResults = analyzeTraverser->getAnalysis( results );
+       *    unsigned int numberOfResults = analyzeTraverser.getAnalysis( results );
        *    for ( unsigned int i=0 ; i<numberOfResults ; i++ )
        *    {
        *      if ( dynamic_cast<EmptyResult *>( results[i] ) != NULL )

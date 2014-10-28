@@ -26,6 +26,7 @@
 
 #include <iostream>
 #include <dp/util/Reflection.h>
+#include <dp/util/Types.h>
 
 namespace dp
 {

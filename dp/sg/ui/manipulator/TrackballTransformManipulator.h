@@ -122,20 +122,7 @@ namespace dp
            *  The application is responsible to make sure that the dp::sg::core::Path stays 
            *  valid during the usage of the Manipulator.
            *  \sa getTransformPath */
-          DP_SG_UI_MANIPULATOR_API void setTransformPath(dp::sg::core::Path * transformPath);
-
-          /*! \brief Set the dp::sg::core::Path to the dp::sg::core::Transform node.
-           *  \param transformPath Complete path to the dp::sg::core::Transform node. Null is a valid value to 
-           *  disconnect the TrackballTransformManipulator from the controlled object.
-           *  \remarks Attach the Manipulator to the desired dp::sg::core::Transform in the tree by providing 
-           *  a complete dp::sg::core::Path from the root node to the dp::sg::core::Transform node.\n
-           *  This class takes care of incrementing and decrementing the reference count of the provided
-           *  dp::sg::core::Path object.
-           *  \n\n 
-           *  The application is responsible to make sure that the dp::sg::core::Path stays 
-           *  valid during the usage of the Manipulator.
-           *  \sa getTransformPath */
-          DP_SG_UI_MANIPULATOR_API void setTransformPath( const dp::util::SmartPtr<dp::sg::core::Path> & transformPath );
+          DP_SG_UI_MANIPULATOR_API void setTransformPath( dp::sg::core::PathSharedPtr const& transformPath );
 
           /*! \brief Get the dp::sg::core::Path to the dp::sg::core::Transform that currently is under control.
            *  \return Path to the controlled dp::sg::core::Transform. If the TrackballTransformManipulator is not 
@@ -143,11 +130,11 @@ namespace dp
            *  \remarks  The application is responsible to make sure that the dp::sg::core::Path stays 
            *  valid during the usage of the Manipulator.
            *  \sa setTransformPath */
-          DP_SG_UI_MANIPULATOR_API const dp::sg::core::Path * getTransformPath() const;
+          DP_SG_UI_MANIPULATOR_API dp::sg::core::PathSharedPtr const& getTransformPath() const;
 
         protected:
-          dp::sg::ui::Trackball m_trackball;  // Trackball object that does all the calculations
-          dp::util::SmartPtr<dp::sg::core::Path>      m_transformPath;  //!< Complete dp::sg::core::Path to the dp::sg::core::Transform node.
+          dp::sg::ui::Trackball       m_trackball;      // Trackball object that does all the calculations
+          dp::sg::core::PathSharedPtr m_transformPath;  //!< Complete dp::sg::core::Path to the dp::sg::core::Transform node.
 
           // new interface
           Mode m_mode;

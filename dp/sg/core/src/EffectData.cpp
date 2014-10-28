@@ -85,12 +85,17 @@ namespace
       }
   };
 
-  class EffectDataLocal;
-  typedef std::shared_ptr<EffectDataLocal> SmartEffectDataLocal;
+  SMART_TYPES( EffectDataLocal );
 
   class EffectDataLocal : public dp::fx::EffectData
   {
     public:
+      static SmartEffectDataLocal create( dp::sg::core::EffectData const* effectData )
+      {
+        return( std::shared_ptr<EffectDataLocal>( new EffectDataLocal( effectData ) ) );
+      }
+
+    protected:
       EffectDataLocal( const dp::sg::core::EffectData * effectData )
         : dp::fx::EffectData( effectData->getEffectSpec(), effectData->getName() )
       {
@@ -318,7 +323,7 @@ namespace dp
       void EffectData::feedHashGenerator( util::HashGenerator & hg ) const
       {
         OwnedObject<Object>::feedHashGenerator( hg );
-        hg.update( reinterpret_cast<const unsigned char *>(m_effectSpec.get()), sizeof(const EffectSpec *) );
+        hg.update( m_effectSpec );
         unsigned int nopgs = m_effectSpec->getNumberOfParameterGroupSpecs();
         for ( unsigned int i=0 ; i<nopgs ; i++ )
         {
@@ -365,7 +370,7 @@ namespace dp
 
       bool EffectData::save( const std::string & filename ) const
       {
-        SmartEffectDataLocal edl( new EffectDataLocal( this ) );
+        SmartEffectDataLocal edl = EffectDataLocal::create( this );
         return( EffectLibrary::instance()->save( dp::util::shared_cast<dp::fx::EffectData>( edl ), filename ) );
       }
 

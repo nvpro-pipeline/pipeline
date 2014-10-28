@@ -29,7 +29,6 @@
 #include <dp/fx/ParameterSpec.h>
 #include <dp/rix/core/RiX.h>
 #include <dp/sg/renderer/rix/gl/TransparencyManager.h>
-#include <dp/util/RCObject.h>
 
 namespace dp
 {
@@ -41,17 +40,16 @@ namespace dp
       {
         namespace gl
         {
+          SMART_TYPES( TransparencyManagerNone );
 
           class DrawableManagerDefault;
           class ShaderManager;
 
-          class TransparencyManagerNone;
-          typedef dp::util::SmartPtr<TransparencyManagerNone> SmartTransparencyManagerNone;
-
           class TransparencyManagerNone : public TransparencyManager
           {
             public:
-              static SmartTransparencyManagerNone create();
+              DP_SG_RDR_RIX_GL_API static SmartTransparencyManagerNone create();
+              DP_SG_RDR_RIX_GL_API virtual ~TransparencyManagerNone();
 
             public:
               DP_SG_RDR_RIX_GL_API virtual void addFragmentCodeSnippets( bool transparent, bool depth, std::vector<std::string> & snippets );
@@ -61,7 +59,6 @@ namespace dp
 
             protected:
               TransparencyManagerNone();
-              virtual ~TransparencyManagerNone();
           };
 
         } // namespace gl
@@ -69,4 +66,3 @@ namespace dp
     } // namespace renderer
   } // namespace sg
 } // namespace dp
-

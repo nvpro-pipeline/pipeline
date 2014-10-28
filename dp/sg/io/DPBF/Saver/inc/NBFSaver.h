@@ -49,7 +49,7 @@
 // exports required for a scene loader plug-in
 extern "C"
 {
-NBFSAVER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPtr<dp::util::PlugIn> & pi);
+NBFSAVER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPlugIn & pi);
 NBFSAVER_API void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids );
 }
 
@@ -360,16 +360,14 @@ inline std::string NBFSaveTraverser::getErrorMessage() const
   return( m_errorMessage );
 }
 
+SMART_TYPES( NBFSaver );
+
 //! A scene saver capable to save a NVSG scene to a "NBF" (Nvsg Binary File format) file.
 class NBFSaver : public dp::sg::io::SceneSaver
 {
 public :
-  //! constructor
-  NBFSaver();
-
-  //! Realization of the pure virtual interface function of a PlugIn.
-  /** \note Never call \c delete on a PlugIn, always use the member function. */
-  void deleteThis( void ); //!< PlugIn interface
+  static SmartNBFSaver create();
+  virtual ~NBFSaver();
 
   //! Realization of the pure virtual interface function of a SceneSaver.
   /** Saves the \a scene and the \a viewState to \a filename. 
@@ -380,14 +378,9 @@ public :
            );
 
 protected:
-  virtual ~NBFSaver();
+  NBFSaver();
 };
 
-
-inline void NBFSaver::deleteThis( void )
-{
-  delete this;
-}
 
 inline bool NBFSaveTraverser::calculatingStorageRequirements() const
 {

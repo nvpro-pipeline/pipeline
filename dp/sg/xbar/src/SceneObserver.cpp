@@ -37,7 +37,7 @@ namespace dp
 
       SmartSceneObserver SceneObserver::create( SceneTreeWeakPtr sceneTree )
       {
-        return( new SceneObserver( sceneTree) );
+        return( std::shared_ptr<SceneObserver>( new SceneObserver( sceneTree) ) );
       }
 
       SceneObserver::SceneObserver( SceneTreeWeakPtr sceneTree )

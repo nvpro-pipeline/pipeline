@@ -26,8 +26,6 @@
 
 #pragma once
 
-#include <dp/util/SmartPtr.h>
-
 namespace dp
 {
   namespace sg
@@ -35,17 +33,17 @@ namespace dp
     namespace xbar
     {
       template <typename ResourceType>
-      class TreeResourceGroup : public dp::util::RCObject
+      class TreeResourceGroup
       {
       public:
-        static dp::util::SmartPtr< TreeResourceGroup<ResourceType> > create()
+        static dp::util::SharedPtr<TreeResourceGroup<ResourceType>> create()
         {
-          return new TreeResourceGroup<ResourceType>;
+          return( std::shared_ptr<TreeResourceGroup<ResourceType>>( new TreeResourceGroup<ResourceType>() ) );
         }
 
-        static dp::util::SmartPtr< TreeResourceGroup<ResourceType> > create( dp::util::SmartPtr< TreeResourceGroup<ResourceType> > &rhs )
+        static dp::util::SharedPtr<TreeResourceGroup<ResourceType>> create( dp::util::SharedPtr<TreeResourceGroup<ResourceType>> const& rhs )
         {
-          return new TreeResourceGroup<ResourceType>( *rhs.get() );
+          return( std::shared_ptr<TreeResourceGroup<ResourceType>>( new TreeResourceGroup<ResourceType>( rhs ) ) );
         }
 
       protected:
@@ -53,35 +51,24 @@ namespace dp
         {
         }
 
-        TreeResourceGroup( const TreeResourceGroup &rhs )
-          : m_group( rhs.m_group )
+        TreeResourceGroup( dp::util::SharedPtr<TreeResourceGroup<ResourceType>> const& rhs )
+          : m_group( rhs->m_group )
         {
         }
 
       public:
-        void add( const dp::util::SmartPtr<ResourceType> &object )
+        void add( dp::util::SharedPtr<ResourceType> const& object )
         {
           m_group.push_back( object );
         }
 
-        const std::vector< dp::util::SmartPtr<ResourceType> > & getVector() const
+        std::vector<dp::util::SharedPtr<ResourceType>> const& getVector() const
         {
           return m_group;
         }
 
-        void setResource( const dp::util::SmartRCObject &resource )
-        {
-          m_resource = resource;
-        }
-
-        const dp::util::SmartRCObject &getResource() const
-        {
-          return m_resource;
-        }
-
       protected:
-        dp::util::SmartRCObject m_resource;
-        std::vector< dp::util::SmartPtr< ResourceType > > m_group;
+        std::vector<dp::util::SharedPtr<ResourceType>>  m_group;
       };
 
     } // namespace xbar

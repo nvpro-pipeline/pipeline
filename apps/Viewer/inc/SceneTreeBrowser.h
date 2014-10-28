@@ -50,7 +50,7 @@ class SceneTreeBrowser : public QDockWidget
     void currentItemChanged( QTreeWidgetItem * current, QTreeWidgetItem * previous );
     void itemExpanded( QTreeWidgetItem * item );
     void itemPressed( QTreeWidgetItem * item, int column );
-    void selectObject( dp::util::SmartPtr<dp::sg::core::Path> path );
+    void selectObject( dp::sg::core::PathSharedPtr const& path );
     void triggeredAddHeadlightMenu( QAction * action );
     void triggeredAddSamplerMenu( QAction * action );
     void triggeredDeleteObject();

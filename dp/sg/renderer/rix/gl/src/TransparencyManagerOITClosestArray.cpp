@@ -43,7 +43,7 @@ namespace dp
 
           SmartTransparencyManagerOITClosestArray TransparencyManagerOITClosestArray::create( dp::math::Vec2ui const & size, unsigned int depth )
           {
-            return( new TransparencyManagerOITClosestArray( size, depth ) );
+            return( std::shared_ptr<TransparencyManagerOITClosestArray>( new TransparencyManagerOITClosestArray( size, depth ) ) );
           }
 
           TransparencyManagerOITClosestArray::TransparencyManagerOITClosestArray( dp::math::Vec2ui const & size, unsigned int depth )

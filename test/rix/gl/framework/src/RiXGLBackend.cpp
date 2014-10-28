@@ -55,6 +55,11 @@ namespace dp
 
           using namespace core::test::framework;
 
+          SmartRiXGLBackend RiXGLBackend::create( char const* renderer, char const* options )
+          {
+            return( std::shared_ptr<RiXGLBackend>( new RiXGLBackend( renderer, options ) ) );
+          }
+
           RiXGLBackend::RiXGLBackend(const char* renderer, const char* options)
             : RiXBackend(renderer, options)
           {

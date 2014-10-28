@@ -54,11 +54,11 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD reason, LPVOID lpReserved)
 #elif defined( LINUX )
 #endif
 
-bool getPlugInterface(const UPIID& piid, dp::util::SmartPtr<dp::util::PlugIn> & pi)
+bool getPlugInterface(const UPIID& piid, dp::util::SmartPlugIn & pi)
 {
   if ( piid == PIID_CSF_SCENE_SAVER )
   {
-    pi = dp::util::SmartPtr<dp::util::PlugIn>( new CSFSaver() );
+    pi = CSFSaver::create();
     return( !!pi );
   }
   return false;
@@ -69,6 +69,19 @@ void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids )
   piids.clear();
 
   piids.push_back(PIID_CSF_SCENE_SAVER);
+}
+
+SmartCSFSaver CSFSaver::create()
+{
+  return( std::shared_ptr<CSFSaver>( new CSFSaver() ) );
+}
+
+CSFSaver::CSFSaver()
+{
+}
+
+CSFSaver::~CSFSaver()
+{
 }
 
 bool CSFSaver::save( dp::sg::core::SceneSharedPtr const& scene, dp::sg::ui::ViewStateSharedPtr const& viewState, string const& filename )

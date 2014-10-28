@@ -52,17 +52,17 @@ namespace dp
             assert( effectSpec );
             assert( !!resourceManager );
 
-            SmartResourceEffectSpecRiXFx resourceEffectSpec = resourceManager->getResource<ResourceEffectSpecRiXFx>( reinterpret_cast<size_t>(effectSpec.get()) );
+            SmartResourceEffectSpecRiXFx resourceEffectSpec = resourceManager->getResource<ResourceEffectSpecRiXFx>( reinterpret_cast<size_t>(effectSpec.getWeakPtr()) );
             if ( !resourceEffectSpec )
             {
-              resourceEffectSpec = new ResourceEffectSpecRiXFx( effectSpec, rixFx, resourceManager );
+              resourceEffectSpec = std::shared_ptr<ResourceEffectSpecRiXFx>( new ResourceEffectSpecRiXFx( effectSpec, rixFx, resourceManager ) );
             }
 
             return resourceEffectSpec;
           }
 
           ResourceEffectSpecRiXFx::ResourceEffectSpecRiXFx( const SmartEffectSpec& effectSpec, const dp::rix::fx::SmartManager& rixfx, const SmartResourceManager& resourceManager )
-            : ResourceManager::Resource( reinterpret_cast<size_t>( effectSpec.get() ), resourceManager )
+            : ResourceManager::Resource( reinterpret_cast<size_t>( effectSpec.getWeakPtr() ), resourceManager )
             , m_resourceManager( resourceManager )
             , m_effectSpec( effectSpec )
           {

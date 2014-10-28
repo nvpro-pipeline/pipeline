@@ -60,26 +60,28 @@ namespace dp
             dp::rix::core::RenderGroupSharedHandle m_renderGroup;
           };
 
+          SMART_TYPES( RiXBackend );
+
           class RiXBackend : public testfw::core::Backend
           {
           public:
-            DPTRIX_API RiXBackend( const char* renderer, const char* options );
             DPTRIX_API virtual ~RiXBackend();
 
             DPTRIX_API virtual dp::ui::SmartRenderTarget createDisplay(int width, int height, bool visible) = 0;
             DPTRIX_API virtual dp::ui::SmartRenderTarget createAuxiliaryRenderTarget(int width, int height) = 0;
 
-            DPTRIX_API virtual void render( dp::testfw::core::RenderData* renderData, dp::ui::SmartRenderTarget renderTarget = nullptr );
+            DPTRIX_API virtual void render( dp::testfw::core::RenderData* renderData, dp::ui::SmartRenderTarget renderTarget = dp::ui::SmartRenderTarget::null );
             
             DPTRIX_API dp::rix::core::Renderer* getRenderer() const;
+
+          protected:
+            DPTRIX_API RiXBackend( const char* renderer, const char* options );
 
           protected:
             dp::rix::core::Renderer* m_rix;
             dp::util::SmartDynamicLibrary m_rixLib;
           
           };
-
-          typedef util::SmartPtr<RiXBackend> SmartRiXBackend;
 
         } // namespace framework
       } // namespace gl

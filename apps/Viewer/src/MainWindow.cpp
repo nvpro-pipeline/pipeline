@@ -204,13 +204,13 @@ void MainWindow::aboutToShowViewMenu()
     m_stereoDialogAction->setEnabled( false );
     m_tonemapperDialogAction->setEnabled( false );
   }
- 
-  bool enable = viewing && ( dynamic_cast<dp::sg::renderer::rix::gl::SceneRenderer*>(m_renderWidgets[m_currentViewport]->getSceneRenderer().get()) != nullptr );
+
+  bool enable = viewing && m_renderWidgets[m_currentViewport]->getSceneRenderer().isPtrTo<dp::sg::renderer::rix::gl::SceneRenderer>();
   m_depthPassAction->setEnabled( enable );
   m_transparencyDialogAction->setEnabled( enable );
   if ( enable )
   {
-    m_depthPassAction->setChecked( static_cast<dp::sg::renderer::rix::gl::SceneRenderer*>(m_renderWidgets[m_currentViewport]->getSceneRenderer().get())->getDepthPass() );
+    m_depthPassAction->setChecked( m_renderWidgets[m_currentViewport]->getSceneRenderer().staticCast<dp::sg::renderer::rix::gl::SceneRenderer>()->getDepthPass() );
   }
 }
 
@@ -319,8 +319,8 @@ ViewerRendererWidget * MainWindow::createRenderer( QWidget * parent, dp::sg::cor
          , vrw, SLOT(currentItemChanged(dp::sg::core::ObjectSharedPtr,dp::sg::core::ObjectSharedPtr)) );
 
   // sent from the vrw
-  connect( vrw, SIGNAL(objectSelected(dp::util::SmartPtr<dp::sg::core::Path>)), this, SLOT(selectObject(dp::util::SmartPtr<dp::sg::core::Path>)) );
-  connect( vrw, SIGNAL(objectSelected(dp::util::SmartPtr<dp::sg::core::Path>)), m_sceneTreeBrowser, SLOT(selectObject(dp::util::SmartPtr<dp::sg::core::Path>)) );
+  connect( vrw, SIGNAL(objectSelected(dp::sg::core::PathSharedPtr)), this, SLOT(selectObject(dp::sg::core::PathSharedPtr)) );
+  connect( vrw, SIGNAL(objectSelected(dp::sg::core::PathSharedPtr)), m_sceneTreeBrowser, SLOT(selectObject(dp::sg::core::PathSharedPtr)) );
 
   // event filter will filter the keys for camera cycling
   vrw->installEventFilter( this );
@@ -607,7 +607,7 @@ void MainWindow::sceneChanged()
   updateRenderers( GetApp()->getViewState() );
 }
 
-void MainWindow::selectObject( dp::util::SmartPtr<dp::sg::core::Path> path )
+void MainWindow::selectObject( dp::sg::core::PathSharedPtr const& path )
 {
   dp::sg::core::ObjectSharedPtr object = path->getTail();
   if ( object.isPtrTo<dp::sg::core::FrustumCamera>() )
@@ -1319,8 +1319,8 @@ void MainWindow::triggeredClose()
 
 void MainWindow::triggeredDepthPass( bool checked )
 {
-  DP_ASSERT( dynamic_cast<dp::sg::renderer::rix::gl::SceneRenderer*>(m_renderWidgets[m_currentViewport]->getSceneRenderer().get()) != nullptr );
-  static_cast<dp::sg::renderer::rix::gl::SceneRenderer*>(m_renderWidgets[m_currentViewport]->getSceneRenderer().get())->setDepthPass( checked );
+  DP_ASSERT( m_renderWidgets[m_currentViewport]->getSceneRenderer().isPtrTo<dp::sg::renderer::rix::gl::SceneRenderer>() );
+  m_renderWidgets[m_currentViewport]->getSceneRenderer().staticCast<dp::sg::renderer::rix::gl::SceneRenderer>()->setDepthPass( checked );
   GetApp()->getPreferences()->setDepthPass( checked );
 }
 

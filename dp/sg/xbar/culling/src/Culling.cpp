@@ -36,6 +36,10 @@ namespace dp
       namespace culling
       {
 
+        Result::Result()
+        {
+        }
+
         Result::~Result()
         {
         }
@@ -46,7 +50,7 @@ namespace dp
 
         CullingSharedPtr Culling::create( SceneTreeSharedPtr const & sceneTree, dp::culling::Mode cullingMode )
         {
-          return new CullingImpl( sceneTree, cullingMode );
+          return CullingImpl::create( sceneTree, cullingMode );
         }
 
       } // namespace culling

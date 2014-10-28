@@ -43,9 +43,7 @@ namespace dp
       {
         namespace gl
         {
-
-          class ResourcePrimitive;
-          typedef dp::util::SmartPtr<ResourcePrimitive> SmartResourcePrimitive;
+          SMART_TYPES( ResourcePrimitive );
 
           class ResourcePrimitive : public ResourceManager::Resource
           {
@@ -70,8 +68,6 @@ namespace dp
             dp::sg::core::PrimitiveSharedPtr m_primitive;
             ResourcePrimitive( const dp::sg::core::PrimitiveSharedPtr &primitive, const SmartResourceManager& resourceManager );
           };
-
-          typedef dp::util::SmartPtr<ResourcePrimitive> SmartResourcePrimitive;
 
         } // namespace gl
       } // namespace rix

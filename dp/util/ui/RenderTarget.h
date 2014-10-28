@@ -27,7 +27,6 @@
 #pragma once
 
 #include <dp/util/Image.h>
-#include <dp/util/SmartPtr.h>
 
 namespace dp
 {
@@ -35,10 +34,12 @@ namespace dp
   {
     namespace ui
     {
+      SMART_TYPES( RenderTarget );
+
       /** \brief An interface to a memory buffer to which the frame is rendered.
           \remarks For mono rendering the LEFT surface is used as default. 
       **/
-      class RenderTarget : public RCObject
+      class RenderTarget
       {
       public:
         enum StereoTarget
@@ -48,7 +49,6 @@ namespace dp
           , LEFT_AND_RIGHT   //!< Left and right eye at the same time, may not work on all targets
         };
 
-        DP_UTIL_API RenderTarget();
         DP_UTIL_API virtual ~RenderTarget();
 
         /** \brief This function will be called by renderers when they start to render a frame.
@@ -112,11 +112,12 @@ namespace dp
         DP_UTIL_API void setHeight(unsigned int height);
 
       protected:
+        DP_UTIL_API RenderTarget();
+
+      protected:
         unsigned int m_width;
         unsigned int m_height;
       };
-
-      typedef SmartPtr<RenderTarget> SmartRenderTarget;
 
     } // namespace ui
   } // namespace util

@@ -31,8 +31,12 @@ namespace dp
 {
   namespace culling
   {
+      ObjectBitSetHandle ObjectBitSet::create( SmartPayload const& userData )
+      {
+        return( std::shared_ptr<ObjectBitSet>( new ObjectBitSet( userData ) ) );
+      }
 
-      ObjectBitSet::ObjectBitSet( const dp::util::SmartRCObject& userData )
+      ObjectBitSet::ObjectBitSet( SmartPayload const& userData )
       : m_userData( userData )
       , m_transformIndex( ~0 )
       , m_groupIndex( ~0 )
@@ -42,12 +46,12 @@ namespace dp
 
       void ObjectBitSet::setGroup( GroupBitSetHandle const & group )
       {
-        m_group = group.get();
+        m_group = group.getWeakPtr();
       }
 
       GroupBitSetHandle ObjectBitSet::getGroup() const
       {
-        return m_group;
+        return( m_group ? GroupHandle( m_group->shared_from_this() ).staticCast<GroupBitSet>() : GroupBitSetHandle::null );
       }
 
   } // namespace culling

@@ -101,7 +101,7 @@ namespace dp
 
     bool EffectSpec::isEquivalent( const SmartEffectSpec & p, bool ignoreNames, bool deepCompare ) const
     {
-      if ( this == p.get() )
+      if ( p == this )
       {
         return( true );
       }

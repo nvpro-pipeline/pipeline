@@ -27,7 +27,6 @@
 #include <dp/DP.h>
 #include <dp/sg/renderer/rix/gl/TransparencyManagerSB.h>
 #include <dp/util/File.h>
-#include <dp/util/SmartPtr.h>
 #include <GL/glew.h>
 
 namespace dp
@@ -43,7 +42,7 @@ namespace dp
 
           SmartTransparencyManagerSB TransparencyManagerSB::create()
           {
-            return( new TransparencyManagerSB() );
+            return( std::shared_ptr<TransparencyManagerSB>( new TransparencyManagerSB() ) );
           }
 
           TransparencyManagerSB::TransparencyManagerSB()

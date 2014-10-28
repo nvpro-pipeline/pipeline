@@ -26,6 +26,7 @@
 
 #include <dp/sg/core/TextureFile.h>
 #include <dp/util/Observer.h>
+#include <dp/util/Types.h>
 #include <boost/make_shared.hpp>
 
 namespace dp
@@ -47,8 +48,16 @@ namespace dp
         virtual void onDestroyed( const dp::util::Subject& subject, dp::util::Payload* payload );
 
       private:
+        SMART_TYPES( Payload );
         class Payload : public dp::util::Payload
         {
+        public:
+          static SmartPayload create();
+          virtual ~Payload();
+
+        protected:
+          Payload();
+
         public:
           std::string                      m_filename; // the filename is required for the onDestroyed event.
           dp::sg::core::TextureFileWeakPtr m_textureFile;
@@ -56,9 +65,24 @@ namespace dp
 
         static TextureFileCache & instance();
         
-        typedef std::map<std::string const, boost::shared_ptr<Payload> > TextureFileMap;
+        typedef std::map<std::string const, std::shared_ptr<Payload> > TextureFileMap;
         TextureFileMap m_cache;
       };
+
+
+      TextureFileCache::SmartPayload TextureFileCache::Payload::create()
+      {
+        return( std::shared_ptr<Payload>( new Payload() ) );
+      }
+
+      TextureFileCache::Payload::Payload()
+      {
+      }
+
+      TextureFileCache::Payload::~Payload()
+      {
+      }
+
 
       TextureFileCache & TextureFileCache::instance()
       { 
@@ -75,11 +99,11 @@ namespace dp
         if ( it == self.m_cache.end() )
         {
           // if not create a new TextureFile object
-          boost::shared_ptr<Payload> payload = boost::make_shared<Payload>();
+          SmartPayload payload = Payload::create();
           payload->m_filename = filename;
           TextureFileSharedPtr textureFile = std::shared_ptr<TextureFile>( new TextureFile( filename, textureTarget ) );
           payload->m_textureFile = textureFile.getWeakPtr();
-          payload->m_textureFile->attach( &self, payload.get() );
+          payload->m_textureFile->attach( &self, payload.getWeakPtr() );
           it = self.m_cache.insert( std::make_pair( filename, payload) ).first;
           return textureFile;
         }

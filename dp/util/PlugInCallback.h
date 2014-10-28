@@ -28,12 +28,14 @@
 /** \file */
 
 #include <dp/util/Config.h>
-#include <dp/util/RCObject.h>
+#include <dp/util/SharedPtr.h>
 
 namespace dp
 {
   namespace util
   {
+    SMART_TYPES( PlugInCallback );
+
     //! PlugInCallback base class
     /** A PlugInCallback object can be used to report warnings and errors that happen while using a PlugIn. It is applied
       * to a PlugIn via PlugIn::setCallback().
@@ -43,7 +45,7 @@ namespace dp
       * And it has two families of specific error and warning functions that are called on specific error/warning
       * conditions.
       */
-    class PlugInCallback : public dp::util::RCObject
+    class PlugInCallback
     {
       public:
         //! Enumeration of PlugInCallback errors.
@@ -182,8 +184,8 @@ namespace dp
         } InvalidFileInfo;
 
       public:
-        //! Constructor
-        PlugInCallback();
+        static SmartPlugInCallback create();
+        virtual ~PlugInCallback();
 
         //! Set whether an exception should be thrown on error.
         void  setThrowExceptionOnError( bool set );
@@ -400,12 +402,16 @@ namespace dp
                                   ) const;
 
       protected: 
-        //! Protected destructor to prevent explicit creation on stack.
-        virtual ~PlugInCallback();
+        PlugInCallback();
 
       private:
         bool  m_throwExceptionOnError;
     };
+
+    inline SmartPlugInCallback PlugInCallback::create()
+    {
+      return( std::shared_ptr<PlugInCallback>( new PlugInCallback() ) );
+    }
 
     inline  PlugInCallback::PlugInCallback()
       : m_throwExceptionOnError(true)

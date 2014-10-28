@@ -58,7 +58,7 @@ namespace dp
            * use getResults instead. 
            * \sa getResults 
            */
-          DP_SG_ALGORITHM_API const std::vector<const dp::sg::core::Path*> & getPaths();
+          DP_SG_ALGORITHM_API std::vector<dp::sg::core::PathSharedPtr> const& getPaths();
 
           /*! \brief Returns all objects found.
            * \return The function returns all objects found during traversal.
@@ -251,15 +251,14 @@ namespace dp
         private:
           bool searchObject(const dp::sg::core::Object* p, const std::string &classNameToHandle);
 
-          dp::util::SmartPtr<dp::sg::core::Path>                m_currentPath;
-          std::string                                           m_className;
-          std::set<const dp::sg::core::Object *>                m_foundObjects;
-          std::string                                           m_objectName;
-          dp::sg::core::ObjectWeakPtr                           m_objectPointer;
-          std::vector<const dp::sg::core::Path*>                m_paths;
-          std::vector<dp::sg::core::ObjectWeakPtr>              m_results;
-          bool                                                  m_searchBaseClass;
-          std::vector<dp::util::SmartPtr<dp::sg::core::Path> >  m_smartPaths;
+          dp::sg::core::PathSharedPtr               m_currentPath;
+          std::string                               m_className;
+          std::set<const dp::sg::core::Object *>    m_foundObjects;
+          std::string                               m_objectName;
+          dp::sg::core::ObjectWeakPtr               m_objectPointer;
+          std::vector<dp::sg::core::PathSharedPtr>  m_paths;
+          std::vector<dp::sg::core::ObjectWeakPtr>  m_results;
+          bool                                      m_searchBaseClass;
       };
 
       inline void SearchTraverser::setClassName( const std::string& name )

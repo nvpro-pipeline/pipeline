@@ -38,8 +38,10 @@ namespace dp
   {
     namespace fx 
     {
+      SMART_TYPES( ManagerUniform );
 
-      class ManagerUniform :  public Manager {
+      class ManagerUniform :  public Manager
+      {
       public:
 #define DEFINE_CLASS( name )\
         class name; \
@@ -52,7 +54,7 @@ namespace dp
 
 #undef DEFINE_CLASS
 
-        ManagerUniform( dp::rix::core::Renderer* renderer, dp::fx::Manager managerType );
+        static SmartManagerUniform create( dp::rix::core::Renderer* renderer, dp::fx::Manager managerType );
         ~ManagerUniform();
 
         void runPendingUpdates();
@@ -79,6 +81,9 @@ namespace dp
 
         dp::rix::core::Renderer*  getRenderer() const;
         virtual dp::fx::Manager   getManagerType() const;
+
+      protected:
+        ManagerUniform( dp::rix::core::Renderer* renderer, dp::fx::Manager managerType );
 
       private:
         SmartParameterGroupSpecInfoHandle getParameterGroupSpecInfo( const dp::fx::SmartParameterGroupSpec& spec );

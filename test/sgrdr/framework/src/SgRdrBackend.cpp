@@ -179,7 +179,7 @@ namespace dp
         {
           dp::sg::core::nvsgTerminate();
           //The Sg Renderer must be destroyed prior to destroying the window
-          m_renderer = nullptr;
+          m_renderer = dp::sg::renderer::rix::gl::SmartSceneRenderer::null;
           if ( m_windowId )
           {
             glutDestroyWindow( m_windowId );

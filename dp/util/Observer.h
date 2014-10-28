@@ -27,7 +27,7 @@
 #pragma once
 
 #include <dp/util/Config.h>
-
+#include <memory>
 #include <vector>
 
 namespace dp
@@ -37,7 +37,7 @@ namespace dp
     class Subject;
     class Observer;
 
-    class Payload
+    class Payload : public std::enable_shared_from_this<Payload>
     {
     public:
       DP_UTIL_API virtual ~Payload();

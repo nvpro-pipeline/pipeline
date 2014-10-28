@@ -46,7 +46,7 @@ namespace dp
             SmartResourceVertexAttributeSet resourceVertexAttributeSet = resourceManager->getResource<ResourceVertexAttributeSet>( reinterpret_cast<size_t>(vertexAttributeSet.getWeakPtr()) );
             if ( !resourceVertexAttributeSet )
             {
-              resourceVertexAttributeSet = new ResourceVertexAttributeSet( vertexAttributeSet, resourceManager );
+              resourceVertexAttributeSet = std::shared_ptr<ResourceVertexAttributeSet>( new ResourceVertexAttributeSet( vertexAttributeSet, resourceManager ) );
               resourceVertexAttributeSet->m_vertexAttributesHandle = resourceManager->getRenderer()->vertexAttributesCreate();
               resourceVertexAttributeSet->update();
             }

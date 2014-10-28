@@ -99,10 +99,14 @@ namespace dp
         *   }
         * \endcode
         */
+      SMART_TYPES( SceneLoader );
+
       // SceneLoader interface
       class SceneLoader : public dp::util::PlugIn
       {
         public:
+          DP_SG_IO_API virtual ~SceneLoader();
+
           //! Loading a scene
           /** Loads a SceniX scene from a file specified by \a filename. 
             * The function tries to look up this file as follows:
@@ -118,20 +122,11 @@ namespace dp
                                                                 ) = 0;
 
         protected:
-          //! Protected virtual destructor
-          /** Prohibits ordinary client code from  
-            * - creating a \c SceneLoader derived object on stack and
-            * - calling \c delete on a pointer to \c SceneLoader. 
-            * \note This will not prohibit the client code from calling \c delete
-            * on a pointer to a \c SceneLoader derived object. Normally this 
-            * is not that critical, because one almost always uses
-            * a pointer to the base class when working with \c SceneLoader plug-ins.
-            * \par
-            * Nevertheless, it would be far less error prone if classes that
-            * inherit from \c SceneLoader also make their destructor protected.
-            */
-          DP_SG_IO_API virtual ~SceneLoader();
+          DP_SG_IO_API SceneLoader();
       };
+
+
+      SMART_TYPES( SceneSaver );
 
       //! Pure virtual base class for SceniX scene saver plug-ins
       /** User defined SceniX scene saver plug-ins must provide the \c SceneSaver
@@ -139,6 +134,8 @@ namespace dp
       class SceneSaver : public dp::util::PlugIn
       {
         public:
+          DP_SG_IO_API virtual ~SceneSaver();
+
           //! Saving a scene
           /** Saves a SceniX \a scene and a \a viewState to a file specified by \a filename. 
             * \returns \c true if successful, \c false otherwise.
@@ -148,26 +145,19 @@ namespace dp
                                         , std::string const& filename ) = 0;
 
         protected:
-          //! Protected virtual destructor
-          /** Prohibits ordinary client code from  
-            * - creating a \c SceneSaver derived object on stack and
-            * - calling \c delete on a pointer to \c SceneSaver.
-            * \note This will not prohibit the client code from calling \c delete
-            * on a pointer to a \c SceneSaver derived object. Normally this 
-            * is not that critical, because one almost always uses
-            * a pointer to the base class when working with \c SceneSaver plug-ins.
-            * \par
-            * Nevertheless, it would be far less error prone if classes that
-            * inherit from \c SceneSaver, also make their destructor protected.
-            */
-          DP_SG_IO_API virtual ~SceneSaver();
+          DP_SG_IO_API SceneSaver();
       };
+
+
+      SMART_TYPES( TextureLoader );
 
       //! Pure virtual base class for texture loader plugins
       /** \note TextureLoader are not yet implemented as plugins. */
       class TextureLoader : public dp::util::PlugIn
       {
         public:
+          DP_SG_IO_API virtual ~TextureLoader();
+
           /*! \brief Function to load a TextureHost.
            *  \param filename The name of the texture file to load.
            *  \param searchPaths Not applicable for texture files, can be left empty.
@@ -198,19 +188,7 @@ namespace dp
                                   = std::vector<std::string>() );
 
         protected:
-          //! Protected virtual destructor
-          /** Prohibits ordinary client code from  
-            * - creating a \c TextureLoader derived object on stack and
-            * - calling \c delete on a pointer to \c TextureLoader.
-            * \note This will not prohibit client code from calling \c delete
-            * on a pointer to a \c TextureLoader derived object. Normally this 
-            * is not that critical, because one almost always uses
-            * a pointer to the base class when working with \c TextureLoader plug-ins.
-            * \par
-            * Nevertheless, it would be far less error prone if classes that
-            * inherit from \c TextureLoader also make their destructor protected.
-            */
-          DP_SG_IO_API virtual ~TextureLoader();
+          DP_SG_IO_API TextureLoader();
 
           /*! \brief Pure virtual interface called on loading a TextureHost file.
            *  \param texImg A pointer to the TextureHost to load the data into.
@@ -226,11 +204,15 @@ namespace dp
                                           , const std::vector<std::string> & searchPaths ) = 0;
       };
 
+      SMART_TYPES( TextureSaver );
+
       //! Pure virtual base class for texture saver plugins
       /** \note TextureSaver are not yet implemented as plugins. */
       class TextureSaver : public dp::util::PlugIn
       {
         public:
+          DP_SG_IO_API virtual ~TextureSaver();
+
           //! Pure virtual interface function to save a TextureHost.
           /** Saves the texture image \a image to the file given by \a filename.
             * \returns  \c true, if the TextureHost was saved successfully, otherwise \c false.
@@ -239,19 +221,7 @@ namespace dp
                                     , const std::string & fileName ) = 0;
 
         protected:
-          //! Protected virtual destructor
-          /** Prohibits ordinary client code from  
-            * - creating a \c TextureSaver derived object on stack and
-            * - calling \c delete on a pointer to \c TextureSaver.
-            * \note This will not prohibit client code from calling \c delete
-            * on a pointer to a \c TextureSaver derived object. Normally this 
-            * is not that critical, because one almost always uses
-            * a pointer to the base class when working with \c TextureSaver plug-ins.
-            * \par
-            * Nevertheless, it would be far less error prone if classes that
-            * inherit from \c TextureSaver also make their destructor protected.
-            */
-          DP_SG_IO_API virtual ~TextureSaver();
+          DP_SG_IO_API TextureSaver();
       };
 
       //! Pure virtual base class for shader loader plugins

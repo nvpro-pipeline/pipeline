@@ -46,6 +46,10 @@ namespace dp
 {
   namespace culling
   {
+      GroupBitSetHandle GroupBitSet::create()
+      {
+        return( std::shared_ptr<GroupBitSet>( new GroupBitSet() ) );
+      }
 
       GroupBitSet::GroupBitSet()
         : m_matrices( nullptr )

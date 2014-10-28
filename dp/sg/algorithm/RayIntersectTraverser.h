@@ -32,7 +32,6 @@
 #include <dp/sg/core/Primitive.h>
 #include <dp/sg/core/Path.h>
 #include <dp/sg/core/Buffer.h>
-#include "dp/util/SmartPtr.h"
 
 namespace dp
 {
@@ -54,13 +53,13 @@ namespace dp
 
           //! Constructor.
           /** This contructor creates an intersection object from the given data. */
-          DP_SG_ALGORITHM_API Intersection( dp::sg::core::Path * pPath                         //!< Path to the intersected drawable.
-                               , const dp::sg::core::PrimitiveSharedPtr & pPrimitive  //!< Intersected drawable.
-                               , const dp::math::Vec3f & isp                  //!< Intersection point on the drawable.
-                               , float dist                                 //!< Distance from the ray origin to the drawable.
-                               , unsigned int primitiveIndex                //!< Index of the intersected primitive in the Primitive.
-                               , const std::vector<unsigned int> & vertexIndices //!< Indices of the vertices of the intersected primitive.
-                               );
+          DP_SG_ALGORITHM_API Intersection( dp::sg::core::PathSharedPtr const& pPath            //!< Path to the intersected drawable.
+                                          , dp::sg::core::PrimitiveSharedPtr const& pPrimitive //!< Intersected drawable.
+                                          , dp::math::Vec3f const& isp                         //!< Intersection point on the drawable.
+                                          , float dist                                          //!< Distance from the ray origin to the drawable.
+                                          , unsigned int primitiveIndex                         //!< Index of the intersected primitive in the Primitive.
+                                          , std::vector<unsigned int> const& vertexIndices     //!< Indices of the vertices of the intersected primitive.
+                                          );
 
           //! Copy constructor.
           /** Creates a new Intersection object from the given one. */
@@ -75,7 +74,7 @@ namespace dp
 
           //! Get the Path to the intersected drawable.
           /** \return Path to the drawable. */
-          DP_SG_ALGORITHM_API dp::util::SmartPtr<dp::sg::core::Path> const & getPath() const;
+          DP_SG_ALGORITHM_API dp::sg::core::PathSharedPtr const& getPath() const;
 
           //! Get the intersected primitive
           /** \return Intersected primitive. */
@@ -125,12 +124,12 @@ namespace dp
           void clone( const Intersection & rhs    //!< Object to clone.
                              ); 
       
-          dp::sg::core::PrimitiveSharedPtr      m_pPrimitive;      //!< Intersected primitive.
-          dp::util::SmartPtr<dp::sg::core::Path>  m_pPath;          //!< Path to the intersected primitive.
-          dp::math::Vec3f               m_isp;            //!< Intersection point on the intersected primitive.
-          float                         m_dist;           //!< Distance from the ray origin to the intersection point.
-          unsigned int                  m_primitiveIndex; //!< Index of the intersected primitive in the Primitive.
-          std::vector<unsigned int>     m_vertexIndices;  //!< Indices of the vertices of the intersected primitive.
+          dp::sg::core::PrimitiveSharedPtr  m_pPrimitive;     //!< Intersected primitive.
+          dp::sg::core::PathSharedPtr       m_pPath;          //!< Path to the intersected primitive.
+          dp::math::Vec3f                   m_isp;            //!< Intersection point on the intersected primitive.
+          float                             m_dist;           //!< Distance from the ray origin to the intersection point.
+          unsigned int                      m_primitiveIndex; //!< Index of the intersected primitive in the Primitive.
+          std::vector<unsigned int>         m_vertexIndices;  //!< Indices of the vertices of the intersected primitive.
 
       };
 
@@ -147,12 +146,12 @@ namespace dp
       {
       }
 
-       inline Intersection::Intersection ( dp::sg::core::Path * pPath
-                                         , const dp::sg::core::PrimitiveSharedPtr & pPrimitive
-                                         , const dp::math::Vec3f & isp
+       inline Intersection::Intersection ( dp::sg::core::PathSharedPtr const& pPath
+                                         , dp::sg::core::PrimitiveSharedPtr const& pPrimitive
+                                         , dp::math::Vec3f const& isp
                                          , float dist
                                          , unsigned int primitiveIndex
-                                         , const std::vector<unsigned int> & vertexIndices)
+                                         , std::vector<unsigned int> const& vertexIndices)
 
       {
         DP_ASSERT(pPrimitive);
@@ -202,7 +201,7 @@ namespace dp
         return m_pPrimitive;
       }
 
-      inline dp::util::SmartPtr<dp::sg::core::Path> const & Intersection::getPath() const
+      inline dp::sg::core::PathSharedPtr const& Intersection::getPath() const
       {
         return m_pPath;
       }
@@ -450,7 +449,7 @@ namespace dp
           bool                          m_camClipping;      //!< true: use camera far/near clipping planes
 
           std::stack<std::vector<dp::sg::core::ClipPlaneSharedPtr> > m_clipPlanes;   //!< vector of active clip planes
-          dp::util::SmartPtr<dp::sg::core::Path>  m_curPath;          //!< Current path.
+          dp::sg::core::PathSharedPtr   m_curPath;          //!< Current path.
           std::vector<Intersection>     m_intersectionList; //!< Intersection list containing all intersections.
           std::stack<dp::math::Vec3f>   m_msRayOrigin;      //!< stack of Origin point of the ray in model space
           std::stack<dp::math::Vec3f>   m_msRayDir;         //!< stack of Direction of the ray in model space

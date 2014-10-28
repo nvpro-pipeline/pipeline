@@ -66,6 +66,11 @@ using namespace std;
 // define a unique plug-interface ID for SceneLoader
 const dp::util::UPITID PITID_SCENE_LOADER(UPITID_SCENE_LOADER, UPITID_VERSION);
 
+SmartXMLLoader XMLLoader::create()
+{
+  return( std::shared_ptr<XMLLoader>( new XMLLoader() ) );
+}
+
 XMLLoader::XMLLoader()
   : m_viewState(NULL)
 {
@@ -75,38 +80,29 @@ XMLLoader::~XMLLoader()
 {
 }
 
-void
-XMLLoader::deleteThis( void )
-{
-  // was instantiated using 'new'. hence kill it with 'delete'
-  delete this;
-}
-
 #if 0
 void
 XMLLoader::optimizeGeometry( GeoNodeWeakPtr geode )
 {
-  SmartPtr<UnifyTraverser> ssut(new UnifyTraverser);
-  ssut->setIgnoreNames( true );
-  ssut->setUnifyTargets(  UnifyTraverser::UT_STATE_SET | UnifyTraverser::UT_STATE_PASS | UnifyTraverser::UT_STATE_ATTRIBUTE );
-  ssut->apply( geode );
+  UnifyTraverser ut;
+  ut.setIgnoreNames( true );
+  ut.setUnifyTargets(  UnifyTraverser::UT_STATE_SET | UnifyTraverser::UT_STATE_PASS | UnifyTraverser::UT_STATE_ATTRIBUTE );
+  ut.apply( geode );
 
-//  SmartPtr<NormalizeTraverser> nt(new NormalizeTraverser);
-//  nt->apply( geode );
+//  NormalizeTraverser nt;
+//  nt.apply( geode );
 
-  SmartPtr<CombineTraverser> ct(new CombineTraverser);
-  ct->setClassesToCombine( CombineTraverser::CC_PRIMITIVE_SET );
-  ct->apply( geode );
+  CombineTraverser ct;
+  ct.setClassesToCombine( CombineTraverser::CC_PRIMITIVE_SET );
+  ct.apply( geode );
 
-  SmartPtr<UnifyTraverser> psut(new UnifyTraverser);
-  psut->setIgnoreNames( true );
-  psut->setUnifyTargets(  UnifyTraverser::UT_PRIMITIVE_SET | UnifyTraverser::UT_VERTEX_ATTRIBUTE_SET
-                        | UnifyTraverser::UT_VERTICES );
-  psut->setEpsilon( 0.00001f );
-  psut->apply( geode );
+  ut.setUnifyTargets(  UnifyTraverser::UT_PRIMITIVE_SET | UnifyTraverser::UT_VERTEX_ATTRIBUTE_SET
+                     | UnifyTraverser::UT_VERTICES );
+  ut.setEpsilon( 0.00001f );
+  ut.apply( geode );
 
-//  SmartPtr<StrippingTraverser> st(new StrippingTraverser);
-//  st->apply( geode );
+//  StrippingTraverser st;
+//  st.apply( geode );
 }
 #endif
 

@@ -35,7 +35,6 @@
 #include <dp/sg/renderer/rix/gl/TransparencyManager.h>
 #include <dp/gl/RenderTarget.h>
 #include <dp/util/Reflection.h>
-#include <dp/util/SmartPtr.h>
 #include <dp/util/DynamicLibrary.h>
 
 namespace dp
@@ -64,7 +63,6 @@ namespace dp
                              , dp::culling::Mode cullingMode
                              , TransparencyMode transparencyMode
                              , const dp::gl::SharedRenderTarget &renderTarget );
-            virtual ~SceneRendererImpl();
 
           public:
             /** \brief Create an instance of SceneRendererImpl
@@ -76,6 +74,7 @@ namespace dp
                                             , dp::culling::Mode culling
                                             , TransparencyMode transparencyMode
                                             , const dp::gl::SharedRenderTarget &renderTarget );
+            virtual ~SceneRendererImpl();
 
             /** \brief Add all supported options to the RendererOptions container.
                 \param rendererOptions A container for RendererOptions 

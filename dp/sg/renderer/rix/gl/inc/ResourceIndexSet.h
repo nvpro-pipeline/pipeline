@@ -41,9 +41,7 @@ namespace dp
       {
         namespace gl
         {
-
-          class ResourceIndexSet;
-          typedef dp::util::SmartPtr<ResourceIndexSet> SmartResourceIndexSet;
+          SMART_TYPES( ResourceIndexSet );
           typedef ResourceIndexSet* WeakResourceIndexSet;
 
           class ResourceIndexSet : public ResourceManager::Resource

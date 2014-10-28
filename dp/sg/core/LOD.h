@@ -30,7 +30,6 @@
 #include <dp/sg/core/nvsgapi.h>
 #include <dp/util/HashGenerator.h>
 #include <dp/sg/core/Group.h>
-#include "dp/util/SmartPtr.h"
 
 namespace dp
 {
@@ -159,11 +158,11 @@ namespace dp
            *    SceneSharedPtr pScene( m_pRA->getScene() );
            *    if (pScene)
            *    {
-           *      SmartPtr<SearchTraverser> st( new SearchTraverser );
-           *      st->setClassName( "class LOD" );
-           *      st->setBaseClassSearch( true );
-           *      st->apply( pScene );  
-           *      const vector<const Path *> &vp = st->getPaths();
+           *      SearchTraverser st;
+           *      st.setClassName( "class LOD" );
+           *      st.setBaseClassSearch( true );
+           *      st.apply( pScene );  
+           *      const vector<const Path *> &vp = st.getPaths();
            *      for ( unsigned int i=0 ; i<vp.size() ; i++ )
            *      {
            *        LODLock( dynamic_cast<LOD*>(vp[i]->getTail()) )->setRangeLock( on, level );

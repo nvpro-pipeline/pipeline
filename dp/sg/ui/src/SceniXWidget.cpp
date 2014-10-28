@@ -45,11 +45,11 @@ namespace dp
         if ( m_manipulator )
         {
           m_manipulator->setViewState( dp::sg::ui::ViewStateSharedPtr::null );
-          m_manipulator->setRenderTarget( 0 );
+          m_manipulator->setRenderTarget( dp::ui::SmartRenderTarget::null );
         }
         if ( m_renderer )
         {
-          m_renderer->setRenderTarget( nullptr );
+          m_renderer->setRenderTarget( dp::ui::SmartRenderTarget::null );
         }
       }
 

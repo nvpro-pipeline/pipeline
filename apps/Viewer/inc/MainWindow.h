@@ -95,7 +95,7 @@ private slots:
   void aboutToShowViewMenu();
   void activeViewportChanged( int index, QWidget * widget );
   void sceneChanged();
-  void selectObject( dp::util::SmartPtr<dp::sg::core::Path> path );
+  void selectObject( dp::sg::core::PathSharedPtr const& path );
   void toggledCameraCycle( bool onoff );
   void toggledCameraOrbitX( bool onoff );
   void toggledCameraOrbitY( bool onoff );

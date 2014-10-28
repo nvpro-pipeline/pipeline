@@ -29,15 +29,14 @@
 #include <dp/gl/Program.h>
 #include <dp/gl/RenderContext.h>
 #include <dp/gl/Texture.h>
-#include <dp/util/SmartPtr.h>
 #include <map>
 
-class TextureTransfer;
-typedef dp::util::SmartPtr<TextureTransfer> SmartTextureTransfer;
-class TextureTransfer : public dp::util::RCObject
+SMART_TYPES( TextureTransfer );
+
+class TextureTransfer
 {
 public:
-  TextureTransfer( dp::gl::SharedRenderContext const& dstContext, dp::gl::SharedRenderContext const& srcContext );
+  static SmartTextureTransfer create( dp::gl::SharedRenderContext const& dstContext, dp::gl::SharedRenderContext const& srcContext );
   ~TextureTransfer();
 
   void setTileSize( size_t width, size_t height );
@@ -46,6 +45,9 @@ public:
   void transfer( size_t index
                , dp::gl::SharedTexture2D dstTexture
                , dp::gl::SharedTexture2D srcTexture );
+
+protected:
+  TextureTransfer( dp::gl::SharedRenderContext const& dstContext, dp::gl::SharedRenderContext const& srcContext );
 
 private:
   void constructComputeShaders();

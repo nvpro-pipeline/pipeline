@@ -29,7 +29,6 @@
 #include <QImage>
 
 #include <dp/sg/ui/qt5/Config.h>
-#include <dp/util/SmartPtr.h>
 #include <dp/util/Image.h>
 #include <dp/sg/core/CoreTypes.h>
 

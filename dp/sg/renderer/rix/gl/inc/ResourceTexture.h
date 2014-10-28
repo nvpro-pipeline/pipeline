@@ -39,9 +39,7 @@ namespace dp
       {
         namespace gl
         {
-
-          class ResourceTexture;
-          typedef dp::util::SmartPtr<ResourceTexture> SmartResourceTexture;
+          SMART_TYPES( ResourceTexture );
           typedef ResourceTexture* WeakResourceTexture;
     
           class ResourceTexture : public ResourceManager::Resource
