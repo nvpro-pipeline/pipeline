@@ -121,8 +121,8 @@ namespace dp
     void DeindexTraverser::doApply( const NodeSharedPtr & root )
     {
       // We can't convert a stripped primitive into a single array primitive, so we destripify before traversal.
-      dp::util::SmartPtr<DestrippingTraverser> destrip( new DestrippingTraverser );
-      destrip->apply( root );
+      DestrippingTraverser destrip;
+      destrip.apply( root );
 
       ExclusiveTraverser::doApply(root);
     }

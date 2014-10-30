@@ -56,7 +56,7 @@ namespace dp
        *  derived from Traverser: SharedTraverser and ExclusiveTraverser, that provide read-only
        *  access and read-write access, respectively, to the elements of the scene graph.
        *  \sa ExclusiveTraverser, SharedTraverser */
-      class Traverser : public dp::util::RCObject, public dp::util::Reflection
+      class Traverser : public dp::util::Reflection
       {
         public:
           /*! \brief Set a ViewState to be used with this Traverser.
@@ -134,6 +134,7 @@ namespace dp
            *  \remarks This convenience function temporary changed the ViewState of this traverser.
            *  \sa apply */
           DP_SG_ALGORITHM_API void apply( dp::sg::ui::ViewStateSharedPtr const& viewstate );
+
         protected:
           /*! \brief Default constructor.
            *  \note The constructor is protected, and hence, a Traverser object cannot be
@@ -278,6 +279,7 @@ namespace dp
           dp::sg::core::SceneSharedPtr    m_scene;          //!< A pointer to the current scene.
           dp::sg::ui::ViewStateSharedPtr  m_viewState;      //!< A pointer to the current view state.
           dp::sg::core::CameraSharedPtr   m_camera;
+
         private:
           DP_SG_ALGORITHM_API unsigned int     getObjectTraversalCode( const dp::sg::core::Object * object );  // NOTE: used inline, therefore needs to be exported via DP_SG_ALGORITHM_API
 

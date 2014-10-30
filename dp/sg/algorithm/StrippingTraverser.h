@@ -50,10 +50,10 @@ namespace dp
           //! Constructor
           DP_SG_ALGORITHM_API StrippingTraverser(void);
 
-        protected:
-          //! Protected destructor to prevent instantiation of a StrippingTraverser.
+          //! Destructor
           DP_SG_ALGORITHM_API virtual ~StrippingTraverser(void);
 
+        protected:
           DP_SG_ALGORITHM_API virtual void handleGeoNode( dp::sg::core::GeoNode * p );
 
           //! Convert each Primitive of type PRIMITIVE_QUADS or PRIMITIVE_TRIANGLES to PRIMITIVE_QUAD_STRIP and PRIMITIVE_TRIANGLE_STRIP, respectively.

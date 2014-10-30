@@ -38,6 +38,9 @@ class DisplayNormalsTraverser : public dp::sg::algorithm::ExclusiveTraverser
     //! Constructor
     DisplayNormalsTraverser();
 
+    //! Destructor
+    virtual ~DisplayNormalsTraverser(void);
+
     //! Set the length of the vertex normals to display
     void setNormalLength(float len);
 
@@ -45,9 +48,6 @@ class DisplayNormalsTraverser : public dp::sg::algorithm::ExclusiveTraverser
     void setNormalColor(dp::math::Vec3f &color);
 
   protected:
-    //! Protected destructor to prevent instantiation of a DisplayNormalsTraverser.
-    virtual ~DisplayNormalsTraverser(void);
-
     /*! \brief Handle the special case for the root being a GeoNode.
      *  \param root The root of the tree to handle.
      *  \remarks The behaviour is undefined, if \a root is not the root node of the currently handled scene. */

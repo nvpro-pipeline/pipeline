@@ -289,6 +289,9 @@ namespace dp
           /*! \brief Default Constructor */
           DP_SG_ALGORITHM_API AnalyzeTraverser( void );
 
+          /*! \brief Destructor */
+          DP_SG_ALGORITHM_API virtual ~AnalyzeTraverser( void );
+
           /*! \brief Get the analysis results of the latest traversal.
            *  \param results A reference to the vector pointers to an AnalyzeResult object to fill.
            *  \return The number of AnalyzeResult objects generated.
@@ -300,11 +303,6 @@ namespace dp
           DP_SG_ALGORITHM_API unsigned int getAnalysis( std::vector<AnalyzeResult*> &results ) const;
 
         protected:
-          /*! \brief Protected destructor to prevent explicit creation.
-           *  \remarks The destructor is never used explicitly, but only when the reference count of
-           *  the AnalyzeTraverser is decremented to zero. */
-          DP_SG_ALGORITHM_API virtual ~AnalyzeTraverser( void );
-
           /*! \brief Override of the doApply method.
            *  \param root A pointer to the read-locked root node of the tree to analyze.
            *  \remarks The doApply method is the traversal entry point of a Traverser. The local data

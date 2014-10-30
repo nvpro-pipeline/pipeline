@@ -393,9 +393,9 @@ dp::sg::ui::ViewStateSharedPtr loadScene( std::string const& filename )
 
 void showStatistics( dp::sg::ui::ViewStateSharedPtr const& viewState )
 {
-  dp::util::SmartPtr<dp::sg::algorithm::StatisticsTraverser> statisticsTraverser = new dp::sg::algorithm::StatisticsTraverser;
-  statisticsTraverser->apply( viewState );
-  dp::sg::algorithm::Statistics const* statistics = statisticsTraverser->getStatistics();
+  dp::sg::algorithm::StatisticsTraverser statisticsTraverser;
+  statisticsTraverser.apply( viewState );
+  dp::sg::algorithm::Statistics const* statistics = statisticsTraverser.getStatistics();
   std::cout << "vertices : " << statistics->m_statVertexAttributeSet.m_numberOfVertices << std::endl;
   std::cout << "faces: " << statistics->m_statPrimitives.m_faces << std::endl;
   std::cout << "faces instances: " << statistics->m_statPrimitiveInstances.m_faces << std::endl;

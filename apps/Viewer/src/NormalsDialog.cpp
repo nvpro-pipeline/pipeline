@@ -96,18 +96,18 @@ void NormalsDialog::apply( const dp::sg::core::SceneSharedPtr & scene )
   DP_ASSERT( scene );
   GetApp()->setOverrideCursor( Qt::WaitCursor );
 
-  dp::util::SmartPtr<DisplayNormalsTraverser> normalsTraverser( new DisplayNormalsTraverser );
+  DisplayNormalsTraverser normalsTraverser;
 
   // set the length of the normals to display
-  normalsTraverser->setNormalLength( m_displayState ? m_length : 0.f );
+  normalsTraverser.setNormalLength( m_displayState ? m_length : 0.f );
 
   // set the color of the normals to display
   qreal r, g, b, a;
   m_color.getRgbF( &r, &g, &b, &a );
 
   dp::math::Vec3f color( (float)r, (float)g, (float)b );
-  normalsTraverser->setNormalColor( color );
-  normalsTraverser->apply( scene );
+  normalsTraverser.setNormalColor( color );
+  normalsTraverser.apply( scene );
 
   GetApp()->restoreOverrideCursor();
 }

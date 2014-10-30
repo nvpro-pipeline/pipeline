@@ -232,6 +232,9 @@ namespace dp
           //! Default constructor.
           DP_SG_ALGORITHM_API RayIntersectTraverser(void);
 
+          //! Destructor.
+          DP_SG_ALGORITHM_API virtual ~RayIntersectTraverser(void);
+
           //! Release all resources.
           /** By releasing all resources we can use this traverser for the 
             * next intersection calculation. */
@@ -274,9 +277,6 @@ namespace dp
 
       
         protected:
-          //! Default destructor.
-          DP_SG_ALGORITHM_API virtual ~RayIntersectTraverser(void);
-
           //! Apply the traverser to the scene.
           /** Start the intersection calculation of the given 
             * ray with the scene objects. */

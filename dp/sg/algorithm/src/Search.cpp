@@ -25,7 +25,6 @@
 
 
 #include <dp/sg/algorithm/Search.h>
-#include <dp/util/SmartPtr.h>
 
 namespace dp
 {
@@ -36,26 +35,26 @@ namespace dp
 
       const std::vector<dp::sg::core::ObjectWeakPtr> searchClass( const dp::sg::core::NodeSharedPtr & root, const std::string& name, bool baseClassSearch /* = false */ )
       {
-        dp::util::SmartPtr<SearchTraverser> st( new SearchTraverser );
+        SearchTraverser st;
 
-        st->setClassName( name );
-        st->setBaseClassSearch( baseClassSearch );
+        st.setClassName( name );
+        st.setBaseClassSearch( baseClassSearch );
 
-        st->apply( root );
+        st.apply( root );
 
-        return st->getResults();
+        return st.getResults();
       }
 
       const std::vector<const dp::sg::core::Path*> searchClassPaths( const dp::sg::core::NodeSharedPtr & root, const std::string& name, bool baseClassSearch /* = false */ )
       {
-        dp::util::SmartPtr<SearchTraverser> st( new SearchTraverser );
+        SearchTraverser st;
 
-        st->setClassName( name );
-        st->setBaseClassSearch( baseClassSearch );
+        st.setClassName( name );
+        st.setBaseClassSearch( baseClassSearch );
 
-        st->apply( root );
+        st.apply( root );
 
-        return st->getPaths();
+        return st.getPaths();
       }
 
       bool containsLight( dp::sg::core::SceneSharedPtr scene )

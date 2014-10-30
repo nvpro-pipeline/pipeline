@@ -46,10 +46,10 @@ namespace dp
           //! Constructor
           DP_SG_ALGORITHM_API TriangulateTraverser(void);
 
-        protected:
-          //! Protected destructor to prevent instantiation of a StrippingTraverser.
+          //! Destructor
           DP_SG_ALGORITHM_API virtual ~TriangulateTraverser(void);
 
+        protected:
           DP_SG_ALGORITHM_API virtual void handleGeoNode( dp::sg::core::GeoNode * p );
 
           //! Handle a Primitive object.

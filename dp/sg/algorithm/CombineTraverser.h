@@ -71,6 +71,9 @@ namespace dp
           //! Constructor
           DP_SG_ALGORITHM_API CombineTraverser( void );
 
+          //! Destructor
+          DP_SG_ALGORITHM_API virtual ~CombineTraverser( void );
+
           /*! \brief Get the bitmask describing the targets to combine.
            *  \return A bitmask describing the targets to combine. */
           DP_SG_ALGORITHM_API unsigned int getCombineTargets() const;
@@ -97,9 +100,6 @@ namespace dp
           END_DECLARE_STATIC_PROPERTIES
 
         protected:
-          //! Protected destructor to prevent instantiation of a CombineTraverser on stack.
-          DP_SG_ALGORITHM_API virtual ~CombineTraverser( void );
-
           //! Cleanup temporary memory.
           DP_SG_ALGORITHM_API virtual void postApply( const dp::sg::core::NodeSharedPtr & root );
 

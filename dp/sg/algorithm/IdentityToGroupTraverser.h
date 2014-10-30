@@ -45,10 +45,10 @@ namespace dp
           //! Constructor
           DP_SG_ALGORITHM_API IdentityToGroupTraverser( void );
 
-        protected:
-          //! Protected destructor to prevent instantiation of an IdentityToGroupTraverser on stack.
+          //! Destructor
           DP_SG_ALGORITHM_API virtual ~IdentityToGroupTraverser( void );
 
+        protected:
           //! If the root node is an identity Transform, it is replaced by a Group.
           DP_SG_ALGORITHM_API virtual void postApply( const dp::sg::core::NodeSharedPtr & root );
 

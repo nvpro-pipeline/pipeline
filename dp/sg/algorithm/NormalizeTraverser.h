@@ -45,6 +45,9 @@ namespace dp
           //! Constructor
           DP_SG_ALGORITHM_API NormalizeTraverser(void);
 
+          //! Destructor
+          DP_SG_ALGORITHM_API virtual ~NormalizeTraverser(void);
+
           //! Get the index of the VertexAttributeSet that is to be normalized.
           /** The default index for normalizing is NORMAL. */
           DP_SG_ALGORITHM_API unsigned int getVertexAttributeIndex() const;
@@ -59,9 +62,6 @@ namespace dp
           END_DECLARE_STATIC_PROPERTIES
 
         protected:
-          //! Protected destructor to prevent instantiation of a NormalizeTraverser on stack.
-          DP_SG_ALGORITHM_API virtual ~NormalizeTraverser(void);
-
           //! Initiate traversal of the scene.
           DP_SG_ALGORITHM_API virtual void  doApply( const dp::sg::core::NodeSharedPtr & root );
 

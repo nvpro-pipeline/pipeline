@@ -3950,7 +3950,7 @@ SceneSharedPtr WRLLoader::load( string const& filename, vector<string> const& se
 
   //  (re-)initialize member variables
   m_eof = false;
-  m_smoothTraverser = new dp::sg::algorithm::SmoothTraverser;
+  m_smoothTraverser = std::make_shared<dp::sg::algorithm::SmoothTraverser>();
 
   viewState.reset(); // loading of ViewState currently not supported
 

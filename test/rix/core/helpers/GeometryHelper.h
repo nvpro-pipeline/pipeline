@@ -26,7 +26,6 @@
 
 #pragma once
 
-#include <dp/util/SmartPtr.h>
 #include <dp/rix/core/RiX.h>
 #include <test/rix/core/helpers/inc/Config.h>
 #include <dp/math/Matmnt.h>

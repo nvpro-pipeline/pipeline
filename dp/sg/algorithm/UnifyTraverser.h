@@ -87,6 +87,9 @@ namespace dp
            *  \sa setEpsilon, setUnifyTargets */
           DP_SG_ALGORITHM_API UnifyTraverser( void );
 
+          /*! \brief Destructor */
+          DP_SG_ALGORITHM_API virtual ~UnifyTraverser( void );
+
           /*! \brief Get the bitmask describing the targets to unify.
            *  \return A bitmask describing the targets to unify. */
           DP_SG_ALGORITHM_API unsigned int getUnifyTargets() const;
@@ -111,9 +114,6 @@ namespace dp
           END_DECLARE_STATIC_PROPERTIES
 
         protected:
-          /*! \brief Protected destructor to prevent instantiation of a UnifyTraverser on stack. */
-          DP_SG_ALGORITHM_API virtual ~UnifyTraverser( void );
-
           /*! \brief Overload of the \link OptimizeTraverser::doApply doApply \endlink method.
            *  \remarks After scene traversal, temporarily allocated storage is freed again. */
           DP_SG_ALGORITHM_API virtual void doApply( const dp::sg::core::NodeSharedPtr & root );
