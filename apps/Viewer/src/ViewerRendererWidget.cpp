@@ -457,12 +457,11 @@ void ViewerRendererWidget::highlightObject( const dp::sg::core::NodeSharedPtr & 
   }
 
   // select everything from here on down
-  dp::util::SmartPtr<dp::sg::algorithm::SearchTraverser> st( new dp::sg::algorithm::SearchTraverser );
-  DP_ASSERT(st);
-  st->setClassName("class dp::sg::core::GeoNode");
-  st->apply( which );
+  dp::sg::algorithm::SearchTraverser searchTraverser;
+  searchTraverser.setClassName("class dp::sg::core::GeoNode");
+  searchTraverser.apply( which );
 
-  const vector<ObjectWeakPtr> & searchResults = st->getResults();
+  const vector<ObjectWeakPtr> & searchResults = searchTraverser.getResults();
   vector<ObjectWeakPtr>::const_iterator it;
   for(it=searchResults.begin(); it!=searchResults.end(); it++)
   {
@@ -617,17 +616,16 @@ ViewerRendererWidget::intersectObject( const dp::sg::core::NodeSharedPtr & baseS
     pCam->getPickRay(screenX, y, width(), height(), rayOrigin, rayDir);
 
     // run the intersect traverser for intersections with the given ray
-    dp::util::SmartPtr<dp::sg::algorithm::RayIntersectTraverser> pick( new dp::sg::algorithm::RayIntersectTraverser );
-    dp::sg::algorithm::RayIntersectTraverser * picker = pick.get();
+    dp::sg::algorithm::RayIntersectTraverser rayIntersectTraverser;
 
-    picker->setRay(rayOrigin, rayDir);
-    picker->setViewState( m_viewState );
-    picker->setViewportSize( width(), height() );
-    picker->apply( baseSearch );
+    rayIntersectTraverser.setRay(rayOrigin, rayDir);
+    rayIntersectTraverser.setViewState( m_viewState );
+    rayIntersectTraverser.setViewportSize( width(), height() );
+    rayIntersectTraverser.apply( baseSearch );
 
-    if (picker->getNumberOfIntersections() > 0)
+    if (rayIntersectTraverser.getNumberOfIntersections() > 0)
     {
-      result = picker->getNearest();
+      result = rayIntersectTraverser.getNearest();
       return true;
     }
   }

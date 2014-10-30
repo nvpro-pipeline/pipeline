@@ -52,13 +52,9 @@ namespace dp
           /*! \brief Default Constructor
            *  \remarks A DestrippingTraverser potentially modifies the tree of the scene. */
           DP_SG_ALGORITHM_API DestrippingTraverser(void);
-
-        protected:
-          /*! \brief Protected destructor to prevent explicit creation.
-           *  \remarks The destructor is never used explicitly, but only when the reference count of
-           *  the DestrippingTraverser is decremented to zero. */
           DP_SG_ALGORITHM_API virtual ~DestrippingTraverser(void);
 
+        protected:
           DP_SG_ALGORITHM_API virtual void doApply( const dp::sg::core::NodeSharedPtr & root );
 
           DP_SG_ALGORITHM_API virtual void handleGeoNode( dp::sg::core::GeoNode * p );

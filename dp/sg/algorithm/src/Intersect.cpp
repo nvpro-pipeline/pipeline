@@ -36,12 +36,12 @@ namespace dp
     namespace algorithm
     {
 
-      dp::util::SmartPtr<RayIntersectTraverser> applyPicker( dp::sg::ui::ViewStateSharedPtr const& viewStatePtr, dp::ui::SmartRenderTarget const& renderTarget, int windowX, int windowY )
+      std::shared_ptr<RayIntersectTraverser> applyPicker( dp::sg::ui::ViewStateSharedPtr const& viewStatePtr, dp::ui::SmartRenderTarget const& renderTarget, int windowX, int windowY )
       {
         DP_ASSERT( viewStatePtr );
         DP_ASSERT( renderTarget );
 
-        dp::util::SmartPtr<RayIntersectTraverser> picker;
+        std::shared_ptr<RayIntersectTraverser> picker;
 
         unsigned int windowWidth, windowHeight;
         renderTarget->getSize( windowWidth, windowHeight );
@@ -49,7 +49,7 @@ namespace dp
         dp::sg::core::CameraSharedPtr pCam = viewStatePtr->getCamera();
         if ( pCam && pCam.isPtrTo<dp::sg::core::FrustumCamera>() ) // requires a frustum camera attached to the ViewState
         {
-          picker = new RayIntersectTraverser;
+          picker = std::make_shared<RayIntersectTraverser>();
 
           // calculate ray origin and direction from the input point
           dp::math::Vec3f rayOrigin;
@@ -68,7 +68,7 @@ namespace dp
       float getIntersectionDistance( dp::sg::ui::ViewStateSharedPtr const& smartViewState, dp::ui::SmartRenderTarget const& renderTarget, int windowX, int windowY )
       {
         float result = -1.0f;
-        dp::util::SmartPtr<RayIntersectTraverser> picker = applyPicker( smartViewState, renderTarget, windowX, windowY );
+        std::shared_ptr<RayIntersectTraverser> picker = applyPicker( smartViewState, renderTarget, windowX, windowY );
         if (picker && picker->getNumberOfIntersections() > 0)
         {
           result = picker->getNearest().getDist();
@@ -80,7 +80,7 @@ namespace dp
       bool intersectObject( dp::sg::ui::ViewStateSharedPtr const& smartViewState, dp::ui::SmartRenderTarget const& renderTarget
                           , unsigned int windowX, unsigned int windowY, Intersection & result )
       {
-        dp::util::SmartPtr<RayIntersectTraverser> picker = applyPicker( smartViewState, renderTarget, windowX, windowY );
+        std::shared_ptr<RayIntersectTraverser> picker = applyPicker( smartViewState, renderTarget, windowX, windowY );
         if (picker && picker->getNumberOfIntersections() > 0)
         {
           result = picker->getNearest();

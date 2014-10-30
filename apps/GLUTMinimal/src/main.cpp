@@ -415,10 +415,10 @@ void GLUTMinimal::onSceneRendererChanged( const dp::sg::ui::SmartSceneRenderer &
 
 void combineVertexAttributes( dp::sg::ui::ViewStateSharedPtr const& viewState )
 {
-  dp::util::SmartPtr<dp::sg::algorithm::SearchTraverser> searchTraverser = new dp::sg::algorithm::SearchTraverser;
-  searchTraverser->setClassName("class dp::sg::core::VertexAttributeSet");
-  searchTraverser->apply( viewState );
-  std::vector<dp::sg::core::ObjectWeakPtr> results = searchTraverser->getResults();
+  dp::sg::algorithm::SearchTraverser searchTraverser;
+  searchTraverser.setClassName("class dp::sg::core::VertexAttributeSet");
+  searchTraverser.apply( viewState );
+  std::vector<dp::sg::core::ObjectWeakPtr> results = searchTraverser.getResults();
   for ( std::vector<dp::sg::core::ObjectWeakPtr>::iterator it = results.begin(); it != results.end(); ++it )
   {
     dp::sg::core::weakPtr_cast<dp::sg::core::VertexAttributeSet>(*it)->combineBuffers();
@@ -427,9 +427,9 @@ void combineVertexAttributes( dp::sg::ui::ViewStateSharedPtr const& viewState )
 
 void showStatistics( dp::sg::ui::ViewStateSharedPtr const& viewState )
 {
-  dp::util::SmartPtr<dp::sg::algorithm::StatisticsTraverser> statisticsTraverser = new dp::sg::algorithm::StatisticsTraverser;
-  statisticsTraverser->apply( viewState );
-  dp::sg::algorithm::Statistics const* statistics = statisticsTraverser->getStatistics();
+  dp::sg::algorithm::StatisticsTraverser statisticsTraverser;
+  statisticsTraverser.apply( viewState );
+  dp::sg::algorithm::Statistics const* statistics = statisticsTraverser.getStatistics();
   std::cout << "vertices : " << statistics->m_statVertexAttributeSet.m_numberOfVertices << std::endl;
   std::cout << "faces: " << statistics->m_statPrimitives.m_faces << std::endl;
   std::cout << "faces instances: " << statistics->m_statPrimitiveInstances.m_faces << std::endl;
@@ -561,11 +561,11 @@ int runApp( options::variables_map const& opts )
     dp::sg::core::EffectDataSharedPtr replacement = dp::sg::core::EffectData::create( dp::fx::EffectLibrary::instance()->getEffectData( opts["replaceAll"].as<std::string>() ) );
     DP_ASSERT( replacement );
 
-    dp::util::SmartPtr<dp::sg::algorithm::SearchTraverser> st( new dp::sg::algorithm::SearchTraverser );
-    st->setClassName( "class dp::sg::core::GeoNode" );
-    st->setBaseClassSearch( true );
-    st->apply( viewState->getScene() );
-    const std::vector<dp::sg::core::ObjectWeakPtr> &vp = st->getResults();
+    dp::sg::algorithm::SearchTraverser searchTraverser;
+    searchTraverser.setClassName( "class dp::sg::core::GeoNode" );
+    searchTraverser.setBaseClassSearch( true );
+    searchTraverser.apply( viewState->getScene() );
+    const std::vector<dp::sg::core::ObjectWeakPtr> &vp = searchTraverser.getResults();
     for ( size_t i=0 ; i<vp.size() ; i++ )
     {
       DP_ASSERT( dynamic_cast<dp::sg::core::GeoNodeWeakPtr>(vp[i]) );

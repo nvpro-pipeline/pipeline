@@ -87,11 +87,11 @@ SmoothDialog::~SmoothDialog()
 void SmoothDialog::accept()
 {
   GetApp()->setOverrideCursor( Qt::WaitCursor );
-  {
-    dp::util::SmartPtr<dp::sg::algorithm::SmoothTraverser> st( new dp::sg::algorithm::SmoothTraverser );
-    st->setCreaseAngle( degToRad( 0.5f * m_creaseAngleSlider->value() ) );
-    st->apply( m_scene );
-  }
+
+  dp::sg::algorithm::SmoothTraverser smoothTraverser;
+  smoothTraverser.setCreaseAngle( degToRad( 0.5f * m_creaseAngleSlider->value() ) );
+  smoothTraverser.apply( m_scene );
+
   GetApp()->restoreOverrideCursor();
 
   QDialog::accept();

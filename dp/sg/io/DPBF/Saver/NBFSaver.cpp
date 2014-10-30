@@ -176,18 +176,18 @@ bool NBFSaver::save( SceneSharedPtr const& scene, dp::sg::ui::ViewStateSharedPtr
   // set locale temporarily to standard "C" locale
   TempLocale tl("C");
 
-  SmartPtr<NBFSaveTraverser> saver(new NBFSaveTraverser);
-  saver->setViewState(viewState);
-  saver->setFileName( filename );
-  bool success = saver->preCalculateFileSize(scene);
+  NBFSaveTraverser saver;
+  saver.setViewState(viewState);
+  saver.setFileName( filename );
+  bool success = saver.preCalculateFileSize(scene);
   if ( success )
   {
-    saver->apply(scene);
-    success = saver->getSuccess();
+    saver.apply(scene);
+    success = saver.getSuccess();
   }
   if ( ! success )
   {
-    INVOKE_CALLBACK( onInvalidFile( filename, saver->getErrorMessage() ) );
+    INVOKE_CALLBACK( onInvalidFile( filename, saver.getErrorMessage() ) );
   }
   return( success );
 }

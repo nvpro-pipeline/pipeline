@@ -461,8 +461,6 @@ namespace dp
             CameraSharedPtr cameraHdl = m_viewState->getCamera();
             if (cameraHdl && cameraHdl.isPtrTo<FrustumCamera>() )
             {
-              dp::util::SmartPtr<dp::sg::algorithm::RayIntersectTraverser> picker( new dp::sg::algorithm::RayIntersectTraverser );
-
               // calculate ray origin and direction from the input point
               int vpW = getRenderTarget()->getWidth();
               int vpH = getRenderTarget()->getHeight();
@@ -472,15 +470,16 @@ namespace dp
               cameraHdl.staticCast<FrustumCamera>()->getPickRay(pkX, pkY, vpW, vpH, rayOrigin, rayDir);
 
               // run the intersect traverser for intersections with the given ray
-              picker->setRay(rayOrigin, rayDir);
-              picker->setViewState(m_viewState);
-              picker->setViewportSize(vpW, vpH);
-              picker->apply(m_viewState->getScene());
+              dp::sg::algorithm::RayIntersectTraverser picker;
+              picker.setRay(rayOrigin, rayDir);
+              picker.setViewState(m_viewState);
+              picker.setViewportSize(vpW, vpH);
+              picker.apply(m_viewState->getScene());
 
-              if (picker->getNumberOfIntersections() > 0)
+              if (picker.getNumberOfIntersections() > 0)
               {
                 needsRedraw = true;
-                hitDistance = picker->getNearest().getDist();
+                hitDistance = picker.getNearest().getDist();
               }
             }
           }

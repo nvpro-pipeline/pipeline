@@ -490,7 +490,6 @@ namespace dp
             if ( viewStateHdl->getCamera().isPtrTo<FrustumCamera>() )
             {
               FrustumCameraSharedPtr const& cameraHdl = viewStateHdl->getCamera().staticCast<FrustumCamera>();
-              dp::util::SmartPtr<dp::sg::algorithm::RayIntersectTraverser> picker( new dp::sg::algorithm::RayIntersectTraverser );
 
               // calculate ray origin and direction from the input point
               int vpW = getRenderTarget()->getWidth();
@@ -501,15 +500,16 @@ namespace dp
               cameraHdl->getPickRay(pkX, pkY, vpW, vpH, rayOrigin, rayDir);
 
               // run the intersect traverser for intersections with the given ray
-              picker->setRay(rayOrigin, rayDir);
-              picker->setViewState(viewStateHdl);
-              picker->setViewportSize(vpW, vpH);
-              picker->apply(viewStateHdl->getScene());
+              dp::sg::algorithm::RayIntersectTraverser picker;
+              picker.setRay(rayOrigin, rayDir);
+              picker.setViewState(viewStateHdl);
+              picker.setViewportSize(vpW, vpH);
+              picker.apply(viewStateHdl->getScene());
 
-              if (picker->getNumberOfIntersections() > 0)
+              if (picker.getNumberOfIntersections() > 0)
               {
                 needsRedraw = true;
-                hitDistance = picker->getNearest().getDist();
+                hitDistance = picker.getNearest().getDist();
               }
             }
           }
@@ -540,8 +540,6 @@ namespace dp
 
               if (vpW && vpH)
               {
-                dp::util::SmartPtr<dp::sg::algorithm::RayIntersectTraverser> picker( new dp::sg::algorithm::RayIntersectTraverser );
-
                 int pkX = getCurrentX();           // at mouse-up, not mouse-down
                 int pkY = vpH - 1 - getCurrentY(); // pick point is lower-left-relative
                 Vec3f rayOrigin;
@@ -550,14 +548,15 @@ namespace dp
                 camera->getPickRay(pkX, pkY, vpW, vpH, rayOrigin, rayDir);
 
                 // run the intersect traverser for intersections with the given ray
-                picker->setRay(rayOrigin, rayDir);
-                picker->setViewState(viewState);
-                picker->setViewportSize(vpW, vpH);
-                picker->apply(viewState->getScene());
+                dp::sg::algorithm::RayIntersectTraverser picker;
+                picker.setRay(rayOrigin, rayDir);
+                picker.setViewState(viewState);
+                picker.setViewportSize(vpW, vpH);
+                picker.apply(viewState->getScene());
 
-                if (picker->getNumberOfIntersections() > 0)
+                if (picker.getNumberOfIntersections() > 0)
                 {
-                  float dist = picker->getNearest().getDist();
+                  float dist = picker.getNearest().getDist();
 
                   if (0.0f < dist)
                   {
@@ -598,8 +597,6 @@ namespace dp
       
               if (vpW && vpH)
               {
-                dp::util::SmartPtr<dp::sg::algorithm::RayIntersectTraverser> picker( new dp::sg::algorithm::RayIntersectTraverser );
-
                 int pkX = getCurrentX();           // at mouse-up, not mouse-down
                 int pkY = vpH - 1 - getCurrentY(); // pick point is lower-left-relative
                 Vec3f rayOrigin;
@@ -608,14 +605,15 @@ namespace dp
                 camera->getPickRay(pkX, pkY, vpW, vpH, rayOrigin, rayDir);
 
                 // run the intersect traverser for intersections with the given ray
-                picker->setRay(rayOrigin, rayDir);
-                picker->setViewState(viewState);
-                picker->setViewportSize(vpW, vpH);
-                picker->apply(viewState->getScene());
+                dp::sg::algorithm::RayIntersectTraverser picker;
+                picker.setRay(rayOrigin, rayDir);
+                picker.setViewState(viewState);
+                picker.setViewportSize(vpW, vpH);
+                picker.apply(viewState->getScene());
 
-                if (picker->getNumberOfIntersections() > 0)
+                if (picker.getNumberOfIntersections() > 0)
                 {
-                  float dist = picker->getNearest().getDist();
+                  float dist = picker.getNearest().getDist();
                   if (0.0f < dist)
                   {
                     // Only set the focus distance, pivot point remains the same.

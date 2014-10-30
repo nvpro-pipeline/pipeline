@@ -122,17 +122,16 @@ namespace dp
           Vec3f dir = -m_upVector;
 
           // wasteful?
-          dp::util::SmartPtr<dp::sg::algorithm::RayIntersectTraverser> rit( new dp::sg::algorithm::RayIntersectTraverser );
+          dp::sg::algorithm::RayIntersectTraverser rit;
+          rit.setViewState( getViewState() );
+          rit.setCamClipping( false );
+          rit.setViewportSize( getRenderTarget()->getWidth(), getRenderTarget()->getHeight() );
+          rit.setRay( camPos, dir );
+          rit.apply( getViewState()->getScene() );
 
-          rit->setViewState( getViewState() );
-          rit->setCamClipping( false );
-          rit->setViewportSize( getRenderTarget()->getWidth(), getRenderTarget()->getHeight() );
-          rit->setRay( camPos, dir );
-          rit->apply( getViewState()->getScene() );
-
-          if( rit->getNumberOfIntersections() )
+          if( rit.getNumberOfIntersections() )
           {
-            const dp::sg::algorithm::Intersection & intr = rit->getNearest();
+            const dp::sg::algorithm::Intersection & intr = rit.getNearest();
 
             // get "closest" point
             m_currentPosition = intr.getIsp();

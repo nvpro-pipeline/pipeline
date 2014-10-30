@@ -62,6 +62,9 @@ namespace dp
           //! Constructor
           DP_SG_ALGORITHM_API EliminateTraverser( void );
 
+          //! Destructor
+          DP_SG_ALGORITHM_API virtual ~EliminateTraverser( void );
+
           /*! \brief Get the bitmask describing the targets to eliminate.
            *  \return A bitmask describing the targets to eliminate. */
           DP_SG_ALGORITHM_API unsigned int getEliminateTargets() const;
@@ -74,10 +77,8 @@ namespace dp
           BEGIN_DECLARE_STATIC_PROPERTIES
               DP_SG_ALGORITHM_API DECLARE_STATIC_PROPERTY( EliminateTargets );
           END_DECLARE_STATIC_PROPERTIES
-        protected:
-          //! Protected destructor to prevent instantiation of a EliminateTraverser on stack.
-          DP_SG_ALGORITHM_API virtual ~EliminateTraverser( void );
 
+        protected:
           //! If the root node is a Group with a single child, it is removed.
           DP_SG_ALGORITHM_API virtual void doApply( const dp::sg::core::NodeSharedPtr & root );
 

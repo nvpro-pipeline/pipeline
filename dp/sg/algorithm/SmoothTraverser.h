@@ -47,6 +47,9 @@ namespace dp
           //! Constructor
           DP_SG_ALGORITHM_API SmoothTraverser(void);
 
+          //! Destructor
+          DP_SG_ALGORITHM_API virtual ~SmoothTraverser(void);
+
           //! Set the crease angle for smoothing.
           DP_SG_ALGORITHM_API void  setCreaseAngle( float creaseAngle );
 
@@ -59,9 +62,6 @@ namespace dp
           END_DECLARE_STATIC_PROPERTIES
 
         protected:
-          //! Protected destructor to prevent instantiation of a SmoothTraverser.
-          DP_SG_ALGORITHM_API virtual ~SmoothTraverser(void);
-
           //! doApply override
           DP_SG_ALGORITHM_API virtual void doApply( const dp::sg::core::NodeSharedPtr & root );
 
@@ -82,9 +82,9 @@ namespace dp
           void flattenPrimitive( dp::sg::core::Primitive *p );
 
         private:
-          float                                     m_creaseAngle;
-          dp::util::SmartPtr<DestrippingTraverser>    m_destrippingTraverser;
-          std::vector<dp::sg::core::PrimitiveSharedPtr>     m_primitives;
+          float                                         m_creaseAngle;
+          std::shared_ptr<DestrippingTraverser>         m_destrippingTraverser;
+          std::vector<dp::sg::core::PrimitiveSharedPtr> m_primitives;
       };
 
     } // namespace algorithm

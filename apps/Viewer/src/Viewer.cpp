@@ -436,12 +436,11 @@ void Viewer::executeCommand( ViewerCommand * command )
 // outputs statistics on current scene
 void Viewer::outputStatistics()
 {
-  dp::util::SmartPtr< dp::sg::algorithm::StatisticsTraverser > st( new dp::sg::algorithm::StatisticsTraverser() );
-
   if ( m_viewState && m_viewState->getScene() )
   {
-    st->apply( m_viewState->getScene() );
-    const dp::sg::algorithm::Statistics * stats = st->getStatistics();
+    dp::sg::algorithm::StatisticsTraverser statisticsTraverser;
+    statisticsTraverser.apply( m_viewState->getScene() );
+    const dp::sg::algorithm::Statistics * stats = statisticsTraverser.getStatistics();
 
     size_t totalVertices = stats->m_statVertexAttributeSet.m_numberOfVertices;
     size_t totalPatches = stats->m_statPrimitives.m_patches;

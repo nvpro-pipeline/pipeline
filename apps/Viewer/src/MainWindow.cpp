@@ -149,12 +149,12 @@ void MainWindow::aboutToShowConvertSceneMenu()
   dp::sg::core::SceneSharedPtr scene = GetApp()->getScene();
   DP_ASSERT( scene );
 
-  dp::util::SmartPtr<dp::sg::algorithm::SearchTraverser> st( new dp::sg::algorithm::SearchTraverser );
-  st->setClassName( "class dp::sg::core::Primitive" );
-  st->setBaseClassSearch( true );
-  st->apply( scene );
+  dp::sg::algorithm::SearchTraverser searchTraverser;
+  searchTraverser.setClassName( "class dp::sg::core::Primitive" );
+  searchTraverser.setBaseClassSearch( true );
+  searchTraverser.apply( scene );
 
-  const std::vector<dp::sg::core::ObjectWeakPtr> &vp = st->getResults();
+  const std::vector<dp::sg::core::ObjectWeakPtr> &vp = searchTraverser.getResults();
 
   m_destripSceneAction->setEnabled( containsStrippedPrimitives( vp ) );
   m_stripSceneAction->setEnabled( containsStripablePrimitives( vp ) );
@@ -1327,10 +1327,10 @@ void MainWindow::triggeredDepthPass( bool checked )
 void MainWindow::triggeredDestripScene( bool checked )
 {
   GetApp()->setOverrideCursor( Qt::WaitCursor );
-  dp::util::SmartPtr<dp::sg::algorithm::DestrippingTraverser> dt( new dp::sg::algorithm::DestrippingTraverser );
+  dp::sg::algorithm::DestrippingTraverser destrippingTraverser;
   DP_ASSERT( GetApp()->getScene() );
-  dt->apply( GetApp()->getScene() );
-  if ( dt->getTreeModified() )
+  destrippingTraverser.apply( GetApp()->getScene() );
+  if ( destrippingTraverser.getTreeModified() )
   {
     GetApp()->emitSceneTreeChanged();
     GetApp()->outputStatistics();
@@ -1453,10 +1453,10 @@ void MainWindow::triggeredSceneStatistics( bool checked )
 {
   DP_ASSERT( GetApp()->getScene() );
 
-  dp::util::SmartPtr<dp::sg::algorithm::StatisticsTraverser> st( new dp::sg::algorithm::StatisticsTraverser );
-  st->apply( GetApp()->getScene() );
+  dp::sg::algorithm::StatisticsTraverser statisticsTraverser;
+  statisticsTraverser.apply( GetApp()->getScene() );
   std::stringstream ss;
-  ss << *st;
+  ss << statisticsTraverser;
 
   PlainTextDialog dlg( "Scene Statistics", "Statistics Results for file " + GetApp()->getDisplayedSceneName(), ss.str().c_str(), this );
   dlg.exec();
@@ -1484,10 +1484,10 @@ void MainWindow::triggeredStereoDialog()
 void MainWindow::triggeredStripScene( bool checked )
 {
   GetApp()->setOverrideCursor( Qt::WaitCursor );
-  dp::util::SmartPtr<dp::sg::algorithm::StrippingTraverser> st( new dp::sg::algorithm::StrippingTraverser );
+  dp::sg::algorithm::StrippingTraverser strippingTraverser;
   DP_ASSERT( GetApp()->getScene() );
-  st->apply( GetApp()->getScene() );
-  if ( st->getTreeModified() )
+  strippingTraverser.apply( GetApp()->getScene() );
+  if ( strippingTraverser.getTreeModified() )
   {
     GetApp()->emitSceneTreeChanged();
     GetApp()->outputStatistics();
@@ -1510,10 +1510,10 @@ void MainWindow::triggeredTransparencyDialog()
 void MainWindow::triggeredTriangulateScene( bool checked )
 {
   GetApp()->setOverrideCursor( Qt::WaitCursor );
-  dp::util::SmartPtr<dp::sg::algorithm::TriangulateTraverser> tt( new dp::sg::algorithm::TriangulateTraverser );
+  dp::sg::algorithm::TriangulateTraverser triangulateTraverser;
   DP_ASSERT( GetApp()->getScene() );
-  tt->apply( GetApp()->getScene() );
-  if ( tt->getTreeModified() )
+  triangulateTraverser.apply( GetApp()->getScene() );
+  if ( triangulateTraverser.getTreeModified() )
   {
     GetApp()->emitSceneTreeChanged();
     GetApp()->outputStatistics();
@@ -1706,10 +1706,10 @@ QString analyze( const dp::sg::core::SceneSharedPtr & scene )
 {
   GetApp()->setOverrideCursor( Qt::WaitCursor );
 
-  dp::util::SmartPtr<dp::sg::algorithm::AnalyzeTraverser> at( new dp::sg::algorithm::AnalyzeTraverser );
-  at->apply( scene );
+  dp::sg::algorithm::AnalyzeTraverser analyzeTraverser;
+  analyzeTraverser.apply( scene );
   std::vector<dp::sg::algorithm::AnalyzeResult *> results;
-  at->getAnalysis( results );
+  analyzeTraverser.getAnalysis( results );
   QString plainText;
   if ( results.empty() )
   {
@@ -1986,14 +1986,13 @@ void setTraversalMasks( dp::sg::core::SceneSharedPtr const & scene, unsigned int
 {
   if ( scene )
   {
-    dp::util::SmartPtr<dp::sg::algorithm::SearchTraverser> searchTrav( new dp::sg::algorithm::SearchTraverser() );
-    DP_ASSERT(searchTrav);
+    dp::sg::algorithm::SearchTraverser searchTraverser;
 
-    searchTrav->setClassName( "class dp::sg::core::GeoNode" );
-    searchTrav->setBaseClassSearch( true );
-    searchTrav->apply( scene );  
+    searchTraverser.setClassName( "class dp::sg::core::GeoNode" );
+    searchTraverser.setBaseClassSearch( true );
+    searchTraverser.apply( scene );  
 
-    const std::vector<dp::sg::core::ObjectWeakPtr> & searchResults = searchTrav->getResults();
+    const std::vector<dp::sg::core::ObjectWeakPtr> & searchResults = searchTraverser.getResults();
     for ( std::vector<dp::sg::core::ObjectWeakPtr>::const_iterator it = searchResults.begin() ; it != searchResults.end() ; ++it )
     {
       dp::sg::core::weakPtr_cast<dp::sg::core::GeoNode>(*it)->setTraversalMask( mask );

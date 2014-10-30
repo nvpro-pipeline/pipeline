@@ -491,7 +491,7 @@ class WRLLoader : public dp::sg::io::SceneLoader
     dp::sg::core::GroupSharedPtr                                m_rootNode;
     dp::sg::core::SceneSharedPtr                                m_scene;
     std::vector<std::string>                                    m_searchPaths;
-    dp::util::SmartPtr<dp::sg::algorithm::SmoothTraverser>      m_smoothTraverser;
+    std::shared_ptr<dp::sg::algorithm::SmoothTraverser>         m_smoothTraverser;
     unsigned int                                                m_stepsPerUnit;
     dp::util::SmartPtr<vrml::Group>                             m_topLevelGroup;
     bool                                                        m_strict;

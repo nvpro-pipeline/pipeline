@@ -309,6 +309,9 @@ namespace dp
           //! Constructor
           DP_SG_ALGORITHM_API StatisticsTraverser(void);
   
+          //! Destructor
+          DP_SG_ALGORITHM_API virtual ~StatisticsTraverser(void);
+
           //! Get a constant pointer to the statistics results.
           DP_SG_ALGORITHM_API const Statistics  * getStatistics( void ) const;
   
@@ -354,12 +357,9 @@ namespace dp
           DP_SG_ALGORITHM_API void statVertexAttributeSet( const dp::sg::core::VertexAttributeSet *p, StatVertexAttributeSet &stats );
 
         protected:
-          //! Destructor
-          DP_SG_ALGORITHM_API virtual ~StatisticsTraverser(void);
-
-    #if !defined(NDEBUG)
+#if !defined(NDEBUG)
           DP_SG_ALGORITHM_API virtual void doApply( const dp::sg::core::NodeSharedPtr & root );
-    #endif
+#endif
 
           //--  Functions implemented from Traverser --
           //! Handle a Billboard object.

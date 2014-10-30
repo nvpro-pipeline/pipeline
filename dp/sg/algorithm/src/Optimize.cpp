@@ -54,9 +54,9 @@ namespace dp
       {
         if ( identityToGroup )
         {
-          dp::util::SmartPtr<IdentityToGroupTraverser> itgt( new IdentityToGroupTraverser );
-          itgt->setIgnoreNames( ignoreNames );
-          itgt->apply( scene );
+          IdentityToGroupTraverser itgt;
+          itgt.setIgnoreNames( ignoreNames );
+          itgt.apply( scene );
         }
 
         //  loop over optimizers until nothing changed
@@ -75,11 +75,11 @@ namespace dp
           {
             if ( lastModifyingTraverser != ELIMINATE_TRAVERSER )
             {
-              dp::util::SmartPtr<EliminateTraverser> et( new EliminateTraverser );
-              et->setIgnoreNames( ignoreNames );
-              et->setEliminateTargets( eliminateFlags );
-              et->apply( scene );
-              if ( et->getTreeModified() )
+              EliminateTraverser et;
+              et.setIgnoreNames( ignoreNames );
+              et.setEliminateTargets( eliminateFlags );
+              et.apply( scene );
+              if ( et.getTreeModified() )
               {
                 modified = true;
                 lastModifyingTraverser = ELIMINATE_TRAVERSER;
@@ -96,15 +96,15 @@ namespace dp
           {
             if ( lastModifyingTraverser != UNIFY_TRAVERSER )
             {
-              dp::util::SmartPtr<UnifyTraverser> ut( new UnifyTraverser );
-              ut->setIgnoreNames( ignoreNames );
-              ut->setUnifyTargets( unifyFlags );
+              UnifyTraverser ut;
+              ut.setIgnoreNames( ignoreNames );
+              ut.setUnifyTargets( unifyFlags );
               if ( unifyFlags & UnifyTraverser::UT_VERTICES )
               {
-                ut->setEpsilon( epsilon );
+                ut.setEpsilon( epsilon );
               }
-              ut->apply( scene );
-              if ( ut->getTreeModified() )
+              ut.apply( scene );
+              if ( ut.getTreeModified() )
               {
                 modified = true;
                 lastModifyingTraverser = UNIFY_TRAVERSER;
@@ -112,8 +112,8 @@ namespace dp
                 if ( unifyFlags & UnifyTraverser::UT_VERTICES )
                 {
                   // after unifying vertices we need to re-normalize the normals
-                  dp::util::SmartPtr<NormalizeTraverser> nt( new NormalizeTraverser );
-                  nt->apply( scene );
+                  NormalizeTraverser nt;
+                  nt.apply( scene );
                 }
               }
             }
@@ -128,11 +128,11 @@ namespace dp
           {
             if ( lastModifyingTraverser != COMBINE_TRAVERSER )
             {
-              dp::util::SmartPtr<CombineTraverser> ct( new CombineTraverser );
-              ct->setIgnoreNames( ignoreNames );
-              ct->setCombineTargets( combineFlags );
-              ct->apply( scene );
-              if ( ct->getTreeModified() )
+              CombineTraverser ct;
+              ct.setIgnoreNames( ignoreNames );
+              ct.setCombineTargets( combineFlags );
+              ct.apply( scene );
+              if ( ct.getTreeModified() )
               {
                 modified = true;
                 lastModifyingTraverser = COMBINE_TRAVERSER;
@@ -147,8 +147,8 @@ namespace dp
 
         if ( optimizeVertexCache )
         {
-          dp::util::SmartPtr<VertexCacheOptimizeTraverser> vcot = new VertexCacheOptimizeTraverser;
-          vcot->apply( scene );
+          VertexCacheOptimizeTraverser vcot;
+          vcot.apply( scene );
         }
       }
 
@@ -159,19 +159,19 @@ namespace dp
         //  first some preprocessing optimizers
         //  -> no specific order here
         {
-          dp::util::SmartPtr<IdentityToGroupTraverser> tr( new IdentityToGroupTraverser );
-          tr->setIgnoreNames( ignoreNames );
-          tr->apply( scene );
+          IdentityToGroupTraverser tr;
+          tr.setIgnoreNames( ignoreNames );
+          tr.apply( scene );
         }
 
         {
-          dp::util::SmartPtr<DestrippingTraverser> tr( new DestrippingTraverser );
-          tr->apply( scene );
+          DestrippingTraverser tr;
+          tr.apply( scene );
         }
 
         {
-          dp::util::SmartPtr<TriangulateTraverser> tr( new TriangulateTraverser );
-          tr->apply( scene );
+          TriangulateTraverser tr;
+          tr.apply( scene );
         }
 
         //  loop over optimizers until nothing changed
@@ -181,20 +181,20 @@ namespace dp
         {
           //  first eliminate redundant/degenerated objects
           {
-            dp::util::SmartPtr<EliminateTraverser> tr( new EliminateTraverser );
-            tr->setIgnoreNames( ignoreNames );
-            tr->setEliminateTargets( EliminateTraverser::ET_ALL_TARGETS_MASK );
-            tr->apply( scene );
-            modified = tr->getTreeModified();
+            EliminateTraverser tr;
+            tr.setIgnoreNames( ignoreNames );
+            tr.setEliminateTargets( EliminateTraverser::ET_ALL_TARGETS_MASK );
+            tr.apply( scene );
+            modified = tr.getTreeModified();
           }
 
           // second combine compatible objects
           {
-            dp::util::SmartPtr<CombineTraverser> tr( new CombineTraverser );
-            tr->setIgnoreNames( ignoreNames );
-            tr->setCombineTargets( CombineTraverser::CT_ALL_TARGETS_MASK );
-            tr->apply( scene );
-            modified = tr->getTreeModified();
+            CombineTraverser tr;
+            tr.setIgnoreNames( ignoreNames );
+            tr.setCombineTargets( CombineTraverser::CT_ALL_TARGETS_MASK );
+            tr.apply( scene );
+            modified = tr.getTreeModified();
           }
         } while( modified );
       }
@@ -204,15 +204,15 @@ namespace dp
         unsigned int unifySelection = 0;
         unifySelection |= UnifyTraverser::UT_VERTICES;
 
-        dp::util::SmartPtr<UnifyTraverser> tr( new UnifyTraverser );
-        tr->setIgnoreNames( false );
-        tr->setUnifyTargets( unifySelection );
-        tr->setEpsilon( FLT_EPSILON );
-        tr->apply( scene );
+        UnifyTraverser tr;
+        tr.setIgnoreNames( false );
+        tr.setUnifyTargets( unifySelection );
+        tr.setEpsilon( FLT_EPSILON );
+        tr.apply( scene );
 
         // after unifying vertices we need to re-normalize the normals
-        dp::util::SmartPtr<NormalizeTraverser> nt( new NormalizeTraverser );
-        nt->apply( scene );
+        NormalizeTraverser nt;
+        nt.apply( scene );
       }
 
     } // namespace algorithm

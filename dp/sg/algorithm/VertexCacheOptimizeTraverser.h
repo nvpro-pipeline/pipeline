@@ -466,10 +466,10 @@ namespace dp
           //! Constructor
           DP_SG_ALGORITHM_API VertexCacheOptimizeTraverser( void );
 
-        protected:
-          //! Protected destructor to prevent instantiation of a CombineTraverser on stack.
+          //! Destructor
           DP_SG_ALGORITHM_API virtual ~VertexCacheOptimizeTraverser( void );
 
+        protected:
           //! Cleanup temporary memory.
           DP_SG_ALGORITHM_API virtual void postApply( const dp::sg::core::NodeSharedPtr & root );
 

@@ -85,11 +85,11 @@ NormalizeDialog::NormalizeDialog( const SceneSharedPtr & scene, QWidget * parent
 
   // disable m_vaButtons without any corresponding data in the scene
   unsigned short vaMask = 0;
-  dp::util::SmartPtr<dp::sg::algorithm::SearchTraverser> st( new dp::sg::algorithm::SearchTraverser );
-  st->setClassName( "class dp::sg::core::VertexAttributeSet" );
-  st->setBaseClassSearch( true );
-  st->apply( m_scene );
-  const vector<ObjectWeakPtr> &vp = st->getResults();
+  dp::sg::algorithm::SearchTraverser searchTraverser;
+  searchTraverser.setClassName( "class dp::sg::core::VertexAttributeSet" );
+  searchTraverser.setBaseClassSearch( true );
+  searchTraverser.apply( m_scene );
+  const vector<ObjectWeakPtr> &vp = searchTraverser.getResults();
   for ( size_t i=0 ; i<vp.size() ; i++ )
   {
     DP_ASSERT( dynamic_cast<VertexAttributeSetWeakPtr>(vp[i]) );
@@ -116,13 +116,13 @@ void NormalizeDialog::accept()
 {
   GetApp()->setOverrideCursor( Qt::WaitCursor );
   {
-    dp::util::SmartPtr<dp::sg::algorithm::NormalizeTraverser> snt( new dp::sg::algorithm::NormalizeTraverser );
+    dp::sg::algorithm::NormalizeTraverser normalizeTraverser;
     for ( unsigned int i=0 ; i<16 ; i++ )
     {
       if ( m_vaButtons[i]->isChecked() )
       {
-        snt->setVertexAttributeIndex( i );
-        snt->apply( m_scene );
+        normalizeTraverser.setVertexAttributeIndex( i );
+        normalizeTraverser.apply( m_scene );
       }
     }
   }

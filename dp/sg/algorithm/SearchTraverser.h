@@ -49,6 +49,9 @@ namespace dp
            */
           DP_SG_ALGORITHM_API SearchTraverser();
 
+          //! Destructor
+          DP_SG_ALGORITHM_API virtual ~SearchTraverser(void);
+
           /*! \brief Returns paths for all objects found.
            * \return The function returns for each object found during traversal the full path from the starting node
            * down to the found object. If you're only interested in the found objects itself, you should consider to 
@@ -136,9 +139,6 @@ namespace dp
           END_DECLARE_STATIC_PROPERTIES
 
         protected:
-          //! Destructor
-          DP_SG_ALGORITHM_API virtual ~SearchTraverser(void);
-      
           //! Set up the search and traverse the scene.
           DP_SG_ALGORITHM_API virtual void  doApply( const dp::sg::core::NodeSharedPtr & root );
 

@@ -887,13 +887,13 @@ bool  NVSGSaver::save( SceneSharedPtr const& scene, dp::sg::ui::ViewStateSharedP
   FILE *fh = fopen( filename.c_str(), "w" );
   if ( fh )
   {
-    SmartPtr<NVSGSaveTraverser> saver(new NVSGSaveTraverser);
+    NVSGSaveTraverser saver;
 
     int s = setvbuf( fh, NULL, _IOFBF, 64 * BUFSIZ );
     DP_ASSERT( s == 0 );
-    saver->setFILE( fh, filename );
-    saver->setViewState( viewState );
-    saver->apply( scene );
+    saver.setFILE( fh, filename );
+    saver.setViewState( viewState );
+    saver.apply( scene );
     fclose( fh );
   }
   else
