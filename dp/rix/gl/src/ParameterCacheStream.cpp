@@ -55,7 +55,7 @@ namespace dp
       ParameterCache<ParameterCacheStream>::ParameterCache( ProgramPipelineGLHandle programPipeline, std::vector<ContainerDescriptorGLHandle> const &descriptors )
         : m_programPipeline( programPipeline )
         , m_descriptors( descriptors )
-        , m_isBindlessUBOSupported(!!glewGetExtension("GL_NV_uniform_buffer_unified_memory"))
+        , m_isBindlessUBOSupported(USE_UNIFORM_BUFFER_UNIFIED_MEMORY && !!glewGetExtension("GL_NV_uniform_buffer_unified_memory"))
       {
         m_uboDataUBO = dp::gl::Buffer::create();
 
