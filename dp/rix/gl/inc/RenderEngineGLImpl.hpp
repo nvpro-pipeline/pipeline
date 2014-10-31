@@ -205,7 +205,7 @@ namespace dp
         }
 
         // todo usage of bindless ubos should be a configuration flag
-        if (glewGetExtension("GL_NV_uniform_buffer_unified_memory")) {
+        if (USE_UNIFORM_BUFFER_UNIFIED_MEMORY && glewGetExtension("GL_NV_uniform_buffer_unified_memory")) {
           glEnableClientState(GL_UNIFORM_BUFFER_UNIFIED_NV);
         }
       }
@@ -213,7 +213,7 @@ namespace dp
       template <typename VertexCache>
       void RenderEngineGLImpl<VertexCache>::endRender()
       {
-        if (glewGetExtension("GL_NV_uniform_buffer_unified_memory")) {
+        if (USE_UNIFORM_BUFFER_UNIFIED_MEMORY && glewGetExtension("GL_NV_uniform_buffer_unified_memory")) {
           glDisableClientState(GL_UNIFORM_BUFFER_UNIFIED_NV);
         }
 
