@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2012
+// Copyright NVIDIA Corporation 2011-2014
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -621,10 +621,12 @@ namespace dp
         DP_ASSERT( init == GLEW_OK );
         if ( init == GLEW_OK )
         {
+#if !defined(NDEBUG)
           if ( !!GLEW_ARB_debug_output )
           {
             glDebugMessageCallbackARB( debugMessageCallback, nullptr );
           }
+#endif
 
           initBufferBinding();
         }
