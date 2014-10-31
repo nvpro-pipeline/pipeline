@@ -31,7 +31,6 @@
 #include <dp/sg/xbar/inc/SceneTreeGenerator.h>
 
 // observers
-#include <dp/sg/xbar/inc/GeoNodeObserver.h>
 #include <dp/sg/xbar/inc/ObjectObserver.h>
 #include <dp/sg/xbar/inc/SwitchObserver.h>
 #include <dp/sg/xbar/inc/TransformObserver.h>
@@ -78,7 +77,6 @@ namespace dp
         , m_switchObserver( SwitchObserver::create() )
       {
         m_objectObserver = ObjectObserver::create( this );
-        m_geoNodeObserver = GeoNodeObserver::create( this );
         m_transformObserver = TransformObserver::create( this );
         m_sceneObserver = SceneObserver::create( this );
 
@@ -167,13 +165,6 @@ namespace dp
 
       void SceneTree::update( dp::sg::ui::ViewStateSharedPtr const& vs )
       {
-        ObjectTreeIndexSet dirtyGeoNodes;
-        m_geoNodeObserver->popDirtyGeoNodes(dirtyGeoNodes);
-        for ( ObjectTreeIndexSet::const_iterator it = dirtyGeoNodes.begin(); it != dirtyGeoNodes.end(); ++it )
-        {
-          notify( EventObject( *it, m_objectTree[*it], EventObject::Changed) );
-        }
-
         {
           dp::util::ProfileEntry p("Update TransformTree");
           updateTransformTree( vs );
@@ -406,7 +397,6 @@ namespace dp
       {
         // attach observer
         m_objectTree[index].m_isDrawable = true;
-        m_geoNodeObserver->attach( weakPtr_cast<GeoNode>(m_objectTree[index].m_object), index );
         notify( EventObject( index, m_objectTree[index], EventObject::Added ) );
       }
 
@@ -444,7 +434,7 @@ namespace dp
           if ( m_objectTree[currentIndex].m_isDrawable )
           {
             notify( EventObject( currentIndex, m_objectTree[currentIndex], EventObject::Removed) );
-            m_geoNodeObserver->detach( currentIndex );
+            m_objectTree[index].m_isDrawable = false;
           }
 
           current.m_clipPlaneGroup.reset();

@@ -36,6 +36,9 @@ namespace dp
     namespace xbar
     {
 
+      class GeoNodeObserver;
+      typedef dp::util::SmartPtr<GeoNodeObserver> SmartGeoNodeObserver;
+
       class GeoNodeObserver : public Observer<ObjectTreeIndex>
       {
       public:
@@ -64,7 +67,7 @@ namespace dp
         }
 
         void popDirtyGeoNodes( ObjectTreeIndexSet & currentSet ) const 
-        { 
+        {
           currentSet = m_dirtyGeoNodes;
           m_dirtyGeoNodes.clear(); 
         }
