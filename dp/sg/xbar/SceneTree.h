@@ -57,9 +57,6 @@ namespace dp
       class SwitchObserver;
       typedef dp::util::SmartPtr<SwitchObserver> SmartSwitchObserver;
 
-      class GeoNodeObserver;
-      typedef dp::util::SmartPtr<GeoNodeObserver> SmartGeoNodeObserver;
-
       class TransformObserver;
       typedef dp::util::SmartPtr<TransformObserver> SmartTransformObserver;
 
@@ -232,7 +229,6 @@ namespace dp
 
         //TODO check switchobserver for shared switches!
         SmartTransformObserver m_transformObserver;
-        SmartGeoNodeObserver   m_geoNodeObserver;
         SmartObjectObserver    m_objectObserver;
         SmartSwitchObserver    m_switchObserver;
         SmartSceneObserver     m_sceneObserver;

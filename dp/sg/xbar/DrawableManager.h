@@ -45,6 +45,7 @@ namespace dp
       class SceneTree;
 
       class SceneTreeObserver;
+      class GeoNodeObserver;
 
       class DrawableManager
       {
@@ -73,6 +74,11 @@ namespace dp
         SceneTreeSharedPtr const & getSceneTree() const { return m_sceneTree; }
 
       protected:
+
+        /** \brief Call this from update(ViewStateSharedPtr const&) to process all deferred events.
+                   Later on this should be the only update function! **/
+        DP_SG_XBAR_API void update();
+
         /** \brief Initialize handles for existing objects in SceneTree during construction. Call from constructor.**/
         void initializeHandles(); 
 
@@ -98,6 +104,8 @@ namespace dp
 
         dp::sg::xbar::SceneTreeSharedPtr m_sceneTree;
         boost::scoped_ptr<SceneTreeObserver> m_sceneTreeObserver;
+
+        dp::util::SmartPtr<GeoNodeObserver> m_geoNodeObserver; // observe GeoNodes for changes
 
         std::vector<Handle> m_dis;
       };
