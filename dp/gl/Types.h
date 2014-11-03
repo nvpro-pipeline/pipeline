@@ -31,7 +31,9 @@
 #include <GL/glew.h>
 #include <dp/math/Vecnt.h>
 #include <dp/math/Matmnt.h>
+#include <dp/ui/RenderTarget.h>
 #include <dp/util/DPAssert.h>
+#include <dp/util/SharedPtr.h>
 
 // required declaration
 namespace dp
@@ -40,7 +42,7 @@ namespace dp
   {
 #define TYPES(T)                        \
     class T;                            \
-    typedef std::shared_ptr<T> Shared##T
+    typedef dp::util::SharedPtr<T> Shared##T
 
     TYPES(Buffer);
     TYPES(ComputeShader);
@@ -189,7 +191,69 @@ namespace dp
     {
       return( GL_FLOAT_MAT4 );
     }
-
-
   } // namespace gl
+} // namespace dp
+
+
+namespace dp
+{
+  namespace util
+  {
+
+    /*! \brief Macro to define ObjectType and our four standard types of a base type T as part of a templated struct.
+     *  \remark Using this struct, the standard types Handle, SharedPtr, WeakPtr and Lock, as well as
+     *  the ObjectType itself, are easily available within a template context. */
+    #define OBJECT_TRAITS_BASE(T)                 \
+    template <> struct ObjectTraits<T>            \
+    {                                             \
+      typedef T                       ObjectType; \
+      typedef dp::util::SharedPtr<T>  SharedPtr;  \
+      typedef T*                      WeakPtr;    \
+    }
+
+    /*! \brief Macro to define ObjectType and our five standard types of a type T, with base type BT, as part of a templated struct.
+     *  \remark Using this struct, the standard types Handle, SharedPtr, WeakPtr and Lock, as well as
+     *  the ObjectType itself, are easily available within a template context. */
+    #define OBJECT_TRAITS(T, BT)                  \
+    template <> struct ObjectTraits<T>            \
+    {                                             \
+      typedef T                       ObjectType; \
+      typedef BT                      Base;       \
+      typedef dp::util::SharedPtr<T>  SharedPtr;  \
+      typedef T*                      WeakPtr;    \
+    }
+
+    OBJECT_TRAITS_BASE( dp::gl::Object );
+      OBJECT_TRAITS( dp::gl::Buffer, dp::gl::Object );
+      OBJECT_TRAITS( dp::gl::DisplayList, dp::gl::Object );
+      OBJECT_TRAITS( dp::gl::Program, dp::gl::Object );
+      OBJECT_TRAITS( dp::gl::Renderbuffer, dp::gl::Object );
+      OBJECT_TRAITS( dp::gl::Shader, dp::gl::Object );
+        OBJECT_TRAITS( dp::gl::ComputeShader, dp::gl::Shader );
+        OBJECT_TRAITS( dp::gl::FragmentShader, dp::gl::Shader );
+        OBJECT_TRAITS( dp::gl::GeometryShader, dp::gl::Shader );
+        OBJECT_TRAITS( dp::gl::TessControlShader, dp::gl::Shader );
+        OBJECT_TRAITS( dp::gl::TessEvaluationShader, dp::gl::Shader );
+        OBJECT_TRAITS( dp::gl::VertexShader, dp::gl::Shader );
+      OBJECT_TRAITS( dp::gl::Texture, dp::gl::Object );
+        OBJECT_TRAITS( dp::gl::Texture1D, dp::gl::Texture );
+        OBJECT_TRAITS( dp::gl::Texture1DArray, dp::gl::Texture );
+        OBJECT_TRAITS( dp::gl::Texture2D, dp::gl::Texture );
+        OBJECT_TRAITS( dp::gl::Texture2DArray, dp::gl::Texture );
+        OBJECT_TRAITS( dp::gl::Texture3D, dp::gl::Texture );
+        OBJECT_TRAITS( dp::gl::TextureBuffer, dp::gl::Texture );
+        OBJECT_TRAITS( dp::gl::TextureCubemap, dp::gl::Texture );
+        OBJECT_TRAITS( dp::gl::TextureCubemapArray, dp::gl::Texture );
+        OBJECT_TRAITS( dp::gl::Texture2DMultisample, dp::gl::Texture );
+        OBJECT_TRAITS( dp::gl::Texture2DMultisampleArray, dp::gl::Texture );
+        OBJECT_TRAITS( dp::gl::TextureRectangle, dp::gl::Texture );
+      OBJECT_TRAITS( dp::gl::VertexArrayObject, dp::gl::Object );
+    OBJECT_TRAITS_BASE( dp::gl::RenderContext );
+    OBJECT_TRAITS_BASE( dp::gl::ShareGroup );
+
+      OBJECT_TRAITS( dp::gl::RenderTarget, dp::ui::RenderTarget );
+        OBJECT_TRAITS( dp::gl::RenderTargetFB, dp::gl::RenderTarget );
+        OBJECT_TRAITS( dp::gl::RenderTargetFBO, dp::gl::RenderTarget );
+
+  } // namespace util
 } // namespace dp

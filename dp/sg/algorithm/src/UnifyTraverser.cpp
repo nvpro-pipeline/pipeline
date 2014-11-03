@@ -285,9 +285,8 @@ namespace dp
         }
         else
         {
-          static EffectDataSharedPtr dummy;
           m_effectData.insert( make_pair( hashKey, effectData ) );
-          return( dummy );
+          return( EffectDataSharedPtr::null );
         }
       }
 

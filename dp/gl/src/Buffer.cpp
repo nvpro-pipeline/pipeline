@@ -45,7 +45,7 @@ namespace dp
 
     SharedBuffer Buffer::create()
     {
-      return( SharedBuffer( new Buffer ) );
+      return( std::shared_ptr<Buffer>( new Buffer() ) );
     }
 
     SharedBuffer Buffer::create( GLenum target, size_t size, GLvoid const* data, GLenum usage )
@@ -150,11 +150,11 @@ namespace dp
       static std::map<std::pair<RenderContext*,GLenum>,Buffer*> boundBufferMap;
       if ( buffer )
       {
-        boundBufferMap[std::make_pair( RenderContext::getCurrentRenderContext().get(), target )] = buffer.get();
+        boundBufferMap[std::make_pair( RenderContext::getCurrentRenderContext().getWeakPtr(), target )] = buffer.getWeakPtr();
       }
       else
       {
-        std::map<std::pair<RenderContext*,GLenum>,Buffer*>::iterator it = boundBufferMap.find( std::make_pair( RenderContext::getCurrentRenderContext().get(), target ) );
+        std::map<std::pair<RenderContext*,GLenum>,Buffer*>::iterator it = boundBufferMap.find( std::make_pair( RenderContext::getCurrentRenderContext().getWeakPtr(), target ) );
         if ( it != boundBufferMap.end() )
         {
           boundBufferMap.erase( it );

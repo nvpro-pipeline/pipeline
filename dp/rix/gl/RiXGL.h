@@ -205,7 +205,7 @@ namespace dp
 
       struct BufferDescriptionGL : public dp::rix::core::BufferDescription
       {
-        BufferDescriptionGL( UsageHint usageHint = UH_STATIC_DRAW, dp::gl::SharedBuffer const& buffer = nullptr )
+        BufferDescriptionGL( UsageHint usageHint = UH_STATIC_DRAW, dp::gl::SharedBuffer const& buffer = dp::gl::SharedBuffer::null )
           : dp::rix::core::BufferDescription( dp::rix::core::BDT_NATIVE )
           , m_buffer( buffer )
           , m_usageHint( usageHint )

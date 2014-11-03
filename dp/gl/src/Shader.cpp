@@ -131,7 +131,7 @@ namespace dp
 
     SharedVertexShader VertexShader::create( std::string const& source )
     {
-      return( SharedVertexShader( new VertexShader( source ) ) );
+      return( std::shared_ptr<VertexShader>( new VertexShader( source ) ) );
     }
 
     VertexShader::VertexShader( std::string const& source )
@@ -147,7 +147,7 @@ namespace dp
 
     SharedTessControlShader TessControlShader::create( std::string const& source )
     {
-      return( SharedTessControlShader( new TessControlShader( source ) ) );
+      return( std::shared_ptr<TessControlShader>( new TessControlShader( source ) ) );
     }
 
     TessControlShader::TessControlShader( std::string const& source )
@@ -163,7 +163,7 @@ namespace dp
 
     SharedTessEvaluationShader TessEvaluationShader::create( std::string const& source )
     {
-      return( SharedTessEvaluationShader( new TessEvaluationShader( source ) ) );
+      return( std::shared_ptr<TessEvaluationShader>( new TessEvaluationShader( source ) ) );
     }
 
     TessEvaluationShader::TessEvaluationShader( std::string const& source )
@@ -179,7 +179,7 @@ namespace dp
 
     SharedGeometryShader GeometryShader::create( std::string const& source )
     {
-      return( SharedGeometryShader( new GeometryShader( source ) ) );
+      return( std::shared_ptr<GeometryShader>( new GeometryShader( source ) ) );
     }
 
     GeometryShader::GeometryShader( std::string const& source )
@@ -195,7 +195,7 @@ namespace dp
 
     SharedFragmentShader FragmentShader::create( std::string const& source )
     {
-      return( SharedFragmentShader( new FragmentShader( source ) ) );
+      return( std::shared_ptr<FragmentShader>( new FragmentShader( source ) ) );
     }
 
     FragmentShader::FragmentShader( std::string const& source )
@@ -211,7 +211,7 @@ namespace dp
 
     SharedComputeShader ComputeShader::create( std::string const& source )
     {
-      return( SharedComputeShader( new ComputeShader( source ) ) );
+      return( std::shared_ptr<ComputeShader>( new ComputeShader( source ) ) );
     }
 
     ComputeShader::ComputeShader( std::string const& source )

@@ -151,7 +151,7 @@ bool CFRPipeline::init( const dp::gl::SharedRenderContext &renderContext,
       gpu.push_back( gpus[i] );
 
       dp::gl::RenderContextFormat format;
-      dp::gl::SharedRenderContext context = dp::gl::RenderContext::create( dp::gl::RenderContext::Headless( &format, nullptr, gpu ) );
+      dp::gl::SharedRenderContext context = dp::gl::RenderContext::create( dp::gl::RenderContext::Headless( &format, dp::gl::SharedRenderContext::null, gpu ) );
 
       dp::gl::SharedRenderTargetFBO rt = dp::gl::RenderTargetFBO::create(context);
       gpuData.m_renderTarget = rt;

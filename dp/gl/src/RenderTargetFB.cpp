@@ -54,7 +54,7 @@ namespace dp
 
     SharedRenderTargetFB RenderTargetFB::create( const SharedRenderContext &glContext )
     {
-      return( SharedRenderTargetFB( new RenderTargetFB( glContext ) ) );
+      return( std::shared_ptr<RenderTargetFB>( new RenderTargetFB( glContext ) ) );
     }
 
     RenderTargetFB::~RenderTargetFB()
