@@ -61,7 +61,7 @@ namespace dp
         case SceneTree::Event::Object:
           {
             SceneTree::EventObject const& eventObject = static_cast<SceneTree::EventObject const&>( eventSceneTree );
-            dp::sg::core::GeoNodeWeakPtr geoNodeWeakPtr = dp::sg::core::weakPtr_cast<dp::sg::core::GeoNode>(eventObject.getNode().m_object);
+            dp::sg::core::GeoNodeWeakPtr geoNodeWeakPtr = dp::util::weakPtr_cast<dp::sg::core::GeoNode>(eventObject.getNode().m_object);
             ObjectTreeNode const &node = eventObject.getNode();
 
             if ( m_drawableManager->m_dis.size() != m_drawableManager->m_sceneTree->getObjectTree().size() )
@@ -161,7 +161,7 @@ namespace dp
           {
             if ( m_objectTree[index].m_isDrawable )
             {
-              dp::sg::core::GeoNodeWeakPtr geoNodeWeakPtr = dp::sg::core::weakPtr_cast<dp::sg::core::GeoNode>(m_objectTree[index].m_object);
+              dp::sg::core::GeoNodeWeakPtr geoNodeWeakPtr = dp::util::weakPtr_cast<dp::sg::core::GeoNode>(m_objectTree[index].m_object);
               ObjectTreeNode const &node = m_objectTree[index];
 
               m_drawableManager->m_dis[index] = m_drawableManager->addDrawableInstance( geoNodeWeakPtr, index );
@@ -254,7 +254,7 @@ namespace dp
           DP_ASSERT( m_dis[index] );
           // Remove/Add to change GeometryInstance
           removeDrawableInstance( m_dis[index] );
-          m_dis[index] = addDrawableInstance( dp::sg::core::weakPtr_cast<dp::sg::core::GeoNode>(node.m_object), index ); // TODO, don't pass geonode?
+          m_dis[index] = addDrawableInstance( dp::util::weakPtr_cast<dp::sg::core::GeoNode>(node.m_object), index ); // TODO, don't pass geonode?
           setDrawableInstanceActive( m_dis[index], node.m_worldActive );
           break;
         }

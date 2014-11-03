@@ -422,13 +422,8 @@ namespace dp
 
 namespace dp
 {
-  namespace sg
+  namespace util
   {
-    namespace core
-    {
-
-      OBJECT_TRAITS( dp::sg::ui::ViewState, core::HandledObject );
-
-    }
+    OBJECT_TRAITS( dp::sg::ui::ViewState, dp::sg::core::HandledObject );
   }
 }

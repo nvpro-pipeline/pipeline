@@ -201,7 +201,7 @@ class NVSGLoader : public dp::sg::io::SceneLoader
     
     template<typename T>          void            readPixelComponent( const std::string & token, T & pc );
     template<typename T>          unsigned char * readPixels( unsigned int nov );
-    template<typename ObjectType> void            storeNamedObject( const std::string & name, std::map<std::string, dp::sg::core::SharedPtr<ObjectType> > & container, const dp::sg::core::SharedPtr<ObjectType> & obj );
+    template<typename ObjectType> void            storeNamedObject( const std::string & name, std::map<std::string, dp::util::SharedPtr<ObjectType> > & container, const dp::util::SharedPtr<ObjectType> & obj );
 
   private :
     std::map<std::string,dp::sg::core::BillboardSharedPtr>          m_billboards;
@@ -242,8 +242,8 @@ inline void NVSGLoader::deleteThis( void )
 
 template <typename ObjectType>
 inline void NVSGLoader::storeNamedObject( const std::string & name
-                                        , std::map<std::string, dp::sg::core::SharedPtr<ObjectType> > & container
-                                        , dp::sg::core::SharedPtr<ObjectType> const & obj )
+                                        , std::map<std::string, dp::util::SharedPtr<ObjectType> > & container
+                                        , dp::util::SharedPtr<ObjectType> const & obj )
 {
   if ( obj )
   {

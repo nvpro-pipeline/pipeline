@@ -27,8 +27,8 @@
 #pragma once
 /** @file */
 
-#include <dp/sg/core/SharedPtr.h>
 #include <dp/util/Reflection.h>
+#include <dp/util/SharedPtr.h>
 #include <dp/util/SmartPtr.h>
 
 // required declaration
@@ -70,31 +70,31 @@ namespace dp
 
 /*! \brief Macro to define the three standard types for a type T.
  *  \remark For convenience, for each class T, we define the types TSharedPtr, TWeakPtr, and TLock */
-#define CORE_TYPES(T)                               \
-  typedef dp::sg::core::SharedPtr<T>  T##SharedPtr; \
-  typedef T*                          T##WeakPtr;
+#define CORE_TYPES(T)                           \
+  typedef dp::util::SharedPtr<T>  T##SharedPtr; \
+  typedef T*                      T##WeakPtr;
 
 /*! \brief Macro to define ObjectType and our four standard types of a base type T as part of a templated struct.
  *  \remark Using this struct, the standard types Handle, SharedPtr, WeakPtr and Lock, as well as
  *  the ObjectType itself, are easily available within a template context. */
-#define OBJECT_TRAITS_BASE(T)                     \
-template <> struct ObjectTraits<T>                \
-{                                                 \
-  typedef T                           ObjectType; \
-  typedef dp::sg::core::SharedPtr<T>  SharedPtr;  \
-  typedef T*                          WeakPtr;    \
+#define OBJECT_TRAITS_BASE(T)                 \
+template <> struct ObjectTraits<T>            \
+{                                             \
+  typedef T                       ObjectType; \
+  typedef dp::util::SharedPtr<T>  SharedPtr;  \
+  typedef T*                      WeakPtr;    \
 }
 
 /*! \brief Macro to define ObjectType and our five standard types of a type T, with base type BT, as part of a templated struct.
  *  \remark Using this struct, the standard types Handle, SharedPtr, WeakPtr and Lock, as well as
  *  the ObjectType itself, are easily available within a template context. */
-#define OBJECT_TRAITS(T, BT)                      \
-template <> struct ObjectTraits<T>                \
-{                                                 \
-  typedef T                           ObjectType; \
-  typedef BT                          Base;       \
-  typedef dp::sg::core::SharedPtr<T>  SharedPtr;  \
-  typedef T*                          WeakPtr;    \
+#define OBJECT_TRAITS(T, BT)                  \
+template <> struct ObjectTraits<T>            \
+{                                             \
+  typedef T                       ObjectType; \
+  typedef BT                      Base;       \
+  typedef dp::util::SharedPtr<T>  SharedPtr;  \
+  typedef T*                      WeakPtr;    \
 }
 
 namespace dp
@@ -189,36 +189,6 @@ namespace dp
       CORE_TYPES( TextureFile );
       CORE_TYPES( TextureHost );
 
-      OBJECT_TRAITS_BASE( HandledObject );
-
-      OBJECT_TRAITS( Object, HandledObject );
-      OBJECT_TRAITS( Camera, Object );
-      OBJECT_TRAITS( FrustumCamera, Camera );
-      OBJECT_TRAITS( ParallelCamera, FrustumCamera );
-      OBJECT_TRAITS( PerspectiveCamera, FrustumCamera );
-      OBJECT_TRAITS( MatrixCamera, Camera );
-      OBJECT_TRAITS( Node, Object );
-      OBJECT_TRAITS( Group, Node );
-      OBJECT_TRAITS( Billboard, Group );
-      OBJECT_TRAITS( LOD, Group );
-      OBJECT_TRAITS( Transform, Group );
-      OBJECT_TRAITS( Switch, Group );
-      OBJECT_TRAITS( LightSource, Node );
-      OBJECT_TRAITS( ClipPlane, Object );
-      OBJECT_TRAITS( GeoNode, Node );
-      OBJECT_TRAITS( Primitive, Object );
-      OBJECT_TRAITS( VertexAttributeSet, Object );
-      OBJECT_TRAITS( IndexSet, Object );
-      OBJECT_TRAITS( EffectData, Object );
-      OBJECT_TRAITS( ParameterGroupData, Object );
-      OBJECT_TRAITS( Scene, Object );
-      OBJECT_TRAITS( Buffer, HandledObject );
-      OBJECT_TRAITS( BufferHost, Buffer );
-      OBJECT_TRAITS( Sampler, Object );
-      OBJECT_TRAITS( Texture, HandledObject );
-      OBJECT_TRAITS( TextureFile, Texture );
-      OBJECT_TRAITS( TextureHost, Texture );
-
     } // namespace core
   } // namespace sg
 } // namespace dp
@@ -228,6 +198,36 @@ namespace dp
 {
   namespace util
   {
+
+    OBJECT_TRAITS_BASE( dp::sg::core::HandledObject );
+
+    OBJECT_TRAITS( dp::sg::core::Object,              dp::sg::core::HandledObject );
+    OBJECT_TRAITS( dp::sg::core::Camera,              dp::sg::core::Object );
+    OBJECT_TRAITS( dp::sg::core::FrustumCamera,       dp::sg::core::Camera );
+    OBJECT_TRAITS( dp::sg::core::ParallelCamera,      dp::sg::core::FrustumCamera );
+    OBJECT_TRAITS( dp::sg::core::PerspectiveCamera,   dp::sg::core::FrustumCamera );
+    OBJECT_TRAITS( dp::sg::core::MatrixCamera,        dp::sg::core::Camera );
+    OBJECT_TRAITS( dp::sg::core::Node,                dp::sg::core::Object );
+    OBJECT_TRAITS( dp::sg::core::Group,               dp::sg::core::Node );
+    OBJECT_TRAITS( dp::sg::core::Billboard,           dp::sg::core::Group );
+    OBJECT_TRAITS( dp::sg::core::LOD,                 dp::sg::core::Group );
+    OBJECT_TRAITS( dp::sg::core::Transform,           dp::sg::core::Group );
+    OBJECT_TRAITS( dp::sg::core::Switch,              dp::sg::core::Group );
+    OBJECT_TRAITS( dp::sg::core::LightSource,         dp::sg::core:: Node );
+    OBJECT_TRAITS( dp::sg::core::ClipPlane,           dp::sg::core::Object );
+    OBJECT_TRAITS( dp::sg::core::GeoNode,             dp::sg::core::Node );
+    OBJECT_TRAITS( dp::sg::core::Primitive,           dp::sg::core::Object );
+    OBJECT_TRAITS( dp::sg::core::VertexAttributeSet,  dp::sg::core::Object );
+    OBJECT_TRAITS( dp::sg::core::IndexSet,            dp::sg::core::Object );
+    OBJECT_TRAITS( dp::sg::core::EffectData,          dp::sg::core::Object );
+    OBJECT_TRAITS( dp::sg::core::ParameterGroupData,  dp::sg::core::Object );
+    OBJECT_TRAITS( dp::sg::core::Scene,               dp::sg::core::Object );
+    OBJECT_TRAITS( dp::sg::core::Buffer,              dp::sg::core::HandledObject );
+    OBJECT_TRAITS( dp::sg::core::BufferHost,          dp::sg::core::Buffer );
+    OBJECT_TRAITS( dp::sg::core::Sampler,             dp::sg::core::Object );
+    OBJECT_TRAITS( dp::sg::core::Texture,             dp::sg::core::HandledObject );
+    OBJECT_TRAITS( dp::sg::core::TextureFile,         dp::sg::core::Texture );
+    OBJECT_TRAITS( dp::sg::core::TextureHost,         dp::sg::core::Texture );
 
     /************************************************************************/
     /* Reflection                                                           */

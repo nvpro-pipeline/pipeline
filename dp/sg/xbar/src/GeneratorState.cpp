@@ -33,7 +33,6 @@
 #include <dp/sg/core/Camera.h>
 #include <dp/sg/core/LightSource.h>
 #include <dp/sg/core/LOD.h>
-#include <dp/sg/core/SharedPtr.h>
 #include <dp/sg/core/Switch.h>
 #include <dp/sg/core/Transform.h>
 

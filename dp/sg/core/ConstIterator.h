@@ -27,8 +27,6 @@
 #pragma once
 /** @file */
 
-#include <dp/sg/core/SharedPtr.h>
-
 namespace dp
 {
   namespace sg
@@ -48,9 +46,9 @@ namespace dp
       class ConstIterator : public std::iterator<std::input_iterator_tag, typename IteratorType::value_type>
       {
 #if defined(__GNUC__)
-        friend class ObjectTraits<FriendType>::ObjectType;
+        friend class dp::util::ObjectTraits<FriendType>::ObjectType;
 #else
-        friend typename ObjectTraits<FriendType>::ObjectType;
+        friend typename dp::util::ObjectTraits<FriendType>::ObjectType;
 #endif
 
       public:

@@ -120,7 +120,7 @@ namespace dp
           m_results.reserve( m_foundObjects.size() );
           for ( set<const Object *>::const_iterator it = m_foundObjects.begin() ; it != m_foundObjects.end() ; ++it )
           {
-            m_results.push_back( getWeakPtr<Object>(*it) );
+            m_results.push_back( dp::util::getWeakPtr<Object>(*it) );
           }
         }
         return( m_results );
@@ -136,7 +136,7 @@ namespace dp
             search( (const Group *) p );
           }
         }
-        else if( m_objectPointer == getWeakPtr<Object>( p ) )
+        else if( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
         {
           addItem(p);
         }
@@ -154,7 +154,7 @@ namespace dp
             search( (const OwnedObject<Object> *) p);
           }
         }
-        else if ( m_objectPointer == getWeakPtr<Object>( p ) )
+        else if ( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
         {
           addItem(p);
         }
@@ -172,7 +172,7 @@ namespace dp
             search( (const Node *) p );
           }
         }
-        else if( m_objectPointer == getWeakPtr<Object>( p ) )
+        else if( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
         {
           addItem(p);
         }
@@ -187,7 +187,7 @@ namespace dp
         {
           search( p );
         }
-        else if( m_objectPointer == getWeakPtr<Object>( p ) )
+        else if( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
         {
           addItem(p);
         }
@@ -205,7 +205,7 @@ namespace dp
             search( (const Group *) p );
           }
         }
-        else if ( m_objectPointer == getWeakPtr<Object>( p ) )
+        else if ( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
         {
           addItem(p);
         }
@@ -223,7 +223,7 @@ namespace dp
             search( (const OwnedObject<EffectData> *) p);
           }
         }
-        else if ( m_objectPointer == getWeakPtr<Object>( p ) )
+        else if ( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
         {
           addItem(p);
         }
@@ -241,7 +241,7 @@ namespace dp
             search( (const OwnedObject<ParameterGroupData> *) p);
           }
         }
-        else if ( m_objectPointer == getWeakPtr<Object>( p ) )
+        else if ( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
         {
           addItem(p);
         }
@@ -259,7 +259,7 @@ namespace dp
             search( (const Group *) p );
           }
         }
-        else if ( m_objectPointer == getWeakPtr<Object>( p ) )
+        else if ( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
         {
           addItem(p);
         }
@@ -274,7 +274,7 @@ namespace dp
         {
           search( p );
         }
-        else if ( m_objectPointer == getWeakPtr<Object>( p ) )
+        else if ( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
         {
           addItem(p);
         }
@@ -292,7 +292,7 @@ namespace dp
             search( (const Node *) p );
           }
         }
-        else if ( m_objectPointer == getWeakPtr<Object>( p ) )
+        else if ( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
         {
           addItem(p);
         }
@@ -310,7 +310,7 @@ namespace dp
             search( (const OwnedObject<Object> *) p );
           }
         }
-        else if ( m_objectPointer == getWeakPtr<Object>( p ) )
+        else if ( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
         {
           addItem(p);
         }
@@ -328,7 +328,7 @@ namespace dp
             search( (const FrustumCamera *) p );
           }
         }
-        else if ( m_objectPointer == getWeakPtr<Object>( p ) )
+        else if ( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
         {
           addItem(p);
         }
@@ -346,7 +346,7 @@ namespace dp
             search( (const FrustumCamera *) p );
           }
         }
-        else if ( m_objectPointer == getWeakPtr<Object>( p ) )
+        else if ( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
         {
           addItem(p);
         }
@@ -364,7 +364,7 @@ namespace dp
             search( (const Camera *) p );
           }
         }
-        else if ( m_objectPointer == getWeakPtr<Object>( p ) )
+        else if ( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
         {
           addItem(p);
         }
@@ -379,7 +379,7 @@ namespace dp
         {
           search( p );
         }
-        else if ( m_objectPointer == getWeakPtr<Object>( p ) )
+        else if ( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
         {
           addItem( p );
         }
@@ -397,7 +397,7 @@ namespace dp
             search( (const OwnedObject<Primitive> *) p );
           }
         }
-        else if ( m_objectPointer == getWeakPtr<Object>( p ) )
+        else if ( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
         {
           addItem( p );
         }

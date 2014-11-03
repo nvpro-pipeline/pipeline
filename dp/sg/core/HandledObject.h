@@ -31,7 +31,6 @@
 #include <dp/util/Observer.h>
 #include <dp/sg/core/Event.h>
 #include <dp/sg/core/CoreTypes.h>
-#include <dp/sg/core/SharedPtr.h>
 #include <boost/type_traits.hpp>
 #include <memory>
 
@@ -50,7 +49,7 @@ namespace dp
 
           virtual HandledObjectSharedPtr clone() const = 0;
 
-          template<typename T> SharedPtr<T> getSharedPtr() const;
+          template<typename T> dp::util::SharedPtr<T> getSharedPtr() const;
 
         protected:
           HandledObject();
@@ -82,7 +81,7 @@ namespace dp
       }
 
       template <typename T>
-      inline SharedPtr<T> HandledObject::getSharedPtr() const
+      inline dp::util::SharedPtr<T> HandledObject::getSharedPtr() const
       {
         DP_STATIC_ASSERT(( boost::is_base_of<HandledObject,T>::value ));
         return( HandledObjectSharedPtr( const_cast<HandledObject*>(this)->shared_from_this() ).staticCast<T>() );

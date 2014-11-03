@@ -36,19 +36,18 @@ namespace dp
   {
     namespace ui
     {
-
       class RendererOptions;
       CORE_TYPES( RendererOptions );
-
     } // namespace ui
+  } // namespace sg
 
-    namespace core
-    {
+  namespace util
+  {
+    OBJECT_TRAITS( dp::sg::ui::RendererOptions, dp::sg::core::HandledObject );
+  } // namespace util
 
-      OBJECT_TRAITS( dp::sg::ui::RendererOptions, dp::sg::core::HandledObject );
-
-    } // namespace core
-
+  namespace sg
+  {
     namespace ui
     {
 
