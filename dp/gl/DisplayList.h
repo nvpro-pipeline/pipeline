@@ -68,7 +68,7 @@ namespace dp
 
     inline SharedDisplayList DisplayList::create()
     {
-      return( SharedDisplayList( new DisplayList ) );
+      return( std::shared_ptr<DisplayList>( new DisplayList() ) );
     }
 
     inline void DisplayList::beginCompile( )

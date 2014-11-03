@@ -31,7 +31,7 @@ namespace dp
   {
     SharedVertexArrayObject VertexArrayObject::create()
     {
-      return( SharedVertexArrayObject( new VertexArrayObject ) );
+      return( std::shared_ptr<VertexArrayObject>( new VertexArrayObject() ) );
     }
 
     VertexArrayObject::VertexArrayObject()

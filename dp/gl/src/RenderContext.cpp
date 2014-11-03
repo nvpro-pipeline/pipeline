@@ -453,7 +453,7 @@ namespace dp
     bool RenderContext::makeCurrent()
     {
       bool result = m_context->makeCurrent();
-      if ( result && ( getThreadData()->currentRenderContext.get() != this ) )
+      if ( result && ( getThreadData()->currentRenderContext.getWeakPtr() != this ) )
       {
         getThreadData()->currentRenderContext = shared_from_this();
       }
@@ -463,7 +463,7 @@ namespace dp
 
     void RenderContext::makeNoncurrent()
     {
-      getThreadData()->currentRenderContext = 0;
+      getThreadData()->currentRenderContext.reset();
       m_context->makeNoncurrent();
     }
 
@@ -568,7 +568,7 @@ namespace dp
         shareGroup = createShareGroup( nativeContext );
       }
 
-      return( SharedRenderContext( new RenderContext( nativeContext, shareGroup ) ) );
+      return( std::shared_ptr<RenderContext>( new RenderContext( nativeContext, shareGroup ) ) );
     }
 
     SharedRenderContext RenderContext::create( const Clone &creation )
@@ -595,8 +595,7 @@ namespace dp
       SharedNativeContext nativeContext = new NativeContext( newContext, true, drawable, false, 0, false, display, true );
   #endif
       SharedShareGroup shareGroup = creation.isShared() ? creation.getContext()->getShareGroup() : createShareGroup( nativeContext );
-      return( SharedRenderContext( new RenderContext( nativeContext, shareGroup ) ) );
-
+      return( std::shared_ptr<RenderContext>( new RenderContext( nativeContext, shareGroup ) ) );
     }
 
     SharedRenderContext RenderContext::create( const Headless &creation )
@@ -671,7 +670,7 @@ namespace dp
       SharedNativeContext nativeContext = new NativeContext( context, true, drawable, false, pbuffer, true, display, true );
   #endif
       SharedShareGroup shareGroup = creation.getContext() ? creation.getContext()->getShareGroup() : createShareGroup( nativeContext );
-      return( SharedRenderContext( new RenderContext( nativeContext, shareGroup, *creation.getFormat() ) ) );
+      return( std::shared_ptr<RenderContext>( new RenderContext( nativeContext, shareGroup, *creation.getFormat() ) ) );
     }
 
     SharedRenderContext RenderContext::create( const Windowed &creation )
@@ -739,7 +738,7 @@ namespace dp
       SharedNativeContext nativeContext;
   #endif
       SharedShareGroup shareGroup = creation.getContext() ? creation.getContext()->getShareGroup() : createShareGroup( nativeContext );
-      return( SharedRenderContext( new RenderContext( nativeContext, shareGroup, *creation.getFormat() ) ) );
+      return( std::shared_ptr<RenderContext>( new RenderContext( nativeContext, shareGroup, *creation.getFormat() ) ) );
 
     }
 
@@ -765,7 +764,7 @@ namespace dp
         shareGroup = createShareGroup( nativeContext );
       }
 
-      return( SharedRenderContext( new RenderContext( nativeContext, shareGroup ) ) );
+      return( std::shared_ptr<RenderContext>( new RenderContext( nativeContext, shareGroup ) ) );
     }
 
     SharedRenderContext RenderContext::create( const FromHWND &creation )
@@ -799,7 +798,7 @@ namespace dp
         shareGroup = createShareGroup( nativeContext );
       }
 
-      return( SharedRenderContext( new RenderContext( nativeContext, shareGroup, *creation.getFormat() ) ) );
+      return( std::shared_ptr<RenderContext>( new RenderContext( nativeContext, shareGroup, *creation.getFormat() ) ) );
     }
   #elif defined(DP_OS_LINUX)
     SharedRenderContext RenderContext::create( const FromDrawable &creation )
@@ -1103,7 +1102,7 @@ namespace dp
     /****************/
     SharedShareGroup ShareGroup::create( const RenderContext::SharedNativeContext &nativeContext )
     {
-      return( SharedShareGroup( new ShareGroup( nativeContext ) ) );
+      return( std::shared_ptr<ShareGroup>( new ShareGroup( nativeContext ) ) );
     }
 
     ShareGroup::ShareGroup( const RenderContext::SharedNativeContext &nativeContext )

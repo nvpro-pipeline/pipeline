@@ -69,7 +69,7 @@ namespace dp
 
     SharedRenderTargetFBO RenderTargetFBO::create( const SharedRenderContext &glContext )
     {
-      return( SharedRenderTargetFBO( new RenderTargetFBO( glContext ) ) );
+      return( std::shared_ptr<RenderTargetFBO>( new RenderTargetFBO( glContext ) ) );
     }
 
     RenderTargetFBO::~RenderTargetFBO()

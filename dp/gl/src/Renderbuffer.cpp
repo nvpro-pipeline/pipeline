@@ -67,17 +67,17 @@ namespace dp
 
     SharedRenderbuffer Renderbuffer::create(GLenum internalFormat, int width, int height )
     {
-      return( SharedRenderbuffer( new Renderbuffer( internalFormat, width, height ) ) );
+      return( std::shared_ptr<Renderbuffer>( new Renderbuffer( internalFormat, width, height ) ) );
     }
 
     SharedRenderbuffer Renderbuffer::create(const MSAA &msaa, GLenum internalFormat, int width, int height )
     {
-      return( SharedRenderbuffer( new Renderbuffer( msaa, internalFormat, width, height ) ) );
+      return( std::shared_ptr<Renderbuffer>( new Renderbuffer( msaa, internalFormat, width, height ) ) );
     }
 
     SharedRenderbuffer Renderbuffer::create(const CSAA &csaa, GLenum internalFormat, int width, int height )
     {
-      return( SharedRenderbuffer( new Renderbuffer( csaa, internalFormat, width, height ) ) );
+      return( std::shared_ptr<Renderbuffer>( new Renderbuffer( csaa, internalFormat, width, height ) ) );
     }
 
     void Renderbuffer::init( int width, int height )

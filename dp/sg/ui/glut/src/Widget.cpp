@@ -1155,8 +1155,7 @@ namespace dp
 
         dp::gl::SharedRenderContext const& Widget::getRenderContext() const
         {
-          static dp::gl::SharedRenderContext dummy;
-          return m_renderTarget ? m_renderTarget->getRenderContext() : dummy;
+          return m_renderTarget ? m_renderTarget->getRenderContext() : dp::gl::SharedRenderContext::null;
         }
 
         dp::gl::SharedRenderTarget  const& Widget::getRenderTarget() const

@@ -35,7 +35,7 @@ namespace dp
 
     SharedProgram Program::create( std::vector<SharedShader> const& shaders, Parameters const& programParameters )
     {
-      return( SharedProgram( new Program( shaders, programParameters ) ) );
+      return( std::shared_ptr<Program>( new Program( shaders, programParameters ) ) );
     }
 
     SharedProgram Program::create( SharedVertexShader const& vertexShader, SharedFragmentShader const& fragmentShader, Parameters const& programParameters )
@@ -43,14 +43,14 @@ namespace dp
       std::vector<SharedShader> shaders;
       shaders.push_back( vertexShader );
       shaders.push_back( fragmentShader );
-      return( SharedProgram( new Program( shaders, programParameters ) ) );
+      return( std::shared_ptr<Program>( new Program( shaders, programParameters ) ) );
     }
 
     SharedProgram Program::create( SharedComputeShader const& computeShader, Parameters const& programParameters )
     {
       std::vector<SharedShader> shaders;
       shaders.push_back( computeShader );
-      return( SharedProgram( new Program( shaders, programParameters ) ) );
+      return( std::shared_ptr<Program>( new Program( shaders, programParameters ) ) );
     }
 
     Program::Program( std::vector<SharedShader> const& shaders, Parameters const& parameters )

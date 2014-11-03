@@ -148,9 +148,9 @@ namespace dp
         m_currentPrimitiveRestartIndex = ~0;
         glEnable( GL_PRIMITIVE_RESTART );
 
-        dp::gl::bind( GL_ARRAY_BUFFER, 0 );
+        dp::gl::bind( GL_ARRAY_BUFFER, dp::gl::SharedBuffer::null );
 
-        dp::gl::bind( GL_ELEMENT_ARRAY_BUFFER, 0 );
+        dp::gl::bind( GL_ELEMENT_ARRAY_BUFFER, dp::gl::SharedBuffer::null );
         m_currentArrayBuffer = ~0;
         m_currentElementBuffer = ~0;
 
@@ -220,10 +220,10 @@ namespace dp
         endFrame();
         setVertexFormatMask( 0 );
 
-        dp::gl::bind( GL_ARRAY_BUFFER, 0 );
+        dp::gl::bind( GL_ARRAY_BUFFER, dp::gl::SharedBuffer::null );
         m_currentArrayBuffer = 0;
 
-        dp::gl::bind( GL_ELEMENT_ARRAY_BUFFER, 0 );
+        dp::gl::bind( GL_ELEMENT_ARRAY_BUFFER, dp::gl::SharedBuffer::null );
         m_currentElementBuffer = 0;
 
         GLenum err = glGetError();

@@ -1398,8 +1398,7 @@ namespace dp
           setAttribute( Qt::WA_PaintOnScreen ); // don't let qt paint anything on screen
           
 #if defined(DP_OS_WINDOWS)
-          dp::gl::SharedRenderContext renderContextGL = dp::gl::RenderContext::create( dp::gl::RenderContext::FromHWND( (HWND)winId()
-            , &m_format, m_shareWidget ? m_shareWidget->getRenderContext() : nullptr ) );
+          dp::gl::SharedRenderContext renderContextGL = dp::gl::RenderContext::create( dp::gl::RenderContext::FromHWND( (HWND)winId(), &m_format, m_shareWidget ? m_shareWidget->getRenderContext() : dp::gl::SharedRenderContext::null ) );
 #elif defined(DP_OS_LINUX)
           // TODO support format
           dp::gl::SharedRenderContext renderContextGL = dp::gl::RenderContext::create( dp::gl::RenderContext::FromDrawable( QX11Info::display(), QX11Info::appScreen(), winId(), m_shareWidget ? m_shareWidget->getRenderContext() : dp::gl::SharedRenderContext::null ) );
