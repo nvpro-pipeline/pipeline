@@ -80,7 +80,6 @@ set(CORE_PUBLIC_HEADERS
   Primitive.h
   Sampler.h
   Scene.h
-  SharedPtr.h
   Switch.h
   Texture.h
   TextureFile.h

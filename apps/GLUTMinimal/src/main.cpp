@@ -421,7 +421,7 @@ void combineVertexAttributes( dp::sg::ui::ViewStateSharedPtr const& viewState )
   std::vector<dp::sg::core::ObjectWeakPtr> results = searchTraverser.getResults();
   for ( std::vector<dp::sg::core::ObjectWeakPtr>::iterator it = results.begin(); it != results.end(); ++it )
   {
-    dp::sg::core::weakPtr_cast<dp::sg::core::VertexAttributeSet>(*it)->combineBuffers();
+    dp::util::weakPtr_cast<dp::sg::core::VertexAttributeSet>(*it)->combineBuffers();
   }
 }
 

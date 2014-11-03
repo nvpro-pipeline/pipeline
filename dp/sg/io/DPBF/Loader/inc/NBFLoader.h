@@ -308,7 +308,7 @@ private:
 
   // shared object handling
   template <typename ObjectType, typename NBFObjectType>
-  bool loadSharedObject( typename dp::sg::core::ObjectTraits<ObjectType>::SharedPtr & obj
+  bool loadSharedObject( typename dp::util::ObjectTraits<ObjectType>::SharedPtr & obj
                        , Offset_AutoPtr<NBFObjectType>& objPtr
                        , dp::sg::core::PrimitiveType pt = dp::sg::core::PRIMITIVE_UNINITIALIZED );
 

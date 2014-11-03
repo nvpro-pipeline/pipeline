@@ -141,5 +141,3 @@ if (WIN32 AND CMAKE_COMPILER_IS_GNUCC)
   # Export everything for now and adopt sources later.
   set_target_properties( DPUtil PROPERTIES LINK_FLAGS "-Wl,--export-all" )
 endif()
-
-set_target_properties( DPUtil PROPERTIES FOLDER "Util" )

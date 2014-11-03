@@ -1995,7 +1995,7 @@ void setTraversalMasks( dp::sg::core::SceneSharedPtr const & scene, unsigned int
     const std::vector<dp::sg::core::ObjectWeakPtr> & searchResults = searchTraverser.getResults();
     for ( std::vector<dp::sg::core::ObjectWeakPtr>::const_iterator it = searchResults.begin() ; it != searchResults.end() ; ++it )
     {
-      dp::sg::core::weakPtr_cast<dp::sg::core::GeoNode>(*it)->setTraversalMask( mask );
+      dp::util::weakPtr_cast<dp::sg::core::GeoNode>(*it)->setTraversalMask( mask );
     }
   }
 }

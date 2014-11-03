@@ -59,27 +59,22 @@ namespace dp
 #if !defined( DOXYGEN_IGNORE )
 namespace dp
 {
-  namespace sg
+  namespace util
   {
-    namespace core
-    {
+    OBJECT_TRAITS( dp::sg::gl::BufferGL,                    dp::sg::core::Buffer );
+    OBJECT_TRAITS( dp::sg::gl::TextureGL,                   dp::sg::core::Texture );
 
-      OBJECT_TRAITS( dp::sg::gl::BufferGL, dp::sg::core::Buffer );
-      OBJECT_TRAITS( dp::sg::gl::TextureGL, dp::sg::core::Texture );
-
-      OBJECT_TRAITS( dp::sg::gl::TextureGL1D, dp::sg::gl::TextureGL );
-      OBJECT_TRAITS( dp::sg::gl::TextureGL2D, dp::sg::gl::TextureGL );
-      OBJECT_TRAITS( dp::sg::gl::TextureGLRectangle, dp::sg::gl::TextureGL );
-      OBJECT_TRAITS( dp::sg::gl::TextureGL3D, dp::sg::gl::TextureGL );
-      OBJECT_TRAITS( dp::sg::gl::TextureGLCubemap, dp::sg::gl::TextureGL );
-      OBJECT_TRAITS( dp::sg::gl::TextureGL1DArray, dp::sg::gl::TextureGL );
-      OBJECT_TRAITS( dp::sg::gl::TextureGL2DArray, dp::sg::gl::TextureGL );
-      OBJECT_TRAITS( dp::sg::gl::TextureGLCubemapArray, dp::sg::gl::TextureGL );
-      OBJECT_TRAITS( dp::sg::gl::TextureGLBuffer, dp::sg::gl::TextureGL );
-      OBJECT_TRAITS( dp::sg::gl::TextureGL2DMultisample, dp::sg::gl::TextureGL );
-      OBJECT_TRAITS( dp::sg::gl::TextureGL2DMultisampleArray, dp::sg::gl::TextureGL );
-
-    }
+    OBJECT_TRAITS( dp::sg::gl::TextureGL1D,                 dp::sg::gl::TextureGL );
+    OBJECT_TRAITS( dp::sg::gl::TextureGL2D,                 dp::sg::gl::TextureGL );
+    OBJECT_TRAITS( dp::sg::gl::TextureGLRectangle,          dp::sg::gl::TextureGL );
+    OBJECT_TRAITS( dp::sg::gl::TextureGL3D,                 dp::sg::gl::TextureGL );
+    OBJECT_TRAITS( dp::sg::gl::TextureGLCubemap,            dp::sg::gl::TextureGL );
+    OBJECT_TRAITS( dp::sg::gl::TextureGL1DArray,            dp::sg::gl::TextureGL );
+    OBJECT_TRAITS( dp::sg::gl::TextureGL2DArray,            dp::sg::gl::TextureGL );
+    OBJECT_TRAITS( dp::sg::gl::TextureGLCubemapArray,       dp::sg::gl::TextureGL );
+    OBJECT_TRAITS( dp::sg::gl::TextureGLBuffer,             dp::sg::gl::TextureGL );
+    OBJECT_TRAITS( dp::sg::gl::TextureGL2DMultisample,      dp::sg::gl::TextureGL );
+    OBJECT_TRAITS( dp::sg::gl::TextureGL2DMultisampleArray, dp::sg::gl::TextureGL );
   }
 }
 #endif

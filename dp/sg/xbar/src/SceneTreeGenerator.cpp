@@ -79,7 +79,7 @@ namespace dp
 
       void SceneTreeGenerator::handleTransform( const dp::sg::core::Transform * p )
       {
-        TransformWeakPtr transform = getWeakPtr<Transform>(p);
+        TransformWeakPtr transform = dp::util::getWeakPtr<Transform>(p);
 
         // add transform to transform stack
         m_generatorState->pushTransform( transform );
@@ -94,7 +94,7 @@ namespace dp
       void SceneTreeGenerator::handleBillboard( const dp::sg::core::Billboard *p )
       {
         // add billboard as a transform 
-        m_generatorState->pushTransform( getWeakPtr<Billboard>(p) );
+        m_generatorState->pushTransform( dp::util::getWeakPtr<Billboard>(p) );
 
         // add transform index to dynamic transforms list
         m_generatorState->addDynamicTransformIndex( m_generatorState->getParentTransformIndex() );

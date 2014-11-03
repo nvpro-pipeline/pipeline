@@ -150,7 +150,7 @@ namespace dp
 
         void CullingImpl::updateBoundingBox( ObjectTreeIndex objectTreeIndex )
         {
-          dp::sg::core::GeoNodeWeakPtr geoNodeWeakPtr = dp::sg::core::weakPtr_cast<dp::sg::core::GeoNode>(m_sceneTree->getObjectTreeNode( objectTreeIndex ).m_object);
+          dp::sg::core::GeoNodeWeakPtr geoNodeWeakPtr = dp::util::weakPtr_cast<dp::sg::core::GeoNode>(m_sceneTree->getObjectTreeNode( objectTreeIndex ).m_object);
           dp::sg::core::PrimitiveSharedPtr primitive = geoNodeWeakPtr->getPrimitive();
           m_culling->objectSetBoundingBox( m_objects[objectTreeIndex], geoNodeWeakPtr->getBoundingBox() );
         }

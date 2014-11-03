@@ -329,7 +329,7 @@ namespace dp
         transform( rhs.m_headLights.begin()
                  , rhs.m_headLights.end()
                  , back_inserter(m_headLights)
-                 , CloneObject() );
+                 , dp::util::CloneObject() );
         notify( Event(this ) );
       }
 

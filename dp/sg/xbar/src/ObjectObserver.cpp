@@ -99,7 +99,7 @@ namespace dp
                 onPreRemoveChild( groupEvent.getGroup(), groupEvent.getChild(), groupEvent.getIndex(), groupPayload );
                 break;
               case dp::sg::core::Group::Event::POST_GROUP_EXCHANGED:
-                m_sceneTree->replaceSubTree( dp::sg::core::getWeakPtr<dp::sg::core::Node>(groupEvent.getGroup()), groupPayload->m_index );
+                m_sceneTree->replaceSubTree( dp::util::getWeakPtr<dp::sg::core::Node>(groupEvent.getGroup()), groupPayload->m_index );
                 break;
               case dp::sg::core::Group::Event::CLIP_PLANES_CHANGED:
                 DP_ASSERT( !"clipplanes not supported" );

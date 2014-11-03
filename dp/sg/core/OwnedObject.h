@@ -28,7 +28,6 @@
 /** @file */
 
 #include <dp/sg/core/Object.h>
-#include <dp/sg/core/SharedPtr.h>
 #include <vector>
 #include <set>
 
@@ -51,7 +50,7 @@ namespace dp
       class OwnedObject : public Object
       {
       public:
-        typedef std::vector<typename ObjectTraits<OwnerType>::WeakPtr> OwnerContainer;
+        typedef std::vector<typename dp::util::ObjectTraits<OwnerType>::WeakPtr> OwnerContainer;
         typedef typename OwnerContainer::const_iterator                OwnerIterator;
 
       public:
@@ -78,7 +77,7 @@ namespace dp
          *  pointer back to each of those OnwerType objects. These are called the owners.
          *  \note The behavior is undefined if \a it is invalid.
          *  \sa getNumberOfOwners */
-        typename ObjectTraits<OwnerType>::WeakPtr getOwner( OwnerIterator it ) const;
+        typename dp::util::ObjectTraits<OwnerType>::WeakPtr getOwner( OwnerIterator it ) const;
 
         /*! \brief Get an iterator to the first entry in the list of the object's owners.
          */
@@ -92,13 +91,13 @@ namespace dp
          *  \param owner The owner that should be added to the object's list of owners.
          *  \remarks In debug mode, the function asserts that the owner is not already in the list.
          */
-        void addOwner( typename ObjectTraits<OwnerType>::WeakPtr owner );
+        void addOwner( typename dp::util::ObjectTraits<OwnerType>::WeakPtr owner );
 
         /*! \brief Remove an owner from the object.
          *  \param owner The owner that should be removed from the object's list of owners.
          *  \remarks In debug mode, the function asserts that the owner is in the list.
          */
-        void removeOwner( typename ObjectTraits<OwnerType>::WeakPtr owner );
+        void removeOwner( typename dp::util::ObjectTraits<OwnerType>::WeakPtr owner );
 
         void markDirty( unsigned int state );
 
@@ -184,19 +183,19 @@ namespace dp
       }
 
       template<typename OwnerType>
-      inline typename ObjectTraits<OwnerType>::WeakPtr OwnedObject<OwnerType>::getOwner( OwnerIterator it ) const
+      inline typename dp::util::ObjectTraits<OwnerType>::WeakPtr OwnedObject<OwnerType>::getOwner( OwnerIterator it ) const
       {
         return( *it );
       }
 
       template<typename OwnerType>
-      inline void OwnedObject<OwnerType>::addOwner( typename ObjectTraits<OwnerType>::WeakPtr owner )
+      inline void OwnedObject<OwnerType>::addOwner( typename dp::util::ObjectTraits<OwnerType>::WeakPtr owner )
       {
         m_owners.push_back( owner );
       }
   
       template<typename OwnerType>
-      inline void OwnedObject<OwnerType>::removeOwner( typename ObjectTraits<OwnerType>::WeakPtr owner )
+      inline void OwnedObject<OwnerType>::removeOwner( typename dp::util::ObjectTraits<OwnerType>::WeakPtr owner )
       {
         typename OwnerContainer::iterator it = std::find( m_owners.begin(), m_owners.end(), owner );
         DP_ASSERT( it != m_owners.end() );
