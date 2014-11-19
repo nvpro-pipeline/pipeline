@@ -23,8 +23,8 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
 #include <dp/rix/gl/inc/ParameterRendererBuffer.h>
+#include <dp/rix/gl/inc/BufferGL.h>
 
 namespace dp
 {
@@ -44,13 +44,21 @@ namespace dp
         , m_uboBinding( GLint(uboBinding) )
         , m_uboOffset( GLsizeiptr(uboOffset) )
         , m_uboBlockSize( uboBlockSize )
+        , m_isBindlessUBOSupported(USE_UNIFORM_BUFFER_UNIFIED_MEMORY && !!glewGetExtension("GL_NV_uniform_buffer_unified_memory"))
       {
         DP_ASSERT( !m_parameters.empty() );
       }
 
       void ParameterRendererBuffer::activate()
       {
-        glBindBufferRange( m_target, m_uboBinding, m_ubo->getGLId(), m_uboOffset, m_uboBlockSize );
+        if (m_isBindlessUBOSupported) {
+            // TODO hack, query alignment from driver!
+            glBufferAddressRangeNV(GL_UNIFORM_BUFFER_ADDRESS_NV, m_uboBinding, m_ubo->getAddress(), (m_uboBlockSize + 0xff) & ~0xff);
+        }
+        else
+        {
+            glBindBufferRange( m_target, m_uboBinding, m_ubo->getGLId(), m_uboOffset, m_uboBlockSize );
+        }
       }
 
       void ParameterRendererBuffer::render( void const* cache )
