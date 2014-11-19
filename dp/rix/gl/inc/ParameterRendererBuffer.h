@@ -59,6 +59,7 @@ namespace dp
         GLint                            m_uboBinding;
         GLintptr                         m_uboOffset;
         GLsizeiptr                       m_uboBlockSize;
+        bool                             m_isBindlessUBOSupported;
       };
 
     } // namespace gl
