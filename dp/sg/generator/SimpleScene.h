@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2009
+// Copyright NVIDIA Corporation 2012-2014
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -35,17 +35,27 @@
 /* This class defines a simple scene with a set of drawables.
 */
 
-class SimpleScene
+namespace dp
 {
-public:
-  DP_SG_GENERATOR_API SimpleScene();
-  DP_SG_GENERATOR_API virtual ~SimpleScene();
+  namespace sg
+  {
+    namespace generator
+    {
+      class SimpleScene
+      {
+      public:
+        DP_SG_GENERATOR_API SimpleScene();
+        DP_SG_GENERATOR_API virtual ~SimpleScene();
 
-  DP_SG_GENERATOR_API void setEffectData( size_t index, const std::string& effectData );
+        DP_SG_GENERATOR_API void setEffectData( size_t index, const std::string& effectData );
 
-  dp::sg::core::SceneSharedPtr       m_sceneHandle;
-  dp::sg::core::EffectDataSharedPtr  m_effectHandle[4];    // one new material for each cube
-  dp::sg::core::TransformSharedPtr   m_transformHandle[4]; // one transform for each cube
-  dp::sg::core::GeoNodeSharedPtr     m_geoNodeHandle[4];   // one geonode for each cube
-  dp::sg::core::PrimitiveSharedPtr   m_primitive;          // the drawable attached to the transforms
-};
+        dp::sg::core::SceneSharedPtr       m_sceneHandle;
+        dp::sg::core::EffectDataSharedPtr  m_effectHandle[4];    // one new material for each cube
+        dp::sg::core::TransformSharedPtr   m_transformHandle[4]; // one transform for each cube
+        dp::sg::core::GeoNodeSharedPtr     m_geoNodeHandle[4];   // one geonode for each cube
+        dp::sg::core::PrimitiveSharedPtr   m_primitive;          // the drawable attached to the transforms
+      };
+
+    } // namespace generator
+  } // namespace sg
+} // namespace dp
