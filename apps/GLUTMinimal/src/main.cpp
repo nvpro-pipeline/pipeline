@@ -466,7 +466,7 @@ dp::sg::ui::ViewStateSharedPtr loadScene( std::string const& filename )
   dp::sg::core::SceneSharedPtr scene;
   if ( filename == "cubes" )
   {
-    SimpleScene simpleScene;
+    dp::sg::generator::SimpleScene simpleScene;
     scene = simpleScene.m_sceneHandle;
   }
   else if ( filename == "preview")
@@ -488,7 +488,7 @@ dp::sg::ui::ViewStateSharedPtr loadScene( std::string const& filename )
     if ( !scene )
     {
       std::cerr << "no valid scene found, using SimpleScene" << std::endl;
-      SimpleScene simpleScene;
+      dp::sg::generator::SimpleScene simpleScene;
       scene = simpleScene.m_sceneHandle;
     }
     viewState = dp::sg::ui::ViewState::create();

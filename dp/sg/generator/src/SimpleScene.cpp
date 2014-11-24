@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2009-2010
+// Copyright NVIDIA Corporation 2012-2014
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -41,91 +41,101 @@
 using namespace dp::math;
 using namespace dp::sg::core;
 
-SimpleScene::SimpleScene()
-{  
-  m_sceneHandle = Scene::create();
-
-  m_sceneHandle->setBackColor(  Vec4f( 71.0f/255.0f, 111.0f/255.0f, 0.0f, 1.0f ) );
-
-  dp::fx::EffectLibrary::instance()->loadEffects( "SimpleScene.xml" );
-
-  // Create cube (or other shape)
-  //m_primitive = dp::sg::generator::createQuadSet(1,1);
-  //m_primitive = dp::sg::generator::createQuadStrip(10);
-  //m_primitive = dp::sg::generator::createTriSet(1,1);
-  //m_primitive = dp::sg::generator::createTriFan(50);
-  //m_primitive = dp::sg::generator::createTriStrip(10,1);
-  m_primitive = dp::sg::generator::createCube();
-  //m_primitive = dp::sg::generator::createTetrahedron();
-  //m_primitive = dp::sg::generator::createOctahedron();
-  //m_primitive = dp::sg::generator::createDodecahedron();
-  //m_primitive = dp::sg::generator::createIcosahedron();
-  //m_primitive = dp::sg::generator::createSphere(32,16);
-  //m_primitive = dp::sg::generator::createTorus(64,32);
-  //m_primitive = dp::sg::generator::createTessellatedPlane(1);
-  //m_primitive = dp::sg::generator::createTessellatedBox(10);
-
-  char const* const names[] =
-  {
-      "White Object"
-    , "Red Object"
-    , "Green Object"
-    , "Blue Object"
-  };
-
-  char const* const materials[] =
-  {
-      "phong_white"
-    , "phong_red"
-    , "phong_green"
-    , "phong_blue"
-  };
-
-  // Create four GeoNodes.
-  for ( int i=0 ; i<4 ; i++ )
-  {
-    m_geoNodeHandle[i] = GeoNode::create();
-    m_geoNodeHandle[i]->setPrimitive( m_primitive );
-    m_geoNodeHandle[i]->setName( names[i] );
-    setEffectData( i, materials[i] );
-  }
-
-  // Create four transforms. Cube coordinates are in the range [-1, 1], set them 3 units apart.
-  m_transformHandle[0] = dp::sg::generator::createTransform( m_geoNodeHandle[0] );
-  m_transformHandle[0]->setName( "White Object Transform" );
-
-  m_transformHandle[1] = dp::sg::generator::createTransform( m_geoNodeHandle[1], Vec3f( 3.0f, 0.0f, 0.0f ) );
-  m_transformHandle[1]->setName( "Red Object Transform" );
-
-  m_transformHandle[2] = dp::sg::generator::createTransform( m_geoNodeHandle[2], Vec3f( 0.0f, 3.0f, 0.0f ), Quatf( Vec3f( 0.0f, 1.0f, 0.0f ), 10.0f) );
-  m_transformHandle[2]->setName( "Green Object Transform" );
-
-  m_transformHandle[3] = dp::sg::generator::createTransform( m_geoNodeHandle[3], Vec3f( 0.0f, 0.0f, 3.0f ), Quatf( Vec3f( 0.0f, 0.0f, 1.0f ), 20.0f) );
-  m_transformHandle[3]->setName( "Blue Object Transform" );
-
-  // Create the root
-  GroupSharedPtr groupHdl = Group::create();
-  for ( int i=0 ; i<4 ; i++ )
-  {
-    groupHdl->addChild( m_transformHandle[i] );
-  }
-  groupHdl->setName( "Root Node" );
-
-  m_sceneHandle->setRootNode( groupHdl );
-}
-
-SimpleScene::~SimpleScene()
+namespace dp
 {
-}
+  namespace sg
+  {
+    namespace generator
+    {
 
-void SimpleScene::setEffectData( size_t index, const std::string& effectData )
-{
-  DP_ASSERT( index < sizeof dp::util::array( m_effectHandle ) );
+      SimpleScene::SimpleScene()
+      {  
+        m_sceneHandle = Scene::create();
 
-  dp::fx::SmartEffectData fxEffectData = dp::fx::EffectLibrary::instance()->getEffectData( effectData );
-  DP_ASSERT( fxEffectData );
+        m_sceneHandle->setBackColor(  Vec4f( 71.0f/255.0f, 111.0f/255.0f, 0.0f, 1.0f ) );
 
-  m_effectHandle[index] = EffectData::create( fxEffectData );
-  m_geoNodeHandle[index]->setMaterialEffect( m_effectHandle[index] );
-}
+        dp::fx::EffectLibrary::instance()->loadEffects( "SimpleScene.xml" );
 
+        // Create cube (or other shape)
+        //m_primitive = dp::sg::generator::createQuadSet(1,1);
+        //m_primitive = dp::sg::generator::createQuadStrip(10);
+        //m_primitive = dp::sg::generator::createTriSet(1,1);
+        //m_primitive = dp::sg::generator::createTriFan(50);
+        //m_primitive = dp::sg::generator::createTriStrip(10,1);
+        m_primitive = dp::sg::generator::createCube();
+        //m_primitive = dp::sg::generator::createTetrahedron();
+        //m_primitive = dp::sg::generator::createOctahedron();
+        //m_primitive = dp::sg::generator::createDodecahedron();
+        //m_primitive = dp::sg::generator::createIcosahedron();
+        //m_primitive = dp::sg::generator::createSphere(32,16);
+        //m_primitive = dp::sg::generator::createTorus(64,32);
+        //m_primitive = dp::sg::generator::createTessellatedPlane(1);
+        //m_primitive = dp::sg::generator::createTessellatedBox(10);
+
+        char const* const names[] =
+        {
+            "White Object"
+          , "Red Object"
+          , "Green Object"
+          , "Blue Object"
+        };
+
+        char const* const materials[] =
+        {
+            "phong_white"
+          , "phong_red"
+          , "phong_green"
+          , "phong_blue"
+        };
+
+        // Create four GeoNodes.
+        for ( int i=0 ; i<4 ; i++ )
+        {
+          m_geoNodeHandle[i] = GeoNode::create();
+          m_geoNodeHandle[i]->setPrimitive( m_primitive );
+          m_geoNodeHandle[i]->setName( names[i] );
+          setEffectData( i, materials[i] );
+        }
+
+        // Create four transforms. Cube coordinates are in the range [-1, 1], set them 3 units apart.
+        m_transformHandle[0] = dp::sg::generator::createTransform( m_geoNodeHandle[0] );
+        m_transformHandle[0]->setName( "White Object Transform" );
+
+        m_transformHandle[1] = dp::sg::generator::createTransform( m_geoNodeHandle[1], Vec3f( 3.0f, 0.0f, 0.0f ) );
+        m_transformHandle[1]->setName( "Red Object Transform" );
+
+        m_transformHandle[2] = dp::sg::generator::createTransform( m_geoNodeHandle[2], Vec3f( 0.0f, 3.0f, 0.0f ), Quatf( Vec3f( 0.0f, 1.0f, 0.0f ), 10.0f) );
+        m_transformHandle[2]->setName( "Green Object Transform" );
+
+        m_transformHandle[3] = dp::sg::generator::createTransform( m_geoNodeHandle[3], Vec3f( 0.0f, 0.0f, 3.0f ), Quatf( Vec3f( 0.0f, 0.0f, 1.0f ), 20.0f) );
+        m_transformHandle[3]->setName( "Blue Object Transform" );
+
+        // Create the root
+        GroupSharedPtr groupHdl = Group::create();
+        for ( int i=0 ; i<4 ; i++ )
+        {
+          groupHdl->addChild( m_transformHandle[i] );
+        }
+        groupHdl->setName( "Root Node" );
+
+        m_sceneHandle->setRootNode( groupHdl );
+      }
+
+      SimpleScene::~SimpleScene()
+      {
+      }
+
+      void SimpleScene::setEffectData( size_t index, const std::string& effectData )
+      {
+        DP_ASSERT( index < sizeof dp::util::array( m_effectHandle ) );
+
+        dp::fx::SmartEffectData fxEffectData = dp::fx::EffectLibrary::instance()->getEffectData( effectData );
+        DP_ASSERT( fxEffectData );
+
+        m_effectHandle[index] = EffectData::create( fxEffectData );
+        m_geoNodeHandle[index]->setMaterialEffect( m_effectHandle[index] );
+      }
+
+    } // namespace generator
+  } // namespace sg
+} // namespace dp

@@ -93,7 +93,7 @@ dp::sg::ui::ViewStateSharedPtr Benchmark_model::createScene()
 
   if( m_sceneFileName == "cubes" )
   {
-    SimpleScene simpleScene;
+    dp::sg::generator::SimpleScene simpleScene;
     scene = simpleScene.m_sceneHandle;
   }
   else if ( m_sceneFileName == "preview" )
