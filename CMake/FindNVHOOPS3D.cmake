@@ -2,7 +2,7 @@ set( HOOPS_VERSION "5.0" )
 file( TO_CMAKE_PATH "$ENV{DP_3RDPARTY_PATH}/HOOPS/${HOOPS_VERSION}/" HOOPS3DROOT)
 
 if ( EXISTS "${HOOPS3DROOT}" )
-
+  set( HOOPS_FOUND "true" )
   if ( "${DP_ARCH}" STREQUAL "x86" )
     set( HOOPS_ARCH "win32" )
   elseif ( "${DP_ARCH}" STREQUAL "amd64" )
