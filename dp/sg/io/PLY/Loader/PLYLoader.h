@@ -89,7 +89,7 @@ extern "C"
   * If the PlugIn ID \a piid equals \c PIID_PLY_SCENE_LOADER, a PLYLoader is created and returned in \a pi.
   * \returns  true, if the requested PlugIn could be created, otherwise false
   */
-PLYLOADER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPlugIn & pi);
+PLYLOADER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::PlugInSharedPtr & pi);
 
 //! Query the supported types of PlugIn Interfaces.
 PLYLOADER_API void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids );
@@ -216,7 +216,7 @@ public:
   std::vector<PLYProperty *> m_pProperties;   // Variable number of property fields per element.
 };
 
-SMART_TYPES( PLYLoader );
+DEFINE_PTR_TYPES( PLYLoader );
 
 //! A Scene Loader for PLY files.
 /** PLY are simple single geometry files often used in academia.
@@ -226,7 +226,7 @@ SMART_TYPES( PLYLoader );
 class PLYLoader : public dp::sg::io::SceneLoader
 {
   public :
-    static SmartPLYLoader create();
+    static PLYLoaderSharedPtr create();
     ~PLYLoader();
 
   protected:
@@ -269,7 +269,7 @@ class PLYLoader : public dp::sg::io::SceneLoader
         //! Maps the specified file offset into process memory.
         /** This constructor is called on instantiation. 
         * It maps \a count objects of type T at file offset \a offset into process memory. */
-        Offset_AutoPtr( dp::util::ReadMapping * fm, dp::util::SmartPlugInCallback const& pic, 
+        Offset_AutoPtr( dp::util::ReadMapping * fm, dp::util::PlugInCallbackSharedPtr const& pic, 
                         uint_t offset, size_t count = 1 );
 
         //! Unmaps the bytes, that have been mapped at instantiation, from process memory. 
@@ -290,9 +290,9 @@ class PLYLoader : public dp::sg::io::SceneLoader
         void reset( uint_t offset, size_t count = 1 );
 
       private:
-        T                             * m_ptr;
-        dp::util::SmartPlugInCallback   m_pic;
-        dp::util::ReadMapping         * m_fm;
+        T                                 * m_ptr;
+        dp::util::PlugInCallbackSharedPtr   m_pic;
+        dp::util::ReadMapping             * m_fm;
     };
 
     // Parsing a binary filemapping.
@@ -399,7 +399,7 @@ inline void PLYLoader::unmapOffset( ubyte_t * offsetPtr )
 
 template<typename T>
 inline PLYLoader::Offset_AutoPtr<T>::Offset_AutoPtr( dp::util::ReadMapping * fm
-                                                   , dp::util::SmartPlugInCallback const& pic
+                                                   , dp::util::PlugInCallbackSharedPtr const& pic
                                                    , uint_t offset, size_t count )
 : m_ptr(NULL)
 , m_fm(fm)

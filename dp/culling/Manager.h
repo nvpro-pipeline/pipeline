@@ -35,11 +35,11 @@ namespace dp
 {
   namespace culling
   {
-    HANDLE_TYPES( Object );
+    DEFINE_PTR_TYPES( Object );
     class Object
     {
       public:
-        ObjectHandle create()
+        ObjectSharedPtr create()
         {
           return( std::shared_ptr<Object>( new Object() ) );
         }
@@ -50,11 +50,11 @@ namespace dp
         Object() {}
     };
 
-    HANDLE_TYPES( Group );
+    DEFINE_PTR_TYPES( Group );
     class Group : public std::enable_shared_from_this<Group>
     {
       public:
-        GroupHandle create()
+        GroupSharedPtr create()
         {
           return( std::shared_ptr<Group>( new Group() ) );
         }
@@ -65,11 +65,11 @@ namespace dp
         Group() {}
     };
 
-    HANDLE_TYPES( Result );
+    DEFINE_PTR_TYPES( Result );
     class Result
     {
       public:
-        ResultHandle create()
+        ResultSharedPtr create()
         {
           return( std::shared_ptr<Result>( new Result() ) );
         }
@@ -80,7 +80,7 @@ namespace dp
         Result() {}
     };
 
-    SMART_TYPES( Payload );
+    DEFINE_PTR_TYPES( Payload );
     class Payload
     {
       public:
@@ -110,36 +110,36 @@ namespace dp
     public:
       DP_CULLING_API virtual ~Manager();
 
-      DP_CULLING_API virtual ObjectHandle objectCreate( SmartPayload const & userData ) = 0;
-      DP_CULLING_API virtual void objectSetBoundingBox( ObjectHandle const & object, dp::math::Box3f const & boundingBox ) = 0 ;
-      DP_CULLING_API virtual void objectSetTransformIndex( ObjectHandle const & object, size_t index ) = 0;
-      DP_CULLING_API virtual void objectSetUserData( ObjectHandle const & object, SmartPayload const & userData ) = 0;
-      DP_CULLING_API virtual SmartPayload const & objectGetUserData( ObjectHandle const & object ) = 0;
+      DP_CULLING_API virtual ObjectSharedPtr objectCreate( PayloadSharedPtr const & userData ) = 0;
+      DP_CULLING_API virtual void objectSetBoundingBox( ObjectSharedPtr const & object, dp::math::Box3f const & boundingBox ) = 0 ;
+      DP_CULLING_API virtual void objectSetTransformIndex( ObjectSharedPtr const & object, size_t index ) = 0;
+      DP_CULLING_API virtual void objectSetUserData( ObjectSharedPtr const & object, PayloadSharedPtr const & userData ) = 0;
+      DP_CULLING_API virtual PayloadSharedPtr const & objectGetUserData( ObjectSharedPtr const & object ) = 0;
 
-      DP_CULLING_API virtual GroupHandle groupCreate() = 0;
-      DP_CULLING_API virtual void groupAddObject( GroupHandle const & group, const ObjectHandle& object ) = 0;
-      DP_CULLING_API virtual ObjectHandle groupGetObject( GroupHandle const & group, size_t index ) = 0;
-      DP_CULLING_API virtual void groupRemoveObject( GroupHandle const & group, ObjectHandle const & object ) = 0;
-      DP_CULLING_API virtual size_t groupGetCount( GroupHandle const & group ) = 0;
-      DP_CULLING_API virtual void groupSetMatrices( GroupHandle const & group, void const * matrices, size_t numberOfMatrices, size_t stride ) = 0;
-      DP_CULLING_API virtual void groupMatrixChanged( GroupHandle const & group, size_t index ) = 0;
-      DP_CULLING_API virtual ResultHandle groupCreateResult( GroupHandle const & group ) = 0;
+      DP_CULLING_API virtual GroupSharedPtr groupCreate() = 0;
+      DP_CULLING_API virtual void groupAddObject( GroupSharedPtr const & group, const ObjectSharedPtr& object ) = 0;
+      DP_CULLING_API virtual ObjectSharedPtr groupGetObject( GroupSharedPtr const & group, size_t index ) = 0;
+      DP_CULLING_API virtual void groupRemoveObject( GroupSharedPtr const & group, ObjectSharedPtr const & object ) = 0;
+      DP_CULLING_API virtual size_t groupGetCount( GroupSharedPtr const & group ) = 0;
+      DP_CULLING_API virtual void groupSetMatrices( GroupSharedPtr const & group, void const * matrices, size_t numberOfMatrices, size_t stride ) = 0;
+      DP_CULLING_API virtual void groupMatrixChanged( GroupSharedPtr const & group, size_t index ) = 0;
+      DP_CULLING_API virtual ResultSharedPtr groupCreateResult( GroupSharedPtr const & group ) = 0;
 
       /** \brief Get a list of objects whose visiblity is changed between the last and current draw call **/
-      DP_CULLING_API virtual std::vector<ObjectHandle> const & resultGetChanged( ResultHandle const& result ) = 0;
+      DP_CULLING_API virtual std::vector<ObjectSharedPtr> const & resultGetChanged( ResultSharedPtr const& result ) = 0;
 
       /** \brief Query if an object is visible within a result. **/
-      DP_CULLING_API virtual bool resultObjectIsVisible( ResultHandle const& result, ObjectHandle const& object ) = 0;
+      DP_CULLING_API virtual bool resultObjectIsVisible( ResultSharedPtr const& result, ObjectSharedPtr const& object ) = 0;
 
       /** \brief Cull a given group and store the result in the given result.
           \param group The group which contains the objects to cull
           \param result The result object which stores the result for the given group. The result must match the given group.
           \param viewProjection The camera/projection matrix
       **/
-      DP_CULLING_API virtual void cull( GroupHandle const & group, ResultHandle const & result, dp::math::Mat44f const & viewProjection ) = 0;
+      DP_CULLING_API virtual void cull( GroupSharedPtr const & group, ResultSharedPtr const & result, dp::math::Mat44f const & viewProjection ) = 0;
 
       /** \brief Compute the bounding box for the given group **/
-      DP_CULLING_API virtual dp::math::Box3f getBoundingBox( GroupHandle const & group ) const = 0;
+      DP_CULLING_API virtual dp::math::Box3f getBoundingBox( GroupSharedPtr const & group ) const = 0;
     };
 
   } // namespace culling

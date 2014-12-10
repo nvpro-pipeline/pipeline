@@ -87,7 +87,7 @@ namespace dp
 
       // terrain geometry mode
       template <typename HeightType>
-      std::vector<dp::math::Vec3f> generateTerrainVertices( dp::util::SmartImage const & heightMap
+      std::vector<dp::math::Vec3f> generateTerrainVertices( dp::util::ImageSharedPtr const & heightMap
                                                           , dp::math::Vec3f const & resolution, dp::math::Vec3f const & offset )
       {
         std::vector<dp::math::Vec3f> vertices;
@@ -104,7 +104,7 @@ namespace dp
         return vertices;
       }
 
-      std::vector<dp::math::Vec3f> generateTerrainVertices( dp::util::SmartImage const & heightMap
+      std::vector<dp::math::Vec3f> generateTerrainVertices( dp::util::ImageSharedPtr const & heightMap
                                                           , dp::math::Vec3f const & resolution, dp::math::Vec3f const & offset )
       {
         DP_ASSERT( heightMap->getPixelFormat() == dp::util::PF_LUMINANCE );
@@ -135,7 +135,7 @@ namespace dp
       dp::sg::core::GeoNodeSharedPtr generateTerrainVertices( std::string const & filenameHeightMap, std::string const & filenameColorMap
                                                             , dp::math::Vec3f const & resolution, dp::math::Vec3f const & offset )
       {
-        dp::util::SmartImage heightMap = dp::util::imageFromFile( filenameHeightMap );
+        dp::util::ImageSharedPtr heightMap = dp::util::imageFromFile( filenameHeightMap );
         DP_ASSERT(heightMap);
 
         dp::sg::core::TextureHostSharedPtr colorMap = dp::sg::io::loadTextureHost( filenameColorMap );

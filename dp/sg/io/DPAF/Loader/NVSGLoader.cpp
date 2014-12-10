@@ -87,7 +87,7 @@ void lib_init()
 }
 #endif
 
-bool getPlugInterface(const UPIID& piid, dp::util::SmartPlugIn & pi)
+bool getPlugInterface(const UPIID& piid, dp::util::PlugInSharedPtr & pi)
 {
   // check if UPIID is properly initialized 
   //DP_ASSERT(PIID_NVSG_SCENE_LOADER==UPIID(".NVSG", PITID_SCENE_LOADER));
@@ -107,7 +107,7 @@ void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids )
   piids.push_back(PIID_NVSG_SCENE_LOADER);
 }
 
-SmartNVSGLoader NVSGLoader::create()
+NVSGLoaderSharedPtr NVSGLoader::create()
 {
   return( std::shared_ptr<NVSGLoader>( new NVSGLoader() ) );
 }
@@ -995,7 +995,7 @@ EffectDataSharedPtr NVSGLoader::readEffectData( const char * name )
     }
 
     DP_ASSERT( !effectSpecName.empty() );
-    dp::fx::SmartEffectSpec effectSpec = dp::fx::EffectLibrary::instance()->getEffectSpec( effectSpecName );
+    dp::fx::EffectSpecSharedPtr effectSpec = dp::fx::EffectLibrary::instance()->getEffectSpec( effectSpecName );
 
     DP_ASSERT( effectSpec );
     effectData = EffectData::create( effectSpec );
@@ -1028,7 +1028,7 @@ EffectDataSharedPtr NVSGLoader::readEffectData( const char * name )
 
 void NVSGLoader::readEnumArray( const string & t, vector<int> & values, const dp::fx::ParameterSpec & ps )
 {
-  const dp::fx::SmartEnumSpec & enumSpec = ps.getEnumSpec();
+  const dp::fx::EnumSpecSharedPtr & enumSpec = ps.getEnumSpec();
   DP_ASSERT( enumSpec );
   onUnexpectedToken( "[", t );
   string token = getNextToken();
@@ -1059,7 +1059,7 @@ Matmnt<m,n,char> NVSGLoader::readEnumMatrix( const string & t, const dp::fx::Par
 template<unsigned int n>
 Vecnt<n,char> NVSGLoader::readEnumVector( const string & t, const dp::fx::ParameterSpec & ps )
 {
-  const dp::fx::SmartEnumSpec & enumSpec = ps.getEnumSpec();
+  const dp::fx::EnumSpecSharedPtr & enumSpec = ps.getEnumSpec();
   DP_ASSERT( enumSpec );
   onUnexpectedToken( "(", t );
   Vecnt<n,char> v;
@@ -2033,7 +2033,7 @@ ParameterGroupDataSharedPtr NVSGLoader::readParameterGroupData( const char * nam
   {
     string annotation;
     unsigned int hints = 0;
-    dp::fx::SmartParameterGroupSpec pgs;
+    dp::fx::ParameterGroupSpecSharedPtr pgs;
 #if !defined(NDEBUG)
     bool encounteredEffectFile = false;
 #endif
@@ -2057,7 +2057,7 @@ ParameterGroupDataSharedPtr NVSGLoader::readParameterGroupData( const char * nam
           DP_ASSERT( encounteredEffectFile );
           string effectName = readName( getNextToken() );
           string groupName = readName( getNextToken() );
-          const dp::fx::SmartEffectSpec & effectSpec = dp::fx::EffectLibrary::instance()->getEffectSpec( effectName );
+          const dp::fx::EffectSpecSharedPtr & effectSpec = dp::fx::EffectLibrary::instance()->getEffectSpec( effectName );
           if ( effectSpec )
           {
             dp::fx::EffectSpec::ParameterGroupSpecsContainer::const_iterator it = effectSpec->findParameterGroupSpec( groupName );

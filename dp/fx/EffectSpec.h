@@ -36,12 +36,12 @@ namespace dp
   namespace fx
   {
     // The spec for an effect, holding a container of SmartParameterGroupSpecs
-    SMART_TYPES( EffectSpec );
+    DEFINE_PTR_TYPES( EffectSpec );
 
     class EffectSpec
     {
       public:
-        typedef std::vector<SmartParameterGroupSpec>  ParameterGroupSpecsContainer;
+        typedef std::vector<ParameterGroupSpecSharedPtr>  ParameterGroupSpecsContainer;
         typedef ParameterGroupSpecsContainer::const_iterator iterator;
 
         typedef enum
@@ -52,12 +52,12 @@ namespace dp
           EST_PIPELINE
         } Type;
 
-        typedef std::map<Type, SmartEffectSpec> DomainEffectSpecs;
+        typedef std::map<Type, EffectSpecSharedPtr> DomainEffectSpecs;
 
       public:
-        DP_FX_API static SmartEffectSpec create( const std::string & name, Type type
-                                               , const ParameterGroupSpecsContainer & groupSpecs
-                                               , bool transparent = false );
+        DP_FX_API static EffectSpecSharedPtr create( const std::string & name, Type type
+                                                   , const ParameterGroupSpecsContainer & groupSpecs
+                                                   , bool transparent = false );
         virtual ~EffectSpec();
 
       public:
@@ -67,11 +67,11 @@ namespace dp
                   unsigned int getNumberOfParameterGroupSpecs() const;
                   iterator beginParameterGroupSpecs() const;
                   iterator endParameterGroupSpecs() const;
-        DP_FX_API iterator findParameterGroupSpec( const SmartParameterGroupSpec & groupSpec ) const;
+        DP_FX_API iterator findParameterGroupSpec( const ParameterGroupSpecSharedPtr & groupSpec ) const;
         DP_FX_API iterator findParameterGroupSpec( const std::string & name ) const;
 
                   dp::util::HashKey getHashKey() const;
-        DP_FX_API bool isEquivalent( const SmartEffectSpec & p, bool ignoreNames, bool deepCompare ) const;
+        DP_FX_API bool isEquivalent( const EffectSpecSharedPtr & p, bool ignoreNames, bool deepCompare ) const;
 
       protected:
         // new pipeline version

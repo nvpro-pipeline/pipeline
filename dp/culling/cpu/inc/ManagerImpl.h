@@ -40,40 +40,40 @@ namespace dp
       class ManagerImpl : public Manager
       {
       public:
-        virtual ObjectHandle objectCreate( SmartPayload const& userData );
-        virtual void objectSetBoundingBox( const ObjectHandle& object, const dp::math::Box3f& boundingBox );
-        virtual void objectSetTransformIndex( const ObjectHandle& object, size_t index );
-        virtual void objectSetUserData( const ObjectHandle& object, SmartPayload const& userData );
-        virtual bool objectIsVisible( const ObjectHandle& object );
+        virtual ObjectSharedPtr objectCreate( PayloadSharedPtr const& userData );
+        virtual void objectSetBoundingBox( const ObjectSharedPtr& object, const dp::math::Box3f& boundingBox );
+        virtual void objectSetTransformIndex( const ObjectSharedPtr& object, size_t index );
+        virtual void objectSetUserData( const ObjectSharedPtr& object, PayloadSharedPtr const& userData );
+        virtual bool objectIsVisible( const ObjectSharedPtr& object );
 
-        virtual SmartPayload const& objectGetUserData( const ObjectHandle& object );
+        virtual PayloadSharedPtr const& objectGetUserData( const ObjectSharedPtr& object );
 
-        virtual GroupHandle groupCreate();
-        virtual void groupAddObject( const GroupHandle& group, const ObjectHandle& object );
-        virtual ObjectHandle groupGetObject( const GroupHandle& group, size_t index );
-        virtual void groupRemoveObject( const GroupHandle& group, const ObjectHandle& object );
-        virtual size_t groupGetCount( const GroupHandle& group );
-        virtual void groupSetMatrices( const GroupHandle& group, void const* matrices, size_t numberOfMatrices, size_t stride );
-        virtual void groupMatrixChanged( GroupHandle const& group, size_t index );
-        virtual ResultHandle groupCreateResult( GroupHandle const& group );
+        virtual GroupSharedPtr groupCreate();
+        virtual void groupAddObject( const GroupSharedPtr& group, const ObjectSharedPtr& object );
+        virtual ObjectSharedPtr groupGetObject( const GroupSharedPtr& group, size_t index );
+        virtual void groupRemoveObject( const GroupSharedPtr& group, const ObjectSharedPtr& object );
+        virtual size_t groupGetCount( const GroupSharedPtr& group );
+        virtual void groupSetMatrices( const GroupSharedPtr& group, void const* matrices, size_t numberOfMatrices, size_t stride );
+        virtual void groupMatrixChanged( GroupSharedPtr const& group, size_t index );
+        virtual ResultSharedPtr groupCreateResult( GroupSharedPtr const& group );
 
-        virtual GroupHandle resultGetChanged( const ResultHandle& result );
-        virtual bool resultObjectIsVisible( ResultHandle const& result, ObjectHandle const& object );
+        virtual GroupSharedPtr resultGetChanged( const ResultSharedPtr& result );
+        virtual bool resultObjectIsVisible( ResultSharedPtr const& result, ObjectSharedPtr const& object );
 
-        virtual void cull( const GroupHandle& group, const ResultHandle& result, const dp::math::Mat44f& viewProjection );
+        virtual void cull( const GroupSharedPtr& group, const ResultSharedPtr& result, const dp::math::Mat44f& viewProjection );
 
-        virtual dp::math::Box3f getBoundingBox( const GroupHandle& group ) const;
+        virtual dp::math::Box3f getBoundingBox( const GroupSharedPtr& group ) const;
 #else
       class ManagerImpl : public Manager
       {
       public:
         ManagerImpl();
         virtual ~ManagerImpl();
-        virtual ObjectHandle objectCreate( SmartPayload const& userData );
-        virtual GroupHandle groupCreate();
-        virtual ResultHandle groupCreateResult( GroupHandle const& group );
+        virtual ObjectSharedPtr objectCreate( PayloadSharedPtr const& userData );
+        virtual GroupSharedPtr groupCreate();
+        virtual ResultSharedPtr groupCreateResult( GroupSharedPtr const& group );
 
-        virtual void cull( const GroupHandle& group, const ResultHandle& result, const dp::math::Mat44f& viewProjection );
+        virtual void cull( const GroupSharedPtr& group, const ResultSharedPtr& result, const dp::math::Mat44f& viewProjection );
       };
 #endif
 

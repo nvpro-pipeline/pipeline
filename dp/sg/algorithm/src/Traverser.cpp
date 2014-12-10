@@ -225,7 +225,7 @@ namespace dp
       void Traverser::traverseEffectData( const EffectData * ed )
       {
         m_currentTextureUnit = 0;
-        const dp::fx::SmartEffectSpec & es = ed->getEffectSpec();
+        const dp::fx::EffectSpecSharedPtr & es = ed->getEffectSpec();
         for ( dp::fx::EffectSpec::iterator it = es->beginParameterGroupSpecs() ; it != es->endParameterGroupSpecs() ; ++it )
         {
           const ParameterGroupDataSharedPtr & parameterGroupData = ed->getParameterGroupData( it );
@@ -242,7 +242,7 @@ namespace dp
 
       void Traverser::traverseParameterGroupData( const ParameterGroupData * pgd )
       {
-        const dp::fx::SmartParameterGroupSpec & pgs = pgd->getParameterGroupSpec();
+        const dp::fx::ParameterGroupSpecSharedPtr & pgs = pgd->getParameterGroupSpec();
         for ( dp::fx::ParameterGroupSpec::iterator it = pgs->beginParameterSpecs() ; it != pgs->endParameterSpecs() ; ++it )
         {
           if ( ( it->first.getType() & dp::fx::PT_POINTER_TYPE_MASK ) == dp::fx::PT_SAMPLER_PTR )

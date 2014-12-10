@@ -37,11 +37,11 @@ namespace dp
     class ParameterGroupSnippet : public Snippet
     {
     public:
-      DP_FX_API ParameterGroupSnippet( const SmartParameterGroupSpec& parameterGroupSpec );
+      DP_FX_API ParameterGroupSnippet( const ParameterGroupSpecSharedPtr& parameterGroupSpec );
       DP_FX_API virtual std::string getSnippet( GeneratorConfiguration& configuration );
 
     private:
-      SmartParameterGroupSpec m_parameterGroupSpec;
+      ParameterGroupSpecSharedPtr m_parameterGroupSpec;
     };
   } // namespace fx
 } // namespace dp

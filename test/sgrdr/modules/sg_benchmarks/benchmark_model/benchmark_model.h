@@ -49,7 +49,7 @@ protected:
 protected:
 
   dp::sgrdr::test::framework::RenderDataSgRdr* m_renderData;
-  dp::sg::ui::SmartSceneRenderer m_sgrdr;
+  dp::sg::ui::SceneRendererSharedPtr m_sgrdr;
 
   std::string m_sceneFileName;
   unsigned int m_repetitions;

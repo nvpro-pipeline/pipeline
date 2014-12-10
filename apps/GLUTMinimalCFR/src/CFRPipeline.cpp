@@ -43,7 +43,7 @@ using std::vector;
 
 #define CFRPIPELINE_PRIMARY_GPU_IMPROVEMENT 0
 
-CFRPipeline::SmartMonoViewStateProvider CFRPipeline::MonoViewStateProvider::create()
+CFRPipeline::MonoViewStateProviderSharedPtr CFRPipeline::MonoViewStateProvider::create()
 {
   return( std::shared_ptr<MonoViewStateProvider>( new CFRPipeline::MonoViewStateProvider() ) );
 }
@@ -53,7 +53,7 @@ CFRPipeline::SmartMonoViewStateProvider CFRPipeline::MonoViewStateProvider::crea
 CFRPipeline::CFRPipeline( const char *renderEngine,
                           dp::fx::Manager shaderManagerType,
                           dp::culling::Mode cullingMode,
-                          const dp::gl::SharedRenderTarget &renderTarget)
+                          const dp::gl::RenderTargetSharedPtr &renderTarget)
   : dp::sg::ui::SceneRenderer( renderTarget )
   , m_renderEngine( renderEngine )
   , m_shaderManager( shaderManagerType )
@@ -72,10 +72,10 @@ CFRPipeline::~CFRPipeline()
 {
 }
 
-SmartCFRPipeline CFRPipeline::create( const char *renderEngine,
-                                      dp::fx::Manager shaderManagerType,
-                                      dp::culling::Mode cullingMode,
-                                      const dp::gl::SharedRenderTarget &renderTarget)
+CFRPipelineSharedPtr CFRPipeline::create( const char *renderEngine,
+                                          dp::fx::Manager shaderManagerType,
+                                          dp::culling::Mode cullingMode,
+                                          const dp::gl::RenderTargetSharedPtr &renderTarget)
 {
   return( std::shared_ptr<CFRPipeline>( new CFRPipeline( renderEngine, shaderManagerType, cullingMode, renderTarget ) ) );
 }
@@ -88,8 +88,8 @@ void CFRPipeline::setTileSize( size_t width, size_t height )
 }
 
 // This needs to be called on-demand in doRender
-bool CFRPipeline::init( const dp::gl::SharedRenderContext &renderContext,
-                        const dp::gl::SharedRenderTarget  &renderTarget )
+bool CFRPipeline::init( const dp::gl::RenderContextSharedPtr &renderContext,
+                        const dp::gl::RenderTargetSharedPtr  &renderTarget )
 {
   // collect information about available GPUs
   unsigned int gpuIndex = 0;
@@ -151,9 +151,9 @@ bool CFRPipeline::init( const dp::gl::SharedRenderContext &renderContext,
       gpu.push_back( gpus[i] );
 
       dp::gl::RenderContextFormat format;
-      dp::gl::SharedRenderContext context = dp::gl::RenderContext::create( dp::gl::RenderContext::Headless( &format, dp::gl::SharedRenderContext::null, gpu ) );
+      dp::gl::RenderContextSharedPtr context = dp::gl::RenderContext::create( dp::gl::RenderContext::Headless( &format, dp::gl::RenderContextSharedPtr::null, gpu ) );
 
-      dp::gl::SharedRenderTargetFBO rt = dp::gl::RenderTargetFBO::create(context);
+      dp::gl::RenderTargetFBOSharedPtr rt = dp::gl::RenderTargetFBO::create(context);
       gpuData.m_renderTarget = rt;
 
       rt->beginRendering();
@@ -161,13 +161,13 @@ bool CFRPipeline::init( const dp::gl::SharedRenderContext &renderContext,
       rt->setAttachment(dp::gl::RenderTargetFBO::COLOR_ATTACHMENT0, dp::gl::Texture2D::create(GL_RGBA8, GL_BGRA, GL_UNSIGNED_BYTE));
 
       // Depth and Stencil are Renderbuffers.
-      dp::gl::SharedRenderbuffer depthStencil0(dp::gl::Renderbuffer::create(GL_DEPTH24_STENCIL8)); // maybe use GL_DEPTH32F_STENCIL8
+      dp::gl::RenderbufferSharedPtr depthStencil0(dp::gl::Renderbuffer::create(GL_DEPTH24_STENCIL8)); // maybe use GL_DEPTH32F_STENCIL8
       rt->setAttachment(dp::gl::RenderTargetFBO::DEPTH_ATTACHMENT,   depthStencil0);
       rt->setAttachment(dp::gl::RenderTargetFBO::STENCIL_ATTACHMENT, depthStencil0);
 
       rt->endRendering();
 
-      SmartTextureTransfer tt = TextureTransfer::create( renderContext, context );
+      TextureTransferSharedPtr tt = TextureTransfer::create( renderContext, context );
       tt->setTileSize( m_tileWidth, m_tileHeight );
       tt->setMaxIndex( m_rendererCount );
       gpuData.m_textureTransfer = tt;
@@ -210,9 +210,9 @@ void CFRPipeline::resize( size_t width, size_t height )
 
 
 // Mind, this is called for left and right eye independently.
-void CFRPipeline::doRender(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::SmartRenderTarget const& renderTarget)
+void CFRPipeline::doRender(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget)
 {
-  const dp::gl::SharedRenderTarget renderTargetGL = dp::util::shared_cast<dp::gl::RenderTarget>(renderTarget);
+  const dp::gl::RenderTargetSharedPtr renderTargetGL = dp::util::shared_cast<dp::gl::RenderTarget>(renderTarget);
   DP_ASSERT( renderTargetGL );
   if( m_gpuData.empty() )
   {
@@ -367,7 +367,7 @@ dp::fx::Manager CFRPipeline::getShaderManager( ) const
   return( m_shaderManager );
 }
 
-void CFRPipeline::generateStencilPattern( dp::gl::SharedRenderTarget renderTarget )
+void CFRPipeline::generateStencilPattern( dp::gl::RenderTargetSharedPtr renderTarget )
 {
   unsigned int width;
   unsigned int height;

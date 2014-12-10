@@ -39,7 +39,7 @@ namespace dp
         /** \brief Create a new shared displaylist
             \return DisplayListSharedPtr to a new displaylist
         **/
-        DP_GL_API static SharedDisplayList create();
+        DP_GL_API static DisplayListSharedPtr create();
         DP_GL_API virtual ~DisplayList();
 
         DP_GL_API void beginCompile( );
@@ -66,7 +66,7 @@ namespace dp
       DP_ASSERT( 0 && "copy constructor may not be called" );
     }
 
-    inline SharedDisplayList DisplayList::create()
+    inline DisplayListSharedPtr DisplayList::create()
     {
       return( std::shared_ptr<DisplayList>( new DisplayList() ) );
     }

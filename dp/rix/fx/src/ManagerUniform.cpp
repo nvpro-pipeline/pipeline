@@ -66,13 +66,13 @@ namespace dp
       class ManagerUniform::Program : public dp::rix::fx::Program
       {
       public:
-        Program( ManagerUniform *manager, dp::fx::SmartEffectSpec const & effectSpec
+        Program( ManagerUniform *manager, dp::fx::EffectSpecSharedPtr const & effectSpec
                , Manager::SystemSpecs const & systemSpecs
                , char const * technique, dp::rix::core::ContainerDescriptorHandle * userDescriptors, size_t numDescriptors
                , SourceFragments const & sourceFragments );
 
         static void getShaderSource( dp::fx::ShaderPipelineConfiguration const & configuration
-                                   , dp::fx::SmartShaderPipeline const & pipeline
+                                   , dp::fx::ShaderPipelineSharedPtr const & pipeline
                                    , dp::rix::fx::Manager::SystemSpecs const & systemSpecs
                                    , dp::fx::Domain domain
                                    , std::string& source
@@ -83,7 +83,7 @@ namespace dp
       };
 
       ManagerUniform::Program::Program( ManagerUniform *manager
-                                      , dp::fx::SmartEffectSpec const & effectSpec
+                                      , dp::fx::EffectSpecSharedPtr const & effectSpec
                                       , Manager::SystemSpecs const & systemSpecs
                                       , char const * technique
                                       , dp::rix::core::ContainerDescriptorHandle * userDescriptors
@@ -105,7 +105,7 @@ namespace dp
           {
             configuration.addSourceCode( it->first, it->second );
           }
-          dp::fx::SmartShaderPipeline shaderPipeline = dp::fx::EffectLibrary::instance()->generateShaderPipeline( configuration );
+          dp::fx::ShaderPipelineSharedPtr shaderPipeline = dp::fx::EffectLibrary::instance()->generateShaderPipeline( configuration );
          
           const dp::fx::ShaderPipeline::iterator itStageVertex   = shaderPipeline->getStage( dp::fx::DOMAIN_VERTEX );
           const dp::fx::ShaderPipeline::iterator itStageFragment = shaderPipeline->getStage( dp::fx::DOMAIN_FRAGMENT );
@@ -157,7 +157,7 @@ namespace dp
                 // ContainerDescriptors for the GeometryInstances. Thus skip them here.
                 if ( !itSystemSpec2->second.m_isGlobal )
                 {
-                  dp::fx::SmartEffectSpec const & effectSpec = itSystemSpec2->second.m_effectSpec;
+                  dp::fx::EffectSpecSharedPtr const & effectSpec = itSystemSpec2->second.m_effectSpec;
                   for ( dp::fx::EffectSpec::iterator itParameterGroupSpec = effectSpec->beginParameterGroupSpecs(); itParameterGroupSpec != effectSpec->endParameterGroupSpecs(); ++itParameterGroupSpec )
                   {
                     m_parameterGroupSpecInfos.push_back(manager->getParameterGroupSpecInfo(*itParameterGroupSpec));
@@ -184,7 +184,7 @@ namespace dp
           std::copy( userDescriptors, userDescriptors + numDescriptors, std::back_inserter(descriptors));
 
           // ensure that a spec gets inserted only once even if it is being used by multiple domains.
-          std::set<dp::fx::SmartParameterGroupSpec> usedSpecs;
+          std::set<dp::fx::ParameterGroupSpecSharedPtr> usedSpecs;
 
           for ( dp::fx::EffectSpec::iterator it = effectSpec->beginParameterGroupSpecs(); it != effectSpec->endParameterGroupSpecs(); ++it )
           {
@@ -230,27 +230,27 @@ namespace dp
       }
 
     void ManagerUniform::Program::getShaderSource( dp::fx::ShaderPipelineConfiguration const & configuration
-                                                 , dp::fx::SmartShaderPipeline const & pipeline
+                                                 , dp::fx::ShaderPipelineSharedPtr const & pipeline
                                                  , dp::rix::fx::Manager::SystemSpecs const & systemSpecs
                                                  , dp::fx::Domain domain
                                                  , std::string& source
                                                  , std::string& entrypoint )
     {
-      std::vector<dp::fx::SmartSnippet> shaderSnippets;
+      std::vector<dp::fx::SnippetSharedPtr> shaderSnippets;
 
       dp::fx::ShaderPipeline::Stage const & stage = *pipeline->getStage( domain );
       
       // generate header only if a body had been generated
       if ( stage.source )
       {
-        std::vector<dp::fx::SmartSnippet> headerSnippets;
+        std::vector<dp::fx::SnippetSharedPtr> headerSnippets;
         headerSnippets.push_back( std::make_shared<dp::fx::VersionSnippet>() );
         headerSnippets.push_back( std::make_shared<dp::fx::ExtensionSnippet>() );
 
-        std::vector<dp::fx::SmartSnippet> pgsSnippets;
+        std::vector<dp::fx::SnippetSharedPtr> pgsSnippets;
 
         // gather all parameter groups
-        for ( std::vector<dp::fx::SmartParameterGroupSpec>::const_iterator it = stage.parameterGroupSpecs.begin();
+        for ( std::vector<dp::fx::ParameterGroupSpecSharedPtr>::const_iterator it = stage.parameterGroupSpecs.begin();
           it != stage.parameterGroupSpecs.end();
           ++it )
         {
@@ -264,7 +264,7 @@ namespace dp
           {
             throw std::runtime_error( std::string("Missing SystemSpec " + *it + " for effect " + configuration.getName() ) );
           }
-          for ( std::vector<dp::fx::SmartParameterGroupSpec>::const_iterator it = itSystemSpec->second.m_effectSpec->beginParameterGroupSpecs();
+          for ( std::vector<dp::fx::ParameterGroupSpecSharedPtr>::const_iterator it = itSystemSpec->second.m_effectSpec->beginParameterGroupSpecs();
             it != itSystemSpec->second.m_effectSpec->endParameterGroupSpecs();
             ++it )
           {
@@ -273,19 +273,19 @@ namespace dp
         }
 
         // get the enums from shader and pgs snippets
-        std::set<dp::fx::SmartEnumSpec> enumSpecs;
-        for ( std::vector<dp::fx::SmartSnippet>::const_iterator it = shaderSnippets.begin(); it != shaderSnippets.end(); ++it )
+        std::set<dp::fx::EnumSpecSharedPtr> enumSpecs;
+        for ( std::vector<dp::fx::SnippetSharedPtr>::const_iterator it = shaderSnippets.begin(); it != shaderSnippets.end(); ++it )
         {
-          std::set<dp::fx::SmartEnumSpec> const & snippetEnums = (*it)->getRequiredEnumSpecs();
+          std::set<dp::fx::EnumSpecSharedPtr> const & snippetEnums = (*it)->getRequiredEnumSpecs();
           if ( ! snippetEnums.empty() )
           {
             enumSpecs.insert( snippetEnums.begin(), snippetEnums.end() );
           }
         }
 
-        for ( std::vector<dp::fx::SmartSnippet>::const_iterator it = pgsSnippets.begin(); it != pgsSnippets.end(); ++it )
+        for ( std::vector<dp::fx::SnippetSharedPtr>::const_iterator it = pgsSnippets.begin(); it != pgsSnippets.end(); ++it )
         {
-          const std::set<dp::fx::SmartEnumSpec> & snippetEnums = (*it)->getRequiredEnumSpecs();
+          const std::set<dp::fx::EnumSpecSharedPtr> & snippetEnums = (*it)->getRequiredEnumSpecs();
           if ( ! snippetEnums.empty() )
           {
             enumSpecs.insert( snippetEnums.begin(), snippetEnums.end() );
@@ -295,13 +295,13 @@ namespace dp
         // insert enumSpecs from source body
         enumSpecs.insert( stage.source->getRequiredEnumSpecs().begin(), stage.source->getRequiredEnumSpecs().end() );
 
-        for ( std::set<dp::fx::SmartEnumSpec>::const_iterator it = enumSpecs.begin(); it != enumSpecs.end(); ++it )
+        for ( std::set<dp::fx::EnumSpecSharedPtr>::const_iterator it = enumSpecs.begin(); it != enumSpecs.end(); ++it )
         {
           headerSnippets.push_back( std::make_shared<dp::fx::EnumSpecSnippet>( *it ) );
         }
 
         // add snippets from renderer
-        std::vector<dp::fx::SmartSnippet> sources;
+        std::vector<dp::fx::SnippetSharedPtr> sources;
         std::vector<std::string> const& codeSnippets = configuration.getSourceCodes(domain);
         for( size_t index = 0;index < codeSnippets.size(); ++index )
         {
@@ -408,7 +408,7 @@ namespace dp
 
       //////////////////////////////////////////////////////////////////////////
       // System
-      SmartManagerUniform ManagerUniform::create( core::Renderer* renderer, dp::fx::Manager managerType )
+      ManagerUniformSharedPtr ManagerUniform::create( core::Renderer* renderer, dp::fx::Manager managerType )
       {
         return( std::shared_ptr<ManagerUniform>( new ManagerUniform( renderer, managerType ) ) );
       }
@@ -445,10 +445,10 @@ namespace dp
       /* GroupData                                                            */
       /************************************************************************/
 
-      dp::rix::fx::GroupDataSharedHandle ManagerUniform::groupDataCreate( dp::fx::SmartParameterGroupSpec const& group )
+      dp::rix::fx::GroupDataSharedHandle ManagerUniform::groupDataCreate( dp::fx::ParameterGroupSpecSharedPtr const& group )
       {
         SmartParameterGroupSpecInfoHandle pgsi = getParameterGroupSpecInfo( group );
-        dp::fx::SmartParameterGroupLayout layout = pgsi->m_groupLayout;
+        dp::fx::ParameterGroupLayoutSharedPtr layout = pgsi->m_groupLayout;
         switch( layout->getManager() )
         {
         case dp::fx::MANAGER_UNIFORM:
@@ -507,12 +507,12 @@ namespace dp
       }
 
 
-      dp::rix::fx::ProgramSharedHandle ManagerUniform::programCreate( const dp::fx::SmartEffectSpec& effectSpec
-                                                                            , Manager::SystemSpecs const & systemSpecs
-                                                                            ,  const char *technique
-                                                                            ,  dp::rix::core::ContainerDescriptorHandle *userDescriptors
-                                                                            ,  size_t numDescriptors
-                                                                            ,  SourceFragments const& sourceFragments )
+      dp::rix::fx::ProgramSharedHandle ManagerUniform::programCreate( const dp::fx::EffectSpecSharedPtr& effectSpec
+                                                                    , Manager::SystemSpecs const & systemSpecs
+                                                                    ,  const char *technique
+                                                                    ,  dp::rix::core::ContainerDescriptorHandle *userDescriptors
+                                                                    ,  size_t numDescriptors
+                                                                    ,  SourceFragments const& sourceFragments )
       {
         std::string key = effectSpec->getName() + "@" + technique;
         ProgramMap::iterator it = m_programs.find( key );
@@ -530,7 +530,7 @@ namespace dp
         return it->second;
       }
 
-      std::map<dp::fx::Domain,std::string> ManagerUniform::getShaderSources( dp::fx::SmartEffectSpec const & effectSpec
+      std::map<dp::fx::Domain,std::string> ManagerUniform::getShaderSources( dp::fx::EffectSpecSharedPtr const & effectSpec
                                                                            , bool depthPass
                                                                            , dp::rix::fx::Manager::SystemSpecs const & systemSpecs
                                                                            , SourceFragments const & sourceFragments ) const
@@ -554,7 +554,7 @@ namespace dp
           configuration.setTechnique( "forward" ); // Required to find the matching signature of the vertex shader.
         }
 
-        dp::fx::SmartShaderPipeline shaderPipeline = dp::fx::EffectLibrary::instance()->generateShaderPipeline( configuration );
+        dp::fx::ShaderPipelineSharedPtr shaderPipeline = dp::fx::EffectLibrary::instance()->generateShaderPipeline( configuration );
 
         std::map<dp::fx::Domain,std::string> sources;
         for ( dp::fx::ShaderPipeline::iterator it = shaderPipeline->beginStages() ; it != shaderPipeline->endStages() ; ++it )
@@ -587,7 +587,7 @@ namespace dp
         return instance->useGroupData( getRenderer(), groupHandle );
       }
 
-      SmartParameterGroupSpecInfoHandle ManagerUniform::getParameterGroupSpecInfo( const dp::fx::SmartParameterGroupSpec& spec ) 
+      SmartParameterGroupSpecInfoHandle ManagerUniform::getParameterGroupSpecInfo( const dp::fx::ParameterGroupSpecSharedPtr& spec ) 
       {
         ParameterGroupSpecInfoMap::iterator it = m_groupInfos.find(spec);
         if ( it == m_groupInfos.end() )

@@ -41,7 +41,7 @@ namespace dp
         namespace gl
         {
 
-          SmartTransparencyManagerOITClosestList TransparencyManagerOITClosestList::create( dp::math::Vec2ui const & size, unsigned int layersCount, float fragmentsCountFactor )
+          TransparencyManagerOITClosestListSharedPtr TransparencyManagerOITClosestList::create( dp::math::Vec2ui const & size, unsigned int layersCount, float fragmentsCountFactor )
           {
             return( std::shared_ptr<TransparencyManagerOITClosestList>( new TransparencyManagerOITClosestList( size, layersCount, fragmentsCountFactor ) ) );
           }
@@ -93,8 +93,8 @@ namespace dp
 
               glGenQueries( 1, &m_samplesPassedQuery );
 
-              dp::gl::SharedVertexShader vertexShader = dp::gl::VertexShader::create( dp::util::loadStringFromFile( dp::home() + "/media/dpfx/passThroughPosition_vs.glsl" ) );
-              dp::gl::SharedFragmentShader fragmentShader = dp::gl::FragmentShader::create( dp::util::loadStringFromFile( dp::home() + "/media/dpfx/oitClosestListClear_fs.glsl" ) );
+              dp::gl::VertexShaderSharedPtr vertexShader = dp::gl::VertexShader::create( dp::util::loadStringFromFile( dp::home() + "/media/dpfx/passThroughPosition_vs.glsl" ) );
+              dp::gl::FragmentShaderSharedPtr fragmentShader = dp::gl::FragmentShader::create( dp::util::loadStringFromFile( dp::home() + "/media/dpfx/oitClosestListClear_fs.glsl" ) );
               m_clearProgram = dp::gl::Program::create( vertexShader, fragmentShader );
 
               // create fragment shader source

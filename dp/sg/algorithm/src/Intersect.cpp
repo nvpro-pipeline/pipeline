@@ -36,7 +36,7 @@ namespace dp
     namespace algorithm
     {
 
-      std::shared_ptr<RayIntersectTraverser> applyPicker( dp::sg::ui::ViewStateSharedPtr const& viewStatePtr, dp::ui::SmartRenderTarget const& renderTarget, int windowX, int windowY )
+      std::shared_ptr<RayIntersectTraverser> applyPicker( dp::sg::ui::ViewStateSharedPtr const& viewStatePtr, dp::ui::RenderTargetSharedPtr const& renderTarget, int windowX, int windowY )
       {
         DP_ASSERT( viewStatePtr );
         DP_ASSERT( renderTarget );
@@ -65,7 +65,7 @@ namespace dp
         return picker;
       }
 
-      float getIntersectionDistance( dp::sg::ui::ViewStateSharedPtr const& smartViewState, dp::ui::SmartRenderTarget const& renderTarget, int windowX, int windowY )
+      float getIntersectionDistance( dp::sg::ui::ViewStateSharedPtr const& smartViewState, dp::ui::RenderTargetSharedPtr const& renderTarget, int windowX, int windowY )
       {
         float result = -1.0f;
         std::shared_ptr<RayIntersectTraverser> picker = applyPicker( smartViewState, renderTarget, windowX, windowY );
@@ -77,7 +77,7 @@ namespace dp
         return result;
       }
 
-      bool intersectObject( dp::sg::ui::ViewStateSharedPtr const& smartViewState, dp::ui::SmartRenderTarget const& renderTarget
+      bool intersectObject( dp::sg::ui::ViewStateSharedPtr const& smartViewState, dp::ui::RenderTargetSharedPtr const& renderTarget
                           , unsigned int windowX, unsigned int windowY, Intersection & result )
       {
         std::shared_ptr<RayIntersectTraverser> picker = applyPicker( smartViewState, renderTarget, windowX, windowY );

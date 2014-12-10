@@ -87,7 +87,7 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD reason, LPVOID lpReserved)
 #elif defined( LINUX )
 #endif
 
-bool getPlugInterface(const UPIID& piid, dp::util::SmartPlugIn & pi)
+bool getPlugInterface(const UPIID& piid, dp::util::PlugInSharedPtr & pi)
 {
   // check if UPIID is properly initialized 
   DP_ASSERT(PIID_NVSG_SCENE_SAVER==UPIID(".NVSG", PITID_SCENE_SAVER));
@@ -879,7 +879,7 @@ void  fprintfTextureTarget( FILE *fh, const char * prefix, TextureTarget target,
   fprintf( fh, "%s%s%s", prefix, name.c_str(), postfix );
 }
 
-SmartNVSGSaver NVSGSaver::create()
+NVSGSaverSharedPtr NVSGSaver::create()
 {
   return( std::shared_ptr<NVSGSaver>( new NVSGSaver() ) );
 }
@@ -1369,7 +1369,7 @@ void NVSGSaveTraverser::handleEffectData( const EffectData * p )
 {
   if ( isFirstTime( p ) )
   {
-    const dp::fx::SmartEffectSpec & es = p->getEffectSpec();
+    const dp::fx::EffectSpecSharedPtr & es = p->getEffectSpec();
     m_effectSpecName = es->getName();
 
     SharedTraverser::handleEffectData( p );
@@ -1585,7 +1585,7 @@ string parameterStringT( const ParameterGroupData * p, dp::fx::ParameterGroupSpe
 template<unsigned int n>
 string parameterStringEnumVN( const Vecnt<n,char> & v, dp::fx::ParameterGroupSpec::iterator it )
 {
-  const dp::fx::SmartEnumSpec & enumSpec = it->first.getEnumSpec();
+  const dp::fx::EnumSpecSharedPtr & enumSpec = it->first.getEnumSpec();
   DP_ASSERT( enumSpec );
   std::ostringstream ost;
   ost << "( ";
@@ -1622,7 +1622,7 @@ string parameterStringEnumVN( const ParameterGroupData * p, dp::fx::ParameterGro
 template<unsigned int m, unsigned int n>
 string parameterStringEnumMN( const Matmnt<m,n,char> & mat, dp::fx::ParameterGroupSpec::iterator it )
 {
-  const dp::fx::SmartEnumSpec & enumSpec = it->first.getEnumSpec();
+  const dp::fx::EnumSpecSharedPtr & enumSpec = it->first.getEnumSpec();
   DP_ASSERT( enumSpec );
   std::ostringstream ost;
   ost << "( ";
@@ -1714,7 +1714,7 @@ string parameterStringEnum( const ParameterGroupData * p, dp::fx::ParameterGroup
   else
   {
     std::ostringstream ost;
-    const dp::fx::SmartEnumSpec & enumSpec = it->first.getEnumSpec();
+    const dp::fx::EnumSpecSharedPtr & enumSpec = it->first.getEnumSpec();
     DP_ASSERT( enumSpec );
     if ( it->first.getArraySize() )
     {
@@ -1832,7 +1832,7 @@ void NVSGSaveTraverser::handleParameterGroupData( const ParameterGroupData * p )
       fprintf( m_fh, "ParameterGroupData\t%s\n{\n", name.c_str() );
       objectData( p );
       fprintf( m_fh, "\teffectFile\t%s\n", dp::util::makePathRelative( dp::fx::EffectLibrary::instance()->getEffectFile( m_effectSpecName ), m_basePaths ).c_str() );
-      const dp::fx::SmartParameterGroupSpec & pgs = p->getParameterGroupSpec();
+      const dp::fx::ParameterGroupSpecSharedPtr & pgs = p->getParameterGroupSpec();
       fprintf( m_fh, "\tparameterGroupSpec\t%s %s\n", m_effectSpecName.c_str(), pgs->getName().c_str() );
       fprintf( m_fh, "\tparameters\n\t[\n" );
       for ( dp::fx::ParameterGroupSpec::iterator it = pgs->beginParameterSpecs() ; it != pgs->endParameterSpecs() ; ++it )

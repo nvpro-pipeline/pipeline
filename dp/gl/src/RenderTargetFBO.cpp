@@ -33,7 +33,7 @@ namespace dp
 {
   namespace gl
   {
-    RenderTargetFBO::RenderTargetFBO( const SharedRenderContext &glContext)
+    RenderTargetFBO::RenderTargetFBO( const RenderContextSharedPtr &glContext)
       : RenderTarget( glContext )
       , m_framebuffer( 0 )
       , m_stereoTarget( LEFT )
@@ -67,7 +67,7 @@ namespace dp
       RenderTarget::makeNoncurrent();
     }
 
-    SharedRenderTargetFBO RenderTargetFBO::create( const SharedRenderContext &glContext )
+    RenderTargetFBOSharedPtr RenderTargetFBO::create( const RenderContextSharedPtr &glContext )
     {
       return( std::shared_ptr<RenderTargetFBO>( new RenderTargetFBO( glContext ) ) );
     }
@@ -127,7 +127,7 @@ namespace dp
       RenderTarget::makeNoncurrent();
     }
 
-    dp::util::SmartImage RenderTargetFBO::getImage( dp::util::PixelFormat pixelFormat, dp::util::DataType pixelDataType, unsigned int index )
+    dp::util::ImageSharedPtr RenderTargetFBO::getImage( dp::util::PixelFormat pixelFormat, dp::util::DataType pixelDataType, unsigned int index )
     {
       if (! m_stereoEnabled )
       {
@@ -139,10 +139,10 @@ namespace dp
 
         // Grab left and right image
         setStereoTarget( LEFT );
-        dp::util::SmartImage texLeft = getTargetAsImage( GL_COLOR_ATTACHMENT0_EXT + index, pixelFormat, pixelDataType );
+        dp::util::ImageSharedPtr texLeft = getTargetAsImage( GL_COLOR_ATTACHMENT0_EXT + index, pixelFormat, pixelDataType );
 
         setStereoTarget( RIGHT );
-        dp::util::SmartImage texRight = getTargetAsImage( GL_COLOR_ATTACHMENT0_EXT + index, pixelFormat, pixelDataType );
+        dp::util::ImageSharedPtr texRight = getTargetAsImage( GL_COLOR_ATTACHMENT0_EXT + index, pixelFormat, pixelDataType );
 
         setStereoTarget( target );
 #if 0
@@ -346,92 +346,92 @@ namespace dp
     /*********************/
     /* AttachmentTexture */
     /*********************/
-    RenderTargetFBO::SharedAttachmentTexture RenderTargetFBO::AttachmentTexture::create( SharedTexture1D const& texture, int level )
+    RenderTargetFBO::SharedAttachmentTexture RenderTargetFBO::AttachmentTexture::create( Texture1DSharedPtr const& texture, int level )
     {
       return( std::shared_ptr<AttachmentTexture>( new AttachmentTexture( texture, level ) ) );
     }
 
-    RenderTargetFBO::SharedAttachmentTexture RenderTargetFBO::AttachmentTexture::create( SharedTexture2D const& texture, int level )
+    RenderTargetFBO::SharedAttachmentTexture RenderTargetFBO::AttachmentTexture::create( Texture2DSharedPtr const& texture, int level )
     {
       return( std::shared_ptr<AttachmentTexture>( new AttachmentTexture( texture, level ) ) );
     }
 
-    RenderTargetFBO::SharedAttachmentTexture RenderTargetFBO::AttachmentTexture::create( SharedTexture3D const& texture, int zoffset, int level )
+    RenderTargetFBO::SharedAttachmentTexture RenderTargetFBO::AttachmentTexture::create( Texture3DSharedPtr const& texture, int zoffset, int level )
     {
       return( std::shared_ptr<AttachmentTexture>( new AttachmentTexture( texture, zoffset, level ) ) );
     }
 
-    RenderTargetFBO::SharedAttachmentTexture RenderTargetFBO::AttachmentTexture::create( SharedTexture1DArray const& texture, int layer, int level )
+    RenderTargetFBO::SharedAttachmentTexture RenderTargetFBO::AttachmentTexture::create( Texture1DArraySharedPtr const& texture, int layer, int level )
     {
       return( std::shared_ptr<AttachmentTexture>( new AttachmentTexture( texture, layer, level ) ) );
     }
 
-    RenderTargetFBO::SharedAttachmentTexture RenderTargetFBO::AttachmentTexture::create( SharedTexture2DArray const& texture, int layer, int level )
+    RenderTargetFBO::SharedAttachmentTexture RenderTargetFBO::AttachmentTexture::create( Texture2DArraySharedPtr const& texture, int layer, int level )
     {
       return( std::shared_ptr<AttachmentTexture>( new AttachmentTexture( texture, layer, level ) ) );
     }
 
-    RenderTargetFBO::SharedAttachmentTexture RenderTargetFBO::AttachmentTexture::create( SharedTextureCubemap const& texture, int face, int level )
+    RenderTargetFBO::SharedAttachmentTexture RenderTargetFBO::AttachmentTexture::create( TextureCubemapSharedPtr const& texture, int face, int level )
     {
       return( std::shared_ptr<AttachmentTexture>( new AttachmentTexture( texture, face, level ) ) );
     }
 
-    RenderTargetFBO::SharedAttachmentTexture RenderTargetFBO::AttachmentTexture::create( SharedTextureRectangle const& texture )
+    RenderTargetFBO::SharedAttachmentTexture RenderTargetFBO::AttachmentTexture::create( TextureRectangleSharedPtr const& texture )
     {
       return( std::shared_ptr<AttachmentTexture>( new AttachmentTexture( texture ) ) );
     }
 
 
-    RenderTargetFBO::AttachmentTexture::AttachmentTexture( const SharedTexture1D &texture, int level )
+    RenderTargetFBO::AttachmentTexture::AttachmentTexture( const Texture1DSharedPtr &texture, int level )
       : m_bindFunc( &AttachmentTexture::bind1D )
       , m_resizeFunc( &AttachmentTexture::resizeTexture1D )
     {
       init( texture, texture->getTarget(), level, 0 );
     }
 
-    RenderTargetFBO::AttachmentTexture::AttachmentTexture( const SharedTexture2D &texture, int level )
+    RenderTargetFBO::AttachmentTexture::AttachmentTexture( const Texture2DSharedPtr &texture, int level )
       : m_bindFunc( &AttachmentTexture::bind2D )
       , m_resizeFunc( &AttachmentTexture::resizeTexture2D )
     {
       init( texture, texture->getTarget(), level, 0 );
     }
 
-    RenderTargetFBO::AttachmentTexture::AttachmentTexture( const SharedTexture3D &texture, int zoffset, int level )
+    RenderTargetFBO::AttachmentTexture::AttachmentTexture( const Texture3DSharedPtr &texture, int zoffset, int level )
       : m_bindFunc( &AttachmentTexture::bind3D )
       , m_resizeFunc( &AttachmentTexture::resizeTexture3D )
     {
       init( texture, texture->getTarget(), level, zoffset );
     }
 
-    RenderTargetFBO::AttachmentTexture::AttachmentTexture( const SharedTexture1DArray &texture, int layer, int level )
+    RenderTargetFBO::AttachmentTexture::AttachmentTexture( const Texture1DArraySharedPtr &texture, int layer, int level )
       : m_bindFunc( &AttachmentTexture::bindLayer )
       , m_resizeFunc( &AttachmentTexture::resizeTexture1DArray )
     {
       init( texture, texture->getTarget(), level, layer );
     }
 
-    RenderTargetFBO::AttachmentTexture::AttachmentTexture( const SharedTexture2DArray &texture, int layer, int level )
+    RenderTargetFBO::AttachmentTexture::AttachmentTexture( const Texture2DArraySharedPtr &texture, int layer, int level )
       : m_bindFunc( &AttachmentTexture::bindLayer )
       , m_resizeFunc( &AttachmentTexture::resizeTexture2DArray )
     {
       init( texture, texture->getTarget(), level, layer );
     }
 
-    RenderTargetFBO::AttachmentTexture::AttachmentTexture( const SharedTextureCubemap &texture, int face, int level )
+    RenderTargetFBO::AttachmentTexture::AttachmentTexture( const TextureCubemapSharedPtr &texture, int face, int level )
       : m_bindFunc( &AttachmentTexture::bind2D )
       , m_resizeFunc( &AttachmentTexture::resizeTextureCubemap )
     {
       init( texture, GL_TEXTURE_CUBE_MAP_POSITIVE_X + face , level, 0 );
     }
 
-    RenderTargetFBO::AttachmentTexture::AttachmentTexture( const SharedTextureRectangle &texture )
+    RenderTargetFBO::AttachmentTexture::AttachmentTexture( const TextureRectangleSharedPtr &texture )
       : m_bindFunc( &AttachmentTexture::bind2D )
       , m_resizeFunc( &AttachmentTexture::resizeTexture2D )
     {
       init( texture, texture->getTarget(), 0, 0 );
     }
 
-    SharedTexture RenderTargetFBO::AttachmentTexture::getTexture() const
+    TextureSharedPtr RenderTargetFBO::AttachmentTexture::getTexture() const
     {
       return m_texture;
     }
@@ -455,7 +455,7 @@ namespace dp
       (this->*m_bindFunc)( attachment, 0 );
     }
 
-    void RenderTargetFBO::AttachmentTexture::init( const SharedTexture &texture, GLenum texTarget, GLuint level, GLuint zoffset )
+    void RenderTargetFBO::AttachmentTexture::init( const TextureSharedPtr &texture, GLenum texTarget, GLuint level, GLuint zoffset )
     {
       m_texture = texture;
       m_textureTarget = texTarget;
@@ -525,12 +525,12 @@ namespace dp
     /**************************/
     /* AttachmentRenderbuffer */
     /**************************/
-    RenderTargetFBO::SharedAttachmentRenderbuffer RenderTargetFBO::AttachmentRenderbuffer::create( SharedRenderbuffer const& renderbuffer )
+    RenderTargetFBO::SharedAttachmentRenderbuffer RenderTargetFBO::AttachmentRenderbuffer::create( RenderbufferSharedPtr const& renderbuffer )
     {
       return( std::shared_ptr<AttachmentRenderbuffer>( new AttachmentRenderbuffer( renderbuffer ) ) );
     }
 
-    RenderTargetFBO::AttachmentRenderbuffer::AttachmentRenderbuffer( SharedRenderbuffer const& renderbuffer )
+    RenderTargetFBO::AttachmentRenderbuffer::AttachmentRenderbuffer( RenderbufferSharedPtr const& renderbuffer )
       : m_renderbuffer( renderbuffer )
     {
     }
@@ -539,7 +539,7 @@ namespace dp
     {
     }
 
-    SharedRenderbuffer RenderTargetFBO::AttachmentRenderbuffer::getRenderbuffer() const
+    RenderbufferSharedPtr RenderTargetFBO::AttachmentRenderbuffer::getRenderbuffer() const
     {
       return m_renderbuffer;
     }
@@ -575,14 +575,14 @@ namespace dp
       m_readBuffer = readBuffer;
     }
 
-    void RenderTargetFBO::blit( const SharedRenderTargetFBO & destination, const BlitMask & mask, const BlitFilter & filter )
+    void RenderTargetFBO::blit( const RenderTargetFBOSharedPtr & destination, const BlitMask & mask, const BlitFilter & filter )
     {
       BlitRegion destRegion(0,0, destination->getWidth(), destination->getHeight());
       BlitRegion srcRegion(0,0, this->getWidth(), this->getHeight());
       blit(destination->getFramebufferId(), mask, filter, destRegion, srcRegion);
     } 
 
-    void RenderTargetFBO::blit( const SharedRenderTargetFB & destination, const BlitMask & mask, const BlitFilter & filter )
+    void RenderTargetFBO::blit( const RenderTargetFBSharedPtr & destination, const BlitMask & mask, const BlitFilter & filter )
     {
       GLint binding;
 
@@ -604,7 +604,7 @@ namespace dp
       blit(0, mask, filter, destRegion, srcRegion);
     }
 
-    void RenderTargetFBO::blit( const SharedRenderTargetFBO & destination, const BlitMask & mask, const BlitFilter & filter,
+    void RenderTargetFBO::blit( const RenderTargetFBOSharedPtr & destination, const BlitMask & mask, const BlitFilter & filter,
                                 const BlitRegion & destRegion, const BlitRegion & srcRegion )
     {
       GLint binding;
@@ -629,7 +629,7 @@ namespace dp
       blit(destination->getFramebufferId(), mask, filter, destRegion, srcRegion);
     } 
 
-    void RenderTargetFBO::blit( const SharedRenderTargetFB & destination, const BlitMask & mask, const BlitFilter & filter,
+    void RenderTargetFBO::blit( const RenderTargetFBSharedPtr & destination, const BlitMask & mask, const BlitFilter & filter,
                                 const BlitRegion & destRegion, const BlitRegion & srcRegion )
     {
       GLint binding;
@@ -720,42 +720,42 @@ namespace dp
       return m_stereoTarget;
     }
 
-    bool RenderTargetFBO::setAttachment( AttachmentTarget target, const SharedTexture1D &texture, StereoTarget stereoTarget, int level )
+    bool RenderTargetFBO::setAttachment( AttachmentTarget target, const Texture1DSharedPtr &texture, StereoTarget stereoTarget, int level )
     {
       return setAttachment( target, AttachmentTexture::create( texture, level ).inplaceCast<Attachment>(), stereoTarget );
     }
 
-    bool RenderTargetFBO::setAttachment( AttachmentTarget target, const SharedTexture2D &texture, StereoTarget stereoTarget, int level )
+    bool RenderTargetFBO::setAttachment( AttachmentTarget target, const Texture2DSharedPtr &texture, StereoTarget stereoTarget, int level )
     {
       return setAttachment( target, AttachmentTexture::create( texture, level ).inplaceCast<Attachment>(), stereoTarget );
     }
 
-    bool RenderTargetFBO::setAttachment( AttachmentTarget target, const SharedTexture3D &texture, StereoTarget stereoTarget, int zoffset, int level )
+    bool RenderTargetFBO::setAttachment( AttachmentTarget target, const Texture3DSharedPtr &texture, StereoTarget stereoTarget, int zoffset, int level )
     {
       return setAttachment( target, AttachmentTexture::create( texture, zoffset, level ).inplaceCast<Attachment>(), stereoTarget );
     }
 
-    bool RenderTargetFBO::setAttachment( AttachmentTarget target, const SharedTexture1DArray &texture, StereoTarget stereoTarget, int layer, int level )
+    bool RenderTargetFBO::setAttachment( AttachmentTarget target, const Texture1DArraySharedPtr &texture, StereoTarget stereoTarget, int layer, int level )
     {
       return setAttachment( target, AttachmentTexture::create( texture, layer, level ).inplaceCast<Attachment>(), stereoTarget );
     }
 
-    bool RenderTargetFBO::setAttachment( AttachmentTarget target, const SharedTexture2DArray &texture, StereoTarget stereoTarget, int layer, int level )
+    bool RenderTargetFBO::setAttachment( AttachmentTarget target, const Texture2DArraySharedPtr &texture, StereoTarget stereoTarget, int layer, int level )
     {
       return setAttachment( target, AttachmentTexture::create( texture, layer, level ).inplaceCast<Attachment>(), stereoTarget );
     }
 
-    bool RenderTargetFBO::setAttachment( AttachmentTarget target, const SharedTextureCubemap &texture, StereoTarget stereoTarget, int face, int level )
+    bool RenderTargetFBO::setAttachment( AttachmentTarget target, const TextureCubemapSharedPtr &texture, StereoTarget stereoTarget, int face, int level )
     {
       return setAttachment( target, AttachmentTexture::create( texture, face, level ).inplaceCast<Attachment>(), stereoTarget );
     }
 
-    bool RenderTargetFBO::setAttachment( AttachmentTarget target, const SharedTextureRectangle &texture, StereoTarget stereoTarget )
+    bool RenderTargetFBO::setAttachment( AttachmentTarget target, const TextureRectangleSharedPtr &texture, StereoTarget stereoTarget )
     {
       return setAttachment( target, AttachmentTexture::create( texture ).inplaceCast<Attachment>(), stereoTarget );
     }
 
-    bool RenderTargetFBO::setAttachment( AttachmentTarget target, const SharedRenderbuffer &buffer, StereoTarget stereoTarget )
+    bool RenderTargetFBO::setAttachment( AttachmentTarget target, const RenderbufferSharedPtr &buffer, StereoTarget stereoTarget )
     {
       return setAttachment( target, AttachmentRenderbuffer::create( buffer ).inplaceCast<Attachment>(), stereoTarget );
     }

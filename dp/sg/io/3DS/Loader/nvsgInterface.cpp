@@ -64,7 +64,7 @@ void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids )
   piids.push_back(dp::util::UPIID(".3DS", PITID_SCENE_LOADER));
 }
 
-bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPlugIn & pi)
+bool getPlugInterface(const dp::util::UPIID& piid, dp::util::PlugInSharedPtr & pi)
 {
   const dp::util::UPIID PIID_3DS_SCENE_LOADER = dp::util::UPIID(".3DS", PITID_SCENE_LOADER);
 

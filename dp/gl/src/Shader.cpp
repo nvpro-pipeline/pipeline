@@ -46,7 +46,7 @@ namespace dp
       }
     }
 
-    SharedShader Shader::create( GLenum type, std::string const& source )
+    ShaderSharedPtr Shader::create( GLenum type, std::string const& source )
     {
       switch( type )
       {
@@ -94,11 +94,11 @@ namespace dp
       {
         if ( getShareGroup() )
         {
-          SHARED_TYPES( CleanupTask );
+          DEFINE_PTR_TYPES( CleanupTask );
           class CleanupTask : public ShareGroupTask
           {
             public:
-              static SharedCleanupTask create( GLuint id )
+              static CleanupTaskSharedPtr create( GLuint id )
               {
                 return( std::shared_ptr<CleanupTask>( new CleanupTask( id ) ) );
               }
@@ -136,7 +136,7 @@ namespace dp
     }
 
 
-    SharedVertexShader VertexShader::create( std::string const& source )
+    VertexShaderSharedPtr VertexShader::create( std::string const& source )
     {
       return( std::shared_ptr<VertexShader>( new VertexShader( source ) ) );
     }
@@ -152,7 +152,7 @@ namespace dp
     }
 
 
-    SharedTessControlShader TessControlShader::create( std::string const& source )
+    TessControlShaderSharedPtr TessControlShader::create( std::string const& source )
     {
       return( std::shared_ptr<TessControlShader>( new TessControlShader( source ) ) );
     }
@@ -168,7 +168,7 @@ namespace dp
     }
 
 
-    SharedTessEvaluationShader TessEvaluationShader::create( std::string const& source )
+    TessEvaluationShaderSharedPtr TessEvaluationShader::create( std::string const& source )
     {
       return( std::shared_ptr<TessEvaluationShader>( new TessEvaluationShader( source ) ) );
     }
@@ -184,7 +184,7 @@ namespace dp
     }
 
 
-    SharedGeometryShader GeometryShader::create( std::string const& source )
+    GeometryShaderSharedPtr GeometryShader::create( std::string const& source )
     {
       return( std::shared_ptr<GeometryShader>( new GeometryShader( source ) ) );
     }
@@ -200,7 +200,7 @@ namespace dp
     }
 
 
-    SharedFragmentShader FragmentShader::create( std::string const& source )
+    FragmentShaderSharedPtr FragmentShader::create( std::string const& source )
     {
       return( std::shared_ptr<FragmentShader>( new FragmentShader( source ) ) );
     }
@@ -216,7 +216,7 @@ namespace dp
     }
 
 
-    SharedComputeShader ComputeShader::create( std::string const& source )
+    ComputeShaderSharedPtr ComputeShader::create( std::string const& source )
     {
       return( std::shared_ptr<ComputeShader>( new ComputeShader( source ) ) );
     }

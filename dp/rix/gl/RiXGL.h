@@ -163,12 +163,12 @@ namespace dp
         /** \brief Provide a texture id as source for the texture data
             \param id The GL id of the previously generated and prepared texture
          **/
-        TextureDataGLTexture( dp::gl::SharedTexture const& texture )
+        TextureDataGLTexture( dp::gl::TextureSharedPtr const& texture )
           : dp::rix::core::TextureData( dp::rix::core::TDT_NATIVE )
           , m_texture( texture )
         {}
 
-        dp::gl::SharedTexture  m_texture;
+        dp::gl::TextureSharedPtr  m_texture;
       };
 
       enum UsageHint
@@ -205,7 +205,7 @@ namespace dp
 
       struct BufferDescriptionGL : public dp::rix::core::BufferDescription
       {
-        BufferDescriptionGL( UsageHint usageHint = UH_STATIC_DRAW, dp::gl::SharedBuffer const& buffer = dp::gl::SharedBuffer::null )
+        BufferDescriptionGL( UsageHint usageHint = UH_STATIC_DRAW, dp::gl::BufferSharedPtr const& buffer = dp::gl::BufferSharedPtr::null )
           : dp::rix::core::BufferDescription( dp::rix::core::BDT_NATIVE )
           , m_buffer( buffer )
           , m_usageHint( usageHint )
@@ -216,8 +216,8 @@ namespace dp
         {
         }
 
-        dp::gl::SharedBuffer  m_buffer;
-        UsageHint             m_usageHint;
+        dp::gl::BufferSharedPtr m_buffer;
+        UsageHint               m_usageHint;
       };
 
       struct ProgramDescriptionGL : public dp::rix::core::ProgramDescription

@@ -55,19 +55,19 @@ namespace dp
       /************************************************************************/
       /* Technique                                                            */
       /************************************************************************/
-      SHARED_PTR_TYPES( Technique );
+      DEFINE_PTR_TYPES( Technique );
 
       class Technique
       {
       public:
-        typedef std::map<std::string, dp::fx::SmartSnippet> SignatureSnippets;
+        typedef std::map<std::string, dp::fx::SnippetSharedPtr> SignatureSnippets;
         typedef std::map<dp::fx::Domain, SignatureSnippets> DomainSignatures;
 
       public:
         static TechniqueSharedPtr create( std::string const& type );
         std::string const & getType() const;
 
-        void addDomainSnippet( dp::fx::Domain domain, std::string const & signature, dp::fx::SmartSnippet const & snippet );
+        void addDomainSnippet( dp::fx::Domain domain, std::string const & signature, dp::fx::SnippetSharedPtr const & snippet );
         SignatureSnippets const & getSignatures( dp::fx::Domain domain ) const;
 
       protected:
@@ -81,16 +81,16 @@ namespace dp
       /************************************************************************/
       /* DomainSpec                                                           */
       /************************************************************************/
-      SMART_TYPES( DomainSpec );
+      DEFINE_PTR_TYPES( DomainSpec );
 
       class DomainSpec
       {
       public:
         typedef std::map<std::string, TechniqueSharedPtr> Techniques;
-        typedef std::vector<SmartParameterGroupSpec> ParameterGroupSpecsContainer;
+        typedef std::vector<ParameterGroupSpecSharedPtr> ParameterGroupSpecsContainer;
 
       public:
-        static SmartDomainSpec create( std::string const & name, dp::fx::Domain domain, ParameterGroupSpecsContainer const & specs, bool transparent, Techniques const & techniques );
+        static DomainSpecSharedPtr create( std::string const & name, dp::fx::Domain domain, ParameterGroupSpecsContainer const & specs, bool transparent, Techniques const & techniques );
 
         TechniqueSharedPtr getTechnique( std::string const & name );
         ParameterGroupSpecsContainer const & getParameterGroups() const;
@@ -111,43 +111,43 @@ namespace dp
       /************************************************************************/
       /* DomainData                                                           */
       /************************************************************************/
-      SMART_TYPES( DomainData );
+      DEFINE_PTR_TYPES( DomainData );
 
       class DomainData
       {
       public:
-        static SmartDomainData create( SmartDomainSpec const & domainSpec, std::string const & name, std::vector<dp::fx::SmartParameterGroupData> const & parameterGroupDatas, bool transparent );
+        static DomainDataSharedPtr create( DomainSpecSharedPtr const & domainSpec, std::string const & name, std::vector<dp::fx::ParameterGroupDataSharedPtr> const & parameterGroupDatas, bool transparent );
 
-        SmartDomainSpec const & getDomainSpec() const;
-        SmartParameterGroupData const & getParameterGroupData( DomainSpec::ParameterGroupSpecsContainer::const_iterator it ) const;
+        DomainSpecSharedPtr const & getDomainSpec() const;
+        ParameterGroupDataSharedPtr const & getParameterGroupData( DomainSpec::ParameterGroupSpecsContainer::const_iterator it ) const;
         std::string const & getName() const;
         bool getTransparent() const;
 
       protected:
-        DomainData( SmartDomainSpec const & domainSpec, std::string const & name, std::vector<dp::fx::SmartParameterGroupData> const & parameterGroupDatas, bool transparent );
+        DomainData( DomainSpecSharedPtr const & domainSpec, std::string const & name, std::vector<dp::fx::ParameterGroupDataSharedPtr> const & parameterGroupDatas, bool transparent );
 
       private:
-        SmartDomainSpec                              m_domainSpec;
-        boost::scoped_array<SmartParameterGroupData> m_parameterGroupDatas;
-        std::string                                  m_name;
-        bool                                         m_transparent;
+        DomainSpecSharedPtr                               m_domainSpec;
+        boost::scoped_array<ParameterGroupDataSharedPtr>  m_parameterGroupDatas;
+        std::string                                       m_name;
+        bool                                              m_transparent;
       };
 
       /************************************************************************/
       /* EffectSpec                                                           */
       /************************************************************************/
-      SMART_TYPES( EffectSpec );
+      DEFINE_PTR_TYPES( EffectSpec );
 
       class EffectSpec : public dp::fx::EffectSpec
       {
       public:
-        typedef std::map<dp::fx::Domain, SmartDomainSpec> DomainSpecs;
+        typedef std::map<dp::fx::Domain, DomainSpecSharedPtr> DomainSpecs;
 
       public:
-        static SmartEffectSpec create( std::string const & name, DomainSpecs const & domainSpecs );
+        static EffectSpecSharedPtr create( std::string const & name, DomainSpecs const & domainSpecs );
 
         DomainSpecs const & getDomainSpecs() const;
-        SmartDomainSpec const & getDomainSpec( dp::fx::Domain stageSpec ) const;
+        DomainSpecSharedPtr const & getDomainSpec( dp::fx::Domain stageSpec ) const;
 
       protected:
         EffectSpec( std::string const & name, DomainSpecs const & domainSpecs );
@@ -160,24 +160,24 @@ namespace dp
       };
 
 
-      SMART_TYPES( EffectLoader );
+      DEFINE_PTR_TYPES( EffectLoader );
 
       class EffectLoader : public dp::fx::EffectLoader
       {
       public:
-        DP_FX_XML_API static SmartEffectLoader create( EffectLibraryImpl * effectLibrary );
+        DP_FX_XML_API static EffectLoaderSharedPtr create( EffectLibraryImpl * effectLibrary );
         DP_FX_XML_API ~EffectLoader();
 
         DP_FX_XML_API virtual bool loadEffects( const std::string& filename );
-        DP_FX_XML_API virtual bool save( const SmartEffectData& effectData, const std::string& filename );
+        DP_FX_XML_API virtual bool save( const EffectDataSharedPtr& effectData, const std::string& filename );
 
         DP_FX_XML_API virtual bool getShaderSnippets( const dp::fx::ShaderPipelineConfiguration & configuration
                                                     , dp::fx::Domain domain
                                                     , std::string& entrypoint
-                                                    , std::vector<dp::fx::SmartSnippet> & snippets );
+                                                    , std::vector<dp::fx::SnippetSharedPtr> & snippets );
 
-        DP_FX_XML_API virtual SmartShaderPipeline generateShaderPipeline( const dp::fx::ShaderPipelineConfiguration& configuration );
-        DP_FX_XML_API virtual bool effectHasTechnique( dp::fx::SmartEffectSpec const& effectSpec, std::string const& techniqueName, bool rasterizer );
+        DP_FX_XML_API virtual ShaderPipelineSharedPtr generateShaderPipeline( const dp::fx::ShaderPipelineConfiguration& configuration );
+        DP_FX_XML_API virtual bool effectHasTechnique( dp::fx::EffectSpecSharedPtr const& effectSpec, std::string const& techniqueName, bool rasterizer );
 
       protected:
         DP_FX_XML_API EffectLoader( EffectLibraryImpl * effectLibrary );
@@ -207,15 +207,15 @@ namespace dp
         void parseDomainSpec( TiXmlElement * effect);
         void parseEffect( TiXmlElement * effect );
         TechniqueSharedPtr parseTechnique( TiXmlElement *techique, dp::fx::Domain domain );
-        SmartParameterGroupSpec parseParameterGroup( TiXmlElement * pg );
+        ParameterGroupSpecSharedPtr parseParameterGroup( TiXmlElement * pg );
         void parseParameter( TiXmlElement * param, std::vector<ParameterSpec> & psc );
         void parseInclude( TiXmlElement * effect );
 
         /** \brief Parse sources within GLSL/CUDA tag **/
-        SmartSnippet parseSources( TiXmlElement * effect );
+        SnippetSharedPtr parseSources( TiXmlElement * effect );
 
-        dp::fx::SmartParameterGroupData parseParameterGroupData( TiXmlElement * pg );
-        void parseParameterData( TiXmlElement * param, const dp::fx::SmartParameterGroupDataPrivate& pgd );
+        dp::fx::ParameterGroupDataSharedPtr parseParameterGroupData( TiXmlElement * pg );
+        void parseParameterData( TiXmlElement * param, const dp::fx::ParameterGroupDataPrivateSharedPtr& pgd );
 
         // pipeline
         void parsePipelineSpec( TiXmlElement * effect );
@@ -224,17 +224,17 @@ namespace dp
         EffectElementType getTypeFromElement(TiXmlElement *element);
         unsigned int getParameterTypeFromGLSLType(const std::string &glslType);
 
-        SmartSnippet getSourceSnippet( std::string const & filename );
-        SmartSnippet getParameterSnippet( std::string const & inout, std::string const & type, TiXmlElement *element );
+        SnippetSharedPtr getSourceSnippet( std::string const & filename );
+        SnippetSharedPtr getParameterSnippet( std::string const & inout, std::string const & type, TiXmlElement *element );
 
       private:
-        typedef std::map<std::string, SmartDomainSpec> DomainSpecs;
-        typedef std::map<std::string, SmartDomainData> DomainDatas;
+        typedef std::map<std::string, DomainSpecSharedPtr> DomainSpecs;
+        typedef std::map<std::string, DomainDataSharedPtr> DomainDatas;
         DomainSpecs m_domainSpecs;
         DomainDatas m_domainDatas;
  
         // Explicitly chosen name to reduce confusion with two other typedefs named ParameterGroupDatas.
-        typedef std::map<std::string, SmartParameterGroupData> ParameterGroupDataLookup;
+        typedef std::map<std::string, ParameterGroupDataSharedPtr> ParameterGroupDataLookup;
         ParameterGroupDataLookup m_parameterGroupDataLookup;
 
         std::set<std::string> m_loadedFiles;

@@ -35,12 +35,12 @@ namespace dp
     {
       namespace culling
       {
-        ResultImplHandle ResultImpl::create( dp::culling::ResultHandle const& result )
+        ResultImplSharedPtr ResultImpl::create( dp::culling::ResultSharedPtr const& result )
         {
           return( std::shared_ptr<ResultImpl>( new ResultImpl( result ) ) );
         }
 
-        ResultImpl::ResultImpl(dp::culling::ResultHandle const & result)
+        ResultImpl::ResultImpl(dp::culling::ResultSharedPtr const & result)
           : m_result( result )
         {
 

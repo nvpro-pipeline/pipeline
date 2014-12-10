@@ -37,7 +37,7 @@ namespace dp
     {
       namespace culling
       {
-        SHARED_PTR_TYPES( CullingImpl );
+        DEFINE_PTR_TYPES( CullingImpl );
 
         class CullingImpl : public Culling, dp::util::Observer
         {
@@ -45,10 +45,10 @@ namespace dp
           static CullingImplSharedPtr create( SceneTreeSharedPtr const & sceneTree, dp::culling::Mode cullingMode );
           virtual ~CullingImpl();
 
-          virtual ResultHandle resultCreate();
-          virtual bool resultIsVisible( ResultHandle const & result, ObjectTreeIndex objectTreeIndex ) const;
-          virtual std::vector<dp::sg::xbar::ObjectTreeIndex> const & resultGetChangedIndices( ResultHandle const & result ) const;
-          virtual void cull( ResultHandle const & result, dp::math::Mat44f const & world2ViewProjection );
+          virtual ResultSharedPtr resultCreate();
+          virtual bool resultIsVisible( ResultSharedPtr const & result, ObjectTreeIndex objectTreeIndex ) const;
+          virtual std::vector<dp::sg::xbar::ObjectTreeIndex> const & resultGetChangedIndices( ResultSharedPtr const & result ) const;
+          virtual void cull( ResultSharedPtr const & result, dp::math::Mat44f const & world2ViewProjection );
           virtual dp::math::Box3f getBoundingBox();
 
         protected:
@@ -71,11 +71,11 @@ namespace dp
           // culling data
 
           //! \brief Payload class which assigns an ObjectTreeIndex to each culling object.
-          SMART_TYPES( Payload );
+          DEFINE_PTR_TYPES( Payload );
           class Payload : public dp::culling::Payload
           {
           public:
-            static SmartPayload create( ObjectTreeIndex objectTreeIndex )
+            static PayloadSharedPtr create( ObjectTreeIndex objectTreeIndex )
             {
               return( std::shared_ptr<Payload>( new Payload( objectTreeIndex ) ) );
             }
@@ -97,8 +97,8 @@ namespace dp
           };
 
           std::unique_ptr<dp::culling::Manager>  m_culling;
-          dp::culling::GroupHandle               m_cullingGroup;
-          std::vector<dp::culling::ObjectHandle> m_objects;
+          dp::culling::GroupSharedPtr               m_cullingGroup;
+          std::vector<dp::culling::ObjectSharedPtr> m_objects;
         };
 
       } // namespace culling

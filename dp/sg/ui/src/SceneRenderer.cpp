@@ -36,12 +36,12 @@ namespace dp
   {
     namespace ui
     {
-      SMART_TYPES( FrustumStereoViewStateProvider );
+      DEFINE_PTR_TYPES( FrustumStereoViewStateProvider );
 
       class FrustumStereoViewStateProvider : public SceneRenderer::StereoViewStateProvider
       {
       public:
-        static SmartFrustumStereoViewStateProvider create();
+        static FrustumStereoViewStateProviderSharedPtr create();
       protected:
         FrustumStereoViewStateProvider();
 
@@ -57,7 +57,7 @@ namespace dp
       {
       }
 
-      SmartFrustumStereoViewStateProvider FrustumStereoViewStateProvider::create()
+      FrustumStereoViewStateProviderSharedPtr FrustumStereoViewStateProvider::create()
       {
         return( std::shared_ptr<FrustumStereoViewStateProvider>( new FrustumStereoViewStateProvider() ) );
       }
@@ -99,7 +99,7 @@ namespace dp
         INIT_STATIC_PROPERTY_RW     ( SceneRenderer, TraversalMaskOverride, unsigned int, SEMANTIC_VALUE, value, value );
       END_REFLECTION_INFO
 
-      SceneRenderer::SceneRenderer( const dp::ui::SmartRenderTarget &renderTarget )
+      SceneRenderer::SceneRenderer( const dp::ui::RenderTargetSharedPtr &renderTarget )
         : Renderer( renderTarget )
         , m_preserveTexturesAfterUpload( true )
         , m_traversalMaskOverride( 0 )
@@ -125,9 +125,9 @@ namespace dp
         return m_viewState;
       }
 
-      void SceneRenderer::render( const ViewStateSharedPtr &viewState, const dp::ui::SmartRenderTarget &renderTarget, dp::ui::RenderTarget::StereoTarget stereoTarget )
+      void SceneRenderer::render( const ViewStateSharedPtr &viewState, const dp::ui::RenderTargetSharedPtr &renderTarget, dp::ui::RenderTarget::StereoTarget stereoTarget )
       {
-        dp::ui::SmartRenderTarget curRenderTarget = renderTarget ? renderTarget : getRenderTarget();
+        dp::ui::RenderTargetSharedPtr curRenderTarget = renderTarget ? renderTarget : getRenderTarget();
 
         DP_ASSERT( viewState );
         DP_ASSERT( curRenderTarget );
@@ -172,7 +172,7 @@ namespace dp
         endRendering( viewState, curRenderTarget );
       }
 
-      void SceneRenderer::doRender( const dp::ui::SmartRenderTarget &renderTarget )
+      void SceneRenderer::doRender( const dp::ui::RenderTargetSharedPtr &renderTarget )
       {
         DP_ASSERT( m_viewState );
         DP_ASSERT( renderTarget );
@@ -180,7 +180,7 @@ namespace dp
         render( m_viewState, renderTarget );
       }
 
-      void SceneRenderer::beginRendering( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::SmartRenderTarget const& renderTarget )
+      void SceneRenderer::beginRendering( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget )
       {
         DP_ASSERT( viewState );
         if ( viewState )
@@ -195,7 +195,7 @@ namespace dp
         }
       }
 
-      void SceneRenderer::endRendering( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::SmartRenderTarget const& renderTarget )
+      void SceneRenderer::endRendering( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget )
       {
       }
 

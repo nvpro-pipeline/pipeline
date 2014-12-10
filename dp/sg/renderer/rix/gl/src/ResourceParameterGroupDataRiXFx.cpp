@@ -40,12 +40,12 @@ namespace dp
 
           // TODO make implementation global? should it be possible to have two implementations active at the same time? What happens if implementation gets changed and resources are still alive?
           // TODO where to store rixfx?
-          SmartResourceParameterGroupDataRiXFx ResourceParameterGroupDataRiXFx::get( const dp::sg::core::ParameterGroupDataSharedPtr& parameterGroupData, const dp::rix::fx::SmartManager& rixFx, const SmartResourceManager& resourceManager )
+          ResourceParameterGroupDataRiXFxSharedPtr ResourceParameterGroupDataRiXFx::get( const dp::sg::core::ParameterGroupDataSharedPtr& parameterGroupData, const dp::rix::fx::ManagerSharedPtr& rixFx, const ResourceManagerSharedPtr& resourceManager )
           {
             assert( parameterGroupData );
             assert( !!resourceManager );
 
-            SmartResourceParameterGroupDataRiXFx resourceParameterGroupData = resourceManager->getResource<ResourceParameterGroupDataRiXFx>( reinterpret_cast<size_t>(parameterGroupData.getWeakPtr()) );
+            ResourceParameterGroupDataRiXFxSharedPtr resourceParameterGroupData = resourceManager->getResource<ResourceParameterGroupDataRiXFx>( reinterpret_cast<size_t>(parameterGroupData.getWeakPtr()) );
             if ( !resourceParameterGroupData )
             {
               resourceParameterGroupData = std::shared_ptr<ResourceParameterGroupDataRiXFx>( new ResourceParameterGroupDataRiXFx( parameterGroupData, rixFx, resourceManager ) );
@@ -55,7 +55,7 @@ namespace dp
             return resourceParameterGroupData;
           }
 
-          ResourceParameterGroupDataRiXFx::ResourceParameterGroupDataRiXFx( const dp::sg::core::ParameterGroupDataSharedPtr& parameterGroupData, const dp::rix::fx::SmartManager& rixFx, const SmartResourceManager& resourceManager )
+          ResourceParameterGroupDataRiXFx::ResourceParameterGroupDataRiXFx( const dp::sg::core::ParameterGroupDataSharedPtr& parameterGroupData, const dp::rix::fx::ManagerSharedPtr& rixFx, const ResourceManagerSharedPtr& resourceManager )
             : ResourceManager::Resource( reinterpret_cast<size_t>( parameterGroupData.getWeakPtr() ), resourceManager )
             , m_parameterGroupData( parameterGroupData )
             , m_rixFx( rixFx )
@@ -79,9 +79,9 @@ namespace dp
           {
             if ( m_groupData )
             {
-              std::vector<SmartResourceSampler> resourceSamplers;
+              std::vector<ResourceSamplerSharedPtr> resourceSamplers;
 
-              const dp::fx::SmartParameterGroupSpec& groupSpec = m_parameterGroupData->getParameterGroupSpec();
+              const dp::fx::ParameterGroupSpecSharedPtr& groupSpec = m_parameterGroupData->getParameterGroupSpec();
 
               dp::fx::ParameterGroupSpec::iterator itEnd = groupSpec->endParameterSpecs();
               for (dp::fx::ParameterGroupSpec::iterator itps = groupSpec->beginParameterSpecs(); itps != itEnd; ++itps)
@@ -92,7 +92,7 @@ namespace dp
                   const dp::sg::core::SamplerSharedPtr& sampler = m_parameterGroupData->getParameter<dp::sg::core::SamplerSharedPtr>( itps );
                   DP_ASSERT( sampler ); // There must be a sampler with texture here or the renderer might fail validation with uninitialized sampler variables.
 
-                  SmartResourceSampler resourceSampler = ResourceSampler::get( sampler, m_resourceManager );
+                  ResourceSamplerSharedPtr resourceSampler = ResourceSampler::get( sampler, m_resourceManager );
                   m_rixFx->groupDataSetValue( m_groupData, itps, dp::rix::core::ContainerDataSampler( resourceSampler->m_samplerHandle ) );
                   resourceSamplers.push_back( resourceSampler );
                 }

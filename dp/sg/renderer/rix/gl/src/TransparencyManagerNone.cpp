@@ -40,7 +40,7 @@ namespace dp
         namespace gl
         {
 
-          SmartTransparencyManagerNone TransparencyManagerNone::create()
+          TransparencyManagerNoneSharedPtr TransparencyManagerNone::create()
           {
             return( std::shared_ptr<TransparencyManagerNone>( new TransparencyManagerNone() ) );
           }

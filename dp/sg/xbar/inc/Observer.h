@@ -39,12 +39,12 @@ namespace dp
       class Observer : public dp::util::Observer
       {
       public:
-        SMART_TYPES( Payload );
+        DEFINE_PTR_TYPES( Payload );
 
         class Payload : public dp::util::Payload
         {
         public:
-          static SmartPayload create( IndexType index )
+          static PayloadSharedPtr create( IndexType index )
           {
             return( std::shared_ptr<Payload>( new Payload( index ) ) );
           }
@@ -62,7 +62,7 @@ namespace dp
         Observer( SceneTreeWeakPtr const& sceneTree );
         virtual ~Observer();
 
-        void attach( dp::util::Subject *subject, const SmartPayload &payload );
+        void attach( dp::util::Subject *subject, const PayloadSharedPtr &payload );
         void detach( IndexType index );
         void detachAll();
 
@@ -70,7 +70,7 @@ namespace dp
       protected:
         virtual void onDetach( IndexType index ) {};
 
-        typedef std::multimap<ObjectTreeIndex, std::pair<dp::util::Subject *, SmartPayload> > IndexMap;
+        typedef std::multimap<ObjectTreeIndex, std::pair<dp::util::Subject *, PayloadSharedPtr> > IndexMap;
         IndexMap m_indexMap;
         SceneTreeWeakPtr m_sceneTree;
       };
@@ -88,7 +88,7 @@ namespace dp
       }
 
       template <typename IndexType>
-      void Observer<IndexType>::attach( dp::util::Subject *subject, const SmartPayload &payload )
+      void Observer<IndexType>::attach( dp::util::Subject *subject, const PayloadSharedPtr &payload )
       {
         m_indexMap.insert( std::make_pair(payload->m_index, std::make_pair( subject, payload ) ) );
         subject->attach( this, payload.getWeakPtr() );

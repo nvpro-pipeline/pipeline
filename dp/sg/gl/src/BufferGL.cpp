@@ -72,7 +72,7 @@ namespace dp
       {
       }
 
-      static inline GLvoid* BufferGLMapRange( dp::gl::SharedBuffer const& buffer, unsigned int stateFlags, core::Buffer::MapMode mapMode, size_t offset, size_t size )
+      static inline GLvoid* BufferGLMapRange( dp::gl::BufferSharedPtr const& buffer, unsigned int stateFlags, core::Buffer::MapMode mapMode, size_t offset, size_t size )
       {
         DP_ASSERT( mapMode != core::Buffer::MAP_NONE );
         DP_ASSERT( buffer && buffer->getGLId() );
@@ -198,7 +198,7 @@ namespace dp
         }
       }
 
-      dp::gl::SharedBuffer const& BufferGL::getBuffer() const
+      dp::gl::BufferSharedPtr const& BufferGL::getBuffer() const
       {
         return( m_buffer );
       }

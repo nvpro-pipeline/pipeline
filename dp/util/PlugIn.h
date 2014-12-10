@@ -246,10 +246,10 @@ namespace dp
       return !(lhs==rhs); 
     }
 
-    SMART_TYPES( PlugIn );
+    DEFINE_PTR_TYPES( PlugIn );
 
     //! Function pointer type for \c getPlugInterface export function required by a plug-in  
-    typedef bool (*PFNGETPLUGINTERFACE)(const UPIID& piid, dp::util::SmartPlugIn & plugIn);
+    typedef bool (*PFNGETPLUGINTERFACE)(const UPIID& piid, dp::util::PlugInSharedPtr & plugIn);
     //! Function pointer type for \c queryPlugInterfacePIIds export function required by a plug-in  
     typedef void (*PFNQUERYPLUGINTERFACEPIIDS)( std::vector<UPIID> & piids );
 
@@ -270,7 +270,7 @@ namespace dp
     public:
       //! Set the callback object to use on this PlugIn.
       /** The PlugInCallback object is used to report errors and warnings that happen while using this PlugIn.  */
-      void setCallback( SmartPlugInCallback const& cb       //!<  callback object to use
+      void setCallback( PlugInCallbackSharedPtr const& cb       //!<  callback object to use
                       , bool throwExceptionOnError = true   //!<  true if an exception is thrown on error
                       );
 
@@ -279,10 +279,10 @@ namespace dp
 
       /*! \brief Get the current callback object as a const pointer.
        *  \returns The current callback object. */
-      SmartPlugInCallback const& callback( void ) const;
+      PlugInCallbackSharedPtr const& callback( void ) const;
 
     private:
-      dp::util::SmartPlugInCallback m_cb;
+      dp::util::PlugInCallbackSharedPtr m_cb;
     };
 
     inline  PlugIn::PlugIn()
@@ -290,7 +290,7 @@ namespace dp
     {
     }
 
-    inline  void  PlugIn::setCallback( SmartPlugInCallback const& cb, bool throwExceptionOnError )
+    inline  void  PlugIn::setCallback( PlugInCallbackSharedPtr const& cb, bool throwExceptionOnError )
     {
       m_cb = cb;
       if ( cb )
@@ -299,7 +299,7 @@ namespace dp
       }
     }
 
-    inline  SmartPlugInCallback const& PlugIn::callback( void ) const
+    inline  PlugInCallbackSharedPtr const& PlugIn::callback( void ) const
     {
       return( m_cb );
     }
@@ -341,7 +341,7 @@ namespace dp
       DP_UTIL_API bool getInterface( 
         const std::vector<std::string>& searchPath  //!< The optional path to search for the plug-ins.
       , const UPIID& piid                           //!< Identifies the interface to search for.
-      , dp::util::SmartPlugIn & plugIn              //!< Holds the interface object (plug-in), if successfull.
+      , dp::util::PlugInSharedPtr & plugIn              //!< Holds the interface object (plug-in), if successfull.
       );
 
       //! Query for a certain interface type
@@ -404,7 +404,7 @@ namespace dp
     class PlugInServer
     {
     public:
-      friend DP_UTIL_API bool getInterface( const std::vector<std::string> & searchPath, const UPIID & piid, dp::util::SmartPlugIn & plugIn );
+      friend DP_UTIL_API bool getInterface( const std::vector<std::string> & searchPath, const UPIID & piid, dp::util::PlugInSharedPtr & plugIn );
       friend DP_UTIL_API bool queryInterfaceType( const std::vector<std::string> & searchPath, const UPITID & pitid, std::vector<UPIID> & piids );
       friend DP_UTIL_API void releaseInterface( const UPIID & piid );
       friend DP_UTIL_API void setPlugInFileFilter( const std::string & filter );
@@ -416,7 +416,7 @@ namespace dp
 
     private:
       // hidden interface
-      bool getInterfaceImpl(const std::vector<std::string>& searchPath, const UPIID& piid, dp::util::SmartPlugIn & plugIn);
+      bool getInterfaceImpl(const std::vector<std::string>& searchPath, const UPIID& piid, dp::util::PlugInSharedPtr & plugIn);
       bool queryInterfaceTypeImpl(const std::vector<std::string>& searchPath, const UPITID& pitid, std::vector<UPIID>& piids);
       void releaseInterfaceImpl(const UPIID& piid);
       void setFileFilterImpl(const std::string& filter);
@@ -426,8 +426,8 @@ namespace dp
     private:
       struct PlugInData
       {
-        std::string           fileName;
-        dp::util::SmartPlugIn plugIn;
+        std::string               fileName;
+        dp::util::PlugInSharedPtr plugIn;
       };
 
       typedef std::map<UPIID,PlugInData>  PlugInMap;

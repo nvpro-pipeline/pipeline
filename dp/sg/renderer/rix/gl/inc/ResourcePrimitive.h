@@ -43,13 +43,13 @@ namespace dp
       {
         namespace gl
         {
-          SMART_TYPES( ResourcePrimitive );
+          DEFINE_PTR_TYPES( ResourcePrimitive );
 
           class ResourcePrimitive : public ResourceManager::Resource
           {
           public:
             /** \brief Fetch resource for the given object/resourceManager. If no resource exists it'll be created **/
-            static SmartResourcePrimitive get( const dp::sg::core::PrimitiveSharedPtr &primitive, const SmartResourceManager& resourceManager );
+            static ResourcePrimitiveSharedPtr get( const dp::sg::core::PrimitiveSharedPtr &primitive, const ResourceManagerSharedPtr& resourceManager );
             virtual void update();
 
             ~ResourcePrimitive();
@@ -66,7 +66,7 @@ namespace dp
             virtual unsigned int getFirstIndex() const = 0;
 
             dp::sg::core::PrimitiveSharedPtr m_primitive;
-            ResourcePrimitive( const dp::sg::core::PrimitiveSharedPtr &primitive, const SmartResourceManager& resourceManager );
+            ResourcePrimitive( const dp::sg::core::PrimitiveSharedPtr &primitive, const ResourceManagerSharedPtr& resourceManager );
           };
 
         } // namespace gl

@@ -31,17 +31,17 @@ namespace dp
   namespace fx
   {
 
-    SmartEffectDataPrivate EffectDataPrivate::create( SmartEffectSpec const& effectSpec, std::string const& name )
+    EffectDataPrivateSharedPtr EffectDataPrivate::create( EffectSpecSharedPtr const& effectSpec, std::string const& name )
     {
       return( std::shared_ptr<EffectDataPrivate>( new EffectDataPrivate( effectSpec, name ) ) );
     }
 
-    EffectDataPrivate::EffectDataPrivate( const SmartEffectSpec& effectSpec, const std::string& name )
+    EffectDataPrivate::EffectDataPrivate( const EffectSpecSharedPtr& effectSpec, const std::string& name )
       : EffectData( effectSpec, name )
     {
     }
 
-    void EffectDataPrivate::setParameterGroupData( EffectSpec::iterator it, const SmartParameterGroupData& parameterGroupData )
+    void EffectDataPrivate::setParameterGroupData( EffectSpec::iterator it, const ParameterGroupDataSharedPtr& parameterGroupData )
     {
       DP_ASSERT( it != m_effectSpec->endParameterGroupSpecs() );
       DP_ASSERT( parameterGroupData ); // TODO is it allowed to reset a parameterGroupData?

@@ -36,7 +36,7 @@ namespace dp
   namespace fx
   {
 
-    SmartEnumSpec EnumSpec::create( const string & type , const vector<string> & values )
+    EnumSpecSharedPtr EnumSpec::create( const string & type , const vector<string> & values )
     {
       return( std::shared_ptr<EnumSpec>( new EnumSpec( type, values ) ) );
     }
@@ -74,7 +74,7 @@ namespace dp
       return( m_values[idx] );
     }
 
-    bool EnumSpec::isEquivalent( const SmartEnumSpec & p, bool /*ignoreNames*/, bool /*deepCompare*/ ) const
+    bool EnumSpec::isEquivalent( const EnumSpecSharedPtr & p, bool /*ignoreNames*/, bool /*deepCompare*/ ) const
     {
       if ( p == this )
       {

@@ -31,12 +31,12 @@ namespace dp
 {
   namespace culling
   {
-      ObjectBitSetHandle ObjectBitSet::create( SmartPayload const& userData )
+      ObjectBitSetSharedPtr ObjectBitSet::create( PayloadSharedPtr const& userData )
       {
         return( std::shared_ptr<ObjectBitSet>( new ObjectBitSet( userData ) ) );
       }
 
-      ObjectBitSet::ObjectBitSet( SmartPayload const& userData )
+      ObjectBitSet::ObjectBitSet( PayloadSharedPtr const& userData )
       : m_userData( userData )
       , m_transformIndex( ~0 )
       , m_groupIndex( ~0 )
@@ -44,14 +44,14 @@ namespace dp
       {
       };
 
-      void ObjectBitSet::setGroup( GroupBitSetHandle const & group )
+      void ObjectBitSet::setGroup( GroupBitSetSharedPtr const & group )
       {
         m_group = group.getWeakPtr();
       }
 
-      GroupBitSetHandle ObjectBitSet::getGroup() const
+      GroupBitSetSharedPtr ObjectBitSet::getGroup() const
       {
-        return( m_group ? GroupHandle( m_group->shared_from_this() ).staticCast<GroupBitSet>() : GroupBitSetHandle::null );
+        return( m_group ? GroupSharedPtr( m_group->shared_from_this() ).staticCast<GroupBitSet>() : GroupBitSetSharedPtr::null );
       }
 
   } // namespace culling

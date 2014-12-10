@@ -40,13 +40,13 @@ namespace dp
   {
     namespace xbar
     {
-      SHARED_PTR_TYPES( SceneTree );
+      DEFINE_PTR_TYPES( SceneTree );
       typedef SceneTree*                       SceneTreeWeakPtr;
 
       class DrawableInstance;
       typedef DrawableInstance* DrawableInstanceWeakPtr;
 
-      SHARED_PTR_TYPES( GeneratorState );
+      DEFINE_PTR_TYPES( GeneratorState );
 
       class GeneratorState
       {

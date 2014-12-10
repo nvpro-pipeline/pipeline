@@ -33,8 +33,8 @@ namespace dp
 {
   namespace culling
   {
-    HANDLE_TYPES( GroupBitSet );
-    HANDLE_TYPES( ObjectBitSet );
+    DEFINE_PTR_TYPES( GroupBitSet );
+    DEFINE_PTR_TYPES( ObjectBitSet );
 
     /************************************************************************/
     /* Keep this class always aligned to 16 bytes!                          */
@@ -42,7 +42,7 @@ namespace dp
     class ObjectBitSet : public Object
     {
     public:
-      DP_CULLING_API static ObjectBitSetHandle create( SmartPayload const& userData );
+      DP_CULLING_API static ObjectBitSetSharedPtr create( PayloadSharedPtr const& userData );
 
       void setTransformIndex( size_t transformIndex );
       size_t getTransformIndex() const;
@@ -53,26 +53,26 @@ namespace dp
       void setExtent( dp::math::Vec4f const& lowerLeft );
       dp::math::Vec4f const& getExtent( ) const;
 
-      void setUserData( SmartPayload const& userData );
-      SmartPayload const& getUserData( ) const;
+      void setUserData( PayloadSharedPtr const& userData );
+      PayloadSharedPtr const& getUserData( ) const;
 
       void setGroupIndex( size_t groupIndex );
       size_t getGroupIndex() const;
 
-      void setGroup( GroupBitSetHandle const & group );
-      GroupBitSetHandle getGroup( ) const;
+      void setGroup( GroupBitSetSharedPtr const & group );
+      GroupBitSetSharedPtr getGroup( ) const;
 
     protected:
-      DP_CULLING_API ObjectBitSet( SmartPayload const& userData );
+      DP_CULLING_API ObjectBitSet( PayloadSharedPtr const& userData );
 
     protected:
       DP_ALIGN(16)                              // align to 16 bytes to allow usage with SSE
-      dp::math::Vec4f         m_lowerLeft;
-      dp::math::Vec4f         m_extent;
-      size_t                  m_transformIndex;
-      SmartPayload            m_userData;
-      size_t                  m_groupIndex;
-      GroupBitSet*            m_group;
+      dp::math::Vec4f     m_lowerLeft;
+      dp::math::Vec4f     m_extent;
+      size_t              m_transformIndex;
+      PayloadSharedPtr    m_userData;
+      size_t              m_groupIndex;
+      GroupBitSet       * m_group;
     };
 
     inline void ObjectBitSet::setTransformIndex( size_t transformIndex )
@@ -105,12 +105,12 @@ namespace dp
       return m_extent;
     }
 
-    inline void ObjectBitSet::setUserData( SmartPayload const& userData )
+    inline void ObjectBitSet::setUserData( PayloadSharedPtr const& userData )
     {
       m_userData = userData;
     }
 
-    inline SmartPayload const& ObjectBitSet::getUserData( ) const
+    inline PayloadSharedPtr const& ObjectBitSet::getUserData( ) const
     {
       return m_userData;
     }

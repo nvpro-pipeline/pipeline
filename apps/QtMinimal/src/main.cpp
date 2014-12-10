@@ -108,7 +108,7 @@ QtMinimalWidget::QtMinimalWidget( const dp::gl::RenderContextFormat &format )
 QtMinimalWidget::~QtMinimalWidget()
 {
   // Delete SceneRenderer here to cleanup resources before the OpenGL context dies
-  setSceneRenderer( dp::sg::ui::SmartSceneRenderer::null );
+  setSceneRenderer( dp::sg::ui::SceneRendererSharedPtr::null );
 
   // Reset Manipulator
   setManipulator( 0 );
@@ -124,7 +124,7 @@ void QtMinimalWidget::keyPressEvent( QKeyEvent *event )
   }
   else if ( event->text().compare( "d" ) == 0 )
   {
-    dp::sg::renderer::rix::gl::SmartSceneRenderer const& renderer = getSceneRenderer().staticCast<dp::sg::renderer::rix::gl::SceneRenderer>();
+    dp::sg::renderer::rix::gl::SceneRendererSharedPtr const& renderer = getSceneRenderer().staticCast<dp::sg::renderer::rix::gl::SceneRenderer>();
     renderer->setDepthPass( ! renderer->getDepthPass() );
   }
   else if ( event->text().compare("s") == 0 )
@@ -412,7 +412,7 @@ int runApp( int argc, char *argv[], options::variables_map const& opts )
   QApplication app( argc, argv );
 
   // Create rendering engine
-  dp::sg::renderer::rix::gl::SmartSceneRenderer renderer = dp::sg::renderer::rix::gl::SceneRenderer::create
+  dp::sg::renderer::rix::gl::SceneRendererSharedPtr renderer = dp::sg::renderer::rix::gl::SceneRenderer::create
   (
       opts["renderengine"].as<std::string>().c_str()
     , getShaderManager( opts["shadermanager"].as<std::string>() )

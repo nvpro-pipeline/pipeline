@@ -35,7 +35,7 @@ namespace dp
 {
   namespace culling
   {
-    HANDLE_TYPES( GroupBitSet );
+    DEFINE_PTR_TYPES( GroupBitSet );
 
     class GroupBitSet : public Group, public dp::util::Subject
     {
@@ -58,13 +58,13 @@ namespace dp
         size_t m_newIndex;
       };
 
-      DP_CULLING_API static GroupBitSetHandle create();
+      DP_CULLING_API static GroupBitSetSharedPtr create();
       DP_CULLING_API virtual ~GroupBitSet();
 
-      DP_CULLING_API void addObject( const ObjectBitSetHandle& object );
-      DP_CULLING_API void removeObject( const ObjectBitSetHandle& object );
+      DP_CULLING_API void addObject( const ObjectBitSetSharedPtr& object );
+      DP_CULLING_API void removeObject( const ObjectBitSetSharedPtr& object );
       DP_CULLING_API void clearObjects();
-      const ObjectBitSetHandle& getObject( size_t index ) const;
+      const ObjectBitSetSharedPtr& getObject( size_t index ) const;
       size_t getObjectCount() const;
       DP_CULLING_API void setMatrices( const void* matrices, size_t numberOfMatrices, size_t stride );
       void const* getMatrices() const;
@@ -87,12 +87,12 @@ namespace dp
       DP_CULLING_API GroupBitSet();
 
     protected:
-      dp::util::BitArray              m_dirtyMatrices;
-      bool                            m_inputChanged;
-      bool                            m_matricesChanged;
-      bool                            m_obbDirty;
-      size_t                          m_objectIncarnation; // incremented on add/removeObject, TODO replace by observer
-      std::vector<ObjectBitSetHandle> m_objects;
+      dp::util::BitArray                  m_dirtyMatrices;
+      bool                                m_inputChanged;
+      bool                                m_matricesChanged;
+      bool                                m_obbDirty;
+      size_t                              m_objectIncarnation; // incremented on add/removeObject, TODO replace by observer
+      std::vector<ObjectBitSetSharedPtr>  m_objects;
 
     private:
       bool m_boundingBoxDirty;
@@ -106,7 +106,7 @@ namespace dp
     /************************************************************************/
     /* Inline functions                                                     */
     /************************************************************************/
-    inline ObjectBitSetHandle const& GroupBitSet::getObject( size_t index ) const
+    inline ObjectBitSetSharedPtr const& GroupBitSet::getObject( size_t index ) const
     {
       DP_ASSERT( index < m_objects.size() );
       return m_objects[index];

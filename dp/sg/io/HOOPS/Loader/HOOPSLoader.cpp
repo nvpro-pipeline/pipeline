@@ -1872,7 +1872,7 @@ dp::sg::core::ParameterGroupDataSharedPtr HOOPSLoader::createGeometryParameterGr
   }
   else
   {
-    dp::fx::SmartParameterGroupData fxParameterGroupData = dp::fx::EffectLibrary::instance()->getParameterGroupData("standardGeometryParameters");
+    dp::fx::ParameterGroupDataSharedPtr fxParameterGroupData = dp::fx::EffectLibrary::instance()->getParameterGroupData("standardGeometryParameters");
     parameterGroupData = dp::sg::core::ParameterGroupData::create( fxParameterGroupData );
     DP_ASSERT( parameterGroupData );
     DP_VERIFY( parameterGroupData->setParameter<float>( "lineWidth", (float)style.m_dWidth ) );
@@ -2036,7 +2036,7 @@ EffectDataSharedPtr HOOPSLoader::createLineEffect( const A3DMiscCascadedAttribut
   const ParameterGroupDataSharedPtr & parameterGroupData = materialEffect->findParameterGroupData( string( "standardMaterialParameters" ) );
   DP_ASSERT( parameterGroupData );
   {
-    const dp::fx::SmartParameterGroupSpec & pgs = parameterGroupData->getParameterGroupSpec();
+    const dp::fx::ParameterGroupSpecSharedPtr & pgs = parameterGroupData->getParameterGroupSpec();
     color = parameterGroupData->getParameter<Vec3f>( pgs->findParameterSpec( "frontDiffuseColor" ) );
   }
 #if !defined(NDEBUG)

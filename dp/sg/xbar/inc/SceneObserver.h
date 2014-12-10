@@ -35,7 +35,7 @@ namespace dp
   {
     namespace xbar
     {
-      SMART_TYPES( SceneObserver );
+      DEFINE_PTR_TYPES( SceneObserver );
 
       class SceneTree;
       typedef SceneTree* SceneTreeWeakPtr;
@@ -43,7 +43,7 @@ namespace dp
       class SceneObserver : public dp::util::Observer
       {
       public:
-        static SmartSceneObserver create( SceneTreeWeakPtr sceneTree );
+        static SceneObserverSharedPtr create( SceneTreeWeakPtr sceneTree );
         virtual ~SceneObserver();
 
       protected:

@@ -45,10 +45,10 @@ namespace dp
           \param parameterGroupSpec spec to generate struct for
           \param generatedName output, gives back name of generated struct
       **/
-      std::string generateStruct( const dp::fx::SmartParameterGroupSpec& parameterGroupSpec, std::string& generatedName );
+      std::string generateStruct( const dp::fx::ParameterGroupSpecSharedPtr& parameterGroupSpec, std::string& generatedName );
 
       /** \brief foreach parametergroupspec::name print #define name uniformName ([arrayIndex]) accessor name **/
-      std::string generateParameterAccessors( const dp::fx::SmartParameterGroupSpec& parameterGroupSpec, const std::string& uniformName, const std::string& arrayIndex, const std::string& accessor );
+      std::string generateParameterAccessors( const dp::fx::ParameterGroupSpecSharedPtr& parameterGroupSpec, const std::string& uniformName, const std::string& arrayIndex, const std::string& accessor );
 
 
     } // namespace glsl

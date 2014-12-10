@@ -35,12 +35,12 @@
 
 #pragma warning(disable: 4267)  // disable warning C4267: possible loss of data, okay to ignore
 
-SMART_TYPES( viewerPlugInCallback );
+DEFINE_PTR_TYPES( viewerPlugInCallback );
 
 class viewerPlugInCallback : public dp::util::PlugInCallback
 {
   public:
-    static SmartviewerPlugInCallback create();
+    static viewerPlugInCallbackSharedPtr create();
     virtual ~viewerPlugInCallback();
 
     virtual void onError( PIC_ERROR eid, const void *info ) const;
@@ -77,7 +77,7 @@ class viewerPlugInCallback : public dp::util::PlugInCallback
     viewerPlugInCallback();
 };
 
-inline SmartviewerPlugInCallback viewerPlugInCallback::create()
+inline viewerPlugInCallbackSharedPtr viewerPlugInCallback::create()
 {
   return( std::shared_ptr<viewerPlugInCallback>( new viewerPlugInCallback() ) );
 }

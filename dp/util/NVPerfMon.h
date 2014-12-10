@@ -75,18 +75,18 @@ namespace dp
         static NVPerfMon * m_nvPerfMon;
 
       private:
-        dp::util::SmartDynamicLibrary   m_nvpmLib;
-        NvPmApi                       * m_nvPmApi;
-        NVPMContext                     m_nvPmApiContext;
-        CounterIDToSpecMap              m_counterIDToSpec;
-        NameToCounterIDMap              m_nameToCounterID;
-        std::vector<NVPMSampleValue>    m_samples;
-        NVPMUINT                        m_numPasses;
-        NVPMUINT                        m_pass;
-        std::vector<std::string>        m_counterFilter;
-        std::vector<NVPMCounterID>      m_counterIDs;
-        NVPMCounterID                   m_durationCounterID;
-        NVPMCounterID                   m_deviationCounterID;
+        dp::util::DynamicLibrarySharedPtr   m_nvpmLib;
+        NvPmApi                           * m_nvPmApi;
+        NVPMContext                         m_nvPmApiContext;
+        CounterIDToSpecMap                  m_counterIDToSpec;
+        NameToCounterIDMap                  m_nameToCounterID;
+        std::vector<NVPMSampleValue>        m_samples;
+        NVPMUINT                            m_numPasses;
+        NVPMUINT                            m_pass;
+        std::vector<std::string>            m_counterFilter;
+        std::vector<NVPMCounterID>          m_counterIDs;
+        NVPMCounterID                       m_durationCounterID;
+        NVPMCounterID                       m_deviationCounterID;
     };
   } // namespace util
 } // namespace dp

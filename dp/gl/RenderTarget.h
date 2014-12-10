@@ -117,9 +117,9 @@ namespace dp
           \param pixelDataType DataType to use for each pixel component.
           \return A TextureHostSharedPtr containing a texture with the content of the surface.
       */
-      DP_GL_API virtual dp::util::SmartImage getImage( dp::util::PixelFormat pixelFormat = dp::util::PF_BGRA
-                                                     , dp::util::DataType pixelDataType = dp::util::DT_UNSIGNED_INT_8
-                                                     , unsigned int index = 0 );
+      DP_GL_API virtual dp::util::ImageSharedPtr getImage( dp::util::PixelFormat pixelFormat = dp::util::PF_BGRA
+                                                         , dp::util::DataType pixelDataType = dp::util::DT_UNSIGNED_INT_8
+                                                         , unsigned int index = 0 );
 
       /** \brief Grab a screenshot of the specified color buffer.
           \param mode GL color buffer target to grab (i.e. GL_FRONT_LEFT or GL_COLOR_ATTACHMENT0).
@@ -127,19 +127,19 @@ namespace dp
           \param pixelDataType DataType to use for each pixel component.
           \return A TextureHostSharedPtr containing a texture with the content of the surface.
       **/
-      DP_GL_API virtual dp::util::SmartImage getTargetAsImage(GLenum mode
-                                                             , dp::util::PixelFormat pixelFormat = dp::util::PF_BGRA
-                                                             , dp::util::DataType pixelDataType = dp::util::DT_UNSIGNED_INT_8 );
+      DP_GL_API virtual dp::util::ImageSharedPtr getTargetAsImage(GLenum mode
+                                                                 , dp::util::PixelFormat pixelFormat = dp::util::PF_BGRA
+                                                                 , dp::util::DataType pixelDataType = dp::util::DT_UNSIGNED_INT_8 );
 
       DP_GL_API virtual bool isValid();
 
       /** \brief Get the OpenGL context used by this RenderTarget
           \return RenderContext used by this RenderTarget
       **/
-      DP_GL_API SharedRenderContext const& getRenderContext();
+      DP_GL_API RenderContextSharedPtr const& getRenderContext();
 
     protected:
-      DP_GL_API RenderTarget( const SharedRenderContext &glContext );
+      DP_GL_API RenderTarget( const RenderContextSharedPtr &glContext );
 
       /** \brief Check if this RenderTarget is current
           \return true if this RenderTarget is current, false otherwise.
@@ -175,8 +175,8 @@ namespace dp
       GLuint            m_clearStencil;
 
     private:
-      bool                m_current;
-      SharedRenderContext m_renderContext;
+      bool                    m_current;
+      RenderContextSharedPtr  m_renderContext;
 
     protected:
       int                 m_x;
@@ -187,7 +187,7 @@ namespace dp
       RenderContextStack  m_contextStack;
     };
 
-    inline SharedRenderContext const& RenderTarget::getRenderContext()
+    inline RenderContextSharedPtr const& RenderTarget::getRenderContext()
     {
       return m_renderContext;
     }

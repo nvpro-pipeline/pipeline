@@ -71,7 +71,7 @@ namespace dp
         namespace gl
         {
 
-          SmartTransparencyManager createTransparencyManager( TransparencyMode mode, dp::math::Vec2ui const & viewportSize )
+          TransparencyManagerSharedPtr createTransparencyManager( TransparencyMode mode, dp::math::Vec2ui const & viewportSize )
           {
             switch( mode )
             {
@@ -92,16 +92,16 @@ namespace dp
             }
           }
 
-          SmartSceneRenderer SceneRendererImpl::create( const char *renderEngine, dp::fx::Manager shaderManagerType
-                                                      , dp::culling::Mode cullingMode, TransparencyMode transparencyMode
-                                                      , const dp::gl::SharedRenderTarget &renderTarget )
+          SceneRendererSharedPtr SceneRendererImpl::create( const char *renderEngine, dp::fx::Manager shaderManagerType
+                                                          , dp::culling::Mode cullingMode, TransparencyMode transparencyMode
+                                                          , const dp::gl::RenderTargetSharedPtr &renderTarget )
           {
             return( std::shared_ptr<SceneRendererImpl>( new SceneRendererImpl( renderEngine, shaderManagerType, cullingMode, transparencyMode, renderTarget ) ) );
           }
 
           SceneRendererImpl::SceneRendererImpl( const char *renderEngine, dp::fx::Manager shaderManagerType
                                               , dp::culling::Mode cullingMode, TransparencyMode transparencyMode
-                                              , const dp::gl::SharedRenderTarget &renderTarget )
+                                              , const dp::gl::RenderTargetSharedPtr &renderTarget )
             : SceneRenderer( renderTarget )
             , m_renderer( nullptr )
             , m_drawableManager( nullptr )
@@ -159,7 +159,7 @@ namespace dp
             //pcd.process( m_sceneTree );
           }
 
-          void SceneRendererImpl::beginRendering( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::SmartRenderTarget const& renderTarget )
+          void SceneRendererImpl::beginRendering( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget )
           {
             if ( !m_rendererInitialized )
             {
@@ -170,7 +170,7 @@ namespace dp
             {
               SceneRenderer::beginRendering( viewState, renderTarget );
 
-              dp::gl::SharedRenderTarget renderTargetGL = dp::util::shared_cast<dp::gl::RenderTarget>( renderTarget );
+              dp::gl::RenderTargetSharedPtr renderTargetGL = dp::util::shared_cast<dp::gl::RenderTarget>( renderTarget );
               DP_ASSERT( renderTargetGL );
 
               if ( !m_userRenderContext )
@@ -209,11 +209,11 @@ namespace dp
             }
           }
 
-          void SceneRendererImpl::endRendering( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::SmartRenderTarget const& renderTarget )
+          void SceneRendererImpl::endRendering( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget )
           {
             if ( m_rendererInitialized )
             {
-              dp::gl::SharedRenderTarget renderTargetGL = dp::util::shared_cast<dp::gl::RenderTarget>( renderTarget );
+              dp::gl::RenderTargetSharedPtr renderTargetGL = dp::util::shared_cast<dp::gl::RenderTarget>( renderTarget );
               DP_ASSERT( renderTargetGL );
               renderTargetGL->endRendering();
 
@@ -226,11 +226,11 @@ namespace dp
             m_depthPass = depthPass;
           }
   
-          void SceneRendererImpl::doRender( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::SmartRenderTarget const& renderTarget )
+          void SceneRendererImpl::doRender( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget )
           {
             if ( m_rendererInitialized )
             {
-              dp::gl::SharedRenderTarget renderTargetGL = dp::util::shared_cast<dp::gl::RenderTarget>( renderTarget );
+              dp::gl::RenderTargetSharedPtr renderTargetGL = dp::util::shared_cast<dp::gl::RenderTarget>( renderTarget );
               DP_ASSERT( renderTargetGL );
 
 #if 0
@@ -289,7 +289,7 @@ namespace dp
             }
           }
 
-          DrawableManager* SceneRendererImpl::createDrawableManager( const SmartResourceManager &resourceManager ) const
+          DrawableManager* SceneRendererImpl::createDrawableManager( const ResourceManagerSharedPtr &resourceManager ) const
           {
             DrawableManagerDefault * dmd = new DrawableManagerDefault( resourceManager, m_transparencyManager, m_shaderManager, m_cullingMode );
             dmd->setEnvironmentSampler( getEnvironmentSampler() );
@@ -298,7 +298,7 @@ namespace dp
             return( dmd );
           }
 
-          void SceneRendererImpl::doRenderDrawables( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::gl::SharedRenderTarget const& renderTarget )
+          void SceneRendererImpl::doRenderDrawables( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::gl::RenderTargetSharedPtr const& renderTarget )
           {
             CameraSharedPtr camera = viewState->getCamera();
 
@@ -512,7 +512,7 @@ namespace dp
             return m_rendererInitialized;
           }
 
-          dp::sg::renderer::rix::gl::SmartTransparencyManager const & SceneRendererImpl::getTransparencyManager() const
+          dp::sg::renderer::rix::gl::TransparencyManagerSharedPtr const & SceneRendererImpl::getTransparencyManager() const
           {
             return( m_transparencyManager );
           }

@@ -56,12 +56,12 @@ namespace dp
             RPT_FORWARD
           };
 
-          SMART_TYPES( ShaderManagerInstance );
+          DEFINE_PTR_TYPES( ShaderManagerInstance );
 
           class ShaderManagerInstance
           {
           public:
-            SmartShaderManagerInstance create();
+            ShaderManagerInstanceSharedPtr create();
             virtual ~ShaderManagerInstance();
 
           protected:
@@ -75,12 +75,12 @@ namespace dp
           };
 
 
-          SMART_TYPES( ShaderManagerRenderGroup );
+          DEFINE_PTR_TYPES( ShaderManagerRenderGroup );
 
           class ShaderManagerRenderGroup
           {
           public:
-            static SmartShaderManagerRenderGroup create();
+            static ShaderManagerRenderGroupSharedPtr create();
             virtual ~ShaderManagerRenderGroup();
 
           protected:
@@ -93,46 +93,46 @@ namespace dp
           class ShaderManager
           {
           public:
-            ShaderManager( dp::sg::xbar::SceneTree *sceneTree, const SmartResourceManager& resourceManager, SmartTransparencyManager const & transparencyManager );
+            ShaderManager( dp::sg::xbar::SceneTree *sceneTree, const ResourceManagerSharedPtr& resourceManager, TransparencyManagerSharedPtr const & transparencyManager );
             virtual ~ShaderManager() {};
 
             void setEnvironmentSampler( const dp::sg::core::SamplerSharedPtr & sampler );
             const dp::sg::core::SamplerSharedPtr & getEnvironmentSampler() const;
 
-            SmartTransparencyManager const & getTransparencyManager() const;
+            TransparencyManagerSharedPtr const & getTransparencyManager() const;
 
             virtual void updateFragmentParameter( std::string const & name, dp::rix::core::ContainerDataRaw const & data ) = 0;
             void update( dp::sg::ui::ViewStateSharedPtr const& vs );
 
             virtual void updateTransforms() = 0;
 
-            SmartShaderManagerInstance registerGeometryInstance( dp::sg::core::GeoNodeSharedPtr const & geoNode,
-                                                                 dp::sg::xbar::ObjectTreeIndex objectTreeIndex,
-                                                                 dp::rix::core::GeometryInstanceSharedHandle & geometryInstance,
-                                                                 RenderPassType rpt = RPT_FORWARD );
+            ShaderManagerInstanceSharedPtr registerGeometryInstance( dp::sg::core::GeoNodeSharedPtr const & geoNode,
+                                                                     dp::sg::xbar::ObjectTreeIndex objectTreeIndex,
+                                                                     dp::rix::core::GeometryInstanceSharedHandle & geometryInstance,
+                                                                     RenderPassType rpt = RPT_FORWARD );
 
-            virtual SmartShaderManagerRenderGroup registerRenderGroup( dp::rix::core::RenderGroupSharedHandle const & renderGroup ) = 0;
+            virtual ShaderManagerRenderGroupSharedPtr registerRenderGroup( dp::rix::core::RenderGroupSharedHandle const & renderGroup ) = 0;
 
             const dp::sg::core::EffectDataSharedPtr& getDefaultEffectData() const { return m_defaultEffectData; }
 
             virtual std::map<dp::fx::Domain,std::string> getShaderSources( const dp::sg::core::GeoNodeSharedPtr & geoNode, bool depthPass ) const = 0;
 
           protected:
-            virtual void updateEnvironment( SmartResourceSampler environmentSampler ) = 0;
+            virtual void updateEnvironment( ResourceSamplerSharedPtr environmentSampler ) = 0;
             virtual void updateLights( dp::sg::ui::ViewStateSharedPtr const& vs ) = 0;
             virtual void updateCameraState( dp::math::Mat44f const & worldToProj, dp::math::Mat44f const & viewToWorld ) = 0;
 
-            virtual void addSystemContainers( SmartShaderManagerInstance const & shaderObject ) = 0;
-            virtual void addSystemContainers( SmartShaderManagerRenderGroup const & renderGroup ) = 0;
+            virtual void addSystemContainers( ShaderManagerInstanceSharedPtr const & shaderObject ) = 0;
+            virtual void addSystemContainers( ShaderManagerRenderGroupSharedPtr const & renderGroup ) = 0;
 
-            virtual SmartShaderManagerInstance registerGeometryInstance( const dp::sg::core::EffectDataSharedPtr &effectData,
-                                                                         dp::sg::xbar::ObjectTreeIndex objectTreeIndex,
-                                                                         dp::rix::core::GeometryInstanceSharedHandle &geometryInstance,
-                                                                         RenderPassType rpt );
+            virtual ShaderManagerInstanceSharedPtr registerGeometryInstance( const dp::sg::core::EffectDataSharedPtr &effectData,
+                                                                             dp::sg::xbar::ObjectTreeIndex objectTreeIndex,
+                                                                             dp::rix::core::GeometryInstanceSharedHandle &geometryInstance,
+                                                                             RenderPassType rpt );
 
             dp::sg::xbar::SceneTree* m_sceneTree;
             dp::rix::core::Renderer* m_renderer;
-            SmartResourceManager m_resourceManager;
+            ResourceManagerSharedPtr m_resourceManager;
 
             dp::sg::core::EffectDataSharedPtr m_defaultEffectData;
 
@@ -141,8 +141,8 @@ namespace dp
           private:
             bool                            m_environmentNeedsUpdate;
             dp::sg::core::SamplerSharedPtr  m_environmentSampler;
-            SmartResourceSampler            m_environmentResourceSampler;
-            SmartTransparencyManager        m_transparencyManager;
+            ResourceSamplerSharedPtr        m_environmentResourceSampler;
+            TransparencyManagerSharedPtr    m_transparencyManager;
           };
 
           class ShaderManagerLights
@@ -175,7 +175,7 @@ namespace dp
             };
 
           public:
-            ShaderManagerLights( dp::sg::xbar::SceneTree *sceneTree, const SmartResourceManager& resourceManager );
+            ShaderManagerLights( dp::sg::xbar::SceneTree *sceneTree, const ResourceManagerSharedPtr& resourceManager );
             virtual ~ShaderManagerLights();
 
             void updateLights( dp::sg::ui::ViewStateSharedPtr const& vs );
@@ -183,10 +183,10 @@ namespace dp
             const dp::rix::core::ContainerDescriptorSharedHandle& getDescriptor() const { return m_descriptorLight; }
 
           protected:
-            dp::sg::xbar::SceneTree*                      m_sceneTree;
-            dp::rix::core::ContainerDescriptorSharedHandle m_descriptorLight;
-            SmartResourceManager                          m_resourceManager;
-            LightInformation                              m_lightInformation;
+            dp::sg::xbar::SceneTree                         * m_sceneTree;
+            dp::rix::core::ContainerDescriptorSharedHandle    m_descriptorLight;
+            ResourceManagerSharedPtr                          m_resourceManager;
+            LightInformation                                  m_lightInformation;
           };
 
           class ShaderManagerTransforms

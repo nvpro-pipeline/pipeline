@@ -43,7 +43,7 @@ namespace dp
       class Renderer : public dp::util::Reflection
       {
       protected:
-        DP_SG_UI_API Renderer( const dp::ui::SmartRenderTarget &renderTarget = dp::ui::SmartRenderTarget() );
+        DP_SG_UI_API Renderer( const dp::ui::RenderTargetSharedPtr &renderTarget = dp::ui::RenderTargetSharedPtr() );
 
       public:
         DP_SG_UI_API virtual ~Renderer();
@@ -51,12 +51,12 @@ namespace dp
         /** \brief Set the dp::ui::RenderTarget used by all subsequent render calls. 
             \param renderTarget The new dp::ui::RenderTarget.
         **/
-        DP_SG_UI_API void setRenderTarget( const dp::ui::SmartRenderTarget &renderTarget );
+        DP_SG_UI_API void setRenderTarget( const dp::ui::RenderTargetSharedPtr &renderTarget );
 
         /** \brief Get the dp::ui::RenderTarget used by render calls.
             \return The current dp::ui::RenderTarget.
         **/
-        DP_SG_UI_API dp::ui::SmartRenderTarget getRenderTarget() const;
+        DP_SG_UI_API dp::ui::RenderTargetSharedPtr getRenderTarget() const;
 
         /** \brief Executes the rendering algorithm on the given dp::ui::RenderTarget. It calls beginRendering,
                    doRender and endRendering with an dp::ui::RenderTarget.
@@ -64,29 +64,29 @@ namespace dp
                                 it overrides the dp::ui::RenderTarget set by setRenderTarget. Otherwise
                                 the previously specified dp::ui::RenderTarget is used.
         **/
-        DP_SG_UI_API void render( const dp::ui::SmartRenderTarget &renderTarget = dp::ui::SmartRenderTarget() );
+        DP_SG_UI_API void render( const dp::ui::RenderTargetSharedPtr &renderTarget = dp::ui::RenderTargetSharedPtr() );
 
         /** \brief Signals the renderer that a complete new image is going to be rendered. **/
         DP_SG_UI_API virtual void restartAccumulation();
 
       protected:
         /** \brief This function is called once per render call before the first doRender call
-            \param renderTarget dp::ui::SmartRenderTarget which had been passed to the render call
+            \param renderTarget dp::ui::RenderTargetSharedPtr which had been passed to the render call
         **/
-        DP_SG_UI_API virtual void beginRendering( const dp::ui::SmartRenderTarget &renderTarget = dp::ui::SmartRenderTarget() );
+        DP_SG_UI_API virtual void beginRendering( const dp::ui::RenderTargetSharedPtr &renderTarget = dp::ui::RenderTargetSharedPtr() );
 
         /** \brief This function is called once per render call after the last doRender call
-            \param renderTarget dp::ui::SmartRenderTarget which had been passed to the render call
+            \param renderTarget dp::ui::RenderTargetSharedPtr which had been passed to the render call
         **/
-        DP_SG_UI_API virtual void endRendering( const dp::ui::SmartRenderTarget &renderTarget = dp::ui::SmartRenderTarget() );
+        DP_SG_UI_API virtual void endRendering( const dp::ui::RenderTargetSharedPtr &renderTarget = dp::ui::RenderTargetSharedPtr() );
 
         /** \brief Override this function to implement a rendering algorithm.
-            \param renderTarget dp::ui::SmartRenderTarget determined by the render call.
+            \param renderTarget dp::ui::RenderTargetSharedPtr determined by the render call.
         **/
-        DP_SG_UI_API virtual void doRender( const dp::ui::SmartRenderTarget &renderTarget ) = 0;
+        DP_SG_UI_API virtual void doRender( const dp::ui::RenderTargetSharedPtr &renderTarget ) = 0;
 
       private:
-        dp::ui::SmartRenderTarget m_renderTarget;
+        dp::ui::RenderTargetSharedPtr m_renderTarget;
       };
 
     }  // namespace ui

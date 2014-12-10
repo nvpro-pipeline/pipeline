@@ -31,20 +31,20 @@ namespace dp
 {
   namespace fx
   {
-    bool Snippet::addRequiredEnumSpec( const SmartEnumSpec & enumSpec )
+    bool Snippet::addRequiredEnumSpec( const EnumSpecSharedPtr & enumSpec )
     {
       return( m_requiredEnumSpecs.insert( enumSpec ).second );
     }
 
-    const std::set<SmartEnumSpec> & Snippet::getRequiredEnumSpecs() const
+    const std::set<EnumSpecSharedPtr> & Snippet::getRequiredEnumSpecs() const
     {
       return( m_requiredEnumSpecs );
     }
 
-    std::string generateSnippets( std::vector<SmartSnippet> snippets, GeneratorConfiguration& configuration )
+    std::string generateSnippets( std::vector<SnippetSharedPtr> snippets, GeneratorConfiguration& configuration )
     {
       std::ostringstream oss;
-      for ( std::vector<SmartSnippet>::iterator it = snippets.begin(); it != snippets.end(); ++it )
+      for ( std::vector<SnippetSharedPtr>::iterator it = snippets.begin(); it != snippets.end(); ++it )
       {
         oss << (*it)->getSnippet( configuration ) << std::endl;
       }

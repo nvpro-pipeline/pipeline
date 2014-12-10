@@ -38,21 +38,21 @@ namespace dp
       {
         namespace gl
         {
-          SMART_TYPES( ResourceEffectSpecRiXFx );
+          DEFINE_PTR_TYPES( ResourceEffectSpecRiXFx );
           typedef ResourceEffectSpecRiXFx* WeakResourceEffectSpecRiXFx;
 
           class ResourceEffectSpecRiXFx : public ResourceManager::Resource
           {
           public:
-            static SmartResourceEffectSpecRiXFx get( const dp::fx::SmartEffectSpec& effectSpec, const dp::rix::fx::SmartManager& rixFx, const SmartResourceManager& resourceManager );
+            static ResourceEffectSpecRiXFxSharedPtr get( const dp::fx::EffectSpecSharedPtr& effectSpec, const dp::rix::fx::ManagerSharedPtr& rixFx, const ResourceManagerSharedPtr& resourceManager );
             virtual ~ResourceEffectSpecRiXFx();
 
-            ResourceEffectSpecRiXFx( const dp::fx::SmartEffectSpec& effectSpec, const dp::rix::fx::SmartManager& rixfx,const SmartResourceManager& resourceManager );
-            const SmartResourceParameterGroupDataRiXFx& getDefaultParameterGroupDataResource( const dp::fx::EffectSpec::iterator& parameterGroupSpec) const;
+            ResourceEffectSpecRiXFx( const dp::fx::EffectSpecSharedPtr& effectSpec, const dp::rix::fx::ManagerSharedPtr& rixfx,const ResourceManagerSharedPtr& resourceManager );
+            const ResourceParameterGroupDataRiXFxSharedPtr& getDefaultParameterGroupDataResource( const dp::fx::EffectSpec::iterator& parameterGroupSpec) const;
           protected:
-            dp::fx::SmartEffectSpec                           m_effectSpec;
-            std::vector<SmartResourceParameterGroupDataRiXFx> m_defaultDatas;
-            SmartResourceManager                         m_resourceManager;
+            dp::fx::EffectSpecSharedPtr                           m_effectSpec;
+            std::vector<ResourceParameterGroupDataRiXFxSharedPtr> m_defaultDatas;
+            ResourceManagerSharedPtr                              m_resourceManager;
           };
 
         } // namespace gl

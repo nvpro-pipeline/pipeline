@@ -34,27 +34,27 @@ namespace dp
 {
   namespace fx
   {
-    SMART_TYPES( EffectData );
+    DEFINE_PTR_TYPES( EffectData );
 
     class EffectData
     {
     public:
-      DP_FX_API const dp::fx::SmartEffectSpec& getEffectSpec() const;
-      DP_FX_API const SmartParameterGroupData& getParameterGroupData( EffectSpec::iterator it ) const;
+      DP_FX_API const dp::fx::EffectSpecSharedPtr& getEffectSpec() const;
+      DP_FX_API const ParameterGroupDataSharedPtr& getParameterGroupData( EffectSpec::iterator it ) const;
       DP_FX_API const std::string& getName() const;
       DP_FX_API bool getTransparent() const;
 
       DP_FX_API virtual bool operator==( const EffectData& effectData ) const;
 
     protected:
-      DP_FX_API EffectData( const SmartEffectSpec& effectSpec, const std::string& name );
+      DP_FX_API EffectData( const EffectSpecSharedPtr& effectSpec, const std::string& name );
       DP_FX_API void setTransparent( bool transparent );
 
     protected:
-      SmartEffectSpec                              m_effectSpec;
-      boost::scoped_array<SmartParameterGroupData> m_parameterGroupDatas;
-      std::string                                  m_name;
-      bool                                         m_transparent;
+      EffectSpecSharedPtr                               m_effectSpec;
+      boost::scoped_array<ParameterGroupDataSharedPtr>  m_parameterGroupDatas;
+      std::string                                       m_name;
+      bool                                              m_transparent;
     };
 
   } // namespace fx

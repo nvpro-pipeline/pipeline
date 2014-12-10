@@ -60,17 +60,17 @@ namespace dp
             dp::rix::core::RenderGroupSharedHandle m_renderGroup;
           };
 
-          SMART_TYPES( RiXBackend );
+          DEFINE_PTR_TYPES( RiXBackend );
 
           class RiXBackend : public testfw::core::Backend
           {
           public:
             DPTRIX_API virtual ~RiXBackend();
 
-            DPTRIX_API virtual dp::ui::SmartRenderTarget createDisplay(int width, int height, bool visible) = 0;
-            DPTRIX_API virtual dp::ui::SmartRenderTarget createAuxiliaryRenderTarget(int width, int height) = 0;
+            DPTRIX_API virtual dp::ui::RenderTargetSharedPtr createDisplay(int width, int height, bool visible) = 0;
+            DPTRIX_API virtual dp::ui::RenderTargetSharedPtr createAuxiliaryRenderTarget(int width, int height) = 0;
 
-            DPTRIX_API virtual void render( dp::testfw::core::RenderData* renderData, dp::ui::SmartRenderTarget renderTarget = dp::ui::SmartRenderTarget::null );
+            DPTRIX_API virtual void render( dp::testfw::core::RenderData* renderData, dp::ui::RenderTargetSharedPtr renderTarget = dp::ui::RenderTargetSharedPtr::null );
             
             DPTRIX_API dp::rix::core::Renderer* getRenderer() const;
 
@@ -79,7 +79,7 @@ namespace dp
 
           protected:
             dp::rix::core::Renderer* m_rix;
-            dp::util::SmartDynamicLibrary m_rixLib;
+            dp::util::DynamicLibrarySharedPtr m_rixLib;
           
           };
 

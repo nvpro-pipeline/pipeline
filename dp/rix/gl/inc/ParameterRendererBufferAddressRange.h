@@ -45,7 +45,7 @@ namespace dp
       {
       public:
         ParameterRendererBufferAddressRange();
-        ParameterRendererBufferAddressRange( ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::SharedBuffer const& ubo, GLenum target, size_t uboBinding, GLsizeiptr uboBlockSize );
+        ParameterRendererBufferAddressRange( ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::BufferSharedPtr const& ubo, GLenum target, size_t uboBinding, GLsizeiptr uboBlockSize );
 
         virtual void activate();
 
@@ -56,7 +56,7 @@ namespace dp
       protected:
         ParameterCacheEntryStreamBuffers    m_parameters;
         GLenum                              m_target;
-        dp::gl::SharedBuffer                m_buffer;
+        dp::gl::BufferSharedPtr             m_buffer;
         GLint                               m_bindingIndex;
         GLuint64                            m_baseAddress;
         GLsizeiptr                          m_bindingLength;

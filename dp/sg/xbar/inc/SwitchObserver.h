@@ -34,18 +34,18 @@ namespace dp
   {
     namespace xbar
     {
-      SMART_TYPES( SwitchObserver );
+      DEFINE_PTR_TYPES( SwitchObserver );
 
       class SwitchObserver : public Observer<ObjectTreeIndex>
       {
       public:
-        static SmartSwitchObserver create()
+        static SwitchObserverSharedPtr create()
         {
           return( std::shared_ptr<SwitchObserver>( new SwitchObserver() ) );
         }
 
       public:
-        SHARED_PTR_TYPES( SwitchObserverPayload );
+        DEFINE_PTR_TYPES( SwitchObserverPayload );
 
         class SwitchObserverPayload : public Observer<ObjectTreeIndex>::Payload
         {

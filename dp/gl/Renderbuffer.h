@@ -68,7 +68,7 @@ namespace dp
           \param height Height of the newly created Renderbuffer.
           \return RefCounted Renderbuffer.
       **/
-      DP_GL_API static SharedRenderbuffer create(GLenum internalFormat, int width = 1, int height = 1);
+      DP_GL_API static RenderbufferSharedPtr create(GLenum internalFormat, int width = 1, int height = 1);
 
       /** \brief Create a new Renderbuffer with MSAA enabled.
           \param msaa MSAA settings of the newly created Renderbuffer.
@@ -77,7 +77,7 @@ namespace dp
           \param height Height of the newly created Renderbuffer.
           \return RefCounted Renderbuffer.
       **/
-      DP_GL_API static SharedRenderbuffer create(const MSAA &msaa, GLenum internalFormat, int width = 1, int height = 1);
+      DP_GL_API static RenderbufferSharedPtr create(const MSAA &msaa, GLenum internalFormat, int width = 1, int height = 1);
 
       /** \brief Create a new Renderbuffer with CSAA enabled.
           \param csaa CSAA settings of the newly created Renderbuffer.
@@ -86,7 +86,7 @@ namespace dp
           \param height Height of the newly created Renderbuffer.
           \return RefCounted Renderbuffer.
       **/
-      DP_GL_API static SharedRenderbuffer create(const CSAA &csaa, GLenum internalFormat, int width = 1, int height = 1);
+      DP_GL_API static RenderbufferSharedPtr create(const CSAA &csaa, GLenum internalFormat, int width = 1, int height = 1);
 
       DP_GL_API virtual ~Renderbuffer();
 

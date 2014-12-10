@@ -98,7 +98,7 @@ void lib_init()
 }
 #endif
 
-bool getPlugInterface(const UPIID& piid, dp::util::SmartPlugIn & pi)
+bool getPlugInterface(const UPIID& piid, dp::util::PlugInSharedPtr & pi)
 {
   if ( piid==PIID_WRL_SCENE_LOADER )
   {
@@ -188,7 +188,7 @@ SFInt32 min( const MFInt32 &mfInt32 )
   return( m );
 }
 
-SmartWRLLoader WRLLoader::create()
+WRLLoaderSharedPtr WRLLoader::create()
 {
   return( std::shared_ptr<WRLLoader>( new WRLLoader() ) );
 }
@@ -274,7 +274,7 @@ WRLLoader::~WRLLoader()
   free( m_line );
 }
 
-void WRLLoader::createBox( SharedIndexedFaceSet & pIndexedFaceSet, const SFVec3f& size, bool textured )
+void WRLLoader::createBox( IndexedFaceSetSharedPtr & pIndexedFaceSet, const SFVec3f& size, bool textured )
 {
   float width  = size[0];
   float height = size[1];
@@ -288,18 +288,18 @@ void WRLLoader::createBox( SharedIndexedFaceSet & pIndexedFaceSet, const SFVec3f
   size_t numVertices = 2 * (h * d + d * w + h * w);
   size_t numIndices  = 5 * ((h - 1) * (d - 1) + (d - 1) * (w - 1) + (h - 1) * (w - 1));
 
-  SharedCoordinate pCoordinate = Coordinate::create();
+  CoordinateSharedPtr pCoordinate = Coordinate::create();
   pCoordinate->point.reserve( numVertices ); // vertices
   pIndexedFaceSet->coord = pCoordinate;
   pIndexedFaceSet->coordIndex.reserve( numIndices );
 
-  SharedNormal pNormal = Normal::create();
+  NormalSharedPtr pNormal = Normal::create();
   pNormal->vector.reserve( numVertices ); // normals
   pIndexedFaceSet->normal = pNormal;
   pIndexedFaceSet->normalIndex.reserve( numIndices );
   pIndexedFaceSet->normalPerVertex = true; // Is the default.
 
-  SharedTextureCoordinate pTextureCoordinate = SharedTextureCoordinate::null;
+  TextureCoordinateSharedPtr pTextureCoordinate = TextureCoordinateSharedPtr::null;
   if ( textured )
   {
     pTextureCoordinate = TextureCoordinate::create();
@@ -667,7 +667,7 @@ void WRLLoader::createBox( SharedIndexedFaceSet & pIndexedFaceSet, const SFVec3f
   // indexOffset += h * w;
 }
 
-void WRLLoader::createCone( SharedIndexedFaceSet & pIndexedFaceSet,
+void WRLLoader::createCone( IndexedFaceSetSharedPtr & pIndexedFaceSet,
                             float radius, float height, 
                             bool bottom, bool side, bool textured )
 {
@@ -694,18 +694,18 @@ void WRLLoader::createCone( SharedIndexedFaceSet & pIndexedFaceSet,
     numIndices  += (n - 1) * m * 5;
   }
 
-  SharedCoordinate pCoordinate = Coordinate::create();
+  CoordinateSharedPtr pCoordinate = Coordinate::create();
   pCoordinate->point.reserve( numVertices ); // vertices
   pIndexedFaceSet->coord = pCoordinate;
   pIndexedFaceSet->coordIndex.reserve( numIndices );
 
-  SharedNormal pNormal = Normal::create();
+  NormalSharedPtr pNormal = Normal::create();
   pNormal->vector.reserve( numVertices ); // normals
   pIndexedFaceSet->normal = pNormal;
   pIndexedFaceSet->normalIndex.reserve( numIndices );
   pIndexedFaceSet->normalPerVertex = true; // Is the default.
 
-  SharedTextureCoordinate pTextureCoordinate = SharedTextureCoordinate::null;
+  TextureCoordinateSharedPtr pTextureCoordinate = TextureCoordinateSharedPtr::null;
   if ( textured )
   {
     pTextureCoordinate = TextureCoordinate::create();
@@ -897,7 +897,7 @@ void WRLLoader::createCone( SharedIndexedFaceSet & pIndexedFaceSet,
   } // side
 }
 
-void WRLLoader::createCylinder( SharedIndexedFaceSet & pIndexedFaceSet,
+void WRLLoader::createCylinder( IndexedFaceSetSharedPtr & pIndexedFaceSet,
                                 float radius, float height, 
                                 bool bottom, bool side, bool top, bool textured )
 {
@@ -929,18 +929,18 @@ void WRLLoader::createCylinder( SharedIndexedFaceSet & pIndexedFaceSet,
     numIndices  += (k - 2) * m * 5 + m * 4;
   }
   
-  SharedCoordinate pCoordinate = Coordinate::create();
+  CoordinateSharedPtr pCoordinate = Coordinate::create();
   pCoordinate->point.reserve( numVertices ); // vertices
   pIndexedFaceSet->coord = pCoordinate;
   pIndexedFaceSet->coordIndex.reserve( numIndices );
 
-  SharedNormal pNormal = Normal::create();
+  NormalSharedPtr pNormal = Normal::create();
   pNormal->vector.reserve( numVertices ); // normals
   pIndexedFaceSet->normal = pNormal;
   pIndexedFaceSet->normalIndex.reserve( numIndices );
   pIndexedFaceSet->normalPerVertex = true; // Is the default.
 
-  SharedTextureCoordinate pTextureCoordinate = SharedTextureCoordinate::null;
+  TextureCoordinateSharedPtr pTextureCoordinate = TextureCoordinateSharedPtr::null;
   if ( textured )
   {
     pTextureCoordinate = TextureCoordinate::create();
@@ -1233,7 +1233,7 @@ void WRLLoader::createCylinder( SharedIndexedFaceSet & pIndexedFaceSet,
   } // top
 }
 
-void WRLLoader::createSphere( SharedIndexedFaceSet & pIndexedFaceSet, float radius, bool textured )
+void WRLLoader::createSphere( IndexedFaceSetSharedPtr & pIndexedFaceSet, float radius, bool textured )
 {
   int m = clamp( (int) (m_subdivisions[SUBDIVISION_SPHERE_DEFAULT] * radius), m_subdivisions[SUBDIVISION_SPHERE_MIN], m_subdivisions[SUBDIVISION_SPHERE_MAX] );
   int n = clamp( m >> 1, std::max(3, m_subdivisions[SUBDIVISION_SPHERE_MIN] >> 1), std::max(3, m_subdivisions[SUBDIVISION_SPHERE_MAX] >> 1) );
@@ -1241,18 +1241,18 @@ void WRLLoader::createSphere( SharedIndexedFaceSet & pIndexedFaceSet, float radi
   const size_t numVertices = n * (m + 1);     // Number of vertices.
   const size_t numIndices  = (n - 1) * m * 5; // Number of indices (quad plus -1 end index = 5)
 
-  SharedCoordinate pCoordinate = Coordinate::create();
+  CoordinateSharedPtr pCoordinate = Coordinate::create();
   pCoordinate->point.reserve( numVertices ); // vertices
   pIndexedFaceSet->coord = pCoordinate;
   pIndexedFaceSet->coordIndex.reserve( numIndices );
 
-  SharedNormal pNormal = Normal::create();
+  NormalSharedPtr pNormal = Normal::create();
   pNormal->vector.reserve( numVertices ); // normals
   pIndexedFaceSet->normal = pNormal;
   pIndexedFaceSet->normalIndex.reserve( numIndices );
   pIndexedFaceSet->normalPerVertex = true; // Is the default.
 
-  SharedTextureCoordinate pTextureCoordinate;
+  TextureCoordinateSharedPtr pTextureCoordinate;
   if ( textured )
   {
     pTextureCoordinate = TextureCoordinate::create();
@@ -1336,7 +1336,7 @@ void WRLLoader::createSphere( SharedIndexedFaceSet & pIndexedFaceSet, float radi
   }
 }
 
-void WRLLoader::determineTexGen( SharedIndexedFaceSet const& pIndexedFaceSet
+void WRLLoader::determineTexGen( IndexedFaceSetSharedPtr const& pIndexedFaceSet
                                , const ParameterGroupDataSharedPtr & parameterGroupData )
 {
   DP_ASSERT( pIndexedFaceSet && parameterGroupData );
@@ -1397,7 +1397,7 @@ void WRLLoader::determineTexGen( SharedIndexedFaceSet const& pIndexedFaceSet
                      (second==2)?1.0f:0.0f ), min );
   plane[1] = Vec4f( p0.getNormal(), p0.getOffset() );
 
-  const dp::fx::SmartParameterGroupSpec & pgs = parameterGroupData->getParameterGroupSpec();
+  const dp::fx::ParameterGroupSpecSharedPtr & pgs = parameterGroupData->getParameterGroupSpec();
   DP_ASSERT( pgs->getName() == "standardTextureParameters" );
   DP_VERIFY( parameterGroupData->setParameterArrayElement<dp::fx::EnumSpec::StorageType>( "genMode", TCA_S, TGM_OBJECT_LINEAR ) );
   DP_VERIFY( parameterGroupData->setParameterArrayElement<dp::fx::EnumSpec::StorageType>( "genMode", TCA_T, TGM_OBJECT_LINEAR ) );
@@ -1462,10 +1462,10 @@ SFNode  WRLLoader::findNode( const SFNode currentNode, string name )
   return( node );
 }
 
-vector<unsigned int> WRLLoader::getCombinedKeys( SharedPositionInterpolator const& center
-                                               , SharedOrientationInterpolator const& rotation
-                                               , SharedPositionInterpolator const& scale
-                                               , SharedPositionInterpolator const& translation )
+vector<unsigned int> WRLLoader::getCombinedKeys( PositionInterpolatorSharedPtr const& center
+                                               , OrientationInterpolatorSharedPtr const& rotation
+                                               , PositionInterpolatorSharedPtr const& scale
+                                               , PositionInterpolatorSharedPtr const& translation )
 {
   vector<unsigned int> steps[4];
   unsigned int n = 0;
@@ -1864,7 +1864,7 @@ void  WRLLoader::interpretVRMLTree( void )
   m_scene->setRootNode( m_rootNode );
 }
 
-EffectDataSharedPtr WRLLoader::interpretAppearance( SharedAppearance const& pAppearance )
+EffectDataSharedPtr WRLLoader::interpretAppearance( AppearanceSharedPtr const& pAppearance )
 {
   DP_ASSERT( pAppearance->material || pAppearance->texture );
 
@@ -1897,11 +1897,11 @@ EffectDataSharedPtr WRLLoader::interpretAppearance( SharedAppearance const& pApp
     bool transparent = ( pAppearance->material && ( 0.0f < pAppearance->material.staticCast<vrml::Material>()->transparency ) );
     if ( textureData && ! transparent )
     {
-      const dp::fx::SmartParameterGroupSpec & pgs = textureData->getParameterGroupSpec();
+      const dp::fx::ParameterGroupSpecSharedPtr & pgs = textureData->getParameterGroupSpec();
       const SamplerSharedPtr & sampler = textureData->getParameter<SamplerSharedPtr>( pgs->findParameterSpec( "sampler" ) );
       if ( sampler )
       {
-        const TextureSharedPtr & texture = sampler->getTexture();
+        const dp::sg::core::TextureSharedPtr & texture = sampler->getTexture();
         if ( texture && texture.isPtrTo<TextureHost>() )
         {
           Image::PixelFormat ipf = texture.staticCast<TextureHost>()->getFormat();
@@ -1917,15 +1917,15 @@ EffectDataSharedPtr WRLLoader::interpretAppearance( SharedAppearance const& pApp
   return( pAppearance->materialEffect );
 }
 
-void  WRLLoader::interpretBackground( SharedBackground const& pBackground )
+void  WRLLoader::interpretBackground( BackgroundSharedPtr const& pBackground )
 {
   //  just set the background color
   m_scene->setBackColor( Vec4f(interpretSFColor( pBackground->skyColor[0] ) ,1.0f));
 }
 
-BillboardSharedPtr WRLLoader::interpretBillboard( vrml::SharedBillboard const& pVRMLBillboard )
+dp::sg::core::BillboardSharedPtr WRLLoader::interpretBillboard( vrml::BillboardSharedPtr const& pVRMLBillboard )
 {
-  BillboardSharedPtr pNVSGBillboard;
+  dp::sg::core::BillboardSharedPtr pNVSGBillboard;
 
   if ( pVRMLBillboard->pBillboard )
   {
@@ -1969,7 +1969,7 @@ inline bool evalTextured( const dp::sg::core::PrimitiveSharedPtr & pset, bool te
   return false; 
 }
 
-void  WRLLoader::interpretBox( SharedBox const& pBox, vector<PrimitiveSharedPtr> &primitives, bool textured )
+void  WRLLoader::interpretBox( BoxSharedPtr const& pBox, vector<PrimitiveSharedPtr> &primitives, bool textured )
 {
   if (  evalTextured(pBox->pTriangles, textured)
      || evalTextured(pBox->pQuads, textured) )
@@ -1991,7 +1991,7 @@ void  WRLLoader::interpretBox( SharedBox const& pBox, vector<PrimitiveSharedPtr>
   }
   else
   {
-    SharedIndexedFaceSet pIndexedFaceSet = IndexedFaceSet::create();
+    IndexedFaceSetSharedPtr pIndexedFaceSet = IndexedFaceSet::create();
     pIndexedFaceSet->setName( pBox->getName() );
 
     createBox( pIndexedFaceSet, pBox->size, textured );
@@ -2008,7 +2008,7 @@ void  WRLLoader::interpretBox( SharedBox const& pBox, vector<PrimitiveSharedPtr>
   }
 }
 
-void  WRLLoader::interpretCone( SharedCone const& pCone, vector<PrimitiveSharedPtr> &primitives, bool textured )
+void  WRLLoader::interpretCone( ConeSharedPtr const& pCone, vector<PrimitiveSharedPtr> &primitives, bool textured )
 {
   if (  evalTextured(pCone->pTriangles, textured)
      || evalTextured(pCone->pQuads, textured) )
@@ -2030,7 +2030,7 @@ void  WRLLoader::interpretCone( SharedCone const& pCone, vector<PrimitiveSharedP
   }
   else
   {
-    SharedIndexedFaceSet pIndexedFaceSet = IndexedFaceSet::create();
+    IndexedFaceSetSharedPtr pIndexedFaceSet = IndexedFaceSet::create();
     pIndexedFaceSet->setName( pCone->getName() );
 
     createCone( pIndexedFaceSet, pCone->bottomRadius, pCone->height, 
@@ -2048,7 +2048,7 @@ void  WRLLoader::interpretCone( SharedCone const& pCone, vector<PrimitiveSharedP
   }
 }
 
-void  WRLLoader::interpretCylinder( SharedCylinder const& pCylinder, vector<PrimitiveSharedPtr> &primitives, bool textured )
+void  WRLLoader::interpretCylinder( CylinderSharedPtr const& pCylinder, vector<PrimitiveSharedPtr> &primitives, bool textured )
 {
   if (  evalTextured(pCylinder->pTriangles, textured)
      || evalTextured(pCylinder->pQuads, textured) )
@@ -2070,7 +2070,7 @@ void  WRLLoader::interpretCylinder( SharedCylinder const& pCylinder, vector<Prim
   }
   else
   {
-    SharedIndexedFaceSet pIndexedFaceSet = IndexedFaceSet::create();
+    IndexedFaceSetSharedPtr pIndexedFaceSet = IndexedFaceSet::create();
     pIndexedFaceSet->setName( pCylinder->getName() );
 
     createCylinder( pIndexedFaceSet, pCylinder->radius, pCylinder->height, 
@@ -2088,7 +2088,7 @@ void  WRLLoader::interpretCylinder( SharedCylinder const& pCylinder, vector<Prim
   }
 }
 
-void  WRLLoader::interpretSphere( SharedSphere const& pSphere, vector<PrimitiveSharedPtr> &primitives, bool textured )
+void  WRLLoader::interpretSphere( SphereSharedPtr const& pSphere, vector<PrimitiveSharedPtr> &primitives, bool textured )
 {
   if (  evalTextured(pSphere->pTriangles, textured)
      || evalTextured(pSphere->pQuads, textured) )
@@ -2110,7 +2110,7 @@ void  WRLLoader::interpretSphere( SharedSphere const& pSphere, vector<PrimitiveS
   }
   else
   {
-    SharedIndexedFaceSet pIndexedFaceSet = IndexedFaceSet::create();
+    IndexedFaceSetSharedPtr pIndexedFaceSet = IndexedFaceSet::create();
     pIndexedFaceSet->setName( pSphere->getName() );
 
     createSphere( pIndexedFaceSet, pSphere->radius, textured );
@@ -2131,7 +2131,7 @@ void  WRLLoader::interpretChildren( MFNode &children, dp::sg::core::GroupSharedP
 {
   for ( size_t i=0 ; i<children.size() ; i++ )
   {
-    ObjectSharedPtr pObject = interpretSFNode( children[i] );
+    dp::sg::core::ObjectSharedPtr pObject = interpretSFNode( children[i] );
     if ( pObject )
     {
       DP_ASSERT( pObject.isPtrTo<Node>() );
@@ -2141,7 +2141,7 @@ void  WRLLoader::interpretChildren( MFNode &children, dp::sg::core::GroupSharedP
   }
 }
 
-void WRLLoader::interpretColor( SharedColor const& pColor )
+void WRLLoader::interpretColor( ColorSharedPtr const& pColor )
 {
   if ( ! pColor->interpreted )
   {
@@ -2153,7 +2153,7 @@ void WRLLoader::interpretColor( SharedColor const& pColor )
   }
 }
 
-void WRLLoader::interpretColorInterpolator( SharedColorInterpolator const& pColorInterpolator
+void WRLLoader::interpretColorInterpolator( ColorInterpolatorSharedPtr const& pColorInterpolator
                                           , unsigned int colorCount )
 {
   if ( ! pColorInterpolator->interpreted )
@@ -2171,7 +2171,7 @@ void WRLLoader::interpretColorInterpolator( SharedColorInterpolator const& pColo
   }
 }
 
-void WRLLoader::interpretCoordinate( SharedCoordinate const& pCoordinate )
+void WRLLoader::interpretCoordinate( CoordinateSharedPtr const& pCoordinate )
 {
   if ( !pCoordinate->interpreted )
   {
@@ -2184,7 +2184,7 @@ void WRLLoader::interpretCoordinate( SharedCoordinate const& pCoordinate )
   }
 }
 
-void WRLLoader::interpretCoordinateInterpolator( SharedCoordinateInterpolator const& pCoordinateInterpolator
+void WRLLoader::interpretCoordinateInterpolator( CoordinateInterpolatorSharedPtr const& pCoordinateInterpolator
                                                , unsigned int pointCount )
 {
   if ( ! pCoordinateInterpolator->interpreted )
@@ -2196,7 +2196,7 @@ void WRLLoader::interpretCoordinateInterpolator( SharedCoordinateInterpolator co
   }
 }
 
-LightSourceSharedPtr WRLLoader::interpretDirectionalLight( SharedDirectionalLight const& directionalLight )
+LightSourceSharedPtr WRLLoader::interpretDirectionalLight( DirectionalLightSharedPtr const& directionalLight )
 {
   LightSourceSharedPtr lightSource;
   if ( directionalLight->lightSource )
@@ -2218,7 +2218,7 @@ LightSourceSharedPtr WRLLoader::interpretDirectionalLight( SharedDirectionalLigh
   return( lightSource );
 }
 
-void  WRLLoader::interpretElevationGrid( SharedElevationGrid const& pElevationGrid
+void  WRLLoader::interpretElevationGrid( ElevationGridSharedPtr const& pElevationGrid
                                        , vector<PrimitiveSharedPtr> &primitives )
 {
   if ( pElevationGrid->pTriangles || pElevationGrid->pQuads )
@@ -2234,10 +2234,10 @@ void  WRLLoader::interpretElevationGrid( SharedElevationGrid const& pElevationGr
   }
   else
   {
-    SharedIndexedFaceSet pIndexedFaceSet = IndexedFaceSet::create();
+    IndexedFaceSetSharedPtr pIndexedFaceSet = IndexedFaceSet::create();
     pIndexedFaceSet->setName( pElevationGrid->getName() );
 
-    SharedCoordinate pCoordinate = Coordinate::create();
+    CoordinateSharedPtr pCoordinate = Coordinate::create();
     pCoordinate->point.reserve( pElevationGrid->height.size() );
     for ( int j=0 ; j<pElevationGrid->zDimension ; j++ )
     {
@@ -2271,7 +2271,7 @@ void  WRLLoader::interpretElevationGrid( SharedElevationGrid const& pElevationGr
     }
     else
     {
-      SharedTextureCoordinate pTextureCoordinate = TextureCoordinate::create();
+      TextureCoordinateSharedPtr pTextureCoordinate = TextureCoordinate::create();
       pTextureCoordinate->point.reserve( pElevationGrid->height.size() );
       float xStep = 1.0f / pElevationGrid->xDimension;
       float zStep = 1.0f / pElevationGrid->zDimension;
@@ -2319,7 +2319,7 @@ void  WRLLoader::interpretElevationGrid( SharedElevationGrid const& pElevationGr
   }
 }
 
-void  WRLLoader::interpretGeometry( vrml::SharedGeometry const& pGeometry, vector<PrimitiveSharedPtr> &primitives
+void  WRLLoader::interpretGeometry( vrml::GeometrySharedPtr const& pGeometry, vector<PrimitiveSharedPtr> &primitives
                                   , bool textured )
 {
   if ( pGeometry.isPtrTo<Box>() )
@@ -2357,9 +2357,9 @@ void  WRLLoader::interpretGeometry( vrml::SharedGeometry const& pGeometry, vecto
   }
 }
 
-GroupSharedPtr WRLLoader::interpretGroup( vrml::SharedGroup const& pGroup )
+dp::sg::core::GroupSharedPtr WRLLoader::interpretGroup( vrml::GroupSharedPtr const& pGroup )
 {
-  GroupSharedPtr pNVSGGroup;
+  dp::sg::core::GroupSharedPtr pNVSGGroup;
   if ( pGroup->pGroup )
   {
     pNVSGGroup = pGroup->pGroup;
@@ -2375,7 +2375,7 @@ GroupSharedPtr WRLLoader::interpretGroup( vrml::SharedGroup const& pGroup )
   return( pNVSGGroup );
 }
 
-ParameterGroupDataSharedPtr WRLLoader::interpretImageTexture( SharedImageTexture const& pImageTexture )
+ParameterGroupDataSharedPtr WRLLoader::interpretImageTexture( ImageTextureSharedPtr const& pImageTexture )
 {
   if ( !pImageTexture->textureData )
   {
@@ -2449,7 +2449,7 @@ void  analyzeIndex( const MFInt32 & mfInt32, vector<unsigned int> & triVerts, ve
   } while ( endIndex < mfInt32.size() );
 }
 
-void  WRLLoader::interpretIndexedFaceSet( SharedIndexedFaceSet const& pIndexedFaceSet
+void  WRLLoader::interpretIndexedFaceSet( IndexedFaceSetSharedPtr const& pIndexedFaceSet
                                         , vector<PrimitiveSharedPtr> &primitives )
 {
   DP_ASSERT( pIndexedFaceSet->coord );
@@ -2492,7 +2492,7 @@ void  WRLLoader::interpretIndexedFaceSet( SharedIndexedFaceSet const& pIndexedFa
     vector<unsigned int> triVerts, triFaces, quadVerts, quadFaces, polygonVerts, polygonFaces;
     analyzeIndex( pIndexedFaceSet->coordIndex, triVerts, triFaces, quadVerts, quadFaces, polygonVerts, polygonFaces );
 
-    GroupSharedPtr smoothGroup;
+    dp::sg::core::GroupSharedPtr smoothGroup;
     if ( !pIndexedFaceSet->normal )
     {
       smoothGroup = dp::sg::core::Group::create();
@@ -2771,7 +2771,7 @@ void WRLLoader::resampleKeyValues( MFFloat & keys, vector<T> & values, unsigned 
   values.swap( valuesOut );
 }
 
-VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( SharedIndexedFaceSet const& pIndexedFaceSet
+VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceSetSharedPtr const& pIndexedFaceSet
                                                                   , unsigned int numberOfVertices
                                                                   , const vector<unsigned int> & startIndices
                                                                   , const vector<unsigned int> & faceIndices )
@@ -2779,7 +2779,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( SharedIndexe
   DP_ASSERT( pIndexedFaceSet->coord.isPtrTo<Coordinate>() );
   DP_ASSERT( !pIndexedFaceSet->normal || pIndexedFaceSet->normal.isPtrTo<Normal>() );
   DP_ASSERT( !pIndexedFaceSet->color || pIndexedFaceSet->color.isPtrTo<Color>() );
-  SharedCoordinate const& pCoordinate = pIndexedFaceSet->coord.staticCast<Coordinate>();
+  CoordinateSharedPtr const& pCoordinate = pIndexedFaceSet->coord.staticCast<Coordinate>();
 
   VertexAttributeSetSharedPtr vash;
 #if defined(KEEP_ANIMATION)
@@ -2818,7 +2818,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( SharedIndexe
     //  set the animated normals
     if ( pIndexedFaceSet->normal && pIndexedFaceSet->normal.staticCast<Normal>()->set_vector )
     {
-      SharedNormal const& pNormal = pIndexedFaceSet->normal.staticCast<Normal>();
+      NormalSharedPtr const& pNormal = pIndexedFaceSet->normal.staticCast<Normal>();
       DP_ASSERT( pNormal->interpreted );
       DP_ASSERT( pCoordinate->set_point->key == pNormal->set_vector->key );
 
@@ -2893,7 +2893,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( SharedIndexe
     //  set the animated colors
     if ( pIndexedFaceSet->color && pIndexedFaceSet->color.staticCast<Color>()->set_color )
     {
-      SharedColor const& pColor = pIndexedFaceSet->color.staticCast<Color>();
+      ColorSharedPtr const& pColor = pIndexedFaceSet->color.staticCast<Color>();
       DP_ASSERT( pColor->interpreted );
       DP_ASSERT( pCoordinate->set_point->key == pColor->set_color->key );
 
@@ -2982,7 +2982,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( SharedIndexe
     //  set the normals
     if ( pIndexedFaceSet->normal )
     {
-      SharedNormal const& pNormal = pIndexedFaceSet->normal.staticCast<Normal>();
+      NormalSharedPtr const& pNormal = pIndexedFaceSet->normal.staticCast<Normal>();
       vector<Vec3f> normals;
       if ( pIndexedFaceSet->normalPerVertex )
       {
@@ -3012,7 +3012,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( SharedIndexe
     //  set the texture coordinates
     if ( pIndexedFaceSet->texCoord )
     {
-      SharedTextureCoordinate const& pTextureCoordinate = pIndexedFaceSet->texCoord.staticCast<TextureCoordinate>();
+      TextureCoordinateSharedPtr const& pTextureCoordinate = pIndexedFaceSet->texCoord.staticCast<TextureCoordinate>();
       vector<Vec2f> texCoords;
       gatherPerVertex<Vec2f>( texCoords, pTextureCoordinate->point,
                               pIndexedFaceSet->texCoordIndex.empty()
@@ -3025,7 +3025,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( SharedIndexe
     //  set the colors
     if ( pIndexedFaceSet->color )
     {
-      SharedColor const& pColor = pIndexedFaceSet->color.staticCast<Color>();
+      ColorSharedPtr const& pColor = pIndexedFaceSet->color.staticCast<Color>();
       vector<Vec3f> colors;
       if ( pIndexedFaceSet->colorPerVertex )
       {
@@ -3056,7 +3056,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( SharedIndexe
   return( vash );
 }
 
-void  WRLLoader::interpretIndexedLineSet( SharedIndexedLineSet const& pIndexedLineSet
+void  WRLLoader::interpretIndexedLineSet( IndexedLineSetSharedPtr const& pIndexedLineSet
                                         , vector<PrimitiveSharedPtr> &primitives )
 {
   DP_ASSERT( pIndexedLineSet->coord );
@@ -3081,7 +3081,7 @@ void  WRLLoader::interpretIndexedLineSet( SharedIndexedLineSet const& pIndexedLi
     iset->setData( &indices[0] , checked_cast<unsigned int>(indices.size()) );
 
     DP_ASSERT( pIndexedLineSet->coord.isPtrTo<Coordinate>() );
-    SharedCoordinate const& pCoordinate = pIndexedLineSet->coord.staticCast<Coordinate>();
+    CoordinateSharedPtr const& pCoordinate = pIndexedLineSet->coord.staticCast<Coordinate>();
     DP_ASSERT( pCoordinate && ! pCoordinate->set_point );
     vector<Vec3f> vertices( ic );
     for ( size_t i=0, j=0 ; i<pIndexedLineSet->coordIndex.size() ; i++ )
@@ -3096,7 +3096,7 @@ void  WRLLoader::interpretIndexedLineSet( SharedIndexedLineSet const& pIndexedLi
 
     if ( pIndexedLineSet->color )
     {
-      SharedColor const& pColor = pIndexedLineSet->color.staticCast<Color>();
+      ColorSharedPtr const& pColor = pIndexedLineSet->color.staticCast<Color>();
       vector<Vec3f> colors( vertices.size() );
       if ( pIndexedLineSet->colorPerVertex )
       {
@@ -3154,7 +3154,7 @@ void  WRLLoader::interpretIndexedLineSet( SharedIndexedLineSet const& pIndexedLi
   }
 }
 
-NodeSharedPtr WRLLoader::interpretInline( SharedInline const& pInline )
+NodeSharedPtr WRLLoader::interpretInline( InlineSharedPtr const& pInline )
 {
   if ( ! pInline->pNode )
   {
@@ -3171,9 +3171,9 @@ NodeSharedPtr WRLLoader::interpretInline( SharedInline const& pInline )
   return( pInline->pNode );
 }
 
-LODSharedPtr WRLLoader::interpretLOD( vrml::SharedLOD const& pVRMLLOD )
+dp::sg::core::LODSharedPtr WRLLoader::interpretLOD( vrml::LODSharedPtr const& pVRMLLOD )
 {
-  LODSharedPtr pNVSGLOD;
+  dp::sg::core::LODSharedPtr pNVSGLOD;
 
   if ( pVRMLLOD->pLOD )
   {
@@ -3216,12 +3216,12 @@ LODSharedPtr WRLLoader::interpretLOD( vrml::SharedLOD const& pVRMLLOD )
   return( pNVSGLOD );
 }
 
-ParameterGroupDataSharedPtr WRLLoader::interpretMaterial( vrml::SharedMaterial const& material )
+ParameterGroupDataSharedPtr WRLLoader::interpretMaterial( vrml::MaterialSharedPtr const& material )
 {
   ParameterGroupDataSharedPtr materialParameters;
   if ( ! material->materialParameters )
   {
-    const dp::fx::SmartEffectSpec & es = getStandardMaterialSpec();
+    const dp::fx::EffectSpecSharedPtr & es = getStandardMaterialSpec();
     dp::fx::EffectSpec::iterator pgsit = es->findParameterGroupSpec( string( "standardMaterialParameters" ) );
     DP_ASSERT( pgsit != es->endParameterGroupSpecs() );
     material->materialParameters = dp::sg::core::ParameterGroupData::create( *pgsit );
@@ -3250,13 +3250,13 @@ ParameterGroupDataSharedPtr WRLLoader::interpretMaterial( vrml::SharedMaterial c
   return( material->materialParameters );
 }
 
-ParameterGroupDataSharedPtr WRLLoader::interpretMovieTexture( SharedMovieTexture const& pMovieTexture )
+ParameterGroupDataSharedPtr WRLLoader::interpretMovieTexture( MovieTextureSharedPtr const& pMovieTexture )
 {
   onUnsupportedToken( "VRMLLoader", "MovieTexture" );
   return( ParameterGroupDataSharedPtr() );
 }
 
-void WRLLoader::interpretNormal( SharedNormal const& pNormal )
+void WRLLoader::interpretNormal( NormalSharedPtr const& pNormal )
 {
   if ( !pNormal->interpreted )
   {
@@ -3268,7 +3268,7 @@ void WRLLoader::interpretNormal( SharedNormal const& pNormal )
   }
 }
 
-void WRLLoader::interpretNormalInterpolator( SharedNormalInterpolator const& pNormalInterpolator
+void WRLLoader::interpretNormalInterpolator( NormalInterpolatorSharedPtr const& pNormalInterpolator
                                            , unsigned int vectorCount )
 {
   if ( ! pNormalInterpolator->interpreted )
@@ -3282,7 +3282,7 @@ void WRLLoader::interpretNormalInterpolator( SharedNormalInterpolator const& pNo
   }
 }
 
-void  WRLLoader::interpretOrientationInterpolator( SharedOrientationInterpolator const& pOrientationInterpolator )
+void  WRLLoader::interpretOrientationInterpolator( OrientationInterpolatorSharedPtr const& pOrientationInterpolator )
 {
   if ( ! pOrientationInterpolator->interpreted )
   {
@@ -3300,13 +3300,13 @@ void  WRLLoader::interpretOrientationInterpolator( SharedOrientationInterpolator
   }
 }
 
-ParameterGroupDataSharedPtr WRLLoader::interpretPixelTexture( SharedPixelTexture const& pPixelTexture )
+ParameterGroupDataSharedPtr WRLLoader::interpretPixelTexture( PixelTextureSharedPtr const& pPixelTexture )
 {
   onUnsupportedToken( "VRMLLoader", "PixelTexture" );
   return( ParameterGroupDataSharedPtr() );
 }
 
-LightSourceSharedPtr WRLLoader::interpretPointLight( vrml::SharedPointLight const& pVRMLPointLight )
+LightSourceSharedPtr WRLLoader::interpretPointLight( vrml::PointLightSharedPtr const& pVRMLPointLight )
 {
   LightSourceSharedPtr lightSource;
   if ( pVRMLPointLight->lightSource )
@@ -3327,7 +3327,7 @@ LightSourceSharedPtr WRLLoader::interpretPointLight( vrml::SharedPointLight cons
   return( lightSource );
 }
 
-void  WRLLoader::interpretPointSet( SharedPointSet const& pPointSet, vector<PrimitiveSharedPtr> &primitives )
+void  WRLLoader::interpretPointSet( PointSetSharedPtr const& pPointSet, vector<PrimitiveSharedPtr> &primitives )
 {
   DP_ASSERT( pPointSet->coord );
 
@@ -3340,7 +3340,7 @@ void  WRLLoader::interpretPointSet( SharedPointSet const& pPointSet, vector<Prim
     VertexAttributeSetSharedPtr cvas = VertexAttributeSet::create();
 
     DP_ASSERT( pPointSet->coord.isPtrTo<Coordinate>() );
-    SharedCoordinate const& pCoordinate = pPointSet->coord.staticCast<Coordinate>();
+    CoordinateSharedPtr const& pCoordinate = pPointSet->coord.staticCast<Coordinate>();
     DP_ASSERT( pCoordinate->point.size() < UINT_MAX );
     vector<Vec3f> vertices( pCoordinate->point.size() );
     for ( unsigned i=0 ; i<pCoordinate->point.size() ; i++ )
@@ -3352,7 +3352,7 @@ void  WRLLoader::interpretPointSet( SharedPointSet const& pPointSet, vector<Prim
     if ( pPointSet->color )
     {
       DP_ASSERT( pPointSet->color.isPtrTo<Color>() );
-      SharedColor const& pColor = pPointSet->color.staticCast<Color>();
+      ColorSharedPtr const& pColor = pPointSet->color.staticCast<Color>();
       DP_ASSERT( pCoordinate->point.size() <= pColor->color.size() );
       vector<Vec3f> colors( pCoordinate->point.size() );
       for ( size_t i=0 ; i<pCoordinate->point.size() ; i++ )
@@ -3371,7 +3371,7 @@ void  WRLLoader::interpretPointSet( SharedPointSet const& pPointSet, vector<Prim
   }
 }
 
-void WRLLoader::interpretPositionInterpolator( SharedPositionInterpolator const& pPositionInterpolator )
+void WRLLoader::interpretPositionInterpolator( PositionInterpolatorSharedPtr const& pPositionInterpolator )
 {
   if ( !pPositionInterpolator->interpreted )
   {
@@ -3382,9 +3382,9 @@ void WRLLoader::interpretPositionInterpolator( SharedPositionInterpolator const&
   }
 }
 
-ObjectSharedPtr WRLLoader::interpretSFNode( const SFNode n )
+dp::sg::core::ObjectSharedPtr WRLLoader::interpretSFNode( const SFNode n )
 {
-  ObjectSharedPtr pObject;
+  dp::sg::core::ObjectSharedPtr pObject;
   if ( n.isPtrTo<Appearance>() )
   {
     DP_ASSERT( false );
@@ -3471,7 +3471,7 @@ Quatf WRLLoader::interpretSFRotation( const SFRotation &r )
   return( Quatf( v, r[3] ) );
 }
 
-NodeSharedPtr WRLLoader::interpretShape( vrml::SharedShape const& pShape )
+NodeSharedPtr WRLLoader::interpretShape( vrml::ShapeSharedPtr const& pShape )
 {
   if ( ! pShape->pNode )
   {
@@ -3498,7 +3498,7 @@ NodeSharedPtr WRLLoader::interpretShape( vrml::SharedShape const& pShape )
       {
         if ( pShape->geometry.isPtrTo<IndexedFaceSet>() )
         {
-          SharedIndexedFaceSet const& pIndexedFaceSet = pShape->geometry.staticCast<IndexedFaceSet>();
+          IndexedFaceSetSharedPtr const& pIndexedFaceSet = pShape->geometry.staticCast<IndexedFaceSet>();
           if ( ! pIndexedFaceSet->texCoord )
           {
             determineTexGen( pIndexedFaceSet, pgd );
@@ -3534,7 +3534,7 @@ NodeSharedPtr WRLLoader::interpretShape( vrml::SharedShape const& pShape )
       }
       else
       {
-        GroupSharedPtr group = dp::sg::core::Group::create();
+        dp::sg::core::GroupSharedPtr group = dp::sg::core::Group::create();
         group->setName( pShape->getName() );
         for ( size_t i=0 ; i<primitives.size(); i++ )
         {
@@ -3550,7 +3550,7 @@ NodeSharedPtr WRLLoader::interpretShape( vrml::SharedShape const& pShape )
   return( pShape->pNode );
 }
 
-LightSourceSharedPtr WRLLoader::interpretSpotLight( vrml::SharedSpotLight const& pVRMLSpotLight )
+LightSourceSharedPtr WRLLoader::interpretSpotLight( vrml::SpotLightSharedPtr const& pVRMLSpotLight )
 {
   LightSourceSharedPtr lightSource;
   if ( pVRMLSpotLight->lightSource )
@@ -3579,7 +3579,7 @@ LightSourceSharedPtr WRLLoader::interpretSpotLight( vrml::SharedSpotLight const&
   return( lightSource );
 }
 
-ParameterGroupDataSharedPtr WRLLoader::interpretTexture( vrml::SharedTexture const& pTexture )
+ParameterGroupDataSharedPtr WRLLoader::interpretTexture( vrml::TextureSharedPtr const& pTexture )
 {
   ParameterGroupDataSharedPtr textureData;
   if ( pTexture.isPtrTo<ImageTexture>() )
@@ -3598,9 +3598,9 @@ ParameterGroupDataSharedPtr WRLLoader::interpretTexture( vrml::SharedTexture con
   return( textureData );
 }
 
-SwitchSharedPtr WRLLoader::interpretSwitch( vrml::SharedSwitch const& pVRMLSwitch )
+dp::sg::core::SwitchSharedPtr WRLLoader::interpretSwitch( vrml::SwitchSharedPtr const& pVRMLSwitch )
 {
-  SwitchSharedPtr pNVSGSwitch;
+  dp::sg::core::SwitchSharedPtr pNVSGSwitch;
 
   if ( pVRMLSwitch->pSwitch )
   {
@@ -3625,7 +3625,7 @@ SwitchSharedPtr WRLLoader::interpretSwitch( vrml::SharedSwitch const& pVRMLSwitc
   return( pNVSGSwitch );
 }
 
-void WRLLoader::interpretTextureTransform( SharedTextureTransform const& pTextureTransform
+void WRLLoader::interpretTextureTransform( TextureTransformSharedPtr const& pTextureTransform
                                          , const ParameterGroupDataSharedPtr & textureData )
 {
   Trafo t;
@@ -3637,9 +3637,9 @@ void WRLLoader::interpretTextureTransform( SharedTextureTransform const& pTextur
   DP_VERIFY( textureData->setParameter<Mat44f>( "textureMatrix", t.getMatrix() ) );
 }
 
-TransformSharedPtr WRLLoader::interpretTransform( vrml::SharedTransform const& pVRMLTransform )
+dp::sg::core::TransformSharedPtr WRLLoader::interpretTransform( vrml::TransformSharedPtr const& pVRMLTransform )
 {
-  TransformSharedPtr pNVSGTransform;
+  dp::sg::core::TransformSharedPtr pNVSGTransform;
 
   if ( pVRMLTransform->pTransform )
   {
@@ -3648,10 +3648,10 @@ TransformSharedPtr WRLLoader::interpretTransform( vrml::SharedTransform const& p
   else
   {
 #if defined(KEEP_ANIMATION)
-    SharedPositionInterpolator const& center = pVRMLTransform->set_center;
-    SharedOrientationInterpolator const& rotation = pVRMLTransform->set_rotation;
-    SharedPositionInterpolator const& scale = pVRMLTransform->set_scale;
-    SharedPositionInterpolator const& translation = pVRMLTransform->set_translation;
+    PositionInterpolatorSharedPtr const& center = pVRMLTransform->set_center;
+    OrientationInterpolatorSharedPtr const& rotation = pVRMLTransform->set_rotation;
+    PositionInterpolatorSharedPtr const& scale = pVRMLTransform->set_scale;
+    PositionInterpolatorSharedPtr const& translation = pVRMLTransform->set_translation;
     if ( center || rotation || scale || translation )
     {
       if (center )
@@ -3826,11 +3826,11 @@ bool  WRLLoader::interpretURL( const MFString &url, string &fileName )
   return( found );
 }
 
-ObjectSharedPtr  WRLLoader::interpretViewpoint( SharedViewpoint const& pViewpoint )
+dp::sg::core::ObjectSharedPtr  WRLLoader::interpretViewpoint( ViewpointSharedPtr const& pViewpoint )
 {
 #if (KEEP_ANIMATION)
-  SharedOrientationInterpolator const& orientation = pViewpoint->set_orientation;
-  SharedPositionInterpolator const& position = pViewpoint->set_position;
+  OrientationInterpolatorSharedPtr const& orientation = pViewpoint->set_orientation;
+  PositionInterpolatorSharedPtr const& position = pViewpoint->set_position;
   if ( orientation || position )
   {
     Quatf rot;
@@ -3923,10 +3923,10 @@ ObjectSharedPtr  WRLLoader::interpretViewpoint( SharedViewpoint const& pViewpoin
 
   m_scene->addCamera( pc );
 
-  return( ObjectSharedPtr() );
+  return( dp::sg::core::ObjectSharedPtr::null );
 }
 
-bool  WRLLoader::isValidScaling( SharedPositionInterpolator const& pPositionInterpolator ) const
+bool  WRLLoader::isValidScaling( PositionInterpolatorSharedPtr const& pPositionInterpolator ) const
 {
   bool  isValid = ! pPositionInterpolator->keyValue.empty();
   for ( size_t i=0 ; isValid && i<pPositionInterpolator->keyValue.size() ; i++ )
@@ -4073,9 +4073,9 @@ bool  WRLLoader::onUnsupportedToken( const string &tokenType, const string &toke
   return( callback() ? callback()->onUnsupportedToken( m_lineNumber, tokenType, token ) : true );
 }
 
-SharedAnchor WRLLoader::readAnchor( const string &nodeName )
+AnchorSharedPtr WRLLoader::readAnchor( const string &nodeName )
 {
-  SharedAnchor pAnchor = Anchor::create();
+  AnchorSharedPtr pAnchor = Anchor::create();
   pAnchor->setName( nodeName );
 
   string & token = getNextToken();
@@ -4109,9 +4109,9 @@ SharedAnchor WRLLoader::readAnchor( const string &nodeName )
   return( pAnchor );
 }
 
-SharedAppearance WRLLoader::readAppearance( const string &nodeName )
+AppearanceSharedPtr WRLLoader::readAppearance( const string &nodeName )
 {
-  SharedAppearance pAppearance = Appearance::create();
+  AppearanceSharedPtr pAppearance = Appearance::create();
   pAppearance->setName( nodeName );
 
   string & token = getNextToken();
@@ -4156,9 +4156,9 @@ SharedAppearance WRLLoader::readAppearance( const string &nodeName )
   return( pAppearance );
 }
 
-SharedAudioClip WRLLoader::readAudioClip( const string &nodeName )
+AudioClipSharedPtr WRLLoader::readAudioClip( const string &nodeName )
 {
-  SharedAudioClip pAudioClip = AudioClip::create();
+  AudioClipSharedPtr pAudioClip = AudioClip::create();
   pAudioClip->setName( nodeName );
 
   string & token = getNextToken();
@@ -4200,9 +4200,9 @@ SharedAudioClip WRLLoader::readAudioClip( const string &nodeName )
   return( pAudioClip );
 }
 
-SharedBackground WRLLoader::readBackground( const string &nodeName )
+BackgroundSharedPtr WRLLoader::readBackground( const string &nodeName )
 {
-  SharedBackground pBackground = Background::create();
+  BackgroundSharedPtr pBackground = Background::create();
   pBackground->setName( nodeName );
 
   string & token = getNextToken();
@@ -4261,9 +4261,9 @@ SharedBackground WRLLoader::readBackground( const string &nodeName )
   return( pBackground );
 }
 
-vrml::SharedBillboard WRLLoader::readBillboard( const string &nodeName )
+vrml::BillboardSharedPtr WRLLoader::readBillboard( const string &nodeName )
 {
-  vrml::SharedBillboard pBillboard = vrml::Billboard::create();
+  vrml::BillboardSharedPtr pBillboard = vrml::Billboard::create();
   pBillboard->setName( nodeName );
 
   string & token = getNextToken();
@@ -4289,9 +4289,9 @@ vrml::SharedBillboard WRLLoader::readBillboard( const string &nodeName )
   return( pBillboard );
 }
 
-SharedBox WRLLoader::readBox( const string &nodeName )
+BoxSharedPtr WRLLoader::readBox( const string &nodeName )
 {
-  SharedBox pBox = Box::create();
+  BoxSharedPtr pBox = Box::create();
   pBox->setName( nodeName );
 
   string & token = getNextToken();
@@ -4313,9 +4313,9 @@ SharedBox WRLLoader::readBox( const string &nodeName )
   return( pBox );
 }
 
-SharedCollision WRLLoader::readCollision( const string &nodeName )
+CollisionSharedPtr WRLLoader::readCollision( const string &nodeName )
 {
-  SharedCollision pCollision = Collision::create();
+  CollisionSharedPtr pCollision = Collision::create();
   pCollision->setName( nodeName );
 
   string & token = getNextToken();
@@ -4345,9 +4345,9 @@ SharedCollision WRLLoader::readCollision( const string &nodeName )
   return( pCollision );
 }
 
-SharedColor WRLLoader::readColor( const string &nodeName )
+ColorSharedPtr WRLLoader::readColor( const string &nodeName )
 {
-  SharedColor pColor = Color::create();
+  ColorSharedPtr pColor = Color::create();
   pColor->setName( nodeName );
 
   string & token = getNextToken();
@@ -4369,9 +4369,9 @@ SharedColor WRLLoader::readColor( const string &nodeName )
   return( pColor );
 }
 
-SharedColorInterpolator WRLLoader::readColorInterpolator( const string &nodeName )
+ColorInterpolatorSharedPtr WRLLoader::readColorInterpolator( const string &nodeName )
 {
-  SharedColorInterpolator pColorInterpolator = ColorInterpolator::create();
+  ColorInterpolatorSharedPtr pColorInterpolator = ColorInterpolator::create();
   pColorInterpolator->setName( nodeName );
 
   string & token = getNextToken();
@@ -4399,9 +4399,9 @@ SharedColorInterpolator WRLLoader::readColorInterpolator( const string &nodeName
   return( pColorInterpolator );
 }
 
-SharedCone WRLLoader::readCone( const string &nodeName )
+ConeSharedPtr WRLLoader::readCone( const string &nodeName )
 {
-  SharedCone pCone = Cone::create();
+  ConeSharedPtr pCone = Cone::create();
   pCone->setName( nodeName );
 
   string & token = getNextToken();
@@ -4435,9 +4435,9 @@ SharedCone WRLLoader::readCone( const string &nodeName )
   return( pCone );
 }
 
-SharedCoordinate WRLLoader::readCoordinate( const string &nodeName )
+CoordinateSharedPtr WRLLoader::readCoordinate( const string &nodeName )
 {
-  SharedCoordinate pCoordinate = Coordinate::create();
+  CoordinateSharedPtr pCoordinate = Coordinate::create();
   pCoordinate->setName( nodeName );
 
   string & token = getNextToken();
@@ -4459,9 +4459,9 @@ SharedCoordinate WRLLoader::readCoordinate( const string &nodeName )
   return( pCoordinate );
 }
 
-SharedCoordinateInterpolator WRLLoader::readCoordinateInterpolator( const string &nodeName )
+CoordinateInterpolatorSharedPtr WRLLoader::readCoordinateInterpolator( const string &nodeName )
 {
-  SharedCoordinateInterpolator pCoordinateInterpolator = CoordinateInterpolator::create();
+  CoordinateInterpolatorSharedPtr pCoordinateInterpolator = CoordinateInterpolator::create();
   pCoordinateInterpolator->setName( nodeName );
 
   string & token = getNextToken();
@@ -4489,9 +4489,9 @@ SharedCoordinateInterpolator WRLLoader::readCoordinateInterpolator( const string
   return( pCoordinateInterpolator );
 }
 
-SharedCylinder WRLLoader::readCylinder( const string &nodeName )
+CylinderSharedPtr WRLLoader::readCylinder( const string &nodeName )
 {
-  SharedCylinder pCylinder = Cylinder::create();
+  CylinderSharedPtr pCylinder = Cylinder::create();
   pCylinder->setName( nodeName );
 
   string & token = getNextToken();
@@ -4529,9 +4529,9 @@ SharedCylinder WRLLoader::readCylinder( const string &nodeName )
   return( pCylinder );
 }
 
-SharedCylinderSensor WRLLoader::readCylinderSensor( const string &nodeName )
+CylinderSensorSharedPtr WRLLoader::readCylinderSensor( const string &nodeName )
 {
-  SharedCylinderSensor pCylinderSensor = CylinderSensor::create();
+  CylinderSensorSharedPtr pCylinderSensor = CylinderSensor::create();
   pCylinderSensor->setName( nodeName );
 
   string & token = getNextToken();
@@ -4576,9 +4576,9 @@ SharedCylinderSensor WRLLoader::readCylinderSensor( const string &nodeName )
   return( pCylinderSensor );
 }
 
-SharedDirectionalLight WRLLoader::readDirectionalLight( const string &nodeName )
+DirectionalLightSharedPtr WRLLoader::readDirectionalLight( const string &nodeName )
 {
-  SharedDirectionalLight pDirectionalLight = DirectionalLight::create();
+  DirectionalLightSharedPtr pDirectionalLight = DirectionalLight::create();
   pDirectionalLight->setName( nodeName );
 
   string & token = getNextToken();
@@ -4616,11 +4616,11 @@ SharedDirectionalLight WRLLoader::readDirectionalLight( const string &nodeName )
   return( pDirectionalLight );
 }
 
-SharedElevationGrid WRLLoader::readElevationGrid( const string &nodeName )
+ElevationGridSharedPtr WRLLoader::readElevationGrid( const string &nodeName )
 {
   bool killit = false;
 
-  SharedElevationGrid pElevationGrid = ElevationGrid::create();
+  ElevationGridSharedPtr pElevationGrid = ElevationGrid::create();
   pElevationGrid->setName( nodeName );
 
   string & token = getNextToken();
@@ -4731,9 +4731,9 @@ void  WRLLoader::readEXTERNPROTO( void )
   readMFString( mfString );
 }
 
-SharedExtrusion WRLLoader::readExtrusion( const string &nodeName )
+ExtrusionSharedPtr WRLLoader::readExtrusion( const string &nodeName )
 {
-  SharedExtrusion pExtrusion = Extrusion::create();
+  ExtrusionSharedPtr pExtrusion = Extrusion::create();
   pExtrusion->setName( nodeName );
 
   string & token = getNextToken();
@@ -4794,9 +4794,9 @@ SharedExtrusion WRLLoader::readExtrusion( const string &nodeName )
   return( pExtrusion );
 }
 
-SharedFog WRLLoader::readFog( const string &nodeName )
+FogSharedPtr WRLLoader::readFog( const string &nodeName )
 {
-  SharedFog pFog = Fog::create();
+  FogSharedPtr pFog = Fog::create();
   pFog->setName( nodeName );
 
   string & token = getNextToken();
@@ -4829,9 +4829,9 @@ SharedFog WRLLoader::readFog( const string &nodeName )
   return( pFog );
 }
 
-SharedFontStyle WRLLoader::readFontStyle( const string &nodeName )
+FontStyleSharedPtr WRLLoader::readFontStyle( const string &nodeName )
 {
-  SharedFontStyle pFontStyle = FontStyle::create();
+  FontStyleSharedPtr pFontStyle = FontStyle::create();
   pFontStyle->setName( nodeName );
 
   string & token = getNextToken();
@@ -4885,9 +4885,9 @@ SharedFontStyle WRLLoader::readFontStyle( const string &nodeName )
   return( pFontStyle );
 }
 
-vrml::SharedGroup WRLLoader::readGroup( const string &nodeName )
+vrml::GroupSharedPtr WRLLoader::readGroup( const string &nodeName )
 {
-  vrml::SharedGroup pGroup = vrml::Group::create();
+  vrml::GroupSharedPtr pGroup = vrml::Group::create();
   pGroup->setName( nodeName );
 
   string & token = getNextToken();
@@ -4918,9 +4918,9 @@ vrml::SharedGroup WRLLoader::readGroup( const string &nodeName )
 }
 
 
-SharedImageTexture WRLLoader::readImageTexture( const string &nodeName )
+ImageTextureSharedPtr WRLLoader::readImageTexture( const string &nodeName )
 {
-  SharedImageTexture pImageTexture = ImageTexture::create();
+  ImageTextureSharedPtr pImageTexture = ImageTexture::create();
   pImageTexture->setName( nodeName );
 
   string & token = getNextToken();
@@ -4959,10 +4959,10 @@ void  WRLLoader::readIndex( vector<SFInt32> &mf )
   }
 }
 
-bool removeCollinearPoint( SharedIndexedFaceSet const& pIndexedFaceSet, unsigned int i0, unsigned int i1, unsigned int i2 )
+bool removeCollinearPoint( IndexedFaceSetSharedPtr const& pIndexedFaceSet, unsigned int i0, unsigned int i1, unsigned int i2 )
 {
   DP_ASSERT( pIndexedFaceSet->coord.isPtrTo<Coordinate>() );
-  SharedCoordinate const& pC = pIndexedFaceSet->coord.staticCast<Coordinate>();
+  CoordinateSharedPtr const& pC = pIndexedFaceSet->coord.staticCast<Coordinate>();
   Vec3f e0 = pC->point[pIndexedFaceSet->coordIndex[i1]] - pC->point[pIndexedFaceSet->coordIndex[i0]];
   Vec3f e1 = pC->point[pIndexedFaceSet->coordIndex[i2]] - pC->point[pIndexedFaceSet->coordIndex[i1]];
   if ( length( e0 ^ e1 ) <= FLT_EPSILON )
@@ -4971,7 +4971,7 @@ bool removeCollinearPoint( SharedIndexedFaceSet const& pIndexedFaceSet, unsigned
     if ( pIndexedFaceSet->color && pIndexedFaceSet->colorPerVertex && ! pIndexedFaceSet->colorIndex.empty() )
     {
       DP_ASSERT( pIndexedFaceSet->color.isPtrTo<Color>() );
-      SharedColor const& pColor = pIndexedFaceSet->color.staticCast<Color>();
+      ColorSharedPtr const& pColor = pIndexedFaceSet->color.staticCast<Color>();
       Vec3f dc0 = pColor->color[pIndexedFaceSet->colorIndex[i1]] - pColor->color[pIndexedFaceSet->colorIndex[i0]];
       Vec3f dc1 = pColor->color[pIndexedFaceSet->colorIndex[i2]] - pColor->color[pIndexedFaceSet->colorIndex[i1]];
       remove = ( length( dc0 / length( e0 ) - dc1 / length( e1 ) ) < FLT_EPSILON );
@@ -4979,7 +4979,7 @@ bool removeCollinearPoint( SharedIndexedFaceSet const& pIndexedFaceSet, unsigned
     if ( remove && pIndexedFaceSet->normal && pIndexedFaceSet->normalPerVertex && ! pIndexedFaceSet->normalIndex.empty() )
     {
       DP_ASSERT( pIndexedFaceSet->normal.isPtrTo<Normal>() );
-      SharedNormal const& pNormal = pIndexedFaceSet->normal.staticCast<Normal>();
+      NormalSharedPtr const& pNormal = pIndexedFaceSet->normal.staticCast<Normal>();
       Vec3f nxn0 = pNormal->vector[pIndexedFaceSet->normalIndex[i0]] ^ pNormal->vector[pIndexedFaceSet->normalIndex[i1]];
       Vec3f nxn1 = pNormal->vector[pIndexedFaceSet->normalIndex[i1]] ^ pNormal->vector[pIndexedFaceSet->normalIndex[i2]];
       float c0 = pNormal->vector[pIndexedFaceSet->normalIndex[i0]] * pNormal->vector[pIndexedFaceSet->normalIndex[i1]];
@@ -4990,7 +4990,7 @@ bool removeCollinearPoint( SharedIndexedFaceSet const& pIndexedFaceSet, unsigned
     if ( remove && pIndexedFaceSet->texCoord && ! pIndexedFaceSet->texCoordIndex.empty() )
     {
       DP_ASSERT( pIndexedFaceSet->texCoord.isPtrTo<TextureCoordinate>() );
-      SharedTextureCoordinate const& pTextureCoordinate = pIndexedFaceSet->texCoord.staticCast<TextureCoordinate>();
+      TextureCoordinateSharedPtr const& pTextureCoordinate = pIndexedFaceSet->texCoord.staticCast<TextureCoordinate>();
       Vec2f dt0 = pTextureCoordinate->point[pIndexedFaceSet->texCoordIndex[i1]] - pTextureCoordinate->point[pIndexedFaceSet->texCoordIndex[i0]];
       Vec2f dt1 = pTextureCoordinate->point[pIndexedFaceSet->texCoordIndex[i2]] - pTextureCoordinate->point[pIndexedFaceSet->texCoordIndex[i1]];
       remove = ( length( dt0 / length( e0 ) - dt1 / length( e1 ) ) < FLT_EPSILON );
@@ -5018,10 +5018,10 @@ bool removeCollinearPoint( SharedIndexedFaceSet const& pIndexedFaceSet, unsigned
   return( false );
 }
 
-bool removeRedundantPoint( SharedIndexedFaceSet const& pIndexedFaceSet, unsigned int i0, unsigned int i1 )
+bool removeRedundantPoint( IndexedFaceSetSharedPtr const& pIndexedFaceSet, unsigned int i0, unsigned int i1 )
 {
   DP_ASSERT( pIndexedFaceSet->coord.isPtrTo<Coordinate>() );
-  SharedCoordinate const& pC = pIndexedFaceSet->coord.staticCast<Coordinate>();
+  CoordinateSharedPtr const& pC = pIndexedFaceSet->coord.staticCast<Coordinate>();
   if (    ( pIndexedFaceSet->coordIndex[i0] == pIndexedFaceSet->coordIndex[i1] )
       ||  ( length( pC->point[pIndexedFaceSet->coordIndex[i1]] - pC->point[pIndexedFaceSet->coordIndex[i0]] ) < FLT_EPSILON ) )
   {
@@ -5029,7 +5029,7 @@ bool removeRedundantPoint( SharedIndexedFaceSet const& pIndexedFaceSet, unsigned
     if ( pIndexedFaceSet->color && pIndexedFaceSet->colorPerVertex && ! pIndexedFaceSet->colorIndex.empty() )
     {
       DP_ASSERT( pIndexedFaceSet->color.isPtrTo<Color>() );
-      SharedColor const& pColor = pIndexedFaceSet->color.staticCast<Color>();
+      ColorSharedPtr const& pColor = pIndexedFaceSet->color.staticCast<Color>();
       remove =    ( pIndexedFaceSet->colorIndex[i0] == pIndexedFaceSet->colorIndex[i1] )
                || ( length( pColor->color[pIndexedFaceSet->colorIndex[i1]] - pColor->color[pIndexedFaceSet->colorIndex[i0]] ) < FLT_EPSILON );
       DP_ASSERT( remove );    // never encountered this
@@ -5037,14 +5037,14 @@ bool removeRedundantPoint( SharedIndexedFaceSet const& pIndexedFaceSet, unsigned
     if ( remove && pIndexedFaceSet->normal && pIndexedFaceSet->normalPerVertex && ! pIndexedFaceSet->normalIndex.empty() )
     {
       DP_ASSERT( pIndexedFaceSet->normal.isPtrTo<Normal>() );
-      SharedNormal const& pNormal = pIndexedFaceSet->normal.staticCast<Normal>();
+      NormalSharedPtr const& pNormal = pIndexedFaceSet->normal.staticCast<Normal>();
       remove =    ( pIndexedFaceSet->normalIndex[i0] == pIndexedFaceSet->normalIndex[i1] )
                || ( length( pNormal->vector[pIndexedFaceSet->normalIndex[i1]] - pNormal->vector[pIndexedFaceSet->normalIndex[i0]] ) < FLT_EPSILON );
     }
     if ( remove && pIndexedFaceSet->texCoord && ! pIndexedFaceSet->texCoordIndex.empty() )
     {
       DP_ASSERT( pIndexedFaceSet->texCoord.isPtrTo<TextureCoordinate>() );
-      SharedTextureCoordinate const& pTextureCoordinate = pIndexedFaceSet->texCoord.staticCast<TextureCoordinate>();
+      TextureCoordinateSharedPtr const& pTextureCoordinate = pIndexedFaceSet->texCoord.staticCast<TextureCoordinate>();
       remove =    ( pIndexedFaceSet->texCoordIndex[i0] == pIndexedFaceSet->texCoordIndex[i1] )
                || ( length( pTextureCoordinate->point[pIndexedFaceSet->texCoordIndex[i1]] - pTextureCoordinate->point[pIndexedFaceSet->texCoordIndex[i0]] ) < FLT_EPSILON );
       DP_ASSERT( remove );    // never encountered this
@@ -5072,7 +5072,7 @@ bool removeRedundantPoint( SharedIndexedFaceSet const& pIndexedFaceSet, unsigned
   return( false );
 }
 
-void removeInvalidFace( SharedIndexedFaceSet const& pIndexedFaceSet, size_t i, size_t j, unsigned int numberOfFaces )
+void removeInvalidFace( IndexedFaceSetSharedPtr const& pIndexedFaceSet, size_t i, size_t j, unsigned int numberOfFaces )
 {
   pIndexedFaceSet->coordIndex.erase( pIndexedFaceSet->coordIndex.begin() + i
                                    , pIndexedFaceSet->coordIndex.begin() + i + j + 1 );
@@ -5109,9 +5109,9 @@ void removeInvalidFace( SharedIndexedFaceSet const& pIndexedFaceSet, size_t i, s
   }
 }
 
-SharedIndexedFaceSet WRLLoader::readIndexedFaceSet( const string &nodeName )
+IndexedFaceSetSharedPtr WRLLoader::readIndexedFaceSet( const string &nodeName )
 {
-  SharedIndexedFaceSet pIndexedFaceSet = IndexedFaceSet::create();
+  IndexedFaceSetSharedPtr pIndexedFaceSet = IndexedFaceSet::create();
   pIndexedFaceSet->setName( nodeName );
 
   string & token = getNextToken();
@@ -5713,9 +5713,9 @@ SharedIndexedFaceSet WRLLoader::readIndexedFaceSet( const string &nodeName )
   return( pIndexedFaceSet );
 }
 
-SharedIndexedLineSet WRLLoader::readIndexedLineSet( const string &nodeName )
+IndexedLineSetSharedPtr WRLLoader::readIndexedLineSet( const string &nodeName )
 {
-  SharedIndexedLineSet pIndexedLineSet = IndexedLineSet::create();
+  IndexedLineSetSharedPtr pIndexedLineSet = IndexedLineSet::create();
   pIndexedLineSet->setName( nodeName );
 
   string & token = getNextToken();
@@ -5763,9 +5763,9 @@ SharedIndexedLineSet WRLLoader::readIndexedLineSet( const string &nodeName )
   return( pIndexedLineSet );
 }
 
-SharedInline WRLLoader::readInline( const string &nodeName )
+InlineSharedPtr WRLLoader::readInline( const string &nodeName )
 {
-  SharedInline pInline = Inline::create();
+  InlineSharedPtr pInline = Inline::create();
   pInline->setName( nodeName );
 
   string & token = getNextToken();
@@ -5793,7 +5793,7 @@ SharedInline WRLLoader::readInline( const string &nodeName )
   }
 
   // map multiply ref'ed Inlines on the same object
-  std::map<MFString,SharedInline>::const_iterator it = m_inlines.find( pInline->url );
+  std::map<MFString,InlineSharedPtr>::const_iterator it = m_inlines.find( pInline->url );
   if ( it == m_inlines.end() )
   {
     it = m_inlines.insert( make_pair( pInline->url, pInline ) ).first;
@@ -5807,9 +5807,9 @@ SharedInline WRLLoader::readInline( const string &nodeName )
   return( it->second );
 }
 
-vrml::SharedLOD WRLLoader::readLOD( const string &nodeName )
+vrml::LODSharedPtr WRLLoader::readLOD( const string &nodeName )
 {
-  vrml::SharedLOD pLOD = vrml::LOD::create();
+  vrml::LODSharedPtr pLOD = vrml::LOD::create();
   pLOD->setName( nodeName );
 
   string & token = getNextToken();
@@ -5839,9 +5839,9 @@ vrml::SharedLOD WRLLoader::readLOD( const string &nodeName )
   return( pLOD );
 }
 
-vrml::SharedMaterial WRLLoader::readMaterial( const string &nodeName )
+vrml::MaterialSharedPtr WRLLoader::readMaterial( const string &nodeName )
 {
-  vrml::SharedMaterial pMaterial = vrml::Material::create();
+  vrml::MaterialSharedPtr pMaterial = vrml::Material::create();
   pMaterial->setName( nodeName );
 
   string & token = getNextToken();
@@ -5883,7 +5883,7 @@ vrml::SharedMaterial WRLLoader::readMaterial( const string &nodeName )
   return( pMaterial );
 }
 
-void  WRLLoader::readMFNode( vrml::SharedGroup const& fatherNode )
+void  WRLLoader::readMFNode( vrml::GroupSharedPtr const& fatherNode )
 {
   SFNode n;
   string & token = getNextToken();
@@ -5933,9 +5933,9 @@ void  WRLLoader::readMFType( vector<SFType> &mf, void (WRLLoader::*readSFType)( 
   }
 }
 
-SharedMovieTexture WRLLoader::readMovieTexture( const string &nodeName )
+MovieTextureSharedPtr WRLLoader::readMovieTexture( const string &nodeName )
 {
-  SharedMovieTexture pMovieTexture = MovieTexture::create();
+  MovieTextureSharedPtr pMovieTexture = MovieTexture::create();
   pMovieTexture->setName( nodeName );
 
   string & token = getNextToken();
@@ -5981,9 +5981,9 @@ SharedMovieTexture WRLLoader::readMovieTexture( const string &nodeName )
   return( pMovieTexture );
 }
 
-SharedNavigationInfo WRLLoader::readNavigationInfo( const string &nodeName )
+NavigationInfoSharedPtr WRLLoader::readNavigationInfo( const string &nodeName )
 {
-  SharedNavigationInfo pNavigationInfo = NavigationInfo::create();
+  NavigationInfoSharedPtr pNavigationInfo = NavigationInfo::create();
   pNavigationInfo->setName( nodeName );
 
   string & token = getNextToken();
@@ -6024,9 +6024,9 @@ SharedNavigationInfo WRLLoader::readNavigationInfo( const string &nodeName )
   return( pNavigationInfo );
 }
 
-SharedNormal WRLLoader::readNormal( const string &nodeName )
+NormalSharedPtr WRLLoader::readNormal( const string &nodeName )
 {
-  SharedNormal pNormal = Normal::create();
+  NormalSharedPtr pNormal = Normal::create();
   pNormal->setName( nodeName );
 
   string & token = getNextToken();
@@ -6052,9 +6052,9 @@ SharedNormal WRLLoader::readNormal( const string &nodeName )
   return( pNormal );
 }
 
-SharedNormalInterpolator WRLLoader::readNormalInterpolator( const string &nodeName )
+NormalInterpolatorSharedPtr WRLLoader::readNormalInterpolator( const string &nodeName )
 {
-  SharedNormalInterpolator pNormalInterpolator = NormalInterpolator::create();
+  NormalInterpolatorSharedPtr pNormalInterpolator = NormalInterpolator::create();
   pNormalInterpolator->setName( nodeName );
 
   string & token = getNextToken();
@@ -6082,9 +6082,9 @@ SharedNormalInterpolator WRLLoader::readNormalInterpolator( const string &nodeNa
   return( pNormalInterpolator );
 }
 
-SharedOrientationInterpolator WRLLoader::readOrientationInterpolator( const string &nodeName )
+OrientationInterpolatorSharedPtr WRLLoader::readOrientationInterpolator( const string &nodeName )
 {
-  SharedOrientationInterpolator pOrientationInterpolator = OrientationInterpolator::create();
+  OrientationInterpolatorSharedPtr pOrientationInterpolator = OrientationInterpolator::create();
   pOrientationInterpolator->setName( nodeName );
 
   string & token = getNextToken();
@@ -6112,9 +6112,9 @@ SharedOrientationInterpolator WRLLoader::readOrientationInterpolator( const stri
   return( pOrientationInterpolator );
 }
 
-SharedPixelTexture WRLLoader::readPixelTexture( const string &nodeName )
+PixelTextureSharedPtr WRLLoader::readPixelTexture( const string &nodeName )
 {
-  SharedPixelTexture pPixelTexture = PixelTexture::create();
+  PixelTextureSharedPtr pPixelTexture = PixelTexture::create();
   pPixelTexture->setName( nodeName );
 
   string & token = getNextToken();
@@ -6144,9 +6144,9 @@ SharedPixelTexture WRLLoader::readPixelTexture( const string &nodeName )
   return( pPixelTexture );
 }
 
-SharedPlaneSensor WRLLoader::readPlaneSensor( const string &nodeName )
+PlaneSensorSharedPtr WRLLoader::readPlaneSensor( const string &nodeName )
 {
-  SharedPlaneSensor pPlaneSensor = PlaneSensor::create();
+  PlaneSensorSharedPtr pPlaneSensor = PlaneSensor::create();
   pPlaneSensor->setName( nodeName );
 
   string & token = getNextToken();
@@ -6187,9 +6187,9 @@ SharedPlaneSensor WRLLoader::readPlaneSensor( const string &nodeName )
   return( pPlaneSensor );
 }
 
-vrml::SharedPointLight WRLLoader::readPointLight( const string &nodeName )
+vrml::PointLightSharedPtr WRLLoader::readPointLight( const string &nodeName )
 {
-  vrml::SharedPointLight pPointLight = vrml::PointLight::create();
+  vrml::PointLightSharedPtr pPointLight = vrml::PointLight::create();
   pPointLight->setName( nodeName );
 
   string & token = getNextToken();
@@ -6235,9 +6235,9 @@ vrml::SharedPointLight WRLLoader::readPointLight( const string &nodeName )
   return( pPointLight );
 }
 
-SharedPointSet WRLLoader::readPointSet( const string &nodeName )
+PointSetSharedPtr WRLLoader::readPointSet( const string &nodeName )
 {
-  SharedPointSet pPointSet = PointSet::create();
+  PointSetSharedPtr pPointSet = PointSet::create();
   pPointSet->setName( nodeName );
 
   string & token = getNextToken();
@@ -6263,9 +6263,9 @@ SharedPointSet WRLLoader::readPointSet( const string &nodeName )
   return( pPointSet );
 }
 
-SharedPositionInterpolator WRLLoader::readPositionInterpolator( const string &nodeName )
+PositionInterpolatorSharedPtr WRLLoader::readPositionInterpolator( const string &nodeName )
 {
-  SharedPositionInterpolator pPositionInterpolator = PositionInterpolator::create();
+  PositionInterpolatorSharedPtr pPositionInterpolator = PositionInterpolator::create();
   pPositionInterpolator->setName( nodeName );
 
   string & token = getNextToken();
@@ -6301,9 +6301,9 @@ void  WRLLoader::readPROTO( void )
   ignoreBlock( "{", "}", getNextToken() );  //  PrototypeDefinition
 }
 
-SharedProximitySensor WRLLoader::readProximitySensor( const string &nodeName )
+ProximitySensorSharedPtr WRLLoader::readProximitySensor( const string &nodeName )
 {
-  SharedProximitySensor pProximitySensor = ProximitySensor::create();
+  ProximitySensorSharedPtr pProximitySensor = ProximitySensor::create();
   pProximitySensor->setName( nodeName );
 
   string & token = getNextToken();
@@ -6571,9 +6571,9 @@ void  WRLLoader::readROUTE( const SFNode currentNode )
   }
 }
 
-SharedScalarInterpolator WRLLoader::readScalarInterpolator( const string &nodeName )
+ScalarInterpolatorSharedPtr WRLLoader::readScalarInterpolator( const string &nodeName )
 {
-  SharedScalarInterpolator pScalarInterpolator = ScalarInterpolator::create();
+  ScalarInterpolatorSharedPtr pScalarInterpolator = ScalarInterpolator::create();
   pScalarInterpolator->setName( nodeName );
 
   string & token = getNextToken();
@@ -6604,11 +6604,11 @@ SharedScalarInterpolator WRLLoader::readScalarInterpolator( const string &nodeNa
   return( pScalarInterpolator );
 }
 
-SharedScript WRLLoader::readScript( const string &nodeName )
+ScriptSharedPtr WRLLoader::readScript( const string &nodeName )
 {
 #if 0
   DP_ASSERT( false );
-  SharedScript pScript = Script::create();
+  ScriptSharedPtr pScript = Script::create();
   pScript->setName( nodeName );
 
   string & token = getNextToken();
@@ -6642,7 +6642,7 @@ SharedScript WRLLoader::readScript( const string &nodeName )
 #else
   onUnsupportedToken( "VRMLLoader", "Script" );
   ignoreBlock( "{", "}", getNextToken() );
-  return( SharedScript::null );
+  return( ScriptSharedPtr::null );
 #endif
 }
 
@@ -6811,9 +6811,9 @@ void  WRLLoader::readSFVec3f( SFVec3f &v, string &token )
   readSFFloat( v[2], getNextToken() );
 }
 
-vrml::SharedShape WRLLoader::readShape( const string &nodeName )
+vrml::ShapeSharedPtr WRLLoader::readShape( const string &nodeName )
 {
-  vrml::SharedShape pShape = vrml::Shape::create();
+  vrml::ShapeSharedPtr pShape = vrml::Shape::create();
   pShape->setName( nodeName );
 
   string & token = getNextToken();
@@ -6853,9 +6853,9 @@ vrml::SharedShape WRLLoader::readShape( const string &nodeName )
   return( pShape );
 }
 
-SharedSound WRLLoader::readSound( const string &nodeName )
+SoundSharedPtr WRLLoader::readSound( const string &nodeName )
 {
-  SharedSound pSound = Sound::create();
+  SoundSharedPtr pSound = Sound::create();
   pSound->setName( nodeName );
 
   string & token = getNextToken();
@@ -6916,9 +6916,9 @@ SharedSound WRLLoader::readSound( const string &nodeName )
   return( pSound );
 }
 
-SharedSphere WRLLoader::readSphere( const string &nodeName )
+SphereSharedPtr WRLLoader::readSphere( const string &nodeName )
 {
-  SharedSphere pSphere = Sphere::create();
+  SphereSharedPtr pSphere = Sphere::create();
   pSphere->setName( nodeName );
 
   string & token = getNextToken();
@@ -6940,9 +6940,9 @@ SharedSphere WRLLoader::readSphere( const string &nodeName )
   return( pSphere );
 }
 
-SharedSphereSensor WRLLoader::readSphereSensor( const string &nodeName )
+SphereSensorSharedPtr WRLLoader::readSphereSensor( const string &nodeName )
 {
-  SharedSphereSensor pSphereSensor = SphereSensor::create();
+  SphereSensorSharedPtr pSphereSensor = SphereSensor::create();
   pSphereSensor->setName( nodeName );
 
   string & token = getNextToken();
@@ -6975,9 +6975,9 @@ SharedSphereSensor WRLLoader::readSphereSensor( const string &nodeName )
   return( pSphereSensor );
 }
 
-vrml::SharedSpotLight WRLLoader::readSpotLight( const string &nodeName )
+vrml::SpotLightSharedPtr WRLLoader::readSpotLight( const string &nodeName )
 {
-  vrml::SharedSpotLight pSpotLight = vrml::SpotLight::create();
+  vrml::SpotLightSharedPtr pSpotLight = vrml::SpotLight::create();
   pSpotLight->setName( nodeName );
 
   string & token = getNextToken();
@@ -7065,9 +7065,9 @@ void  WRLLoader::readStatements( void )
   }
 }
 
-vrml::SharedSwitch WRLLoader::readSwitch( const string &nodeName )
+vrml::SwitchSharedPtr WRLLoader::readSwitch( const string &nodeName )
 {
-  vrml::SharedSwitch pSwitch = vrml::Switch::create();
+  vrml::SwitchSharedPtr pSwitch = vrml::Switch::create();
   pSwitch->setName( nodeName );
 
   string & token = getNextToken();
@@ -7093,9 +7093,9 @@ vrml::SharedSwitch WRLLoader::readSwitch( const string &nodeName )
   return( pSwitch );
 }
 
-SharedText WRLLoader::readText( const string &nodeName )
+TextSharedPtr WRLLoader::readText( const string &nodeName )
 {
-  SharedText pText = Text::create();
+  TextSharedPtr pText = Text::create();
   pText->setName( nodeName );
 
   string & token = getNextToken();
@@ -7132,9 +7132,9 @@ SharedText WRLLoader::readText( const string &nodeName )
   return( pText );
 }
 
-SharedTextureCoordinate WRLLoader::readTextureCoordinate( const string &nodeName )
+TextureCoordinateSharedPtr WRLLoader::readTextureCoordinate( const string &nodeName )
 {
-  SharedTextureCoordinate pTextureCoordinate = TextureCoordinate::create();
+  TextureCoordinateSharedPtr pTextureCoordinate = TextureCoordinate::create();
   pTextureCoordinate->setName( nodeName );
 
   string & token = getNextToken();
@@ -7156,9 +7156,9 @@ SharedTextureCoordinate WRLLoader::readTextureCoordinate( const string &nodeName
   return( pTextureCoordinate );
 }
 
-SharedTextureTransform WRLLoader::readTextureTransform( const string &nodeName )
+TextureTransformSharedPtr WRLLoader::readTextureTransform( const string &nodeName )
 {
-  SharedTextureTransform pTextureTransform = TextureTransform::create();
+  TextureTransformSharedPtr pTextureTransform = TextureTransform::create();
   pTextureTransform->setName( nodeName );
 
   string & token = getNextToken();
@@ -7192,9 +7192,9 @@ SharedTextureTransform WRLLoader::readTextureTransform( const string &nodeName )
   return( pTextureTransform );
 }
 
-SharedTimeSensor WRLLoader::readTimeSensor( const string &nodeName )
+TimeSensorSharedPtr WRLLoader::readTimeSensor( const string &nodeName )
 {
-  SharedTimeSensor pTimeSensor = TimeSensor::create();
+  TimeSensorSharedPtr pTimeSensor = TimeSensor::create();
   pTimeSensor->setName( nodeName );
 
   string & token = getNextToken();
@@ -7232,9 +7232,9 @@ SharedTimeSensor WRLLoader::readTimeSensor( const string &nodeName )
   return( pTimeSensor );
 }
 
-SharedTouchSensor WRLLoader::readTouchSensor( const string &nodeName )
+TouchSensorSharedPtr WRLLoader::readTouchSensor( const string &nodeName )
 {
-  SharedTouchSensor pTouchSensor = TouchSensor::create();
+  TouchSensorSharedPtr pTouchSensor = TouchSensor::create();
   pTouchSensor->setName( nodeName );
 
   string & token = getNextToken();
@@ -7259,9 +7259,9 @@ SharedTouchSensor WRLLoader::readTouchSensor( const string &nodeName )
   return( pTouchSensor );
 }
 
-vrml::SharedTransform WRLLoader::readTransform( const string &nodeName )
+vrml::TransformSharedPtr WRLLoader::readTransform( const string &nodeName )
 {
-  vrml::SharedTransform pTransform = vrml::Transform::create();
+  vrml::TransformSharedPtr pTransform = vrml::Transform::create();
   pTransform->setName( nodeName );
 
   string & token = getNextToken();
@@ -7312,9 +7312,9 @@ vrml::SharedTransform WRLLoader::readTransform( const string &nodeName )
   return( pTransform );
 }
 
-SharedViewpoint WRLLoader::readViewpoint( const string &nodeName )
+ViewpointSharedPtr WRLLoader::readViewpoint( const string &nodeName )
 {
-  SharedViewpoint pViewpoint = Viewpoint::create();
+  ViewpointSharedPtr pViewpoint = Viewpoint::create();
   pViewpoint->setName( nodeName );
 
   string & token = getNextToken();
@@ -7353,9 +7353,9 @@ SharedViewpoint WRLLoader::readViewpoint( const string &nodeName )
   return( pViewpoint );
 }
 
-SharedVisibilitySensor WRLLoader::readVisibilitySensor( const string &nodeName )
+VisibilitySensorSharedPtr WRLLoader::readVisibilitySensor( const string &nodeName )
 {
-  SharedVisibilitySensor pVisibilitySensor = VisibilitySensor::create();
+  VisibilitySensorSharedPtr pVisibilitySensor = VisibilitySensor::create();
   pVisibilitySensor->setName( nodeName );
 
   string & token = getNextToken();
@@ -7388,9 +7388,9 @@ SharedVisibilitySensor WRLLoader::readVisibilitySensor( const string &nodeName )
   return( pVisibilitySensor );
 }
 
-SharedWorldInfo WRLLoader::readWorldInfo( const string &nodeName )
+WorldInfoSharedPtr WRLLoader::readWorldInfo( const string &nodeName )
 {
-  SharedWorldInfo pWorldInfo = WorldInfo::create();
+  WorldInfoSharedPtr pWorldInfo = WorldInfo::create();
   pWorldInfo->setName( nodeName );
 
   string & token = getNextToken();

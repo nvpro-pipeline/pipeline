@@ -92,7 +92,7 @@ public:
   virtual void paint();
  
 protected:
-    virtual void onSceneRendererChanged( const dp::sg::ui::SmartSceneRenderer &sceneRenderer );
+    virtual void onSceneRendererChanged( const dp::sg::ui::SceneRendererSharedPtr &sceneRenderer );
 
 private:
   std::unique_ptr<dp::sg::ui::manipulator::TrackballCameraManipulatorHIDSync> m_trackballHIDSync;
@@ -163,7 +163,7 @@ void GLUTMinimal::paint()
 {
   try
   {
-    dp::sg::renderer::rix::gl::SmartSceneRenderer renderer = getSceneRenderer().staticCast<dp::sg::renderer::rix::gl::SceneRenderer>();
+    dp::sg::renderer::rix::gl::SceneRendererSharedPtr renderer = getSceneRenderer().staticCast<dp::sg::renderer::rix::gl::SceneRenderer>();
     if ( !m_renderEngine.empty() && renderer->getRenderEngine() != m_renderEngine )
     {
       std::cout << "Setting renderengine: " << m_renderEngine << std::endl;
@@ -399,7 +399,7 @@ void GLUTMinimal::updateSceneRendererEngine()
   m_renderEngine = engine;
 }
 
-void GLUTMinimal::onSceneRendererChanged( const dp::sg::ui::SmartSceneRenderer &sceneRenderer )
+void GLUTMinimal::onSceneRendererChanged( const dp::sg::ui::SceneRendererSharedPtr &sceneRenderer )
 {
   if ( sceneRenderer )
   {
@@ -519,7 +519,7 @@ int runApp( options::variables_map const& opts )
     return -1;
   }
 
-  dp::sg::renderer::rix::gl::SmartSceneRenderer renderer = dp::sg::renderer::rix::gl::SceneRenderer::create
+  dp::sg::renderer::rix::gl::SceneRendererSharedPtr renderer = dp::sg::renderer::rix::gl::SceneRenderer::create
   ( 
       opts["renderengine"].as<std::string>().c_str()
     , getShaderManager( opts["shadermanager"].as<std::string>() )

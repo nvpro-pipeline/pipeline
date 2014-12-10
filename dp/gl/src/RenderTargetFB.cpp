@@ -33,7 +33,7 @@ namespace dp
 {
   namespace gl
   {
-    RenderTargetFB::RenderTargetFB( const SharedRenderContext &glContext )
+    RenderTargetFB::RenderTargetFB( const RenderContextSharedPtr &glContext )
      : RenderTarget( glContext)
      , m_swapBuffersEnabled(false)
      , m_stereoEnabled( glContext->getFormat().isStereo() )
@@ -52,7 +52,7 @@ namespace dp
       this->setSize(viewport[2]-viewport[0], viewport[3]-viewport[1]);
     }
 
-    SharedRenderTargetFB RenderTargetFB::create( const SharedRenderContext &glContext )
+    RenderTargetFBSharedPtr RenderTargetFB::create( const RenderContextSharedPtr &glContext )
     {
       return( std::shared_ptr<RenderTargetFB>( new RenderTargetFB( glContext ) ) );
     }
@@ -79,9 +79,9 @@ namespace dp
       RenderTarget::makeNoncurrent();
     }
 
-    dp::util::SmartImage RenderTargetFB::getImage( dp::util::PixelFormat pixelFormat
-                                                   , dp::util::DataType pixelDataType
-                                                   , unsigned int index )
+    dp::util::ImageSharedPtr RenderTargetFB::getImage( dp::util::PixelFormat pixelFormat
+                                                     , dp::util::DataType pixelDataType
+                                                     , unsigned int index )
     {
       if (! m_stereoEnabled )
       {
@@ -92,8 +92,8 @@ namespace dp
         StereoTarget target = getStereoTarget();
 
         // Grab left and right image
-        dp::util::SmartImage texLeft = getTargetAsImage( getStereoTargetBuffer( LEFT, isCurrent() ), pixelFormat, pixelDataType );
-        dp::util::SmartImage texRight = getTargetAsImage( getStereoTargetBuffer( RIGHT, isCurrent() ), pixelFormat, pixelDataType );
+        dp::util::ImageSharedPtr texLeft = getTargetAsImage( getStereoTargetBuffer( LEFT, isCurrent() ), pixelFormat, pixelDataType );
+        dp::util::ImageSharedPtr texRight = getTargetAsImage( getStereoTargetBuffer( RIGHT, isCurrent() ), pixelFormat, pixelDataType );
 #if 0
         return createStereoTextureHost( texLeft, texRight );
 #else

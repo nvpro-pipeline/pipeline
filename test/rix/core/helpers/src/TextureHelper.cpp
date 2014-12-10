@@ -43,7 +43,7 @@ namespace dp
 
       template<typename T>
       void setTextureData( dp::rix::core::Renderer* rix, TextureSharedHandle const & textureHandle, dp::util::PixelFormat pixelFormat, dp::util::DataType dataType
-                         , dp::util::generator::SmartTextureObjectData& data )
+                         , dp::util::generator::TextureObjectDataSharedPtr& data )
       {
         unsigned char components;
         bool swapRB = false;
@@ -85,7 +85,7 @@ namespace dp
         outVal[2] = intVal;
       }
 
-      dp::util::SmartImage getEyeZFromDepthBuffer( const dp::util::SmartImage& depthBuffer, float nearPlane, float farPlane )
+      dp::util::ImageSharedPtr getEyeZFromDepthBuffer( const dp::util::ImageSharedPtr& depthBuffer, float nearPlane, float farPlane )
       {
         DP_ASSERT( depthBuffer->getDataType() == dp::util::DT_FLOAT_32 );
         DP_ASSERT( getComponentCount( depthBuffer->getPixelFormat() ) == 1 );
@@ -115,7 +115,7 @@ namespace dp
         colorOut[2] = alphaIn[0];
       }
 
-      dp::util::SmartImage getGrayscaleFromAlphaImage( const dp::util::SmartImage& alphaImage )
+      dp::util::ImageSharedPtr getGrayscaleFromAlphaImage( const dp::util::ImageSharedPtr& alphaImage )
       {
         DP_ASSERT( getComponentCount( alphaImage->getPixelFormat() ) == 1 );
         DP_ASSERT( alphaImage->getDataType() == dp::util::DT_UNSIGNED_INT_8 );
@@ -146,7 +146,7 @@ namespace dp
         colorOut[2] = colorOut[0];
       }
 
-      dp::util::SmartImage getGrayscaleFromAlphaImageFloatRange( const dp::util::SmartImage& alphaImage, float from, float to )
+      dp::util::ImageSharedPtr getGrayscaleFromAlphaImageFloatRange( const dp::util::ImageSharedPtr& alphaImage, float from, float to )
       {
         DP_ASSERT( getComponentCount( alphaImage->getPixelFormat() ) == 1 );
         DP_ASSERT( alphaImage->getDataType() == dp::util::DT_FLOAT_32 );
@@ -168,7 +168,7 @@ namespace dp
       }
 
       TextureSharedHandle generateTexture( dp::rix::core::Renderer* rix 
-                                         , dp::util::generator::SmartTextureObjectData data
+                                         , dp::util::generator::TextureObjectDataSharedPtr data
                                          , dp::util::PixelFormat pixelFormat /*= PF_RGBA */
                                          , dp::util::DataType dataType /*= DT_FLOAT_32 */
                                          , InternalTextureFormat internalFormat /*= ITF_RGBA8*/
@@ -215,7 +215,7 @@ namespace dp
                                                , InternalTextureFormat internalFormat /*= core::ITF_RGBA8*/
                                                , bool generateMipmaps /*= false*/ )
       {
-        dp::util::SmartImage texImage = dp::util::imageFromFile(filename);
+        dp::util::ImageSharedPtr texImage = dp::util::imageFromFile(filename);
         DP_ASSERT(texImage);
 
         std::vector<const void*> texData = texImage->getLayerDataArray();
@@ -251,7 +251,7 @@ namespace dp
         , InternalTextureFormat internalFormat /*= core::ITF_RGBA8*/
         , bool generateMipmaps /*= false*/ )
       {
-        dp::util::SmartImage cubeMapImage = dp::util::imageFromFile(filename);
+        dp::util::ImageSharedPtr cubeMapImage = dp::util::imageFromFile(filename);
         DP_ASSERT(cubeMapImage);
 
         dp::util::DataType dataType = cubeMapImage->getDataType();

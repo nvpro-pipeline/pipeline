@@ -41,7 +41,7 @@ namespace dp
       {
         namespace gl
         {
-          SMART_TYPES( TransparencyManager );
+          DEFINE_PTR_TYPES( TransparencyManager );
 
           class ShaderManager;
 

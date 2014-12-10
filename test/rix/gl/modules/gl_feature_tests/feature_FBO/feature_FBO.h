@@ -90,10 +90,10 @@ private:
   GLuint m_textureName;
   GLuint m_depthTextureName;
 
-  dp::gl::SharedTexture2D m_colorBuf;
-  dp::gl::SharedTexture2D m_depthBuf;
+  dp::gl::Texture2DSharedPtr m_colorBuf;
+  dp::gl::Texture2DSharedPtr m_depthBuf;
 
-  dp::ui::SmartRenderTarget m_fbo;
+  dp::ui::RenderTargetSharedPtr m_fbo;
   bool m_screenshotFBO;
   std::string m_screenshotFBOName;
 };

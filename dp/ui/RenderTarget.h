@@ -33,7 +33,7 @@ namespace dp
 {
   namespace ui
   {
-    SMART_TYPES( RenderTarget );
+    DEFINE_PTR_TYPES( RenderTarget );
 
     /** \brief An dp::ui::RenderTarget specifies a render surface to be used in conjunction with an dp::sg::ui::Renderer.
                devtech platform supports RenderTargets for OpenGL (dp::gl::RenderTargetFB, dp::gl::RenderTargetFBO) .
@@ -108,7 +108,7 @@ namespace dp
           \return A TextureHostSharedPtr containing a texture with the content of the surface.
           \remarks If a RenderTarget cannot support this operation it returns a null object.
       **/
-      DP_UI_API virtual dp::util::SmartImage getImage( 
+      DP_UI_API virtual dp::util::ImageSharedPtr getImage( 
             dp::util::PixelFormat pixelFormat = dp::util::PF_BGRA, 
             dp::util::DataType pixelDataType = dp::util::DT_UNSIGNED_INT_8,
             unsigned int index = 0) = 0;

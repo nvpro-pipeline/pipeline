@@ -90,8 +90,8 @@ public:
 
   dp::gl::RenderContextFormat getFormat() const;    // override of SceniXQGLWidget::getFormat() !!
 
-  dp::sg::ui::SmartSceneRenderer getSceneRenderer() const;
-  void setSceneRenderer( const dp::sg::ui::SmartSceneRenderer & );
+  dp::sg::ui::SceneRendererSharedPtr getSceneRenderer() const;
+  void setSceneRenderer( const dp::sg::ui::SceneRendererSharedPtr & );
 
   void setIsViewport( bool isViewport );
 
@@ -161,7 +161,7 @@ protected:
   double determineDurationFactor();
 
   void enableHighlighting( bool onOff );
-  void onRenderTargetChanged( const dp::gl::SharedRenderTarget &oldTarget, const dp::gl::SharedRenderTarget &newTarget );
+  void onRenderTargetChanged( const dp::gl::RenderTargetSharedPtr &oldTarget, const dp::gl::RenderTargetSharedPtr &newTarget );
 
 public slots:
   void addCamera();
@@ -203,7 +203,7 @@ protected:
   dp::sg::ui::Manipulator * m_currentManipulator;
   ManipulatorType m_manipulatorType;
 
-  SmartSceneRendererPipeline m_sceneRendererPipeline;
+  SceneRendererPipelineSharedPtr m_sceneRendererPipeline;
   
   std::set< dp::sg::core::GeoNodeSharedPtr > m_selectedGeoNodes;
 

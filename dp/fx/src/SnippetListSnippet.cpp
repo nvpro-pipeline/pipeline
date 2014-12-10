@@ -31,13 +31,13 @@ namespace dp
   namespace fx
   {
 
-    SnippetListSnippet::SnippetListSnippet( std::vector<dp::fx::SmartSnippet> const & snippets )
+    SnippetListSnippet::SnippetListSnippet( std::vector<dp::fx::SnippetSharedPtr> const & snippets )
       : m_snippets( snippets )
     {
-      for ( std::vector<dp::fx::SmartSnippet>::iterator it = m_snippets.begin(); it != m_snippets.end(); ++it )
+      for ( std::vector<dp::fx::SnippetSharedPtr>::iterator it = m_snippets.begin(); it != m_snippets.end(); ++it )
       {
-        std::set<SmartEnumSpec> const & enumSpecs = (*it)->getRequiredEnumSpecs();
-        for ( std::set<SmartEnumSpec>::const_iterator itEnumSpec = enumSpecs.begin(); itEnumSpec != enumSpecs.end(); ++itEnumSpec )
+        std::set<EnumSpecSharedPtr> const & enumSpecs = (*it)->getRequiredEnumSpecs();
+        for ( std::set<EnumSpecSharedPtr>::const_iterator itEnumSpec = enumSpecs.begin(); itEnumSpec != enumSpecs.end(); ++itEnumSpec )
         {
           addRequiredEnumSpec( *itEnumSpec );
         }
@@ -47,7 +47,7 @@ namespace dp
     std::string SnippetListSnippet::getSnippet( GeneratorConfiguration & configuration )
     {
       std::string result;
-      for ( std::vector<dp::fx::SmartSnippet>::iterator it = m_snippets.begin(); it != m_snippets.end(); ++it )
+      for ( std::vector<dp::fx::SnippetSharedPtr>::iterator it = m_snippets.begin(); it != m_snippets.end(); ++it )
       {
         result += (*it)->getSnippet( configuration );
       }

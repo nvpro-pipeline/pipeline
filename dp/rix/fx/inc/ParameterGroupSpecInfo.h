@@ -42,23 +42,23 @@ namespace dp
       class ParameterGroupSpecInfo : public dp::rix::core::HandledObject
       {
       public:
-        ParameterGroupSpecInfo( const dp::fx::SmartParameterGroupSpec& parameterGroupSpec, dp::fx::Manager manager, dp::rix::core::Renderer *renderer );
+        ParameterGroupSpecInfo( const dp::fx::ParameterGroupSpecSharedPtr& parameterGroupSpec, dp::fx::Manager manager, dp::rix::core::Renderer *renderer );
 
         struct ParameterMapping
         {
           dp::rix::core::ContainerEntry m_entry;
         };
 
-        dp::fx::SmartParameterGroupSpec               m_parameterGroupSpec;
-        dp::rix::core::ContainerDescriptorSharedHandle m_descriptor; // rix descriptor for group
-        dp::rix::core::ContainerDescriptorSharedHandle m_descriptorId; // rix descriptor for group id
+        dp::fx::ParameterGroupSpecSharedPtr             m_parameterGroupSpec;
+        dp::rix::core::ContainerDescriptorSharedHandle  m_descriptor; // rix descriptor for group
+        dp::rix::core::ContainerDescriptorSharedHandle  m_descriptorId; // rix descriptor for group id
 
         // for uniform
         std::vector<ParameterMapping>     m_mapping; //! Mapping between n-th entry of spec and rix container
 
         // for buffers
-        SmartBufferManager                m_bufferManager;
-        dp::fx::SmartParameterGroupLayout m_groupLayout;
+        SmartBufferManager                    m_bufferManager;
+        dp::fx::ParameterGroupLayoutSharedPtr m_groupLayout;
       };
 
       typedef dp::rix::core::HandleTrait<ParameterGroupSpecInfo>::Type ParameterGroupSpecInfoHandle;

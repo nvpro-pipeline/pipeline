@@ -153,7 +153,7 @@ void CameraAnimator::initCameraMoveToLight( const dp::sg::core::LightSourceWeakP
   {
     DP_ASSERT( lsh->getLightEffect() );
     dp::sg::core::EffectDataSharedPtr const& le = lsh->getLightEffect();
-    const dp::fx::SmartEffectSpec & es = le->getEffectSpec();
+    const dp::fx::EffectSpecSharedPtr & es = le->getEffectSpec();
     for ( dp::fx::EffectSpec::iterator it = es->beginParameterGroupSpecs() ; it != es->endParameterGroupSpecs() ; ++it )
     {
       const dp::sg::core::ParameterGroupDataSharedPtr & parameterGroupData = le->getParameterGroupData( it );
@@ -164,7 +164,7 @@ void CameraAnimator::initCameraMoveToLight( const dp::sg::core::LightSourceWeakP
           || ( name == "standardPointLightParameters" )
           || ( name == "standardSpotLightParameters" ) )
         {
-          const dp::fx::SmartParameterGroupSpec & pgs = parameterGroupData->getParameterGroupSpec();
+          const dp::fx::ParameterGroupSpecSharedPtr & pgs = parameterGroupData->getParameterGroupSpec();
           if ( name == "standardDirectedLightParameters" )
           {
             m_cameraMoveTarget->setDirection( parameterGroupData->getParameter<dp::math::Vec3f>( pgs->findParameterSpec( "direction" ) ) );

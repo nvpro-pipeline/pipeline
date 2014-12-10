@@ -145,7 +145,7 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD  reason, LPVOID lpReserved)
 }
 #endif
 
-bool getPlugInterface(const UPIID& piid, dp::util::SmartPlugIn & pi)
+bool getPlugInterface(const UPIID& piid, dp::util::PlugInSharedPtr & pi)
 {
   if ( piid==PIID_NBF_SCENE_SAVER )
   {
@@ -162,7 +162,7 @@ void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids )
   piids.push_back(PIID_NBF_SCENE_SAVER);
 }
 
-SmartNBFSaver NBFSaver::create()
+NBFSaverSharedPtr NBFSaver::create()
 {
   return( std::shared_ptr<NBFSaver>( new NBFSaver() ) );
 }
@@ -603,7 +603,7 @@ void NBFSaveTraverser::handleEffectData( const EffectData * p )
   {
     SharedTraverser::handleEffectData( p );         // walk the EffectData's parameter groups invoking the base implementation
 
-    const dp::fx::SmartEffectSpec & es = p->getEffectSpec();
+    const dp::fx::EffectSpecSharedPtr & es = p->getEffectSpec();
     std::string effectFile = dp::util::makePathRelative( dp::fx::EffectLibrary::instance()->getEffectFile( es->getName() ), m_basePaths );
 
     if ( calculatingStorageRequirements() )
@@ -662,7 +662,7 @@ void NBFSaveTraverser::handleParameterGroupData( const ParameterGroupData * p )
   {
     SharedTraverser::handleParameterGroupData( p );
 
-    const dp::fx::SmartParameterGroupSpec & pgs = p->getParameterGroupSpec();
+    const dp::fx::ParameterGroupSpecSharedPtr & pgs = p->getParameterGroupSpec();
     if ( calculatingStorageRequirements() )
     {
       m_objectOffsetMap[ph] = pseudoAlloc(sizeof(NBFParameterGroupData));

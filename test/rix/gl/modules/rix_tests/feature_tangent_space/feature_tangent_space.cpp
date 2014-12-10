@@ -201,13 +201,13 @@ void Feature_tangent_space::createScene()
     "}\n";
   //Geometry
 
-  SmartGeometryData sphereData = createSphere( ATTRIB_POSITION | ATTRIB_NORMAL | ATTRIB_TEXCOORD0 | ATTRIB_TANGENT | ATTRIB_BINORMAL, 64, 32);
+  GeometryDataSharedPtr sphereData = createSphere( ATTRIB_POSITION | ATTRIB_NORMAL | ATTRIB_TEXCOORD0 | ATTRIB_TANGENT | ATTRIB_BINORMAL, 64, 32);
   GeometrySharedHandle sphere = rix::util::generateGeometry(sphereData, m_rix);
 
-  SmartGeometryData cylinderData = createCylinder( ATTRIB_POSITION | ATTRIB_NORMAL | ATTRIB_TEXCOORD0 | ATTRIB_TANGENT |ATTRIB_BINORMAL, 64, 2 );
+  GeometryDataSharedPtr cylinderData = createCylinder( ATTRIB_POSITION | ATTRIB_NORMAL | ATTRIB_TEXCOORD0 | ATTRIB_TANGENT |ATTRIB_BINORMAL, 64, 2 );
   GeometrySharedHandle cylinder = rix::util::generateGeometry(cylinderData, m_rix);
   
-  SmartGeometryData quadData = createQuad( ATTRIB_POSITION | ATTRIB_NORMAL | ATTRIB_TEXCOORD0 | ATTRIB_TANGENT |ATTRIB_BINORMAL );
+  GeometryDataSharedPtr quadData = createQuad( ATTRIB_POSITION | ATTRIB_NORMAL | ATTRIB_TEXCOORD0 | ATTRIB_TANGENT |ATTRIB_BINORMAL );
   GeometrySharedHandle quad = rix::util::generateGeometry(quadData, m_rix);
 
   // Container Descriptors
@@ -403,11 +403,11 @@ void Feature_tangent_space::createScene()
   m_rix->containerSetData( vertVarContainer3,   containerEntryModel2worldIT, ContainerDataRaw( 0, model2world3IT.getPtr(), 16 * sizeof(float) ) );
   m_rix->containerSetData( fragContainer3,      containerEntryColor,       ContainerDataRaw( 0, white, 4 * sizeof(float) ) );
 
-  dp::util::generator::SmartTextureObjectData noiseTexture = dp::util::generator::createNoiseTexture( math::Vec2ui(256, 256), 10.0f, 20.0f );
-  dp::util::generator::SmartTextureObjectData normalTexture = dp::util::generator::convertHeightMapToNormalMap( noiseTexture, 0.014f );
+  dp::util::generator::TextureObjectDataSharedPtr noiseTexture = dp::util::generator::createNoiseTexture( math::Vec2ui(256, 256), 10.0f, 20.0f );
+  dp::util::generator::TextureObjectDataSharedPtr normalTexture = dp::util::generator::convertHeightMapToNormalMap( noiseTexture, 0.014f );
   TextureSharedHandle noiseNormalMap = dp::rix::util::generateTexture( m_rix, normalTexture, dp::util::PF_RGBA, dp::util::DT_UNSIGNED_INT_32, ITF_RGBA8 );
 
-  dp::util::generator::SmartTextureObjectData pyramidNormalTexture = dp::util::generator::createPyramidNormalMap( math::Vec2ui(256, 256), math::Vec2ui(16, 16), 0.03125f );
+  dp::util::generator::TextureObjectDataSharedPtr pyramidNormalTexture = dp::util::generator::createPyramidNormalMap( math::Vec2ui(256, 256), math::Vec2ui(16, 16), 0.03125f );
   TextureSharedHandle pyramidNormalMap = dp::rix::util::generateTexture( m_rix, pyramidNormalTexture, dp::util::PF_RGBA, dp::util::DT_UNSIGNED_INT_32, ITF_RGBA8 );
 
   rix::core::SamplerSharedHandle samplerNoiseNormalMap = m_rix->samplerCreate();

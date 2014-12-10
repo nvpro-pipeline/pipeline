@@ -39,7 +39,7 @@ namespace dp
     class Shader : public Object
     {
       public:
-        DP_GL_API static SharedShader create( GLenum type, std::string const& source );
+        DP_GL_API static ShaderSharedPtr create( GLenum type, std::string const& source );
         DP_GL_API virtual ~Shader();
 
       public:
@@ -54,7 +54,7 @@ namespace dp
     class VertexShader : public Shader
     {
       public:
-        DP_GL_API static SharedVertexShader create( std::string const& source );
+        DP_GL_API static VertexShaderSharedPtr create( std::string const& source );
 
       public:
         DP_GL_API virtual GLenum getType() const;
@@ -67,7 +67,7 @@ namespace dp
     class TessControlShader : public Shader
     {
       public:
-        DP_GL_API static SharedTessControlShader create( std::string const& source );
+        DP_GL_API static TessControlShaderSharedPtr create( std::string const& source );
 
       public:
         DP_GL_API virtual GLenum getType() const;
@@ -80,7 +80,7 @@ namespace dp
     class TessEvaluationShader : public Shader
     {
       public:
-        DP_GL_API static SharedTessEvaluationShader create( std::string const& source );
+        DP_GL_API static TessEvaluationShaderSharedPtr create( std::string const& source );
 
       public:
         DP_GL_API virtual GLenum getType() const;
@@ -93,7 +93,7 @@ namespace dp
     class GeometryShader : public Shader
     {
       public:
-        DP_GL_API static SharedGeometryShader create( std::string const& source );
+        DP_GL_API static GeometryShaderSharedPtr create( std::string const& source );
 
       public:
         DP_GL_API virtual GLenum getType() const;
@@ -106,7 +106,7 @@ namespace dp
     class FragmentShader : public Shader
     {
       public:
-        DP_GL_API static SharedFragmentShader create( std::string const& source );
+        DP_GL_API static FragmentShaderSharedPtr create( std::string const& source );
 
       public:
         DP_GL_API virtual GLenum getType() const;
@@ -118,7 +118,7 @@ namespace dp
     class ComputeShader : public Shader
     {
       public:
-        DP_GL_API static SharedComputeShader create( std::string const& source );
+        DP_GL_API static ComputeShaderSharedPtr create( std::string const& source );
 
       public:
         DP_GL_API virtual GLenum getType() const;

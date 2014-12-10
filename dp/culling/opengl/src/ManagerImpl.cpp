@@ -188,18 +188,18 @@ namespace dp
 
       }
 
-      GroupHandle ManagerImpl::groupCreate()
+      GroupSharedPtr ManagerImpl::groupCreate()
       {
         return GroupImpl::create();
       }
 
-      ObjectHandle ManagerImpl::objectCreate( SmartPayload const& userData )
+      ObjectSharedPtr ManagerImpl::objectCreate( PayloadSharedPtr const& userData )
       {
         return ObjectBitSet::create( userData );
       }
 
 
-      ResultHandle ManagerImpl::groupCreateResult( GroupHandle const& group )
+      ResultSharedPtr ManagerImpl::groupCreateResult( GroupSharedPtr const& group )
       {
         return( ResultBitSet::create( group.staticCast<GroupImpl>() ) );
       }
@@ -216,11 +216,11 @@ namespace dp
         }
       }
 
-      void ManagerImpl::cull( const GroupHandle& group, const ResultHandle& result, const dp::math::Mat44f& viewProjection )
+      void ManagerImpl::cull( const GroupSharedPtr& group, const ResultSharedPtr& result, const dp::math::Mat44f& viewProjection )
       {
         dp::util::ProfileEntry p("cull");
 
-        const GroupImplHandle& groupImpl = group.staticCast<GroupImpl>();
+        const GroupImplSharedPtr& groupImpl = group.staticCast<GroupImpl>();
 
         dp::math::Mat44f vp = viewProjection;
         dp::math::Mat44f modelViewProjection;

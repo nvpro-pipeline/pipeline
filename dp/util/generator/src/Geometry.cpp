@@ -39,12 +39,12 @@ namespace dp
 
     namespace generator
     {
-      SmartGeometryData GeometryData::create( GeometryPrimitiveType gpt )
+      GeometryDataSharedPtr GeometryData::create( GeometryPrimitiveType gpt )
       {
         return( std::shared_ptr<GeometryData>( new GeometryData( gpt ) ) );
       }
 
-      SmartGeometryData GeometryData::create( SmartGeometryData const& rhs )
+      GeometryDataSharedPtr GeometryData::create( GeometryDataSharedPtr const& rhs )
       {
         return( std::shared_ptr<GeometryData>( new GeometryData( rhs ) ) );
       }
@@ -58,7 +58,7 @@ namespace dp
       {
       }
 
-      GeometryData::GeometryData( SmartGeometryData const& rhs )
+      GeometryData::GeometryData( GeometryDataSharedPtr const& rhs )
       {
         m_attributes = rhs->m_attributes;
         m_indices = rhs->m_indices;
@@ -114,16 +114,16 @@ namespace dp
         b.normalize();
       }
 
-      SmartGeometryData createQuad( unsigned int attrMask
-                                  , Vec3f v0 /*= math::Vec3f(0.0f, 0.0f, 0.0f)*/
-                                  , Vec3f v1 /*= math::Vec3f(1.0f, 0.0f, 0.0f)*/
-                                  , Vec3f v2 /*= math::Vec3f(0.0f, 1.0f, 0.0f)*/
-                                  , Vec2f t0 /*= math::Vec2f(0.0f, 0.0f)*/
-                                  , Vec2f t1 /*= math::Vec2f(1.0f, 0.0f)*/
-                                  , Vec2f t2 /*= math::Vec2f(0.0f, 1.0f)*/ )
+      GeometryDataSharedPtr createQuad( unsigned int attrMask
+                                      , Vec3f v0 /*= math::Vec3f(0.0f, 0.0f, 0.0f)*/
+                                      , Vec3f v1 /*= math::Vec3f(1.0f, 0.0f, 0.0f)*/
+                                      , Vec3f v2 /*= math::Vec3f(0.0f, 1.0f, 0.0f)*/
+                                      , Vec2f t0 /*= math::Vec2f(0.0f, 0.0f)*/
+                                      , Vec2f t1 /*= math::Vec2f(1.0f, 0.0f)*/
+                                      , Vec2f t2 /*= math::Vec2f(0.0f, 1.0f)*/ )
       {
 
-        SmartGeometryData meshOut = GeometryData::create(GPT_TRIANGLE_STRIP);
+        GeometryDataSharedPtr meshOut = GeometryData::create(GPT_TRIANGLE_STRIP);
 
         AttributeFeed positions(meshOut, ATTRIB_POSITION, attrMask, 3, 4);
         AttributeFeed texCoords(meshOut, ATTRIB_TEXCOORD0, attrMask, 2, 4);
@@ -163,16 +163,16 @@ namespace dp
         return meshOut;
       }
 
-      SmartGeometryData createQuadIndexed( unsigned int attrMask
-                                         , Vec3f v0 /*= math::Vec3f(0.0f, 0.0f, 0.0f)*/
-                                         , Vec3f v1 /*= math::Vec3f(1.0f, 0.0f, 0.0f)*/
-                                         , Vec3f v2 /*= math::Vec3f(0.0f, 1.0f, 0.0f)*/
-                                         , Vec2f t0 /*= math::Vec2f(0.0f, 0.0f)*/
-                                         , Vec2f t1 /*= math::Vec2f(1.0f, 0.0f)*/
-                                         , Vec2f t2 /*= math::Vec2f(0.0f, 1.0f)*/ )
+      GeometryDataSharedPtr createQuadIndexed( unsigned int attrMask
+                                             , Vec3f v0 /*= math::Vec3f(0.0f, 0.0f, 0.0f)*/
+                                             , Vec3f v1 /*= math::Vec3f(1.0f, 0.0f, 0.0f)*/
+                                             , Vec3f v2 /*= math::Vec3f(0.0f, 1.0f, 0.0f)*/
+                                             , Vec2f t0 /*= math::Vec2f(0.0f, 0.0f)*/
+                                             , Vec2f t1 /*= math::Vec2f(1.0f, 0.0f)*/
+                                             , Vec2f t2 /*= math::Vec2f(0.0f, 1.0f)*/ )
       {
 
-        SmartGeometryData meshOut = GeometryData::create(GPT_TRIANGLE_STRIP);
+        GeometryDataSharedPtr meshOut = GeometryData::create(GPT_TRIANGLE_STRIP);
 
         AttributeFeed positions(meshOut, ATTRIB_POSITION, attrMask, 3, 4);
         AttributeFeed texCoords(meshOut, ATTRIB_TEXCOORD0, attrMask, 2, 4);
@@ -219,16 +219,16 @@ namespace dp
       }
 
 
-      SmartGeometryData createTriangle( unsigned int attrMask
-                                      , Vec3f v0 /*= math::Vec3f(0.0f, 0.0f, 0.0f)*/
-                                      , Vec3f v1 /*= math::Vec3f(1.0f, 0.0f, 0.0f)*/
-                                      , Vec3f v2 /*= math::Vec3f(0.0f, 1.0f, 0.0f)*/
-                                      , Vec2f t0 /*= math::Vec2f(0.0f, 0.0f)*/
-                                      , Vec2f t1 /*= math::Vec2f(1.0f, 0.0f)*/
-                                      , Vec2f t2 /*math::Vec2f(0.0f, 1.0f)*/ )
+      GeometryDataSharedPtr createTriangle( unsigned int attrMask
+                                          , Vec3f v0 /*= math::Vec3f(0.0f, 0.0f, 0.0f)*/
+                                          , Vec3f v1 /*= math::Vec3f(1.0f, 0.0f, 0.0f)*/
+                                          , Vec3f v2 /*= math::Vec3f(0.0f, 1.0f, 0.0f)*/
+                                          , Vec2f t0 /*= math::Vec2f(0.0f, 0.0f)*/
+                                          , Vec2f t1 /*= math::Vec2f(1.0f, 0.0f)*/
+                                          , Vec2f t2 /*math::Vec2f(0.0f, 1.0f)*/ )
       {
 
-        SmartGeometryData meshOut = GeometryData::create(GPT_TRIANGLES);
+        GeometryDataSharedPtr meshOut = GeometryData::create(GPT_TRIANGLES);
 
         AttributeFeed positions(meshOut, ATTRIB_POSITION, attrMask, 3, 3);
         AttributeFeed texCoord(meshOut, ATTRIB_TEXCOORD0, attrMask, 2, 3);
@@ -263,29 +263,29 @@ namespace dp
       }
 
       //TODO: The float t{Left|Top|Right|Bottom} needs to be adapted to Vec4f tRect
-      SmartGeometryData createRectangle( unsigned int attrMask
-                                       , float left, float top, float right, float bottom
-                                       , float tLeft /*= 0.0f*/
-                                       , float tTop /*= 1.0f*/
-                                       , float tRight /*= 1.0f*/
-                                       , float tBottom /*= 0.0f*/)
+      GeometryDataSharedPtr createRectangle( unsigned int attrMask
+                                           , float left, float top, float right, float bottom
+                                           , float tLeft /*= 0.0f*/
+                                           , float tTop /*= 1.0f*/
+                                           , float tRight /*= 1.0f*/
+                                           , float tBottom /*= 0.0f*/)
       {
         return createQuadIndexed(attrMask, Vec3f(left, bottom, 0.0f) 
-                                  , Vec3f(right, bottom, 0.0f)
-                                  , Vec3f(left, top, 0.0f)
-                                  , Vec2f(tLeft, tBottom)
-                                  , Vec2f(tRight, tBottom)
-                                  , Vec2f(tLeft, tTop) );
+                                         , Vec3f(right, bottom, 0.0f)
+                                         , Vec3f(left, top, 0.0f)
+                                         , Vec2f(tLeft, tBottom)
+                                         , Vec2f(tRight, tBottom)
+                                         , Vec2f(tLeft, tTop) );
       }
 
-      SmartGeometryData createCube( unsigned int attrMask
-                                  , Vec2f t0 /*= math::Vec2f(0.0f, 0.0f)*/
-                                  , Vec2f t1 /*= math::Vec2f(1.0f, 0.0f)*/
-                                  , Vec2f t2 /*= math::Vec2f(0.0f, 1.0f)*/ )
+      GeometryDataSharedPtr createCube( unsigned int attrMask
+                                      , Vec2f t0 /*= math::Vec2f(0.0f, 0.0f)*/
+                                      , Vec2f t1 /*= math::Vec2f(1.0f, 0.0f)*/
+                                      , Vec2f t2 /*= math::Vec2f(0.0f, 1.0f)*/ )
       {
         const int numVerts = 24;
 
-        SmartGeometryData meshOut = GeometryData::create(GPT_TRIANGLES);
+        GeometryDataSharedPtr meshOut = GeometryData::create(GPT_TRIANGLES);
 
         AttributeFeed positions(meshOut, ATTRIB_POSITION, attrMask, 3, numVerts);
         AttributeFeed texCoords(meshOut, ATTRIB_TEXCOORD0, attrMask, 2, numVerts);
@@ -463,11 +463,11 @@ namespace dp
         return meshOut;
       }
 
-      SmartGeometryData createCylinder( unsigned int attrMask
-                                      , unsigned int longitudeDivs
-                                      , unsigned int heightDivs /*= 2*/
-                                      , float longitudeEnd /*= 0.0f*/
-                                      , float innerRadius /*= 0.0f*/ )
+      GeometryDataSharedPtr createCylinder( unsigned int attrMask
+                                          , unsigned int longitudeDivs
+                                          , unsigned int heightDivs /*= 2*/
+                                          , float longitudeEnd /*= 0.0f*/
+                                          , float innerRadius /*= 0.0f*/ )
       {
         DP_ASSERT(heightDivs > 1);
         DP_ASSERT(longitudeDivs > 2);
@@ -475,7 +475,7 @@ namespace dp
         DP_ASSERT(longitudeEnd < 2.0f * PI);
         DP_ASSERT(!(longitudeEnd < 0.0f));
 
-        SmartGeometryData meshOut = GeometryData::create(GPT_TRIANGLES);
+        GeometryDataSharedPtr meshOut = GeometryData::create(GPT_TRIANGLES);
 
         bool bLongEndSplit = longitudeEnd > 0.0f;
         bool bTube = innerRadius > 0.0f;
@@ -692,12 +692,12 @@ namespace dp
         return meshOut;
       }
 
-      SmartGeometryData createSphere( unsigned int attrMask
-                                    , unsigned int longitudeDivs
-                                    , unsigned int latitudeDivs
-                                    , float longitudeEnd /*= 0.0f*/
-                                    , float latitudeEnd /*= math::PI*/
-                                    , float latitudeBegin /*= 0.0f*/ )
+      GeometryDataSharedPtr createSphere( unsigned int attrMask
+                                        , unsigned int longitudeDivs
+                                        , unsigned int latitudeDivs
+                                        , float longitudeEnd /*= 0.0f*/
+                                        , float latitudeEnd /*= math::PI*/
+                                        , float latitudeBegin /*= 0.0f*/ )
       {
         DP_ASSERT(latitudeDivs > 2);
         DP_ASSERT(longitudeDivs > 2);
@@ -709,7 +709,7 @@ namespace dp
         DP_ASSERT(latitudeBegin < PI);
         DP_ASSERT(latitudeBegin < latitudeEnd);
 
-        SmartGeometryData meshOut = GeometryData::create(GPT_TRIANGLES);
+        GeometryDataSharedPtr meshOut = GeometryData::create(GPT_TRIANGLES);
 
         bool bLongEndSplit = longitudeEnd > 0.0f;
         bool bLatEndSplit = latitudeEnd < PI;

@@ -32,17 +32,17 @@ namespace dp
 {
   namespace fx
   {
-    SMART_TYPES( EffectDataPrivate );
+    DEFINE_PTR_TYPES( EffectDataPrivate );
 
     class EffectDataPrivate : public EffectData
     {
     public:
-      static SmartEffectDataPrivate create( SmartEffectSpec const& effectSpe, std::string const& name );
+      static EffectDataPrivateSharedPtr create( EffectSpecSharedPtr const& effectSpe, std::string const& name );
 
-      void setParameterGroupData( EffectSpec::iterator it, const SmartParameterGroupData& parameterGroupData );
+      void setParameterGroupData( EffectSpec::iterator it, const ParameterGroupDataSharedPtr& parameterGroupData );
 
     protected:
-      EffectDataPrivate( const SmartEffectSpec& effectSpec, const std::string& name );
+      EffectDataPrivate( const EffectSpecSharedPtr& effectSpec, const std::string& name );
     };
 
   } // namespace fx

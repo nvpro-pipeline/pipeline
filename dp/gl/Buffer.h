@@ -36,8 +36,8 @@ namespace dp
     class Buffer : public Object
     {
       public:
-        DP_GL_API static SharedBuffer create();
-        DP_GL_API static SharedBuffer create( GLenum target, size_t size, GLvoid const* data, GLenum usage );
+        DP_GL_API static BufferSharedPtr create();
+        DP_GL_API static BufferSharedPtr create( GLenum target, size_t size, GLvoid const* data, GLenum usage );
         DP_GL_API virtual ~Buffer();
 
       public:
@@ -58,29 +58,29 @@ namespace dp
     };
 
 
-    DP_GL_API void bind( GLenum target, SharedBuffer const& buffer );
-    DP_GL_API void copy( SharedBuffer const& src, SharedBuffer const& dst, size_t srcOffset, size_t dstOffset, size_t size );
+    DP_GL_API void bind( GLenum target, BufferSharedPtr const& buffer );
+    DP_GL_API void copy( BufferSharedPtr const& src, BufferSharedPtr const& dst, size_t srcOffset, size_t dstOffset, size_t size );
 
 
     template <typename T>
     class MappedBuffer
     {
       public:
-        MappedBuffer( SharedBuffer const& buffer, GLenum target, GLenum access );
+        MappedBuffer( BufferSharedPtr const& buffer, GLenum target, GLenum access );
         ~MappedBuffer();
 
       public:
         operator T*() const;
 
       private:
-        SharedBuffer  m_buffer;
-        GLenum        m_target;
-        T           * m_ptr;
+        BufferSharedPtr   m_buffer;
+        GLenum            m_target;
+        T               * m_ptr;
     };
 
 
     template <typename T>
-    inline MappedBuffer<T>::MappedBuffer( SharedBuffer const& buffer, GLenum target, GLenum access )
+    inline MappedBuffer<T>::MappedBuffer( BufferSharedPtr const& buffer, GLenum target, GLenum access )
       : m_buffer( buffer )
       , m_target( target )
     {

@@ -38,7 +38,7 @@ namespace dp
   {
 
     // The spec for a group of parameters
-    SMART_TYPES( ParameterGroupSpec );
+    DEFINE_PTR_TYPES( ParameterGroupSpec );
 
     class ParameterGroupSpec
     {
@@ -49,7 +49,7 @@ namespace dp
         typedef ParameterSpecsContainer::const_iterator iterator;
 
       public:
-        DP_FX_API static SmartParameterGroupSpec create( const std::string & name
+        DP_FX_API static ParameterGroupSpecSharedPtr create( const std::string & name
                                                        , const std::vector<ParameterSpec> & specs );
         DP_FX_API virtual ~ParameterGroupSpec();
 
@@ -62,7 +62,7 @@ namespace dp
         DP_FX_API iterator findParameterSpec( const std::string & name ) const;
 
         dp::util::HashKey getHashKey() const;
-        bool isEquivalent( const SmartParameterGroupSpec & p, bool ignoreNames, bool deepCompare ) const;
+        bool isEquivalent( const ParameterGroupSpecSharedPtr & p, bool ignoreNames, bool deepCompare ) const;
 
       protected:
         DP_FX_API ParameterGroupSpec( const std::string & name, const std::vector<ParameterSpec> & specs );
@@ -111,7 +111,7 @@ namespace dp
       return( m_hashKey );
     }
 
-    inline bool ParameterGroupSpec::isEquivalent( const SmartParameterGroupSpec & p, bool ignoreNames, bool /*deepCompare*/ ) const
+    inline bool ParameterGroupSpec::isEquivalent( const ParameterGroupSpecSharedPtr & p, bool ignoreNames, bool /*deepCompare*/ ) const
     {
       return(   ( p.getWeakPtr() == this )
             ||  (   ( ignoreNames ? true : m_name == p->m_name )

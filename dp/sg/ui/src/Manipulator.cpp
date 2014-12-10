@@ -45,12 +45,12 @@ namespace dp
       {
       }
 
-      void Manipulator::setRenderTarget( const dp::ui::SmartRenderTarget &renderTarget )
+      void Manipulator::setRenderTarget( const dp::ui::RenderTargetSharedPtr &renderTarget )
       {
         m_renderTarget = renderTarget;
       }
 
-      dp::ui::SmartRenderTarget Manipulator::getRenderTarget() const
+      dp::ui::RenderTargetSharedPtr Manipulator::getRenderTarget() const
       {
         return m_renderTarget;
       }

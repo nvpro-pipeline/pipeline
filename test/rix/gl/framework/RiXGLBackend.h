@@ -42,20 +42,20 @@ namespace dp
       {
         namespace framework
         {
-          SMART_TYPES( RiXGLBackend );
+          DEFINE_PTR_TYPES( RiXGLBackend );
 
           class RiXGLBackend : public core::test::framework::RiXBackend
           {
           public:
-            DPTRIXGL_API static SmartRiXGLBackend create( char const* renderer, char const* options );
+            DPTRIXGL_API static RiXGLBackendSharedPtr create( char const* renderer, char const* options );
             DPTRIXGL_API virtual ~RiXGLBackend();
 
-            DPTRIXGL_API virtual dp::ui::SmartRenderTarget createDisplay(int width, int height, bool visible);
-            DPTRIXGL_API virtual dp::ui::SmartRenderTarget createAuxiliaryRenderTarget(int width, int height);
+            DPTRIXGL_API virtual dp::ui::RenderTargetSharedPtr createDisplay(int width, int height, bool visible);
+            DPTRIXGL_API virtual dp::ui::RenderTargetSharedPtr createAuxiliaryRenderTarget(int width, int height);
             DPTRIXGL_API virtual void finish();
 
             template <typename RTGLImpl>
-            static dp::ui::SmartRenderTarget createContextedRenderTarget(dp::gl::SharedRenderContext glContext)
+            static dp::ui::RenderTargetSharedPtr createContextedRenderTarget(dp::gl::RenderContextSharedPtr glContext)
             {
               return RTGLImpl::create( glContext );
             }
@@ -64,8 +64,8 @@ namespace dp
             DPTRIXGL_API RiXGLBackend(const char* renderer, const char* options);
 
           protected:
-            dp::gl::RenderContextFormat m_format;
-            dp::gl::SharedRenderContext m_context;
+            dp::gl::RenderContextFormat     m_format;
+            dp::gl::RenderContextSharedPtr  m_context;
 
             int m_windowId;
           };

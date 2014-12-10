@@ -34,7 +34,7 @@ namespace dp
 {
   namespace util
   {
-    SMART_TYPES( PlugInCallback );
+    DEFINE_PTR_TYPES( PlugInCallback );
 
     //! PlugInCallback base class
     /** A PlugInCallback object can be used to report warnings and errors that happen while using a PlugIn. It is applied
@@ -184,7 +184,7 @@ namespace dp
         } InvalidFileInfo;
 
       public:
-        static SmartPlugInCallback create();
+        static PlugInCallbackSharedPtr create();
         virtual ~PlugInCallback();
 
         //! Set whether an exception should be thrown on error.
@@ -408,7 +408,7 @@ namespace dp
         bool  m_throwExceptionOnError;
     };
 
-    inline SmartPlugInCallback PlugInCallback::create()
+    inline PlugInCallbackSharedPtr PlugInCallback::create()
     {
       return( std::shared_ptr<PlugInCallback>( new PlugInCallback() ) );
     }

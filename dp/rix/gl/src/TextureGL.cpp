@@ -46,7 +46,7 @@ namespace dp
     {
       using namespace dp::rix::core;
 
-      TextureGL::TextureGL( dp::gl::SharedTexture const& texture, bool mipMapped )
+      TextureGL::TextureGL( dp::gl::TextureSharedPtr const& texture, bool mipMapped )
         : m_texture( texture )
         , m_hasMipmaps( mipMapped )
       {
@@ -318,12 +318,12 @@ namespace dp
   #endif
       }
 
-      dp::gl::SharedTexture const& TextureGL::getTexture() const
+      dp::gl::TextureSharedPtr const& TextureGL::getTexture() const
       {
         return( m_texture );
       }
 
-      void TextureGL::setTexture( dp::gl::SharedTexture const& texture )
+      void TextureGL::setTexture( dp::gl::TextureSharedPtr const& texture )
       {
         DP_ASSERT( texture && glIsTexture( texture->getGLId() ) );
         m_texture = texture;

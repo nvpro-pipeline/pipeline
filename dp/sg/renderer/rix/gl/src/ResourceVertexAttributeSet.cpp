@@ -38,12 +38,12 @@ namespace dp
         namespace gl
         {
 
-          SmartResourceVertexAttributeSet ResourceVertexAttributeSet::get( const dp::sg::core::VertexAttributeSetSharedPtr &vertexAttributeSet, const SmartResourceManager& resourceManager )
+          ResourceVertexAttributeSetSharedPtr ResourceVertexAttributeSet::get( const dp::sg::core::VertexAttributeSetSharedPtr &vertexAttributeSet, const ResourceManagerSharedPtr& resourceManager )
           {
             assert( vertexAttributeSet );
             assert( resourceManager );
 
-            SmartResourceVertexAttributeSet resourceVertexAttributeSet = resourceManager->getResource<ResourceVertexAttributeSet>( reinterpret_cast<size_t>(vertexAttributeSet.getWeakPtr()) );
+            ResourceVertexAttributeSetSharedPtr resourceVertexAttributeSet = resourceManager->getResource<ResourceVertexAttributeSet>( reinterpret_cast<size_t>(vertexAttributeSet.getWeakPtr()) );
             if ( !resourceVertexAttributeSet )
             {
               resourceVertexAttributeSet = std::shared_ptr<ResourceVertexAttributeSet>( new ResourceVertexAttributeSet( vertexAttributeSet, resourceManager ) );
@@ -53,7 +53,7 @@ namespace dp
             return resourceVertexAttributeSet;
           }
 
-          ResourceVertexAttributeSet::ResourceVertexAttributeSet( const dp::sg::core::VertexAttributeSetSharedPtr &vertexAttributeSet, const SmartResourceManager& resourceManager )
+          ResourceVertexAttributeSet::ResourceVertexAttributeSet( const dp::sg::core::VertexAttributeSetSharedPtr &vertexAttributeSet, const ResourceManagerSharedPtr& resourceManager )
             : ResourceManager::Resource( reinterpret_cast<size_t>( vertexAttributeSet.getWeakPtr() ), resourceManager )
             , m_vertexAttributeSet( vertexAttributeSet )
           {
@@ -80,7 +80,7 @@ namespace dp
 
             unsigned int numVertices = m_vertexAttributeSet->getVertexAttribute( 0 ).getVertexDataCount();
 
-            std::vector<SmartResourceBuffer> resourceBuffers;
+            std::vector<ResourceBufferSharedPtr> resourceBuffers;
 
             unsigned int currentStream = 0;
 
@@ -92,7 +92,7 @@ namespace dp
 
               if ( va.getBuffer() && va.getVertexDataCount() == numVertices )
               {
-                SmartResourceBuffer resourceBuffer = ResourceBuffer::get(va.getBuffer(), m_resourceManager );
+                ResourceBufferSharedPtr resourceBuffer = ResourceBuffer::get(va.getBuffer(), m_resourceManager );
                 //resourceVertexAttributeSet->m_resourceBuffers.push_back( resourceBuffer );
                 resourceBuffers.push_back( resourceBuffer );
           

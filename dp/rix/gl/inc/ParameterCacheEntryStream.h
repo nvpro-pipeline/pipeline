@@ -36,7 +36,7 @@ namespace dp
   {
     namespace gl
     {
-      SHARED_PTR_TYPES( ParameterCacheEntryStream );
+      DEFINE_PTR_TYPES( ParameterCacheEntryStream );
 
       class ParameterCacheEntryStream
       {

@@ -57,18 +57,18 @@
 // exports required for a scene loader plug-in
 extern "C"
 {
-XMLLOADER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPlugIn & pi);
+XMLLOADER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::PlugInSharedPtr & pi);
 XMLLOADER_API void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids );
 }
 
 #define INVOKE_CALLBACK(cb) if( callback() ) callback()->cb
 
-SMART_TYPES( XMLLoader );
+DEFINE_PTR_TYPES( XMLLoader );
 
 class XMLLoader : public dp::sg::io::SceneLoader
 {
 public:
-  static SmartXMLLoader create();
+  static XMLLoaderSharedPtr create();
   virtual ~XMLLoader(void);
 
   dp::sg::core::SceneSharedPtr load( std::string const& filename

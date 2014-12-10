@@ -37,10 +37,10 @@ namespace dp
   {
 
       DP_FX_API void getValueFromString( unsigned int type, unsigned int arraySize, std::string const & valueString, void * value );
-      DP_FX_API void getValueFromString( const SmartEnumSpec & enumSpec, unsigned int arraySize, const std::string & valueString, EnumSpec::StorageType * valueArray );
+      DP_FX_API void getValueFromString( const EnumSpecSharedPtr & enumSpec, unsigned int arraySize, const std::string & valueString, EnumSpec::StorageType * valueArray );
 
       DP_FX_API std::string getStringFromValue( unsigned int type, unsigned int arraySize, void const* value);
-      DP_FX_API std::string getStringFromValue( const SmartEnumSpec & enumSpec, unsigned int arraySize,  EnumSpec::StorageType const * valueArray );
+      DP_FX_API std::string getStringFromValue( const EnumSpecSharedPtr & enumSpec, unsigned int arraySize,  EnumSpec::StorageType const * valueArray );
 
   } // namespace fx
 } // namespace cp

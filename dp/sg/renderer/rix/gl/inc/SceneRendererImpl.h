@@ -62,18 +62,18 @@ namespace dp
                              , dp::fx::Manager shaderManagerType
                              , dp::culling::Mode cullingMode
                              , TransparencyMode transparencyMode
-                             , const dp::gl::SharedRenderTarget &renderTarget );
+                             , const dp::gl::RenderTargetSharedPtr &renderTarget );
 
           public:
             /** \brief Create an instance of SceneRendererImpl
                 \param renderTarget Default RenderTarget to use.
                 \return An instance of a SceneRendererImpl object.
             **/
-            static SmartSceneRenderer create( const char *renderEngine
-                                            , dp::fx::Manager shaderManagerType
-                                            , dp::culling::Mode culling
-                                            , TransparencyMode transparencyMode
-                                            , const dp::gl::SharedRenderTarget &renderTarget );
+            static SceneRendererSharedPtr create( const char *renderEngine
+                                                , dp::fx::Manager shaderManagerType
+                                                , dp::culling::Mode culling
+                                                , TransparencyMode transparencyMode
+                                                , const dp::gl::RenderTargetSharedPtr &renderTarget );
             virtual ~SceneRendererImpl();
 
             /** \brief Add all supported options to the RendererOptions container.
@@ -86,7 +86,7 @@ namespace dp
             bool getDepthPass( ) const { return m_depthPass; }
 
             virtual std::map<dp::fx::Domain,std::string> getShaderSources( const dp::sg::core::GeoNodeSharedPtr & geoNode, bool depthPass ) const;
-            virtual dp::sg::renderer::rix::gl::SmartTransparencyManager const & getTransparencyManager() const;
+            virtual dp::sg::renderer::rix::gl::TransparencyManagerSharedPtr const & getTransparencyManager() const;
 
           protected:
             /** \brief Delete all primitive caches. Call this function only if an OpenGL context is active since resources need
@@ -94,13 +94,13 @@ namespace dp
             **/
             void deletePrimitiveCaches();
 
-            virtual void beginRendering( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::SmartRenderTarget const& renderTarget );
-            virtual void endRendering( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::SmartRenderTarget const& renderTarget );
+            virtual void beginRendering( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget );
+            virtual void endRendering( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget );
 
-            virtual void doRender( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::SmartRenderTarget const& renderTarget );
+            virtual void doRender( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget );
 
-            virtual void doRenderDrawables( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::gl::SharedRenderTarget const& renderTarget );
-            virtual dp::sg::xbar::DrawableManager *createDrawableManager( const SmartResourceManager &resourceManager ) const;
+            virtual void doRenderDrawables( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::gl::RenderTargetSharedPtr const& renderTarget );
+            virtual dp::sg::xbar::DrawableManager *createDrawableManager( const ResourceManagerSharedPtr &resourceManager ) const;
             dp::sg::xbar::DrawableManager* getDrawableManager() const { return m_drawableManager; }
 
             virtual void onEnvironmentSamplerChanged();
@@ -129,15 +129,15 @@ namespace dp
             dp::sg::xbar::SceneTreeSharedPtr  m_sceneTree;
             dp::rix::core::Renderer*          m_renderer;
             dp::sg::xbar::DrawableManager*    m_drawableManager;
-            SmartResourceManager              m_resourceManager;
+            ResourceManagerSharedPtr          m_resourceManager;
             dp::fx::Manager                   m_shaderManager;
             std::string                       m_renderEngine;
 
             bool                              m_contextRegistered;
             bool                              m_rendererInitialized;
 
-            dp::gl::SharedRenderContext       m_userRenderContext;     // RenderContext provided by the user in the first render call
-            dp::util::SmartDynamicLibrary     m_rix;
+            dp::gl::RenderContextSharedPtr    m_userRenderContext;     // RenderContext provided by the user in the first render call
+            dp::util::DynamicLibrarySharedPtr m_rix;
             dp::culling::Mode                 m_cullingMode;
 
             bool                              m_cullingEnabled;
@@ -145,7 +145,7 @@ namespace dp
             dp::math::Vec2ui                  m_viewportSize;
 
           private:
-            dp::sg::renderer::rix::gl::SmartTransparencyManager m_transparencyManager;
+            dp::sg::renderer::rix::gl::TransparencyManagerSharedPtr m_transparencyManager;
           };
 
         } // namespace gl

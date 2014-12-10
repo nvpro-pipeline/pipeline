@@ -40,14 +40,14 @@ namespace dp
       {
         namespace gl
         {
-          SMART_TYPES( ResourceBuffer );
+          DEFINE_PTR_TYPES( ResourceBuffer );
           typedef ResourceBuffer* WeakResourceBuffer;
 
           class ResourceBuffer : public ResourceManager::Resource
           {
           public:
             /** \brief Fetch resource for the given object/resourceManager. If no resource exists it'll be created **/
-            static SmartResourceBuffer get( const dp::sg::core::BufferSharedPtr &buffer, const SmartResourceManager& resourceManager );
+            static ResourceBufferSharedPtr get( const dp::sg::core::BufferSharedPtr &buffer, const ResourceManagerSharedPtr& resourceManager );
             virtual ~ResourceBuffer();
 
             virtual const dp::sg::core::HandledObjectSharedPtr& getHandledObject() const;
@@ -59,7 +59,7 @@ namespace dp
 
           protected:
             dp::sg::core::BufferSharedPtr m_buffer;
-            ResourceBuffer( const dp::sg::core::BufferSharedPtr& buffer, const SmartResourceManager& resourceManager );
+            ResourceBuffer( const dp::sg::core::BufferSharedPtr& buffer, const ResourceManagerSharedPtr& resourceManager );
           };
 
         } // namespace gl

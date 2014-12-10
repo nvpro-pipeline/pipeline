@@ -42,7 +42,7 @@ namespace dp
           class ShaderManagerTransformsUniform : public ShaderManagerTransforms
           {
           public:
-            ShaderManagerTransformsUniform( dp::sg::xbar::SceneTree* sceneTree, const SmartResourceManager& resourceManager );
+            ShaderManagerTransformsUniform( dp::sg::xbar::SceneTree* sceneTree, const ResourceManagerSharedPtr& resourceManager );
             virtual ~ShaderManagerTransformsUniform();
 
             virtual void updateTransforms();
@@ -60,8 +60,8 @@ namespace dp
             TransformContainerData                        m_containerDatas;
             std::vector<dp::sg::xbar::TransformTreeIndex> m_newContainerTransforms;
 
-            dp::sg::xbar::SceneTree* m_sceneTree;
-            SmartResourceManager     m_resourceManager;
+            dp::sg::xbar::SceneTree * m_sceneTree;
+            ResourceManagerSharedPtr  m_resourceManager;
           };
 
         } // namespace gl

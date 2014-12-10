@@ -60,7 +60,7 @@ AnimatorBase::AnimatorBase( dp::sg::core::EffectDataSharedPtr const & effectData
 }
 
 
-SHARED_PTR_TYPES( AnimatorColor );
+DEFINE_PTR_TYPES( AnimatorColor );
 
 class AnimatorColor : public AnimatorBase
 {

@@ -67,19 +67,19 @@ namespace dp
 
         public:
           DPTSGRDR_API virtual ~SgRdrBackend();
-          DPTSGRDR_API virtual dp::ui::SmartRenderTarget createDisplay(int width, int height, bool visible);
+          DPTSGRDR_API virtual dp::ui::RenderTargetSharedPtr createDisplay(int width, int height, bool visible);
 
-          DPTSGRDR_API virtual void render( dp::testfw::core::RenderData* renderData, dp::ui::SmartRenderTarget renderTarget = dp::ui::SmartRenderTarget::null );
+          DPTSGRDR_API virtual void render( dp::testfw::core::RenderData* renderData, dp::ui::RenderTargetSharedPtr renderTarget = dp::ui::RenderTargetSharedPtr::null );
           DPTSGRDR_API virtual void finish();
 
-          DPTSGRDR_API dp::sg::ui::SmartSceneRenderer getRenderer() const;
+          DPTSGRDR_API dp::sg::ui::SceneRendererSharedPtr getRenderer() const;
 
         protected:
-          dp::gl::RenderContextFormat m_format;
-          dp::gl::SharedRenderContext m_context;
-          int                         m_windowId;
+          dp::gl::RenderContextFormat         m_format;
+          dp::gl::RenderContextSharedPtr      m_context;
+          int                                 m_windowId;
 
-          dp::sg::ui::SmartSceneRenderer m_renderer;
+          dp::sg::ui::SceneRendererSharedPtr  m_renderer;
         };
 
       } // namespace framework

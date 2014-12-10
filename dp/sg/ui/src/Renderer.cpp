@@ -33,7 +33,7 @@ namespace dp
     namespace ui
     {
 
-      Renderer::Renderer( const dp::ui::SmartRenderTarget &renderTarget)
+      Renderer::Renderer( const dp::ui::RenderTargetSharedPtr &renderTarget)
         : m_renderTarget( renderTarget )
       {
       }
@@ -42,12 +42,12 @@ namespace dp
       {
       }
 
-      void Renderer::setRenderTarget( const dp::ui::SmartRenderTarget &renderTarget )
+      void Renderer::setRenderTarget( const dp::ui::RenderTargetSharedPtr &renderTarget )
       {
         m_renderTarget = renderTarget;
       }
 
-      dp::ui::SmartRenderTarget Renderer::getRenderTarget() const
+      dp::ui::RenderTargetSharedPtr Renderer::getRenderTarget() const
       {
         return m_renderTarget;
       }
@@ -56,17 +56,17 @@ namespace dp
       {
       }
 
-      void Renderer::beginRendering( const dp::ui::SmartRenderTarget &renderTarget )
+      void Renderer::beginRendering( const dp::ui::RenderTargetSharedPtr &renderTarget )
       {
       }
 
-      void Renderer::endRendering( const dp::ui::SmartRenderTarget &renderTarget )
+      void Renderer::endRendering( const dp::ui::RenderTargetSharedPtr &renderTarget )
       {
       }
 
-      void Renderer::render( const dp::ui::SmartRenderTarget &renderTarget )
+      void Renderer::render( const dp::ui::RenderTargetSharedPtr &renderTarget )
       {
-        dp::ui::SmartRenderTarget target = renderTarget ? renderTarget : m_renderTarget;
+        dp::ui::RenderTargetSharedPtr target = renderTarget ? renderTarget : m_renderTarget;
         DP_ASSERT( target );
 
         beginRendering( target );

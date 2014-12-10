@@ -49,7 +49,7 @@ namespace dp
       {
         namespace gl
         {
-          SMART_TYPES( RendererFSQImpl );
+          DEFINE_PTR_TYPES( RendererFSQImpl );
 
           /*! \brief Renderer to draw a "Full Screen" (ie: viewport-filling) quad, using a supplied pair of geometry effect and material effect.
            *  \par Namespace: nvgl
@@ -134,7 +134,7 @@ namespace dp
           class RendererFSQImpl : public FSQRenderer
           {
             public:
-              static SmartFSQRenderer create( const dp::gl::SharedRenderTarget &renderTarget = dp::gl::SharedRenderTarget::null );
+              static RendererFSQImplSharedPtr create( const dp::gl::RenderTargetSharedPtr &renderTarget = dp::gl::RenderTargetSharedPtr::null );
               virtual ~RendererFSQImpl(void);
 
               void setEffect( const dp::sg::core::EffectDataSharedPtr & effect );
@@ -173,7 +173,7 @@ namespace dp
                *  \param callRTBeginEnd Whether to wrap the Quad rendering with target->beginRendering() and target->endRendering().  In some 
                *  cases the RenderTarget may be current and calling begin/endRendering may be either unnecessary or detremental.
                **/
-              static void presentTextureGL2D( GLuint textureId, const dp::gl::SharedRenderTarget &target, bool callRTBeginEnd = true );
+              static void presentTextureGL2D( GLuint textureId, const dp::gl::RenderTargetSharedPtr &target, bool callRTBeginEnd = true );
 
               /*! \brief Fill the viewport with the given TextureGL2D.
                *  \remarks This is a convenience function to render the given TextureGL2D in a viewport-filling quad.
@@ -182,7 +182,7 @@ namespace dp
                *  \param callRTBeginEnd Whether to wrap the Quad rendering with target->beginRendering() and target->endRendering().  In some 
                *  cases the RenderTarget may be current and calling begin/endRendering may be either unnecessary or detremental.
                **/
-              static void presentTextureGL2D( const dp::gl::SharedTexture2D &tex2d, const dp::gl::SharedRenderTarget &target, bool callRTBeginEnd = true );
+              static void presentTextureGL2D( const dp::gl::Texture2DSharedPtr &tex2d, const dp::gl::RenderTargetSharedPtr &target, bool callRTBeginEnd = true );
 
               /*! \brief Fill the viewport with the given TextureGLRectangle.
                *  \remarks This is a convenience function to render the given TextureGLRectangle in a viewport-filling quad.
@@ -191,37 +191,37 @@ namespace dp
                *  \param callRTBeginEnd Whether to wrap the Quad rendering with target->beginRendering() and target->endRendering().  In some 
                *  cases the RenderTarget may be current and calling begin/endRendering may be either unnecessary or detremental.
                **/
-              static void presentTextureGLRectangle( const dp::gl::SharedTextureRectangle &tex2d, const dp::gl::SharedRenderTarget &target, bool callRTBeginEnd = true );
+              static void presentTextureGLRectangle( const dp::gl::TextureRectangleSharedPtr &tex2d, const dp::gl::RenderTargetSharedPtr &target, bool callRTBeginEnd = true );
 
               REFLECTION_INFO( RendererFSQImpl );
               BEGIN_DECLARE_STATIC_PROPERTIES
               END_DECLARE_STATIC_PROPERTIES
 
             protected:
-              RendererFSQImpl( const dp::gl::SharedRenderTarget &target );
-              virtual void doRender( const dp::ui::SmartRenderTarget &renderTarget );
+              RendererFSQImpl( const dp::gl::RenderTargetSharedPtr &target );
+              virtual void doRender( const dp::ui::RenderTargetSharedPtr &renderTarget );
 
             private:
-              void setTexCoord1( const dp::gl::SharedRenderTarget & target );
+              void setTexCoord1( const dp::gl::RenderTargetSharedPtr & target );
 
             private:
               int                                           m_targetX;
               int                                           m_targetY;
               unsigned int                                  m_targetW;
               unsigned int                                  m_targetH;
-              dp::sg::core::VertexAttributeSetSharedPtr             m_vertexAttributeSet;
-              dp::sg::core::PrimitiveSharedPtr                      m_primitive;
-              dp::sg::core::EffectDataSharedPtr                     m_effect;
+              dp::sg::core::VertexAttributeSetSharedPtr     m_vertexAttributeSet;
+              dp::sg::core::PrimitiveSharedPtr              m_primitive;
+              dp::sg::core::EffectDataSharedPtr             m_effect;
               bool                                          m_effectsValid;
-              dp::util::SmartDynamicLibrary                 m_rendererGLLib;
-              dp::rix::core::Renderer                               * m_renderer;
-              dp::rix::core::RenderGroupSharedHandle         m_renderGroup;
-              dp::rix::core::GeometryInstanceSharedHandle    m_geometryInstance;
-              dp::rix::fx::SmartManager                     m_rixFxManager;
-              dp::rix::fx::InstanceSharedHandle              m_instance;
-              SmartResourceManager            m_resourceManager;
-              SmartResourceEffectDataRiXFx    m_resourceEffectData;
-              SmartResourcePrimitive          m_resourcePrimitive;
+              dp::util::DynamicLibrarySharedPtr             m_rendererGLLib;
+              dp::rix::core::Renderer                     * m_renderer;
+              dp::rix::core::RenderGroupSharedHandle        m_renderGroup;
+              dp::rix::core::GeometryInstanceSharedHandle   m_geometryInstance;
+              dp::rix::fx::ManagerSharedPtr                 m_rixFxManager;
+              dp::rix::fx::InstanceSharedHandle             m_instance;
+              ResourceManagerSharedPtr            m_resourceManager;
+              ResourceEffectDataRiXFxSharedPtr    m_resourceEffectData;
+              ResourcePrimitiveSharedPtr          m_resourcePrimitive;
           };
 
         } // namespace gl

@@ -57,7 +57,7 @@ namespace dp
         return test->run(mf, m_name) ? TRF_PASSED : TRF_FAILED;
       }
 
-      TestObject::TestObject( TestCreateFunc testCreator, const dp::util::SmartDynamicLibrary& dynLib )
+      TestObject::TestObject( TestCreateFunc testCreator, const dp::util::DynamicLibrarySharedPtr& dynLib )
         : m_testCreator(testCreator)
         , m_dynLib(dynLib)
       {

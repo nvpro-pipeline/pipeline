@@ -118,7 +118,7 @@ void Feature_transform_attribute::createScene()
     "  Color = color + texture( tex, vTexCoords.xy );\n"
     "}\n";
 
-  dp::util::generator::SmartGeometryData mesh[4];
+  dp::util::generator::GeometryDataSharedPtr mesh[4];
   mesh[0] = dp::util::generator::createQuad( dp::util::generator::ATTRIB_POSITION | dp::util::generator::ATTRIB_TEXCOORD0
                                            , math::Vec3f(-0.125f*m_height, -0.125f*m_height, 0.0f)
                                            , math::Vec3f(0.125f*m_height, -0.125f*m_height, 0.0f)

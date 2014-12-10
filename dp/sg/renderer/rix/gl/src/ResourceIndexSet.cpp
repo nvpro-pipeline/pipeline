@@ -39,12 +39,12 @@ namespace dp
         namespace gl
         {
 
-          SmartResourceIndexSet ResourceIndexSet::get( const dp::sg::core::IndexSetSharedPtr &indexSet, const SmartResourceManager& resourceManager )
+          ResourceIndexSetSharedPtr ResourceIndexSet::get( const dp::sg::core::IndexSetSharedPtr &indexSet, const ResourceManagerSharedPtr& resourceManager )
           {
             assert( indexSet );
             assert( resourceManager );
 
-            SmartResourceIndexSet resourceIndexSet = resourceManager->getResource<ResourceIndexSet>( reinterpret_cast<size_t>(indexSet.getWeakPtr()) );
+            ResourceIndexSetSharedPtr resourceIndexSet = resourceManager->getResource<ResourceIndexSet>( reinterpret_cast<size_t>(indexSet.getWeakPtr()) );
             if ( !resourceIndexSet )
             {
               resourceIndexSet = std::shared_ptr<ResourceIndexSet>( new ResourceIndexSet( indexSet, resourceManager ) );
@@ -55,7 +55,7 @@ namespace dp
             return resourceIndexSet;
           }
 
-          ResourceIndexSet::ResourceIndexSet( const dp::sg::core::IndexSetSharedPtr &indexSet, const SmartResourceManager& resourceManager )
+          ResourceIndexSet::ResourceIndexSet( const dp::sg::core::IndexSetSharedPtr &indexSet, const ResourceManagerSharedPtr& resourceManager )
             : ResourceManager::Resource( reinterpret_cast<size_t>( indexSet.getWeakPtr() ), resourceManager )
             , m_indexSet( indexSet )
           {

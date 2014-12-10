@@ -39,7 +39,7 @@ namespace dp
     namespace fx
     {
 
-      ParameterGroupSpecInfo::ParameterGroupSpecInfo( const dp::fx::SmartParameterGroupSpec& parameterGroupSpec, dp::fx::Manager manager, dp::rix::core::Renderer *renderer )
+      ParameterGroupSpecInfo::ParameterGroupSpecInfo( const dp::fx::ParameterGroupSpecSharedPtr& parameterGroupSpec, dp::fx::Manager manager, dp::rix::core::Renderer *renderer )
         : m_parameterGroupSpec( parameterGroupSpec )
       {
         // TODO get manager from somewhere else

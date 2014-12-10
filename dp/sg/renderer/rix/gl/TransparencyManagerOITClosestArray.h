@@ -42,12 +42,12 @@ namespace dp
       {
         namespace gl
         {
-          SMART_TYPES( TransparencyManagerOITClosestArray );
+          DEFINE_PTR_TYPES( TransparencyManagerOITClosestArray );
 
           class TransparencyManagerOITClosestArray : public TransparencyManager
           {
             public:
-              DP_SG_RDR_RIX_GL_API static SmartTransparencyManagerOITClosestArray create( dp::math::Vec2ui const & size, unsigned int depth );
+              DP_SG_RDR_RIX_GL_API static TransparencyManagerOITClosestArraySharedPtr create( dp::math::Vec2ui const & size, unsigned int depth );
               DP_SG_RDR_RIX_GL_API virtual ~TransparencyManagerOITClosestArray();
 
             public:
@@ -79,16 +79,16 @@ namespace dp
               dp::rix::core::TextureSharedHandle              m_perFragmentSpinLockTexture;
               dp::rix::core::TextureSharedHandle              m_samplesTexture;
 
-              dp::gl::SharedProgram       m_clearProgram;
-              dp::gl::SharedBuffer        m_fullScreenQuad;
-              bool                        m_initializedBuffers;
-              bool                        m_initializedHandles;
-              dp::gl::SharedTexture2D     m_perFragmentCountTextureGL;
-              dp::gl::SharedTexture2D     m_perFragmentIndexTextureGL;
-              dp::gl::SharedTexture2D     m_perFragmentSamplesAccuTextureGL;
-              dp::gl::SharedTexture2D     m_perFragmentSpinLockTextureGL;
-              dp::gl::SharedProgram       m_resolveProgram;
-              dp::gl::SharedTextureBuffer m_samplesTextureGL;
+              dp::gl::ProgramSharedPtr        m_clearProgram;
+              dp::gl::BufferSharedPtr         m_fullScreenQuad;
+              bool                            m_initializedBuffers;
+              bool                            m_initializedHandles;
+              dp::gl::Texture2DSharedPtr      m_perFragmentCountTextureGL;
+              dp::gl::Texture2DSharedPtr      m_perFragmentIndexTextureGL;
+              dp::gl::Texture2DSharedPtr      m_perFragmentSamplesAccuTextureGL;
+              dp::gl::Texture2DSharedPtr      m_perFragmentSpinLockTextureGL;
+              dp::gl::ProgramSharedPtr        m_resolveProgram;
+              dp::gl::TextureBufferSharedPtr  m_samplesTextureGL;
           };
 
         } // namespace gl

@@ -66,7 +66,7 @@ namespace dp
     {
     }
 
-    void EffectLibraryImpl::registerEffectLoader( SmartEffectLoader const& effectLoader, const std::string& extension )
+    void EffectLibraryImpl::registerEffectLoader( EffectLoaderSharedPtr const& effectLoader, const std::string& extension )
     {
       DP_ASSERT( m_effectLoaders.find(extension) == m_effectLoaders.end() );
       m_effectLoaders[extension] = effectLoader;
@@ -82,7 +82,7 @@ namespace dp
       return( extensions );
     }
 
-    bool EffectLibraryImpl::effectHasTechnique( SmartEffectSpec const& effectSpec, std::string const& techniqueName, bool rasterizer ) const
+    bool EffectLibraryImpl::effectHasTechnique( EffectSpecSharedPtr const& effectSpec, std::string const& techniqueName, bool rasterizer ) const
     {
       EffectSpecs::const_iterator it = m_effectSpecs.find( effectSpec->getName() );
       if ( it != m_effectSpecs.end() )
@@ -182,7 +182,7 @@ namespace dp
       }
     }
 
-    const SmartEffectSpec& EffectLibraryImpl::getEffectSpec(const std::string& effectName ) const
+    const EffectSpecSharedPtr& EffectLibraryImpl::getEffectSpec(const std::string& effectName ) const
     {
       EffectSpecs::const_iterator it = m_effectSpecs.find( effectName );
       if ( it != m_effectSpecs.end() )
@@ -191,7 +191,7 @@ namespace dp
       }
       else
       {
-        return( SmartEffectSpec::null );
+        return( EffectSpecSharedPtr::null );
       }
     }
 
@@ -209,7 +209,7 @@ namespace dp
       }
     }
 
-    const SmartParameterGroupSpec& EffectLibraryImpl::getParameterGroupSpec( const std::string & pgsName ) const
+    const ParameterGroupSpecSharedPtr& EffectLibraryImpl::getParameterGroupSpec( const std::string & pgsName ) const
     {
       ParameterGroupSpecs::const_iterator it = m_parameterGroupSpecs.find( pgsName );
       if ( it != m_parameterGroupSpecs.end() )
@@ -218,18 +218,18 @@ namespace dp
       }
       else
       {
-        return( SmartParameterGroupSpec::null );
+        return( ParameterGroupSpecSharedPtr::null );
       }
     }
 
-    SmartShaderPipeline EffectLibraryImpl::generateShaderPipeline( const ShaderPipelineConfiguration& configuration )
+    ShaderPipelineSharedPtr EffectLibraryImpl::generateShaderPipeline( const ShaderPipelineConfiguration& configuration )
     {
       EffectSpecs::const_iterator itEffectSpec = m_effectSpecs.find( configuration.getName() );
 
       return itEffectSpec->second.effectLoader->generateShaderPipeline( configuration );
     }
 
-    SmartEnumSpec EffectLibraryImpl::registerSpec( const SmartEnumSpec& enumSpec )
+    EnumSpecSharedPtr EffectLibraryImpl::registerSpec( const EnumSpecSharedPtr& enumSpec )
     {
       DP_ASSERT( enumSpec );
       EnumSpecs::iterator it = m_enumSpecs.find( enumSpec->getType() );
@@ -245,7 +245,7 @@ namespace dp
       }
     }
 
-    SmartEffectSpec EffectLibraryImpl::registerSpec( const SmartEffectSpec& effectSpec, EffectLoader* effectLoader )
+    EffectSpecSharedPtr EffectLibraryImpl::registerSpec( const EffectSpecSharedPtr& effectSpec, EffectLoader* effectLoader )
     {
       DP_ASSERT( effectSpec );
       EffectSpecs::iterator it = m_effectSpecs.find( effectSpec->getName() );
@@ -261,7 +261,7 @@ namespace dp
         m_effectSpecs[ effectSpec->getName()] = EffectSpecInfo( effectSpec, effectLoader, m_currentFile.top() );
 
         // create EffectData for default values of EffectSpec
-        SmartEffectDataPrivate effectData = EffectDataPrivate::create( effectSpec, effectSpec->getName() );
+        EffectDataPrivateSharedPtr effectData = EffectDataPrivate::create( effectSpec, effectSpec->getName() );
         for ( EffectSpec::iterator it = effectSpec->beginParameterGroupSpecs(); it != effectSpec->endParameterGroupSpecs(); ++it )
         {
           effectData->setParameterGroupData( it, getParameterGroupData( (*it)->getName() ) );
@@ -272,7 +272,7 @@ namespace dp
       }
     }
 
-    SmartParameterGroupSpec EffectLibraryImpl::registerSpec( const SmartParameterGroupSpec& parameterGroupSpec )
+    ParameterGroupSpecSharedPtr EffectLibraryImpl::registerSpec( const ParameterGroupSpecSharedPtr& parameterGroupSpec )
     {
       DP_ASSERT( parameterGroupSpec );
       ParameterGroupSpecs::const_iterator it = m_parameterGroupSpecs.find( parameterGroupSpec->getName() );
@@ -291,7 +291,7 @@ namespace dp
       }
     }
 
-    SmartParameterGroupData EffectLibraryImpl::registerParameterGroupData( const SmartParameterGroupData& parameterGroupData )
+    ParameterGroupDataSharedPtr EffectLibraryImpl::registerParameterGroupData( const ParameterGroupDataSharedPtr& parameterGroupData )
     {
       DP_ASSERT( parameterGroupData );
       ParameterGroupDatas::const_iterator it = m_parameterGroupDatas.find( parameterGroupData->getName() );
@@ -307,7 +307,7 @@ namespace dp
       }
     }
 
-    SmartEffectData EffectLibraryImpl::registerEffectData( const SmartEffectData& effectData )
+    EffectDataSharedPtr EffectLibraryImpl::registerEffectData( const EffectDataSharedPtr& effectData )
     {
       DP_ASSERT( effectData );
       EffectDatas::const_iterator it = m_effectDatas.find( effectData->getName() );
@@ -323,7 +323,7 @@ namespace dp
       }
     }
 
-    const SmartEnumSpec& EffectLibraryImpl::getEnumSpec( const std::string& name ) const
+    const EnumSpecSharedPtr& EffectLibraryImpl::getEnumSpec( const std::string& name ) const
     {
       EnumSpecs::const_iterator it = m_enumSpecs.find( name );
       if ( it != m_enumSpecs.end() )
@@ -332,11 +332,11 @@ namespace dp
       }
       else
       {
-        return( SmartEnumSpec::null );
+        return( EnumSpecSharedPtr::null );
       }
     }
 
-    const SmartParameterGroupData& EffectLibraryImpl::getParameterGroupData( const std::string& name ) const
+    const ParameterGroupDataSharedPtr& EffectLibraryImpl::getParameterGroupData( const std::string& name ) const
     {
       ParameterGroupDatas::const_iterator it = m_parameterGroupDatas.find( name );
       if ( it != m_parameterGroupDatas.end() )
@@ -345,11 +345,11 @@ namespace dp
       }
       else
       {
-        return( SmartParameterGroupData::null );
+        return( ParameterGroupDataSharedPtr::null );
       }
     }
 
-    const SmartEffectData& EffectLibraryImpl::getEffectData( const std::string& name ) const
+    const EffectDataSharedPtr& EffectLibraryImpl::getEffectData( const std::string& name ) const
     {
       EffectDatas::const_iterator it = m_effectDatas.find( name );
       if ( it != m_effectDatas.end() )
@@ -358,11 +358,11 @@ namespace dp
       }
       else
       {
-        return( SmartEffectData::null );
+        return( EffectDataSharedPtr::null );
       }
     }
 
-    bool EffectLibraryImpl::save( const SmartEffectData& effectData, const std::string& filename )
+    bool EffectLibraryImpl::save( const EffectDataSharedPtr& effectData, const std::string& filename )
     {
       EffectLoaders::iterator it = m_effectLoaders.find( dp::util::getFileExtension( filename ) );
       if ( it != m_effectLoaders.end() )

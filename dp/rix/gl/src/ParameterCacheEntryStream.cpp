@@ -451,7 +451,7 @@ namespace dp
           if ( parametersContainer->m_bufferHandle )
           {
             DP_ASSERT( parametersContainer->m_bufferHandle->getBuffer() );
-            dp::gl::SharedBuffer const& b = parametersContainer->m_bufferHandle->getBuffer();
+            dp::gl::BufferSharedPtr const& b = parametersContainer->m_bufferHandle->getBuffer();
             parametersCache->m_bufferId = b->getGLId();
             parametersCache->m_offset = parametersContainer->m_offset;
             parametersCache->m_size = GLuint( parametersContainer->m_length == size_t(~0) ? b->getSize() - parametersContainer->m_offset : parametersContainer->m_length );
@@ -526,7 +526,7 @@ namespace dp
           if ( parametersContainer->m_bufferHandle )
           {
             DP_ASSERT( parametersContainer->m_bufferHandle->getBuffer() );
-            dp::gl::SharedBuffer const& b = parametersContainer->m_bufferHandle->getBuffer();
+            dp::gl::BufferSharedPtr const& b = parametersContainer->m_bufferHandle->getBuffer();
             parametersCache->m_address = b->getAddress() + parametersContainer->m_offset;
             parametersCache->m_length = GLuint( parametersContainer->m_length == size_t(~0) ? b->getSize() - parametersContainer->m_offset : parametersContainer->m_length );
 

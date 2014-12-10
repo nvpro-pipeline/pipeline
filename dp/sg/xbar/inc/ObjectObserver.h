@@ -37,7 +37,7 @@ namespace dp
   {
     namespace xbar
     {
-      SMART_TYPES( ObjectObserver );
+      DEFINE_PTR_TYPES( ObjectObserver );
 
       class ObjectObserver : public Observer<ObjectTreeIndex>
       {
@@ -52,7 +52,7 @@ namespace dp
       public:
         virtual ~ObjectObserver();
 
-        static SmartObjectObserver create( SceneTreeWeakPtr sceneTree )
+        static ObjectObserverSharedPtr create( SceneTreeWeakPtr sceneTree )
         {
           return( std::shared_ptr<ObjectObserver>( new ObjectObserver( sceneTree ) ) );
         }

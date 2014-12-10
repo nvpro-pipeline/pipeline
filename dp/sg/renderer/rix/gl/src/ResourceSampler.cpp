@@ -38,12 +38,12 @@ namespace dp
         namespace gl
         {
 
-          SmartResourceSampler ResourceSampler::get( const dp::sg::core::SamplerSharedPtr &sampler, const SmartResourceManager& resourceManager )
+          ResourceSamplerSharedPtr ResourceSampler::get( const dp::sg::core::SamplerSharedPtr &sampler, const ResourceManagerSharedPtr& resourceManager )
           {
             assert( sampler );
             assert( resourceManager );
 
-            SmartResourceSampler resourceSampler = resourceManager->getResource<ResourceSampler>( reinterpret_cast<size_t>(sampler.getWeakPtr()) );
+            ResourceSamplerSharedPtr resourceSampler = resourceManager->getResource<ResourceSampler>( reinterpret_cast<size_t>(sampler.getWeakPtr()) );
             if ( !resourceSampler )
             {
               resourceSampler = std::shared_ptr<ResourceSampler>( new ResourceSampler( sampler, resourceManager ) );
@@ -53,7 +53,7 @@ namespace dp
             return resourceSampler;
           }
 
-          ResourceSampler::ResourceSampler( const dp::sg::core::SamplerSharedPtr &sampler, const SmartResourceManager& resourceManager )
+          ResourceSampler::ResourceSampler( const dp::sg::core::SamplerSharedPtr &sampler, const ResourceManagerSharedPtr& resourceManager )
             : ResourceManager::Resource( reinterpret_cast<size_t>( sampler.getWeakPtr() ), resourceManager )
             , m_sampler( sampler )
           {

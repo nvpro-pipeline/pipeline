@@ -40,8 +40,8 @@ namespace dp
       {
       public:
         using UniformGenerator::generateUniforms;
-        virtual std::string generateUniforms( const dp::fx::SmartParameterGroupSpec& spec );
-        SmartParameterGroupLayout getParameterGroupLayout( const dp::fx::SmartParameterGroupSpec& spec );
+        virtual std::string generateUniforms( const dp::fx::ParameterGroupSpecSharedPtr& spec );
+        ParameterGroupLayoutSharedPtr getParameterGroupLayout( const dp::fx::ParameterGroupSpecSharedPtr& spec );
       };
 
     } // namespace glsl

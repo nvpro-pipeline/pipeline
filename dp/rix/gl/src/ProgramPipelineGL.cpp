@@ -131,7 +131,7 @@ namespace dp
           for ( size_t programIndex = 0; programIndex < xnumPrograms; ++programIndex )
           {
             ProgramGLHandle programGLHandle = handleCast<ProgramGL>(xprograms[programIndex].get());
-            std::vector<dp::gl::SharedShader> const& shaders = programGLHandle->getProgram()->getShaders();
+            std::vector<dp::gl::ShaderSharedPtr> const& shaders = programGLHandle->getProgram()->getShaders();
             for ( size_t shaderIndex = 0;shaderIndex < shaders.size(); ++shaderIndex )
             {
               sources.push_back( shaders[shaderIndex]->getSource() );

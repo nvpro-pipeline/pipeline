@@ -179,7 +179,7 @@ namespace dp
         {
           dp::sg::core::nvsgTerminate();
           //The Sg Renderer must be destroyed prior to destroying the window
-          m_renderer = dp::sg::renderer::rix::gl::SmartSceneRenderer::null;
+          m_renderer = dp::sg::renderer::rix::gl::SceneRendererSharedPtr::null;
           if ( m_windowId )
           {
             glutDestroyWindow( m_windowId );
@@ -193,12 +193,12 @@ namespace dp
           }
         }
 
-        dp::sg::ui::SmartSceneRenderer SgRdrBackend::getRenderer() const
+        dp::sg::ui::SceneRendererSharedPtr SgRdrBackend::getRenderer() const
         {
           return m_renderer;
         }
 
-        void SgRdrBackend::render( dp::testfw::core::RenderData* renderData, dp::ui::SmartRenderTarget renderTarget )
+        void SgRdrBackend::render( dp::testfw::core::RenderData* renderData, dp::ui::RenderTargetSharedPtr renderTarget )
         {
           DP_ASSERT(m_renderer);
           DP_ASSERT(!!renderTarget);
@@ -213,7 +213,7 @@ namespace dp
           glFinish();
         }
 
-        dp::ui::SmartRenderTarget SgRdrBackend::createDisplay( int width, int height, bool visible )
+        dp::ui::RenderTargetSharedPtr SgRdrBackend::createDisplay( int width, int height, bool visible )
         {            
           glutInitDisplayMode( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH | GLUT_ALPHA | GLUT_BORDERLESS );
           glutInitWindowSize( width, height );
@@ -223,7 +223,7 @@ namespace dp
 
           glewInit();
 
-          dp::ui::SmartRenderTarget displayTarget = dp::gl::RenderTargetFB::create( dp::gl::RenderContext::create( dp::gl::RenderContext::Attach() ) );
+          dp::ui::RenderTargetSharedPtr displayTarget = dp::gl::RenderTargetFB::create( dp::gl::RenderContext::create( dp::gl::RenderContext::Attach() ) );
           displayTarget->setSize(width, height);
           dp::util::shared_cast<dp::gl::RenderTargetFB>(displayTarget)->setClearMask( dp::gl::TBM_COLOR_BUFFER | dp::gl::TBM_DEPTH_BUFFER );
 

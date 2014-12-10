@@ -39,7 +39,7 @@ namespace dp
   {
     namespace util
     {
-      DPHELPERS_API core::GeometrySharedHandle generateGeometry( dp::util::generator::SmartGeometryData& meshIn, dp::rix::core::Renderer* m_rix );
+      DPHELPERS_API core::GeometrySharedHandle generateGeometry( dp::util::generator::GeometryDataSharedPtr& meshIn, dp::rix::core::Renderer* m_rix );
     } // namespace util
   } // namespace rix
 } // namespace dp

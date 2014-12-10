@@ -2180,7 +2180,7 @@ void PreviewScene::setEffectData( size_t index, const std::string& effectData )
 {
   DP_ASSERT( index < sizeof dp::util::array( m_effectHandle ) );
 
-  dp::fx::SmartEffectData fxEffectData = dp::fx::EffectLibrary::instance()->getEffectData( effectData );
+  dp::fx::EffectDataSharedPtr fxEffectData = dp::fx::EffectLibrary::instance()->getEffectData( effectData );
   DP_ASSERT( fxEffectData );
 
   m_effectHandle[index] = EffectData::create( fxEffectData );

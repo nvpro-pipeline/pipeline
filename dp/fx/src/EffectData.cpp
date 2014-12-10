@@ -31,16 +31,16 @@ namespace dp
   namespace fx
   {
 
-    EffectData::EffectData( const SmartEffectSpec& effectSpec, const std::string& name )
+    EffectData::EffectData( const EffectSpecSharedPtr& effectSpec, const std::string& name )
       : m_effectSpec( effectSpec)
       , m_name( name )
       , m_transparent( effectSpec->getTransparent() )
     {
       DP_ASSERT( m_effectSpec ); // actually should be an exception
-      m_parameterGroupDatas.reset( new SmartParameterGroupData[ effectSpec->getNumberOfParameterGroupSpecs() ] );
+      m_parameterGroupDatas.reset( new ParameterGroupDataSharedPtr[ effectSpec->getNumberOfParameterGroupSpecs() ] );
     }
 
-    const SmartParameterGroupData& EffectData::getParameterGroupData( EffectSpec::iterator it ) const
+    const ParameterGroupDataSharedPtr& EffectData::getParameterGroupData( EffectSpec::iterator it ) const
     {
       DP_ASSERT( it != m_effectSpec->endParameterGroupSpecs() );
       return m_parameterGroupDatas[ std::distance( m_effectSpec->beginParameterGroupSpecs(), it ) ];
@@ -51,7 +51,7 @@ namespace dp
       return m_name;
     }
 
-    const SmartEffectSpec& EffectData::getEffectSpec( ) const
+    const EffectSpecSharedPtr& EffectData::getEffectSpec( ) const
     {
       return m_effectSpec;
     }

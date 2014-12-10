@@ -50,24 +50,24 @@ namespace dp
         //optional
         DPTCORE_API virtual bool option( const std::vector<std::string>& optionString );
 
-        DPTCORE_API SmartBackend getBackend() const;
+        DPTCORE_API BackendSharedPtr getBackend() const;
 
       public:
-        DPTCORE_API virtual void render( RenderData* renderData, dp::ui::SmartRenderTarget renderTarget );
-        DPTCORE_API util::SmartImage getScreenshot() const;
+        DPTCORE_API virtual void render( RenderData* renderData, dp::ui::RenderTargetSharedPtr renderTarget );
+        DPTCORE_API util::ImageSharedPtr getScreenshot() const;
 
         //This will initialize rendering back end. Every derived class MUST call this in
         //their implementation of run()
         DPTCORE_API virtual bool run( MeasurementFunctor & mf, const std::string& name );
 
       private:
-        DPTCORE_API SmartBackend createBackend( const std::string& rendererName, const std::vector<std::string>& options );
+        DPTCORE_API BackendSharedPtr createBackend( const std::string& rendererName, const std::vector<std::string>& options );
 
       protected:
         bool m_rendererSpecified;
-        util::SmartDynamicLibrary m_backendLib;
-        dp::ui::SmartRenderTarget m_displayTarget;
-        SmartBackend m_backend;
+        util::DynamicLibrarySharedPtr m_backendLib;
+        dp::ui::RenderTargetSharedPtr m_displayTarget;
+        BackendSharedPtr m_backend;
 
         //As long as the test launching application maintains the same renderer for each run
         //Then we might as well remember what its respective backend is to spare us the files

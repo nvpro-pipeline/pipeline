@@ -56,13 +56,13 @@ OBJSAVER.
   * If the PlugIn ID \a piid equals \c PIID_NVSG_SCENE_SAVER, a OBJSAVER is created and returned in \a pi.
   * \returns  true, if the requested PlugIn could be created, otherwise false
   */
-OBJSAVER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPlugIn & pi);
+OBJSAVER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::PlugInSharedPtr & pi);
 
 //! Query the supported types of PlugIn Interfaces.
 OBJSAVER_API void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids );
 }
 
-SMART_TYPES( OBJSaver );
+DEFINE_PTR_TYPES( OBJSaver );
 
 //! A Scene Saver for obj files.
 /** NVSG files can be produced with the sample ViewerVR. 
@@ -70,7 +70,7 @@ SMART_TYPES( OBJSaver );
 class OBJSaver : public dp::sg::io::SceneSaver
 {
   public :
-    static SmartOBJSaver create();
+    static OBJSaverSharedPtr create();
     virtual ~OBJSaver();
 
     //! Realization of the pure virtual interface function of a SceneSaver.

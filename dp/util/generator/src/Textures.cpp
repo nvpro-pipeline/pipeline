@@ -41,7 +41,7 @@ namespace dp
     namespace generator
     {
 
-      SmartTextureObjectData TextureObjectData::create()
+      TextureObjectDataSharedPtr TextureObjectData::create()
       {
         return( std::shared_ptr<TextureObjectData>( new TextureObjectData() ) );
       }
@@ -54,9 +54,9 @@ namespace dp
       {
       }
 
-      SmartTextureObjectData createTextureColored( const Vec2ui& size, const Vec4f& color )
+      TextureObjectDataSharedPtr createTextureColored( const Vec2ui& size, const Vec4f& color )
       {
-        SmartTextureObjectData texture = TextureObjectData::create();
+        TextureObjectDataSharedPtr texture = TextureObjectData::create();
         texture->m_size = size;
         unsigned int length = size[0] * size[1];
 
@@ -70,9 +70,9 @@ namespace dp
         return texture;
       }
 
-      SmartTextureObjectData createTextureCheckered(const Vec2ui& size, const Vec2ui& tileCount, const Vec4f& oddColor, const Vec4f& evenColor)
+      TextureObjectDataSharedPtr createTextureCheckered(const Vec2ui& size, const Vec2ui& tileCount, const Vec4f& oddColor, const Vec4f& evenColor)
       {
-        SmartTextureObjectData texture = TextureObjectData::create();
+        TextureObjectDataSharedPtr texture = TextureObjectData::create();
         texture->m_size = size;
         texture->m_data.resize(size[0] * size[1]);
 
@@ -89,9 +89,9 @@ namespace dp
         return texture;
       }
 
-      SmartTextureObjectData createTextureGradient(const Vec2ui& size, const Vec4f& bottomColor, const Vec4f& topLeftColor, const Vec4f& topRightColor)
+      TextureObjectDataSharedPtr createTextureGradient(const Vec2ui& size, const Vec4f& bottomColor, const Vec4f& topLeftColor, const Vec4f& topRightColor)
       {
-        SmartTextureObjectData texture = TextureObjectData::create();
+        TextureObjectDataSharedPtr texture = TextureObjectData::create();
         texture->m_size = size;
         texture->m_data.resize(size[0] * size[1]);
 
@@ -111,10 +111,10 @@ namespace dp
         return texture;
       }
 
-      SmartTextureObjectData convertHeightMapToNormalMap( const SmartTextureObjectData& heightMap
+      TextureObjectDataSharedPtr convertHeightMapToNormalMap( const TextureObjectDataSharedPtr& heightMap
                                                         , float factor ) //Maximum apparent bump depth
       {
-        SmartTextureObjectData normalMap = TextureObjectData::create();
+        TextureObjectDataSharedPtr normalMap = TextureObjectData::create();
         unsigned int texWidth = heightMap->m_size[0];
         unsigned int texHeight = heightMap->m_size[1];
         normalMap->m_size = heightMap->m_size;
@@ -153,9 +153,9 @@ namespace dp
         return normalMap;
       }
 
-      SmartTextureObjectData createNoiseTexture( const math::Vec2ui& size, float frequencyX, float frequencyY )
+      TextureObjectDataSharedPtr createNoiseTexture( const math::Vec2ui& size, float frequencyX, float frequencyY )
       {
-        SmartTextureObjectData texture = TextureObjectData::create();
+        TextureObjectDataSharedPtr texture = TextureObjectData::create();
         unsigned int texWidth = size[0];
         unsigned int texHeight = size[1];
         texture->m_size = size;
@@ -178,11 +178,11 @@ namespace dp
         return texture;
       }
 
-      SmartTextureObjectData createPyramidNormalMap( const math::Vec2ui& size
-                                                   , const math::Vec2ui& pyramidTiles
-                                                   , float pyramidHeight )   //Depth of a pyramid in texel space
+      TextureObjectDataSharedPtr createPyramidNormalMap( const math::Vec2ui& size
+                                                       , const math::Vec2ui& pyramidTiles
+                                                       , float pyramidHeight )   //Depth of a pyramid in texel space
       {
-        SmartTextureObjectData texture = TextureObjectData::create();
+        TextureObjectDataSharedPtr texture = TextureObjectData::create();
         unsigned int texWidth = size[0];
         unsigned int texHeight = size[1];
         texture->m_size = size;

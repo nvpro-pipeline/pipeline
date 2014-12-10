@@ -41,12 +41,12 @@ namespace dp
   namespace util
   {
 
-    SmartImage Image::create()
+    ImageSharedPtr Image::create()
     {
       return( std::shared_ptr<Image>( new Image() ) );
     }
 
-    SmartImage Image::create( size_t width, size_t height, PixelFormat pixelFormat, DataType dataType, void const* const* data, size_t numLayers, size_t mipmapLevels )
+    ImageSharedPtr Image::create( size_t width, size_t height, PixelFormat pixelFormat, DataType dataType, void const* const* data, size_t numLayers, size_t mipmapLevels )
     {
       return( std::shared_ptr<Image>( new Image( width, height, pixelFormat, dataType, data, numLayers, mipmapLevels ) ) );
     }
@@ -367,7 +367,7 @@ namespace dp
       }
     }
 
-    bool imageToFile(const SmartImage& image, std::string filename, bool layersAsFaces)
+    bool imageToFile(const ImageSharedPtr& image, std::string filename, bool layersAsFaces)
     {
       unsigned int imageID;
       ilGenImages( 1, (ILuint *) &imageID );
@@ -479,7 +479,7 @@ namespace dp
       return false;
     }
 
-    SmartImage imageFromFile( const string & filename, bool layersAsFaces )
+    ImageSharedPtr imageFromFile( const string & filename, bool layersAsFaces )
     {
       unsigned int imageID;
       ilGenImages( 1, (ILuint *) &imageID );
@@ -544,7 +544,7 @@ namespace dp
         }
 
         int ilerror = ilGetError();
-        SmartImage loadedImage = Image::create( width, height, format, dataType, numLayers + numMipmaps > 1 ? (void const* const*)&payload[0] : (void const* const*)payload[0], numLayers, numMipmaps );
+        ImageSharedPtr loadedImage = Image::create( width, height, format, dataType, numLayers + numMipmaps > 1 ? (void const* const*)&payload[0] : (void const* const*)payload[0], numLayers, numMipmaps );
 
         // free all resources associated with the DevIL image
         // note: free this memory before we eventually flip the image (that will allocate more memory)

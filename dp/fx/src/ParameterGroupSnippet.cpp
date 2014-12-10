@@ -37,7 +37,7 @@ namespace dp
 {
   namespace fx
   {
-    ParameterGroupSnippet::ParameterGroupSnippet( const SmartParameterGroupSpec& parameterGroupSpec )
+    ParameterGroupSnippet::ParameterGroupSnippet( const ParameterGroupSpecSharedPtr& parameterGroupSpec )
       : m_parameterGroupSpec( parameterGroupSpec )
     {
       for ( ParameterGroupSpec::iterator it = m_parameterGroupSpec->beginParameterSpecs(); it != m_parameterGroupSpec->endParameterSpecs(); ++it )

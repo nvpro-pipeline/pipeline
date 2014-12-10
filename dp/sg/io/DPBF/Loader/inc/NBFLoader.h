@@ -51,7 +51,7 @@ void lib_init() __attribute__ ((constructor));   // will be called before dlopen
 // exports required for a scene loader plug-in
 extern "C"
 {
-NBFLOADER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPlugIn & pi);
+NBFLOADER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::PlugInSharedPtr & pi);
 NBFLOADER_API void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids );
 }
 
@@ -64,13 +64,13 @@ struct NBFLightSource_nbf_50;
 struct NBFLightSource_nbf_12;
 struct NBFPrimitive_nbf_4d;
 
-SMART_TYPES( NBFLoader );
+DEFINE_PTR_TYPES( NBFLoader );
 
 //! A Scene Loader for nbf files.
 class NBFLoader : public dp::sg::io::SceneLoader
 {
 public:
-  static SmartNBFLoader create();
+  static NBFLoaderSharedPtr create();
   virtual  ~NBFLoader(void);
 
   //! Realization of the pure virtual interface function of a SceneLoader.
@@ -131,7 +131,7 @@ private:
       //! Maps the specified file offset into process memory.
       /** This constructor is called on instantiation. 
       * It maps \a count objects of type T at file offset \a offset into process memory. */
-      Offset_AutoPtr( dp::util::ReadMapping * fm, dp::util::SmartPlugInCallback const& pic, uint_t offset
+      Offset_AutoPtr( dp::util::ReadMapping * fm, dp::util::PlugInCallbackSharedPtr const& pic, uint_t offset
                     , unsigned int count=1 );
 
       //! Unmaps the bytes, that have been mapped at instantiation, from process memory. 
@@ -152,9 +152,9 @@ private:
       void reset( uint_t offset, unsigned int count=1 );
 
     private:
-      T                             * m_ptr;
-      dp::util::SmartPlugInCallback   m_pic;
-      dp::util::ReadMapping         * m_fm;
+      T                                 * m_ptr;
+      dp::util::PlugInCallbackSharedPtr   m_pic;
+      dp::util::ReadMapping             * m_fm;
   };
 
 
@@ -398,7 +398,7 @@ private:
   std::map<uint_t,dp::sg::core::EffectDataSharedPtr> m_stateSetToEffect;
   std::map<uint_t,dp::sg::core::EffectDataSharedPtr> m_materialToMaterialEffect;
   dp::sg::core::EffectDataSharedPtr m_materialEffect;
-  dp::fx::SmartEffectSpec   m_currentEffectSpec;
+  dp::fx::EffectSpecSharedPtr   m_currentEffectSpec;
 };
 
 inline dp::sg::core::EffectDataSharedPtr NBFLoader::getMaterialEffect()
@@ -424,7 +424,7 @@ inline void NBFLoader::unmapOffset( ubyte_t * offsetPtr )
 
 template<typename T>
 inline NBFLoader::Offset_AutoPtr<T>::Offset_AutoPtr( dp::util::ReadMapping * fm
-                                                   , dp::util::SmartPlugInCallback const& pic
+                                                   , dp::util::PlugInCallbackSharedPtr const& pic
                                                    , uint_t offset, unsigned int count )
 : m_ptr(NULL)
 , m_fm(fm)

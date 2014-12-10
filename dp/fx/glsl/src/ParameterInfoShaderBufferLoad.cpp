@@ -193,7 +193,7 @@ namespace dp
       /************************************************************************/
       /* \brief offset is in/out, next free offset location                    */
       /************************************************************************/
-      dp::fx::ParameterGroupLayout::SmartParameterInfo createParameterInfoShaderBufferLoad( unsigned int type, size_t& offset, size_t arraySize )
+      dp::fx::ParameterGroupLayout::ParameterInfoSharedPtr createParameterInfoShaderBufferLoad( unsigned int type, size_t& offset, size_t arraySize )
       {
         switch (type)
         {

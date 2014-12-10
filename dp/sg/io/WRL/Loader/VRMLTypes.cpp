@@ -35,7 +35,7 @@
 using namespace vrml;
 using std::string;
 
-SharedAnchor Anchor::create()
+AnchorSharedPtr Anchor::create()
 {
   return( std::shared_ptr<Anchor>( new Anchor() ) );
 }
@@ -46,7 +46,7 @@ const string & Anchor::getType( void ) const
   return( type );
 }
 
-SharedAppearance Appearance::create()
+AppearanceSharedPtr Appearance::create()
 {
   return( std::shared_ptr<Appearance>( new Appearance() ) );
 }
@@ -65,7 +65,7 @@ const string & Appearance::getType( void ) const
   return( type );
 }
 
-SharedAudioClip AudioClip::create()
+AudioClipSharedPtr AudioClip::create()
 {
   return( std::shared_ptr<AudioClip>( new AudioClip() ) );
 }
@@ -84,7 +84,7 @@ const string & AudioClip::getType( void ) const
   return( type );
 }
 
-SharedBackground Background::create()
+BackgroundSharedPtr Background::create()
 {
   return( std::shared_ptr<Background>( new Background() ) );
 }
@@ -100,7 +100,7 @@ const string & Background::getType( void ) const
   return( type );
 }
 
-SharedBillboard Billboard::create()
+BillboardSharedPtr Billboard::create()
 {
   return( std::shared_ptr<Billboard>( new Billboard() ) );
 }
@@ -120,7 +120,7 @@ const string & Billboard::getType( void ) const
   return( type );
 }
 
-SharedBox Box::create()
+BoxSharedPtr Box::create()
 {
   return( std::shared_ptr<Box>( new Box() ) );
 }
@@ -140,7 +140,7 @@ const string & Box::getType( void ) const
   return( type );
 }
 
-SharedCollision Collision::create()
+CollisionSharedPtr Collision::create()
 {
   return( std::shared_ptr<Collision>( new Collision() ) );
 }
@@ -160,7 +160,7 @@ const string & Collision::getType( void ) const
   return( type );
 }
 
-SharedColor Color::create()
+ColorSharedPtr Color::create()
 {
   return( std::shared_ptr<Color>( new Color() ) );
 }
@@ -177,7 +177,7 @@ const string & Color::getType( void ) const
   return( type );
 }
 
-SharedColorInterpolator ColorInterpolator::create()
+ColorInterpolatorSharedPtr ColorInterpolator::create()
 {
   return( std::shared_ptr<ColorInterpolator>( new ColorInterpolator() ) );
 }
@@ -188,7 +188,7 @@ const string & ColorInterpolator::getType( void ) const
   return( type );
 }
 
-SharedCone Cone::create()
+ConeSharedPtr Cone::create()
 {
   return( std::shared_ptr<Cone>( new Cone() ) );
 }
@@ -207,7 +207,7 @@ const string & Cone::getType( void ) const
   return( type );
 }
 
-SharedCoordinate Coordinate::create()
+CoordinateSharedPtr Coordinate::create()
 {
   return( std::shared_ptr<Coordinate>( new Coordinate() ) );
 }
@@ -227,7 +227,7 @@ const string & Coordinate::getType( void ) const
   return( type );
 }
 
-SharedCoordinateInterpolator CoordinateInterpolator::create()
+CoordinateInterpolatorSharedPtr CoordinateInterpolator::create()
 {
   return( std::shared_ptr<CoordinateInterpolator>( new CoordinateInterpolator() ) );
 }
@@ -238,7 +238,7 @@ const string & CoordinateInterpolator::getType( void ) const
   return( type );
 }
 
-SharedCylinder Cylinder::create()
+CylinderSharedPtr Cylinder::create()
 {
   return( std::shared_ptr<Cylinder>( new Cylinder() ) );
 }
@@ -258,7 +258,7 @@ const string & Cylinder::getType( void ) const
   return( type );
 }
 
-SharedCylinderSensor CylinderSensor::create()
+CylinderSensorSharedPtr CylinderSensor::create()
 {
   return( std::shared_ptr<CylinderSensor>( new CylinderSensor() ) );
 }
@@ -278,7 +278,7 @@ const string & CylinderSensor::getType( void ) const
   return( type );
 }
 
-SharedDirectionalLight DirectionalLight::create()
+DirectionalLightSharedPtr DirectionalLight::create()
 {
   return( std::shared_ptr<DirectionalLight>( new DirectionalLight() ) );
 }
@@ -298,7 +298,7 @@ const string & DirectionalLight::getType( void ) const
   return( type );
 }
 
-SharedElevationGrid ElevationGrid::create()
+ElevationGridSharedPtr ElevationGrid::create()
 {
   return( std::shared_ptr<ElevationGrid>( new ElevationGrid() ) );
 }
@@ -326,7 +326,7 @@ const string & ElevationGrid::getType( void ) const
   return( type );
 }
 
-SharedExtrusion Extrusion::create()
+ExtrusionSharedPtr Extrusion::create()
 {
   return( std::shared_ptr<Extrusion>( new Extrusion() ) );
 }
@@ -356,7 +356,7 @@ const string & Extrusion::getType( void ) const
   return( type );
 }
 
-SharedFog Fog::create()
+FogSharedPtr Fog::create()
 {
   return( std::shared_ptr<Fog>( new Fog() ) );
 }
@@ -374,7 +374,7 @@ const string & Fog::getType( void ) const
   return( type );
 }
 
-SharedFontStyle FontStyle::create()
+FontStyleSharedPtr FontStyle::create()
 {
   return( std::shared_ptr<FontStyle>( new FontStyle() ) );
 }
@@ -403,7 +403,7 @@ const string & Geometry::getType( void ) const
   return( type );
 }
 
-SharedGroup Group::create()
+GroupSharedPtr Group::create()
 {
   return( std::shared_ptr<Group>( new Group() ) );
 }
@@ -422,7 +422,7 @@ const string & Group::getType( void ) const
   return( type );
 }
 
-SharedImageTexture ImageTexture::create()
+ImageTextureSharedPtr ImageTexture::create()
 {
   return( std::shared_ptr<ImageTexture>( new ImageTexture() ) );
 }
@@ -441,7 +441,7 @@ const string & ImageTexture::getType( void ) const
   return( type );
 }
 
-SharedIndexedFaceSet IndexedFaceSet::create()
+IndexedFaceSetSharedPtr IndexedFaceSet::create()
 {
   return( std::shared_ptr<IndexedFaceSet>( new IndexedFaceSet() ) );
 }
@@ -466,7 +466,7 @@ const string & IndexedFaceSet::getType( void ) const
   return( type );
 }
 
-SharedIndexedLineSet IndexedLineSet::create()
+IndexedLineSetSharedPtr IndexedLineSet::create()
 {
   return( std::shared_ptr<IndexedLineSet>( new IndexedLineSet() ) );
 }
@@ -515,7 +515,7 @@ const string & Light::getType( void ) const
   return( type );
 }
 
-SharedInline Inline::create()
+InlineSharedPtr Inline::create()
 {
   return( std::shared_ptr<Inline>( new Inline() ) );
 }
@@ -536,7 +536,7 @@ const string & Inline::getType( void ) const
   return( type );
 }
 
-SharedLOD LOD::create()
+LODSharedPtr LOD::create()
 {
   return( std::shared_ptr<LOD>( new LOD() ) );
 }
@@ -556,7 +556,7 @@ const string & LOD::getType( void ) const
   return( type );
 }
 
-SharedMaterial Material::create()
+MaterialSharedPtr Material::create()
 {
   return( std::shared_ptr<Material>( new Material() ) );
 }
@@ -581,7 +581,7 @@ const string & Material::getType( void ) const
   return( type );
 }
 
-SharedMovieTexture MovieTexture::create()
+MovieTextureSharedPtr MovieTexture::create()
 {
   return( std::shared_ptr<MovieTexture>( new MovieTexture() ) );
 }
@@ -600,7 +600,7 @@ const string & MovieTexture::getType( void ) const
   return( type );
 }
 
-SharedNavigationInfo NavigationInfo::create()
+NavigationInfoSharedPtr NavigationInfo::create()
 {
   return( std::shared_ptr<NavigationInfo>( new NavigationInfo() ) );
 }
@@ -622,7 +622,7 @@ const string & NavigationInfo::getType( void ) const
   return( type );
 }
 
-SharedNormal Normal::create()
+NormalSharedPtr Normal::create()
 {
   return( std::shared_ptr<Normal>( new Normal() ) );
 }
@@ -642,7 +642,7 @@ const string & Normal::getType( void ) const
   return( type );
 }
 
-SharedNormalInterpolator NormalInterpolator::create()
+NormalInterpolatorSharedPtr NormalInterpolator::create()
 {
   return( std::shared_ptr<NormalInterpolator>( new NormalInterpolator() ) );
 }
@@ -653,7 +653,7 @@ const string & NormalInterpolator::getType( void ) const
   return( type );
 }
 
-SharedObject Object::create()
+ObjectSharedPtr Object::create()
 {
   return( std::shared_ptr<Object>( new Object() ) );
 }
@@ -664,7 +664,7 @@ const string & Object::getType( void ) const
   return( type );
 }
 
-SharedOrientationInterpolator OrientationInterpolator::create()
+OrientationInterpolatorSharedPtr OrientationInterpolator::create()
 {
   return( std::shared_ptr<OrientationInterpolator>( new OrientationInterpolator() ) );
 }
@@ -675,7 +675,7 @@ const string & OrientationInterpolator::getType( void ) const
   return( type );
 }
 
-SharedPixelTexture PixelTexture::create()
+PixelTextureSharedPtr PixelTexture::create()
 {
   return( std::shared_ptr<PixelTexture>( new PixelTexture() ) );
 }
@@ -694,7 +694,7 @@ const string & PixelTexture::getType( void ) const
   return( type );
 }
 
-SharedPlaneSensor PlaneSensor::create()
+PlaneSensorSharedPtr PlaneSensor::create()
 {
   return( std::shared_ptr<PlaneSensor>( new PlaneSensor() ) );
 }
@@ -713,7 +713,7 @@ const string & PlaneSensor::getType( void ) const
   return( type );
 }
 
-SharedPointLight PointLight::create()
+PointLightSharedPtr PointLight::create()
 {
   return( std::shared_ptr<PointLight>( new PointLight() ) );
 }
@@ -735,7 +735,7 @@ const string & PointLight::getType( void ) const
   return( type );
 }
 
-SharedPointSet PointSet::create()
+PointSetSharedPtr PointSet::create()
 {
   return( std::shared_ptr<PointSet>( new PointSet() ) );
 }
@@ -754,7 +754,7 @@ const string & PointSet::getType( void ) const
   return( type );
 }
 
-SharedPositionInterpolator PositionInterpolator::create()
+PositionInterpolatorSharedPtr PositionInterpolator::create()
 {
   return( std::shared_ptr<PositionInterpolator>( new PositionInterpolator() ) );
 }
@@ -765,7 +765,7 @@ const string & PositionInterpolator::getType( void ) const
   return( type );
 }
 
-SharedProximitySensor ProximitySensor::create()
+ProximitySensorSharedPtr ProximitySensor::create()
 {
   return( std::shared_ptr<ProximitySensor>( new ProximitySensor() ) );
 }
@@ -782,7 +782,7 @@ const string & ProximitySensor::getType( void ) const
   return( type );
 }
 
-SharedScript Script::create()
+ScriptSharedPtr Script::create()
 {
   return( std::shared_ptr<Script>( new Script() ) );
 }
@@ -841,7 +841,7 @@ SFRotation::SFRotation( const SFVec3f &axis, SFFloat angle )
   setVec( *this, a[0], a[1], a[2], angle );
 }
 
-SharedScalarInterpolator ScalarInterpolator::create()
+ScalarInterpolatorSharedPtr ScalarInterpolator::create()
 {
   return( std::shared_ptr<ScalarInterpolator>( new ScalarInterpolator() ) );
 }
@@ -852,7 +852,7 @@ const string & ScalarInterpolator::getType( void ) const
   return( type );
 }
 
-SharedShape Shape::create()
+ShapeSharedPtr Shape::create()
 {
   return( std::shared_ptr<Shape>( new Shape() ) );
 }
@@ -871,7 +871,7 @@ const string & Shape::getType( void ) const
   return( type );
 }
 
-SharedSound Sound::create()
+SoundSharedPtr Sound::create()
 {
   return( std::shared_ptr<Sound>( new Sound() ) );
 }
@@ -899,7 +899,7 @@ const string & Sound::getType( void ) const
   return( type );
 }
 
-SharedSphere Sphere::create()
+SphereSharedPtr Sphere::create()
 {
   return( std::shared_ptr<Sphere>( new Sphere() ) );
 }
@@ -915,7 +915,7 @@ const string & Sphere::getType( void ) const
   return( type );
 }
 
-SharedSphereSensor SphereSensor::create()
+SphereSensorSharedPtr SphereSensor::create()
 {
   return( std::shared_ptr<SphereSensor>( new SphereSensor() ) );
 }
@@ -932,7 +932,7 @@ const string & SphereSensor::getType( void ) const
   return( type );
 }
 
-SharedSpotLight SpotLight::create()
+SpotLightSharedPtr SpotLight::create()
 {
   return( std::shared_ptr<SpotLight>( new SpotLight() ) );
 }
@@ -957,7 +957,7 @@ const string & SpotLight::getType( void ) const
   return( type );
 }
 
-SharedSwitch Switch::create()
+SwitchSharedPtr Switch::create()
 {
   return( std::shared_ptr<Switch>( new Switch() ) );
 }
@@ -977,7 +977,7 @@ const string & Switch::getType( void ) const
   return( type );
 }
 
-SharedText Text::create()
+TextSharedPtr Text::create()
 {
   return( std::shared_ptr<Text>( new Text() ) );
 }
@@ -997,7 +997,7 @@ const string & Text::getType( void ) const
   return( type );
 }
 
-SharedTexture Texture::create()
+TextureSharedPtr Texture::create()
 {
   return( std::shared_ptr<Texture>( new Texture() ) );
 }
@@ -1014,7 +1014,7 @@ const string & Texture::getType( void ) const
   return( type );
 }
 
-SharedTextureCoordinate TextureCoordinate::create()
+TextureCoordinateSharedPtr TextureCoordinate::create()
 {
   return( std::shared_ptr<TextureCoordinate>( new TextureCoordinate() ) );
 }
@@ -1025,7 +1025,7 @@ const string & TextureCoordinate::getType( void ) const
   return( type );
 }
 
-SharedTextureTransform TextureTransform::create()
+TextureTransformSharedPtr TextureTransform::create()
 {
   return( std::shared_ptr<TextureTransform>( new TextureTransform() ) );
 }
@@ -1052,7 +1052,7 @@ TimeSensor::TimeSensor()
 {
 }
 
-SharedTimeSensor TimeSensor::create()
+TimeSensorSharedPtr TimeSensor::create()
 {
   return( std::shared_ptr<TimeSensor>( new TimeSensor() ) );
 }
@@ -1063,7 +1063,7 @@ const string & TimeSensor::getType( void ) const
   return( type );
 }
 
-SharedTouchSensor TouchSensor::create()
+TouchSensorSharedPtr TouchSensor::create()
 {
   return( std::shared_ptr<TouchSensor>( new TouchSensor() ) );
 }
@@ -1074,7 +1074,7 @@ const string & TouchSensor::getType( void ) const
   return( type );
 }
 
-SharedTransform Transform::create()
+TransformSharedPtr Transform::create()
 {
   return( std::shared_ptr<Transform>( new Transform() ) );
 }
@@ -1098,7 +1098,7 @@ const string & Transform::getType( void ) const
   return( type );
 }
 
-SharedViewpoint Viewpoint::create()
+ViewpointSharedPtr Viewpoint::create()
 {
   return( std::shared_ptr<Viewpoint>( new Viewpoint() ) );
 }
@@ -1121,7 +1121,7 @@ const string & Viewpoint::getType( void ) const
   return( type );
 }
 
-SharedVisibilitySensor VisibilitySensor::create()
+VisibilitySensorSharedPtr VisibilitySensor::create()
 {
   return( std::shared_ptr<VisibilitySensor>( new VisibilitySensor() ) );
 }
@@ -1138,7 +1138,7 @@ const string & VisibilitySensor::getType( void ) const
   return( type );
 }
 
-SharedWorldInfo WorldInfo::create()
+WorldInfoSharedPtr WorldInfo::create()
 {
   return( std::shared_ptr<WorldInfo>( new WorldInfo() ) );
 }

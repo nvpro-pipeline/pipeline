@@ -190,7 +190,7 @@ namespace dp
           OptimizeTraverser::handleEffectData( p );
           if ( optimizationAllowed( p->getSharedPtr<EffectData>() ) && ( m_unifyTargets & UT_PARAMETER_GROUP_DATA ) )
           {
-            const dp::fx::SmartEffectSpec & es = p->getEffectSpec();
+            const dp::fx::EffectSpecSharedPtr & es = p->getEffectSpec();
             for ( dp::fx::EffectSpec::iterator it = es->beginParameterGroupSpecs() ; it != es->endParameterGroupSpecs() ; ++it )
             {
               const ParameterGroupDataSharedPtr & parameterGroupData = p->getParameterGroupData( it );
@@ -335,7 +335,7 @@ namespace dp
           OptimizeTraverser::handleParameterGroupData( p );
           if ( optimizationAllowed( p->getSharedPtr<ParameterGroupData>() ) && ( m_unifyTargets & UT_SAMPLER ) )
           {
-            const dp::fx::SmartParameterGroupSpec & pgs = p->getParameterGroupSpec();
+            const dp::fx::ParameterGroupSpecSharedPtr & pgs = p->getParameterGroupSpec();
             for ( dp::fx::ParameterGroupSpec::iterator it = pgs->beginParameterSpecs() ; it != pgs->endParameterSpecs() ; ++it )
             {
               if ( ( it->first.getType() & dp::fx::PT_POINTER_TYPE_MASK ) == dp::fx::PT_SAMPLER_PTR )

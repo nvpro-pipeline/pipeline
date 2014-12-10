@@ -37,11 +37,11 @@ namespace dp
     class SnippetListSnippet : public Snippet
     {
     public:
-      DP_FX_API SnippetListSnippet( std::vector<dp::fx::SmartSnippet> const & snippets );
+      DP_FX_API SnippetListSnippet( std::vector<dp::fx::SnippetSharedPtr> const & snippets );
       DP_FX_API virtual std::string getSnippet( GeneratorConfiguration& configuration );
 
     private:
-      std::vector<dp::fx::SmartSnippet> m_snippets;
+      std::vector<dp::fx::SnippetSharedPtr> m_snippets;
     };
   } // namespace fx
 } // namespace dp

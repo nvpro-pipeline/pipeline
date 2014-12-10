@@ -49,7 +49,7 @@ namespace dp
         namespace gl
         {
 
-          SceneRenderer::SceneRenderer( const dp::gl::SharedRenderTarget &renderTarget )
+          SceneRenderer::SceneRenderer( const dp::gl::RenderTargetSharedPtr &renderTarget )
             : dp::sg::ui::SceneRenderer( renderTarget )
             , m_depthPass( false )
 
@@ -60,9 +60,9 @@ namespace dp
           {
           }
 
-          SmartSceneRenderer SceneRenderer::create( const char *renderEngine, dp::fx::Manager shaderManagerType
-                                                  , dp::culling::Mode cullingMode, TransparencyMode transparencyMode
-                                                  , const dp::gl::SharedRenderTarget &renderTarget )
+          SceneRendererSharedPtr SceneRenderer::create( const char *renderEngine, dp::fx::Manager shaderManagerType
+                                                      , dp::culling::Mode cullingMode, TransparencyMode transparencyMode
+                                                      , const dp::gl::RenderTargetSharedPtr &renderTarget )
           {
             return SceneRendererImpl::create( renderEngine, shaderManagerType, cullingMode, transparencyMode, renderTarget );
           }

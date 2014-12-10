@@ -51,7 +51,7 @@ namespace dp
   {
     namespace opengl
     {
-      GroupImplHandle GroupImpl::create()
+      GroupImplSharedPtr GroupImpl::create()
       {
         return( std::shared_ptr<GroupImpl>( new GroupImpl() ) );
       }
@@ -92,7 +92,7 @@ namespace dp
           // generate list of objects to cull from shader
           for ( size_t index = 0;index < numberOfObjects; ++index )
           {
-            const ObjectBitSetHandle& objectImpl = getObject( index );
+            const ObjectBitSetSharedPtr& objectImpl = getObject( index );
             ShaderObject &object = inputs[index];
             object.matrix = static_cast<dp::util::Uint32>(objectImpl->getTransformIndex());
             object.lowerLeft = objectImpl->getLowerLeft();

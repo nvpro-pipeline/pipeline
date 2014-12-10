@@ -33,7 +33,7 @@ namespace dp
   namespace gl
   {
 
-    RenderTarget::RenderTarget( const SharedRenderContext &glContext )
+    RenderTarget::RenderTarget( const RenderContextSharedPtr &glContext )
      : m_renderContext(glContext)
      , m_width(0)
      , m_height(0)
@@ -359,19 +359,19 @@ namespace dp
       return output;
     }
 
-    dp::util::SmartImage
+    dp::util::ImageSharedPtr
     RenderTarget::getImage( dp::util::PixelFormat pixelFormat, dp::util::DataType pixelDataType, unsigned int index )
     {
       return getTargetAsImage( GL_FRONT, pixelFormat, pixelDataType );
     }
 
-    dp::util::SmartImage
+    dp::util::ImageSharedPtr
     RenderTarget::getTargetAsImage( GLenum mode, dp::util::PixelFormat pixelFormat, dp::util::DataType pixelDataType )
     {
       // FIXME use C++ object for current/noncurrent for exception safety
       makeCurrent();
 
-      dp::util::SmartImage image = dp::util::Image::create();
+      dp::util::ImageSharedPtr image = dp::util::Image::create();
       std::vector<dp::util::Uint8> pixels = getImagePixels( mode, pixelFormat, pixelDataType );
       if ( !pixels.empty() )
       {

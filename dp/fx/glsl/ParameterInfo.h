@@ -35,8 +35,8 @@ namespace dp
   {
     namespace glsl
     {
-      dp::fx::ParameterGroupLayout::SmartParameterInfo createParameterInfoShaderBufferLoad( unsigned int type, size_t& offset, size_t arraySize );
-      dp::fx::ParameterGroupLayout::SmartParameterInfo createParameterInfoUBOStd140       ( unsigned int type, size_t& offset, size_t arraySize );      
+      dp::fx::ParameterGroupLayout::ParameterInfoSharedPtr createParameterInfoShaderBufferLoad( unsigned int type, size_t& offset, size_t arraySize );
+      dp::fx::ParameterGroupLayout::ParameterInfoSharedPtr createParameterInfoUBOStd140       ( unsigned int type, size_t& offset, size_t arraySize );      
     } // namespace glsl
   } // namespace fx
 } // namespace fx

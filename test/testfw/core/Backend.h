@@ -44,7 +44,7 @@ namespace dp
         DPTCORE_API virtual ~RenderData();
       };
 
-      SMART_TYPES( Backend );
+      DEFINE_PTR_TYPES( Backend );
 
       class Backend : public std::enable_shared_from_this<Backend>
       {
@@ -54,8 +54,8 @@ namespace dp
         virtual ~Backend(){}
 
         //The back end context interface
-        DPTCORE_API virtual dp::ui::SmartRenderTarget createDisplay( int width, int height, bool visible ) = 0;
-        DPTCORE_API virtual void render( RenderData* renderData, dp::ui::SmartRenderTarget renderTarget = dp::ui::SmartRenderTarget::null ) = 0;
+        DPTCORE_API virtual dp::ui::RenderTargetSharedPtr createDisplay( int width, int height, bool visible ) = 0;
+        DPTCORE_API virtual void render( RenderData* renderData, dp::ui::RenderTargetSharedPtr renderTarget = dp::ui::RenderTargetSharedPtr::null ) = 0;
         DPTCORE_API virtual void finish() = 0;
       };
 

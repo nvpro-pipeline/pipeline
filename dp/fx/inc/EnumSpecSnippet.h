@@ -37,10 +37,10 @@ namespace dp
     class EnumSpecSnippet : public Snippet
     {
     public:
-      DP_FX_API EnumSpecSnippet( const SmartEnumSpec& enumSpec );
+      DP_FX_API EnumSpecSnippet( const EnumSpecSharedPtr& enumSpec );
       DP_FX_API virtual std::string getSnippet( dp::fx::GeneratorConfiguration& configuration );
     private:
-      SmartEnumSpec m_enumSpec;
+      EnumSpecSharedPtr m_enumSpec;
     };
 
   } // namespace fx

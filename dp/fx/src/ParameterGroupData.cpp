@@ -30,12 +30,12 @@ namespace dp
 {
   namespace fx
   {
-    SmartParameterGroupData ParameterGroupData::create( SmartParameterGroupSpec const& parameterGroupSpec, std::string const& name )
+    ParameterGroupDataSharedPtr ParameterGroupData::create( ParameterGroupSpecSharedPtr const& parameterGroupSpec, std::string const& name )
     {
       return( std::shared_ptr<ParameterGroupData>( new ParameterGroupData( parameterGroupSpec, name ) ) );
     }
 
-    ParameterGroupData::ParameterGroupData( const SmartParameterGroupSpec& parameterGroupSpec, const std::string& name )
+    ParameterGroupData::ParameterGroupData( const ParameterGroupSpecSharedPtr& parameterGroupSpec, const std::string& name )
       : m_parameterGroupSpec( parameterGroupSpec )
       , m_name( name )
     {
@@ -104,7 +104,7 @@ namespace dp
 
     }
 
-    const dp::fx::SmartParameterGroupSpec& ParameterGroupData::getParameterGroupSpec() const
+    const dp::fx::ParameterGroupSpecSharedPtr& ParameterGroupData::getParameterGroupSpec() const
     {
       return m_parameterGroupSpec;
     }

@@ -32,7 +32,7 @@ namespace dp
   namespace fx
   {
 
-    EnumSpecSnippet::EnumSpecSnippet( const SmartEnumSpec& enumSpec )
+    EnumSpecSnippet::EnumSpecSnippet( const EnumSpecSharedPtr& enumSpec )
       : m_enumSpec( enumSpec )
     {
 

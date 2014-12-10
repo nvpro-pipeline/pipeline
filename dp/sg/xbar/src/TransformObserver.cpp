@@ -41,7 +41,7 @@ namespace dp
       {
         DP_ASSERT( m_indexMap.find( index ) == m_indexMap.end() );
 
-        SmartDirtyPayload payload( DirtyPayload::create( index ) );
+        DirtyPayloadSharedPtr payload( DirtyPayload::create( index ) );
         Observer<TransformTreeIndex>::attach( t, payload );
 
         payload->m_dirty = true;

@@ -77,12 +77,12 @@ namespace dp
         /* GroupCPU                                                             */
         /* This group stores the cached OBB for each object                     */
         /************************************************************************/
-        HANDLE_TYPES( GroupCPU );
+        DEFINE_PTR_TYPES( GroupCPU );
 
         class GroupCPU : public GroupBitSet
         {
         public:
-          static GroupCPUHandle create();
+          static GroupCPUSharedPtr create();
           void updateOBBs();
 
           std::vector<OBB> const & getOBBs() const;
@@ -95,7 +95,7 @@ namespace dp
           size_t m_objectIncarnationOBB;
         };
 
-        GroupCPUHandle GroupCPU::create()
+        GroupCPUSharedPtr GroupCPU::create()
         {
           return( std::shared_ptr<GroupCPU>( new GroupCPU() ) );
         }
@@ -125,7 +125,7 @@ namespace dp
             for ( size_t index = 0; index < m_objects.size();++index )
             {
               OBB &obb = m_obbs[index];
-              ObjectBitSetHandle const & objectImpl = getObject( index );
+              ObjectBitSetSharedPtr const & objectImpl = getObject( index );
               dp::math::Mat44f const & modelView = reinterpret_cast<dp::math::Mat44f const &>(*(basePtr + objectImpl->getTransformIndex() * matricesStride) );
 
               obb.point = m_objects[index]->getLowerLeft() * modelView;
@@ -181,17 +181,17 @@ namespace dp
 
       }
 
-      ObjectHandle ManagerImpl::objectCreate( SmartPayload const& userData )
+      ObjectSharedPtr ManagerImpl::objectCreate( PayloadSharedPtr const& userData )
       {
         return ObjectBitSet::create( userData );
       }
 
-      GroupHandle ManagerImpl::groupCreate()
+      GroupSharedPtr ManagerImpl::groupCreate()
       {
         return GroupCPU::create();
       }
 
-      ResultHandle ManagerImpl::groupCreateResult( GroupHandle const& group )
+      ResultSharedPtr ManagerImpl::groupCreateResult( GroupSharedPtr const& group )
       {
         return( ResultBitSet::create( group.staticCast<GroupBitSet>() ) );
       }
@@ -464,10 +464,10 @@ namespace dp
       }
 #endif
 
-      void ManagerImpl::cull( GroupHandle const& group, ResultHandle const& result, const dp::math::Mat44f& viewProjection )
+      void ManagerImpl::cull( GroupSharedPtr const& group, ResultSharedPtr const& result, const dp::math::Mat44f& viewProjection )
       {
         dp::util::ProfileEntry p("cull");
-        GroupCPUHandle const & groupImpl = group.staticCast<GroupCPU>();
+        GroupCPUSharedPtr const & groupImpl = group.staticCast<GroupCPU>();
 
         groupImpl->updateOBBs();
         std::vector<OBB> const &obbs = groupImpl->getOBBs();
@@ -498,7 +498,7 @@ namespace dp
 
           for ( int index = 0;index < count; ++index )
           {
-            const ObjectBitSetHandle& objectImpl = groupImpl->getObject( index );
+            const ObjectBitSetSharedPtr& objectImpl = groupImpl->getObject( index );
             const dp::math::neon::Mat44f &modelView = reinterpret_cast<const dp::math::neon::Mat44f&>(*(basePtr + objectImpl->getTransformIndex() * matricesStride) );
             visible.setBit( index, isVisibleNEON( vp, modelView, *reinterpret_cast<dp::math::neon::Vec4f const*>(&objectImpl->getLowerLeft())
               , *reinterpret_cast<dp::math::neon::Vec4f const*>(&objectImpl->getExtent()) ) );

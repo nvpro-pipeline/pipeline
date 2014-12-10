@@ -43,21 +43,21 @@ namespace dp
       public:
         ManagerImpl();
         virtual ~ManagerImpl();
-        virtual ObjectHandle objectCreate( SmartPayload const& userData );
+        virtual ObjectSharedPtr objectCreate( PayloadSharedPtr const& userData );
 
-        virtual GroupHandle groupCreate();
-        virtual ResultHandle groupCreateResult( GroupHandle const& group );
+        virtual GroupSharedPtr groupCreate();
+        virtual ResultSharedPtr groupCreateResult( GroupSharedPtr const& group );
 
-        virtual void cull( const GroupHandle& group, const ResultHandle& result, const dp::math::Mat44f& viewProjection );
+        virtual void cull( const GroupSharedPtr& group, const ResultSharedPtr& result, const dp::math::Mat44f& viewProjection );
       private:
         void initializeComputeShader();
 
         /************************************************************************/
         /* OpenGL resources                                                     */
         /************************************************************************/
-        dp::gl::SharedProgram m_program;
-        GLint                 m_uniformViewProjection;
-        bool                  m_shaderInitialized;
+        dp::gl::ProgramSharedPtr  m_program;
+        GLint                     m_uniformViewProjection;
+        bool                      m_shaderInitialized;
       };
 
     } // namespace opengl

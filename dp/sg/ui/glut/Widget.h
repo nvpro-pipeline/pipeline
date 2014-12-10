@@ -47,8 +47,8 @@ namespace dp
           DP_SG_UI_GLUT_API Widget( int x = -1, int y = -1 );
           DP_SG_UI_GLUT_API virtual ~Widget();
 
-          DP_SG_UI_GLUT_API const dp::gl::SharedRenderContext & getRenderContext() const;
-          DP_SG_UI_GLUT_API const dp::gl::SharedRenderTarget  & getRenderTarget() const;
+          DP_SG_UI_GLUT_API const dp::gl::RenderContextSharedPtr & getRenderContext() const;
+          DP_SG_UI_GLUT_API const dp::gl::RenderTargetSharedPtr  & getRenderTarget() const;
 
           /** \brief Enforce a repaint of the viewport **/
           DP_SG_UI_GLUT_API virtual void doTriggerRepaint();
@@ -117,7 +117,7 @@ namespace dp
 
           std::string m_windowTitle;
           std::string m_windowTitleBase;
-          dp::gl::SharedRenderTarget  m_renderTarget;
+          dp::gl::RenderTargetSharedPtr  m_renderTarget;
 
           /************************************************************************/
           /* static delegation functions                                          */

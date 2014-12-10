@@ -36,7 +36,7 @@ namespace dp
     namespace glsl
     {
 
-      dp::fx::ParameterGroupLayout::SmartParameterInfo createParameterInfoUBOStd140( unsigned int type, size_t& offset, size_t arraySize );
+      dp::fx::ParameterGroupLayout::ParameterInfoSharedPtr createParameterInfoUBOStd140( unsigned int type, size_t& offset, size_t arraySize );
 
     } // namespace glsl
   } // namespace fx

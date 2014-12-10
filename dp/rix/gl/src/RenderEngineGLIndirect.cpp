@@ -139,7 +139,7 @@ namespace dp
 
         RenderEngineGLIndirect::RenderGroupGLCache::BindlessPointer pointer;
         DP_ASSERT( gi->getGeometry()->getIndices()->getBufferHandle()->getBuffer() );
-        dp::gl::SharedBuffer const& buffer = gi->getGeometry()->getIndices()->getBufferHandle()->getBuffer();
+        dp::gl::BufferSharedPtr const& buffer = gi->getGeometry()->getIndices()->getBufferHandle()->getBuffer();
         pointer.m_address = buffer->getAddress();
         pointer.m_range = buffer->getSize();
         entry.m_indexPointers.push_back( pointer );
@@ -215,7 +215,7 @@ namespace dp
         std::vector<GLuint64EXT> pointers;
 
         DP_ASSERT( entry->m_indirectEntriesBuffer->getBuffer() );
-        dp::gl::SharedBuffer const& buffer = entry->m_indirectEntriesBuffer->getBuffer();
+        dp::gl::BufferSharedPtr const& buffer = entry->m_indirectEntriesBuffer->getBuffer();
         GLuint64EXT base = buffer->getAddress();
         for ( size_t index = 0;index < entry->m_indirectEntries.size(); ++index )
         {

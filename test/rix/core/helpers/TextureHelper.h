@@ -84,14 +84,14 @@ namespace dp
       }
 
 
-      DPHELPERS_API dp::util::SmartImage getEyeZFromDepthBuffer( const dp::util::SmartImage& depthBuffer, float nearPlane, float farPlane );
+      DPHELPERS_API dp::util::ImageSharedPtr getEyeZFromDepthBuffer( const dp::util::ImageSharedPtr& depthBuffer, float nearPlane, float farPlane );
 
-      DPHELPERS_API dp::util::SmartImage getGrayscaleFromAlphaImage( const dp::util::SmartImage& alphaImage );
+      DPHELPERS_API dp::util::ImageSharedPtr getGrayscaleFromAlphaImage( const dp::util::ImageSharedPtr& alphaImage );
 
-      DPHELPERS_API dp::util::SmartImage getGrayscaleFromAlphaImageFloatRange( const dp::util::SmartImage& alphaImage, float from, float to );
+      DPHELPERS_API dp::util::ImageSharedPtr getGrayscaleFromAlphaImageFloatRange( const dp::util::ImageSharedPtr& alphaImage, float from, float to );
 
       DPHELPERS_API core::TextureSharedHandle generateTexture( dp::rix::core::Renderer* rix 
-                                                             , dp::util::generator::SmartTextureObjectData data
+                                                             , dp::util::generator::TextureObjectDataSharedPtr data
                                                              , dp::util::PixelFormat pixelFormat = dp::util::PF_RGBA
                                                              , dp::util::DataType dataType = dp::util::DT_FLOAT_32
                                                              , core::InternalTextureFormat internalFormat = core::ITF_RGBA8

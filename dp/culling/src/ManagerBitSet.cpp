@@ -75,19 +75,19 @@ namespace dp
 
     }
 
-    void ManagerBitSet::objectSetUserData( const ObjectHandle& object, SmartPayload const& userData )
+    void ManagerBitSet::objectSetUserData( const ObjectSharedPtr& object, PayloadSharedPtr const& userData )
     {
       object.staticCast<ObjectBitSet>()->setUserData( userData );
     }
 
-    SmartPayload const& ManagerBitSet::objectGetUserData( const ObjectHandle& object )
+    PayloadSharedPtr const& ManagerBitSet::objectGetUserData( const ObjectSharedPtr& object )
     {
       return( object.staticCast<ObjectBitSet>()->getUserData() );
     }
 
-    void ManagerBitSet::objectSetTransformIndex( const ObjectHandle& object, size_t index )
+    void ManagerBitSet::objectSetTransformIndex( const ObjectSharedPtr& object, size_t index )
     {
-      const ObjectBitSetHandle objectImpl = object.staticCast<ObjectBitSet>();
+      const ObjectBitSetSharedPtr objectImpl = object.staticCast<ObjectBitSet>();
 
       objectImpl->setTransformIndex( index );
       if ( objectImpl->getGroup() )
@@ -96,9 +96,9 @@ namespace dp
       }
     }
 
-    void ManagerBitSet::objectSetBoundingBox( const ObjectHandle& object, const dp::math::Box3f& boundingBox )
+    void ManagerBitSet::objectSetBoundingBox( const ObjectSharedPtr& object, const dp::math::Box3f& boundingBox )
     {
-      const ObjectBitSetHandle objectImpl = object.staticCast<ObjectBitSet>();
+      const ObjectBitSetSharedPtr objectImpl = object.staticCast<ObjectBitSet>();
       objectImpl->setLowerLeft( dp::math::Vec4f(boundingBox.getLower(), 1.0f ) );
       objectImpl->setExtent( dp::math::Vec4f( boundingBox.getSize(), 0.0f ) );
 
@@ -108,51 +108,51 @@ namespace dp
       }
     }
 
-    void ManagerBitSet::groupAddObject( const GroupHandle& group, const ObjectHandle& object )
+    void ManagerBitSet::groupAddObject( const GroupSharedPtr& group, const ObjectSharedPtr& object )
     {
       group.staticCast<GroupBitSet>()->addObject( object.staticCast<ObjectBitSet>() );
     }
 
-    ObjectHandle ManagerBitSet::groupGetObject( const GroupHandle& group, size_t index )
+    ObjectSharedPtr ManagerBitSet::groupGetObject( const GroupSharedPtr& group, size_t index )
     {
       return( group.staticCast<GroupBitSet>()->getObject( index ) );
     }
 
-    void ManagerBitSet::groupRemoveObject( const GroupHandle& group, const ObjectHandle& objectHandle )
+    void ManagerBitSet::groupRemoveObject( const GroupSharedPtr& group, const ObjectSharedPtr& objectHandle )
     {
       group.staticCast<GroupBitSet>()->removeObject( objectHandle.staticCast<ObjectBitSet>() );
     }
 
-    size_t ManagerBitSet::groupGetCount( const GroupHandle& group )
+    size_t ManagerBitSet::groupGetCount( const GroupSharedPtr& group )
     {
       return( group.staticCast<GroupBitSet>()->getObjectCount() );
     }
 
-    void ManagerBitSet::groupSetMatrices( const GroupHandle& group, void const* matrices, size_t numberOfMatrices, size_t stride )
+    void ManagerBitSet::groupSetMatrices( const GroupSharedPtr& group, void const* matrices, size_t numberOfMatrices, size_t stride )
     {
       group.staticCast<GroupBitSet>()->setMatrices( matrices, numberOfMatrices, stride );
     }
 
-    void ManagerBitSet::groupMatrixChanged( GroupHandle const& group, size_t index )
+    void ManagerBitSet::groupMatrixChanged( GroupSharedPtr const& group, size_t index )
     {
       group.staticCast<GroupBitSet>()->markMatrixDirty( index );
     }
 
-    std::vector<ObjectHandle> const & ManagerBitSet::resultGetChanged( const ResultHandle& result )
+    std::vector<ObjectSharedPtr> const & ManagerBitSet::resultGetChanged( const ResultSharedPtr& result )
     {
       return( result.staticCast<ResultBitSet>()->getChangedObjects() );
     }
 
-    bool ManagerBitSet::resultObjectIsVisible( ResultHandle const& result, ObjectHandle const& object )
+    bool ManagerBitSet::resultObjectIsVisible( ResultSharedPtr const& result, ObjectSharedPtr const& object )
     {
       return( result.staticCast<ResultBitSet>()->isVisible( object.staticCast<ObjectBitSet>() ) );
     }
 
-    dp::math::Box3f ManagerBitSet::getBoundingBox( const GroupHandle& group ) const
+    dp::math::Box3f ManagerBitSet::getBoundingBox( const GroupSharedPtr& group ) const
     {
       dp::util::ProfileEntry p("cull::getBoundingBox");
 
-      const GroupBitSetHandle& groupImpl = group.staticCast<GroupBitSet>();
+      const GroupBitSetSharedPtr& groupImpl = group.staticCast<GroupBitSet>();
       if ( groupImpl->isBoundingBoxDirty() )
       {
         groupImpl->setBoundingBox( calculateBoundingBox( group ) );
@@ -161,12 +161,12 @@ namespace dp
       return groupImpl->getBoundingBox();
     }
 
-    dp::math::Box3f ManagerBitSet::calculateBoundingBox( const GroupHandle& group ) const
+    dp::math::Box3f ManagerBitSet::calculateBoundingBox( const GroupSharedPtr& group ) const
     {
 #if defined(SSE)
       if ( useSSE )
       {
-        const GroupBitSetHandle& groupImpl = group.staticCast<GroupBitSet>();
+        const GroupBitSetSharedPtr& groupImpl = group.staticCast<GroupBitSet>();
 
         __m128 minValue = _mm_set1_ps( std::numeric_limits<float>::signaling_NaN() );
         __m128 maxValue = _mm_set1_ps( std::numeric_limits<float>::signaling_NaN() );
@@ -174,7 +174,7 @@ namespace dp
         char const* basePtr = reinterpret_cast<char const*>(groupImpl->getMatrices());
         for ( size_t index = 0;index < groupImpl->getObjectCount(); ++index )
         {
-          const ObjectBitSetHandle objectImpl = groupImpl->getObject( index ).staticCast<ObjectBitSet>();
+          const ObjectBitSetSharedPtr objectImpl = groupImpl->getObject( index ).staticCast<ObjectBitSet>();
           dp::math::sse::Mat44f const& modelView = *reinterpret_cast<dp::math::sse::Mat44f const*>(basePtr + objectImpl->getTransformIndex() * groupImpl->getMatricesStride());
           dp::math::Vec4f const& extent = objectImpl->getExtent();
 
@@ -215,7 +215,7 @@ namespace dp
 #elif defined(NEON)
         if ( useNEON )
         {
-          const GroupBitSetHandle& groupImpl = dp::util::smart_cast<GroupBitSet>( group );
+          const GroupBitSetSharedPtr& groupImpl = dp::util::smart_cast<GroupBitSet>( group );
 
           float32x4_t minValue = vdupq_n_f32( std::numeric_limits<float>::max() );
           float32x4_t maxValue = vdupq_n_f32( -std::numeric_limits<float>::max() );
@@ -223,7 +223,7 @@ namespace dp
           char const* basePtr = reinterpret_cast<char const*>(groupImpl->getMatrices());
           for ( size_t index = 0;index < groupImpl->getObjectCount(); ++index )
           {
-            const ObjectBitSetHandle objectImpl = dp::util::smart_cast<ObjectBitSet>( groupImpl->getObject( index ) );
+            const ObjectBitSetSharedPtr objectImpl = dp::util::smart_cast<ObjectBitSet>( groupImpl->getObject( index ) );
             dp::math::neon::Mat44f const& modelView = *reinterpret_cast<dp::math::neon::Mat44f const*>(basePtr + objectImpl->getTransformIndex() * groupImpl->getMatricesStride());
             dp::math::Vec4f const& extent = objectImpl->getExtent();
 
@@ -267,14 +267,14 @@ namespace dp
 #endif
       // CPU fallback
       {
-        const GroupBitSetHandle& groupImpl = group.staticCast<GroupBitSet>();
+        const GroupBitSetSharedPtr& groupImpl = group.staticCast<GroupBitSet>();
 
         dp::math::Box4f boundingBox;
 
         char const* basePtr = reinterpret_cast<char const*>(groupImpl->getMatrices());
         for ( size_t index = 0;index < groupImpl->getObjectCount(); ++index )
         {
-          const ObjectBitSetHandle objectImpl = groupImpl->getObject( index ).staticCast<ObjectBitSet>();
+          const ObjectBitSetSharedPtr objectImpl = groupImpl->getObject( index ).staticCast<ObjectBitSet>();
           dp::math::Mat44f const& modelView = reinterpret_cast<dp::math::Mat44f const&>(*(basePtr + objectImpl->getTransformIndex() * groupImpl->getMatricesStride()));
           dp::math::Vec4f const& extent = objectImpl->getExtent();
 

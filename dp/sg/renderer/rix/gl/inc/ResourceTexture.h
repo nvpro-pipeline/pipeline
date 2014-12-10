@@ -39,14 +39,14 @@ namespace dp
       {
         namespace gl
         {
-          SMART_TYPES( ResourceTexture );
+          DEFINE_PTR_TYPES( ResourceTexture );
           typedef ResourceTexture* WeakResourceTexture;
-    
+
           class ResourceTexture : public ResourceManager::Resource
           {
           public:
             /** \brief Fetch resource for the given object/resourceManager. If no resource exists it'll be created **/
-            static SmartResourceTexture get( const dp::sg::core::TextureSharedPtr& texture, const SmartResourceManager& resourceManager );
+            static ResourceTextureSharedPtr get( const dp::sg::core::TextureSharedPtr& texture, const ResourceManagerSharedPtr& resourceManager );
       
             virtual ~ResourceTexture();
 
@@ -59,7 +59,7 @@ namespace dp
           protected:
             dp::rix::core::TextureSharedHandle getRiXTexture( dp::sg::core::TextureHostSharedPtr const& texture );
             void updateRiXTexture( const dp::rix::core::TextureSharedHandle& rixTexture, dp::sg::core::TextureHostSharedPtr const& texture );
-            ResourceTexture( const dp::sg::core::TextureSharedPtr& texture, const SmartResourceManager& resourceManager );
+            ResourceTexture( const dp::sg::core::TextureSharedPtr& texture, const ResourceManagerSharedPtr& resourceManager );
 
           protected:
             dp::sg::core::TextureSharedPtr m_texture;

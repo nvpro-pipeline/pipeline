@@ -47,12 +47,12 @@ using namespace dp::sg::core;
 ExtractGeometryTraverser::ExtractGeometryTraverser()
 {
   // construct a material to extract defaults 
-  const SmartEffectSpec & standardSpec = getStandardMaterialSpec();
+  const EffectSpecSharedPtr & standardSpec = getStandardMaterialSpec();
   EffectSpec::iterator groupSpecIt = standardSpec->findParameterGroupSpec( string( "standardMaterialParameters" ) );
   DP_ASSERT( groupSpecIt != standardSpec->endParameterGroupSpecs() );
   dp::sg::core::ParameterGroupDataSharedPtr material = dp::sg::core::ParameterGroupData::create( *groupSpecIt );
 
-  SmartParameterGroupSpec pgs = material->getParameterGroupSpec();
+  ParameterGroupSpecSharedPtr pgs = material->getParameterGroupSpec();
   CSFSGMaterial csfsgmaterial;
   csfsgmaterial.name  = std::string("default");
   csfsgmaterial.diffuse  = Vec4f( material->getParameter<Vec3f>( pgs->findParameterSpec( "frontDiffuseColor" ) ), 1.0f );
@@ -139,14 +139,14 @@ void  ExtractGeometryTraverser::handleGeoNode( const GeoNode * p )
 {
   if ( p->getMaterialEffect() )
   {
-    EffectDataSharedPtr const& ed = p->getMaterialEffect();
-    const ParameterGroupDataSharedPtr & smp = ed->findParameterGroupData( string( "standardMaterialParameters" ) );
+    dp::sg::core::EffectDataSharedPtr const& ed = p->getMaterialEffect();
+    const dp::sg::core::ParameterGroupDataSharedPtr & smp = ed->findParameterGroupData( string( "standardMaterialParameters" ) );
     if ( smp )
     {
       CSFSGMaterialHashMap::const_iterator itSearch = m_materialMap.find(ed.getWeakPtr());
       if ( itSearch == m_materialMap.end() )
       {
-        SmartParameterGroupSpec pgs = smp->getParameterGroupSpec();
+        ParameterGroupSpecSharedPtr pgs = smp->getParameterGroupSpec();
         CSFSGMaterial material;
 
         // simply copy this material for later

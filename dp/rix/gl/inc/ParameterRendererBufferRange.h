@@ -45,7 +45,7 @@ namespace dp
       {
       public:
         ParameterRendererBufferRange();
-        ParameterRendererBufferRange( ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::SharedBuffer const& ubo, GLenum target, size_t uboBinding, GLsizeiptr uboBlockSize );
+        ParameterRendererBufferRange( ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::BufferSharedPtr const& ubo, GLenum target, size_t uboBinding, GLsizeiptr uboBlockSize );
 
         virtual void activate();
 

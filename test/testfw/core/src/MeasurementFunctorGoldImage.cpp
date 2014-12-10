@@ -157,7 +157,7 @@ namespace dp
           }
           else
           { 
-            util::SmartImage gold = util::imageFromFile(m_goldDir + "\\" + goldImageName);
+            util::ImageSharedPtr gold = util::imageFromFile(m_goldDir + "\\" + goldImageName);
             if( !gold )
             {
               if(foundFile)
@@ -192,7 +192,7 @@ namespace dp
         m_screenshots.push_back( static_cast<TestRender*>(getTest())->getScreenshot() );
       }
 
-      util::SmartImage MeasurementFunctorGoldImage::retrieveScreenshot( unsigned int i )
+      util::ImageSharedPtr MeasurementFunctorGoldImage::retrieveScreenshot( unsigned int i )
       {
         return m_screenshots[i];
       }

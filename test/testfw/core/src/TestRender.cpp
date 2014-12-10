@@ -55,13 +55,13 @@ namespace dp
       {
       }
 
-      util::SmartImage TestRender::getScreenshot() const
+      util::ImageSharedPtr TestRender::getScreenshot() const
       {
-        util::SmartImage image = m_displayTarget->getImage();
+        util::ImageSharedPtr image = m_displayTarget->getImage();
         return image;
       }
 
-      void TestRender::render( RenderData* renderData, dp::ui::SmartRenderTarget renderTarget )
+      void TestRender::render( RenderData* renderData, dp::ui::RenderTargetSharedPtr renderTarget )
       {
         m_backend->render(renderData, renderTarget);
       }
@@ -132,7 +132,7 @@ namespace dp
         return !!m_backend;
       }
 
-      SmartBackend TestRender::createBackend( const std::string& rendererName, const std::vector<std::string>& options )
+      BackendSharedPtr TestRender::createBackend( const std::string& rendererName, const std::vector<std::string>& options )
       {
         typedef core::Backend * (*ContextCreator)(const char*, const std::vector<std::string>*);
 
@@ -145,7 +145,7 @@ namespace dp
 
           for( std::vector<std::string>::iterator it = backendNames.begin(); it != backendNames.end(); ++it )
           {
-            dp::util::SmartDynamicLibrary backendLib = dp::util::DynamicLibrary::createFromFile( *it );
+            dp::util::DynamicLibrarySharedPtr backendLib = dp::util::DynamicLibrary::createFromFile( *it );
             IsRendererSupported isRendererSupported = (IsRendererSupported)backendLib->getSymbol( "isRendererSupported" );
             DP_ASSERT( isRendererSupported );
             if ( isRendererSupported( rendererName.c_str() ) )
@@ -181,7 +181,7 @@ namespace dp
         return creator( rendererName.c_str(), &options )->shared_from_this();
       }
 
-      SmartBackend TestRender::getBackend() const
+      BackendSharedPtr TestRender::getBackend() const
       {
         return( m_backend );
       }

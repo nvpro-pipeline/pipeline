@@ -66,15 +66,15 @@ namespace dp
       class TextureGL : public dp::sg::core::Texture
       {
       public:
-        DP_SG_GL_API static TextureGLSharedPtr create( const dp::gl::SharedTexture& textureGL );
+        DP_SG_GL_API static TextureGLSharedPtr create( const dp::gl::TextureSharedPtr& textureGL );
         DP_SG_GL_API virtual dp::sg::core::HandledObjectSharedPtr clone() const;
 
-        DP_SG_GL_API const dp::gl::SharedTexture& getTexture() const;
+        DP_SG_GL_API const dp::gl::TextureSharedPtr& getTexture() const;
         DP_SG_GL_API static bool getTexImageFmt( GLTexImageFmt & tfmt, dp::sg::core::Image::PixelFormat fmt, dp::sg::core::Image::PixelDataType type, dp::sg::core::TextureHost::TextureGPUFormat gpufmt );
       protected:
-        DP_SG_GL_API TextureGL( const dp::gl::SharedTexture& texture );
+        DP_SG_GL_API TextureGL( const dp::gl::TextureSharedPtr& texture );
       private:
-        dp::gl::SharedTexture m_texture;
+        dp::gl::TextureSharedPtr m_texture;
       };
 
     } // namespace gl

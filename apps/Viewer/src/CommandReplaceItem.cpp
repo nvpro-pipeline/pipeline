@@ -117,7 +117,7 @@ bool CommandReplaceItem::doReplace( SceneTreeItem * oldChild, SceneTreeItem * ne
       DP_ASSERT( newChild->getObject()->getObjectCode() == OC_SAMPLER );
       {
         ParameterGroupDataSharedPtr const& pgd = m_parent->getObject().staticCast<ParameterGroupData>();
-        const dp::fx::SmartParameterGroupSpec & pgs = pgd->getParameterGroupSpec();
+        const dp::fx::ParameterGroupSpecSharedPtr & pgs = pgd->getParameterGroupSpec();
         dp::fx::ParameterGroupSpec::iterator it = pgs->findParameterSpec( newChild->getObject().staticCast<Sampler>()->getName() );
         DP_ASSERT( it != pgs->endParameterSpecs() );
         DP_ASSERT( pgs->findParameterSpec( oldChild->getObject().staticCast<Sampler>()->getName() ) == it );

@@ -66,7 +66,7 @@ using namespace std;
 // define a unique plug-interface ID for SceneLoader
 const dp::util::UPITID PITID_SCENE_LOADER(UPITID_SCENE_LOADER, UPITID_VERSION);
 
-SmartXMLLoader XMLLoader::create()
+XMLLoaderSharedPtr XMLLoader::create()
 {
   return( std::shared_ptr<XMLLoader>( new XMLLoader() ) );
 }

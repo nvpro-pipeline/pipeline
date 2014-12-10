@@ -210,7 +210,7 @@ namespace dp
        *  \param type The OpenGL texture client type used in resize operations (e.g. GL_UNSIGNED_BYTE).
        *  \param width The texture width.
        *  \sa setData, resize */
-      DP_GL_API static SharedTexture1D create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width = 0 );
+      DP_GL_API static Texture1DSharedPtr create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width = 0 );
 
     public:
       /*! \brief Transfers data to the OpenGL texture, keeping current internal format and size.
@@ -268,7 +268,7 @@ namespace dp
        *  \param width The texture width.
        *  \param layers The amount of texture layers.
        *  \sa setData, resize */
-      DP_GL_API static SharedTexture1DArray create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width = 0, GLsizei layers = 0 );
+      DP_GL_API static Texture1DArraySharedPtr create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width = 0, GLsizei layers = 0 );
 
     public:
       /*! \brief Transfers data to the OpenGL texture, keeping current internal format and size.
@@ -340,7 +340,7 @@ namespace dp
        *  \param width The texture width.
        *  \param height The texture height.
        *  \sa setData, resize */
-      DP_GL_API static SharedTexture2D create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width = 0, GLsizei height = 0 );
+      DP_GL_API static Texture2DSharedPtr create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width = 0, GLsizei height = 0 );
 
     public:
       /*! \brief Transfers the buffer data to the OpenGL texture, keeping current internal format and size.
@@ -405,7 +405,7 @@ namespace dp
        *  \param width The texture width.
        *  \param height The texture height.
        *  \sa setData, resize */
-      DP_GL_API static SharedTextureRectangle create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width = 0, GLsizei height = 0 );
+      DP_GL_API static TextureRectangleSharedPtr create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width = 0, GLsizei height = 0 );
 
     public:
       /*! \brief Transfers data to the OpenGL texture, keeping current internal format and size.
@@ -471,7 +471,7 @@ namespace dp
        *  \param height The texture height.
        *  \param layers The amount of texture layers.
        *  \sa setData, resize */
-      DP_GL_API static SharedTexture2DArray create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width = 0, GLsizei height = 0, GLsizei layers = 0 );
+      DP_GL_API static Texture2DArraySharedPtr create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width = 0, GLsizei height = 0, GLsizei layers = 0 );
 
     public:
       /*! \brief Transfers data to the OpenGL texture, keeping current internal format and size.
@@ -555,7 +555,7 @@ namespace dp
        *  \param height The texture height.
        *  \param depth The texture depth.
        *  \sa setData, resize */
-      DP_GL_API static SharedTexture3D create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width = 0, GLsizei height = 0, GLsizei depth = 0 );
+      DP_GL_API static Texture3DSharedPtr create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width = 0, GLsizei height = 0, GLsizei depth = 0 );
 
     public:
       /*! \brief Transfers data to the OpenGL texture, keeping current internal format and size.
@@ -629,7 +629,7 @@ namespace dp
        *  \param format The OpenGL texture client format used in resize operations (e.g. GL_RGBA).
        *  \param type The OpenGL texture client type used in resize operations (e.g. GL_UNSIGNED_BYTE).
        *  \sa setData, resize */
-      DP_GL_API static SharedTextureCubemap create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width = 0, GLsizei height = 0 );
+      DP_GL_API static TextureCubemapSharedPtr create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width = 0, GLsizei height = 0 );
 
     public:
       /*! \brief Transfers data to the OpenGL texture, keeping current internal format and size.
@@ -701,7 +701,7 @@ namespace dp
        *  \param height The texture height. Width and height must match.
        *  \param layers The amount of texture layers.
        *  \sa setData, resize */
-      DP_GL_API static SharedTextureCubemapArray create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width = 0, GLsizei height = 0, GLsizei layers = 0 );
+      DP_GL_API static TextureCubemapArraySharedPtr create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width = 0, GLsizei height = 0, GLsizei layers = 0 );
 
     public:
       /*! \brief Transfers data to the OpenGL texture, keeping current internal format and size.
@@ -788,7 +788,7 @@ namespace dp
        *  \param width The texture width.
        *  \param height The texture height.
        *  \sa resize, setSamples */
-      DP_GL_API static SharedTexture2DMultisample create( GLenum internalFormat, GLsizei samples = 1, GLsizei width = 0, GLsizei height = 0, bool fixedLocations = true );
+      DP_GL_API static Texture2DMultisampleSharedPtr create( GLenum internalFormat, GLsizei samples = 1, GLsizei width = 0, GLsizei height = 0, bool fixedLocations = true );
 
     public:
       /*! \brief Resizes the texture. All content and mipmap levels are lost if the size is different from current state.
@@ -892,7 +892,7 @@ namespace dp
        *  \param fixedLocations When set to true, the location of the samples are the same for all internalFormats and depend only on sample count.
        *  Otherwise they can vary with each internalFormat.
        *  \sa resize, setSamples */
-      DP_GL_API static SharedTexture2DMultisampleArray create( GLenum internalFormat, GLsizei samples = 1, GLsizei width = 0, GLsizei height = 0, GLsizei layers = 0, bool fixedLocations = true );
+      DP_GL_API static Texture2DMultisampleArraySharedPtr create( GLenum internalFormat, GLsizei samples = 1, GLsizei width = 0, GLsizei height = 0, GLsizei layers = 0, bool fixedLocations = true );
 
     public:
       /*! \brief Resizes the texture. All content and mipmap levels are lost if the size is different from current state.
@@ -992,13 +992,13 @@ namespace dp
     class TextureBuffer : public Texture
     {
       public:
-        DP_GL_API static SharedTextureBuffer create( GLenum internalFormat, SharedBuffer const& buffer );
-        DP_GL_API static SharedTextureBuffer create( GLenum internalFormat, unsigned int size = 0, GLvoid const* data = nullptr, GLenum usage = GL_DYNAMIC_COPY );
+        DP_GL_API static TextureBufferSharedPtr create( GLenum internalFormat, BufferSharedPtr const& buffer );
+        DP_GL_API static TextureBufferSharedPtr create( GLenum internalFormat, unsigned int size = 0, GLvoid const* data = nullptr, GLenum usage = GL_DYNAMIC_COPY );
         DP_GL_API ~TextureBuffer();
 
       public:
-        DP_GL_API SharedBuffer const& getBuffer() const;
-        DP_GL_API void setBuffer( SharedBuffer const& buffer );
+        DP_GL_API BufferSharedPtr const& getBuffer() const;
+        DP_GL_API void setBuffer( BufferSharedPtr const& buffer );
 
         /*! \brief Returns the maximum texture size allowed in the current OpenGL context.
          *  \note Uses GL_MAX_TEXTURE_SIZE for the query.
@@ -1010,10 +1010,10 @@ namespace dp
         DP_GL_API static bool isSupported();
 
       protected:
-        DP_GL_API TextureBuffer( GLenum internalFormat, SharedBuffer const& buffer );
+        DP_GL_API TextureBuffer( GLenum internalFormat, BufferSharedPtr const& buffer );
 
       private:
-        SharedBuffer  m_buffer;
+        BufferSharedPtr  m_buffer;
     };
 
   } // namespace gl

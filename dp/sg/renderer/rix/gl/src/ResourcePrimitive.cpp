@@ -44,7 +44,7 @@ namespace dp
 
           class ResourcePrimitiveStandard : public ResourcePrimitive {
           public:
-            ResourcePrimitiveStandard(const dp::sg::core::PrimitiveSharedPtr &primitive, const SmartResourceManager& resourceManager);
+            ResourcePrimitiveStandard(const dp::sg::core::PrimitiveSharedPtr &primitive, const ResourceManagerSharedPtr& resourceManager);
 
           protected:
             virtual void updateVertexAttributesAndIndices();
@@ -54,11 +54,11 @@ namespace dp
             virtual unsigned int getFirstIndex() const;
 
           private:
-            SmartResourceIndexSet           m_resourceIndexSet;
-            SmartResourceVertexAttributeSet m_resourceVertexAttributeSet;
+            ResourceIndexSetSharedPtr           m_resourceIndexSet;
+            ResourceVertexAttributeSetSharedPtr m_resourceVertexAttributeSet;
           };
 
-          ResourcePrimitiveStandard::ResourcePrimitiveStandard(const dp::sg::core::PrimitiveSharedPtr &primitive, const SmartResourceManager& resourceManager)
+          ResourcePrimitiveStandard::ResourcePrimitiveStandard(const dp::sg::core::PrimitiveSharedPtr &primitive, const ResourceManagerSharedPtr& resourceManager)
             : ResourcePrimitive(primitive, resourceManager)
           {
           }
@@ -113,7 +113,7 @@ namespace dp
           /************************************************************************/
           class ResourcePrimitiveSubAllocator : public ResourcePrimitive {
           public:
-            ResourcePrimitiveSubAllocator(const dp::sg::core::PrimitiveSharedPtr &primitive, const SmartResourceManager& resourceManager);
+            ResourcePrimitiveSubAllocator(const dp::sg::core::PrimitiveSharedPtr &primitive, const ResourceManagerSharedPtr& resourceManager);
 
           protected:
             virtual void updateVertexAttributesAndIndices();
@@ -129,7 +129,7 @@ namespace dp
             unsigned int                                m_firstIndex;
           };
 
-          ResourcePrimitiveSubAllocator::ResourcePrimitiveSubAllocator(const dp::sg::core::PrimitiveSharedPtr &primitive, const SmartResourceManager& resourceManager)
+          ResourcePrimitiveSubAllocator::ResourcePrimitiveSubAllocator(const dp::sg::core::PrimitiveSharedPtr &primitive, const ResourceManagerSharedPtr& resourceManager)
             : ResourcePrimitive(primitive, resourceManager)
           {
           }
@@ -174,12 +174,12 @@ namespace dp
             return m_firstIndex;
           }
 
-          SmartResourcePrimitive ResourcePrimitive::get( const dp::sg::core::PrimitiveSharedPtr &primitive, const SmartResourceManager& resourceManager )
+          ResourcePrimitiveSharedPtr ResourcePrimitive::get( const dp::sg::core::PrimitiveSharedPtr &primitive, const ResourceManagerSharedPtr& resourceManager )
           {
             assert( primitive );
             assert( resourceManager );
 
-            SmartResourcePrimitive resourcePrimitive = resourceManager->getResource<ResourcePrimitive>( reinterpret_cast<size_t>(primitive.getWeakPtr()) );
+            ResourcePrimitiveSharedPtr resourcePrimitive = resourceManager->getResource<ResourcePrimitive>( reinterpret_cast<size_t>(primitive.getWeakPtr()) );
             if ( !resourcePrimitive )
             {
 #if defined(USE_SUBALLOCATOR)
@@ -193,7 +193,7 @@ namespace dp
             return resourcePrimitive;
           }
 
-          ResourcePrimitive::ResourcePrimitive( const dp::sg::core::PrimitiveSharedPtr &primitive, const SmartResourceManager& resourceManager )
+          ResourcePrimitive::ResourcePrimitive( const dp::sg::core::PrimitiveSharedPtr &primitive, const ResourceManagerSharedPtr& resourceManager )
             : ResourceManager::Resource( reinterpret_cast<size_t>( primitive.getWeakPtr() ), resourceManager )
             , m_primitive( primitive )
           {

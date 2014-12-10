@@ -123,14 +123,14 @@ namespace dp
 
         ParameterStates    m_parameterStates;
 
-        std::vector< unsigned char >      m_uniformData;// data bytes for glUniform data
-        std::vector<dp::gl::SharedBuffer> m_ubos;       // one UBO for each ubo descriptor if glBufferSubData technique is being used
+        std::vector< unsigned char >          m_uniformData;// data bytes for glUniform data
+        std::vector<dp::gl::BufferSharedPtr>  m_ubos;       // one UBO for each ubo descriptor if glBufferSubData technique is being used
 
-        std::vector< unsigned char >      m_uboData;    // data bytes for the UBO before uploading
-        dp::gl::SharedBuffer              m_uboDataUBO; // single UBO for all uboData entries
+        std::vector< unsigned char >          m_uboData;    // data bytes for the UBO before uploading
+        dp::gl::BufferSharedPtr               m_uboDataUBO; // single UBO for all uboData entries
 
-        std::vector< bool >               m_isUBOData; // determines for each descriptor if the corresponding data should be copied to the UBO
-        std::vector< size_t >             m_dataSizes; // required size for container data cache for given index
+        std::vector< bool >                   m_isUBOData; // determines for each descriptor if the corresponding data should be copied to the UBO
+        std::vector< size_t >                 m_dataSizes; // required size for container data cache for given index
 
         // allocation state
         size_t m_currentUniformOffset;

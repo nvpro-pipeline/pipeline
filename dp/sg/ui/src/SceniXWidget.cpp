@@ -45,11 +45,11 @@ namespace dp
         if ( m_manipulator )
         {
           m_manipulator->setViewState( dp::sg::ui::ViewStateSharedPtr::null );
-          m_manipulator->setRenderTarget( dp::ui::SmartRenderTarget::null );
+          m_manipulator->setRenderTarget( dp::ui::RenderTargetSharedPtr::null );
         }
         if ( m_renderer )
         {
-          m_renderer->setRenderTarget( dp::ui::SmartRenderTarget::null );
+          m_renderer->setRenderTarget( dp::ui::RenderTargetSharedPtr::null );
         }
       }
 
@@ -68,7 +68,7 @@ namespace dp
         return m_viewState;
       }
 
-      void SceniXSceneRendererWidget::setSceneRenderer( const dp::sg::ui::SmartSceneRenderer &sceneRenderer )
+      void SceniXSceneRendererWidget::setSceneRenderer( const dp::sg::ui::SceneRendererSharedPtr &sceneRenderer )
       {
         if ( m_renderer != sceneRenderer)
         {
@@ -78,7 +78,7 @@ namespace dp
         }
       }
 
-      dp::sg::ui::SmartSceneRenderer SceniXSceneRendererWidget::getSceneRenderer() const
+      dp::sg::ui::SceneRendererSharedPtr SceniXSceneRendererWidget::getSceneRenderer() const
       {
         return m_renderer;
       }

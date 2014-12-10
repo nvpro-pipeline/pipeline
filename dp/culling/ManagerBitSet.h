@@ -38,23 +38,23 @@ namespace dp
     public:
       DP_CULLING_API ManagerBitSet();
       DP_CULLING_API virtual ~ManagerBitSet();
-      DP_CULLING_API virtual void objectSetBoundingBox( const ObjectHandle& object, const dp::math::Box3f& boundingBox );
-      DP_CULLING_API virtual void objectSetTransformIndex( const ObjectHandle& object, size_t index );
-      DP_CULLING_API virtual void objectSetUserData( const ObjectHandle& object, SmartPayload const& userData );
-      DP_CULLING_API virtual SmartPayload const& objectGetUserData( const ObjectHandle& object );
+      DP_CULLING_API virtual void objectSetBoundingBox( const ObjectSharedPtr& object, const dp::math::Box3f& boundingBox );
+      DP_CULLING_API virtual void objectSetTransformIndex( const ObjectSharedPtr& object, size_t index );
+      DP_CULLING_API virtual void objectSetUserData( const ObjectSharedPtr& object, PayloadSharedPtr const& userData );
+      DP_CULLING_API virtual PayloadSharedPtr const& objectGetUserData( const ObjectSharedPtr& object );
 
-      DP_CULLING_API virtual void groupAddObject( const GroupHandle& group, const ObjectHandle& object );
-      DP_CULLING_API virtual ObjectHandle groupGetObject( const GroupHandle& group, size_t index );
-      DP_CULLING_API virtual void groupRemoveObject( const GroupHandle& group, const ObjectHandle& object );
-      DP_CULLING_API virtual size_t groupGetCount( const GroupHandle& group );
-      DP_CULLING_API virtual void groupSetMatrices( GroupHandle const& group, void const* matrices, size_t numberOfMatrices, size_t stride );
-      DP_CULLING_API virtual void groupMatrixChanged( GroupHandle const& group, size_t index );
+      DP_CULLING_API virtual void groupAddObject( const GroupSharedPtr& group, const ObjectSharedPtr& object );
+      DP_CULLING_API virtual ObjectSharedPtr groupGetObject( const GroupSharedPtr& group, size_t index );
+      DP_CULLING_API virtual void groupRemoveObject( const GroupSharedPtr& group, const ObjectSharedPtr& object );
+      DP_CULLING_API virtual size_t groupGetCount( const GroupSharedPtr& group );
+      DP_CULLING_API virtual void groupSetMatrices( GroupSharedPtr const& group, void const* matrices, size_t numberOfMatrices, size_t stride );
+      DP_CULLING_API virtual void groupMatrixChanged( GroupSharedPtr const& group, size_t index );
 
-      DP_CULLING_API virtual std::vector<ObjectHandle> const & resultGetChanged( ResultHandle const & result );
-      DP_CULLING_API virtual bool resultObjectIsVisible( ResultHandle const& result, ObjectHandle const& object );
+      DP_CULLING_API virtual std::vector<ObjectSharedPtr> const & resultGetChanged( ResultSharedPtr const & result );
+      DP_CULLING_API virtual bool resultObjectIsVisible( ResultSharedPtr const& result, ObjectSharedPtr const& object );
 
-      DP_CULLING_API virtual dp::math::Box3f getBoundingBox( const GroupHandle& group ) const;
-      DP_CULLING_API virtual dp::math::Box3f calculateBoundingBox( const GroupHandle& group ) const;
+      DP_CULLING_API virtual dp::math::Box3f getBoundingBox( const GroupSharedPtr& group ) const;
+      DP_CULLING_API virtual dp::math::Box3f calculateBoundingBox( const GroupSharedPtr& group ) const;
     };
 
   } // namespace culling

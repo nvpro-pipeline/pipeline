@@ -47,12 +47,12 @@ namespace dp
         namespace gl
         {
 
-          SmartResourceEffectSpecRiXFx ResourceEffectSpecRiXFx::get( const SmartEffectSpec &effectSpec, const dp::rix::fx::SmartManager& rixFx, const SmartResourceManager& resourceManager )
+          ResourceEffectSpecRiXFxSharedPtr ResourceEffectSpecRiXFx::get( const EffectSpecSharedPtr &effectSpec, const dp::rix::fx::ManagerSharedPtr& rixFx, const ResourceManagerSharedPtr& resourceManager )
           {
             assert( effectSpec );
             assert( !!resourceManager );
 
-            SmartResourceEffectSpecRiXFx resourceEffectSpec = resourceManager->getResource<ResourceEffectSpecRiXFx>( reinterpret_cast<size_t>(effectSpec.getWeakPtr()) );
+            ResourceEffectSpecRiXFxSharedPtr resourceEffectSpec = resourceManager->getResource<ResourceEffectSpecRiXFx>( reinterpret_cast<size_t>(effectSpec.getWeakPtr()) );
             if ( !resourceEffectSpec )
             {
               resourceEffectSpec = std::shared_ptr<ResourceEffectSpecRiXFx>( new ResourceEffectSpecRiXFx( effectSpec, rixFx, resourceManager ) );
@@ -61,7 +61,7 @@ namespace dp
             return resourceEffectSpec;
           }
 
-          ResourceEffectSpecRiXFx::ResourceEffectSpecRiXFx( const SmartEffectSpec& effectSpec, const dp::rix::fx::SmartManager& rixfx, const SmartResourceManager& resourceManager )
+          ResourceEffectSpecRiXFx::ResourceEffectSpecRiXFx( const EffectSpecSharedPtr& effectSpec, const dp::rix::fx::ManagerSharedPtr& rixfx, const ResourceManagerSharedPtr& resourceManager )
             : ResourceManager::Resource( reinterpret_cast<size_t>( effectSpec.getWeakPtr() ), resourceManager )
             , m_resourceManager( resourceManager )
             , m_effectSpec( effectSpec )
@@ -78,7 +78,7 @@ namespace dp
 
           }
 
-          const SmartResourceParameterGroupDataRiXFx& ResourceEffectSpecRiXFx::getDefaultParameterGroupDataResource( const dp::fx::EffectSpec::iterator& parameterGroupSpec) const
+          const ResourceParameterGroupDataRiXFxSharedPtr& ResourceEffectSpecRiXFx::getDefaultParameterGroupDataResource( const dp::fx::EffectSpec::iterator& parameterGroupSpec) const
           {
             return m_defaultDatas[distance( m_effectSpec->beginParameterGroupSpecs(), parameterGroupSpec )];
           }
