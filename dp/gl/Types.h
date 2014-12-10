@@ -103,6 +103,12 @@ namespace dp
     }
 
     template <>
+    inline GLenum TypeTraits<bool>::glType()
+    {
+      return( GL_BOOL );
+    }
+
+    template <>
     inline GLenum TypeTraits<float>::glType()
     {
       return( GL_FLOAT );
@@ -155,6 +161,12 @@ namespace dp
       DP_STATIC_ASSERT( !"TypeTraits::glType: specialization for type dp::math::Vecnt<n,T> is missing" );
 #endif
       return( GL_INVALID_VALUE );
+    }
+
+    template <>
+    inline GLenum TypeTraits<dp::math::Vec3f>::glType()
+    {
+      return( GL_FLOAT_VEC3 );
     }
 
     template <>
