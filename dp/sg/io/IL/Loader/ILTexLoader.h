@@ -45,20 +45,20 @@
 // exports required for a scene loader plug-in
 extern "C"
 {
-  ILTEXLOADER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPlugIn & pi);
+  ILTEXLOADER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::PlugInSharedPtr & pi);
   ILTEXLOADER_API void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids );
 }
 
-SMART_TYPES( ILTexLoader );
+DEFINE_PTR_TYPES( ILTexLoader );
 
 //! A Texture Loader that encapsulates DevIL so it can be used with the SceniX PlugIn mechanism.
 class ILTexLoader : public dp::sg::io::TextureLoader
 {
   public:
-    static SmartILTexLoader create();
+    static ILTexLoaderSharedPtr create();
     virtual ~ILTexLoader();  
 
-    friend bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPlugIn & pi);
+    friend bool getPlugInterface(const dp::util::UPIID& piid, dp::util::PlugInSharedPtr & pi);
 
   protected:
     ILTexLoader();
@@ -80,7 +80,7 @@ class ILTexLoader : public dp::sg::io::TextureLoader
     /*! \brief Single instance of this class.
      *  \remarks To reduce the overhead due to the large number of supported extensions, we only
      *  instantiate this class once. */
-    static SmartILTexLoader m_instance;
+    static ILTexLoaderSharedPtr m_instance;
 };
 
 

@@ -276,7 +276,7 @@ namespace dp
       }
 #endif
 
-      dp::gl::SharedBuffer const& BufferGL::getBuffer() const
+      dp::gl::BufferSharedPtr const& BufferGL::getBuffer() const
       {
         return( m_buffer );
       }

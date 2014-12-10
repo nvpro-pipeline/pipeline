@@ -30,7 +30,7 @@
 #include <dp/math/Vecnt.h>
 #include <dp/sg/core/CoreTypes.h>
 
-SHARED_PTR_TYPES( Animator );
+DEFINE_PTR_TYPES( Animator );
 
 class Animator
 {
@@ -39,7 +39,7 @@ public:
   virtual void update( float time ) = 0;
 };
 
-SHARED_PTR_TYPES( AnimatedScene );
+DEFINE_PTR_TYPES( AnimatedScene );
 
 class AnimatedScene
 {
@@ -64,10 +64,10 @@ protected:
   dp::math::Vec2f m_gridSize;
   dp::math::Vec2i m_objectCount;
 
-  dp::fx::SmartEffectSpec  m_effectSpec;
-  dp::sg::core::PrimitiveSharedPtr m_primitive;
-  dp::sg::core::GroupSharedPtr     m_root;
-  dp::sg::core::SceneSharedPtr     m_scene;
+  dp::fx::EffectSpecSharedPtr       m_effectSpec;
+  dp::sg::core::PrimitiveSharedPtr  m_primitive;
+  dp::sg::core::GroupSharedPtr      m_root;
+  dp::sg::core::SceneSharedPtr      m_scene;
 
   // for updating colors;
   dp::fx::EffectSpec::iterator         m_itColors;

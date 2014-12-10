@@ -45,7 +45,7 @@ namespace dp
       bool GroupDataBufferedCombined::setValue( const dp::fx::ParameterGroupSpec::iterator& parameter, const dp::rix::core::ContainerData& data )
       {
         const dp::rix::core::ContainerDataRaw& containerDataRaw = reinterpret_cast<const dp::rix::core::ContainerDataRaw&>(data);
-        const dp::fx::ParameterGroupLayout::SmartParameterInfo& info = m_groupSpecInfo->m_groupLayout->getParameterInfo(parameter);
+        const dp::fx::ParameterGroupLayout::ParameterInfoSharedPtr& info = m_groupSpecInfo->m_groupLayout->getParameterInfo(parameter);
         info->convert( m_groupSpecInfo->m_bufferManager->allocationGetPointer( m_allocation.get() ), containerDataRaw.m_data );
         m_groupSpecInfo->m_bufferManager->allocationMarkDirty( m_allocation.get() );
         return false;

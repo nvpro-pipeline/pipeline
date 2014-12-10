@@ -36,13 +36,13 @@ namespace dp
 {
   namespace util
   {
-    SMART_TYPES( Image );
+    DEFINE_PTR_TYPES( Image );
 
     class Image       // a 2D bitmap.
     {
     public:
-      static DP_UTIL_API SmartImage create();
-      static DP_UTIL_API SmartImage create( size_t width, size_t height, PixelFormat pixelFormat, DataType dataType, void const* const* data = nullptr, size_t numLayers = 1, size_t mipmapLevels = 0 );
+      static DP_UTIL_API ImageSharedPtr create();
+      static DP_UTIL_API ImageSharedPtr create( size_t width, size_t height, PixelFormat pixelFormat, DataType dataType, void const* const* data = nullptr, size_t numLayers = 1, size_t mipmapLevels = 0 );
       virtual DP_UTIL_API ~Image();
 
     public:
@@ -91,8 +91,8 @@ namespace dp
 
     };
 
-    DP_UTIL_API bool       imageToFile(const SmartImage& image, std::string filename, bool layersAsFaces = true);
-    DP_UTIL_API SmartImage imageFromFile(const std::string& filename, bool layersAsFaces = true);
+    DP_UTIL_API bool            imageToFile(const ImageSharedPtr& image, std::string filename, bool layersAsFaces = true);
+    DP_UTIL_API ImageSharedPtr  imageFromFile(const std::string& filename, bool layersAsFaces = true);
 
   } // namespace util
 } // namespace dp

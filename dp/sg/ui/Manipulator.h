@@ -74,12 +74,12 @@ namespace dp
         /*! \brief Sets this manipulator's RenderTarget.
          *  \param renderTarget The RenderTarget this manipulator should use.
          *  \sa getRenderTarget */
-        DP_SG_UI_API virtual void setRenderTarget( const dp::ui::SmartRenderTarget &renderTarget );
+        DP_SG_UI_API virtual void setRenderTarget( const dp::ui::RenderTargetSharedPtr &renderTarget );
 
         /*! \brief Gets this manipulator's RenderTarget.
          *  \return The RenderTarget this manipulator is using.
          *  \sa setRenderTarget */
-        DP_SG_UI_API virtual dp::ui::SmartRenderTarget getRenderTarget() const;
+        DP_SG_UI_API virtual dp::ui::RenderTargetSharedPtr getRenderTarget() const;
 
         /*! \brief Updates the manipulator's timestamp, and runs the manipulator.
          *  \param dt Delta time passage since this function was called last, in seconds.
@@ -94,7 +94,7 @@ namespace dp
         virtual void reset();
 
       protected:
-        dp::ui::SmartRenderTarget       m_renderTarget;
+        dp::ui::RenderTargetSharedPtr   m_renderTarget;
         dp::sg::ui::ViewStateSharedPtr  m_viewState;
       };
 

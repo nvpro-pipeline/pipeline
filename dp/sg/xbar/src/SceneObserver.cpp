@@ -35,7 +35,7 @@ namespace dp
     namespace xbar
     {
 
-      SmartSceneObserver SceneObserver::create( SceneTreeWeakPtr sceneTree )
+      SceneObserverSharedPtr SceneObserver::create( SceneTreeWeakPtr sceneTree )
       {
         return( std::shared_ptr<SceneObserver>( new SceneObserver( sceneTree) ) );
       }

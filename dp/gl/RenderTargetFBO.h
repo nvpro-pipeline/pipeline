@@ -117,52 +117,52 @@ namespace dp
       {
       public:
         /** \brief Constructor for 1D textures **/
-        DP_GL_API static SharedAttachmentTexture create( const SharedTexture1D &texture, int level = 0 );
+        DP_GL_API static SharedAttachmentTexture create( const Texture1DSharedPtr &texture, int level = 0 );
 
         /** \brief Constructor for 2D textures **/
-        DP_GL_API static SharedAttachmentTexture create( const SharedTexture2D &texture, int level = 0 );
+        DP_GL_API static SharedAttachmentTexture create( const Texture2DSharedPtr &texture, int level = 0 );
 
         /** \brief Constructor for 3D textures **/
-        DP_GL_API static SharedAttachmentTexture create( const SharedTexture3D &texture, int zoffset, int level = 0 );
+        DP_GL_API static SharedAttachmentTexture create( const Texture3DSharedPtr &texture, int zoffset, int level = 0 );
 
         /** \brief Constructor for 1D array textures **/
-        DP_GL_API static SharedAttachmentTexture create( const SharedTexture1DArray &texture, int layer, int level = 0 );
+        DP_GL_API static SharedAttachmentTexture create( const Texture1DArraySharedPtr &texture, int layer, int level = 0 );
 
         /** \brief Constructor for 2D array textures **/
-        DP_GL_API static SharedAttachmentTexture create( const SharedTexture2DArray &texture, int layer, int level = 0);
+        DP_GL_API static SharedAttachmentTexture create( const Texture2DArraySharedPtr &texture, int layer, int level = 0);
 
         /** \brief Constructor for cubemap textures **/
-        DP_GL_API static SharedAttachmentTexture create( const SharedTextureCubemap &texture, int face, int level = 0 );
+        DP_GL_API static SharedAttachmentTexture create( const TextureCubemapSharedPtr &texture, int face, int level = 0 );
 
         /** \brief Constructor for rectangle textures **/
-        DP_GL_API static SharedAttachmentTexture create( const SharedTextureRectangle &texture );
+        DP_GL_API static SharedAttachmentTexture create( const TextureRectangleSharedPtr &texture );
 
         /** \brief Get the attached textureGL object.
             \return The attached textureGL object.
         **/
-        DP_GL_API SharedTexture getTexture() const;
+        DP_GL_API TextureSharedPtr getTexture() const;
 
       protected:
         /** \brief Constructor for 1D textures **/
-        DP_GL_API AttachmentTexture( const SharedTexture1D &texture, int level = 0 );
+        DP_GL_API AttachmentTexture( const Texture1DSharedPtr &texture, int level = 0 );
 
         /** \brief Constructor for 2D textures **/
-        DP_GL_API AttachmentTexture( const SharedTexture2D &texture, int level = 0 );
+        DP_GL_API AttachmentTexture( const Texture2DSharedPtr &texture, int level = 0 );
 
         /** \brief Constructor for 3D textures **/
-        DP_GL_API AttachmentTexture( const SharedTexture3D &texture, int zoffset, int level = 0 );
+        DP_GL_API AttachmentTexture( const Texture3DSharedPtr &texture, int zoffset, int level = 0 );
 
         /** \brief Constructor for 1D array textures **/
-        DP_GL_API AttachmentTexture( const SharedTexture1DArray &texture, int layer, int level = 0 );
+        DP_GL_API AttachmentTexture( const Texture1DArraySharedPtr &texture, int layer, int level = 0 );
 
         /** \brief Constructor for 2D array textures **/
-        DP_GL_API AttachmentTexture( const SharedTexture2DArray &texture, int layer, int level = 0);
+        DP_GL_API AttachmentTexture( const Texture2DArraySharedPtr &texture, int layer, int level = 0);
 
         /** \brief Constructor for cubemap textures **/
-        DP_GL_API AttachmentTexture( const SharedTextureCubemap &texture, int face, int level = 0 );
+        DP_GL_API AttachmentTexture( const TextureCubemapSharedPtr &texture, int face, int level = 0 );
 
         /** \brief Constructor for rectangle textures **/
-        DP_GL_API AttachmentTexture( const SharedTextureRectangle &texture );
+        DP_GL_API AttachmentTexture( const TextureRectangleSharedPtr &texture );
         /** \brief Resize the texture to the given size.
             \param width New width for the texture.
             \param height New height for the texture.
@@ -179,7 +179,7 @@ namespace dp
         ´**/
         DP_GL_API virtual void unbind( GLenum target );
 
-        DP_GL_API void init( const SharedTexture &texture, GLenum target, GLenum level, GLenum zoffset );
+        DP_GL_API void init( const TextureSharedPtr &texture, GLenum target, GLenum level, GLenum zoffset );
 
         /** \brief Resize function for 1D textures. **/
         DP_GL_API void resizeTexture1D( int width, int height );
@@ -230,10 +230,10 @@ namespace dp
         /** \brief Function pointer to bind the attached texture type to the framebuffer. **/
         void (AttachmentTexture::*m_bindFunc)( GLenum target, GLuint textureId );
 
-        GLenum        m_textureTarget;
-        GLuint        m_level;
-        GLuint        m_zoffset;
-        SharedTexture m_texture;
+        GLenum            m_textureTarget;
+        GLuint            m_level;
+        GLuint            m_zoffset;
+        TextureSharedPtr  m_texture;
       };
 
       /**************************/
@@ -247,14 +247,14 @@ namespace dp
       class AttachmentRenderbuffer : public Attachment
       {
       public:
-        DP_GL_API static SharedAttachmentRenderbuffer create( SharedRenderbuffer const& renderbuffer );
+        DP_GL_API static SharedAttachmentRenderbuffer create( RenderbufferSharedPtr const& renderbuffer );
         DP_GL_API virtual ~AttachmentRenderbuffer();
 
       protected:
         /** \brief Constructor for an Attachment with a renderbuffer.
             \param renderbuffer Renderbuffer to use for this attachment.
         **/
-        DP_GL_API AttachmentRenderbuffer( SharedRenderbuffer const& renderbuffer );
+        DP_GL_API AttachmentRenderbuffer( RenderbufferSharedPtr const& renderbuffer );
 
         /** \brief Resize the renderbuffer.
             \param width New width for the renderbuffer.
@@ -273,12 +273,12 @@ namespace dp
         DP_GL_API virtual void unbind( GLenum target );
 
         /** \brief Get the RenderBufferGL object of this attachment.
-            \return SharedRenderbuffer object used by this attachment.
+            \return RenderbufferSharedPtr object used by this attachment.
         **/
-        DP_GL_API SharedRenderbuffer getRenderbuffer() const;
+        DP_GL_API RenderbufferSharedPtr getRenderbuffer() const;
 
       private:
-        SharedRenderbuffer m_renderbuffer;
+        RenderbufferSharedPtr m_renderbuffer;
       };
 
       // RenderTarget interface
@@ -320,15 +320,15 @@ namespace dp
       typedef unsigned int BlitFilter;
 
     protected:
-      DP_GL_API RenderTargetFBO( const SharedRenderContext &glContext );
+      DP_GL_API RenderTargetFBO( const RenderContextSharedPtr &glContext );
 
     public:
       /** \brief Create a new RenderTargetFBO object using the given context */
-      DP_GL_API static SharedRenderTargetFBO create( const SharedRenderContext &glContext );
+      DP_GL_API static RenderTargetFBOSharedPtr create( const RenderContextSharedPtr &glContext );
 
       DP_GL_API virtual ~RenderTargetFBO();
  
-      DP_GL_API virtual dp::util::SmartImage getImage( 
+      DP_GL_API virtual dp::util::ImageSharedPtr getImage( 
         dp::util::PixelFormat pixelFormat = dp::util::PF_BGRA, 
         dp::util::DataType pixelDataType = dp::util::DT_UNSIGNED_INT_8,
         unsigned int index = 0 );
@@ -368,7 +368,7 @@ namespace dp
           \param level Mipmap level to use for the attachment
           \return true if the operation was successful, false otherwise.
       **/
-      DP_GL_API bool setAttachment( AttachmentTarget target, const SharedTexture1D &texture, StereoTarget stereoTarget = RenderTarget::LEFT, int level = 0 );
+      DP_GL_API bool setAttachment( AttachmentTarget target, const Texture1DSharedPtr &texture, StereoTarget stereoTarget = RenderTarget::LEFT, int level = 0 );
 
       /** \brief Attach a 2d texture.
           \param target The attachment will be attached to the given target.
@@ -377,7 +377,7 @@ namespace dp
           \param level Mipmap level to use for the attachment
           \return true if the operation was successful, false otherwise.
       **/
-      DP_GL_API bool setAttachment( AttachmentTarget target, const SharedTexture2D &texture, StereoTarget stereoTarget = RenderTarget::LEFT, int level = 0 );
+      DP_GL_API bool setAttachment( AttachmentTarget target, const Texture2DSharedPtr &texture, StereoTarget stereoTarget = RenderTarget::LEFT, int level = 0 );
 
       /** \brief Attach a 3d texture.
           \param target The attachment will be attached to the given target.
@@ -387,7 +387,7 @@ namespace dp
           \param level Mipmap level to use for the attachment.
           \return true if the operation was successful, false otherwise.
       **/
-      DP_GL_API bool setAttachment( AttachmentTarget target, const SharedTexture3D &texture, StereoTarget stereoTarget = RenderTarget::LEFT, int zoffset = 0, int level = 0 );
+      DP_GL_API bool setAttachment( AttachmentTarget target, const Texture3DSharedPtr &texture, StereoTarget stereoTarget = RenderTarget::LEFT, int zoffset = 0, int level = 0 );
 
       /** \brief Attach a 1d texture array.
           \param target The attachment will be attached to the given target.
@@ -397,7 +397,7 @@ namespace dp
           \param level Mipmap level to use for the attachment.
           \return true if the operation was successful, false otherwise.
       **/
-      DP_GL_API bool setAttachment( AttachmentTarget target, const SharedTexture1DArray &texture, StereoTarget stereoTarget = RenderTarget::LEFT, int layer = 0, int level = 0 );
+      DP_GL_API bool setAttachment( AttachmentTarget target, const Texture1DArraySharedPtr &texture, StereoTarget stereoTarget = RenderTarget::LEFT, int layer = 0, int level = 0 );
 
       /** \brief Attach a 2d texture array.
           \param target The attachment will be attached to the given target.
@@ -407,7 +407,7 @@ namespace dp
           \param level Mipmap level to use for the attachment.
           \return true if the operation was successful, false otherwise.
       **/
-      DP_GL_API bool setAttachment( AttachmentTarget target, const SharedTexture2DArray &texture, StereoTarget stereoTarget = RenderTarget::LEFT, int layer = 0, int level = 0 );
+      DP_GL_API bool setAttachment( AttachmentTarget target, const Texture2DArraySharedPtr &texture, StereoTarget stereoTarget = RenderTarget::LEFT, int layer = 0, int level = 0 );
 
       /** \brief Attach a cubemap.
           \param target The attachment will be attached to the given target.
@@ -417,7 +417,7 @@ namespace dp
           \param level Mipmap level to use for the attachment.
           \return true if the operation was successful, false otherwise.
       **/
-      DP_GL_API bool setAttachment( AttachmentTarget target, const SharedTextureCubemap &texture, StereoTarget stereoTarget = RenderTarget::LEFT, int face = 0, int level = 0 );
+      DP_GL_API bool setAttachment( AttachmentTarget target, const TextureCubemapSharedPtr &texture, StereoTarget stereoTarget = RenderTarget::LEFT, int face = 0, int level = 0 );
 
       /** \brief Attach a 2d rectangular texture.
           \param target The attachment will be attached to the given target.
@@ -425,7 +425,7 @@ namespace dp
           \param stereoTarget For stereo rendering it's possible to assign the attachment to the LEFT, RIGHT or LEFT_AND_RIGHT eye.
           \return true if the operation was successful, false otherwise.
       **/
-      DP_GL_API bool setAttachment( AttachmentTarget target, const SharedTextureRectangle &texture, StereoTarget stereoTarget = RenderTarget::LEFT );
+      DP_GL_API bool setAttachment( AttachmentTarget target, const TextureRectangleSharedPtr &texture, StereoTarget stereoTarget = RenderTarget::LEFT );
 
       /** \brief Attach a renderbuffer.
           \param target The attachment will be attached to the given target.
@@ -433,7 +433,7 @@ namespace dp
           \param stereoTarget For stereo rendering it's possible to assign the attachment to the LEFT, RIGHT or LEFT_AND_RIGHT eye.
           \return true if the operation was successful, false otherwise.
       **/
-      DP_GL_API bool setAttachment( AttachmentTarget target, const SharedRenderbuffer &buffer, StereoTarget stereoTarget = RenderTarget::LEFT );
+      DP_GL_API bool setAttachment( AttachmentTarget target, const RenderbufferSharedPtr &buffer, StereoTarget stereoTarget = RenderTarget::LEFT );
 
       /** \brief Get the attachment for a given target
           \param target Target of the FramebufferObject for the query.
@@ -484,14 +484,14 @@ namespace dp
       };
 
    
-      DP_GL_API void blit( const SharedRenderTargetFBO & destination, const BlitMask & mask = COLOR_BUFFER_BIT, 
+      DP_GL_API void blit( const RenderTargetFBOSharedPtr & destination, const BlitMask & mask = COLOR_BUFFER_BIT, 
                           const BlitFilter & filter = NEAREST );
-      DP_GL_API void blit( const SharedRenderTargetFB & destination, const BlitMask & mask = COLOR_BUFFER_BIT, 
+      DP_GL_API void blit( const RenderTargetFBSharedPtr & destination, const BlitMask & mask = COLOR_BUFFER_BIT, 
                           const BlitFilter & filter = NEAREST );
-      DP_GL_API void blit( const SharedRenderTargetFBO & destination, const BlitMask & mask, 
+      DP_GL_API void blit( const RenderTargetFBOSharedPtr & destination, const BlitMask & mask, 
                           const BlitFilter & filter, const BlitRegion & destRegion, 
                           const BlitRegion & srcRegion );
-      DP_GL_API void blit( const SharedRenderTargetFB & destination, const BlitMask & mask, 
+      DP_GL_API void blit( const RenderTargetFBSharedPtr & destination, const BlitMask & mask, 
                           const BlitFilter & filter, const BlitRegion & destRegion, 
                           const BlitRegion & srcRegion );
 

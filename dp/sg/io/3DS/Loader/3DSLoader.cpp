@@ -71,7 +71,7 @@ using std::string;
 using std::vector;
 using std::map;
 
-SmartThreeDSLoader ThreeDSLoader::create()
+ThreeDSLoaderSharedPtr ThreeDSLoader::create()
 {
   return( std::shared_ptr<ThreeDSLoader>( new ThreeDSLoader() ) );
 }
@@ -1898,12 +1898,12 @@ ThreeDSLoader::constructMaterials( std::vector<dp::sg::core::EffectDataSharedPtr
       EffectDataSharedPtr const& me = materials[i];
       me->setName( m->name );
 
-      const dp::fx::SmartEffectSpec & es = me->getEffectSpec();
+      const dp::fx::EffectSpecSharedPtr & es = me->getEffectSpec();
       dp::fx::EffectSpec::iterator pgsit = es->findParameterGroupSpec( string( "standardMaterialParameters" ) );
       DP_ASSERT( pgsit != es->endParameterGroupSpecs() );
       ParameterGroupDataSharedPtr materialParameters = ParameterGroupData::create( *pgsit );
       {
-        const dp::fx::SmartParameterGroupSpec & pgs = materialParameters->getParameterGroupSpec();
+        const dp::fx::ParameterGroupSpecSharedPtr & pgs = materialParameters->getParameterGroupSpec();
 
         Vec3f ambientColor( m->ambient[0], m->ambient[1], m->ambient[2] );
         Vec3f diffuseColor( m->diffuse[0], m->diffuse[1], m->diffuse[2] );
@@ -1951,7 +1951,7 @@ ThreeDSLoader::constructMaterials( std::vector<dp::sg::core::EffectDataSharedPtr
 
       if ( diffuseTexture || reflMap )
       {
-        const dp::fx::SmartEffectSpec & es = me->getEffectSpec();
+        const dp::fx::EffectSpecSharedPtr & es = me->getEffectSpec();
         dp::fx::EffectSpec::iterator pgsit = es->findParameterGroupSpec( string( "standardTextureParameters" ) );
         DP_ASSERT( pgsit != es->endParameterGroupSpecs() );
 
@@ -1996,7 +1996,7 @@ ThreeDSLoader::constructMaterials( std::vector<dp::sg::core::EffectDataSharedPtr
     // if the wire width of the wireframe is not the default 1.f, add a geometry effect
     if ( usesWire && ( 0.0f < m->wire_size ) && ( 1.0f != m->wire_size ) )
     {
-      dp::fx::SmartEffectSpec const & effectSpec = materials[i]->getEffectSpec();
+      dp::fx::EffectSpecSharedPtr const & effectSpec = materials[i]->getEffectSpec();
       dp::fx::EffectSpec::iterator pgsit = effectSpec->findParameterGroupSpec( string( "standardGeometryParameters" ) );
       DP_ASSERT( pgsit != effectSpec->endParameterGroupSpecs() );
 

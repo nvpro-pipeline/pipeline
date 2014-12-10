@@ -443,7 +443,7 @@ namespace dp
       if ( m_statistics->m_statParameterGroupData.firstEncounter( p, !!m_instanceCount ) )
       {
         statObject( (const ParameterGroupData *)p, m_statistics->m_statParameterGroupData);
-        const dp::fx::SmartParameterGroupSpec & spec = p->getParameterGroupSpec();
+        const dp::fx::ParameterGroupSpecSharedPtr & spec = p->getParameterGroupSpec();
         m_statistics->m_statParameterGroupData.m_dataSizeHistogram[spec->getDataSize()]++;
         m_statistics->m_statParameterGroupData.m_numParameterHistogram[spec->getNumberOfParameterSpecs()]++;
         SharedTraverser::handleParameterGroupData( p );

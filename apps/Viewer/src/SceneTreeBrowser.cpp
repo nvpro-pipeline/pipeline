@@ -113,7 +113,7 @@ void SceneTreeBrowser::setScene( SceneSharedPtr const & scene )
 std::vector<dp::fx::ParameterGroupSpec::iterator> getEmptySamplerParameters( const ParameterGroupDataSharedPtr & parameterGroupData )
 {
   std::vector<dp::fx::ParameterGroupSpec::iterator> samplerParameters;
-  const dp::fx::SmartParameterGroupSpec & pgs = parameterGroupData->getParameterGroupSpec();
+  const dp::fx::ParameterGroupSpecSharedPtr & pgs = parameterGroupData->getParameterGroupSpec();
   for ( dp::fx::ParameterGroupSpec::iterator it = pgs->beginParameterSpecs() ; it != pgs->endParameterSpecs() ; ++it )
   {
     if ( ( ( it->first.getType() & dp::fx::PT_POINTER_TYPE_MASK ) == dp::fx::PT_SAMPLER_PTR ) && ! parameterGroupData->getParameter<SamplerSharedPtr>( it ) )
@@ -397,7 +397,7 @@ void SceneTreeBrowser::triggeredShowShaderPipeline()
 
   DP_ASSERT( GetApp() && GetApp()->getMainWindow() && GetApp()->getMainWindow()->getCurrentViewport() );
   ViewerRendererWidget * vrw = GetApp()->getMainWindow()->getCurrentViewport();
-  dp::sg::ui::SmartSceneRenderer sceneRenderer = vrw->getSceneRenderer();
+  dp::sg::ui::SceneRendererSharedPtr sceneRenderer = vrw->getSceneRenderer();
   DP_ASSERT( sceneRenderer );
   std::map<dp::fx::Domain,std::string> sources[2];
   sources[0] = sceneRenderer->getShaderSources( geoNode, false );

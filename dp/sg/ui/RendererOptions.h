@@ -36,7 +36,7 @@ namespace dp
   {
     namespace ui
     {
-      SHARED_PTR_TYPES( RendererOptions );
+      DEFINE_PTR_TYPES( RendererOptions );
 
       /*! \brief   This class is a container for RendererOptions.
           \remarks Use SceneRenderer*::addRendererOptions( const RendererOptionsSharedPtr &options ) to initialize the

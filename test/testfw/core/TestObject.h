@@ -55,7 +55,7 @@ namespace dp
 
       public:
         DPTCORE_API TestObject( TestCreateFunc testCreator, const std::string& name, const std::string& desc );
-        DPTCORE_API TestObject( TestCreateFunc testCreator, const dp::util::SmartDynamicLibrary& dynLib );
+        DPTCORE_API TestObject( TestCreateFunc testCreator, const dp::util::DynamicLibrarySharedPtr& dynLib );
 
       public:
         DPTCORE_API TestObject( const TestObject& rhs );
@@ -69,7 +69,7 @@ namespace dp
 
       private:
         TestCreateFunc m_testCreator;
-        dp::util::SmartDynamicLibrary m_dynLib;
+        dp::util::DynamicLibrarySharedPtr m_dynLib;
         
         std::string m_name;
         std::string m_description;

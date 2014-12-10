@@ -38,7 +38,7 @@ namespace dp
   {
     namespace fx 
     {
-      SMART_TYPES( ManagerUniform );
+      DEFINE_PTR_TYPES( ManagerUniform );
 
       class ManagerUniform :  public Manager
       {
@@ -54,24 +54,24 @@ namespace dp
 
 #undef DEFINE_CLASS
 
-        static SmartManagerUniform create( dp::rix::core::Renderer* renderer, dp::fx::Manager managerType );
+        static ManagerUniformSharedPtr create( dp::rix::core::Renderer* renderer, dp::fx::Manager managerType );
         ~ManagerUniform();
 
         void runPendingUpdates();
 
-        dp::rix::fx::ProgramSharedHandle programCreate( dp::fx::SmartEffectSpec const & effectSpec
+        dp::rix::fx::ProgramSharedHandle programCreate( dp::fx::EffectSpecSharedPtr const & effectSpec
                                                       , Manager::SystemSpecs const & systemSpecs
                                                       , char const * technique
                                                       , dp::rix::core::ContainerDescriptorHandle *userDescriptors
                                                       , size_t numDescriptors
                                                       , SourceFragments const & sourceFragments = SourceFragments() );
 
-        std::map<dp::fx::Domain,std::string> getShaderSources( const dp::fx::SmartEffectSpec & effectSpec
+        std::map<dp::fx::Domain,std::string> getShaderSources( const dp::fx::EffectSpecSharedPtr & effectSpec
                                                              , bool depthPass
                                                              , dp::rix::fx::Manager::SystemSpecs const & systemSpecs
                                                              , SourceFragments const & sourceFragments = SourceFragments() ) const;
 
-        dp::rix::fx::GroupDataSharedHandle groupDataCreate  ( dp::fx::SmartParameterGroupSpec const& groupSpec );
+        dp::rix::fx::GroupDataSharedHandle groupDataCreate  ( dp::fx::ParameterGroupSpecSharedPtr const& groupSpec );
         void                              groupDataSetValue( dp::rix::fx::GroupDataSharedHandle const& groupData, const dp::fx::ParameterGroupSpec::iterator& parameter, const dp::rix::core::ContainerData& data );
 
         virtual dp::rix::fx::InstanceHandle instanceCreate       (core::GeometryInstanceHandle gi) ;
@@ -86,7 +86,7 @@ namespace dp
         ManagerUniform( dp::rix::core::Renderer* renderer, dp::fx::Manager managerType );
 
       private:
-        SmartParameterGroupSpecInfoHandle getParameterGroupSpecInfo( const dp::fx::SmartParameterGroupSpec& spec );
+        SmartParameterGroupSpecInfoHandle getParameterGroupSpecInfo( const dp::fx::ParameterGroupSpecSharedPtr& spec );
 
         dp::rix::core::Renderer*   m_renderer;
         dp::fx::Manager            m_managerType;
@@ -94,7 +94,7 @@ namespace dp
         typedef std::map<std::string, dp::rix::fx::ProgramSharedHandle> ProgramMap;
         ProgramMap m_programs;
 
-        typedef std::map<dp::fx::SmartParameterGroupSpec, SmartParameterGroupSpecInfoHandle> ParameterGroupSpecInfoMap;
+        typedef std::map<dp::fx::ParameterGroupSpecSharedPtr, SmartParameterGroupSpecInfoHandle> ParameterGroupSpecInfoMap;
         ParameterGroupSpecInfoMap m_groupInfos;
 
         typedef std::vector<dp::rix::fx::GroupDataSharedHandle> DirtyGroupContainer;

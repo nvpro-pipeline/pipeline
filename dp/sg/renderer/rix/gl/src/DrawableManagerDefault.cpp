@@ -109,8 +109,8 @@ namespace dp
           /************************************************************************/
           /* DrawableManagerDefault                                               */
           /************************************************************************/
-          DrawableManagerDefault::DrawableManagerDefault( const SmartResourceManager & resourceManager
-                                                        , SmartTransparencyManager const & transparencyManager
+          DrawableManagerDefault::DrawableManagerDefault( const ResourceManagerSharedPtr & resourceManager
+                                                        , TransparencyManagerSharedPtr const & transparencyManager
                                                         , dp::fx::Manager shaderManagerType
                                                         , dp::culling::Mode cullingMode )
             : dp::sg::xbar::DrawableManager( )
@@ -139,7 +139,7 @@ namespace dp
             ObjectTreeNode objectTreeNode = getSceneTree()->getObjectTreeNode( objectTreeIndex );
 
             // generate a new handle and fill it
-            DefaultHandleDataHandle handle = DefaultHandleData::create( dp::sg::xbar::ObjectTreeIndex(m_instances.size()) );
+            DefaultHandleDataSharedPtr handle = DefaultHandleData::create( dp::sg::xbar::ObjectTreeIndex(m_instances.size()) );
 
             // generate a new instance
             m_instances.push_back( Instance() );
@@ -172,7 +172,7 @@ namespace dp
           void DrawableManagerDefault::removeDrawableInstance( DrawableManager::Handle handle )
           {
             DP_ASSERT( handle.isPtrTo<DefaultHandleData>() );
-            DefaultHandleDataHandle const& handleData = handle.staticCast<DefaultHandleData>();
+            DefaultHandleDataSharedPtr const& handleData = handle.staticCast<DefaultHandleData>();
 
             // TODO really remove data
             dp::rix::core::Renderer *renderer = m_resourceManager->getRenderer();
@@ -195,7 +195,7 @@ namespace dp
               di.m_currentRenderGroup = nullptr;
             }
 
-            std::vector<DefaultHandleDataHandle>::iterator it = std::find( m_transparentDIs.begin(), m_transparentDIs.end(), handle );
+            std::vector<DefaultHandleDataSharedPtr>::iterator it = std::find( m_transparentDIs.begin(), m_transparentDIs.end(), handle );
             if ( it != m_transparentDIs.end() )
             {
               m_transparentDIs.erase( it );
@@ -214,7 +214,7 @@ namespace dp
           void DrawableManagerDefault::updateDrawableInstance( DrawableManager::Handle handle )
           {
             DP_ASSERT( handle.isPtrTo<DefaultHandleData>() );
-            DefaultHandleDataHandle const& handleData = handle.staticCast<DefaultHandleData>();
+            DefaultHandleDataSharedPtr const& handleData = handle.staticCast<DefaultHandleData>();
 
             dp::rix::core::Renderer *renderer = m_resourceManager->getRenderer();
 
@@ -255,7 +255,7 @@ namespace dp
               }
 
               DP_ASSERT( effectDataSurface );
-              SmartShaderManagerInstance shaderObjectDepthPass = di.m_smartShaderObjectDepthPass;
+              ShaderManagerInstanceSharedPtr shaderObjectDepthPass = di.m_smartShaderObjectDepthPass;
               if ( di.m_currentEffectSurface != effectDataSurface )
               {
                 if ( di.m_effectDataAttached )
@@ -308,12 +308,12 @@ namespace dp
                 {
                   renderer->renderGroupRemoveGeometryInstance( m_renderGroups[di.m_transparent][RGP_DEPTH], di.m_geometryInstanceDepthPass );
                 }
-                di.m_resourcePrimitive = SmartResourcePrimitive::null;
+                di.m_resourcePrimitive = ResourcePrimitiveSharedPtr::null;
                 di.m_geometryInstance = nullptr;
                 di.m_geometryInstanceDepthPass = nullptr;
                 di.m_currentRenderGroup = nullptr;
-                di.m_smartShaderObject = SmartShaderManagerInstance::null;
-                di.m_smartShaderObjectDepthPass = SmartShaderManagerInstance::null;
+                di.m_smartShaderObject = ShaderManagerInstanceSharedPtr::null;
+                di.m_smartShaderObjectDepthPass = ShaderManagerInstanceSharedPtr::null;
                 di.m_currentEffectSurface.reset();
               }
             }
@@ -322,7 +322,7 @@ namespace dp
           void DrawableManagerDefault::setDrawableInstanceActive( Handle handle, bool active )
           {
             DP_ASSERT( handle.isPtrTo<DefaultHandleData>() );
-            DefaultHandleDataHandle const& handleData = handle.staticCast<DefaultHandleData>();
+            DefaultHandleDataSharedPtr const& handleData = handle.staticCast<DefaultHandleData>();
 
             dp::rix::core::Renderer *renderer = m_resourceManager->getRenderer();
             Instance& di = m_instances[handleData->m_index];
@@ -336,7 +336,7 @@ namespace dp
           void DrawableManagerDefault::setDrawableInstanceTraversalMask( Handle handle, dp::util::Uint32 traversalMask )
           {
             DP_ASSERT( handle.isPtrTo<DefaultHandleData>() );
-            DefaultHandleDataHandle const& handleData = handle.staticCast<DefaultHandleData>();
+            DefaultHandleDataSharedPtr const& handleData = handle.staticCast<DefaultHandleData>();
 
             dp::rix::core::Renderer *renderer = m_resourceManager->getRenderer();
             Instance& di = m_instances[handleData->m_index];
@@ -364,7 +364,7 @@ namespace dp
               for ( size_t index = 0;index < changed.size(); ++index )
               {
                 DP_ASSERT( getDrawableInstance( changed[index] ).isPtrTo<DefaultHandleData>() );
-                DefaultHandleDataHandle const& defaultHandleData = getDrawableInstance( changed[index] ).staticCast<DefaultHandleData>();
+                DefaultHandleDataSharedPtr const& defaultHandleData = getDrawableInstance( changed[index] ).staticCast<DefaultHandleData>();
                 Instance & instance = m_instances[defaultHandleData->m_index];
 
                 bool newVisible = m_cullingManager->resultIsVisible( m_cullingResult, changed[index] );
@@ -400,7 +400,7 @@ namespace dp
             TransformTree const& transformTree = getSceneTree()->getTransformTree();
 
             std::vector<SortInfo> sortInfo;
-            for ( std::vector<DefaultHandleDataHandle>::iterator it = m_transparentDIs.begin(); it != m_transparentDIs.end(); ++it )
+            for ( std::vector<DefaultHandleDataSharedPtr>::iterator it = m_transparentDIs.begin(); it != m_transparentDIs.end(); ++it )
             {
               SortInfo info;
               Instance &instance = m_instances[ (*it)->m_index ];

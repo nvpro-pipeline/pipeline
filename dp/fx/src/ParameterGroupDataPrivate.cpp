@@ -32,12 +32,12 @@ namespace dp
   namespace fx
   {
 
-    SmartParameterGroupDataPrivate ParameterGroupDataPrivate::create( SmartParameterGroupSpec const& parameterGroupSpec, std::string const& name )
+    ParameterGroupDataPrivateSharedPtr ParameterGroupDataPrivate::create( ParameterGroupSpecSharedPtr const& parameterGroupSpec, std::string const& name )
     {
       return( std::shared_ptr<ParameterGroupDataPrivate>( new ParameterGroupDataPrivate( parameterGroupSpec, name ) ) );
     }
 
-    ParameterGroupDataPrivate::ParameterGroupDataPrivate( const SmartParameterGroupSpec& parameterGroupSpec, const std::string& name )
+    ParameterGroupDataPrivate::ParameterGroupDataPrivate( const ParameterGroupSpecSharedPtr& parameterGroupSpec, const std::string& name )
       : ParameterGroupData( parameterGroupSpec, name )
     {
       // fill the data area with the defaults from the spec

@@ -249,8 +249,8 @@ namespace dp
 
     // TODO must be moved to new dp::(ui?) module
   #if 0
-    /*! \brief Specialization of the TypedPropertyEnum template for type dp::ui::SmartRenderTarget. */
-    template <> struct TypedPropertyEnum< dp::ui::SmartRenderTarget > {
+    /*! \brief Specialization of the TypedPropertyEnum template for type dp::ui::RenderTargetSharedPtr. */
+    template <> struct TypedPropertyEnum< dp::ui::RenderTargetSharedPtr > {
       enum { type = Property::TYPE_RENDERTARGET };
     };
   #endif

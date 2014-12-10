@@ -62,7 +62,7 @@ namespace dp
             GL_TEXTURE_CUBE_MAP, GL_TEXTURE_1D_ARRAY_EXT,
             GL_TEXTURE_2D_ARRAY_EXT, GL_TEXTURE_RECTANGLE_ARB }; 
 
-          void RendererFSQImpl::setTexCoord1( const dp::gl::SharedRenderTarget & target )
+          void RendererFSQImpl::setTexCoord1( const dp::gl::RenderTargetSharedPtr & target )
           {
             int x, y;
             unsigned int w, h;
@@ -86,7 +86,7 @@ namespace dp
             }
           }
 
-          RendererFSQImpl::RendererFSQImpl( const dp::gl::SharedRenderTarget &target )
+          RendererFSQImpl::RendererFSQImpl( const dp::gl::RenderTargetSharedPtr &target )
             : FSQRenderer( target )
             , m_effectsValid(false)
             , m_rendererGLLib(nullptr)
@@ -122,7 +122,7 @@ namespace dp
             DP_ASSERT( m_resourceManager );
           }
 
-          SmartFSQRenderer RendererFSQImpl::create( const dp::gl::SharedRenderTarget &renderTarget )
+          RendererFSQImplSharedPtr RendererFSQImpl::create( const dp::gl::RenderTargetSharedPtr &renderTarget )
           {
             return( std::shared_ptr<RendererFSQImpl>( new RendererFSQImpl( renderTarget ) ) );;
           }
@@ -154,9 +154,9 @@ namespace dp
           //                                    Where: X,Y,W,H are either Viewport Parameters or
           //                                           X,Y=0 and W,H are output RenderTarget dimensions
           //
-          void RendererFSQImpl::doRender( const dp::ui::SmartRenderTarget &renderTarget )
+          void RendererFSQImpl::doRender( const dp::ui::RenderTargetSharedPtr &renderTarget )
           {
-            dp::gl::SharedRenderTarget rtgl = dp::util::shared_cast<dp::gl::RenderTarget>( renderTarget );
+            dp::gl::RenderTargetSharedPtr rtgl = dp::util::shared_cast<dp::gl::RenderTarget>( renderTarget );
 
             if( !rtgl )
             {
@@ -189,8 +189,8 @@ namespace dp
 
             if ( !m_effectsValid )
             {
-              dp::fx::SmartEffectSpec es = dp::fx::EffectSpec::create( "sys_matrices", dp::fx::EffectSpec::EST_SYSTEM, EffectSpec::ParameterGroupSpecsContainer() );
-              dp::fx::SmartEffectSpec ec = dp::fx::EffectSpec::create( "sys_camera", dp::fx::EffectSpec::EST_SYSTEM, EffectSpec::ParameterGroupSpecsContainer() );
+              dp::fx::EffectSpecSharedPtr es = dp::fx::EffectSpec::create( "sys_matrices", dp::fx::EffectSpec::EST_SYSTEM, EffectSpec::ParameterGroupSpecsContainer() );
+              dp::fx::EffectSpecSharedPtr ec = dp::fx::EffectSpec::create( "sys_camera", dp::fx::EffectSpec::EST_SYSTEM, EffectSpec::ParameterGroupSpecsContainer() );
               dp::rix::fx::Manager::SystemSpecs s;
               s["sys_matrices"] = dp::rix::fx::Manager::EffectSpecInfo( es, false );
               s["sys_camera"] = dp::rix::fx::Manager::EffectSpecInfo( ec, true );
@@ -258,7 +258,7 @@ namespace dp
           bool RendererFSQImpl::setSamplerByName( const std::string & samplerName, const SamplerSharedPtr & sampler )
           {
             DP_ASSERT( m_effect );
-            const SmartEffectSpec & es = m_effect->getEffectSpec();
+            const EffectSpecSharedPtr & es = m_effect->getEffectSpec();
             for ( EffectSpec::iterator it = es->beginParameterGroupSpecs() ; it != es->endParameterGroupSpecs() ; ++it )
             {
               ParameterGroupSpec::iterator pit = (*it)->findParameterSpec( samplerName );

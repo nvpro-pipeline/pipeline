@@ -78,12 +78,12 @@ namespace dp
           class DrawableManagerDefault : public dp::sg::xbar::DrawableManager
           {
           public:
-            HANDLE_TYPES( DefaultHandleData );
+            DEFINE_PTR_TYPES( DefaultHandleData );
 
             class DefaultHandleData : public HandleData
             {
             public:
-              static DefaultHandleDataHandle create( dp::sg::xbar::ObjectTreeIndex index )
+              static DefaultHandleDataSharedPtr create( dp::sg::xbar::ObjectTreeIndex index )
               {
                 return( std::shared_ptr<DefaultHandleData>( new DefaultHandleData( index ) ) );
               }
@@ -99,11 +99,11 @@ namespace dp
             };
             
             /** \brief Payload for handle **/
-            SMART_TYPES( Payload );
+            DEFINE_PTR_TYPES( Payload );
             class Payload : public dp::util::Payload
             {
             public:
-              static SmartPayload create()
+              static PayloadSharedPtr create()
               {
                 return( std::shared_ptr<Payload>( new Payload() ) );
               }
@@ -148,16 +148,16 @@ namespace dp
               // in the observer since the effect data could die before the instance.
               dp::sg::core::EffectDataSharedPtr           m_currentEffectSurface;
 
-              SmartResourcePrimitive                      m_resourcePrimitive;
-              SmartShaderManagerInstance                  m_smartShaderObject;
-              SmartShaderManagerInstance                  m_smartShaderObjectDepthPass;
+              ResourcePrimitiveSharedPtr                  m_resourcePrimitive;
+              ShaderManagerInstanceSharedPtr              m_smartShaderObject;
+              ShaderManagerInstanceSharedPtr              m_smartShaderObjectDepthPass;
 
               bool                          m_isVisible;
               bool                          m_isActive;
               bool                          m_isTraversalActive;
               dp::util::Uint32              m_activeTraversalMask;
               dp::sg::xbar::ObjectTreeIndex m_objectTreeIndex;
-              DefaultHandleDataHandle       m_handle;
+              DefaultHandleDataSharedPtr    m_handle;
 
               // depth sorting
               float                            m_squaredDistance;
@@ -169,14 +169,14 @@ namespace dp
               dp::math::Vec4f                  m_boundingBoxExtent;
               dp::sg::xbar::TransformTreeIndex m_transformIndex;
 
-              SmartPayload  m_payload;
-              bool          m_effectDataAttached;
+              PayloadSharedPtr  m_payload;
+              bool              m_effectDataAttached;
 
               void updateRendererVisibility( dp::rix::core::Renderer* renderer );
             };
 
-            DrawableManagerDefault( const SmartResourceManager & resourceManager
-                                  , SmartTransparencyManager const & transparencyManager
+            DrawableManagerDefault( const ResourceManagerSharedPtr & resourceManager
+                                  , TransparencyManagerSharedPtr const & transparencyManager
                                   , dp::fx::Manager shaderManagerType = dp::fx::MANAGER_SHADERBUFFER
                                   , dp::culling::Mode cullingMode = dp::culling::MODE_AUTO );
             virtual ~DrawableManagerDefault();
@@ -234,16 +234,16 @@ namespace dp
             void cullManager( const dp::sg::core::CameraSharedPtr &camera );
             void setActiveTraversalMask( unsigned int nodeMask );
 
-            dp::fx::Manager                       m_shaderManagerType;
-            SmartResourceManager                  m_resourceManager;
-            std::vector<Instance>                 m_instances;
+            dp::fx::Manager                         m_shaderManagerType;
+            ResourceManagerSharedPtr                m_resourceManager;
+            std::vector<Instance>                   m_instances;
 
             //  m_renderGroup(Instance)s[Opaque|Transparent][Forward|DepthPass]
             dp::rix::core::RenderGroupSharedHandle  m_renderGroups[RGL_COUNT][RGP_COUNT];
-            SmartShaderManagerRenderGroup           m_renderGroupInstances[RGL_COUNT][RGP_COUNT];
+            ShaderManagerRenderGroupSharedPtr       m_renderGroupInstances[RGL_COUNT][RGP_COUNT];
 
-            std::vector<DefaultHandleDataHandle>               m_transparentDIs; 
-            std::vector<dp::rix::core::GeometryInstanceSharedHandle> m_depthSortedTransparentGIs;
+            std::vector<DefaultHandleDataSharedPtr>                   m_transparentDIs; 
+            std::vector<dp::rix::core::GeometryInstanceSharedHandle>  m_depthSortedTransparentGIs;
 
             boost::scoped_ptr<ShaderManager>        m_shaderManager;
             unsigned int                            m_activeTraversalMask;
@@ -251,13 +251,13 @@ namespace dp
 
             dp::culling::Mode                       m_cullingMode;
             dp::sg::xbar::culling::CullingSharedPtr m_cullingManager;
-            dp::sg::xbar::culling::ResultHandle     m_cullingResult;
+            dp::sg::xbar::culling::ResultSharedPtr  m_cullingResult;
             bool                                    m_cullingEnabled;
 
           private:
             dp::sg::core::SamplerSharedPtr  m_environmentSampler;
             dp::math::Vec2ui                m_viewportSize;
-            SmartTransparencyManager        m_transparencyManager;
+            TransparencyManagerSharedPtr    m_transparencyManager;
           };
 
         } // namespace gl

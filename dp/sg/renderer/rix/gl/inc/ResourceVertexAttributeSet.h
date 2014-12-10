@@ -41,14 +41,14 @@ namespace dp
       {
         namespace gl
         {
-          SMART_TYPES( ResourceVertexAttributeSet );
+          DEFINE_PTR_TYPES( ResourceVertexAttributeSet );
           typedef ResourceVertexAttributeSet* WeakResourceVertexAttributeSet;
-    
+
           class ResourceVertexAttributeSet : public ResourceManager::Resource
           {
           public:
             /** \brief Fetch resource for the given object/resourceManager. If no resource exists it'll be created **/
-            static SmartResourceVertexAttributeSet get( const dp::sg::core::VertexAttributeSetSharedPtr &vertexAttributeSet, const SmartResourceManager& resourceManager );
+            static ResourceVertexAttributeSetSharedPtr get( const dp::sg::core::VertexAttributeSetSharedPtr &vertexAttributeSet, const ResourceManagerSharedPtr& resourceManager );
             virtual void update();
 
             ~ResourceVertexAttributeSet();
@@ -58,8 +58,8 @@ namespace dp
             dp::rix::core::VertexAttributesSharedHandle m_vertexAttributesHandle;
           protected:
             dp::sg::core::VertexAttributeSetSharedPtr m_vertexAttributeSet;
-            std::vector<SmartResourceBuffer>  m_resourceBuffers;
-            ResourceVertexAttributeSet( const dp::sg::core::VertexAttributeSetSharedPtr &vertexAttributeSet, const SmartResourceManager& resourceManager );
+            std::vector<ResourceBufferSharedPtr>  m_resourceBuffers;
+            ResourceVertexAttributeSet( const dp::sg::core::VertexAttributeSetSharedPtr &vertexAttributeSet, const ResourceManagerSharedPtr& resourceManager );
 
           };
 

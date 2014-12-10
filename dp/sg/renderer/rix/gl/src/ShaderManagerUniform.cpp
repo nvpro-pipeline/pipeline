@@ -52,7 +52,7 @@ namespace dp
           /************************************************************************/
           /* ShaderManagerTransformsUniform                                       */
           /************************************************************************/
-          ShaderManagerTransformsUniform::ShaderManagerTransformsUniform( SceneTree *sceneTree, const SmartResourceManager& resourceManager )
+          ShaderManagerTransformsUniform::ShaderManagerTransformsUniform( SceneTree *sceneTree, const ResourceManagerSharedPtr& resourceManager )
             : m_sceneTree( sceneTree )
             , m_resourceManager( resourceManager )
           {

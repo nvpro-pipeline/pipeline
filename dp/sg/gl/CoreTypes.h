@@ -34,20 +34,20 @@ namespace dp
   {
     namespace gl
     {
-      SHARED_PTR_TYPES( BufferGL );
-      SHARED_PTR_TYPES( TextureGL );
+      DEFINE_PTR_TYPES( BufferGL );
+      DEFINE_PTR_TYPES( TextureGL );
 
-      SHARED_PTR_TYPES( TextureGL1D );
-      SHARED_PTR_TYPES( TextureGL2D );
-      SHARED_PTR_TYPES( TextureGLRectangle );
-      SHARED_PTR_TYPES( TextureGL3D );
-      SHARED_PTR_TYPES( TextureGLCubemap );
-      SHARED_PTR_TYPES( TextureGL1DArray );
-      SHARED_PTR_TYPES( TextureGL2DArray );
-      SHARED_PTR_TYPES( TextureGLCubemapArray );
-      SHARED_PTR_TYPES( TextureGLBuffer );
-      SHARED_PTR_TYPES( TextureGL2DMultisample );
-      SHARED_PTR_TYPES( TextureGL2DMultisampleArray );
+      DEFINE_PTR_TYPES( TextureGL1D );
+      DEFINE_PTR_TYPES( TextureGL2D );
+      DEFINE_PTR_TYPES( TextureGLRectangle );
+      DEFINE_PTR_TYPES( TextureGL3D );
+      DEFINE_PTR_TYPES( TextureGLCubemap );
+      DEFINE_PTR_TYPES( TextureGL1DArray );
+      DEFINE_PTR_TYPES( TextureGL2DArray );
+      DEFINE_PTR_TYPES( TextureGLCubemapArray );
+      DEFINE_PTR_TYPES( TextureGLBuffer );
+      DEFINE_PTR_TYPES( TextureGL2DMultisample );
+      DEFINE_PTR_TYPES( TextureGL2DMultisampleArray );
     } // namespace gl
   } // namespace sg
 } // namespace dp

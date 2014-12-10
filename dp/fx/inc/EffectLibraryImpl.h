@@ -39,7 +39,7 @@ namespace dp
   namespace fx
   {
 
-    SMART_TYPES( EffectLoader );
+    DEFINE_PTR_TYPES( EffectLoader );
 
     class EffectLibraryImpl : public EffectLibrary
     {
@@ -50,29 +50,29 @@ namespace dp
 
       // public interface
       virtual bool loadEffects(const std::string& filename, const std::vector<std::string> &searchPaths );
-      virtual bool save( const SmartEffectData& effectData, const std::string& filename );
+      virtual bool save( const EffectDataSharedPtr& effectData, const std::string& filename );
       virtual void getEffectNames(std::vector<std::string>& names );
       virtual void getEffectNames( const std::string & filename, EffectSpec::Type type, std::vector<std::string> & names ) const;
-      virtual const SmartEffectSpec& getEffectSpec(const std::string& effectName) const;
+      virtual const EffectSpecSharedPtr& getEffectSpec(const std::string& effectName) const;
       virtual std::string const& getEffectFile( std::string const& effectName ) const;
-      virtual const SmartParameterGroupSpec& getParameterGroupSpec( const std::string & pgsName ) const;
-      virtual const SmartEnumSpec& getEnumSpec( const std::string& name ) const;
+      virtual const ParameterGroupSpecSharedPtr& getParameterGroupSpec( const std::string & pgsName ) const;
+      virtual const EnumSpecSharedPtr& getEnumSpec( const std::string& name ) const;
 
-      virtual const SmartParameterGroupData& getParameterGroupData( const std::string& name ) const;
-      virtual const SmartEffectData& getEffectData( const std::string& name ) const;
+      virtual const ParameterGroupDataSharedPtr& getParameterGroupData( const std::string& name ) const;
+      virtual const EffectDataSharedPtr& getEffectData( const std::string& name ) const;
 
-      SmartShaderPipeline generateShaderPipeline( const ShaderPipelineConfiguration& configuration );
+      ShaderPipelineSharedPtr generateShaderPipeline( const ShaderPipelineConfiguration& configuration );
 
       // interface for backends
-      virtual SmartEnumSpec registerSpec( const SmartEnumSpec& enumSpec );
-      virtual SmartEffectSpec registerSpec( const SmartEffectSpec& enumSpec, EffectLoader* effectLoader );
-      virtual SmartParameterGroupSpec registerSpec( const SmartParameterGroupSpec& enumSpec );
-      virtual SmartParameterGroupData registerParameterGroupData( const SmartParameterGroupData& parameterGroupData );
-      virtual SmartEffectData registerEffectData( const SmartEffectData& effectData );
+      virtual EnumSpecSharedPtr registerSpec( const EnumSpecSharedPtr& enumSpec );
+      virtual EffectSpecSharedPtr registerSpec( const EffectSpecSharedPtr& enumSpec, EffectLoader* effectLoader );
+      virtual ParameterGroupSpecSharedPtr registerSpec( const ParameterGroupSpecSharedPtr& enumSpec );
+      virtual ParameterGroupDataSharedPtr registerParameterGroupData( const ParameterGroupDataSharedPtr& parameterGroupData );
+      virtual EffectDataSharedPtr registerEffectData( const EffectDataSharedPtr& effectData );
       virtual std::vector<std::string> getRegisteredExtensions() const;
-      virtual bool effectHasTechnique( SmartEffectSpec const& effectSpec, std::string const& techniqueName, bool rasterizer ) const;
+      virtual bool effectHasTechnique( EffectSpecSharedPtr const& effectSpec, std::string const& techniqueName, bool rasterizer ) const;
 
-      void registerEffectLoader( SmartEffectLoader const& effectLoader, const std::string& extension );
+      void registerEffectLoader( EffectLoaderSharedPtr const& effectLoader, const std::string& extension );
 
     protected:
       EffectLibraryImpl();
@@ -82,10 +82,10 @@ namespace dp
       typedef std::vector< std::string> SearchPaths;
       SearchPaths m_searchPaths;
 
-      typedef std::map<std::string, SmartEffectLoader> EffectLoaders;
+      typedef std::map<std::string, EffectLoaderSharedPtr> EffectLoaders;
       EffectLoaders m_effectLoaders;
 
-      typedef std::map<std::string, SmartParameterGroupSpec> ParameterGroupSpecs;
+      typedef std::map<std::string, ParameterGroupSpecSharedPtr> ParameterGroupSpecs;
       ParameterGroupSpecs m_parameterGroupSpecs;
 
       // List of EffectSpecs
@@ -96,28 +96,28 @@ namespace dp
         {
         }
 
-        EffectSpecInfo( const SmartEffectSpec& pEffectSpec, EffectLoader* pEffectLoader, const std::string & file )
+        EffectSpecInfo( const EffectSpecSharedPtr& pEffectSpec, EffectLoader* pEffectLoader, const std::string & file )
           : effectSpec( pEffectSpec)
           , effectLoader( pEffectLoader )
           , effectFile( file )
         {
         }
 
-        SmartEffectSpec   effectSpec;
-        EffectLoader    * effectLoader;
-        std::string       effectFile;
+        EffectSpecSharedPtr   effectSpec;
+        EffectLoader        * effectLoader;
+        std::string           effectFile;
       };
 
       typedef std::map<std::string, EffectSpecInfo> EffectSpecs;
       EffectSpecs m_effectSpecs; 
 
-      typedef std::map<std::string, SmartEnumSpec> EnumSpecs;
+      typedef std::map<std::string, EnumSpecSharedPtr> EnumSpecs;
       EnumSpecs m_enumSpecs;
 
-      typedef std::map<std::string, SmartParameterGroupData> ParameterGroupDatas;
+      typedef std::map<std::string, ParameterGroupDataSharedPtr> ParameterGroupDatas;
       ParameterGroupDatas m_parameterGroupDatas;
 
-      typedef std::map<std::string, SmartEffectData> EffectDatas;
+      typedef std::map<std::string, EffectDataSharedPtr> EffectDatas;
       EffectDatas m_effectDatas;
 
       std::stack<std::string> m_currentFile;

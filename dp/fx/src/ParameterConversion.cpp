@@ -120,7 +120,7 @@ namespace dp
         }
       }
 
-      void getValueFromString( const SmartEnumSpec & enumSpec, unsigned int arraySize, const std::string & valueString, EnumSpec::StorageType * valueArray )
+      void getValueFromString( const EnumSpecSharedPtr & enumSpec, unsigned int arraySize, const std::string & valueString, EnumSpec::StorageType * valueArray )
       {
         DP_ASSERT( !valueString.empty() );
 
@@ -233,7 +233,7 @@ namespace dp
         return outputStream.str();
       }
 
-      std::string getStringFromValue( const SmartEnumSpec & enumSpec, unsigned int arraySize,  EnumSpec::StorageType const * valueArray )
+      std::string getStringFromValue( const EnumSpecSharedPtr & enumSpec, unsigned int arraySize,  EnumSpec::StorageType const * valueArray )
       {
         std::ostringstream outputStream;
         unsigned int count = std::max( (unsigned int)1, arraySize );

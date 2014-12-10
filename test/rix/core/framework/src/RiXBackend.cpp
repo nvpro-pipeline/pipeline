@@ -89,7 +89,7 @@ namespace dp
             DP_ASSERT(m_rix);
           }
 
-          void RiXBackend::render( dp::testfw::core::RenderData* renderData, dp::ui::SmartRenderTarget renderTarget )
+          void RiXBackend::render( dp::testfw::core::RenderData* renderData, dp::ui::RenderTargetSharedPtr renderTarget )
           {
             DP_ASSERT(m_rix);
             DP_ASSERT(!!renderTarget);

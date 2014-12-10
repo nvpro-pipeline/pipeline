@@ -39,12 +39,12 @@ using namespace dp::fx;
 using std::string;
 using std::vector;
 
-SceneRendererPipeline::SmartMonoViewStateProvider SceneRendererPipeline::MonoViewStateProvider::create()
+SceneRendererPipeline::MonoViewStateProviderSharedPtr SceneRendererPipeline::MonoViewStateProvider::create()
 {
   return( std::shared_ptr<MonoViewStateProvider>( new SceneRendererPipeline::MonoViewStateProvider() ) );
 }
 
-SmartSceneRendererPipeline SceneRendererPipeline::create()
+SceneRendererPipelineSharedPtr SceneRendererPipeline::create()
 {
   return( std::shared_ptr<SceneRendererPipeline>( new SceneRendererPipeline() ) );
 }
@@ -80,8 +80,8 @@ SceneRendererPipeline::~SceneRendererPipeline()
 }
 
 // This is called from initializeGL().
-bool SceneRendererPipeline::init(const dp::gl::SharedRenderContext &renderContext,
-                                 const dp::gl::SharedRenderTarget  &renderTarget)
+bool SceneRendererPipeline::init(const dp::gl::RenderContextSharedPtr &renderContext,
+                                 const dp::gl::RenderTargetSharedPtr  &renderTarget)
 {
   m_renderTarget = renderTarget;
 
@@ -107,7 +107,7 @@ bool SceneRendererPipeline::init(const dp::gl::SharedRenderContext &renderContex
   m_highlightFBO->setAttachment(dp::gl::RenderTargetFBO::COLOR_ATTACHMENT0,
                                 dp::gl::Texture2D::create(GL_RGBA8, GL_BGRA, GL_UNSIGNED_BYTE));
   // Depth and Stencil are Renderbuffers.
-  dp::gl::SharedRenderbuffer depthStencil(dp::gl::Renderbuffer::create(GL_DEPTH24_STENCIL8)); // Shared depth stencil buffer between the tonemap and hightlight FBOs.
+  dp::gl::RenderbufferSharedPtr depthStencil(dp::gl::Renderbuffer::create(GL_DEPTH24_STENCIL8)); // Shared depth stencil buffer between the tonemap and hightlight FBOs.
   m_highlightFBO->setAttachment(dp::gl::RenderTargetFBO::DEPTH_ATTACHMENT,   depthStencil);
   m_highlightFBO->setAttachment(dp::gl::RenderTargetFBO::STENCIL_ATTACHMENT, depthStencil);
 
@@ -160,7 +160,7 @@ bool SceneRendererPipeline::init(const dp::gl::SharedRenderContext &renderContex
 }
 
 // Mind, this is called for left and right eye independently.
-void SceneRendererPipeline::doRender(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::SmartRenderTarget const& renderTarget)
+void SceneRendererPipeline::doRender(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget)
 {
   if ( m_tonemapperEnabled )
   {
@@ -238,9 +238,9 @@ void SceneRendererPipeline::doRenderBackdrop(dp::sg::ui::ViewStateSharedPtr cons
   m_environmentBackdrop->render();
 }
 
-void SceneRendererPipeline::doRenderStandard(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::SmartRenderTarget const& renderTarget)
+void SceneRendererPipeline::doRenderStandard(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget)
 {
-  dp::gl::SharedRenderTarget const & renderTargetGL = dp::util::shared_cast<dp::gl::RenderTarget>(renderTarget);
+  dp::gl::RenderTargetSharedPtr const & renderTargetGL = dp::util::shared_cast<dp::gl::RenderTarget>(renderTarget);
   dp::gl::TargetBufferMask clearMask = renderTargetGL->getClearMask();
 
   if (m_backdropEnabled)
@@ -268,9 +268,9 @@ void SceneRendererPipeline::doRenderStandard(dp::sg::ui::ViewStateSharedPtr cons
   m_sceneRenderer->render(viewState, renderTarget, renderTarget->getStereoTarget());
 }
 
-void SceneRendererPipeline::doRenderTonemap(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::SmartRenderTarget const& renderTarget)
+void SceneRendererPipeline::doRenderTonemap(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget)
 {
-  dp::gl::SharedRenderTarget const & renderTargetGL = dp::util::shared_cast<dp::gl::RenderTarget>(renderTarget);
+  dp::gl::RenderTargetSharedPtr const & renderTargetGL = dp::util::shared_cast<dp::gl::RenderTarget>(renderTarget);
   dp::gl::TargetBufferMask clearMask = renderTargetGL->getClearMask();
 
   // Match the size of the tonemapFBO to the destination renderTarget.
@@ -324,7 +324,7 @@ void SceneRendererPipeline::doRenderTonemap(dp::sg::ui::ViewStateSharedPtr const
   renderTargetGL->setClearMask( clearMask );
 }
 
-void SceneRendererPipeline::doRenderHighlight(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::SmartRenderTarget const& renderTarget)
+void SceneRendererPipeline::doRenderHighlight(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget)
 {
   // only call this if objects need to be rendered highlighted
   DP_ASSERT(m_highlighting);
@@ -377,7 +377,7 @@ void SceneRendererPipeline::doRenderHighlight(dp::sg::ui::ViewStateSharedPtr con
   glPopAttrib();
 
   // Render the outline around the highlighted object onto the main renderTarget (framebuffer).
-  dp::gl::SharedRenderTarget const & renderTargetGL = dp::util::shared_cast<dp::gl::RenderTarget>(renderTarget);
+  dp::gl::RenderTargetSharedPtr const & renderTargetGL = dp::util::shared_cast<dp::gl::RenderTarget>(renderTarget);
   dp::gl::TargetBufferMask clearMask = renderTargetGL->getClearMask();
   
   // keep the following render call from clearing the previous rendered content
@@ -388,7 +388,7 @@ void SceneRendererPipeline::doRenderHighlight(dp::sg::ui::ViewStateSharedPtr con
 }
 
 // This switches the renderer for the main pass between rasterizer and raytracer.
-void SceneRendererPipeline::setSceneRenderer(const dp::sg::ui::SmartSceneRenderer &sceneRenderer)
+void SceneRendererPipeline::setSceneRenderer(const dp::sg::ui::SceneRendererSharedPtr &sceneRenderer)
 {
   m_sceneRenderer = sceneRenderer;
   // Do not separate the ViewState camera another time during the render() call issued inside the SceneRendererPipeline.
@@ -409,7 +409,7 @@ void SceneRendererPipeline::setSceneRenderer(const dp::sg::ui::SmartSceneRendere
   }
 }
 
-dp::sg::ui::SmartSceneRenderer SceneRendererPipeline::getSceneRenderer() const 
+dp::sg::ui::SceneRendererSharedPtr SceneRendererPipeline::getSceneRenderer() const 
 {
   return m_sceneRenderer;
 }

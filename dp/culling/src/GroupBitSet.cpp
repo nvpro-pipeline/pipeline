@@ -46,7 +46,7 @@ namespace dp
 {
   namespace culling
   {
-      GroupBitSetHandle GroupBitSet::create()
+      GroupBitSetSharedPtr GroupBitSet::create()
       {
         return( std::shared_ptr<GroupBitSet>( new GroupBitSet() ) );
       }
@@ -73,7 +73,7 @@ namespace dp
         }
       }
 
-      void GroupBitSet::addObject( const ObjectBitSetHandle& object )
+      void GroupBitSet::addObject( const ObjectBitSetSharedPtr& object )
       {
         if ( object->getGroupIndex() == ~0 )
         {
@@ -90,7 +90,7 @@ namespace dp
         }
       }
 
-      void GroupBitSet::removeObject( ObjectBitSetHandle const & object )
+      void GroupBitSet::removeObject( ObjectBitSetSharedPtr const & object )
       {
         size_t oldGroupIndex = object->getGroupIndex();
         if ( oldGroupIndex < m_objects.size() && m_objects[oldGroupIndex] == object )
@@ -99,7 +99,7 @@ namespace dp
           m_objects[ oldGroupIndex ] = m_objects.back();
           m_objects[ oldGroupIndex ]->setGroupIndex(oldGroupIndex);
           object->setGroupIndex(~0);
-          object->setGroup( GroupBitSetHandle() );
+          object->setGroup( GroupBitSetSharedPtr() );
 
           // remove the last element
           m_objects.pop_back();

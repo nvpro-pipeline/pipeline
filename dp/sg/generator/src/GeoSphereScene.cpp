@@ -472,7 +472,7 @@ GeoSphereScene::GeoSphereScene()
   
   dp::fx::EffectLibrary::instance()->loadEffects( "PreviewScene.xml");
 
-  dp::fx::SmartEffectData phongEffectData = dp::fx::EffectLibrary::instance()->getEffectData( "phong_red" );
+  dp::fx::EffectDataSharedPtr phongEffectData = dp::fx::EffectLibrary::instance()->getEffectData( "phong_red" );
   DP_ASSERT( phongEffectData );
 
   m_effectHandle = EffectData::create( phongEffectData );

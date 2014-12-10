@@ -40,7 +40,7 @@ namespace dp
       typedef TreeNodeBaseClass::NodeIndex TransformTreeIndex;
       typedef TreeNodeBaseClass::NodeIndex ObjectTreeIndex;
 
-      SHARED_PTR_TYPES( ClipPlaneInstance );
+      DEFINE_PTR_TYPES( ClipPlaneInstance );
 
       typedef TreeResourceGroup<ClipPlaneInstance>    ClipPlaneGroup;
       typedef dp::util::SharedPtr<ClipPlaneGroup>     SmartClipPlaneGroup;

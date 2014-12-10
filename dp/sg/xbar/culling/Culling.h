@@ -38,8 +38,8 @@ namespace dp
     {
       namespace culling
       {
-        SHARED_PTR_TYPES( Culling );
-        HANDLE_TYPES( Result );
+        DEFINE_PTR_TYPES( Culling );
+        DEFINE_PTR_TYPES( Result );
 
         class Result
         {
@@ -50,7 +50,7 @@ namespace dp
           DP_SG_XBAR_CULLING_API Result();
         };
 
-        /** \brief This class provides culling on all GeoNodes in a SceneTree. It supports multiple viewports at the same time through the ResultHandle.
+        /** \brief This class provides culling on all GeoNodes in a SceneTree. It supports multiple viewports at the same time through the ResultSharedPtr.
                    After calling cull the function resultGetChangedIndices returns a list of ObjectTree indices with changed visibility. It is possible
                    to support multiple viewports by creating multiple results.
         **/
@@ -63,16 +63,16 @@ namespace dp
           DP_SG_XBAR_CULLING_API static CullingSharedPtr create( SceneTreeSharedPtr const& sceneTree, dp::culling::Mode cullingMode );
 
           /** \brief Create a culling result. This handle contains the visibility of all objects in the SceneTree **/
-          DP_SG_XBAR_CULLING_API virtual ResultHandle resultCreate() = 0;
+          DP_SG_XBAR_CULLING_API virtual ResultSharedPtr resultCreate() = 0;
 
           /** \brief Check if an object was visible during the last cull call **/
-          DP_SG_XBAR_CULLING_API virtual bool resultIsVisible( ResultHandle const & result, ObjectTreeIndex objectTreeIndex ) const = 0;
+          DP_SG_XBAR_CULLING_API virtual bool resultIsVisible( ResultSharedPtr const & result, ObjectTreeIndex objectTreeIndex ) const = 0;
 
           /** \brief Get the list of ObjectTree indices whose visibility has changed during the last cull call **/
-          DP_SG_XBAR_CULLING_API virtual std::vector<dp::sg::xbar::ObjectTreeIndex> const & resultGetChangedIndices( ResultHandle const & ) const = 0;
+          DP_SG_XBAR_CULLING_API virtual std::vector<dp::sg::xbar::ObjectTreeIndex> const & resultGetChangedIndices( ResultSharedPtr const & ) const = 0;
 
           /** \brief Cull the SceneTree against the given world2ViewProjection matrix and update the given result **/
-          DP_SG_XBAR_CULLING_API virtual void cull( ResultHandle const& result, dp::math::Mat44f const & world2ViewProjection ) = 0;
+          DP_SG_XBAR_CULLING_API virtual void cull( ResultSharedPtr const& result, dp::math::Mat44f const & world2ViewProjection ) = 0;
 
           /** \brief Calculate the bounding box of the SceneTree. Currently all active and inactive objects are used to calculate the result **/
           DP_SG_XBAR_CULLING_API virtual dp::math::Box3f getBoundingBox( ) = 0;

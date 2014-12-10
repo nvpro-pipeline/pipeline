@@ -113,7 +113,7 @@ void Feature_texture_sampler::createScene()
     "  Color = color + texture( tex, vTexCoords.xy );\n"
     "}\n";
 
-  dp::util::generator::SmartGeometryData mesh = dp::util::generator::createRectangle( dp::util::generator::ATTRIB_POSITION | dp::util::generator::ATTRIB_TEXCOORD0, 0.0f, 0.25f*m_height, 0.25f*m_width, 0.0f );
+  dp::util::generator::GeometryDataSharedPtr mesh = dp::util::generator::createRectangle( dp::util::generator::ATTRIB_POSITION | dp::util::generator::ATTRIB_TEXCOORD0, 0.0f, 0.25f*m_height, 0.25f*m_width, 0.0f );
   m_geometry = dp::rix::util::generateGeometry(mesh, m_rix);
 
 

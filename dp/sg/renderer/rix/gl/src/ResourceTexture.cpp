@@ -47,12 +47,12 @@ namespace dp
         namespace gl
         {
 
-          SmartResourceTexture ResourceTexture::get( const dp::sg::core::TextureSharedPtr& texture, const SmartResourceManager& resourceManager )
+          ResourceTextureSharedPtr ResourceTexture::get( const dp::sg::core::TextureSharedPtr& texture, const ResourceManagerSharedPtr& resourceManager )
           {
             DP_ASSERT( texture );
             DP_ASSERT( !!resourceManager );
 
-            SmartResourceTexture resourceTexture = resourceManager->getResource<ResourceTexture>( reinterpret_cast<size_t>(texture.getWeakPtr()) );
+            ResourceTextureSharedPtr resourceTexture = resourceManager->getResource<ResourceTexture>( reinterpret_cast<size_t>(texture.getWeakPtr()) );
             if ( !resourceTexture )
             {
               resourceTexture = std::shared_ptr<ResourceTexture>( new ResourceTexture( texture, resourceManager ) );
@@ -255,7 +255,7 @@ namespace dp
             m_resourceManager->getRenderer()->textureSetData( m_textureHandle, dataPtr );
           }
 
-          ResourceTexture::ResourceTexture( const dp::sg::core::TextureSharedPtr& texture, const SmartResourceManager& resourceManager )
+          ResourceTexture::ResourceTexture( const dp::sg::core::TextureSharedPtr& texture, const ResourceManagerSharedPtr& resourceManager )
             : ResourceManager::Resource( reinterpret_cast<size_t>( texture.getWeakPtr() ), resourceManager )
             , m_texture( texture )
             , m_isNativeTexture( false )

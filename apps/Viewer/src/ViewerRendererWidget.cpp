@@ -128,14 +128,14 @@ ViewerRendererWidget::setRendererType( RendererType type )
     switch( type )
     {
       case RENDERER_NONE:
-        setSceneRenderer( dp::sg::ui::SmartSceneRenderer::null );
+        setSceneRenderer( dp::sg::ui::SceneRendererSharedPtr::null );
         break;
 
       case RENDERER_RASTERIZE_XBAR:
       {
         addRasterizeActions();
         Viewer * viewer = GetApp();
-        dp::sg::renderer::rix::gl::SmartSceneRenderer ssrgl =
+        dp::sg::renderer::rix::gl::SceneRendererSharedPtr ssrgl =
           dp::sg::renderer::rix::gl::SceneRenderer::create( viewer->getRenderEngine().c_str(), 
                                                             viewer->getShaderManagerType(),
                                                             viewer->getCullingMode(),
@@ -510,7 +510,7 @@ void ViewerRendererWidget::dropEvent( QDropEvent * event )
   if ( mimeData->hasText() )
   {
     std::string effectName = mimeData->text().toStdString();
-    const dp::fx::SmartEffectSpec & materialEffectSpec = dp::fx::EffectLibrary::instance()->getEffectSpec( effectName );
+    const dp::fx::EffectSpecSharedPtr & materialEffectSpec = dp::fx::EffectLibrary::instance()->getEffectSpec( effectName );
     if ( materialEffectSpec )
     {
       ExecuteCommand( new CommandReplaceEffect( *m_selectedGeoNodes.begin(), GetApp()->getEffectData( effectName ) ) );
@@ -540,7 +540,7 @@ void ViewerRendererWidget::dragEnterEvent( QDragEnterEvent * event )
   if ( mimeData->hasText() )
   {
     std::string effectName = mimeData->text().toStdString();
-    const dp::fx::SmartEffectSpec & effectSpec = dp::fx::EffectLibrary::instance()->getEffectSpec( effectName );
+    const dp::fx::EffectSpecSharedPtr & effectSpec = dp::fx::EffectLibrary::instance()->getEffectSpec( effectName );
     if ( effectSpec )
     {
       event->accept();
@@ -856,7 +856,7 @@ void ViewerRendererWidget::moveSelectedObject()
     case OC_LIGHT_SOURCE:
     {
       EffectDataSharedPtr const& le = m_highlightedObject.staticCast<LightSource>()->getLightEffect();
-      const dp::fx::SmartEffectSpec & es = le->getEffectSpec();
+      const dp::fx::EffectSpecSharedPtr & es = le->getEffectSpec();
       for ( dp::fx::EffectSpec::iterator it = es->beginParameterGroupSpecs() ; it != es->endParameterGroupSpecs() ; ++it )
       {
         const dp::sg::core::ParameterGroupDataSharedPtr & parameterGroupData = le->getParameterGroupData( it );
@@ -917,7 +917,7 @@ ViewerRendererWidget::enableHighlighting( bool onOff )
   m_sceneRendererPipeline->enableHighlighting( onOff );
 }
 
-dp::sg::ui::SmartSceneRenderer ViewerRendererWidget::getSceneRenderer() const
+dp::sg::ui::SceneRendererSharedPtr ViewerRendererWidget::getSceneRenderer() const
 {
   if( m_sceneRendererPipeline )
   {
@@ -925,11 +925,11 @@ dp::sg::ui::SmartSceneRenderer ViewerRendererWidget::getSceneRenderer() const
   }
   else
   {
-    return dp::sg::ui::SmartSceneRenderer(0);
+    return dp::sg::ui::SceneRendererSharedPtr(0);
   }
 }
 
-void ViewerRendererWidget::setSceneRenderer( const dp::sg::ui::SmartSceneRenderer & ssr )
+void ViewerRendererWidget::setSceneRenderer( const dp::sg::ui::SceneRendererSharedPtr & ssr )
 {
   ssr->setEnvironmentSampler( GetApp()->getEnvironmentSampler() );
 
@@ -1295,7 +1295,7 @@ void ViewerRendererWidget::setOITDepth( unsigned int depth )
   if ( m_oitDepth != depth )
   {
     m_oitDepth = depth;
-    dp::sg::renderer::rix::gl::SmartSceneRenderer const& sceneRenderer = getSceneRenderer().staticCast<dp::sg::renderer::rix::gl::SceneRenderer>();
+    dp::sg::renderer::rix::gl::SceneRendererSharedPtr const& sceneRenderer = getSceneRenderer().staticCast<dp::sg::renderer::rix::gl::SceneRenderer>();
     if ( sceneRenderer )
     {
       sceneRenderer->getTransparencyManager()->setLayersCount( m_oitDepth );
@@ -1425,7 +1425,7 @@ ViewerRendererWidget::ManipulatorType ViewerRendererWidget::getManipulatorType()
   return m_manipulatorType;
 }
 
-void ViewerRendererWidget::onRenderTargetChanged( const dp::gl::SharedRenderTarget &oldTarget, const dp::gl::SharedRenderTarget &newTarget )
+void ViewerRendererWidget::onRenderTargetChanged( const dp::gl::RenderTargetSharedPtr &oldTarget, const dp::gl::RenderTargetSharedPtr &newTarget )
 {
   switch( getRendererType() )
   {

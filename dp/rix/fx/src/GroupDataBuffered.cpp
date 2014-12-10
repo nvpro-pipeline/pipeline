@@ -53,7 +53,7 @@ namespace dp
       bool GroupDataBuffered::setValue( const dp::fx::ParameterGroupSpec::iterator& parameter, const dp::rix::core::ContainerData& data )
       {
         const dp::rix::core::ContainerDataRaw& containerDataRaw = reinterpret_cast<const dp::rix::core::ContainerDataRaw&>(data);
-        const dp::fx::ParameterGroupLayout::SmartParameterInfo& info = m_groupSpecInfo->m_groupLayout->getParameterInfo(parameter);
+        const dp::fx::ParameterGroupLayout::ParameterInfoSharedPtr& info = m_groupSpecInfo->m_groupLayout->getParameterInfo(parameter);
         info->convert( m_shadowBuffer.get(), containerDataRaw.m_data );
         if ( !m_dirty )
         {

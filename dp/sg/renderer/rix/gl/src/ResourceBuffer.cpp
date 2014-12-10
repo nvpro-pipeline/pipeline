@@ -40,12 +40,12 @@ namespace dp
         namespace gl
         {
 
-          SmartResourceBuffer ResourceBuffer::get( const dp::sg::core::BufferSharedPtr &buffer, const SmartResourceManager& resourceManager )
+          ResourceBufferSharedPtr ResourceBuffer::get( const dp::sg::core::BufferSharedPtr &buffer, const ResourceManagerSharedPtr& resourceManager )
           {
             assert( buffer );
             assert( !!resourceManager );
     
-            SmartResourceBuffer resourceBuffer = resourceManager->getResource<ResourceBuffer>( reinterpret_cast<size_t>(buffer.getWeakPtr()) );
+            ResourceBufferSharedPtr resourceBuffer = resourceManager->getResource<ResourceBuffer>( reinterpret_cast<size_t>(buffer.getWeakPtr()) );
             if ( !resourceBuffer )
             {
               resourceBuffer = std::shared_ptr<ResourceBuffer>( new ResourceBuffer( buffer, resourceManager ) );
@@ -67,7 +67,7 @@ namespace dp
             return resourceBuffer;
           }
 
-          ResourceBuffer::ResourceBuffer( const dp::sg::core::BufferSharedPtr &buffer, const SmartResourceManager& resourceManager )
+          ResourceBuffer::ResourceBuffer( const dp::sg::core::BufferSharedPtr &buffer, const ResourceManagerSharedPtr& resourceManager )
             : ResourceManager::Resource( reinterpret_cast<size_t>( buffer.getWeakPtr() ), resourceManager )
             , m_buffer( buffer )
             , m_isNativeBuffer( false )

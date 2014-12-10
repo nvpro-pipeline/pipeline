@@ -34,12 +34,12 @@ namespace dp
 {
   namespace fx
   {
-    SMART_TYPES( ParameterGroupLayout );
+    DEFINE_PTR_TYPES( ParameterGroupLayout );
 
     class ParameterGroupLayout
     {
     public:
-      SMART_TYPES( ParameterInfo );
+      DEFINE_PTR_TYPES( ParameterInfo );
 
       class ParameterInfo
       {
@@ -47,10 +47,10 @@ namespace dp
         virtual void convert( void* dstBase, void const* src ) const = 0;
       };
 
-      DP_FX_API static SmartParameterGroupLayout create( dp::fx::Manager manager, const std::vector<SmartParameterInfo>& parameterInfos, const std::string& groupName, size_t bufferSize, bool isInstanced, const SmartParameterGroupSpec& spec );
+      DP_FX_API static ParameterGroupLayoutSharedPtr create( dp::fx::Manager manager, const std::vector<ParameterInfoSharedPtr>& parameterInfos, const std::string& groupName, size_t bufferSize, bool isInstanced, const ParameterGroupSpecSharedPtr& spec );
 
       /** \brief Get ParameterInfo for the given iterator **/
-      SmartParameterInfo const & getParameterInfo( const dp::fx::ParameterGroupSpec::iterator& it) const;
+      ParameterInfoSharedPtr const & getParameterInfo( const dp::fx::ParameterGroupSpec::iterator& it) const;
 
       /** size of a single buffer if non-uniforms are being used **/
       DP_FX_API size_t getBufferSize() const; 
@@ -65,16 +65,16 @@ namespace dp
 
       DP_FX_API dp::fx::Manager getManager() const;
     protected:
-      DP_FX_API ParameterGroupLayout( dp::fx::Manager manager, const std::vector<SmartParameterInfo>& parameterInfos, const std::string& groupName, size_t bufferSize, bool isInstanced, const SmartParameterGroupSpec& spec );
-      SmartParameterGroupSpec         m_spec;
-      std::string                     m_groupName;
-      std::vector<SmartParameterInfo> m_parameterInfos;
-      dp::fx::Manager                 m_manager;
-      size_t                          m_bufferSize;
-      bool                            m_isInstanced;
+      DP_FX_API ParameterGroupLayout( dp::fx::Manager manager, const std::vector<ParameterInfoSharedPtr>& parameterInfos, const std::string& groupName, size_t bufferSize, bool isInstanced, const ParameterGroupSpecSharedPtr& spec );
+      ParameterGroupSpecSharedPtr         m_spec;
+      std::string                         m_groupName;
+      std::vector<ParameterInfoSharedPtr> m_parameterInfos;
+      dp::fx::Manager                     m_manager;
+      size_t                              m_bufferSize;
+      bool                                m_isInstanced;
     };
 
-    inline ParameterGroupLayout::SmartParameterInfo const& ParameterGroupLayout::getParameterInfo( const ParameterGroupSpec::iterator& it ) const
+    inline ParameterGroupLayout::ParameterInfoSharedPtr const& ParameterGroupLayout::getParameterInfo( const ParameterGroupSpec::iterator& it ) const
     {
       size_t index = std::distance( m_spec->beginParameterSpecs(), it );
       return m_parameterInfos[index];

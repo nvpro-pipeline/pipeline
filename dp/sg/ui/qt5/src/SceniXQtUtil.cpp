@@ -333,7 +333,7 @@ namespace dp
 
         /** \brief Creates an QImage out of a TextureHost 
         **/
-        QImage createQImage( const dp::util::SmartImage& image /*, int image, int mipmap */ )
+        QImage createQImage( const dp::util::ImageSharedPtr& image /*, int image, int mipmap */ )
         {
           const void *srcData = image->getLayerData( 0, 0 );
           int width = static_cast<int>(image->getWidth( ));

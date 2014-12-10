@@ -39,19 +39,19 @@ namespace dp
   {
     namespace opengl
     {
-      HANDLE_TYPES( GroupImpl );
+      DEFINE_PTR_TYPES( GroupImpl );
 
       class GroupImpl : public GroupBitSet
       {
       public:
-        static GroupImplHandle create();
+        static GroupImplSharedPtr create();
         virtual ~GroupImpl();
 
         void update( size_t workGroupSize );
 
-        dp::gl::SharedBuffer const & getInputBuffer() { return m_inputBuffer; }
-        dp::gl::SharedBuffer const & getMatrixBuffer() { return m_matricesBuffer; }
-        dp::gl::SharedBuffer const & getOutputBuffer() { return m_outputBuffer; }
+        dp::gl::BufferSharedPtr const & getInputBuffer() { return m_inputBuffer; }
+        dp::gl::BufferSharedPtr const & getMatrixBuffer() { return m_matricesBuffer; }
+        dp::gl::BufferSharedPtr const & getOutputBuffer() { return m_outputBuffer; }
 
       protected:
         GroupImpl();
@@ -60,9 +60,9 @@ namespace dp
         void updateOutputBuffer( size_t workGroupSize );
 
       private:
-        dp::gl::SharedBuffer  m_inputBuffer;
-        dp::gl::SharedBuffer  m_matricesBuffer;
-        dp::gl::SharedBuffer  m_outputBuffer;
+        dp::gl::BufferSharedPtr  m_inputBuffer;
+        dp::gl::BufferSharedPtr  m_matricesBuffer;
+        dp::gl::BufferSharedPtr  m_outputBuffer;
         GLsizei               m_outputBufferSize;
       };
 

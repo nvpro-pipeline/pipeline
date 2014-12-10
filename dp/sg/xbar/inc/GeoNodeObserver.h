@@ -35,14 +35,14 @@ namespace dp
   {
     namespace xbar
     {
-      SMART_TYPES( GeoNodeObserver );
+      DEFINE_PTR_TYPES( GeoNodeObserver );
 
       class GeoNodeObserver : public Observer<ObjectTreeIndex>
       {
       public:
         virtual ~GeoNodeObserver();
 
-        static SmartGeoNodeObserver create( const SceneTreeWeakPtr &sceneTree )
+        static GeoNodeObserverSharedPtr create( const SceneTreeWeakPtr &sceneTree )
         {
           return( std::shared_ptr<GeoNodeObserver>( new GeoNodeObserver( sceneTree ) ) );
         }

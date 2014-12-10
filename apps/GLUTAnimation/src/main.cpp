@@ -110,7 +110,7 @@ GLUTAnimationWidget::GLUTAnimationWidget( const dp::gl::RenderContextFormat &for
 GLUTAnimationWidget::~GLUTAnimationWidget()
 {
   // Delete SceneRenderer here to cleanup resources before the OpenGL context dies
-  setSceneRenderer( SmartSceneRenderer::null );
+  setSceneRenderer( SceneRendererSharedPtr::null );
 
   // Reset Manipulator
   setManipulator( 0 );
@@ -223,7 +223,7 @@ void showStatistics( dp::sg::ui::ViewStateSharedPtr const& viewState )
 int runApp( int argc, char *argv[], bool stereo, bool continuous, int frames, const char *renderEngine, dp::fx::Manager smt )
 {
   // Create rendering engine
-  SmartSceneRenderer renderer = dp::sg::renderer::rix::gl::SceneRenderer::create( renderEngine, smt, dp::culling::MODE_CPU );
+  SceneRendererSharedPtr renderer = dp::sg::renderer::rix::gl::SceneRenderer::create( renderEngine, smt, dp::culling::MODE_CPU );
 
   // Setup default OpenGL format descriptor
   // We need to create a default format first to be able to check if a stereo pixelformat is available later.

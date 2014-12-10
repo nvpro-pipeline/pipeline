@@ -215,7 +215,7 @@ void SceneTreeItem::expandItem()
       case OC_EFFECT_DATA :
         {
           EffectDataSharedPtr const& ed = m_object.staticCast<EffectData>();
-          dp::fx::SmartEffectSpec const & es = ed->getEffectSpec();
+          dp::fx::EffectSpecSharedPtr const & es = ed->getEffectSpec();
           for ( dp::fx::EffectSpec::iterator it = es->beginParameterGroupSpecs() ; it != es->endParameterGroupSpecs() ; ++it )
           {
             if ( ed->getParameterGroupData( it ) )
@@ -228,7 +228,7 @@ void SceneTreeItem::expandItem()
       case OC_PARAMETER_GROUP_DATA :
         {
           ParameterGroupDataSharedPtr const& pgd = m_object.staticCast<ParameterGroupData>();
-          dp::fx::SmartParameterGroupSpec const & pgs = pgd->getParameterGroupSpec();
+          dp::fx::ParameterGroupSpecSharedPtr const & pgs = pgd->getParameterGroupSpec();
           for ( dp::fx::ParameterGroupSpec::iterator it = pgs->beginParameterSpecs() ; it != pgs->endParameterSpecs() ; ++it )
           {
             if ( ( ( it->first.getType() & dp::fx::PT_POINTER_TYPE_MASK ) == dp::fx::PT_SAMPLER_PTR )
@@ -319,7 +319,7 @@ void SceneTreeItem::setChildIndicatorPolicy()
       DP_ASSERT( m_object.isPtrTo<ParameterGroupData>() );
       {
         ParameterGroupDataSharedPtr const& pgd = m_object.staticCast<ParameterGroupData>();
-        dp::fx::SmartParameterGroupSpec const & pgs = pgd->getParameterGroupSpec();
+        dp::fx::ParameterGroupSpecSharedPtr const & pgs = pgd->getParameterGroupSpec();
         for ( dp::fx::ParameterGroupSpec::iterator it = pgs->beginParameterSpecs() ; it != pgs->endParameterSpecs() && !showIndicator ; ++it )
         {
           showIndicator = ( ( it->first.getType() & dp::fx::PT_POINTER_TYPE_MASK ) == dp::fx::PT_SAMPLER_PTR )
@@ -422,7 +422,7 @@ void SceneTreeItem::update()
       case OC_EFFECT_DATA :
         {
           EffectDataSharedPtr const& ed = m_object.staticCast<EffectData>();
-          dp::fx::SmartEffectSpec const & es = ed->getEffectSpec();
+          dp::fx::EffectSpecSharedPtr const & es = ed->getEffectSpec();
           for ( dp::fx::EffectSpec::iterator it = es->beginParameterGroupSpecs() ; it != es->endParameterGroupSpecs() ; ++it )
           {
             if ( ed->getParameterGroupData( it ) )
@@ -435,7 +435,7 @@ void SceneTreeItem::update()
       case OC_PARAMETER_GROUP_DATA :
         {
           ParameterGroupDataSharedPtr const& pgd = m_object.staticCast<ParameterGroupData>();
-          dp::fx::SmartParameterGroupSpec const & pgs = pgd->getParameterGroupSpec();
+          dp::fx::ParameterGroupSpecSharedPtr const & pgs = pgd->getParameterGroupSpec();
           for ( dp::fx::ParameterGroupSpec::iterator it = pgs->beginParameterSpecs() ; it != pgs->endParameterSpecs() ; ++it )
           {
             if ( ( it->first.getType() & dp::fx::PT_POINTER_TYPE_MASK ) == dp::fx::PT_SAMPLER_PTR )

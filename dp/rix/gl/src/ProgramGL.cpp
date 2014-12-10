@@ -93,7 +93,7 @@ namespace dp
 
       void ProgramGL::initEffect( dp::rix::core::ProgramShaderCode const& psc )
       {
-        std::vector<dp::gl::SharedShader> shaders;
+        std::vector<dp::gl::ShaderSharedPtr> shaders;
         for ( unsigned int i=0 ; i<psc.m_numShaders ; i++ )
         {
           shaders.push_back( dp::gl::Shader::create( getGLProgramDomain( psc.m_shaderTypes[i] ), psc.m_codes[i] ) );
@@ -120,7 +120,7 @@ namespace dp
           nameShader << std::setw(4) << shaderId;
           nameShader << "s.txt";
           std::ofstream outputShader( tmp + "\\" + nameShader.str() );
-          for ( std::vector<dp::gl::SharedShader>::const_iterator it = shaders.begin() ; it != shaders.end() ; ++it )
+          for ( std::vector<dp::gl::ShaderSharedPtr>::const_iterator it = shaders.begin() ; it != shaders.end() ; ++it )
           {
             outputShader << dp::gl::shaderTypeToName( (*it)->getType() ) << std::endl;
             outputShader << (*it)->getSource();

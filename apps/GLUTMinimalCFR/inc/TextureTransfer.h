@@ -31,46 +31,46 @@
 #include <dp/gl/Texture.h>
 #include <map>
 
-SMART_TYPES( TextureTransfer );
+DEFINE_PTR_TYPES( TextureTransfer );
 
 class TextureTransfer
 {
 public:
-  static SmartTextureTransfer create( dp::gl::SharedRenderContext const& dstContext, dp::gl::SharedRenderContext const& srcContext );
+  static TextureTransferSharedPtr create( dp::gl::RenderContextSharedPtr const& dstContext, dp::gl::RenderContextSharedPtr const& srcContext );
   ~TextureTransfer();
 
   void setTileSize( size_t width, size_t height );
   void setMaxIndex( size_t maxIndex );
 
   void transfer( size_t index
-               , dp::gl::SharedTexture2D dstTexture
-               , dp::gl::SharedTexture2D srcTexture );
+               , dp::gl::Texture2DSharedPtr dstTexture
+               , dp::gl::Texture2DSharedPtr srcTexture );
 
 protected:
-  TextureTransfer( dp::gl::SharedRenderContext const& dstContext, dp::gl::SharedRenderContext const& srcContext );
+  TextureTransfer( dp::gl::RenderContextSharedPtr const& dstContext, dp::gl::RenderContextSharedPtr const& srcContext );
 
 private:
   void constructComputeShaders();
   void destroyComputeShaders();
-  dp::gl::SharedProgram compileShader( dp::gl::SharedRenderContext const& context, char const* source );
+  dp::gl::ProgramSharedPtr compileShader( dp::gl::RenderContextSharedPtr const& context, char const* source );
 
   // get a texture for the given context 
-  dp::gl::SharedTexture2D const& getTmpTexture( dp::gl::SharedRenderContext const& context, size_t width, size_t height );
+  dp::gl::Texture2DSharedPtr const& getTmpTexture( dp::gl::RenderContextSharedPtr const& context, size_t width, size_t height );
 
 private:
-  typedef std::map< dp::gl::SharedRenderContext, dp::gl::SharedTexture2D > Textures;
+  typedef std::map< dp::gl::RenderContextSharedPtr, dp::gl::Texture2DSharedPtr > Textures;
 
 private:
-  dp::gl::SharedRenderContext m_dstContext;
-  dp::gl::SharedRenderContext m_srcContext;
+  dp::gl::RenderContextSharedPtr m_dstContext;
+  dp::gl::RenderContextSharedPtr m_srcContext;
 
   size_t m_tileWidth;
   size_t m_tileHeight;
   size_t m_maxIndex;
 
-  dp::gl::SharedProgram  m_compressProgram;
-  dp::gl::SharedProgram  m_decompressProgram;
-  dp::gl::SharedProgram  m_copyProgram;
+  dp::gl::ProgramSharedPtr  m_compressProgram;
+  dp::gl::ProgramSharedPtr  m_decompressProgram;
+  dp::gl::ProgramSharedPtr  m_copyProgram;
   bool m_shadersInitialized;
 
   Textures m_tmpTextures;

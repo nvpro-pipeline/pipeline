@@ -55,7 +55,7 @@ namespace dp
       protected:
         //Screenshooting
         DPTCORE_API void takeScreenshot();
-        DPTCORE_API util::SmartImage retrieveScreenshot(unsigned int i);
+        DPTCORE_API util::ImageSharedPtr retrieveScreenshot(unsigned int i);
 
         //Gold image helper functions
         DPTCORE_API bool saveImages();
@@ -69,7 +69,7 @@ namespace dp
         std::string m_filenamePrefix;
         std::string m_filenameSuffix;
 
-        std::vector<util::SmartImage> m_screenshots;
+        std::vector<util::ImageSharedPtr> m_screenshots;
       };
 
     } // namespace core

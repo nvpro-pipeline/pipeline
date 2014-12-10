@@ -91,7 +91,7 @@ namespace dp
       }
     }
 
-    ParameterSpec::ParameterSpec( const std::string & name, const SmartEnumSpec & enumSpec, unsigned int arraySize, const string & defaultString, const std::string & annotation )
+    ParameterSpec::ParameterSpec( const std::string & name, const EnumSpecSharedPtr & enumSpec, unsigned int arraySize, const string & defaultString, const std::string & annotation )
       : m_name(name)
       , m_type(PT_ENUM)
       , m_annotation(annotation)

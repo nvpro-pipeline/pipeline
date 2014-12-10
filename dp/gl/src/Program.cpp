@@ -33,34 +33,34 @@ namespace dp
   namespace gl
   {
 
-    SharedProgram Program::create( std::vector<SharedShader> const& shaders, Parameters const& programParameters )
+    ProgramSharedPtr Program::create( std::vector<ShaderSharedPtr> const& shaders, Parameters const& programParameters )
     {
       return( std::shared_ptr<Program>( new Program( shaders, programParameters ) ) );
     }
 
-    SharedProgram Program::create( SharedVertexShader const& vertexShader, SharedFragmentShader const& fragmentShader, Parameters const& programParameters )
+    ProgramSharedPtr Program::create( VertexShaderSharedPtr const& vertexShader, FragmentShaderSharedPtr const& fragmentShader, Parameters const& programParameters )
     {
-      std::vector<SharedShader> shaders;
+      std::vector<ShaderSharedPtr> shaders;
       shaders.push_back( vertexShader );
       shaders.push_back( fragmentShader );
       return( std::shared_ptr<Program>( new Program( shaders, programParameters ) ) );
     }
 
-    SharedProgram Program::create( SharedComputeShader const& computeShader, Parameters const& programParameters )
+    ProgramSharedPtr Program::create( ComputeShaderSharedPtr const& computeShader, Parameters const& programParameters )
     {
-      std::vector<SharedShader> shaders;
+      std::vector<ShaderSharedPtr> shaders;
       shaders.push_back( computeShader );
       return( std::shared_ptr<Program>( new Program( shaders, programParameters ) ) );
     }
 
-    Program::Program( std::vector<SharedShader> const& shaders, Parameters const& parameters )
+    Program::Program( std::vector<ShaderSharedPtr> const& shaders, Parameters const& parameters )
       : m_activeAttributesCount(0)
       , m_activeAttributesMask(0)
       , m_shaders( shaders )
     {
 #if !defined(NDEBUG)
       std::set<GLenum> types;
-      for ( std::vector<SharedShader>::const_iterator it = m_shaders.begin() ; it != m_shaders.end() ; ++it )
+      for ( std::vector<ShaderSharedPtr>::const_iterator it = m_shaders.begin() ; it != m_shaders.end() ; ++it )
       {
         DP_ASSERT( *it && types.insert( (*it)->getType() ).second );
       }
@@ -74,7 +74,7 @@ namespace dp
       glProgramParameteri( id, GL_PROGRAM_BINARY_RETRIEVABLE_HINT, parameters.m_binaryRetrievableHint );
       glProgramParameteri( id, GL_PROGRAM_SEPARABLE, parameters.m_separable );
 
-      for ( std::vector<SharedShader>::const_iterator it = m_shaders.begin() ; it != m_shaders.end() ; ++it )
+      for ( std::vector<ShaderSharedPtr>::const_iterator it = m_shaders.begin() ; it != m_shaders.end() ; ++it )
       {
         glAttachShader( id, (*it)->getGLId() );
       }
@@ -259,11 +259,11 @@ namespace dp
       {
         if ( getShareGroup() )
         {
-          SHARED_TYPES( CleanupTask );
+          DEFINE_PTR_TYPES( CleanupTask );
           class CleanupTask : public ShareGroupTask
           {
             public:
-              static SharedCleanupTask create( GLuint id )
+              static CleanupTaskSharedPtr create( GLuint id )
               {
                 return( std::shared_ptr<CleanupTask>( new CleanupTask( id ) ) );
               }
@@ -317,12 +317,12 @@ namespace dp
       return( std::make_pair( binaryFormat, binary ) );
     }
 
-    std::vector<SharedShader> const& Program::getShaders() const
+    std::vector<ShaderSharedPtr> const& Program::getShaders() const
     {
       return( m_shaders );
     }
 
-    void Program::setImageTexture( std::string const& textureName, SharedTexture const& texture, GLenum access )
+    void Program::setImageTexture( std::string const& textureName, TextureSharedPtr const& texture, GLenum access )
     {
       std::map<std::string,size_t>::const_iterator uit = m_uniformsMap.find( textureName );
       DP_ASSERT( uit != m_uniformsMap.end() );
@@ -420,7 +420,7 @@ namespace dp
       }
     }
 
-    ProgramUseGuard::ProgramUseGuard( SharedProgram const& program, bool doBinding )
+    ProgramUseGuard::ProgramUseGuard( ProgramSharedPtr const& program, bool doBinding )
       : m_program( program )
       , m_binding( doBinding )
     {

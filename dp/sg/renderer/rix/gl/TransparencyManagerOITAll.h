@@ -42,12 +42,12 @@ namespace dp
       {
         namespace gl
         {
-          SMART_TYPES( TransparencyManagerOITAll );
+          DEFINE_PTR_TYPES( TransparencyManagerOITAll );
 
           class TransparencyManagerOITAll : public TransparencyManager
           {
             public:
-              DP_SG_RDR_RIX_GL_API static SmartTransparencyManagerOITAll create( dp::math::Vec2ui const & size );
+              DP_SG_RDR_RIX_GL_API static TransparencyManagerOITAllSharedPtr create( dp::math::Vec2ui const & size );
               DP_SG_RDR_RIX_GL_API virtual ~TransparencyManagerOITAll();
 
             public:
@@ -75,17 +75,17 @@ namespace dp
               dp::rix::core::TextureSharedHandle                m_perFragmentOffsetTexture;
               dp::rix::core::TextureSharedHandle                m_samplesTexture;
 
-              dp::gl::SharedProgram       m_clearProgram;
-              dp::gl::SharedTexture1D     m_counterAccuTexture;
-              dp::gl::SharedBuffer        m_fullScreenQuad;
-              bool                        m_initializedBuffers;
-              bool                        m_initializedHandles;
-              dp::gl::SharedTexture2D     m_perFragmentCountTextureGL;
-              dp::gl::SharedTexture2D     m_perFragmentOffsetTextureGL;
-              dp::gl::SharedProgram       m_resolveCountersProgram;
-              dp::gl::SharedProgram       m_resolveSamplesProgram;
-              dp::gl::SharedTextureBuffer m_samplesTextureGL;
-              GLuint                      m_samplesPassedQuery;
+              dp::gl::ProgramSharedPtr        m_clearProgram;
+              dp::gl::Texture1DSharedPtr      m_counterAccuTexture;
+              dp::gl::BufferSharedPtr         m_fullScreenQuad;
+              bool                            m_initializedBuffers;
+              bool                            m_initializedHandles;
+              dp::gl::Texture2DSharedPtr      m_perFragmentCountTextureGL;
+              dp::gl::Texture2DSharedPtr      m_perFragmentOffsetTextureGL;
+              dp::gl::ProgramSharedPtr        m_resolveCountersProgram;
+              dp::gl::ProgramSharedPtr        m_resolveSamplesProgram;
+              dp::gl::TextureBufferSharedPtr  m_samplesTextureGL;
+              GLuint                          m_samplesPassedQuery;
           };
 
         } // namespace gl

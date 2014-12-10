@@ -35,7 +35,7 @@ namespace dp
     namespace fx
     {
 
-      SmartManager Manager::create( dp::fx::Manager managerType, dp::rix::core::Renderer* rdr, unsigned int /*uniformBufferOffsetAlign*/ )
+      ManagerSharedPtr Manager::create( dp::fx::Manager managerType, dp::rix::core::Renderer* rdr, unsigned int /*uniformBufferOffsetAlign*/ )
       {
         switch (managerType)
         {
@@ -48,7 +48,7 @@ namespace dp
           return ManagerUniform::create( rdr, managerType );
         default:
           DP_ASSERT(0 && "unsupported manager");
-          return nullptr;
+          return( ManagerSharedPtr::null );
         }
       }
 

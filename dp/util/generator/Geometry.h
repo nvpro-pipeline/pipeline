@@ -87,13 +87,13 @@ namespace dp
         std::vector<float> m_data;
       };
 
-      SMART_TYPES( GeometryData );
+      DEFINE_PTR_TYPES( GeometryData );
 
       class GeometryData
       {
       public:
-        DP_UTIL_API static SmartGeometryData create( GeometryPrimitiveType gpt );
-        DP_UTIL_API static SmartGeometryData create( SmartGeometryData const& rhs );
+        DP_UTIL_API static GeometryDataSharedPtr create( GeometryPrimitiveType gpt );
+        DP_UTIL_API static GeometryDataSharedPtr create( GeometryDataSharedPtr const& rhs );
         DP_UTIL_API ~GeometryData();
 
         std::vector<unsigned int> m_indices;
@@ -105,13 +105,13 @@ namespace dp
 
       protected:
         DP_UTIL_API GeometryData( GeometryPrimitiveType gpt );
-        DP_UTIL_API GeometryData( SmartGeometryData const& rhs);
+        DP_UTIL_API GeometryData( GeometryDataSharedPtr const& rhs);
       };
 
       class AttributeFeed
       {
       public:
-        AttributeFeed(SmartGeometryData& data, AttributeID attributeId, unsigned int attrMask, unsigned int dimensionality, size_t numElements = 0)
+        AttributeFeed(GeometryDataSharedPtr& data, AttributeID attributeId, unsigned int attrMask, unsigned int dimensionality, size_t numElements = 0)
         {
           if( m_enabled = !!(attrMask & attributeId) )
           {
@@ -171,7 +171,7 @@ namespace dp
       class IndexFeed
       {
       public:
-        IndexFeed( SmartGeometryData& data, size_t numElements = 0 )
+        IndexFeed( GeometryDataSharedPtr& data, size_t numElements = 0 )
                  : m_indices(data->m_indices)
         {
           m_indices.reserve(numElements);
@@ -187,9 +187,9 @@ namespace dp
       };
 
       template <unsigned int dim>
-      SmartGeometryData createPoint( const math::Vecnt<dim,float>& v0 )
+      GeometryDataSharedPtr createPoint( const math::Vecnt<dim,float>& v0 )
       {
-        SmartGeometryData meshOut = new GeometryData(GPT_POINTS);
+        GeometryDataSharedPtr meshOut = new GeometryData(GPT_POINTS);
 
         AttributeFeed positions(meshOut, ATTRIB_POSITION, ATTRIB_POSITION, dim, 1);
         positions.add( v0 );
@@ -200,9 +200,9 @@ namespace dp
       }
 
       template <unsigned int dim>
-      SmartGeometryData createPoints( const std::vector< math::Vecnt<dim,float> >& v, bool indexed = false )
+      GeometryDataSharedPtr createPoints( const std::vector< math::Vecnt<dim,float> >& v, bool indexed = false )
       {
-        SmartGeometryData meshOut = new GeometryData(GPT_POINTS);
+        GeometryDataSharedPtr meshOut = new GeometryData(GPT_POINTS);
 
         AttributeFeed positions(meshOut, ATTRIB_POSITION, ATTRIB_POSITION, dim, v.size() );
         for( typename std::vector< math::Vecnt<dim,float> >::const_iterator it = v.begin(); it != v.end(); ++it )
@@ -224,60 +224,60 @@ namespace dp
         return meshOut;
       }
 
-      DP_UTIL_API SmartGeometryData createQuad( unsigned int attrMask
-                                              , math::Vec3f v0 = math::Vec3f(0.0f, 0.0f, 0.0f)
-                                              , math::Vec3f v1 = math::Vec3f(1.0f, 0.0f, 0.0f)
-                                              , math::Vec3f v2 = math::Vec3f(0.0f, 1.0f, 0.0f)
-                                              , math::Vec2f t0 = math::Vec2f(0.0f, 0.0f)
-                                              , math::Vec2f t1 = math::Vec2f(1.0f, 0.0f)
-                                              , math::Vec2f t2 = math::Vec2f(0.0f, 1.0f) );
-
-      DP_UTIL_API SmartGeometryData createQuadIndexed( unsigned int attrMask
-                                                     , math::Vec2f t0 = math::Vec2f(0.0f, 0.0f)
-                                                     , math::Vec2f t1 = math::Vec2f(1.0f, 0.0f)
-                                                     , math::Vec2f t2 = math::Vec2f(0.0f, 1.0f) );
-
-      DP_UTIL_API SmartGeometryData createTriangle( unsigned int attrMask
+      DP_UTIL_API GeometryDataSharedPtr createQuad( unsigned int attrMask
                                                   , math::Vec3f v0 = math::Vec3f(0.0f, 0.0f, 0.0f)
-                                                  , math::Vec3f v1 = math::Vec3f(1.0f, 0.0f, 0.0f) 
+                                                  , math::Vec3f v1 = math::Vec3f(1.0f, 0.0f, 0.0f)
                                                   , math::Vec3f v2 = math::Vec3f(0.0f, 1.0f, 0.0f)
                                                   , math::Vec2f t0 = math::Vec2f(0.0f, 0.0f)
                                                   , math::Vec2f t1 = math::Vec2f(1.0f, 0.0f)
                                                   , math::Vec2f t2 = math::Vec2f(0.0f, 1.0f) );
 
+      DP_UTIL_API GeometryDataSharedPtr createQuadIndexed( unsigned int attrMask
+                                                         , math::Vec2f t0 = math::Vec2f(0.0f, 0.0f)
+                                                         , math::Vec2f t1 = math::Vec2f(1.0f, 0.0f)
+                                                         , math::Vec2f t2 = math::Vec2f(0.0f, 1.0f) );
+
+      DP_UTIL_API GeometryDataSharedPtr createTriangle( unsigned int attrMask
+                                                      , math::Vec3f v0 = math::Vec3f(0.0f, 0.0f, 0.0f)
+                                                      , math::Vec3f v1 = math::Vec3f(1.0f, 0.0f, 0.0f) 
+                                                      , math::Vec3f v2 = math::Vec3f(0.0f, 1.0f, 0.0f)
+                                                      , math::Vec2f t0 = math::Vec2f(0.0f, 0.0f)
+                                                      , math::Vec2f t1 = math::Vec2f(1.0f, 0.0f)
+                                                      , math::Vec2f t2 = math::Vec2f(0.0f, 1.0f) );
+
       //TODO: The float t{Left|Top|Right|Bottom} needs to be adapted to Vec4f tRect
-      DP_UTIL_API SmartGeometryData createRectangle( unsigned int attrMask
-                                                   , float left, float top, float right, float bottom
-                                                   , float tLeft = 0.0f, float tTop = 1.0f
-                                                   , float tRight = 1.0f, float tBottom = 0.0f);
+      DP_UTIL_API GeometryDataSharedPtr createRectangle( unsigned int attrMask
+                                                       , float left, float top, float right, float bottom
+                                                       , float tLeft = 0.0f, float tTop = 1.0f
+                                                       , float tRight = 1.0f, float tBottom = 0.0f);
 
-      DP_UTIL_API SmartGeometryData createCube( unsigned int attrMask
-                                              , math::Vec2f t0 = math::Vec2f(0.0f, 0.0f)
-                                              , math::Vec2f t1 = math::Vec2f(1.0f, 0.0f)
-                                              , math::Vec2f t2 = math::Vec2f(0.0f, 1.0f) );
+      DP_UTIL_API GeometryDataSharedPtr createCube( unsigned int attrMask
+                                                  , math::Vec2f t0 = math::Vec2f(0.0f, 0.0f)
+                                                  , math::Vec2f t1 = math::Vec2f(1.0f, 0.0f)
+                                                  , math::Vec2f t2 = math::Vec2f(0.0f, 1.0f) );
 
-      DP_UTIL_API SmartGeometryData createCylinder( unsigned int attrMask
-                                                  , unsigned int longitudeDivs                   //Number of times to subdivide the circular cross-section
-                                                  , unsigned int heightDivs = 2                  //Number of times to subdivide the height span of the cylinder
-                                                  , float longitudeEnd = 0.0f                    //Optionally set the ending angle of the circular cross-section
-                                                  , float innerRadius = 0.0f );                  //Optionally set an inner Radius, thus making the shape a solid tube
+      DP_UTIL_API GeometryDataSharedPtr createCylinder( unsigned int attrMask
+                                                      , unsigned int longitudeDivs                   //Number of times to subdivide the circular cross-section
+                                                      , unsigned int heightDivs = 2                  //Number of times to subdivide the height span of the cylinder
+                                                      , float longitudeEnd = 0.0f                    //Optionally set the ending angle of the circular cross-section
+                                                      , float innerRadius = 0.0f );                  //Optionally set an inner Radius, thus making the shape a solid tube
 
-      DP_UTIL_API SmartGeometryData createSphere( unsigned int attrMask
-                                                , unsigned int longitudeDivs                     //Number of axial subdivisions (y-axis)  
-                                                , unsigned int latitudeDivs                      //Number of meridional subdivisions
-                                                , float longitudeEnd = 0.0f                      //Optionally set the ending longitudinal angle
-                                                , float latitudeEnd = math::PI                   //Optionally set the ending latitudinal angle
-                                                , float latitudeBegin = 0.0f );                  //Optionall set the starting latitude angle
+      DP_UTIL_API GeometryDataSharedPtr createSphere( unsigned int attrMask
+                                                    , unsigned int longitudeDivs                     //Number of axial subdivisions (y-axis)  
+                                                    , unsigned int latitudeDivs                      //Number of meridional subdivisions
+                                                    , float longitudeEnd = 0.0f                      //Optionally set the ending longitudinal angle
+                                                    , float latitudeEnd = math::PI                   //Optionally set the ending latitudinal angle
+                                                    , float latitudeBegin = 0.0f );                  //Optionall set the starting latitude angle
 
 
       template<unsigned int n>
-      SmartGeometryData transformAttribute( math::Matmnt<n,n,float> matrix, AttributeID attribute
-                                          , const SmartGeometryData& meshIn, bool bPositional = true
-                                          , SmartGeometryData meshOut = SmartGeometryData::null )
+      GeometryDataSharedPtr transformAttribute( math::Matmnt<n,n,float> matrix, AttributeID attribute
+                                              , const GeometryDataSharedPtr& meshIn, bool bPositional = true
+                                              , GeometryDataSharedPtr meshOut = GeometryDataSharedPtr::null )
       {
         DP_ASSERT( meshIn->checkConsistency() );
 
-        if( meshOut == SmartGeometryData::null )
+        if( meshOut == GeometryDataSharedPtr::null )
         {
           meshOut = GeometryData::create(meshIn);
         }
@@ -331,7 +331,7 @@ namespace dp
       }
 
       template<unsigned int n>
-      SmartGeometryData transformAttributes( math::Matmnt<n,n,float> matrix, unsigned int attributes, const SmartGeometryData& meshIn, SmartGeometryData meshOut = SmartGeometryData::null )
+      GeometryDataSharedPtr transformAttributes( math::Matmnt<n,n,float> matrix, unsigned int attributes, const GeometryDataSharedPtr& meshIn, GeometryDataSharedPtr meshOut = GeometryDataSharedPtr::null )
       {
         for(unsigned int attr = 0; attr < NUM_ATTRIBS; attr++)
         {

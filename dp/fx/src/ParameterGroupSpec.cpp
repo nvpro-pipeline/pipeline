@@ -38,8 +38,8 @@ namespace dp
   namespace fx
   {
 
-    SmartParameterGroupSpec ParameterGroupSpec::create( const string & name
-                                                      , const vector<ParameterSpec> & specs )
+    ParameterGroupSpecSharedPtr ParameterGroupSpec::create( const string & name
+                                                          , const vector<ParameterSpec> & specs )
     {
       return( std::shared_ptr<ParameterGroupSpec>( new ParameterGroupSpec( name, specs ) ) );
     }

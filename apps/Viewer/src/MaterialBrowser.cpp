@@ -115,7 +115,7 @@ void MaterialBrowser::catalogItemPressed( QTreeWidgetItem * item, int column )
   if ( item )
   {
     QString materialName = item->data( column, Qt::UserRole ).toString();
-    dp::fx::SmartEffectSpec const& pipelineSpec = dp::fx::EffectLibrary::instance()->getEffectSpec( materialName.toStdString() );
+    dp::fx::EffectSpecSharedPtr const& pipelineSpec = dp::fx::EffectLibrary::instance()->getEffectSpec( materialName.toStdString() );
     if ( pipelineSpec )
     {
       QMimeData * mimeData = new QMimeData;

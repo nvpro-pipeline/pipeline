@@ -120,7 +120,7 @@ bool Benchmark_vertexThroughput::onInit()
 bool Benchmark_vertexThroughput::onRunInit( unsigned int i )
 {
 
-  SmartGeometryData geometryData = generator::createSphere( ATTRIB_POSITION | ATTRIB_NORMAL | ATTRIB_TEXCOORD0 | ATTRIB_TANGENT | ATTRIB_BINORMAL, getSubdivs(i), getSubdivs(i) );
+  GeometryDataSharedPtr geometryData = generator::createSphere( ATTRIB_POSITION | ATTRIB_NORMAL | ATTRIB_TEXCOORD0 | ATTRIB_TANGENT | ATTRIB_BINORMAL, getSubdivs(i), getSubdivs(i) );
   GeometrySharedHandle geometry = rix::util::generateGeometry(geometryData, m_rix);
   m_rix->geometryInstanceSetGeometry(  m_geometryInstance, geometry );
 

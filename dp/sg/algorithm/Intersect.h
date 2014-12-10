@@ -43,7 +43,7 @@ namespace dp
        * \param windowY y position of mouse inside the viewport window
        * \return float distance to closest object.  -1 if nothing intersected.
        */
-      float getIntersectionDistance( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::SmartRenderTarget const& renderTarget,
+      float getIntersectionDistance( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget,
                                      int windowX, int windowY );
 
       /*! \brief intersect the scene from a window-space point
@@ -55,7 +55,7 @@ namespace dp
        * \param result the dp::sg::algorithm::Intersection result, if the method returns true
        * \return true if an intersection was found
        */
-      bool intersectObject( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::SmartRenderTarget const& renderTarget,
+      bool intersectObject( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget,
                             unsigned int windowX, unsigned int windowY, Intersection & result );
     }
   }

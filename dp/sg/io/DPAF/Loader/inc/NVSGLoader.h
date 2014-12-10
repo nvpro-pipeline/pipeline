@@ -62,13 +62,13 @@ extern "C"
   * If the PlugIn ID \a piid equals \c PIID_NVSG_SCENE_LOADER, a NVSGLoader is created and returned in \a pi.
   * \returns  true, if the requested PlugIn could be created, otherwise false
   */
-NVSGLOADER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPlugIn & pi);
+NVSGLOADER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::PlugInSharedPtr & pi);
 
 //! Query the supported types of PlugIn Interfaces.
 NVSGLOADER_API void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids );
 }
 
-SMART_TYPES( NVSGLoader );
+DEFINE_PTR_TYPES( NVSGLoader );
 
 //! A Scene Loader for nvsg files.
 /** NVSG files can be produced with the sample SceniX Viewer. 
@@ -76,7 +76,7 @@ SMART_TYPES( NVSGLoader );
 class NVSGLoader : public dp::sg::io::SceneLoader
 {
   public :
-    static SmartNVSGLoader create();
+    static NVSGLoaderSharedPtr create();
     virtual ~NVSGLoader();
 
   public :

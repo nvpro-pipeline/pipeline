@@ -175,7 +175,7 @@ bool add( dp::sg::core::ObjectSharedPtr const& parent, dp::sg::core::ObjectShare
       DP_ASSERT( child->getObjectCode() == dp::sg::core::OC_SAMPLER );
       {
         dp::sg::core::ParameterGroupDataSharedPtr const& pgd = parent.staticCast<dp::sg::core::ParameterGroupData>();
-        const dp::fx::SmartParameterGroupSpec & pgs = pgd->getParameterGroupSpec();
+        const dp::fx::ParameterGroupSpecSharedPtr & pgs = pgd->getParameterGroupSpec();
         dp::fx::ParameterGroupSpec::iterator it = pgs->findParameterSpec( child.staticCast<dp::sg::core::Sampler>()->getName() );
         DP_ASSERT( it != pgs->endParameterSpecs() );
         pgd->setParameter( it, child.staticCast<dp::sg::core::Sampler>() );
@@ -254,7 +254,7 @@ bool remove( dp::sg::core::ObjectSharedPtr const& parent, dp::sg::core::ObjectSh
       {
         dp::sg::core::ParameterGroupDataSharedPtr const& pgd = child.staticCast<dp::sg::core::ParameterGroupData>();
         dp::sg::core::EffectDataSharedPtr const& ed = parent.staticCast<dp::sg::core::EffectData>();
-        dp::fx::SmartEffectSpec const & es = ed->getEffectSpec();
+        dp::fx::EffectSpecSharedPtr const & es = ed->getEffectSpec();
         DP_ASSERT( es->findParameterGroupSpec( pgd->getParameterGroupSpec() ) != es->endParameterGroupSpecs() );
         parent.staticCast<dp::sg::core::EffectData>()->setParameterGroupData( es->findParameterGroupSpec( pgd->getParameterGroupSpec() ), dp::sg::core::ParameterGroupDataSharedPtr() );
       }
@@ -263,7 +263,7 @@ bool remove( dp::sg::core::ObjectSharedPtr const& parent, dp::sg::core::ObjectSh
       DP_ASSERT( child->getObjectCode() == dp::sg::core::OC_SAMPLER );
       {
         dp::sg::core::ParameterGroupDataSharedPtr const& pgd = parent.staticCast<dp::sg::core::ParameterGroupData>();
-        const dp::fx::SmartParameterGroupSpec & pgs = pgd->getParameterGroupSpec();
+        const dp::fx::ParameterGroupSpecSharedPtr & pgs = pgd->getParameterGroupSpec();
         dp::fx::ParameterGroupSpec::iterator it = pgs->findParameterSpec( child.staticCast<dp::sg::core::Sampler>()->getName() );
         DP_ASSERT( it != pgs->endParameterSpecs() );
         pgd->setParameter( it, dp::sg::core::SamplerSharedPtr() );

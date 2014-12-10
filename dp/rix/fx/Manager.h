@@ -42,7 +42,7 @@ namespace dp
       DEFINE_RIX_HANDLE(Instance);
       DEFINE_RIX_HANDLE(Program);
 
-      SMART_TYPES( Manager );
+      DEFINE_PTR_TYPES( Manager );
 
       typedef std::map<dp::fx::Domain, std::vector<std::string> > SourceFragments;
 
@@ -53,36 +53,36 @@ namespace dp
         {
           EffectSpecInfo() {};
 
-          EffectSpecInfo( dp::fx::SmartEffectSpec const & effectSpec, bool isGlobal )
+          EffectSpecInfo( dp::fx::EffectSpecSharedPtr const & effectSpec, bool isGlobal )
             : m_effectSpec( effectSpec )
             , m_isGlobal( isGlobal)
           {
           }
 
-          dp::fx::SmartEffectSpec m_effectSpec;
-          bool                    m_isGlobal;
+          dp::fx::EffectSpecSharedPtr m_effectSpec;
+          bool                        m_isGlobal;
         };
 
         typedef std::map<std::string, EffectSpecInfo> SystemSpecs;
 
       public:
-        RIX_FX_API static SmartManager         create(dp::fx::Manager managerType, dp::rix::core::Renderer* rdr, unsigned int uniformBufferOffsetAlign=256);
+        RIX_FX_API static ManagerSharedPtr     create(dp::fx::Manager managerType, dp::rix::core::Renderer* rdr, unsigned int uniformBufferOffsetAlign=256);
 
         RIX_FX_API virtual void                runPendingUpdates() = 0;
 
-        RIX_FX_API virtual dp::rix::fx::ProgramSharedHandle programCreate( const dp::fx::SmartEffectSpec& effectSpec
+        RIX_FX_API virtual dp::rix::fx::ProgramSharedHandle programCreate( const dp::fx::EffectSpecSharedPtr& effectSpec
                                                                          , Manager::SystemSpecs const & systemSpecs
                                                                          , const char *technique
                                                                          , dp::rix::core::ContainerDescriptorHandle *userDescriptors
                                                                          , size_t numDescriptors
                                                                          , SourceFragments const& sourceFragments = SourceFragments() ) = 0;
 
-        RIX_FX_API virtual std::map<dp::fx::Domain,std::string> getShaderSources( const dp::fx::SmartEffectSpec & effectSpec
+        RIX_FX_API virtual std::map<dp::fx::Domain,std::string> getShaderSources( const dp::fx::EffectSpecSharedPtr & effectSpec
                                                                                 , bool depthPass
                                                                                 , dp::rix::fx::Manager::SystemSpecs const & systemSpecs
                                                                                 , SourceFragments const& sourceFragments = SourceFragments() ) const = 0;
 
-        RIX_FX_API virtual GroupDataSharedHandle groupDataCreate( dp::fx::SmartParameterGroupSpec const& group ) = 0;
+        RIX_FX_API virtual GroupDataSharedHandle groupDataCreate( dp::fx::ParameterGroupSpecSharedPtr const& group ) = 0;
         RIX_FX_API virtual void                  groupDataSetValue( GroupDataSharedHandle const& groupdata
                                                                   , const dp::fx::ParameterGroupSpec::iterator& parameter
                                                                   , const core::ContainerData& data ) = 0;

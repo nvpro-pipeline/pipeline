@@ -112,7 +112,7 @@ void Feature_texture_buffer::createScene()
   // prepare render API objects
   //
 
-  dp::util::generator::SmartGeometryData mesh = dp::util::generator::createRectangle( dp::util::generator::ATTRIB_POSITION | dp::util::generator::ATTRIB_TEXCOORD0, 0.0f, 0.5f*m_height, 0.5f*m_width, 0.0f );
+  dp::util::generator::GeometryDataSharedPtr mesh = dp::util::generator::createRectangle( dp::util::generator::ATTRIB_POSITION | dp::util::generator::ATTRIB_TEXCOORD0, 0.0f, 0.5f*m_height, 0.5f*m_width, 0.0f );
   GeometrySharedHandle geometry = dp::rix::util::generateGeometry(mesh, m_rix);
 
   std::vector<ProgramParameter> vertexProgramParameters;

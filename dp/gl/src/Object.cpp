@@ -33,7 +33,7 @@ namespace dp
     Object::Object()
       : m_id(~0)
     {
-      SharedRenderContext current = RenderContext::getCurrentRenderContext();
+      RenderContextSharedPtr current = RenderContext::getCurrentRenderContext();
       if ( current )
       {
         m_shareGroup = current->getShareGroup();
@@ -44,7 +44,7 @@ namespace dp
     {
     }
 
-    SharedShareGroup Object::getShareGroup() const
+    ShareGroupSharedPtr Object::getShareGroup() const
     {
       return( m_shareGroup );
     }

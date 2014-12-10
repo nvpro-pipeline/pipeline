@@ -30,12 +30,12 @@ namespace dp
 {
   namespace fx
   {
-    SmartParameterGroupLayout ParameterGroupLayout::create( dp::fx::Manager manager, const std::vector<SmartParameterInfo>& parameterInfos, const std::string& groupName, size_t bufferSize, bool isInstanced, const SmartParameterGroupSpec& spec )
+    ParameterGroupLayoutSharedPtr ParameterGroupLayout::create( dp::fx::Manager manager, const std::vector<ParameterInfoSharedPtr>& parameterInfos, const std::string& groupName, size_t bufferSize, bool isInstanced, const ParameterGroupSpecSharedPtr& spec )
     {
       return( std::shared_ptr<ParameterGroupLayout>( new ParameterGroupLayout( manager, parameterInfos, groupName, bufferSize, isInstanced, spec ) ) );
     }
 
-    ParameterGroupLayout::ParameterGroupLayout( dp::fx::Manager manager, const std::vector<SmartParameterInfo>& parameterInfos, const std::string& groupName, size_t bufferSize, bool isInstanced, const SmartParameterGroupSpec& spec )
+    ParameterGroupLayout::ParameterGroupLayout( dp::fx::Manager manager, const std::vector<ParameterInfoSharedPtr>& parameterInfos, const std::string& groupName, size_t bufferSize, bool isInstanced, const ParameterGroupSpecSharedPtr& spec )
       : m_manager( manager )
       , m_parameterInfos( parameterInfos )
       , m_groupName( groupName )

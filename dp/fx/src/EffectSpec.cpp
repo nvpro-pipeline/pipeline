@@ -38,12 +38,12 @@ namespace dp
   namespace fx
   {
 
-    SmartEffectSpec EffectSpec::create( const string & name, Type type, const ParameterGroupSpecsContainer & groupSpecs, bool transparent )
+    EffectSpecSharedPtr EffectSpec::create( const string & name, Type type, const ParameterGroupSpecsContainer & groupSpecs, bool transparent )
     {
       return( std::shared_ptr<EffectSpec>( new EffectSpec( name, type, groupSpecs, transparent ) ) );
     }
 
-    bool specSorter( const SmartParameterGroupSpec & spec0, const SmartParameterGroupSpec & spec1 )
+    bool specSorter( const ParameterGroupSpecSharedPtr & spec0, const ParameterGroupSpecSharedPtr & spec1 )
     {
       return( spec0->getName() < spec1->getName() );
     }
@@ -75,7 +75,7 @@ namespace dp
       hg.finalize( (unsigned int *)&m_hashKey );
     }
 
-    EffectSpec::iterator EffectSpec::findParameterGroupSpec( const SmartParameterGroupSpec & groupSpec ) const
+    EffectSpec::iterator EffectSpec::findParameterGroupSpec( const ParameterGroupSpecSharedPtr & groupSpec ) const
     {
       for ( iterator it = m_specs.begin() ; it != m_specs.end() ; ++it )
       {
@@ -99,7 +99,7 @@ namespace dp
       return( m_specs.end() );
     }
 
-    bool EffectSpec::isEquivalent( const SmartEffectSpec & p, bool ignoreNames, bool deepCompare ) const
+    bool EffectSpec::isEquivalent( const EffectSpecSharedPtr & p, bool ignoreNames, bool deepCompare ) const
     {
       if ( p == this )
       {

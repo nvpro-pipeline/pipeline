@@ -112,7 +112,7 @@ void Feature_texture_native::createScene()
     "  Color = color + texture( tex, vTexCoords );\n"
     "}\n";
 
-  dp::util::generator::SmartGeometryData mesh = dp::util::generator::createRectangle( dp::util::generator::ATTRIB_POSITION | dp::util::generator::ATTRIB_TEXCOORD0, 0.0f, 0.5f*m_height, 0.5f*m_width, 0.0f );
+  dp::util::generator::GeometryDataSharedPtr mesh = dp::util::generator::createRectangle( dp::util::generator::ATTRIB_POSITION | dp::util::generator::ATTRIB_TEXCOORD0, 0.0f, 0.5f*m_height, 0.5f*m_width, 0.0f );
   GeometrySharedHandle geometry = dp::rix::util::generateGeometry(mesh, m_rix);
 
   std::vector<ProgramParameter> vertexProgramParameters;
@@ -183,7 +183,7 @@ void Feature_texture_native::createScene()
 
   TextureSharedHandle texture = m_rix->textureCreate( textureDescription );
 
-  dp::gl::SharedTexture2D glTexture = dp::gl::Texture2D::create( GL_RGBA16, tex2DWidth, tex2DHeight, GL_RGBA, GL_FLOAT );
+  dp::gl::Texture2DSharedPtr glTexture = dp::gl::Texture2D::create( GL_RGBA16, tex2DWidth, tex2DHeight, GL_RGBA, GL_FLOAT );
   glTexture->setFilterParameters( GL_NEAREST, GL_LINEAR );
   glTexture->setWrapParameters( GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE );
 

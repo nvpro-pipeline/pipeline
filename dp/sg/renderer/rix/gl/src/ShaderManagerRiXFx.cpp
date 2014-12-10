@@ -61,36 +61,36 @@ namespace dp
           class ShaderManagerTransformsRiXFx
           {
           public:
-            ShaderManagerTransformsRiXFx( dp::sg::xbar::SceneTree* sceneTree, const SmartResourceManager& resourceManager, dp::rix::fx::SmartManager m_rixFxManager );
+            ShaderManagerTransformsRiXFx( dp::sg::xbar::SceneTree* sceneTree, const ResourceManagerSharedPtr& resourceManager, dp::rix::fx::ManagerSharedPtr m_rixFxManager );
             virtual ~ShaderManagerTransformsRiXFx();
 
             virtual void updateTransforms();
             virtual dp::rix::fx::GroupDataSharedHandle getGroupData( dp::sg::xbar::TransformTreeIndex transformIndex );
-            virtual dp::fx::SmartEffectSpec getSystemSpec() { return m_effectSpecMatrices; }
+            virtual dp::fx::EffectSpecSharedPtr getSystemSpec() { return m_effectSpecMatrices; }
 
           protected:
-            dp::fx::SmartEffectSpec             m_transformEffectSpec;
+            dp::fx::EffectSpecSharedPtr             m_transformEffectSpec;
 
             typedef std::vector<dp::rix::fx::GroupDataSharedHandle> TransformGroupDatas;
 
             TransformGroupDatas                           m_transformGroupDatas;
             std::vector<dp::sg::xbar::TransformTreeIndex> m_newContainerTransforms;
 
-            dp::sg::xbar::SceneTree* m_sceneTree;
-            SmartResourceManager      m_resourceManager;
-            dp::rix::fx::SmartManager m_rixFxManager;
-            dp::fx::SmartParameterGroupSpec m_groupSpecWorldMatrices;
-            dp::fx::SmartEffectSpec         m_effectSpecMatrices;
+            dp::sg::xbar::SceneTree             * m_sceneTree;
+            ResourceManagerSharedPtr              m_resourceManager;
+            dp::rix::fx::ManagerSharedPtr         m_rixFxManager;
+            dp::fx::ParameterGroupSpecSharedPtr   m_groupSpecWorldMatrices;
+            dp::fx::EffectSpecSharedPtr           m_effectSpecMatrices;
 
-            dp::fx::ParameterGroupSpec::iterator m_itWorldMatrix;
-            dp::fx::ParameterGroupSpec::iterator m_itWorldMatrixIT;
+            dp::fx::ParameterGroupSpec::iterator  m_itWorldMatrix;
+            dp::fx::ParameterGroupSpec::iterator  m_itWorldMatrixIT;
 
           private:
-            void updateTransformNode( const dp::rix::fx::SmartManager& manager, const dp::rix::fx::GroupDataSharedHandle& groupHandle, const TransformTreeNode& node );
+            void updateTransformNode( const dp::rix::fx::ManagerSharedPtr& manager, const dp::rix::fx::GroupDataSharedHandle& groupHandle, const TransformTreeNode& node );
           };
 
 
-          ShaderManagerTransformsRiXFx::ShaderManagerTransformsRiXFx( SceneTree *sceneTree, const SmartResourceManager& resourceManager, dp::rix::fx::SmartManager rixFxManager )
+          ShaderManagerTransformsRiXFx::ShaderManagerTransformsRiXFx( SceneTree *sceneTree, const ResourceManagerSharedPtr& resourceManager, dp::rix::fx::ManagerSharedPtr rixFxManager )
             : m_sceneTree( sceneTree)
             , m_resourceManager( resourceManager )
             , m_rixFxManager( rixFxManager )
@@ -137,7 +137,7 @@ namespace dp
             return m_transformGroupDatas[transformIndex];
           }
 
-          inline void ShaderManagerTransformsRiXFx::updateTransformNode( const dp::rix::fx::SmartManager& manager, const dp::rix::fx::GroupDataSharedHandle& groupHandle, const TransformTreeNode &node )
+          inline void ShaderManagerTransformsRiXFx::updateTransformNode( const dp::rix::fx::ManagerSharedPtr& manager, const dp::rix::fx::GroupDataSharedHandle& groupHandle, const TransformTreeNode &node )
           {
             // compute world matrices
 
@@ -175,12 +175,12 @@ namespace dp
           /************************************************************************/
           /* ShaderManagerRiXFxInstance                                           */
           /************************************************************************/
-          SMART_TYPES( ShaderManagerRiXFxInstance );
+          DEFINE_PTR_TYPES( ShaderManagerRiXFxInstance );
 
           class ShaderManagerRiXFxInstance : public ShaderManagerInstance
           {
           public:
-            static SmartShaderManagerRiXFxInstance create();
+            static ShaderManagerRiXFxInstanceSharedPtr create();
           protected:
             ShaderManagerRiXFxInstance();
 
@@ -188,10 +188,10 @@ namespace dp
             dp::rix::fx::ProgramSharedHandle program;
             dp::rix::fx::InstanceSharedHandle instance;
 
-            SmartResourceEffectDataRiXFx resourceEffectDataRiXFx;
+            ResourceEffectDataRiXFxSharedPtr resourceEffectDataRiXFx;
           };
 
-          SmartShaderManagerRiXFxInstance ShaderManagerRiXFxInstance::create()
+          ShaderManagerRiXFxInstanceSharedPtr ShaderManagerRiXFxInstance::create()
           {
             return( std::shared_ptr<ShaderManagerRiXFxInstance>( new ShaderManagerRiXFxInstance() ) );
           }
@@ -203,12 +203,12 @@ namespace dp
           /************************************************************************/
           /* ShaderManagerRiXFxRenderGroup                                        */
           /************************************************************************/
-          SMART_TYPES( ShaderManagerRiXFxRenderGroup );
+          DEFINE_PTR_TYPES( ShaderManagerRiXFxRenderGroup );
 
           class ShaderManagerRiXFxRenderGroup : public ShaderManagerRenderGroup
           {
           public:
-            static SmartShaderManagerRiXFxRenderGroup create();
+            static ShaderManagerRiXFxRenderGroupSharedPtr create();
           protected:
             ShaderManagerRiXFxRenderGroup();
 
@@ -216,7 +216,7 @@ namespace dp
             dp::rix::fx::InstanceSharedHandle instance;
           };
 
-          SmartShaderManagerRiXFxRenderGroup ShaderManagerRiXFxRenderGroup::create()
+          ShaderManagerRiXFxRenderGroupSharedPtr ShaderManagerRiXFxRenderGroup::create()
           {
             return( std::shared_ptr<ShaderManagerRiXFxRenderGroup>( new ShaderManagerRiXFxRenderGroup() ) );
           }
@@ -225,7 +225,7 @@ namespace dp
           {
           }
 
-          ShaderManagerRiXFx::ShaderManagerRiXFx( SceneTree *sceneTree, dp::fx::Manager managerType, const SmartResourceManager& resourceManager, SmartTransparencyManager const & transparencyManager )
+          ShaderManagerRiXFx::ShaderManagerRiXFx( SceneTree *sceneTree, dp::fx::Manager managerType, const ResourceManagerSharedPtr& resourceManager, TransparencyManagerSharedPtr const & transparencyManager )
             : ShaderManager( sceneTree, resourceManager, transparencyManager )
             , m_shaderManagerLights( sceneTree, resourceManager )
           {
@@ -239,7 +239,7 @@ namespace dp
             std::vector<dp::fx::ParameterSpec> parameterSpecs;
             parameterSpecs.push_back( ParameterSpec( "sys_ViewProjMatrix", PT_MATRIX4x4 | PT_FLOAT32, dp::util::SEMANTIC_VALUE ) );
             parameterSpecs.push_back( ParameterSpec( "sys_ViewMatrixI",    PT_MATRIX4x4 | PT_FLOAT32, dp::util::SEMANTIC_VALUE ) );
-            dp::fx::SmartParameterGroupSpec groupSpecCamera = ParameterGroupSpec::create( "sys_camera", parameterSpecs );
+            dp::fx::ParameterGroupSpecSharedPtr groupSpecCamera = ParameterGroupSpec::create( "sys_camera", parameterSpecs );
 
             // Get iterators for fast updates later
             m_itViewProjMatrix = groupSpecCamera->findParameterSpec( "sys_ViewProjMatrix" );
@@ -272,7 +272,7 @@ namespace dp
             std::vector<dp::fx::ParameterSpec> fragmentSpecs;
             fragmentSpecs.push_back( ParameterSpec( "sys_ViewportSize", PT_VECTOR2 | PT_UINT32, dp::util::SEMANTIC_VALUE ) );
             getTransparencyManager()->addFragmentParameterSpecs( fragmentSpecs );
-            dp::fx::SmartParameterGroupSpec fragmentGroupSpec = dp::fx::ParameterGroupSpec::create( "sys_FragmentParameters", fragmentSpecs );
+            dp::fx::ParameterGroupSpecSharedPtr fragmentGroupSpec = dp::fx::ParameterGroupSpec::create( "sys_FragmentParameters", fragmentSpecs );
 
             dp::fx::EffectSpec::ParameterGroupSpecsContainer fragmentGroupSpecs;
             fragmentGroupSpecs.push_back( fragmentGroupSpec );
@@ -296,7 +296,7 @@ namespace dp
             updateTransforms();
           }
 
-          void ShaderManagerRiXFx::updateEnvironment( SmartResourceSampler environmentSampler )
+          void ShaderManagerRiXFx::updateEnvironment( ResourceSamplerSharedPtr environmentSampler )
           {
             DP_ASSERT( environmentSampler );
 
@@ -323,9 +323,9 @@ namespace dp
             m_rixFxManager->runPendingUpdates();
           }
 
-          SmartShaderManagerRenderGroup ShaderManagerRiXFx::registerRenderGroup( dp::rix::core::RenderGroupSharedHandle const & renderGroup )
+          ShaderManagerRenderGroupSharedPtr ShaderManagerRiXFx::registerRenderGroup( dp::rix::core::RenderGroupSharedHandle const & renderGroup )
           {
-            SmartShaderManagerRiXFxRenderGroup rixFxRenderGroup = ShaderManagerRiXFxRenderGroup::create();
+            ShaderManagerRiXFxRenderGroupSharedPtr rixFxRenderGroup = ShaderManagerRiXFxRenderGroup::create();
             rixFxRenderGroup->renderGroup = renderGroup;
             rixFxRenderGroup->instance = m_rixFxManager->instanceCreate( renderGroup.get() );
             addSystemContainers( rixFxRenderGroup.inplaceCast<ShaderManagerRenderGroup>() );
@@ -333,19 +333,19 @@ namespace dp
             return rixFxRenderGroup;
           }
 
-          void ShaderManagerRiXFx::addSystemContainers( SmartShaderManagerInstance const & shaderObject )
+          void ShaderManagerRiXFx::addSystemContainers( ShaderManagerInstanceSharedPtr const & shaderObject )
           {
             const dp::rix::core::GeometryInstanceSharedHandle& geometryInstance = shaderObject->geometryInstance;
             const dp::sg::xbar::ObjectTreeNode &objectTreeNode = m_sceneTree->getObjectTreeNode( shaderObject->objectTreeIndex );
 
-            SmartShaderManagerRiXFxInstance o = shaderObject.staticCast<ShaderManagerRiXFxInstance>();
+            ShaderManagerRiXFxInstanceSharedPtr o = shaderObject.staticCast<ShaderManagerRiXFxInstance>();
 
             m_rixFxManager->instanceUseGroupData( o->instance.get(), m_shaderManagerTransforms->getGroupData( objectTreeNode.m_transformIndex ).get() );
           }
 
-          void ShaderManagerRiXFx::addSystemContainers( SmartShaderManagerRenderGroup const & renderGroup )
+          void ShaderManagerRiXFx::addSystemContainers( ShaderManagerRenderGroupSharedPtr const & renderGroup )
           {
-            SmartShaderManagerRiXFxRenderGroup o = renderGroup.staticCast<ShaderManagerRiXFxRenderGroup>();
+            ShaderManagerRiXFxRenderGroupSharedPtr o = renderGroup.staticCast<ShaderManagerRiXFxRenderGroup>();
 
             m_rixFxManager->instanceUseGroupData( o->instance.get(), m_groupDataCamera.get() );
             m_renderer->renderGroupUseContainer( renderGroup->renderGroup, m_containerEnvironment );
@@ -358,23 +358,23 @@ namespace dp
             m_shaderManagerLights.updateLights( vs );
           }
 
-          SmartShaderManagerInstance ShaderManagerRiXFx::registerGeometryInstance( 
+          ShaderManagerInstanceSharedPtr ShaderManagerRiXFx::registerGeometryInstance( 
             const dp::sg::core::EffectDataSharedPtr &effectData,
             dp::sg::xbar::ObjectTreeIndex objectTreeIndex,
             dp::rix::core::GeometryInstanceSharedHandle &geometryInstance,
             RenderPassType rpt )
           {
-            SmartResourceEffectDataRiXFx resourceEffectData = ResourceEffectDataRiXFx::get( effectData, m_rixFxManager, m_resourceManager );
+            ResourceEffectDataRiXFxSharedPtr resourceEffectData = ResourceEffectDataRiXFx::get( effectData, m_rixFxManager, m_resourceManager );
             if ( resourceEffectData )
             {
               // use the EffectSpecs to determine potential transparency
-              dp::fx::SmartEffectSpec const & effectSpec = effectData->getEffectSpec();
+              dp::fx::EffectSpecSharedPtr const & effectSpec = effectData->getEffectSpec();
 
               dp::rix::fx::SourceFragments const& sf = m_additionalCodeSnippets[effectSpec->getTransparent()][rpt==RPT_DEPTH];
               dp::rix::fx::ProgramSharedHandle program = m_rixFxManager->programCreate( effectSpec, m_systemSpecs
                                                                                       , ( rpt == RPT_FORWARD ) ? "forward" : "depthPass"
                                                                                       , nullptr, 0, m_additionalCodeSnippets[effectSpec->getTransparent()][rpt==RPT_DEPTH] ); // no user descriptors
-              SmartShaderManagerRiXFxInstance o = nullptr;
+              ShaderManagerRiXFxInstanceSharedPtr o;
               if ( program )
               {
                 o = ShaderManagerRiXFxInstance::create();
@@ -412,7 +412,7 @@ namespace dp
             const dp::sg::core::EffectDataSharedPtr & effectData = geoNode->getMaterialEffect() ? geoNode->getMaterialEffect() : m_defaultEffectData;
 
             // use the EffectSpecs to determine potential transparency
-            dp::fx::SmartEffectSpec const & effectSpec = effectData->getEffectSpec();
+            dp::fx::EffectSpecSharedPtr const & effectSpec = effectData->getEffectSpec();
 
             return( m_rixFxManager->getShaderSources( effectSpec, depthPass, m_systemSpecs, m_additionalCodeSnippets[effectSpec->getTransparent()][depthPass] ) );
           }

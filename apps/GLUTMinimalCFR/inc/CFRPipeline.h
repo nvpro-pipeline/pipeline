@@ -32,7 +32,7 @@
 
 #include "TextureTransfer.h"
 
-SMART_TYPES( CFRPipeline );
+DEFINE_PTR_TYPES( CFRPipeline );
 
 class CFRPipeline : public dp::sg::ui::SceneRenderer
 {
@@ -40,18 +40,18 @@ protected:
   CFRPipeline( const char* renderEngine = 0,
                dp::fx::Manager shaderManagerType = dp::fx::MANAGER_SHADERBUFFER,
                dp::culling::Mode cullingMode = dp::culling::MODE_AUTO,
-               const dp::gl::SharedRenderTarget &renderTarget = dp::gl::SharedRenderTarget() );
+               const dp::gl::RenderTargetSharedPtr &renderTarget = dp::gl::RenderTargetSharedPtr() );
 
 public:
-  static SmartCFRPipeline create( const char* renderEngine = 0,
-                                  dp::fx::Manager shaderManagerType = dp::fx::MANAGER_SHADERBUFFER,
-                                  dp::culling::Mode cullingMode = dp::culling::MODE_AUTO,
-                                  const dp::gl::SharedRenderTarget &renderTarget = dp::gl::SharedRenderTarget() );
+  static CFRPipelineSharedPtr create( const char* renderEngine = 0,
+                                      dp::fx::Manager shaderManagerType = dp::fx::MANAGER_SHADERBUFFER,
+                                      dp::culling::Mode cullingMode = dp::culling::MODE_AUTO,
+                                      const dp::gl::RenderTargetSharedPtr &renderTarget = dp::gl::RenderTargetSharedPtr() );
   ~CFRPipeline();
 
   void setTileSize( size_t width, size_t height );
 
-  bool init(const dp::gl::SharedRenderContext &renderContext, const dp::gl::SharedRenderTarget &renderTarget);
+  bool init(const dp::gl::RenderContextSharedPtr &renderContext, const dp::gl::RenderTargetSharedPtr &renderTarget);
   void resize( size_t width, size_t height );
 
   virtual std::map<dp::fx::Domain,std::string> getShaderSources( const dp::sg::core::GeoNodeSharedPtr & geoNode, bool depthPass ) const;
@@ -66,16 +66,16 @@ public:
   virtual dp::fx::Manager getShaderManager() const;
 
 protected:
-  virtual void doRender(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::SmartRenderTarget const& renderTarget);
+  virtual void doRender(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget);
   virtual void onEnvironmentSamplerChanged();
 
 private:
-  SMART_TYPES( MonoViewStateProvider );
+  DEFINE_PTR_TYPES( MonoViewStateProvider );
 
   class MonoViewStateProvider : public SceneRenderer::StereoViewStateProvider
   {
   public:
-    static SmartMonoViewStateProvider create();
+    static MonoViewStateProviderSharedPtr create();
 
   protected:
     dp::sg::ui::ViewStateSharedPtr calculateViewState( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTarget::StereoTarget eye )
@@ -87,13 +87,13 @@ private:
 private:
   struct GpuData
   {
-    dp::sg::ui::SmartSceneRenderer  m_sceneRenderer;
-    dp::gl::SharedRenderTarget      m_renderTarget;
-    SmartTextureTransfer            m_textureTransfer;
+    dp::sg::ui::SceneRendererSharedPtr  m_sceneRenderer;
+    dp::gl::RenderTargetSharedPtr       m_renderTarget;
+    TextureTransferSharedPtr            m_textureTransfer;
   };
 
 private:
-  void generateStencilPattern( dp::gl::SharedRenderTarget renderTarget );
+  void generateStencilPattern( dp::gl::RenderTargetSharedPtr renderTarget );
 
 private:
   std::string       m_renderEngine;    // the render engine used to render the images
@@ -111,10 +111,10 @@ private:
 
   std::vector< GpuData > m_gpuData;
 
-  dp::sg::renderer::rix::gl::SmartFSQRenderer m_outputRenderer;   // renderer for compositing the output image
-  dp::gl::SharedTexture2D                     m_compositeTexture; // texture to composite the image data from the different contexts
+  dp::sg::renderer::rix::gl::FSQRendererSharedPtr m_outputRenderer;   // renderer for compositing the output image
+  dp::gl::Texture2DSharedPtr                      m_compositeTexture; // texture to composite the image data from the different contexts
 
-  SmartMonoViewStateProvider m_monoViewStateProvider;
+  MonoViewStateProviderSharedPtr m_monoViewStateProvider;
 
 };
 

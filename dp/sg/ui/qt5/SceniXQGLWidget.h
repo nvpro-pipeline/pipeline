@@ -63,8 +63,8 @@ namespace dp
 
           DP_SG_UI_QT5_API virtual void resizeEvent( QResizeEvent *event );
 
-          DP_SG_UI_QT5_API const dp::gl::SharedRenderContext & getRenderContext() const;
-          DP_SG_UI_QT5_API const dp::gl::SharedRenderTarget & getRenderTarget() const;
+          DP_SG_UI_QT5_API const dp::gl::RenderContextSharedPtr & getRenderContext() const;
+          DP_SG_UI_QT5_API const dp::gl::RenderTargetSharedPtr & getRenderTarget() const;
 
           DP_SG_UI_QT5_API bool event( QEvent *event );
 
@@ -94,7 +94,7 @@ namespace dp
               \param oldTarget The RenderTarget for the old format.
               \param newTarget The RenderTarget for the new format.
           **/
-          DP_SG_UI_QT5_API virtual void onRenderTargetChanged( const dp::gl::SharedRenderTarget &oldTarget, const dp::gl::SharedRenderTarget &newTarget );
+          DP_SG_UI_QT5_API virtual void onRenderTargetChanged( const dp::gl::RenderTargetSharedPtr &oldTarget, const dp::gl::RenderTargetSharedPtr &newTarget );
 
           DP_SG_UI_QT5_API virtual void initializeGL();
           DP_SG_UI_QT5_API virtual void resizeGL( int width, int height );

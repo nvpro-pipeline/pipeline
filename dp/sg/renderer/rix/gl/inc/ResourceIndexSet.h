@@ -41,14 +41,14 @@ namespace dp
       {
         namespace gl
         {
-          SMART_TYPES( ResourceIndexSet );
+          DEFINE_PTR_TYPES( ResourceIndexSet );
           typedef ResourceIndexSet* WeakResourceIndexSet;
 
           class ResourceIndexSet : public ResourceManager::Resource
           {
           public:
             /** \brief Fetch resource for the given object/resourceManager. If no resource exists it'll be created **/
-            static SmartResourceIndexSet get( const dp::sg::core::IndexSetSharedPtr &indexSet, const SmartResourceManager& resourceManager );
+            static ResourceIndexSetSharedPtr get( const dp::sg::core::IndexSetSharedPtr &indexSet, const ResourceManagerSharedPtr& resourceManager );
 
             ~ResourceIndexSet();
 
@@ -58,10 +58,10 @@ namespace dp
             dp::rix::core::IndicesSharedHandle m_indicesHandle;
 
           protected:
-            SmartResourceBuffer     m_resourceBuffer;
+            ResourceBufferSharedPtr         m_resourceBuffer;
             dp::sg::core::IndexSetSharedPtr m_indexSet;
 
-            ResourceIndexSet( const dp::sg::core::IndexSetSharedPtr &vertexAttributeSet, const SmartResourceManager& resourceManager );
+            ResourceIndexSet( const dp::sg::core::IndexSetSharedPtr &vertexAttributeSet, const ResourceManagerSharedPtr& resourceManager );
           };
 
         } // namespace gl

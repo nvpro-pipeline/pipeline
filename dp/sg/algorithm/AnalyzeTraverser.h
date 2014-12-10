@@ -391,15 +391,15 @@ namespace dp
           class EffectSpecEquivalenceInfo
           {
             public:
-              std::vector<dp::fx::SmartEffectSpec>  uniqueSpecs;
-              std::set<dp::fx::SmartEffectSpec>     equivalentSpecs;
+              std::vector<dp::fx::EffectSpecSharedPtr>  uniqueSpecs;
+              std::set<dp::fx::EffectSpecSharedPtr>     equivalentSpecs;
           };
 
           class ParameterGroupSpecEquivalenceInfo
           {
             public:
-              std::vector<dp::fx::SmartParameterGroupSpec>  uniqueSpecs;
-              std::set<dp::fx::SmartParameterGroupSpec>     equivalentSpecs;
+              std::vector<dp::fx::ParameterGroupSpecSharedPtr>  uniqueSpecs;
+              std::set<dp::fx::ParameterGroupSpecSharedPtr>     equivalentSpecs;
           };
 
           typedef std::map<dp::sg::core::VertexAttributeSetWeakPtr,std::set<unsigned int> > VertexUseMap;
@@ -408,8 +408,8 @@ namespace dp
           void analyzeCombinable( const dp::sg::core::Group * p );
           void analyzeEmpty( const dp::sg::core::Object * p, unsigned int numberOfElements );
           void analyzeEquivalent( const dp::sg::core::Object *p );
-          void analyzeEquivalentEffectSpec( const dp::fx::SmartEffectSpec & p );
-          void analyzeEquivalentParameterGroupSpec( const dp::fx::SmartParameterGroupSpec & p );
+          void analyzeEquivalentEffectSpec( const dp::fx::EffectSpecSharedPtr & p );
+          void analyzeEquivalentParameterGroupSpec( const dp::fx::ParameterGroupSpecSharedPtr & p );
           void analyzeNormalsNormalized( dp::sg::core::Buffer::ConstIterator<dp::math::Vec3f>::Type normals, unsigned int non
                                        , unsigned int &nullNormals, unsigned int &denormalizedNormals );
           void analyzeMissing( const dp::sg::core::Object * p, const void * ptr );
@@ -424,27 +424,27 @@ namespace dp
           void testVertexAttributeSet( const dp::sg::core::VertexAttributeSet * p );
 
         private:
-          std::map<unsigned int,unsigned int>                           m_countMap;
-          std::stack<std::vector<const dp::sg::core::GeoNode*> >                m_combinableGeoNodes;
+          std::map<unsigned int,unsigned int>                                       m_countMap;
+          std::stack<std::vector<const dp::sg::core::GeoNode*> >                    m_combinableGeoNodes;
           std::map<dp::sg::core::ObjectCode,std::pair<unsigned int,unsigned int> >  m_combinableInfo;
-          const dp::sg::core::LOD *                                             m_currentLOD;
-          std::pair<unsigned int,unsigned int>                          m_denormalizedNormalsVAS;
-          std::map<dp::sg::core::ObjectCode, unsigned int>              m_emptyMap;
-          EffectSpecEquivalenceInfo                                     m_effectSpecEquivalenceInfo;
+          const dp::sg::core::LOD *                                                 m_currentLOD;
+          std::pair<unsigned int,unsigned int>                                      m_denormalizedNormalsVAS;
+          std::map<dp::sg::core::ObjectCode, unsigned int>                          m_emptyMap;
+          EffectSpecEquivalenceInfo                                                 m_effectSpecEquivalenceInfo;
           std::map<dp::sg::core::ObjectCode, EquivalenceInfo>                       m_equivalenceMap;
-          unsigned int                                                  m_identityCount;
-          unsigned int                                                  m_lodRanges;
+          unsigned int                                                              m_identityCount;
+          unsigned int                                                              m_lodRanges;
           std::map<dp::sg::core::ObjectCode, unsigned int>                          m_missingMap;
-          std::pair<unsigned int,unsigned int>                          m_nullNormalsLIVAAD;
-          std::pair<unsigned int,unsigned int>                          m_nullNormalsVAS;
-          ParameterGroupSpecEquivalenceInfo                             m_parameterGroupSpecEquivalenceInfo;
-          unsigned int                                                  m_redundantIndexSets;
-          unsigned int                                                  m_redundantLODs;
-          unsigned int                                                  m_redundantLODRanges;
-          std::set<const dp::sg::core::Object *>                                m_sharedObjects;
+          std::pair<unsigned int,unsigned int>                                      m_nullNormalsLIVAAD;
+          std::pair<unsigned int,unsigned int>                                      m_nullNormalsVAS;
+          ParameterGroupSpecEquivalenceInfo                                         m_parameterGroupSpecEquivalenceInfo;
+          unsigned int                                                              m_redundantIndexSets;
+          unsigned int                                                              m_redundantLODs;
+          unsigned int                                                              m_redundantLODRanges;
+          std::set<const dp::sg::core::Object *>                                    m_sharedObjects;
           std::map<dp::sg::core::ObjectCode, std::pair<unsigned int,unsigned int> > m_shortStripped;
-          std::map<dp::sg::core::ObjectCode, unsigned int>              m_singleChildMap;
-          VertexUseMap                                                  m_vertexUseMap;
+          std::map<dp::sg::core::ObjectCode, unsigned int>                          m_singleChildMap;
+          VertexUseMap                                                              m_vertexUseMap;
       };
 
     } // namespace algorithm

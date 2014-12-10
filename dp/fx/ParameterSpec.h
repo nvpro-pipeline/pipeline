@@ -183,7 +183,7 @@ namespace dp
       public:
         DP_FX_API ParameterSpec( const std::string & name, unsigned int type, dp::util::Semantic semantic, unsigned int arraySize = 0, const std::string & defaultString = "", const std::string & annotation = "" );
         DP_FX_API ParameterSpec( const std::string & name, unsigned int type, dp::util::Semantic semantic, unsigned int arraySize, const void* defaultValue, const std::string & annotation = "" );
-        DP_FX_API ParameterSpec( const std::string & name, const SmartEnumSpec & enumSpec, unsigned int arraySize = 0, const std::string & defaultString = "", const std::string & annotation = "" );
+        DP_FX_API ParameterSpec( const std::string & name, const EnumSpecSharedPtr & enumSpec, unsigned int arraySize = 0, const std::string & defaultString = "", const std::string & annotation = "" );
         DP_FX_API ParameterSpec( const ParameterSpec & spec );
         DP_FX_API ~ParameterSpec();
 
@@ -194,7 +194,7 @@ namespace dp
         unsigned int getArraySize() const;
         const void * getDefaultValue() const;
         template<typename T> const T & getDefaultValue( unsigned int idx = 0 ) const;
-        const SmartEnumSpec & getEnumSpec() const;
+        const EnumSpecSharedPtr & getEnumSpec() const;
 
         unsigned int getSizeInByte() const;
         unsigned int getElementSizeInBytes() const;
@@ -204,7 +204,7 @@ namespace dp
       private:
         std::string           m_name;
         unsigned int          m_type;
-        SmartEnumSpec         m_enumSpec;
+        EnumSpecSharedPtr     m_enumSpec;
         std::string           m_annotation;
         dp::util::Semantic    m_semantic;
         unsigned int          m_arraySize;
@@ -253,7 +253,7 @@ namespace dp
       return( (static_cast<const T *>(m_defaultValue))[idx] );
     }
 
-    inline const SmartEnumSpec & ParameterSpec::getEnumSpec() const
+    inline const EnumSpecSharedPtr & ParameterSpec::getEnumSpec() const
     {
       return( m_enumSpec );
     }

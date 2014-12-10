@@ -49,7 +49,7 @@ namespace dp
             \return A QImage created out of the pixel data from \a textureImage
         **/
         DP_SG_UI_QT5_API QImage createQImage( const dp::sg::core::TextureHostSharedPtr &textureImage, int image = 0, int mipmap = 0 );
-        DP_SG_UI_QT5_API QImage createQImage( const dp::util::SmartImage& image /*, int image, int mipmap */ );
+        DP_SG_UI_QT5_API QImage createQImage( const dp::util::ImageSharedPtr& image /*, int image, int mipmap */ );
 
       } // namespace qt5
     } // namespace ui

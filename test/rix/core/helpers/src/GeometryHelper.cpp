@@ -38,7 +38,7 @@ namespace dp
     namespace util
     {
 
-      GeometrySharedHandle generateGeometry( dp::util::generator::SmartGeometryData& meshIn, dp::rix::core::Renderer* m_rix )
+      GeometrySharedHandle generateGeometry( dp::util::generator::GeometryDataSharedPtr& meshIn, dp::rix::core::Renderer* m_rix )
       {
         unsigned int attrMask = 0;
 

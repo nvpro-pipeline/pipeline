@@ -51,7 +51,7 @@ namespace dp
       {
         namespace gl
         {
-          SmartShaderManagerInstance ShaderManagerInstance::create()
+          ShaderManagerInstanceSharedPtr ShaderManagerInstance::create()
           {
             return( std::shared_ptr<ShaderManagerInstance>( new ShaderManagerInstance() ) );
           }
@@ -66,7 +66,7 @@ namespace dp
           }
 
 
-          SmartShaderManagerRenderGroup ShaderManagerRenderGroup::create()
+          ShaderManagerRenderGroupSharedPtr ShaderManagerRenderGroup::create()
           {
             return( std::shared_ptr<ShaderManagerRenderGroup>( new ShaderManagerRenderGroup() ) );
           }
@@ -79,7 +79,7 @@ namespace dp
           {
           }
 
-          ShaderManager::ShaderManager( SceneTree* sceneTree, const SmartResourceManager& resourceManager, SmartTransparencyManager const & transparencyManager )
+          ShaderManager::ShaderManager( SceneTree* sceneTree, const ResourceManagerSharedPtr& resourceManager, TransparencyManagerSharedPtr const & transparencyManager )
             : m_sceneTree( sceneTree )
             , m_resourceManager( resourceManager )
             , m_environmentNeedsUpdate( false )
@@ -96,7 +96,7 @@ namespace dp
             if ( m_environmentSampler != sampler )
             {
               m_environmentSampler = sampler;
-              m_environmentResourceSampler = sampler ? ResourceSampler::get( sampler, m_resourceManager ) : SmartResourceSampler::null;
+              m_environmentResourceSampler = sampler ? ResourceSampler::get( sampler, m_resourceManager ) : ResourceSamplerSharedPtr::null;
 
               m_environmentNeedsUpdate = true;
             }
@@ -107,28 +107,28 @@ namespace dp
             return( m_environmentSampler );
           }
 
-          SmartTransparencyManager const & ShaderManager::getTransparencyManager() const
+          TransparencyManagerSharedPtr const & ShaderManager::getTransparencyManager() const
           {
             return( m_transparencyManager );
           }
 
-          SmartShaderManagerInstance ShaderManager::registerGeometryInstance( const dp::sg::core::GeoNodeSharedPtr &geoNode,
-                                                                              dp::sg::xbar::ObjectTreeIndex objectTreeIndex,
-                                                                              dp::rix::core::GeometryInstanceSharedHandle &geometryInstance,
-                                                                              RenderPassType rpt )
+          ShaderManagerInstanceSharedPtr ShaderManager::registerGeometryInstance( const dp::sg::core::GeoNodeSharedPtr &geoNode,
+                                                                                  dp::sg::xbar::ObjectTreeIndex objectTreeIndex,
+                                                                                  dp::rix::core::GeometryInstanceSharedHandle &geometryInstance,
+                                                                                  RenderPassType rpt )
           {
             const dp::sg::core::EffectDataSharedPtr& effectData = geoNode->getMaterialEffect() ? geoNode->getMaterialEffect() : m_defaultEffectData;
 
             return registerGeometryInstance( effectData, objectTreeIndex, geometryInstance, rpt );
           }
 
-          SmartShaderManagerInstance ShaderManager::registerGeometryInstance( const dp::sg::core::EffectDataSharedPtr &effectData,
-                                                                              dp::sg::xbar::ObjectTreeIndex objectTreeIndex,
-                                                                              dp::rix::core::GeometryInstanceSharedHandle &geometryInstance,
-                                                                              RenderPassType rpt )
+          ShaderManagerInstanceSharedPtr ShaderManager::registerGeometryInstance( const dp::sg::core::EffectDataSharedPtr &effectData,
+                                                                                  dp::sg::xbar::ObjectTreeIndex objectTreeIndex,
+                                                                                  dp::rix::core::GeometryInstanceSharedHandle &geometryInstance,
+                                                                                  RenderPassType rpt )
           {
             DP_ASSERT( !"should not hit this path");
-            return SmartShaderManagerInstance::null;
+            return ShaderManagerInstanceSharedPtr::null;
           }
 
           void ShaderManager::update( dp::sg::ui::ViewStateSharedPtr const& viewState )
@@ -175,7 +175,7 @@ namespace dp
             {
               DP_ASSERT( ls->getLightEffect() );
               dp::sg::core::EffectDataSharedPtr const& le = ls->getLightEffect();
-              const SmartEffectSpec & es = le->getEffectSpec();
+              const EffectSpecSharedPtr & es = le->getEffectSpec();
               for ( EffectSpec::iterator it = es->beginParameterGroupSpecs() ; it != es->endParameterGroupSpecs() ; ++it )
               {
                 const dp::sg::core::ParameterGroupDataSharedPtr & parameterGroupData = le->getParameterGroupData( it );
@@ -187,7 +187,7 @@ namespace dp
                     || ( name == "standardSpotLightParameters" ) )
                   {
                     const Mat44f w = world;
-                    const SmartParameterGroupSpec & pgs = parameterGroupData->getParameterGroupSpec();
+                    const ParameterGroupSpecSharedPtr & pgs = parameterGroupData->getParameterGroupSpec();
                     light.ambient = Vec4f( parameterGroupData->getParameter<Vec3f>( pgs->findParameterSpec( "ambient" ) ), 1.0f );
                     light.diffuse = Vec4f( parameterGroupData->getParameter<Vec3f>( pgs->findParameterSpec( "diffuse" ) ), 1.0f );
                     light.specular = Vec4f( parameterGroupData->getParameter<Vec3f>( pgs->findParameterSpec( "specular" ) ), 1.0f );
@@ -227,7 +227,7 @@ namespace dp
             return( copied );
           }
 
-          ShaderManagerLights::ShaderManagerLights( SceneTree *sceneTree, const SmartResourceManager& resourceManager )
+          ShaderManagerLights::ShaderManagerLights( SceneTree *sceneTree, const ResourceManagerSharedPtr& resourceManager )
             : m_sceneTree( sceneTree )
             , m_resourceManager( resourceManager )
           {

@@ -99,7 +99,7 @@ namespace dp
         *   }
         * \endcode
         */
-      SMART_TYPES( SceneLoader );
+      DEFINE_PTR_TYPES( SceneLoader );
 
       // SceneLoader interface
       class SceneLoader : public dp::util::PlugIn
@@ -126,7 +126,7 @@ namespace dp
       };
 
 
-      SMART_TYPES( SceneSaver );
+      DEFINE_PTR_TYPES( SceneSaver );
 
       //! Pure virtual base class for SceniX scene saver plug-ins
       /** User defined SceniX scene saver plug-ins must provide the \c SceneSaver
@@ -149,7 +149,7 @@ namespace dp
       };
 
 
-      SMART_TYPES( TextureLoader );
+      DEFINE_PTR_TYPES( TextureLoader );
 
       //! Pure virtual base class for texture loader plugins
       /** \note TextureLoader are not yet implemented as plugins. */
@@ -204,7 +204,7 @@ namespace dp
                                           , const std::vector<std::string> & searchPaths ) = 0;
       };
 
-      SMART_TYPES( TextureSaver );
+      DEFINE_PTR_TYPES( TextureSaver );
 
       //! Pure virtual base class for texture saver plugins
       /** \note TextureSaver are not yet implemented as plugins. */

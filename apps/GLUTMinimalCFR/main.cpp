@@ -95,7 +95,7 @@ public:
   virtual void paint();
  
 protected:
-    virtual void onSceneRendererChanged( const dp::sg::ui::SmartSceneRenderer &sceneRenderer );
+    virtual void onSceneRendererChanged( const dp::sg::ui::SceneRendererSharedPtr &sceneRenderer );
 
 private:
   std::unique_ptr<dp::sg::ui::manipulator::TrackballCameraManipulatorHIDSync> m_trackballHIDSync;
@@ -422,7 +422,7 @@ void GLUTMinimalCFR::updateSceneRendererEngine()
   m_renderEngine = engine;
 }
 
-void GLUTMinimalCFR::onSceneRendererChanged( const dp::sg::ui::SmartSceneRenderer &sceneRenderer )
+void GLUTMinimalCFR::onSceneRendererChanged( const dp::sg::ui::SceneRendererSharedPtr &sceneRenderer )
 {
   if ( sceneRenderer )
   {
@@ -574,7 +574,7 @@ int runApp( options::variables_map const& opts )
     return -1;
   }
 
-  SmartCFRPipeline renderer = CFRPipeline::create
+  CFRPipelineSharedPtr renderer = CFRPipeline::create
   ( 
       opts["renderengine"].as<std::string>().c_str()
     , getShaderManager( opts["shadermanager"].as<std::string>() )

@@ -49,7 +49,7 @@ namespace dp
     class RenderContext : public std::enable_shared_from_this<RenderContext>
     {
     protected:
-      SHARED_TYPES( NativeContext );
+      DEFINE_PTR_TYPES( NativeContext );
 
     public:
       // Constructor parameters
@@ -59,7 +59,7 @@ namespace dp
         {
         }
 
-        Attach( const SharedRenderContext &pSharedContext )
+        Attach( const RenderContextSharedPtr &pSharedContext )
           : m_shared(pSharedContext)
         {
         }
@@ -73,7 +73,7 @@ namespace dp
         {
         }
 
-        SharedRenderContext getContext() const
+        RenderContextSharedPtr getContext() const
         {
           return( m_shared );
         }
@@ -82,12 +82,12 @@ namespace dp
         // prohibit assignment
         Attach &operator=( const Attach & );
 
-        SharedRenderContext  m_shared;
+        RenderContextSharedPtr  m_shared;
       };
 
       struct Clone
       {
-        Clone( const SharedRenderContext &pContext, bool pShare )
+        Clone( const RenderContextSharedPtr &pContext, bool pShare )
         : m_context( pContext )
         , m_share(pShare)
         {
@@ -108,7 +108,7 @@ namespace dp
         {
         }
 
-        SharedRenderContext getContext() const
+        RenderContextSharedPtr getContext() const
         {
           return( m_context );
         }
@@ -122,13 +122,13 @@ namespace dp
         // prohibit assignment
         Clone &operator=( const Clone & );
 
-        SharedRenderContext  m_context;
-        bool                  m_share;
+        RenderContextSharedPtr  m_context;
+        bool                    m_share;
       };
 
       struct Headless
       {
-        Headless( RenderContextFormat *pFormat, const SharedRenderContext &pShared )
+        Headless( RenderContextFormat *pFormat, const RenderContextSharedPtr &pShared )
           : m_format(pFormat)
           , m_shared(pShared)
   #if defined(LINUX)
@@ -139,7 +139,7 @@ namespace dp
         }
 
   #if defined(DP_OS_WINDOWS)
-        Headless( RenderContextFormat *pFormat, const SharedRenderContext &pShared, std::vector< HGPUNV > gpus )
+        Headless( RenderContextFormat *pFormat, const RenderContextSharedPtr &pShared, std::vector< HGPUNV > gpus )
           : m_format(pFormat)
           , m_shared(pShared)
           , m_gpus( gpus )
@@ -175,7 +175,7 @@ namespace dp
           return( m_format );
         }
 
-        SharedRenderContext getContext() const
+        RenderContextSharedPtr getContext() const
         {
           return( m_shared );
         }
@@ -203,14 +203,14 @@ namespace dp
         // prohibit assignment
         Headless &operator=( const Headless & );
 
-        RenderContextFormat * m_format;
-        SharedRenderContext    m_shared;
+        RenderContextFormat     * m_format;
+        RenderContextSharedPtr    m_shared;
   #if defined(DP_OS_WINDOWS)
-        std::vector< HGPUNV > m_gpus;
+        std::vector< HGPUNV >     m_gpus;
   #endif
   #if defined(DP_OS_LINUX)
-        const char *          m_display;
-        int                   m_screen;
+        const char *              m_display;
+        int                       m_screen;
   #endif
       };
 
@@ -218,7 +218,7 @@ namespace dp
 
       struct Windowed
       {
-        Windowed( RenderContextFormat *pFormat, const SharedRenderContext &pShared, unsigned int width, unsigned int height )
+        Windowed( RenderContextFormat *pFormat, const RenderContextSharedPtr &pShared, unsigned int width, unsigned int height )
           : m_format(pFormat)
           , m_shared(pShared)
   #if defined(LINUX)
@@ -258,7 +258,7 @@ namespace dp
           return( m_format );
         }
 
-        SharedRenderContext getContext() const
+        RenderContextSharedPtr getContext() const
         {
           return( m_shared );
         }
@@ -289,13 +289,13 @@ namespace dp
         // prohibit assignment
         Windowed &operator=( const Windowed & );
 
-        RenderContextFormat * m_format;
-        SharedRenderContext    m_shared;
-        unsigned int          m_width;
-        unsigned int          m_height;
+        RenderContextFormat     * m_format;
+        RenderContextSharedPtr    m_shared;
+        unsigned int              m_width;
+        unsigned int              m_height;
   #if defined(LINUX)
-        const char *          m_display;
-        int                   m_screen;
+        const char *              m_display;
+        int                       m_screen;
   #endif
       };
 
@@ -303,7 +303,7 @@ namespace dp
   #if defined( WIN32 )
       struct FromHDC
       {
-        FromHDC( HDC pHdc, const SharedRenderContext &pShared )
+        FromHDC( HDC pHdc, const RenderContextSharedPtr &pShared )
           : m_hdc(pHdc)
           , m_shared(pShared)
         {
@@ -324,7 +324,7 @@ namespace dp
           return( m_hdc );
         }
 
-        SharedRenderContext getContext() const
+        RenderContextSharedPtr getContext() const
         {
           return( m_shared );
         }
@@ -333,13 +333,13 @@ namespace dp
         // prohibit assignment
         FromHDC &operator=( const FromHDC & );
 
-        HDC                   m_hdc;
-        SharedRenderContext  m_shared;
+        HDC                     m_hdc;
+        RenderContextSharedPtr  m_shared;
       };
 
       struct FromHWND
       {
-        FromHWND( HWND pHwnd, RenderContextFormat const * pFormat, SharedRenderContext const & pShared )
+        FromHWND( HWND pHwnd, RenderContextFormat const * pFormat, RenderContextSharedPtr const & pShared )
           : m_hwnd(pHwnd)
           , m_format(pFormat)
           , m_shared(pShared)
@@ -367,7 +367,7 @@ namespace dp
           return( m_format );
         }
 
-        SharedRenderContext getContext() const
+        RenderContextSharedPtr getContext() const
         {
           return( m_shared );
         }
@@ -378,14 +378,14 @@ namespace dp
 
         HWND                        m_hwnd;
         RenderContextFormat const * m_format;
-        SharedRenderContext          m_shared;
+        RenderContextSharedPtr      m_shared;
       };
   #endif
 
   #if defined(LINUX)
       struct FromDrawable
       {
-        FromDrawable( Display *pDisplay, int pScreen, GLXDrawable pDrawable, const SharedRenderContext &pShared )
+        FromDrawable( Display *pDisplay, int pScreen, GLXDrawable pDrawable, const RenderContextSharedPtr &pShared )
           : display(pDisplay)
           , screen( pScreen )
           , drawable(pDrawable)
@@ -404,7 +404,7 @@ namespace dp
         Display *display;
         int screen;
         GLXDrawable drawable;
-        SharedRenderContext shared;
+        RenderContextSharedPtr shared;
       private:
         // prohibit assignment
         FromDrawable &operator=( const FromDrawable & );
@@ -418,8 +418,8 @@ namespace dp
       // abstract base class
       DP_GL_API RenderContext();
 
-      DP_GL_API RenderContext( const SharedNativeContext &nativeContext, const SharedShareGroup &shareGroup );
-      DP_GL_API RenderContext( const SharedNativeContext &nativeContext, const SharedShareGroup &shareGroup, const RenderContextFormat &format );
+      DP_GL_API RenderContext( const NativeContextSharedPtr &nativeContext, const ShareGroupSharedPtr &shareGroup );
+      DP_GL_API RenderContext( const NativeContextSharedPtr &nativeContext, const ShareGroupSharedPtr &shareGroup, const RenderContextFormat &format );
       DP_GL_API RenderContext( const Attach &creation );
       DP_GL_API RenderContext( const Headless &headless);
       DP_GL_API RenderContext( const Clone &creation );
@@ -431,15 +431,15 @@ namespace dp
       DP_GL_API RenderContext &operator=(const RenderContext &);
 
     public:
-      DP_GL_API static SharedRenderContext create( const Attach &creation );
-      DP_GL_API static SharedRenderContext create( const Clone &creation );
-      DP_GL_API static SharedRenderContext create( const Headless &creation );
-      DP_GL_API static SharedRenderContext create( const Windowed &creation );
+      DP_GL_API static RenderContextSharedPtr create( const Attach &creation );
+      DP_GL_API static RenderContextSharedPtr create( const Clone &creation );
+      DP_GL_API static RenderContextSharedPtr create( const Headless &creation );
+      DP_GL_API static RenderContextSharedPtr create( const Windowed &creation );
   #if defined(WIN32)
-      DP_GL_API static SharedRenderContext create( const FromHDC &creation );
-      DP_GL_API static SharedRenderContext create( const FromHWND &creation );
+      DP_GL_API static RenderContextSharedPtr create( const FromHDC &creation );
+      DP_GL_API static RenderContextSharedPtr create( const FromHWND &creation );
   #elif defined(LINUX)
-      DP_GL_API static SharedRenderContext create( const FromDrawable &creation );
+      DP_GL_API static RenderContextSharedPtr create( const FromDrawable &creation );
   #endif
 
       // may introduce locking to ensure that context is been used only by one thread at the same time
@@ -451,8 +451,8 @@ namespace dp
       // make context uncurrent
       DP_GL_API void makeNoncurrent();
 
-      DP_GL_API static const SharedRenderContext & getCurrentRenderContext();
-      DP_GL_API SharedShareGroup getShareGroup() const;
+      DP_GL_API static const RenderContextSharedPtr & getCurrentRenderContext();
+      DP_GL_API ShareGroupSharedPtr getShareGroup() const;
 
       DP_GL_API void swap();
 
@@ -507,16 +507,16 @@ namespace dp
       DP_GL_API static GLXContext createContext( Display *display, GLXFBConfig config, GLXContext shareContext );
       DP_GL_API static GLXPbuffer createPbuffer( Display *display, GLXFBConfig config );
     #endif
-      DP_GL_API static SharedShareGroup createShareGroup( const RenderContext::SharedNativeContext &context );
+      DP_GL_API static ShareGroupSharedPtr createShareGroup( const RenderContext::NativeContextSharedPtr &context );
 
       /** Hold a native OGL context **/
       class NativeContext
       {
       public:
   #if defined(WIN32)
-        DP_GL_API static SharedNativeContext create( HWND hwnd, bool destroyHWND, HDC hdc, bool destroyHDC, HGLRC hglrc, bool destroyHGLRC );
+        DP_GL_API static NativeContextSharedPtr create( HWND hwnd, bool destroyHWND, HDC hdc, bool destroyHDC, HGLRC hglrc, bool destroyHGLRC );
   #elif defined(LINUX)
-        DP_GL_API static SharedNativeContext create( GLXContext context, bool destroyContext, GLXDrawable drawable, bool destroyDrawable, GLXPbuffer pbuffer, bool destroyPbuffer, Display *display, bool destroyDisplay );
+        DP_GL_API static NativeContextSharedPtr create( GLXContext context, bool destroyContext, GLXDrawable drawable, bool destroyDrawable, GLXPbuffer pbuffer, bool destroyPbuffer, Display *display, bool destroyDisplay );
   #endif
         DP_GL_API virtual ~NativeContext();
 
@@ -560,9 +560,9 @@ namespace dp
   #endif
       };
 
-      RenderContextFormat m_format;
-      SharedShareGroup     m_shareGroup;
-      SharedNativeContext  m_context;
+      RenderContextFormat     m_format;
+      ShareGroupSharedPtr     m_shareGroup;
+      NativeContextSharedPtr  m_context;
 
       friend class ShareGroup;
       friend class ShareGroupImpl;
@@ -575,7 +575,7 @@ namespace dp
       /* \brief Push the current RenderContext on the stack and make a the given RenderContext object context active.
        * \param renderContextGL The RenderContext which should be active
        */
-      DP_GL_API void push( const SharedRenderContext &renderContextGL );
+      DP_GL_API void push( const RenderContextSharedPtr &renderContextGL );
 
       /* \brief Make the RenderContextGl object at the top of the stack active and remove it from the stack.
        */
@@ -599,7 +599,7 @@ namespace dp
         GLXDrawable drawable;
         Display*    display;
   #endif
-        SharedRenderContext renderContextGL;
+        RenderContextSharedPtr renderContextGL;
       };
       std::stack<StackEntry> m_stack;
     };
@@ -611,7 +611,7 @@ namespace dp
     /** \brief A ShareGroupTask is a small task which can be executed in the GL thread of a ShareGroup.
     **/
     // FIXME does it make sense to introduce a generic task function?
-    SHARED_TYPES( ShareGroupTask );
+    DEFINE_PTR_TYPES( ShareGroupTask );
     class ShareGroupTask
     {
     public:
@@ -629,18 +629,18 @@ namespace dp
     class ShareGroup : public std::enable_shared_from_this<ShareGroup>
     {
     public:
-      DP_GL_API static SharedShareGroup create( const RenderContext::SharedNativeContext &nativeContext );
+      DP_GL_API static ShareGroupSharedPtr create( const RenderContext::NativeContextSharedPtr &nativeContext );
       DP_GL_API virtual ~ShareGroup();
 
-      DP_GL_API SharedShareGroupResourceHolder registerResource( size_t key, unsigned int type, const SharedObject &resource );
+      DP_GL_API SharedShareGroupResourceHolder registerResource( size_t key, unsigned int type, const ObjectSharedPtr &resource );
       DP_GL_API SharedShareGroupResourceHolder getResource( size_t key, unsigned int type );
 
-      DP_GL_API void executeTask( const SharedShareGroupTask &task, bool async = true );
+      DP_GL_API void executeTask( const ShareGroupTaskSharedPtr &task, bool async = true );
 
     protected:
       friend class ShareGroupResourceHolder;
 
-      DP_GL_API ShareGroup( const RenderContext::SharedNativeContext &nativeContext );
+      DP_GL_API ShareGroup( const RenderContext::NativeContextSharedPtr &nativeContext );
       DP_GL_API ShareGroup( const ShareGroup & );
 
       /** \brief Key used for ResourceMap **/
@@ -666,7 +666,7 @@ namespace dp
       typedef std::map<Key, std::pair<int, ShareGroupResourceHolder*> > ResourceMap;
       ResourceMap m_resources;
 
-      RenderContext::SharedNativeContext m_nativeContext;  // headless context for resource cleanup
+      RenderContext::NativeContextSharedPtr m_nativeContext;  // headless context for resource cleanup
 
       ShareGroupImpl *m_impl;
     };
@@ -677,18 +677,18 @@ namespace dp
     class ShareGroupResourceHolder
     {
     public:
-      DP_GL_API ShareGroupResourceHolder( const SharedShareGroup &shareGroup, ShareGroup::Key key, const SharedObject &resource );
+      DP_GL_API ShareGroupResourceHolder( const ShareGroupSharedPtr &shareGroup, ShareGroup::Key key, const ObjectSharedPtr &resource );
       DP_GL_API ShareGroupResourceHolder( const ShareGroupResourceHolder &rhs );
       DP_GL_API virtual ~ShareGroupResourceHolder( );
 
-      DP_GL_API SharedObject getResource();
+      DP_GL_API ObjectSharedPtr getResource();
 
     protected:
       ShareGroupResourceHolder &operator=( const ShareGroupResourceHolder &rhs );
 
-      SharedShareGroup  m_shareGroup;
-      ShareGroup::Key   m_key;
-      SharedObject      m_resource;
+      ShareGroupSharedPtr m_shareGroup;
+      ShareGroup::Key     m_key;
+      ObjectSharedPtr     m_resource;
     };
 
   } // namespace gl

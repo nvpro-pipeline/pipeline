@@ -41,7 +41,7 @@ namespace dp
       {
         DP_ASSERT( m_indexMap.find(index) == m_indexMap.end() );
 
-        SmartPayload payload( Payload::create( index ) );
+        PayloadSharedPtr payload( Payload::create( index ) );
         Observer<ObjectTreeIndex>::attach( obj, payload );
 
         // fill cache data entry with current data

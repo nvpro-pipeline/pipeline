@@ -40,11 +40,11 @@ namespace dp
     namespace core
     {
 
-      DPTCORE_API dp::util::SmartDynamicLibrary getTestLib( std::string const& libname )
+      DPTCORE_API dp::util::DynamicLibrarySharedPtr getTestLib( std::string const& libname )
       {
-        static std::map<std::string, dp::util::SmartDynamicLibrary> g_libs;
+        static std::map<std::string, dp::util::DynamicLibrarySharedPtr> g_libs;
 
-        std::map<std::string, dp::util::SmartDynamicLibrary>::iterator it = g_libs.find(libname);
+        std::map<std::string, dp::util::DynamicLibrarySharedPtr>::iterator it = g_libs.find(libname);
         if ( it == g_libs.end() )
         {
           static std::string modulePath;
@@ -61,7 +61,7 @@ namespace dp
           else
           {
             std::cerr << "Error: " << filePath << " could not be found or is not a regular file\n";
-            return dp::util::SmartDynamicLibrary::null;
+            return dp::util::DynamicLibrarySharedPtr::null;
           }
         }
 
@@ -76,7 +76,7 @@ namespace dp
 
         if(wc == string::npos)
         {
-          dp::util::SmartDynamicLibrary lib = getTestLib(filter);
+          dp::util::DynamicLibrarySharedPtr lib = getTestLib(filter);
 
           if(!lib)
           {
@@ -103,7 +103,7 @@ namespace dp
           return 0;
         }
 
-        util::SmartDynamicLibrary lib = getTestLib( filter.substr(0, wc) );
+        util::DynamicLibrarySharedPtr lib = getTestLib( filter.substr(0, wc) );
         TestGetEntryPointFunc getTest = (TestGetEntryPointFunc)lib->getSymbol("getTest");
         TestObject* testObject = getTest( filter.substr(wc+1, filter.length() - wc - 1).c_str() );
         DP_ASSERT( testObject );

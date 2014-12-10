@@ -41,7 +41,7 @@ namespace dp
   {
     namespace xbar
     {
-      SMART_TYPES( GeoNodeObserver );
+      DEFINE_PTR_TYPES( GeoNodeObserver );
 
       class SceneTree;
 
@@ -116,7 +116,7 @@ namespace dp
         dp::sg::xbar::SceneTreeSharedPtr m_sceneTree;
         boost::scoped_ptr<SceneTreeObserver> m_sceneTreeObserver;
 
-        SmartGeoNodeObserver m_geoNodeObserver; // observe GeoNodes for changes
+        GeoNodeObserverSharedPtr m_geoNodeObserver; // observe GeoNodes for changes
 
         std::vector<Handle> m_dis;
       };

@@ -37,7 +37,7 @@ namespace dp
 {
   namespace fx
   {
-    SMART_TYPES( EnumSpec );
+    DEFINE_PTR_TYPES( EnumSpec );
 
     class EnumSpec
     {
@@ -45,7 +45,7 @@ namespace dp
         typedef int StorageType;
 
       public:
-        DP_FX_API static SmartEnumSpec create( const std::string & type, const std::vector<std::string> & values );
+        DP_FX_API static EnumSpecSharedPtr create( const std::string & type, const std::vector<std::string> & values );
         DP_FX_API virtual ~EnumSpec();
 
       public:
@@ -54,7 +54,7 @@ namespace dp
         DP_FX_API const std::string & getValueName( unsigned int idx ) const;
         DP_FX_API StorageType getValue( const std::string & name ) const;
 
-        DP_FX_API bool isEquivalent( const SmartEnumSpec & p, bool ignoreNames, bool deepCompare ) const;
+        DP_FX_API bool isEquivalent( const EnumSpecSharedPtr & p, bool ignoreNames, bool deepCompare ) const;
 
       protected:
         DP_FX_API EnumSpec( const std::string & type, const std::vector<std::string> & value );

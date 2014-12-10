@@ -62,7 +62,7 @@
 // exports required for a scene loader plug-in
 extern "C"
 {
-THREEDSLOADER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPlugIn & pi);
+THREEDSLOADER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::PlugInSharedPtr & pi);
 THREEDSLOADER_API void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids );
 }
 
@@ -100,14 +100,14 @@ typedef struct MatGroupData
   vector <int> vertMap; // vertMap[j] is the new index of the jth vertex in the material group
 } MatGroupData;
 
-SMART_TYPES( ThreeDSLoader );
+DEFINE_PTR_TYPES( ThreeDSLoader );
 
 // Note 'ThreeDSLoader' instead of '3DSLoader' because legal 
 // C++ class names cannot start with numbers
 class ThreeDSLoader : public dp::sg::io::SceneLoader
 {
 public:
-  static SmartThreeDSLoader create();
+  static ThreeDSLoaderSharedPtr create();
   virtual ~ThreeDSLoader(void);
 
   dp::sg::core::SceneSharedPtr load( const std::string& filename,

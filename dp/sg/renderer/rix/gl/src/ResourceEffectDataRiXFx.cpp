@@ -40,12 +40,12 @@ namespace dp
         {
 
           // TODO make implementation global? should it be possible to have two implementations active at the same time? What happens if implementation gets changed and resources are still alive?
-          SmartResourceEffectDataRiXFx ResourceEffectDataRiXFx::get( const dp::sg::core::EffectDataSharedPtr &effectData, const dp::rix::fx::SmartManager& rixFx, const SmartResourceManager& resourceManager )
+          ResourceEffectDataRiXFxSharedPtr ResourceEffectDataRiXFx::get( const dp::sg::core::EffectDataSharedPtr &effectData, const dp::rix::fx::ManagerSharedPtr& rixFx, const ResourceManagerSharedPtr& resourceManager )
           {
             assert( effectData );
             assert( !!resourceManager );
 
-            SmartResourceEffectDataRiXFx resourceEffectData = resourceManager->getResource<ResourceEffectDataRiXFx>( reinterpret_cast<size_t>(effectData.getWeakPtr()) );
+            ResourceEffectDataRiXFxSharedPtr resourceEffectData = resourceManager->getResource<ResourceEffectDataRiXFx>( reinterpret_cast<size_t>(effectData.getWeakPtr()) );
             if ( !resourceEffectData )
             {
               resourceEffectData = std::shared_ptr<ResourceEffectDataRiXFx>( new ResourceEffectDataRiXFx( effectData, rixFx, resourceManager ) );
@@ -55,7 +55,7 @@ namespace dp
             return resourceEffectData;
           }
 
-          ResourceEffectDataRiXFx::ResourceEffectDataRiXFx( const dp::sg::core::EffectDataSharedPtr &effectData, const dp::rix::fx::SmartManager& rixFx, const SmartResourceManager& resourceManager )
+          ResourceEffectDataRiXFx::ResourceEffectDataRiXFx( const dp::sg::core::EffectDataSharedPtr &effectData, const dp::rix::fx::ManagerSharedPtr& rixFx, const ResourceManagerSharedPtr& resourceManager )
             : ResourceManager::Resource( reinterpret_cast<size_t>( effectData.getWeakPtr() ), resourceManager )
             , m_rixFx( rixFx )
             , m_effectData( effectData )
@@ -75,10 +75,10 @@ namespace dp
 
           void ResourceEffectDataRiXFx::update( )
           {
-            const dp::fx::SmartEffectSpec& effectSpec = m_effectData->getEffectSpec();
+            const dp::fx::EffectSpecSharedPtr& effectSpec = m_effectData->getEffectSpec();
             m_resourceEffectSpec = ResourceEffectSpecRiXFx::get( effectSpec, m_rixFx, m_resourceManager );
 
-            std::vector<SmartResourceParameterGroupDataRiXFx> newResourceParameterGroupDataRiXFxs;
+            std::vector<ResourceParameterGroupDataRiXFxSharedPtr> newResourceParameterGroupDataRiXFxs;
             for ( dp::fx::EffectSpec::iterator it = effectSpec->beginParameterGroupSpecs(); it != effectSpec->endParameterGroupSpecs(); ++it )
             {
               dp::sg::core::ParameterGroupDataSharedPtr const& parameterGroupData = m_effectData->getParameterGroupData(it);

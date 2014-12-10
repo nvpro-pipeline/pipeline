@@ -78,7 +78,7 @@ public:
   virtual void paint();
  
 protected:
-    virtual void onSceneRendererChanged( const dp::sg::ui::SmartSceneRenderer &sceneRenderer );
+    virtual void onSceneRendererChanged( const dp::sg::ui::SceneRendererSharedPtr &sceneRenderer );
 
 private:
   std::shared_ptr<dp::sg::ui::manipulator::TrackballCameraManipulatorHIDSync> m_trackballHIDSync;
@@ -147,7 +147,7 @@ void TerrainRenderer::setDuration( double duration )
 
 void TerrainRenderer::paint()
 {
-  dp::sg::renderer::rix::gl::SmartSceneRenderer renderer = getSceneRenderer().staticCast<dp::sg::renderer::rix::gl::SceneRenderer>();
+  dp::sg::renderer::rix::gl::SceneRendererSharedPtr renderer = getSceneRenderer().staticCast<dp::sg::renderer::rix::gl::SceneRenderer>();
   if ( !m_renderEngine.empty() && renderer->getRenderEngine() != m_renderEngine )
   {
     std::cout << "Setting renderengine: " << m_renderEngine << std::endl;
@@ -226,7 +226,7 @@ void TerrainRenderer::onHIDEvent( dp::util::PropertyId propertyId )
   }
 }
 
-void TerrainRenderer::onSceneRendererChanged( const dp::sg::ui::SmartSceneRenderer &sceneRenderer )
+void TerrainRenderer::onSceneRendererChanged( const dp::sg::ui::SceneRendererSharedPtr &sceneRenderer )
 {
   if ( sceneRenderer )
   {
@@ -276,7 +276,7 @@ int runApp( options::variables_map const& opts )
 {
   // Create renderer
 
-  dp::sg::renderer::rix::gl::SmartSceneRenderer renderer = dp::sg::renderer::rix::gl::SceneRenderer::create
+  dp::sg::renderer::rix::gl::SceneRendererSharedPtr renderer = dp::sg::renderer::rix::gl::SceneRenderer::create
   ( 
       opts["renderengine"].as<std::string>().c_str()
     , getShaderManager( opts["shadermanager"].as<std::string>() )

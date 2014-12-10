@@ -48,11 +48,11 @@ namespace dp
         public:
           /*! \brief create an EffectData
            *  \param effectSpec The dp::fx::EffectSpec specifying the layout of the EffectData. */
-          DP_SG_CORE_API static EffectDataSharedPtr create( const dp::fx::SmartEffectSpec & effectSpec );
+          DP_SG_CORE_API static EffectDataSharedPtr create( const dp::fx::EffectSpecSharedPtr & effectSpec );
 
           /*! \brief create an EffectData
            *  \param effectData The dp::fx::EffectData specifying the layout and values of the newly created EffectData. */
-          DP_SG_CORE_API static EffectDataSharedPtr create( const dp::fx::SmartEffectData & effectData);
+          DP_SG_CORE_API static EffectDataSharedPtr create( const dp::fx::EffectDataSharedPtr & effectData);
 
           DP_SG_CORE_API virtual HandledObjectSharedPtr clone() const;
 
@@ -61,7 +61,7 @@ namespace dp
         public:
           /*! \brief Get the dp::fx::EffectSpec of this EffectData
            *  \returns A constant reference to the dp::fx::EffectSpec of this EffectData. */
-          DP_SG_CORE_API const dp::fx::SmartEffectSpec & getEffectSpec() const;
+          DP_SG_CORE_API const dp::fx::EffectSpecSharedPtr & getEffectSpec() const;
 
           /*! \brief Get the ParameterGroupData corresponding to an iterator on an EffectSpec.
            *  \param it The iterator on an EffectSpec specifying the ParameterGroupData to get.
@@ -90,10 +90,10 @@ namespace dp
           DP_SG_CORE_API unsigned int getNumberOfParameterGroupData() const;
 
           /*! \brief Find the element in this EffectData for the specified ParameterGroupSpec.
-           *  \param spec A constant reference to a dp::fx::SmartParameterGroupSpec, that specifies the ParameterGroupData to find.
+           *  \param spec A constant reference to a dp::fx::ParameterGroupSpecSharedPtr, that specifies the ParameterGroupData to find.
            *  \return The ParameterGroupData in this EffectData corresponding to the ParameterGroupSpec \a spec.
            *  \note If there is no ParameterGroupData corresponding the ParameterGroupSpec \a spec, an empty ParameterGroupData is returned. */
-          DP_SG_CORE_API const ParameterGroupDataSharedPtr & findParameterGroupData( const dp::fx::SmartParameterGroupSpec & spec ) const;
+          DP_SG_CORE_API const ParameterGroupDataSharedPtr & findParameterGroupData( const dp::fx::ParameterGroupSpecSharedPtr & spec ) const;
 
           /*! \brief Find the element in this EffectData for the specified name of the ParameterGroupSpec.
            *  \param specName The name of the ParameterGroupSpec that specifies the ParameterGroupData to find.
@@ -120,25 +120,25 @@ namespace dp
         protected:
           friend class OwnedObject<EffectData>;
 
-          DP_SG_CORE_API EffectData( const dp::fx::SmartEffectSpec& effectSpec );
-          DP_SG_CORE_API EffectData( const dp::fx::SmartEffectData& effectData );
+          DP_SG_CORE_API EffectData( const dp::fx::EffectSpecSharedPtr& effectSpec );
+          DP_SG_CORE_API EffectData( const dp::fx::EffectDataSharedPtr& effectData );
           DP_SG_CORE_API EffectData( const EffectData& rhs );
           DP_SG_CORE_API EffectData & operator=( const EffectData & rhs );
           DP_SG_CORE_API virtual void feedHashGenerator( dp::util::HashGenerator & hg ) const;
 
         private:
-          dp::fx::SmartEffectSpec                           m_effectSpec;
+          dp::fx::EffectSpecSharedPtr                       m_effectSpec;
           boost::scoped_array<ParameterGroupDataSharedPtr>  m_parameterGroupData;
           bool                                              m_transparent;
       };
 
 
       // Helper function to get some "standard" spec
-      DP_SG_CORE_API const dp::fx::SmartEffectSpec& getStandardGeometrySpec();
-      DP_SG_CORE_API const dp::fx::SmartEffectSpec& getStandardDirectedLightSpec();
-      DP_SG_CORE_API const dp::fx::SmartEffectSpec& getStandardPointLightSpec();
-      DP_SG_CORE_API const dp::fx::SmartEffectSpec& getStandardSpotLightSpec();
-      DP_SG_CORE_API const dp::fx::SmartEffectSpec& getStandardMaterialSpec();
+      DP_SG_CORE_API const dp::fx::EffectSpecSharedPtr& getStandardGeometrySpec();
+      DP_SG_CORE_API const dp::fx::EffectSpecSharedPtr& getStandardDirectedLightSpec();
+      DP_SG_CORE_API const dp::fx::EffectSpecSharedPtr& getStandardPointLightSpec();
+      DP_SG_CORE_API const dp::fx::EffectSpecSharedPtr& getStandardSpotLightSpec();
+      DP_SG_CORE_API const dp::fx::EffectSpecSharedPtr& getStandardMaterialSpec();
 
       DP_SG_CORE_API EffectDataSharedPtr createStandardGeometryData();
       DP_SG_CORE_API EffectDataSharedPtr createStandardDirectedLightData( const dp::math::Vec3f & direction = dp::math::Vec3f( 0.0f, 0.0f, -1.0f )
@@ -168,7 +168,7 @@ namespace dp
                                                                    , const float indexOfRefraction = 1.0f );
 
 
-      inline const dp::fx::SmartEffectSpec & EffectData::getEffectSpec() const
+      inline const dp::fx::EffectSpecSharedPtr & EffectData::getEffectSpec() const
       {
         return( m_effectSpec );
       }

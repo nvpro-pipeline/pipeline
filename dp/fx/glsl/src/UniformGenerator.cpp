@@ -33,7 +33,7 @@ namespace dp
     namespace glsl
     {
 
-      std::string UniformGenerator::generateUniforms( const dp::fx::SmartEffectSpec& spec )
+      std::string UniformGenerator::generateUniforms( const dp::fx::EffectSpecSharedPtr& spec )
       {
         std::string result;
         if ( spec )
@@ -46,7 +46,7 @@ namespace dp
         return result;
       }
 
-      bool UniformGenerator::bufferAllowed( const dp::fx::SmartParameterGroupSpec& spec )
+      bool UniformGenerator::bufferAllowed( const dp::fx::ParameterGroupSpecSharedPtr& spec )
       {
         bool blockBuffer = false;
         for ( ParameterGroupSpec::iterator it = spec->beginParameterSpecs(); !blockBuffer && it != spec->endParameterSpecs(); ++it )

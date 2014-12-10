@@ -136,10 +136,10 @@ bool Feature_FBO::onClear()
 {
   if(m_screenshotFBO)
   {
-    dp::util::SmartImage fboColorShot = m_fbo->getImage(dp::util::PF_RGBA, dp::util::DT_UNSIGNED_INT_8);
+    dp::util::ImageSharedPtr fboColorShot = m_fbo->getImage(dp::util::PF_RGBA, dp::util::DT_UNSIGNED_INT_8);
     dp::util::imageToFile(fboColorShot, std::string(CURRENT_MODULE_DIR) + "/feature_FBO/color" + m_screenshotFBOName + ".png" );
 
-    dp::util::SmartImage fboDepth = dp::rix::util::getEyeZFromDepthBuffer( m_fbo->getImage(util::PF_DEPTH_COMPONENT, util::DT_FLOAT_32), m_nearPlane, m_farPlane );
+    dp::util::ImageSharedPtr fboDepth = dp::rix::util::getEyeZFromDepthBuffer( m_fbo->getImage(util::PF_DEPTH_COMPONENT, util::DT_FLOAT_32), m_nearPlane, m_farPlane );
     dp::util::imageToFile(fboDepth, std::string(CURRENT_MODULE_DIR) + "/feature_FBO/depth_" + m_screenshotFBOName + ".png" );
   }
 
@@ -248,9 +248,9 @@ void Feature_FBO::createScene()
 {
   // Geometry
 
-  SmartGeometryData cylinderDataNormal  = createCylinder( ATTRIB_POSITION | ATTRIB_NORMAL | ATTRIB_TEXCOORD0, 64 );
-  SmartGeometryData cylinderDataCut     = createCylinder( ATTRIB_POSITION | ATTRIB_NORMAL | ATTRIB_TEXCOORD0, 64, 8, 3.0f*PI_HALF );
-  SmartGeometryData cylinderDataCutTube = createCylinder( ATTRIB_POSITION | ATTRIB_NORMAL | ATTRIB_TEXCOORD0, 64, 8, 3.0f*PI_HALF, 0.5f );
+  GeometryDataSharedPtr cylinderDataNormal  = createCylinder( ATTRIB_POSITION | ATTRIB_NORMAL | ATTRIB_TEXCOORD0, 64 );
+  GeometryDataSharedPtr cylinderDataCut     = createCylinder( ATTRIB_POSITION | ATTRIB_NORMAL | ATTRIB_TEXCOORD0, 64, 8, 3.0f*PI_HALF );
+  GeometryDataSharedPtr cylinderDataCutTube = createCylinder( ATTRIB_POSITION | ATTRIB_NORMAL | ATTRIB_TEXCOORD0, 64, 8, 3.0f*PI_HALF, 0.5f );
 
   GeometrySharedHandle cylinder = rix::util::generateGeometry(cylinderDataNormal, m_rix);
   GeometrySharedHandle cylinderCut = rix::util::generateGeometry(cylinderDataCut, m_rix);
@@ -534,7 +534,7 @@ void Feature_FBO::createSecondPass()
 {
   // Geometry
 
-  SmartGeometryData geoDataScreenQuad = createQuad( ATTRIB_POSITION | ATTRIB_TEXCOORD0, math::Vec3f(-m_aspectRatio, -1.0f, 0.0f), math::Vec3f(m_aspectRatio, -1.0f, 0.0f), math::Vec3f(-m_aspectRatio, 1.0f, 0.0f) );
+  GeometryDataSharedPtr geoDataScreenQuad = createQuad( ATTRIB_POSITION | ATTRIB_TEXCOORD0, math::Vec3f(-m_aspectRatio, -1.0f, 0.0f), math::Vec3f(m_aspectRatio, -1.0f, 0.0f), math::Vec3f(-m_aspectRatio, 1.0f, 0.0f) );
   GeometrySharedHandle geoScreenQuad = rix::util::generateGeometry(geoDataScreenQuad, m_rix);
 
   // Shader Code

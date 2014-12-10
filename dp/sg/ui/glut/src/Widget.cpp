@@ -1153,12 +1153,12 @@ namespace dp
           }
         }
 
-        dp::gl::SharedRenderContext const& Widget::getRenderContext() const
+        dp::gl::RenderContextSharedPtr const& Widget::getRenderContext() const
         {
-          return m_renderTarget ? m_renderTarget->getRenderContext() : dp::gl::SharedRenderContext::null;
+          return m_renderTarget ? m_renderTarget->getRenderContext() : dp::gl::RenderContextSharedPtr::null;
         }
 
-        dp::gl::SharedRenderTarget  const& Widget::getRenderTarget() const
+        dp::gl::RenderTargetSharedPtr  const& Widget::getRenderTarget() const
         {
           return m_renderTarget;
         }

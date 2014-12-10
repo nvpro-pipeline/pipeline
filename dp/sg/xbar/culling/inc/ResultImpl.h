@@ -36,26 +36,26 @@ namespace dp
     {
       namespace culling
       {
-        HANDLE_TYPES( ResultImpl );
+        DEFINE_PTR_TYPES( ResultImpl );
 
-        /** \brief Internal result class which holds a dp::culling::ResultHandle and a vector with indices to the objectTree 
+        /** \brief Internal result class which holds a dp::culling::ResultSharedPtr and a vector with indices to the objectTree 
                    which visibility has changed since the last cull call.
         **/
         class ResultImpl : public Result
         {
         public:
-          static ResultImplHandle create( dp::culling::ResultHandle const & result );
+          static ResultImplSharedPtr create( dp::culling::ResultSharedPtr const & result );
 
         public:
-          dp::culling::ResultHandle getResult() const { return m_result; }
+          dp::culling::ResultSharedPtr getResult() const { return m_result; }
           std::vector<ObjectTreeIndex> & getChanged() { return m_changed; }
 
         protected:
-          ResultImpl( dp::culling::ResultHandle const & result );
+          ResultImpl( dp::culling::ResultSharedPtr const & result );
 
         private:
           std::vector<ObjectTreeIndex> m_changed;
-          dp::culling::ResultHandle m_result; // result object of dp::culling module
+          dp::culling::ResultSharedPtr m_result; // result object of dp::culling module
         };
 
       } // namespace culling

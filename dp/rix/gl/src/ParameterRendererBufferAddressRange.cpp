@@ -38,7 +38,7 @@ namespace dp
       {
       }
 
-      ParameterRendererBufferAddressRange::ParameterRendererBufferAddressRange( ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::SharedBuffer const& buffer, GLenum target, size_t bindingIndex, GLsizeiptr bindingLength )
+      ParameterRendererBufferAddressRange::ParameterRendererBufferAddressRange( ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::BufferSharedPtr const& buffer, GLenum target, size_t bindingIndex, GLsizeiptr bindingLength )
         : m_parameters( parameterCacheEntries )
         , m_buffer( buffer )
         , m_target( target )

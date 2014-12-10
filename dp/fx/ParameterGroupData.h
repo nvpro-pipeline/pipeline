@@ -35,26 +35,26 @@ namespace dp
 {
   namespace fx
   {
-    SMART_TYPES( ParameterGroupData );
+    DEFINE_PTR_TYPES( ParameterGroupData );
 
     class ParameterGroupData
     {
     public:
-      DP_FX_API static SmartParameterGroupData create( SmartParameterGroupSpec const& parameterGroupSpec, std::string const& name );
+      DP_FX_API static ParameterGroupDataSharedPtr create( ParameterGroupSpecSharedPtr const& parameterGroupSpec, std::string const& name );
       DP_FX_API virtual ~ParameterGroupData();
 
-      DP_FX_API const dp::fx::SmartParameterGroupSpec & getParameterGroupSpec() const;
+      DP_FX_API const dp::fx::ParameterGroupSpecSharedPtr & getParameterGroupSpec() const;
       DP_FX_API const std::string& getName() const;
       DP_FX_API const void * getParameter( dp::fx::ParameterGroupSpec::iterator it ) const;
       DP_FX_API virtual bool operator==( const ParameterGroupData& parameterGroupData ) const;
 
     protected:
-      DP_FX_API ParameterGroupData( const SmartParameterGroupSpec& parameterGroupSpec, const std::string& name );
+      DP_FX_API ParameterGroupData( const ParameterGroupSpecSharedPtr& parameterGroupSpec, const std::string& name );
 
     protected:
-      dp::fx::SmartParameterGroupSpec m_parameterGroupSpec;
-      std::vector<char>               m_data;
-      std::string                     m_name;
+      dp::fx::ParameterGroupSpecSharedPtr m_parameterGroupSpec;
+      std::vector<char>                   m_data;
+      std::string                         m_name;
     };
 
   } // namespace fx

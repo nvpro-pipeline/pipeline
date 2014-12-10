@@ -47,11 +47,11 @@ ExtractGeometryTraverser::ExtractGeometryTraverser()
   m_transformStack.setWorldToView( cIdentity44f, cIdentity44f );
 
   // construct a material to extract defaults 
-  const dp::fx::SmartEffectSpec & standardSpec = getStandardMaterialSpec();
+  const dp::fx::EffectSpecSharedPtr & standardSpec = getStandardMaterialSpec();
  dp::fx:: EffectSpec::iterator groupSpecIt = standardSpec->findParameterGroupSpec( string( "standardMaterialParameters" ) );
   DP_ASSERT( groupSpecIt != standardSpec->endParameterGroupSpecs() );
   ParameterGroupDataSharedPtr material = ParameterGroupData::create( *groupSpecIt );
-  dp::fx::SmartParameterGroupSpec pgs = material->getParameterGroupSpec();
+  dp::fx::ParameterGroupSpecSharedPtr pgs = material->getParameterGroupSpec();
 
   m_material.isTexture = false;
   m_material.isMaterial = false;
@@ -126,7 +126,7 @@ void  ExtractGeometryTraverser::handleGeoNode( const GeoNode * p )
     const ParameterGroupDataSharedPtr & smp = ed->findParameterGroupData( string( "standardMaterialParameters" ) );
     if ( smp )
     {
-      dp::fx::SmartParameterGroupSpec pgs = smp->getParameterGroupSpec();
+      dp::fx::ParameterGroupSpecSharedPtr pgs = smp->getParameterGroupSpec();
 
       // simply copy this material for later
       m_material.isMaterial = true;
@@ -140,7 +140,7 @@ void  ExtractGeometryTraverser::handleGeoNode( const GeoNode * p )
     const ParameterGroupDataSharedPtr & stp = ed->findParameterGroupData( string( "standardTextureParameters" ) );
     if ( stp )
     {
-      dp::fx::SmartParameterGroupSpec pgs = stp->getParameterGroupSpec();
+      dp::fx::ParameterGroupSpecSharedPtr pgs = stp->getParameterGroupSpec();
 
       m_material.isTexture = true;
       const SamplerSharedPtr & sampler = stp->getParameter<SamplerSharedPtr>( pgs->findParameterSpec( "sampler" ) );

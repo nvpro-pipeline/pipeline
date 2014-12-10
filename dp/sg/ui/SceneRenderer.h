@@ -37,7 +37,7 @@ namespace dp
   {
     namespace ui
     {
-      SMART_TYPES( SceneRenderer );
+      DEFINE_PTR_TYPES( SceneRenderer );
 
       /** \brief SceneRenderer is the base class for all Renderers which visualize a scene. On a stereo
                  dp::ui::RenderTarget stereo rendering is turned on automatically. SceniX supports a default implementation
@@ -51,7 +51,7 @@ namespace dp
         /** \brief This class generates an dp::sg::ui::ViewState for the left and right eye based on a
                    monoscopic dp::sg::ui::ViewState. 
         **/
-        SMART_TYPES( StereoViewStateProvider );
+        DEFINE_PTR_TYPES( StereoViewStateProvider );
         class StereoViewStateProvider
         {
         public:
@@ -106,8 +106,8 @@ namespace dp
         /**\brief Set the StereoViewState provider which should be used for stereo ViewState calculation.
            \param viewStateProvider A ViewStateProvider instance with desired behaviour.
         **/
-        DP_SG_UI_API void setStereoViewStateProvider( SmartStereoViewStateProvider const& viewStateProvider );
-        DP_SG_UI_API SmartStereoViewStateProvider const& getStereoViewStateProvider() const;
+        DP_SG_UI_API void setStereoViewStateProvider( StereoViewStateProviderSharedPtr const& viewStateProvider );
+        DP_SG_UI_API StereoViewStateProviderSharedPtr const& getStereoViewStateProvider() const;
 
         DP_SG_UI_API void setEnvironmentSampler( const dp::sg::core::SamplerSharedPtr & sampler );
         DP_SG_UI_API const dp::sg::core::SamplerSharedPtr & getEnvironmentSampler() const;
@@ -119,7 +119,7 @@ namespace dp
             \param renderTarget If renderTarget is valid it temporarily overrides the default set by Renderer::setRenderTarget.
         **/
         DP_SG_UI_API void render( dp::sg::ui::ViewStateSharedPtr const& viewState
-                                , dp::ui::SmartRenderTarget const& renderTarget = dp::ui::SmartRenderTarget()
+                                , dp::ui::RenderTargetSharedPtr const& renderTarget = dp::ui::RenderTargetSharedPtr()
                                 , dp::ui::RenderTarget::StereoTarget stereoTarget = dp::ui::RenderTarget::LEFT_AND_RIGHT );
 
         /** \brief Add all renderer options required by this renderer to the given dp::sg::ui::RendererOptions object. It is possible
@@ -148,22 +148,22 @@ namespace dp
 
       protected:
         /** \brief Constructor used by create **/
-        DP_SG_UI_API SceneRenderer( const dp::ui::SmartRenderTarget &renderTarget = dp::ui::SmartRenderTarget() );
+        DP_SG_UI_API SceneRenderer( const dp::ui::RenderTargetSharedPtr &renderTarget = dp::ui::RenderTargetSharedPtr() );
 
         // preserve interface should be set using Reflection
         DP_SG_UI_API bool isPreserveTexturesAfterUpload() const;
         DP_SG_UI_API void setPreserveTexturesAfterUpload( bool onOff );
 
-        DP_SG_UI_API virtual void beginRendering( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::SmartRenderTarget const& renderTarget );
-        DP_SG_UI_API virtual void endRendering( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::SmartRenderTarget const& renderTarget );
+        DP_SG_UI_API virtual void beginRendering( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget );
+        DP_SG_UI_API virtual void endRendering( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget );
 
-        DP_SG_UI_API virtual void doRender( const dp::ui::SmartRenderTarget &renderTarget );
+        DP_SG_UI_API virtual void doRender( const dp::ui::RenderTargetSharedPtr &renderTarget );
 
         /** \brief Interface for the actual rendering algorithm.
             \param viewState The dp::sg::ui::ViewState to use to render the frame.
             \param renderTarget The RenderTarget to use to render the frame.
         **/
-        DP_SG_UI_API virtual void doRender( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::SmartRenderTarget const& renderTarget ) = 0;
+        DP_SG_UI_API virtual void doRender( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget ) = 0;
 
         DP_SG_UI_API virtual void onEnvironmentSamplerChanged();
 
@@ -174,9 +174,9 @@ namespace dp
         dp::sg::ui::RendererOptionsWeakPtr  m_rendererOptions;
 
       private:
-        SmartStereoViewStateProvider    m_stereoViewStateProvider;
-        unsigned int                    m_traversalMaskOverride;
-        dp::sg::core::SamplerSharedPtr  m_environmentSampler;
+        StereoViewStateProviderSharedPtr  m_stereoViewStateProvider;
+        unsigned int                      m_traversalMaskOverride;
+        dp::sg::core::SamplerSharedPtr    m_environmentSampler;
       };
 
       inline bool SceneRenderer::isPreserveTexturesAfterUpload() const
@@ -207,12 +207,12 @@ namespace dp
         }
       }
 
-      inline void SceneRenderer::setStereoViewStateProvider( SceneRenderer::SmartStereoViewStateProvider const& viewStateProvider )
+      inline void SceneRenderer::setStereoViewStateProvider( SceneRenderer::StereoViewStateProviderSharedPtr const& viewStateProvider )
       {
         m_stereoViewStateProvider = viewStateProvider;
       }
 
-      inline SceneRenderer::SmartStereoViewStateProvider const& SceneRenderer::getStereoViewStateProvider( ) const
+      inline SceneRenderer::StereoViewStateProviderSharedPtr const& SceneRenderer::getStereoViewStateProvider( ) const
       {
         return m_stereoViewStateProvider;
       }

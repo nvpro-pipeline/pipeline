@@ -43,7 +43,7 @@ namespace dp
       {
         namespace gl
         {
-          SMART_TYPES( ResourceEffectDataRiXFx );
+          DEFINE_PTR_TYPES( ResourceEffectDataRiXFx );
           typedef ResourceEffectDataRiXFx* WeakResourceEffectDataRiXFx;
 
 
@@ -53,7 +53,7 @@ namespace dp
             typedef std::vector<dp::rix::fx::GroupDataSharedHandle> GroupDatas;
 
             /** \brief Fetch resource for the given object/resourceManager. If no resource exists it'll be created **/
-            static SmartResourceEffectDataRiXFx get( const dp::sg::core::EffectDataSharedPtr &effectData, const dp::rix::fx::SmartManager& rixFx, const SmartResourceManager& resourceManager );
+            static ResourceEffectDataRiXFxSharedPtr get( const dp::sg::core::EffectDataSharedPtr &effectData, const dp::rix::fx::ManagerSharedPtr& rixFx, const ResourceManagerSharedPtr& resourceManager );
             virtual ~ResourceEffectDataRiXFx();
 
             virtual const dp::sg::core::HandledObjectSharedPtr& getHandledObject() const;
@@ -61,12 +61,12 @@ namespace dp
 
             ResourceEffectDataRiXFx::GroupDatas getGroupDatas() const;
           protected:
-            ResourceEffectDataRiXFx( const dp::sg::core::EffectDataSharedPtr &effectData, const dp::rix::fx::SmartManager& rixFx, const SmartResourceManager& resourceManager );
+            ResourceEffectDataRiXFx( const dp::sg::core::EffectDataSharedPtr &effectData, const dp::rix::fx::ManagerSharedPtr& rixFx, const ResourceManagerSharedPtr& resourceManager );
 
-            std::vector<SmartResourceParameterGroupDataRiXFx> m_resourceParameterGroupDataRiXFxs;
-            SmartResourceEffectSpecRiXFx         m_resourceEffectSpec;
-            dp::rix::fx::SmartManager            m_rixFx;
-            dp::sg::core::EffectDataSharedPtr            m_effectData;
+            std::vector<ResourceParameterGroupDataRiXFxSharedPtr> m_resourceParameterGroupDataRiXFxs;
+            ResourceEffectSpecRiXFxSharedPtr                      m_resourceEffectSpec;
+            dp::rix::fx::ManagerSharedPtr                         m_rixFx;
+            dp::sg::core::EffectDataSharedPtr                     m_effectData;
           };
 
         } // namespace gl

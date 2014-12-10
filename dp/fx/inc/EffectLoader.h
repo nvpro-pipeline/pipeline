@@ -41,7 +41,7 @@ namespace dp
   {
     class EffectLibraryImpl;
 
-    SMART_TYPES( EffectLoader );
+    DEFINE_PTR_TYPES( EffectLoader );
 
     class EffectLoader
     {
@@ -49,10 +49,10 @@ namespace dp
       DP_FX_API virtual ~EffectLoader();
 
       DP_FX_API virtual bool loadEffects( const std::string & filename ) = 0;
-      DP_FX_API virtual bool save( const SmartEffectData& effectData, const std::string& filename ) = 0;
+      DP_FX_API virtual bool save( const EffectDataSharedPtr& effectData, const std::string& filename ) = 0;
 
-      DP_FX_API virtual SmartShaderPipeline generateShaderPipeline( const dp::fx::ShaderPipelineConfiguration& configuration ) = 0;
-      DP_FX_API virtual bool effectHasTechnique( SmartEffectSpec const& effectSpec, std::string const& techniqueName, bool rasterizer ) = 0;
+      DP_FX_API virtual ShaderPipelineSharedPtr generateShaderPipeline( const dp::fx::ShaderPipelineConfiguration& configuration ) = 0;
+      DP_FX_API virtual bool effectHasTechnique( EffectSpecSharedPtr const& effectSpec, std::string const& techniqueName, bool rasterizer ) = 0;
 
     protected:
       DP_FX_API EffectLoader( EffectLibraryImpl * effectLibrary );

@@ -42,24 +42,12 @@ typedef uintptr_t UINT_PTR;   //!< Linux specific type definition for UINT_PTR, 
 
 #include <boost/type_traits/is_base_of.hpp>
 
-#define SHARED_TYPES(T)                     \
-  class T;                                  \
-  typedef dp::util::SharedPtr<T> Shared##T
-
 /*! \brief Macro to define the three standard types for a type T.
  *  \remark For convenience, for each class T, we define the types TSharedPtr, TWeakPtr, and TLock */
-#define SHARED_PTR_TYPES(T)                     \
+#define DEFINE_PTR_TYPES(T)                     \
   class T;                                      \
   typedef dp::util::SharedPtr<T>  T##SharedPtr; \
   typedef T*                      T##WeakPtr;
-
-#define SMART_TYPES(T)                    \
-  class T;                                \
-  typedef dp::util::SharedPtr<T> Smart##T
-
-#define HANDLE_TYPES(T)                       \
-  class T;                                    \
-  typedef dp::util::SharedPtr<T>  T##Handle;
 
 
 /*! \brief Macro to define ObjectType and our four standard SHARED_TYPES of a base type T as part of a templated struct.

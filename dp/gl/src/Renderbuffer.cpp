@@ -65,17 +65,17 @@ namespace dp
       init( width, height );
     }
 
-    SharedRenderbuffer Renderbuffer::create(GLenum internalFormat, int width, int height )
+    RenderbufferSharedPtr Renderbuffer::create(GLenum internalFormat, int width, int height )
     {
       return( std::shared_ptr<Renderbuffer>( new Renderbuffer( internalFormat, width, height ) ) );
     }
 
-    SharedRenderbuffer Renderbuffer::create(const MSAA &msaa, GLenum internalFormat, int width, int height )
+    RenderbufferSharedPtr Renderbuffer::create(const MSAA &msaa, GLenum internalFormat, int width, int height )
     {
       return( std::shared_ptr<Renderbuffer>( new Renderbuffer( msaa, internalFormat, width, height ) ) );
     }
 
-    SharedRenderbuffer Renderbuffer::create(const CSAA &csaa, GLenum internalFormat, int width, int height )
+    RenderbufferSharedPtr Renderbuffer::create(const CSAA &csaa, GLenum internalFormat, int width, int height )
     {
       return( std::shared_ptr<Renderbuffer>( new Renderbuffer( csaa, internalFormat, width, height ) ) );
     }
@@ -95,11 +95,11 @@ namespace dp
       {
         if ( getShareGroup() )
         {
-          SHARED_TYPES( CleanupTask );
+          DEFINE_PTR_TYPES( CleanupTask );
           class CleanupTask : public ShareGroupTask
           {
             public:
-              static SharedCleanupTask create( GLuint id )
+              static CleanupTaskSharedPtr create( GLuint id )
               {
                 return( std::shared_ptr<CleanupTask>( new CleanupTask( id ) ) );
               }

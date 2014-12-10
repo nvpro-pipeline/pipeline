@@ -85,12 +85,12 @@ namespace
       }
   };
 
-  SMART_TYPES( EffectDataLocal );
+  DEFINE_PTR_TYPES( EffectDataLocal );
 
   class EffectDataLocal : public dp::fx::EffectData
   {
     public:
-      static SmartEffectDataLocal create( dp::sg::core::EffectData const* effectData )
+      static EffectDataLocalSharedPtr create( dp::sg::core::EffectData const* effectData )
       {
         return( std::shared_ptr<EffectDataLocal>( new EffectDataLocal( effectData ) ) );
       }
@@ -123,12 +123,12 @@ namespace dp
         INIT_STATIC_PROPERTY_RW( EffectData, Transparent, bool, SEMANTIC_VALUE, value, value );
       END_REFLECTION_INFO
 
-      EffectDataSharedPtr EffectData::create( const SmartEffectSpec & effectSpec )
+      EffectDataSharedPtr EffectData::create( const EffectSpecSharedPtr & effectSpec )
       {
         return( std::shared_ptr<EffectData>( new EffectData( effectSpec ) ) );
       }
 
-      EffectDataSharedPtr EffectData::create( const SmartEffectData& effectData )
+      EffectDataSharedPtr EffectData::create( const dp::fx::EffectDataSharedPtr& effectData )
       {
         return( std::shared_ptr<EffectData>( effectData ? new EffectData( effectData ) : nullptr ) );
       }
@@ -138,7 +138,7 @@ namespace dp
         return( std::shared_ptr<EffectData>( new EffectData( *this ) ) );
       }
 
-      EffectData::EffectData( const SmartEffectSpec& effectSpec )
+      EffectData::EffectData( const EffectSpecSharedPtr& effectSpec )
         : OwnedObject<Object>()
         , m_effectSpec( effectSpec )
         , m_transparent( effectSpec->getTransparent() )
@@ -149,7 +149,7 @@ namespace dp
         m_parameterGroupData.reset( new ParameterGroupDataSharedPtr[effectSpec->getNumberOfParameterGroupSpecs()] );
       }
 
-      EffectData::EffectData( const SmartEffectData& effectData )
+      EffectData::EffectData( const dp::fx::EffectDataSharedPtr& effectData )
         : OwnedObject<Object>()
         , m_effectSpec( effectData->getEffectSpec() )
         , m_transparent( effectData->getTransparent() )
@@ -216,7 +216,7 @@ namespace dp
 
       bool EffectData::setParameterGroupData( const ParameterGroupDataSharedPtr & pgd )
       {
-        const SmartParameterGroupSpec & pgs = pgd->getParameterGroupSpec();
+        const ParameterGroupSpecSharedPtr & pgs = pgd->getParameterGroupSpec();
         EffectSpec::iterator it = m_effectSpec->findParameterGroupSpec( pgs );
         if ( it != m_effectSpec->endParameterGroupSpecs() )
         {
@@ -240,7 +240,7 @@ namespace dp
         return( count );
       }
 
-      const ParameterGroupDataSharedPtr & EffectData::findParameterGroupData( const SmartParameterGroupSpec & spec ) const
+      const ParameterGroupDataSharedPtr & EffectData::findParameterGroupData( const ParameterGroupSpecSharedPtr & spec ) const
       {
         EffectSpec::iterator it = m_effectSpec->findParameterGroupSpec( spec );
         if ( it != m_effectSpec->endParameterGroupSpecs() )
@@ -370,48 +370,48 @@ namespace dp
 
       bool EffectData::save( const std::string & filename ) const
       {
-        SmartEffectDataLocal edl = EffectDataLocal::create( this );
+        EffectDataLocalSharedPtr edl = EffectDataLocal::create( this );
         return( EffectLibrary::instance()->save( dp::util::shared_cast<dp::fx::EffectData>( edl ), filename ) );
       }
 
-      const SmartEffectSpec& getStandardGeometrySpec()
+      const EffectSpecSharedPtr& getStandardGeometrySpec()
       {
-        SmartEffectSpec const & es = EffectLibrary::instance()->getEffectSpec( std::string("standardGeometryEffect") );
+        EffectSpecSharedPtr const & es = EffectLibrary::instance()->getEffectSpec( std::string("standardGeometryEffect") );
         DP_ASSERT( !es->getTransparent() );
         return( es );
       }
   
-      const SmartEffectSpec& getStandardDirectedLightSpec()
+      const EffectSpecSharedPtr& getStandardDirectedLightSpec()
       {
-        SmartEffectSpec const & es = EffectLibrary::instance()->getEffectSpec( std::string("standardDirectedLightEffect") );
+        EffectSpecSharedPtr const & es = EffectLibrary::instance()->getEffectSpec( std::string("standardDirectedLightEffect") );
         DP_ASSERT( !es->getTransparent() );
         return( es );
       }
 
-      const SmartEffectSpec& getStandardPointLightSpec()
+      const EffectSpecSharedPtr& getStandardPointLightSpec()
       {
-        SmartEffectSpec const & es = EffectLibrary::instance()->getEffectSpec( std::string("standardPointLightEffect") );
+        EffectSpecSharedPtr const & es = EffectLibrary::instance()->getEffectSpec( std::string("standardPointLightEffect") );
         DP_ASSERT( !es->getTransparent() );
         return( es );
       }
 
-      const SmartEffectSpec& getStandardSpotLightSpec()
+      const EffectSpecSharedPtr& getStandardSpotLightSpec()
       {
-        SmartEffectSpec const & es = EffectLibrary::instance()->getEffectSpec( std::string("standardSpotLightEffect") );
+        EffectSpecSharedPtr const & es = EffectLibrary::instance()->getEffectSpec( std::string("standardSpotLightEffect") );
         DP_ASSERT( !es->getTransparent() );
         return( es );
       }
 
-      const SmartEffectSpec& getStandardMaterialSpec()
+      const EffectSpecSharedPtr& getStandardMaterialSpec()
       {
-        SmartEffectSpec const & es = EffectLibrary::instance()->getEffectSpec( std::string("standardMaterial") );
+        EffectSpecSharedPtr const & es = EffectLibrary::instance()->getEffectSpec( std::string("standardMaterial") );
         DP_ASSERT( es->getTransparent() );
         return( es );
       }
 
       EffectDataSharedPtr createStandardGeometryData()
       {
-        const SmartEffectSpec & standardSpec = getStandardGeometrySpec();
+        const EffectSpecSharedPtr & standardSpec = getStandardGeometrySpec();
         DP_ASSERT( standardSpec );
         EffectSpec::iterator groupSpecIt = standardSpec->findParameterGroupSpec( std::string( "standardGeometryParameters" ) );
         DP_ASSERT( groupSpecIt != standardSpec->endParameterGroupSpecs() );
@@ -425,7 +425,7 @@ namespace dp
       EffectDataSharedPtr createStandardDirectedLightData( const Vec3f & direction, const Vec3f & ambient
                                                          , const Vec3f & diffuse, const Vec3f & specular )
       {
-        const SmartEffectSpec & standardSpec = getStandardDirectedLightSpec();
+        const EffectSpecSharedPtr & standardSpec = getStandardDirectedLightSpec();
         DP_ASSERT( standardSpec );
         EffectSpec::iterator groupSpecIt = standardSpec->findParameterGroupSpec( std::string( "standardDirectedLightParameters" ) );
         DP_ASSERT( groupSpecIt != standardSpec->endParameterGroupSpecs() );
@@ -446,7 +446,7 @@ namespace dp
                                                       , const Vec3f & diffuse, const Vec3f & specular
                                                       , const boost::array<float,3> & attenuations )
       {
-        const SmartEffectSpec & standardSpec = getStandardPointLightSpec();
+        const EffectSpecSharedPtr & standardSpec = getStandardPointLightSpec();
         DP_ASSERT( standardSpec );
         EffectSpec::iterator groupSpecIt = standardSpec->findParameterGroupSpec( std::string( "standardPointLightParameters" ) );
         DP_ASSERT( groupSpecIt != standardSpec->endParameterGroupSpecs() );
@@ -470,7 +470,7 @@ namespace dp
                                                      , const boost::array<float,3> & attenuations
                                                      , float exponent, float cutoff )
       {
-        const SmartEffectSpec & standardSpec = getStandardSpotLightSpec();
+        const EffectSpecSharedPtr & standardSpec = getStandardSpotLightSpec();
         DP_ASSERT( standardSpec );
         EffectSpec::iterator groupSpecIt = standardSpec->findParameterGroupSpec( std::string( "standardSpotLightParameters" ) );
         DP_ASSERT( groupSpecIt != standardSpec->endParameterGroupSpecs() );
@@ -496,7 +496,7 @@ namespace dp
                                                     , const Vec3f & emissiveColor, const float opacity
                                                     , const float reflectivity, const float indexOfRefraction )
       {
-        const SmartEffectSpec & standardSpec = getStandardMaterialSpec();
+        const EffectSpecSharedPtr & standardSpec = getStandardMaterialSpec();
         DP_ASSERT( standardSpec );
         EffectSpec::iterator materialSpecIt = standardSpec->findParameterGroupSpec( std::string( "standardMaterialParameters" ) );
         DP_ASSERT( materialSpecIt != standardSpec->endParameterGroupSpecs() );

@@ -43,14 +43,14 @@ namespace dp
       }
     }
 
-    SharedBuffer Buffer::create()
+    BufferSharedPtr Buffer::create()
     {
       return( std::shared_ptr<Buffer>( new Buffer() ) );
     }
 
-    SharedBuffer Buffer::create( GLenum target, size_t size, GLvoid const* data, GLenum usage )
+    BufferSharedPtr Buffer::create( GLenum target, size_t size, GLvoid const* data, GLenum usage )
     {
-      SharedBuffer buffer = Buffer::create();
+      BufferSharedPtr buffer = Buffer::create();
       buffer->setData( target, size, data, usage );
       return( buffer );
     }
@@ -70,11 +70,11 @@ namespace dp
       {
         if ( getShareGroup() )
         {
-          SHARED_TYPES( CleanupTask );
+          DEFINE_PTR_TYPES( CleanupTask );
           class CleanupTask : public ShareGroupTask
           {
             public:
-              static SharedCleanupTask create( GLuint id )
+              static CleanupTaskSharedPtr create( GLuint id )
               {
                 return( std::shared_ptr<CleanupTask>( new CleanupTask( id ) ) );
               }
@@ -150,7 +150,7 @@ namespace dp
       return( getGLInterface()->unmap( getGLId(), target ) );
     }
 
-    void bind( GLenum target, SharedBuffer const& buffer )
+    void bind( GLenum target, BufferSharedPtr const& buffer )
     {
 #if !defined(NDEBUG)
       DP_ASSERT( RenderContext::getCurrentRenderContext() );
@@ -172,7 +172,7 @@ namespace dp
       glBindBuffer( target, buffer ? buffer->getGLId() : 0 );
     }
 
-    void copy( SharedBuffer const& srcBuffer, SharedBuffer const& dstBuffer, size_t srcOffset, size_t dstOffset, size_t size )
+    void copy( BufferSharedPtr const& srcBuffer, BufferSharedPtr const& dstBuffer, size_t srcOffset, size_t dstOffset, size_t size )
     {
       DP_ASSERT( ( srcOffset <= srcOffset + size ) && ( srcOffset + size <= srcBuffer->getSize() ) );
       DP_ASSERT( ( dstOffset <= dstOffset + size ) && ( dstOffset + size <= dstBuffer->getSize() ) );

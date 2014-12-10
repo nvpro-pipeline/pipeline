@@ -70,7 +70,7 @@ namespace dp
       public:
         static BufferGLHandle create( const dp::rix::core::BufferDescription& bufferDescription );
 
-        dp::gl::SharedBuffer const&  getBuffer() const;
+        dp::gl::BufferSharedPtr const&  getBuffer() const;
 
         void setSize( size_t width, size_t height = 0, size_t depth = 0 );
         void setElementSize( size_t elementSize );
@@ -130,7 +130,7 @@ namespace dp
 #endif
 
       private:
-        dp::gl::SharedBuffer        m_buffer;
+        dp::gl::BufferSharedPtr     m_buffer;
         size_t                      m_elementSize;
         dp::rix::core::BufferFormat m_format;
         GLenum                      m_usageHint;

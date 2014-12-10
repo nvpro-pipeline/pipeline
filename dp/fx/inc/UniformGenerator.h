@@ -37,11 +37,11 @@ namespace dp
     class UniformGenerator
     {
     public:
-      virtual std::string generateUniforms( const dp::fx::SmartEffectSpec& spec ) = 0;
-      virtual std::string generateUniforms( const dp::fx::SmartParameterGroupSpec& spec ) = 0;
+      virtual std::string generateUniforms( const dp::fx::EffectSpecSharedPtr& spec ) = 0;
+      virtual std::string generateUniforms( const dp::fx::ParameterGroupSpecSharedPtr& spec ) = 0;
 
     protected:
-      virtual bool bufferAllowed( const dp::fx::SmartParameterGroupSpec& spec) = 0;
+      virtual bool bufferAllowed( const dp::fx::ParameterGroupSpecSharedPtr& spec) = 0;
     };
 
   } // namespace fx

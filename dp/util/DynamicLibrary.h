@@ -34,7 +34,7 @@ namespace dp
 {
   namespace util
   {
-    SMART_TYPES( DynamicLibrary );
+    DEFINE_PTR_TYPES( DynamicLibrary );
 
     //! Open a shared library
     /** This function opens a shared library (.dll or .so).
@@ -42,8 +42,8 @@ namespace dp
     class DynamicLibrary
     {
     public:
-      static DP_UTIL_API SmartDynamicLibrary createFromFile(const char* name);
-      static             SmartDynamicLibrary createFromFile(const std::string& name){ return createFromFile(name.c_str()); }
+      static DP_UTIL_API DynamicLibrarySharedPtr createFromFile(const char* name);
+      static             DynamicLibrarySharedPtr createFromFile(const std::string& name){ return createFromFile(name.c_str()); }
       DP_UTIL_API ~DynamicLibrary();
 
     private:

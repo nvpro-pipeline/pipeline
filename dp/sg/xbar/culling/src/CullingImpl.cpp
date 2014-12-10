@@ -108,36 +108,36 @@ namespace dp
           m_sceneTree->detach( this );
         }
 
-        dp::sg::xbar::culling::ResultHandle CullingImpl::resultCreate()
+        dp::sg::xbar::culling::ResultSharedPtr CullingImpl::resultCreate()
         {
           return( ResultImpl::create( m_culling->groupCreateResult( m_cullingGroup ) ) );
         }
 
-        bool CullingImpl::resultIsVisible( ResultHandle const & result, ObjectTreeIndex objectTreeIndex ) const
+        bool CullingImpl::resultIsVisible( ResultSharedPtr const & result, ObjectTreeIndex objectTreeIndex ) const
         {
           return( m_culling->resultObjectIsVisible( result.staticCast<ResultImpl>()->getResult(), m_objects[objectTreeIndex] ) );
         }
 
-        std::vector<dp::sg::xbar::ObjectTreeIndex> const & CullingImpl::resultGetChangedIndices( ResultHandle const & result ) const
+        std::vector<dp::sg::xbar::ObjectTreeIndex> const & CullingImpl::resultGetChangedIndices( ResultSharedPtr const & result ) const
         {
           return( result.staticCast<ResultImpl>()->getChanged() );
         }
 
-        void CullingImpl::cull( ResultHandle const & result, dp::math::Mat44f const & world2ViewProjection )
+        void CullingImpl::cull( ResultSharedPtr const & result, dp::math::Mat44f const & world2ViewProjection )
         {
-          ResultImplHandle const & resultImpl = result.staticCast<ResultImpl>();
+          ResultImplSharedPtr const & resultImpl = result.staticCast<ResultImpl>();
           dp::sg::xbar::TransformTree const & transformTree = m_sceneTree->getTransformTree();
           m_culling->groupSetMatrices( m_cullingGroup, &transformTree[0].m_worldMatrix, transformTree.size(), sizeof( transformTree[0]) );
           m_culling->cull( m_cullingGroup, resultImpl->getResult(), world2ViewProjection );
 
-          std::vector<dp::culling::ObjectHandle> const & changedObjects = m_culling->resultGetChanged( resultImpl->getResult() );
+          std::vector<dp::culling::ObjectSharedPtr> const & changedObjects = m_culling->resultGetChanged( resultImpl->getResult() );
           std::vector<ObjectTreeIndex> & changedIndices = resultImpl->getChanged();
 
           // clear the previous list of indices and get new the indices from the culling result
           changedIndices.clear();
           for ( size_t index = 0;index < changedObjects.size(); ++index )
           {
-            SmartPayload const & p = m_culling->objectGetUserData(changedObjects[index]).staticCast<Payload>();
+            PayloadSharedPtr const & p = m_culling->objectGetUserData(changedObjects[index]).staticCast<Payload>();
 
             changedIndices.push_back( p->getObjectTreeIndex() );
           }

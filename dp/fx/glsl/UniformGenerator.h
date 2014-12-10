@@ -40,11 +40,11 @@ namespace dp
       class UniformGenerator : public dp::fx::UniformGenerator
       {
       public:
-        virtual std::string generateUniforms( const dp::fx::SmartEffectSpec& spec );
-        virtual std::string generateUniforms( const dp::fx::SmartParameterGroupSpec& spec ) = 0;
+        virtual std::string generateUniforms( const dp::fx::EffectSpecSharedPtr& spec );
+        virtual std::string generateUniforms( const dp::fx::ParameterGroupSpecSharedPtr& spec ) = 0;
 
       protected:
-        bool bufferAllowed( const dp::fx::SmartParameterGroupSpec& spec);
+        bool bufferAllowed( const dp::fx::ParameterGroupSpecSharedPtr& spec);
       };
     } // namespace glsl
   } // namespace fx

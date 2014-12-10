@@ -46,8 +46,8 @@ namespace dp
         DP_SG_UI_API void setViewState( dp::sg::ui::ViewStateSharedPtr const& viewStateHandle );
         DP_SG_UI_API dp::sg::ui::ViewStateSharedPtr const& getViewState() const;
 
-        DP_SG_UI_API void setSceneRenderer( const dp::sg::ui::SmartSceneRenderer &sceneRenderer );
-        DP_SG_UI_API dp::sg::ui::SmartSceneRenderer getSceneRenderer() const;
+        DP_SG_UI_API void setSceneRenderer( const dp::sg::ui::SceneRendererSharedPtr &sceneRenderer );
+        DP_SG_UI_API dp::sg::ui::SceneRendererSharedPtr getSceneRenderer() const;
 
         DP_SG_UI_API void setManipulator( Manipulator *manipulator );
         DP_SG_UI_API Manipulator * getManipulator() const;
@@ -57,11 +57,11 @@ namespace dp
         DP_SG_UI_API virtual void triggerRepaint() = 0;
       protected:
         DP_SG_UI_API virtual void onViewStateChanged( dp::sg::ui::ViewStateSharedPtr const& viewStateHandle );
-        DP_SG_UI_API virtual void onSceneRendererChanged( const dp::sg::ui::SmartSceneRenderer &sceneRenderer ) {};
+        DP_SG_UI_API virtual void onSceneRendererChanged( const dp::sg::ui::SceneRendererSharedPtr &sceneRenderer ) {};
         DP_SG_UI_API virtual void onManipulatorChanged( Manipulator *manipulator ) {};
 
-        dp::sg::ui::SmartSceneRenderer  m_renderer;
-        dp::sg::ui::ViewStateSharedPtr  m_viewState;
+        dp::sg::ui::SceneRendererSharedPtr  m_renderer;
+        dp::sg::ui::ViewStateSharedPtr      m_viewState;
 
         // Manipulator
         Manipulator * m_manipulator;

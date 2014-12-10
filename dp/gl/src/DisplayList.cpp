@@ -36,11 +36,11 @@ namespace dp
       {
         if ( getShareGroup() )
         {
-          SHARED_TYPES( CleanupTask );
+          DEFINE_PTR_TYPES( CleanupTask );
           class CleanupTask : public ShareGroupTask
           {
             public:
-              static SharedCleanupTask create( GLuint id )
+              static CleanupTaskSharedPtr create( GLuint id )
               {
                 return( std::shared_ptr<CleanupTask>( new CleanupTask( id ) ) );
               }

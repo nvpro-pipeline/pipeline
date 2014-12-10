@@ -39,7 +39,7 @@ namespace dp
   {
     namespace ui
     {
-      SHARED_PTR_TYPES( ViewState );
+      DEFINE_PTR_TYPES( ViewState );
 
       /*! \brief The ViewState class encapsulates view-specific state. 
        *  \par Namespace: dp::sg::core

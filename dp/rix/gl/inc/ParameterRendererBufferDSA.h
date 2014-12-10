@@ -42,7 +42,7 @@ namespace dp
       class ParameterRendererBufferDSA : public ParameterRendererBuffer
       {
       public:
-        ParameterRendererBufferDSA( ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::SharedBuffer const& ubo, GLenum target, size_t uboBinding, size_t uboOffset, GLsizeiptr uboBlockSize );
+        ParameterRendererBufferDSA( ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::BufferSharedPtr const& ubo, GLenum target, size_t uboBinding, size_t uboOffset, GLsizeiptr uboBlockSize );
 
         virtual void render( void const* cache );
       };

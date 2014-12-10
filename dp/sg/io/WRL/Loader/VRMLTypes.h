@@ -37,12 +37,12 @@ namespace vrml
   //  it's not neccessary to document all these helper classes !
 #if ! defined( DOXYGEN_IGNORE )
 
-  SHARED_TYPES( Object );
+  DEFINE_PTR_TYPES( Object );
 
   class Object
   {
     public:
-      static SharedObject create();
+      static ObjectSharedPtr create();
       virtual ~Object() {}
       virtual const std::string & getType() const;
       const std::string& getName() const { return name; } 
@@ -69,7 +69,7 @@ namespace vrml
   typedef char                  SFInt8;
   typedef int                   SFInt32;
   typedef std::vector<SFInt32>  MFInt32;
-  typedef SharedObject          SFNode;
+  typedef ObjectSharedPtr       SFNode;
   typedef std::vector<SFNode>   MFNode;
   typedef std::string           SFString;
   typedef std::vector<SFString> MFString;
@@ -117,7 +117,7 @@ namespace vrml
   }
 
 
-  SHARED_TYPES( Geometry );
+  DEFINE_PTR_TYPES( Geometry );
   class Geometry : public Object
   {
     public:
@@ -128,11 +128,11 @@ namespace vrml
       Geometry()  {}
   };
 
-  SHARED_TYPES( Group );
+  DEFINE_PTR_TYPES( Group );
   class Group : public Object
   {
     public:
-      static SharedGroup create();
+      static GroupSharedPtr create();
       virtual ~Group();
       virtual const std::string & getType( void ) const;
 
@@ -158,11 +158,11 @@ namespace vrml
       SFBool  enabled;
   };
 
-  SHARED_TYPES( TimeSensor );
+  DEFINE_PTR_TYPES( TimeSensor );
   class TimeSensor : public Sensor
   {
     public:
-      static SharedTimeSensor create();
+      static TimeSensorSharedPtr create();
       virtual ~TimeSensor()  {}
       virtual const std::string & getType( void ) const;
 
@@ -206,11 +206,11 @@ namespace vrml
       dp::sg::core::LightSourceSharedPtr lightSource;
   };
 
-  SHARED_TYPES( Texture );
+  DEFINE_PTR_TYPES( Texture );
   class Texture : public Object
   {
     public:
-      static SharedTexture create();
+      static TextureSharedPtr create();
       virtual ~Texture()  {}
       virtual const std::string & getType( void ) const;
 
@@ -222,11 +222,11 @@ namespace vrml
       SFBool  repeatT;
   };
 
-  SHARED_TYPES( Anchor );
+  DEFINE_PTR_TYPES( Anchor );
   class Anchor : public Group
   {
     public:
-      static SharedAnchor create();
+      static AnchorSharedPtr create();
       virtual ~Anchor() {}
       virtual const std::string & getType( void ) const;
 
@@ -239,11 +239,11 @@ namespace vrml
       MFString  url;
   };
 
-  SHARED_TYPES( Appearance );
+  DEFINE_PTR_TYPES( Appearance );
   class Appearance : public Object
   {
     public:
-      static SharedAppearance create();
+      static AppearanceSharedPtr create();
       virtual ~Appearance();
       virtual const std::string & getType( void ) const;
 
@@ -258,11 +258,11 @@ namespace vrml
       dp::sg::core::EffectDataSharedPtr materialEffect;
   };
 
-  SHARED_TYPES( AudioClip );
+  DEFINE_PTR_TYPES( AudioClip );
   class AudioClip : public Object
   {
     public:
-      static SharedAudioClip create();
+      static AudioClipSharedPtr create();
       virtual ~AudioClip()  {}
       virtual const std::string & getType( void ) const;
 
@@ -278,11 +278,11 @@ namespace vrml
       MFString  url;
   };
 
-  SHARED_TYPES( Background );
+  DEFINE_PTR_TYPES( Background );
   class Background : public Object
   {
     public:
-      static SharedBackground create();
+      static BackgroundSharedPtr create();
       virtual ~Background() {}
       virtual const std::string & getType( void ) const;
 
@@ -302,11 +302,11 @@ namespace vrml
       MFColor   skyColor;
   };
 
-  SHARED_TYPES( Billboard );
+  DEFINE_PTR_TYPES( Billboard );
   class Billboard : public Group
   {
     public:
-      static SharedBillboard create();
+      static BillboardSharedPtr create();
       virtual ~Billboard();
       virtual const std::string & getType( void ) const;
 
@@ -319,11 +319,11 @@ namespace vrml
       dp::sg::core::BillboardSharedPtr  pBillboard;
   };
 
-  SHARED_TYPES( Box );
+  DEFINE_PTR_TYPES( Box );
   class Box : public Geometry
   {
     public:
-      static SharedBox create();
+      static BoxSharedPtr create();
       virtual ~Box();
       virtual const std::string & getType( void ) const;
 
@@ -337,11 +337,11 @@ namespace vrml
       dp::sg::core::PrimitiveSharedPtr pQuads;
   };
 
-  SHARED_TYPES( Collision );
+  DEFINE_PTR_TYPES( Collision );
   class Collision : public Group
   {
     public:
-      static SharedCollision create();
+      static CollisionSharedPtr create();
       virtual ~Collision();
       virtual const std::string & getType( void ) const;
 
@@ -353,11 +353,11 @@ namespace vrml
       SFNode  proxy;
   };
 
-  SHARED_TYPES( ColorInterpolator );
+  DEFINE_PTR_TYPES( ColorInterpolator );
   class ColorInterpolator : public Interpolator
   {
     public:
-      static SharedColorInterpolator create();
+      static ColorInterpolatorSharedPtr create();
       virtual ~ColorInterpolator()  {}
       virtual const std::string & getType( void ) const;
 
@@ -368,11 +368,11 @@ namespace vrml
       MFColor keyValue;
   };
 
-  SHARED_TYPES( Color );
+  DEFINE_PTR_TYPES( Color );
   class Color : public Object
   {
     public:
-      static SharedColor create();
+      static ColorSharedPtr create();
       virtual ~Color() {}
       virtual const std::string & getType( void ) const;
 
@@ -380,16 +380,16 @@ namespace vrml
       Color();
 
     public:
-      MFColor                 color;
-      bool                    interpreted;
-      SharedColorInterpolator set_color;
+      MFColor                     color;
+      bool                        interpreted;
+      ColorInterpolatorSharedPtr  set_color;
   };
 
-  SHARED_TYPES( Cone );
+  DEFINE_PTR_TYPES( Cone );
   class Cone : public Geometry
   {
     public:
-      static SharedCone create();
+      static ConeSharedPtr create();
       virtual ~Cone() {}
       virtual const std::string & getType( void ) const;
 
@@ -406,11 +406,11 @@ namespace vrml
       dp::sg::core::PrimitiveSharedPtr pQuads;
   };
 
-  SHARED_TYPES( CoordinateInterpolator );
+  DEFINE_PTR_TYPES( CoordinateInterpolator );
   class CoordinateInterpolator : public Interpolator
   {
     public:
-      static SharedCoordinateInterpolator create();
+      static CoordinateInterpolatorSharedPtr create();
       virtual ~CoordinateInterpolator()  {}
       virtual const std::string & getType( void ) const;
 
@@ -421,11 +421,11 @@ namespace vrml
       MFVec3f keyValue;
   };
 
-  SHARED_TYPES( Coordinate );
+  DEFINE_PTR_TYPES( Coordinate );
   class Coordinate : public Object
   {
     public:
-      static SharedCoordinate create();
+      static CoordinateSharedPtr create();
       virtual ~Coordinate();
       virtual const std::string & getType( void ) const;
 
@@ -433,16 +433,16 @@ namespace vrml
       Coordinate();
 
     public:
-      MFVec3f                       point;
-      bool                          interpreted;
-      SharedCoordinateInterpolator  set_point;
+      MFVec3f                         point;
+      bool                            interpreted;
+      CoordinateInterpolatorSharedPtr set_point;
   };
 
-  SHARED_TYPES( Cylinder );
+  DEFINE_PTR_TYPES( Cylinder );
   class Cylinder : public Geometry
   {
     public:
-      static SharedCylinder create();
+      static CylinderSharedPtr create();
       virtual ~Cylinder() {}
       virtual const std::string & getType( void ) const;
 
@@ -460,11 +460,11 @@ namespace vrml
       dp::sg::core::PrimitiveSharedPtr pQuads;
   };
 
-  SHARED_TYPES( CylinderSensor );
+  DEFINE_PTR_TYPES( CylinderSensor );
   class CylinderSensor : public Sensor
   {
     public:
-      static SharedCylinderSensor create();
+      static CylinderSensorSharedPtr create();
       virtual ~CylinderSensor()  {}
       virtual const std::string & getType( void ) const;
 
@@ -479,11 +479,11 @@ namespace vrml
       SFFloat offset;
   };
 
-  SHARED_TYPES( DirectionalLight );
+  DEFINE_PTR_TYPES( DirectionalLight );
   class DirectionalLight : public Light
   {
     public:
-      static SharedDirectionalLight create();
+      static DirectionalLightSharedPtr create();
       virtual ~DirectionalLight();
       virtual const std::string & getType( void ) const;
 
@@ -494,11 +494,11 @@ namespace vrml
       SFVec3f direction;
   };
 
-  SHARED_TYPES( ElevationGrid );
+  DEFINE_PTR_TYPES( ElevationGrid );
   class ElevationGrid : public Geometry
   {
     public:
-      static SharedElevationGrid create();
+      static ElevationGridSharedPtr create();
       virtual ~ElevationGrid();
       virtual const std::string & getType( void ) const;
 
@@ -524,11 +524,11 @@ namespace vrml
       dp::sg::core::PrimitiveSharedPtr pQuads;
   };
 
-  SHARED_TYPES( Extrusion );
+  DEFINE_PTR_TYPES( Extrusion );
   class Extrusion : public Geometry
   {
     public:
-      static SharedExtrusion create();
+      static ExtrusionSharedPtr create();
       virtual ~Extrusion()  {}
       virtual const std::string & getType( void ) const;
 
@@ -548,11 +548,11 @@ namespace vrml
       MFVec3f     spine;
   };
 
-  SHARED_TYPES( Fog );
+  DEFINE_PTR_TYPES( Fog );
   class Fog : public Object
   {
     public:
-      static SharedFog create();
+      static FogSharedPtr create();
       virtual ~Fog()  {}
       virtual const std::string & getType( void ) const;
 
@@ -565,11 +565,11 @@ namespace vrml
       SFFloat   visibilityRange;
   };
 
-  SHARED_TYPES( FontStyle );
+  DEFINE_PTR_TYPES( FontStyle );
   class FontStyle : public Object
   {
     public:
-      static SharedFontStyle create();
+      static FontStyleSharedPtr create();
       virtual ~FontStyle()  {}
       virtual const std::string & getType( void ) const;
 
@@ -588,11 +588,11 @@ namespace vrml
       SFBool    topToBottom;
   };
 
-  SHARED_TYPES( ImageTexture );
+  DEFINE_PTR_TYPES( ImageTexture );
   class ImageTexture : public Texture
   {
     public:
-      static SharedImageTexture create();
+      static ImageTextureSharedPtr create();
       virtual ~ImageTexture();
       virtual const std::string & getType( void ) const;
 
@@ -605,11 +605,11 @@ namespace vrml
       dp::sg::core::ParameterGroupDataSharedPtr textureData;
   };
 
-  SHARED_TYPES( IndexedFaceSet );
+  DEFINE_PTR_TYPES( IndexedFaceSet );
   class IndexedFaceSet : public Geometry
   {
     public:
-      static SharedIndexedFaceSet create();
+      static IndexedFaceSetSharedPtr create();
       virtual ~IndexedFaceSet();
       virtual const std::string & getType( void ) const;
 
@@ -637,11 +637,11 @@ namespace vrml
       dp::sg::core::PrimitiveSharedPtr pPolygons;
   };
 
-  SHARED_TYPES( IndexedLineSet );
+  DEFINE_PTR_TYPES( IndexedLineSet );
   class IndexedLineSet : public Geometry
   {
     public:
-      static SharedIndexedLineSet create();
+      static IndexedLineSetSharedPtr create();
       virtual ~IndexedLineSet();
       virtual const std::string & getType( void ) const;
 
@@ -658,11 +658,11 @@ namespace vrml
       dp::sg::core::PrimitiveSharedPtr  pLineStrips;
   };
 
-  SHARED_TYPES( Inline );
+  DEFINE_PTR_TYPES( Inline );
   class Inline : public Object
   {
     public:
-      static SharedInline create();
+      static InlineSharedPtr create();
       virtual ~Inline();
       virtual const std::string & getType( void ) const;
 
@@ -677,11 +677,11 @@ namespace vrml
       dp::sg::core::NodeSharedPtr pNode;
   };
 
-  SHARED_TYPES( LOD );
+  DEFINE_PTR_TYPES( LOD );
   class LOD : public Group
   {
     public:
-      static SharedLOD create();
+      static LODSharedPtr create();
       virtual ~LOD();
       virtual const std::string & getType( void ) const;
 
@@ -695,11 +695,11 @@ namespace vrml
       dp::sg::core::LODSharedPtr  pLOD;
   };
 
-  SHARED_TYPES( Material );
+  DEFINE_PTR_TYPES( Material );
   class Material : public Object
   {
     public:
-      static SharedMaterial create();
+      static MaterialSharedPtr create();
       virtual ~Material();
       virtual const std::string & getType( void ) const;
 
@@ -717,11 +717,11 @@ namespace vrml
       dp::sg::core::ParameterGroupDataSharedPtr materialParameters;
   };
 
-  SHARED_TYPES( MovieTexture );
+  DEFINE_PTR_TYPES( MovieTexture );
   class MovieTexture : public Texture
   {
     public:
-      static SharedMovieTexture create();
+      static MovieTextureSharedPtr create();
       virtual ~MovieTexture()  {}
       virtual const std::string & getType( void ) const;
 
@@ -736,11 +736,11 @@ namespace vrml
       MFString  url;
   };
 
-  SHARED_TYPES( NavigationInfo );
+  DEFINE_PTR_TYPES( NavigationInfo );
   class NavigationInfo : public Object
   {
     public:
-      static SharedNavigationInfo create();
+      static NavigationInfoSharedPtr create();
       virtual ~NavigationInfo() {}
       virtual const std::string & getType( void ) const;
 
@@ -755,11 +755,11 @@ namespace vrml
       SFFloat   visibilityLimit;
   };
 
-  SHARED_TYPES( NormalInterpolator );
+  DEFINE_PTR_TYPES( NormalInterpolator );
   class NormalInterpolator : public Interpolator
   {
     public:
-      static SharedNormalInterpolator create();
+      static NormalInterpolatorSharedPtr create();
       virtual ~NormalInterpolator()  {}
       virtual const std::string & getType( void ) const;
 
@@ -770,11 +770,11 @@ namespace vrml
       MFVec3f keyValue;
   };
 
-  SHARED_TYPES( Normal );
+  DEFINE_PTR_TYPES( Normal );
   class Normal : public Object
   {
     public:
-      static SharedNormal create();
+      static NormalSharedPtr create();
       virtual ~Normal();
       virtual const std::string & getType( void ) const;
 
@@ -782,16 +782,16 @@ namespace vrml
       Normal();
 
     public:
-      MFVec3f                   vector;
-      bool                      interpreted;
-      SharedNormalInterpolator  set_vector;
+      MFVec3f                     vector;
+      bool                        interpreted;
+      NormalInterpolatorSharedPtr set_vector;
   };
 
-  SHARED_TYPES( OrientationInterpolator );
+  DEFINE_PTR_TYPES( OrientationInterpolator );
   class OrientationInterpolator : public Interpolator
   {
     public:
-      static SharedOrientationInterpolator create();
+      static OrientationInterpolatorSharedPtr create();
       virtual ~OrientationInterpolator()  {}
       virtual const std::string & getType( void ) const;
 
@@ -804,11 +804,11 @@ namespace vrml
       std::vector<dp::math::Quatf> keyValueQuatf;
   };
 
-  SHARED_TYPES( PixelTexture );
+  DEFINE_PTR_TYPES( PixelTexture );
   class PixelTexture : public Texture
   {
     public:
-      static SharedPixelTexture create();
+      static PixelTextureSharedPtr create();
       virtual ~PixelTexture()  {}
       virtual const std::string & getType( void ) const;
 
@@ -819,11 +819,11 @@ namespace vrml
       SFImage image;
   };
 
-  SHARED_TYPES( PlaneSensor );
+  DEFINE_PTR_TYPES( PlaneSensor );
   class PlaneSensor : public Sensor
   {
     public:
-      static SharedPlaneSensor create();
+      static PlaneSensorSharedPtr create();
       virtual ~PlaneSensor()  {}
       virtual const std::string & getType( void ) const;
 
@@ -837,11 +837,11 @@ namespace vrml
       SFVec3f offset;
   };
 
-  SHARED_TYPES( PointLight );
+  DEFINE_PTR_TYPES( PointLight );
   class PointLight : public Light
   {
     public:
-      static SharedPointLight create();
+      static PointLightSharedPtr create();
       virtual ~PointLight();
       virtual const std::string & getType( void ) const;
 
@@ -854,11 +854,11 @@ namespace vrml
       SFFloat radius;
   };
 
-  SHARED_TYPES( PointSet );
+  DEFINE_PTR_TYPES( PointSet );
   class PointSet : public Geometry
   {
     public:
-      static SharedPointSet create();
+      static PointSetSharedPtr create();
       virtual ~PointSet();
       virtual const std::string & getType( void ) const;
 
@@ -872,11 +872,11 @@ namespace vrml
       dp::sg::core::PrimitiveSharedPtr  pPoints;
   };
 
-  SHARED_TYPES( PositionInterpolator );
+  DEFINE_PTR_TYPES( PositionInterpolator );
   class PositionInterpolator : public Interpolator
   {
     public:
-      static SharedPositionInterpolator create();
+      static PositionInterpolatorSharedPtr create();
       virtual ~PositionInterpolator()  {}
       virtual const std::string & getType( void ) const;
 
@@ -887,11 +887,11 @@ namespace vrml
       MFVec3f keyValue;
   };
 
-  SHARED_TYPES( ProximitySensor );
+  DEFINE_PTR_TYPES( ProximitySensor );
   class ProximitySensor : public Sensor
   {
     public:
-      static SharedProximitySensor create();
+      static ProximitySensorSharedPtr create();
       virtual ~ProximitySensor()  {}
       virtual const std::string & getType( void ) const;
 
@@ -903,11 +903,11 @@ namespace vrml
       SFVec3f size;
   };
 
-  SHARED_TYPES( ScalarInterpolator );
+  DEFINE_PTR_TYPES( ScalarInterpolator );
   class ScalarInterpolator : public Interpolator
   {
     public:
-      static SharedScalarInterpolator create();
+      static ScalarInterpolatorSharedPtr create();
       virtual ~ScalarInterpolator()  {}
       virtual const std::string & getType( void ) const;
 
@@ -918,11 +918,11 @@ namespace vrml
       MFFloat keyValue;
   };
 
-  SHARED_TYPES( Script );
+  DEFINE_PTR_TYPES( Script );
   class Script : public Object
   {
     public:
-      static SharedScript create();
+      static ScriptSharedPtr create();
       virtual ~Script() {}
       virtual const std::string & getType( void ) const;
 
@@ -935,11 +935,11 @@ namespace vrml
       SFBool    mustEvaluate;
   };
 
-  SHARED_TYPES( Shape );
+  DEFINE_PTR_TYPES( Shape );
   class Shape : public Object
   {
     public:
-      static SharedShape create();
+      static ShapeSharedPtr create();
       virtual ~Shape();
       virtual const std::string & getType( void ) const;
 
@@ -953,11 +953,11 @@ namespace vrml
       dp::sg::core::NodeSharedPtr  pNode;
   };
 
-  SHARED_TYPES( Sound );
+  DEFINE_PTR_TYPES( Sound );
   class Sound : public Object
   {
     public:
-      static SharedSound create();
+      static SoundSharedPtr create();
       virtual ~Sound();
       virtual const std::string & getType( void ) const;
 
@@ -977,11 +977,11 @@ namespace vrml
       SFBool  spatialize;
   };
 
-  SHARED_TYPES( Sphere );
+  DEFINE_PTR_TYPES( Sphere );
   class Sphere : public Geometry
   {
     public:
-      static SharedSphere create();
+      static SphereSharedPtr create();
       virtual ~Sphere() {}
       virtual const std::string & getType( void ) const;
 
@@ -995,11 +995,11 @@ namespace vrml
       dp::sg::core::PrimitiveSharedPtr pQuads;
   };
 
-  SHARED_TYPES( SphereSensor );
+  DEFINE_PTR_TYPES( SphereSensor );
   class SphereSensor : public Sensor
   {
     public:
-      static SharedSphereSensor create();
+      static SphereSensorSharedPtr create();
       virtual ~SphereSensor()  {}
       virtual const std::string & getType( void ) const;
 
@@ -1011,11 +1011,11 @@ namespace vrml
       SFRotation  offset;
   };
 
-  SHARED_TYPES( SpotLight );
+  DEFINE_PTR_TYPES( SpotLight );
   class SpotLight : public Light
   {
     public:
-      static SharedSpotLight create();
+      static SpotLightSharedPtr create();
       virtual ~SpotLight();
       virtual const std::string & getType( void ) const;
 
@@ -1031,11 +1031,11 @@ namespace vrml
       SFFloat radius;
   };
 
-  SHARED_TYPES( Switch );
+  DEFINE_PTR_TYPES( Switch );
   class Switch : public Group
   {
     public:
-      static SharedSwitch create();
+      static SwitchSharedPtr create();
       virtual ~Switch();
       virtual const std::string & getType( void ) const;
 
@@ -1048,11 +1048,11 @@ namespace vrml
       dp::sg::core::SwitchSharedPtr pSwitch;
   };
 
-  SHARED_TYPES( Text );
+  DEFINE_PTR_TYPES( Text );
   class Text : public Geometry
   {
     public:
-      static SharedText create();
+      static TextSharedPtr create();
       virtual ~Text();
       virtual const std::string & getType( void ) const;
 
@@ -1066,11 +1066,11 @@ namespace vrml
       SFFloat   maxExtent;
   };
 
-  SHARED_TYPES( TextureCoordinate );
+  DEFINE_PTR_TYPES( TextureCoordinate );
   class TextureCoordinate : public Object
   {
     public:
-      static SharedTextureCoordinate create();
+      static TextureCoordinateSharedPtr create();
       virtual ~TextureCoordinate()  {}
       virtual const std::string & getType( void ) const;
 
@@ -1081,11 +1081,11 @@ namespace vrml
       MFVec2f point;
   };
 
-  SHARED_TYPES( TextureTransform );
+  DEFINE_PTR_TYPES( TextureTransform );
   class TextureTransform : public Object
   {
     public:
-      static SharedTextureTransform create();
+      static TextureTransformSharedPtr create();
       virtual ~TextureTransform()  {}
       virtual const std::string & getType( void ) const;
 
@@ -1099,11 +1099,11 @@ namespace vrml
       SFVec2f translation;
   };
 
-  SHARED_TYPES( TouchSensor );
+  DEFINE_PTR_TYPES( TouchSensor );
   class TouchSensor : public Sensor
   {
     public:
-      static SharedTouchSensor create();
+      static TouchSensorSharedPtr create();
       virtual ~TouchSensor()  {}
       virtual const std::string & getType( void ) const;
 
@@ -1111,11 +1111,11 @@ namespace vrml
       TouchSensor() {}
   };
 
-  SHARED_TYPES( Transform );
+  DEFINE_PTR_TYPES( Transform );
   class Transform : public Group
   {
     public:
-      static SharedTransform create();
+      static TransformSharedPtr create();
       virtual ~Transform();
       virtual const std::string & getType( void ) const;
 
@@ -1129,19 +1129,19 @@ namespace vrml
       SFRotation  scaleOrientation;
       SFVec3f     translation;
 
-      SharedPositionInterpolator    set_center;
-      SharedOrientationInterpolator set_rotation;
-      SharedPositionInterpolator    set_scale;
-      SharedPositionInterpolator    set_translation;
+      PositionInterpolatorSharedPtr    set_center;
+      OrientationInterpolatorSharedPtr set_rotation;
+      PositionInterpolatorSharedPtr    set_scale;
+      PositionInterpolatorSharedPtr    set_translation;
 
       dp::sg::core::TransformSharedPtr  pTransform;
   };
 
-  SHARED_TYPES( Viewpoint );
+  DEFINE_PTR_TYPES( Viewpoint );
   class Viewpoint : public Object
   {
     public:
-      static SharedViewpoint create();
+      static ViewpointSharedPtr create();
       virtual ~Viewpoint();
       virtual const std::string & getType( void ) const;
 
@@ -1155,15 +1155,15 @@ namespace vrml
       SFVec3f     position;
       SFString    description;
 
-      SharedOrientationInterpolator set_orientation;
-      SharedPositionInterpolator    set_position;
+      OrientationInterpolatorSharedPtr set_orientation;
+      PositionInterpolatorSharedPtr    set_position;
   };
 
-  SHARED_TYPES( VisibilitySensor );
+  DEFINE_PTR_TYPES( VisibilitySensor );
   class VisibilitySensor : public Sensor
   {
     public:
-      static SharedVisibilitySensor create();
+      static VisibilitySensorSharedPtr create();
       virtual ~VisibilitySensor()  {}
       virtual const std::string & getType( void ) const;
 
@@ -1175,11 +1175,11 @@ namespace vrml
       SFVec3f size;
   };
 
-  SHARED_TYPES( WorldInfo );
+  DEFINE_PTR_TYPES( WorldInfo );
   class WorldInfo : public Object
   {
     public:
-      static SharedWorldInfo create();
+      static WorldInfoSharedPtr create();
       virtual ~WorldInfo()  {}
       virtual const std::string & getType( void ) const;
 

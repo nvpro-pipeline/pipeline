@@ -43,13 +43,13 @@ namespace dp
       {
         namespace gl
         {
-          SMART_TYPES( ResourceSampler );
+          DEFINE_PTR_TYPES( ResourceSampler );
 
           class ResourceSampler : public ResourceManager::Resource
           {
           public:
             /** \brief Fetch resource for the given object/resourceManager. If no resource exists it'll be created **/
-            static SmartResourceSampler get( const dp::sg::core::SamplerSharedPtr &Sampler, const SmartResourceManager& resourceManager );
+            static ResourceSamplerSharedPtr get( const dp::sg::core::SamplerSharedPtr &Sampler, const ResourceManagerSharedPtr& resourceManager );
             virtual void update();
 
             ~ResourceSampler();
@@ -57,13 +57,13 @@ namespace dp
             virtual const dp::sg::core::HandledObjectSharedPtr& getHandledObject() const;
 
             dp::rix::core::SamplerSharedHandle       m_samplerHandle;
-            SmartResourceTexture                     m_resourceTexture;
+            ResourceTextureSharedPtr                 m_resourceTexture;
             dp::rix::core::SamplerStateSharedHandle  m_samplerStateHandle;
 
           protected:
             dp::sg::core::SamplerSharedPtr  m_sampler;
 
-            ResourceSampler( const dp::sg::core::SamplerSharedPtr &Sampler, const SmartResourceManager& resourceManager );
+            ResourceSampler( const dp::sg::core::SamplerSharedPtr &Sampler, const ResourceManagerSharedPtr& resourceManager );
 
           private:
             dp::rix::core::SamplerStateCompareMode compareModeSceniXToRiX( dp::sg::core::TextureCompareMode tcm );

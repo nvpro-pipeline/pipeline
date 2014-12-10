@@ -47,7 +47,7 @@ namespace dp
           class ShaderManagerRiXFx : public ShaderManager
           {
           public:
-            ShaderManagerRiXFx( dp::sg::xbar::SceneTree *sceneTree, dp::fx::Manager managerType, const SmartResourceManager& resourceManager, SmartTransparencyManager const & transparencyManager );
+            ShaderManagerRiXFx( dp::sg::xbar::SceneTree *sceneTree, dp::fx::Manager managerType, const ResourceManagerSharedPtr& resourceManager, TransparencyManagerSharedPtr const & transparencyManager );
 
             virtual void updateCameraState( const dp::math::Mat44f& worldToProj, const dp::math::Mat44f& viewToWorld );
             virtual void updateTransforms();
@@ -55,32 +55,32 @@ namespace dp
 
             virtual std::map<dp::fx::Domain,std::string> getShaderSources( const dp::sg::core::GeoNodeSharedPtr & geoNode, bool depthPass ) const;
 
-            virtual SmartShaderManagerRenderGroup registerRenderGroup( dp::rix::core::RenderGroupSharedHandle const & renderGroup );
+            virtual ShaderManagerRenderGroupSharedPtr registerRenderGroup( dp::rix::core::RenderGroupSharedHandle const & renderGroup );
 
           protected:
-            virtual void addSystemContainers( SmartShaderManagerInstance const & shaderObject );
-            virtual void addSystemContainers( SmartShaderManagerRenderGroup const & renderGroup );
+            virtual void addSystemContainers( ShaderManagerInstanceSharedPtr const & shaderObject );
+            virtual void addSystemContainers( ShaderManagerRenderGroupSharedPtr const & renderGroup );
 
-            virtual void updateEnvironment( SmartResourceSampler environmentSampler );
+            virtual void updateEnvironment( ResourceSamplerSharedPtr environmentSampler );
             virtual void updateFragmentParameter( std::string const & name, dp::rix::core::ContainerDataRaw const & data );
 
             /*********************************/
             /* Global SceniX Specific values */
             /*********************************/
-            SmartShaderManagerInstance registerGeometryInstance( const dp::sg::core::EffectDataSharedPtr &effectData
-                                                               , dp::sg::xbar::ObjectTreeIndex objectTreeIndex
-                                                               , dp::rix::core::GeometryInstanceSharedHandle &geometryInstance
-                                                               , RenderPassType rpt );
+            ShaderManagerInstanceSharedPtr registerGeometryInstance( const dp::sg::core::EffectDataSharedPtr &effectData
+                                                                   , dp::sg::xbar::ObjectTreeIndex objectTreeIndex
+                                                                   , dp::rix::core::GeometryInstanceSharedHandle &geometryInstance
+                                                                   , RenderPassType rpt );
 
             ShaderManagerLights                             m_shaderManagerLights;
             boost::scoped_ptr<ShaderManagerTransformsRiXFx> m_shaderManagerTransforms;
-            dp::rix::fx::SmartManager                       m_rixFxManager;
+            dp::rix::fx::ManagerSharedPtr                   m_rixFxManager;
             dp::rix::fx::Manager::SystemSpecs               m_systemSpecs;
 
             // camera state
-            dp::fx::SmartEffectSpec              m_effectSpecCamera;
-            dp::fx::ParameterGroupSpec::iterator m_itViewProjMatrix;
-            dp::fx::ParameterGroupSpec::iterator m_itViewMatrixI;
+            dp::fx::EffectSpecSharedPtr           m_effectSpecCamera;
+            dp::fx::ParameterGroupSpec::iterator  m_itViewProjMatrix;
+            dp::fx::ParameterGroupSpec::iterator  m_itViewMatrixI;
             dp::rix::fx::GroupDataSharedHandle    m_groupDataCamera;
 
           private:
@@ -88,7 +88,7 @@ namespace dp
             dp::rix::core::ContainerDescriptorSharedHandle m_descriptorFragment;
             dp::rix::core::ContainerSharedHandle           m_containerEnvironment;
             dp::rix::core::ContainerSharedHandle           m_containerFragment;
-            dp::fx::SmartEffectSpec                        m_fragmentSystemSpec;
+            dp::fx::EffectSpecSharedPtr                    m_fragmentSystemSpec;
 
             std::map<std::string, dp::rix::core::ProgramHandle> m_mapEffectsToPrograms;
 

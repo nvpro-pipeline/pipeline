@@ -56,19 +56,19 @@ CSFSAVER.
   * If the PlugIn ID \a piid equals \c PIID_NVSG_SCENE_SAVER, a CSFSAVER is created and returned in \a pi.
   * \returns  true, if the requested PlugIn could be created, otherwise false
   */
-CSFSAVER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::SmartPlugIn & pi);
+CSFSAVER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::PlugInSharedPtr & pi);
 
 //! Query the supported types of PlugIn Interfaces.
 CSFSAVER_API void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids );
 }
 
-SMART_TYPES( CSFSaver );
+DEFINE_PTR_TYPES( CSFSaver );
 
 //! A Scene Saver for csf files.
 class CSFSaver : public dp::sg::io::SceneSaver
 {
   public :
-    static SmartCSFSaver create();
+    static CSFSaverSharedPtr create();
     virtual ~CSFSaver();
 
     //! Realization of the pure virtual interface function of a SceneSaver.

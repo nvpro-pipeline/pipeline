@@ -35,17 +35,17 @@ namespace dp
   {
     namespace xbar
     {
-      SMART_TYPES( TransformObserver );
+      DEFINE_PTR_TYPES( TransformObserver );
 
       class TransformObserver : public Observer<TransformTreeIndex>
       {
       public:
-        SMART_TYPES( DirtyPayload );
+        DEFINE_PTR_TYPES( DirtyPayload );
 
         class DirtyPayload : public Payload
         {
         public:
-          static SmartDirtyPayload create( TransformTreeIndex index )
+          static DirtyPayloadSharedPtr create( TransformTreeIndex index )
           {
             return( std::shared_ptr<DirtyPayload>( new DirtyPayload( index ) ) );
           }
@@ -67,7 +67,7 @@ namespace dp
         virtual ~TransformObserver();
 
       public:
-        static SmartTransformObserver create( SceneTreeWeakPtr sceneTree )
+        static TransformObserverSharedPtr create( SceneTreeWeakPtr sceneTree )
         {
           return( std::shared_ptr<TransformObserver>( new TransformObserver(sceneTree) ) );
         }

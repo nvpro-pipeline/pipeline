@@ -54,12 +54,12 @@ namespace dp
 
       template <typename IndexType> class Observer;
 
-      SMART_TYPES( SwitchObserver );
-      SMART_TYPES( TransformObserver );
-      SMART_TYPES( ObjectObserver );
-      SMART_TYPES( SceneObserver );
+      DEFINE_PTR_TYPES( SwitchObserver );
+      DEFINE_PTR_TYPES( TransformObserver );
+      DEFINE_PTR_TYPES( ObjectObserver );
+      DEFINE_PTR_TYPES( SceneObserver );
 
-      SHARED_PTR_TYPES( SceneTree );
+      DEFINE_PTR_TYPES( SceneTree );
       typedef SceneTree*                    SceneTreeWeakPtr;
 
       /*===========================================================================*/
@@ -222,10 +222,10 @@ namespace dp
         bool m_dirty;
 
         //TODO check switchobserver for shared switches!
-        SmartTransformObserver m_transformObserver;
-        SmartObjectObserver    m_objectObserver;
-        SmartSwitchObserver    m_switchObserver;
-        SmartSceneObserver     m_sceneObserver;
+        TransformObserverSharedPtr m_transformObserver;
+        ObjectObserverSharedPtr    m_objectObserver;
+        SwitchObserverSharedPtr    m_switchObserver;
+        SceneObserverSharedPtr     m_sceneObserver;
 
         TransformTree                            m_transformTree;
         TransformTreeIndexSet                    m_dynamicTransformIndices;

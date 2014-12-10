@@ -34,7 +34,7 @@ namespace dp
   {
     namespace ui
     {
-      SMART_TYPES( RenderTarget );
+      DEFINE_PTR_TYPES( RenderTarget );
 
       /** \brief An interface to a memory buffer to which the frame is rendered.
           \remarks For mono rendering the LEFT surface is used as default. 
@@ -78,7 +78,7 @@ namespace dp
 
         /** \brief Fetch pixels of the surface in a Bitmap.
         **/
-        DP_UTIL_API virtual SmartImage getScreenshot(unsigned int layer = 0) = 0;
+        DP_UTIL_API virtual ImageSharedPtr getScreenshot(unsigned int layer = 0) = 0;
 
         /** \brief Check if the RenderTarget is valid and can be used for rendering.
             \return true If the RenderTarget is ready for rendering, false otherwise.

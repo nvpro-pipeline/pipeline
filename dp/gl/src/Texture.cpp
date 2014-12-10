@@ -1002,11 +1002,11 @@ namespace dp
       {
         if ( getShareGroup() )
         {
-          SHARED_TYPES( CleanupTask );
+          DEFINE_PTR_TYPES( CleanupTask );
           class CleanupTask : public ShareGroupTask
           {
             public:
-              static SharedCleanupTask create( GLuint id )
+              static CleanupTaskSharedPtr create( GLuint id )
               {
                 return( std::shared_ptr<CleanupTask>( new CleanupTask( id ) ) );
               }
@@ -1134,7 +1134,7 @@ namespace dp
     /* Texture1D   */
     /***************/
 
-    SharedTexture1D Texture1D::create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width )
+    Texture1DSharedPtr Texture1D::create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width )
     {
       return( std::shared_ptr<Texture1D>( new Texture1D( internalFormat, format, type, width ) ) );
     }
@@ -1194,7 +1194,7 @@ namespace dp
     /* Texture1DArray   */
     /********************/
 
-    SharedTexture1DArray Texture1DArray::create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width, GLsizei layers )
+    Texture1DArraySharedPtr Texture1DArray::create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width, GLsizei layers )
     {
       return( std::shared_ptr<Texture1DArray>( new Texture1DArray( internalFormat, format, type, width, layers ) ) );
     }
@@ -1221,7 +1221,7 @@ namespace dp
       if ( !isMipMapLevelDefined(mipLevel) )
       {
         TexGLTransfer uploadCreate = upload;
-        dp::gl::bind( GL_PIXEL_UNPACK_BUFFER, SharedBuffer::null );    // make sure, GL_PIXEL_UNPACK_BUFFER is unbound !
+        dp::gl::bind( GL_PIXEL_UNPACK_BUFFER, BufferSharedPtr::null );    // make sure, GL_PIXEL_UNPACK_BUFFER is unbound !
         uploadCreate.m_dataSize *= m_layers;
         uploadCreate.m_height = m_layers;
         uploadCreate.m_dataPtr = nullptr;
@@ -1279,7 +1279,7 @@ namespace dp
     /* Texture2D   */
     /***************/
 
-    SharedTexture2D Texture2D::create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width, GLsizei height )
+    Texture2DSharedPtr Texture2D::create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width, GLsizei height )
     {
       return( std::shared_ptr<Texture2D>( new Texture2D( internalFormat, format, type, width, height ) ) );
     }
@@ -1342,7 +1342,7 @@ namespace dp
     /* TextureRectangle     */
     /************************/
 
-    SharedTextureRectangle TextureRectangle::create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width, GLsizei height )
+    TextureRectangleSharedPtr TextureRectangle::create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width, GLsizei height )
     {
       return( std::shared_ptr<TextureRectangle>( new TextureRectangle( internalFormat, format, type, width, height ) ) );
     }
@@ -1402,7 +1402,7 @@ namespace dp
     /* Texture2DArray    */
     /*********************/
 
-    SharedTexture2DArray Texture2DArray::create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width, GLsizei height, GLsizei layers )
+    Texture2DArraySharedPtr Texture2DArray::create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width, GLsizei height, GLsizei layers )
     {
       return( std::shared_ptr<Texture2DArray>( new Texture2DArray( internalFormat, format, type, width, height, layers ) ) );
     }
@@ -1431,7 +1431,7 @@ namespace dp
       if ( !isMipMapLevelDefined(mipLevel) )
       {
         TexGLTransfer uploadCreate = upload;
-        dp::gl::bind( GL_PIXEL_UNPACK_BUFFER, SharedBuffer::null );    // make sure, GL_PIXEL_UNPACK_BUFFER is unbound !
+        dp::gl::bind( GL_PIXEL_UNPACK_BUFFER, BufferSharedPtr::null );    // make sure, GL_PIXEL_UNPACK_BUFFER is unbound !
         uploadCreate.m_dataSize *= m_layers;
         uploadCreate.m_depth = m_layers;
         uploadCreate.m_dataPtr = nullptr;
@@ -1492,7 +1492,7 @@ namespace dp
     /* Texture3D   */
     /***************/
 
-    SharedTexture3D Texture3D::create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width, GLsizei height, GLsizei depth )
+    Texture3DSharedPtr Texture3D::create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width, GLsizei height, GLsizei depth )
     {
       return( std::shared_ptr<Texture3D>( new Texture3D( internalFormat, format, type, width, height, depth ) ) );
     }
@@ -1557,7 +1557,7 @@ namespace dp
     /* TextureCubemap   */
     /********************/
 
-    SharedTextureCubemap TextureCubemap::create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width, GLsizei height )
+    TextureCubemapSharedPtr TextureCubemap::create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width, GLsizei height )
     {
       return( std::shared_ptr<TextureCubemap>( new TextureCubemap( internalFormat, format, type, width, height ) ) );
     }
@@ -1585,7 +1585,7 @@ namespace dp
       if ( !isMipMapLevelDefined(mipLevel) )
       {
         TexGLTransfer uploadCreate = upload;
-        dp::gl::bind( GL_PIXEL_UNPACK_BUFFER, SharedBuffer::null );    // make sure, GL_PIXEL_UNPACK_BUFFER is unbound !
+        dp::gl::bind( GL_PIXEL_UNPACK_BUFFER, BufferSharedPtr::null );    // make sure, GL_PIXEL_UNPACK_BUFFER is unbound !
         uploadCreate.m_dataPtr = nullptr;
         for (unsigned int f = 0; f < 6; ++f)
         {
@@ -1637,7 +1637,7 @@ namespace dp
     /* TextureCubemapArray    */
     /**************************/
 
-    SharedTextureCubemapArray TextureCubemapArray::create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width, GLsizei height, GLsizei layers )
+    TextureCubemapArraySharedPtr TextureCubemapArray::create( GLenum internalFormat, GLenum format, GLenum type, GLsizei width, GLsizei height, GLsizei layers )
     {
       return( std::shared_ptr<TextureCubemapArray>( new TextureCubemapArray( internalFormat, format, type, width, height, layers ) ) );
     }
@@ -1666,7 +1666,7 @@ namespace dp
       if ( !isMipMapLevelDefined(mipLevel) )
       {
         TexGLTransfer uploadCreate = upload;
-        dp::gl::bind( GL_PIXEL_UNPACK_BUFFER, SharedBuffer::null );    // make sure, GL_PIXEL_UNPACK_BUFFER is unbound !
+        dp::gl::bind( GL_PIXEL_UNPACK_BUFFER, BufferSharedPtr::null );    // make sure, GL_PIXEL_UNPACK_BUFFER is unbound !
         uploadCreate.m_dataSize *= m_layers;
         uploadCreate.m_depth = m_layers;
         uploadCreate.m_dataPtr = nullptr;
@@ -1726,7 +1726,7 @@ namespace dp
     /* Texture2DMultisample    */
     /***************************/
 
-    SharedTexture2DMultisample Texture2DMultisample::create( GLenum internalFormat, GLsizei samples, GLsizei width, GLsizei height, bool fixedLocations )
+    Texture2DMultisampleSharedPtr Texture2DMultisample::create( GLenum internalFormat, GLsizei samples, GLsizei width, GLsizei height, bool fixedLocations )
     {
       return( std::shared_ptr<Texture2DMultisample>( new Texture2DMultisample( internalFormat, samples, width, height, fixedLocations ) ) );
     }
@@ -1817,7 +1817,7 @@ namespace dp
     /* Texture2DMultisampleArray    */
     /********************************/
 
-    SharedTexture2DMultisampleArray Texture2DMultisampleArray::create( GLenum internalFormat, GLsizei samples, GLsizei width, GLsizei height, GLsizei layers, bool fixedLocations )
+    Texture2DMultisampleArraySharedPtr Texture2DMultisampleArray::create( GLenum internalFormat, GLsizei samples, GLsizei width, GLsizei height, GLsizei layers, bool fixedLocations )
     {
       return( std::shared_ptr<Texture2DMultisampleArray>( new Texture2DMultisampleArray( internalFormat, samples, width, height, layers, fixedLocations ) ) );
     }
@@ -1919,17 +1919,17 @@ namespace dp
     /* TextureBuffer    */
     /********************/
 
-    SharedTextureBuffer TextureBuffer::create( GLenum internalFormat, SharedBuffer const& buffer )
+    TextureBufferSharedPtr TextureBuffer::create( GLenum internalFormat, BufferSharedPtr const& buffer )
     {
       return( std::shared_ptr<TextureBuffer>( new TextureBuffer( internalFormat, buffer ) ) );
     }
 
-    SharedTextureBuffer TextureBuffer::create( GLenum internalFormat, unsigned int size, GLvoid const* data, GLenum usage )
+    TextureBufferSharedPtr TextureBuffer::create( GLenum internalFormat, unsigned int size, GLvoid const* data, GLenum usage )
     {
       return( std::shared_ptr<TextureBuffer>( new TextureBuffer( internalFormat, Buffer::create( GL_TEXTURE_BUFFER, size, data, usage ) ) ) );
     }
 
-    TextureBuffer::TextureBuffer( GLenum internalFormat, SharedBuffer const& buffer )
+    TextureBuffer::TextureBuffer( GLenum internalFormat, BufferSharedPtr const& buffer )
       : Texture( GL_TEXTURE_BUFFER, internalFormat, GL_INVALID_ENUM, GL_INVALID_ENUM )
     {
       setBuffer( buffer );
@@ -1939,12 +1939,12 @@ namespace dp
     {
     }
 
-    SharedBuffer const& TextureBuffer::getBuffer() const
+    BufferSharedPtr const& TextureBuffer::getBuffer() const
     {
       return( m_buffer );
     }
 
-    void TextureBuffer::setBuffer( SharedBuffer const& buffer )
+    void TextureBuffer::setBuffer( BufferSharedPtr const& buffer )
     {
       if ( m_buffer != buffer )
       {

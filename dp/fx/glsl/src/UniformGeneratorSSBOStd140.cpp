@@ -45,7 +45,7 @@ namespace dp
       {
       }
 
-      std::string UniformGeneratorSSBOStd140::generateUniforms( const dp::fx::SmartParameterGroupSpec& spec )
+      std::string UniformGeneratorSSBOStd140::generateUniforms( const dp::fx::ParameterGroupSpecSharedPtr& spec )
       {
         // TODO who decides if SBL is available for the group?
         if ( !bufferAllowed(spec) )
@@ -102,9 +102,9 @@ namespace dp
       /************************************************************************/
       /* Compute Layout in Buffer for SBL                                     */
       /************************************************************************/
-      dp::fx::SmartParameterGroupLayout UniformGeneratorSSBOStd140::getParameterGroupLayout( const dp::fx::SmartParameterGroupSpec& spec )
+      dp::fx::ParameterGroupLayoutSharedPtr UniformGeneratorSSBOStd140::getParameterGroupLayout( const dp::fx::ParameterGroupSpecSharedPtr& spec )
       {
-        std::vector<ParameterGroupLayout::SmartParameterInfo> parameterInfos;
+        std::vector<ParameterGroupLayout::ParameterInfoSharedPtr> parameterInfos;
 
         if ( !bufferAllowed(spec) )
         {
@@ -119,7 +119,7 @@ namespace dp
           {
             const ParameterSpec& parameterSpec = it->first;
             // can use the same layout as ubostd140
-            ParameterGroupLayout::SmartParameterInfo pi = dp::fx::glsl::createParameterInfoUBOStd140( parameterSpec.getType(), offset, parameterSpec.getArraySize() );
+            ParameterGroupLayout::ParameterInfoSharedPtr pi = dp::fx::glsl::createParameterInfoUBOStd140( parameterSpec.getType(), offset, parameterSpec.getArraySize() );
             parameterInfos.push_back(pi);
           }
           std::string groupName = std::string("buffer_") + spec->getName();

@@ -52,12 +52,12 @@ namespace dp
       typedef std::map<ParameterGroupSpec*,std::pair<unsigned int,dp::util::PropertyListChain *> > SpecToPropertyListChainMap;
       static SpecToPropertyListChainMap gSpecToPropertyMap;
 
-      ParameterGroupDataSharedPtr ParameterGroupData::create( const SmartParameterGroupSpec & parameterGroupSpec )
+      ParameterGroupDataSharedPtr ParameterGroupData::create( const ParameterGroupSpecSharedPtr & parameterGroupSpec )
       {
         return( std::shared_ptr<ParameterGroupData>( new ParameterGroupData( parameterGroupSpec ) ) );
       }
 
-      ParameterGroupDataSharedPtr ParameterGroupData::create( const dp::fx::SmartParameterGroupData & parameterGroupData )
+      ParameterGroupDataSharedPtr ParameterGroupData::create( const dp::fx::ParameterGroupDataSharedPtr & parameterGroupData )
       {
         return( std::shared_ptr<ParameterGroupData>( new ParameterGroupData( parameterGroupData ) ) );
       }
@@ -453,7 +453,7 @@ namespace dp
       /************************************************************************/
       /* ParameterGroupData                                                   */
       /************************************************************************/
-      ParameterGroupData::ParameterGroupData( const dp::fx::SmartParameterGroupSpec& parameterGroupSpec)
+      ParameterGroupData::ParameterGroupData( const dp::fx::ParameterGroupSpecSharedPtr& parameterGroupSpec)
         : OwnedObject<EffectData>()
       {
         m_objectCode = OC_PARAMETER_GROUP_DATA;
@@ -462,7 +462,7 @@ namespace dp
         initData( dp::fx::EffectLibrary::instance()->getParameterGroupData( parameterGroupSpec->getName() ) );
       }
 
-      ParameterGroupData::ParameterGroupData( const dp::fx::SmartParameterGroupData& fxParameterGroupData)
+      ParameterGroupData::ParameterGroupData( const dp::fx::ParameterGroupDataSharedPtr& fxParameterGroupData)
         : OwnedObject<EffectData>()
       {
         m_objectCode = OC_PARAMETER_GROUP_DATA;
@@ -597,7 +597,7 @@ namespace dp
       return( target );
     }
 
-      void ParameterGroupData::initSpec( const dp::fx::SmartParameterGroupSpec & spec )
+      void ParameterGroupData::initSpec( const dp::fx::ParameterGroupSpecSharedPtr & spec )
       {
         setName( spec->getName() );
         m_parameterGroupSpec = spec;
@@ -628,7 +628,7 @@ namespace dp
         }
       }
 
-      void ParameterGroupData::initData( const dp::fx::SmartParameterGroupData & data )
+      void ParameterGroupData::initData( const dp::fx::ParameterGroupDataSharedPtr & data )
       {
         // fill the data area with the defaults from the spec
         for ( ParameterGroupSpec::iterator it = m_parameterGroupSpec->beginParameterSpecs() ; it != m_parameterGroupSpec->endParameterSpecs() ; ++it )
@@ -784,7 +784,7 @@ namespace dp
 
       ParameterGroupDataSharedPtr createStandardTextureParameterData( const SamplerSharedPtr & sampler )
       {
-        SmartEffectSpec materialSpec = getStandardMaterialSpec();
+        EffectSpecSharedPtr materialSpec = getStandardMaterialSpec();
         EffectSpec::iterator groupSpecIt = materialSpec->findParameterGroupSpec( std::string( "standardTextureParameters" ) );
         DP_ASSERT( groupSpecIt != materialSpec->endParameterGroupSpecs() );
 
@@ -796,7 +796,7 @@ namespace dp
 
       ParameterGroupDataSharedPtr createStandardBumpmapParameterData( const SamplerSharedPtr & sampler )
       {
-        SmartEffectSpec materialSpec = dp::fx::EffectLibrary::instance()->getEffectSpec("standardMaterialEffectBumped");
+        EffectSpecSharedPtr materialSpec = dp::fx::EffectLibrary::instance()->getEffectSpec("standardMaterialEffectBumped");
         EffectSpec::iterator groupSpecIt = materialSpec->findParameterGroupSpec( std::string( "standardBumpmapParameters" ) );
         DP_ASSERT( groupSpecIt != materialSpec->endParameterGroupSpecs() );
 

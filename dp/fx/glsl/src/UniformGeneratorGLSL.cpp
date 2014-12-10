@@ -152,7 +152,7 @@ namespace dp
         return "";
       }
 
-      std::string generateStruct( const dp::fx::SmartParameterGroupSpec& parameterGroupSpec, std::string& generatedStructName )
+      std::string generateStruct( const dp::fx::ParameterGroupSpecSharedPtr& parameterGroupSpec, std::string& generatedStructName )
       {
         std::ostringstream stringStruct;
         generatedStructName = "pgs_" + parameterGroupSpec->getName();
@@ -174,7 +174,7 @@ namespace dp
         return stringStruct.str();
       }
 
-      std::string generateParameterAccessors( const dp::fx::SmartParameterGroupSpec& parameterGroupSpec, const std::string& uniformName, const std::string& arrayIndex, const std::string& accessor )
+      std::string generateParameterAccessors( const dp::fx::ParameterGroupSpecSharedPtr& parameterGroupSpec, const std::string& uniformName, const std::string& arrayIndex, const std::string& accessor )
       {
         std::ostringstream stringDefines;
         std::string arrayAccess = arrayIndex.empty() ? arrayIndex : std::string("[") + arrayIndex + std::string("]");

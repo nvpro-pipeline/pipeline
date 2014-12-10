@@ -65,7 +65,7 @@ namespace dp
 #endif
     }
 
-    SmartDynamicLibrary DynamicLibrary::createFromFile( const char* name )
+    DynamicLibrarySharedPtr DynamicLibrary::createFromFile( const char* name )
     {
 #if defined( DP_OS_WINDOWS )
       HINSTANCE dll = LoadLibrary(name);

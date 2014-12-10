@@ -37,7 +37,7 @@ namespace dp
     namespace glsl
     {
 
-      std::string UniformGeneratorGLSLStandard::generateUniforms( const dp::fx::SmartParameterGroupSpec& spec )
+      std::string UniformGeneratorGLSLStandard::generateUniforms( const dp::fx::ParameterGroupSpecSharedPtr& spec )
       {
         std::ostringstream oss;
         oss << "// ParameterGroup: " << spec->getName() << "\n";
@@ -54,9 +54,9 @@ namespace dp
         return( oss.str() );
       }
 
-      dp::fx::SmartParameterGroupLayout UniformGeneratorGLSLStandard::getParameterGroupLayout( const dp::fx::SmartParameterGroupSpec& spec )
+      dp::fx::ParameterGroupLayoutSharedPtr UniformGeneratorGLSLStandard::getParameterGroupLayout( const dp::fx::ParameterGroupSpecSharedPtr& spec )
       {
-        std::vector<dp::fx::ParameterGroupLayout::SmartParameterInfo> parameterInfos;
+        std::vector<dp::fx::ParameterGroupLayout::ParameterInfoSharedPtr> parameterInfos;
         return( dp::fx::ParameterGroupLayout::create( dp::fx::MANAGER_UNIFORM, parameterInfos, "", 0, false, spec ) );
       }
 

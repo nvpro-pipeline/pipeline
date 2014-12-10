@@ -36,7 +36,7 @@ namespace dp
     class VertexArrayObject : public Object
     {
       public:
-        DP_GL_API static SharedVertexArrayObject create();
+        DP_GL_API static VertexArrayObjectSharedPtr create();
         DP_GL_API virtual ~VertexArrayObject();
 
       public:
@@ -47,15 +47,15 @@ namespace dp
         DP_GL_API VertexArrayObject();
 
       private:
-        std::map<GLint,SharedBuffer>  m_attributes;
-        SharedBuffer                  m_indices;
+        std::map<GLint,BufferSharedPtr>  m_attributes;
+        BufferSharedPtr                  m_indices;
     };
 
 
     template <typename T>
     inline void VertexArrayObject::setAttribute( GLint location, std::vector<T> const& values, GLenum usage )
     {
-      std::map<GLint,SharedBuffer>::iterator it = m_attributes.find( location );
+      std::map<GLint,BufferSharedPtr>::iterator it = m_attributes.find( location );
       if ( it == m_attributes.end() )
       {
         it = m_attributes.insert( std::make_pair( location, Buffer::create() ) ).first;

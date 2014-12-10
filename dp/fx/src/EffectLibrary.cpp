@@ -81,7 +81,7 @@ namespace dp
       return( m_name );
     }
 
-    void ShaderPipelineConfiguration::addEffectSpec( Domain domain, SmartEffectSpec const& effectSpec, SmartEffectSpec const& systemSpec )
+    void ShaderPipelineConfiguration::addEffectSpec( Domain domain, EffectSpecSharedPtr const& effectSpec, EffectSpecSharedPtr const& systemSpec )
     {
       DP_ASSERT( !effectSpec || ( effectSpec->getType() != EffectSpec::EST_PIPELINE ) );
       if ( effectSpec || systemSpec )
@@ -132,12 +132,12 @@ namespace dp
     /************************************************************************/
     /* ShaderPipelineImpl                                                   */
     /************************************************************************/
-    SMART_TYPES( ShaderPipelineImpl );
+    DEFINE_PTR_TYPES( ShaderPipelineImpl );
 
     class ShaderPipelineImpl : public ShaderPipeline
     {
     public:
-      static SmartShaderPipelineImpl create()
+      static ShaderPipelineImplSharedPtr create()
       {
         return( std::shared_ptr<ShaderPipelineImpl>( new ShaderPipelineImpl() ) );
       }
@@ -165,7 +165,7 @@ namespace dp
       return EffectLibraryImpl::instance();
     }
 
-    dp::fx::SmartParameterGroupLayout EffectLibrary::getParameterGroupLayout( const dp::fx::SmartParameterGroupSpec& spec, dp::fx::Manager manager )
+    dp::fx::ParameterGroupLayoutSharedPtr EffectLibrary::getParameterGroupLayout( const dp::fx::ParameterGroupSpecSharedPtr& spec, dp::fx::Manager manager )
     {
       switch ( manager )
       {
@@ -182,11 +182,8 @@ namespace dp
       case MANAGER_SHADER_STORAGE_BUFFER_OBJECT_RIX:
         return dp::fx::glsl::UniformGeneratorSSBOStd140(false).getParameterGroupLayout(spec);
       default:
-        {
-          DP_ASSERT(!"Unsupported manager");
-          static SmartParameterGroupLayout dummy;
-          return( dummy );
-        }
+        DP_ASSERT(!"Unsupported manager");
+        return( ParameterGroupLayoutSharedPtr::null );
       }
     }
 

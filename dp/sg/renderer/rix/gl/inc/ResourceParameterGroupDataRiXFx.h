@@ -44,7 +44,7 @@ namespace dp
       {
         namespace gl
         {
-          SMART_TYPES( ResourceParameterGroupDataRiXFx );
+          DEFINE_PTR_TYPES( ResourceParameterGroupDataRiXFx );
           typedef ResourceParameterGroupDataRiXFx* WeakResourceParameterGroupDataRiXFx;
 
 
@@ -52,7 +52,7 @@ namespace dp
           {
           public:
             /** \brief Fetch resource for the given object/resourceManager. If no resource exists it'll be created **/
-            static SmartResourceParameterGroupDataRiXFx get( const dp::sg::core::ParameterGroupDataSharedPtr& parameterGroupData, const dp::rix::fx::SmartManager& rixFx, const SmartResourceManager& resourceManager );
+            static ResourceParameterGroupDataRiXFxSharedPtr get( const dp::sg::core::ParameterGroupDataSharedPtr& parameterGroupData, const dp::rix::fx::ManagerSharedPtr& rixFx, const ResourceManagerSharedPtr& resourceManager );
             virtual ~ResourceParameterGroupDataRiXFx();
 
             virtual const dp::sg::core::HandledObjectSharedPtr& getHandledObject() const;
@@ -62,14 +62,14 @@ namespace dp
             dp::rix::fx::GroupDataSharedHandle getGroupData() const { return m_groupData; }
 
           protected:
-            ResourceParameterGroupDataRiXFx( const dp::sg::core::ParameterGroupDataSharedPtr& parameterGroupData, const dp::rix::fx::SmartManager& rixFx, const SmartResourceManager& resourceManager );
+            ResourceParameterGroupDataRiXFx( const dp::sg::core::ParameterGroupDataSharedPtr& parameterGroupData, const dp::rix::fx::ManagerSharedPtr& rixFx, const ResourceManagerSharedPtr& resourceManager );
       
             dp::sg::core::ParameterGroupDataSharedPtr m_parameterGroupData;
-            dp::rix::fx::GroupDataSharedHandle         m_groupData;
-            dp::rix::fx::SmartManager                 m_rixFx;
+            dp::rix::fx::GroupDataSharedHandle        m_groupData;
+            dp::rix::fx::ManagerSharedPtr             m_rixFx;
 
             // keep referenced resources alive
-            std::vector<SmartResourceSampler> m_resourceSamplers;
+            std::vector<ResourceSamplerSharedPtr>     m_resourceSamplers;
           };
 
         } // namespace gl

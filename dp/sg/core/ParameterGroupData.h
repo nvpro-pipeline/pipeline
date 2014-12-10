@@ -49,15 +49,15 @@ namespace dp
       class ParameterGroupData : public OwnedObject<EffectData>
       {
         public:
-          DP_SG_CORE_API static ParameterGroupDataSharedPtr create( const dp::fx::SmartParameterGroupData & parameterGroupData );
-          DP_SG_CORE_API static ParameterGroupDataSharedPtr create( const dp::fx::SmartParameterGroupSpec & parameterGroupSpec );
+          DP_SG_CORE_API static ParameterGroupDataSharedPtr create( const dp::fx::ParameterGroupDataSharedPtr & parameterGroupData );
+          DP_SG_CORE_API static ParameterGroupDataSharedPtr create( const dp::fx::ParameterGroupSpecSharedPtr & parameterGroupSpec );
 
           DP_SG_CORE_API virtual HandledObjectSharedPtr clone() const;
 
           DP_SG_CORE_API virtual ~ParameterGroupData();
 
         public:
-          DP_SG_CORE_API const dp::fx::SmartParameterGroupSpec & getParameterGroupSpec() const;
+          DP_SG_CORE_API const dp::fx::ParameterGroupSpecSharedPtr & getParameterGroupSpec() const;
 
           template <typename T> const T & getParameter( const dp::fx::ParameterGroupSpec::iterator& it ) const;
           template <typename T> const T & getParameter( const std::string & name ) const;          
@@ -105,31 +105,31 @@ namespace dp
 
         protected:
           DP_SG_CORE_API ParameterGroupData( const ParameterGroupData &rhs );
-          DP_SG_CORE_API ParameterGroupData( const dp::fx::SmartParameterGroupData& fxParameterGroupData );
-          DP_SG_CORE_API ParameterGroupData( const dp::fx::SmartParameterGroupSpec& parameterGroupSpec );
+          DP_SG_CORE_API ParameterGroupData( const dp::fx::ParameterGroupDataSharedPtr& fxParameterGroupData );
+          DP_SG_CORE_API ParameterGroupData( const dp::fx::ParameterGroupSpecSharedPtr& parameterGroupSpec );
           DP_SG_CORE_API virtual void feedHashGenerator( dp::util::HashGenerator & hg ) const;
 
           // TODO require due to sampler/pgd cross references
           DP_SG_CORE_API void setParameterIntern( const dp::fx::ParameterGroupSpec::iterator& it, const SamplerSharedPtr & value );
 
         private:
-          DP_SG_CORE_API void initSpec( const dp::fx::SmartParameterGroupSpec & spec );
-          DP_SG_CORE_API void initData( const dp::fx::SmartParameterGroupData & data );
+          DP_SG_CORE_API void initSpec( const dp::fx::ParameterGroupSpecSharedPtr & spec );
+          DP_SG_CORE_API void initData( const dp::fx::ParameterGroupDataSharedPtr & data );
 
           DP_SG_CORE_API ParameterGroupData & operator=( const ParameterGroupData & rhs );
 
         private:
           dp::util::Subject m_subject;
 
-          dp::fx::SmartParameterGroupSpec m_parameterGroupSpec;
-          std::vector<char>               m_data;
+          dp::fx::ParameterGroupSpecSharedPtr m_parameterGroupSpec;
+          std::vector<char>                   m_data;
       };
 
 
       DP_SG_CORE_API ParameterGroupDataSharedPtr createStandardTextureParameterData( const SamplerSharedPtr & sampler = SamplerSharedPtr() );
       DP_SG_CORE_API ParameterGroupDataSharedPtr createStandardBumpmapParameterData( const SamplerSharedPtr & sampler = SamplerSharedPtr() );
 
-      inline const dp::fx::SmartParameterGroupSpec & ParameterGroupData::getParameterGroupSpec() const
+      inline const dp::fx::ParameterGroupSpecSharedPtr & ParameterGroupData::getParameterGroupSpec() const
       {
         return( m_parameterGroupSpec );
       }

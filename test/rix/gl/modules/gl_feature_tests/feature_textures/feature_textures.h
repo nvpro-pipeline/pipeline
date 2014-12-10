@@ -62,7 +62,7 @@ protected:
 
 protected:
 
-  dp::gl::SharedBuffer  m_buf;
+  dp::gl::BufferSharedPtr  m_buf;
 
   dp::rix::core::VertexAttributesSharedHandle m_vertexAttributes;
 

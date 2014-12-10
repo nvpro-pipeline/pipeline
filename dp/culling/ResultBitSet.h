@@ -33,15 +33,15 @@ namespace dp
 {
   namespace culling
   {
-    HANDLE_TYPES( ResultBitSet );
+    DEFINE_PTR_TYPES( ResultBitSet );
 
     class ResultBitSet : public Result, public dp::util::Observer
     {
     public:
-      DP_CULLING_API static ResultBitSetHandle create( GroupBitSetHandle const& parentGroup );
+      DP_CULLING_API static ResultBitSetSharedPtr create( GroupBitSetSharedPtr const& parentGroup );
       DP_CULLING_API virtual ~ResultBitSet();
 
-      DP_CULLING_API std::vector<ObjectHandle> const & getChangedObjects() const;
+      DP_CULLING_API std::vector<ObjectSharedPtr> const & getChangedObjects() const;
 
       /** \brief Update the group of changed objects.
           \param visibility is a bitmask where the visibility for object i is specified in bit i
@@ -51,14 +51,14 @@ namespace dp
       DP_CULLING_API virtual void onNotify( dp::util::Event const& event, dp::util::Payload* payload );
       DP_CULLING_API virtual void onDestroyed( dp::util::Subject const& subject, dp::util::Payload* payload );
 
-      bool isVisible( ObjectBitSetHandle const & object );
+      bool isVisible( ObjectBitSetSharedPtr const & object );
 
     protected:
-      DP_CULLING_API ResultBitSet( GroupBitSetHandle const& parentGroup );
+      DP_CULLING_API ResultBitSet( GroupBitSetSharedPtr const& parentGroup );
 
     private:
-      GroupBitSetHandle m_groupParent;
-      std::vector<ObjectHandle> m_changedObjects;
+      GroupBitSetSharedPtr m_groupParent;
+      std::vector<ObjectSharedPtr> m_changedObjects;
 
       size_t m_objectIncarnation;
       bool   m_groupChanged;
@@ -66,7 +66,7 @@ namespace dp
       dp::util::BitArray m_results;
    };
 
-    inline bool ResultBitSet::isVisible( ObjectBitSetHandle const & object )
+    inline bool ResultBitSet::isVisible( ObjectBitSetSharedPtr const & object )
     {
       size_t groupIndex = object->getGroupIndex();
       DP_ASSERT( groupIndex != ~0 );

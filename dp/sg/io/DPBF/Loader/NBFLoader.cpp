@@ -1762,7 +1762,7 @@ extern "C"
 {
 #endif
 
-NBFLOADER_API bool getPlugInterface(const UPIID& piid, dp::util::SmartPlugIn & pi)
+NBFLOADER_API bool getPlugInterface(const UPIID& piid, dp::util::PlugInSharedPtr & pi)
 {
   if ( piid==PIID_NBF_SCENE_LOADER )
   {
@@ -1783,7 +1783,7 @@ NBFLOADER_API void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids
 }
 #endif
 
-SmartNBFLoader NBFLoader::create()
+NBFLoaderSharedPtr NBFLoader::create()
 {
   return( std::shared_ptr<NBFLoader>( new NBFLoader() ) );
 }
@@ -4903,7 +4903,7 @@ ParameterGroupDataSharedPtr NBFLoader::getMaterialParameterGroup( const string &
     pgd = me->findParameterGroupData( name );
     if ( !pgd )
     {
-      const dp::fx::SmartEffectSpec es = me->getEffectSpec();
+      const dp::fx::EffectSpecSharedPtr es = me->getEffectSpec();
       dp::fx::EffectSpec::iterator it = es->findParameterGroupSpec( name );
       DP_ASSERT( it != es->endParameterGroupSpecs() );
       pgd = ParameterGroupData::create( *it);
@@ -6229,7 +6229,7 @@ ParameterGroupDataSharedPtr NBFLoader::loadParameterGroupData( uint_t offset )
     dp::fx::EffectSpec::iterator it = m_currentEffectSpec->findParameterGroupSpec( mapString( pgdPtr->parameterGroupSpecName ) );
     if ( it != m_currentEffectSpec->endParameterGroupSpecs() )
     {
-      const dp::fx::SmartParameterGroupSpec & pgs = *it;
+      const dp::fx::ParameterGroupSpecSharedPtr & pgs = *it;
       parameterGroupData = ParameterGroupData::create( pgs );
       readObject( parameterGroupData, pgdPtr );
 

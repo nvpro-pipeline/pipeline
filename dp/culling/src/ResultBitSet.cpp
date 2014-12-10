@@ -33,12 +33,12 @@ namespace dp
 {
   namespace culling
   {
-      ResultBitSetHandle ResultBitSet::create( GroupBitSetHandle const& parentGroup )
+      ResultBitSetSharedPtr ResultBitSet::create( GroupBitSetSharedPtr const& parentGroup )
       {
         return( std::shared_ptr<ResultBitSet>( new ResultBitSet( parentGroup ) ) );
       }
 
-      ResultBitSet::ResultBitSet( GroupBitSetHandle const& parentGroup )
+      ResultBitSet::ResultBitSet( GroupBitSetSharedPtr const& parentGroup )
         : m_groupParent( parentGroup )
         , m_objectIncarnation(~0)
         , m_results(0)
@@ -53,7 +53,7 @@ namespace dp
         m_groupParent->detach( this );
       }
 
-      std::vector<ObjectHandle> const & ResultBitSet::getChangedObjects() const
+      std::vector<ObjectSharedPtr> const & ResultBitSet::getChangedObjects() const
       {
         return m_changedObjects;
       }
@@ -80,7 +80,7 @@ namespace dp
         /** \brief Visitor which adds changed objects to the changed group **/
         struct Visitor
         {
-          inline Visitor( GroupBitSetHandle const & group, std::vector<ObjectHandle> & changed )
+          inline Visitor( GroupBitSetSharedPtr const & group, std::vector<ObjectSharedPtr> & changed )
             : m_group( group )
             , m_changed( changed )
           {
@@ -89,12 +89,12 @@ namespace dp
 
           inline void operator()( size_t index )
           {
-            const ObjectBitSetHandle& objectImpl = m_group->getObject( index );
+            const ObjectBitSetSharedPtr& objectImpl = m_group->getObject( index );
             m_changed.push_back( objectImpl );
           }
         private:
-          GroupBitSetHandle const & m_group;
-          std::vector<ObjectHandle> & m_changed;
+          GroupBitSetSharedPtr const & m_group;
+          std::vector<ObjectSharedPtr> & m_changed;
         };
 
         dp::util::BitArray newVisible( m_groupParent->getObjectCount() );

@@ -39,7 +39,7 @@ namespace dp
     namespace glsl
     {
 
-      std::string UniformGeneratorGLSLShaderBufferLoad::generateUniforms( const dp::fx::SmartParameterGroupSpec& spec )
+      std::string UniformGeneratorGLSLShaderBufferLoad::generateUniforms( const dp::fx::ParameterGroupSpecSharedPtr& spec )
       {
         // TODO who decides if SBL is available for the group?
         bool blockShaderBufferLoad = false;
@@ -72,9 +72,9 @@ namespace dp
       /************************************************************************/
       /* Compute Layout in Buffer for SBL                                     */
       /************************************************************************/
-      dp::fx::SmartParameterGroupLayout UniformGeneratorGLSLShaderBufferLoad::getParameterGroupLayout( const dp::fx::SmartParameterGroupSpec& spec )
+      dp::fx::ParameterGroupLayoutSharedPtr UniformGeneratorGLSLShaderBufferLoad::getParameterGroupLayout( const dp::fx::ParameterGroupSpecSharedPtr& spec )
       {
-        std::vector<ParameterGroupLayout::SmartParameterInfo> parameterInfos;
+        std::vector<ParameterGroupLayout::ParameterInfoSharedPtr> parameterInfos;
 
         bool blockBuffer = false;
         for ( ParameterGroupSpec::iterator it = spec->beginParameterSpecs(); !blockBuffer && it != spec->endParameterSpecs(); ++it )
@@ -97,7 +97,7 @@ namespace dp
           for ( ParameterGroupSpec::iterator it = spec->beginParameterSpecs(); it != spec->endParameterSpecs(); ++it )
           {
             const ParameterSpec& parameterSpec = it->first;
-            ParameterGroupLayout::SmartParameterInfo pi = dp::fx::glsl::createParameterInfoShaderBufferLoad( parameterSpec.getType(), offset, parameterSpec.getArraySize() );
+            ParameterGroupLayout::ParameterInfoSharedPtr pi = dp::fx::glsl::createParameterInfoShaderBufferLoad( parameterSpec.getType(), offset, parameterSpec.getArraySize() );
             parameterInfos.push_back(pi);
           }
           std::string groupName = std::string("uniform_") + spec->getName();

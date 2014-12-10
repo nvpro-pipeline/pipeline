@@ -43,21 +43,21 @@ namespace dp
       dp::fx::Manager manager;
     };
 
-    SMART_TYPES( Snippet );
+    DEFINE_PTR_TYPES( Snippet );
 
     class Snippet
     {
     public:
       DP_FX_API virtual std::string getSnippet( GeneratorConfiguration& config ) = 0;
 
-      DP_FX_API bool addRequiredEnumSpec( const SmartEnumSpec & enumSpec );
-      DP_FX_API const std::set<SmartEnumSpec> & getRequiredEnumSpecs() const;
+      DP_FX_API bool addRequiredEnumSpec( const EnumSpecSharedPtr & enumSpec );
+      DP_FX_API const std::set<EnumSpecSharedPtr> & getRequiredEnumSpecs() const;
 
     private:
-      std::set<SmartEnumSpec>  m_requiredEnumSpecs;
+      std::set<EnumSpecSharedPtr>  m_requiredEnumSpecs;
     };
 
-    DP_FX_API std::string generateSnippets( std::vector<SmartSnippet> snippets, GeneratorConfiguration& config );
+    DP_FX_API std::string generateSnippets( std::vector<SnippetSharedPtr> snippets, GeneratorConfiguration& config );
 
   } // namespace fx
 } // namespace dp

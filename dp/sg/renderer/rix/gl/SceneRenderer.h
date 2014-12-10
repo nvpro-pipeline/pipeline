@@ -48,7 +48,7 @@ namespace dp
       {
         namespace gl
         {
-          SMART_TYPES( SceneRenderer );
+          DEFINE_PTR_TYPES( SceneRenderer );
 
           /** \brief SceneRenderer is an OpenGL 3.0 based renderer. The OpenGL context used during the first render call
                     must not be changed for successive calls. It is necessary to remove all references to this object before
@@ -60,18 +60,18 @@ namespace dp
           class SceneRenderer : public dp::sg::ui::SceneRenderer
           {    
           protected:
-            DP_SG_RDR_RIX_GL_API SceneRenderer( const dp::gl::SharedRenderTarget &renderTarget = dp::gl::SharedRenderTarget() );
+            DP_SG_RDR_RIX_GL_API SceneRenderer( const dp::gl::RenderTargetSharedPtr &renderTarget = dp::gl::RenderTargetSharedPtr() );
 
           public:
             /** \brief Create an instance of SceneRenderer
                 \param renderTarget Default RenderTarget to use.
                 \return An instance of a SceneRenderer object.
             **/
-            static DP_SG_RDR_RIX_GL_API SmartSceneRenderer create( const char *renderEngine = 0,
-                                                                   dp::fx::Manager shaderManagerType = dp::fx::MANAGER_SHADERBUFFER,
-                                                                   dp::culling::Mode cullingMode = dp::culling::MODE_AUTO,
-                                                                   TransparencyMode transparencyMode = TM_ORDER_INDEPENDENT_CLOSEST_LIST,
-                                                                   const dp::gl::SharedRenderTarget &renderTarget = dp::gl::SharedRenderTarget() );
+            static DP_SG_RDR_RIX_GL_API SceneRendererSharedPtr create( const char *renderEngine = 0,
+                                                                       dp::fx::Manager shaderManagerType = dp::fx::MANAGER_SHADERBUFFER,
+                                                                       dp::culling::Mode cullingMode = dp::culling::MODE_AUTO,
+                                                                       TransparencyMode transparencyMode = TM_ORDER_INDEPENDENT_CLOSEST_LIST,
+                                                                       const dp::gl::RenderTargetSharedPtr &renderTarget = dp::gl::RenderTargetSharedPtr() );
             DP_SG_RDR_RIX_GL_API virtual ~SceneRenderer();
 
             // HACK HACK HACK
@@ -83,7 +83,7 @@ namespace dp
 
             virtual dp::sg::renderer::rix::gl::TransparencyMode getTransparencyMode() const = 0;
             virtual void setTransparencyMode( dp::sg::renderer::rix::gl::TransparencyMode mode ) = 0;
-            virtual dp::sg::renderer::rix::gl::SmartTransparencyManager const & getTransparencyManager() const = 0;
+            virtual dp::sg::renderer::rix::gl::TransparencyManagerSharedPtr const & getTransparencyManager() const = 0;
 
           protected:
             /** \brief Delete all primitive caches. Call this function only if an OpenGL context is active since resources need
@@ -91,7 +91,7 @@ namespace dp
             **/
             DP_SG_RDR_RIX_GL_API virtual void deletePrimitiveCaches() = 0;
 
-            DP_SG_RDR_RIX_GL_API virtual dp::sg::xbar::DrawableManager *createDrawableManager( const SmartResourceManager &resourceManager ) const = 0;
+            DP_SG_RDR_RIX_GL_API virtual dp::sg::xbar::DrawableManager *createDrawableManager( const ResourceManagerSharedPtr &resourceManager ) const = 0;
             DP_SG_RDR_RIX_GL_API virtual dp::sg::xbar::DrawableManager* getDrawableManager() const = 0;
 
           protected:

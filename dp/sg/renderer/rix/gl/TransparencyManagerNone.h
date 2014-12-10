@@ -40,7 +40,7 @@ namespace dp
       {
         namespace gl
         {
-          SMART_TYPES( TransparencyManagerNone );
+          DEFINE_PTR_TYPES( TransparencyManagerNone );
 
           class DrawableManagerDefault;
           class ShaderManager;
@@ -48,7 +48,7 @@ namespace dp
           class TransparencyManagerNone : public TransparencyManager
           {
             public:
-              DP_SG_RDR_RIX_GL_API static SmartTransparencyManagerNone create();
+              DP_SG_RDR_RIX_GL_API static TransparencyManagerNoneSharedPtr create();
               DP_SG_RDR_RIX_GL_API virtual ~TransparencyManagerNone();
 
             public:

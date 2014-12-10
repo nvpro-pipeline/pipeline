@@ -129,7 +129,7 @@ int main( int argc, char *argv[] )
     std::string from( element->Attribute( "from" ) );
     std::string to( element->Attribute( "to" ) );
 
-    dp::fx::SmartEffectData effectData = dp::fx::EffectLibrary::instance()->getEffectData( to );
+    dp::fx::EffectDataSharedPtr effectData = dp::fx::EffectLibrary::instance()->getEffectData( to );
     if ( ! effectData )
     {
       std::cerr << "Could no get EffectData <" << to << ".\n";

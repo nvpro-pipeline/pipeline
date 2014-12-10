@@ -40,7 +40,7 @@ namespace dp
     {
     public:
       // RenderTarget interface
-      DP_GL_API static SharedRenderTargetFB create( const SharedRenderContext &glContext );
+      DP_GL_API static RenderTargetFBSharedPtr create( const RenderContextSharedPtr &glContext );
 
       DP_GL_API virtual ~RenderTargetFB();
 
@@ -50,7 +50,7 @@ namespace dp
                  will be created.
           \return A TextureHost with the content of the color buffer.
       **/
-      DP_GL_API virtual dp::util::SmartImage getImage( dp::util::PixelFormat pixelFormat = dp::util::PF_BGRA
+      DP_GL_API virtual dp::util::ImageSharedPtr getImage( dp::util::PixelFormat pixelFormat = dp::util::PF_BGRA
         , dp::util::DataType pixelDataType = dp::util::DT_UNSIGNED_INT_8, unsigned int index = 0 );
 
       /** \brief Set the background color for glClear calls
@@ -82,7 +82,7 @@ namespace dp
       GLenum getStereoTargetBuffer( StereoTarget stereoTarget, bool backbuffer );
       void setDrawBuffer( StereoTarget stereoTarget );
 
-      DP_GL_API RenderTargetFB( const SharedRenderContext &glContext );
+      DP_GL_API RenderTargetFB( const RenderContextSharedPtr &glContext );
 
       GLbitfield   m_clearMaskGL;
       GLclampf     m_clearColorR, m_clearColorG, m_clearColorB, m_clearColorA;

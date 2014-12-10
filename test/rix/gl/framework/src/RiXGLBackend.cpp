@@ -55,7 +55,7 @@ namespace dp
 
           using namespace core::test::framework;
 
-          SmartRiXGLBackend RiXGLBackend::create( char const* renderer, char const* options )
+          RiXGLBackendSharedPtr RiXGLBackend::create( char const* renderer, char const* options )
           {
             return( std::shared_ptr<RiXGLBackend>( new RiXGLBackend( renderer, options ) ) );
           }
@@ -85,7 +85,7 @@ namespace dp
            m_context->makeNoncurrent();
           }
 
-          dp::ui::SmartRenderTarget RiXGLBackend::createDisplay( int width, int height, bool visible )
+          dp::ui::RenderTargetSharedPtr RiXGLBackend::createDisplay( int width, int height, bool visible )
           {            
             glutInitDisplayMode( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH | GLUT_ALPHA | GLUT_BORDERLESS );
             glutInitWindowSize( width, height );
@@ -96,7 +96,7 @@ namespace dp
             glewInit();
             m_context = dp::gl::RenderContext::create( dp::gl::RenderContext::Attach() );
 
-            dp::ui::SmartRenderTarget displayTarget = createContextedRenderTarget<dp::gl::RenderTargetFB>(m_context);
+            dp::ui::RenderTargetSharedPtr displayTarget = createContextedRenderTarget<dp::gl::RenderTargetFB>(m_context);
             dp::util::shared_cast<dp::gl::RenderTargetFB>(displayTarget)->setSwapBuffersEnabled(true);
             dp::util::shared_cast<dp::gl::RenderTargetFB>(displayTarget)->setClearMask( dp::gl::TBM_COLOR_BUFFER | dp::gl::TBM_DEPTH_BUFFER );
 
@@ -109,10 +109,10 @@ namespace dp
             return displayTarget;
           }
 
-          dp::ui::SmartRenderTarget RiXGLBackend::createAuxiliaryRenderTarget(int width, int height)
+          dp::ui::RenderTargetSharedPtr RiXGLBackend::createAuxiliaryRenderTarget(int width, int height)
           {
             DP_ASSERT(!!m_context);
-            dp::ui::SmartRenderTarget fbo = dp::gl::RenderTargetFBO::create(m_context/*, width, height*/);
+            dp::ui::RenderTargetSharedPtr fbo = dp::gl::RenderTargetFBO::create(m_context/*, width, height*/);
             fbo->setSize(width, height);
             return fbo;
           }

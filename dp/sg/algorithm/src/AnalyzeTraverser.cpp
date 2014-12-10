@@ -698,7 +698,7 @@ namespace dp
         }
       }
 
-      void AnalyzeTraverser::analyzeEquivalentEffectSpec( const dp::fx::SmartEffectSpec & p )
+      void AnalyzeTraverser::analyzeEquivalentEffectSpec( const dp::fx::EffectSpecSharedPtr & p )
       {
         EffectSpecEquivalenceInfo & ei = m_effectSpecEquivalenceInfo;
         bool foundEquivalent = false;
@@ -719,7 +719,7 @@ namespace dp
         }
       }
 
-      void AnalyzeTraverser::analyzeEquivalentParameterGroupSpec( const dp::fx::SmartParameterGroupSpec & p )
+      void AnalyzeTraverser::analyzeEquivalentParameterGroupSpec( const dp::fx::ParameterGroupSpecSharedPtr & p )
       {
         ParameterGroupSpecEquivalenceInfo & ei = m_parameterGroupSpecEquivalenceInfo;
         bool foundEquivalent = false;

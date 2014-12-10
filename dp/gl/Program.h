@@ -68,22 +68,22 @@ namespace dp
         struct UniformBlock
         {
           GLint                 bufferBinding;
-          dp::gl::SharedBuffer  buffer;
+          dp::gl::BufferSharedPtr  buffer;
         };
         typedef std::vector<UniformBlock> UniformBlocks;
 
       public:
-        DP_GL_API static SharedProgram create( std::vector<SharedShader> const& shaders, Parameters const& parameters = Parameters() );
-        DP_GL_API static SharedProgram create( SharedVertexShader const& vertexShader, SharedFragmentShader const& fragmentShader, Parameters const& parameters = Parameters() );
-        DP_GL_API static SharedProgram create( SharedComputeShader const& computeShader, Parameters const& programParameters = Parameters() );
+        DP_GL_API static ProgramSharedPtr create( std::vector<ShaderSharedPtr> const& shaders, Parameters const& parameters = Parameters() );
+        DP_GL_API static ProgramSharedPtr create( VertexShaderSharedPtr const& vertexShader, FragmentShaderSharedPtr const& fragmentShader, Parameters const& parameters = Parameters() );
+        DP_GL_API static ProgramSharedPtr create( ComputeShaderSharedPtr const& computeShader, Parameters const& programParameters = Parameters() );
         DP_GL_API ~Program();
 
         DP_GL_API unsigned int getActiveAttributesCount() const;
         DP_GL_API unsigned int getActiveAttributesMask() const;
         DP_GL_API GLint getAttributeLocation( std::string const& name ) const;
         DP_GL_API std::pair<GLenum,std::vector<char>> getBinary() const;
-        DP_GL_API std::vector<SharedShader> const& getShaders() const;
-        DP_GL_API void setImageTexture( std::string const& textureName, SharedTexture const& texture, GLenum access );
+        DP_GL_API std::vector<ShaderSharedPtr> const& getShaders() const;
+        DP_GL_API void setImageTexture( std::string const& textureName, TextureSharedPtr const& texture, GLenum access );
 
         template <typename T> void setUniform( std::string const& name, T const& value );
         template <typename T> void setUniform( size_t uniformIndex, T const& value );
@@ -101,14 +101,14 @@ namespace dp
         DP_GL_API size_t getActiveUniformBlockIndex( std::string const& uniformName ) const;
 
       protected:
-        DP_GL_API Program( std::vector<SharedShader> const& shaders, Parameters const & parameter );
+        DP_GL_API Program( std::vector<ShaderSharedPtr> const& shaders, Parameters const & parameter );
 
       private:
         struct ImageData
         {
-          GLuint        index;                        // index into m_uniforms
-          GLenum        access;
-          SharedTexture texture;
+          GLuint            index;                        // index into m_uniforms
+          GLenum            access;
+          TextureSharedPtr  texture;
         };
 
       private:
@@ -122,7 +122,7 @@ namespace dp
         unsigned int                  m_activeAttributesMask;
         std::vector<ImageData>        m_imageUniforms;
         std::vector<GLuint>           m_samplerUniforms;  // indices into m_uniforms
-        std::vector<SharedShader>     m_shaders;
+        std::vector<ShaderSharedPtr>  m_shaders;
         Uniforms                      m_uniforms;
         std::map<std::string,size_t>  m_uniformsMap;
         Uniforms                      m_bufferVariables;
@@ -134,12 +134,12 @@ namespace dp
     class ProgramUseGuard
     {
       public:
-        DP_GL_API ProgramUseGuard( SharedProgram const& program, bool doBinding = true );
+        DP_GL_API ProgramUseGuard( ProgramSharedPtr const& program, bool doBinding = true );
         DP_GL_API ~ProgramUseGuard();
 
       private:
-        SharedProgram m_program;
-        bool          m_binding;
+        ProgramSharedPtr  m_program;
+        bool              m_binding;
     };
 
     template <typename T>

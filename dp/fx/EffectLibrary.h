@@ -43,20 +43,20 @@ namespace dp
 {
   namespace fx
   {
-    SMART_TYPES( ShaderPipeline );
+    DEFINE_PTR_TYPES( ShaderPipeline );
 
     class ShaderPipeline
     {
     public:
-      typedef std::vector<SmartParameterGroupSpec> ParameterGroupSpecContainer;
+      typedef std::vector<ParameterGroupSpecSharedPtr> ParameterGroupSpecContainer;
 
       struct Stage
       {
-        Domain       domain;
-        SmartSnippet source;
-        std::string  entrypoint;
-        std::vector<SmartParameterGroupSpec> parameterGroupSpecs;
-        std::vector<std::string>             systemSpecs;
+        Domain                                    domain;
+        SnippetSharedPtr                          source;
+        std::string                               entrypoint;
+        std::vector<ParameterGroupSpecSharedPtr>  parameterGroupSpecs;
+        std::vector<std::string>                  systemSpecs;
       };
 
       typedef std::vector<Stage> Stages;
@@ -81,14 +81,14 @@ namespace dp
       {
         SpecInfo() {}
 
-        SpecInfo( SmartEffectSpec const& ds, SmartEffectSpec const& ss)
+        SpecInfo( EffectSpecSharedPtr const& ds, EffectSpecSharedPtr const& ss)
           : domainSpec( ds )
           , systemSpec( ss )
         {
         }
 
-        SmartEffectSpec domainSpec;
-        SmartEffectSpec systemSpec;
+        EffectSpecSharedPtr domainSpec;
+        EffectSpecSharedPtr systemSpec;
       };
 
       typedef std::map< Domain, SpecInfo > EffectSpecPerDomain;
@@ -97,7 +97,7 @@ namespace dp
 
       DP_FX_API std::string const& getName() const;
 
-      DP_FX_API void addEffectSpec( Domain domain, SmartEffectSpec const& effectSpec, SmartEffectSpec const& systemSpec = SmartEffectSpec() );
+      DP_FX_API void addEffectSpec( Domain domain, EffectSpecSharedPtr const& effectSpec, EffectSpecSharedPtr const& systemSpec = EffectSpecSharedPtr() );
       DP_FX_API ShaderPipelineConfiguration::EffectSpecPerDomain getEffectSpecs() const;
 
       /** add a piece of sourcecode after the parameter declarations and before the rest of the shader**/
@@ -129,29 +129,29 @@ namespace dp
       static DP_FX_API EffectLibrary* instance();
 
       DP_FX_API virtual bool loadEffects(const std::string& filename, const std::vector<std::string> &searchPaths = std::vector<std::string>() ) = 0;
-      DP_FX_API virtual bool save( const SmartEffectData& effectData, const std::string& filename ) = 0;
+      DP_FX_API virtual bool save( const EffectDataSharedPtr& effectData, const std::string& filename ) = 0;
 
       DP_FX_API virtual void getEffectNames( std::vector<std::string>& names ) = 0;
       DP_FX_API virtual void getEffectNames( const std::string & filename, EffectSpec::Type type, std::vector<std::string> & names ) const = 0;
 
-      DP_FX_API virtual const SmartEffectSpec& getEffectSpec( std::string const& effectName ) const = 0;
+      DP_FX_API virtual const EffectSpecSharedPtr& getEffectSpec( std::string const& effectName ) const = 0;
       DP_FX_API virtual std::string const& getEffectFile( std::string const& effectName ) const = 0;
 
-      DP_FX_API virtual const SmartParameterGroupSpec & getParameterGroupSpec( const std::string & pgsName ) const = 0;
+      DP_FX_API virtual const ParameterGroupSpecSharedPtr & getParameterGroupSpec( const std::string & pgsName ) const = 0;
 
-      DP_FX_API virtual const SmartEnumSpec & getEnumSpec( const std::string & enumName ) const = 0;
+      DP_FX_API virtual const EnumSpecSharedPtr & getEnumSpec( const std::string & enumName ) const = 0;
 
-      DP_FX_API virtual dp::fx::SmartParameterGroupLayout getParameterGroupLayout( const dp::fx::SmartParameterGroupSpec& spec, dp::fx::Manager manager );
+      DP_FX_API virtual dp::fx::ParameterGroupLayoutSharedPtr getParameterGroupLayout( const dp::fx::ParameterGroupSpecSharedPtr& spec, dp::fx::Manager manager );
 
-      DP_FX_API virtual const SmartParameterGroupData& getParameterGroupData( const std::string& name ) const = 0;
+      DP_FX_API virtual const ParameterGroupDataSharedPtr& getParameterGroupData( const std::string& name ) const = 0;
 
-      DP_FX_API virtual const SmartEffectData& getEffectData( const std::string& name ) const = 0;
+      DP_FX_API virtual const EffectDataSharedPtr& getEffectData( const std::string& name ) const = 0;
 
-      DP_FX_API virtual SmartShaderPipeline generateShaderPipeline( const dp::fx::ShaderPipelineConfiguration& configuration ) = 0;
+      DP_FX_API virtual ShaderPipelineSharedPtr generateShaderPipeline( const dp::fx::ShaderPipelineConfiguration& configuration ) = 0;
 
       DP_FX_API virtual std::vector<std::string> getRegisteredExtensions() const = 0;
 
-      DP_FX_API virtual bool effectHasTechnique( SmartEffectSpec const& effectSpec, std::string const& techniqueName, bool rasterizer ) const = 0;
+      DP_FX_API virtual bool effectHasTechnique( EffectSpecSharedPtr const& effectSpec, std::string const& techniqueName, bool rasterizer ) const = 0;
 
     }; // EffectLibrary
 

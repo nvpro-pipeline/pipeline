@@ -51,7 +51,7 @@ using std::vector;
 using std::string;
 
 // a pointer to our single instance of the Loader
-SmartILTexSaver ILTexSaver::m_instance;
+ILTexSaverSharedPtr ILTexSaver::m_instance;
 
 // supported Plug Interface ID
 const UPITID PITID_TEXTURE_SAVER(UPITID_TEXTURE_SAVER, UPITID_VERSION); // plug-in type
@@ -96,7 +96,7 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 }
 #endif
 
-bool getPlugInterface(const UPIID& piid, dp::util::SmartPlugIn & pi)
+bool getPlugInterface(const UPIID& piid, dp::util::PlugInSharedPtr & pi)
 {
   for( unsigned int i=0; i<NUM_SUPPORTED_EXTENSIONS; ++i)
   {
@@ -243,7 +243,7 @@ static void faceTwiddling(int face, TextureHostSharedPtr const& texImage)
   }
 }
 
-SmartILTexSaver ILTexSaver::create()
+ILTexSaverSharedPtr ILTexSaver::create()
 {
   return( std::shared_ptr<ILTexSaver>( new ILTexSaver() ) );
 }
@@ -256,7 +256,7 @@ ILTexSaver::ILTexSaver()
 ILTexSaver::~ILTexSaver()
 {
   ilShutDown();
-  ILTexSaver::m_instance = SmartILTexSaver::null;
+  ILTexSaver::m_instance = ILTexSaverSharedPtr::null;
 }
 
 bool ILTexSaver::save( const TextureHostSharedPtr & image, const string & fileName )

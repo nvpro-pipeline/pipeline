@@ -92,7 +92,7 @@ CommandReplaceEffect::CommandReplaceEffect( const dp::sg::core::GeoNodeSharedPtr
   // special handling for enum "scatter_mode": set transparent flag in EffectData
   // when the EffectSpec says, it's transparent, it might in fact be opaque, if there is a parameter "scatter_mode" with value "scatter_reflect".
   {
-    const dp::fx::SmartEffectSpec & es = m_newEffect->getEffectSpec();
+    const dp::fx::EffectSpecSharedPtr & es = m_newEffect->getEffectSpec();
 
     if ( es->getTransparent() )
     {

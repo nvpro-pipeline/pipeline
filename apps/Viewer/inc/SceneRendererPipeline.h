@@ -41,18 +41,18 @@ struct TonemapperValues
   float burnHighlights;
 };
 
-SMART_TYPES( SceneRendererPipeline );
+DEFINE_PTR_TYPES( SceneRendererPipeline );
 
 class SceneRendererPipeline : public dp::sg::ui::SceneRenderer
 {
 public:
-  static SmartSceneRendererPipeline create();
+  static SceneRendererPipelineSharedPtr create();
   ~SceneRendererPipeline();
 
-  bool init(const dp::gl::SharedRenderContext &renderContext, const dp::gl::SharedRenderTarget &renderTarget);
+  bool init(const dp::gl::RenderContextSharedPtr &renderContext, const dp::gl::RenderTargetSharedPtr &renderTarget);
 
-  void setSceneRenderer(const dp::sg::ui::SmartSceneRenderer &sceneRenderer);
-  dp::sg::ui::SmartSceneRenderer getSceneRenderer() const; 
+  void setSceneRenderer(const dp::sg::ui::SceneRendererSharedPtr &sceneRenderer);
+  dp::sg::ui::SceneRendererSharedPtr getSceneRenderer() const; 
   void enableHighlighting(bool onOff);
   
   void updateEnvironment();
@@ -78,15 +78,15 @@ public:
 
 protected:
   SceneRendererPipeline();
-  virtual void doRender(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::SmartRenderTarget const& renderTarget);
+  virtual void doRender(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget);
   virtual void onEnvironmentSamplerChanged();
 
 private:
-  SMART_TYPES( MonoViewStateProvider );
+  DEFINE_PTR_TYPES( MonoViewStateProvider );
   class MonoViewStateProvider : public SceneRenderer::StereoViewStateProvider
   {
   public:
-    static SmartMonoViewStateProvider create();
+    static MonoViewStateProviderSharedPtr create();
 
   protected:
     dp::sg::ui::ViewStateSharedPtr calculateViewState( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTarget::StereoTarget eye )
@@ -97,27 +97,27 @@ private:
 
   // helpers called from doRender to keep the code more readable
   void doRenderBackdrop(dp::sg::ui::ViewStateSharedPtr const& viewState);
-  void doRenderTonemap(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::SmartRenderTarget const& renderTarget);
-  void doRenderStandard(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::SmartRenderTarget const& renderTarget);
-  void doRenderHighlight(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::SmartRenderTarget const& renderTarget);
+  void doRenderTonemap(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget);
+  void doRenderStandard(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget);
+  void doRenderHighlight(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget);
   void initBackdrop();
   void initTonemapper();
 
 private:
-  dp::sg::ui::SmartSceneRenderer                m_sceneRenderer; // The renderer for the main image on the framebuffer (rasterizer or ray tracer).  
-  SmartMonoViewStateProvider                    m_monoViewStateProvider;
+  dp::sg::ui::SceneRendererSharedPtr                m_sceneRenderer; // The renderer for the main image on the framebuffer (rasterizer or ray tracer).  
+  MonoViewStateProviderSharedPtr                    m_monoViewStateProvider;
 
-  dp::gl::SharedRenderTarget                    m_renderTarget;             // The render target passed into init.
-  dp::gl::SharedRenderTargetFBO                 m_tonemapFBO;               // The monoscopic FBO for the tonemap texture rendering and processing.
-  dp::gl::SharedRenderTargetFBO                 m_highlightFBO;             // The monoscopic FBO for the highlight rendering and processing.
-  dp::sg::renderer::rix::gl::SmartSceneRenderer m_sceneRendererHighlight;   // The renderer for the highlighted objects into the FBO.
-  dp::sg::renderer::rix::gl::SmartFSQRenderer   m_rendererStencilToColor;
-  dp::sg::renderer::rix::gl::SmartFSQRenderer   m_rendererHighlight;
-  dp::sg::renderer::rix::gl::SmartFSQRenderer   m_environmentBackdrop;
-  dp::sg::renderer::rix::gl::SmartFSQRenderer   m_tonemapper;
-  bool                                          m_highlighting;
-  bool                                          m_backdropEnabled;
-  bool                                          m_tonemapperEnabled;
+  dp::gl::RenderTargetSharedPtr                     m_renderTarget;             // The render target passed into init.
+  dp::gl::RenderTargetFBOSharedPtr                  m_tonemapFBO;               // The monoscopic FBO for the tonemap texture rendering and processing.
+  dp::gl::RenderTargetFBOSharedPtr                  m_highlightFBO;             // The monoscopic FBO for the highlight rendering and processing.
+  dp::sg::renderer::rix::gl::SceneRendererSharedPtr m_sceneRendererHighlight;   // The renderer for the highlighted objects into the FBO.
+  dp::sg::renderer::rix::gl::FSQRendererSharedPtr   m_rendererStencilToColor;
+  dp::sg::renderer::rix::gl::FSQRendererSharedPtr   m_rendererHighlight;
+  dp::sg::renderer::rix::gl::FSQRendererSharedPtr   m_environmentBackdrop;
+  dp::sg::renderer::rix::gl::FSQRendererSharedPtr   m_tonemapper;
+  bool                                              m_highlighting;
+  bool                                              m_backdropEnabled;
+  bool                                              m_tonemapperEnabled;
 
   // Tonemapper values in the GUI:
   TonemapperValues m_tonemapperValues;

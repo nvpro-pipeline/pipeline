@@ -39,7 +39,7 @@ namespace dp
       typedef TestObject* (*TestGetEntryPointFunc)(const char*);
       typedef void (*TestEnumFunc)( std::vector<TestObject>& );
 
-      DPTCORE_API dp::util::SmartDynamicLibrary getTestLib(const std::string& libname);
+      DPTCORE_API dp::util::DynamicLibrarySharedPtr getTestLib(const std::string& libname);
       
       /*! \brief Search the given directory for compatible tests using the filter string and returns a vector of test objects containing those tests.
       *  \return A vector of DPTtestObject pointer containing all compatible tests in the given directory.*/

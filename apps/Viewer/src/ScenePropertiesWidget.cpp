@@ -402,7 +402,7 @@ void ScenePropertiesWidget::textureSelectionClicked( bool checked )
 
   DP_ASSERT( 0 < sampler->getNumberOfOwners() );
   dp::sg::core::ParameterGroupDataSharedPtr const& pgd = sampler->getOwner( sampler->ownersBegin() )->getSharedPtr<dp::sg::core::ParameterGroupData>();
-  dp::fx::SmartParameterGroupSpec pgs = pgd->getParameterGroupSpec();
+  dp::fx::ParameterGroupSpecSharedPtr pgs = pgd->getParameterGroupSpec();
 
   dp::fx::ParameterGroupSpec::iterator it;
   for ( it = pgs->beginParameterSpecs() ; it != pgs->endParameterSpecs() ; ++it )

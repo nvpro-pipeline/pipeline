@@ -48,11 +48,11 @@ namespace dp
         virtual void onDestroyed( const dp::util::Subject& subject, dp::util::Payload* payload );
 
       private:
-        SMART_TYPES( Payload );
+        DEFINE_PTR_TYPES( Payload );
         class Payload : public dp::util::Payload
         {
         public:
-          static SmartPayload create();
+          static PayloadSharedPtr create();
           virtual ~Payload();
 
         protected:
@@ -70,7 +70,7 @@ namespace dp
       };
 
 
-      TextureFileCache::SmartPayload TextureFileCache::Payload::create()
+      TextureFileCache::PayloadSharedPtr TextureFileCache::Payload::create()
       {
         return( std::shared_ptr<Payload>( new Payload() ) );
       }
@@ -99,7 +99,7 @@ namespace dp
         if ( it == self.m_cache.end() )
         {
           // if not create a new TextureFile object
-          SmartPayload payload = Payload::create();
+          PayloadSharedPtr payload = Payload::create();
           payload->m_filename = filename;
           TextureFileSharedPtr textureFile = std::shared_ptr<TextureFile>( new TextureFile( filename, textureTarget ) );
           payload->m_textureFile = textureFile.getWeakPtr();

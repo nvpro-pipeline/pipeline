@@ -33,7 +33,7 @@ namespace dp
     namespace gl
     {
 
-      ParameterRendererBufferDSA::ParameterRendererBufferDSA( ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::SharedBuffer const& ubo, GLenum target, size_t uboBinding, size_t uboOffset, GLsizeiptr uboBlockSize )
+      ParameterRendererBufferDSA::ParameterRendererBufferDSA( ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::BufferSharedPtr const& ubo, GLenum target, size_t uboBinding, size_t uboOffset, GLsizeiptr uboBlockSize )
         : ParameterRendererBuffer( parameterCacheEntries, ubo, target, uboBinding, uboOffset, uboBlockSize )
       {
       }

@@ -41,7 +41,7 @@ namespace dp
         namespace gl
         {
 
-          SmartTransparencyManagerOITAll TransparencyManagerOITAll::create( dp::math::Vec2ui const & size )
+          TransparencyManagerOITAllSharedPtr TransparencyManagerOITAll::create( dp::math::Vec2ui const & size )
           {
             return( std::shared_ptr<TransparencyManagerOITAll>( new TransparencyManagerOITAll( size ) ) );
           }
@@ -91,8 +91,8 @@ namespace dp
 
               glGenQueries( 1, &m_samplesPassedQuery );
 
-              dp::gl::SharedVertexShader vertexShader = dp::gl::VertexShader::create( dp::util::loadStringFromFile( dp::home() + "/media/dpfx/passThroughPosition_vs.glsl" ) );
-              dp::gl::SharedFragmentShader fragmentShader = dp::gl::FragmentShader::create( dp::util::loadStringFromFile( dp::home() + "/media/dpfx/oitAllClear_fs.glsl" ) );
+              dp::gl::VertexShaderSharedPtr vertexShader = dp::gl::VertexShader::create( dp::util::loadStringFromFile( dp::home() + "/media/dpfx/passThroughPosition_vs.glsl" ) );
+              dp::gl::FragmentShaderSharedPtr fragmentShader = dp::gl::FragmentShader::create( dp::util::loadStringFromFile( dp::home() + "/media/dpfx/oitAllClear_fs.glsl" ) );
               m_clearProgram = dp::gl::Program::create( vertexShader, fragmentShader );
 
               // vertexShader is the same as for m_clearProgram !
