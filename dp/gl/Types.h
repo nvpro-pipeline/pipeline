@@ -47,12 +47,14 @@ namespace dp
     DEFINE_PTR_TYPES(GeometryShader);
     DEFINE_PTR_TYPES(Object);
     DEFINE_PTR_TYPES(Program);
+    DEFINE_PTR_TYPES(ProgramInstance);
     DEFINE_PTR_TYPES(Query);
     DEFINE_PTR_TYPES(Renderbuffer);
     DEFINE_PTR_TYPES(RenderContext);
     DEFINE_PTR_TYPES(RenderTarget);
     DEFINE_PTR_TYPES(RenderTargetFB);
     DEFINE_PTR_TYPES(RenderTargetFBO);
+    DEFINE_PTR_TYPES(Sampler);
     DEFINE_PTR_TYPES(Shader);
     DEFINE_PTR_TYPES(ShareGroup);
     DEFINE_PTR_TYPES(TessControlShader);
@@ -87,7 +89,7 @@ namespace dp
     template <typename T>
     inline unsigned int TypeTraits<T>::componentCount()
     {
-#if defined(_MSVC_VER)
+#if defined(_MSC_VER)
       DP_STATIC_ASSERT( std::numeric_limits<T>::is_specialized );
 #endif
       return( 1 );
@@ -96,7 +98,7 @@ namespace dp
       template <typename T>
     inline GLenum TypeTraits<T>::glType()
     {
-#if defined(_MSVC_VER)
+#if defined(_MSC_VER)
       DP_STATIC_ASSERT( !"TypeTraits::glType: specialization for type T is missing" );
 #endif
       return( GL_INVALID_VALUE );
@@ -135,7 +137,7 @@ namespace dp
     template <typename T>
     inline bool TypeTraits<T>::isInteger()
     {
-#if defined(_MSVC_VER)
+#if defined(_MSC_VER)
       DP_STATIC_ASSERT( std::numeric_limits<T>::is_specialized );
 #endif
       return( std::numeric_limits<T>::is_integer );
@@ -157,7 +159,7 @@ namespace dp
     template <unsigned int n, typename T>
     inline GLenum TypeTraits<dp::math::Vecnt<n,T>>::glType()
     {
-#if defined(_MSVC_VER)
+#if defined(_MSC_VER)
       DP_STATIC_ASSERT( !"TypeTraits::glType: specialization for type dp::math::Vecnt<n,T> is missing" );
 #endif
       return( GL_INVALID_VALUE );
@@ -173,6 +175,12 @@ namespace dp
     inline GLenum TypeTraits<dp::math::Vec4f>::glType()
     {
       return( GL_FLOAT_VEC4 );
+    }
+
+    template <>
+    inline GLenum TypeTraits<dp::math::Vec3i>::glType()
+    {
+      return( GL_INT_VEC3 );
     }
 
 
@@ -191,7 +199,7 @@ namespace dp
     template<unsigned int m, unsigned int n, typename T>
     inline GLenum TypeTraits<dp::math::Matmnt<m,n,T>>::glType()
     {
-#if defined(_MSVC_VER)
+#if defined(_MSC_VER)
       DP_STATIC_ASSERT( !"TypeTraits::glType: specialization for type dp::math::Matmnt<m,n,T> is missing" );
 #endif
       return( GL_INVALID_VALUE );

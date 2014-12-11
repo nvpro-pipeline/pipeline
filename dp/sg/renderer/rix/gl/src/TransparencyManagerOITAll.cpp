@@ -25,6 +25,9 @@
 
 
 #include <dp/DP.h>
+#include <dp/gl/Program.h>
+#include <dp/gl/ProgramInstance.h>
+#include <dp/gl/Shader.h>
 #include <dp/rix/gl/RiXGL.h>
 #include <dp/sg/renderer/rix/gl/TransparencyManagerOITAll.h>
 #include <dp/sg/renderer/rix/gl/inc/DrawableManagerDefault.h>
@@ -95,15 +98,15 @@ namespace dp
 
               dp::gl::VertexShaderSharedPtr vertexShader = dp::gl::VertexShader::create( dp::util::loadStringFromFile( dp::home() + "/media/dpfx/passThroughPosition_vs.glsl" ) );
               dp::gl::FragmentShaderSharedPtr fragmentShader = dp::gl::FragmentShader::create( dp::util::loadStringFromFile( dp::home() + "/media/dpfx/oitAllClear_fs.glsl" ) );
-              m_clearProgram = dp::gl::Program::create( vertexShader, fragmentShader );
+              m_clearProgram = dp::gl::ProgramInstance::create( dp::gl::Program::create( vertexShader, fragmentShader ) );
 
               // vertexShader is the same as for m_clearProgram !
               fragmentShader = dp::gl::FragmentShader::create( dp::util::loadStringFromFile( dp::home() + "/media/dpfx/oitAllResolveCounters_fs.glsl" ) );
-              m_resolveCountersProgram = dp::gl::Program::create( vertexShader, fragmentShader );
+              m_resolveCountersProgram = dp::gl::ProgramInstance::create( dp::gl::Program::create( vertexShader, fragmentShader ) );
 
               // vertexShader is the same as for m_clearProgram !
               fragmentShader = dp::gl::FragmentShader::create( dp::util::loadStringFromFile( dp::home() + "/media/dpfx/oitAllResolveSamples_fs.glsl" ) );
-              m_resolveSamplesProgram = dp::gl::Program::create( vertexShader, fragmentShader );
+              m_resolveSamplesProgram = dp::gl::ProgramInstance::create( dp::gl::Program::create( vertexShader, fragmentShader ) );
 
               m_initializedHandles = true;
             }
@@ -118,16 +121,16 @@ namespace dp
 
               m_samplesTextureGL = dp::gl::TextureBuffer::create( GL_RG32UI, 0, nullptr, GL_DYNAMIC_COPY );
 
-              m_clearProgram->setImageTexture( "counterAccu", m_counterAccuTexture, GL_WRITE_ONLY );
-              m_clearProgram->setImageTexture( "perFragmentCount", m_perFragmentCountTextureGL, GL_WRITE_ONLY );
+              m_clearProgram->setImageUniform( "counterAccu", m_counterAccuTexture, GL_WRITE_ONLY );
+              m_clearProgram->setImageUniform( "perFragmentCount", m_perFragmentCountTextureGL, GL_WRITE_ONLY );
 
-              m_resolveCountersProgram->setImageTexture( "counterAccu", m_counterAccuTexture, GL_READ_WRITE );
-              m_resolveCountersProgram->setImageTexture( "perFragmentCount", m_perFragmentCountTextureGL, GL_WRITE_ONLY );
-              m_resolveCountersProgram->setImageTexture( "perFragmentOffset", m_perFragmentOffsetTextureGL, GL_WRITE_ONLY );
+              m_resolveCountersProgram->setImageUniform( "counterAccu", m_counterAccuTexture, GL_READ_WRITE );
+              m_resolveCountersProgram->setImageUniform( "perFragmentCount", m_perFragmentCountTextureGL, GL_WRITE_ONLY );
+              m_resolveCountersProgram->setImageUniform( "perFragmentOffset", m_perFragmentOffsetTextureGL, GL_WRITE_ONLY );
 
-              m_resolveSamplesProgram->setImageTexture( "perFragmentCount", m_perFragmentCountTextureGL, GL_READ_ONLY );
-              m_resolveSamplesProgram->setImageTexture( "perFragmentOffset", m_perFragmentOffsetTextureGL, GL_READ_ONLY );
-              m_resolveSamplesProgram->setImageTexture( "samplesBuffer", m_samplesTextureGL, GL_READ_WRITE );
+              m_resolveSamplesProgram->setImageUniform( "perFragmentCount", m_perFragmentCountTextureGL, GL_READ_ONLY );
+              m_resolveSamplesProgram->setImageUniform( "perFragmentOffset", m_perFragmentOffsetTextureGL, GL_READ_ONLY );
+              m_resolveSamplesProgram->setImageUniform( "samplesBuffer", m_samplesTextureGL, GL_READ_WRITE );
 
               renderer->textureSetData( m_perFragmentCountTexture, dp::rix::gl::TextureDataGLTexture( m_perFragmentCountTextureGL ) );
               renderer->textureSetData( m_perFragmentOffsetTexture, dp::rix::gl::TextureDataGLTexture( m_perFragmentOffsetTextureGL ) );
@@ -136,15 +139,12 @@ namespace dp
               m_initializedBuffers = true;
             }
 
-            {
-              // clear the oit buffers
-              dp::gl::ProgramUseGuard pug( m_clearProgram );
-
-              glColorMask( GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE );
-              glDepthMask( GL_FALSE );
-              drawQuad();
-              glMemoryBarrier( GL_SHADER_IMAGE_ACCESS_BARRIER_BIT );
-            }
+            // clear the oit buffers
+            glColorMask( GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE );
+            glDepthMask( GL_FALSE );
+            m_clearProgram->apply();
+            drawQuad();
+            glMemoryBarrier( GL_SHADER_IMAGE_ACCESS_BARRIER_BIT );
 
             glBeginQuery( GL_SAMPLES_PASSED, m_samplesPassedQuery );
           }
@@ -153,15 +153,12 @@ namespace dp
           {
             glEndQuery( GL_SAMPLES_PASSED );
 
-            {
-              // resolve the counters buffer
-              dp::gl::ProgramUseGuard pug( m_resolveCountersProgram );
-
-              glMemoryBarrier( GL_SHADER_IMAGE_ACCESS_BARRIER_BIT );
-              glDisable( GL_DEPTH_TEST );
-              drawQuad();
-              glEnable( GL_DEPTH_TEST );
-            }
+            // resolve the counters buffer
+            glMemoryBarrier( GL_SHADER_IMAGE_ACCESS_BARRIER_BIT );
+            glDisable( GL_DEPTH_TEST );
+            m_resolveCountersProgram->apply();
+            drawQuad();
+            glEnable( GL_DEPTH_TEST );
 
             unsigned int samplesCount = -1;
 #if 0
@@ -184,18 +181,15 @@ namespace dp
             glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE );
             glDepthMask( GL_TRUE );
 
-            {
-              // resolve the oit buffers
-              dp::gl::ProgramUseGuard pug( m_resolveSamplesProgram );
-
-              glMemoryBarrier( GL_SHADER_IMAGE_ACCESS_BARRIER_BIT );
-              glEnable( GL_BLEND );
-              glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-              glDisable( GL_DEPTH_TEST );
-              drawQuad();
-              glDisable( GL_BLEND );
-              glEnable( GL_DEPTH_TEST );
-            }
+            // resolve the oit buffers
+            glMemoryBarrier( GL_SHADER_IMAGE_ACCESS_BARRIER_BIT );
+            glEnable( GL_BLEND );
+            glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+            glDisable( GL_DEPTH_TEST );
+            m_resolveSamplesProgram->apply();
+            drawQuad();
+            glDisable( GL_BLEND );
+            glEnable( GL_DEPTH_TEST );
 
             return( TransparencyManager::endTransparentPass() );
           }

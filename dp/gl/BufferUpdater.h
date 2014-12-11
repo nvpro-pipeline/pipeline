@@ -87,11 +87,11 @@ namespace dp
         std::vector<int>  offsets;
       };
 
-      std::map<size_t, UpdateInfo> m_updateInfos;         // One updateInfo per update size
-      dp::gl::BufferSharedPtr      m_buffer;              // Buffer to update
-      dp::gl::BufferSharedPtr      m_bufferData;          // Buffer with data to update
-      dp::gl::BufferSharedPtr      m_bufferChunkOffsets;  // Buffer with offsets of the chunks to update
-      dp::gl::ProgramSharedPtr     m_programUpdate;       // Program used to scatter data on the GPU.
+      std::map<size_t, UpdateInfo>      m_updateInfos;         // One updateInfo per update size
+      dp::gl::BufferSharedPtr           m_buffer;              // Buffer to update
+      dp::gl::BufferSharedPtr           m_bufferData;          // Buffer with data to update
+      dp::gl::BufferSharedPtr           m_bufferChunkOffsets;  // Buffer with offsets of the chunks to update
+      dp::gl::ProgramInstanceSharedPtr  m_programUpdate;       // Program used to scatter data on the GPU.
     };
 
   } // namespace gl

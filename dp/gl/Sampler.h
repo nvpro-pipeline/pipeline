@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright NVIDIA Corporation 2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -26,43 +26,55 @@
 
 #pragma once
 
-#include <dp/culling/opengl/Manager.h>
-#include <GL/glew.h>
-#include <dp/gl/ProgramInstance.h>
+#include <dp/gl/Config.h>
+#include <dp/gl/Buffer.h>
+#include <dp/gl/Object.h>
+#include <dp/math/math.h>
 
-#if defined(GL_VERSION_4_3)
+// TODO Image capturing is currently not implemented. The code sequences using 
+// SamplerHost have been disabled with #if 0.
 
 namespace dp
 {
-  namespace culling
+  namespace gl
   {
-    namespace opengl
+    /*! \brief Base class to represent an OpenGL sampler.
+     */
+    class Sampler : public Object
     {
-      class ManagerImpl : public Manager
-      {
       public:
-        ManagerImpl();
-        virtual ~ManagerImpl();
-        virtual ObjectSharedPtr objectCreate( PayloadSharedPtr const& userData );
+        DP_GL_API static SamplerSharedPtr create();
+        DP_GL_API virtual ~Sampler();
 
-        virtual GroupSharedPtr groupCreate();
-        virtual ResultSharedPtr groupCreateResult( GroupSharedPtr const& group );
+      public:
+        DP_GL_API void bind( GLuint unit );
+        DP_GL_API void unbind( GLuint unit );
 
-        virtual void cull( const GroupSharedPtr& group, const ResultSharedPtr& result, const dp::math::Mat44f& viewProjection );
+        DP_GL_API void setBorderColor( float color[4] );
+        DP_GL_API void setBorderColor( unsigned int color[4] );
+        DP_GL_API void setBorderColor( int color[4] );
+
+        DP_GL_API void setCompareParameters( GLenum mode, GLenum func );
+
+        /*! \brief Set filtering modes for this texture
+         *  \param minFilter The filter to use for minification
+         *  \param magFilter The filter to use for magnification
+        **/
+        DP_GL_API void setFilterParameters( GLenum minFilter, GLenum magFilter );
+
+        DP_GL_API void setLODParameters( float minLOD, float maxLOD );
+
+        DP_GL_API void setWrapParameters( GLenum wrapS, GLenum wrapT, GLenum wrapR );
+
+      protected:
+        /*! \brief Constructor for sampler class. */
+        DP_GL_API Sampler();
+
       private:
-        void initializeComputeShader();
-
-        /************************************************************************/
-        /* OpenGL resources                                                     */
-        /************************************************************************/
-        dp::gl::ProgramInstanceSharedPtr  m_program;
-        GLint                             m_uniformViewProjection;
-        bool                              m_shaderInitialized;
-      };
-
-    } // namespace opengl
-  } // namespace culling
-} // namespace dp
-
-// GL_VERSION_4_3
+#if !defined(NDEBUG)
+        std::set<GLuint>  m_boundUnits;
 #endif
+    };
+
+  } // namespace gl
+} // namespace dp
