@@ -24,6 +24,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <dp/gl/BufferUpdater.h>
+#include <dp/gl/ProgramInstance.h>
 
 namespace dp
 {
@@ -69,7 +70,7 @@ namespace dp
     {
       m_bufferData = dp::gl::Buffer::create(dp::gl::Buffer::CORE, GL_STREAM_DRAW, GL_SHADER_STORAGE_BUFFER);
       m_bufferChunkOffsets = dp::gl::Buffer::create(dp::gl::Buffer::CORE, GL_STREAM_DRAW, GL_SHADER_STORAGE_BUFFER);
-      m_programUpdate = dp::gl::Program::create(dp::gl::ComputeShader::create(shader));
+      m_programUpdate = dp::gl::ProgramInstance::create( dp::gl::Program::create(dp::gl::ComputeShader::create(shader)) );
     }
 
     BufferUpdater::~BufferUpdater()
@@ -105,9 +106,6 @@ namespace dp
       GLint id;
       glGetIntegerv(GL_CURRENT_PROGRAM, &id);
 
-      // bind the scattering program and the buffer 
-      glUseProgram(m_programUpdate->getGLId());
-
       // iterate over all chunk sizes and update the data
       for (auto it = m_updateInfos.begin(); it != m_updateInfos.end(); ++it)
       {
@@ -127,10 +125,10 @@ namespace dp
 
         m_programUpdate->setUniform("chunkSize", static_cast<int>(it->first / 16));
         m_programUpdate->setUniform("numChunks", static_cast<int>(info.offsets.size()));
-
-        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, INPUT_BINDING, m_bufferData->getGLId());
-        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, OUTPUT_BINDING, m_buffer->getGLId());
-        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, CHUNK_OFFSET_BINDING, m_bufferChunkOffsets->getGLId());
+        m_programUpdate->setShaderStorageBuffer( "Input", m_bufferData );
+        m_programUpdate->setShaderStorageBuffer( "Output", m_buffer );
+        m_programUpdate->setShaderStorageBuffer( "Offsets", m_bufferChunkOffsets );
+        m_programUpdate->apply();
 
         size_t numberOfBytes = info.offsets.size() * it->first;
         size_t numberOfVec4s = numberOfBytes / 16;

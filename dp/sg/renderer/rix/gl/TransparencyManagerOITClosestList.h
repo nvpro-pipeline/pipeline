@@ -26,7 +26,6 @@
 
 #pragma once
 
-#include <dp/gl/Program.h>
 #include <dp/gl/Texture.h>
 #include <dp/sg/renderer/rix/gl/inc/ShaderManager.h>
 #include <dp/sg/renderer/rix/gl/TransparencyManager.h>
@@ -73,17 +72,17 @@ namespace dp
               dp::rix::core::ContainerDescriptorSharedHandle  m_parameterContainerDescriptor;
               dp::rix::core::TextureSharedHandle              m_offsetsTexture;
 
-              dp::gl::ProgramSharedPtr        m_clearProgram;
-              dp::gl::Texture1DSharedPtr      m_counterTextureGL;
-              unsigned int                    m_fragmentsCount;
-              float                           m_fragmentsCountFactor;
-              dp::gl::TextureBufferSharedPtr  m_fragmentsTextureGL;
-              dp::gl::BufferSharedPtr         m_fullScreenQuad;
-              bool                            m_initializedBuffers;
-              bool                            m_initializedHandles;
-              dp::gl::Texture2DSharedPtr      m_perFragmentOffsetsTextureGL;
-              dp::gl::ProgramSharedPtr        m_resolveProgram;
-              GLuint                          m_samplesPassedQuery;
+              dp::gl::ProgramInstanceSharedPtr  m_clearProgram;
+              dp::gl::Texture1DSharedPtr        m_counterTextureGL;
+              unsigned int                      m_fragmentsCount;
+              float                             m_fragmentsCountFactor;
+              dp::gl::TextureBufferSharedPtr    m_fragmentsTextureGL;
+              dp::gl::BufferSharedPtr           m_fullScreenQuad;
+              bool                              m_initializedBuffers;
+              bool                              m_initializedHandles;
+              dp::gl::Texture2DSharedPtr        m_perFragmentOffsetsTextureGL;
+              dp::gl::ProgramInstanceSharedPtr  m_resolveProgram;
+              GLuint                            m_samplesPassedQuery;
           };
 
         } // namespace gl

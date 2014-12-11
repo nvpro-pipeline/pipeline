@@ -30,6 +30,7 @@
 #include <dp/culling/ObjectBitSet.h>
 #include <dp/culling/ResultBitSet.h>
 #include <dp/culling/opengl/inc/GroupImpl.h>
+#include <dp/gl/Program.h>
 #include <dp/util/BitArray.h>
 #include <dp/util/FrameProfiler.h>
 #include <boost/scoped_array.hpp>
@@ -210,9 +211,10 @@ namespace dp
         {
           glewInit();
 
-          m_program = dp::gl::Program::create( dp::gl::ComputeShader::create( shader ) );
+          dp::gl::ProgramSharedPtr program = dp::gl::Program::create( dp::gl::ComputeShader::create( shader ) );
           m_shaderInitialized = true;
-          m_uniformViewProjection = m_program->getActiveUniform( m_program->getActiveUniformIndex( "viewProjection" ) ).location;
+          m_uniformViewProjection = program->getActiveUniform( program->getActiveUniformIndex( "viewProjection" ) ).location;
+          m_program = dp::gl::ProgramInstance::create( program );
         }
       }
 
@@ -231,7 +233,7 @@ namespace dp
         // initialize output buffer
         size_t numberOfWorkingGroups = (groupImpl->getObjectCount() + WORKGROUP_SIZE - 1) / WORKGROUP_SIZE;
 
-        dp::gl::ProgramUseGuard useGuard( m_program );
+        m_program->apply();
         glUniformMatrix4fv( m_uniformViewProjection, 1, false, viewProjection[0].getPtr() );
 
         glBindBufferBase( GL_SHADER_STORAGE_BUFFER, OBJECT_BINDING, groupImpl->getInputBuffer()->getGLId() );

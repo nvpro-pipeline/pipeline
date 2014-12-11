@@ -25,7 +25,8 @@
 
 
 #include <inc/TextureTransfer.h>
-
+#include <dp/gl/Program.h>
+#include <dp/gl/ProgramInstance.h>
 #include <dp/util/FrameProfiler.h>
 
 // #define ENABLE_PROFILING 0
@@ -169,11 +170,10 @@ void TextureTransfer::transfer( size_t index
 
   if( m_srcContext == m_dstContext )
   {
-    m_copyProgram->setImageTexture( "dstImg", dstTexture, GL_WRITE_ONLY );
-    m_copyProgram->setImageTexture( "srcImg", srcTexture, GL_READ_ONLY );
+    m_copyProgram->setImageUniform( "dstImg", dstTexture, GL_WRITE_ONLY );
+    m_copyProgram->setImageUniform( "srcImg", srcTexture, GL_READ_ONLY );
 
-    dp::gl::ProgramUseGuard pug( m_copyProgram );
-
+    m_copyProgram->apply();
     glUniform1i( 0, dp::checked_cast<GLint>(m_maxIndex) );
     glUniform1i( 1, dp::checked_cast<GLint>(index) );
 
@@ -186,16 +186,14 @@ void TextureTransfer::transfer( size_t index
 
     // compress the image data into src tmp texture
     dp::gl::Texture2DSharedPtr srcTmpTexture = getTmpTexture( m_srcContext, tmpTexWidth, tmpTexHeight );
-    m_compressProgram->setImageTexture( "tmp", srcTmpTexture, GL_WRITE_ONLY );
-    m_compressProgram->setImageTexture( "srcImg", srcTexture, GL_READ_ONLY );
-    {
-      dp::gl::ProgramUseGuard pug( m_compressProgram );
+    m_compressProgram->setImageUniform( "tmp", srcTmpTexture, GL_WRITE_ONLY );
+    m_compressProgram->setImageUniform( "srcImg", srcTexture, GL_READ_ONLY );
 
-      glUniform1i( 0, dp::checked_cast<GLint>(m_maxIndex) );
-      glUniform1i( 1, dp::checked_cast<GLint>(index) );
+    m_compressProgram->apply();
+    glUniform1i( 0, dp::checked_cast<GLint>(m_maxIndex) );
+    glUniform1i( 1, dp::checked_cast<GLint>(index) );
 
-      glDispatchCompute( dp::checked_cast<GLuint>(tilesXPerGpu), dp::checked_cast<GLuint>(tilesY), 1 );
-    }
+    glDispatchCompute( dp::checked_cast<GLuint>(tilesXPerGpu), dp::checked_cast<GLuint>(tilesY), 1 );
 
     contextStack.pop();
 
@@ -220,11 +218,10 @@ void TextureTransfer::transfer( size_t index
     }
 
     // decompress image data from dst tmp texture
-    m_decompressProgram->setImageTexture( "dstImg", dstTexture, GL_WRITE_ONLY );
-    m_decompressProgram->setImageTexture( "tmp", dstTmpTexture, GL_READ_ONLY );
+    m_decompressProgram->setImageUniform( "dstImg", dstTexture, GL_WRITE_ONLY );
+    m_decompressProgram->setImageUniform( "tmp", dstTmpTexture, GL_READ_ONLY );
 
-    dp::gl::ProgramUseGuard pug( m_decompressProgram );
-
+    m_decompressProgram->apply();
     glUniform1i( 0, dp::checked_cast<GLint>(m_maxIndex) );
     glUniform1i( 1, dp::checked_cast<GLint>(index) );
 
@@ -258,9 +255,9 @@ void TextureTransfer::constructComputeShaders()
 {
   if ( !m_shadersInitialized )
   {
-    m_compressProgram   = compileShader( m_srcContext, compressShader );
-    m_decompressProgram = compileShader( m_dstContext, decompressShader );
-    m_copyProgram       = compileShader( m_dstContext, copyShader );
+    m_compressProgram   = dp::gl::ProgramInstance::create( compileShader( m_srcContext, compressShader ) );
+    m_decompressProgram = dp::gl::ProgramInstance::create( compileShader( m_dstContext, decompressShader ) );
+    m_copyProgram       = dp::gl::ProgramInstance::create( compileShader( m_dstContext, copyShader ) );
     DP_ASSERT( m_compressProgram && m_decompressProgram && m_copyProgram );
     m_shadersInitialized = true;
   }
