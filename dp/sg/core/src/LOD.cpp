@@ -110,7 +110,6 @@ namespace dp
         if ( m_center != center )
         {
           m_center = center;
-          markDirty( NVSG_BOUNDING_VOLUMES );
           notify( PropertyEvent( this, PID_Center ) );
         }
       }
@@ -167,7 +166,8 @@ namespace dp
           m_ranges        = rhs.m_ranges;
           m_isRangeLocked = rhs.m_isRangeLocked;
           m_rangeLock     = rhs.m_rangeLock;
-          markDirty( NVSG_BOUNDING_VOLUMES );
+          notify( PropertyEvent( this, PID_Center ) );
+          notify( Object::Event( this ) );
         }
         return *this;
       }

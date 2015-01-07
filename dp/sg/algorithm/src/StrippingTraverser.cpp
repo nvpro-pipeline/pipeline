@@ -102,7 +102,7 @@ namespace dp
         DP_ASSERT( !m_strip );
         m_strip = Primitive::create( ( vpp == 3 ) ? PRIMITIVE_TRIANGLE_STRIP : PRIMITIVE_QUAD_STRIP );
 
-        *((OwnedObject<Object>*)m_strip.getWeakPtr()) = *p;    // copy all but the Primitive itself
+        *((Object*)m_strip.getWeakPtr()) = *p;    // copy all but the Primitive itself
         //m_strip->setName( p->getName() );
         //m_strip->setAnnotation( p->getAnnotation() );
         //m_strip->setHints( p->getHints() );
@@ -157,7 +157,7 @@ namespace dp
         strippedIndices.pop_back();      // remove the last pri again
 
         IndexSetSharedPtr strippedIndexSet = IndexSet::create();
-        *((OwnedObject<Primitive>*)strippedIndexSet.getWeakPtr()) = *(m_strip->getIndexSet().getWeakPtr());
+        *((Object*)strippedIndexSet.getWeakPtr()) = *(m_strip->getIndexSet().getWeakPtr());
         strippedIndexSet->setData( &strippedIndices[0], checked_cast<unsigned int>(strippedIndices.size()) );
         strippedIndexSet->setPrimitiveRestartIndex( ~0 );
 

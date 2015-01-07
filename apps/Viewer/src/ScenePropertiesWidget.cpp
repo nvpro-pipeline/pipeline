@@ -305,28 +305,10 @@ void ScenePropertiesWidget::currentColorChanged( const QColor & color )
 
 void ScenePropertiesWidget::editingFinishedFloat()
 {
-  dp::util::PropertyId pid = static_cast<dp::util::PropertyId>( sender()->property( "dp::util::PropertyId" ).value<void *>() );
-
   DP_ASSERT( dynamic_cast<QLineEdit*>(sender()) );
-  QLineEdit * lineEdit = static_cast<QLineEdit*>(sender());
 
-  float value = lineEdit->text().toFloat();
-
-  // special handling for "frontOpacity" in "standardMaterialParameters": toggle transparent flag in dp::sg::core::EffectData
-  DP_ASSERT( m_object.isPtrTo<dp::sg::core::ParameterGroupData>() );
-  dp::sg::core::ParameterGroupDataSharedPtr const& parameterGroupData = m_object.staticCast<dp::sg::core::ParameterGroupData>();
-  {
-    if ( ( parameterGroupData->getParameterGroupSpec()->getName() == "standardMaterialParameters" ) && ( parameterGroupData->getPropertyName( pid ) == "frontOpacity" ) )
-    {
-      bool wasTransparent = ( parameterGroupData->getValue<float>( pid ) != 1.0f );
-      bool nowTransparent = ( value != 1.0f );
-      if ( wasTransparent != nowTransparent )
-      {
-        setEffectDataTransparent( parameterGroupData, nowTransparent );
-      }
-    }
-  }
-
+  dp::util::PropertyId pid = static_cast<dp::util::PropertyId>( sender()->property( "dp::util::PropertyId" ).value<void *>() );
+  float value = static_cast<QLineEdit*>(sender())->text().toFloat();
   setValue<float>( pid, value );
 }
 
@@ -359,24 +341,6 @@ void ScenePropertiesWidget::enumIndexChanged( int index )
 {
   dp::util::PropertyId pid = static_cast<dp::util::PropertyId>( sender()->property( "dp::util::PropertyId" ).value<void *>() );
   DP_ASSERT( pid->isEnum() );
-
-  // special handling for enum "scatter_mode": toggle transparent flag in dp::sg::core::EffectData
-  if ( pid->getEnumTypeName() == "scatter_mode" )
-  {
-    DP_ASSERT( ( pid->getEnumsCount() == 3 )
-            && ( pid->getEnumName( 0 ) == "scatter_reflect" )
-            && ( pid->getEnumName( 1 ) == "scatter_transmit" )
-            && ( pid->getEnumName( 2 ) == "scatter_reflect_transmit" ) );
-    DP_ASSERT( m_object.isPtrTo<dp::sg::core::ParameterGroupData>() );
-    dp::sg::core::ParameterGroupDataSharedPtr const& parameterGroupData = m_object.staticCast<dp::sg::core::ParameterGroupData>();
-    bool wasTransparent = ( parameterGroupData->getValue<int>( pid ) != 0 );
-    bool nowTransparent = ( index != 0 );
-    if ( wasTransparent != nowTransparent )
-    {
-      setEffectDataTransparent( parameterGroupData, nowTransparent );
-    }
-  }
-
   DP_VERIFY( setValue<int>( pid, index ) );
 }
 
@@ -400,22 +364,7 @@ void ScenePropertiesWidget::textureSelectionClicked( bool checked )
   DP_ASSERT( m_object.isPtrTo<dp::sg::core::Sampler>() );
   dp::sg::core::SamplerSharedPtr const& sampler = m_object.staticCast<dp::sg::core::Sampler>();
 
-  DP_ASSERT( 0 < sampler->getNumberOfOwners() );
-  dp::sg::core::ParameterGroupDataSharedPtr const& pgd = sampler->getOwner( sampler->ownersBegin() )->getSharedPtr<dp::sg::core::ParameterGroupData>();
-  dp::fx::ParameterGroupSpecSharedPtr pgs = pgd->getParameterGroupSpec();
-
-  dp::fx::ParameterGroupSpec::iterator it;
-  for ( it = pgs->beginParameterSpecs() ; it != pgs->endParameterSpecs() ; ++it )
-  {
-    if (    ( ( it->first.getType() & dp::fx::PT_POINTER_TYPE_MASK ) == dp::fx::PT_SAMPLER_PTR )
-        &&  ( pgd->getParameter<dp::sg::core::SamplerSharedPtr>( it ) == sampler ) )
-    {
-      break;
-    }
-  }
-  DP_ASSERT( it != pgs->endParameterSpecs() );
-
-  QString textureFile = GetApp()->getMainWindow()->getTextureFile( it->first.getType() );
+  QString textureFile = GetApp()->getMainWindow()->getTextureFile( textureTargetToType( sampler->getTexture()->getTextureTarget() ) );
   if ( ! textureFile.isEmpty() )
   {
     DP_ASSERT( dynamic_cast<QPushButton*>(sender()) );
@@ -917,14 +866,6 @@ void ScenePropertiesWidget::updateLabledSlider( QHBoxLayout * layout, float valu
   float max = slider->property( "Max" ).toFloat();
   DP_ASSERT( ( min <= value ) && ( value <= max ) );
   slider->setValue( slider->maximum() * ( value - min ) / ( max - min ) );
-}
-
-void ScenePropertiesWidget::setEffectDataTransparent( dp::sg::core::ParameterGroupDataSharedPtr const & pgd, bool transparent )
-{
-  for ( dp::sg::core::OwnedObject<dp::sg::core::EffectData>::OwnerIterator it = pgd->ownersBegin() ; it != pgd->ownersEnd() ; ++it )
-  {
-    (*it)->setTransparent( transparent );
-  }
 }
 
 bool checkEnabled( dp::sg::core::ObjectSharedPtr const& o, dp::util::PropertyId pid )

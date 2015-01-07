@@ -50,15 +50,14 @@ namespace dp
       }
 
       ClipPlane::ClipPlane()
-      : OwnedObject<Group>()
-      , m_plane(Vec3f(0.f, 0.f, 0.f), 0.f) // the default constructor of Plane3f does not perform any initialization!
+      : m_plane(Vec3f(0.f, 0.f, 0.f), 0.f) // the default constructor of Plane3f does not perform any initialization!
       , m_enabled(true) // enabled by default
       {
         m_objectCode = OC_CLIPPLANE;
       }
 
       ClipPlane::ClipPlane(const ClipPlane& rhs)
-      : OwnedObject<Group>(rhs)
+      : Object(rhs)
       , m_plane(rhs.m_plane)
       , m_enabled(rhs.m_enabled)
       {
@@ -116,7 +115,7 @@ namespace dp
 
       void ClipPlane::feedHashGenerator( util::HashGenerator & hg ) const
       {
-        OwnedObject<Group>::feedHashGenerator( hg );
+        Object::feedHashGenerator( hg );
         hg.update( reinterpret_cast<const unsigned char *>(&m_plane), sizeof(m_plane) );
         hg.update( reinterpret_cast<const unsigned char *>(&m_enabled), sizeof(m_enabled) );
       }

@@ -27,7 +27,6 @@
 #include <dp/sg/core/Group.h>
 #include <dp/sg/core/ClipPlane.h>
 #include <dp/sg/core/LightSource.h>
-#include <dp/sg/core/OwnedObject.hpp>
 
 using namespace dp::math;
 
@@ -79,7 +78,6 @@ namespace dp
 
       void Group::postRemoveChild(unsigned int index)
       {
-        markDirty( NVSG_BOUNDING_VOLUMES );
       }
 
       void Group::preAddChild(unsigned int index)
@@ -88,7 +86,6 @@ namespace dp
 
       void Group::postAddChild(unsigned int index)
       {
-        markDirty( NVSG_BOUNDING_VOLUMES );
         notify( Event( this, Event::POST_CHILD_ADD, m_children[index], index ) );
       }
 
@@ -98,7 +95,7 @@ namespace dp
         unsigned int idx = util::checked_cast<unsigned int>(std::distance( m_children.begin(), gcci ));
         preAddChild( idx );
         ChildrenContainer::iterator position = m_children.insert( gcci, child );
-        child->addOwner( this );
+        child->attach( this );
         postAddChild( idx );
         return( position );
       }
@@ -107,7 +104,7 @@ namespace dp
       {
         unsigned int idx = util::checked_cast<unsigned int>(std::distance<ChildrenContainer::iterator>( m_children.begin(), cci ));
         preRemoveChild( idx );
-        (*cci)->removeOwner( this );
+        (*cci)->detach( this );
         ChildrenContainer::iterator ret = m_children.erase( cci );
         postRemoveChild( idx );
         return( ret );
@@ -116,13 +113,12 @@ namespace dp
       Group::ChildrenContainer::iterator Group::doReplaceChild( ChildrenContainer::iterator & cci, const NodeSharedPtr & newChild )
       {
         DP_ASSERT( newChild );
-        newChild->addOwner( this );
-        (*cci)->removeOwner( this );
+        newChild->attach( this );
+        (*cci)->detach( this );
 
         unsigned int idx = util::checked_cast<unsigned int>(std::distance<ChildrenContainer::iterator>( m_children.begin(), cci ));
         notify( Event( this, Event::PRE_CHILD_REMOVE, m_children[idx], idx ) );
         *cci = newChild;
-        markDirty( NVSG_BOUNDING_VOLUMES );
         notify( Event( this, Event::POST_CHILD_ADD, m_children[idx], idx ) );
 
         return( cci );
@@ -186,9 +182,8 @@ namespace dp
         {
           // this is nearly a nop if the bounding volumes are already dirty and cheap in comparison to what happens int he background
           // if the observer calls getBounding*() it's necessary that the dirty flag has already been set.
-          markDirty( NVSG_BOUNDING_VOLUMES ); 
           notify( Event( this, Event::PRE_CHILD_REMOVE, m_children[0], 0 ) );
-          (*cci)->removeOwner( this );
+          (*cci)->detach( this );
         }
         m_children.clear();
       }
@@ -250,7 +245,7 @@ namespace dp
         for ( size_t i=0; i<children.size(); ++i )
         {
           m_children[i] = children[i].clone();
-          m_children[i]->addOwner( this );
+          m_children[i]->attach( this );
         }
       }
 
@@ -263,7 +258,7 @@ namespace dp
         for ( size_t i=0 ; i<clipPlanes.size() ; i++ )
         {
           m_clipPlanes[i] = clipPlanes[i].clone();
-          m_clipPlanes[i]->addOwner( this );
+          m_clipPlanes[i]->attach( this );
         }
       }
 
@@ -279,7 +274,6 @@ namespace dp
           copyChildren(rhs.m_children);
           copyClipPlanes(rhs.m_clipPlanes);
 
-          markDirty( NVSG_BOUNDING_VOLUMES );
           notify( Event( this, Event::POST_GROUP_EXCHANGED ) );
         }
         return *this;
@@ -363,7 +357,7 @@ namespace dp
         ClipPlaneContainer::iterator cpci = find( m_clipPlanes.begin(), m_clipPlanes.end(), plane );
         if ( cpci == m_clipPlanes.end() )
         {
-          plane->addOwner( this );
+          plane->attach( this );
           m_clipPlanes.push_back( plane );
           cpci = m_clipPlanes.end() - 1;
       
@@ -374,7 +368,7 @@ namespace dp
 
       Group::ClipPlaneContainer::iterator Group::doRemoveClipPlane( const ClipPlaneContainer::iterator & cpci )
       {
-        (*cpci)->removeOwner( this );
+        (*cpci)->detach( this );
 
         Group::ClipPlaneContainer::iterator it = m_clipPlanes.erase( cpci );
         notify( Group::Event( this, Group::Event::CLIP_PLANES_CHANGED ) );
@@ -409,7 +403,7 @@ namespace dp
         unsigned int dirtyBits = 0;
         for ( ClipPlaneContainer::iterator cpci = m_clipPlanes.begin() ; cpci != m_clipPlanes.end() ; ++cpci )
         {
-          (*cpci)->removeOwner( this );
+          (*cpci)->detach( this );
         }
         m_clipPlanes.clear();
         notify( Group::Event( this, Group::Event::CLIP_PLANES_CHANGED ) );
@@ -419,7 +413,7 @@ namespace dp
       {
         for ( ChildrenContainer::iterator it = m_children.begin(); it != m_children.end(); ++it )
         {
-          (*it)->removeOwner( this );
+          (*it)->detach( this );
         }
         m_children.clear();
       }
@@ -428,7 +422,7 @@ namespace dp
       {
         for ( ClipPlaneContainer::iterator it = m_clipPlanes.begin(); it != m_clipPlanes.end(); ++it )
         {
-          (*it)->removeOwner( this );
+          (*it)->detach( this );
         }
         m_clipPlanes.clear();
       }

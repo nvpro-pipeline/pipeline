@@ -91,7 +91,7 @@ namespace dp
        * function registered for that specific object code, this handler is called. Otherwise, a higher
        * level object code is queried, that also has to be provided by the concrete classes derived from
        * Object, until an object code is encountered a handler function is registered for. */
-      class Object : public HandledObject
+      class Object : public HandledObject, public dp::util::Observer
       {
       public:
         class Event;
@@ -188,6 +188,17 @@ namespace dp
           * \sa \ref howtoderiveanvsgobject, Object::getHigherLevelObjectCode
           */
         ObjectCode getObjectCode() const;
+
+        /*! \brief Assigns new content from another Object. 
+          * \param
+          * rhs Reference to an Object from which to assign the new content.
+          * \return
+          * A reference to this object.
+          * \remarks
+          * The assignment operator unreferences the old content before assigning the new content. The new
+          * content will be a deep-copy of the content of right-hand-sided object. 
+          */
+        DP_SG_CORE_API Object & operator=(const Object & rhs);
 
         /*! \brief Returns the higher-level object code for a given object code.
           * \param
@@ -407,6 +418,22 @@ namespace dp
            *  \sa getHashKey */
         DP_SG_CORE_API virtual void feedHashGenerator( dp::util::HashGenerator & hg ) const;
 
+        /*! \brief virtual function overload from dp::util::Observer
+         *  \param event A constant reference to the notifying event
+         *  \param payload A pointer to the payload specified on attach
+         *  \note This function is called whenever a Subject that is oberserved by this notifies an event.
+         *  The standard behaviour of an Object is, to modify the dirty mask according to the Event.
+         *  Then it calls notify with that same event to notify its own Observers.
+         *  \sa dp::util::Observer, dp::util::Subject */
+        DP_SG_CORE_API virtual void onNotify( dp::util::Event const & event, dp::util::Payload * payload );
+
+        /*! \brief virtual function overload from dp::util::Observer
+         *  \param subject A constant reference to the subject currently being destroyed
+         *  \param payload A pointer to the payload specified on attach
+         *  \note This function is called whenever a Subject that is observed by this is going to be destroyed.
+         *  The standard behaviour of an Object is, to just ignore that notification. */
+        DP_SG_CORE_API virtual void onDestroyed( dp::util::Subject const & subject, dp::util::Payload* payload );
+
       public:
       // exposed properties for reflection
         REFLECTION_INFO_API( DP_SG_CORE_API, Object );
@@ -426,21 +453,8 @@ namespace dp
           */
         DP_SG_CORE_API Object( const Object& rhs );
 
-        /*! \brief Assigns new content from another Object. 
-          * \param
-          * rhs Reference to an Object from which to assign the new content.
-          * \return
-          * A reference to this object.
-          * \remarks
-          * The assignment operator unreferences the old content before assigning the new content. The new
-          * content will be a deep-copy of the content of right-hand-sided object. 
-          */
-        DP_SG_CORE_API Object & operator=(const Object & rhs);
-
         DP_SG_CORE_API virtual unsigned int determineHintsContainment(unsigned int which) const;
         DP_SG_CORE_API virtual bool determineTransparencyContainment() const;
-
-        DP_SG_CORE_API virtual void markDirty( unsigned int dirtyMask );
 
       protected:
         /*! \brief Per-object type identifier.
@@ -456,8 +470,7 @@ namespace dp
         mutable unsigned int      m_flags; // containment, contained hints
         mutable dp::util::HashKey m_hashKey;
 
-        template <typename Owner> friend class OwnedObject;
-        template <typename Owner> friend class OwnedBoundingVolumeObject;
+        friend class BoundingVolumeObject;
 
       private:
         std::string     * m_name;          // optional name

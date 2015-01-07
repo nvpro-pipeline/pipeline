@@ -77,7 +77,7 @@ namespace dp
         if ( rhs.m_lightEffect )
         {
           m_lightEffect = rhs.m_lightEffect.clone();
-          m_lightEffect->addOwner( this );
+          m_lightEffect->attach( this );
         }
       }
 
@@ -85,7 +85,7 @@ namespace dp
       {
         if ( m_lightEffect )
         {
-          m_lightEffect->removeOwner( this );
+          m_lightEffect->detach( this );
         }
       }
 
@@ -95,12 +95,12 @@ namespace dp
         {
           if ( m_lightEffect )
           {
-            m_lightEffect->removeOwner( this );
+            m_lightEffect->detach( this );
           }
           m_lightEffect = effect;
           if ( m_lightEffect )
           {
-            m_lightEffect->addOwner( this );
+            m_lightEffect->attach( this );
           }
           notify( Event(this ) );
         }
@@ -115,13 +115,13 @@ namespace dp
 
           if ( m_lightEffect )
           {
-            m_lightEffect->removeOwner( this );
+            m_lightEffect->detach( this );
             m_lightEffect.reset();
           }
           if ( rhs.m_lightEffect )
           {
             m_lightEffect = rhs.m_lightEffect.clone();
-            m_lightEffect->addOwner( this );
+            m_lightEffect->attach( this );
           }
 
           m_shadowCasting = rhs.m_shadowCasting;

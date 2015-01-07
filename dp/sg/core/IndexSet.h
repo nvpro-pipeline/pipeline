@@ -33,7 +33,7 @@
 #include <dp/util/Types.h>
 #include <dp/sg/core/Buffer.h>
 #include <dp/sg/core/Primitive.h>
-#include <dp/sg/core/OwnedObject.h>
+#include <dp/sg/core/Object.h>
 
 namespace dp
 {
@@ -44,7 +44,7 @@ namespace dp
 
       /*! \brief Provides an interface to handle indices to be attached to a Primitive
        *  \sa Primitive */
-      class IndexSet : public OwnedObject<Primitive>
+      class IndexSet : public Object
       {
         public:
           /*! \brief Creates a new IndexSet */

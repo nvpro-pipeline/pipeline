@@ -93,7 +93,6 @@ class ScenePropertiesWidget : public QDockWidget
     QWidget * createEdit( const dp::sg::core::TextureSharedPtr & value, dp::util::PropertyId pid, bool enabled );
     QLayout * createEdit( const dp::math::Quatf & value, dp::util::PropertyId pid, bool enabled );
     QHBoxLayout * createLabledSlider( dp::util::PropertyId pid, float value, float min, float max, unsigned int size = 0, unsigned int index = 0 );
-    void setEffectDataTransparent( dp::sg::core::ParameterGroupDataSharedPtr const& pgd, bool transparent );
     void updateEdit( QWidget * widget, bool value );
     void updateEdit( QLayout * layout, float value, dp::util::PropertyId pid );
     template<unsigned int N> void updateEdit( QLayout * layout, const dp::math::Vecnt<N,float> & value, dp::util::PropertyId pid );

@@ -273,7 +273,6 @@ namespace dp
       {
         // This function only gets called if the transform actually changed
         // and that means the bounding volume incarnation changes.
-        markDirty( NVSG_BOUNDING_VOLUMES );
         notify( Object::Event( this ) );
 
         // FIXME not required for new renderer

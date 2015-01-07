@@ -41,12 +41,11 @@ namespace dp
       END_REFLECTION_INFO
 
       Node::Node()
-      : OwnedBoundingVolumeObject<Group>()
       {
       }
 
       Node::Node(const Node& rhs)
-      : OwnedBoundingVolumeObject<Group>(rhs) // copy base class part
+      : BoundingVolumeObject(rhs) // copy base class part
       {
       }
 
@@ -58,7 +57,7 @@ namespace dp
       {
         if (&rhs != this)
         {
-          OwnedBoundingVolumeObject<Group>::operator=(rhs);
+          BoundingVolumeObject::operator=(rhs);
         }
 
         return *this;

@@ -121,21 +121,6 @@ namespace dp
         return( sci );
       }
 
-#if !defined(NDEBUG)
-      bool Scene::containsNode( const NodeSharedPtr & node ) const
-      {
-        bool found = ( node == m_root );
-        if ( ! found )
-        {
-          for ( OwnedObject<Group>::OwnerContainer::const_iterator it=node->ownersBegin() ; it!=node->ownersEnd() && !found ; ++it )
-          {
-            found = containsNode( node->getOwner( it )->getSharedPtr<Node>() );
-          }
-        }
-        return( found );
-      }
-#endif
-
     } // namespace core
   } // namespace sg
 } // namespace dp

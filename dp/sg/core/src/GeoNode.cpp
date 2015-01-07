@@ -62,12 +62,12 @@ namespace dp
         if ( rhs.m_materialEffect )
         {
           m_materialEffect = rhs.m_materialEffect.clone();
-          m_materialEffect->addOwner( this );
+          m_materialEffect->attach( this );
         }
         if ( rhs.m_primitive )
         {
           m_primitive = rhs.m_primitive.clone();
-          m_primitive->addOwner( this );
+          m_primitive->attach( this );
         }
       }
 
@@ -75,11 +75,11 @@ namespace dp
       {
         if ( m_materialEffect )
         {
-          m_materialEffect->removeOwner( this );
+          m_materialEffect->detach( this );
         }
         if ( m_primitive )
         {
-          m_primitive->removeOwner( this );
+          m_primitive->detach( this );
         }
       }
 
@@ -91,12 +91,12 @@ namespace dp
         {
           if ( m_materialEffect )
           {
-            m_materialEffect->removeOwner( this );
+            m_materialEffect->detach( this );
           }
           m_materialEffect = materialEffect;
           if ( m_materialEffect )
           {
-            m_materialEffect->addOwner( this );
+            m_materialEffect->attach( this );
           }
 
           notify( Event( this, Event::EFFECT_DATA_CHANGED ) );
@@ -109,15 +109,14 @@ namespace dp
         {
           if ( m_primitive )
           {
-            m_primitive->removeOwner( this );
+            m_primitive->detach( this );
           }
           m_primitive = primitive;
           if ( m_primitive )
           {
-            m_primitive->addOwner( this );
+            m_primitive->attach( this );
           }
           // GeoNode-Change
-          markDirty( NVSG_BOUNDING_VOLUMES );
           notify( Event( this, Event::PRIMITIVE_CHANGED) );
         }
       }
@@ -143,12 +142,12 @@ namespace dp
           {
             if ( m_materialEffect )
             {
-              m_materialEffect->removeOwner( this );
+              m_materialEffect->detach( this );
             }
             m_materialEffect = rhs.m_materialEffect.clone();
             if ( m_materialEffect )
             {
-              m_materialEffect->addOwner( this );
+              m_materialEffect->attach( this );
             }
             notify( Event( this, Event::EFFECT_DATA_CHANGED ) );
           }
@@ -156,14 +155,13 @@ namespace dp
           {
             if ( m_primitive )
             {
-              m_primitive->removeOwner( this );
+              m_primitive->detach( this );
             }
             m_primitive = rhs.m_primitive.clone();
             if ( m_primitive )
             {
-              m_primitive->addOwner( this );
+              m_primitive->attach( this );
             }
-            markDirty( NVSG_BOUNDING_VOLUMES );
             notify( Event( this, Event::PRIMITIVE_CHANGED) );
           }
         }

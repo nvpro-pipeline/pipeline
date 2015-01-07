@@ -27,7 +27,6 @@
 #include <dp/fx/EffectLibrary.h>
 #include <dp/sg/core/CoreTypes.h>
 #include <dp/sg/core/EffectData.h>
-#include <dp/sg/core/OwnedObject.hpp>
 #include <dp/sg/core/ParameterGroupData.h>
 #include <dp/sg/core/Sampler.h>
 #include <dp/sg/core/TextureFile.h>
@@ -454,7 +453,6 @@ namespace dp
       /* ParameterGroupData                                                   */
       /************************************************************************/
       ParameterGroupData::ParameterGroupData( const dp::fx::ParameterGroupSpecSharedPtr& parameterGroupSpec)
-        : OwnedObject<EffectData>()
       {
         m_objectCode = OC_PARAMETER_GROUP_DATA;
         //init ( parameterGroupSpec );
@@ -463,7 +461,6 @@ namespace dp
       }
 
       ParameterGroupData::ParameterGroupData( const dp::fx::ParameterGroupDataSharedPtr& fxParameterGroupData)
-        : OwnedObject<EffectData>()
       {
         m_objectCode = OC_PARAMETER_GROUP_DATA;
         initSpec( fxParameterGroupData->getParameterGroupSpec() );
@@ -471,7 +468,7 @@ namespace dp
       }
 
       ParameterGroupData::ParameterGroupData( const ParameterGroupData & rhs )
-        : OwnedObject<EffectData>( rhs )
+        : Object( rhs )
       {
         m_objectCode = OC_PARAMETER_GROUP_DATA;
         initSpec( rhs.getParameterGroupSpec() );
@@ -512,7 +509,7 @@ namespace dp
                 {
                   if ( ho.isPtrTo<Sampler>() )
                   {
-                    ho.staticCast<Sampler>()->removeOwner( this );
+                    ho.staticCast<Sampler>()->detach( this );
                   }
                   ho.reset();
                 }
@@ -526,7 +523,7 @@ namespace dp
               {
                 if ( ho.isPtrTo<Sampler>() )
                 {
-                  ho.staticCast<Sampler>()->removeOwner( this );
+                  ho.staticCast<Sampler>()->detach( this );
                 }
                 ho.reset();
               }
@@ -548,54 +545,6 @@ namespace dp
           gSpecToPropertyMap.erase( pit );
         }
       }
-
-    TextureTarget textureTypeToTarget( unsigned int type )
-    {
-      TextureTarget target = TT_UNSPECIFIED_TEXTURE_TARGET;
-      switch( type & PT_SAMPLER_TYPE_MASK )
-      {
-        case PT_SAMPLER_1D :
-          target = TT_TEXTURE_1D;
-          break;
-        case PT_SAMPLER_2D :
-          target = TT_TEXTURE_2D;
-          break;
-        case PT_SAMPLER_3D :
-          target = TT_TEXTURE_3D;
-          break;
-        case PT_SAMPLER_CUBE :
-          target = TT_TEXTURE_CUBE;
-          break;
-        case PT_SAMPLER_2D_RECT :
-          target = TT_TEXTURE_RECTANGLE;
-          break;
-        case PT_SAMPLER_1D_ARRAY :
-          target = TT_TEXTURE_1D_ARRAY;
-          break;
-        case PT_SAMPLER_2D_ARRAY :
-          target = TT_TEXTURE_2D_ARRAY;
-          break;
-        case PT_SAMPLER_BUFFER :
-          target = TT_TEXTURE_BUFFER;
-          break;
-        case PT_SAMPLER_CUBE_ARRAY :
-          target = TT_TEXTURE_CUBE_ARRAY;
-          break;
-        case PT_SAMPLER_2D_MULTI_SAMPLE :
-        case PT_SAMPLER_2D_MULTI_SAMPLE_ARRAY :
-        case PT_SAMPLER_1D_SHADOW :
-        case PT_SAMPLER_2D_SHADOW :
-        case PT_SAMPLER_2D_RECT_SHADOW :
-        case PT_SAMPLER_1D_ARRAY_SHADOW :
-        case PT_SAMPLER_2D_ARRAY_SHADOW :
-        case PT_SAMPLER_CUBE_SHADOW :
-        case PT_SAMPLER_CUBE_ARRAY_SHADOW :
-        default :
-          DP_ASSERT( !"encountered unsupported texture type" );
-          break;
-      }
-      return( target );
-    }
 
       void ParameterGroupData::initSpec( const dp::fx::ParameterGroupSpecSharedPtr & spec )
       {
@@ -717,7 +666,7 @@ namespace dp
           return( true );
         }
 
-        bool equi = object.isPtrTo<ParameterGroupData>() && OwnedObject<EffectData>::isEquivalent( object, ignoreNames, deepCompare );
+        bool equi = object.isPtrTo<ParameterGroupData>() && Object::isEquivalent( object, ignoreNames, deepCompare );
         if ( equi )
         {
           ParameterGroupDataSharedPtr const& pgd = object.staticCast<ParameterGroupData>();
@@ -755,7 +704,7 @@ namespace dp
 
       void ParameterGroupData::feedHashGenerator( util::HashGenerator & hg ) const
       {
-        OwnedObject<EffectData>::feedHashGenerator( hg );
+        Object::feedHashGenerator( hg );
         hg.update( m_parameterGroupSpec );
         hg.update( reinterpret_cast<const unsigned char *>(m_data.data()), util::checked_cast<unsigned int>(m_data.size()) );
       }
@@ -771,12 +720,12 @@ namespace dp
         {
           if ( dst )
           {
-            dst->removeOwner( this );
+            dst->detach( this );
           }
           dst = value;
           if ( dst )
           {
-            dst->addOwner( this );
+            dst->attach( this );
           }
           notify( Event(it) );
         }

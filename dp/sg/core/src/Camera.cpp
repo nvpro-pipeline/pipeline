@@ -27,7 +27,6 @@
 #include <dp/sg/core/Camera.h>
 #include <dp/sg/core/Group.h>
 #include <dp/sg/core/LightSource.h>
-#include <dp/sg/core/OwnedObject.hpp>
 
 #include <iterator>
 

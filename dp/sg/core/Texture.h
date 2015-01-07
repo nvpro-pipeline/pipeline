@@ -205,6 +205,9 @@ namespace dp
         mutable bool              m_hashKeyValid;
       };
 
+      DP_SG_CORE_API unsigned int textureTargetToType( dp::sg::core::TextureTarget target );
+      DP_SG_CORE_API TextureTarget textureTypeToTarget( unsigned int type );
+
       inline TextureTarget Texture::getTextureTarget() const
       {
         return m_textureTarget;
@@ -215,7 +218,7 @@ namespace dp
         m_hashKeyValid = false;
       }
 
-    #if !defined(NDEBUG)
+#if !defined(NDEBUG)
       inline bool Texture::isHashKeyValid() const
       {
         return( m_hashKeyValid );

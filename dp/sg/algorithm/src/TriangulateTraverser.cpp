@@ -127,7 +127,7 @@ namespace dp
         {
           // create a new Primitive QuadStrip -> TriStrip or Quads -> Tris
           m_triangulatedPrimitive = Primitive::create( primitiveType == PRIMITIVE_QUAD_STRIP ? PRIMITIVE_TRIANGLE_STRIP : PRIMITIVE_TRIANGLES );
-          *((OwnedObject<Object>*)m_triangulatedPrimitive.getWeakPtr()) = *p;    // copy all but the Primitive itself
+          *static_cast<Object*>(m_triangulatedPrimitive.getWeakPtr()) = *p;    // copy all but the Primitive itself
           m_triangulatedPrimitive->setElementRange( p->getElementOffset(), p->getElementCount() );
           m_triangulatedPrimitive->setInstanceCount( p->getInstanceCount() );
           m_triangulatedPrimitive->setVertexAttributeSet( p->getVertexAttributeSet() );
@@ -143,7 +143,7 @@ namespace dp
                                    , m_triangulatedPrimitive->getElementCount(), m_triangulatedPrimitive->getVertexAttributeSet(), newIndices
                                    , m_triangulatedPrimitive->getIndexSet()->getPrimitiveRestartIndex() );
             IndexSetSharedPtr triangulatedIndexSet = IndexSet::create();
-            *((OwnedObject<Primitive>*)triangulatedIndexSet.getWeakPtr()) = *( m_triangulatedPrimitive->getIndexSet().getWeakPtr() );
+            *static_cast<Object*>(triangulatedIndexSet.getWeakPtr()) = *( m_triangulatedPrimitive->getIndexSet().getWeakPtr() );
             triangulatedIndexSet->setData( &newIndices[0], checked_cast<unsigned int>(newIndices.size()) );
             triangulatedIndexSet->setPrimitiveRestartIndex( ~0 );
           }

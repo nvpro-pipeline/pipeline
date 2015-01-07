@@ -35,7 +35,6 @@
 #include <dp/sg/core/IndexSet.h>
 #include <dp/sg/core/ParameterGroupData.h>
 #include <dp/sg/core/TextureHost.h>
-#include <dp/sg/core/OwnedObject.hpp>
 #include <dp/fx/EffectLibrary.h>
 #include <dp/DP.h>
 

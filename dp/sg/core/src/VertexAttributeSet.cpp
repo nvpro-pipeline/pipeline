@@ -28,7 +28,6 @@
 #include <dp/util/Memory.h>
 #include <dp/sg/core/VertexAttributeSet.h>
 #include <dp/sg/core/BufferHost.h>
-#include <dp/sg/core/OwnedObject.hpp>
 
 using namespace dp::math;
 
@@ -61,8 +60,7 @@ namespace dp
       }
 
       VertexAttributeSet::VertexAttributeSet()
-      : OwnedObject<Object>()
-      , m_enableFlags(0)
+      : m_enableFlags(0)
       , m_normalizeEnableFlags(0)
       {
         m_bufferObserver.setVertexAttributeSet( this );
@@ -70,7 +68,7 @@ namespace dp
       }
 
       VertexAttributeSet::VertexAttributeSet(const VertexAttributeSet& rhs)
-      : OwnedObject<Object>(rhs)
+      : Object(rhs)
       , m_enableFlags(rhs.m_enableFlags)
       , m_normalizeEnableFlags(rhs.m_normalizeEnableFlags)
       , m_vattribs(rhs.m_vattribs)
@@ -117,7 +115,7 @@ namespace dp
 
         if ( attrib == NVSG_POSITION )
         {
-          markDirty( NVSG_BOUNDING_VOLUMES );
+          // we might introduce a specific notify on position change
         }
         notify( Event(this ) );
       }
@@ -181,7 +179,7 @@ namespace dp
 
         if ( NVSG_POSITION == attrIndex )
         {
-          markDirty( NVSG_BOUNDING_VOLUMES );
+          // we might introduce a specific notify on position change
         }
         notify( Event(this ) );
       }
@@ -222,7 +220,7 @@ namespace dp
 
         if ( attrIndex == NVSG_POSITION )
         {
-          markDirty( NVSG_BOUNDING_VOLUMES );
+          // we might introduce a specific notify on position change
         }
         notify( Event(this ) );
       }
@@ -258,7 +256,7 @@ namespace dp
 
         if ( NVSG_POSITION == attrIndex )
         {
-          markDirty( NVSG_BOUNDING_VOLUMES );
+          // we might introduce a specific notify on position change
         }
         notify( Event(this ) );
       }
@@ -332,7 +330,7 @@ namespace dp
 
         if ( NVSG_POSITION == attrIndex )
         {
-          markDirty( NVSG_BOUNDING_VOLUMES );
+          // we might introduce a specific notify on position change
         }
         notify( Event( this ) );
       }
@@ -354,7 +352,7 @@ namespace dp
           m_vattribs.erase( it );
           if ( NVSG_POSITION == attrIndex )
           {
-            markDirty( NVSG_BOUNDING_VOLUMES );
+            // we might introduce a specific notify on position change
           }
           notify( Event( this ) );
           setEnabled( attrib, !disable );
@@ -432,7 +430,7 @@ namespace dp
       {
         if (&rhs != this)
         {
-          OwnedObject<Object>::operator=(rhs);
+          Object::operator=(rhs);
           m_enableFlags = rhs.m_enableFlags;
           m_normalizeEnableFlags = rhs.m_normalizeEnableFlags;
           for ( AttributeContainer::iterator it = m_vattribs.begin() ; it != m_vattribs.end() ; ++it )
@@ -689,7 +687,7 @@ namespace dp
           return( true );
         }
 
-        bool equi = object.isPtrTo<VertexAttributeSet>() && OwnedObject<Object>::isEquivalent( object, ignoreNames, deepCompare );
+        bool equi = object.isPtrTo<VertexAttributeSet>() && Object::isEquivalent( object, ignoreNames, deepCompare );
         if ( equi )
         {
           VertexAttributeSetSharedPtr const& vas = object.staticCast<VertexAttributeSet>();
@@ -791,7 +789,7 @@ namespace dp
 
       void VertexAttributeSet::feedHashGenerator( util::HashGenerator & hg ) const
       {
-        OwnedObject<Object>::feedHashGenerator( hg );
+        Object::feedHashGenerator( hg );
         hg.update( reinterpret_cast<const unsigned char *>(&m_enableFlags), sizeof(m_enableFlags) );
         hg.update( reinterpret_cast<const unsigned char *>(&m_normalizeEnableFlags), sizeof(m_normalizeEnableFlags) );
         for ( AttributeContainer::const_iterator it = m_vattribs.begin() ; it != m_vattribs.end() ; ++it )
@@ -978,7 +976,7 @@ namespace dp
       void VertexAttributeSet::onBufferChanged( )
       {
         // called only if position attribute buffer has been changed
-        markDirty( NVSG_BOUNDING_VOLUMES );
+        notify( Event( this ) );
       }
 
     } // namespace core

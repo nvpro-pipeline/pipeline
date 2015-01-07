@@ -123,7 +123,7 @@ namespace dp
         {
           if ( searchObject( p, "class dp::sg::core::Billboard" ) )
           {
-            search( (const Group *) p );
+            search( static_cast<Group const*>(p) );
           }
         }
         else if( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
@@ -141,7 +141,7 @@ namespace dp
         {
           if ( searchObject( p, "class dp::sg::core::EffectData" ) )
           {
-            search( (const OwnedObject<Object> *) p);
+            search( static_cast<Object const*>(p) );
           }
         }
         else if ( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
@@ -159,7 +159,7 @@ namespace dp
         {
           if ( searchObject( p, "class dp::sg::core::GeoNode" ) )
           {
-            search( (const Node *) p );
+            search( static_cast<Node const*>(p) );
           }
         }
         else if( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
@@ -192,7 +192,7 @@ namespace dp
         {
           if ( searchObject( p, "class dp::sg::core::LOD" ) )
           {
-            search( (const Group *) p );
+            search( static_cast<Group const*>(p) );
           }
         }
         else if ( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
@@ -210,7 +210,7 @@ namespace dp
         {
           if ( searchObject( p, "class dp::sg::core::ParameterGroupData" ) )
           {
-            search( (const OwnedObject<EffectData> *) p);
+            search( static_cast<Object const*>(p) );
           }
         }
         else if ( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
@@ -228,7 +228,7 @@ namespace dp
         {
           if ( searchObject( p, "class dp::sg::core::Sampler" ) )
           {
-            search( (const OwnedObject<ParameterGroupData> *) p);
+            search( static_cast<Object const*>(p) );
           }
         }
         else if ( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
@@ -246,7 +246,7 @@ namespace dp
         {
           if ( searchObject( p, "class dp::sg::core::Switch" ) )
           {
-            search( (const Group *) p );
+            search( static_cast<Group const*>(p) );
           }
         }
         else if ( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
@@ -279,7 +279,7 @@ namespace dp
         {
           if ( searchObject( p, "class dp::sg::core::LightSource" ) )
           {
-            search( (const Node *) p );
+            search( static_cast<Node const*>(p) );
           }
         }
         else if ( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
@@ -297,7 +297,7 @@ namespace dp
         {
           if ( searchObject( p, "class dp::sg::core::Primitive" ) )
           {
-            search( (const OwnedObject<Object> *) p );
+            search( static_cast<Object const*>(p) );
           }
         }
         else if ( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
@@ -315,7 +315,7 @@ namespace dp
         {
           if ( searchObject( p, "class dp::sg::core::ParallelCamera" ) )
           {
-            search( (const FrustumCamera *) p );
+            search( static_cast<FrustumCamera const*>(p) );
           }
         }
         else if ( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
@@ -333,7 +333,7 @@ namespace dp
         {
           if ( searchObject( p, "class dp::sg::core::PerspectiveCamera" ) )
           {
-            search( (const FrustumCamera *) p );
+            search( static_cast<FrustumCamera const*>(p) );
           }
         }
         else if ( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
@@ -351,7 +351,7 @@ namespace dp
         {
           if ( searchObject( p, "class dp::sg::core::MatrixCamera" ) )
           {
-            search( (const Camera *) p );
+            search( static_cast<Camera const*>(p) );
           }
         }
         else if ( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
@@ -384,7 +384,7 @@ namespace dp
         {
           if ( searchObject( p, "class dp::sg::core::IndexSet" ) )
           {
-            search( (const OwnedObject<Primitive> *) p );
+            search( static_cast<Object const*>(p) );
           }
         }
         else if ( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
@@ -399,7 +399,7 @@ namespace dp
       {
         if ( searchObject( p,"class dp::sg::core::Camera" ))
         {
-          search( (const Object *) p );
+          search( static_cast<Object const*>(p) );
         }
       }
 
@@ -407,7 +407,7 @@ namespace dp
       {
         if ( searchObject( p,"class dp::sg::core::Group" ))
         {
-          search( (const Node *) p );
+          search( static_cast<Node const*>(p) );
         }
       }
 
@@ -415,7 +415,7 @@ namespace dp
       {
         if ( searchObject( p,"class dp::sg::core::LightSource" ))
         {
-          search( (const Node *) p );
+          search( static_cast<Node const*>(p) );
         }
       }
 
@@ -423,7 +423,7 @@ namespace dp
       {
         if ( searchObject( p,"class dp::sg::core::Node" ))
         {
-          search( (const Object *) p );
+          search( static_cast<Object const*>(p) );
         }
       }
 
@@ -436,7 +436,7 @@ namespace dp
       {
         if ( searchObject( p,"class dp::sg::core::Transform" ))
         {
-          search( (const Group *) p );
+          search( static_cast<Group const*>(p) );
         }
       }
 
@@ -444,15 +444,7 @@ namespace dp
       {
         if ( searchObject( p, "class dp::sg::core::VertexAttributeSet" ) )
         {
-          search( (const OwnedObject<Primitive> *) p );
-        }
-      }
-
-      void SearchTraverser::search( const OwnedObject<Primitive> * p )
-      {
-        if ( searchObject( p, "class dp::sg::core::OwnedObject<Primitive>" ) )
-        {
-          search( (const Object *) p );
+          search( static_cast<Object const*>(p) );
         }
       }
 
