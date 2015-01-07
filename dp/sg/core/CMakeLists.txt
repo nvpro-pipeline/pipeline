@@ -48,6 +48,7 @@ set(CORE_SOURCES
 
 set(CORE_PUBLIC_HEADERS
   Billboard.h
+  BoundingVolumeObject.h
   Buffer.h
   BufferHost.h
   Camera.h
@@ -70,9 +71,6 @@ set(CORE_PUBLIC_HEADERS
   nvsgapi.h
   NVSGVersion.h
   Object.h
-  OwnedBoundingVolumeObject.h
-  OwnedObject.h
-  OwnedObject.hpp
   ParallelCamera.h
   ParameterGroupData.h
   Path.h

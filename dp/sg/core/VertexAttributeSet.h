@@ -30,7 +30,7 @@
 #include <dp/sg/core/nvsgapi.h>
 #include <dp/math/Spherent.h>
 #include <dp/util/HashGenerator.h>
-#include <dp/sg/core/OwnedObject.h>
+#include <dp/sg/core/Object.h>
 #include <dp/util/Types.h>
 #include <dp/sg/core/VertexAttribute.h>
 
@@ -53,7 +53,7 @@ namespace dp
        * conventional NORMAL vertex attribute only allows for 3-component values to
        * pass down the vertex pipeline. Other conventional vertex attributes have similar 
        * restrictions. Generic attributes do not have this restriction. */
-      class VertexAttributeSet : public OwnedObject<Object>
+      class VertexAttributeSet : public Object
       {
         public:
           DP_SG_CORE_API static VertexAttributeSetSharedPtr create();

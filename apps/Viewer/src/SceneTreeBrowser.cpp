@@ -173,12 +173,8 @@ void SceneTreeBrowser::contextMenuEvent( QContextMenuEvent * event )
           QAction * saveAction = menu.addAction( "&Save EffectData ..." );
           connect( saveAction, SIGNAL(triggered()), this, SLOT(triggeredSaveEffectData()) );
 
-          EffectDataSharedPtr const& effectData = currentItem->getObject().staticCast<EffectData>();
-          if ( GetApp()->holdsEffectData( effectData ) || ( 1 < effectData->getNumberOfOwners() ) )
-          {
-            QAction * replaceAction = menu.addAction( "&Replace by Clone" );
-            connect( replaceAction, SIGNAL(triggered()), this, SLOT(triggeredReplaceByClone()) );
-          }
+          QAction * replaceAction = menu.addAction( "&Replace by Clone" );
+          connect( replaceAction, SIGNAL(triggered()), this, SLOT(triggeredReplaceByClone()) );
         }
         break;
 

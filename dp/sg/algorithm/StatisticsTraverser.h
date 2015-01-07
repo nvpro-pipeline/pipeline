@@ -204,8 +204,6 @@ namespace dp
       /*! \brief Class to hold statistics information about Node objects. */
       class StatNode : public StatObject
       {
-        public:
-          std::map<unsigned int,unsigned int> m_parents;      //!< Histogram over the number of parents.
       };
 
       /*! \brief Class to hold statistics information about Group objects. */

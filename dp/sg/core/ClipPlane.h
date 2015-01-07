@@ -28,7 +28,7 @@
 /** @file */
 
 #include <dp/sg/core/nvsgapi.h>
-#include <dp/sg/core/OwnedObject.h>
+#include <dp/sg/core/Object.h>
 #include <dp/util/HashGenerator.h>
 #include <dp/math/Vecnt.h>
 #include <dp/math/Planent.h>
@@ -52,7 +52,7 @@ namespace dp
        * exact same hierarchy of Transforms that apply to the Group it was added to.
        * \par Namespace: dp::sg::core
        */ 
-      class ClipPlane : public OwnedObject<Group>
+      class ClipPlane : public Object
       {
       public:
         DP_SG_CORE_API static ClipPlaneSharedPtr create();

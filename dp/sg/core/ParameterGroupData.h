@@ -29,7 +29,7 @@
 
 #include <dp/fx/ParameterGroupSpec.h>
 #include <dp/fx/ParameterGroupData.h>
-#include <dp/sg/core/OwnedObject.h>
+#include <dp/sg/core/Object.h>
 #include <dp/sg/core/EffectData.h>
 #include <dp/sg/core/Sampler.h>
 #include <dp/util/Observer.h>
@@ -46,7 +46,7 @@ namespace dp
       // This is owned by some EffectData objects.
       // NOTE: as soon as we derive from ParameterGroupData, and introduce additional dynamic Properties, we need to
       // change our current handling of m_propertyLists !!
-      class ParameterGroupData : public OwnedObject<EffectData>
+      class ParameterGroupData : public Object
       {
         public:
           DP_SG_CORE_API static ParameterGroupDataSharedPtr create( const dp::fx::ParameterGroupDataSharedPtr & parameterGroupData );
@@ -99,7 +99,6 @@ namespace dp
           private:
             const dp::fx::ParameterGroupSpec::iterator& m_parameter;
           };
-          void attach( dp::util::Observer* observer, dp::util::Payload* payload );
 
           REFLECTION_INFO_API( DP_SG_CORE_API, ParameterGroupData );
 

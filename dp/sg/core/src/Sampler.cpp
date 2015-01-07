@@ -29,7 +29,6 @@
 #include <dp/sg/core/Sampler.h>
 #include <dp/sg/core/Sampler.h>
 #include <dp/sg/core/Texture.h>
-#include <dp/sg/core/OwnedObject.hpp>
 
 namespace dp
 {
@@ -230,7 +229,7 @@ namespace dp
           return( true );
         }
 
-        bool equi = object.isPtrTo<Sampler>() && OwnedObject<ParameterGroupData>::isEquivalent( object, ignoreNames, deepCompare );
+        bool equi = object.isPtrTo<Sampler>() && Object::isEquivalent( object, ignoreNames, deepCompare );
         if ( equi )
         {
           SamplerSharedPtr const& s = object.staticCast<Sampler>();
@@ -261,7 +260,7 @@ namespace dp
       {
         if ( this != &rhs )
         {
-          OwnedObject<ParameterGroupData>::operator=( rhs );
+          Object::operator=( rhs );
           setTexture( rhs.m_texture );
           setBorderColor( rhs.m_borderColor );
           setMagFilterMode( rhs.m_magFilterMode );
@@ -276,7 +275,7 @@ namespace dp
 
       void Sampler::feedHashGenerator( dp::util::HashGenerator & hg ) const
       {
-        OwnedObject<ParameterGroupData>::feedHashGenerator( hg );
+        Object::feedHashGenerator( hg );
         if ( m_texture )
         {
           hg.update( reinterpret_cast<const unsigned char *>(m_texture.getWeakPtr()), sizeof(const Texture *) );

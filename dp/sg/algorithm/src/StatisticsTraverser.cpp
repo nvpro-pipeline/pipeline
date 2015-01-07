@@ -272,7 +272,6 @@ namespace dp
 
     void  StatisticsTraverser::statNode( const Node *p, StatNode &stats )
     {
-      stats.m_parents[checked_cast<unsigned int>(p->getNumberOfParents())]++;
       statObject( (const Object *)p, stats );
     }
 
@@ -549,7 +548,6 @@ namespace dp
       std::ostream& operator<<( std::ostream& os, const StatNode& obj )
       {
         os <<(StatObject)obj;
-        os << histogramToString("Parents", obj.m_parents);
         return os;
       }
 

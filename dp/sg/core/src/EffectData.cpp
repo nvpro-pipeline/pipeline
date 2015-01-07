@@ -139,8 +139,7 @@ namespace dp
       }
 
       EffectData::EffectData( const EffectSpecSharedPtr& effectSpec )
-        : OwnedObject<Object>()
-        , m_effectSpec( effectSpec )
+        : m_effectSpec( effectSpec )
         , m_transparent( effectSpec->getTransparent() )
       {
         DP_ASSERT( m_effectSpec );
@@ -150,8 +149,7 @@ namespace dp
       }
 
       EffectData::EffectData( const dp::fx::EffectDataSharedPtr& effectData )
-        : OwnedObject<Object>()
-        , m_effectSpec( effectData->getEffectSpec() )
+        : m_effectSpec( effectData->getEffectSpec() )
         , m_transparent( effectData->getTransparent() )
       {
         DP_ASSERT( m_effectSpec );
@@ -164,12 +162,12 @@ namespace dp
         {
           size_t index = std::distance( m_effectSpec->beginParameterGroupSpecs(), it );
           m_parameterGroupData[ index ] = ParameterGroupData::create( effectData->getParameterGroupData(it) );
-          m_parameterGroupData[index]->addOwner( this );
+          m_parameterGroupData[index]->attach( this );
         }
       }
 
       EffectData::EffectData( const EffectData &rhs )
-        : OwnedObject<Object>( rhs )
+        : Object( rhs )
         , m_effectSpec( rhs.m_effectSpec )
         , m_parameterGroupData( new ParameterGroupDataSharedPtr[rhs.m_effectSpec->getNumberOfParameterGroupSpecs()] )
         , m_transparent( rhs.m_transparent )
@@ -181,7 +179,7 @@ namespace dp
           if ( rhs.m_parameterGroupData[i] )
           {
             m_parameterGroupData[i] = rhs.m_parameterGroupData[i].clone();
-            m_parameterGroupData[i]->addOwner( this );
+            m_parameterGroupData[i]->attach( this );
           }
           else
           {
@@ -204,12 +202,12 @@ namespace dp
         {
           if ( m_parameterGroupData[idx] )
           {
-            m_parameterGroupData[idx]->removeOwner( this );
+            m_parameterGroupData[idx]->detach( this );
           }
           m_parameterGroupData[idx] = pgd;
           if ( pgd )
           {
-            pgd->addOwner( this );
+            pgd->attach( this );
           }
         }
       }
@@ -264,7 +262,7 @@ namespace dp
       {
         if ( this != &rhs )
         {
-          OwnedObject<Object>::operator=( rhs );
+          Object::operator=( rhs );
           m_effectSpec          = rhs.m_effectSpec;
           clearParameterGroupData();
           unsigned int nopgs = m_effectSpec->getNumberOfParameterGroupSpecs();
@@ -274,7 +272,7 @@ namespace dp
             m_parameterGroupData[i] = rhs.m_parameterGroupData[i];
             if ( m_parameterGroupData[i] )
             {
-              m_parameterGroupData[i]->addOwner( this );
+              m_parameterGroupData[i]->attach( this );
             }
           }
         }
@@ -288,7 +286,7 @@ namespace dp
           return( true );
         }
 
-        bool equi = object.isPtrTo<EffectData>() && OwnedObject<Object>::isEquivalent( object, ignoreNames, deepCompare );
+        bool equi = object.isPtrTo<EffectData>() && Object::isEquivalent( object, ignoreNames, deepCompare );
         if ( equi )
         {
           EffectDataSharedPtr const& ed = object.staticCast<EffectData>();
@@ -322,7 +320,7 @@ namespace dp
 
       void EffectData::feedHashGenerator( util::HashGenerator & hg ) const
       {
-        OwnedObject<Object>::feedHashGenerator( hg );
+        Object::feedHashGenerator( hg );
         hg.update( m_effectSpec );
         unsigned int nopgs = m_effectSpec->getNumberOfParameterGroupSpecs();
         for ( unsigned int i=0 ; i<nopgs ; i++ )
@@ -341,7 +339,7 @@ namespace dp
         {
           if ( m_parameterGroupData[i] )
           {
-            m_parameterGroupData[i]->removeOwner( this );
+            m_parameterGroupData[i]->detach( this );
             m_parameterGroupData[i].reset();
           }
         }
@@ -353,7 +351,6 @@ namespace dp
         if ( m_transparent != transparent )
         {
           m_transparent = transparent;
-          markDirty( NVSG_CONTAINS_TRANSPARENCY );
           notify( PropertyEvent( this, PID_Transparent ) );
         }
       }

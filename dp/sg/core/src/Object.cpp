@@ -25,6 +25,11 @@
 
 
 #include <dp/sg/core/Object.h>
+#include <dp/sg/core/EffectData.h>
+#include <dp/sg/core/GeoNode.h>
+#include <dp/sg/core/Group.h>
+#include <dp/sg/core/LOD.h>
+#include <dp/sg/core/Switch.h>
 #include <dp/util/HashGeneratorMurMur.h>
 
 namespace dp
@@ -34,20 +39,20 @@ namespace dp
     namespace core
     {
 
-      DEFINE_STATIC_PROPERTY( Object, Name );
-      DEFINE_STATIC_PROPERTY( Object, Annotation );
-      DEFINE_STATIC_PROPERTY( Object, Hints );
-      DEFINE_STATIC_PROPERTY( Object, TraversalMask );
+      DEFINE_STATIC_PROPERTY(Object, Name);
+      DEFINE_STATIC_PROPERTY(Object, Annotation);
+      DEFINE_STATIC_PROPERTY(Object, Hints);
+      DEFINE_STATIC_PROPERTY(Object, TraversalMask);
 
-      BEGIN_REFLECTION_INFO( Object )
-        INIT_STATIC_PROPERTY_RW (Object, Name,          std::string,  SEMANTIC_VALUE, const_reference, const_reference );
-        INIT_STATIC_PROPERTY_RW (Object, Annotation,    std::string,  SEMANTIC_VALUE, const_reference, const_reference );
-        INIT_STATIC_PROPERTY_RW (Object, Hints,         unsigned int, SEMANTIC_VALUE, value, value );
-        INIT_STATIC_PROPERTY_RW (Object, TraversalMask, unsigned int, SEMANTIC_VALUE, value, value );
+      BEGIN_REFLECTION_INFO(Object)
+        INIT_STATIC_PROPERTY_RW (Object, Name,          std::string,  SEMANTIC_VALUE, const_reference, const_reference);
+        INIT_STATIC_PROPERTY_RW (Object, Annotation,    std::string,  SEMANTIC_VALUE, const_reference, const_reference);
+        INIT_STATIC_PROPERTY_RW (Object, Hints,         unsigned int, SEMANTIC_VALUE, value, value);
+        INIT_STATIC_PROPERTY_RW (Object, TraversalMask, unsigned int, SEMANTIC_VALUE, value, value);
       END_REFLECTION_INFO
 
       Object::Object(void)
-      : m_objectCode(OC_INVALID)
+     : m_objectCode(OC_INVALID)
       , m_hashKey(0)
       , m_name(nullptr)
       , m_annotation(nullptr)
@@ -55,12 +60,12 @@ namespace dp
       , m_hints(0)
       , m_userData(nullptr)
       , m_traversalMask(~0)
-      , m_dirtyState( NVSG_BOUNDING_VOLUMES | NVSG_CONTAINS_MASK | NVSG_HASH_KEY )
+      , m_dirtyState(NVSG_BOUNDING_VOLUMES | NVSG_CONTAINS_MASK | NVSG_HASH_KEY)
       {
       }
 
       Object::Object(const Object& rhs)
-      : m_objectCode(rhs.m_objectCode) // copy object code 
+     : m_objectCode(rhs.m_objectCode) // copy object code 
       , m_hashKey(rhs.m_hashKey)
       , m_name(nullptr) // proper pointer initialization
       , m_annotation(nullptr) // dito
@@ -68,17 +73,17 @@ namespace dp
       , m_flags(rhs.m_flags)
       , m_traversalMask(rhs.m_traversalMask)
       , m_userData(rhs.m_userData) // just copy the address to arbitrary user data
-      , m_dirtyState( NVSG_BOUNDING_VOLUMES | NVSG_CONTAINS_MASK | NVSG_HASH_KEY )
+      , m_dirtyState(NVSG_BOUNDING_VOLUMES | NVSG_CONTAINS_MASK | NVSG_HASH_KEY)
       {
         // concrete objects should have a valid object code - assert this
         DP_ASSERT(m_objectCode!=OC_INVALID);
 
-        if ( rhs.m_name )
+        if (rhs.m_name)
         { // this copy inherits name from rhs
           m_name = new std::string(*rhs.m_name); 
         }
 
-        if ( rhs.m_annotation )
+        if (rhs.m_annotation)
         { // this copy inherits name from rhs
           m_annotation = new std::string(*rhs.m_annotation); 
         }
@@ -90,21 +95,21 @@ namespace dp
         delete m_annotation;
       }
 
-      bool Object::isDataShared( void ) const
+      bool Object::isDataShared(void) const
       {
-        return( false );
+        return(false);
       }
 
-      DataID Object::getDataID( void ) const
+      DataID Object::getDataID(void) const
       {
-        return( (DataID)this );
+        return((DataID)this);
       }
 
-      void Object::setName( const std::string& name )
+      void Object::setName(const std::string& name)
       {
-        if ( !m_name || ( *m_name != name ) )
+        if (!m_name || (*m_name != name))
         {
-          if ( !m_name )
+          if (!m_name)
           {
             m_name = new std::string(name);
           }
@@ -112,19 +117,19 @@ namespace dp
           {
             *m_name = name;
           }
-          notify( PropertyEvent( this, PID_Name ) );
+          notify(PropertyEvent(this, PID_Name));
         }
       }
 
       const std::string& Object::getName() const
       {
         static std::string noname("");
-        return  m_name ? *m_name : noname;
+        return  m_name ? *m_name: noname;
       }
 
-      void Object::setAnnotation( const std::string& anno  )
+      void Object::setAnnotation(const std::string& anno )
       {
-        if ( ! m_annotation )
+        if (! m_annotation)
         {
           m_annotation = new std::string(anno);
         }
@@ -132,25 +137,25 @@ namespace dp
         {
           *m_annotation = anno;
         }
-        notify( PropertyEvent( this, PID_Annotation ) );
+        notify(PropertyEvent(this, PID_Annotation));
       }
 
       const std::string& Object::getAnnotation() const
       {
         static std::string noanno("");
-        return( m_annotation ? *m_annotation : noanno );
+        return(m_annotation ? *m_annotation: noanno);
       }
 
       ObjectCode Object::getHigherLevelObjectCode(ObjectCode) const
       {
-        return( OC_INVALID );
+        return(OC_INVALID);
       }
 
       Object & Object::operator=(const Object & rhs)
       {
         if (&rhs != this)
         {
-          HandledObject::operator=( rhs );
+          HandledObject::operator=(rhs);
 
           // concrete objects should have a valid object code - assert this
           DP_ASSERT(m_objectCode != OC_INVALID);
@@ -165,7 +170,7 @@ namespace dp
             delete m_name;
             m_name = nullptr;
           }
-          if ( rhs.m_name )
+          if (rhs.m_name)
           { 
             m_name = new std::string(*rhs.m_name); 
           }
@@ -188,43 +193,35 @@ namespace dp
           // copy traversal mask
           m_traversalMask = rhs.m_traversalMask;
 
-          markDirty( NVSG_BOUNDING_VOLUMES );
-
-          notify( PropertyEvent( this, PID_Annotation ) );
-          notify( PropertyEvent( this, PID_Name ) );
-          notify( PropertyEvent( this, PID_Hints ) );
+          notify(PropertyEvent(this, PID_Annotation));
+          notify(PropertyEvent(this, PID_Name));
+          notify(PropertyEvent(this, PID_Hints));
         }
         return *this;
       }
 
-      void Object::markDirty( unsigned int dirtyMask )
+      bool Object::isEquivalent(ObjectSharedPtr const& object, bool ignoreNames, bool deepCompare) const
       {
-        // we assume, that each and every change that makes this object dirty might also invalidate the hash key
-        m_dirtyState |= ( dirtyMask | NVSG_HASH_KEY );
-      }
-
-      bool Object::isEquivalent( ObjectSharedPtr const& object, bool ignoreNames, bool deepCompare ) const
-      {
-        if ( object == this )
+        if (object == this)
         {
-          return( true );
+          return(true);
         }
 
-        bool equi = ( m_objectCode == object->m_objectCode );
-        if ( !ignoreNames )
+        bool equi = (m_objectCode == object->m_objectCode);
+        if (!ignoreNames)
         {
-          equi = ( m_name && object->m_name && ( *m_name == *object->m_name ) )   // objects have the same name
-              || ( m_name == object->m_name );                                    // or both are unnamed
+          equi = (m_name && object->m_name && (*m_name == *object->m_name)) // objects have the same name
+              || (m_name == object->m_name);                                // or both are unnamed
         }
-        return( equi );
+        return(equi);
       }
 
       bool Object::containsTransparency() const
       {
-        if ( m_dirtyState & NVSG_CONTAINS_TRANSPARENCY )
+        if (m_dirtyState & NVSG_CONTAINS_TRANSPARENCY)
         {
           m_flags &= ~NVSG_CONTAINS_TRANSPARENCY;
-          if ( determineTransparencyContainment() )
+          if (determineTransparencyContainment())
           { 
             m_flags |= NVSG_CONTAINS_TRANSPARENCY;
           }
@@ -235,14 +232,14 @@ namespace dp
 
       util::HashKey Object::getHashKey() const
       {
-        if ( m_dirtyState & NVSG_HASH_KEY )
+        if (m_dirtyState & NVSG_HASH_KEY)
         {
           util::HashGeneratorMurMur hg;
-          feedHashGenerator( hg );
-          hg.finalize( (unsigned int *)&m_hashKey );
+          feedHashGenerator(hg);
+          hg.finalize((unsigned int *)&m_hashKey);
           m_dirtyState &= ~NVSG_HASH_KEY;
         }
-        return( m_hashKey );
+        return(m_hashKey);
       }
 
       unsigned int Object::determineHintsContainment(unsigned int hints) const
@@ -255,40 +252,138 @@ namespace dp
         return false;
       }
 
-      void Object::feedHashGenerator( util::HashGenerator & hg ) const
+      void Object::feedHashGenerator(util::HashGenerator & hg) const
       {
         // We should always ignore name and annotation!
-        hg.update( reinterpret_cast<const unsigned char *>(&m_userData), sizeof(m_userData) );  // just take the dumb pointer... that's all we know
-        hg.update( reinterpret_cast<const unsigned char *>(&m_hints), sizeof(m_hints) );
+        hg.update(reinterpret_cast<const unsigned char *>(&m_userData), sizeof(m_userData));  // just take the dumb pointer... that's all we know
+        hg.update(reinterpret_cast<const unsigned char *>(&m_hints), sizeof(m_hints));
       }
 
-      std::string objectCodeToName( ObjectCode oc )
+      void Object::onNotify(dp::util::Event const & event, dp::util::Payload * payload)
       {
-        switch( oc )
+        DP_ASSERT(!payload);
+
+        unsigned int changedState = 0;
+        switch(event.getType())
         {
-          case OC_INVALID :               return( "Invalid" );
-          case OC_SCENE :                 return( "Scene" );
-          case OC_GEONODE :               return( "GeoNode" );
-          case OC_GROUP :                 return( "Group" );
-          case OC_LOD :                   return( "LOD" );
-          case OC_SWITCH :                return( "Switch" );
-          case OC_TRANSFORM :             return( "Transform" );
-          case OC_BILLBOARD :             return( "Billboard" );
-          case OC_CLIPPLANE :             return( "ClipPlane" );
-          case OC_LIGHT_SOURCE :          return( "LightSource" );
-          case OC_VERTEX_ATTRIBUTE_SET :  return( "VertexAttributeSet" );
-          case OC_PRIMITIVE :             return( "Primitive" );
-          case OC_INDEX_SET :             return( "IndexSet" );
-          case OC_EFFECT_DATA :           return( "EffectData" );
-          case OC_PARAMETER_GROUP_DATA :  return( "ParameterGroupData" );
-          case OC_SAMPLER :               return( "Sampler" );
-          case OC_PARALLELCAMERA :        return( "ParallelCamera" );
-          case OC_PERSPECTIVECAMERA :     return( "PerspectiveCamera" );
-          case OC_MATRIXCAMERA :          return( "MatrixCamera" );
-          default :
+          case dp::util::Event::DP_SG_CORE:
+            {
+              // we can ingore core events
+              dp::sg::core::Event const& coreEvent = static_cast<dp::sg::core::Event const&>(event);
+              switch(coreEvent.getType())
+              {
+                case dp::sg::core::Event::GEONODE:
+                  {
+                    dp::sg::core::GeoNode::Event const& geoNodeEvent = static_cast<dp::sg::core::GeoNode::Event const&>(coreEvent);
+                    switch(geoNodeEvent.getType())
+                    {
+                      case dp::sg::core::GeoNode::Event::PRIMITIVE_CHANGED:
+                        changedState |= NVSG_BOUNDING_VOLUMES;
+                        break;
+                      default:
+                        DP_ASSERT(!"encountered unhandled geonode event type!");
+                        break;
+                    }
+                  }
+                  break;
+                case dp::sg::core::Event::GROUP:
+                  {
+                    dp::sg::core::Group::Event const& groupEvent = static_cast<dp::sg::core::Group::Event const&>(coreEvent);
+                    switch(groupEvent.getType())
+                    {
+                      case dp::sg::core::Group::Event::POST_CHILD_ADD:
+                      case dp::sg::core::Group::Event::PRE_CHILD_REMOVE:
+                      case dp::sg::core::Group::Event::POST_GROUP_EXCHANGED:
+                        changedState |= NVSG_BOUNDING_VOLUMES;
+                        break;
+                      default:
+                        DP_ASSERT(!"encountered unhandled group event type!");
+                        break;
+                    }
+                  }
+                  break;
+                case dp::sg::core::Event::OBJECT:
+                  changedState |= NVSG_BOUNDING_VOLUMES;
+                  break;
+                case dp::sg::core::Event::PARAMETER_GROUP_DATA:
+                  break;
+                default:
+                  DP_ASSERT(!"encountered unhandled core event type!");
+                  break;
+              }
+            }
+            break;
+          case dp::util::Event::GENERIC:
+            // no need to change anything on a generic event
+            break;
+          case dp::util::Event::PROPERTY:
+            {
+              // the only property event we're interested in is the transparency event
+              dp::util::Reflection::PropertyEvent const& propertyEvent = static_cast<dp::util::Reflection::PropertyEvent const&>(event);
+              dp::util::PropertyId propertyId = propertyEvent.getPropertyId();
+              if (propertyId == dp::sg::core::EffectData::PID_Transparent)
+              {
+                changedState |= NVSG_CONTAINS_TRANSPARENCY;
+              }
+              else if ((propertyId == dp::sg::core::LOD::PID_Center)
+                    || (propertyId == dp::sg::core::Switch::PID_ActiveSwitchMask))
+              {
+                changedState |= NVSG_BOUNDING_VOLUMES;
+              }
+#if !defined(NDEBUG)
+              else if ((propertyId != dp::sg::core::Object::PID_Name)
+                    &&  (propertyId != dp::sg::core::Object::PID_TraversalMask))
+              {
+                DP_ASSERT(!"encountered unhandled property event type!");
+              }
+#endif
+            }
+            break;
+          default:
+            DP_ASSERT(!"encountered unhandled event type!");
+            break;
+        }
+
+        if ((m_dirtyState | changedState) != m_dirtyState)
+        {
+          // we assume, that each and every change that makes this object dirty might also invalidate the hash key
+          m_dirtyState |= NVSG_HASH_KEY;
+          notify(event);
+        }
+      }
+
+      void Object::onDestroyed(dp::util::Subject const & subject, dp::util::Payload* payload)
+      {
+        DP_ASSERT(false);
+      }
+
+      std::string objectCodeToName(ObjectCode oc)
+      {
+        switch(oc)
+        {
+          case OC_INVALID:               return("Invalid");
+          case OC_SCENE:                 return("Scene");
+          case OC_GEONODE:               return("GeoNode");
+          case OC_GROUP:                 return("Group");
+          case OC_LOD:                   return("LOD");
+          case OC_SWITCH:                return("Switch");
+          case OC_TRANSFORM:             return("Transform");
+          case OC_BILLBOARD:             return("Billboard");
+          case OC_CLIPPLANE:             return("ClipPlane");
+          case OC_LIGHT_SOURCE:          return("LightSource");
+          case OC_VERTEX_ATTRIBUTE_SET:  return("VertexAttributeSet");
+          case OC_PRIMITIVE:             return("Primitive");
+          case OC_INDEX_SET:             return("IndexSet");
+          case OC_EFFECT_DATA:           return("EffectData");
+          case OC_PARAMETER_GROUP_DATA:  return("ParameterGroupData");
+          case OC_SAMPLER:               return("Sampler");
+          case OC_PARALLELCAMERA:        return("ParallelCamera");
+          case OC_PERSPECTIVECAMERA:     return("PerspectiveCamera");
+          case OC_MATRIXCAMERA:          return("MatrixCamera");
+          default:
             std::ostringstream oss;
             oss << "Unknown objectCode: " << oc;
-            return( oss.str() );
+            return(oss.str());
         }
       }
 

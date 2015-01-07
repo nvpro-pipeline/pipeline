@@ -196,13 +196,6 @@ namespace dp
            *  is invalid. */
           DP_SG_CORE_API virtual dp::math::Sphere3f getBoundingSphere() const;
 
-    #if !defined(NDEBUG)
-          /*! \brief Ask if the specified node is part of this scene.
-           *  \param node The node to check for being part of this scene.
-           *  \return \c true, if \c node is part of this scene, otherwise \c false. */
-          DP_SG_CORE_API bool containsNode( const NodeSharedPtr & node ) const;
-    #endif
-
         protected:
           /*! \brief Default-constructs a Scene.
            *  \remarks The Scene initially has an ambient color of light grey (0.2, 0.2, 0.2), and a

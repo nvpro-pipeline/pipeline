@@ -82,7 +82,7 @@ namespace dp
       }
 
       Primitive::Primitive(const Primitive& rhs)
-      : OwnedBoundingVolumeObject<Object>(rhs) // copy base class part
+      : BoundingVolumeObject(rhs) // copy base class part
       , m_boundingBox( rhs.m_boundingBox )
       , m_boundingSphere( rhs.m_boundingSphere )
       {
@@ -91,12 +91,12 @@ namespace dp
         if ( rhs.m_indexSet )
         {
           m_indexSet = rhs.m_indexSet.clone();
-          m_indexSet->addOwner( this );
+          m_indexSet->attach( this );
         }
         if ( rhs.m_vertexAttributeSet )
         {
           m_vertexAttributeSet = rhs.m_vertexAttributeSet.clone();
-          m_vertexAttributeSet->addOwner( this );
+          m_vertexAttributeSet->attach( this );
         }
 
         m_primitiveType    = rhs.m_primitiveType;
@@ -118,11 +118,11 @@ namespace dp
       {
         if ( m_vertexAttributeSet )
         {
-          m_vertexAttributeSet->removeOwner( this );
+          m_vertexAttributeSet->detach( this );
         }
         if ( m_indexSet )
         {
-          m_indexSet->removeOwner( this );
+          m_indexSet->detach( this );
         }
       }
 
@@ -130,7 +130,7 @@ namespace dp
       {
         if (&rhs != this)
         {
-          OwnedBoundingVolumeObject<Object>::operator=(rhs);
+          BoundingVolumeObject::operator=(rhs);
           setVertexAttributeSet( rhs.m_vertexAttributeSet );
           setIndexSet( rhs.m_indexSet );
 
@@ -161,14 +161,13 @@ namespace dp
           // see above
           if ( vash )
           {
-            vash->addOwner( this );
+            vash->attach( this );
           }
           if ( m_vertexAttributeSet )
           {
-            m_vertexAttributeSet->removeOwner( this );
+            m_vertexAttributeSet->detach( this );
           }
           m_vertexAttributeSet = vash;
-          markDirty( NVSG_BOUNDING_VOLUMES );
           notify( Event(this ) );
 
           clearCachedCounts();
@@ -181,11 +180,11 @@ namespace dp
         {
           if ( iset )
           {
-            iset->addOwner( this );
+            iset->attach( this );
           }
           if ( m_indexSet )
           {
-            m_indexSet->removeOwner( this );
+            m_indexSet->detach( this );
           }
 
           m_indexSet = iset;
@@ -202,7 +201,6 @@ namespace dp
           }
 
           clearCachedCounts();
-          markDirty( NVSG_BOUNDING_VOLUMES );
           notify( Event( this ) );
         }
       }
@@ -245,7 +243,7 @@ namespace dp
           }
 
           // will change BV, but we have no way to know how, since primitives are output in rasterizer
-          markDirty( NVSG_BOUNDING_VOLUMES );
+          notify( Event( this ) );
 
           // Fixme?  Cached counts don't change with more instances ATM
           //clearCachedCounts();
@@ -277,7 +275,7 @@ namespace dp
           return( true );
         }
 
-        bool equi = object.isPtrTo<Primitive>() && OwnedBoundingVolumeObject<Object>::isEquivalent( object, ignoreNames, deepCompare );
+        bool equi = object.isPtrTo<Primitive>() && BoundingVolumeObject::isEquivalent( object, ignoreNames, deepCompare );
         if ( equi )
         {
           PrimitiveSharedPtr const& p = object.staticCast<Primitive>();
@@ -468,7 +466,7 @@ namespace dp
 
       void Primitive::feedHashGenerator( util::HashGenerator & hg ) const
       {
-        OwnedBoundingVolumeObject<Object>::feedHashGenerator( hg );
+        BoundingVolumeObject::feedHashGenerator( hg );
         hg.update( reinterpret_cast<const unsigned char *>(&m_primitiveType), sizeof(m_primitiveType) );
         hg.update( reinterpret_cast<const unsigned char *>(&m_elementOffset), sizeof(m_elementOffset) );
         hg.update( reinterpret_cast<const unsigned char *>(&m_elementCount), sizeof(m_elementCount) );
@@ -644,7 +642,6 @@ namespace dp
           m_elementOffset = offset;
           m_elementCount  = count;
 
-          markDirty( NVSG_BOUNDING_VOLUMES );
           notify( Event( this ) );
 
           clearCachedCounts();

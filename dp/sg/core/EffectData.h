@@ -31,7 +31,7 @@
 #include <dp/fx/EffectSpec.h>
 #include <dp/fx/EffectData.h>
 #include <dp/util/Array.h>
-#include <dp/sg/core/OwnedObject.h>
+#include <dp/sg/core/Object.h>
 #include <dp/sg/core/ParameterGroupData.h>
 
 namespace dp
@@ -43,7 +43,7 @@ namespace dp
 
       // The complete set of data of an Effect
       // This is the base of MaterialEffect, LightEffect, GeometryEffect,...
-      class EffectData : public OwnedObject<Object>
+      class EffectData : public Object
       {
         public:
           /*! \brief create an EffectData
@@ -118,8 +118,6 @@ namespace dp
           END_DECLARE_STATIC_PROPERTIES
 
         protected:
-          friend class OwnedObject<EffectData>;
-
           DP_SG_CORE_API EffectData( const dp::fx::EffectSpecSharedPtr& effectSpec );
           DP_SG_CORE_API EffectData( const dp::fx::EffectDataSharedPtr& effectData );
           DP_SG_CORE_API EffectData( const EffectData& rhs );

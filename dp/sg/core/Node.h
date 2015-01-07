@@ -28,8 +28,7 @@
 /** @file */
 
 #include <dp/sg/core/nvsgapi.h>
-
-#include <dp/sg/core/OwnedBoundingVolumeObject.h>
+#include <dp/sg/core/BoundingVolumeObject.h>
 
 namespace dp
 {
@@ -41,15 +40,11 @@ namespace dp
       /*! \brief Serves as base class for all tree nodes
         * \par Namespace: dp::sg::core
         */
-      class Node : public OwnedBoundingVolumeObject<Group>
+      class Node : public BoundingVolumeObject
       {
         public:
           /*! \brief Destructs a Node. */
           DP_SG_CORE_API virtual ~Node();
-
-          /*! \brief Returns the number of parent Group nodes for this Node.
-            * \returns The actual number of Group nodes that have this Node as child node. */
-          DP_SG_CORE_API size_t getNumberOfParents() const;
 
           REFLECTION_INFO_API( DP_SG_CORE_API, Node );
 
@@ -68,11 +63,6 @@ namespace dp
           DP_SG_CORE_API Node & operator=(const Node & rhs);
       };
   
-      inline size_t Node::getNumberOfParents() const
-      {
-        return getNumberOfOwners();
-      }
-
     } // namespace core
   } // namespace sg
 } // namespace dp

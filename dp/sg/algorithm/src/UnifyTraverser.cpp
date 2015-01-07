@@ -153,7 +153,6 @@ namespace dp
         DP_ASSERT(   m_effectData.empty() && m_geoNodes.empty() && m_groups.empty() && m_indexSets.empty()
                     && m_LODs.empty() && m_parameterGroupData.empty() && m_primitives.empty() && m_samplers.empty()
                     && m_textures.empty() && m_vertexAttributeSets.empty() );
-        DP_ASSERT( m_multiOwnedHandledVAS.empty() && m_removedVAS.empty() );
 
         OptimizeTraverser::doApply( root );
 
@@ -168,8 +167,6 @@ namespace dp
         m_samplers.clear();
         m_textures.clear();
         m_vertexAttributeSets.clear();
-        m_multiOwnedHandledVAS.clear();
-        m_removedVAS.clear();
       }
 
       void UnifyTraverser::handleBillboard( Billboard *p )
@@ -380,6 +377,33 @@ namespace dp
         if ( pitb.second )
         {
           OptimizeTraverser::handlePrimitive( p );
+
+          // replace the VertexAttributeSet, in case it has been optimized
+          VASReplacementMap::iterator it = m_vasReplacements.find( p->getVertexAttributeSet() );
+          if ( it != m_vasReplacements.end() )
+          {
+            IndexSetSharedPtr newIndexSet( IndexSet::create() );
+            if ( p->isIndexed() )
+            {
+              IndexSetSharedPtr oldIndexSet = p->getIndexSet();
+              unsigned int pri = oldIndexSet->getPrimitiveRestartIndex();
+              vector<unsigned int> newIndices( p->getElementCount() );
+              IndexSet::ConstIterator<unsigned int> oldIndices( oldIndexSet, p->getElementOffset() );
+              for ( size_t i=0 ; i<newIndices.size() ; i++ )
+              {
+                newIndices[i] = ( oldIndices[i] == pri ) ? pri : it->second.m_indexMap[i];
+              }
+              newIndexSet->setData( &newIndices[0], checked_cast<unsigned int>(newIndices.size()) );
+            }
+            else
+            {
+              newIndexSet->setData( it->second.m_indexMap.data(), checked_cast<unsigned int>(it->second.m_indexMap.size()) );
+            }
+            p->setIndexSet( newIndexSet );
+            p->setVertexAttributeSet( it->second.m_vas );
+            p->setElementRange( 0, ~0 );
+          }
+
           if ( optimizationAllowed( p->getSharedPtr<Primitive>() ) )
           {
             if ( m_unifyTargets & UT_INDEX_SET )
@@ -471,12 +495,9 @@ namespace dp
             VertexAttributeSetSharedPtr vas = p->getSharedPtr<VertexAttributeSet>();
             unsigned int n = p->getNumberOfVertices();
 
-            //  multiple used VertexAttributeSets are only handled once
-            if (    (     ( 1 == p->getNumberOfOwners() )
-                      ||  ( m_multiOwnedHandledVAS.find( vas ) == m_multiOwnedHandledVAS.end() ) )
-                &&  ( n > 1 ) )
+            //  handle VAS with more than one vertex only
+            if ( 1 < n )
             {
-
               // ***************************************************************
               // the algorithm currently only works for float-typed vertex data!
               // ***************************************************************
@@ -486,18 +507,12 @@ namespace dp
                 if (  type != dp::util::DT_UNKNOWN // no data is ok!
                    && type != dp::util::DT_FLOAT_32 )  
                 {
-                  if ( p->getNumberOfOwners() > 1 )
-                  {
-                    // don't consider again
-                    m_multiOwnedHandledVAS.insert( vas );
-                  }
                   DP_ASSERT( !"This algorithm currently only works for float-typed vertex data!" );
                   return; 
                 }
               }
               // ***************************************************************
               // ***************************************************************
-
 
               //  count the dimension of the VertexAttributeSet
               unsigned int  dimension = 0;
@@ -548,9 +563,6 @@ namespace dp
               //  if there are less points only
               if ( pointCount < n )
               {
-                //  the VertexAttributeSet p will be removed, so hold a ref on it here
-                m_removedVAS.push_back( vas );
-
                 //  initialize the index mapping to undefined
                 vector<unsigned int>  indexMap( n );
                 for ( unsigned int i=0 ; i<n ; i++ )
@@ -572,7 +584,7 @@ namespace dp
                 delete octree;
 
                 //  create a new VertexAttributeSet with the condensed data
-                VertexAttributeSetSharedPtr newVASH = VertexAttributeSet::create();
+                VertexAttributeSetSharedPtr newVAS = VertexAttributeSet::create();
                 for ( unsigned int i=0, j=0 ; i<VertexAttributeSet::NVSG_VERTEX_ATTRIB_COUNT ; i++ )
                 {
                   if ( p->getNumberOfVertexData( i ) )
@@ -586,60 +598,23 @@ namespace dp
                         vad[dim*k+l] = valuesOut[k][j+l];
                       }
                     }
-                    newVASH->setVertexData( i, dim, dp::util::DT_FLOAT_32, &vad[0], 0, checked_cast<unsigned int>(vad.size()/dim) );
+                    newVAS->setVertexData( i, dim, dp::util::DT_FLOAT_32, &vad[0], 0, checked_cast<unsigned int>(vad.size()/dim) );
 
                     // inherit enable states from source attrib
                     // normalize-enable state only meaningful for generic aliases!
-                    newVASH->setEnabled(i, p->isEnabled(i)); // conventional
-                    newVASH->setEnabled(i+16, p->isEnabled(i+16)); // generic
-                    newVASH->setNormalizeEnabled(i+16, p->isNormalizeEnabled(i+16)); // generic only!
+                    newVAS->setEnabled(i, p->isEnabled(i)); // conventional
+                    newVAS->setEnabled(i+16, p->isEnabled(i+16)); // generic
+                    newVAS->setNormalizeEnabled(i+16, p->isNormalizeEnabled(i+16)); // generic only!
                     j += dim;
                   }
                 }
 
-                //  now replace the VertexAttributeSet of all it's owners by the new one and adjust their index information
-                while ( 0 < p->getNumberOfOwners() )
-                {
-                  DP_ASSERT( isPtrTo<Primitive>(p->getOwner(p->ownersBegin())) );
-                  PrimitiveSharedPtr primitive = p->getOwner( p->ownersBegin() )->getSharedPtr<Primitive>();
-
-                  IndexSetSharedPtr newIndexSet( IndexSet::create() );
-                  if ( primitive->isIndexed() )
-                  {
-                    IndexSetSharedPtr oldIndexSet = primitive->getIndexSet();
-                    unsigned int pri = oldIndexSet->getPrimitiveRestartIndex();
-                    vector<unsigned int> newIndices( primitive->getElementCount() );
-                    IndexSet::ConstIterator<unsigned int> oldIndices( oldIndexSet, primitive->getElementOffset() );
-                    for ( size_t i=0 ; i<newIndices.size() ; i++ )
-                    {
-                      newIndices[i] = ( oldIndices[i] == pri ) ? pri : indexMap[oldIndices[i]];
-                    }
-                    newIndexSet->setData( &newIndices[0], checked_cast<unsigned int>(newIndices.size()) );
-                  }
-                  else
-                  {
-                    newIndexSet->setData( &indexMap[0], checked_cast<unsigned int>(indexMap.size()) );
-                  }
-                  primitive->setIndexSet( newIndexSet );
-                  primitive->setVertexAttributeSet( newVASH );
-                  primitive->setElementRange( 0, ~0 );
-                }
-
-                //  store the new VertexAttributeSet as already handled (if it's multiply owned)
-                if ( 1 < newVASH->getNumberOfOwners() )
-                {
-                  m_multiOwnedHandledVAS.insert( newVASH );
-                }
+                DP_ASSERT( m_vasReplacements.find( vas ) == m_vasReplacements.end() );
+                m_vasReplacements[vas] = VASReplacement( newVAS, indexMap );
               }
               else
               {
                 delete octree;
-
-                //  store the old VertexAttributeSet as already handled (if it's multiply owned)
-                if ( 1 < p->getNumberOfOwners() )
-                {
-                  m_multiOwnedHandledVAS.insert( vas );
-                }
               }
             }
           }

@@ -27,7 +27,7 @@
 #pragma once
 /** @file */
 
-#include <dp/sg/core/OwnedObject.h>
+#include <dp/sg/core/Object.h>
 
 namespace dp
 {
@@ -37,13 +37,12 @@ namespace dp
     {
 
       /*! \brief Class to manage bounding volume information.
-       * This class acts as a base class for all OwnedObject classes that need an additional
+       * This class acts as a base class for all Object classes that need an additional
        * bounding volume functionality.
        * Override the protected virtual functions calculateBoundingBox and calculateBoundingSphere
        * in the derived class to calculate the right bounding volume data for the class.
        */
-      template<typename OwnerType>
-      class OwnedBoundingVolumeObject : public OwnedObject<OwnerType>
+      class BoundingVolumeObject : public Object
       {
       public: 
         /*! \brief Get the bounding box of the object.
@@ -66,26 +65,26 @@ namespace dp
 
       protected:
     
-        /*! \brief Protected default constructor to prevent instantiation of an OwnedObject.
-         *  \remarks An OwnedObject is not intended to be instantiated, but only classes derived from it.
+        /*! \brief Protected default constructor to prevent instantiation of a BoundingVolumeObject.
+         *  \remarks A BoundingVolumeObject is not intended to be instantiated, but only classes derived from it.
          */
-        OwnedBoundingVolumeObject();
+        BoundingVolumeObject();
     
-        /*! \brief Protected copy constructor from an OwnedObject.
-         *  \remarks An OwnedObject is not intended to be instantiated, but only classes derived from it.
+        /*! \brief Protected copy constructor from a BoundingVolumeObject.
+         *  \remarks A BoundingVolumeObject is not intended to be instantiated, but only classes derived from it.
          */
-        OwnedBoundingVolumeObject( const OwnedBoundingVolumeObject<OwnerType> &rhs );
+        BoundingVolumeObject( const BoundingVolumeObject &rhs );
 
-        /*! \brief Protected destructor of an OwnedObject.
-         *  \remarks An OwnedObject is not intended to be instantiated, but only classes derived from it.
+        /*! \brief Protected destructor of a BoundingVolumeObject.
+         *  \remarks A BoundingVolumeObject is not intended to be instantiated, but only classes derived from it.
          */
-        ~OwnedBoundingVolumeObject();
+        ~BoundingVolumeObject();
     
         /*! \brief Assigns new content from another Object. 
          *  \param rhs Reference to an Object from which to assign the new content.
          *  \return A reference to this object.
          */
-        OwnedBoundingVolumeObject& operator=( const OwnedBoundingVolumeObject& rhs );
+        BoundingVolumeObject& operator=( const BoundingVolumeObject& rhs );
     
         /*! \brief Calculate the bounding box of the object.
          *  \return The function calculates and returns the bounding box of the object.
@@ -107,8 +106,7 @@ namespace dp
       };
 
 
-      template<typename OwnerType>
-      inline const dp::math::Box3f & OwnedBoundingVolumeObject<OwnerType>::getBoundingBox() const
+      inline const dp::math::Box3f & BoundingVolumeObject::getBoundingBox() const
       {
         if( !!( this->m_dirtyState & this->NVSG_BOUNDING_BOX ) )
         {
@@ -118,8 +116,7 @@ namespace dp
         return m_boundingBox;
       }
 
-      template<typename OwnerType>
-      inline const dp::math::Sphere3f & OwnedBoundingVolumeObject<OwnerType>::getBoundingSphere() const
+      inline const dp::math::Sphere3f & BoundingVolumeObject::getBoundingSphere() const
       {
         if( !!( this->m_dirtyState & this->NVSG_BOUNDING_SPHERE ) )
         {
@@ -129,29 +126,24 @@ namespace dp
         return m_boundingSphere;
       }
 
-      template<typename OwnerType>
-      OwnedBoundingVolumeObject<OwnerType>::OwnedBoundingVolumeObject()
-        : OwnedObject<OwnerType>()
+      inline BoundingVolumeObject::BoundingVolumeObject()
       {
       }
 
-      template<typename OwnerType>
-      OwnedBoundingVolumeObject<OwnerType>::OwnedBoundingVolumeObject( const OwnedBoundingVolumeObject<OwnerType> &rhs )
-        : OwnedObject<OwnerType>( rhs )
+      inline BoundingVolumeObject::BoundingVolumeObject( const BoundingVolumeObject &rhs )
+        : Object( rhs )
         , m_boundingBox( rhs.m_boundingBox )
         , m_boundingSphere( rhs.m_boundingSphere )
       {
       }
 
-      template<typename OwnerType>
-      OwnedBoundingVolumeObject<OwnerType>::~OwnedBoundingVolumeObject()
+      inline BoundingVolumeObject::~BoundingVolumeObject()
       {
       }
 
-      template<typename OwnerType>
-      inline OwnedBoundingVolumeObject<OwnerType>& OwnedBoundingVolumeObject<OwnerType>::operator=( const OwnedBoundingVolumeObject& rhs )
+      inline BoundingVolumeObject & BoundingVolumeObject::operator=( const BoundingVolumeObject& rhs )
       {
-        OwnedObject<OwnerType>::operator=(rhs);
+        Object::operator=(rhs);
         if (&rhs != this)
         {
           m_boundingBox    = rhs.m_boundingBox;
@@ -160,14 +152,12 @@ namespace dp
         return *this;
       }
 
-      template<typename OwnerType>
-      inline dp::math::Box3f OwnedBoundingVolumeObject<OwnerType>::calculateBoundingBox() const
+      inline dp::math::Box3f BoundingVolumeObject::calculateBoundingBox() const
       {
         return dp::math::Box3f();
       }
 
-      template<typename OwnerType>
-      inline dp::math::Sphere3f OwnedBoundingVolumeObject<OwnerType>::calculateBoundingSphere() const
+      inline dp::math::Sphere3f BoundingVolumeObject::calculateBoundingSphere() const
       {
         return dp::math::Sphere3f();
       }

@@ -24,6 +24,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+#include <dp/fx/ParameterSpec.h>
 #include <dp/sg/core/Texture.h>
 
 namespace dp
@@ -134,6 +135,98 @@ namespace dp
       {
         hg.update( reinterpret_cast<const unsigned char *>(&m_mipmapUseCount), sizeof(m_mipmapUseCount) );
         hg.update( reinterpret_cast<const unsigned char *>(&m_textureTarget), sizeof(m_textureTarget) );
+      }
+
+      unsigned int textureTargetToType( dp::sg::core::TextureTarget target )
+      {
+        unsigned int type = dp::fx::PT_UNDEFINED;
+        switch( target )
+        {
+          case dp::sg::core::TT_TEXTURE_1D :
+            type = dp::fx::PT_SAMPLER_1D;
+            break;
+          case dp::sg::core::TT_TEXTURE_2D :
+            type = dp::fx::PT_SAMPLER_2D;
+            break;
+          case dp::sg::core::TT_TEXTURE_3D :
+            type = dp::fx::PT_SAMPLER_3D;
+            break;
+          case dp::sg::core::TT_TEXTURE_CUBE :
+            type = dp::fx::PT_SAMPLER_CUBE;
+            break;
+          case dp::sg::core::TT_TEXTURE_1D_ARRAY :
+            type = dp::fx::PT_SAMPLER_1D_ARRAY;
+            break;
+          case dp::sg::core::TT_TEXTURE_2D_ARRAY :
+            type = dp::fx::PT_SAMPLER_2D_ARRAY;
+            break;
+          case dp::sg::core::TT_TEXTURE_RECTANGLE :
+            type = dp::fx::PT_SAMPLER_2D_RECT;
+            break;
+          case dp::sg::core::TT_TEXTURE_CUBE_ARRAY :
+            type = dp::fx::PT_SAMPLER_CUBE_ARRAY;
+            break;
+          case dp::sg::core::TT_TEXTURE_BUFFER :
+            type = dp::fx::PT_SAMPLER_BUFFER;
+            break;
+          case dp::sg::core::TT_UNSPECIFIED_TEXTURE_TARGET :
+          default :
+            DP_ASSERT( !"encountered unsupported texture Ttarget" );
+            break;
+        }
+        if ( type != dp::fx::PT_UNDEFINED )
+        {
+          type |= dp::fx::PT_SAMPLER_PTR;
+        }
+        return( type );
+      }
+
+      TextureTarget textureTypeToTarget( unsigned int type )
+      {
+        TextureTarget target = dp::sg::core::TT_UNSPECIFIED_TEXTURE_TARGET;
+        switch( type & dp::fx::PT_SAMPLER_TYPE_MASK )
+        {
+          case dp::fx::PT_SAMPLER_1D :
+            target = dp::sg::core::TT_TEXTURE_1D;
+            break;
+          case dp::fx::PT_SAMPLER_2D :
+            target = dp::sg::core::TT_TEXTURE_2D;
+            break;
+          case dp::fx::PT_SAMPLER_3D :
+            target = dp::sg::core::TT_TEXTURE_3D;
+            break;
+          case dp::fx::PT_SAMPLER_CUBE :
+            target = dp::sg::core::TT_TEXTURE_CUBE;
+            break;
+          case dp::fx::PT_SAMPLER_2D_RECT :
+            target = dp::sg::core::TT_TEXTURE_RECTANGLE;
+            break;
+          case dp::fx::PT_SAMPLER_1D_ARRAY :
+            target = dp::sg::core::TT_TEXTURE_1D_ARRAY;
+            break;
+          case dp::fx::PT_SAMPLER_2D_ARRAY :
+            target = dp::sg::core::TT_TEXTURE_2D_ARRAY;
+            break;
+          case dp::fx::PT_SAMPLER_BUFFER :
+            target = dp::sg::core::TT_TEXTURE_BUFFER;
+            break;
+          case dp::fx::PT_SAMPLER_CUBE_ARRAY :
+            target = dp::sg::core::TT_TEXTURE_CUBE_ARRAY;
+            break;
+          case dp::fx::PT_SAMPLER_2D_MULTI_SAMPLE :
+          case dp::fx::PT_SAMPLER_2D_MULTI_SAMPLE_ARRAY :
+          case dp::fx::PT_SAMPLER_1D_SHADOW :
+          case dp::fx::PT_SAMPLER_2D_SHADOW :
+          case dp::fx::PT_SAMPLER_2D_RECT_SHADOW :
+          case dp::fx::PT_SAMPLER_1D_ARRAY_SHADOW :
+          case dp::fx::PT_SAMPLER_2D_ARRAY_SHADOW :
+          case dp::fx::PT_SAMPLER_CUBE_SHADOW :
+          case dp::fx::PT_SAMPLER_CUBE_ARRAY_SHADOW :
+          default :
+            DP_ASSERT( !"encountered unsupported texture type" );
+            break;
+        }
+        return( target );
       }
 
     } // namespace core

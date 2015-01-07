@@ -26,7 +26,6 @@
 
 #include <dp/sg/core/CoreTypes.h>
 #include <dp/sg/core/IndexSet.h>
-#include <dp/sg/core/OwnedObject.hpp>
 #include <dp/util/Types.h>
 #include <dp/sg/core/BufferHost.h>
 
@@ -108,7 +107,6 @@ namespace dp
         if ( m_dataType != type )
         {
           m_dataType = type;
-          markDirty( NVSG_BOUNDING_VOLUMES );
           notify( Event( this ) );
         }
       }
@@ -118,7 +116,6 @@ namespace dp
         if ( m_primitiveRestartIndex != pri )
         {
           m_primitiveRestartIndex = pri;
-          markDirty( NVSG_BOUNDING_VOLUMES );
           notify( Event( this ) );
         }
       }
@@ -205,14 +202,12 @@ namespace dp
           {
             m_buffer->attach( &m_bufferObserver );
           }
-          markDirty( NVSG_BOUNDING_VOLUMES );
           notify( Event( this ) );
         }
       }
 
       void IndexSet::onBufferChanged( )
       {
-        markDirty( NVSG_BOUNDING_VOLUMES );
         notify( Event( this ) );
       }
 
@@ -235,7 +230,7 @@ namespace dp
           return( true );
         }
 
-        bool equi = object.isPtrTo<IndexSet>() && OwnedObject<Primitive>::isEquivalent( object, ignoreNames, deepCompare );
+        bool equi = object.isPtrTo<IndexSet>() && Object::isEquivalent( object, ignoreNames, deepCompare );
         if ( equi )
         {
           IndexSetSharedPtr const& is = object.staticCast<IndexSet>();

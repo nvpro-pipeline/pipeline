@@ -28,7 +28,7 @@
 /** @file */
 
 #include <dp/sg/core/nvsgapi.h>
-#include <dp/sg/core/OwnedObject.h>
+#include <dp/sg/core/Object.h>
 #include <dp/sg/core/ParameterGroupData.h>
 #include <dp/sg/core/Texture.h>
 
@@ -88,7 +88,7 @@ namespace dp
       } TextureWrapMode;
 
 
-      class Sampler : public OwnedObject<ParameterGroupData>
+      class Sampler : public Object
       {
         public:
           DP_SG_CORE_API static SamplerSharedPtr create( const TextureSharedPtr & texture = TextureSharedPtr() );

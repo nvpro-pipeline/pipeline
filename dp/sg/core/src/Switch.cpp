@@ -184,13 +184,11 @@ namespace dp
 
       void Switch::postActivateChild(unsigned int index)
       {
-        markDirty( NVSG_BOUNDING_VOLUMES );
         notify( PropertyEvent( this, PID_ActiveSwitchMask) );
       }
 
       void Switch::postDeactivateChild(unsigned int index)
       {
-        markDirty( NVSG_BOUNDING_VOLUMES );
         notify( PropertyEvent( this, PID_ActiveSwitchMask) );
       }
 

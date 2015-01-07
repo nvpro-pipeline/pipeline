@@ -183,6 +183,23 @@ namespace dp
           void unifyVertexAttributeSet( dp::sg::core::Primitive *p );
 
         private:
+          // map an old VAS to a new one and the corresponding mapping of indices
+          struct VASReplacement
+          {
+            VASReplacement()
+            {}
+
+            VASReplacement( dp::sg::core::VertexAttributeSetSharedPtr const& vas, std::vector<unsigned int> const& indexMap )
+              : m_vas(vas)
+              , m_indexMap(indexMap)
+            {}
+
+            dp::sg::core::VertexAttributeSetSharedPtr m_vas;
+            std::vector<unsigned int>                 m_indexMap;
+          };
+          typedef std::map<dp::sg::core::VertexAttributeSetSharedPtr,VASReplacement> VASReplacementMap;
+
+        private:
           std::multimap<dp::util::HashKey,dp::sg::core::EffectDataSharedPtr>          m_effectData;
           float                                                                       m_epsilon;
           std::multimap<dp::util::HashKey,dp::sg::core::GeoNodeSharedPtr>             m_geoNodes;
@@ -196,10 +213,8 @@ namespace dp
           std::multimap<dp::util::HashKey,dp::sg::core::SamplerSharedPtr>             m_samplers;
           std::multimap<dp::util::HashKey,dp::sg::core::TextureSharedPtr>             m_textures;
           unsigned int                                                                m_unifyTargets;
+          VASReplacementMap                                                           m_vasReplacements;
           std::multimap<dp::util::HashKey,dp::sg::core::VertexAttributeSetSharedPtr>  m_vertexAttributeSets;
-
-          std::set<dp::sg::core::VertexAttributeSetSharedPtr>                         m_multiOwnedHandledVAS;
-          std::vector<dp::sg::core::VertexAttributeSetSharedPtr>                      m_removedVAS;
       };
 
       inline unsigned int UnifyTraverser::getUnifyTargets() const

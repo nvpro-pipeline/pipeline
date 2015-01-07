@@ -244,10 +244,6 @@ namespace dp
           /** This function is called when a VertexAttributeSet is searched or a base class searching is enabled. */
           DP_SG_ALGORITHM_API virtual void search( const dp::sg::core::VertexAttributeSet * p );
 
-          //! Search through an OwnedObject<Primitive> object.
-          /** This function is called when an OwnedObject<Primitive> is searched or a base class searching is enabled. */
-          DP_SG_ALGORITHM_API virtual void search( const dp::sg::core::OwnedObject<dp::sg::core::Primitive> * p );
-
         private:
           bool searchObject(const dp::sg::core::Object* p, const std::string &classNameToHandle);
 

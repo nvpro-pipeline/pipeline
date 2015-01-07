@@ -28,9 +28,7 @@
 /** @file */
 
 #include <dp/sg/core/nvsgapi.h>
-
-#include <dp/sg/core/OwnedBoundingVolumeObject.h>
-
+#include <dp/sg/core/BoundingVolumeObject.h>
 #include <dp/sg/core/IndexSet.h>
 #include <dp/sg/core/VertexAttributeSet.h>
 
@@ -108,7 +106,7 @@ namespace dp
 
       /*! \brief Class for Primitive objects.
        *  \sa VertexAttributeSet, IndexSet */
-      class Primitive : public OwnedBoundingVolumeObject<Object>
+      class Primitive : public BoundingVolumeObject
       {
         public:
           DP_SG_CORE_API static PrimitiveSharedPtr create( PrimitiveType pt );
@@ -382,14 +380,14 @@ namespace dp
            *  \return The axis-aligned bounding box of this Primitive.
            *  \remarks This function is called by the framework when re-calculation
            *  of the bounding box is required for this Primitive.
-           *  Overrides OwnedBoundingVolumeObject::calculateBoundingBox. */
+           *  Overrides BoundingVolumeObject::calculateBoundingBox. */
           DP_SG_CORE_API virtual dp::math::Box3f calculateBoundingBox() const;
 
           /*! \brief Calculate the bounding sphere of this Primitive.
            *  \return A dp::math::Sphere3f that contains the complete Primitive.
            *  \remarks This function is called by the framework to determine a sphere that completely
            *  contains the Primitive.
-           *  Overrides OwnedBoundingVolumeObject::calculateBoundingSphere. */
+           *  Overrides BoundingVolumeObject::calculateBoundingSphere. */
           DP_SG_CORE_API virtual dp::math::Sphere3f calculateBoundingSphere() const;
 
           /*! \brief Override to specialize normals calculation for Primitives
