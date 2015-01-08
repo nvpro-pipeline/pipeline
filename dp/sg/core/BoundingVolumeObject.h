@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright NVIDIA Corporation 2012-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -49,7 +49,7 @@ namespace dp
          * \return
          * The function returns the current bounding box of the object.
          * \remarks This class caches the bounding box and only recalculates it
-         * by calling calculateBoundingBox when the NVSG_BOUNDING_BOX dirty flag
+         * by calling calculateBoundingBox when the DP_BOUNDING_BOX dirty flag
          * is set.
          */
         const dp::math::Box3f & getBoundingBox() const;
@@ -58,7 +58,7 @@ namespace dp
          * \return
          * The function returns the current bounding sphere of the object.
          * \remarks This class caches the bounding sphere and only recalculates it
-         * by calling calculateBoundingBox when the NVSG_BOUNDING_SPHERE dirty flag
+         * by calling calculateBoundingBox when the DP_BOUNDING_SPHERE dirty flag
          * is set.
          */
         const dp::math::Sphere3f & getBoundingSphere() const;
@@ -108,9 +108,9 @@ namespace dp
 
       inline const dp::math::Box3f & BoundingVolumeObject::getBoundingBox() const
       {
-        if( !!( this->m_dirtyState & this->NVSG_BOUNDING_BOX ) )
+        if( !!( this->m_dirtyState & this->DP_SG_BOUNDING_BOX ) )
         {
-          this->m_dirtyState &= ~this->NVSG_BOUNDING_BOX;
+          this->m_dirtyState &= ~this->DP_SG_BOUNDING_BOX;
           m_boundingBox = calculateBoundingBox();
         }
         return m_boundingBox;
@@ -118,9 +118,9 @@ namespace dp
 
       inline const dp::math::Sphere3f & BoundingVolumeObject::getBoundingSphere() const
       {
-        if( !!( this->m_dirtyState & this->NVSG_BOUNDING_SPHERE ) )
+        if( !!( this->m_dirtyState & this->DP_SG_BOUNDING_SPHERE ) )
         {
-          this->m_dirtyState &= ~this->NVSG_BOUNDING_SPHERE;
+          this->m_dirtyState &= ~this->DP_SG_BOUNDING_SPHERE;
           m_boundingSphere = calculateBoundingSphere();
         }
         return m_boundingSphere;

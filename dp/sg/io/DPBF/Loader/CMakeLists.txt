@@ -5,29 +5,29 @@ include_directories(
 
 #definitions
 add_definitions(
-  "-DNBFLOADER_EXPORTS"
+  "-DDPBFLOADER_EXPORTS"
 )
 
 #sources
-set(NBFLOADER_SOURCES
-  NBFLoader.cpp
+set(DPBFLOADER_SOURCES
+  DPBFLoader.cpp
 )
 
-set(NBFLOADER_HEADERS
-  inc/NBFLoader.h
-  ../NBF.h
+set(DPBFLOADER_HEADERS
+  inc/DPBFLoader.h
+  ../DPBF.h
 )
 
-source_group(source FILES ${NBFLOADER_SOURCES})
-source_group(header FILES ${NBFLOADER_HEADERS})
+source_group(source FILES ${DPBFLOADER_SOURCES})
+source_group(header FILES ${DPBFLOADER_HEADERS})
 
 #target
-add_library( NBFLoader SHARED
-  ${NBFLOADER_SOURCES}
-  ${NBFLOADER_HEADERS}
+add_library( DPBFLoader SHARED
+  ${DPBFLOADER_SOURCES}
+  ${DPBFLOADER_HEADERS}
 )
 
-target_link_libraries( NBFLoader 
+target_link_libraries( DPBFLoader 
   DP
   DPSgCore
   DPSgUI
@@ -37,4 +37,4 @@ target_link_libraries( NBFLoader
   DPSgIO
 )
 
-set_target_properties( NBFLoader PROPERTIES SUFFIX ".nxm" FOLDER "Loaders" )
+set_target_properties( DPBFLoader PROPERTIES SUFFIX ".nxm" FOLDER "Loaders" )

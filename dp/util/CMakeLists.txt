@@ -16,7 +16,6 @@ add_definitions(
 )
 
 set(DPUTIL_INCLUDES
-  Allocator.h
   Atom.h
   Backtrace.h
   BitArray.h
@@ -69,7 +68,6 @@ set(DPUTIL_GENERATOR_INCLUDES
 source_group(headers/generator FILES ${DPUTIL_GENERATOR_INCLUDES})
 
 set(DPUTIL_SOURCES
-  src/Allocator.cpp
   src/Backtrace.cpp
   src/BitArray.cpp
   src/DPAssert.cpp

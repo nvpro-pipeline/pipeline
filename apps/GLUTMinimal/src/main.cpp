@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012 - 2013
+// Copyright NVIDIA Corporation 2012-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -27,7 +27,6 @@
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 
-#include <dp/sg/core/nvsg.h>
 #include <dp/sg/core/PerspectiveCamera.h>
 #include <dp/sg/core/EffectData.h>
 #include <dp/sg/core/TextureFile.h>
@@ -722,11 +721,6 @@ int main(int argc, char *argv[])
   int result = -1;
   try
   {
-    dp::sg::core::nvsgInitialize( );
-  #if !defined(NDEBUG)
-    dp::sg::core::nvsgSetDebugFlags( dp::sg::core::NVSG_DBG_ASSERT /*| dp::sg::core::NVSG_DBG_LEAK_DETECTION*/ );
-  #endif
-
     // initialize GLUT, set window size and display mode, create the main window
     glutInit( &argc, argv );
     glutSetOption( GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_CONTINUE_EXECUTION );
@@ -805,8 +799,6 @@ int main(int argc, char *argv[])
   if (dp::gl::RenderContext::getCurrentRenderContext()) {
     dp::gl::RenderContext::getCurrentRenderContext()->makeNoncurrent();
   }
-
-  dp::sg::core::nvsgTerminate();
 
   return result;
 }

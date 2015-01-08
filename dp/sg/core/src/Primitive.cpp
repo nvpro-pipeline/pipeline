@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2011
+// Copyright NVIDIA Corporation 2010-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -243,7 +243,6 @@ namespace dp
           }
 
           // will change BV, but we have no way to know how, since primitives are output in rasterizer
-          notify( Event( this ) );
 
           // Fixme?  Cached counts don't change with more instances ATM
           //clearCachedCounts();
@@ -449,7 +448,7 @@ namespace dp
 
       void Primitive::generateTexCoords( TextureCoordType type, unsigned int tc, bool overwrite )
       {
-        DP_ASSERT( ( VertexAttributeSet::NVSG_TEXCOORD0 <= tc ) && ( tc <= VertexAttributeSet::NVSG_TEXCOORD7 ) );
+        DP_ASSERT( ( VertexAttributeSet::DP_SG_TEXCOORD0 <= tc ) && ( tc <= VertexAttributeSet::DP_SG_TEXCOORD7 ) );
         calculateTexCoords( type, tc, overwrite );
       }
 
@@ -653,7 +652,7 @@ namespace dp
       {
         return m_indexSet ?
                m_indexSet->getNumberOfIndices() :
-               getVertexAttributeSet()->getNumberOfVertexData( VertexAttributeSet::NVSG_POSITION );
+               getVertexAttributeSet()->getNumberOfVertexData( VertexAttributeSet::DP_SG_POSITION );
       }
 
       unsigned int Primitive::getElementCount() const
@@ -1004,7 +1003,7 @@ namespace dp
           // initialize with zero
           memset( &normals[0], 0, normals.size() * sizeof(Vec3f) );
 
-          DP_ASSERT( vassp->getVertexBuffer( VertexAttributeSet::NVSG_POSITION ) );
+          DP_ASSERT( vassp->getVertexBuffer( VertexAttributeSet::DP_SG_POSITION ) );
           Buffer::ConstIterator<Vec3f>::Type vertices = vassp->getVertices();
 
           // calculate the normals, depending on primitive type
@@ -1049,7 +1048,7 @@ namespace dp
                            , unsigned int i2, std::vector<Vec3f> & tangents )
       {
         //  determine the texture dependent plane weight
-        DP_ASSERT( vas->getVertexBuffer( VertexAttributeSet::NVSG_POSITION ) );
+        DP_ASSERT( vas->getVertexBuffer( VertexAttributeSet::DP_SG_POSITION ) );
         DP_ASSERT( tc );
 
         Buffer::ConstIterator<Vec3f>::Type vertices = vas->getVertices();

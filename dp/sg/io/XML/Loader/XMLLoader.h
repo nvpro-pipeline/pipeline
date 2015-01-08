@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2005
+// Copyright NVIDIA Corporation 2002-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -38,8 +38,7 @@
 
 #include "tinyxml.h"
 
-#include <dp/sg/core/nvsgapi.h>
-#include <dp/sg/core/nvsg.h>
+#include <dp/sg/core/Config.h>
 #include <dp/sg/core/Scene.h>
 #include <dp/sg/io/PlugInterface.h>
 

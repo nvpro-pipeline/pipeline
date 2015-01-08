@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2011
+// Copyright NVIDIA Corporation 2002-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -147,7 +147,7 @@ namespace dp
 
       IndexSet::ConstIterator<unsigned int> indices( p->getIndexSet(), offset );
 
-      for ( unsigned int i = 0; i < VertexAttributeSet::NVSG_VERTEX_ATTRIB_COUNT; i++ )
+      for ( unsigned int i = 0; i < VertexAttributeSet::DP_SG_VERTEX_ATTRIB_COUNT; i++ )
       {
         // Handle all provided VertexAttributes, not only the enabled ones.
         switch ( ovas->getSizeOfVertexData( i ) )

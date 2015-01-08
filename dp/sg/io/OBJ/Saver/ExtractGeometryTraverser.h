@@ -33,11 +33,11 @@
 
 #include <string>
 
-#ifdef NVSG_API
-#undef NVSG_API
+#ifdef DP_API
+#undef DP_API
 #endif
 
-#define NVSG_API
+#define DP_API
 
 class OBJMaterial
 {
@@ -83,45 +83,45 @@ class ExtractGeometryTraverser : public dp::sg::algorithm::SharedTraverser
     //! Protected constructor to prevent instantiation of a ModelViewTraverser.
     /** \note A ExtractGeometryTraverser doesn't change anything in the scene graph, but might be used by a modifying traverser.
       * therefore, it gets the readOnly flag as a parameter to pass to Traverser. */
-    NVSG_API ExtractGeometryTraverser();
+    DP_API ExtractGeometryTraverser();
 
     //! Protected destructor to prevent instantiation of a ExtractGeometryTraverser.
-    NVSG_API virtual ~ExtractGeometryTraverser();
+    DP_API virtual ~ExtractGeometryTraverser();
 
     //! Provide special treatment of a Billboard node.
     /** On a Billboard the modelview matrix is modified, the children are traversed, and the modelview matrix is
       * restored. */
-    NVSG_API virtual void handleBillboard( const dp::sg::core::Billboard *p   //!<  Billboard to handle
+    DP_API virtual void handleBillboard( const dp::sg::core::Billboard *p   //!<  Billboard to handle
                                          );
 
     //! Provide special treatment of a Switch node.
-    NVSG_API virtual void handleSwitch( const dp::sg::core::Switch *p   //!<  Billboard to handle
+    DP_API virtual void handleSwitch( const dp::sg::core::Switch *p   //!<  Billboard to handle
                                          );
 
-    NVSG_API virtual void handleLOD( const dp::sg::core::LOD *lod );
+    DP_API virtual void handleLOD( const dp::sg::core::LOD *lod );
 
-    NVSG_API virtual void handleGeoNode( const dp::sg::core::GeoNode * p );
+    DP_API virtual void handleGeoNode( const dp::sg::core::GeoNode * p );
 
     //! Provide special treatment of a Transform node.
     /** On a Transform the modelview matrix is modified, the children are traversed, and the modelview matrix is
       * restored. */
-    NVSG_API virtual void handleTransform( const dp::sg::core::Transform *p          //!<  Transform to handle
+    DP_API virtual void handleTransform( const dp::sg::core::Transform *p          //!<  Transform to handle
                                         );
 
     //! Handles actions to take between transform stack adjustment and traversal.
     /** In this base class, this is a NOP.  */
-    NVSG_API virtual bool preTraverseTransform( const dp::math::Trafo *p        //!< Trafo of node to traverse next 
+    DP_API virtual bool preTraverseTransform( const dp::math::Trafo *p        //!< Trafo of node to traverse next 
                                               );
 
     //! Handles actions to take between traversal and transform stack adjustment.
     /** When this function returns true, the subtree beneath is traversed. Otherwise it isn't.
       * \return true */
-    NVSG_API virtual void postTraverseTransform( const dp::math::Trafo *p       //!< Trafo of node that was traversed immediately before this call. 
+    DP_API virtual void postTraverseTransform( const dp::math::Trafo *p       //!< Trafo of node that was traversed immediately before this call. 
                                               );
 
-    NVSG_API virtual void traversePrimitive( const dp::sg::core::Primitive * p );
+    DP_API virtual void traversePrimitive( const dp::sg::core::Primitive * p );
 
-    NVSG_API virtual void submitIndexedTriangleSet( const std::vector<unsigned int> & indices, 
+    DP_API virtual void submitIndexedTriangleSet( const std::vector<unsigned int> & indices, 
                                                     const std::vector<dp::math::Vec3f> & verts,
                                                     const std::vector<dp::math::Vec3f> & normals,
                                                     const std::vector<dp::math::Vec2f> & texCoords,

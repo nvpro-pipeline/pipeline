@@ -27,7 +27,7 @@
 #pragma once
 /** @file */
 
-#include <dp/sg/core/nvsgapi.h>
+#include <dp/sg/core/Config.h>
 #include <dp/math/Quatt.h>
 #include <dp/math/Trafo.h>
 #include <dp/math/Vecnt.h>

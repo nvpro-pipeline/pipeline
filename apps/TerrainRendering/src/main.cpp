@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012 - 2013
+// Copyright NVIDIA Corporation 2012-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -27,7 +27,6 @@
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 
-#include <dp/sg/core/nvsg.h>
 #include <dp/sg/core/PerspectiveCamera.h>
 #include <dp/sg/core/EffectData.h>
 
@@ -368,11 +367,6 @@ int runApp( options::variables_map const& opts )
 
 int main(int argc, char *argv[])
 {
-  dp::sg::core::nvsgInitialize( );
-#if !defined(NDEBUG)
-  //dp::sg::core::nvsgSetDebugFlags( dp::sg::core::NVSG_DBG_ASSERT /*| dp::sg::core::NVSG_DBG_LEAK_DETECTION*/ );
-#endif
-
 #if defined(DP_OS_WINDOWS)
   SetProcessAffinityMask( GetCurrentProcess(), 1 << 4 );
 #endif
@@ -433,8 +427,6 @@ int main(int argc, char *argv[])
     std::string line;
     getline( std::cin, line );
   }
-
-  dp::sg::core::nvsgTerminate();
 
   return result;
 }

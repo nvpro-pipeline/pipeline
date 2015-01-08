@@ -30,7 +30,7 @@
 #include <fstream>
 #include <string>
 
-#include <dp/sg/core/nvsgapi.h>
+#include <dp/sg/core/Config.h>
 #include <dp/sg/core/CoreTypes.h>
 #include <dp/util/PlugInCallback.h>
 #include <dp/util/File.h>

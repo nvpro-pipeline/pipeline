@@ -28,7 +28,7 @@
 
 #include <dp/sg/generator/Config.h>
 
-#include <dp/sg/core/nvsgapi.h> // NVSG storage-class defines
+#include <dp/sg/core/Config.h>
 #include <dp/sg/core/CoreTypes.h>
 
 /* This class defines a simple scene with a set of drawables.

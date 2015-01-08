@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2014
+// Copyright NVIDIA Corporation 2010-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -82,7 +82,7 @@ namespace dp
               texCoord1[2] = Vec2f( (float)m_targetX + m_targetW, (float)m_targetY + m_targetH );
               texCoord1[3] = Vec2f( (float)m_targetX, (float)m_targetY + m_targetH );
 
-              m_vertexAttributeSet->setVertexData( VertexAttributeSet::NVSG_TEXCOORD1, 2, dp::util::DT_FLOAT_32, &texCoord1[0], 0, 4 );
+              m_vertexAttributeSet->setVertexData( VertexAttributeSet::DP_SG_TEXCOORD1, 2, dp::util::DT_FLOAT_32, &texCoord1[0], 0, 4 );
             }
           }
 
@@ -97,8 +97,8 @@ namespace dp
               static Vec3f vertices[4] = { Vec3f( -1.0f, -1.0f, 0.0f ), Vec3f( 1.0f, -1.0f, 0.0f ), Vec3f( 1.0f, 1.0f, 0.0f ), Vec3f( -1.0f, 1.0f, 0.0f ) };
               static Vec2f texCoord0[4] = { Vec2f( 0.0f, 0.0f ), Vec2f( 1.0f, 0.0f ), Vec2f( 1.0f, 1.0f ), Vec2f( 0.0f, 1.0f ) };
 
-              m_vertexAttributeSet->setVertexData( VertexAttributeSet::NVSG_POSITION, 3, dp::util::DT_FLOAT_32, &vertices[0], 0, 4 );
-              m_vertexAttributeSet->setVertexData( VertexAttributeSet::NVSG_TEXCOORD0, 2, dp::util::DT_FLOAT_32, &texCoord0[0], 0, 4 );
+              m_vertexAttributeSet->setVertexData( VertexAttributeSet::DP_SG_POSITION, 3, dp::util::DT_FLOAT_32, &vertices[0], 0, 4 );
+              m_vertexAttributeSet->setVertexData( VertexAttributeSet::DP_SG_TEXCOORD0, 2, dp::util::DT_FLOAT_32, &texCoord0[0], 0, 4 );
             }
             setTexCoord1( target );
 
@@ -247,11 +247,11 @@ namespace dp
 
             if ( coords.empty() )
             {
-              m_vertexAttributeSet->setEnabled( VertexAttributeSet::NVSG_TEXCOORD0 + unit, false );
+              m_vertexAttributeSet->setEnabled( VertexAttributeSet::DP_SG_TEXCOORD0 + unit, false );
             }
             else
             {
-              m_vertexAttributeSet->setVertexData( VertexAttributeSet::NVSG_TEXCOORD0 + unit, 4, dp::util::DT_FLOAT_32, &coords[0], 0, 4 );
+              m_vertexAttributeSet->setVertexData( VertexAttributeSet::DP_SG_TEXCOORD0 + unit, 4, dp::util::DT_FLOAT_32, &coords[0], 0, 4 );
             }
           }
 

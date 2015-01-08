@@ -27,7 +27,7 @@
 #pragma once
 /** \file */
 
-#include <dp/sg/core/nvsgapi.h>
+#include <dp/sg/core/Config.h>
 
 /**
 Use this Profiling class to measure execution times in milliseconds.

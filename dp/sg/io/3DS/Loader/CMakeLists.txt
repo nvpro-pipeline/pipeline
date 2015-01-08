@@ -16,7 +16,6 @@ if (LIB3DS_FOUND)
   #sources
   set(3DSLOADER_SOURCES
     3DSLoader.cpp
-    nvsgInterface.cpp
   )
 
   set(3DSLOADER_HEADERS

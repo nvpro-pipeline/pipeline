@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2011
+// Copyright NVIDIA Corporation 2002-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -126,8 +126,8 @@ namespace dp
         if ( m_primitive && m_primitive->getVertexAttributeSet() )
         {
           VertexAttributeSetSharedPtr const& vas = m_primitive->getVertexAttributeSet();
-          vas->setEnabled( VertexAttributeSet::NVSG_TEXCOORD0 + tu, false );    // disable attribute!
-          vas->removeVertexData( VertexAttributeSet::NVSG_TEXCOORD0 + tu );
+          vas->setEnabled( VertexAttributeSet::DP_SG_TEXCOORD0 + tu, false );    // disable attribute!
+          vas->removeVertexData( VertexAttributeSet::DP_SG_TEXCOORD0 + tu );
           // Note: index cache stays valid, so no need to dismiss them
         }
       }

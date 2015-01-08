@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2005
+// Copyright NVIDIA Corporation 2002-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -24,65 +24,44 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-// nvsgInterface.cpp
-// interface to nvsg dll loading code
-//
+#include <dp/fx/EffectLibrary.h>
+#include <dp/util/Plugin.h>
+#include <dp/util/DPAssert.h>
+#include <dp/util/File.h>
+#include <string>
 
-#include <dp/sg/core/nvsgapi.h>
-#include <dp/sg/io/PlugInterface.h> // definition of UPITID_VERSION,
-#include <dp/sg/io/PlugInterfaceID.h> // definition of UPITID_VERSION,
-                                  // UPITID_SCENE_LOADER, and
-                                  // UPITID_SCENE_SAVER
-#include "XMLLoader.h"
-
-// storage-class defines 
-#if defined(_WIN32)
-# ifdef XMLLOADER_EXPORTS
-#  define DLL_EXPORT __declspec(dllexport)
-# else
-#  define DLL_EXPORT __declspec(dllimport)
-# endif
-#else
-#  define DLL_EXPORT
-#endif
-
-#if defined(_WIN32)
-BOOL APIENTRY DllMain(HANDLE hModule, DWORD reason, LPVOID lpReserved)
+namespace dp
 {
-  if (reason == DLL_PROCESS_ATTACH)
+  namespace sg
   {
-    int i=0;
-  }
+    namespace core
+    {
 
-  return TRUE;
-}
+      static bool initialize()
+      {
+        // the search path for loader DLLs
+#if defined(_WIN32)
+        std::string appPath = dp::util::getModulePath( GetModuleHandle( NULL ) );
 #elif defined(LINUX)
-void lib_init()
-{
-  int i=0;
-}
+        std::string appPath = dp::util::getModulePath();
 #endif
+        // TextureHost::createFromFile() relies on this to be set correctly!
+        dp::util::addPlugInSearchPath( appPath );
 
+        // load standard effects required for the scenegraph
+        bool success = true;
 
-// unique plug-in types
-const dp::util::UPITID PITID_SCENE_LOADER(UPITID_SCENE_LOADER, UPITID_VERSION);
+        success &= dp::fx::EffectLibrary::instance()->loadEffects( "standard_lights.xml" );
+        success &= dp::fx::EffectLibrary::instance()->loadEffects( "standard_material.xml" );
+        success &= dp::fx::EffectLibrary::instance()->loadEffects( "collada.xml" );
+        DP_ASSERT(success && "EffectLibrary::loadLibrary failed.");
 
-void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids )
-{
-  piids.clear();
+        return success;
+      }
 
-  piids.push_back(dp::util::UPIID(".XML", PITID_SCENE_LOADER));
-}
+      bool initialized = initialize();
 
-bool getPlugInterface(const dp::util::UPIID& piid, dp::util::PlugInSharedPtr & pi)
-{
-  const dp::util::UPIID PIID_XML_SCENE_LOADER = dp::util::UPIID(".XML", PITID_SCENE_LOADER);
+    } // namespace core
+  } // namespace sg
+} // namespace dp
 
-  if ( piid == PIID_XML_SCENE_LOADER )
-  {
-    pi = XMLLoader::create();
-    return( !!pi );
-  }
-
-  return false;
-}

@@ -220,7 +220,7 @@ namespace dp
         bool areOpposite( const Vecnt<n,T> & v0, const Vecnt<n,T> & v1
                         , T eps = std::numeric_limits<T>::epsilon() )
       {
-        NVSG_PRIVATE_ASSERT( isNormalized( v0 ) && isNormalized( v1 ) );
+        DP_PRIVATE_ASSERT( isNormalized( v0 ) && isNormalized( v1 ) );
         return( ( 1 + v0 * v1 ) <= eps );
       }
 
@@ -640,7 +640,7 @@ namespace dp
       template<typename S>
       inline Vecnt<n,T> & Vecnt<n,T>::operator/=( S s )
       {
-        NVSG_PRIVATE_ASSERT( std::numeric_limits<S>::epsilon() < abs(s) );
+        DP_PRIVATE_ASSERT( std::numeric_limits<S>::epsilon() < abs(s) );
         for ( unsigned int i=0 ; i<n ; ++i )
         {
           m_vec[i] /= T(s);
@@ -738,7 +738,7 @@ namespace dp
         if ( std::numeric_limits<T>::epsilon() < norm )
         {
           v /= norm;
-          //  NVSG_PRIVATE_ASSERT( isNormalized( v ) ); // due to rounding errors this assertion might fail !
+          //  DP_PRIVATE_ASSERT( isNormalized( v ) ); // due to rounding errors this assertion might fail !
         }
         return( norm );
       }
@@ -749,7 +749,7 @@ namespace dp
         Vecnt<n,double> vd(v);
         double norm = normalize( vd );
         v = vd;
-        NVSG_PRIVATE_ASSERT( ( norm <= std::numeric_limits<double>::epsilon() ) || isNormalized(v) );
+        DP_PRIVATE_ASSERT( ( norm <= std::numeric_limits<double>::epsilon() ) || isNormalized(v) );
         return( (float)norm );
       }
 
@@ -908,23 +908,23 @@ namespace dp
       template<unsigned int n, typename T>
       inline Vecnt<n,T>  orthonormalize( const Vecnt<n,T> & v0, const Vecnt<n,T> & v1 )
       {
-        NVSG_PRIVATE_ASSERT( isNormalized( v0 ) && isNormalized( v1 ) && !areCollinear( v0, v1 ) );
+        DP_PRIVATE_ASSERT( isNormalized( v0 ) && isNormalized( v1 ) && !areCollinear( v0, v1 ) );
         //  determine the orthogonal projection of v1 on v0 : ( v0 * v1 ) * v0
         //  and subtract it from v1 resulting in the orthogonalized version of v1
         Vecnt<n,T> vr = v1 - ( v0 * v1 ) * v0;
         vr.normalize();
         //  don't assert the general case, because this orthonormalization is far from exact
-        //  NVSG_PRIVATE_ASSERT( areOrthonormal( vr, v0 ) );
+        //  DP_PRIVATE_ASSERT( areOrthonormal( vr, v0 ) );
         return( vr );
       }
 
       template<typename T>
       inline Vecnt<3,T> orthonormalize( const Vecnt<3,T> & v0, const Vecnt<3,T> & v1 )
       {
-        NVSG_PRIVATE_ASSERT( isNormalized( v0 ) && isNormalized( v1 ) && !areCollinear( v0, v1 ) );
+        DP_PRIVATE_ASSERT( isNormalized( v0 ) && isNormalized( v1 ) && !areCollinear( v0, v1 ) );
         Vecnt<3,T> vr = v0 ^ ( v1 ^ v0 );
         vr.normalize();
-        NVSG_PRIVATE_ASSERT( areOrthonormal( vr, v0 ) );
+        DP_PRIVATE_ASSERT( areOrthonormal( vr, v0 ) );
         return( vr );
       }
 
@@ -964,7 +964,7 @@ namespace dp
         ret[0] = v0[1] * v1[2] - v0[2] * v1[1];
         ret[1] = v0[2] * v1[0] - v0[0] * v1[2];
         ret[2] = v0[0] * v1[1] - v0[1] * v1[0];
-        NVSG_PRIVATE_ASSERT( areOrthogonal( ret, v0 ) && areOrthogonal( ret, v1 ) );
+        DP_PRIVATE_ASSERT( areOrthogonal( ret, v0 ) && areOrthogonal( ret, v1 ) );
         return( ret );
       }
 

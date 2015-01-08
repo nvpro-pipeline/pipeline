@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2011
+// Copyright NVIDIA Corporation 2002-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -60,7 +60,7 @@ namespace dp
       , m_hints(0)
       , m_userData(nullptr)
       , m_traversalMask(~0)
-      , m_dirtyState(NVSG_BOUNDING_VOLUMES | NVSG_HASH_KEY)
+      , m_dirtyState(DP_SG_BOUNDING_VOLUMES | DP_SG_HASH_KEY)
       {
       }
 
@@ -73,7 +73,7 @@ namespace dp
       , m_flags(rhs.m_flags)
       , m_traversalMask(rhs.m_traversalMask)
       , m_userData(rhs.m_userData) // just copy the address to arbitrary user data
-      , m_dirtyState(NVSG_BOUNDING_VOLUMES | NVSG_HASH_KEY)
+      , m_dirtyState(DP_SG_BOUNDING_VOLUMES | DP_SG_HASH_KEY)
       {
         // concrete objects should have a valid object code - assert this
         DP_ASSERT(m_objectCode!=OC_INVALID);
@@ -218,12 +218,12 @@ namespace dp
 
       util::HashKey Object::getHashKey() const
       {
-        if (m_dirtyState & NVSG_HASH_KEY)
+        if (m_dirtyState & DP_SG_HASH_KEY)
         {
           util::HashGeneratorMurMur hg;
           feedHashGenerator(hg);
           hg.finalize((unsigned int *)&m_hashKey);
-          m_dirtyState &= ~NVSG_HASH_KEY;
+          m_dirtyState &= ~DP_SG_HASH_KEY;
         }
         return(m_hashKey);
       }
@@ -259,7 +259,7 @@ namespace dp
                     switch(geoNodeEvent.getType())
                     {
                       case dp::sg::core::GeoNode::Event::PRIMITIVE_CHANGED:
-                        changedState |= NVSG_BOUNDING_VOLUMES;
+                        changedState |= DP_SG_BOUNDING_VOLUMES;
                         break;
                       default:
                         DP_ASSERT(!"encountered unhandled geonode event type!");
@@ -275,7 +275,7 @@ namespace dp
                       case dp::sg::core::Group::Event::POST_CHILD_ADD:
                       case dp::sg::core::Group::Event::PRE_CHILD_REMOVE:
                       case dp::sg::core::Group::Event::POST_GROUP_EXCHANGED:
-                        changedState |= NVSG_BOUNDING_VOLUMES;
+                        changedState |= DP_SG_BOUNDING_VOLUMES;
                         break;
                       default:
                         DP_ASSERT(!"encountered unhandled group event type!");
@@ -284,7 +284,7 @@ namespace dp
                   }
                   break;
                 case dp::sg::core::Event::OBJECT:
-                  changedState |= NVSG_BOUNDING_VOLUMES;
+                  changedState |= DP_SG_BOUNDING_VOLUMES;
                   break;
                 case dp::sg::core::Event::PARAMETER_GROUP_DATA:
                   break;
@@ -305,7 +305,7 @@ namespace dp
               if ( ( propertyId == dp::sg::core::LOD::PID_Center )
                 || ( propertyId == dp::sg::core::Switch::PID_ActiveSwitchMask ) )
               {
-                changedState |= NVSG_BOUNDING_VOLUMES;
+                changedState |= DP_SG_BOUNDING_VOLUMES;
               }
 #if !defined(NDEBUG)
               else if ( ( propertyId != dp::sg::core::EffectData::PID_Transparent )
@@ -325,7 +325,7 @@ namespace dp
         if ((m_dirtyState | changedState) != m_dirtyState)
         {
           // we assume, that each and every change that makes this object dirty might also invalidate the hash key
-          m_dirtyState |= NVSG_HASH_KEY;
+          m_dirtyState |= DP_SG_HASH_KEY;
           notify(event);
         }
       }

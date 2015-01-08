@@ -27,7 +27,7 @@
 #pragma once
 /** @file */
 
-#include <dp/sg/core/nvsgapi.h>
+#include <dp/sg/core/Config.h>
 #include <dp/sg/core/Object.h>
 #include <dp/sg/core/ParameterGroupData.h>
 #include <dp/sg/core/Texture.h>

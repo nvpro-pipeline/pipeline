@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2005
+// Copyright NVIDIA Corporation 2002-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -36,7 +36,6 @@
 
 #include <typeinfo>
 
-#include <dp/sg/core/NVSGVersion.h> // NVSG version info
 #include <dp/sg/io/PlugInterfaceID.h>
 #include <dp/sg/core/TextureHost.h>
 
@@ -365,7 +364,7 @@ bool ILTexLoader::onLoad( TextureHostSharedPtr const& texImg
           if ( !ilConvertImage(ilGetInteger(IL_PALETTE_BASE_TYPE), IL_UNSIGNED_BYTE) )
           {
 #if 0
-            NVSG_TRACE_OUT("ERROR: conversion from color index format failed!\n");
+            DP_TRACE_OUT("ERROR: conversion from color index format failed!\n");
 #endif
             INVOKE_CALLBACK(onInvalidFile(filename, "DevIL Loadable Color-Indexed Image"));
             goto ERROREXIT;
@@ -466,7 +465,7 @@ bool ILTexLoader::onLoad( TextureHostSharedPtr const& texImg
   else
   {
 #if 0
-    NVSG_TRACE_OUT("ERROR: load image failed!\n");
+    DP_TRACE_OUT("ERROR: load image failed!\n");
 #endif
     INVOKE_CALLBACK(onInvalidFile(filename, "DevIL Loadable Image"));
     goto ERROREXIT;

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2005
+// Copyright NVIDIA Corporation 2002-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -426,11 +426,6 @@ namespace dp
                                          , unsigned int primitiveIndex   //!< Index of the intersected primitive
                                          , const std::vector<unsigned int> & vertexIndices //!< Indices of the vertices of the intersected primitive
                                          );
-
-    #if !defined(NDEBUG)
-          /** Dump intersection map - for Debug*/
-          DP_SG_ALGORITHM_API void dumpIntersectionList();
-    #endif
 
         private:
           void checkLine( const dp::sg::core::Primitive * p, const dp::sg::core::Buffer::ConstIterator<dp::math::Vec3f>::Type &vertices

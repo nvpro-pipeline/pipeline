@@ -1204,8 +1204,8 @@ static PrimitiveSharedPtr createPreviewMainObject( int m )
   vasPtr->setVertices( &verticesOut[0], numVertices );
   vasPtr->setNormals( &normalsOut[0], numVertices );
   vasPtr->setTexCoords( 0, &texcoordsOut[0], numVertices );
-  vasPtr->setTexCoords( VertexAttributeSet::NVSG_TANGENT  - VertexAttributeSet::NVSG_TEXCOORD0, &tangentsOut[0],  numVertices );
-  vasPtr->setTexCoords( VertexAttributeSet::NVSG_BINORMAL - VertexAttributeSet::NVSG_TEXCOORD0, &binormalsOut[0], numVertices );
+  vasPtr->setTexCoords( VertexAttributeSet::DP_SG_TANGENT  - VertexAttributeSet::DP_SG_TEXCOORD0, &tangentsOut[0],  numVertices );
+  vasPtr->setTexCoords( VertexAttributeSet::DP_SG_BINORMAL - VertexAttributeSet::DP_SG_TEXCOORD0, &binormalsOut[0], numVertices );
 
   IndexSetSharedPtr indexSet = IndexSet::create();
   indexSet->setData( &indices[0], dp::util::checked_cast<unsigned int>(indices.size()) );
@@ -1359,8 +1359,8 @@ static PrimitiveSharedPtr createPreviewBowl( int m )
   vasPtr->setVertices( &verticesOut[0], numVertices );
   vasPtr->setNormals( &normalsOut[0], numVertices );
   vasPtr->setTexCoords( 0, &texcoordsOut[0], numVertices );
-  vasPtr->setTexCoords( VertexAttributeSet::NVSG_TANGENT  - VertexAttributeSet::NVSG_TEXCOORD0, &tangentsOut[0],  numVertices );
-  vasPtr->setTexCoords( VertexAttributeSet::NVSG_BINORMAL - VertexAttributeSet::NVSG_TEXCOORD0, &binormalsOut[0], numVertices );
+  vasPtr->setTexCoords( VertexAttributeSet::DP_SG_TANGENT  - VertexAttributeSet::DP_SG_TEXCOORD0, &tangentsOut[0],  numVertices );
+  vasPtr->setTexCoords( VertexAttributeSet::DP_SG_BINORMAL - VertexAttributeSet::DP_SG_TEXCOORD0, &binormalsOut[0], numVertices );
 
   IndexSetSharedPtr indexSet( IndexSet::create() );
   indexSet->setData( &indices[0], dp::util::checked_cast<unsigned int>(indices.size()) );
@@ -1472,8 +1472,8 @@ static PrimitiveSharedPtr createPreviewSphere( int m )
   vasPtr->setVertices( &verticesOut[0], numVertices );
   vasPtr->setNormals( &normalsOut[0], numVertices );
   vasPtr->setTexCoords( 0, &texcoordsOut[0], numVertices );
-  vasPtr->setTexCoords( VertexAttributeSet::NVSG_TANGENT  - VertexAttributeSet::NVSG_TEXCOORD0, &tangentsOut[0],  numVertices );
-  vasPtr->setTexCoords( VertexAttributeSet::NVSG_BINORMAL - VertexAttributeSet::NVSG_TEXCOORD0, &binormalsOut[0], numVertices );
+  vasPtr->setTexCoords( VertexAttributeSet::DP_SG_TANGENT  - VertexAttributeSet::DP_SG_TEXCOORD0, &tangentsOut[0],  numVertices );
+  vasPtr->setTexCoords( VertexAttributeSet::DP_SG_BINORMAL - VertexAttributeSet::DP_SG_TEXCOORD0, &binormalsOut[0], numVertices );
 
   IndexSetSharedPtr indexSet( IndexSet::create() );
   indexSet->setData( &indices[0], dp::util::checked_cast<unsigned int>(indices.size()) );
@@ -1655,8 +1655,8 @@ static PrimitiveSharedPtr createPreviewPlatform( int m )
   vasPtr->setVertices( &verticesOut[0], numVertices );
   vasPtr->setNormals( &normalsOut[0], numVertices );
   vasPtr->setTexCoords( 0, &texcoordsOut[0], numVertices );
-  vasPtr->setTexCoords( VertexAttributeSet::NVSG_TANGENT  - VertexAttributeSet::NVSG_TEXCOORD0, &tangentsOut[0],  numVertices );
-  vasPtr->setTexCoords( VertexAttributeSet::NVSG_BINORMAL - VertexAttributeSet::NVSG_TEXCOORD0, &binormalsOut[0], numVertices );
+  vasPtr->setTexCoords( VertexAttributeSet::DP_SG_TANGENT  - VertexAttributeSet::DP_SG_TEXCOORD0, &tangentsOut[0],  numVertices );
+  vasPtr->setTexCoords( VertexAttributeSet::DP_SG_BINORMAL - VertexAttributeSet::DP_SG_TEXCOORD0, &binormalsOut[0], numVertices );
 
   IndexSetSharedPtr indexSet( IndexSet::create() );
   indexSet->setData( &indices[0], dp::util::checked_cast<unsigned int>(indices.size()) );
@@ -2095,8 +2095,8 @@ static PrimitiveSharedPtr createPreviewRing( int m )
   vasPtr->setVertices( &verticesOut[0], numVertices );
   vasPtr->setNormals( &normalsOut[0], numVertices );
   vasPtr->setTexCoords( 0, &texcoordsOut[0], numVertices );
-  vasPtr->setTexCoords( VertexAttributeSet::NVSG_TANGENT  - VertexAttributeSet::NVSG_TEXCOORD0, &tangentsOut[0],  numVertices );
-  vasPtr->setTexCoords( VertexAttributeSet::NVSG_BINORMAL - VertexAttributeSet::NVSG_TEXCOORD0, &binormalsOut[0], numVertices );
+  vasPtr->setTexCoords( VertexAttributeSet::DP_SG_TANGENT  - VertexAttributeSet::DP_SG_TEXCOORD0, &tangentsOut[0],  numVertices );
+  vasPtr->setTexCoords( VertexAttributeSet::DP_SG_BINORMAL - VertexAttributeSet::DP_SG_TEXCOORD0, &binormalsOut[0], numVertices );
 
   IndexSetSharedPtr indexSet( IndexSet::create() );
   indexSet->setData( &indices[0], dp::util::checked_cast<unsigned int>(indices.size()) );

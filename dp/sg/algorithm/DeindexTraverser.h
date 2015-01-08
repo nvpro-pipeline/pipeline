@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2011
+// Copyright NVIDIA Corporation 2002-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -32,7 +32,6 @@
 
 #include <dp/sg/algorithm/Config.h>
 #include <dp/sg/algorithm/Traverser.h>
-#include <dp/sg/core/nvsg.h>
 #include <dp/sg/core/CoreTypes.h>
 #include <dp/sg/core/Primitive.h>
 

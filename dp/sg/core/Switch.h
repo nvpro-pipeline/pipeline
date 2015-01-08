@@ -27,7 +27,7 @@
 #pragma once
 /** @file */
 
-#include <dp/sg/core/nvsgapi.h> // stuff commonly required
+#include <dp/sg/core/Config.h> // stuff commonly required
 #include <dp/util/HashGenerator.h>
 #include <dp/sg/core/Group.h> // base class definition
 // additional dependencies

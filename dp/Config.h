@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2013
+// Copyright NVIDIA Corporation 2013-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -44,3 +44,6 @@
 #else
 #define DP_UNUSED
 #endif
+
+#define DP_VER_MAJOR 10
+#define DP_VER_MINOR 0

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2009-2010
+// Copyright NVIDIA Corporation 2009-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -37,7 +37,6 @@
 #include <dp/fx/EffectLibrary.h>
 #include <dp/sg/algorithm/IndexTraverser.h>
 #include <dp/sg/algorithm/StatisticsTraverser.h>
-#include <dp/sg/core/nvsg.h>
 #include <dp/sg/core/PerspectiveCamera.h>
 #include <dp/sg/core/TextureFile.h>
 #include <dp/sg/io/IO.h>

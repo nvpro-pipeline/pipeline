@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2013
+// Copyright NVIDIA Corporation 2013-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -29,19 +29,18 @@
 #include <dp/fx/EffectLibrary.h>
 #include <dp/sg/algorithm/Replace.h>
 #include <dp/sg/algorithm/Search.h>
-#include <dp/sg/core/nvsg.h>
 #include <dp/sg/io/IO.h>
 #include <dp/sg/ui/ViewState.h>
 #include <dp/util/File.h>
 
 // exchanger sceneFile mappingsFile materialsFile
-// e.g.: MaterialExchanger sample.nbf sample_mappings.xml sample_materials.xml
+// e.g.: MaterialExchanger sample.dpbf sample_mappings.xml sample_materials.xml
 int main( int argc, char *argv[] )
 {
   if ( argc != 3 )
   {
     std::cerr << "exchanger usage: exchanger sceneFile mappingsFile materialsFile\n"
-              << "  where sceneFile is a DP/SG-loadable scene file (*.nbf, *.dae, ...)\n"
+              << "  where sceneFile is a DP/SG-loadable scene file (*.dpbf, *.dae, ...)\n"
               << "  and mappingsFile is an XML file that gives the mapping of EffectData\n"
               << "  names in the scene to EffectData names in the materialsFile,\n"
               << "  and materialsFile is an XML file with the EffectData to use.\n"
@@ -69,7 +68,6 @@ int main( int argc, char *argv[] )
     return( -1 );
   }
 
-  dp::sg::core::nvsgInitialize();
   dp::sg::ui::ViewStateSharedPtr viewState = dp::sg::io::loadScene( sceneFile );
 
   if ( ! viewState )
@@ -141,15 +139,13 @@ int main( int argc, char *argv[] )
 
   dp::sg::algorithm::replaceEffectDatas( scene, replacementMap );
 
-  std::string saveName = dp::util::getFilePath( sceneFile ) + "/" + dp::util::getFileStem( sceneFile ) + "X.nbf";
+  std::string saveName = dp::util::getFilePath( sceneFile ) + "/" + dp::util::getFileStem( sceneFile ) + "X.dpbf";
 
   if ( ! dp::sg::io::saveScene( saveName, viewState ) )
   {
     std::cerr << "Could not save the converted scene to <" << saveName << ">\n";
     return( -1 );
   }
-
-  dp::sg::core::nvsgTerminate();
 
   return( 0 );
 }

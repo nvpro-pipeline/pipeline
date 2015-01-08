@@ -5,7 +5,7 @@ include_directories(
 
 #definitions
 add_definitions(
-  -DNVSGLOADER_EXPORTS
+  -DDPAFLOADER_EXPORTS
 )
 
 if (MSVC)
@@ -13,24 +13,24 @@ if (MSVC)
 endif()
 
 #source
-set( NVSGLOADER_SOURCES
-  NVSGLoader.cpp
+set( DPAFLOADER_SOURCES
+  DPAFLoader.cpp
 )
 
-set( NVSGLOADER_HEADERS
-  inc/NVSGLoader.h
+set( DPAFLOADER_HEADERS
+  inc/DPAFLoader.h
 )
 
-source_group(source FILES ${NVSGLOADER_SOURCES})
-source_group(header FILES ${NVSGLOADER_HEADERS})
+source_group(source FILES ${DPAFLOADER_SOURCES})
+source_group(header FILES ${DPAFLOADER_HEADERS})
 
 #target
-add_library( NVSGLoader SHARED
-  ${NVSGLOADER_SOURCES}
-  ${NVSGLOADER_HEADERS}
+add_library( DPAFLoader SHARED
+  ${DPAFLOADER_SOURCES}
+  ${DPAFLOADER_HEADERS}
 )
 
-target_link_libraries( NVSGLoader
+target_link_libraries( DPAFLoader 
   DP
   DPSgCore
   DPSgUI
@@ -40,4 +40,4 @@ target_link_libraries( NVSGLoader
   DPSgIO
 )
 
-set_target_properties( NVSGLoader PROPERTIES SUFFIX ".nxm" FOLDER "Loaders" )
+set_target_properties( DPAFLoader PROPERTIES SUFFIX ".nxm" FOLDER "Loaders" )

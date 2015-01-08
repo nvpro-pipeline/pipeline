@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2013
+// Copyright NVIDIA Corporation 2013-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -32,6 +32,7 @@
 // #include <dp/util/Profile.h>
 
 #include <boost/scoped_array.hpp>
+#include <sstream>
 
 #define STRINGIFY(x) #x
 #define TOSTRING(x) STRINGIFY(x)

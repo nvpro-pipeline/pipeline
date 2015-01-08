@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2012
+// Copyright NVIDIA Corporation 2002-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -28,7 +28,7 @@
 /** \file */
 
 #include  <set>
-#include  <dp/sg/core/nvsgapi.h>
+#include  <dp/sg/core/Config.h>
 #include  <dp/sg/io/PlugInterfaceID.h>
 #include  <dp/sg/io/PlugInterface.h>
 #include  <dp/sg/ui/ViewState.h>
@@ -53,7 +53,7 @@ extern "C"
 //! Get the PlugIn interface for this scene saver.
 /** Every PlugIn has to resolve this function. It is used to get a pointer to a PlugIn class, in this case a 
 CSFSAVER.
-  * If the PlugIn ID \a piid equals \c PIID_NVSG_SCENE_SAVER, a CSFSAVER is created and returned in \a pi.
+  * If the PlugIn ID \a piid equals \c PIID_DP_SCENE_SAVER, a CSFSAVER is created and returned in \a pi.
   * \returns  true, if the requested PlugIn could be created, otherwise false
   */
 CSFSAVER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::PlugInSharedPtr & pi);

@@ -316,7 +316,7 @@ namespace dp
           
         va.setData( 3, dp::util::DT_FLOAT_32, buffer, 0, 0, (unsigned int)(verticesPerTexel * numRects) );
         dp::sg::core::VertexAttributeSetSharedPtr vertexAttributeset = dp::sg::core::VertexAttributeSet::create();
-        vertexAttributeset->setVertexAttribute(dp::sg::core::VertexAttributeSet::NVSG_POSITION, va);
+        vertexAttributeset->setVertexAttribute(dp::sg::core::VertexAttributeSet::DP_SG_POSITION, va);
 
         // setup primtive
         dp::sg::core::PrimitiveSharedPtr primitive = dp::sg::core::Primitive::create( primitiveType );

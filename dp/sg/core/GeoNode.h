@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2007
+// Copyright NVIDIA Corporation 2002-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -27,7 +27,7 @@
 #pragma once
 /** @file */
 
-#include <dp/sg/core/nvsgapi.h> // commonly used stuff
+#include <dp/sg/core/Config.h> // commonly used stuff
 #include <dp/util/HashGenerator.h>
 #include <dp/sg/core/Node.h> // base class definition
 
@@ -107,12 +107,12 @@ namespace dp
 
           /*! \brief Generates tangents and binormals for all geometries contained in the indicated GeoNode
             *  \param tc Addresses the vertex attribute to hold the input texture coordinates used to calculate the tangent space. 
-            *  By default, input coordinates are taken from the VertexAttributeSet::NVSG_TEXCOORD0. 
+            *  By default, input coordinates are taken from the VertexAttributeSet::DP_SG_TEXCOORD0. 
             *  \param tg Addresses the vertex attribute where to output the calculated tangents. 
-            *  By default tangents are written to VertexAttributeSet::NVSG_TANGENT, 
+            *  By default tangents are written to VertexAttributeSet::DP_SG_TANGENT, 
             *  which is aligned to the TANGENT binding semantic used by Cg for varying vertex shader input. 
             *  \param bn Addresses the vertex attribute to output the calculated binormals. 
-            *  By default binormals are written to VertexAttributeSet::NVSG_BINORMAL, 
+            *  By default binormals are written to VertexAttributeSet::DP_SG_BINORMAL, 
             *  which is aligned to the BINORMAL binding semantic used by Cg for varying vertex shader input. 
             *  \param overwrite An optional flag to indicate whether or not to overwrite existing vertex data in the output vertex
             *  attributes \a tg, and \a bn. The default is to overwrite existing vertex data.
@@ -123,20 +123,20 @@ namespace dp
             *  attributes already contain data, this data gets lost, if the \a overwrite flag is set. 
             *  If the \a overwrite flag is not set, tangents and binormals are only written to the indicated output
             *  vertex attributes, if these are empty at the time of calling. */  
-          DP_SG_CORE_API void generateTangentSpace( unsigned int tc = VertexAttributeSet::NVSG_TEXCOORD0
-                                            , unsigned int tg = VertexAttributeSet::NVSG_TANGENT
-                                            , unsigned int bn = VertexAttributeSet::NVSG_BINORMAL
+          DP_SG_CORE_API void generateTangentSpace( unsigned int tc = VertexAttributeSet::DP_SG_TEXCOORD0
+                                            , unsigned int tg = VertexAttributeSet::DP_SG_TANGENT
+                                            , unsigned int bn = VertexAttributeSet::DP_SG_BINORMAL
                                             , bool overwrite = true );
 
           /*! \brief Generates 2D texture coordinates 
             *  \param type Desired texture coordinate type. Accepted are TCT_CYLINDRICAL, TCT_PLANAR, and TCT_SPHERICAL. 
             *  \param texcoords Addresses the vertex attribute where to output the generated texture coords. 
-            *  VertexAttributeSet::NVSG_TEXCOORD0 - VertexAttributeSet::NVSG_TEXCOORD7 are allowed identifiers.
-            *  By default texture coords are written to VertexAttributeSet::NVSG_TEXCOORD0, 
+            *  VertexAttributeSet::DP_SG_TEXCOORD0 - VertexAttributeSet::DP_SG_TEXCOORD7 are allowed identifiers.
+            *  By default texture coords are written to VertexAttributeSet::DP_SG_TEXCOORD0, 
             *  \param overwrite An optional flag indicating whether or not to overwrite existing vertex data in the output
             *  vertex attribute \a tc. The default is to overwrite existing vertex data. */
           DP_SG_CORE_API void generateTexCoords( TextureCoordType type
-                                          , unsigned int texcoords = VertexAttributeSet::NVSG_TEXCOORD0
+                                          , unsigned int texcoords = VertexAttributeSet::DP_SG_TEXCOORD0
                                           , bool overwrite = true );
 
           /*! \brief Clear texture coordinates on the Primitive. */

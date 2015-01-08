@@ -27,7 +27,7 @@
 #pragma once
 /** @file */
 
-#include <dp/sg/core/nvsgapi.h>
+#include <dp/sg/core/Config.h>
 #include <dp/util/HashGeneratorMurMur.h>
 #include <dp/sg/core/CoreTypes.h>
 #include <dp/sg/core/HandledObject.h>

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2009-2010
+// Copyright NVIDIA Corporation 2009-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -29,8 +29,6 @@
 #include <windows.h>
 #endif
 
-#include <dp/sg/core/nvsg.h>
-
 #include "Viewer.h"
 
 // This is in res/ui and contains a QString appStyleSheet.
@@ -38,8 +36,6 @@
 
 // #include <crtdbg.h> // Track leaks on exit.
 
-// This is a trick to get the shutdown sequence of Qt aligned with SceniX data stored at SceniXQGLWidgets.
-// Widgets were deleted, after the nvsgTerminate was called otherwise.
 int runApp(int argc, char *argv[] )
 {
   Viewer app( argc, argv );
@@ -61,18 +57,7 @@ int runApp(int argc, char *argv[] )
 
 int main( int argc, char *argv[] )
 {
-  // _CrtSetBreakAlloc(/* Put CRT leak number here. */);
-  dp::sg::core::nvsgInitialize();
-
-#if !defined( NDEBUG )
-  // Debug executable performance is faster without dp::sg::core::NVSG_DBG_LEAK_DETECTION.
-  // Enable it if there is a memory leak assertion on program end.
-  dp::sg::core::nvsgSetDebugFlags( dp::sg::core::NVSG_DBG_ASSERT /* | dp::sg::core::NVSG_DBG_LEAK_DETECTION */ );
-#endif
-
   int result = runApp(argc, argv);
-
-  dp::sg::core::nvsgTerminate();
 
   return result;
 }

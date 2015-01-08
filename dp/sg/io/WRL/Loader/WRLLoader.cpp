@@ -219,7 +219,7 @@ WRLLoader::WRLLoader()
   m_subdivisions[SUBDIVISION_BOX_MAX]     = 8;  // maximum
 
   // The user can define the subdivisions used for build built-in geometry!
-  if ( const char * env = getenv( "NVSG_WRL_SUBDIVISIONS" ) )
+  if ( const char * env = getenv( "DP_WRL_SUBDIVISIONS" ) )
   {
     std::string values( env );
     std::string token;
@@ -1925,32 +1925,32 @@ void  WRLLoader::interpretBackground( BackgroundSharedPtr const& pBackground )
 
 dp::sg::core::BillboardSharedPtr WRLLoader::interpretBillboard( vrml::BillboardSharedPtr const& pVRMLBillboard )
 {
-  dp::sg::core::BillboardSharedPtr pNVSGBillboard;
+  dp::sg::core::BillboardSharedPtr pBillboard;
 
   if ( pVRMLBillboard->pBillboard )
   {
-    pNVSGBillboard = pVRMLBillboard->pBillboard;
+    pBillboard = pVRMLBillboard->pBillboard;
   }
   else
   {
-    pNVSGBillboard = dp::sg::core::Billboard::create();
+    pBillboard = dp::sg::core::Billboard::create();
 
-    pNVSGBillboard->setName( pVRMLBillboard->getName() );
+    pBillboard->setName( pVRMLBillboard->getName() );
     if ( length( pVRMLBillboard->axisOfRotation ) < FLT_EPSILON )
     {
-      pNVSGBillboard->setAlignment( dp::sg::core::Billboard::BA_VIEWER );
+      pBillboard->setAlignment( dp::sg::core::Billboard::BA_VIEWER );
     }
     else
     {
-      pNVSGBillboard->setAlignment( dp::sg::core::Billboard::BA_AXIS );
+      pBillboard->setAlignment( dp::sg::core::Billboard::BA_AXIS );
       pVRMLBillboard->axisOfRotation.normalize();
-      pNVSGBillboard->setRotationAxis( pVRMLBillboard->axisOfRotation );
+      pBillboard->setRotationAxis( pVRMLBillboard->axisOfRotation );
     }
-    interpretChildren( pVRMLBillboard->children, pNVSGBillboard );
-    pVRMLBillboard->pBillboard = pNVSGBillboard;
+    interpretChildren( pVRMLBillboard->children, pBillboard );
+    pVRMLBillboard->pBillboard = pBillboard;
   }
 
-  return( pNVSGBillboard );
+  return( pBillboard );
 }
 
 inline bool evalTextured( const dp::sg::core::PrimitiveSharedPtr & pset, bool textured)
@@ -1958,8 +1958,8 @@ inline bool evalTextured( const dp::sg::core::PrimitiveSharedPtr & pset, bool te
   if ( pset )
   {
     bool hasTexCoords = false;
-    for ( unsigned int i=VertexAttributeSet::NVSG_TEXCOORD0
-        ; !hasTexCoords && i<VertexAttributeSet::NVSG_VERTEX_ATTRIB_COUNT
+    for ( unsigned int i=VertexAttributeSet::DP_SG_TEXCOORD0
+        ; !hasTexCoords && i<VertexAttributeSet::DP_SG_VERTEX_ATTRIB_COUNT
         ; ++i )
     {
       hasTexCoords = !!pset->getVertexAttributeSet()->getNumberOfVertexData(i);
@@ -2127,7 +2127,7 @@ void  WRLLoader::interpretSphere( SphereSharedPtr const& pSphere, vector<Primiti
   }
 }
 
-void  WRLLoader::interpretChildren( MFNode &children, dp::sg::core::GroupSharedPtr const& pNVSGGroup )
+void  WRLLoader::interpretChildren( MFNode &children, dp::sg::core::GroupSharedPtr const& pGroup )
 {
   for ( size_t i=0 ; i<children.size() ; i++ )
   {
@@ -2135,7 +2135,7 @@ void  WRLLoader::interpretChildren( MFNode &children, dp::sg::core::GroupSharedP
     if ( pObject )
     {
       DP_ASSERT( pObject.isPtrTo<Node>() );
-      pNVSGGroup->addChild( pObject.staticCast<Node>() );
+      pGroup->addChild( pObject.staticCast<Node>() );
       // LightReferences will be added to the root with the WRLLoadTraverser !
     }
   }
@@ -2357,22 +2357,22 @@ void  WRLLoader::interpretGeometry( vrml::GeometrySharedPtr const& pGeometry, ve
   }
 }
 
-dp::sg::core::GroupSharedPtr WRLLoader::interpretGroup( vrml::GroupSharedPtr const& pGroup )
+dp::sg::core::GroupSharedPtr WRLLoader::interpretGroup( vrml::GroupSharedPtr const& pVRMLGroup )
 {
-  dp::sg::core::GroupSharedPtr pNVSGGroup;
-  if ( pGroup->pGroup )
+  dp::sg::core::GroupSharedPtr pGroup;
+  if ( pVRMLGroup->pGroup )
   {
-    pNVSGGroup = pGroup->pGroup;
+    pGroup = pVRMLGroup->pGroup;
   }
   else
   {
-    pNVSGGroup = dp::sg::core::Group::create();
-    pNVSGGroup->setName( pGroup->getName() );
-    interpretChildren( pGroup->children, pNVSGGroup );
-    pGroup->pGroup = pNVSGGroup;
+    pGroup = dp::sg::core::Group::create();
+    pGroup->setName( pGroup->getName() );
+    interpretChildren( pVRMLGroup->children, pGroup );
+    pVRMLGroup->pGroup = pGroup;
   }
 
-  return( pNVSGGroup );
+  return( pGroup );
 }
 
 ParameterGroupDataSharedPtr WRLLoader::interpretImageTexture( ImageTextureSharedPtr const& pImageTexture )
@@ -2811,7 +2811,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
       VertexAttributeAnimationLock(vaah)->setDescription( livaadh );
       {
         AnimatedVertexAttributeSetLock avas(avash);
-        avas->setAnimation( VertexAttributeSet::NVSG_POSITION, vaah );
+        avas->setAnimation( VertexAttributeSet::DP_SG_POSITION, vaah );
       }
     }
 
@@ -2886,7 +2886,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
       VertexAttributeAnimationLock(vaah)->setDescription( livaadh );
       {
         AnimatedVertexAttributeSetLock avas(avash);
-        avas->setAnimation( VertexAttributeSet::NVSG_NORMAL, vaah );
+        avas->setAnimation( VertexAttributeSet::DP_SG_NORMAL, vaah );
       }
     }
 
@@ -2961,7 +2961,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
       VertexAttributeAnimationLock(vaah)->setDescription( livaadh );
       {
         AnimatedVertexAttributeSetLock avas(avash);
-        avas->setAnimation( VertexAttributeSet::NVSG_COLOR, vaah );
+        avas->setAnimation( VertexAttributeSet::DP_COLOR, vaah );
       }
     }
     vash = avash;
@@ -3173,26 +3173,26 @@ NodeSharedPtr WRLLoader::interpretInline( InlineSharedPtr const& pInline )
 
 dp::sg::core::LODSharedPtr WRLLoader::interpretLOD( vrml::LODSharedPtr const& pVRMLLOD )
 {
-  dp::sg::core::LODSharedPtr pNVSGLOD;
+  dp::sg::core::LODSharedPtr pLOD;
 
   if ( pVRMLLOD->pLOD )
   {
-    pNVSGLOD = pVRMLLOD->pLOD;
+    pLOD = pVRMLLOD->pLOD;
   }
   else
   {
-    pNVSGLOD = dp::sg::core::LOD::create();
-    pNVSGLOD->setName( pVRMLLOD->getName() );
-    interpretChildren( pVRMLLOD->children, pNVSGLOD );
+    pLOD = dp::sg::core::LOD::create();
+    pLOD->setName( pVRMLLOD->getName() );
+    interpretChildren( pVRMLLOD->children, pLOD );
     if ( pVRMLLOD->range.size() != 0 )
     {
-      pNVSGLOD->setRanges( &pVRMLLOD->range[0], checked_cast<unsigned int>(pVRMLLOD->range.size()) );
+      pLOD->setRanges( &pVRMLLOD->range[0], checked_cast<unsigned int>(pVRMLLOD->range.size()) );
     }
     else
     {
-      vector<float> ranges( pNVSGLOD->getNumberOfChildren() - 1 );
+      vector<float> ranges( pLOD->getNumberOfChildren() - 1 );
       float dist = 0.0f;
-      for ( dp::sg::core::Group::ChildrenIterator gci = pNVSGLOD->beginChildren() ; gci != pNVSGLOD->endChildren() ; ++gci )
+      for ( dp::sg::core::Group::ChildrenIterator gci = pLOD->beginChildren() ; gci != pLOD->endChildren() ; ++gci )
       {
         DP_ASSERT( dp::math::isValid((*gci)->getBoundingSphere()) );
         float radius = (*gci)->getBoundingSphere().getRadius();
@@ -3206,14 +3206,14 @@ dp::sg::core::LODSharedPtr WRLLoader::interpretLOD( vrml::LODSharedPtr const& pV
       {
         ranges[i] = dist;
       }
-      pNVSGLOD->setRanges( &ranges[0], checked_cast<unsigned int>(ranges.size()) );
+      pLOD->setRanges( &ranges[0], checked_cast<unsigned int>(ranges.size()) );
     }
-    pNVSGLOD->setCenter( pVRMLLOD->center );
+    pLOD->setCenter( pVRMLLOD->center );
 
-    pVRMLLOD->pLOD = pNVSGLOD;
+    pVRMLLOD->pLOD = pLOD;
   }
 
-  return( pNVSGLOD );
+  return( pLOD );
 }
 
 ParameterGroupDataSharedPtr WRLLoader::interpretMaterial( vrml::MaterialSharedPtr const& material )
@@ -3600,29 +3600,29 @@ ParameterGroupDataSharedPtr WRLLoader::interpretTexture( vrml::TextureSharedPtr 
 
 dp::sg::core::SwitchSharedPtr WRLLoader::interpretSwitch( vrml::SwitchSharedPtr const& pVRMLSwitch )
 {
-  dp::sg::core::SwitchSharedPtr pNVSGSwitch;
+  dp::sg::core::SwitchSharedPtr pSwitch;
 
   if ( pVRMLSwitch->pSwitch )
   {
-    pNVSGSwitch = pVRMLSwitch->pSwitch;
+    pSwitch = pVRMLSwitch->pSwitch;
   }
   else
   {
-    pNVSGSwitch = dp::sg::core::Switch::create();
-    pNVSGSwitch->setName( pVRMLSwitch->getName() );
-    interpretChildren( pVRMLSwitch->children, pNVSGSwitch );
+    pSwitch = dp::sg::core::Switch::create();
+    pSwitch->setName( pVRMLSwitch->getName() );
+    interpretChildren( pVRMLSwitch->children, pSwitch );
     if ( ( pVRMLSwitch->whichChoice < 0 ) || ( (SFInt32)pVRMLSwitch->children.size() <= pVRMLSwitch->whichChoice ) )
     {
-      pNVSGSwitch->setInactive();
+      pSwitch->setInactive();
     }
     else
     {
-      pNVSGSwitch->setActive( pVRMLSwitch->whichChoice );
+      pSwitch->setActive( pVRMLSwitch->whichChoice );
     }
-    pVRMLSwitch->pSwitch = pNVSGSwitch;
+    pVRMLSwitch->pSwitch = pSwitch;
   }
 
-  return( pNVSGSwitch );
+  return( pSwitch );
 }
 
 void WRLLoader::interpretTextureTransform( TextureTransformSharedPtr const& pTextureTransform
@@ -3639,11 +3639,11 @@ void WRLLoader::interpretTextureTransform( TextureTransformSharedPtr const& pTex
 
 dp::sg::core::TransformSharedPtr WRLLoader::interpretTransform( vrml::TransformSharedPtr const& pVRMLTransform )
 {
-  dp::sg::core::TransformSharedPtr pNVSGTransform;
+  dp::sg::core::TransformSharedPtr pTransform;
 
   if ( pVRMLTransform->pTransform )
   {
-    pNVSGTransform = pVRMLTransform->pTransform;
+    pTransform = pVRMLTransform->pTransform;
   }
   else
   {
@@ -3787,9 +3787,9 @@ dp::sg::core::TransformSharedPtr WRLLoader::interpretTransform( vrml::TransformS
       TrafoAnimationSharedPtr tah = TrafoAnimation::create();
       TrafoAnimationLock(tah)->setDescription( litadh );
 
-      AnimatedTransformSharedPtr pNVSGAnimatedTransform = AnimatedTransform::create();
-      AnimatedTransformLock(pNVSGAnimatedTransform)->setAnimation(tah);
-      pNVSGTransform = pNVSGAnimatedTransform;
+      AnimatedTransformSharedPtr pAnimatedTransform = AnimatedTransform::create();
+      AnimatedTransformLock(pAnimatedTransform)->setAnimation(tah);
+      pTransform = pAnimatedTransform;
     }
     else
 #endif
@@ -3801,17 +3801,17 @@ dp::sg::core::TransformSharedPtr WRLLoader::interpretTransform( vrml::TransformS
       trafo.setScaleOrientation( interpretSFRotation( pVRMLTransform->scaleOrientation ) );
       trafo.setTranslation( pVRMLTransform->translation );
 
-      pNVSGTransform = dp::sg::core::Transform::create();
-      pNVSGTransform->setTrafo( trafo );
+      pTransform = dp::sg::core::Transform::create();
+      pTransform->setTrafo( trafo );
     }
 
-    pNVSGTransform->setName( pVRMLTransform->getName() );
-    interpretChildren( pVRMLTransform->children, pNVSGTransform );
+    pTransform->setName( pVRMLTransform->getName() );
+    interpretChildren( pVRMLTransform->children, pTransform );
 
-    pVRMLTransform->pTransform = pNVSGTransform;
+    pVRMLTransform->pTransform = pTransform;
   }
 
-  return( pNVSGTransform );
+  return( pTransform );
 }
 
 bool  WRLLoader::interpretURL( const MFString &url, string &fileName )

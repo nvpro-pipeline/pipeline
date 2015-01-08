@@ -1439,7 +1439,7 @@ namespace dp
 #define DERIVE_STATIC_PROPERTIES_TEMPLATE(Klass, Base ) static bool DERIVE_TOKENPASTE2(deriveStaticProperties, __LINE__ )  = dp::util::deriveStaticProperties<Klass, Base>();
 
 /* Example of a reflected class. Note that dp::sg::core::Object is already derived from Reflection.
-   Objects derived from dp::sg::core::Object or subclasses of nvsg::Object must not derive from
+   Objects derived from dp::sg::core::Object or subclasses of dp::sg::core::Object must not derive from
    Reflection
 
 class MyReflectedClass : public Reflection

@@ -31,6 +31,7 @@
 #include <dp/util/Types.h>
 #include <boost/shared_array.hpp>
 #include <string>
+#include <vector>
 
 namespace dp
 {

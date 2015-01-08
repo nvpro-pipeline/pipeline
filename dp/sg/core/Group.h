@@ -27,7 +27,7 @@
 #pragma once
 /** @file */
 
-#include <dp/sg/core/nvsgapi.h>
+#include <dp/sg/core/Config.h>
 #include <dp/sg/core/ClipPlane.h>
 #include <dp/sg/core/LightSource.h>
 #include <dp/sg/core/Node.h>

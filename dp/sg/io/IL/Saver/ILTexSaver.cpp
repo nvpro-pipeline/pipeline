@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2005
+// Copyright NVIDIA Corporation 2002-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -33,7 +33,6 @@
 #endif
 #include <typeinfo>
 
-#include <dp/sg/core/NVSGVersion.h> // NVSG version info
 #include <dp/sg/io/PlugInterfaceID.h>
 #include <dp/sg/core/TextureHost.h>
 
@@ -332,7 +331,7 @@ bool ILTexSaver::save( const TextureHostSharedPtr & image, const string & fileNa
     //      // convert color index to whatever the base type of the palette is
     //      if ( !ilConvertImage(ilGetInteger(IL_PALETTE_BASE_TYPE), IL_UNSIGNED_BYTE) )
     //      {
-    //        NVSG_TRACE_OUT("ERROR: conversion from color index format failed!\n");        
+    //        DP_TRACE_OUT("ERROR: conversion from color index format failed!\n");        
     //        INVOKE_CALLBACK(onInvalidFile(fileName, "DevIL Loadable Color-Indexed Image"));
     //        goto ERROREXIT;
     //      }
@@ -402,7 +401,7 @@ bool ILTexSaver::save( const TextureHostSharedPtr & image, const string & fileNa
   else
   {
 #if 0
-    NVSG_TRACE_OUT("ERROR: save image failed!\n");      
+    DP_TRACE_OUT("ERROR: save image failed!\n");      
 #endif
 
     // clean up errors

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2009-2012
+// Copyright NVIDIA Corporation 2009-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -467,10 +467,6 @@ void MainWindow::initMultisampleMenu( QMenu * menu )
 
 void MainWindow::loadFile( const QString & fileName, bool replaceShaders )
 {
-#if defined( MEMDEBUG ) && !defined( NDEBUG )
-  nvsgRuntimeDebugControl( NVSG_RUNTIME_DEBUG_PUSH_ALLOCATIONS );
-#endif
-
   if ( !fileName.isEmpty() )
   {
     GetApp()->setOverrideCursor( Qt::WaitCursor );
@@ -1310,11 +1306,6 @@ void MainWindow::triggeredClose()
 
   // this kicks everything off
   GetApp()->unloadScene();
-
-#if defined( MEMDEBUG ) && !defined( NDEBUG )
-  nvsgRuntimeDebugControl( NVSG_RUNTIME_DEBUG_DUMP_ALLOCATION_DIFFERENCES );
-  nvsgRuntimeDebugControl( NVSG_RUNTIME_DEBUG_POP_ALLOCATIONS );
-#endif
 }
 
 void MainWindow::triggeredDepthPass( bool checked )
@@ -1432,7 +1423,7 @@ void MainWindow::triggeredSave()
   }
 
   QString data = QDir::fromNativeSeparators( QStandardPaths::standardLocations( QStandardPaths::DocumentsLocation ).front().append( "/NVIDIA Corporation/SceniX Viewer/" ) );
-  QString fileName = QFileDialog::getSaveFileName( this, "Save File", data, "Scenes (*.nbf *.nvsg *.obj *.csf)" );
+  QString fileName = QFileDialog::getSaveFileName( this, "Save File", data, "Scenes (*.dpbf *.dpaf *.obj *.csf)" );
   if ( !fileName.isEmpty() )
   {
     GetApp()->setOverrideCursor( Qt::WaitCursor );

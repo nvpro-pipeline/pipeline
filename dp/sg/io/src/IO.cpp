@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright NVIDIA Corporation 2012-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -94,9 +94,9 @@ namespace dp
         size_t pos = dir.rfind("media");
         if ( pos != string::npos )
         {
-          string nvsgsdk(dir.substr(0, pos));
-          sceneSearchPaths.push_back(nvsgsdk + "media/effects");
-          sceneSearchPaths.push_back(nvsgsdk + "media/textures");
+          string sdk(dir.substr(0, pos));
+          sceneSearchPaths.push_back(sdk + "media/effects");
+          sceneSearchPaths.push_back(sdk + "media/textures");
         }
 
         dp::sg::core::SceneSharedPtr scene;

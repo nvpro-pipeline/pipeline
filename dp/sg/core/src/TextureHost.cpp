@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2005
+// Copyright NVIDIA Corporation 2002-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -957,19 +957,9 @@ namespace dp
             {
               DP_ASSERT( srcImages[i][j].m_pixels );
               m_images[i][j].m_pixels = BufferHost::create();
-              if ( !m_images[i][j].m_pixels )
-              { // image allocation failed
-    #if 0
-                NVSG_TRACE_OUT("ERROR: image allocation failed!\n");
-    #endif
-                return;
-              }
-
-              {
-                BufferSharedPtr const& bufferDst = m_images[i][j].m_pixels;
-                bufferDst->setSize(   m_images[i][j].m_nob );
-                bufferDst->setData(0, m_images[i][j].m_nob, srcImages[i][j].m_pixels, 0);
-              }
+              BufferSharedPtr const& bufferDst = m_images[i][j].m_pixels;
+              bufferDst->setSize(   m_images[i][j].m_nob );
+              bufferDst->setData(0, m_images[i][j].m_nob, srcImages[i][j].m_pixels, 0);
             }
           }
         }
@@ -1020,7 +1010,7 @@ namespace dp
             if ( !img->m_pixels )
             { // image allocation failed
     #if 0
-              NVSG_TRACE_OUT("ERROR: image allocation failed!\n");
+              DP_TRACE_OUT("ERROR: image allocation failed!\n");
     #endif
               return;
             }
@@ -1148,13 +1138,6 @@ namespace dp
           Image * dst = &images.back(); // points to new created Image
 
           dst->m_pixels = BufferHost::create();
-          if ( !dst->m_pixels )
-          { // image allocation failed
-    #if 0
-            NVSG_TRACE_OUT("ERROR: image allocation failed!\n");
-    #endif
-            goto ERROREXIT;
-          }
           dst->m_pixels->setSize( dst->m_nob );
           dst->m_pixels->setData( 0, dst->m_nob, mipmaps[i] );
           src = dst; // prepare for next level creation
@@ -1167,7 +1150,7 @@ namespace dp
           if ( m_creationFlags & F_IMAGE_STREAM )
           {
     #if 0
-            NVSG_TRACE_OUT("ERROR: incomplete mipmap chain with F_IMAGE_STREAM set!\n");
+            DP_TRACE_OUT("ERROR: incomplete mipmap chain with F_IMAGE_STREAM set!\n");
     #endif
             goto ERROREXIT;
           }
@@ -1175,7 +1158,7 @@ namespace dp
           if ( isProblematicFormat(images[0].m_format) )
           {
     #if 0
-            NVSG_TRACE_OUT("ERROR: incomplete mipmap chain with problematic format!\n");
+            DP_TRACE_OUT("ERROR: incomplete mipmap chain with problematic format!\n");
     #endif
             goto ERROREXIT;
           }
@@ -1243,7 +1226,7 @@ namespace dp
           if ( m_creationFlags & F_IMAGE_STREAM )
           {
     #if 0
-            NVSG_TRACE_OUT("ERROR: incomplete mipmap chain with F_IMAGE_STREAM set!\n");
+            DP_TRACE_OUT("ERROR: incomplete mipmap chain with F_IMAGE_STREAM set!\n");
     #endif
             goto ERROREXIT;
           }
@@ -1251,7 +1234,7 @@ namespace dp
           if ( isProblematicFormat(images[0].m_format) )
           {
     #if 0
-            NVSG_TRACE_OUT("ERROR: incomplete mipmap chain with problematic format!\n");
+            DP_TRACE_OUT("ERROR: incomplete mipmap chain with problematic format!\n");
     #endif
             goto ERROREXIT;
           }
@@ -1312,7 +1295,7 @@ namespace dp
           if ( !dst->m_pixels )
           { // image allocation failed
     #if 0
-            NVSG_TRACE_OUT("ERROR: image allocation failed!\n");
+            DP_TRACE_OUT("ERROR: image allocation failed!\n");
     #endif
             goto ERROREXIT;
           }
@@ -1597,7 +1580,7 @@ namespace dp
           if ( !dst.m_pixels )
           { // image allocation failed
     #if 0
-            NVSG_TRACE_OUT("ERROR: image allocation failed!\n");
+            DP_TRACE_OUT("ERROR: image allocation failed!\n");
     #endif
             goto ERROREXIT;
           }
@@ -1656,7 +1639,7 @@ namespace dp
             if ( !dst.m_pixels )
             { // image allocation failed
     #if 0
-              NVSG_TRACE_OUT("ERROR: image allocation failed!\n");
+              DP_TRACE_OUT("ERROR: image allocation failed!\n");
     #endif
               goto ERROREXIT;
             }
@@ -1704,9 +1687,9 @@ namespace dp
            || sizeLimit < d || !isPowerOfTwo(d) )
         {
     #if 0
-          NVSG_TRACE_OUT_F(("unscaled width  = %d\n", w));
-          NVSG_TRACE_OUT_F(("unscaled height = %d\n", h));
-          NVSG_TRACE_OUT_F(("unscaled depth  = %d\n", d));
+          DP_TRACE_OUT_F(("unscaled width  = %d\n", w));
+          DP_TRACE_OUT_F(("unscaled height = %d\n", h));
+          DP_TRACE_OUT_F(("unscaled depth  = %d\n", d));
     #endif
 
           // clamp dimensions to specified size limit
@@ -1719,7 +1702,7 @@ namespace dp
              || (m_creationFlags & F_SCALE_POT_MASK)==(F_SCALE_POT_ABOVE | F_SCALE_POT_BELOW) )
           {
     #if 0
-            NVSG_TRACE_OUT("scaling to nearest power-of-two\n");
+            DP_TRACE_OUT("scaling to nearest power-of-two\n");
     #endif
             w = powerOfTwoNearest(w);
             h = powerOfTwoNearest(h);
@@ -1728,7 +1711,7 @@ namespace dp
           else if ( m_creationFlags & F_SCALE_POT_BELOW )
           {
     #if 0
-            NVSG_TRACE_OUT("scaling to previous power-of-two\n");
+            DP_TRACE_OUT("scaling to previous power-of-two\n");
     #endif
             w = powerOfTwoBelow(w);
             h = powerOfTwoBelow(h);
@@ -1737,7 +1720,7 @@ namespace dp
           else
           {
     #if 0
-            NVSG_TRACE_OUT("scaling to next power-of-two\n");
+            DP_TRACE_OUT("scaling to next power-of-two\n");
     #endif
             w = powerOfTwoAbove(w);
             h = powerOfTwoAbove(h);
@@ -1745,9 +1728,9 @@ namespace dp
           }
       
     #if 0
-          NVSG_TRACE_OUT_F(("scaled width  = %d\n", w));
-          NVSG_TRACE_OUT_F(("scaled height = %d\n", h));
-          NVSG_TRACE_OUT_F(("scaled depth  = %d\n", d));
+          DP_TRACE_OUT_F(("scaled width  = %d\n", w));
+          DP_TRACE_OUT_F(("scaled height = %d\n", h));
+          DP_TRACE_OUT_F(("scaled depth  = %d\n", d));
     #endif
 
           // apply to all first level images
@@ -1757,7 +1740,7 @@ namespace dp
             if ( !scale(i, w, h, d) )
             {
     #if 0
-              NVSG_TRACE_OUT_F(("ERROR: scaling failed for image #%d\n"));
+              DP_TRACE_OUT_F(("ERROR: scaling failed for image #%d\n"));
     #endif
               return false;
             }
@@ -1825,7 +1808,7 @@ namespace dp
           if ( !img->m_pixels )
           { // image allocation failed
     #if 0
-            NVSG_TRACE_OUT("ERROR: image allocation failed!\n");
+            DP_TRACE_OUT("ERROR: image allocation failed!\n");
     #endif
             goto ERROREXIT;
           }
@@ -1960,7 +1943,7 @@ namespace dp
           if ( !pixels[i] )
           { // image allocation failed
     #if 0
-            NVSG_TRACE_OUT("ERROR: image allocation failed!\n");
+            DP_TRACE_OUT("ERROR: image allocation failed!\n");
     #endif
             return;
           }
@@ -2012,7 +1995,7 @@ namespace dp
           if ( !pixels[i] )
           { // image allocation failed
     #if 0
-            NVSG_TRACE_OUT("ERROR: image allocation failed!\n");
+            DP_TRACE_OUT("ERROR: image allocation failed!\n");
     #endif
             return;
           }

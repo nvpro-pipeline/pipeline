@@ -5,7 +5,7 @@ include_directories(
 
 #definitions
 add_definitions(
-  -DNBFSAVER_EXPORTS
+  -DDPBFSAVER_EXPORTS
 )
 
 if(WIN32)
@@ -13,25 +13,25 @@ if(WIN32)
 endif()
 
 #sources
-set(NBFSAVER_SOURCES
-  NBFSaver.cpp
+set(DPBFSAVER_SOURCES
+  DPBFSaver.cpp
 )
 
-set(NBFSAVER_HEADERS
-  inc/NBFSaver.h
-  ../NBF.h
+set(DPBFSAVER_HEADERS
+  inc/DPBFSaver.h
+  ../DPBF.h
 )
 
-source_group(source FILES ${NBFSAVER_SOURCES})
-source_group(header FILES ${NBFSAVER_HEADERS})
+source_group(source FILES ${DPBFSAVER_SOURCES})
+source_group(header FILES ${DPBFSAVER_HEADERS})
 
 #target
-add_library( NBFSaver SHARED
-  ${NBFSAVER_SOURCES}
-  ${NBFSAVER_HEADERS}
+add_library( DPBFSaver SHARED
+  ${DPBFSAVER_SOURCES}
+  ${DPBFSAVER_HEADERS}
 )
 
-target_link_libraries( NBFSaver 
+target_link_libraries( DPBFSaver 
   DP
   DPSgCore
   DPSgUI
@@ -43,4 +43,4 @@ target_link_libraries( NBFSaver
   DPSgIO
 )
 
-set_target_properties( NBFSaver PROPERTIES SUFFIX ".nxm" FOLDER "Savers" )
+set_target_properties( DPBFSaver PROPERTIES SUFFIX ".nxm" FOLDER "Savers" )

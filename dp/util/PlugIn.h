@@ -30,7 +30,9 @@
 #include <dp/util/Config.h>
 #include <dp/util/PlugInCallback.h>
 #include <dp/util/SharedPtr.h>
+#include <dp/util/Singleton.h>
 #include <map>
+#include <set>
 
 
 #if defined(DP_OS_LINUX)

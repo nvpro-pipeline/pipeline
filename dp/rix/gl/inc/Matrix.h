@@ -1086,10 +1086,10 @@ namespace dp
       template<typename T>
       Matnnt<3,T> & setMat( Matnnt<3,T> & m, const Vecnt<3,T> & axis, T angle )
       {
-        NVSG_PRIVATE_ASSERT( isNormalized( axis ) );
+        DP_PRIVATE_ASSERT( isNormalized( axis ) );
         T c = cos( angle );
         T s = sin( angle );
-        NVSG_PRIVATE_ASSERT( abs( s * s + c * c - 1 ) <= std::numeric_limits<T>::epsilon() );
+        DP_PRIVATE_ASSERT( abs( s * s + c * c - 1 ) <= std::numeric_limits<T>::epsilon() );
         T t = 1 - c;
         T x = axis[0];
         T y = axis[1];
@@ -1099,7 +1099,7 @@ namespace dp
         m[1] = Vecnt<3,T>( t * x * y - s * z, t * y * y + c,     t * y * z + s * x );
         m[2] = Vecnt<3,T>( t * x * z + s * y, t * y * z - s * x, t * z * z + c     );
 
-        NVSG_PRIVATE_ASSERT( isRotation( m ) );
+        DP_PRIVATE_ASSERT( isRotation( m ) );
         return( m );
       }
 

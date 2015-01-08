@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2011
+// Copyright NVIDIA Corporation 2002-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -27,7 +27,7 @@
 #pragma once
 /** @file */
 
-#include <dp/sg/core/nvsgapi.h>
+#include <dp/sg/core/Config.h>
 #include <dp/math/Spherent.h>
 #include <dp/util/HashGenerator.h>
 #include <dp/sg/core/Object.h>
@@ -67,50 +67,50 @@ namespace dp
           enum 
           {
             // conventional vertex attributes
-            NVSG_POSITION = 0,
-            NVSG_VERTEX_WEIGHT,
-            NVSG_NORMAL,
-            NVSG_COLOR,
-            NVSG_SECONDARY_COLOR,
-            NVSG_FOG_COORD,
-            NVSG_UNUSED_1,
-            NVSG_UNUSED_2,
-            NVSG_TEXCOORD0,
-            NVSG_TEXCOORD1,
-            NVSG_TEXCOORD2,
-            NVSG_TEXCOORD3,
-            NVSG_TEXCOORD4,
-            NVSG_TEXCOORD5,
-            NVSG_TEXCOORD6, NVSG_TANGENT = NVSG_TEXCOORD6,
-            NVSG_TEXCOORD7, NVSG_BINORMAL = NVSG_TEXCOORD7,
+            DP_SG_POSITION = 0,
+            DP_SG_VERTEX_WEIGHT,
+            DP_SG_NORMAL,
+            DP_SG_COLOR,
+            DP_SG_SECONDARY_COLOR,
+            DP_SG_FOG_COORD,
+            DP_SG_UNUSED_1,
+            DP_SG_UNUSED_2,
+            DP_SG_TEXCOORD0,
+            DP_SG_TEXCOORD1,
+            DP_SG_TEXCOORD2,
+            DP_SG_TEXCOORD3,
+            DP_SG_TEXCOORD4,
+            DP_SG_TEXCOORD5,
+            DP_SG_TEXCOORD6, DP_SG_TANGENT = DP_SG_TEXCOORD6,
+            DP_SG_TEXCOORD7, DP_SG_BINORMAL = DP_SG_TEXCOORD7,
 
             // generic vertex attributes
-            NVSG_ATTR0,
-            NVSG_ATTR1,
-            NVSG_ATTR2,
-            NVSG_ATTR3,
-            NVSG_ATTR4,
-            NVSG_ATTR5,
-            NVSG_ATTR6,
-            NVSG_ATTR7,
-            NVSG_ATTR8,
-            NVSG_ATTR9,
-            NVSG_ATTR10,
-            NVSG_ATTR11,
-            NVSG_ATTR12,
-            NVSG_ATTR13,
-            NVSG_ATTR14,
-            NVSG_ATTR15,
+            DP_SG_ATTR0,
+            DP_SG_ATTR1,
+            DP_SG_ATTR2,
+            DP_SG_ATTR3,
+            DP_SG_ATTR4,
+            DP_SG_ATTR5,
+            DP_SG_ATTR6,
+            DP_SG_ATTR7,
+            DP_SG_ATTR8,
+            DP_SG_ATTR9,
+            DP_SG_ATTR10,
+            DP_SG_ATTR11,
+            DP_SG_ATTR12,
+            DP_SG_ATTR13,
+            DP_SG_ATTR14,
+            DP_SG_ATTR15,
       
-            NVSG_VERTEX_ATTRIB_COUNT = 16
+            DP_SG_VERTEX_ATTRIB_COUNT = 16
 
           };
 
           /*! \brief Exchanges vertex data of two vertex attributes.
            *  \param attrib Indicates the vertex attribute whose data is to be exchanged with
-           *  those of the VertexAttribute \a rhs. NVSG_POSITION, NVSG_NORMAL, NVSG_COLOR,
-           *  NVSG_SECONDARY_COLOR, NVSG_FOG_COORD, NVSG_TEXCOORD0 - NVSG_TEXCOORD7, and NVSG_ATTR0 -
-           *  NVSG_ATTR15 are allowed identifier.
+           *  those of the VertexAttribute \a rhs. DP_SG_POSITION, DP_SG_NORMAL, DP_SG_COLOR,
+           *  DP_SG_SECONDARY_COLOR, DP_SG_FOG_COORD, DP_SG_TEXCOORD0 - DP_SG_TEXCOORD7, and DP_SG_ATTR0 -
+           *  DP_SG_ATTR15 are allowed identifier.
            *  \param rhs The VertexAttribute whose data is to be exchanged with those of the 
            *  vertex attribute indicated by \a attrib. 
            *  \remarks
@@ -127,9 +127,9 @@ namespace dp
           DP_SG_CORE_API virtual void swapVertexData(unsigned int attrib, VertexAttribute& rhs);
 
           /*! \brief Reserve space for data in the specified vertex attribute.
-           * \param attrib Index to identify the vertex attribute. NVSG_POSITION, NVSG_NORMAL, NVSG_COLOR,
-           *  NVSG_SECONDARY_COLOR, NVSG_FOG_COORD, NVSG_TEXCOORD0 - NVSG_TEXCOORD7, and NVSG_ATTR0 -
-           *  NVSG_ATTR15 are allowed indices.
+           * \param attrib Index to identify the vertex attribute. DP_SG_POSITION, DP_SG_NORMAL, DP_SG_COLOR,
+           *  DP_SG_SECONDARY_COLOR, DP_SG_FOG_COORD, DP_SG_TEXCOORD0 - DP_SG_TEXCOORD7, and DP_SG_ATTR0 -
+           *  DP_SG_ATTR15 are allowed indices.
            * \param size Specifies the number of coordinates per vertex; must be 1, 2, 3, or 4.
            * \param type Specifies the data type of each coordinate in the input data array. 
            *  In general, symbolic constants dp::util::DT_INT_8, dp::util::DT_UNSIGNED_INT_8, dp::util::DT_INT_16, dp::util::DT_UNSIGNED_INT_16,
@@ -143,9 +143,9 @@ namespace dp
                                                  , dp::util::DataType type, unsigned int count );
 
           /*! \brief Sets data for the specified vertex attribute.
-           * \param attrib Index to identify the vertex attribute. NVSG_POSITION, NVSG_NORMAL, NVSG_COLOR,
-           *  NVSG_SECONDARY_COLOR, NVSG_FOG_COORD, NVSG_TEXCOORD0 - NVSG_TEXCOORD7, and NVSG_ATTR0 -
-           *  NVSG_ATTR15 are allowed indices.
+           * \param attrib Index to identify the vertex attribute. DP_SG_POSITION, DP_SG_NORMAL, DP_SG_COLOR,
+           *  DP_SG_SECONDARY_COLOR, DP_SG_FOG_COORD, DP_SG_TEXCOORD0 - DP_SG_TEXCOORD7, and DP_SG_ATTR0 -
+           *  DP_SG_ATTR15 are allowed indices.
            * \param size Specifies the number of coordinates per vertex; must be 1, 2, 3, or 4.
            * \param type Specifies the data type of each coordinate in the input data array. 
            *  In general, symbolic constants dp::util::DT_INT_8, dp::util::DT_UNSIGNED_INT_8, dp::util::DT_INT_16, dp::util::DT_UNSIGNED_INT_16,
@@ -155,8 +155,8 @@ namespace dp
            * \param count Specifies the number of vertex data to copy.
            * \param enable Optional bool to enable this vertex attribute. Default is \c true.
            * \remarks
-           * This function can be used to specify vertex data for generic vertex attributes NVSG_ATTR0 - NVSG_ATTR15, 
-           * as well as for conventional vertex attributes like NVSG_POSITION, NVSG_NORMAL, NVSG_COLOR, etc..
+           * This function can be used to specify vertex data for generic vertex attributes DP_ATTR0 - DP_SG_ATTR15, 
+           * as well as for conventional vertex attributes like DP_SG_POSITION, DP_SG_NORMAL, DP_SG_COLOR, etc..
            * Conventional and generic vertex attributes are aliased, where pairs of conventional and generic
            * attributes are sharing the same storage. 
            * \n\n
@@ -181,34 +181,34 @@ namespace dp
            <TD ><b><font size=+1 color="#ffffff"> Type </font></b></TD>
            </TR>
            <TR BGCOLOR="#ffffff">
-           <TD>NVSG_POSITION</TD>  
+           <TD>DP_SG_POSITION</TD>  
            <TD>3</TD>
            <TD>dp::util::DT_FLOAT_32</TD>
            </TR>
            <TR BGCOLOR="#ffffff">
-           <TD>NVSG_NORMAL</TD>  
+           <TD>DP_SG_NORMAL</TD>  
            <TD>3</TD>
            <TD>dp::util::DT_FLOAT_32</TD>
            </TR>
            <TR BGCOLOR="#ffffff">
-           <TD>NVSG_COLOR</TD>  
+           <TD>DP_SG_COLOR</TD>  
            <TD>3, 4</TD>
            <TD>dp::util::DT_INT_8, dp::util::DT_UNSIGNED_INT_8, dp::util::DT_INT_16, dp::util::DT_UNSIGNED_INT_16, 
                dp::util::DT_INT_32, dp::util::DT_UNSIGNED_INT_32, dp::util::DT_FLOAT_32, dp::util::DT_FLOAT_64 </TD>
            </TR>
            <TR BGCOLOR="#ffffff">
-           <TD>NVSG_SECONDARY_COLOR</TD>  
+           <TD>DP_SG_SECONDARY_COLOR</TD>  
            <TD>3</TD>
            <TD>dp::util::DT_INT_8, dp::util::DT_UNSIGNED_INT_8, dp::util::DT_INT_16, dp::util::DT_UNSIGNED_INT_16, 
            dp::util::DT_INT_32, dp::util::DT_UNSIGNED_INT_32, dp::util::DT_FLOAT_32, dp::util::DT_FLOAT_64 </TD>
            </TR>
            <TR BGCOLOR="#ffffff">
-           <TD>NVSG_FOG_COORD</TD>  
+           <TD>DP_SG_FOG_COORD</TD>  
            <TD>1</TD>
            <TD>dp::util::DT_FLOAT_32, dp::util::DT_FLOAT_64</TD>
            </TR>
            <TR BGCOLOR="#ffffff">
-           <TD>NVSG_TEXCOORD[0-7]</TD>  
+           <TD>DP_SG_TEXCOORD[0-7]</TD>  
            <TD>1, 2, 3, 4</TD>
            <TD>dp::util::DT_INT_16, dp::util::DT_INT_32, dp::util::DT_FLOAT_32, dp::util::DT_FLOAT_64</TD>
            </TR>
@@ -226,9 +226,9 @@ namespace dp
                                              , bool enable = true );
       
           /*! \brief Overwrites data for the specified vertex attribute starting at the indicated position.
-           * \param attrib Index to identify the vertex attribute. NVSG_POSITION, NVSG_NORMAL, NVSG_COLOR,
-           *  NVSG_SECONDARY_COLOR, NVSG_FOG_COORD, NVSG_TEXCOORD0 - NVSG_TEXCOORD7, and NVSG_ATTR0 -
-           *  NVSG_ATTR15 are allowed indices.
+           * \param attrib Index to identify the vertex attribute. DP_SG_POSITION, DP_SG_NORMAL, DP_SG_COLOR,
+           *  DP_SG_SECONDARY_COLOR, DP_SG_FOG_COORD, DP_SG_TEXCOORD0 - DP_SG_TEXCOORD7, and DP_SG_ATTR0 -
+           *  DP_SG_ATTR15 are allowed indices.
            * \param pos Marks the position of the first vertex inside the already specified array of vertex data,
            *  where overwriting should start. If the magic value ~0 is specified, the input data will be appended
            *  to the array of vertex data.
@@ -249,9 +249,9 @@ namespace dp
                                              , unsigned int count, bool enable = true );
 
           /*! \brief Overwrites data for the specified vertex attribute using the provided buffer information.
-           * \param attrib Index to identify the vertex attribute. NVSG_POSITION, NVSG_NORMAL, NVSG_COLOR,
-           *  NVSG_SECONDARY_COLOR, NVSG_FOG_COORD, NVSG_TEXCOORD0 - NVSG_TEXCOORD7, and NVSG_ATTR0 -
-           *  NVSG_ATTR15 are allowed indices.
+           * \param attrib Index to identify the vertex attribute. DP_SG_POSITION, DP_SG_NORMAL, DP_SG_COLOR,
+           *  DP_SG_SECONDARY_COLOR, DP_SG_FOG_COORD, DP_SG_TEXCOORD0 - DP_SG_TEXCOORD7, and DP_SG_ATTR0 -
+           *  DP_SG_ATTR15 are allowed indices.
            * \param size Specifies the number of coordinates per vertex; must be 1, 2, 3, or 4.
            * \param type Specifies the data type of each coordinate in the input data array. 
            *  In general, symbolic constants dp::util::DT_INT_8, dp::util::DT_UNSIGNED_INT_8, dp::util::DT_INT_16, dp::util::DT_UNSIGNED_INT_16,
@@ -270,9 +270,9 @@ namespace dp
                                              , bool enable = true );
       
           /*! \brief Overwrites data referenced to by an index array.
-           * \param attrib Index to identify the vertex attribute. NVSG_POSITION, NVSG_NORMAL, NVSG_COLOR,
-           *  NVSG_SECONDARY_COLOR, NVSG_FOG_COORD, NVSG_TEXCOORD0 - NVSG_TEXCOORD7, and NVSG_ATTR0 -
-           *  NVSG_ATTR15 are allowed indices.
+           * \param attrib Index to identify the vertex attribute. DP_SG_POSITION, DP_SG_NORMAL, DP_SG_COLOR,
+           *  DP_SG_SECONDARY_COLOR, DP_SG_FOG_COORD, DP_SG_TEXCOORD0 - DP_SG_TEXCOORD7, and DP_SG_ATTR0 -
+           *  DP_SG_ATTR15 are allowed indices.
            * \param to Specifies the start address of the index array, that will be taken
            *  to reference the respective vertex data to be re-specified. If NULL is passed here,
            *  the input vertex data will be appended to the array of vertex data that previously was specified.
@@ -411,7 +411,7 @@ namespace dp
            * \param attrib Indicates the vertex attribute for which to specify the normalize-enable state. 
            * \param enable Appoints the normalize-enable state for the indicated vertex attribute.
            * \remarks
-           * This function is meaningful only for generic vertex attributes, that is - NVSG_ATTR0 - NVSG_ATTR15.
+           * This function is meaningful only for generic vertex attributes, that is - DP_ATTR0 - DP_SG_ATTR15.
            * This function can be used to indicate that fixed-point generic vertex attribute array components
            * should be converted to [-1,1] or [0,1] ranges, for signed and unsigned types resp.. 
            * If you pass \c true as second argument, normalization will be implicitly enabled for the
@@ -438,7 +438,7 @@ namespace dp
            * be released prior to copying the new positions.
            * \n\n
            * The vertices initially are enable for rendering if specified using this function.
-           * Alternatively, you can use setVertexData with NVSG_POSITION as first argument
+           * Alternatively, you can use setVertexData with DP_SG_POSITION as first argument
            * to specify positions, but this would require an explicit enable through setEnabled.
            * \sa setVertexData, setEnabled */ 
           DP_SG_CORE_API void setVertices( const dp::math::Vec3f * vertices, unsigned int count, bool enable = true );
@@ -459,7 +459,7 @@ namespace dp
           /*! \brief Retrieves position data from the VertexAttributeSet.
            * \return The function returns the address of the first position stored in the array.
            * \note If there are no vertices, or the data is specified by the generic vertex attribute
-           *  NVSG_ATTR0 and doesn't fit to the usual vertex size and format of three floats per vertex,
+           *  DP_ATTR0 and doesn't fit to the usual vertex size and format of three floats per vertex,
            *  NULL is returned. */
           DP_SG_CORE_API Buffer::ConstIterator<dp::math::Vec3f>::Type getVertices() const;
 
@@ -487,7 +487,7 @@ namespace dp
            * to copying the new normals.
            * \n\n
            * The normals initially are enable for rendering if specified using this function.
-           * Alternatively, you can use setVertexData with NVSG_NORMAL as first argument
+           * Alternatively, you can use setVertexData with DP_SG_NORMAL as first argument
            * to specify normals, but this would require an explicit enable through setEnabled. 
            * \sa setVertexData, setEnabled */
           DP_SG_CORE_API void setNormals( const dp::math::Vec3f * normals, unsigned int count, bool enable = true );
@@ -507,7 +507,7 @@ namespace dp
           /*! \brief Retrieves normals from the VertexAttributeSet.
            * \return The function returns the address of the first normal stored in the array.
            * \note If there are no normals, or the data is specified by the generic vertex attribute
-           *  NVSG_ATTR2 and doesn't fit to the usual normal size and format of three floats per vertex,
+           *  DP_SG_ATTR2 and doesn't fit to the usual normal size and format of three floats per vertex,
            *  NULL is returned. */
           DP_SG_CORE_API Buffer::ConstIterator<dp::math::Vec3f>::Type getNormals() const;
 
@@ -527,7 +527,7 @@ namespace dp
            * to copying the new colors. 
            * \n\n
            * The colors initially are enable for rendering if specified using this function.
-           * Alternatively, you can use setVertexData with NVSG_COLOR as first argument
+           * Alternatively, you can use setVertexData with DP_SG_COLOR as first argument
            * to specify vertex colors, but this would require an explicit enable through setEnabled. 
            * \sa setVertexData, setEnabled */
           template <unsigned int N, typename T> void setColors( const dp::math::Vecnt<N,T> * colors, unsigned int count, bool enable = true );
@@ -577,7 +577,7 @@ namespace dp
            * to copying the new colors.
            * \n\n
            * The secondary colors initially are enable for rendering if specified using this function.
-           * Alternatively, you can use setVertexData with NVSG_SECONDARY_COLOR as first argument
+           * Alternatively, you can use setVertexData with DP_SECONDARY_COLOR as first argument
            * to specify secondary colors, but this would require an explicit enable through setEnabled. 
            * \sa setVertexData, setEnabled */
           template <typename T> void setSecondaryColors( const dp::math::Vecnt<3,T> * colors, unsigned int count, bool enable = true );
@@ -621,7 +621,7 @@ namespace dp
            * to copying the new coordinates.
            * \n\n
            * The fog coordinates initially are enable for rendering if specified using this function.
-           * Alternatively, you can use setVertexData with NVSG_FOG_COORD as first argument
+           * Alternatively, you can use setVertexData with DP_FOG_COORD as first argument
            * to specify fog coordinates, but this would require an explicit enable through setEnabled. 
            * \sa setVertexData, setEnabled */
           template <typename T> void setFogCoords( const T * coords, unsigned int count, bool enable = true );
@@ -643,7 +643,7 @@ namespace dp
           /*! \brief Retrieves fog coordinates from the VertexAttributeSet.
            * \return The function returns the address of the first coordinate stored in the array.
            * \note If there are no fog coords, or the data is specified by the generic vertex attribute
-           *  NVSG_ATTR5 and doesn't fit to the usual fog coord size of one component per vertex, NULL
+           *  DP_SG_ATTR5 and doesn't fit to the usual fog coord size of one component per vertex, NULL
            *  is returned. */
           Buffer::ConstIterator<float>::Type getFogCoords() const;
 
@@ -669,7 +669,7 @@ namespace dp
            * texture unit will be released prior to copying the new texture coordinates.
            * \n\n
            * The texture coordinates initially are enable for rendering if specified using this function.
-           * Alternatively, you can use setVertexData with NVSG_TEXCOORD0+unit as first argument
+           * Alternatively, you can use setVertexData with DP_SG_TEXCOORD0+unit as first argument
            * to specify texture coordinates, but this would require an explicit enable through setEnabled. 
            * \sa setVertexData, setEnabled */
           template <unsigned int N, typename T> void setTexCoords( unsigned int unit, const dp::math::Vecnt<N,T> * coords, unsigned int count, bool enable = true );
@@ -840,7 +840,7 @@ namespace dp
       DP_SG_CORE_API void generateTexCoords( VertexAttributeSetSharedPtr const& vas       //!< pointer to the VertexAttributeSet to use
                                      , TextureCoordType tct           //!< type of texture coordinates to generate
                                      , const dp::math::Sphere3f &sphere //!< bounding sphere to map coordinates to
-                                     , unsigned int tc = VertexAttributeSet::NVSG_TEXCOORD0   //!< vertex attrib to generate the coordinates in
+                                     , unsigned int tc = VertexAttributeSet::DP_SG_TEXCOORD0   //!< vertex attrib to generate the coordinates in
                                      );
 
       /*! \brief Determine if an attribute identifier identifies a generic or a conventional attribute.
@@ -861,7 +861,7 @@ namespace dp
       template <typename ValueType>
       typename Buffer::ConstIterator<ValueType>::Type VertexAttributeSet::getVertexData(unsigned int attrib) const
       {
-        DP_ASSERT( NVSG_POSITION<=attrib && attrib<=NVSG_ATTR15 ); // undefined behavior on invalid attrib
+        DP_ASSERT( DP_SG_POSITION<=attrib && attrib<=DP_SG_ATTR15 ); // undefined behavior on invalid attrib
 
         // we alias generic and conventional vertex attributes, that is - 
         // pairs of generic and conventional vertex attributes are sharing the same storage
@@ -881,7 +881,7 @@ namespace dp
 
       inline void VertexAttributeSet::setEnabled(unsigned int attrib, bool enable)
       {
-        DP_ASSERT(attrib>=NVSG_POSITION && attrib<=NVSG_ATTR15);
+        DP_ASSERT(attrib>=DP_SG_POSITION && attrib<=DP_SG_ATTR15);
         m_enableFlags &= ~(1<<attrib);
         m_enableFlags |= ((!!enable)<<attrib);
         notify( Event( this ) );
@@ -889,13 +889,13 @@ namespace dp
 
       inline bool VertexAttributeSet::isEnabled(unsigned int attrib) const
       {
-        DP_ASSERT(attrib>=NVSG_POSITION && attrib<=NVSG_ATTR15);
+        DP_ASSERT(attrib>=DP_SG_POSITION && attrib<=DP_SG_ATTR15);
         return !!(m_enableFlags & (1<<attrib));
       }
 
       inline void VertexAttributeSet::setNormalizeEnabled(unsigned int attrib, bool enable)
       {
-        DP_ASSERT(attrib>=NVSG_ATTR0 && attrib<=NVSG_ATTR15); // only for generic attributes!
+        DP_ASSERT(attrib>=DP_SG_ATTR0 && attrib<=DP_SG_ATTR15); // only for generic attributes!
         m_normalizeEnableFlags &= ~(1<<attrib);
         m_normalizeEnableFlags |= ~((!!enable)<<attrib);
         notify( Event( this ) );
@@ -903,32 +903,32 @@ namespace dp
 
       inline bool VertexAttributeSet::isNormalizeEnabled(unsigned int attrib) const
       {
-        DP_ASSERT(attrib>=NVSG_POSITION && attrib<=NVSG_ATTR15);
+        DP_ASSERT(attrib>=DP_SG_POSITION && attrib<=DP_SG_ATTR15);
         return !!(m_normalizeEnableFlags & (1<<attrib));
       }
 
       inline void VertexAttributeSet::setVertices( const dp::math::Vec3f * vertices, unsigned int count, bool enable )
       {
-        setVertexData( NVSG_POSITION, 3, dp::util::DT_FLOAT_32, &vertices[0], 0, count, enable );
+        setVertexData( DP_SG_POSITION, 3, dp::util::DT_FLOAT_32, &vertices[0], 0, count, enable );
       }
 
       inline void VertexAttributeSet::setVertices( unsigned int pos, const dp::math::Vec3f * vertices, unsigned int count, bool enable )
       {
-        setVertexData( NVSG_POSITION, pos, 3, dp::util::DT_FLOAT_32, &vertices[0], 0, count, enable );
+        setVertexData( DP_SG_POSITION, pos, 3, dp::util::DT_FLOAT_32, &vertices[0], 0, count, enable );
       }
 
       inline Buffer::ConstIterator<dp::math::Vec3f>::Type VertexAttributeSet::getVertices() const
       {
         // debug checks on current limitations
-        DP_ASSERT( getSizeOfVertexData(NVSG_POSITION) == 3 );  
-        DP_ASSERT( getTypeOfVertexData(NVSG_POSITION) == dp::util::DT_FLOAT_32 );
+        DP_ASSERT( getSizeOfVertexData(DP_SG_POSITION) == 3 );  
+        DP_ASSERT( getTypeOfVertexData(DP_SG_POSITION) == dp::util::DT_FLOAT_32 );
 
-        return getVertexData<dp::math::Vec3f>(NVSG_POSITION);
+        return getVertexData<dp::math::Vec3f>(DP_SG_POSITION);
       }
 
       inline unsigned int VertexAttributeSet::getNumberOfVertices() const
       {
-        return getNumberOfVertexData(NVSG_POSITION);
+        return getNumberOfVertexData(DP_SG_POSITION);
       }
 
       inline unsigned int VertexAttributeSet::getPerVertexBytes() const
@@ -946,195 +946,195 @@ namespace dp
 
       //inline void VertexAttributeSet::setVertexWeights( const float * weights, unsigned int count, bool enable )
       //{
-      //  setVertexData( NVSG_VERTEX_WEIGHT, 1, dp::util::DT_FLOAT_32, weights, count, enable );
+      //  setVertexData( DP_VERTEX_WEIGHT, 1, dp::util::DT_FLOAT_32, weights, count, enable );
       //}
 
       //inline void VertexAttributeSet::setVertexWeights( unsigned int pos, const float * weights, unsigned int count, bool enable )
       //{
-      //  setVertexData( NVSG_VERTEX_WEIGHT, pos, 1, dp::util::DT_FLOAT_32, weights, count, enable );
+      //  setVertexData( DP_VERTEX_WEIGHT, pos, 1, dp::util::DT_FLOAT_32, weights, count, enable );
       //}
 
       //inline const void * VertexAttributeSet::getVertexWeights() const
       // {
-      //  return( (     ( getSizeOfVertexData(NVSG_VERTEX_WEIGHT) == 1 )
-      //            &&  ( getTypeOfVertexData(NVSG_VERTEX_WEIGHT) == dp::util::DT_FLOAT_32 ) )
-      //          ? (const dp::math::Vec3f*)getVertexData(NVSG_VERTEX_WEIGHT)
+      //  return( (     ( getSizeOfVertexData(DP_VERTEX_WEIGHT) == 1 )
+      //            &&  ( getTypeOfVertexData(DP_VERTEX_WEIGHT) == dp::util::DT_FLOAT_32 ) )
+      //          ? (const dp::math::Vec3f*)getVertexData(DP_VERTEX_WEIGHT)
       //          : NULL );
       //}
 
       //inline unsigned int VertexAttributeSet::getNumberOfVertexWeights() const
       //{
-      //  return getNumberOfVertexData(NVSG_VERTEX_WEIGHT);
+      //  return getNumberOfVertexData(DP_VERTEX_WEIGHT);
       //}
 
       inline void VertexAttributeSet::setNormals( const dp::math::Vec3f * normals, unsigned int count, bool enable )
       {
-        setVertexData( NVSG_NORMAL, 3, dp::util::DT_FLOAT_32, normals, 0, count, enable );
+        setVertexData( DP_SG_NORMAL, 3, dp::util::DT_FLOAT_32, normals, 0, count, enable );
       }
 
       inline void VertexAttributeSet::setNormals( unsigned int pos, const dp::math::Vec3f * normals, unsigned int count, bool enable )
       {
-        setVertexData( NVSG_NORMAL, pos, 3, dp::util::DT_FLOAT_32, normals, 0, count, enable );
+        setVertexData( DP_SG_NORMAL, pos, 3, dp::util::DT_FLOAT_32, normals, 0, count, enable );
       }
 
       inline Buffer::ConstIterator<dp::math::Vec3f>::Type VertexAttributeSet::getNormals() const
       {
         // debug checks on current limitations
-        DP_ASSERT( getSizeOfVertexData(NVSG_NORMAL) == 3 );  
-        DP_ASSERT( getTypeOfVertexData(NVSG_NORMAL) == dp::util::DT_FLOAT_32 );
+        DP_ASSERT( getSizeOfVertexData(DP_SG_NORMAL) == 3 );  
+        DP_ASSERT( getTypeOfVertexData(DP_SG_NORMAL) == dp::util::DT_FLOAT_32 );
 
-        return getVertexData<dp::math::Vec3f>(NVSG_NORMAL);
+        return getVertexData<dp::math::Vec3f>(DP_SG_NORMAL);
       }
 
       inline unsigned int VertexAttributeSet::getNumberOfNormals() const
       {
-        return getNumberOfVertexData(NVSG_NORMAL);
+        return getNumberOfVertexData(DP_SG_NORMAL);
       }
 
       template <unsigned int N, typename T> 
       inline void VertexAttributeSet::setColors( const dp::math::Vecnt<N,T> * colors, unsigned int count, bool enable )
       {
-        setVertexData( NVSG_COLOR, N, dp::util::Type2EnumType<T>::type, colors, 0, count, enable );
+        setVertexData( DP_SG_COLOR, N, dp::util::Type2EnumType<T>::type, colors, 0, count, enable );
       }
 
       template <unsigned int N, typename T> 
       inline void VertexAttributeSet::setColors( unsigned int pos, const dp::math::Vecnt<N,T> * colors, unsigned int count, bool enable )
       {
-        setVertexData( NVSG_COLOR, pos, N, dp::util::Type2EnumType<T>::type, colors, 0, count, enable );
+        setVertexData( DP_SG_COLOR, pos, N, dp::util::Type2EnumType<T>::type, colors, 0, count, enable );
       }
 
       template <typename ValueType>
       inline typename Buffer::ConstIterator<ValueType>::Type VertexAttributeSet::getColors() const
       {
-        return getVertexData<ValueType>(NVSG_COLOR);
+        return getVertexData<ValueType>(DP_SG_COLOR);
       }
 
       inline unsigned int VertexAttributeSet::getNumberOfColors() const
       {
-        return getNumberOfVertexData(NVSG_COLOR);
+        return getNumberOfVertexData(DP_SG_COLOR);
       }
 
       inline unsigned int VertexAttributeSet::getSizeOfColors() const
       {
-        return getSizeOfVertexData(NVSG_COLOR);
+        return getSizeOfVertexData(DP_SG_COLOR);
       }
 
       inline unsigned int VertexAttributeSet::getTypeOfColors() const
       {
-        return getTypeOfVertexData(NVSG_COLOR);
+        return getTypeOfVertexData(DP_SG_COLOR);
       }
 
       template <typename T> 
       inline void VertexAttributeSet::setSecondaryColors( const dp::math::Vecnt<3,T> * colors, unsigned int count, bool enable )
       {
-        setVertexData(NVSG_SECONDARY_COLOR, 3, dp::util::Type2EnumType<T>::type, colors, 0, count, enable );
+        setVertexData(DP_SG_SECONDARY_COLOR, 3, dp::util::Type2EnumType<T>::type, colors, 0, count, enable );
       }
 
       template <typename T> 
       inline void VertexAttributeSet::setSecondaryColors( unsigned int pos, const dp::math::Vecnt<3,T> * colors, unsigned int count, bool enable )
       {
-        setVertexData( NVSG_SECONDARY_COLOR, pos, 3, dp::util::Type2EnumType<T>::type, colors, 0, count, enable );
+        setVertexData( DP_SG_SECONDARY_COLOR, pos, 3, dp::util::Type2EnumType<T>::type, colors, 0, count, enable );
       }
 
       template <typename ValueType>
       inline typename Buffer::ConstIterator<ValueType>::Type VertexAttributeSet::getSecondaryColors() const
       {
-        return getVertexData<ValueType>(NVSG_SECONDARY_COLOR);
+        return getVertexData<ValueType>(DP_SG_SECONDARY_COLOR);
       }
 
       inline unsigned int VertexAttributeSet::getNumberOfSecondaryColors() const
       {
-        return getNumberOfVertexData(NVSG_SECONDARY_COLOR);
+        return getNumberOfVertexData(DP_SG_SECONDARY_COLOR);
       }
 
       inline unsigned int VertexAttributeSet::getTypeOfSecondaryColors() const
       {
-        return getTypeOfVertexData(NVSG_SECONDARY_COLOR);
+        return getTypeOfVertexData(DP_SG_SECONDARY_COLOR);
       }
 
       template <typename T> 
       inline void VertexAttributeSet::setFogCoords( const T * coords, unsigned int count, bool enable )
       {
-        setVertexData( NVSG_FOG_COORD, 1, dp::util::Type2EnumType<T>::type, coords, 0, count, enable );
+        setVertexData( DP_SG_FOG_COORD, 1, dp::util::Type2EnumType<T>::type, coords, 0, count, enable );
       }
 
       template <typename T> 
       inline void VertexAttributeSet::setFogCoords( unsigned int pos, T * coords, unsigned int count, bool enable )
       {
-        setVertexData( NVSG_FOG_COORD, pos, 1, dp::util::Type2EnumType<T>::type, coords, 0, count, enable );
+        setVertexData( DP_SG_FOG_COORD, pos, 1, dp::util::Type2EnumType<T>::type, coords, 0, count, enable );
       }
 
       inline Buffer::ConstIterator<float>::Type VertexAttributeSet::getFogCoords() const
       {
-        return( ( getSizeOfVertexData(NVSG_FOG_COORD) == 1 ) ? getVertexData<float>(NVSG_FOG_COORD) : Buffer::ConstIterator<float>::Type() );
+        return( ( getSizeOfVertexData(DP_SG_FOG_COORD) == 1 ) ? getVertexData<float>(DP_SG_FOG_COORD) : Buffer::ConstIterator<float>::Type() );
       }
 
       inline unsigned int VertexAttributeSet::getNumberOfFogCoords() const
       {
-        return getNumberOfVertexData(NVSG_FOG_COORD);
+        return getNumberOfVertexData(DP_SG_FOG_COORD);
       }
 
       inline unsigned int VertexAttributeSet::getTypeOfFogCoords() const
       {
-        return getTypeOfVertexData(NVSG_FOG_COORD);
+        return getTypeOfVertexData(DP_SG_FOG_COORD);
       }
 
       template <unsigned int N, typename T> 
       inline void VertexAttributeSet::setTexCoords( unsigned int unit, const dp::math::Vecnt<N,T> * coords, unsigned int count, bool enable )
       {
         DP_ASSERT(unit<8);
-        setVertexData( NVSG_TEXCOORD0+unit, N, dp::util::Type2EnumType<T>::type, coords, 0, count, enable );
+        setVertexData( DP_SG_TEXCOORD0+unit, N, dp::util::Type2EnumType<T>::type, coords, 0, count, enable );
       }
 
       template <unsigned int N, typename T> 
       inline void VertexAttributeSet::setTexCoords( unsigned int unit, unsigned int pos, const dp::math::Vecnt<N,T> * coords, unsigned int count, bool enable )
       {
         DP_ASSERT(unit<8);
-        setVertexData( NVSG_TEXCOORD0+unit, pos, N, dp::util::Type2EnumType<T>::type, coords, 0, count, enable );
+        setVertexData( DP_SG_TEXCOORD0+unit, pos, N, dp::util::Type2EnumType<T>::type, coords, 0, count, enable );
       }
 
       template <typename ValueType>
       inline typename Buffer::ConstIterator<ValueType>::Type VertexAttributeSet::getTexCoords(unsigned int unit) const
       {
         DP_ASSERT(unit<8);
-        return getVertexData<ValueType>(NVSG_TEXCOORD0+unit);
+        return getVertexData<ValueType>(DP_SG_TEXCOORD0+unit);
       }
 
       inline unsigned int VertexAttributeSet::getNumberOfTexCoords(unsigned int unit) const
       {
         DP_ASSERT(unit<8);
-        return getNumberOfVertexData(NVSG_TEXCOORD0+unit);
+        return getNumberOfVertexData(DP_SG_TEXCOORD0+unit);
       }
 
       inline unsigned int VertexAttributeSet::getSizeOfTexCoords(unsigned int unit) const
       {
         DP_ASSERT(unit<8);
-        return getSizeOfVertexData(NVSG_TEXCOORD0+unit);
+        return getSizeOfVertexData(DP_SG_TEXCOORD0+unit);
       }
 
       inline unsigned int VertexAttributeSet::getTypeOfTexCoords(unsigned int unit) const
       {
         DP_ASSERT(unit<8);
-        return getTypeOfVertexData(NVSG_TEXCOORD0+unit);
+        return getTypeOfVertexData(DP_SG_TEXCOORD0+unit);
       }
 
       inline bool genericAttrib(unsigned int attrib)
       {
-        return attrib >= VertexAttributeSet::NVSG_ATTR0;
+        return attrib >= VertexAttributeSet::DP_SG_ATTR0;
       }
 
       inline unsigned int attribIndex(unsigned int attrib)
       {
         if ( genericAttrib(attrib) ) 
         {
-          return attrib - VertexAttributeSet::NVSG_ATTR0;
+          return attrib - VertexAttributeSet::DP_SG_ATTR0;
         }
         return attrib;
       }
 
       inline const VertexAttribute &VertexAttributeSet::getVertexAttribute( int attrib ) const
       {
-        DP_ASSERT(NVSG_POSITION <= attrib && attrib <= NVSG_ATTR15); // undefined behavior on invalid attrib
+        DP_ASSERT(DP_SG_POSITION <= attrib && attrib <= DP_SG_ATTR15); // undefined behavior on invalid attrib
         AttributeContainer::const_iterator it = m_vattribs.find( attribIndex( attrib ) );
         return( it == m_vattribs.end() ? m_emptyAttribute : it->second );
       }

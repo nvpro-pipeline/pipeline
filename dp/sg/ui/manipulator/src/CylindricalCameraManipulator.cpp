@@ -234,17 +234,17 @@ namespace dp
               float multiplier = 1.0f;
 
         #if 0
-              if ( m_flags & NVSG_WHEELING )
+              if ( m_flags & DP_WHEELING )
               {
                 // take accumulated deltas if user is wheeling
                 dy = getWheelTicks();
          
                 // Temporary speedup/slowdown of mouse wheel dolly operation.
-                if (getKeyState() & NVSG_SHIFT) // Speedup has precedence.
+                if (getKeyState() & DP_SHIFT) // Speedup has precedence.
                 {
                   multiplier = 4.0f;
                 }
-                else if (getKeyState() & NVSG_CONTROL)
+                else if (getKeyState() & DP_CONTROL)
                 {
                   multiplier = 0.25f;
                 }
@@ -259,11 +259,11 @@ namespace dp
                 // MMM - implement speed in sync
         #if 0
                 // Temporary speedup/slowdown of mouse wheel dolly operation.
-                if (getKeyState() & NVSG_SHIFT) // Speedup has precedence.
+                if (getKeyState() & DP_SHIFT) // Speedup has precedence.
                 {
                   multiplier = 4.0f;
                 }
-                else if (getKeyState() & NVSG_CONTROL)
+                else if (getKeyState() & DP_CONTROL)
                 {
                   multiplier = 0.25f;
                 }
@@ -441,7 +441,7 @@ namespace dp
               int currentY = getCurrentY();
       
         #if 0
-              if ( m_flags & NVSG_SPIN )
+              if ( m_flags & DP_SPIN )
               {
                 lastX = m_startSpinX;
                 lastY = m_startSpinY;

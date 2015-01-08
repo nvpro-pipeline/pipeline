@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright NVIDIA Corporation 2012-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -39,7 +39,6 @@
 #include <iostream>
 #include <tchar.h>
 
-#include <dp/sg/core/nvsg.h>
 #include <dp/sg/renderer/rix/gl/SceneRenderer.h>
 
 #include <boost/program_options.hpp>
@@ -171,13 +170,10 @@ namespace dp
           }
 
           m_renderer->setCullingEnabled( !disableCulling );
-
-          dp::sg::core::nvsgInitialize( );
         }
 
         SgRdrBackend::~SgRdrBackend()
         {
-          dp::sg::core::nvsgTerminate();
           //The Sg Renderer must be destroyed prior to destroying the window
           m_renderer = dp::sg::renderer::rix::gl::SceneRendererSharedPtr::null;
           if ( m_windowId )

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright NVIDIA Corporation 2012-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -28,7 +28,7 @@
 /** @file */
 
 #include <typeinfo>
-#include <dp/sg/core/nvsgapi.h> // commonly used stuff
+#include <dp/sg/core/Config.h> // commonly used stuff
 #include <dp/math/Boxnt.h>
 #include <dp/math/Spherent.h>
 #include <dp/sg/core/ConstIterator.h>
@@ -153,14 +153,14 @@ namespace dp
         enum
         {
           // bounding volume state
-          NVSG_BOUNDING_BOX                   = DP_SG_HINT_LAST_HINT          << 1,
-          NVSG_BOUNDING_SPHERE                = NVSG_BOUNDING_BOX             << 1,
+          DP_SG_BOUNDING_BOX                   = DP_SG_HINT_LAST_HINT          << 1,
+          DP_SG_BOUNDING_SPHERE                = DP_SG_BOUNDING_BOX             << 1,
       
-          NVSG_BOUNDING_VOLUMES               = NVSG_BOUNDING_BOX | 
-                                                NVSG_BOUNDING_SPHERE,
+          DP_SG_BOUNDING_VOLUMES               = DP_SG_BOUNDING_BOX | 
+                                                DP_SG_BOUNDING_SPHERE,
 
           // hash key state
-          NVSG_HASH_KEY                       = NVSG_BOUNDING_SPHERE    << 1
+          DP_SG_HASH_KEY                       = DP_SG_BOUNDING_SPHERE    << 1
         };
 
         class Event;
@@ -181,7 +181,7 @@ namespace dp
           * Object-derived classes must override the protected member 
           * \link Object::m_objectCode m_objectCode \endlink, with the correct value for the
           * respective type. It is recommended to do this at instantiation time of the customized object.
-          * \sa \ref howtoderiveanvsgobject, Object::getHigherLevelObjectCode
+          * \sa \ref Object::getHigherLevelObjectCode
           */
         ObjectCode getObjectCode() const;
 
