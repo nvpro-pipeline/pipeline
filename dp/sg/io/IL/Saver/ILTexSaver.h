@@ -61,7 +61,7 @@ extern "C"
 
 DEFINE_PTR_TYPES( ILTexSaver );
 
-//! A Texture Saver that encapsulates DevIL so it can be used with the NVSG PlugIn mechanism.
+//! A Texture Saver that encapsulates DevIL so it can be used with the dp::util PlugIn mechanism.
 class ILTexSaver : public dp::sg::io::TextureSaver
 {
   friend bool getPlugInterface(const dp::util::UPIID& piid, dp::util::PlugInSharedPtr & pi);

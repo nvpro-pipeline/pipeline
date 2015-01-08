@@ -58,7 +58,7 @@ namespace dp
         * \code
         *   // Example:
         *   // --------
-        *   // Get a scene loader interface capable to load 'nbf' files ("NVSG Binary File")
+        *   // Get a scene loader interface capable to load 'dpbf' files ("DP Binary File")
         *   
         *   // 
         *   vector<string> searchPaths;
@@ -70,7 +70,7 @@ namespace dp
         *
         *   dp::sg::core::SmartScene theScene;
         *   dp::sg::core::SmartViewState viewState;
-        *   dp::util::UPIID nbfLoaderInterfaceID;
+        *   dp::util::UPIID dpbfLoaderInterfaceID;
         *   bool foundAppropriate = false;
         *   vector<dp::util::UPIID> piids;
         *   if ( dp::util::queryInterfaceType(searchPaths, PITID_SCENE_LOADER, piids) )
@@ -78,10 +78,10 @@ namespace dp
         *     vector<dp::util::UPIID>::iterator it = piids.begin();
         *     for ( ; it != piids.end(); ++it )
         *     {
-        *       if ( !stricmp((*it).getPlugSpecificIDString(), ".nbf") )
+        *       if ( !stricmp((*it).getPlugSpecificIDString(), ".dpbf") )
         *       {
         *         // found, copy the ID
-        *         nbfLoaderInterfaceID = *it;
+        *         dpbfLoaderInterfaceID = *it;
         *         foundAppropriate = true;
         *         break; // look no further
         *       }
@@ -89,11 +89,11 @@ namespace dp
         *     if ( foundAppropriate )
         *     {
         *       dp::util::PlugIn * plug; 
-        *       if ( dp::util::getInterface(searchPaths, nbfLoaderInterfaceID, plug) )
+        *       if ( dp::util::getInterface(searchPaths, dpbfLoaderInterfaceID, plug) )
         *       {
         *         dp::sg::core::SceneLoader * loader = reinterpret_cast<SceneLoader*>(plug);
-        *         theScene = loader->load("c:\\myscenes\\sample.nbf", searchPaths, viewState);
-        *         dp::util::releaseInterface(nbfLoaderInterfaceID);
+        *         theScene = loader->load("c:\\myscenes\\sample.dpbf", searchPaths, viewState);
+        *         dp::util::releaseInterface(dpbfLoaderInterfaceID);
         *       }
         *     }
         *   }

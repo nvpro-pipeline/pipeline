@@ -5,7 +5,7 @@ include_directories(
 
 #definitions
 add_definitions(
-  -DNVSGSAVER_EXPORTS
+  -DDPAFSAVER_EXPORTS
   -D_CRT_SECURE_NO_WARNINGS
 )
 
@@ -14,24 +14,24 @@ if (MSVC)
 endif()
 
 #sources
-set( NVSGSAVER_SOURCES
-  NVSGSaver.cpp
+set( DPAFSAVER_SOURCES
+  DPAFSaver.cpp
 )
 
-set( NVSGSAVER_HEADERS
-  inc/NVSGSaver.h
+set( DPAFSAVER_HEADERS
+  inc/DPAFSaver.h
 )
 
-source_group(source FILES ${NVSGSAVER_SOURCES})
-source_group(header FILES ${NVSGSAVER_HEADERS})
+source_group(source FILES ${DPAFSAVER_SOURCES})
+source_group(header FILES ${DPAFSAVER_HEADERS})
 
 #target
-add_library( NVSGSaver SHARED
-  ${NVSGSAVER_SOURCES}
-  ${NVSGSAVER_HEADERS}
+add_library( DPAFSaver SHARED
+  ${DPAFSAVER_SOURCES}
+  ${DPAFSAVER_HEADERS}
 )
 
-target_link_libraries( NVSGSaver 
+target_link_libraries( DPAFSaver 
   DP
   DPSgCore
   DPSgUI
@@ -42,4 +42,4 @@ target_link_libraries( NVSGSaver
   DPSgIO
 )
 
-set_target_properties( NVSGSaver PROPERTIES SUFFIX ".nxm" FOLDER "Savers" )
+set_target_properties( DPAFSaver PROPERTIES SUFFIX ".nxm" FOLDER "Savers" )

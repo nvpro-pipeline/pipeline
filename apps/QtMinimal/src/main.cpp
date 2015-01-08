@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2009-2011
+// Copyright NVIDIA Corporation 2009-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -36,7 +36,6 @@
 
 #include <dp/fx/EffectLibrary.h>
 #include <dp/sg/algorithm/Replace.h>
-#include <dp/sg/core/nvsg.h>
 #include <dp/sg/core/PerspectiveCamera.h>
 #include <dp/sg/core/TextureFile.h>
 #include <dp/sg/algorithm/Optimize.h>
@@ -480,7 +479,7 @@ int runApp( int argc, char *argv[], options::variables_map const& opts )
     for ( size_t i=0 ; i<vp.size() ; i++ )
     {
       DP_ASSERT( dynamic_cast<dp::sg::core::PrimitiveWeakPtr>(vp[i]) );
-      static_cast<dp::sg::core::PrimitiveWeakPtr>(vp[i])->generateTexCoords( tct, dp::sg::core::VertexAttributeSet::NVSG_TEXCOORD0, false );
+      static_cast<dp::sg::core::PrimitiveWeakPtr>(vp[i])->generateTexCoords( tct, dp::sg::core::VertexAttributeSet::DP_SG_TEXCOORD0, false );
       // don't overwrite if there already are some texture coordinate                                                               ^^^^^
     }
   }
@@ -492,9 +491,9 @@ int runApp( int argc, char *argv[], options::variables_map const& opts )
     for ( size_t i=0 ; i<vp.size() ; i++ )
     {
       DP_ASSERT( dynamic_cast<dp::sg::core::PrimitiveWeakPtr>(vp[i]) );
-      static_cast<dp::sg::core::PrimitiveWeakPtr>(vp[i])->generateTangentSpace( dp::sg::core::VertexAttributeSet::NVSG_TEXCOORD0
-                                                                              , dp::sg::core::VertexAttributeSet::NVSG_TANGENT
-                                                                              , dp::sg::core::VertexAttributeSet::NVSG_BINORMAL
+      static_cast<dp::sg::core::PrimitiveWeakPtr>(vp[i])->generateTangentSpace( dp::sg::core::VertexAttributeSet::DP_SG_TEXCOORD0
+                                                                              , dp::sg::core::VertexAttributeSet::DP_SG_TANGENT
+                                                                              , dp::sg::core::VertexAttributeSet::DP_SG_BINORMAL
                                                                               , false );
       // don't overwrite if there already are some texture coordinate           ^^^^^
     }
@@ -671,11 +670,6 @@ int runApp( int argc, char *argv[], options::variables_map const& opts )
 
 int main(int argc, char *argv[])
 {
-  dp::sg::core::nvsgInitialize( );
-#if !defined(NDEBUG)
-  dp::sg::core::nvsgSetDebugFlags( dp::sg::core::NVSG_DBG_ASSERT /*| dp::sg::core::NVSG_DBG_LEAK_DETECTION*/ );
-#endif
-
   options::options_description od("Usage: QtMinimal");
 
   od.add_options()
@@ -772,8 +766,6 @@ int main(int argc, char *argv[])
     std::string line;
     getline( std::cin, line );
   }
-
-  dp::sg::core::nvsgTerminate();
 
   return result;
 }

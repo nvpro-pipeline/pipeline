@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2005
+// Copyright NVIDIA Corporation 2002-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -27,10 +27,13 @@
 #pragma once
 /** \file */
 
-#include <dp/sg/core/NVSGVersion.h>
+#include <dp/Config.h>
+#include <boost/preprocessor/stringize.hpp>
 
 //! A string define serving for version safty
-#define UPITID_VERSION        NVSG_VER_MAJOR_STR "." NVSG_VER_MINOR_STR
+#define UPITID_STRING_HELPER(x) #x
+#define UPITID_STRING(x) UPITID_STRING_HELPER(x)
+#define UPITID_VERSION        "dp_" BOOST_PP_STRINGIZE(DP_VER_MAJOR) "." BOOST_PP_STRINGIZE(DP_VER_MINOR)
 
 #define UPITID_SCENE_LOADER   0x0001    //!<  Unique Plug-In Type ID for Scene loaders
 #define UPITID_SCENE_SAVER    0x0002    //!<  Unique Plug-In Type ID for Scene savers

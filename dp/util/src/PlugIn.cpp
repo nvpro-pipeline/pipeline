@@ -27,6 +27,7 @@
 #include <dp/util/PlugIn.h>
 #include <dp/util/Tokenizer.h>
 #include <dp/util/File.h>
+#include <algorithm>
 
 #if !defined( NDEBUG )
 #include <stdio.h>

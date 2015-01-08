@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2007
+// Copyright NVIDIA Corporation 2002-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -27,7 +27,7 @@
 #pragma once
 /** @file */
 
-#include <dp/sg/core/nvsgapi.h>
+#include <dp/sg/core/Config.h>
 #include <dp/sg/core/BoundingVolumeObject.h>
 #include <dp/sg/core/IndexSet.h>
 #include <dp/sg/core/VertexAttributeSet.h>
@@ -322,14 +322,14 @@ namespace dp
           /*! \brief Generates tangents and binormals
            * \param texcoords
            * Addresses the vertex attribute to hold the input 2D texture coordinates used to calculate the tangent space.
-           * By default, input texture coordinates are taken from the VertexAttributeSet::NVSG_TEXCOORD0. 
+           * By default, input texture coordinates are taken from the VertexAttributeSet::DP_SG_TEXCOORD0. 
            * \param tangents
            * Addresses the vertex attribute where to output the calculated tangents. 
-           * By default tangents are written to VertexAttributeSet::NVSG_TANGENT, 
+           * By default tangents are written to VertexAttributeSet::DP_SG_TANGENT, 
            * which is aligned to the TANGENT binding semantic used by Cg for varying vertex shader input. 
            * \param binormals
            * Addresses the vertex attribute where to output the calculated binormals.
-           * By default binormals are written to VertexAttributeSet::NVSG_BINORMAL, 
+           * By default binormals are written to VertexAttributeSet::DP_SG_BINORMAL, 
            * which is aligned to the BINORMAL binding semantic used by Cg for varying vertex shader input. 
            * \param overwrite 
            * An optional flag indicating whether to overwrite existing vertex data.
@@ -338,9 +338,9 @@ namespace dp
            * The function calls the protected virtual function calculateTangentSpace, which concrete Drawables
            * should override to provide correct tangent space calculation.
            * \sa calculateTangentSpace */
-          DP_SG_CORE_API void generateTangentSpace( unsigned int texcoords = VertexAttributeSet::NVSG_TEXCOORD0, 
-                                              unsigned int tangents  = VertexAttributeSet::NVSG_TANGENT, 
-                                              unsigned int binormals = VertexAttributeSet::NVSG_BINORMAL,
+          DP_SG_CORE_API void generateTangentSpace( unsigned int texcoords = VertexAttributeSet::DP_SG_TEXCOORD0, 
+                                              unsigned int tangents  = VertexAttributeSet::DP_SG_TANGENT, 
+                                              unsigned int binormals = VertexAttributeSet::DP_SG_BINORMAL,
                                               bool overwrite = true );
 
           /*! \brief Generates 2D texture coordinates 
@@ -348,8 +348,8 @@ namespace dp
            * Desired texture coordinate type. Accepted are TCT_CYLINDRICAL, TCT_PLANAR, and TCT_SPHERICAL. 
            * \param texcoords 
            * Addresses the vertex attribute where to output the generated texture coords. 
-           * VertexAttributeSet::NVSG_TEXCOORD0 - VertexAttributeSet::NVSG_TEXCOORD7 are allowed identifiers.
-           * By default texture coords are written to VertexAttributeSet::NVSG_TEXCOORD0, 
+           * VertexAttributeSet::DP_SG_TEXCOORD0 - VertexAttributeSet::DP_SG_TEXCOORD7 are allowed identifiers.
+           * By default texture coords are written to VertexAttributeSet::DP_SG_TEXCOORD0, 
            * \param overwrite 
            * An optional flag indicating whether to overwrite existing vertex data.
            * The default is to overwrite existing data.
@@ -358,7 +358,7 @@ namespace dp
            * should override to provide correct texture coordinate calculation.
            * \sa calculateTexCoords */
           DP_SG_CORE_API void generateTexCoords( TextureCoordType type, 
-                                           unsigned int texcoords = VertexAttributeSet::NVSG_TEXCOORD0, 
+                                           unsigned int texcoords = VertexAttributeSet::DP_SG_TEXCOORD0, 
                                            bool overwrite = true );
 
           REFLECTION_INFO_API( DP_SG_CORE_API, Primitive );

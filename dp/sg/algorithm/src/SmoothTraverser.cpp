@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2011
+// Copyright NVIDIA Corporation 2002-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -220,7 +220,7 @@ namespace dp
             ||  ! checkTrivial( (const T *)indexBuffer.getPtr(), noi ) )
         {
           VertexAttributeSetSharedPtr newVASH = VertexAttributeSet::create();
-          for ( unsigned int i=0 ; i<VertexAttributeSet::NVSG_VERTEX_ATTRIB_COUNT ; i++ )
+          for ( unsigned int i=0 ; i<VertexAttributeSet::DP_SG_VERTEX_ATTRIB_COUNT ; i++ )
           {
             if ( vas->getSizeOfVertexData(i) )
             {

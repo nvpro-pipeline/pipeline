@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2009
+// Copyright NVIDIA Corporation 2009-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -28,7 +28,7 @@
 
 #include <dp/sg/generator/Config.h>
 
-#include <dp/sg/core/nvsgapi.h> // NVSG storage-class defines
+#include <dp/sg/core/Config.h>
 #include <dp/sg/core/CoreTypes.h>
 
 /* This class defines a material preview beauty scene with a set of drawables.

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2005
+// Copyright NVIDIA Corporation 2002-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -27,12 +27,11 @@
 #pragma once
 /** \file */
 
-#include  <fstream>
-#include  <set>
-#include  <dp/sg/core/nvsg.h>
 #include  <dp/sg/io/PlugInterface.h>
 #include  <dp/sg/algorithm/SmoothTraverser.h>
 #include  "VRMLTypes.h"
+#include  <fstream>
+#include  <set>
 
 
 //  Don't need to document the API specifier
@@ -298,7 +297,7 @@ class WRLLoader : public dp::sg::io::SceneLoader
     void                                        ignoreBlock( const std::string &open, const std::string &close, std::string &token );
     dp::sg::core::SceneSharedPtr                import( const std::string &filename );
     dp::sg::core::EffectDataSharedPtr           interpretAppearance( vrml::AppearanceSharedPtr const& pAppearance );
-    void                                        interpretChildren( vrml::MFNode &children, dp::sg::core::GroupSharedPtr const& pNVSGGroup );
+    void                                        interpretChildren( vrml::MFNode &children, dp::sg::core::GroupSharedPtr const& pGroup );
     void                                        interpretBackground( vrml::BackgroundSharedPtr const& pBackground );
     dp::sg::core::BillboardSharedPtr            interpretBillboard( vrml::BillboardSharedPtr const& pVRMLBillboard );
     void                                        interpretBox( vrml::BoxSharedPtr const& pBox, std::vector<dp::sg::core::PrimitiveSharedPtr> &primitives, bool textured = false );
@@ -456,8 +455,8 @@ class WRLLoader : public dp::sg::io::SceneLoader
     // Circular and rectangular subdivision limits. The creation functions attempt to subdivide with square sized quads.
     // Minimum, standard at radius 1.0, and maximum subdivisions for a full circle of a sphere, cylinder, cone tessellation depending on their radii and heights.
     // Minimum, standard at size 1.0, and maximum subdivisions for a Box depending on its size.
-    // These six values can be defined by the user via the environment variable NVSG_WRL_SUBDIVISIONS. 
-    // Defaults are NVSG_WRL_SUBDIVISIONS = 12 36 90  2 4 8
+    // These six values can be defined by the user via the environment variable DP_WRL_SUBDIVISIONS. 
+    // Defaults are DP_WRL_SUBDIVISIONS = 12 36 90  2 4 8
     int                                                       m_subdivisions[6];
 };
 

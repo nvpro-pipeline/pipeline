@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2009-2011
+// Copyright NVIDIA Corporation 2009-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -28,8 +28,6 @@
 
 #include <GL/glew.h>
 #include <GL/freeglut.h>
-
-#include <dp/sg/core/nvsg.h>
 
 #include <dp/sg/generator/SimpleScene.h>
 #include "AnimatedScene.h"
@@ -127,7 +125,7 @@ void GLUTAnimationWidget::onHIDEvent( dp::util::PropertyId propertyId )
 
   if ( propertyId == PID_Key_D && getValue<bool>(PID_Key_D) )
   {
-    dp::sg::io::saveScene( "e:\\tmp\\qtminimalxbar.nbf", getViewState() );
+    dp::sg::io::saveScene( "e:\\tmp\\qtminimalxbar.dpbf", getViewState() );
   }
 
   if ( propertyId == PID_Key_T && getValue<bool>(PID_Key_T) )
@@ -254,11 +252,6 @@ int runApp( int argc, char *argv[], bool stereo, bool continuous, int frames, co
 
 int main(int argc, char *argv[])
 {
-  dp::sg::core::nvsgInitialize( );
-#if !defined(NDEBUG)
-  dp::sg::core::nvsgSetDebugFlags( dp::sg::core::NVSG_DBG_ASSERT | dp::sg::core::NVSG_DBG_LEAK_DETECTION );
-#endif
-
   glutInit( &argc, argv );
   glutSetOption( GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_CONTINUE_EXECUTION );
 
@@ -315,10 +308,6 @@ int main(int argc, char *argv[])
   }
 
   int result = runApp( argc, argv, stereo, continuous, frames, renderEngine, smt );
-
-  //dp::sg::core::nvsgRuntimeDebugControl( dp::sg::core::NVSG_RUNTIME_DEBUG_DUMP_ALLOCATION_DIFFERENCES );
-
-  dp::sg::core::nvsgTerminate();
 
   return result;
 }

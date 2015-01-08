@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2011
+// Copyright NVIDIA Corporation 2002-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -501,7 +501,7 @@ namespace dp
               // ***************************************************************
               // the algorithm currently only works for float-typed vertex data!
               // ***************************************************************
-              for ( unsigned int i=0 ; i<VertexAttributeSet::NVSG_VERTEX_ATTRIB_COUNT ; i++ )
+              for ( unsigned int i=0 ; i<VertexAttributeSet::DP_SG_VERTEX_ATTRIB_COUNT ; i++ )
               {
                 unsigned int type = p->getTypeOfVertexData(i);
                 if (  type != dp::util::DT_UNKNOWN // no data is ok!
@@ -516,7 +516,7 @@ namespace dp
 
               //  count the dimension of the VertexAttributeSet
               unsigned int  dimension = 0;
-              for ( unsigned int i=0 ; i<VertexAttributeSet::NVSG_VERTEX_ATTRIB_COUNT ; i++ )
+              for ( unsigned int i=0 ; i<VertexAttributeSet::DP_SG_VERTEX_ATTRIB_COUNT ; i++ )
               {
                 if ( p->getNumberOfVertexData( i ) )
                 {
@@ -532,7 +532,7 @@ namespace dp
               }
 
               //  fill valuesIn with the vertex attribute data
-              for ( unsigned int i=0, j=0 ; i<VertexAttributeSet::NVSG_VERTEX_ATTRIB_COUNT ; i++ )
+              for ( unsigned int i=0, j=0 ; i<VertexAttributeSet::DP_SG_VERTEX_ATTRIB_COUNT ; i++ )
               {
                 if ( p->getNumberOfVertexData( i ) != 0 )
                 {
@@ -585,7 +585,7 @@ namespace dp
 
                 //  create a new VertexAttributeSet with the condensed data
                 VertexAttributeSetSharedPtr newVAS = VertexAttributeSet::create();
-                for ( unsigned int i=0, j=0 ; i<VertexAttributeSet::NVSG_VERTEX_ATTRIB_COUNT ; i++ )
+                for ( unsigned int i=0, j=0 ; i<VertexAttributeSet::DP_SG_VERTEX_ATTRIB_COUNT ; i++ )
                 {
                   if ( p->getNumberOfVertexData( i ) )
                   {

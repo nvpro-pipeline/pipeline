@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2009-2011
+// Copyright NVIDIA Corporation 2009-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -1231,8 +1231,8 @@ namespace dp
         vasPtr->setVertices( &vertices[0], size_v );
         vasPtr->setNormals( &normals[0], size_v );
         vasPtr->setTexCoords( 0, &texcoords[0], size_v );
-        vasPtr->setTexCoords( VertexAttributeSet::NVSG_TANGENT  - VertexAttributeSet::NVSG_TEXCOORD0, &tangents[0], size_v );
-        vasPtr->setTexCoords( VertexAttributeSet::NVSG_BINORMAL - VertexAttributeSet::NVSG_TEXCOORD0, &binormals[0], size_v );
+        vasPtr->setTexCoords( VertexAttributeSet::DP_SG_TANGENT  - VertexAttributeSet::DP_SG_TEXCOORD0, &tangents[0], size_v );
+        vasPtr->setTexCoords( VertexAttributeSet::DP_SG_BINORMAL - VertexAttributeSet::DP_SG_TEXCOORD0, &binormals[0], size_v );
 
         IndexSetSharedPtr indexSet( IndexSet::create() );
         indexSet->setData( &indices[0], checked_cast<unsigned int>(indices.size()) );
@@ -1508,8 +1508,8 @@ namespace dp
         vasPtr->setVertices( &vertices[0], size_v );
         vasPtr->setNormals( &normals[0], size_v );
         vasPtr->setTexCoords( 0, &texcoords[0], size_v );
-        vasPtr->setTexCoords( VertexAttributeSet::NVSG_TANGENT  - VertexAttributeSet::NVSG_TEXCOORD0, &tangents[0], size_v );
-        vasPtr->setTexCoords( VertexAttributeSet::NVSG_BINORMAL - VertexAttributeSet::NVSG_TEXCOORD0, &binormals[0], size_v );
+        vasPtr->setTexCoords( VertexAttributeSet::DP_SG_TANGENT  - VertexAttributeSet::DP_SG_TEXCOORD0, &tangents[0], size_v );
+        vasPtr->setTexCoords( VertexAttributeSet::DP_SG_BINORMAL - VertexAttributeSet::DP_SG_TEXCOORD0, &binormals[0], size_v );
 
         IndexSetSharedPtr indexSet( IndexSet::create() );
         indexSet->setData( &indices[0], checked_cast<unsigned int>(indices.size()) );

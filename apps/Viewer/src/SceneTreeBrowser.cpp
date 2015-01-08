@@ -146,7 +146,7 @@ void SceneTreeBrowser::contextMenuEvent( QContextMenuEvent * event )
       case OC_PRIMITIVE :
         {
           VertexAttributeSetSharedPtr const& vas = currentItem->getObject().staticCast<Primitive>()->getVertexAttributeSet();
-          if ( !vas->getVertexAttribute( VertexAttributeSet::NVSG_TEXCOORD0 ).getBuffer() )
+          if ( !vas->getVertexAttribute( VertexAttributeSet::DP_SG_TEXCOORD0 ).getBuffer() )
           {
             QMenu * subMenu = menu.addMenu( "Generate Texture &Coordinates" );
             subMenu->addAction( "Cylindrical" );
@@ -158,9 +158,9 @@ void SceneTreeBrowser::contextMenuEvent( QContextMenuEvent * event )
             connect( subMenu, SIGNAL( triggered( QAction * ) ), this, SLOT( triggeredGenerateTextureCoordinatesMenu( QAction * ) ) );
           }
 
-          if (      vas->getVertexAttribute( VertexAttributeSet::NVSG_TEXCOORD0 ).getBuffer()
-              &&  ! vas->getVertexAttribute( VertexAttributeSet::NVSG_TEXCOORD6 ).getBuffer()
-              &&  ! vas->getVertexAttribute( VertexAttributeSet::NVSG_TEXCOORD7 ).getBuffer() )
+          if (      vas->getVertexAttribute( VertexAttributeSet::DP_SG_TEXCOORD0 ).getBuffer()
+              &&  ! vas->getVertexAttribute( VertexAttributeSet::DP_SG_TEXCOORD6 ).getBuffer()
+              &&  ! vas->getVertexAttribute( VertexAttributeSet::DP_SG_TEXCOORD7 ).getBuffer() )
           {
             QAction * action = menu.addAction( "Generate &Tangent Space" );
             connect( action, SIGNAL(triggered()), this, SLOT(triggeredGenerateTangentSpace()) );

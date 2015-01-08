@@ -19,7 +19,6 @@ endif()
 
 #sources
 set(XMLLOADER_SOURCES
-  nvsgXMLInterface.cpp
   XMLLoader.cpp
 )
 

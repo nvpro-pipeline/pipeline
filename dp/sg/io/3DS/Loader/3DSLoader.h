@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2005
+// Copyright NVIDIA Corporation 2002-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -38,8 +38,7 @@
 #include <dp/math/Trafo.h>
 #include <dp/math/Vecnt.h>
 
-#include <dp/sg/core/nvsgapi.h>
-#include <dp/sg/core/nvsg.h>
+#include <dp/sg/core/Config.h>
 #include <dp/sg/core/Scene.h>
 #include <dp/sg/io/PlugInterface.h>
 
@@ -121,7 +120,7 @@ private:
   // build the scene from the loaded 3ds data structure
   void buildScene( dp::sg::core::Group *, Lib3dsFile * data );
 
-  // recursively build the NVSG node tree from the 3ds data
+  // recursively build the node tree from the 3ds data
   void buildTree( dp::sg::core::Group *, Lib3dsNode * n, dp::math::Vec3f &piv, Lib3dsFile * data );
 
   // recursively search the node tree for a node of the given name and type

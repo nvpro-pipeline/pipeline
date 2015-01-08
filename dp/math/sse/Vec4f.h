@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2013
+// Copyright NVIDIA Corporation 2011-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -53,8 +53,7 @@ namespace dp
           /*! \brief Copy constructor from a vector with one less value than \c this, and an explicit last value.
            *  \param rhs A vector with \a m values of type \a S, where \a m has to be one less than \a n.
            *  \param last A single value of type \a R, that will be set as the last value of \c this.
-           *  \remarks This constructor contains a compile-time NVSG_ASSERTion, to make sure that \a m is one
-           *  less than \a n. The values of \a rhs of type \a S are converted to type \a T and assigned
+           *  \remarks The values of \a rhs of type \a S are converted to type \a T and assigned
            *  as the first values of \c this. The value \a last of type \a R also is converted to type
            *  \a T and assigned as the last value of \c this.
            *  \par Example:
@@ -74,9 +73,7 @@ namespace dp
            *  \param y Second element of the vector.
            *  \param z Third element of the vector.
            *  \param w Fourth element of the vector.
-           *  \remarks This constructor contains a compile-time NVSG_ASSERTion, to make sure it is used for
-           *  four-element vectors, like Vec4f, only.
-           *  \par Example:
+           *  \remarks Example:
            *  \code
            *    Vec4f         v4f( 1.0f, 2.0f, 3.0f, 4.0f );
            *    Vecnt<4,int>  v4i( 0, 1, 2, 3 );

@@ -50,7 +50,7 @@ namespace dp
       END_REFLECTION_INFO
 
       NormalizeTraverser::NormalizeTraverser(void)
-      : m_attrib(VertexAttributeSet::NVSG_NORMAL)
+      : m_attrib(VertexAttributeSet::DP_SG_NORMAL)
       {
       }
 

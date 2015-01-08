@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2005
+// Copyright NVIDIA Corporation 2002-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -28,9 +28,11 @@
 // XMLLoader.cpp
 //
 
+#include <dp/sg/io/PlugInterface.h> // definition of UPITID_VERSION,
+#include <dp/sg/io/PlugInterfaceID.h> // definition of UPITID_VERSION, UPITID_SCENE_LOADER, and UPITID_SCENE_SAVER
+
 #include <dp/Exception.h>
-#include <dp/sg/core/nvsgapi.h>
-#include <dp/sg/core/nvsg.h>
+#include <dp/sg/core/Config.h>
 #include <dp/sg/core/Scene.h>
 #include <dp/sg/io/IO.h>
 #include <dp/sg/io/PlugInterface.h>
@@ -41,7 +43,6 @@
 #include <dp/math/Vecnt.h>
 #include <dp/math/Quatt.h>
 
-// NVSG types used
 #include <dp/sg/core/Group.h>
 #include <dp/sg/core/Transform.h>
 
@@ -65,6 +66,26 @@ using namespace std;
 
 // define a unique plug-interface ID for SceneLoader
 const dp::util::UPITID PITID_SCENE_LOADER(UPITID_SCENE_LOADER, UPITID_VERSION);
+
+void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids )
+{
+  piids.clear();
+
+  piids.push_back(dp::util::UPIID(".XML", PITID_SCENE_LOADER));
+}
+
+bool getPlugInterface(const dp::util::UPIID& piid, dp::util::PlugInSharedPtr & pi)
+{
+  const dp::util::UPIID PIID_XML_SCENE_LOADER = dp::util::UPIID(".XML", PITID_SCENE_LOADER);
+
+  if ( piid == PIID_XML_SCENE_LOADER )
+  {
+    pi = XMLLoader::create();
+    return( !!pi );
+  }
+
+  return false;
+}
 
 XMLLoaderSharedPtr XMLLoader::create()
 {

@@ -39,7 +39,7 @@ namespace dp
   {
     namespace gl
     {
-    #define NVSG_TIF_INVALID 0    //!< Invalid texture format
+    #define DP_TIF_INVALID 0    //!< Invalid texture format
 
       //! GLTexImageFmt specifies the format and data type of a texture image.
       struct GLTexImageFmt
@@ -51,7 +51,7 @@ namespace dp
       };
 
       //! Internal data structure used to describe formats
-      struct NVSGTexImageFmt
+      struct TexImageFmt
       {
         GLint fixedPtFmt;     //!< The OpenGL internal format for fixed point 
         GLint floatFmt;       //!< The OpenGL internal format for floating point

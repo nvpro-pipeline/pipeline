@@ -28,7 +28,7 @@
 /** \file */
 
 #include  <set>
-#include  <dp/sg/core/nvsgapi.h>
+#include  <dp/sg/core/Config.h>
 #include  <dp/sg/io/PlugInterfaceID.h>
 #include  <dp/sg/io/PlugInterface.h>
 #include  <dp/sg/ui/ViewState.h>
@@ -53,7 +53,7 @@ extern "C"
 //! Get the PlugIn interface for this scene saver.
 /** Every PlugIn has to resolve this function. It is used to get a pointer to a PlugIn class, in this case a 
 OBJSAVER.
-  * If the PlugIn ID \a piid equals \c PIID_NVSG_SCENE_SAVER, a OBJSAVER is created and returned in \a pi.
+  * If the PlugIn ID \a piid equals \c PIID_DP_SCENE_SAVER, a OBJSAVER is created and returned in \a pi.
   * \returns  true, if the requested PlugIn could be created, otherwise false
   */
 OBJSAVER_API bool getPlugInterface(const dp::util::UPIID& piid, dp::util::PlugInSharedPtr & pi);
@@ -65,8 +65,6 @@ OBJSAVER_API void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids 
 DEFINE_PTR_TYPES( OBJSaver );
 
 //! A Scene Saver for obj files.
-/** NVSG files can be produced with the sample ViewerVR. 
-  * They are text files that represent a Scene and a ViewState.  */
 class OBJSaver : public dp::sg::io::SceneSaver
 {
   public :

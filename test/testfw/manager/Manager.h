@@ -27,6 +27,7 @@
 #pragma once
 
 #include <test/testfw/core/TestObjectUtil.h>
+#include <map>
 
 #define REGISTER_TEST(name_of_test, test_desc, test_create_func) static dp::testfw::core::TestObject g_test(test_create_func, name_of_test, test_desc); \
                                                       static bool g_initialized = registerTest(name_of_test, &g_test)

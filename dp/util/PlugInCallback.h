@@ -29,6 +29,8 @@
 
 #include <dp/util/Config.h>
 #include <dp/util/SharedPtr.h>
+#include <string>
+#include <vector>
 
 namespace dp
 {

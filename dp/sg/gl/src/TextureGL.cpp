@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010
+// Copyright NVIDIA Corporation 2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -37,7 +37,7 @@ namespace dp
 
       // glRecentTexImageFmts represents formats corresponding to recent hardware features.
       // Note: this table should be updated as hardware improves!
-      dp::sg::gl::NVSGTexImageFmt recentTexImageFmts[Image::IMG_NUM_FORMATS][Image::IMG_NUM_TYPES] =
+      dp::sg::gl::TexImageFmt recentTexImageFmts[Image::IMG_NUM_FORMATS][Image::IMG_NUM_TYPES] =
       {
         { // IMG_COLOR_INDEX - unsupported!! 
           { 0,0,0, 0,0, 0, 0,0 }   // IMG_BYTE
@@ -95,8 +95,8 @@ namespace dp
           // custom formats
           //
           // requires 4-component format
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,   NVSG_TIF_INVALID,   NVSG_TIF_INVALID,    NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0}  // IMG_UNSIGNED_INT_2_10_10_10  
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,   DP_TIF_INVALID,   DP_TIF_INVALID,    DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0}  // IMG_UNSIGNED_INT_2_10_10_10  
 
           // supported if EXT_texture_shared_exponent exported                                                                                                    
           ,  { GL_RGB9_E5_EXT,    GL_RGB9_E5_EXT,    GL_RGB9_E5_EXT,      GL_RGB9_E5_EXT,     GL_RGB9_E5_EXT,
@@ -107,8 +107,8 @@ namespace dp
             GL_RGB,            GL_UNSIGNED_INT_10F_11F_11F_REV_EXT, 0 }  // IMG_UNSIGNED_INT_10F_11F_11F
 
           // format - type mismatch
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,   NVSG_TIF_INVALID,   NVSG_TIF_INVALID,    NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_24_8
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,   DP_TIF_INVALID,   DP_TIF_INVALID,    DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_24_8
 
         }
         , { // IMG_RGBA !! 
@@ -151,16 +151,16 @@ namespace dp
             GL_RGBA,           GL_UNSIGNED_INT_2_10_10_10_REV,   0 }  // IMG_UNSIGNED_INT_2_10_10_10  
 
           // requires RGB
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,    NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_5_9_9_9
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,    DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_5_9_9_9
           // EXT_texture_shared_exponent
           // requires RGB
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,    NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_10F_11F_11F
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,    DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_10F_11F_11F
 
           // format - type mismatch
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,    NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0  } // IMG_UNSIGNED_INT_24_8
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,    DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0  } // IMG_UNSIGNED_INT_24_8
 
         }
         , { // IMG_BGR !! 
@@ -198,20 +198,20 @@ namespace dp
           // meaningless because RGB layout doesn't map to 32-bit input data. would crash for 8-bit per channel user data
 
           // requires 4-component format
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0}  // IMG_UNSIGNED_INT_2_10_10_10  
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0}  // IMG_UNSIGNED_INT_2_10_10_10  
           // G80 native
           // requires RGB                                                                                                     
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_5_9_9_9
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_5_9_9_9
 
           // requires RGB                                                                                                     
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_10F_11F_11F
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_10F_11F_11F
 
           // format - type mismatch
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,    NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0  }  // IMG_UNSIGNED_INT_24_8
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,    DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0  }  // IMG_UNSIGNED_INT_24_8
 
         }
         , { // IMG_BGRA !! 
@@ -253,16 +253,16 @@ namespace dp
             GL_BGRA,           GL_UNSIGNED_INT_2_10_10_10_REV,   0 }  // IMG_UNSIGNED_INT_2_10_10_10  
 
           // requires RGB
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_5_9_9_9
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_5_9_9_9
 
           // requires RGB
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_10F_11F_11F
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_10F_11F_11F
 
           // format - type mismatch
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0  }  // IMG_UNSIGNED_INT_24_8
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0  }  // IMG_UNSIGNED_INT_24_8
 
         }
         , { // IMG_LUMINANCE !! 
@@ -302,20 +302,20 @@ namespace dp
           // custom formats
           // 
           // requires 4-component format      
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_2_10_10_10
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_2_10_10_10
 
           // requires RGB
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_5_9_9_9
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_5_9_9_9
 
           // requires RGB
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_10F_11F_11F
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_10F_11F_11F
 
           // format - type mismatch
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,    NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0  }  // IMG_UNSIGNED_INT_24_8
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,    DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0  }  // IMG_UNSIGNED_INT_24_8
 
         }
         , { // IMG_LUMINANCE_ALPHA !! 
@@ -362,20 +362,20 @@ namespace dp
           // custom formats
           // 
           // requires 4-component format 
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_2_10_10_10
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_2_10_10_10
 
           // requires RGB
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_5_9_9_9
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_5_9_9_9
 
           // requires RGB
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_10F_11F_11F  
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_10F_11F_11F  
 
           // format - type mismatch
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_24_8
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_24_8
 
         }
         , { // IMG_ALPHA !! 
@@ -411,20 +411,20 @@ namespace dp
           // custom formats
           // 
           // 1-component format does not match. requires 4-component format (RGBA|BGRA)
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 } // IMG_UNSIGNED_INT_2_10_10_10 
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 } // IMG_UNSIGNED_INT_2_10_10_10 
 
           // requires RGB format
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_5_9_9_9
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_5_9_9_9
 
           // requires RGB format
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_10F_11F_11F
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_10F_11F_11F
 
           // format - type mismatch
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_24_8
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_24_8
         }
         , { // IMG_DEPTH_COMPONENT - Requires ARB_depth_texture
 
@@ -459,16 +459,16 @@ namespace dp
           // custom formats
           // 
           // requires 4-component format (RGBA|BGRA)
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 } // IMG_UNSIGNED_INT_2_10_10_10
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 } // IMG_UNSIGNED_INT_2_10_10_10
 
           // requires RGB format
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_5_9_9_9
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_5_9_9_9
 
           // requires RGB format
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 } // IMG_UNSIGNED_INT_10F_11F_11F 
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 } // IMG_UNSIGNED_INT_10F_11F_11F 
 
           // load only depth pixels out of the depth stencil - supported if EXT_packed_depth_stencil exported
           ,  { GL_DEPTH_COMPONENT24_ARB,  GL_DEPTH_COMPONENT24_ARB,  GL_DEPTH_COMPONENT24_ARB,  GL_DEPTH_COMPONENT24_ARB,  GL_DEPTH_COMPONENT24_ARB,
@@ -480,51 +480,51 @@ namespace dp
           // userFmtFixed       userFmtFloat       userFmtInteger       type                upload
 
           // DEPTH_STENCIL requires UNSIGNED_INT_24_8
-          { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0}  // IMG_BYTE
+          { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0}  // IMG_BYTE
 
           // DEPTH_STENCIL requires UNSIGNED_INT_24_8
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0}  // IMG_UNSIGNED_BYTE 
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0}  // IMG_UNSIGNED_BYTE 
 
           // DEPTH_STENCIL requires UNSIGNED_INT_24_8
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_SHORT 
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_SHORT 
 
           // DEPTH_STENCIL requires UNSIGNED_INT_24_8
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_SHORT 
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_SHORT 
 
           // DEPTH_STENCIL requires UNSIGNED_INT_24_8
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_INT 
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_INT 
 
           // DEPTH_STENCIL requires UNSIGNED_INT_24_8
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT 
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT 
 
           // DEPTH_STENCIL requires UNSIGNED_INT_24_8
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_FLOAT 
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_FLOAT 
 
           // DEPTH_STENCIL requires UNSIGNED_INT_24_8
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_HALF 
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_HALF 
 
           //
           // custom formats
           // 
           // format - type mismatch 
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_2_10_10_10
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_2_10_10_10
 
           // format - type mismatch 
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_5_9_9_9
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_5_9_9_9
 
           // format - type mismatch 
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_10F_11F_11F
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_10F_11F_11F
 
           // perfect match of format and type - supported if EXT_packed_depth_stencil exported
           // fast upload format
@@ -554,30 +554,30 @@ namespace dp
           ,  { GL_ALPHA32UI_EXT,          GL_ALPHA32UI_EXT,     GL_ALPHA32UI_EXT,      GL_ALPHA32UI_EXT,  GL_ALPHA32UI_EXT, 
             GL_ALPHA,            GL_UNSIGNED_INT,    0 }  // IMG_UNSIGNED_INT
 
-          ,  { NVSG_TIF_INVALID,    NVSG_TIF_INVALID,     NVSG_TIF_INVALID,       NVSG_TIF_INVALID, NVSG_TIF_INVALID,  
-            NVSG_TIF_INVALID,    0,           0 }  // IMG_FLOAT - float data with integer fmt = invalid
+          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,  
+            DP_TIF_INVALID,    0,           0 }  // IMG_FLOAT - float data with integer fmt = invalid
 
-          ,  { NVSG_TIF_INVALID,    NVSG_TIF_INVALID,     NVSG_TIF_INVALID,       NVSG_TIF_INVALID, NVSG_TIF_INVALID,  
-            NVSG_TIF_INVALID,    0,           0 }  // IMG_HALF - float data with integer fmt = invalid
+          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,  
+            DP_TIF_INVALID,    0,           0 }  // IMG_HALF - float data with integer fmt = invalid
 
           //
           // custom formats
           // 
           // requires 4-component format 
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_2_10_10_10
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_2_10_10_10
 
           // requires RGB
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_5_9_9_9
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_5_9_9_9
 
           // requires RGB
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INY_10F_11F_11F
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INY_10F_11F_11F
 
           // format - type mismatch
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_24_8
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_24_8
         }
         , { // IMG_INTEGER_LUMINANCE !! 
 
@@ -602,30 +602,30 @@ namespace dp
           ,  { GL_LUMINANCE32UI_EXT,      GL_LUMINANCE32UI_EXT,     GL_LUMINANCE32UI_EXT,      GL_LUMINANCE32UI_EXT,  GL_LUMINANCE32UI_EXT, 
             GL_LUMINANCE,              GL_UNSIGNED_INT,    0 }  // IMG_UNSIGNED_INT
 
-          ,  { NVSG_TIF_INVALID,    NVSG_TIF_INVALID,     NVSG_TIF_INVALID,       NVSG_TIF_INVALID, NVSG_TIF_INVALID,  
-            NVSG_TIF_INVALID,    0,           0 }  // IMG_FLOAT - float data with integer fmt = invalid
+          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,  
+            DP_TIF_INVALID,    0,           0 }  // IMG_FLOAT - float data with integer fmt = invalid
 
-          ,  { NVSG_TIF_INVALID,    NVSG_TIF_INVALID,     NVSG_TIF_INVALID,       NVSG_TIF_INVALID, NVSG_TIF_INVALID,  
-            NVSG_TIF_INVALID,    0,           0 }  // IMG_HALF - float data with integer fmt = invalid
+          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,  
+            DP_TIF_INVALID,    0,           0 }  // IMG_HALF - float data with integer fmt = invalid
 
           //
           // custom formats
           // 
           // requires 4-component format (RGBA|BGRA) 
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_2_10_10_10
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_2_10_10_10
 
           // requires RGB
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_5_9_9_9
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_5_9_9_9
 
           // requires RGB
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_10F_11F_11F
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_10F_11F_11F
 
           // format - type mismatch
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_24_8
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_24_8
         }
         , { // IMG_INTEGER_LUMINANCE_ALPHA !! 
 
@@ -650,31 +650,31 @@ namespace dp
           ,  { GL_LUMINANCE_ALPHA32UI_EXT,          GL_LUMINANCE_ALPHA32UI_EXT,     GL_LUMINANCE_ALPHA32UI_EXT,      GL_LUMINANCE_ALPHA32UI_EXT,  GL_LUMINANCE_ALPHA32UI_EXT, 
             GL_LUMINANCE_ALPHA,            GL_UNSIGNED_INT,    0 }  // IMG_UNSIGNED_INT
 
-          ,  { NVSG_TIF_INVALID,    NVSG_TIF_INVALID,     NVSG_TIF_INVALID,       NVSG_TIF_INVALID, NVSG_TIF_INVALID,  
-            NVSG_TIF_INVALID,    0,           0 }  // IMG_FLOAT - float data with integer fmt = invalid
+          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,  
+            DP_TIF_INVALID,    0,           0 }  // IMG_FLOAT - float data with integer fmt = invalid
 
-          ,  { NVSG_TIF_INVALID,    NVSG_TIF_INVALID,     NVSG_TIF_INVALID,       NVSG_TIF_INVALID, NVSG_TIF_INVALID,  
-            NVSG_TIF_INVALID,    0,           0 }  // IMG_HALF - float data with integer fmt = invalid
+          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,  
+            DP_TIF_INVALID,    0,           0 }  // IMG_HALF - float data with integer fmt = invalid
 
           //
           // custom formats
           // 
 
           // requires 4-component format (RGBA|BGRA) 
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_2_10_10_10
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_2_10_10_10
 
           // requires RGB
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_5_9_9_9
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_5_9_9_9
 
           // requires RGB
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_10F_11F_11F
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_10F_11F_11F
 
           // format - type mismatch
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_24_8
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_24_8
         }
         , { // IMG_INTEGER_RGB !! 
 
@@ -699,31 +699,31 @@ namespace dp
           ,  { GL_RGB32UI_EXT,          GL_RGB32UI_EXT,     GL_RGB32UI_EXT,      GL_RGB32UI_EXT,  GL_RGB32UI_EXT, 
             GL_RGB,            GL_UNSIGNED_INT,    0 }  // IMG_UNSIGNED_INT
 
-          ,  { NVSG_TIF_INVALID,    NVSG_TIF_INVALID,     NVSG_TIF_INVALID,       NVSG_TIF_INVALID, NVSG_TIF_INVALID,  
-            NVSG_TIF_INVALID,    0,           0 }  // IMG_FLOAT - float data with integer fmt = invalid
+          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,  
+            DP_TIF_INVALID,    0,           0 }  // IMG_FLOAT - float data with integer fmt = invalid
 
-          ,  { NVSG_TIF_INVALID,    NVSG_TIF_INVALID,     NVSG_TIF_INVALID,       NVSG_TIF_INVALID, NVSG_TIF_INVALID,  
-            NVSG_TIF_INVALID,    0,           0 }  // IMG_HALF - float data with integer fmt = invalid
+          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,  
+            DP_TIF_INVALID,    0,           0 }  // IMG_HALF - float data with integer fmt = invalid
 
           //
           // custom formats
           // 
 
           // requires 4-component format (RGBA|BGRA) 
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_2_10_10_10
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_2_10_10_10
 
           // requires RGB
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_5_9_9_9
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_5_9_9_9
 
           // requires RGB
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_10F_11F_11F
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_10F_11F_11F
 
           // format - type mismatch
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_24_8
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_24_8
         }
         , { // IMG_INTEGER_BGR !! 
 
@@ -748,31 +748,31 @@ namespace dp
           ,  { GL_RGB32UI_EXT,          GL_RGB32UI_EXT,     GL_RGB32UI_EXT,      GL_RGB32UI_EXT,  GL_RGB32UI_EXT, 
             GL_BGR_INTEGER_EXT,            GL_UNSIGNED_INT,    0 }  // IMG_UNSIGNED_INT
 
-          ,  { NVSG_TIF_INVALID,    NVSG_TIF_INVALID,     NVSG_TIF_INVALID,       NVSG_TIF_INVALID, NVSG_TIF_INVALID,  
-            NVSG_TIF_INVALID,    0,           0 }  // IMG_FLOAT - float data with integer fmt = invalid
+          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,  
+            DP_TIF_INVALID,    0,           0 }  // IMG_FLOAT - float data with integer fmt = invalid
 
-          ,  { NVSG_TIF_INVALID,    NVSG_TIF_INVALID,     NVSG_TIF_INVALID,       NVSG_TIF_INVALID, NVSG_TIF_INVALID,  
-            NVSG_TIF_INVALID,    0,           0 }  // IMG_HALF - float data with integer fmt = invalid
+          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,  
+            DP_TIF_INVALID,    0,           0 }  // IMG_HALF - float data with integer fmt = invalid
 
           //
           // custom formats
           // 
 
           // requires 4-component format (RGBA|BGRA) 
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_2_10_10_10
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_2_10_10_10
 
           // requires RGB
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_5_9_9_9
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_5_9_9_9
 
           // requires RGB
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_10F_11F_11F
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_10F_11F_11F
 
           // format - type mismatch
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_24_8
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_24_8
         }
         , { // IMG_INTEGER_RGBA !! 
 
@@ -797,11 +797,11 @@ namespace dp
           ,  { GL_RGBA32UI_EXT,          GL_RGBA32UI_EXT,     GL_RGBA32UI_EXT,      GL_RGBA32UI_EXT,  GL_RGBA32UI_EXT, 
             GL_RGBA_INTEGER_EXT,            GL_UNSIGNED_INT,    0 }  // IMG_UNSIGNED_INT
 
-          ,  { NVSG_TIF_INVALID,    NVSG_TIF_INVALID,     NVSG_TIF_INVALID,       NVSG_TIF_INVALID, NVSG_TIF_INVALID,  
-            NVSG_TIF_INVALID,    0,           0 }  // IMG_FLOAT - float data with integer fmt = invalid
+          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,  
+            DP_TIF_INVALID,    0,           0 }  // IMG_FLOAT - float data with integer fmt = invalid
 
-          ,  { NVSG_TIF_INVALID,    NVSG_TIF_INVALID,     NVSG_TIF_INVALID,       NVSG_TIF_INVALID, NVSG_TIF_INVALID,  
-            NVSG_TIF_INVALID,    0,           0 }  // IMG_HALF - float data with integer fmt = invalid
+          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,  
+            DP_TIF_INVALID,    0,           0 }  // IMG_HALF - float data with integer fmt = invalid
 
           //
           // custom formats
@@ -812,16 +812,16 @@ namespace dp
             GL_RGBA_INTEGER_EXT, GL_UNSIGNED_INT_2_10_10_10_REV,   0 }  // IMG_UNSIGNED_INT_2_10_10_10
 
           // requires RGB
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_5_9_9_9
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_5_9_9_9
 
           // requires RGB
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_10F_11F_11F
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_10F_11F_11F
 
           // format - type mismatch
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_24_8
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_24_8
         }
         , { // IMG_INTEGER_BGRA !! 
 
@@ -846,11 +846,11 @@ namespace dp
           ,  { GL_RGBA32UI_EXT,     GL_RGBA32UI_EXT,     GL_RGBA32UI_EXT,      GL_RGBA32UI_EXT,  GL_RGBA32UI_EXT, 
             GL_BGRA_INTEGER_EXT, GL_UNSIGNED_INT,    0 }  // IMG_UNSIGNED_INT
 
-          ,  { NVSG_TIF_INVALID,    NVSG_TIF_INVALID,     NVSG_TIF_INVALID,       NVSG_TIF_INVALID, NVSG_TIF_INVALID,  
-            NVSG_TIF_INVALID,    0,           0 }  // IMG_FLOAT - float data with integer fmt = invalid
+          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,  
+            DP_TIF_INVALID,    0,           0 }  // IMG_FLOAT - float data with integer fmt = invalid
 
-          ,  { NVSG_TIF_INVALID,    NVSG_TIF_INVALID,     NVSG_TIF_INVALID,       NVSG_TIF_INVALID, NVSG_TIF_INVALID,  
-            NVSG_TIF_INVALID,    0,           0 }  // IMG_HALF - float data with integer fmt = invalid
+          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,  
+            DP_TIF_INVALID,    0,           0 }  // IMG_HALF - float data with integer fmt = invalid
 
           //
           // custom formats
@@ -860,16 +860,16 @@ namespace dp
             GL_BGRA_INTEGER_EXT, GL_UNSIGNED_INT_2_10_10_10_REV,   0 }  // IMG_UNSIGNED_INT_2_10_10_10
 
           // requires RGB
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_5_9_9_9
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_5_9_9_9
 
           // requires RGB
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_10F_11F_11F
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_10F_11F_11F
 
           // format - type mismatch
-          ,  { NVSG_TIF_INVALID,  NVSG_TIF_INVALID,  NVSG_TIF_INVALID,    NVSG_TIF_INVALID,   NVSG_TIF_INVALID,
-            NVSG_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_24_8
+          ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
+            DP_TIF_INVALID,  0, 0 }  // IMG_UNSIGNED_INT_24_8
         }
 
         //
@@ -881,22 +881,22 @@ namespace dp
       {
       public: 
         TexImageFmts();
-        dp::sg::gl::NVSGTexImageFmt getFmt( Image::PixelFormat pf, Image::PixelDataType pdt );
-        dp::sg::gl::NVSGTexImageFmt* getFmts( Image::PixelFormat pf );
+        dp::sg::gl::TexImageFmt getFmt( Image::PixelFormat pf, Image::PixelDataType pdt );
+        dp::sg::gl::TexImageFmt* getFmts( Image::PixelFormat pf );
 
       private:
         void initialize();
 
       private:
         bool initialized;
-        dp::sg::gl::NVSGTexImageFmt m_texImageFmts[Image::IMG_NUM_FORMATS][Image::IMG_NUM_TYPES];     
+        dp::sg::gl::TexImageFmt m_texImageFmts[Image::IMG_NUM_FORMATS][Image::IMG_NUM_TYPES];     
       };
 
       TexImageFmts::TexImageFmts()
         : initialized( false )
       {}
 
-      dp::sg::gl::NVSGTexImageFmt TexImageFmts::getFmt( Image::PixelFormat pf, Image::PixelDataType pdt )
+      dp::sg::gl::TexImageFmt TexImageFmts::getFmt( Image::PixelFormat pf, Image::PixelDataType pdt )
       {
         if( !initialized )
         {
@@ -907,7 +907,7 @@ namespace dp
         return m_texImageFmts[pf][pdt];
       }
 
-      dp::sg::gl::NVSGTexImageFmt* TexImageFmts::getFmts( Image::PixelFormat pf )
+      dp::sg::gl::TexImageFmt* TexImageFmts::getFmts( Image::PixelFormat pf )
       {
         if( !initialized )
         {
@@ -977,11 +977,11 @@ namespace dp
           {
             for( size_t j = 0; j < Image::IMG_NUM_TYPES; j++ )
             {
-              m_texImageFmts[i][j].fixedPtFmt    = NVSG_TIF_INVALID;
-              m_texImageFmts[i][j].floatFmt      = NVSG_TIF_INVALID;
-              m_texImageFmts[i][j].compressedFmt = NVSG_TIF_INVALID;
-              m_texImageFmts[i][j].integerFmt    = NVSG_TIF_INVALID;
-              m_texImageFmts[i][j].nonLinearFmt  = NVSG_TIF_INVALID;
+              m_texImageFmts[i][j].fixedPtFmt    = DP_TIF_INVALID;
+              m_texImageFmts[i][j].floatFmt      = DP_TIF_INVALID;
+              m_texImageFmts[i][j].compressedFmt = DP_TIF_INVALID;
+              m_texImageFmts[i][j].integerFmt    = DP_TIF_INVALID;
+              m_texImageFmts[i][j].nonLinearFmt  = DP_TIF_INVALID;
             }
           }
         }
@@ -1059,11 +1059,11 @@ namespace dp
           {
             for( size_t j = 0; j < Image::IMG_NUM_TYPES; j++ )
             {
-              m_texImageFmts[i][j].fixedPtFmt    = NVSG_TIF_INVALID;
-              m_texImageFmts[i][j].floatFmt      = NVSG_TIF_INVALID;
-              m_texImageFmts[i][j].compressedFmt = NVSG_TIF_INVALID;
-              m_texImageFmts[i][j].integerFmt    = NVSG_TIF_INVALID;
-              m_texImageFmts[i][j].nonLinearFmt  = NVSG_TIF_INVALID;
+              m_texImageFmts[i][j].fixedPtFmt    = DP_TIF_INVALID;
+              m_texImageFmts[i][j].floatFmt      = DP_TIF_INVALID;
+              m_texImageFmts[i][j].compressedFmt = DP_TIF_INVALID;
+              m_texImageFmts[i][j].integerFmt    = DP_TIF_INVALID;
+              m_texImageFmts[i][j].nonLinearFmt  = DP_TIF_INVALID;
             }
           }
 
@@ -1148,11 +1148,11 @@ namespace dp
           {
             for( size_t j = 0; j < Image::IMG_NUM_TYPES; j++ )
             {
-              m_texImageFmts[i][j].fixedPtFmt    = NVSG_TIF_INVALID;
-              m_texImageFmts[i][j].floatFmt      = NVSG_TIF_INVALID;
-              m_texImageFmts[i][j].compressedFmt = NVSG_TIF_INVALID;
-              m_texImageFmts[i][j].integerFmt    = NVSG_TIF_INVALID;
-              m_texImageFmts[i][j].nonLinearFmt  = NVSG_TIF_INVALID;
+              m_texImageFmts[i][j].fixedPtFmt    = DP_TIF_INVALID;
+              m_texImageFmts[i][j].floatFmt      = DP_TIF_INVALID;
+              m_texImageFmts[i][j].compressedFmt = DP_TIF_INVALID;
+              m_texImageFmts[i][j].integerFmt    = DP_TIF_INVALID;
+              m_texImageFmts[i][j].nonLinearFmt  = DP_TIF_INVALID;
             }
           }
         }
@@ -1230,21 +1230,21 @@ namespace dp
           {
             for( size_t j = 0; j < Image::IMG_NUM_TYPES; j++ )
             {
-              m_texImageFmts[i][j].fixedPtFmt    = NVSG_TIF_INVALID;
-              m_texImageFmts[i][j].floatFmt      = NVSG_TIF_INVALID;
-              m_texImageFmts[i][j].compressedFmt = NVSG_TIF_INVALID;
-              m_texImageFmts[i][j].integerFmt    = NVSG_TIF_INVALID;
-              m_texImageFmts[i][j].nonLinearFmt  = NVSG_TIF_INVALID;
+              m_texImageFmts[i][j].fixedPtFmt    = DP_TIF_INVALID;
+              m_texImageFmts[i][j].floatFmt      = DP_TIF_INVALID;
+              m_texImageFmts[i][j].compressedFmt = DP_TIF_INVALID;
+              m_texImageFmts[i][j].integerFmt    = DP_TIF_INVALID;
+              m_texImageFmts[i][j].nonLinearFmt  = DP_TIF_INVALID;
             }
           }
 
           for( size_t j = 0; j < Image::IMG_NUM_TYPES; j++ )
           {
-            m_texImageFmts[Image::IMG_DEPTH_COMPONENT][j].fixedPtFmt    = NVSG_TIF_INVALID;
-            m_texImageFmts[Image::IMG_DEPTH_COMPONENT][j].floatFmt      = NVSG_TIF_INVALID;
-            m_texImageFmts[Image::IMG_DEPTH_COMPONENT][j].compressedFmt = NVSG_TIF_INVALID;
-            m_texImageFmts[Image::IMG_DEPTH_COMPONENT][j].integerFmt    = NVSG_TIF_INVALID;
-            m_texImageFmts[Image::IMG_DEPTH_COMPONENT][j].nonLinearFmt  = NVSG_TIF_INVALID;
+            m_texImageFmts[Image::IMG_DEPTH_COMPONENT][j].fixedPtFmt    = DP_TIF_INVALID;
+            m_texImageFmts[Image::IMG_DEPTH_COMPONENT][j].floatFmt      = DP_TIF_INVALID;
+            m_texImageFmts[Image::IMG_DEPTH_COMPONENT][j].compressedFmt = DP_TIF_INVALID;
+            m_texImageFmts[Image::IMG_DEPTH_COMPONENT][j].integerFmt    = DP_TIF_INVALID;
+            m_texImageFmts[Image::IMG_DEPTH_COMPONENT][j].nonLinearFmt  = DP_TIF_INVALID;
           }
         }
 
@@ -1256,20 +1256,20 @@ namespace dp
           //
           for( size_t i = 0; i < Image::IMG_NUM_FORMATS; i ++ )
           {
-            m_texImageFmts[i][Image::IMG_UNSIGNED_INT_24_8].fixedPtFmt    = NVSG_TIF_INVALID;
-            m_texImageFmts[i][Image::IMG_UNSIGNED_INT_24_8].floatFmt      = NVSG_TIF_INVALID;
-            m_texImageFmts[i][Image::IMG_UNSIGNED_INT_24_8].compressedFmt = NVSG_TIF_INVALID;
-            m_texImageFmts[i][Image::IMG_UNSIGNED_INT_24_8].integerFmt    = NVSG_TIF_INVALID;
-            m_texImageFmts[i][Image::IMG_UNSIGNED_INT_24_8].nonLinearFmt  = NVSG_TIF_INVALID;
+            m_texImageFmts[i][Image::IMG_UNSIGNED_INT_24_8].fixedPtFmt    = DP_TIF_INVALID;
+            m_texImageFmts[i][Image::IMG_UNSIGNED_INT_24_8].floatFmt      = DP_TIF_INVALID;
+            m_texImageFmts[i][Image::IMG_UNSIGNED_INT_24_8].compressedFmt = DP_TIF_INVALID;
+            m_texImageFmts[i][Image::IMG_UNSIGNED_INT_24_8].integerFmt    = DP_TIF_INVALID;
+            m_texImageFmts[i][Image::IMG_UNSIGNED_INT_24_8].nonLinearFmt  = DP_TIF_INVALID;
           }
 
           for( size_t j = 0; j < Image::IMG_NUM_TYPES; j++ )
           {
-            m_texImageFmts[Image::IMG_DEPTH_STENCIL][j].fixedPtFmt    = NVSG_TIF_INVALID;
-            m_texImageFmts[Image::IMG_DEPTH_STENCIL][j].floatFmt      = NVSG_TIF_INVALID;
-            m_texImageFmts[Image::IMG_DEPTH_STENCIL][j].compressedFmt = NVSG_TIF_INVALID;
-            m_texImageFmts[Image::IMG_DEPTH_STENCIL][j].integerFmt    = NVSG_TIF_INVALID;
-            m_texImageFmts[Image::IMG_DEPTH_STENCIL][j].nonLinearFmt  = NVSG_TIF_INVALID;
+            m_texImageFmts[Image::IMG_DEPTH_STENCIL][j].fixedPtFmt    = DP_TIF_INVALID;
+            m_texImageFmts[Image::IMG_DEPTH_STENCIL][j].floatFmt      = DP_TIF_INVALID;
+            m_texImageFmts[Image::IMG_DEPTH_STENCIL][j].compressedFmt = DP_TIF_INVALID;
+            m_texImageFmts[Image::IMG_DEPTH_STENCIL][j].integerFmt    = DP_TIF_INVALID;
+            m_texImageFmts[Image::IMG_DEPTH_STENCIL][j].nonLinearFmt  = DP_TIF_INVALID;
           }
         }
 
@@ -1280,11 +1280,11 @@ namespace dp
           //
           for( size_t i = 0; i < Image::IMG_NUM_FORMATS; i ++ )
           {
-            m_texImageFmts[i][Image::IMG_UNSIGNED_INT_10F_11F_11F].fixedPtFmt    = NVSG_TIF_INVALID;
-            m_texImageFmts[i][Image::IMG_UNSIGNED_INT_10F_11F_11F].floatFmt      = NVSG_TIF_INVALID;
-            m_texImageFmts[i][Image::IMG_UNSIGNED_INT_10F_11F_11F].compressedFmt = NVSG_TIF_INVALID;
-            m_texImageFmts[i][Image::IMG_UNSIGNED_INT_10F_11F_11F].integerFmt    = NVSG_TIF_INVALID;
-            m_texImageFmts[i][Image::IMG_UNSIGNED_INT_10F_11F_11F].nonLinearFmt  = NVSG_TIF_INVALID;
+            m_texImageFmts[i][Image::IMG_UNSIGNED_INT_10F_11F_11F].fixedPtFmt    = DP_TIF_INVALID;
+            m_texImageFmts[i][Image::IMG_UNSIGNED_INT_10F_11F_11F].floatFmt      = DP_TIF_INVALID;
+            m_texImageFmts[i][Image::IMG_UNSIGNED_INT_10F_11F_11F].compressedFmt = DP_TIF_INVALID;
+            m_texImageFmts[i][Image::IMG_UNSIGNED_INT_10F_11F_11F].integerFmt    = DP_TIF_INVALID;
+            m_texImageFmts[i][Image::IMG_UNSIGNED_INT_10F_11F_11F].nonLinearFmt  = DP_TIF_INVALID;
           }
         }
 
@@ -1295,11 +1295,11 @@ namespace dp
           //
           for( size_t i = 0; i < Image::IMG_NUM_FORMATS; i ++ )
           {
-            m_texImageFmts[i][Image::IMG_UNSIGNED_INT_5_9_9_9].fixedPtFmt    = NVSG_TIF_INVALID;
-            m_texImageFmts[i][Image::IMG_UNSIGNED_INT_5_9_9_9].floatFmt      = NVSG_TIF_INVALID;
-            m_texImageFmts[i][Image::IMG_UNSIGNED_INT_5_9_9_9].compressedFmt = NVSG_TIF_INVALID;
-            m_texImageFmts[i][Image::IMG_UNSIGNED_INT_5_9_9_9].integerFmt    = NVSG_TIF_INVALID;
-            m_texImageFmts[i][Image::IMG_UNSIGNED_INT_5_9_9_9].nonLinearFmt  = NVSG_TIF_INVALID;
+            m_texImageFmts[i][Image::IMG_UNSIGNED_INT_5_9_9_9].fixedPtFmt    = DP_TIF_INVALID;
+            m_texImageFmts[i][Image::IMG_UNSIGNED_INT_5_9_9_9].floatFmt      = DP_TIF_INVALID;
+            m_texImageFmts[i][Image::IMG_UNSIGNED_INT_5_9_9_9].compressedFmt = DP_TIF_INVALID;
+            m_texImageFmts[i][Image::IMG_UNSIGNED_INT_5_9_9_9].integerFmt    = DP_TIF_INVALID;
+            m_texImageFmts[i][Image::IMG_UNSIGNED_INT_5_9_9_9].nonLinearFmt  = DP_TIF_INVALID;
           }
         }
 
@@ -1324,11 +1324,11 @@ namespace dp
           {
             for( size_t j = 0; j < Image::IMG_NUM_TYPES; j++ )
             {
-              m_texImageFmts[i][j].fixedPtFmt    = NVSG_TIF_INVALID;
-              m_texImageFmts[i][j].floatFmt      = NVSG_TIF_INVALID;
-              m_texImageFmts[i][j].compressedFmt = NVSG_TIF_INVALID;
-              m_texImageFmts[i][j].integerFmt    = NVSG_TIF_INVALID;
-              m_texImageFmts[i][j].nonLinearFmt  = NVSG_TIF_INVALID;
+              m_texImageFmts[i][j].fixedPtFmt    = DP_TIF_INVALID;
+              m_texImageFmts[i][j].floatFmt      = DP_TIF_INVALID;
+              m_texImageFmts[i][j].compressedFmt = DP_TIF_INVALID;
+              m_texImageFmts[i][j].integerFmt    = DP_TIF_INVALID;
+              m_texImageFmts[i][j].nonLinearFmt  = DP_TIF_INVALID;
             }
           }
         }
@@ -1414,11 +1414,11 @@ namespace dp
           {
             for( size_t j = 0; j < Image::IMG_NUM_TYPES; j ++ )
             {
-              m_texImageFmts[i][j].fixedPtFmt    = NVSG_TIF_INVALID;
-              m_texImageFmts[i][j].floatFmt      = NVSG_TIF_INVALID;
-              m_texImageFmts[i][j].compressedFmt = NVSG_TIF_INVALID;
-              m_texImageFmts[i][j].integerFmt    = NVSG_TIF_INVALID;
-              m_texImageFmts[i][j].nonLinearFmt  = NVSG_TIF_INVALID;
+              m_texImageFmts[i][j].fixedPtFmt    = DP_TIF_INVALID;
+              m_texImageFmts[i][j].floatFmt      = DP_TIF_INVALID;
+              m_texImageFmts[i][j].compressedFmt = DP_TIF_INVALID;
+              m_texImageFmts[i][j].integerFmt    = DP_TIF_INVALID;
+              m_texImageFmts[i][j].nonLinearFmt  = DP_TIF_INVALID;
             }
           }
         }
@@ -1973,16 +1973,16 @@ namespace dp
         }
 
         // lookup the formats
-        NVSGTexImageFmt  nvsgFmt    = texImageFmts.getFmt(fmt,type);
+        TexImageFmt  dpFmt    = texImageFmts.getFmt(fmt,type);
         // formats for this particular fmt
-        NVSGTexImageFmt* nvsgFmts   = texImageFmts.getFmts(fmt);
+        TexImageFmt* dpFmts   = texImageFmts.getFmts(fmt);
 
-        tfmt.type       = nvsgFmt.type;
-        tfmt.uploadHint = nvsgFmt.uploadHint;
+        tfmt.type       = dpFmt.type;
+        tfmt.uploadHint = dpFmt.uploadHint;
 
         //
         // If gpufmt == TGF_DEFAULT, and we have a floating point format texture, then the assumption is that
-        // the texture will be loaded with a floating point format to match the way NVSG used to work.  So, unless
+        // the texture will be loaded with a floating point format to match the way dp used to work.  So, unless
         // the user has selected a specific generic format, examine the PixelData and if it is float, reset the
         // GPUformat to be float as well. 
         //
@@ -2008,38 +2008,38 @@ namespace dp
           // default "defaults" to FIXED format
         case TextureHost::TGF_DEFAULT:
         case TextureHost::TGF_FIXED:
-          tfmt.intFmt     = nvsgFmt.fixedPtFmt;
-          tfmt.usrFmt     = nvsgFmt.usrFmt;
+          tfmt.intFmt     = dpFmt.fixedPtFmt;
+          tfmt.usrFmt     = dpFmt.usrFmt;
           break;
 
         case TextureHost::TGF_COMPRESSED_FIXED:
-          tfmt.intFmt     = nvsgFmt.compressedFmt;
-          tfmt.usrFmt     = nvsgFmt.usrFmt;
+          tfmt.intFmt     = dpFmt.compressedFmt;
+          tfmt.usrFmt     = dpFmt.usrFmt;
           break;
 
         case TextureHost::TGF_FLOAT:
-          tfmt.intFmt     = nvsgFmt.floatFmt;
-          tfmt.usrFmt     = nvsgFmt.usrFmt;
+          tfmt.intFmt     = dpFmt.floatFmt;
+          tfmt.usrFmt     = dpFmt.usrFmt;
           break;
 
         case TextureHost::TGF_NONLINEAR:
-          tfmt.intFmt     = nvsgFmt.nonLinearFmt;
-          tfmt.usrFmt     = nvsgFmt.usrFmt;
+          tfmt.intFmt     = dpFmt.nonLinearFmt;
+          tfmt.usrFmt     = dpFmt.usrFmt;
           break;
 
         case TextureHost::TGF_INTEGER:
-          tfmt.intFmt     = nvsgFmt.integerFmt;
-          tfmt.usrFmt     = mapToInteger( nvsgFmt.usrFmt );
+          tfmt.intFmt     = dpFmt.integerFmt;
+          tfmt.usrFmt     = mapToInteger( dpFmt.usrFmt );
           break;
 
         case TextureHost::TGF_FLOAT16:
-          tfmt.intFmt     = nvsgFmts[Image::IMG_FLOAT16].floatFmt;
-          tfmt.usrFmt     = nvsgFmts[Image::IMG_FLOAT16].usrFmt;
+          tfmt.intFmt     = dpFmts[Image::IMG_FLOAT16].floatFmt;
+          tfmt.usrFmt     = dpFmts[Image::IMG_FLOAT16].usrFmt;
           break;
 
         case TextureHost::TGF_FLOAT32:
-          tfmt.intFmt     = nvsgFmts[Image::IMG_FLOAT32].floatFmt;
-          tfmt.usrFmt     = nvsgFmts[Image::IMG_FLOAT32].usrFmt;
+          tfmt.intFmt     = dpFmts[Image::IMG_FLOAT32].floatFmt;
+          tfmt.usrFmt     = dpFmts[Image::IMG_FLOAT32].usrFmt;
           break;
 
         case TextureHost::TGF_FIXED8:
@@ -2049,16 +2049,16 @@ namespace dp
             case Image::IMG_BYTE:
             case Image::IMG_SHORT:
             case Image::IMG_INT:
-              tfmt.intFmt     = nvsgFmts[Image::IMG_BYTE].fixedPtFmt;
-              tfmt.usrFmt     = nvsgFmts[Image::IMG_BYTE].usrFmt;
+              tfmt.intFmt     = dpFmts[Image::IMG_BYTE].fixedPtFmt;
+              tfmt.usrFmt     = dpFmts[Image::IMG_BYTE].usrFmt;
               break;
 
             case Image::IMG_UNSIGNED_BYTE:
             case Image::IMG_UNSIGNED_SHORT:
             case Image::IMG_UNSIGNED_INT:
             default:
-              tfmt.intFmt     = nvsgFmts[Image::IMG_UNSIGNED_BYTE].fixedPtFmt;
-              tfmt.usrFmt     = nvsgFmts[Image::IMG_UNSIGNED_BYTE].usrFmt;
+              tfmt.intFmt     = dpFmts[Image::IMG_UNSIGNED_BYTE].fixedPtFmt;
+              tfmt.usrFmt     = dpFmts[Image::IMG_UNSIGNED_BYTE].usrFmt;
               break;
             }
             break;
@@ -2066,8 +2066,8 @@ namespace dp
 
         case TextureHost::TGF_FIXED10:
           // only 1 format supported
-          tfmt.intFmt     = nvsgFmts[Image::IMG_UNSIGNED_INT_2_10_10_10].fixedPtFmt;
-          tfmt.usrFmt     = nvsgFmts[Image::IMG_UNSIGNED_INT_2_10_10_10].usrFmt;
+          tfmt.intFmt     = dpFmts[Image::IMG_UNSIGNED_INT_2_10_10_10].fixedPtFmt;
+          tfmt.usrFmt     = dpFmts[Image::IMG_UNSIGNED_INT_2_10_10_10].usrFmt;
           break;
 
         case TextureHost::TGF_FIXED16:
@@ -2077,16 +2077,16 @@ namespace dp
             case Image::IMG_BYTE:
             case Image::IMG_SHORT:
             case Image::IMG_INT:
-              tfmt.intFmt     = nvsgFmts[Image::IMG_SHORT].fixedPtFmt;
-              tfmt.usrFmt     = nvsgFmts[Image::IMG_SHORT].usrFmt;
+              tfmt.intFmt     = dpFmts[Image::IMG_SHORT].fixedPtFmt;
+              tfmt.usrFmt     = dpFmts[Image::IMG_SHORT].usrFmt;
               break;
 
             case Image::IMG_UNSIGNED_BYTE:
             case Image::IMG_UNSIGNED_SHORT:
             case Image::IMG_UNSIGNED_INT:
             default:
-              tfmt.intFmt     = nvsgFmts[Image::IMG_UNSIGNED_SHORT].fixedPtFmt;
-              tfmt.usrFmt     = nvsgFmts[Image::IMG_UNSIGNED_SHORT].usrFmt;
+              tfmt.intFmt     = dpFmts[Image::IMG_UNSIGNED_SHORT].fixedPtFmt;
+              tfmt.usrFmt     = dpFmts[Image::IMG_UNSIGNED_SHORT].usrFmt;
               break;
             }
             break;
@@ -2094,13 +2094,13 @@ namespace dp
 
         default:
           // set this so the routine knows the number of components
-          tfmt.intFmt     = nvsgFmt.fixedPtFmt;
-          tfmt.usrFmt     = nvsgFmt.usrFmt;
+          tfmt.intFmt     = dpFmt.fixedPtFmt;
+          tfmt.usrFmt     = dpFmt.usrFmt;
 
           return getTextureGPUFormatValues( gpufmt, tfmt.intFmt, tfmt.usrFmt );
         }
 
-        return ( tfmt.intFmt != NVSG_TIF_INVALID );
+        return ( tfmt.intFmt != DP_TIF_INVALID );
       }
 
     } // namespace gl

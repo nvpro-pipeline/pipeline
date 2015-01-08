@@ -34,7 +34,7 @@
 
 #include  <cstdio> // make mingw happy
 #include  <dp/Exception.h>
-#include  <dp/sg/core/nvsgapi.h>
+#include  <dp/sg/core/Config.h>
 #include  <dp/sg/core/GeoNode.h>
 #include  <dp/sg/core/IndexSet.h>
 #include  <dp/sg/core/Scene.h>
@@ -354,7 +354,7 @@ SceneSharedPtr PLYLoader::load(const string& filename, const vector<string> &sea
     size_t filesize = dp::util::fileSize( filename );
     if ( filesize != -1 )
     {
-      // Stuff needed to fill the NVSG scene in the end.
+      // Stuff needed to fill the scene in the end.
       int hasAttribute = 0;
 
       // Now the elements and properties are fully setup.
@@ -378,7 +378,7 @@ SceneSharedPtr PLYLoader::load(const string& filename, const vector<string> &sea
 
         // Parse the PLY header which defines the vertex attribute layout and data format in the file.
         // Construct the necessary read function list to read the data into local data structures
-        // which will then be put into NVSG nodes.
+        // which will then be put into scene nodes.
         if (pcFileMapping)
         {
           // Prepare everything for header parsing.
@@ -937,7 +937,7 @@ SceneSharedPtr PLYLoader::load(const string& filename, const vector<string> &sea
           cvas->setColors(&color[0], static_cast<unsigned int>(color.size()));
         }
 
-        // Generate the NVSG scene from the gathered data.
+        // Generate the scene from the gathered data.
         PrimitiveSharedPtr pTriangles = Primitive::create( PRIMITIVE_TRIANGLES );
         pTriangles->setIndexSet( iset );
         pTriangles->setVertexAttributeSet( cvas );

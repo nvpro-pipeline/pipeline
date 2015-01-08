@@ -37,7 +37,6 @@
 typedef uintptr_t UINT_PTR;   //!< Linux specific type definition for UINT_PTR, as it's known from MSVC.
 #endif
 
-#include <dp/util/Allocator.h>
 #include <dp/util/DPAssert.h>
 
 #include <boost/type_traits/is_base_of.hpp>

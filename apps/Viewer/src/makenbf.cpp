@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2009
+// Copyright NVIDIA Corporation 2009-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -24,7 +24,6 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#include <dp/sg/core/nvsg.h>
 #include <dp/sg/core/PerspectiveCamera.h>
 #include <dp/sg/core/Scene.h>
 #include <dp/sg/ui/ViewState.h>
@@ -64,11 +63,6 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-  dp::sg::core::nvsgInitialize();
-#if !defined(NDEBUG)
-  dp::sg::core::nvsgSetDebugFlags(dp::sg::core::NVSG_DBG_LEAK_DETECTION);
-#endif
-
   QApplication qapp(argc, argv);
 
   if (argc < 2 )
@@ -81,7 +75,7 @@ int main(int argc, char *argv[])
   dp::sg::ui::ViewStateSharedPtr viewStateHandle;
   
   // make sbf saver include shader sourcecode
-  _putenv( "NVSG_DAE_WORKAROUNDS=ADD_NVSG_MATERIAL:NVSG_MATERIAL_ONLY:MATERIAL_TO_VERTEX_COLORS" );
+  _putenv( "DP_DAE_WORKAROUNDS=ADD_DP_MATERIAL:DP_MATERIAL_ONLY:MATERIAL_TO_VERTEX_COLORS" );
 
   QString inputName, outputName;
 
@@ -133,8 +127,6 @@ int main(int argc, char *argv[])
   {
     std::cout << "done" << std::endl;
   }
-
-  dp::sg::core::nvsgTerminate();
 
   return return_code;
 }

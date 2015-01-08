@@ -27,7 +27,7 @@
 #pragma once
 /** @file */
 
-#include <dp/sg/core/nvsgapi.h> // commonly used stuff
+#include <dp/sg/core/Config.h> // commonly used stuff
 #include <dp/math/Trafo.h>
 #include <dp/util/HashGenerator.h>
 #include <dp/sg/core/EffectData.h>

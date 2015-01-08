@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2005
+// Copyright NVIDIA Corporation 2002-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -27,6 +27,9 @@
 // 3DSLoader.cpp
 //
 
+#include <dp/sg/io/PlugInterface.h> // definition of UPITID_VERSION,
+#include <dp/sg/io/PlugInterfaceID.h> // definition of UPITID_VERSION, UPITID_SCENE_LOADER, and UPITID_SCENE_SAVER
+
 #include <dp/Exception.h>
 #include <dp/math/Quatt.h>
 #include <dp/math/Vecnt.h>
@@ -34,8 +37,7 @@
 
 #include <dp/fx/EffectSpec.h>
 
-#include <dp/sg/core/nvsgapi.h>
-#include <dp/sg/core/nvsg.h>
+#include <dp/sg/core/Config.h>
 #include <dp/sg/core/Scene.h>
 #include <dp/sg/io/PlugInterface.h>
 #include <dp/util/File.h>
@@ -57,7 +59,7 @@
 #include <sstream>
 #include <map>
 
-#define MAX_SHINE 100 // the maximum specular exponent ("shininess") in NVSG
+#define MAX_SHINE 100 // the maximum specular exponent ("shininess")
 #define LIGHT_INTENSITY 0.7f // the default light intensity if none is supplied
 #define CREASE_ANGLE 45.0f // the default crease angle for smoothing local vertex normals
 #define CORRUPTED_BUFFER 1e+06f // the cutoff for a "very large" float indicating an invalid texcoord
@@ -70,6 +72,31 @@ using std::pair;
 using std::string;
 using std::vector;
 using std::map;
+
+
+// unique plug-in types
+const dp::util::UPITID PITID_SCENE_LOADER(UPITID_SCENE_LOADER, UPITID_VERSION);
+
+void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids )
+{
+  piids.clear();
+
+  piids.push_back(dp::util::UPIID(".3DS", PITID_SCENE_LOADER));
+}
+
+bool getPlugInterface(const dp::util::UPIID& piid, dp::util::PlugInSharedPtr & pi)
+{
+  const dp::util::UPIID PIID_3DS_SCENE_LOADER = dp::util::UPIID(".3DS", PITID_SCENE_LOADER);
+
+  if ( piid == PIID_3DS_SCENE_LOADER )
+  {
+    pi = ThreeDSLoader::create();
+    return( !!pi );
+  }
+
+  return false;
+}
+
 
 ThreeDSLoaderSharedPtr ThreeDSLoader::create()
 {
@@ -518,7 +545,7 @@ ThreeDSLoader::configureCamera( Group *parent, Lib3dsNode *n, Vec3f &piv, bool h
   PerspectiveCameraSharedPtr hCamera( PerspectiveCamera::create() );
   hCamera->setName(c->name);
 
-  // set the field of view of the camera: 3ds is in degrees, NVSG in radians
+  // set the field of view of the camera: 3ds is in degrees, dp::sg::core in radians
   if(c->fov!=0.f)
   {
     hCamera->setFieldOfView(degToRad(c->fov));

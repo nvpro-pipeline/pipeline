@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010
+// Copyright NVIDIA Corporation 2010-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -56,11 +56,7 @@ namespace dp
       {
         if ( m_managed )
         {
-          if ( m_data )
-          {
-            DP_ASSERT( m_sizeInBytes );
-            dp::util::Singleton<dp::util::Allocator>::instance()->dealloc( m_data, m_sizeInBytes );
-          }
+          delete[] m_data;
         }
       }
 
@@ -68,11 +64,7 @@ namespace dp
       {
         if (m_managed)
         {
-          if ( m_data )
-          {
-            DP_ASSERT( m_sizeInBytes );
-            dp::util::Singleton<dp::util::Allocator>::instance()->dealloc( m_data, m_sizeInBytes );
-          }
+          delete[] m_data;
           m_managed = false;
         }
         m_data = reinterpret_cast<char*>(data);
@@ -129,16 +121,12 @@ namespace dp
 
         if ( m_sizeInBytes != size)
         {
+          m_sizeInBytes = size;
           if ( m_managed )
           {
-            if ( m_data )
-            {
-              DP_ASSERT( m_sizeInBytes );
-              dp::util::Singleton<dp::util::Allocator>::instance()->dealloc( m_data, m_sizeInBytes );
-            }
-            m_data = (char *) dp::util::Singleton<dp::util::Allocator>::instance()->alloc( size );
+            delete[] m_data;
+            m_data = new char[m_sizeInBytes];
           }
-          m_sizeInBytes = size;
           // TODO: notify about changes? data is currently crap.
         }
       }

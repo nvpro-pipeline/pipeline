@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2011
+// Copyright NVIDIA Corporation 2002-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -86,7 +86,7 @@ namespace dp
 
       void VertexAttributeSet::swapVertexData(unsigned int attrib, VertexAttribute& rhs)
       {
-        DP_ASSERT( ( NVSG_POSITION <= attrib ) && ( attrib <= NVSG_ATTR15 ) ); // undefined behavior on invalid attrib
+        DP_ASSERT( ( DP_SG_POSITION <= attrib ) && ( attrib <= DP_SG_ATTR15 ) ); // undefined behavior on invalid attrib
 
         // we alias generic and conventional vertex attributes, that is - 
         // pairs of generic and conventional vertex attributes are sharing the same storage
@@ -113,9 +113,8 @@ namespace dp
           m_vattribs.erase( it );
         }
 
-        if ( attrib == NVSG_POSITION )
+        if ( attrib == DP_SG_POSITION )
         {
-          // we might introduce a specific notify on position change
         }
         notify( Event(this ) );
       }
@@ -123,7 +122,7 @@ namespace dp
       void VertexAttributeSet::reserveVertexData( unsigned int attrib, unsigned int size
                                                 , dp::util::DataType type, unsigned int count )
       {
-        DP_ASSERT( ( NVSG_POSITION <= attrib ) && ( attrib <= NVSG_ATTR15 ) );
+        DP_ASSERT( ( DP_SG_POSITION <= attrib ) && ( attrib <= DP_SG_ATTR15 ) );
         DP_ASSERT( ( dp::util::DT_INT_8 <= type ) && ( type <= dp::util::DT_NUM_DATATYPES ) );
 
         // we alias generic and conventional vertex attributes, that is - 
@@ -154,7 +153,7 @@ namespace dp
                                             , const void * data, unsigned int stride, unsigned int count
                                             , bool enable )
       {
-        DP_ASSERT( ( NVSG_POSITION <= attrib ) && ( attrib <= NVSG_ATTR15 ) );
+        DP_ASSERT( ( DP_SG_POSITION <= attrib ) && ( attrib <= DP_SG_ATTR15 ) );
         DP_ASSERT( ( dp::util::DT_INT_8 <= type ) && ( type <= dp::util::DT_NUM_DATATYPES ) );
         DP_ASSERT( data );
 
@@ -177,9 +176,8 @@ namespace dp
         subscribeBuffer( it );
         setEnabled( attrib, enable );
 
-        if ( NVSG_POSITION == attrIndex )
+        if ( DP_SG_POSITION == attrIndex )
         {
-          // we might introduce a specific notify on position change
         }
         notify( Event(this ) );
       }
@@ -188,7 +186,7 @@ namespace dp
                                             , dp::util::DataType type, const void * data, unsigned int stride
                                             , unsigned int count, bool enable )
       {
-        DP_ASSERT( ( NVSG_POSITION <= attrib ) && ( attrib <= NVSG_ATTR15 ) );
+        DP_ASSERT( ( DP_SG_POSITION <= attrib ) && ( attrib <= DP_SG_ATTR15 ) );
         DP_ASSERT( ( dp::util::DT_INT_8 <= type ) && ( type <= dp::util::DT_NUM_DATATYPES ) );
         DP_ASSERT( data );
 
@@ -218,9 +216,8 @@ namespace dp
         subscribeBuffer( it );
         setEnabled( attrib, enable );
 
-        if ( attrIndex == NVSG_POSITION )
+        if ( attrIndex == DP_SG_POSITION )
         {
-          // we might introduce a specific notify on position change
         }
         notify( Event(this ) );
       }
@@ -230,7 +227,7 @@ namespace dp
                                              , unsigned int strideInBytes, unsigned int count
                                              , bool enable )
       {
-        DP_ASSERT( ( NVSG_POSITION <= attrib ) && ( attrib <= NVSG_ATTR15 ) );
+        DP_ASSERT( ( DP_SG_POSITION <= attrib ) && ( attrib <= DP_SG_ATTR15 ) );
         DP_ASSERT( ( dp::util::DT_INT_8 <= type ) && ( type <= dp::util::DT_NUM_DATATYPES ) );
         DP_ASSERT( buffer );
 
@@ -254,9 +251,8 @@ namespace dp
         subscribeBuffer( it );
         setEnabled( attrib, enable );
 
-        if ( NVSG_POSITION == attrIndex )
+        if ( DP_SG_POSITION == attrIndex )
         {
-          // we might introduce a specific notify on position change
         }
         notify( Event(this ) );
       }
@@ -268,7 +264,7 @@ namespace dp
                                             , dp::util::DataType type, const void * data, unsigned int stride
                                             , unsigned int count, bool enable )
       {
-        DP_ASSERT( ( NVSG_POSITION <= attrib ) && ( attrib <= NVSG_ATTR15 ) );
+        DP_ASSERT( ( DP_SG_POSITION <= attrib ) && ( attrib <= DP_SG_ATTR15 ) );
         DP_ASSERT( from );
         DP_ASSERT( ( dp::util::DT_INT_8 <= type ) && ( type <= dp::util::DT_NUM_DATATYPES ) );
         DP_ASSERT( data );
@@ -328,16 +324,15 @@ namespace dp
         subscribeBuffer( it );
         setEnabled( attrib, enable );
 
-        if ( NVSG_POSITION == attrIndex )
+        if ( DP_SG_POSITION == attrIndex )
         {
-          // we might introduce a specific notify on position change
         }
         notify( Event( this ) );
       }
 
       void VertexAttributeSet::removeVertexData( unsigned int attrib, bool disable )
       {
-        DP_ASSERT( ( NVSG_POSITION <= attrib ) && ( attrib <= NVSG_ATTR15 ) ); // undefined behavior on invalid attrib
+        DP_ASSERT( ( DP_SG_POSITION <= attrib ) && ( attrib <= DP_SG_ATTR15 ) ); // undefined behavior on invalid attrib
 
         // we alias generic and conventional vertex attributes, that is - 
         // pairs of generic and conventional vertex attributes are sharing the same storage
@@ -350,9 +345,8 @@ namespace dp
           DP_ASSERT( it->second.getVertexDataCount() );   // nothing to do if no data was specified before
           it->second.removeData();
           m_vattribs.erase( it );
-          if ( NVSG_POSITION == attrIndex )
+          if ( DP_SG_POSITION == attrIndex )
           {
-            // we might introduce a specific notify on position change
           }
           notify( Event( this ) );
           setEnabled( attrib, !disable );
@@ -361,7 +355,7 @@ namespace dp
 
       Buffer::DataReadLock VertexAttributeSet::getVertexData(unsigned int attrib) const
       {
-        DP_ASSERT( ( NVSG_POSITION <= attrib ) && ( attrib <= NVSG_ATTR15 ) ); // undefined behavior on invalid attrib
+        DP_ASSERT( ( DP_SG_POSITION <= attrib ) && ( attrib <= DP_SG_ATTR15 ) ); // undefined behavior on invalid attrib
 
         // we alias generic and conventional vertex attributes, that is - 
         // pairs of generic and conventional vertex attributes are sharing the same storage
@@ -386,42 +380,42 @@ namespace dp
 
       unsigned int VertexAttributeSet::getSizeOfVertexData(unsigned int attrib) const
       {
-        DP_ASSERT( ( NVSG_POSITION <= attrib ) && ( attrib <= NVSG_ATTR15 ) ); // undefined behavior on invalid attrib
+        DP_ASSERT( ( DP_SG_POSITION <= attrib ) && ( attrib <= DP_SG_ATTR15 ) ); // undefined behavior on invalid attrib
         AttributeContainer::const_iterator it = m_vattribs.find( attrib );
         return( ( it == m_vattribs.end() ) ? 0 : it->second.getVertexDataSize() );
       }
 
       dp::util::DataType VertexAttributeSet::getTypeOfVertexData(unsigned int attrib) const
       {
-        DP_ASSERT( ( NVSG_POSITION <= attrib ) && ( attrib <= NVSG_ATTR15 ) ); // undefined behavior on invalid attrib
+        DP_ASSERT( ( DP_SG_POSITION <= attrib ) && ( attrib <= DP_SG_ATTR15 ) ); // undefined behavior on invalid attrib
         AttributeContainer::const_iterator it = m_vattribs.find( attrib );
         return( ( it == m_vattribs.end() ) ? dp::util::DT_UNKNOWN : it->second.getVertexDataType() );
       }
 
       unsigned int VertexAttributeSet::getNumberOfVertexData(unsigned int attrib) const
       {
-        DP_ASSERT( ( NVSG_POSITION <= attrib ) && ( attrib <= NVSG_ATTR15 ) ); // undefined behavior on invalid attrib
+        DP_ASSERT( ( DP_SG_POSITION <= attrib ) && ( attrib <= DP_SG_ATTR15 ) ); // undefined behavior on invalid attrib
         AttributeContainer::const_iterator it = m_vattribs.find( attrib );
         return( ( it == m_vattribs.end() ) ? 0 : it->second.getVertexDataCount() );
       }
 
       unsigned int VertexAttributeSet::getStrideOfVertexData(unsigned int attrib) const
       {
-        DP_ASSERT( ( NVSG_POSITION <= attrib ) && ( attrib <= NVSG_ATTR15 ) ); // undefined behavior on invalid attrib
+        DP_ASSERT( ( DP_SG_POSITION <= attrib ) && ( attrib <= DP_SG_ATTR15 ) ); // undefined behavior on invalid attrib
         AttributeContainer::const_iterator it = m_vattribs.find( attrib );
         return( ( it == m_vattribs.end() ) ? 0 : it->second.getVertexDataStrideInBytes() );
       }
 
       unsigned int VertexAttributeSet::getOffsetOfVertexData(unsigned int attrib) const
       {
-        DP_ASSERT( ( NVSG_POSITION <= attrib ) && ( attrib <= NVSG_ATTR15 ) ); // undefined behavior on invalid attrib
+        DP_ASSERT( ( DP_SG_POSITION <= attrib ) && ( attrib <= DP_SG_ATTR15 ) ); // undefined behavior on invalid attrib
         AttributeContainer::const_iterator it = m_vattribs.find( attrib );
         return( ( it == m_vattribs.end() ) ? 0 : it->second.getVertexDataOffsetInBytes() );
       }
 
       bool VertexAttributeSet::isContiguousVertexData(unsigned int attrib) const
       {
-        DP_ASSERT( ( NVSG_POSITION <= attrib ) && ( attrib <= NVSG_ATTR15 ) ); // undefined behavior on invalid attrib
+        DP_ASSERT( ( DP_SG_POSITION <= attrib ) && ( attrib <= DP_SG_ATTR15 ) ); // undefined behavior on invalid attrib
         AttributeContainer::const_iterator it = m_vattribs.find( attrib );
         return( ( it == m_vattribs.end() ) ? false : it->second.isContiguous() );
       }
@@ -457,7 +451,7 @@ namespace dp
           dst->setHints( src->getHints() );
           dst->setUserData( src->getUserData() );
 
-          for ( unsigned int i=0 ; i<2*VertexAttributeSet::NVSG_VERTEX_ATTRIB_COUNT ; ++i )
+          for ( unsigned int i=0 ; i<2*VertexAttributeSet::DP_SG_VERTEX_ATTRIB_COUNT ; ++i )
           {
             if ( src->getSizeOfVertexData( i ) )
             {
@@ -466,7 +460,7 @@ namespace dp
                                 , src->getVertexBuffer( i ), src->getOffsetOfVertexData( i )
                                 , src->getStrideOfVertexData( i ), src->getNumberOfVertexData( i ) );
               dst->setEnabled( i, src->isEnabled( i ) );
-              if ( i >= VertexAttributeSet::NVSG_VERTEX_ATTRIB_COUNT )
+              if ( i >= VertexAttributeSet::DP_SG_VERTEX_ATTRIB_COUNT )
               {
                 dst->setNormalizeEnabled( i, src->isNormalizeEnabled( i ) );
               }
@@ -479,18 +473,18 @@ namespace dp
       void generateTexCoords( VertexAttributeSetSharedPtr const& vas, TextureCoordType tct, const Sphere3f &sphere, unsigned int tc )
       {
         DP_ASSERT( vas );
-        DP_ASSERT(VertexAttributeSet::NVSG_TEXCOORD0 <= tc && tc <= VertexAttributeSet::NVSG_TEXCOORD7);
+        DP_ASSERT(VertexAttributeSet::DP_SG_TEXCOORD0 <= tc && tc <= VertexAttributeSet::DP_SG_TEXCOORD7);
 
         switch( tct )
         {
           case TCT_CYLINDRICAL :
-            generateTexCoordsCylinder( vas, sphere, tc-VertexAttributeSet::NVSG_TEXCOORD0 ); // convert 'tc' to zero based unit
+            generateTexCoordsCylinder( vas, sphere, tc-VertexAttributeSet::DP_SG_TEXCOORD0 ); // convert 'tc' to zero based unit
             break;
           case TCT_PLANAR :
-            generateTexCoordsPlane( vas, sphere, tc-VertexAttributeSet::NVSG_TEXCOORD0 ); // convert 'tc' to zero based unit
+            generateTexCoordsPlane( vas, sphere, tc-VertexAttributeSet::DP_SG_TEXCOORD0 ); // convert 'tc' to zero based unit
             break;
           case TCT_SPHERICAL :
-            generateTexCoordsSphere( vas, sphere, tc-VertexAttributeSet::NVSG_TEXCOORD0 ); // convert 'tc' to zero based unit
+            generateTexCoordsSphere( vas, sphere, tc-VertexAttributeSet::DP_SG_TEXCOORD0 ); // convert 'tc' to zero based unit
             break;
           default :
             DP_ASSERT( false );
@@ -814,7 +808,7 @@ namespace dp
           }
         }
 
-        for ( unsigned int slot=0 ; slot<VertexAttributeSet::NVSG_VERTEX_ATTRIB_COUNT ; slot++ )
+        for ( unsigned int slot=0 ; slot<VertexAttributeSet::DP_SG_VERTEX_ATTRIB_COUNT ; slot++ )
         {
           if ( from->getSizeOfVertexData( slot ) )
           {
@@ -860,7 +854,7 @@ namespace dp
           }
         }
 
-        for ( unsigned int slot=0 ; slot<VertexAttributeSet::NVSG_VERTEX_ATTRIB_COUNT ; slot++ )
+        for ( unsigned int slot=0 ; slot<VertexAttributeSet::DP_SG_VERTEX_ATTRIB_COUNT ; slot++ )
         {
           if ( from->getSizeOfVertexData( slot ) )
           {
@@ -931,7 +925,7 @@ namespace dp
         // calculate stride & number of vertices
         unsigned int stride = 0;
         unsigned int numberOfVertices = 0;
-        for ( unsigned int index = 0; index < VertexAttributeSet::NVSG_VERTEX_ATTRIB_COUNT; ++index )
+        for ( unsigned int index = 0; index < VertexAttributeSet::DP_SG_VERTEX_ATTRIB_COUNT; ++index )
         {
           if ( isEnabled( index ) )
           {
@@ -953,7 +947,7 @@ namespace dp
         BufferSharedPtr newBufferSharedPtr = BufferHost::create();
         newBufferSharedPtr->setSize( numberOfVertices * stride );
         unsigned int offset = 0;
-        for ( unsigned int index = 0; index < VertexAttributeSet::NVSG_VERTEX_ATTRIB_COUNT; ++index )
+        for ( unsigned int index = 0; index < VertexAttributeSet::DP_SG_VERTEX_ATTRIB_COUNT; ++index )
         {
           if ( isEnabled( index ) )
           {
@@ -976,7 +970,6 @@ namespace dp
       void VertexAttributeSet::onBufferChanged( )
       {
         // called only if position attribute buffer has been changed
-        notify( Event( this ) );
       }
 
     } // namespace core

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012 - 2013
+// Copyright NVIDIA Corporation 2012-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -27,7 +27,6 @@
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 
-#include <dp/sg/core/nvsg.h>
 #include <dp/sg/core/PerspectiveCamera.h>
 #include <dp/sg/core/EffectData.h>
 
@@ -636,7 +635,8 @@ int runApp( options::variables_map const& opts )
 
   if ( !opts["headlight"].empty() )
   {
-    // Bug 914976 containsLight() doesn't find lights in nvsgmain. Force adding the headlight anyway when the user specified it.
+    // TODO is this still a bug?
+    // Bug 914976 containsLight() doesn't find lights in the scene. Force adding the headlight anyway when the user specified it.
     if ( viewStateHandle /* && viewStateHandle->getScene() && !SceneLock( viewStateHandle->getScene() )->containsLight() */
       && viewStateHandle->getCamera() && ( viewStateHandle->getCamera()->getNumberOfHeadLights() == 0 ) )
     {
@@ -699,11 +699,6 @@ int runApp( options::variables_map const& opts )
 
 int main(int argc, char *argv[])
 {
-  dp::sg::core::nvsgInitialize( );
-#if !defined(NDEBUG)
-  dp::sg::core::nvsgSetDebugFlags( dp::sg::core::NVSG_DBG_ASSERT /*| dp::sg::core::NVSG_DBG_LEAK_DETECTION*/ );
-#endif
-
   // initialize GLUT, set window size and display mode, create the main window
   glutInit( &argc, argv );
   glutSetOption( GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_CONTINUE_EXECUTION );
@@ -763,8 +758,5 @@ int main(int argc, char *argv[])
     std::string line;
     getline( std::cin, line );
   }
-
-  dp::sg::core::nvsgTerminate();
-  
   return result;
 }

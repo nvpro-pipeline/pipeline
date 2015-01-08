@@ -28,6 +28,7 @@
 #include <dp/util/Image.h>
 #include <dp/util/File.h>
 #include <dp/util/Types.h>
+#include <dp/util/Singleton.h>
 #include <il.h>
 
 #include <iostream>
@@ -573,7 +574,7 @@ ERROREXIT:
       virtual ~DevILInitShutdown();
     };
 
-    typedef Singleton<DevILInitShutdown> GlobalDeVILInitShutdown;
+    typedef dp::util::Singleton<DevILInitShutdown> GlobalDeVILInitShutdown;
 
     DevILInitShutdown::DevILInitShutdown()
     {

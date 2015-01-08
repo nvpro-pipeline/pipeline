@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2005
+// Copyright NVIDIA Corporation 2002-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -130,10 +130,6 @@ namespace dp
         DP_ASSERT( m_msCamDir.size() == 0 );
 
         DP_ASSERT( m_clipPlanes.size() == 1 );
-
-      #if !defined(NDEBUG)
-        dumpIntersectionList();
-      #endif
       }
 
       void RayIntersectTraverser::release()
@@ -755,24 +751,6 @@ namespace dp
                                                  , primitiveIndex
                                                  , vertexIndices ) );
       }
-
-      #if !defined(NDEBUG)
-      void RayIntersectTraverser::dumpIntersectionList()
-      {
-        vector<Intersection>::const_iterator cit;
-        for (cit = m_intersectionList.begin(); cit != m_intersectionList.end(); cit++)
-        {
-      #if 0
-          NVSG_TRACE_OUT_F(("--------------------------------------------------\n"));
-          NVSG_TRACE_OUT_F(("Path    : %d\n", (*cit).getPath()));
-          NVSG_TRACE_OUT_F(("Primitive: %s\n", PrimitiveLock((*cit).getPrimitive())->getName().c_str()));
-          NVSG_TRACE_OUT_F(("Isp     : (%g, %g, %g)\n", (*cit).getIsp()[0], (*cit).getIsp()[1], (*cit).getIsp()[2]));
-          NVSG_TRACE_OUT_F(("Dist    : %g\n", (*cit).getDist()));
-          NVSG_TRACE_OUT_F(("--------------------------------------------------\n"));
-      #endif
-        }
-      }
-      #endif
 
       void RayIntersectTraverser::checkLine( const Primitive * p, const Buffer::ConstIterator<Vec3f>::Type &vertices
                                            , unsigned int i0, unsigned int i1, unsigned int pi )

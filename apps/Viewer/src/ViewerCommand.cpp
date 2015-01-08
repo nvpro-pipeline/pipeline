@@ -158,8 +158,8 @@ CommandGenerateTangentSpace::~CommandGenerateTangentSpace()
 bool CommandGenerateTangentSpace::doUndo()
 {
   // reset the tangent space texture coordinates again
-  m_primitive->getVertexAttributeSet()->setVertexAttribute( VertexAttributeSet::NVSG_TEXCOORD6, dp::sg::core::VertexAttribute(), false );
-  m_primitive->getVertexAttributeSet()->setVertexAttribute( VertexAttributeSet::NVSG_TEXCOORD7, dp::sg::core::VertexAttribute(), false );
+  m_primitive->getVertexAttributeSet()->setVertexAttribute( VertexAttributeSet::DP_SG_TEXCOORD6, dp::sg::core::VertexAttribute(), false );
+  m_primitive->getVertexAttributeSet()->setVertexAttribute( VertexAttributeSet::DP_SG_TEXCOORD7, dp::sg::core::VertexAttribute(), false );
   return( true );
 }
 
@@ -202,7 +202,7 @@ CommandGenerateTextureCoordinates::~CommandGenerateTextureCoordinates()
 bool CommandGenerateTextureCoordinates::doUndo()
 {
   // reset the texture coordinates again
-  m_primitive->getVertexAttributeSet()->setVertexAttribute( VertexAttributeSet::NVSG_TEXCOORD0, dp::sg::core::VertexAttribute(), false );
+  m_primitive->getVertexAttributeSet()->setVertexAttribute( VertexAttributeSet::DP_SG_TEXCOORD0, dp::sg::core::VertexAttribute(), false );
   return( true );
 }
 

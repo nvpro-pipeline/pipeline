@@ -23,12 +23,11 @@ set(CORE_SOURCES
   src/GeoNode.cpp
   src/Group.cpp
   src/IndexSet.cpp
+  src/Init.cpp
   src/LightSource.cpp
   src/LOD.cpp
   src/MatrixCamera.cpp
   src/Node.cpp
-  src/nvsg.cpp
-  src/NVSGVersion.cpp
   src/Object.cpp
   src/ParallelCamera.cpp
   src/ParameterGroupData.cpp
@@ -53,6 +52,7 @@ set(CORE_PUBLIC_HEADERS
   BufferHost.h
   Camera.h
   ClipPlane.h
+  Config.h
   ConstIterator.h
   CoreTypes.h
   EffectData.h
@@ -67,9 +67,6 @@ set(CORE_PUBLIC_HEADERS
   LOD.h
   MatrixCamera.h
   Node.h
-  nvsg.h
-  nvsgapi.h
-  NVSGVersion.h
   Object.h
   ParallelCamera.h
   ParameterGroupData.h

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2009-2014
+// Copyright NVIDIA Corporation 2009-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -293,7 +293,8 @@ namespace dp
       // FIXME error managment
       WNDCLASS wc;
 
-      // register dummy window class, move creation to nvsg.cpp
+      // register dummy window class
+      // TODO move creating to static initializer
       wc.style = CS_OWNDC;
       wc.lpfnWndProc = RenderContextWndProc;
       wc.cbClsExtra = 0;
