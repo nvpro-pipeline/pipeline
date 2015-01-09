@@ -28,6 +28,9 @@
 // HOOPSLoader.cpp
 //
 
+#include <dp/sg/io/PlugInterface.h> // definition of UPITID_VERSION,
+#include <dp/sg/io/PlugInterfaceID.h> // definition of UPITID_VERSION, UPITID_SCENE_LOADER, and UPITID_SCENE_SAVER
+
 #include <dp/Exception.h>
 #include <dp/sg/core/EffectData.h>
 #include <dp/sg/core/GeoNode.h>
@@ -58,6 +61,79 @@ using std::map;
 using std::pair;
 using std::string;
 using std::vector;
+
+
+// unique plug-in types
+const dp::util::UPITID PITID_SCENE_LOADER(UPITID_SCENE_LOADER, UPITID_VERSION);
+
+static char * cadFormats[] =
+{
+  ".3dxml",       // Dassault Systems: CATIA V6
+  ".arc",         // Siemens: I-deas
+  ".asm",         // Siemens: Solid Edge, PTC
+  ".catpart",     // Dassault Systems: CATIA V5
+  ".catproduct",  // Dassault Systems: CATIA V5
+  ".catshape",    // Dassault Systems: CATIA V5
+  ".cgr",         // Dassault Systems: CATIA Graphics Representation
+  ".dlv",         // Dassault Systems: CATIA V4
+  ".exp",         // Dassault Systems: CATIA V4
+  ".iam",         // Autodesk: Inventor
+  ".ifc",         // Industry Foundation Classes
+  ".iges",        // IGES
+  ".igs",         // IGES
+  ".ipt",         // Autodesk: Inventor
+  ".jt",          // Siemens: JT
+  ".mf1",         // Siemens: I-deas
+  ".model",       // Dassault Systems: CATIA V4
+  ".neu",         // PTC
+  ".par",         // Siemens: Solid Edge
+  ".pkg",         // Siemens: I-deas
+  ".prc",         // PRC
+  ".prt",         // PTC, Siemens: NX
+  ".psm",         // Siemens: Solid Edge
+  ".pwd",         // Siemens: Solid Edge
+  ".session",     // Dassault Systems: CATIA V4
+  ".sldasm",      // Dassault Systems: SolidWorks
+  ".sldprt",      // Dassault Systems: SolidWorks
+  ".step",        // STEP
+  ".stl",         // Stereo Lithography
+  ".stp",         // STEP
+  ".vda"          // VDA-FS
+  ".vrml",        // VRML V1.0 and V2.0
+//  ".wrl",         // VRML V1.0 and V2.0
+  ".x_b",         // Siemens: Parasolid
+  ".x_t",         // Siemens: Parasolid
+  ".xas",         // PTC
+  ".xmt",         // Siemens: Parasolid
+  ".xmt_txt",     // Siemens: Parasolid
+  ".xpr",         // PTC
+};
+#define NUM_CAD_FORMATS (sizeof( cadFormats ) / sizeof( char * ))
+
+void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids )
+{
+  piids.clear();
+
+  for ( unsigned int i=0 ; i<NUM_CAD_FORMATS ; i++ )
+  {
+    piids.push_back(dp::util::UPIID(cadFormats[i], PITID_SCENE_LOADER));
+  }
+}
+
+bool getPlugInterface(const dp::util::UPIID& piid, dp::util::PlugIn *& pi)
+{
+  for( unsigned int i = 0; i < NUM_CAD_FORMATS; i ++ )
+  {
+    if ( piid == dp::util::UPIID(cadFormats[i], PITID_SCENE_LOADER) )
+    {
+      pi = new HOOPSLoader();
+      return( true );
+    }
+  }
+
+  return false;
+}
+
 
 // need something different here, use this for now
 #define CHECK_RET(function_call) {\

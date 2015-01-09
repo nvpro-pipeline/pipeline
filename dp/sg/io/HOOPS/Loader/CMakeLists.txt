@@ -14,7 +14,6 @@ if(HOOPS_FOUND)
 
   #source
   set( HOOPSLOADER_SOURCES
-        nvsgInterface.cpp
         HOOPSLoader.cpp
      )
 

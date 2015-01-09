@@ -36,7 +36,6 @@
 #include <vector>
 
 #include <dp/math/Vecnt.h>
-#include <dp/sg/core/nvsgapi.h>
 #include <dp/sg/core/CoreTypes.h>
 #include <dp/sg/core/Group.h>
 #include <dp/sg/io/PlugInterface.h>
