@@ -347,7 +347,6 @@ namespace dp
           DP_SG_CORE_API virtual dp::math::Sphere3f calculateBoundingSphere() const;
 
           DP_SG_CORE_API virtual unsigned short determineHintsContainment( unsigned short hints ) const;
-          DP_SG_CORE_API virtual bool determineTransparencyContainment() const;
 
           /*! \brief Feed the data of this object into the provied HashGenerator.
            *  \param hg The HashGenerator to update with the data of this object.

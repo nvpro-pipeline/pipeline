@@ -315,25 +315,6 @@ namespace dp
         return( containment );
       }
 
-      bool Switch::determineTransparencyContainment() const
-      {
-        Group::ChildrenConstIterator gcci = beginChildren();
-        unsigned int previousIndex = 0;
-        const SwitchMask & aMask = activeMask();
-        bool containsTransparent = false;
-
-        for ( set<unsigned int>::const_iterator it=aMask.begin() ; !containsTransparent && it!=aMask.end() ; ++it )
-        {
-          DP_ASSERT( *it < getNumberOfChildren() );
-
-          std::advance( gcci, *it - previousIndex );
-          previousIndex = *it;
-
-          containsTransparent = (*gcci)->containsTransparency();
-        }
-        return( containsTransparent );
-      }
-
       Switch & Switch::operator=(const Switch & rhs)
       {
         if (&rhs != this)

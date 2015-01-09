@@ -187,14 +187,6 @@ namespace dp
             *  \sa invalidateBoundingVolumes */
           DP_SG_CORE_API virtual dp::math::Sphere3f calculateBoundingSphere() const;
 
-          /*! \brief Determine the transparency containment status.
-            *  \return \c true, if this GeoNode holds any transparent geometry, otherwise \c false.
-            *  \remarks This function is called by the framework to determine the transparency
-            *  containment state of a Node when the transparency containment cache is marked as
-            *  invalid.
-            *  \sa Node */
-          DP_SG_CORE_API virtual bool determineTransparencyContainment() const;
-
           /*! \brief Feed the data of this object into the provied HashGenerator.
             *  \param hg The HashGenerator to update with the data of this object.
             *  \sa getHashKey */
@@ -227,20 +219,6 @@ namespace dp
       inline dp::math::Sphere3f GeoNode::calculateBoundingSphere() const
       {
         return( m_primitive ? m_primitive->getBoundingSphere() : dp::math::Sphere3f() );
-      }
-
-      inline bool GeoNode::determineTransparencyContainment() const
-      {
-        bool tc = false;
-        if ( m_materialEffect )
-        {
-          tc = m_materialEffect->containsTransparency();
-        }
-        if ( ! tc && m_primitive )
-        {
-          tc = m_primitive->containsTransparency();
-        }
-        return( tc );
       }
 
       inline bool GeoNode::generateNormals( bool overwrite )

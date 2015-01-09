@@ -60,7 +60,7 @@ namespace dp
       , m_hints(0)
       , m_userData(nullptr)
       , m_traversalMask(~0)
-      , m_dirtyState(NVSG_BOUNDING_VOLUMES | NVSG_CONTAINS_MASK | NVSG_HASH_KEY)
+      , m_dirtyState(NVSG_BOUNDING_VOLUMES | NVSG_HASH_KEY)
       {
       }
 
@@ -73,7 +73,7 @@ namespace dp
       , m_flags(rhs.m_flags)
       , m_traversalMask(rhs.m_traversalMask)
       , m_userData(rhs.m_userData) // just copy the address to arbitrary user data
-      , m_dirtyState(NVSG_BOUNDING_VOLUMES | NVSG_CONTAINS_MASK | NVSG_HASH_KEY)
+      , m_dirtyState(NVSG_BOUNDING_VOLUMES | NVSG_HASH_KEY)
       {
         // concrete objects should have a valid object code - assert this
         DP_ASSERT(m_objectCode!=OC_INVALID);
@@ -216,20 +216,6 @@ namespace dp
         return(equi);
       }
 
-      bool Object::containsTransparency() const
-      {
-        if (m_dirtyState & NVSG_CONTAINS_TRANSPARENCY)
-        {
-          m_flags &= ~NVSG_CONTAINS_TRANSPARENCY;
-          if (determineTransparencyContainment())
-          { 
-            m_flags |= NVSG_CONTAINS_TRANSPARENCY;
-          }
-          m_dirtyState &= ~NVSG_CONTAINS_TRANSPARENCY;
-        }
-        return !!(m_flags & NVSG_CONTAINS_TRANSPARENCY);
-      }
-
       util::HashKey Object::getHashKey() const
       {
         if (m_dirtyState & NVSG_HASH_KEY)
@@ -245,11 +231,6 @@ namespace dp
       unsigned int Object::determineHintsContainment(unsigned int hints) const
       {
         return getHints(hints);
-      }
-
-      bool Object::determineTransparencyContainment() const
-      {
-        return false;
       }
 
       void Object::feedHashGenerator(util::HashGenerator & hg) const
@@ -321,18 +302,15 @@ namespace dp
               // the only property event we're interested in is the transparency event
               dp::util::Reflection::PropertyEvent const& propertyEvent = static_cast<dp::util::Reflection::PropertyEvent const&>(event);
               dp::util::PropertyId propertyId = propertyEvent.getPropertyId();
-              if (propertyId == dp::sg::core::EffectData::PID_Transparent)
-              {
-                changedState |= NVSG_CONTAINS_TRANSPARENCY;
-              }
-              else if ((propertyId == dp::sg::core::LOD::PID_Center)
-                    || (propertyId == dp::sg::core::Switch::PID_ActiveSwitchMask))
+              if ( ( propertyId == dp::sg::core::LOD::PID_Center )
+                || ( propertyId == dp::sg::core::Switch::PID_ActiveSwitchMask ) )
               {
                 changedState |= NVSG_BOUNDING_VOLUMES;
               }
 #if !defined(NDEBUG)
-              else if ((propertyId != dp::sg::core::Object::PID_Name)
-                    &&  (propertyId != dp::sg::core::Object::PID_TraversalMask))
+              else if ( ( propertyId != dp::sg::core::EffectData::PID_Transparent )
+                    &&  ( propertyId != dp::sg::core::Object::PID_Name )
+                    &&  ( propertyId != dp::sg::core::Object::PID_TraversalMask ) )
               {
                 DP_ASSERT(!"encountered unhandled property event type!");
               }
