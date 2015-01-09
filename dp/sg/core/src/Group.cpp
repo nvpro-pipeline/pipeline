@@ -214,18 +214,6 @@ namespace dp
         return( sphere );
       }
 
-      bool Group::determineTransparencyContainment() const
-      {
-        for ( ChildrenContainer::const_iterator ccci = m_children.begin() ; ccci != m_children.end() ; ++ccci )
-        {
-          if ( (*ccci)->containsTransparency() )
-          {
-            return( true );
-          }
-        }
-        return( false );
-      }
-
       unsigned int Group::determineHintsContainment( unsigned int hints ) const
       {
         unsigned int containment = Node::determineHintsContainment( hints );

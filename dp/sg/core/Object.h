@@ -158,13 +158,9 @@ namespace dp
       
           NVSG_BOUNDING_VOLUMES               = NVSG_BOUNDING_BOX | 
                                                 NVSG_BOUNDING_SPHERE,
-                                            
-          // containment state
-          NVSG_CONTAINS_TRANSPARENCY          = NVSG_BOUNDING_SPHERE          << 1,
 
-          NVSG_CONTAINS_MASK                  = NVSG_CONTAINS_TRANSPARENCY,
           // hash key state
-          NVSG_HASH_KEY                       = NVSG_CONTAINS_TRANSPARENCY    << 1
+          NVSG_HASH_KEY                       = NVSG_BOUNDING_SPHERE    << 1
         };
 
         class Event;
@@ -396,8 +392,6 @@ namespace dp
          *  \sa feedHashGenerator */
         DP_SG_CORE_API dp::util::HashKey getHashKey() const;
 
-        DP_SG_CORE_API bool containsTransparency() const;
-
         /*! \brief Set a TraversalMask to be used with this Object.
          *  \param mask The mask to be used.
          *  \remarks The traversal mask is used in conjuction with Traverser-derived and Renderer-derived objects to
@@ -454,7 +448,6 @@ namespace dp
         DP_SG_CORE_API Object( const Object& rhs );
 
         DP_SG_CORE_API virtual unsigned int determineHintsContainment(unsigned int which) const;
-        DP_SG_CORE_API virtual bool determineTransparencyContainment() const;
 
       protected:
         /*! \brief Per-object type identifier.

@@ -107,7 +107,6 @@ namespace dp
           DP_SG_CORE_API bool getTransparent() const;
           DP_SG_CORE_API void setTransparent( bool transparent );
 
-          DP_SG_CORE_API virtual bool determineTransparencyContainment() const;
           DP_SG_CORE_API virtual bool isEquivalent( ObjectSharedPtr const& object, bool ignoreNames = true, bool deepCompare = false ) const;
 
           DP_SG_CORE_API bool save( const std::string & filename ) const;

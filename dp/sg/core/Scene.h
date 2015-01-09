@@ -182,10 +182,6 @@ namespace dp
            *  \sa getRootNode */
           DP_SG_CORE_API void setRootNode( const NodeSharedPtr & root );
 
-          /*! \brief Ask if this Scene contains any transparent StateAttribute.
-           *  \return \c true, if the Scene contains a transparent StateAttribute, otherwise \c false. */
-          DP_SG_CORE_API bool containsTransparency() const;
-
           /*! \brief Get the bounding box of the scene.
            *  \return The bounding box of the scene. If the root node is invalid, the bounding box
            *  is invalid. */
@@ -263,15 +259,6 @@ namespace dp
       inline const NodeSharedPtr & Scene::getRootNode() const
       {
         return( m_root );
-      }
-
-      inline bool Scene::containsTransparency() const
-      {
-        if(m_root)                                              // First check if root node is valid before requesting read access!
-        {
-          return( m_root->containsTransparency() );
-        }
-        return false;
       }
 
       inline const dp::math::Vec3f& Scene::getAmbientColor() const

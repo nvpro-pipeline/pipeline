@@ -360,11 +360,6 @@ namespace dp
         return( m_transparent );
       }
 
-      bool EffectData::determineTransparencyContainment() const
-      {
-        return( m_transparent );
-      }
-
       bool EffectData::save( const std::string & filename ) const
       {
         EffectDataLocalSharedPtr edl = EffectDataLocal::create( this );
