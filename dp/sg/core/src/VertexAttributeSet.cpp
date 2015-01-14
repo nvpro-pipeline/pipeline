@@ -972,6 +972,14 @@ namespace dp
         // called only if position attribute buffer has been changed
       }
 
+      VertexAttribute const& VertexAttributeSet::getVertexAttribute(int attrib) const
+      {
+        DP_ASSERT(DP_SG_POSITION <= attrib && attrib <= DP_SG_ATTR15); // undefined behavior on invalid attrib
+        AttributeContainer::const_iterator it = m_vattribs.find( attribIndex( attrib ) );
+        return( it == m_vattribs.end() ? m_emptyAttribute : it->second );
+      }
+
+
     } // namespace core
   } // namespace sg
 } // namespace dp

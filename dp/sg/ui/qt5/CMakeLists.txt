@@ -47,7 +47,6 @@ if( Qt5Widgets_FOUND )
 
   target_link_libraries( DPSgUIQt5
     DPSgCore
-    DPSgUI
     DPGL
     ${GLEW_LIBRARY}
     ${OPENGL_gl_LIBRARY}

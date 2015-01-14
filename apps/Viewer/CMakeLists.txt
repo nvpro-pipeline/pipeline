@@ -180,7 +180,6 @@ if(Qt5Widgets_FOUND AND TARGET DPSgUIQt5)
     ${GLEW_LIBRARY}
     ${Boost_LIBRARIES}
     DP
-    DPSgAlgorithm
     DPSgCore
     DPSgGL
     DPSgRdrRiXGL
@@ -219,7 +218,6 @@ if(Qt5Widgets_FOUND AND TARGET DPSgUIQt5)
 
   target_link_libraries(makenbf
     ${QT_LIBRARIES}
-    DPSgAlgorithm
     DPSgCore
     DPSgIO
   )

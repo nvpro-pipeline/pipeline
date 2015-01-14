@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2014
+// Copyright NVIDIA Corporation 2010-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -49,6 +49,7 @@
 #include <dp/sg/core/Node.h>
 #include <dp/sg/core/Object.h>
 #include <dp/sg/core/Primitive.h>
+#include <dp/sg/core/Scene.h>
 #include <dp/sg/core/Switch.h>
 #include <dp/sg/core/Transform.h>
 
@@ -163,20 +164,20 @@ namespace dp
       {
       }
 
-      void SceneTree::update( dp::sg::ui::ViewStateSharedPtr const& vs )
+      void SceneTree::update(dp::sg::core::CameraSharedPtr const& camera, float lodScaleRange)
       {
         {
           dp::util::ProfileEntry p("Update TransformTree");
-          updateTransformTree( vs );
+          updateTransformTree(camera);
         }
 
         {
           dp::util::ProfileEntry p("Update ObjectTree");
-          updateObjectTree( vs );
+          updateObjectTree(camera, lodScaleRange);
         }
       }
 
-      void SceneTree::updateTransformTree( dp::sg::ui::ViewStateSharedPtr const& vs )
+      void SceneTree::updateTransformTree(dp::sg::core::CameraSharedPtr const& camera)
       {
         //
         // first step: update node local information
@@ -234,14 +235,14 @@ namespace dp
         // 
 
         m_changedTransforms.clear();
-        UpdateTransformVisitor visitor( m_transformTree, *this, vs->getCamera(), m_changedTransforms );
+        UpdateTransformVisitor visitor( m_transformTree, *this, camera, m_changedTransforms );
         PreOrderTreeTraverser<TransformTree, UpdateTransformVisitor> traverser;
 
         traverser.processDirtyList( m_transformTree, visitor, TransformTreeNode::DEFAULT_DIRTY);
         m_transformTree.m_dirtyObjects.clear();
       }
 
-      void SceneTree::updateObjectTree( dp::sg::ui::ViewStateSharedPtr const& vs )
+      void SceneTree::updateObjectTree(dp::sg::core::CameraSharedPtr const& camera, float lodRangeScale)
       {   
         //
         // first step: update node-local information
@@ -301,8 +302,7 @@ namespace dp
         // update all lods
         if( !m_objectTree.m_LODs.empty() )
         {
-          float scaleFactor = vs->getLODRangeScale();
-          const Mat44f& worldToView = vs->getCamera()->getWorldToViewMatrix();
+          const Mat44f& worldToView = camera->getWorldToViewMatrix();
 
           std::map< ObjectTreeIndex, LODWeakPtr >::iterator it, it_end = m_objectTree.m_LODs.end();
           for( it = m_objectTree.m_LODs.begin(); it != it_end; ++it )
@@ -312,7 +312,7 @@ namespace dp
 
             const Mat44f modelToWorld = getTransformMatrix( node.m_transformIndex );
             const Mat44f modelToView = modelToWorld * worldToView;
-            ObjectTreeIndex activeIndex = it->second->getLODToUse( modelToView, scaleFactor );
+            ObjectTreeIndex activeIndex = it->second->getLODToUse( modelToView, lodRangeScale );
 
             ObjectTreeIndex childIndex = m_objectTree[index].m_firstChild;
             // counter for the i-th child

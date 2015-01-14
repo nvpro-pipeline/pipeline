@@ -28,6 +28,7 @@
 
 #include <dp/sg/renderer/rix/gl/Config.h>
 #include <dp/sg/core/CoreTypes.h>
+#include <dp/sg/ui/ViewState.h>
 #include <dp/sg/xbar/SceneTree.h>
 #include <dp/sg/renderer/rix/gl/inc/ResourceManager.h>
 #include <dp/sg/renderer/rix/gl/inc/ResourceSampler.h>

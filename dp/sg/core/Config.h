@@ -27,9 +27,11 @@
 #pragma once
 /** @file */
 
-#ifdef _WIN32
+#include <dp/Config.h>
+
+#if defined(DP_OS_WINDOWS)
 // microsoft specific storage-class defines
-# if defined(DP_SG_CORE_EXPORTS)
+# if defined(DP_SG_CORE_EXPORTS) || defined(DP_SG_XBAR_EXPORTS) || defined(DP_SG_ALGORITHM_EXPORTS) || defined(DP_SG_UI_EXPORTS)
 #  define DP_SG_CORE_API __declspec(dllexport)
 # else
 #  define DP_SG_CORE_API __declspec(dllimport)

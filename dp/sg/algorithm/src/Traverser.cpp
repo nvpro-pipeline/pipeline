@@ -157,15 +157,7 @@ namespace dp
       {
         DP_ASSERT(scene);
   
-        dp::sg::ui::ViewStateSharedPtr tempViewState = dp::sg::ui::ViewState::create();
-        if ( m_viewState )
-        {
-          tempViewState = m_viewState.clone();
-        }
-        tempViewState->setScene( scene );
-
-        // Use the temporary ViewState for this traversal
-        apply(tempViewState);
+        apply(scene->getRootNode());
       }
 
       bool Traverser::preApply( const NodeSharedPtr & root )

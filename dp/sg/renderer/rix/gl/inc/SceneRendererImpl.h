@@ -125,7 +125,6 @@ namespace dp
             void shutdownRenderer();
 
             // renderer info
-            dp::sg::core::SceneSharedPtr      m_lastScene;
             dp::sg::xbar::SceneTreeSharedPtr  m_sceneTree;
             dp::rix::core::Renderer*          m_renderer;
             dp::sg::xbar::DrawableManager*    m_drawableManager;

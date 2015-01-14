@@ -25,6 +25,7 @@
 
 
 #include <dp/sg/algorithm/Search.h>
+#include <dp/sg/core/Scene.h>
 
 namespace dp
 {

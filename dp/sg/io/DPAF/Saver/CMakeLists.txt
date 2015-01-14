@@ -34,8 +34,6 @@ add_library( DPAFSaver SHARED
 target_link_libraries( DPAFSaver 
   DP
   DPSgCore
-  DPSgUI
-  DPSgAlgorithm
   DPMath
   DPUtil
   DPFx

@@ -32,16 +32,10 @@ source_group(header FILES ${PRIVATE_HEADERS})
 source_group(""     FILES ${PUBLIC_HEADERS})
 
 #target
-add_library( DPSgUI SHARED
+add_library( DPSgUI OBJECT
   ${SOURCES}
   ${HEADERS}
   ${PUBLIC_HEADERS}
-)
-
-target_link_libraries( DPSgUI
-  DPSgCore
-  DPFx
-  DPMath
 )
 
 set_target_properties( DPSgUI PROPERTIES COMPILE_DEFINITIONS DP_SG_UI_EXPORTS )

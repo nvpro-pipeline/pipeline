@@ -27,6 +27,7 @@
 #include <dp/sg/algorithm/Replace.h>
 #include <dp/sg/algorithm/Traverser.h>
 #include <dp/sg/core/EffectData.h>
+#include <dp/sg/core/Scene.h>
 #include <dp/fx/EffectLibrary.h>
 
 using namespace dp::sg::core;

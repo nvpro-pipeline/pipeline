@@ -33,6 +33,7 @@
 #include <dp/sg/core/EffectData.h>
 #include <dp/sg/core/GeoNode.h>
 #include <dp/sg/core/LightSource.h>
+#include <dp/sg/core/Scene.h>
 #include <dp/sg/ui/ViewState.h>
 #include <dp/util/Array.h>
 

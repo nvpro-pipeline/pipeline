@@ -34,7 +34,6 @@ if (LIB3DS_FOUND)
   target_link_libraries( 3DSLoader
     DP
     DPSgCore
-    DPSgUI
     DPMath
     DPUtil
     DPFx

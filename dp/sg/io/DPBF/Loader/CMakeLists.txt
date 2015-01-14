@@ -30,7 +30,6 @@ add_library( DPBFLoader SHARED
 target_link_libraries( DPBFLoader 
   DP
   DPSgCore
-  DPSgUI
   DPMath
   DPUtil
   DPFx

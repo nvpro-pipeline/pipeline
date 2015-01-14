@@ -45,7 +45,6 @@ target_link_libraries( Tutorial_001_Render_Scene
   ${OPENGL_gl_LIBRARY}
   ${GLEW_LIBRARY}
   ${Boost_LIBRARIES}
-  DPSgAlgorithm
   DPSgCore
   DPSgGL
   DPSgRdrRiXGL

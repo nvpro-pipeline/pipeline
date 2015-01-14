@@ -49,7 +49,6 @@ add_library( DPSgIO SHARED
 
 target_link_libraries( DPSgIO
   DPSgCore
-  DPSgUI
   DPUtil
 )
 

@@ -5,6 +5,7 @@ include_directories(
 
 #definitions
 add_definitions(
+  -DDP_SG_XBAR_CULLING_EXPORTS
 )
 
 #sources
@@ -39,7 +40,6 @@ target_link_libraries( DPSgXbarCulling
   DPSgCore
   DPUtil
   DPMath
-  DPSgXbar
   DPCulling
   DPCullingCPU
   DPCullingOpenGL

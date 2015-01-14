@@ -33,7 +33,6 @@ add_library( DPAFLoader SHARED
 target_link_libraries( DPAFLoader 
   DP
   DPSgCore
-  DPSgUI
   DPMath
   DPUtil
   DPFx

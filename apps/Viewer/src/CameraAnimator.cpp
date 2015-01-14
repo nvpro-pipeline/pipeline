@@ -27,6 +27,7 @@
 #include "CameraAnimator.h"
 #include <dp/sg/core/FrustumCamera.h>
 #include <dp/sg/core/PerspectiveCamera.h>
+#include <dp/sg/core/Scene.h>
 
 CameraAnimator::CameraAnimator( QObject * parent )
   : QObject( parent )

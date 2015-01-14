@@ -41,7 +41,6 @@ add_library( DPSgUIGLUT SHARED
 
 target_link_libraries( DPSgUIGLUT
   DPSgCore
-  DPSgUI
   DPGL
   ${GLEW_LIBRARY}
   ${GLUT_LIBRARIES}

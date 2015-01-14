@@ -26,7 +26,8 @@
 
 #pragma once
 
-#ifdef _WIN32
+#include <dp/Config.h>
+#if defined(DP_OS_WINDOWS)
 // microsoft specific storage-class defines
 # if defined(DP_SG_XBAR_CULLING_EXPORTS)
 #  define DP_SG_XBAR_CULLING_API  __declspec(dllexport)

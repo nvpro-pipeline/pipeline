@@ -869,8 +869,7 @@ namespace dp
         AttributeContainer::const_iterator it = m_vattribs.find( attrIndex );
         if ( it == m_vattribs.end() )
         {
-          Buffer::DataReadLock lock = getVertexData( attrib );
-          return( typename Buffer::ConstIterator<ValueType>::Type( lock.getPtr<ValueType>(), m_emptyAttribute.getVertexDataStrideInBytes(), lock ) );
+          return Buffer::ConstIterator<ValueType>::Type();
         }
         else
         {
@@ -1131,14 +1130,6 @@ namespace dp
         }
         return attrib;
       }
-
-      inline const VertexAttribute &VertexAttributeSet::getVertexAttribute( int attrib ) const
-      {
-        DP_ASSERT(DP_SG_POSITION <= attrib && attrib <= DP_SG_ATTR15); // undefined behavior on invalid attrib
-        AttributeContainer::const_iterator it = m_vattribs.find( attribIndex( attrib ) );
-        return( it == m_vattribs.end() ? m_emptyAttribute : it->second );
-      }
-
     } // namespace core
   } // namespace sg
 } // namespace dp

@@ -43,12 +43,10 @@ add_executable( GLUTAnimation
 target_link_libraries( GLUTAnimation
   ${OPENGL_gl_LIBRARY}
   ${GLEW_LIBRARY}
-  DPSgAlgorithm
   DPSgCore
   DPSgGL
   DPSgRdrRiXGL
   DPSgIO
-  DPSgUI
   DPSgUIManipulator
   DPSgUIGLUT
   DPSgGenerator

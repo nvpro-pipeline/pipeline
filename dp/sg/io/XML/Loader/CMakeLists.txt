@@ -38,7 +38,6 @@ add_library( XMLLoader SHARED
 target_link_libraries( XMLLoader
   DP
   DPSgCore
-  DPSgUI
   DPMath
   DPUtil
   DPSgIO

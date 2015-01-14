@@ -31,7 +31,7 @@
 #include <dp/sg/ui/RendererOptions.h>
 #include <dp/sg/core/Camera.h>
 #include <dp/sg/core/HandledObject.h>
-#include <dp/sg/core/Scene.h>
+#include <dp/sg/xbar/SceneTree.h>
 
 namespace dp
 {
@@ -213,13 +213,27 @@ namespace dp
 
           /*! \brief Returns the current Scene of the ViewState
            *  \return The Scene of this ViewState.
+           *  \deprecated
           */
-          DP_SG_UI_API const dp::sg::core::SceneSharedPtr & getScene() const;
+          DP_SG_UI_API dp::sg::core::SceneSharedPtr const& getScene() const;
 
-          /*! \brief Set the Scene of the ViewState
-           *  \param scene The new Scene
+          /*! \brief Creates a new SceneTree for the given Scene.
+           *  \param scene The Scene for the new SceneTree
+           *  \deprecated
+           *  \remarks The new SceneTree is even created if the Scene of the current SceneTree matches the passed Scene.
           */
-          DP_SG_UI_API void setScene( const dp::sg::core::SceneSharedPtr & scene );
+          DP_SG_UI_API void setScene(dp::sg::core::SceneSharedPtr const& scene);
+
+          /*! \brief Set the dp::sg::xbar::SceneTree of the ViewState
+          *   \param sceneTree The new SceneTree.
+              \remarks This function also updates the Scene of the ViewState.
+          **/
+          DP_SG_UI_API void setSceneTree(dp::sg::xbar::SceneTreeSharedPtr const& sceneTree);
+
+          /*! \brief Returns the current SceneTree of the ViewState.
+           *  \return The SceneTree of this ViewState.
+          */
+          DP_SG_UI_API dp::sg::xbar::SceneTreeSharedPtr const& getSceneTree() const;
 
           /*! \brief Query if automatic clip plane adjustment is on.
            *  \return \c true, if automatic clip plane adjustment is on, otherwise \c false.
@@ -264,10 +278,10 @@ namespace dp
           DP_SG_UI_API ViewState( const ViewState& rhs );
 
         private:
-          bool                           m_autoClipPlanes; //!< automatically adjust the clip planes for the camera
-          dp::sg::core::CameraSharedPtr                m_camera;         //!< this camera renders the tree
+          bool                                 m_autoClipPlanes;  //!< automatically adjust the clip planes for the camera
+          dp::sg::core::CameraSharedPtr        m_camera;          //!< this camera renders the tree
           dp::sg::ui::RendererOptionsSharedPtr m_rendererOptions; //!< RenderOptions object for SceneRenderers
-          unsigned int                   m_traversalMask; //!< Current Traversal mask
+          unsigned int                         m_traversalMask;   //!< Current Traversal mask
       
           float                         m_targetDistance;
           bool                          m_stereoAutomaticEyeDistanceAdjustment;
@@ -276,7 +290,7 @@ namespace dp
           bool                          m_reversedEyes;
           float                         m_scaleLODRange;
 
-          dp::sg::core::SceneSharedPtr    m_scene;        //!< Scene to render
+          dp::sg::xbar::SceneTreeSharedPtr m_sceneTree; //!< SceneTree to render
       };
 
       inline float ViewState::getTargetDistance() const

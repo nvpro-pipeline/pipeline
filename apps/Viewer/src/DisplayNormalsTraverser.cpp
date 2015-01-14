@@ -28,6 +28,7 @@
 #include <dp/sg/core/LOD.h>
 #include <dp/sg/core/Switch.h>
 #include <dp/sg/core/Transform.h>
+#include <dp/sg/core/Scene.h>
 
 DisplayNormalsTraverser::DisplayNormalsTraverser()
 : m_normalLength(10.0f)

@@ -38,7 +38,6 @@ target_link_libraries( ${LINK_NAME}
   DPTestManager
   DPHelpers
   DPTSgRdr
-  DPSgUI
   DPSgIO
   DPSgGenerator
   DPSgCore

@@ -26,6 +26,7 @@
 
 #pragma once
 
+#include <dp/sg/algorithm/Config.h>
 #include <dp/sg/core/CoreTypes.h>
 #include <dp/ui/RenderTarget.h>
 #include <dp/sg/algorithm/RayIntersectTraverser.h>

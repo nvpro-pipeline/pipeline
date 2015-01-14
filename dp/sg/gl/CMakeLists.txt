@@ -41,7 +41,6 @@ add_library( DPSgGL SHARED
 
 target_link_libraries( DPSgGL
   DPSgCore
-  DPSgUI
   DPUtil
   DPGL
   ${GLEW_LIBRARY}

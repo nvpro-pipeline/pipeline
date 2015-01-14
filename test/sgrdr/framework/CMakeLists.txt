@@ -47,7 +47,6 @@ target_link_libraries( DPTSgRdr
   DPUtil
   DPTcore
   DPGL
-  DPSgUI
   DPSgCore
   DPSgRdrRiXGL
 )
@@ -58,7 +57,6 @@ add_dependencies( DPTSgRdr
   DPTRiX
   RiXCore
   RiXGL
-  DPSgUI
   DPSgRdrRiXGL
 )
 

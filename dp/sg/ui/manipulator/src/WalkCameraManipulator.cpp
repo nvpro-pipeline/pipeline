@@ -26,6 +26,7 @@
 
 #include <dp/sg/ui/manipulator/WalkCameraManipulator.h>
 #include <dp/sg/core/Camera.h>
+#include <dp/sg/core/Scene.h>
 #include <dp/sg/algorithm/RayIntersectTraverser.h>
 
 using namespace dp::math;
