@@ -30,7 +30,6 @@ add_library( ILTexLoader SHARED
 
 target_link_libraries( ILTexLoader
   DPSgCore
-  DPSgUI
   DPMath
   DPUtil
   DPFx

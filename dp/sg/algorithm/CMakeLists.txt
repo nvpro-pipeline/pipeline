@@ -71,17 +71,10 @@ source_group(header FILES ${PRIVATE_HEADERS})
 source_group(""     FILES ${PUBLIC_HEADERS})
 
 #target
-add_library( DPSgAlgorithm SHARED
+add_library( DPSgAlgorithm OBJECT
   ${SOURCES}
   ${HEADERS}
   ${PUBLIC_HEADERS}
-)
-
-target_link_libraries( DPSgAlgorithm
-  DPSgCore
-  DPSgUI
-  DPFx
-  DPMath
 )
 
 set_target_properties( DPSgAlgorithm PROPERTIES FOLDER "SG" )

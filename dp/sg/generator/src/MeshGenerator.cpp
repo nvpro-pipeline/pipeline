@@ -33,6 +33,7 @@
 #include <dp/sg/core/Node.h>
 #include <dp/sg/core/Sampler.h>
 #include <dp/sg/core/Switch.h>
+#include <dp/sg/core/TextureHost.h>
 #include <dp/sg/core/Transform.h>
 #include <dp/sg/ui/ViewState.h>
 #include <dp/sg/io/PlugInterface.h>

@@ -28,6 +28,7 @@
 #include <dp/sg/ui/RendererOptions.h>
 #include <dp/sg/core/FrustumCamera.h>
 #include <dp/sg/core/PerspectiveCamera.h>
+#include <dp/sg/core/Scene.h>
 #include <dp/sg/ui/RendererOptions.h>
 
 using namespace dp::math;
@@ -105,9 +106,9 @@ namespace dp
         {
           m_camera = rhs.m_camera.clone();
         }
-        if ( rhs.m_scene )
+        if ( rhs.m_sceneTree )
         {
-          m_scene = rhs.m_scene.clone();
+          m_sceneTree = dp::sg::xbar::SceneTree::create(rhs.getScene());
         }
       }
 
@@ -121,7 +122,7 @@ namespace dp
         m_stereoEyeDistance = rhs.m_stereoEyeDistance;
         m_reversedEyes = rhs.m_reversedEyes;
         m_scaleLODRange = rhs.m_scaleLODRange;
-        m_scene = rhs.m_scene;
+        m_sceneTree = rhs.m_sceneTree;
         m_rendererOptions = rhs.m_rendererOptions;
         m_traversalMask = rhs.m_traversalMask;
 
@@ -155,16 +156,26 @@ namespace dp
 
       void ViewState::setScene( const SceneSharedPtr & scene )
       {
-        if ( scene != m_scene )
-        {
-          m_scene = scene;
-          notify( dp::util::Event( ) );
-        }
+        setSceneTree(dp::sg::xbar::SceneTree::create(scene));
       }
 
       const SceneSharedPtr & ViewState::getScene( ) const
       {
-        return m_scene;
+        return m_sceneTree ? m_sceneTree->getScene() : dp::sg::core::SceneSharedPtr::null;
+      }
+
+      void ViewState::setSceneTree(dp::sg::xbar::SceneTreeSharedPtr const& sceneTree)
+      {
+        if (sceneTree != m_sceneTree)
+        {
+          m_sceneTree = sceneTree;
+          notify( dp::util::Event( ) );
+        }
+      }
+
+      dp::sg::xbar::SceneTreeSharedPtr const& ViewState::getSceneTree() const
+      {
+        return m_sceneTree;
       }
 
       void ViewState::setRendererOptions(const dp::sg::ui::RendererOptionsSharedPtr &rendererOptions)

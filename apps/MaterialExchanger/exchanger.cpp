@@ -32,6 +32,7 @@
 #include <dp/sg/io/IO.h>
 #include <dp/sg/ui/ViewState.h>
 #include <dp/util/File.h>
+#include <dp/sg/core/Scene.h>
 
 // exchanger sceneFile mappingsFile materialsFile
 // e.g.: MaterialExchanger sample.dpbf sample_mappings.xml sample_materials.xml

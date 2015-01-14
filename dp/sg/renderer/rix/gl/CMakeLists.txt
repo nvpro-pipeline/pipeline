@@ -111,12 +111,10 @@ target_link_libraries( DPSgRdrRiXGL
   RiXGL
   RiXFx
   DP
-  DPSgXbar
   DPSgXbarCulling
   DPSgCore
   DPGL
   DPSgGL
-  DPSgUI
   DPSgIO
   DPMath
   DPCulling

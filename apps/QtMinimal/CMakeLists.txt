@@ -49,7 +49,6 @@ if (Qt5Widgets_FOUND AND TARGET DPSgUIQt5)
     ${OPENGL_gl_LIBRARY}
     ${GLEW_LIBRARY}
     ${Boost_LIBRARIES}
-    DPSgAlgorithm
     DPSgCore
     DPSgGL
     DPSgRdrRiXGL

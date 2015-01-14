@@ -34,7 +34,6 @@ add_library( PLYLoader SHARED
 target_link_libraries( PLYLoader
   DP
   DPSgCore
-  DPSgUI
   DPMath
   DPUtil
   DPFx

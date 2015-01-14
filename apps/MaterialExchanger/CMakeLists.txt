@@ -34,7 +34,6 @@ add_executable(MaterialExchanger
 
 target_link_libraries(MaterialExchanger
   ${TINYXML_LIBRARIES}
-  DPSgAlgorithm
   DPSgIO
 )
 

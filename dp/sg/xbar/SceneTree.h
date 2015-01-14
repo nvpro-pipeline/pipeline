@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2014
+// Copyright NVIDIA Corporation 2010-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -33,7 +33,6 @@
 #include <dp/sg/core/CoreTypes.h>
 #include <dp/sg/core/ClipPlane.h>
 #include <dp/sg/ui/RendererOptions.h>
-#include <dp/sg/ui/ViewState.h>
 
 #include <vector>
 #include <stack>
@@ -163,7 +162,7 @@ namespace dp
         const dp::math::Mat44f& getTransformMatrix( TransformTreeIndex index ) const { return m_transformTree[index].m_worldMatrix; }
         bool isMirrorTransform( TransformTreeIndex index ) const { return m_transformTree.operator[](index).m_worldBits & TransformTreeNode::ISMIRRORTRANSFORM; }
 
-        DP_SG_XBAR_API void update( dp::sg::ui::ViewStateSharedPtr const& viewState ); 
+        DP_SG_XBAR_API void update(dp::sg::core::CameraSharedPtr const& camera, float lodScaleRange); 
 
         // TODO documentation.
         // adders - no not the snakes.
@@ -203,8 +202,8 @@ namespace dp
         void transformSetObjectTreeIndex( TransformTreeIndex transformTreeIndex, ObjectTreeIndex objectTreeIndex );
 
       protected:
-        DP_SG_XBAR_API void updateTransformTree( dp::sg::ui::ViewStateSharedPtr const& viewState );
-        DP_SG_XBAR_API void updateObjectTree( dp::sg::ui::ViewStateSharedPtr const& viewState );
+        DP_SG_XBAR_API void updateTransformTree(dp::sg::core::CameraSharedPtr const& camera);
+        DP_SG_XBAR_API void updateObjectTree(dp::sg::core::CameraSharedPtr const& camera, float lodScaleRange);
 
         DP_SG_XBAR_API void onRootNodeChanged( );
 

@@ -33,8 +33,6 @@ add_library( WRLLoader SHARED
 target_link_libraries( WRLLoader
   DP
   DPSgCore
-  DPSgUI
-  DPSgAlgorithm
   DPMath
   DPUtil
   DPFx

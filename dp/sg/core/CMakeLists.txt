@@ -96,6 +96,9 @@ add_library( DPSgCore SHARED
   ${CORE_SOURCES}
   ${CORE_PUBLIC_HEADERS}
   ${CORE_PRIVATE_HEADERS}
+  $<TARGET_OBJECTS:DPSgAlgorithm>
+  $<TARGET_OBJECTS:DPSgUI>
+  $<TARGET_OBJECTS:DPSgXbar>
 )
 
 target_link_libraries( DPSgCore

@@ -233,24 +233,10 @@ namespace dp
               dp::gl::RenderTargetSharedPtr renderTargetGL = dp::util::shared_cast<dp::gl::RenderTarget>( renderTarget );
               DP_ASSERT( renderTargetGL );
 
-#if 0
-              // store OpenGL state 
-              glPushAttrib( GL_ALL_ATTRIB_BITS );
-              glPushClientAttrib( GL_CLIENT_VERTEX_ARRAY_BIT | GL_CLIENT_PIXEL_STORE_BIT );
-#endif
-
-              // (re-)generate SceneTree if
-              // 1) no SceneTree present
-              // 2) Scene changed
-              SceneSharedPtr scene = viewState->getScene();
-              // FIXME m_lastScene != scene will fail if a new node has been allocated at exactly the same pointer as the old one.
-              if( m_sceneTree == nullptr || m_lastScene != scene )
+              if (viewState->getSceneTree() != m_sceneTree)
               {
                 delete m_drawableManager;
-
-                // generate a new render list
-                m_sceneTree.reset();
-                m_sceneTree = SceneTree::create( scene );
+                m_sceneTree = viewState->getSceneTree();
 
                 m_drawableManager = createDrawableManager( m_resourceManager );
                 m_drawableManager->setSceneTree( m_sceneTree );
@@ -258,8 +244,6 @@ namespace dp
 
                 DrawableManagerDefault* drawableManagerDefault = dynamic_cast<DrawableManagerDefault*>( m_drawableManager );
                 drawableManagerDefault->setCullingEnabled( m_cullingEnabled );
-
-                m_lastScene = scene;
 
                 m_transparencyManager->setShaderManager( drawableManagerDefault->getShaderManager() );
                 m_transparencyManager->useParameterContainer( m_resourceManager->getRenderer(), drawableManagerDefault->getRenderGroupTransparent() );
@@ -269,7 +253,7 @@ namespace dp
               // Refresh all observed data
               {
                 // Refresh the Scene Tree (the caches need to be filled for the first render)
-                m_sceneTree->update( viewState );
+                m_sceneTree->update(viewState->getCamera(), viewState->getLODRangeScale());
 
                 // Refresh the observed resources
                 m_resourceManager->updateResources();
@@ -280,12 +264,6 @@ namespace dp
                 PROFILE( "Render");
                 doRenderDrawables( viewState, renderTargetGL );
               }
-
-#if 0
-              // pop OpenGL state
-              glPopClientAttrib( );
-              glPopAttrib( );
-#endif
             }
           }
 

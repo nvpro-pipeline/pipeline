@@ -35,8 +35,6 @@ if(WIN32)
 
     target_link_libraries( CSFSaver
       DPSgCore
-      DPSgUI
-      DPSgAlgorithm
       DPMath
       DPUtil
       DPFx

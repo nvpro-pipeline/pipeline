@@ -52,7 +52,6 @@ if(WIN32)
     ${OPENGL_gl_LIBRARY}
     ${GLEW_LIBRARY}
     ${Boost_LIBRARIES}
-    DPSgAlgorithm
     DPSgCore
     DPSgGL
     DPSgRdrRiXGL

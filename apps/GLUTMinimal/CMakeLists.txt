@@ -45,7 +45,6 @@ target_link_libraries( GLUTMinimal
   ${OPENGL_gl_LIBRARY}
   ${GLEW_LIBRARY}
   ${Boost_LIBRARIES}
-  DPSgAlgorithm
   DPSgCore
   DPSgGL
   DPSgRdrRiXGL

@@ -47,7 +47,6 @@ if ( NOT "${DP_ARCH}" STREQUAL "armv7l")
     ${OPENGL_gl_LIBRARY}
     ${GLEW_LIBRARY}
     ${Boost_LIBRARIES}
-    DPSgAlgorithm
     DPSgCore
     DPSgGL
     DPSgRdrRiXGL

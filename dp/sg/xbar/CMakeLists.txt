@@ -51,17 +51,10 @@ source_group(headers FILES ${XBAR_PRIVATE_HEADERS})
 source_group("" FILES ${XBAR_PUBLIC_HEADERS})
 
 #target
-add_library( DPSgXbar SHARED
+add_library( DPSgXbar OBJECT
   ${XBAR_SOURCES}
   ${XBAR_PUBLIC_HEADERS}
   ${XBAR_PRIVATE_HEADERS}
-)
-
-target_link_libraries( DPSgXbar
-  DPSgCore
-  DPSgAlgorithm
-  DPUtil
-  DPMath
 )
 
 set_target_properties( DPSgXbar PROPERTIES FOLDER "SG" )

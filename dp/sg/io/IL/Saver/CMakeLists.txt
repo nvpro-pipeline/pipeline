@@ -29,8 +29,6 @@ add_library( ILTexSaver SHARED
 
 target_link_libraries( ILTexSaver
   DPSgCore
-  DPSgUI
-  DPSgAlgorithm
   DPUtil
   DPSgIO
   ${IL_LIBRARIES}

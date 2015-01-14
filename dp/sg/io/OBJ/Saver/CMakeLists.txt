@@ -31,8 +31,6 @@ add_library( OBJSaver SHARED
 
 target_link_libraries( OBJSaver
   DPSgCore
-  DPSgUI
-  DPSgAlgorithm
   DPMath
   DPUtil
   DPFx

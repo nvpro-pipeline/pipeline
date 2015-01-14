@@ -58,8 +58,6 @@ target_link_libraries( DPSgUIManipulator
   DPSgCore
   DPFx
   DPMath
-  DPSgAlgorithm
-  DPSgUI
   ${OPENGL_glu_LIBRARY}
   ${OPENGL_gl_LIBRARY}
   ${GLEW_LIBRARY}

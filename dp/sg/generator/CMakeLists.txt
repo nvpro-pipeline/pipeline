@@ -41,7 +41,6 @@ add_library( DPSgGenerator SHARED
 target_link_libraries( DPSgGenerator
   DP
   DPSgCore
-  DPSgUI
   DPSgIO
 )
 
