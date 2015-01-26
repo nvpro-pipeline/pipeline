@@ -856,7 +856,7 @@ namespace dp
                           : ParameterCacheEntryStreamSharedPtr(CacheEntryBufferBinding<GL_UNIFORM_BUFFER>::create( binding.bufferIndex, cacheOffset, containerOffset, arraySize ));
         default:
           DP_ASSERT( !"unknown buffer binding type " );
-          return nullptr;
+          return ParameterCacheEntryStreamSharedPtr::null;
         }
       }
 

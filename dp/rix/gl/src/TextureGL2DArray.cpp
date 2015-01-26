@@ -53,7 +53,8 @@ namespace dp
         DP_ASSERT( description.m_depth == 0 );
       }
 
-      void TextureGL2DArray::upload( unsigned int mipMapLevel, unsigned int layer, const void* data )
+      // TODO is this correct?
+      void TextureGL2DArray::upload(unsigned int mipMapLevel, unsigned int /*layer*/, const void* data)
       {
         dp::util::shared_cast<dp::gl::Texture2DArray>( getTexture() )->setData( data, mipMapLevel );
       }

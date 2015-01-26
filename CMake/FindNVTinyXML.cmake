@@ -6,7 +6,7 @@
 #  TINYXML_DEFINITIONS - Compiler switches required for using TinyXML
 
 find_path(TINYXML_INCLUDE_DIR "tinyxml.h")
-find_library(TINYXML_LIBRARY NAMES tinyxml.lib)
+find_library(TINYXML_LIBRARY NAMES tinyxml)
 
 set(TINYXML_LIBRARIES ${TINYXML_LIBRARY} )
 set(TINYXML_INCLUDE_DIRS ${TINYXML_INCLUDE_DIR} )

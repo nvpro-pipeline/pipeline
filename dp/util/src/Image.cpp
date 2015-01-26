@@ -564,7 +564,7 @@ ERROREXIT:
       // free all resources associated with the DevIL image
       ilDeleteImages(1, &imageID);
       DP_ASSERT(IL_NO_ERROR == ilGetError());
-      return( nullptr );
+      return( ImageSharedPtr::null );
     }
 
     class DevILInitShutdown

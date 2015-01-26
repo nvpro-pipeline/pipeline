@@ -66,11 +66,11 @@ namespace dp
       template <int n, int m, typename SourceType, typename DestType>
       CacheEntryMatrix<n,m,SourceType, DestType>::CacheEntryMatrix( dp::gl::Program::Uniform const& uniformInfo, size_t containerOffset, size_t size )
         : ParameterCacheEntryStreamBuffer( uniformInfo.offset, containerOffset, 0 )
-        , m_arraySize( uniformInfo.arraySize )
+        , m_arraySize( size )
         , m_arrayStride( uniformInfo.arrayStride )
         , m_matrixStride( uniformInfo.matrixStride )
       {
-        DP_ASSERT( GLsizei(size) == uniformInfo.arraySize );
+        DP_ASSERT( (uniformInfo.arraySize == 0 && size == 1) || (uniformInfo.arraySize == size) );
 
         if ( n > 1 )
         {
@@ -113,7 +113,9 @@ namespace dp
         , size_t containerOffset )
       {
         ParameterCacheEntryStreamBufferSharedPtr parameterCacheEntry;
+#if !defined(NDEBUG)
         GLint const& uniformType = uniformInfo.type;
+#endif
         size_t newArraySize = 1;
         switch( containerParameterType )
         {

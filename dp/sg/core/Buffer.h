@@ -447,7 +447,7 @@ namespace dp
       template <typename ValueType>
       typename Buffer::ConstIterator<ValueType>::Type Buffer::getConstIterator( size_t offset, int strideInBytes ) const
       {
-        DataReadLock readLock( getWeakPtr<Buffer>(this) );
+        DataReadLock readLock( dp::util::getWeakPtr<Buffer>(this) );
         const char *basePtr = reinterpret_cast<const char*>(readLock.getPtr()) + offset;
         return ConstIterator<ValueType>::Type( reinterpret_cast<const ValueType *>(basePtr), strideInBytes ? strideInBytes : sizeof(ValueType), readLock );
       }

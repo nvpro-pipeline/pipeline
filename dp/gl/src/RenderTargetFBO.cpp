@@ -149,7 +149,7 @@ namespace dp
         return createStereoTextureHost( texLeft, texRight );
 #else
         DP_ASSERT( !"There's no equivalent for createStereoTextureHost for dp::util::Image yet" );
-        return nullptr;
+        return dp::util::ImageSharedPtr::null;
 #endif
       }
     }

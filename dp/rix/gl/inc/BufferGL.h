@@ -131,8 +131,8 @@ namespace dp
 
       private:
         dp::gl::BufferSharedPtr     m_buffer;
-        size_t                      m_elementSize;
         dp::rix::core::BufferFormat m_format;
+        size_t                      m_elementSize;
         GLenum                      m_usageHint;
         size_t                      m_width;
         size_t                      m_height;

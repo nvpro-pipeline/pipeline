@@ -103,7 +103,7 @@ namespace dp
         // convenience handling on clone
         SharedPtr<T> clone() const;
 
-        typename T * getWeakPtr() const;
+        T * getWeakPtr() const;
 
         template <typename U> bool operator==( U const* rhs ) const;
 

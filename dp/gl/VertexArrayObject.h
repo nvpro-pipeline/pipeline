@@ -28,6 +28,7 @@
 
 #include <dp/gl/Config.h>
 #include <dp/gl/Object.h>
+#include <dp/gl/Buffer.h>
 
 namespace dp
 {
@@ -65,13 +66,13 @@ namespace dp
       glBindVertexArray( getGLId() );
       glBindBuffer( GL_ARRAY_BUFFER, it->second->getGLId() );
 
-      if ( TypeTraits<TypeTraits<T>::componentType>::isInteger() )
+      if ( TypeTraits<typename TypeTraits<T>::componentType>::isInteger() )
       {
-        glVertexAttribIPointer( location, TypeTraits<T>::componentCount(), TypeTraits<TypeTraits<T>::componentType>::glType(), 0, nullptr );
+        glVertexAttribIPointer( location, TypeTraits<T>::componentCount(), TypeTraits<typename TypeTraits<T>::componentType>::glType(), 0, nullptr );
       }
       else
       {
-        glVertexAttribPointer( location, TypeTraits<T>::componentCount(), TypeTraits<TypeTraits<T>::componentType>::glType(), GL_FALSE, 0, nullptr );
+        glVertexAttribPointer( location, TypeTraits<T>::componentCount(), TypeTraits<typename TypeTraits<T>::componentType>::glType(), GL_FALSE, 0, nullptr );
       }
 
       if ( values.empty() )

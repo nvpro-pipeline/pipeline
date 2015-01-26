@@ -173,7 +173,7 @@ namespace dp
           {
             ResourceMap::iterator it = m_resources.find( key );
             DP_ASSERT( it == m_resources.end() || (it != m_resources.end() && dynamic_cast<ResourceType*>( it->second )));
-            return it != m_resources.end() ? dp::util::SharedPtr<ResourceType>( *reinterpret_cast<std::shared_ptr<ResourceType>*>(&it->second->shared_from_this()) ) : dp::util::SharedPtr<ResourceType>::null;
+            return (it != m_resources.end()) ? dp::util::SharedPtr<Resource>(it->second->shared_from_this()).inplaceCast<ResourceType>() : dp::util::SharedPtr<ResourceType>::null;
           }
 
         } // namespace gl

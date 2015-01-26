@@ -31,6 +31,7 @@
 #include <dp/gl/Shader.h>
 #include <dp/gl/Texture.h>
 #include <dp/math/Matmnt.h>
+#include <GL/glew.h>
 
 namespace dp
 {
@@ -174,7 +175,9 @@ namespace dp
     template <typename T>
     inline void setProgramUniform( GLint program, GLint location, T const& value )
     {
+#if defined(_MSVC_VER)
       DP_STATIC_ASSERT( !"setProgramUniform: missing specialization for type T!" );
+#endif
     }
 
     template <>
@@ -210,47 +213,75 @@ namespace dp
     template <typename T>
     inline void setBufferData( GLint buffer, GLint offset, GLint matrixStride, T const& value )
     {
+#if defined(_MSVC_VER)
       DP_STATIC_ASSERT( !"setProgramUniformBuffer: missing specialization for type T!" );
+#endif
     }
 
     template <>
-    inline void setBufferData( GLint buffer, GLint offset, GLint matrixStride, float const& value )
+    inline void setBufferData( GLint buffer, GLint offset, GLint /*matrixStride*/, float const& value )
     {
+#if defined(GL_VERSION_4_5)
       glNamedBufferSubData( buffer, offset, sizeof(float), &value );
+#else
+      glNamedBufferSubDataEXT( buffer, offset, sizeof(float), &value );
+#endif
     }
 
     template <>
-    inline void setBufferData( GLint buffer, GLint offset, GLint matrixStride, int const& value )
+    inline void setBufferData( GLint buffer, GLint offset, GLint /*matrixStride*/, int const& value )
     {
+#if defined(GL_VERSION_4_5)
       glNamedBufferSubData( buffer, offset, sizeof(int), &value );
+#else
+      glNamedBufferSubDataEXT( buffer, offset, sizeof(int), &value );
+#endif
     }
 
     template <>
-    inline void setBufferData( GLint buffer, GLint offset, GLint matrixStride, unsigned int const& value )
+    inline void setBufferData( GLint buffer, GLint offset, GLint /*matrixStride*/, unsigned int const& value )
     {
+#if defined(GL_VERSION_4_5)
       glNamedBufferSubData( buffer, offset, sizeof(unsigned int), &value );
+#else
+      glNamedBufferSubDataEXT( buffer, offset, sizeof(unsigned int), &value );
+#endif
     }
 
     template <>
-    inline void setBufferData( GLint buffer, GLint offset, GLint matrixStride, dp::math::Vec4f const& value )
+    inline void setBufferData( GLint buffer, GLint offset, GLint /*matrixStride*/, dp::math::Vec4f const& value )
     {
+#if defined(GL_VERSION_4_5)
       glNamedBufferSubData( buffer, offset, sizeof(dp::math::Vec4f), &value );
+#else
+      glNamedBufferSubDataEXT( buffer, offset, sizeof(dp::math::Vec4f), &value );
+#endif
     }
 
     template <>
     inline void setBufferData( GLint buffer, GLint offset, GLint matrixStride, dp::math::Mat33f const& value )
     {
       DP_ASSERT( matrixStride == 4 * sizeof(float) );
+#if defined(GL_VERSION_4_5)
       glNamedBufferSubData( buffer, offset, 3*sizeof(float), &value[0] );
       glNamedBufferSubData( buffer, offset + matrixStride, 3*sizeof(float), &value[1] );
       glNamedBufferSubData( buffer, offset + 2*matrixStride, 3*sizeof(float), &value[2] );
+#else
+      glNamedBufferSubDataEXT( buffer, offset, 3*sizeof(float), &value[0] );
+      glNamedBufferSubDataEXT( buffer, offset + matrixStride, 3*sizeof(float), &value[1] );
+      glNamedBufferSubDataEXT( buffer, offset + 2*matrixStride, 3*sizeof(float), &value[2] );
+#endif
     }
 
     template <>
-    inline void setBufferData( GLint buffer, GLint offset, GLint matrixStride, dp::math::Mat44f const& value )
+    inline void setBufferData( GLint buffer, GLint offset, GLint /*matrixStride*/, dp::math::Mat44f const& value )
     {
       DP_ASSERT( matrixStride == 4 * sizeof(float) );
+#if defined(GL_VERSION_4_5)
       glNamedBufferSubData( buffer, offset, sizeof(dp::math::Mat44f), &value );
+#else
+      glNamedBufferSubDataEXT( buffer, offset, sizeof(dp::math::Mat44f), &value );
+#endif
     }
 
   } // namespace gl

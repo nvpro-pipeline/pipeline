@@ -1,5 +1,7 @@
 project(DPCulling)
 
+cmake_policy(SET CMP0022 OLD)
+
 add_definitions(
   "-DDP_CULLING_EXPORTS"
   "-D_CRT_SECURE_NO_WARNINGS"

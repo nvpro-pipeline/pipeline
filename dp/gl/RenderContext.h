@@ -27,6 +27,7 @@
 #pragma once
 
 #include <dp/gl/Config.h>
+#include <GL/glew.h>
 #include <dp/gl/RenderContextFormat.h>
 #include <dp/gl/Types.h>
 #include <vector>

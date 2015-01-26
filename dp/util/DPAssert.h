@@ -48,12 +48,10 @@ namespace dp
 #define DP_ASSERT_IMPL(expr)
 #endif
 
-#if defined(_WIN32) // Windows 32/64-bit
+#if defined(DP_OS_WINDOWS) // Windows 32/64-bit
   #include <windows.h>
   #define DP_DBGBREAK() DebugBreak();
-#elif defined(LINUX) && defined(__i386__) // linux 32-bit
-  #define DP_DBGBREAK() asm("int $0x03");
-#elif defined(LINUX) && defined(__ARMEL__) // linux 32-bit
+#elif defined(DP_OS_LINUX)
   #define DP_DBGBREAK() __builtin_trap();
 #else
   #define DP_DBGBREAK()

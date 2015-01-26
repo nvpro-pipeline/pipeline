@@ -78,7 +78,7 @@ namespace dp
       }
       else
       {
-        return 0;
+        return DynamicLibrarySharedPtr::null;
       }
     }
 

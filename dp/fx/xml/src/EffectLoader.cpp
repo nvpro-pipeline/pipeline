@@ -152,7 +152,7 @@ namespace dp
         }
         // The DomainSpec's technique doesn't match the queried one.
         // Return nullptr so that it's going to be ignored. 
-        return nullptr;
+        return TechniqueSharedPtr::null;
       }
 
       DomainSpec::ParameterGroupSpecsContainer const & DomainSpec::getParameterGroups() const

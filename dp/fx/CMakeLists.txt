@@ -1,5 +1,7 @@
 project(DPFx)
 
+cmake_policy(SET CMP0022 OLD)
+
 find_package( NVTinyXML)
 
 add_definitions(
