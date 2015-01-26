@@ -3160,5 +3160,5 @@ bool  DPAFLoader::testDPVersion( void )
 {
   m_line = 0;
   getNextLine();
-  return( m_currentLine == "#DPSG V1.0");
+  return( m_currentLine == "#DPAF V1.0");
 }
