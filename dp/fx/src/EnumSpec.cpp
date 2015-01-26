@@ -26,51 +26,48 @@
 
 #include <dp/fx/EnumSpec.h>
 #include <dp/util/Types.h>
-
-using namespace dp::util;
-using std::string;
-using std::vector;
+#include <algorithm>
 
 namespace dp
 {
   namespace fx
   {
 
-    EnumSpecSharedPtr EnumSpec::create( const string & type , const vector<string> & values )
+    EnumSpecSharedPtr EnumSpec::create(std::string const& type , std::vector<std::string> const& values)
     {
       return( std::shared_ptr<EnumSpec>( new EnumSpec( type, values ) ) );
     }
 
-    EnumSpec::EnumSpec( const string & type , const vector<string> & values )
+    EnumSpec::EnumSpec(std::string const& type , std::vector<std::string> const& values)
       : m_type(type)
       , m_values(values)
     {
-      DP_ASSERT( m_values.size() < checked_cast<size_t>(std::numeric_limits<StorageType>::max()) );
+      DP_ASSERT( m_values.size() < dp::util::checked_cast<size_t>(std::numeric_limits<StorageType>::max()) );
     }
 
     EnumSpec::~EnumSpec()
     {
     }
 
-    const string & EnumSpec::getType() const
+    std::string const& EnumSpec::getType() const
     {
       return( m_type );
     }
 
     unsigned int EnumSpec::getValueCount() const
     {
-      return( checked_cast<unsigned int>( m_values.size() ) );
+      return(dp::util::checked_cast<unsigned int>(m_values.size()));
     }
 
-    EnumSpec::StorageType EnumSpec::getValue( const string & name ) const
+    EnumSpec::StorageType EnumSpec::getValue( std::string const& name ) const
     {
-      vector<string>::const_iterator it = find( m_values.begin(), m_values.end(), name );
-      return( ( it == m_values.end() ) ? ~0 : checked_cast<StorageType>( distance( m_values.begin(), it ) ) );
+      std::vector<std::string>::const_iterator it = std::find( m_values.begin(), m_values.end(), name );
+      return((it == m_values.end()) ? ~0 : dp::util::checked_cast<StorageType>(distance(m_values.begin(), it)));
     }
 
-    const string & EnumSpec::getValueName( unsigned int idx ) const
+    std::string const& EnumSpec::getValueName( unsigned int idx ) const
     {
-      DP_ASSERT( checked_cast<size_t>(idx) < m_values.size() );
+      DP_ASSERT(dp::util::checked_cast<size_t>(idx) < m_values.size());
       return( m_values[idx] );
     }
 

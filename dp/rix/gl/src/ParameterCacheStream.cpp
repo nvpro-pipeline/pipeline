@@ -144,8 +144,6 @@ namespace dp
             GLint binding;
             GLint blockSize;
 
-            GLint programId = parameterState.m_program->getProgram()->getGLId();
-
             GLenum props[] = { GL_BUFFER_BINDING, GL_BUFFER_DATA_SIZE };
             GLint results[sizeof dp::util::array(props)];
             glGetProgramResourceiv(program->getProgram()->getGLId(), GL_SHADER_STORAGE_BLOCK, blockIndex, sizeof dp::util::array(props), props, sizeof dp::util::array(results), NULL, results);

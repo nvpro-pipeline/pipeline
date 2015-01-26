@@ -284,7 +284,7 @@ namespace dp
           case PT_ENUM                   : return( std::make_shared<ParameterInfoVectorConversion<dp::fx::EnumSpec::StorageType, int, 1, 1>>( offset, arraySize ) );
           default:
             DP_ASSERT( !"Unsupported parametertype" );
-            return nullptr;
+            return dp::fx::ParameterGroupLayout::ParameterInfoSharedPtr::null;
         }
       }
 

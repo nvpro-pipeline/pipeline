@@ -86,15 +86,19 @@ namespace dp
     template <typename T>
     inline unsigned int TypeTraits<T>::componentCount()
     {
+#if defined(_MSVC_VER)
       DP_STATIC_ASSERT( std::numeric_limits<T>::is_specialized );
+#endif
       return( 1 );
     }
 
-    template <typename T>
+      template <typename T>
     inline GLenum TypeTraits<T>::glType()
     {
+#if defined(_MSVC_VER)
       DP_STATIC_ASSERT( !"TypeTraits::glType: specialization for type T is missing" );
-      return( GL_ERROR );
+#endif
+      return( GL_INVALID_VALUE );
     }
 
     template <>
@@ -124,7 +128,9 @@ namespace dp
     template <typename T>
     inline bool TypeTraits<T>::isInteger()
     {
+#if defined(_MSVC_VER)
       DP_STATIC_ASSERT( std::numeric_limits<T>::is_specialized );
+#endif
       return( std::numeric_limits<T>::is_integer );
     }
 
@@ -144,8 +150,10 @@ namespace dp
     template <unsigned int n, typename T>
     inline GLenum TypeTraits<dp::math::Vecnt<n,T>>::glType()
     {
+#if defined(_MSVC_VER)
       DP_STATIC_ASSERT( !"TypeTraits::glType: specialization for type dp::math::Vecnt<n,T> is missing" );
-      return( GL_ERROR );
+#endif
+      return( GL_INVALID_VALUE );
     }
 
     template <>
@@ -170,8 +178,10 @@ namespace dp
     template<unsigned int m, unsigned int n, typename T>
     inline GLenum TypeTraits<dp::math::Matmnt<m,n,T>>::glType()
     {
+#if defined(_MSVC_VER)
       DP_STATIC_ASSERT( !"TypeTraits::glType: specialization for type dp::math::Matmnt<m,n,T> is missing" );
-      return( GL_ERROR );
+#endif
+      return( GL_INVALID_VALUE );
     }
 
     template <>

@@ -47,8 +47,8 @@ namespace dp
       using namespace dp::rix::core;
 
       TextureGL::TextureGL( dp::gl::TextureSharedPtr const& texture, bool mipMapped )
-        : m_texture( texture )
-        , m_hasMipmaps( mipMapped )
+        : m_hasMipmaps( mipMapped )
+        , m_texture( texture )
       {
         DP_ASSERT( m_texture );
 

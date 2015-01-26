@@ -58,7 +58,7 @@ namespace dp
         case GL_FRAGMENT_SHADER :         return( FragmentShader::create( source ) );
         default :
           DP_ASSERT( false );
-          return( nullptr );
+          return( ShaderSharedPtr::null );
       }
     }
 

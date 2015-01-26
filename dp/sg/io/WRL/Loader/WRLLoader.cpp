@@ -1439,7 +1439,7 @@ void  WRLLoader::eraseIndex( unsigned int f, unsigned int i, unsigned int count,
 
 SFNode  WRLLoader::findNode( const SFNode currentNode, string name )
 {
-  SFNode  node = NULL;
+  SFNode  node;
   if ( m_defNodes.find( name ) != m_defNodes.end() )
   {
     node = m_defNodes[name];

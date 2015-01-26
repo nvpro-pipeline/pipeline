@@ -107,11 +107,13 @@ namespace dp
           }
           dp::fx::ShaderPipelineSharedPtr shaderPipeline = dp::fx::EffectLibrary::instance()->generateShaderPipeline( configuration );
          
+#if !defined(NDEBUG)
           const dp::fx::ShaderPipeline::iterator itStageVertex   = shaderPipeline->getStage( dp::fx::DOMAIN_VERTEX );
           const dp::fx::ShaderPipeline::iterator itStageFragment = shaderPipeline->getStage( dp::fx::DOMAIN_FRAGMENT );
 
           DP_ASSERT( itStageVertex   != shaderPipeline->endStages() );
           DP_ASSERT( itStageFragment != shaderPipeline->endStages() );
+#endif
 
           std::vector<std::string> shaderStringSources;
           std::vector<char const*> shaderSources;

@@ -865,7 +865,7 @@ namespace dp
       glewInit();
 
       ShareGroupSharedPtr shareGroup = creation.shared ? creation.shared->getShareGroup() : createShareGroup( nativeContext );
-      return new RenderContext( nativeContext, shareGroup );
+      return std::shared_ptr<RenderContext>(new RenderContext(nativeContext, shareGroup));
     }
   #endif
 

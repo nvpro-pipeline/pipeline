@@ -41,25 +41,16 @@ if(WIN32)
   list(APPEND CMAKE_INCLUDE_PATH "${DP_3RDPARTY_PATH}/DevIL/include")
   list(APPEND CMAKE_LIBRARY_PATH "${DP_3RDPARTY_PATH}/DevIL")
 
-  macro(CopyDevIL)
-  endmacro()
-  
   ### GLEW
   list(APPEND CMAKE_INCLUDE_PATH "${DP_3RDPARTY_PATH}/glew/include")
   # TODO OS arch dependency?
   list(APPEND CMAKE_LIBRARY_PATH "${DP_3RDPARTY_PATH}/glew/lib/Release/x64")
   
-  macro(CopyGLEW)
-  endmacro()
-
   ### freeglut
   list(APPEND CMAKE_INCLUDE_PATH "${DP_3RDPARTY_PATH}/freeglut/include")
   # TODO OS arch dependency?
   list(APPEND CMAKE_LIBRARY_PATH "${DP_3RDPARTY_PATH}/freeglut/lib/x64")
 
-  macro(CopyGLUT)
-  endmacro()
-  
   ### Qt
   
   # Search for Windows SDK so that Qt5 can find glu32.lib
@@ -112,3 +103,12 @@ if(WIN32)
   endif()
  
 endif()
+
+macro(CopyDevIL)
+endmacro()
+
+macro(CopyGLEW)
+endmacro()
+
+macro(CopyGLUT)
+endmacro()

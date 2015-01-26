@@ -563,7 +563,8 @@ namespace dp
         group->useContainer( container );
       }
 
-  #if defined(WIN32)
+#if !defined(NDEBUG)
+  #if defined(DP_OS_WINDOWS)
   #define CALLCONVENTION  WINAPI
   #else
   #define CALLCONVENTION
@@ -614,6 +615,7 @@ namespace dp
           // DAR FIXME The OpenGL driver reports an error when a texture sampler is unassigned although it's not used, that is not fatal: DP_ASSERT( 0 && "OpenGL Error" );
         }
       }
+#endif
 
       void RiXGL::registerContext()
       {
@@ -624,7 +626,8 @@ namespace dp
 #if !defined(NDEBUG)
           if ( !!GLEW_ARB_debug_output )
           {
-            glDebugMessageCallbackARB( debugMessageCallback, nullptr );
+            // the interface of the debugprocarb changed in OpenGL 4.5. Use a cast to make it work in all cases.
+            glDebugMessageCallbackARB( reinterpret_cast<GLDEBUGPROCARB>(debugMessageCallback), nullptr );
           }
 #endif
 

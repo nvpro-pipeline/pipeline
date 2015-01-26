@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright NVIDIA Corporation 2011-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -158,7 +158,7 @@ namespace dp
       template <typename ValueType>
       bool TypedPropertyParameter<ValueType>::isEnum() const
       {
-        return( m_it->first.getEnumSpec() );
+        return( !!m_it->first.getEnumSpec() );
       }
 
       template <typename ValueType>
@@ -238,7 +238,7 @@ namespace dp
       template <typename ValueType>
       bool TypedPropertyParameterArray<ValueType>::isEnum() const
       {
-        return( m_it->first.getEnumSpec() );
+        return( !!m_it->first.getEnumSpec() );
       }
 
       template <typename ValueType>
