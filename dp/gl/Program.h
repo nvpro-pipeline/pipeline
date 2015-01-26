@@ -274,7 +274,7 @@ namespace dp
     }
 
     template <>
-    inline void setBufferData( GLint buffer, GLint offset, GLint /*matrixStride*/, dp::math::Mat44f const& value )
+    inline void setBufferData( GLint buffer, GLint offset, GLint matrixStride, dp::math::Mat44f const& value )
     {
       DP_ASSERT( matrixStride == 4 * sizeof(float) );
 #if defined(GL_VERSION_4_5)
