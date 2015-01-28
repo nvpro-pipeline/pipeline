@@ -428,8 +428,18 @@ namespace dp
     private:
       struct PlugInData
       {
-        std::string               fileName;
-        dp::util::PlugInSharedPtr plugIn;
+        PlugInData() : lib(0), pfnGetPlugInterface(0) {}
+        ~PlugInData()
+        {
+          if ( lib )
+          {
+            UnMapLibrary( lib );
+          }
+        }
+
+        std::string         fileName;
+        HLIB                lib;
+        PFNGETPLUGINTERFACE pfnGetPlugInterface;
       };
 
       typedef std::map<UPIID,PlugInData>  PlugInMap;
