@@ -473,7 +473,8 @@ void MainWindow::loadFile( const QString & fileName, bool replaceShaders )
 
     if( !GetApp()->loadScene( fileName ) )
     {
-      QMessageBox::critical( 0, "Scene Load Error", "Unable to load file: " + fileName );
+      DP_ASSERT( getLog() && dynamic_cast<LogWidget*>(getLog()) );
+      QMessageBox::critical( 0, "Scene Load Error", static_cast<LogWidget*>(getLog())->latestMessage() );
     }
     else
     {

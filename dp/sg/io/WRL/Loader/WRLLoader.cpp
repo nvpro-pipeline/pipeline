@@ -1866,8 +1866,6 @@ void  WRLLoader::interpretVRMLTree( void )
 
 EffectDataSharedPtr WRLLoader::interpretAppearance( AppearanceSharedPtr const& pAppearance )
 {
-  DP_ASSERT( pAppearance->material || pAppearance->texture );
-
   if ( ! pAppearance->materialEffect )
   {
     pAppearance->materialEffect = dp::sg::core::EffectData::create( getStandardMaterialSpec() );
@@ -1884,14 +1882,15 @@ EffectDataSharedPtr WRLLoader::interpretAppearance( AppearanceSharedPtr const& p
     {
       DP_ASSERT( pAppearance->texture.isPtrTo<vrml::Texture>() );
       textureData = interpretTexture( pAppearance->texture.staticCast<vrml::Texture>() );
-
-      if ( textureData && pAppearance->textureTransform )
+      if ( textureData )
       {
-        DP_ASSERT( pAppearance->textureTransform.isPtrTo<TextureTransform>() );
-        interpretTextureTransform( pAppearance->textureTransform.staticCast<TextureTransform>(), textureData );
+        if ( pAppearance->textureTransform )
+        {
+          DP_ASSERT( pAppearance->textureTransform.isPtrTo<TextureTransform>() );
+          interpretTextureTransform( pAppearance->textureTransform.staticCast<TextureTransform>(), textureData );
+        }
+        DP_VERIFY( pAppearance->materialEffect->setParameterGroupData( textureData ) );
       }
-
-      DP_VERIFY( pAppearance->materialEffect->setParameterGroupData( textureData ) );
     }
 
     bool transparent = ( pAppearance->material && ( 0.0f < pAppearance->material.staticCast<vrml::Material>()->transparency ) );
@@ -2330,7 +2329,7 @@ void  WRLLoader::interpretGeometry( vrml::GeometrySharedPtr const& pGeometry, ve
   {
     interpretCone( pGeometry.staticCast<Cone>(), primitives, textured );
   }
-  if ( pGeometry.isPtrTo<Cylinder>() )
+  else if ( pGeometry.isPtrTo<Cylinder>() )
   {
     interpretCylinder( pGeometry.staticCast<Cylinder>(), primitives, textured );
   }
@@ -2452,8 +2451,6 @@ void  analyzeIndex( const MFInt32 & mfInt32, vector<unsigned int> & triVerts, ve
 void  WRLLoader::interpretIndexedFaceSet( IndexedFaceSetSharedPtr const& pIndexedFaceSet
                                         , vector<PrimitiveSharedPtr> &primitives )
 {
-  DP_ASSERT( pIndexedFaceSet->coord );
-
   if ( pIndexedFaceSet->pTriangles || pIndexedFaceSet->pQuads || pIndexedFaceSet->pPolygons )
   {
     if ( pIndexedFaceSet->pTriangles )
@@ -3059,8 +3056,6 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
 void  WRLLoader::interpretIndexedLineSet( IndexedLineSetSharedPtr const& pIndexedLineSet
                                         , vector<PrimitiveSharedPtr> &primitives )
 {
-  DP_ASSERT( pIndexedLineSet->coord );
-
   if ( pIndexedLineSet->pLineStrips )
   {
     primitives.push_back( pIndexedLineSet->pLineStrips );
@@ -3161,11 +3156,9 @@ NodeSharedPtr WRLLoader::interpretInline( InlineSharedPtr const& pInline )
     string  fileName;
     if ( interpretURL( pInline->url, fileName ) )
     {
-      WRLLoader * pWRLLoader = new WRLLoader;
-      dp::sg::ui::ViewStateSharedPtr viewState;
-      SceneSharedPtr pScene = pWRLLoader->load( fileName, m_searchPaths, viewState );
-      pInline->pNode = pScene->getRootNode();
-      delete pWRLLoader;
+      dp::sg::ui::ViewStateSharedPtr viewState = dp::sg::io::loadScene( fileName, m_searchPaths, callback() );
+      DP_ASSERT( viewState && viewState->getScene() );
+      pInline->pNode = viewState->getScene()->getRootNode();
     }
   }
   return( pInline->pNode );
@@ -3329,13 +3322,11 @@ LightSourceSharedPtr WRLLoader::interpretPointLight( vrml::PointLightSharedPtr c
 
 void  WRLLoader::interpretPointSet( PointSetSharedPtr const& pPointSet, vector<PrimitiveSharedPtr> &primitives )
 {
-  DP_ASSERT( pPointSet->coord );
-
   if ( pPointSet->pPoints )
   {
     primitives.push_back( pPointSet->pPoints );
   }
-  else
+  else if ( pPointSet->coord )
   {
     VertexAttributeSetSharedPtr cvas = VertexAttributeSet::create();
 
@@ -3611,7 +3602,7 @@ dp::sg::core::SwitchSharedPtr WRLLoader::interpretSwitch( vrml::SwitchSharedPtr 
     pSwitch = dp::sg::core::Switch::create();
     pSwitch->setName( pVRMLSwitch->getName() );
     interpretChildren( pVRMLSwitch->children, pSwitch );
-    if ( ( pVRMLSwitch->whichChoice < 0 ) || ( (SFInt32)pVRMLSwitch->children.size() <= pVRMLSwitch->whichChoice ) )
+    if ( ( pVRMLSwitch->whichChoice < 0 ) || ( (SFInt32)pSwitch->getNumberOfChildren() <= pVRMLSwitch->whichChoice ) )
     {
       pSwitch->setInactive();
     }
@@ -4057,10 +4048,9 @@ void  WRLLoader::onUnexpectedToken( const string &expected, const string &token 
 
 void  WRLLoader::onUnknownToken( const string &tokenType, const string &token ) const
 {
-  if ( callback() )
-  {
-    callback()->onUnknownToken( m_lineNumber, tokenType, token );
-  }
+  std::ostringstream oss;
+  oss << "WRLLoader: Unknown " << tokenType << " <" << token << "> encountered in Line " << m_lineNumber << std::endl;
+  throw std::runtime_error( oss.str().c_str() );
 }
 
 bool  WRLLoader::onUndefinedToken( const string &tokenType, const string &token ) const
@@ -7457,19 +7447,22 @@ bool  WRLLoader::testWRLVersion( const string &filename )
       m_nextTokenEnd = string::npos;
       setNextToken();
     }
-    else if ( m_currentString.compare( 0, 16, "#VRML V1.0 ascii" ) == 0 )
+    else if ( ( m_currentString.compare( 0, 16, "#VRML V1.0 ascii" ) == 0 )
+          ||  ( m_currentString.compare( 0, 4, "#X3D" ) == 0 ) )
     {
-      if ( callback() )
+      while ( iscntrl( m_currentString.back() ) )
       {
-        callback()->onIncompatibleFile( filename, "VRML", 2<<16, 1<<16 );
+        m_currentString.pop_back();
       }
+      std::ostringstream message;
+      message << "WRLLoader: unsupported VRML version <" << m_currentString << "> in file <" << filename << ">" << std::endl;
+      throw std::runtime_error( message.str().c_str() );
     }
     else
     {
-      if ( callback() )
-      {
-        callback()->onInvalidFile( filename, "VRML" );
-      }
+      std::ostringstream message;
+      message << "WRLLoader: the file <" << filename << "> is not a valid VRML file" << std::endl;
+      throw std::runtime_error( message.str().c_str() );
     }
   }
   else if ( callback() )

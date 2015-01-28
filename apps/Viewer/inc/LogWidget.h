@@ -46,12 +46,15 @@ class LogWidget : public QDockWidget
       LOG_ERROR      // color text to indicate an 'error'
     };
 
-    virtual void message( const QString & message, Severity severity = LOG_MESSAGE ) const;
+    virtual void message( const QString & message, Severity severity = LOG_MESSAGE );
+
+    QString latestMessage() const;
 
   protected:
     QTextBrowser * m_textEdit;
 
     QString        m_warningColor;
     QString        m_errorColor;
+    QString        m_latestMessage;
 };
 

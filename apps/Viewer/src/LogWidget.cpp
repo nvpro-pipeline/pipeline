@@ -49,7 +49,7 @@ inline void escapeHTML( QString & str )
   str.replace( QString(">"),  QString("&gt;") );
 }
 
-void LogWidget::message( const QString & inmessage, Severity severity ) const
+void LogWidget::message( const QString & inmessage, Severity severity )
 {
   QTime tm = QTime::currentTime();
   QString output = tm.toString( "hh:mm:ss" ) + QString( "&nbsp;:&nbsp;" );
@@ -77,9 +77,15 @@ void LogWidget::message( const QString & inmessage, Severity severity ) const
   m_textEdit->insertHtml( output );
   // scroll down to find cursor
   m_textEdit->ensureCursorVisible();
+
+  m_latestMessage = inmessage;
 }
 
 LogWidget::~LogWidget()
 {
 }
 
+QString LogWidget::latestMessage() const
+{
+  return( m_latestMessage );
+}

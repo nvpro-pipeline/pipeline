@@ -219,9 +219,11 @@ void CameraAnimator::initCameraZoomAll()
   if ( m_viewState->getScene()->getRootNode() )
   {
     const dp::math::Sphere3f & bs = m_viewState->getScene()->getRootNode()->getBoundingSphere();
-    m_cameraMoveTarget->zoom( bs, dp::math::PI_QUARTER );
-
-    m_viewState->setTargetDistance( std::max<float>( dp::math::distance( m_cameraMoveTarget->getPosition(), bs.getCenter() ), 0.1f ) );
+    if ( isPositive( bs ) )
+    {
+      m_cameraMoveTarget->zoom( bs, dp::math::PI_QUARTER );
+      m_viewState->setTargetDistance( std::max<float>( dp::math::distance( m_cameraMoveTarget->getPosition(), bs.getCenter() ), 0.1f ) );
+    }
   }
 
   cameraMoveDurationFactor( determineDurationFactor() );

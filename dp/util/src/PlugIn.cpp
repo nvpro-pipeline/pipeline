@@ -149,33 +149,28 @@ namespace dp
         }
         if ( plugInMapIt != m_plugIns.end() )
         {
-          if ( plugInMapIt->second.plugIn )
-          {
-            plugIn = plugInMapIt->second.plugIn;
-          }
-          else
+          if ( !plugInMapIt->second.pfnGetPlugInterface )
           {
             HLIB lib = MapLibrary( plugInMapIt->second.fileName.c_str() );
-            if ( lib ) 
+            if ( lib )
             {
               PFNGETPLUGINTERFACE pfnGetPlugInterface = (PFNGETPLUGINTERFACE)GetFuncAddress( lib, "getPlugInterface" );
-              if ( pfnGetPlugInterface ) 
+              if ( pfnGetPlugInterface )
               {
-                if ( (*pfnGetPlugInterface)( piid, plugIn ) )
-                {
-                  // keep the plug-in for later access
-                  plugInMapIt->second.plugIn = plugIn;
-                }
+                plugInMapIt->second.lib = lib;
+                plugInMapIt->second.pfnGetPlugInterface = pfnGetPlugInterface;
               }
               else
               {
-                // free unused
                 UnMapLibrary( lib );
               }
             }
           }
-
-          if ( ! plugIn )
+          if ( plugInMapIt->second.pfnGetPlugInterface )
+          {
+            DP_VERIFY( (*plugInMapIt->second.pfnGetPlugInterface)( piid, plugIn ) );
+          }
+          else
           {
             m_unsupportedUPIIDs.insert( piid );
           }
@@ -209,7 +204,12 @@ namespace dp
       PlugInMap::iterator it = m_plugIns.find( piid );
       if ( it != m_plugIns.end() )
       {
-        it->second.plugIn.reset();
+        if ( it->second.lib )
+        {
+          UnMapLibrary( it->second.lib );
+          it->second.lib = 0;
+          it->second.pfnGetPlugInterface = 0;
+        }
       }
     }
 
