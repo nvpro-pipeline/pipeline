@@ -147,8 +147,9 @@ namespace dp
     inline void Program::setUniform( std::string const& name, T const& value )
     {
       size_t uniformIndex = getActiveUniformIndex( name );
-      DP_ASSERT( uniformIndex != -1 );
-      setUniform( uniformIndex, value );
+      if (uniformIndex != ~0) {
+        setUniform( uniformIndex, value );
+      }
     }
 
     template <typename T>

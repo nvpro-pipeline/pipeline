@@ -26,11 +26,12 @@
 
 #pragma once
 
+#include <dp/rix/gl/Config.h>
 #include <dp/gl/Buffer.h>
 #include <dp/gl/Texture.h>
 #include <dp/util/Types.h>
 #include <dp/rix/core/RiX.h>
-#include <dp/rix/gl/Config.h>
+#include <dp/util/BitArray.h>
 
 #include <set>
 #include <string>
@@ -78,6 +79,8 @@ namespace dp
       DEFINE_RIX_GL_HANDLE(VertexFormatGL);
 
 #undef DEFINE_RIX_GL_HANDLE
+
+      typedef unsigned int ID;
 
       enum SamplerBorderColorDataType
       {
@@ -232,10 +235,10 @@ namespace dp
       class RiXGL : public dp::rix::core::Renderer
       {
       protected:
-        virtual ~RiXGL();
         RiXGL( const char *renderEngine );
 
       public:
+        virtual ~RiXGL();
         friend RIX_GL_API dp::rix::core::Renderer* ::createRenderer( char const * );
 
         // delete the renderer
@@ -332,23 +335,18 @@ namespace dp
         // TODO: handle context registration differently. this forces the app to include RiXGL.h
         RIX_GL_API virtual void registerContext(); // register the current active context. Currently this may be called only once.
 
+        ID  aquireContainerID();
+        void      releaseUniqueContainerID(ID);
+
       private:
         RenderEngineGL* m_renderEngine;
         std::string     m_renderEngineName;
 
         bool m_isRendering;
+
+        dp::util::BitArray m_containerFreeIDs; // bit set -> id free/unused
       };
 
     } // namespace gl
   } // namespace rix
 } // namespace dp
-
-// keep compability for some time
-namespace RiX
-{
-  namespace GL
-  {
-    using namespace dp::rix::gl;
-  }
-}
-

@@ -32,6 +32,7 @@
 #include <algorithm>
 #include <cstring>
 #include <typeinfo>
+#include <dp/rix/gl/RiXGL.h>
 
 namespace dp
 {
@@ -315,12 +316,14 @@ namespace dp
         }
       }
 
-      ContainerGL::ContainerGL( ContainerDescriptorGLSharedHandle const & desc ) 
+      ContainerGL::ContainerGL(dp::rix::gl::RiXGL *renderer, ContainerDescriptorGLSharedHandle const & desc)
         : m_descriptor( desc )
         , m_size( desc->m_size )
         , m_data( nullptr )
         , m_count( 0 )
+        , m_renderer(renderer)
       {
+        m_uniqueID = renderer->aquireContainerID();
         if ( m_size )
         {
           m_data = malloc( m_size );
@@ -333,6 +336,7 @@ namespace dp
 
       ContainerGL::~ContainerGL()
       {
+        m_renderer->releaseUniqueContainerID(m_uniqueID);
         for (size_t index = 0; index < m_descriptor->m_parameterInfos.size(); index++)
         {
           const ContainerDescriptorGL::ParameterInfo &descr = m_descriptor->m_parameterInfos[index];

@@ -112,7 +112,7 @@ namespace dp
 #endif            
             DP_ASSERT( m_rendererGLLib );
 
-            dp::rix::core::PFNCREATERENDERER createRenderer = (RiX::PFNCREATERENDERER)m_rendererGLLib->getSymbol( "createRenderer" );
+            dp::rix::core::PFNCREATERENDERER createRenderer = (dp::rix::core::PFNCREATERENDERER)m_rendererGLLib->getSymbol( "createRenderer" );
             DP_ASSERT( createRenderer );
 
             m_renderer = (*createRenderer)( "VBO" );

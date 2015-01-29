@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2011
+// Copyright NVIDIA Corporation 2010-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -124,24 +124,23 @@ namespace dp
             bool initializeRenderer();
             void shutdownRenderer();
 
-            // renderer info
-            dp::sg::xbar::SceneTreeSharedPtr  m_sceneTree;
-            dp::rix::core::Renderer*          m_renderer;
-            dp::sg::xbar::DrawableManager*    m_drawableManager;
-            ResourceManagerSharedPtr          m_resourceManager;
-            dp::fx::Manager                   m_shaderManager;
-            std::string                       m_renderEngine;
+            dp::util::DynamicLibrarySharedPtr        m_rix; // keep m_rix always before m_renderer to ensure proper destruction order
+            std::unique_ptr<dp::rix::core::Renderer> m_renderer;
+            dp::sg::xbar::SceneTreeSharedPtr         m_sceneTree;
+            dp::sg::xbar::DrawableManager*           m_drawableManager;
+            ResourceManagerSharedPtr                 m_resourceManager;
+            dp::fx::Manager                          m_shaderManager;
+            std::string                              m_renderEngine;
 
-            bool                              m_contextRegistered;
-            bool                              m_rendererInitialized;
+            bool                                     m_contextRegistered;
+            bool                                     m_rendererInitialized;
 
-            dp::gl::RenderContextSharedPtr    m_userRenderContext;     // RenderContext provided by the user in the first render call
-            dp::util::DynamicLibrarySharedPtr m_rix;
-            dp::culling::Mode                 m_cullingMode;
+            dp::gl::RenderContextSharedPtr           m_userRenderContext;     // RenderContext provided by the user in the first render call
+            dp::culling::Mode                        m_cullingMode;
 
-            bool                              m_cullingEnabled;
+            bool                                     m_cullingEnabled;
 
-            dp::math::Vec2ui                  m_viewportSize;
+            dp::math::Vec2ui                         m_viewportSize;
 
           private:
             dp::sg::renderer::rix::gl::TransparencyManagerSharedPtr m_transparencyManager;

@@ -40,7 +40,7 @@
 #define GL_UNIFORM_BUFFER_UNIFIED_NV                        0x936E
 #define GL_UNIFORM_BUFFER_ADDRESS_NV                        0x936F
 
-#define USE_UNIFORM_BUFFER_UNIFIED_MEMORY true
+#define USE_UNIFORM_BUFFER_UNIFIED_MEMORY false
 
 namespace dp
 {

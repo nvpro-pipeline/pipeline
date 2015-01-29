@@ -53,7 +53,7 @@ namespace dp
             dp::rix::core::ContainerDescriptorSharedHandle m_descriptorTransforms;
 
             //typedef std::map<dp::sg::xbar::TransformTreeIndex, dp::rix::core::ContainerSharedHandle> TransformContainerData;
-            typedef std::vector<RiX::ContainerSharedHandle> TransformContainerData;
+            typedef std::vector<dp::rix::core::ContainerSharedHandle> TransformContainerData;
 
             //TransformContainerData                      m_containerTransforms;
             //TransformContainerData                      m_containerDirtyTransforms; // TODO make a vector with observer interface

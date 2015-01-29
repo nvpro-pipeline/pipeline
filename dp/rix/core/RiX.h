@@ -770,9 +770,8 @@ namespace dp
 
       class Renderer
       {
-      protected:
-        RIX_CORE_API virtual ~Renderer();
       public:
+        RIX_CORE_API virtual ~Renderer();
         RIX_CORE_API virtual void deleteThis() = 0;
 
         RIX_CORE_API virtual void update() = 0;
@@ -867,8 +866,3 @@ namespace dp
     } // core
   } // rix
 } // dp
-
-namespace RiX
-{
-  using namespace dp::rix::core;
-}

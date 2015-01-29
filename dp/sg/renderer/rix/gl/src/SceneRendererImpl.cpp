@@ -134,11 +134,6 @@ namespace dp
               m_sceneTree.reset();
               m_resourceManager.reset();
 
-              if( m_renderer )
-              {
-                m_renderer->deleteThis();
-              }
-
               glStack.pop();
             }
           }
@@ -199,8 +194,8 @@ namespace dp
 
               if ( !m_contextRegistered )
               {
-                DP_ASSERT( dynamic_cast<RiX::GL::RiXGL*>(m_renderer) );
-                static_cast<RiX::GL::RiXGL*>(m_renderer)->registerContext();
+                DP_ASSERT( dynamic_cast<dp::rix::gl::RiXGL*>(m_renderer.get()) );
+                static_cast<dp::rix::gl::RiXGL*>(m_renderer.get())->registerContext();
                 m_contextRegistered = true;
               }
 
@@ -324,7 +319,7 @@ namespace dp
                 do
                 {
                   NSIGHT_START_RANGE( "Begin TransparentPass" );
-                  m_transparencyManager->beginTransparentPass( m_renderer );
+                  m_transparencyManager->beginTransparentPass( m_renderer.get() );
                   NSIGHT_STOP_RANGE();
                   if ( m_transparencyManager->supportsDepthPass() )
                   {
@@ -337,7 +332,7 @@ namespace dp
                   }
                   if ( m_transparencyManager->needsSortedRendering() )
                   {
-                    std::vector<RiX::GeometryInstanceSharedHandle> const & sortedGIs = drawableManagerDefault->getSortedTransparentGIs( camera->getPosition() );
+                    std::vector<dp::rix::core::GeometryInstanceSharedHandle> const & sortedGIs = drawableManagerDefault->getSortedTransparentGIs( camera->getPosition() );
                     NSIGHT_START_RANGE( "TransparentPass Sorted" );
                     m_renderer->render( drawableManagerDefault->getRenderGroupTransparent(), &sortedGIs[0], sortedGIs.size() );
                     NSIGHT_STOP_RANGE();
@@ -412,7 +407,7 @@ namespace dp
             if ( mode != m_transparencyManager->getTransparencyMode() )
             {
               m_transparencyManager = createTransparencyManager( mode, m_viewportSize );
-              m_transparencyManager->initializeParameterContainer( m_renderer, m_viewportSize );
+              m_transparencyManager->initializeParameterContainer( m_renderer.get(), m_viewportSize );
               m_sceneTree.reset();
             }
           }
@@ -469,11 +464,11 @@ namespace dp
 #endif
               DP_ASSERT( m_rix && "Could not load dynamic library RiXGL.rdr" );
 
-              dp::rix::core::PFNCREATERENDERER createRenderer = reinterpret_cast<RiX::PFNCREATERENDERER>(m_rix->getSymbol("createRenderer"));
-              m_renderer = dynamic_cast<RiX::GL::RiXGL*>((*createRenderer)( m_renderEngine.c_str() ));
+              dp::rix::core::PFNCREATERENDERER createRenderer = reinterpret_cast<dp::rix::core::PFNCREATERENDERER>(m_rix->getSymbol("createRenderer"));
+              m_renderer.reset(dynamic_cast<dp::rix::gl::RiXGL*>((*createRenderer)( m_renderEngine.c_str() )));
               DP_ASSERT( m_renderer && "Could not create RiXGL renderer" );
 
-              m_resourceManager = ResourceManager::create( m_renderer, m_shaderManager );
+              m_resourceManager = ResourceManager::create( m_renderer.get(), m_shaderManager );
 
               m_rendererInitialized = m_renderer && m_resourceManager;
 
@@ -483,7 +478,7 @@ namespace dp
               }
               else
               {
-                m_transparencyManager->initializeParameterContainer( m_renderer, m_viewportSize );
+                m_transparencyManager->initializeParameterContainer( m_renderer.get(), m_viewportSize );
               }
             }
 

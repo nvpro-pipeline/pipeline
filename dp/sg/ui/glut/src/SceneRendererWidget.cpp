@@ -68,8 +68,8 @@ namespace dp
 
         void SceneRendererWidget::cleanup()
         {
-          m_renderer.reset();
           Widget::cleanup();
+          m_renderer.reset();
         }
 
         void SceneRendererWidget::triggerRepaint()
