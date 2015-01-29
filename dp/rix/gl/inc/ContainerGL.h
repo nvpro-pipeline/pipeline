@@ -44,6 +44,7 @@ namespace dp
   {
     namespace gl
     {
+
       class ContainerDescriptorGL : public dp::rix::core::ContainerDescriptor
       {
       public:
@@ -117,7 +118,7 @@ namespace dp
         };
 
       public:
-        ContainerGL( ContainerDescriptorGLSharedHandle const & desc );
+        ContainerGL( dp::rix::gl::RiXGL* renderer, ContainerDescriptorGLSharedHandle const & desc );
         ~ContainerGL();
 
         void setData( dp::rix::core::ContainerEntry entry, const dp::rix::core::ContainerData& containerData );
@@ -154,6 +155,8 @@ namespace dp
           GLenum          m_access;
         };
 
+        ID getUniqueID() const { return m_uniqueID; }
+
       protected:
         virtual void onNotify( const dp::util::Event &event, dp::util::Payload *payload );
         virtual void onDestroyed( const dp::util::Subject& subject, dp::util::Payload* payload );
@@ -162,6 +165,9 @@ namespace dp
         void setData( const ContainerDescriptorGL::ParameterInfo& descriptor, const dp::rix::core::ContainerDataBuffer&  containerData );
         void setData( const ContainerDescriptorGL::ParameterInfo& descriptor, const dp::rix::core::ContainerDataSampler& containerData );
         void setData( const ContainerDescriptorGL::ParameterInfo& descriptor, const dp::rix::core::ContainerDataImage&   containerData );
+
+        ID            m_uniqueID;
+        dp::rix::gl::RiXGL *m_renderer;
       };
     } // namespace gl
   } // namespace rix

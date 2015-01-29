@@ -30,6 +30,7 @@
 #include <dp/sg/core/Group.h>
 #include <dp/sg/core/LOD.h>
 #include <dp/sg/core/Switch.h>
+#include <dp/sg/core/Transform.h>
 #include <dp/util/HashGeneratorMurMur.h>
 
 namespace dp
@@ -299,18 +300,25 @@ namespace dp
             break;
           case dp::util::Event::PROPERTY:
             {
-              // the only property event we're interested in is the transparency event
+              //The only property events we're interested in are those that potentially change the bounding volumes.
               dp::util::Reflection::PropertyEvent const& propertyEvent = static_cast<dp::util::Reflection::PropertyEvent const&>(event);
               dp::util::PropertyId propertyId = propertyEvent.getPropertyId();
-              if ( ( propertyId == dp::sg::core::LOD::PID_Center )
-                || ( propertyId == dp::sg::core::Switch::PID_ActiveSwitchMask ) )
+              if ( (propertyId == dp::sg::core::LOD::PID_Center)
+                || (propertyId == dp::sg::core::Switch::PID_ActiveSwitchMask)
+                || (propertyId == dp::sg::core::Transform::PID_Matrix)
+                || (propertyId == dp::sg::core::Transform::PID_Translation)
+                || (propertyId == dp::sg::core::Transform::PID_Scaling)
+                || (propertyId == dp::sg::core::Transform::PID_ScaleOrientation)
+                || (propertyId == dp::sg::core::Transform::PID_Orientation)
+                 )
               {
                 changedState |= DP_SG_BOUNDING_VOLUMES;
               }
 #if !defined(NDEBUG)
-              else if ( ( propertyId != dp::sg::core::EffectData::PID_Transparent )
-                    &&  ( propertyId != dp::sg::core::Object::PID_Name )
-                    &&  ( propertyId != dp::sg::core::Object::PID_TraversalMask ) )
+              else if ( (propertyId != dp::sg::core::EffectData::PID_Transparent)
+                    &&  (propertyId != dp::sg::core::Object::PID_Name)
+                    &&  (propertyId != dp::sg::core::Object::PID_TraversalMask)
+                    &&  (propertyId != dp::sg::core::Object::PID_Hints))
               {
                 DP_ASSERT(!"encountered unhandled property event type!");
               }

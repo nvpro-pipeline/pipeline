@@ -61,8 +61,6 @@ dp::rix::core::Renderer* createRenderer( const char *options )
 }
 
 
-using namespace RiX;
-
 namespace dp
 {
   namespace rix
@@ -101,39 +99,39 @@ namespace dp
         m_renderEngine->beginRender();
       }
 
-      void RiXGL::render( RenderGroupSharedHandle const & groupHandle, dp::rix::core::RenderOptions const & renderOptions )
+      void RiXGL::render( dp::rix::core::RenderGroupSharedHandle const & groupHandle, dp::rix::core::RenderOptions const & renderOptions )
       {
-        DP_ASSERT( handleIsTypeOf<RenderGroupGL>( groupHandle ) );
+        DP_ASSERT( dp::rix::core::handleIsTypeOf<RenderGroupGL>( groupHandle ) );
 
         update();
 
         if ( !m_isRendering )
         {
           beginRender();
-          m_renderEngine->render( handleCast<RenderGroupGL>(groupHandle), renderOptions );
+          m_renderEngine->render( dp::rix::core::handleCast<RenderGroupGL>(groupHandle), renderOptions );
           endRender();
         }
         else
         {
-          m_renderEngine->render( handleCast<RenderGroupGL>(groupHandle), renderOptions );
+          m_renderEngine->render( dp::rix::core::handleCast<RenderGroupGL>(groupHandle), renderOptions );
         }
       }
 
       void RiXGL::render( dp::rix::core::RenderGroupSharedHandle const & groupHandle, dp::rix::core::GeometryInstanceSharedHandle const * gis, size_t numGIs, dp::rix::core::RenderOptions const & renderOptions )
       {
-        DP_ASSERT( handleIsTypeOf<RenderGroupGL>( groupHandle ) );
+        DP_ASSERT( dp::rix::core::handleIsTypeOf<RenderGroupGL>( groupHandle ) );
 
         update();
 
         if ( !m_isRendering )
         {
           beginRender();
-          m_renderEngine->render( handleCast<RenderGroupGL>(groupHandle), gis, numGIs, renderOptions );
+          m_renderEngine->render( dp::rix::core::handleCast<RenderGroupGL>(groupHandle), gis, numGIs, renderOptions );
           endRender();
         }
         else
         {
-          m_renderEngine->render( handleCast<RenderGroupGL>(groupHandle), gis, numGIs, renderOptions );
+          m_renderEngine->render( dp::rix::core::handleCast<RenderGroupGL>(groupHandle), gis, numGIs, renderOptions );
         }
       }
 
@@ -145,32 +143,32 @@ namespace dp
         m_renderEngine->endRender();
       }
 
-      ContainerSharedHandle RiXGL::containerCreate( ContainerDescriptorSharedHandle const & desc )
+      dp::rix::core::ContainerSharedHandle RiXGL::containerCreate( dp::rix::core::ContainerDescriptorSharedHandle const & desc )
       {
-        DP_ASSERT( handleIsTypeOf<ContainerDescriptorGL>( desc ) );
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<ContainerDescriptorGL>(desc));
 
-        ContainerDescriptorGLSharedHandle cdgl = handleCast< ContainerDescriptorGL >( desc );
+        ContainerDescriptorGLSharedHandle cdgl = dp::rix::core::handleCast<ContainerDescriptorGL>(desc);
 
-        return new ContainerGL( cdgl );
+        return new ContainerGL(this, cdgl);
       }
 
-      void RiXGL::containerSetData(ContainerSharedHandle const & c, ContainerEntry entry, ContainerData const & containerData )
+      void RiXGL::containerSetData(dp::rix::core::ContainerSharedHandle const & c, dp::rix::core::ContainerEntry entry, dp::rix::core::ContainerData const & containerData )
       {
-         DP_ASSERT( handleIsTypeOf<ContainerGL>( c ) );
+         DP_ASSERT(dp::rix::core::handleIsTypeOf<ContainerGL>( c ));
 
-         ContainerGLSharedHandle cgl = handleCast< ContainerGL >( c );
+         ContainerGLSharedHandle cgl = dp::rix::core::handleCast< ContainerGL >( c );
 
          cgl->setData( entry, containerData );
       }
 
-      ContainerDescriptorSharedHandle RiXGL::containerDescriptorCreate( ProgramParameterDescriptor const & programParameterDescriptor )
+      dp::rix::core::ContainerDescriptorSharedHandle RiXGL::containerDescriptorCreate( dp::rix::core::ProgramParameterDescriptor const & programParameterDescriptor )
       {
         switch ( programParameterDescriptor.getType() )
         {
-        case PPDT_COMMON:
+        case dp::rix::core::PPDT_COMMON:
         {
-          DP_ASSERT( dynamic_cast<const ProgramParameterDescriptorCommon*>(&programParameterDescriptor) );
-          ProgramParameterDescriptorCommon const & descriptor = static_cast<ProgramParameterDescriptorCommon const &>(programParameterDescriptor);
+          DP_ASSERT( dynamic_cast<const dp::rix::core::ProgramParameterDescriptorCommon*>(&programParameterDescriptor) );
+          dp::rix::core::ProgramParameterDescriptorCommon const & descriptor = static_cast<dp::rix::core::ProgramParameterDescriptorCommon const &>(programParameterDescriptor);
           return new ContainerDescriptorGL( this, descriptor.m_numParameters, descriptor.m_parameters );
         }
         default:
@@ -179,33 +177,33 @@ namespace dp
         }
       }
 
-      unsigned int RiXGL::containerDescriptorGetNumberOfEntries( ContainerDescriptorSharedHandle const & desc )
+      unsigned int RiXGL::containerDescriptorGetNumberOfEntries( dp::rix::core::ContainerDescriptorSharedHandle const & desc )
       {
-        DP_ASSERT( handleIsTypeOf<ContainerDescriptorGL>(desc) );
-        ContainerDescriptorGLSharedHandle descriptor = handleCast<ContainerDescriptorGL>(desc);
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<ContainerDescriptorGL>(desc));
+        ContainerDescriptorGLSharedHandle descriptor = dp::rix::core::handleCast<ContainerDescriptorGL>(desc);
 
         return static_cast<unsigned int>(descriptor->m_parameterInfos.size());
       }
 
-      ContainerEntry RiXGL::containerDescriptorGetEntry( ContainerDescriptorSharedHandle const & desc, unsigned int index )
+      dp::rix::core::ContainerEntry RiXGL::containerDescriptorGetEntry( dp::rix::core::ContainerDescriptorSharedHandle const & desc, unsigned int index )
       {
-        DP_ASSERT( handleIsTypeOf<ContainerDescriptorGL>(desc) );
-        ContainerDescriptorGLSharedHandle descriptor = handleCast<ContainerDescriptorGL>(desc);
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<ContainerDescriptorGL>(desc));
+        ContainerDescriptorGLSharedHandle descriptor = dp::rix::core::handleCast<ContainerDescriptorGL>(desc);
 
         DP_ASSERT( index < descriptor->m_parameterInfos.size() );
         return descriptor->generateEntry( index );
       }
 
-      ContainerEntry RiXGL::containerDescriptorGetEntry( ContainerDescriptorSharedHandle const & desc, const char* name )
+      dp::rix::core::ContainerEntry RiXGL::containerDescriptorGetEntry( dp::rix::core::ContainerDescriptorSharedHandle const & desc, const char* name )
       {
-        DP_ASSERT( handleIsTypeOf<ContainerDescriptorGL>(desc) );
-        ContainerDescriptorGLSharedHandle descriptor = handleCast<ContainerDescriptorGL>(desc);
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<ContainerDescriptorGL>(desc));
+        ContainerDescriptorGLSharedHandle descriptor = dp::rix::core::handleCast<ContainerDescriptorGL>(desc);
 
         return descriptor->getEntry( name );
       }
 
       /** VertexFormat **/
-      dp::rix::core::VertexFormatSharedHandle RiXGL::vertexFormatCreate( VertexFormatDescription const & vertexFormatDescription )
+      dp::rix::core::VertexFormatSharedHandle RiXGL::vertexFormatCreate( dp::rix::core::VertexFormatDescription const & vertexFormatDescription )
       {
         return VertexFormatGL::create( vertexFormatDescription );
       }
@@ -216,15 +214,15 @@ namespace dp
         return new VertexDataGL();
       }
 
-      void RiXGL::vertexDataSet( VertexDataSharedHandle const & handle, unsigned int index, BufferSharedHandle const & bufferHandle, size_t offset, size_t numberOfVertices )
+      void RiXGL::vertexDataSet( dp::rix::core::VertexDataSharedHandle const & handle, unsigned int index, dp::rix::core::BufferSharedHandle const & bufferHandle, size_t offset, size_t numberOfVertices )
       {
-        DP_ASSERT( handleIsTypeOf<VertexDataGL>( handle ) );
-        DP_ASSERT( index <= RIX_GL_MAX_ATTRIBUTES );
-        DP_ASSERT( handleIsTypeOf<BufferGL>( bufferHandle ) );
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<VertexDataGL>( handle ));
+        DP_ASSERT(index <= RIX_GL_MAX_ATTRIBUTES);
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<BufferGL>( bufferHandle ));
 
-        VertexDataGLSharedHandle formatData = handleCast<VertexDataGL>(handle);
+        VertexDataGLSharedHandle formatData = dp::rix::core::handleCast<VertexDataGL>(handle);
         VertexDataGL::Data &data = formatData->m_data[index];
-        handleAssign( data.m_buffer, handleCast<BufferGL>(bufferHandle) );
+        dp::rix::core::handleAssign( data.m_buffer, dp::rix::core::handleCast<BufferGL>(bufferHandle) );
         data.m_offset = offset;
         formatData->m_numberOfVertices = numberOfVertices;
       }
@@ -238,13 +236,13 @@ namespace dp
 
       void RiXGL::vertexAttributesSet( dp::rix::core::VertexAttributesSharedHandle const & handle, dp::rix::core::VertexDataSharedHandle const & vertexData, dp::rix::core::VertexFormatSharedHandle const & vertexFormat )
       {
-        DP_ASSERT( handleIsTypeOf<VertexAttributesGL>( handle ) );
-        DP_ASSERT( handleIsTypeOf<VertexDataGL>( vertexData ) );
-        DP_ASSERT( handleIsTypeOf<VertexFormatGL>( vertexFormat ) );
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<VertexAttributesGL>( handle ));
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<VertexDataGL>( vertexData ));
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<VertexFormatGL>( vertexFormat ));
 
-        VertexAttributesGLSharedHandle attributes = handleCast<VertexAttributesGL>(handle);
-        attributes->setVertexFormatGLHandle( handleCast<VertexFormatGL>(vertexFormat.get()) );
-        attributes->setVertexDataGLHandle( handleCast<VertexDataGL>(vertexData.get()) );
+        VertexAttributesGLSharedHandle attributes = dp::rix::core::handleCast<VertexAttributesGL>(handle);
+        attributes->setVertexFormatGLHandle( dp::rix::core::handleCast<VertexFormatGL>(vertexFormat.get()) );
+        attributes->setVertexDataGLHandle( dp::rix::core::handleCast<VertexDataGL>(vertexData.get()) );
       }
 
       /** Indices **/
@@ -253,12 +251,12 @@ namespace dp
         return new IndicesGL();
       }
 
-      void RiXGL::indicesSetData( IndicesSharedHandle const & handle, dp::util::DataType dataType, BufferSharedHandle const & bufferHandle, size_t offset, size_t count )
+      void RiXGL::indicesSetData( dp::rix::core::IndicesSharedHandle const & handle, dp::util::DataType dataType, dp::rix::core::BufferSharedHandle const & bufferHandle, size_t offset, size_t count )
       {
-        DP_ASSERT( handleIsTypeOf<IndicesGL>( handle ) );
-        DP_ASSERT( handleIsTypeOf<BufferGL>( bufferHandle ) );
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<IndicesGL>( handle ));
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<BufferGL>( bufferHandle ));
 
-        handleCast<IndicesGL>(handle)->setData( dataType, bufferHandle.get(), offset, count );
+        dp::rix::core::handleCast<IndicesGL>(handle)->setData( dataType, bufferHandle.get(), offset, count );
       }
 
       /** Buffer **/
@@ -269,35 +267,35 @@ namespace dp
 
       void RiXGL::bufferSetSize( dp::rix::core::BufferSharedHandle const & handle, size_t width, size_t height /*= 0*/, size_t depth /*= 0 */ )
       {
-        DP_ASSERT( handleIsTypeOf<BufferGL>( handle ) );
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<BufferGL>( handle ));
 
-        handleCast<BufferGL>( handle )->setSize( width, height, depth );
+        dp::rix::core::handleCast<BufferGL>( handle )->setSize( width, height, depth );
       }
 
       void RiXGL::bufferSetElementSize( dp::rix::core::BufferSharedHandle const & handle, size_t elementSize )
       {
-        DP_ASSERT( handleIsTypeOf<BufferGL>( handle ) );
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<BufferGL>( handle ));
 
-        handleCast<BufferGL>( handle )->setElementSize( elementSize );
+        dp::rix::core::handleCast<BufferGL>( handle )->setElementSize( elementSize );
       }
 
       void RiXGL::bufferSetFormat( dp::rix::core::BufferSharedHandle const & handle, dp::rix::core::BufferFormat bufferFormat )
       {
-        DP_ASSERT( handleIsTypeOf<BufferGL>( handle ) );
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<BufferGL>( handle ));
 
-        handleCast<BufferGL>( handle )->setFormat( bufferFormat );
+        dp::rix::core::handleCast<BufferGL>( handle )->setFormat( bufferFormat );
       }
 
       void RiXGL::bufferUpdateData( dp::rix::core::BufferSharedHandle const & handle, size_t offset, void const * data, size_t size )
       {
-        DP_ASSERT( handleIsTypeOf<BufferGL>( handle ) );
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<BufferGL>( handle ));
         DP_ASSERT( data && size );
 
-        handleCast<BufferGL>( handle )->updateData( offset, data, size );
+        dp::rix::core::handleCast<BufferGL>( handle )->updateData( offset, data, size );
       }
 
 #if 1
-      void RiXGL::bufferInitReferences ( dp::rix::core::BufferSharedHandle const & /*handle*/, BufferReferences const & /*refinfo*/ )
+      void RiXGL::bufferInitReferences ( dp::rix::core::BufferSharedHandle const & /*handle*/, dp::rix::core::BufferReferences const & /*refinfo*/ )
       {
         DP_ASSERT(!"not supported");
 #else
@@ -311,7 +309,7 @@ namespace dp
       }
 
 #if 1
-      void RiXGL::bufferSetReference  ( dp::rix::core::BufferSharedHandle const & /*handle*/, size_t /*slot*/, ContainerData const & /*data*/,  BufferStoredReference & /*ref*/ )
+      void RiXGL::bufferSetReference  ( dp::rix::core::BufferSharedHandle const & /*handle*/, size_t /*slot*/, dp::rix::core::ContainerData const & /*data*/, dp::rix::core::BufferStoredReference & /*ref*/ )
       {
         DP_ASSERT(!"not supported");
 #else
@@ -327,37 +325,37 @@ namespace dp
 
       void* RiXGL::bufferMap( dp::rix::core::BufferSharedHandle const & handle, dp::rix::core::AccessType accessType )
       {
-        DP_ASSERT( handleIsTypeOf<BufferGL>( handle ) );
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<BufferGL>( handle ));
 
-        return handleCast<BufferGL>( handle )->map( accessType );
+        return dp::rix::core::handleCast<BufferGL>( handle )->map( accessType );
       }
 
       bool RiXGL::bufferUnmap( dp::rix::core::BufferSharedHandle const & handle )
       {
-        DP_ASSERT( handleIsTypeOf<BufferGL>( handle ) );
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<BufferGL>( handle ));
 
-        return handleCast<BufferGL>( handle )->unmap();
+        return dp::rix::core::handleCast<BufferGL>( handle )->unmap();
       }
 
       /** Texture **/
-      TextureSharedHandle RiXGL::textureCreate( TextureDescription const & description )
+      dp::rix::core::TextureSharedHandle RiXGL::textureCreate( dp::rix::core::TextureDescription const & description )
       {
         return TextureGL::create( description );
       }
 
-      void RiXGL::textureSetData( TextureSharedHandle const & texture, TextureData const & data )
+      void RiXGL::textureSetData( dp::rix::core::TextureSharedHandle const & texture, dp::rix::core::TextureData const & data )
       {
-        DP_ASSERT( handleIsTypeOf<TextureGL>(texture) );
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<TextureGL>(texture));
 
-        handleCast<TextureGL>( texture )->setData( data );
+       dp::rix::core:: handleCast<TextureGL>( texture )->setData( data );
       }
 
-      void RiXGL::textureSetDefaultSamplerState( TextureSharedHandle const & texture, SamplerStateSharedHandle const & samplerState )
+      void RiXGL::textureSetDefaultSamplerState( dp::rix::core::TextureSharedHandle const & texture, dp::rix::core::SamplerStateSharedHandle const & samplerState )
       {
-        DP_ASSERT( handleIsTypeOf<TextureGL>(texture) );
-        DP_ASSERT( handleIsTypeOf<SamplerStateGL>(samplerState) );
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<TextureGL>(texture));
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<SamplerStateGL>(samplerState));
 
-        handleCast<TextureGL>( texture )->setDefaultSamplerState( handleCast<SamplerStateGL>( samplerState.get() ) );
+        dp::rix::core::handleCast<TextureGL>( texture )->setDefaultSamplerState( dp::rix::core::handleCast<SamplerStateGL>( samplerState.get() ) );
       }
 
       /** Sampler **/
@@ -368,23 +366,23 @@ namespace dp
 
       void RiXGL::samplerSetSamplerState( dp::rix::core::SamplerSharedHandle const & sampler, dp::rix::core::SamplerStateSharedHandle const & samplerState )
       {
-        DP_ASSERT( handleIsTypeOf<Sampler>(sampler) );
-        DP_ASSERT( handleIsTypeOf<SamplerState>(samplerState) );
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<Sampler>(sampler));
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<SamplerStateGL>(samplerState));
 
-        handleCast<Sampler>( sampler )->setSamplerState( handleCast<SamplerStateGL>( samplerState ) );
+        dp::rix::core::handleCast<Sampler>( sampler )->setSamplerState( dp::rix::core::handleCast<SamplerStateGL>( samplerState ) );
       }
 
       void RiXGL::samplerSetTexture(dp::rix::core::SamplerSharedHandle const & sampler, dp::rix::core::TextureSharedHandle const & texture)
       {
-        DP_ASSERT( handleIsTypeOf<Sampler>(sampler) );
-        DP_ASSERT( !texture || handleIsTypeOf<Texture>(texture) );
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<Sampler>(sampler));
+        DP_ASSERT(!texture || dp::rix::core::handleIsTypeOf<TextureGL>(texture));
 
-        handleCast<Sampler>( sampler )->setTexture( texture ? handleCast<TextureGL>( texture ) : TextureGLSharedHandle() );
+        dp::rix::core::handleCast<Sampler>( sampler )->setTexture( texture ? dp::rix::core::handleCast<TextureGL>( texture ) : TextureGLSharedHandle() );
       }
 
 
       /** SamplerState **/
-      SamplerStateSharedHandle RiXGL::samplerStateCreate( SamplerStateData const & data )
+      dp::rix::core::SamplerStateSharedHandle RiXGL::samplerStateCreate( dp::rix::core::SamplerStateData const & data )
       {
         return SamplerStateGL::create( data );
       }
@@ -397,26 +395,26 @@ namespace dp
 
       void RiXGL::geometryDescriptionSet( dp::rix::core::GeometryDescriptionSharedHandle const & handle, GeometryPrimitiveType primitiveType, unsigned int primitiveRestartIndex )
       {
-        DP_ASSERT( handleIsTypeOf<GeometryDescriptionGL>( handle ) );
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<GeometryDescriptionGL>( handle ));
 
-        GeometryDescriptionGLSharedHandle geometryDescription = handleCast<GeometryDescriptionGL>(handle);
+        GeometryDescriptionGLSharedHandle geometryDescription = dp::rix::core::handleCast<GeometryDescriptionGL>(handle);
         geometryDescription->setPrimitiveType( primitiveType );
         geometryDescription->setPrimitiveRestartIndex( primitiveRestartIndex );
       }
 
       void RiXGL::geometryDescriptionSetBaseVertex( dp::rix::core::GeometryDescriptionSharedHandle const & handle, unsigned int baseVertex )
       {
-        DP_ASSERT( handleIsTypeOf<GeometryDescriptionGL>( handle ) );
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<GeometryDescriptionGL>( handle ));
 
-        GeometryDescriptionGLSharedHandle geometryDescription = handleCast<GeometryDescriptionGL>(handle);
+        GeometryDescriptionGLSharedHandle geometryDescription = dp::rix::core::handleCast<GeometryDescriptionGL>(handle);
         geometryDescription->setBaseVertex( baseVertex );
       }
 
       void RiXGL::geometryDescriptionSetIndexRange( dp::rix::core::GeometryDescriptionSharedHandle const & handle, unsigned int first, unsigned int count )
       {
-        DP_ASSERT( handleIsTypeOf<GeometryDescriptionGL>( handle ) );
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<GeometryDescriptionGL>( handle ));
 
-        GeometryDescriptionGLSharedHandle geometryDescription = handleCast<GeometryDescriptionGL>(handle);
+        GeometryDescriptionGLSharedHandle geometryDescription = dp::rix::core::handleCast<GeometryDescriptionGL>(handle);
         geometryDescription->setIndexRange( first, count );
       }
 
@@ -429,16 +427,16 @@ namespace dp
       void RiXGL::geometrySetData( dp::rix::core::GeometrySharedHandle const & handle, dp::rix::core::GeometryDescriptionSharedHandle const & geometryDescriptionHandle
                                  , dp::rix::core::VertexAttributesSharedHandle const & vertexAttributesHandle, dp::rix::core::IndicesSharedHandle const & indicesHandle )
       {
-        DP_ASSERT( handleIsTypeOf<GeometryGL>( handle ) );
-        DP_ASSERT( handleIsTypeOf<GeometryDescriptionGL>( geometryDescriptionHandle ) );
-        DP_ASSERT( handleIsTypeOf<VertexAttributesGL>( vertexAttributesHandle ) );
-        DP_ASSERT( !indicesHandle || handleIsTypeOf<IndicesGL>( indicesHandle ) );
+        DP_ASSERT(                  dp::rix::core::handleIsTypeOf<GeometryGL>(handle));
+        DP_ASSERT(                  dp::rix::core::handleIsTypeOf<GeometryDescriptionGL>(geometryDescriptionHandle));
+        DP_ASSERT(                  dp::rix::core::handleIsTypeOf<VertexAttributesGL>(vertexAttributesHandle));
+        DP_ASSERT(!indicesHandle || dp::rix::core::handleIsTypeOf<IndicesGL>(indicesHandle));
 
-        GeometryGLSharedHandle geometryHandle = handleCast<GeometryGL>(handle);
+        GeometryGLSharedHandle geometryHandle = dp::rix::core::handleCast<GeometryGL>(handle);
 
-        geometryHandle->setGeometryDescription( handleCast<GeometryDescriptionGL>(geometryDescriptionHandle) );
-        geometryHandle->setVertexAttributes( handleCast<VertexAttributesGL>(vertexAttributesHandle) );
-        geometryHandle->setIndices( indicesHandle ? handleCast<IndicesGL>(indicesHandle) : IndicesGLSharedHandle() );
+        geometryHandle->setGeometryDescription( dp::rix::core::handleCast<GeometryDescriptionGL>(geometryDescriptionHandle) );
+        geometryHandle->setVertexAttributes( dp::rix::core::handleCast<VertexAttributesGL>(vertexAttributesHandle) );
+        geometryHandle->setIndices( indicesHandle ? dp::rix::core::handleCast<IndicesGL>(indicesHandle) : IndicesGLSharedHandle() );
       }
 
       /** GeometryInstance **/
@@ -447,25 +445,25 @@ namespace dp
         return new GeometryInstanceGL();
       }
 
-      bool RiXGL::geometryInstanceUseContainer( GeometryInstanceSharedHandle const & handle, ContainerSharedHandle const & containerHandle )
+      bool RiXGL::geometryInstanceUseContainer( dp::rix::core::GeometryInstanceSharedHandle const & handle, dp::rix::core::ContainerSharedHandle const & containerHandle )
       {
-        DP_ASSERT( handleIsTypeOf<GeometryInstanceGL>( handle ) );
-        DP_ASSERT( handleIsTypeOf<ContainerGL>( containerHandle ) );
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<GeometryInstanceGL>( handle ));
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<ContainerGL>( containerHandle ));
 
-        if (    !handleIsTypeOf<GeometryInstanceGL>( handle )
-             || !handleIsTypeOf<ContainerGL>( containerHandle ) )
+        if (    !dp::rix::core::handleIsTypeOf<GeometryInstanceGL>( handle )
+             || !dp::rix::core::handleIsTypeOf<ContainerGL>( containerHandle ) )
         {
           return false;
         }
 
-        GeometryInstanceGLSharedHandle geometryInstance = handleCast<GeometryInstanceGL>(handle);
+        GeometryInstanceGLSharedHandle geometryInstance = dp::rix::core::handleCast<GeometryInstanceGL>(handle);
 
         if ( !geometryInstance->m_programPipeline )
         {
           return false;
         }
 
-        ContainerGLSharedHandle cgl = handleCast<ContainerGL>(containerHandle);
+        ContainerGLSharedHandle cgl = dp::rix::core::handleCast<ContainerGL>(containerHandle);
         if ( !geometryInstance->useContainer( cgl ) )
         {
           return false;
@@ -481,86 +479,106 @@ namespace dp
 
       void RiXGL::geometryInstanceSetGeometry( dp::rix::core::GeometryInstanceSharedHandle const & handle, dp::rix::core::GeometrySharedHandle const & geometry )
       {
-        DP_ASSERT( handleIsTypeOf<GeometryInstanceGL>( handle ) );
-        DP_ASSERT( handleIsTypeOf<GeometryGL>( geometry ) );
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<GeometryInstanceGL>( handle ));
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<GeometryGL>( geometry ));
 
-        handleCast<GeometryInstanceGL>(handle)->setGeometry( handleCast<GeometryGL>(geometry) );
+        dp::rix::core::handleCast<GeometryInstanceGL>(handle)->setGeometry( dp::rix::core::handleCast<GeometryGL>(geometry) );
       }
 
       void RiXGL::geometryInstanceSetProgramPipeline( dp::rix::core::GeometryInstanceSharedHandle const & handle, dp::rix::core::ProgramPipelineSharedHandle const & programPipelineHandle )
       {
-        DP_ASSERT( handleIsTypeOf<GeometryInstanceGL>( handle ) );
-        DP_ASSERT( handleIsTypeOf<ProgramPipelineGL>( programPipelineHandle ) );
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<GeometryInstanceGL>( handle ));
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<ProgramPipelineGL>( programPipelineHandle ));
 
-        handleCast<GeometryInstanceGL>(handle)->setProgramPipeline( handleCast<ProgramPipelineGL>( programPipelineHandle ) );
+        dp::rix::core::handleCast<GeometryInstanceGL>(handle)->setProgramPipeline( dp::rix::core::handleCast<ProgramPipelineGL>( programPipelineHandle ) );
       }
   
-      void RiXGL::geometryInstanceSetVisible( GeometryInstanceSharedHandle const & handle, bool visible )
+      void RiXGL::geometryInstanceSetVisible( dp::rix::core::GeometryInstanceSharedHandle const & handle, bool visible )
       {
-        DP_ASSERT( handleIsTypeOf<GeometryInstanceGL>( handle ) );
-        handleCast<GeometryInstanceGL>( handle )->setVisible( visible );
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<GeometryInstanceGL>( handle ));
+        dp::rix::core::handleCast<GeometryInstanceGL>( handle )->setVisible( visible );
       }
 
       /** Program **/
-      dp::rix::core::ProgramSharedHandle RiXGL::programCreate( ProgramDescription const & description )
+      dp::rix::core::ProgramSharedHandle RiXGL::programCreate( dp::rix::core::ProgramDescription const & description )
       {
         return new ProgramGL( description );
       }
 
       /** ProgramPipeline **/
-      ProgramPipelineSharedHandle RiXGL::programPipelineCreate( ProgramSharedHandle const * programs, unsigned int numPrograms )
+      dp::rix::core::ProgramPipelineSharedHandle RiXGL::programPipelineCreate( dp::rix::core::ProgramSharedHandle const * programs, unsigned int numPrograms )
       {
         return new ProgramPipelineGL( programs, numPrograms );
       }
 
       /** RenderGroup **/
-      RenderGroupSharedHandle RiXGL::renderGroupCreate()
+      dp::rix::core::RenderGroupSharedHandle RiXGL::renderGroupCreate()
       {
         return new RenderGroupGL( m_renderEngine );
       }
 
-      void RiXGL::renderGroupAddGeometryInstance( RenderGroupSharedHandle const & groupHandle, GeometryInstanceSharedHandle const & geometryHandle )
+      void RiXGL::renderGroupAddGeometryInstance( dp::rix::core::RenderGroupSharedHandle const & groupHandle, dp::rix::core::GeometryInstanceSharedHandle const & geometryHandle )
       {
-        DP_ASSERT( handleIsTypeOf<RenderGroupGL>( groupHandle ) );
-        DP_ASSERT( handleIsTypeOf<GeometryInstanceGL>( geometryHandle ) );
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<RenderGroupGL>( groupHandle ));
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<GeometryInstanceGL>( geometryHandle ));
 
-        RenderGroupGLSharedHandle group = handleCast<RenderGroupGL>( groupHandle );
-        GeometryInstanceGLSharedHandle geometry = handleCast<GeometryInstanceGL>( geometryHandle );
+        RenderGroupGLSharedHandle group =dp::rix::core:: handleCast<RenderGroupGL>( groupHandle );
+        GeometryInstanceGLSharedHandle geometry = dp::rix::core::handleCast<GeometryInstanceGL>( geometryHandle );
 
         group->addGeometryInstance( geometry.get() );
       }
 
-      void RiXGL::renderGroupRemoveGeometryInstance( RenderGroupSharedHandle const & groupHandle, GeometryInstanceSharedHandle const & geometryHandle )
+      void RiXGL::renderGroupRemoveGeometryInstance( dp::rix::core::RenderGroupSharedHandle const & groupHandle, dp::rix::core::GeometryInstanceSharedHandle const & geometryHandle )
       {
-        DP_ASSERT( handleIsTypeOf<RenderGroupGL>( groupHandle ) );
-        DP_ASSERT( handleIsTypeOf<GeometryInstanceGL>( geometryHandle ) );
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<RenderGroupGL>( groupHandle ));
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<GeometryInstanceGL>( geometryHandle ));
 
-        RenderGroupGLSharedHandle group = handleCast<RenderGroupGL>( groupHandle );
-        GeometryInstanceGLSharedHandle geometry = handleCast<GeometryInstanceGL>( geometryHandle );
+        RenderGroupGLSharedHandle group = dp::rix::core::handleCast<RenderGroupGL>( groupHandle );
+        GeometryInstanceGLSharedHandle geometry = dp::rix::core::handleCast<GeometryInstanceGL>( geometryHandle );
 
         group->removeGeometryInstance( geometry.get() );
       }
 
       void RiXGL::renderGroupSetProgramPipeline( dp::rix::core::RenderGroupSharedHandle const & groupHandle, dp::rix::core::ProgramPipelineSharedHandle const & programPipelineHandle )
       {
-        DP_ASSERT( handleIsTypeOf<RenderGroup>( groupHandle ) );
-        DP_ASSERT( handleIsTypeOf<ProgramPipeline>( programPipelineHandle ) );
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<RenderGroupGL>( groupHandle ));
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<ProgramPipelineGL>( programPipelineHandle ));
 
-        RenderGroupGLSharedHandle group = handleCast<RenderGroupGL>( groupHandle );
-        ProgramPipelineGLSharedHandle programPipeline = handleCast<ProgramPipelineGL>( programPipelineHandle );
+        RenderGroupGLSharedHandle group = dp::rix::core::handleCast<RenderGroupGL>( groupHandle );
+        ProgramPipelineGLSharedHandle programPipeline = dp::rix::core::handleCast<ProgramPipelineGL>( programPipelineHandle );
 
         group->setProgramPipeline( programPipeline.get() );
       }
 
       void RiXGL::renderGroupUseContainer( dp::rix::core::RenderGroupSharedHandle const & groupHandle, dp::rix::core::ContainerSharedHandle const & containerHandle )
       {
-        DP_ASSERT( handleIsTypeOf<RenderGroupGL>( groupHandle ) );
-        DP_ASSERT( handleIsTypeOf<ContainerGL>( containerHandle ) );
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<RenderGroupGL>( groupHandle ));
+        DP_ASSERT(dp::rix::core::handleIsTypeOf<ContainerGL>( containerHandle ));
 
-        RenderGroupGLHandle group = handleCast<RenderGroupGL>( groupHandle.get() );
-        ContainerGLHandle container = handleCast<ContainerGL>( containerHandle.get() );
+        RenderGroupGLHandle group = dp::rix::core::handleCast<RenderGroupGL>( groupHandle.get() );
+        ContainerGLHandle container = dp::rix::core::handleCast<ContainerGL>( containerHandle.get() );
 
         group->useContainer( container );
+      }
+
+      ID RiXGL::aquireContainerID()
+      {
+        size_t freeID = m_containerFreeIDs.countLeadingZeroes();
+        if (freeID == m_containerFreeIDs.getSize()) 
+        {
+          freeID = m_containerFreeIDs.getSize();
+          // no free ids left, enlarge buffer
+          m_containerFreeIDs.resize( m_containerFreeIDs.getSize() + 65536, true);
+        }
+        m_containerFreeIDs.disableBit(freeID);
+        return dp::util::checked_cast<ID>(freeID);
+      }
+
+      void RiXGL::releaseUniqueContainerID(ID uniqueId)
+      {
+        DP_ASSERT(uniqueId < m_containerFreeIDs.getSize());
+        DP_ASSERT(m_containerFreeIDs.getBit(uniqueId) == false);
+        m_containerFreeIDs.enableBit(uniqueId);
       }
 
 #if !defined(NDEBUG)

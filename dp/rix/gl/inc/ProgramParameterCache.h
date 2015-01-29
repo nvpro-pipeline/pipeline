@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2013
+// Copyright NVIDIA Corporation 2013-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -115,8 +115,10 @@ namespace dp
         void onContainerNotify( dp::util::Event const& event, dp::util::Payload* payload );
         void onContainerDestroyed( dp::util::Subject const& subject, dp::util::Payload* payload );
 
-        std::unique_ptr<ContainerObserver> m_containerObserver;
-        std::set<ContainerGLHandle> m_dirtyContainers;
+        std::unique_ptr<ContainerObserver>   m_containerObserver;
+        dp::util::BitArray                   m_containerDirty; // specifies if a container is dirty
+        dp::util::BitArray                   m_containerKnown; // specifies if a container is already known 
+        std::vector<ContainerGLSharedHandle> m_containers;     // All known containers, shared as they're being observed
       };
 
       template <typename ParameterCacheType>
@@ -145,25 +147,17 @@ namespace dp
       template <typename ParameterCacheType>
       ProgramParameterCache<ParameterCacheType>::~ProgramParameterCache()
       {
-        ContainerLocations& containerLocations = m_parameterCache->getContainerLocations();
-        // remove observes on all container locations
-        for ( typename ContainerLocations::iterator it = containerLocations.begin(); it != containerLocations.end(); ++it )
-        {
-          it->first->detach( m_containerObserver.get(), nullptr );
-        }
+        m_containerKnown.traverseBits( [&](size_t index) { m_containers[index]->detach(m_containerObserver.get(), nullptr); } );
       }
 
       template <typename ParameterCacheType>
       void ProgramParameterCache<ParameterCacheType>::allocateCacheData( std::vector<GeometryInstanceGLHandle> const& m_sortedGIs )
       {
-        m_dirtyContainers.clear();
-
-        // remove observers on all container locations
-        ContainerLocations& containerLocations = m_parameterCache->getContainerLocations();
-        for ( typename ContainerLocations::iterator it = containerLocations.begin(); it != containerLocations.end(); ++it )
-        {
-          it->first->detach( m_containerObserver.get(), nullptr);
-        }
+        // TODO The algorithm can be more clever by detaching only the containers which are no longer referenced.
+        // detach all observed containers
+        m_containerKnown.traverseBits( [&](size_t index) { m_containers[index]->detach(m_containerObserver.get(), nullptr); } );
+        m_containerKnown.clear();
+        m_containerDirty.clear();
 
         m_parameterCache->allocationBegin();
         if ( !m_sortedGIs.empty())
@@ -171,18 +165,34 @@ namespace dp
           // second compute offsets for variable containers
           for ( std::vector< GeometryInstanceGLHandle >::const_iterator itGI = m_sortedGIs.begin(); itGI != m_sortedGIs.end(); ++itGI )
           {
-            //for ( std::vector<unsigned int>::iterator itContainerIndex = m_variableContainers.begin(); itContainerIndex != m_variableContainers.end(); ++itContainerIndex )
             for ( size_t containerIndex = 0; containerIndex < m_activeContainers.size(); ++containerIndex)
             {
               ContainerGLHandle container = (*itGI)->m_containers[containerIndex].container.get();
 
-              // check if container is already in cache
-              // TODO move attach somewhere else
-              if ( m_parameterCache->allocateContainer(container, containerIndex) )
+              ID uniqueId = container->getUniqueID();
+
+              // grow vectors if required...
+
+              if (m_containerKnown.getSize() <= uniqueId)
               {
-                // TODO generate unique idx for each container...
+                size_t newSize = (uniqueId + 65536) &~65535;
+                m_containerKnown.resize(newSize);
+                m_containerDirty.resize(newSize);
+                m_containers.resize(newSize);
+              }
+
+              if (!m_containerKnown.getBit(uniqueId))
+              {
+                // allocate
+                m_parameterCache->allocateContainer(container, containerIndex);
+
+                // mark as known, keep reference and observe
+                m_containerKnown.enableBit(uniqueId);
+                m_containers[uniqueId] = container;
                 container->attach( m_containerObserver.get(), nullptr );
-                m_dirtyContainers.insert( container );
+
+                // and make dirty
+                m_containerDirty.enableBit(uniqueId);
               }
             }
           }
@@ -223,12 +233,9 @@ namespace dp
       template <typename ParameterCacheType>
       void ProgramParameterCache<ParameterCacheType>::updateConvertedCache()
       {
-     if ( m_uniformDataDirty )
+        if ( m_uniformDataDirty )
         {
-          for ( std::set<ContainerGLHandle>::iterator it = m_dirtyContainers.begin(); it != m_dirtyContainers.end(); ++it )
-          {
-            m_parameterCache->updateContainer( *it );
-          }
+          m_containerDirty.traverseBits([&](size_t index) {m_parameterCache->updateContainer(m_containers[index].get());});
           m_uniformDataDirty = false;
         }
       }
@@ -242,7 +249,7 @@ namespace dp
         m_uniformDataDirty = true;
 
         // mark container location dirty
-        m_dirtyContainers.insert( containerEvent.getHandle() );
+        m_containerDirty.enableBit(containerEvent.getHandle()->getUniqueID());
       }
 
       template <typename ParameterCacheType>

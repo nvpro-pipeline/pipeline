@@ -75,7 +75,7 @@ namespace dp
             /** copy over vertex data **/
             dp::rix::core::Renderer *renderer = m_resourceManager->getRenderer();
 
-            std::vector<RiX::VertexFormatInfo>  vertexInfos;
+            std::vector<dp::rix::core::VertexFormatInfo>  vertexInfos;
             dp::rix::core::VertexDataSharedHandle vertexData = renderer->vertexDataCreate();
 
             unsigned int numVertices = m_vertexAttributeSet->getVertexAttribute( 0 ).getVertexDataCount();

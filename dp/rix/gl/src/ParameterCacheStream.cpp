@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2013-2014
+// Copyright NVIDIA Corporation 2013-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -56,6 +56,7 @@ namespace dp
         : m_programPipeline( programPipeline )
         , m_descriptors( descriptors )
         , m_isBindlessUBOSupported(USE_UNIFORM_BUFFER_UNIFIED_MEMORY && !!glewGetExtension("GL_NV_uniform_buffer_unified_memory"))
+        , m_containerLocationsValid(0)
       {
         m_uboDataUBO = dp::gl::Buffer::create();
 
@@ -221,25 +222,20 @@ namespace dp
         }
       }
 
-      void ParameterCache<ParameterCacheStream>::updateContainer( ContainerGLHandle container )
+      void ParameterCache<ParameterCacheStream>::updateContainer(ContainerGLHandle container)
       {
-        ContainerLocations::iterator it = m_containerLocations.find( container );
-        if ( it != m_containerLocations.end() )
-        {
-          Location const& location = it->second; 
-
-          // cannot use m_uniformData[offset] since dummy might be the last one which has size of 0
-          // this would cause an out of bounds exception
-          unsigned char *basePtr = (m_uniformData.empty() | m_isUBOData[location.m_descriptorIndex] ) ? nullptr : &m_uniformData[0];
-          m_parameterStates[location.m_descriptorIndex].m_parameterRenderer->update( basePtr + location.m_offset, container->m_data );
-          //location.m_dirty = false;
-        }
+        Location const& location = m_containerLocations[container->getUniqueID()];
+        // cannot use m_uniformData[offset] since dummy might be the last one which has size of 0
+        // this would cause an out of bounds exception
+        unsigned char *basePtr = (m_uniformData.empty() | m_isUBOData[location.m_descriptorIndex] ) ? nullptr : &m_uniformData[0];
+        m_parameterStates[location.m_descriptorIndex].m_parameterRenderer->update(basePtr + location.m_offset, container->m_data);
+        //location.m_dirty = false;
       }
 
       void ParameterCache<ParameterCacheStream>::updateContainerCacheEntry( ContainerGLHandle container, ContainerCacheEntry* containerCacheEntry )
       {
         ParameterRendererStream::CacheEntry *cacheEntry = static_cast<ParameterRendererStream::CacheEntry*>(containerCacheEntry);
-        Location & location = m_containerLocations[container];
+        Location & location = m_containerLocations[container->getUniqueID()];
         unsigned char *base = (m_uniformData.empty() | m_isUBOData[location.m_descriptorIndex] ) ? nullptr : &m_uniformData[0];
         size_t offset = location.m_offset;
         *cacheEntry = ParameterRendererStream::CacheEntry( base + offset );
@@ -247,32 +243,29 @@ namespace dp
 
       void ParameterCache<ParameterCacheStream>::allocationBegin()
       {
-        m_containerLocations.clear();
+        // TODO MTA Does it make sense to think about shrinking?
+        m_containerLocationsValid.clear();
         m_currentUniformOffset = 0;
         m_currentUBOOffset = 0;
       }
 
-      bool ParameterCache<ParameterCacheStream>::allocateContainer( ContainerGLHandle container, size_t descriptorIndex )
+      void ParameterCache<ParameterCacheStream>::allocateContainer(ContainerGLHandle container, size_t descriptorIndex)
       {
-        ContainerLocations::iterator it = m_containerLocations.find( container );
-        if ( it  == m_containerLocations.end() )
-        {
-          size_t & offset = m_isUBOData[descriptorIndex] ? m_currentUBOOffset : m_currentUniformOffset;
-          m_containerLocations[container] = Location(offset, descriptorIndex );
-          offset += m_dataSizes[descriptorIndex];
-          return true;
-        }
-        DP_ASSERT( it->second.m_descriptorIndex == descriptorIndex );
-        return false;
+        ID containerId = container->getUniqueID();
+        growContainerLocations(containerId);
+
+        DP_ASSERT(m_containerLocationsValid.getBit(containerId) == false);
+
+        size_t & offset = m_isUBOData[descriptorIndex] ? m_currentUBOOffset : m_currentUniformOffset;
+        m_containerLocations[containerId] = Location(offset, descriptorIndex );
+        offset += m_dataSizes[descriptorIndex];
+        m_containerLocationsValid.enableBit(containerId);
       }
 
-      void ParameterCache<ParameterCacheStream>::removeContainer( ContainerGLHandle container )
+      void ParameterCache<ParameterCacheStream>::removeContainer(ContainerGLHandle container)
       {
-        ContainerLocations::iterator it = m_containerLocations.find(const_cast<ContainerGLHandle>(container));
-        if ( it != m_containerLocations.end() )
-        {
-          m_containerLocations.erase(it);
-        }
+        DP_ASSERT(container->getUniqueID() < m_containerLocationsValid.getSize())
+        m_containerLocationsValid.disableBit(container->getUniqueID());
       }
 
       void ParameterCache<ParameterCacheStream>::allocationEnd()
@@ -296,6 +289,20 @@ namespace dp
         for ( size_t idx = 0; idx < numParameterGroups;++idx )
         {
           m_parameterStates[idx].m_parameterRenderer->activate();
+        }
+      }
+
+      void ParameterCache<ParameterCacheStream>::resizeContainerLocations(size_t containerLocations)
+      {
+        m_containerLocationsValid.resize(containerLocations);
+        m_containerLocations.resize(containerLocations);
+      }
+
+      void ParameterCache<ParameterCacheStream>::growContainerLocations(size_t newIndex)
+      {
+        if (newIndex >= m_containerLocationsValid.getSize())
+        {
+          resizeContainerLocations((newIndex + 65536) & ~65535);
         }
       }
 

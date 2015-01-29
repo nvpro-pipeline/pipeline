@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012-2013
+// Copyright NVIDIA Corporation 2012-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -28,10 +28,10 @@
 
 #include <dp/util/Config.h>
 #include <dp/util/Types.h>
+#include <dp/util/DPAssert.h>
 #include <algorithm>
 #include <cstring>
-#include <dp/util/DPAssert.h>
-#include <boost/scoped_array.hpp>
+#include <memory>
 
 namespace dp
 {
@@ -80,7 +80,19 @@ namespace dp
       }
     }
 
+    inline size_t clz(dp::util::Uint64 bits)
+    {
+      unsigned long localIndex;
+      return _BitScanForward64(&localIndex,bits) ? localIndex : 64;
+    }
+
+    inline size_t clz(dp::util::Uint32 bits)
+    {
+      unsigned long localIndex;
+      return _BitScanForward(&localIndex,bits) ? localIndex : 32;
+    }
 #else
+    // TODO implement GCC version!
     template <typename BitType, typename Visitor> inline void bitTraverse( BitType bits, Visitor& visitor )
     {
       size_t index = 0;
@@ -127,6 +139,7 @@ namespace dp
       /** \brief Create a new BitVector with all bits set to false
           \param size Number of bits in this Array
       **/
+      DP_UTIL_API BitArray();
       DP_UTIL_API BitArray( size_t size );
       DP_UTIL_API BitArray( const BitArray & rhs );
       DP_UTIL_API ~BitArray();
@@ -146,9 +159,9 @@ namespace dp
       /** \brief Change the number of bits in this array. The state of remaining bits is being kept.
                  New bits will be initialized to false.
           \param size New number of bits in this array
+          \param defaultValue The new default value for the new bits
       **/
-      // TODO add resize support with default value
-      DP_UTIL_API void resize( size_t size );
+      DP_UTIL_API void resize( size_t size, bool defaultValue = false );
 
       size_t getSize() const { return m_size; }
 
@@ -166,6 +179,8 @@ namespace dp
 
       /** \brief call Visitor( size_t index ) on all bits which are set. **/
       template <typename Visitor> void traverseBits( Visitor &visitor );
+
+      DP_UTIL_API size_t countLeadingZeroes() const;
       
     private:
       /** \brief Determine the element / bit for the given index **/
@@ -179,8 +194,13 @@ namespace dp
       **/
       void clearUnusedBits();
 
+      /** \brief Set the last unused bits in the last element.
+          \remarks Set bits whose number is >= m_size. This is required when expanding the vector with the bits set to true.
+      **/
+      void setUnusedBits();
+
       size_t  m_size;
-      boost::scoped_array<BitStorageType> m_bits;
+      std::unique_ptr<BitStorageType[]> m_bits;
     };
 
     /** \brief Determine the element / bit for the given index **/
@@ -276,6 +296,16 @@ namespace dp
         m_bits[determineNumberOfElements() - 1] &= ~BitStorageType(0) >> ((StorageBitsPerElement - usedBitsInLastElement) & StorageBitsPerElement - 1);
       }
     }
+
+    inline void BitArray::setUnusedBits()
+    {
+      if ( m_size )
+      {
+        size_t usedBitsInLastElement = m_size % StorageBitsPerElement;
+        m_bits[determineNumberOfElements() - 1] |= ~BitStorageType(0) << usedBitsInLastElement;
+      }
+    }
+
 
   } // namespace util
 } // namespace dp

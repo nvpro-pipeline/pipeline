@@ -221,7 +221,7 @@ void showStatistics( dp::sg::ui::ViewStateSharedPtr const& viewState )
 int runApp( int argc, char *argv[], bool stereo, bool continuous, int frames, const char *renderEngine, dp::fx::Manager smt )
 {
   // Create rendering engine
-  SceneRendererSharedPtr renderer = dp::sg::renderer::rix::gl::SceneRenderer::create( renderEngine, smt, dp::culling::MODE_CPU );
+  SceneRendererSharedPtr renderer = dp::sg::renderer::rix::gl::SceneRenderer::create( renderEngine, smt, dp::culling::MODE_CPU, dp::sg::renderer::rix::gl::TM_NONE );
 
   // Setup default OpenGL format descriptor
   // We need to create a default format first to be able to check if a stereo pixelformat is available later.

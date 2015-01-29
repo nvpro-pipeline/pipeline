@@ -102,9 +102,9 @@ namespace dp
 
             m_context->makeCurrent();
 
-            DP_ASSERT( dynamic_cast<RiX::GL::RiXGL*>( getRenderer() ) );
+            DP_ASSERT( dynamic_cast<dp::rix::gl::RiXGL*>( getRenderer() ) );
 
-            static_cast<RiX::GL::RiXGL*>( getRenderer() )->registerContext();
+            static_cast<dp::rix::gl::RiXGL*>( getRenderer() )->registerContext();
 
             return displayTarget;
           }

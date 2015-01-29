@@ -82,7 +82,7 @@ namespace dp
             m_rixLib = util::DynamicLibrary::createFromFile(renderer);
             DP_ASSERT(m_rixLib);
 
-            dp::rix::core::PFNCREATERENDERER createRenderer = (RiX::PFNCREATERENDERER)m_rixLib->getSymbol("createRenderer");
+            dp::rix::core::PFNCREATERENDERER createRenderer = (dp::rix::core::PFNCREATERENDERER)m_rixLib->getSymbol("createRenderer");
             DP_ASSERT(createRenderer);
 
             m_rix = createRenderer( options );

@@ -70,7 +70,7 @@ namespace dp
         /** \brief allocate a Location for the container
             \return true if new allocation took place or false if there was an allocation before
         **/
-        bool allocateContainer( ContainerGLHandle container );
+        void allocateContainer( ContainerGLHandle container );
 
         /** \brief remove given container from cache **/
         void removeContainer( ContainerGLHandle container );

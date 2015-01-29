@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012-2013
+// Copyright NVIDIA Corporation 2012-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -32,6 +32,14 @@ namespace dp
   namespace util
   {
 
+    /** \brief Create a new BitVector.
+    **/
+    BitArray::BitArray()
+      : m_size( 0 )
+      , m_bits( nullptr )
+    {
+    }
+
     /** \brief Create a new BitVector with all bits set to false
         \param size Number of Bits in the Array
     **/
@@ -53,8 +61,13 @@ namespace dp
     {
     }
 
-    void BitArray::resize( size_t newSize )
+    void BitArray::resize( size_t newSize, bool defaultValue)
     {
+      // if the default value for the new bits is true enabled the unused bits in the last element.
+      if (defaultValue) {
+        setUnusedBits();
+      }
+
       size_t oldNumberOfElements = determineNumberOfElements();
       size_t oldSize = m_size;
       m_size = newSize;
@@ -63,19 +76,18 @@ namespace dp
       // the number of elements has changed, reallocate array
       if ( oldNumberOfElements != newNumberOfElements )
       {
-        boost::scoped_array<BitStorageType> newBits(new BitStorageType[newNumberOfElements]);
+        std::unique_ptr<BitStorageType[]> newBits(new BitStorageType[newNumberOfElements]);
         if ( newNumberOfElements < oldNumberOfElements )
         {
           std::copy( m_bits.get(), m_bits.get() + newNumberOfElements, newBits.get() );
         }
         else
         {
-          std::copy( m_bits.get(), m_bits.get() + oldNumberOfElements, newBits.get() );
-          std::fill( newBits.get() + oldNumberOfElements, newBits.get() + newNumberOfElements, BitStorageType(0) );
+          std::copy(m_bits.get(), m_bits.get() + oldNumberOfElements, newBits.get());
+          std::fill(newBits.get() + oldNumberOfElements, newBits.get() + newNumberOfElements, defaultValue ? ~BitStorageType(0) : BitStorageType(0));
         }
         m_bits.swap( newBits );
       }
-
       clearUnusedBits();
     }
 
@@ -206,6 +218,24 @@ namespace dp
 
         clearUnusedBits();
       }
+    }
+
+    size_t BitArray::countLeadingZeroes() const
+    {
+      size_t index = 0;
+      
+      // first count 
+      while (index < determineNumberOfElements() && !m_bits[index])
+      {
+        ++index;
+      }
+      size_t leadingZeroes = index * StorageBitsPerElement;
+      if (index < determineNumberOfElements())
+      {
+        leadingZeroes += clz(m_bits[index]);
+      }
+
+      return std::min(leadingZeroes, getSize());
     }
 
   } // namespace util

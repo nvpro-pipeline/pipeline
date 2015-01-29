@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2013-2014
+// Copyright NVIDIA Corporation 2013-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -30,6 +30,7 @@
 #include <dp/rix/gl/inc/ParameterCacheEntryStream.h>
 #include <dp/rix/gl/inc/ParameterCacheEntryStreamBuffer.h>
 #include <dp/rix/gl/inc/ParameterRendererStream.h>
+#include <dp/util/BitArray.h>
 #include <memory>
 
 namespace dp
@@ -98,7 +99,7 @@ namespace dp
         /** \brief allocate a Location for the container
             \return true if new allocation took place or false if there was an allocation before
         **/
-        bool allocateContainer( ContainerGLHandle container, size_t containerIndex );
+        void allocateContainer( ContainerGLHandle container, size_t containerIndex );
 
         /** \brief remove a container from the cache **/
         void removeContainer( ContainerGLHandle container );
@@ -112,14 +113,20 @@ namespace dp
         /** \brief Update the ContainerCacheEntry for the given ContainerGLHandle. **/
         void updateContainerCacheEntry( ContainerGLHandle container, ContainerCacheEntry* containerCacheEntry);
 
-        typedef std::map<ContainerGLHandle, Location> ContainerLocations;
+        typedef std::vector<Location> ContainerLocations;
 
         ContainerLocations& getContainerLocations() { return m_containerLocations; }
+        dp::util::BitArray& getContainerLocationsValid() { return m_containerLocationsValid; }
 
       private:
+        dp::util::BitArray m_containerLocationsValid;
         ContainerLocations m_containerLocations;
 
         void generateParameterStates( );
+        void resizeContainerLocations(size_t newSize);
+
+        // ensure that the m_containerLocations* data structure are big enough to hold newIndex
+        void growContainerLocations(size_t newIndex);
 
         ParameterStates    m_parameterStates;
 
