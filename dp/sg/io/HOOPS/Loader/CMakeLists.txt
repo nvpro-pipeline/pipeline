@@ -33,7 +33,6 @@ if(HOOPS_FOUND)
   target_link_libraries( HOOPSLoader
     DP
     DPSgCore
-    DPSgUI
     DPMath
     DPUtil
     DPFx
