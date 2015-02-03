@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2013
+// Copyright NVIDIA Corporation 2013-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -45,12 +45,14 @@ namespace dp
         , m_uboBinding( GLint(uboBinding) )
         , m_uboBlockSize( uboBlockSize )
         , m_cacheData( new dp::util::Uint8[uboBlockSize] )
+        , m_bufferUpdater(new dp::gl::BufferUpdater(ubo))
       {
         DP_ASSERT( !m_parameters.empty() );
       }
 
       void ParameterRendererBufferRange::activate()
       {
+        m_bufferUpdater->executeUpdates();
       }
 
       void ParameterRendererBufferRange::render( void const* cache )
@@ -77,8 +79,8 @@ namespace dp
           }
         }
         
-        glBindBuffer( m_target, m_ubo );
-        glBufferSubData( m_target, reinterpret_cast<size_t>(cache), m_uboBlockSize, m_cacheData.get() );
+
+        m_bufferUpdater->update(reinterpret_cast<size_t>(cache), m_uboBlockSize, m_cacheData.get());
       }
 
       size_t ParameterRendererBufferRange::getCacheSize( ) const
