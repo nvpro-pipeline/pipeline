@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2014
+// Copyright NVIDIA Corporation 2014-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -46,6 +46,7 @@ namespace dp
         , m_baseAddress( 0 )
         , m_bindingLength( bindingLength )
         , m_cacheData( new dp::util::Uint8[m_bindingLength] )
+        , m_bufferUpdater(new dp::gl::BufferUpdater(buffer))
       {
         DP_ASSERT( !m_parameters.empty() );
       }
@@ -53,6 +54,7 @@ namespace dp
       void ParameterRendererBufferAddressRange::activate()
       {
         // update base address of buffer
+        m_bufferUpdater->executeUpdates();
         m_baseAddress = m_buffer->getAddress();
       }
 
@@ -78,7 +80,7 @@ namespace dp
             (*parameterObject)->update( m_cacheData.get(), container );
           } while (++parameterObject != parameterObjectEnd);
 
-          m_buffer->setSubData( m_target, reinterpret_cast<size_t>(cache), m_bindingLength, m_cacheData.get() );
+          m_bufferUpdater->update(reinterpret_cast<size_t>(cache), m_bindingLength, m_cacheData.get());
         }
         
       }

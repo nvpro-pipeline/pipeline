@@ -15,6 +15,7 @@ add_definitions(
 #sources
 set(SOURCES
   src/Buffer.cpp
+  src/BufferUpdater.cpp
   src/DisplayList.cpp
   src/Object.cpp
   src/Program.cpp
@@ -31,6 +32,7 @@ set(SOURCES
 
 set(PUBLIC_HEADERS
   Buffer.h
+  BufferUpdater.h
   Config.h
   DisplayList.h
   Object.h

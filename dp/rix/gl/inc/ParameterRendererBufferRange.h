@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2013
+// Copyright NVIDIA Corporation 2013-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -28,6 +28,7 @@
 
 #include <dp/rix/gl/inc/ParameterCacheStream.h>
 #include <dp/rix/gl/inc/ParameterRendererStream.h>
+#include <dp/gl/BufferUpdater.h>
 #include <memory>
 
 namespace dp
@@ -40,7 +41,7 @@ namespace dp
       /************************************************************************/
       /* ParameterRendererBufferRange                                         */
       /************************************************************************/
-
+      
       class ParameterRendererBufferRange : public ParameterRendererStream
       {
       public:
@@ -54,12 +55,13 @@ namespace dp
         virtual size_t getCacheSize() const;
 
       protected:
-        ParameterCacheEntryStreamBuffers    m_parameters;
-        GLenum                              m_target;
-        GLuint                              m_ubo;
-        GLint                               m_uboBinding;
-        GLsizeiptr                          m_uboBlockSize;
-        std::unique_ptr<dp::util::Uint8[]>  m_cacheData;
+        ParameterCacheEntryStreamBuffers       m_parameters;
+        GLenum                                 m_target;
+        GLuint                                 m_ubo;
+        GLint                                  m_uboBinding;
+        GLsizeiptr                             m_uboBlockSize;
+        std::unique_ptr<dp::util::Uint8[]>     m_cacheData;
+        std::unique_ptr<dp::gl::BufferUpdater> m_bufferUpdater;
       };
 
     } // namespace gl
