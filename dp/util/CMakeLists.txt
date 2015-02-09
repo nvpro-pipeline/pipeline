@@ -16,7 +16,7 @@ add_definitions(
 )
 
 set(DPUTIL_INCLUDES
-  Atom.h
+  Array.h
   Backtrace.h
   BitArray.h
   BitMask.h
@@ -29,7 +29,6 @@ set(DPUTIL_INCLUDES
   HashGeneratorMurMur.h
   HashGeneratorMD5.h
   Image.h
-  Lock.h
   Memory.h
   NVPerfMon.h
   Observer.h
@@ -45,11 +44,9 @@ set(DPUTIL_INCLUDES
   Timer.h
   Tokenizer.h
   Tools.h
-  Trace.h
   Types.h
 )
 
-SET( DPUTIL_INCLUDES ${DPUTIL_INCLUDES} Array.h )
 add_definitions("-DDP_UTIL_USE_BOOST")
 
 source_group(headers FILES ${DPUTIL_INCLUDES})
