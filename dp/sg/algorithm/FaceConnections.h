@@ -106,7 +106,7 @@ namespace dp
            *  the connectivities of the face \a fi and its neighbours, whether it forms such a set of quads.
            *  \sa findTriPatch4 */
           DP_SG_CORE_API bool findQuadPatch4x4( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
-                                        , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] );
+                                              , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] );
 
           /*! \brief Determine if a triangle can be part of a triangular connected set of 9 triangles.
            *  \param indices A pointer to the indices of the triangles.
@@ -155,7 +155,7 @@ namespace dp
           std::vector<std::set<unsigned int> >  m_faceSets;
       };
 
-    } // namespace core
+    } // namespace algorithm
   } // namespace sg
 } // namespace dp
 
