@@ -18,7 +18,6 @@ set(CORE_SOURCES
   src/Camera.cpp
   src/ClipPlane.cpp
   src/EffectData.cpp
-  src/FaceConnections.cpp
   src/FrustumCamera.cpp
   src/GeoNode.cpp
   src/Group.cpp
@@ -57,7 +56,6 @@ set(CORE_PUBLIC_HEADERS
   CoreTypes.h
   EffectData.h
   Event.h
-  FaceConnections.h
   FrustumCamera.h
   GeoNode.h
   Group.h

@@ -35,7 +35,7 @@ namespace dp
 {
   namespace sg
   {
-    namespace core
+    namespace algorithm
     {
 
       /*! \brief Helper class to determine face connectivity from triangle or quad soups.
@@ -50,7 +50,7 @@ namespace dp
            *  \remarks All the connectivity informations about the Primitive \a p is determined.
            *  Depending on the size of \a p, that might take a while.
            *  \sa Primitive */
-          DP_SG_CORE_API FaceConnections( const Primitive * p );
+          DP_SG_CORE_API FaceConnections( const dp::sg::core::Primitive * p );
 
           /*! \brief Disconnect a single face from the connectivity set.
            *  \param faceIndex The index of the face to disconnect.
@@ -80,7 +80,7 @@ namespace dp
            *  \remarks Determines the 'horizontal' and the 'vertical' quad strip including the face \a fi and selects
            *  the longer one.
            *  \sa findLongestTriStrip */
-          DP_SG_CORE_API unsigned int findLongestQuadStrip( IndexSet::ConstIterator<unsigned int> &, unsigned int fi
+          DP_SG_CORE_API unsigned int findLongestQuadStrip( dp::sg::core::IndexSet::ConstIterator<unsigned int> &, unsigned int fi
                                                           , std::vector<unsigned int> & stripIndices
                                                           , std::list<unsigned int> & stripFaces );
 
@@ -92,7 +92,7 @@ namespace dp
            *  \return Length of the longest tri strip found.
            *  \remarks Determines the three possible tri strip including the face \a fi, and selects the longest one.
            *  \fineLongestQuadStrip */
-          DP_SG_CORE_API unsigned int findLongestTriStrip( IndexSet::ConstIterator<unsigned int> & indices
+          DP_SG_CORE_API unsigned int findLongestTriStrip( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices
                                                          , unsigned int fi, std::vector<unsigned int> & stripIndices
                                                          , std::list<unsigned int> & stripFaces );
 
@@ -105,7 +105,7 @@ namespace dp
            *  \remarks A QuadPatch4x4 consists of a set of 3 x 3 quads, or 4 x 4 vertices. This function simply checks
            *  the connectivities of the face \a fi and its neighbours, whether it forms such a set of quads.
            *  \sa findTriPatch4 */
-          DP_SG_CORE_API bool findQuadPatch4x4( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
+          DP_SG_CORE_API bool findQuadPatch4x4( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
                                         , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] );
 
           /*! \brief Determine if a triangle can be part of a triangular connected set of 9 triangles.
@@ -118,7 +118,7 @@ namespace dp
            *  This function simply checks the connectivities of the face \a fi and it neighours, whether it forms such a
            *  set of triangles.
            *  \sa findQuadPatch4x4 */
-          DP_SG_CORE_API bool findTriPatch4( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
+          DP_SG_CORE_API bool findTriPatch4( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
                                            , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] );
 
           /*! \brief Get all the faces without any neighbours, and clear the list that holds them
@@ -129,7 +129,7 @@ namespace dp
            *  primitives that had no neighbours, or were isolated in the stripping/patching process. You get all the
            *  vertex indices of those faces with this function.
            *  \sa findLongestQuadStrip, findLongestTriStrip, findQuadPatch4x4, findTriPatch4 */
-          DP_SG_CORE_API unsigned int getAndClearZeroConnectionIndices( IndexSet::ConstIterator<unsigned int> & allIndices
+          DP_SG_CORE_API unsigned int getAndClearZeroConnectionIndices( dp::sg::core::IndexSet::ConstIterator<unsigned int> & allIndices
                                                                       , std::vector<unsigned int> & zeroIndices );
 
           /*! \brief Get the neighbours of a primitive.
@@ -145,7 +145,7 @@ namespace dp
           DP_SG_CORE_API unsigned int getNextFaceIndex( unsigned int * connectivity = NULL );
 
         private:
-          void connectFaces( IndexSet::ConstIterator<unsigned int> & indices, unsigned int faceIndex
+          void connectFaces( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int faceIndex
                            , unsigned int verticesPerFace, unsigned int edgeIndex0, unsigned int edgeIndex1
                            , const std::vector<std::list<unsigned int> > & verticesToFaceLists );
 

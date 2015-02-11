@@ -24,23 +24,23 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#include <dp/sg/core/FaceConnections.h>
+#include <dp/sg/algorithm/FaceConnections.h>
 #include <dp/sg/core/Primitive.h>
 
 namespace dp
 {
   namespace sg
   {
-    namespace core
+    namespace algorithm
     {
 
-      FaceConnections::FaceConnections( const Primitive * p )
+      FaceConnections::FaceConnections( const dp::sg::core::Primitive * p )
         : m_faceConnections(p->getElementCount(),~0)
         , m_faceConnectionCounts(p->getNumberOfPrimitives())
         , m_faceSets(p->getNumberOfVerticesPerPrimitive()+1)
       {
-        DP_ASSERT( ( p->getPrimitiveType() == PRIMITIVE_TRIANGLES )
-                  || ( p->getPrimitiveType() == PRIMITIVE_QUADS ) );
+        DP_ASSERT( ( p->getPrimitiveType() == dp::sg::core::PRIMITIVE_TRIANGLES )
+                  || ( p->getPrimitiveType() == dp::sg::core::PRIMITIVE_QUADS ) );
 
         unsigned int elementCount = p->getElementCount();
         unsigned int primitiveSize = p->getNumberOfVerticesPerPrimitive();
@@ -49,7 +49,7 @@ namespace dp
         //  for each vertex build a list of face indices where it is used
         unsigned int vertexCount = p->getVertexAttributeSet()->getNumberOfVertices();
         std::vector<std::list<unsigned int> > verticesToFaceLists( vertexCount );
-        IndexSet::ConstIterator<unsigned int> indices( p->getIndexSet(), p->getElementOffset() );
+        dp::sg::core::IndexSet::ConstIterator<unsigned int> indices( p->getIndexSet(), p->getElementOffset() );
         for ( unsigned int i=0, k=0 ; i<elementCount ; i+=primitiveSize, k++ )
         {
           for ( unsigned int j=0 ; j<primitiveSize ; j++ )
@@ -128,7 +128,7 @@ namespace dp
         }
       }
 
-      void checkQuadStrip( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi, unsigned int le
+      void checkQuadStrip( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi, unsigned int le
                          , const std::vector<unsigned int> & faceConnections, std::list<unsigned int> & faceList
                          , std::list<unsigned int> & vertexList )
       {
@@ -212,7 +212,7 @@ namespace dp
         }
       }
 
-      unsigned int FaceConnections::findLongestQuadStrip( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
+      unsigned int FaceConnections::findLongestQuadStrip( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
                                                         , std::vector<unsigned int> & stripIndices
                                                         , std::list<unsigned int> & stripFaces )
       {
@@ -232,7 +232,7 @@ namespace dp
         return( util::checked_cast<unsigned int>(stripFaces.size()) );
       }
 
-      void checkTriStrip( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi, unsigned int le
+      void checkTriStrip( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi, unsigned int le
                         , const std::vector<unsigned int> & faceConnections, std::list<unsigned int> & faceList
                         , std::list<unsigned int> & vertexList )
       {
@@ -315,7 +315,7 @@ namespace dp
         }
       }
 
-      unsigned int FaceConnections::findLongestTriStrip( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
+      unsigned int FaceConnections::findLongestTriStrip( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
                                                        , std::vector<unsigned int> & stripIndices
                                                        , std::list<unsigned int> & stripFaces )
       {
@@ -367,7 +367,7 @@ namespace dp
     //    | 0 | 1 | 2 |
     //    |___|___|___|
 
-      bool checkQuadPatch4x4Start0i( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi, unsigned int ei01
+      bool checkQuadPatch4x4Start0i( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi, unsigned int ei01
                                    , const std::vector<unsigned int> & faceConnections
                                    , std::vector<unsigned int> & patchIndices, unsigned int pf[9] )
       {
@@ -481,7 +481,7 @@ namespace dp
         return( ok );
       }
 
-      bool checkQuadPatch4x4Start0( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
+      bool checkQuadPatch4x4Start0( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
                                   , const std::vector<unsigned int> & faceConnections
                                   , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] )
       {
@@ -493,7 +493,7 @@ namespace dp
         return( ok );
       }
 
-      bool checkQuadPatch4x4Start1i( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi1, unsigned int ei10
+      bool checkQuadPatch4x4Start1i( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi1, unsigned int ei10
                                     , const std::vector<unsigned int> & faceConnections
                                     , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] )
       {
@@ -508,7 +508,7 @@ namespace dp
         return( ok );
       }
 
-      bool checkQuadPatch4x4Start1( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
+      bool checkQuadPatch4x4Start1( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
                                   , const std::vector<unsigned int> & faceConnections
                                   , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] )
       {
@@ -520,7 +520,7 @@ namespace dp
         return( ok );
       }
 
-      bool checkQuadPatch4x4Start2i( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi2, unsigned int ei21
+      bool checkQuadPatch4x4Start2i( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi2, unsigned int ei21
                                    , const std::vector<unsigned int> & faceConnections
                                    , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] )
       {
@@ -535,7 +535,7 @@ namespace dp
         return( ok );
       }
 
-      bool checkQuadPatch4x4Start2( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
+      bool checkQuadPatch4x4Start2( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
                                   , const std::vector<unsigned int> & faceConnections
                                   , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] )
       {
@@ -547,7 +547,7 @@ namespace dp
         return( ok );
       }
 
-      bool checkQuadPatch4x4Start3i( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi3, unsigned int ei30
+      bool checkQuadPatch4x4Start3i( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi3, unsigned int ei30
                                    , const std::vector<unsigned int> & faceConnections
                                    , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] )
       {
@@ -562,7 +562,7 @@ namespace dp
         return( ok );
       }
 
-      bool checkQuadPatch4x4Start3( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
+      bool checkQuadPatch4x4Start3( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
                                   , const std::vector<unsigned int> & faceConnections
                                   , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] )
       {
@@ -574,7 +574,7 @@ namespace dp
         return( ok );
       }
 
-      bool checkQuadPatch4x4Start4i( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi4, unsigned int ei43
+      bool checkQuadPatch4x4Start4i( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi4, unsigned int ei43
                                    , const std::vector<unsigned int> & faceConnections
                                    , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] )
       {
@@ -589,7 +589,7 @@ namespace dp
         return( ok );
       }
 
-      bool checkQuadPatch4x4Start4( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
+      bool checkQuadPatch4x4Start4( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
                                   , const std::vector<unsigned int> & faceConnections
                                   , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] )
       {
@@ -601,7 +601,7 @@ namespace dp
         return( ok );
       }
 
-      bool checkQuadPatch4x4Start5i( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi5, unsigned int ei54
+      bool checkQuadPatch4x4Start5i( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi5, unsigned int ei54
                                    , const std::vector<unsigned int> & faceConnections
                                    , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] )
       {
@@ -616,7 +616,7 @@ namespace dp
         return( ok );
       }
 
-      bool checkQuadPatch4x4Start5( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
+      bool checkQuadPatch4x4Start5( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
                                   , const std::vector<unsigned int> & faceConnections
                                   , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] )
       {
@@ -628,7 +628,7 @@ namespace dp
         return( ok );
       }
 
-      bool checkQuadPatch4x4Start6i( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi6, unsigned int ei63
+      bool checkQuadPatch4x4Start6i( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi6, unsigned int ei63
                                    , const std::vector<unsigned int> & faceConnections
                                    , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] )
       {
@@ -643,7 +643,7 @@ namespace dp
         return( ok );
       }
 
-      bool checkQuadPatch4x4Start6( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
+      bool checkQuadPatch4x4Start6( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
                                   , const std::vector<unsigned int> & faceConnections
                                   , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] )
       {
@@ -655,7 +655,7 @@ namespace dp
         return( ok );
       }
 
-      bool checkQuadPatch4x4Start7i( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi7, unsigned int ei76
+      bool checkQuadPatch4x4Start7i( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi7, unsigned int ei76
                                    , const std::vector<unsigned int> & faceConnections
                                    , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] )
       {
@@ -670,7 +670,7 @@ namespace dp
         return( ok );
       }
 
-      bool checkQuadPatch4x4Start7( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
+      bool checkQuadPatch4x4Start7( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
                                   , const std::vector<unsigned int> & faceConnections
                                   , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] )
       {
@@ -682,7 +682,7 @@ namespace dp
         return( ok );
       }
 
-      bool checkQuadPatch4x4Start8i( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi8, unsigned int ei87
+      bool checkQuadPatch4x4Start8i( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi8, unsigned int ei87
                                    , const std::vector<unsigned int> & faceConnections
                                    , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] )
       {
@@ -697,7 +697,7 @@ namespace dp
         return( ok );
       }
 
-      bool checkQuadPatch4x4Start8( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
+      bool checkQuadPatch4x4Start8( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
                                   , const std::vector<unsigned int> & faceConnections
                                   , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] )
       {
@@ -709,7 +709,7 @@ namespace dp
         return( ok );
       }
 
-      bool FaceConnections::findQuadPatch4x4( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
+      bool FaceConnections::findQuadPatch4x4( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
                                             , std::vector<unsigned int> & patchIndices
                                             , unsigned int patchFaces[9] )
       {
@@ -740,7 +740,7 @@ namespace dp
     //     /  0 \  /  2 \  /  4 \
     //    /______\/______\/______\
 
-      bool checkTriPatch4Start0i( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi, unsigned int ei01
+      bool checkTriPatch4Start0i( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi, unsigned int ei01
                                 , const std::vector<unsigned int> & faceConnections
                                 , std::vector<unsigned int> & patchIndices, unsigned int pf[9] )
       {
@@ -836,7 +836,7 @@ namespace dp
         return( ok );
       }
 
-      bool checkTriPatch4Start0( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
+      bool checkTriPatch4Start0( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
                                , const std::vector<unsigned int> & faceConnections
                                , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] )
       {
@@ -848,7 +848,7 @@ namespace dp
         return( ok );
       }
 
-      bool checkTriPatch4Start1i( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi1, unsigned int ei10
+      bool checkTriPatch4Start1i( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi1, unsigned int ei10
                                 , const std::vector<unsigned int> & faceConnections
                                 , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] )
       {
@@ -863,7 +863,7 @@ namespace dp
         return( ok );
       }
 
-      bool checkTriPatch4Start1( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
+      bool checkTriPatch4Start1( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
                                , const std::vector<unsigned int> & faceConnections
                                , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] )
       {
@@ -875,7 +875,7 @@ namespace dp
         return( ok );
       }
 
-      bool checkTriPatch4Start2i( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi2, unsigned int ei21
+      bool checkTriPatch4Start2i( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi2, unsigned int ei21
                                 , const std::vector<unsigned int> & faceConnections
                                 , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] )
       {
@@ -890,7 +890,7 @@ namespace dp
         return( ok );
       }
 
-      bool checkTriPatch4Start2( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
+      bool checkTriPatch4Start2( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
                                , const std::vector<unsigned int> & faceConnections
                                , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] )
       {
@@ -902,7 +902,7 @@ namespace dp
         return( ok );
       }
 
-      bool checkTriPatch4Start3i( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi3, unsigned int ei32
+      bool checkTriPatch4Start3i( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi3, unsigned int ei32
                                 , const std::vector<unsigned int> & faceConnections
                                 , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] )
       {
@@ -917,7 +917,7 @@ namespace dp
         return( ok );
       }
 
-      bool checkTriPatch4Start3( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
+      bool checkTriPatch4Start3( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
                                , const std::vector<unsigned int> & faceConnections
                                , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] )
       {
@@ -929,7 +929,7 @@ namespace dp
         return( ok );
       }
 
-      bool checkTriPatch4Start4i( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi4, unsigned int ei43
+      bool checkTriPatch4Start4i( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi4, unsigned int ei43
                                 , const std::vector<unsigned int> & faceConnections
                                 , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] )
       {
@@ -944,7 +944,7 @@ namespace dp
         return( ok );
       }
 
-      bool checkTriPatch4Start4( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
+      bool checkTriPatch4Start4( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
                                , const std::vector<unsigned int> & faceConnections
                                , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] )
       {
@@ -956,7 +956,7 @@ namespace dp
         return( ok );
       }
 
-      bool checkTriPatch4Start5i( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi5, unsigned int ei51
+      bool checkTriPatch4Start5i( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi5, unsigned int ei51
                                 , const std::vector<unsigned int> & faceConnections
                                 , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] )
       {
@@ -971,7 +971,7 @@ namespace dp
         return( ok );
       }
 
-      bool checkTriPatch4Start5( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
+      bool checkTriPatch4Start5( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
                                , const std::vector<unsigned int> & faceConnections
                                , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] )
       {
@@ -983,7 +983,7 @@ namespace dp
         return( ok );
       }
 
-      bool checkTriPatch4Start6i( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi6, unsigned int ei65
+      bool checkTriPatch4Start6i( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi6, unsigned int ei65
                                 , const std::vector<unsigned int> & faceConnections
                                 , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] )
       {
@@ -998,7 +998,7 @@ namespace dp
         return( ok );
       }
 
-      bool checkTriPatch4Start6( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
+      bool checkTriPatch4Start6( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
                                , const std::vector<unsigned int> & faceConnections
                                , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] )
       {
@@ -1010,7 +1010,7 @@ namespace dp
         return( ok );
       }
 
-      bool checkTriPatch4Start7i( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi7, unsigned int ei76
+      bool checkTriPatch4Start7i( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi7, unsigned int ei76
                                 , const std::vector<unsigned int> & faceConnections
                                 , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] )
       {
@@ -1025,7 +1025,7 @@ namespace dp
         return( ok );
       }
 
-      bool checkTriPatch4Start7( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
+      bool checkTriPatch4Start7( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
                                , const std::vector<unsigned int> & faceConnections
                                , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] )
       {
@@ -1037,7 +1037,7 @@ namespace dp
         return( ok );
       }
 
-      bool checkTriPatch4Start8i( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi8, unsigned int ei86
+      bool checkTriPatch4Start8i( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi8, unsigned int ei86
                                 , const std::vector<unsigned int> & faceConnections
                                 , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] )
       {
@@ -1052,7 +1052,7 @@ namespace dp
         return( ok );
       }
 
-      bool checkTriPatch4Start8( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
+      bool checkTriPatch4Start8( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
                                , const std::vector<unsigned int> & faceConnections
                                , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] )
       {
@@ -1064,7 +1064,7 @@ namespace dp
         return( ok );
       }
 
-      bool FaceConnections::findTriPatch4( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
+      bool FaceConnections::findTriPatch4( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
                                          , std::vector<unsigned int> & patchIndices, unsigned int patchFaces[9] )
       {
         DP_ASSERT( m_faceSets.size() == 4 );
@@ -1079,7 +1079,7 @@ namespace dp
               ||  checkTriPatch4Start8( indices, fi, m_faceConnections, patchIndices, patchFaces ) );
       }
 
-      unsigned int FaceConnections::getAndClearZeroConnectionIndices( IndexSet::ConstIterator<unsigned int> & allIndices
+      unsigned int FaceConnections::getAndClearZeroConnectionIndices( dp::sg::core::IndexSet::ConstIterator<unsigned int> & allIndices
                                                                     , std::vector<unsigned int> & zeroIndices )
       {
         // get the zero-list faces and clear the zero-list
@@ -1122,7 +1122,7 @@ namespace dp
       }
 
 
-      void FaceConnections::connectFaces( IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
+      void FaceConnections::connectFaces( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi
                                         , unsigned int ps, unsigned int i0, unsigned int i1
                                         , const std::vector<std::list<unsigned int> > & verticesToFaceLists )
       {

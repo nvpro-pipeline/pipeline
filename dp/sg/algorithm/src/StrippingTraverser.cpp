@@ -29,20 +29,10 @@
 #include <valarray>
 #pragma pop_macro("free")
 
-#include <dp/sg/core/FaceConnections.h>
+#include <dp/sg/algorithm/FaceConnections.h>
+#include <dp/sg/algorithm/StrippingTraverser.h>
 #include <dp/sg/core/GeoNode.h>
 #include <dp/sg/core/Primitive.h>
-#include <dp/sg/algorithm/StrippingTraverser.h>
-
-using namespace dp::util;
-using namespace dp::sg::core;
-
-using std::valarray;
-using std::map;
-using std::list;
-using std::set;
-using std::vector;
-using std::pair;
 
 namespace dp
 {
@@ -59,7 +49,7 @@ namespace dp
       {
       }
 
-      void StrippingTraverser::handleGeoNode( GeoNode * p )
+      void StrippingTraverser::handleGeoNode( dp::sg::core::GeoNode * p )
       {
         DP_ASSERT( !m_strip );
         ExclusiveTraverser::handleGeoNode( p );
@@ -71,38 +61,38 @@ namespace dp
         }
       }
 
-      void StrippingTraverser::handlePrimitive( Primitive * p )
+      void StrippingTraverser::handlePrimitive( dp::sg::core::Primitive * p )
       {
         ExclusiveTraverser::handlePrimitive( p );
-        if ( optimizationAllowed( p->getSharedPtr<Primitive>() ) )
+        if ( optimizationAllowed( p->getSharedPtr<dp::sg::core::Primitive>() ) )
         {
           switch( p->getPrimitiveType() )
           {
-            case PRIMITIVE_TRIANGLES :
-            case PRIMITIVE_QUADS :
+            case dp::sg::core::PRIMITIVE_TRIANGLES :
+            case dp::sg::core::PRIMITIVE_QUADS :
               changeToStrips( p );
               break;
-            case PRIMITIVE_LINES :                // might to be added, as needed
-            case PRIMITIVE_TRIANGLES_ADJACENCY :  // might to be added, as needed
-            case PRIMITIVE_LINE_STRIP_ADJACENCY : // might to be added, as needed
+            case dp::sg::core::PRIMITIVE_LINES :                // might to be added, as needed
+            case dp::sg::core::PRIMITIVE_TRIANGLES_ADJACENCY :  // might to be added, as needed
+            case dp::sg::core::PRIMITIVE_LINE_STRIP_ADJACENCY : // might to be added, as needed
             default:
               break;
           }
         }
       }
 
-      void StrippingTraverser::changeToStrips( Primitive * p )
+      void StrippingTraverser::changeToStrips( dp::sg::core::Primitive * p )
       {
-        DP_ASSERT(    ( p->getPrimitiveType() == PRIMITIVE_TRIANGLES )
-                    ||  ( p->getPrimitiveType() == PRIMITIVE_QUADS ) );
+        DP_ASSERT(    ( p->getPrimitiveType() == dp::sg::core::PRIMITIVE_TRIANGLES )
+                  ||  ( p->getPrimitiveType() == dp::sg::core::PRIMITIVE_QUADS ) );
 
         unsigned int vpp = p->getNumberOfVerticesPerPrimitive();
         DP_ASSERT( ( vpp == 3 ) || ( vpp == 4 ) );
 
         DP_ASSERT( !m_strip );
-        m_strip = Primitive::create( ( vpp == 3 ) ? PRIMITIVE_TRIANGLE_STRIP : PRIMITIVE_QUAD_STRIP );
+        m_strip = dp::sg::core::Primitive::create( ( vpp == 3 ) ? dp::sg::core::PRIMITIVE_TRIANGLE_STRIP : dp::sg::core::PRIMITIVE_QUAD_STRIP );
 
-        *((Object*)m_strip.getWeakPtr()) = *p;    // copy all but the Primitive itself
+        *((dp::sg::core::Object*)m_strip.getWeakPtr()) = *p;    // copy all but the Primitive itself
         //m_strip->setName( p->getName() );
         //m_strip->setAnnotation( p->getAnnotation() );
         //m_strip->setHints( p->getHints() );
@@ -118,16 +108,16 @@ namespace dp
 
         m_strip->makeIndexed();
 
-        vector<unsigned int> strippedIndices;
-        vector<unsigned int> nonStrippedIndices;
+        std::vector<unsigned int> strippedIndices;
+        std::vector<unsigned int> nonStrippedIndices;
         FaceConnections fc( p );
         {
           // get the indices (using the offset of p)
-          IndexSet::ConstIterator<unsigned int> indices( m_strip->getIndexSet(), p->getElementOffset() );
+          dp::sg::core::IndexSet::ConstIterator<unsigned int> indices( m_strip->getIndexSet(), p->getElementOffset() );
 
           for ( unsigned int fi = fc.getNextFaceIndex() ; fi != ~0 ; fi = fc.getNextFaceIndex() )
           {
-            list<unsigned int> stripFaces;
+            std::list<unsigned int> stripFaces;
             unsigned int length = ( vpp == 3 ) ? fc.findLongestTriStrip( indices, fi, strippedIndices, stripFaces )
                                                 : fc.findLongestQuadStrip( indices, fi, strippedIndices, stripFaces );
             fc.disconnectFaces( stripFaces );
@@ -156,19 +146,19 @@ namespace dp
         }
         strippedIndices.pop_back();      // remove the last pri again
 
-        IndexSetSharedPtr strippedIndexSet = IndexSet::create();
-        *((Object*)strippedIndexSet.getWeakPtr()) = *(m_strip->getIndexSet().getWeakPtr());
-        strippedIndexSet->setData( &strippedIndices[0], checked_cast<unsigned int>(strippedIndices.size()) );
+        dp::sg::core::IndexSetSharedPtr strippedIndexSet = dp::sg::core::IndexSet::create();
+        *((dp::sg::core::Object*)strippedIndexSet.getWeakPtr()) = *(m_strip->getIndexSet().getWeakPtr());
+        strippedIndexSet->setData( &strippedIndices[0], dp::util::checked_cast<unsigned int>(strippedIndices.size()) );
         strippedIndexSet->setPrimitiveRestartIndex( ~0 );
 
         m_strip->setIndexSet( strippedIndexSet );
       }
 
-      bool StrippingTraverser::optimizationAllowed( ObjectSharedPtr const& obj )
+      bool StrippingTraverser::optimizationAllowed( dp::sg::core::ObjectSharedPtr const& obj )
       {
         DP_ASSERT( obj != NULL );
 
-        return (obj->getHints( Object::DP_SG_HINT_DYNAMIC ) == 0);
+        return (obj->getHints( dp::sg::core::Object::DP_SG_HINT_DYNAMIC ) == 0);
       }
 
     } // namespace algorithm
