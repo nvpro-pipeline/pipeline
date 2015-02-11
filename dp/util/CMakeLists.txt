@@ -51,10 +51,6 @@ add_definitions("-DDP_UTIL_USE_BOOST")
 
 source_group(headers FILES ${DPUTIL_INCLUDES})
 
-set(DPUTIL_UI_INCLUDES
-  ui/RenderTarget.h
-)
-
 source_group(headers/ui FILES ${DPUTIL_UI_INCLUDES})
 
 set(DPUTIL_GENERATOR_INCLUDES
@@ -89,10 +85,6 @@ set(DPUTIL_SOURCES
 
 source_group(sources FILES ${DPUTIL_SOURCES})
 
-
-set(DPUTIL_UI_SOURCES
-  ui/src/RenderTarget.cpp
-)
 
 source_group(sources/ui FILES ${DPUTIL_UI_SOURCES})
 

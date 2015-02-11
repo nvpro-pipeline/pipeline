@@ -14,6 +14,7 @@ set(SOURCES
   src/DeindexTraverser.cpp
   src/DestrippingTraverser.cpp
   src/EliminateTraverser.cpp
+  src/FaceConnections.cpp
   src/IdentityToGroupTraverser.cpp
   src/IndexTraverser.cpp
   src/Intersect.cpp
@@ -41,11 +42,11 @@ set(PUBLIC_HEADERS
   Config.h
   AnalyzeTraverser.h
   AppTraverser.h
-  ClipPlanesElement.h
   CombineTraverser.h
   DeindexTraverser.h
   DestrippingTraverser.h
   EliminateTraverser.h
+  FaceConnections.h
   IdentityToGroupTraverser.h
   IndexTraverser.h
   Intersect.h
