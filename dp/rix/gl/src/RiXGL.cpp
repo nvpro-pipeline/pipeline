@@ -30,8 +30,6 @@
 #include <cassert>
 #include <cstdlib>
 #include <cstring>
-#include "Vector.h"
-#include "Matrix.h"
 #include "RenderGroupGL.h"
 #include "BufferGL.h"
 #include "ContainerGL.h"
