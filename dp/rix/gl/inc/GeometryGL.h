@@ -27,7 +27,6 @@
 #pragma once
 
 #include <dp/rix/gl/RiXGL.h>
-#include "Vector.h"
 
 #include "VertexAttributesGL.h"
 #include "IndicesGL.h"
@@ -60,12 +59,6 @@ namespace dp
 
         void setGeometryDescription( GeometryDescriptionGLSharedHandle const & geometryDescription );
         GeometryDescriptionGLSharedHandle const & getGeometryDescription() const { return m_geometryDescription; }
-
-        /****************/
-        /* VBO Storage **/
-        /****************/
-        Vec4f m_boundingBoxLower;
-        Vec4f m_boundingBoxExtends;
 
       protected:
         GeometryDescriptionGLSharedHandle   m_geometryDescription;

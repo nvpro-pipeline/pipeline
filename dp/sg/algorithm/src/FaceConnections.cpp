@@ -40,7 +40,7 @@ namespace dp
         , m_faceSets(p->getNumberOfVerticesPerPrimitive()+1)
       {
         DP_ASSERT( ( p->getPrimitiveType() == dp::sg::core::PRIMITIVE_TRIANGLES )
-                  || ( p->getPrimitiveType() == dp::sg::core::PRIMITIVE_QUADS ) );
+                || ( p->getPrimitiveType() == dp::sg::core::PRIMITIVE_QUADS ) );
 
         unsigned int elementCount = p->getElementCount();
         unsigned int primitiveSize = p->getNumberOfVerticesPerPrimitive();
@@ -1155,6 +1155,6 @@ namespace dp
         }
       }
 
-    } // namespace core
+    } // namespace algorithm
   } // namespace sg
 } // namespace dp

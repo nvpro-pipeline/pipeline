@@ -25,7 +25,6 @@ set( SOURCES
   src/GeometryGL.cpp
   src/GeometryInstanceGL.cpp
   src/IndicesGL.cpp
-  src/Matrix.cpp
   src/ParameterCacheStream.cpp
   src/ParameterCacheEntryStream.cpp
   src/ParameterCacheEntryStreamBuffer.cpp
@@ -76,7 +75,6 @@ set(HEADERS
   inc/GeometryGL.h
   inc/GeometryInstanceGL.h
   inc/IndicesGL.h
-  inc/Matrix.h
   inc/ProgramGL.h
   inc/ParameterCache.h
   inc/ParameterCacheStream.h
@@ -118,7 +116,6 @@ set(HEADERS
   inc/TextureGL3D.h
   inc/TextureGLCubeMap.h
   inc/TextureGLCubeMapArray.h
-  inc/Vector.h
   inc/VertexAttributesGL.h
   inc/VertexCacheGL.h
   inc/VertexDataGL.h
