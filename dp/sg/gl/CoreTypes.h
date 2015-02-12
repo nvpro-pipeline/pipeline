@@ -36,18 +36,6 @@ namespace dp
     {
       DEFINE_PTR_TYPES( BufferGL );
       DEFINE_PTR_TYPES( TextureGL );
-
-      DEFINE_PTR_TYPES( TextureGL1D );
-      DEFINE_PTR_TYPES( TextureGL2D );
-      DEFINE_PTR_TYPES( TextureGLRectangle );
-      DEFINE_PTR_TYPES( TextureGL3D );
-      DEFINE_PTR_TYPES( TextureGLCubemap );
-      DEFINE_PTR_TYPES( TextureGL1DArray );
-      DEFINE_PTR_TYPES( TextureGL2DArray );
-      DEFINE_PTR_TYPES( TextureGLCubemapArray );
-      DEFINE_PTR_TYPES( TextureGLBuffer );
-      DEFINE_PTR_TYPES( TextureGL2DMultisample );
-      DEFINE_PTR_TYPES( TextureGL2DMultisampleArray );
     } // namespace gl
   } // namespace sg
 } // namespace dp
