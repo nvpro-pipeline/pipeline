@@ -31,8 +31,6 @@
 #include <boost/preprocessor/stringize.hpp>
 
 //! A string define serving for version safty
-#define UPITID_STRING_HELPER(x) #x
-#define UPITID_STRING(x) UPITID_STRING_HELPER(x)
 #define UPITID_VERSION        "dp_" BOOST_PP_STRINGIZE(DP_VER_MAJOR) "." BOOST_PP_STRINGIZE(DP_VER_MINOR)
 
 #define UPITID_SCENE_LOADER   0x0001    //!<  Unique Plug-In Type ID for Scene loaders
