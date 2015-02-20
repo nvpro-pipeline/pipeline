@@ -55,13 +55,13 @@ namespace dp
         virtual size_t getCacheSize() const;
 
       protected:
-        ParameterCacheEntryStreamBuffers       m_parameters;
-        GLenum                                 m_target;
-        GLuint                                 m_ubo;
-        GLint                                  m_uboBinding;
-        GLsizeiptr                             m_uboBlockSize;
-        std::unique_ptr<dp::util::Uint8[]>     m_cacheData;
-        std::unique_ptr<dp::gl::BufferUpdater> m_bufferUpdater;
+        ParameterCacheEntryStreamBuffers        m_parameters;
+        GLenum                                  m_target;
+        GLuint                                  m_ubo;
+        GLint                                   m_uboBinding;
+        GLsizeiptr                              m_uboBlockSize;
+        std::unique_ptr<dp::Uint8[]>            m_cacheData;
+        std::unique_ptr<dp::gl::BufferUpdater>  m_bufferUpdater;
       };
 
     } // namespace gl

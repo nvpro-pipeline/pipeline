@@ -29,7 +29,6 @@
 
 #include <dp/util/Image.h>
 #include <dp/util/SharedPtr.h>
-#include <dp/util/Types.h>
 
 #include <test/rix/core/framework/RiXBackend.h>
 #include <test/rix/core/helpers/GeometryHelper.h>
@@ -136,10 +135,10 @@ bool Feature_FBO::onClear()
 {
   if(m_screenshotFBO)
   {
-    dp::util::ImageSharedPtr fboColorShot = m_fbo->getImage(dp::util::PF_RGBA, dp::util::DT_UNSIGNED_INT_8);
+    dp::util::ImageSharedPtr fboColorShot = m_fbo->getImage(dp::PF_RGBA, dp::DT_UNSIGNED_INT_8);
     dp::util::imageToFile(fboColorShot, std::string(CURRENT_MODULE_DIR) + "/feature_FBO/color" + m_screenshotFBOName + ".png" );
 
-    dp::util::ImageSharedPtr fboDepth = dp::rix::util::getEyeZFromDepthBuffer( m_fbo->getImage(util::PF_DEPTH_COMPONENT, util::DT_FLOAT_32), m_nearPlane, m_farPlane );
+    dp::util::ImageSharedPtr fboDepth = dp::rix::util::getEyeZFromDepthBuffer( m_fbo->getImage(dp::PF_DEPTH_COMPONENT, dp::DT_FLOAT_32), m_nearPlane, m_farPlane );
     dp::util::imageToFile(fboDepth, std::string(CURRENT_MODULE_DIR) + "/feature_FBO/depth_" + m_screenshotFBOName + ".png" );
   }
 
@@ -467,7 +466,7 @@ void Feature_FBO::createScene()
 
   SamplerStateDataCommon samplerStateDataCommon( SSFM_NEAREST, SSFM_NEAREST );
   SamplerStateSharedHandle samplerStateHandle = m_rix->samplerStateCreate(samplerStateDataCommon);
-  TextureSharedHandle diffuseMap = dp::rix::util::generateTexture( m_rix, dp::util::generator::createTextureGradient( Vec2ui(128, 128), Vec4f(1.0, 0.0f, 0.0f, 1.0), Vec4f(0.0, 1.0f, 0.0f, 1.0), Vec4f(0.0, 0.0f, 1.0f, 1.0) ), dp::util::PF_RGBA, dp::util::DT_UNSIGNED_INT_32, ITF_RGBA8 );
+  TextureSharedHandle diffuseMap = dp::rix::util::generateTexture( m_rix, dp::util::generator::createTextureGradient( Vec2ui(128, 128), Vec4f(1.0, 0.0f, 0.0f, 1.0), Vec4f(0.0, 1.0f, 0.0f, 1.0), Vec4f(0.0, 0.0f, 1.0f, 1.0) ), dp::PF_RGBA, dp::DT_UNSIGNED_INT_32, ITF_RGBA8 );
 
 
   // Set Container Data
@@ -654,7 +653,7 @@ void Feature_FBO::createSecondPass()
   //Make a native GL texture for our FBO attachment
   TextureSharedHandle textureFBO;
   {
-    TextureDescription textureDescription( TT_2D, ITF_RGBA32F, dp::util::PF_RGBA, dp::util::DT_FLOAT_32, 2*m_width, 2*m_height );
+    TextureDescription textureDescription( TT_2D, ITF_RGBA32F, dp::PF_RGBA, dp::DT_FLOAT_32, 2*m_width, 2*m_height );
     textureFBO = m_rix->textureCreate( textureDescription );
 
     m_colorBuf = gl::Texture2D::create( GL_RGBA32F, GL_RGBA, GL_UNSIGNED_BYTE, 2*m_width, 2*m_height );

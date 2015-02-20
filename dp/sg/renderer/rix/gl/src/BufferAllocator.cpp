@@ -113,7 +113,7 @@ namespace dp
                             unsigned int stride = offset;
                             size_t numberOfVertices = vertexAttributeSet->getNumberOfVertexData(sourceAttributes.front());
 
-                            std::vector<dp::util::Uint8> vertices(numberOfVertices * stride);
+                            std::vector<dp::Uint8> vertices(numberOfVertices * stride);
                             for (size_t index = 0;index < sourceAttributes.size();++index) {
                                 dp::sg::core::VertexAttribute const & va = vertexAttributeSet->getVertexAttribute(sourceAttributes[index]);
 
@@ -204,7 +204,7 @@ namespace dp
                         return offset;
                     }
 
-                    size_t BufferAllocator::allocateIndices(dp::rix::core::Renderer *renderer, dp::util::DataType dataType, size_t numElements, dp::rix::core::IndicesSharedHandle &indices, dp::rix::core::BufferSharedHandle &buffer)
+                    size_t BufferAllocator::allocateIndices(dp::rix::core::Renderer *renderer, dp::DataType dataType, size_t numElements, dp::rix::core::IndicesSharedHandle &indices, dp::rix::core::BufferSharedHandle &buffer)
                     {
                         IndicesInfos::iterator it = m_indicesInfos.find(dataType);
                         if (it == m_indicesInfos.end()) {

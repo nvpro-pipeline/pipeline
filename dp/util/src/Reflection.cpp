@@ -25,8 +25,8 @@
 
 
 #include <iostream>
+#include <dp/Types.h>
 #include <dp/util/Reflection.h>
-#include <dp/util/Types.h>
 
 namespace dp
 {
@@ -83,7 +83,7 @@ namespace dp
 
     unsigned int PropertyListImpl::getPropertyCount() const
     {
-      return checked_cast<unsigned int>(m_propertyVector.size());
+      return dp::checked_cast<unsigned int>(m_propertyVector.size());
     }
 
     PropertyId PropertyListImpl::getProperty(unsigned int index) const

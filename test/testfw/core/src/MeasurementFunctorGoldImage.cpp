@@ -143,7 +143,7 @@ namespace dp
 
         const std::string& name = getCurTestName();
 
-        unsigned int nShots = dp::util::checked_cast<unsigned int>(m_screenshots.size());
+        unsigned int nShots = dp::checked_cast<unsigned int>(m_screenshots.size());
         for(unsigned int i = 0; i < nShots; i++)
         {
           std::string goldImageName(m_filenamePrefix + name + "_" + getTest()->getDescriptionOnRunInit(i) + m_filenameSuffix + util::to_string(".png"));

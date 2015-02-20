@@ -249,7 +249,7 @@ namespace dp
         return new IndicesGL();
       }
 
-      void RiXGL::indicesSetData( dp::rix::core::IndicesSharedHandle const & handle, dp::util::DataType dataType, dp::rix::core::BufferSharedHandle const & bufferHandle, size_t offset, size_t count )
+      void RiXGL::indicesSetData( dp::rix::core::IndicesSharedHandle const & handle, dp::DataType dataType, dp::rix::core::BufferSharedHandle const & bufferHandle, size_t offset, size_t count )
       {
         DP_ASSERT(dp::rix::core::handleIsTypeOf<IndicesGL>( handle ));
         DP_ASSERT(dp::rix::core::handleIsTypeOf<BufferGL>( bufferHandle ));
@@ -569,7 +569,7 @@ namespace dp
           m_containerFreeIDs.resize( m_containerFreeIDs.getSize() + 65536, true);
         }
         m_containerFreeIDs.disableBit(freeID);
-        return dp::util::checked_cast<ID>(freeID);
+        return dp::checked_cast<ID>(freeID);
       }
 
       void RiXGL::releaseUniqueContainerID(ID uniqueId)

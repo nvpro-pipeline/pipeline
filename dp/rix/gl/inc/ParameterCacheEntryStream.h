@@ -50,10 +50,10 @@ namespace dp
         ParameterCacheEntryStream( size_t cacheOffset, size_t containerOffset, size_t arraySize, size_t size );
 
       protected:
-        dp::util::Uint32 m_arraySize;
-        size_t m_cacheOffset;
-        size_t m_containerOffset;
-        size_t m_size;
+        dp::Uint32  m_arraySize;
+        size_t      m_cacheOffset;
+        size_t      m_containerOffset;
+        size_t      m_size;
       };
 
       typedef std::vector<ParameterCacheEntryStreamSharedPtr> ParameterCacheEntryStreams;

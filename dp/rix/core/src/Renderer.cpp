@@ -26,8 +26,6 @@
 
 #include <dp/rix/core/RiX.h>
 
-#include <dp/util/Types.h>
-
 #include <iostream>
 
 namespace dp
@@ -51,7 +49,7 @@ namespace dp
       }
 
       TextureDescription::TextureDescription( TextureType type, InternalTextureFormat internalFormat,
-                                              dp::util::PixelFormat pixelFormat, dp::util::DataType dataType,
+                                              dp::PixelFormat pixelFormat, dp::DataType dataType,
                                               size_t width /*= 0*/, size_t height /*= 0*/, size_t depth /*= 0*/, 
                                               size_t layers /*= 0*/, bool mipmaps /*= false */ )
         : m_type( type )
@@ -85,7 +83,7 @@ namespace dp
       {
       }
 
-      TextureDataPtr::TextureDataPtr( void const * data, dp::util::PixelFormat pixelFormat, dp::util::DataType pixelDataType )
+      TextureDataPtr::TextureDataPtr( void const * data, dp::PixelFormat pixelFormat, dp::DataType pixelDataType )
         : TextureData( TDT_POINTER )
         , m_pData( data )
         , m_data( &m_pData )
@@ -96,7 +94,7 @@ namespace dp
       {
       }
 
-      TextureDataPtr::TextureDataPtr( void const * const * data, unsigned int numMipMapLevels, dp::util::PixelFormat pixelFormat, dp::util::DataType pixelDataType )
+      TextureDataPtr::TextureDataPtr( void const * const * data, unsigned int numMipMapLevels, dp::PixelFormat pixelFormat, dp::DataType pixelDataType )
         : TextureData( TDT_POINTER )
         , m_pData( nullptr )
         , m_data( data )
@@ -107,7 +105,7 @@ namespace dp
       {
       }
 
-      TextureDataPtr::TextureDataPtr( void const * const * data, unsigned int numMipMapLevels, unsigned int numLayers, dp::util::PixelFormat pixelFormat, dp::util::DataType pixelDataType )
+      TextureDataPtr::TextureDataPtr( void const * const * data, unsigned int numMipMapLevels, unsigned int numLayers, dp::PixelFormat pixelFormat, dp::DataType pixelDataType )
         : TextureData( TDT_POINTER )
         , m_pData( nullptr )
         , m_data( data )

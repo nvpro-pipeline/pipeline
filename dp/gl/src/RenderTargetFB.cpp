@@ -79,8 +79,8 @@ namespace dp
       RenderTarget::makeNoncurrent();
     }
 
-    dp::util::ImageSharedPtr RenderTargetFB::getImage( dp::util::PixelFormat pixelFormat
-                                                     , dp::util::DataType pixelDataType
+    dp::util::ImageSharedPtr RenderTargetFB::getImage( dp::PixelFormat pixelFormat
+                                                     , dp::DataType pixelDataType
                                                      , unsigned int index )
     {
       if (! m_stereoEnabled )

@@ -107,7 +107,7 @@ namespace dp
 
     inline unsigned int EffectSpec::getNumberOfParameterGroupSpecs() const
     {
-      return( dp::util::checked_cast<unsigned int>( m_specs.size() ) );
+      return( dp::checked_cast<unsigned int>( m_specs.size() ) );
     }
 
     inline EffectSpec::iterator EffectSpec::beginParameterGroupSpecs() const

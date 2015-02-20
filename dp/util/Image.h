@@ -26,9 +26,8 @@
 
 #pragma once
 
-#include <dp/util/Config.h>
+#include <dp/Types.h>
 #include <dp/util/SharedPtr.h>
-#include <dp/util/Types.h>
 #include <boost/shared_array.hpp>
 #include <string>
 #include <vector>

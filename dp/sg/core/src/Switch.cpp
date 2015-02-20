@@ -231,7 +231,7 @@ namespace dp
 
       unsigned int  Switch::getNumberOfActive() const
       {
-        return( checked_cast<unsigned int>(activeMask().size()) );
+        return( dp::checked_cast<unsigned int>(activeMask().size()) );
       }
 
       unsigned int Switch::getActive( vector<unsigned int>& indices ) const
@@ -241,7 +241,7 @@ namespace dp
         const SwitchMask & aMask = activeMask();
 
         copy(aMask.begin(), aMask.end(), inserter(indices, indices.begin()));
-        return( checked_cast<unsigned int>(indices.size()) );
+        return( dp::checked_cast<unsigned int>(indices.size()) );
       }
 
       bool Switch::isActive() const
@@ -461,7 +461,7 @@ namespace dp
 
       unsigned int Switch::getNumberOfMasks() const 
       { 
-        return( checked_cast<unsigned int>(m_masks.size()) ); 
+        return( dp::checked_cast<unsigned int>(m_masks.size()) ); 
       }
 
       Switch::MaskIterator 

@@ -27,7 +27,6 @@
 #include <dp/fx/ParameterConversion.h>
 #include <dp/fx/ParameterSpec.h>
 #include <dp/util/Tokenizer.h>
-#include <dp/util/Types.h>
 
 using namespace dp::util;
 using std::max;
@@ -81,40 +80,40 @@ namespace dp
           switch( type & PT_SCALAR_TYPE_MASK )
           {
           case PT_BOOL:
-            convert( count, inputStream, static_cast<dp::util::Bool*>(value) );
+            convert( count, inputStream, static_cast<dp::Bool*>(value) );
             break;
           case PT_ENUM:
             DP_ASSERT( false );    // enums are handled by a separate function!
             break;
           case PT_INT8:
-            convert( count, inputStream, static_cast<dp::util::Int8*>(value) );
+            convert( count, inputStream, static_cast<dp::Int8*>(value) );
             break;
           case PT_UINT8:
-            convert( count, inputStream, static_cast<dp::util::Uint8*>(value) );
+            convert( count, inputStream, static_cast<dp::Uint8*>(value) );
             break;
           case PT_INT16:
-            convert( count, inputStream, static_cast<dp::util::Int16*>(value) );
+            convert( count, inputStream, static_cast<dp::Int16*>(value) );
             break;
           case PT_UINT16:
-            convert( count, inputStream, static_cast<dp::util::Uint16*>(value) );
+            convert( count, inputStream, static_cast<dp::Uint16*>(value) );
             break;
           case PT_FLOAT32:
-            convert( count, inputStream, static_cast<dp::util::Float32*>(value) );
+            convert( count, inputStream, static_cast<dp::Float32*>(value) );
             break;
           case PT_INT32:
-            convert( count, inputStream, static_cast<dp::util::Int32*>(value) );
+            convert( count, inputStream, static_cast<dp::Int32*>(value) );
             break;
           case PT_UINT32:
-            convert( count, inputStream, static_cast<dp::util::Uint32*>(value) );
+            convert( count, inputStream, static_cast<dp::Uint32*>(value) );
             break;
           case PT_FLOAT64:
-            convert( count, inputStream, static_cast<dp::util::Float64*>(value) );
+            convert( count, inputStream, static_cast<dp::Float64*>(value) );
             break;
           case PT_INT64:
-            convert( count, inputStream, static_cast<dp::util::Int64*>(value) );
+            convert( count, inputStream, static_cast<dp::Int64*>(value) );
             break;
           case PT_UINT64:
-            convert( count, inputStream, static_cast<dp::util::Uint64*>(value) );
+            convert( count, inputStream, static_cast<dp::Uint64*>(value) );
             break;
           }
         }
@@ -173,40 +172,40 @@ namespace dp
           switch( type & PT_SCALAR_TYPE_MASK )
           {
           case PT_BOOL:
-            convert( count, reinterpret_cast<dp::util::Bool const*>(value), outputStream );
+            convert( count, reinterpret_cast<dp::Bool const*>(value), outputStream );
             break;
           case PT_ENUM:
             DP_ASSERT( false );    // enums are handled by a separate function!
             break;
           case PT_INT8:
-            convert( count, reinterpret_cast<dp::util::Int8 const*>(value), outputStream );
+            convert( count, reinterpret_cast<dp::Int8 const*>(value), outputStream );
             break;
           case PT_UINT8:
-            convert( count, reinterpret_cast<dp::util::Uint8 const*>(value), outputStream );
+            convert( count, reinterpret_cast<dp::Uint8 const*>(value), outputStream );
             break;
           case PT_INT16:
-            convert( count, reinterpret_cast<dp::util::Int16 const*>(value), outputStream );
+            convert( count, reinterpret_cast<dp::Int16 const*>(value), outputStream );
             break;
           case PT_UINT16:
-            convert( count, reinterpret_cast<dp::util::Uint16 const*>(value), outputStream );
+            convert( count, reinterpret_cast<dp::Uint16 const*>(value), outputStream );
             break;
           case PT_FLOAT32:
-            convert( count, reinterpret_cast<dp::util::Float32 const*>(value), outputStream );
+            convert( count, reinterpret_cast<dp::Float32 const*>(value), outputStream );
             break;
           case PT_INT32:
-            convert( count, reinterpret_cast<dp::util::Int32 const*>(value), outputStream );
+            convert( count, reinterpret_cast<dp::Int32 const*>(value), outputStream );
             break;
           case PT_UINT32:
-            convert( count, reinterpret_cast<dp::util::Uint32 const*>(value), outputStream );
+            convert( count, reinterpret_cast<dp::Uint32 const*>(value), outputStream );
             break;
           case PT_FLOAT64:
-            convert( count, reinterpret_cast<dp::util::Float64 const*>(value), outputStream );
+            convert( count, reinterpret_cast<dp::Float64 const*>(value), outputStream );
             break;
           case PT_INT64:
-            convert( count, reinterpret_cast<dp::util::Int64 const*>(value), outputStream );
+            convert( count, reinterpret_cast<dp::Int64 const*>(value), outputStream );
             break;
           case PT_UINT64:
-            convert( count, reinterpret_cast<dp::util::Uint64 const*>(value), outputStream );
+            convert( count, reinterpret_cast<dp::Uint64 const*>(value), outputStream );
             break;
           }
         }

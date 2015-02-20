@@ -107,9 +107,9 @@ bool CSFSaver::save( dp::sg::core::SceneSharedPtr const& scene, dp::sg::ui::View
   // to reduce amount of geometries
 
   file.hasUniqueNodes = 1;
-  file.numGeometries = checked_cast<int>(sgGeometries.size());
-  file.numMaterials = checked_cast<int>(sgMaterials.size());
-  file.numNodes = checked_cast<int>(sgNodes.size());
+  file.numGeometries = dp::checked_cast<int>(sgGeometries.size());
+  file.numMaterials = dp::checked_cast<int>(sgMaterials.size());
+  file.numNodes = dp::checked_cast<int>(sgNodes.size());
   file.rootIDX = 0;
 
   if (!file.numGeometries || !file.numMaterials || !file.numNodes)
@@ -137,10 +137,10 @@ bool CSFSaver::save( dp::sg::core::SceneSharedPtr const& scene, dp::sg::ui::View
       geometries[i].matrix[j * 4 + j] = 1.0f;
     }
 
-    geometries[i].numIndexSolid = checked_cast<int>(it->indices.size());
+    geometries[i].numIndexSolid = dp::checked_cast<int>(it->indices.size());
     geometries[i].numIndexWire = 0;
-    geometries[i].numVertices = checked_cast<int>(it->vertices.size());
-    geometries[i].numParts = checked_cast<int>(it->parts.size());
+    geometries[i].numVertices = dp::checked_cast<int>(it->vertices.size());
+    geometries[i].numParts = dp::checked_cast<int>(it->parts.size());
 
     geometries[i].parts = it->parts.size() ? &it->parts[0] : nullptr;
 
@@ -171,7 +171,7 @@ bool CSFSaver::save( dp::sg::core::SceneSharedPtr const& scene, dp::sg::ui::View
   i = 0;
   for(vector<CSFSGNode>::iterator it = sgNodes.begin(); it != sgNodes.end(); i++, it++)
   {
-    nodes[i].numChildren = checked_cast<int>(it->children.size());
+    nodes[i].numChildren = dp::checked_cast<int>(it->children.size());
     nodes[i].children = it->children.size() ? &it->children[0] : nullptr;
     nodes[i].geometryIDX = it->geometryIDX;
     nodes[i].parts = nullptr;
@@ -179,7 +179,7 @@ bool CSFSaver::save( dp::sg::core::SceneSharedPtr const& scene, dp::sg::ui::View
     if(nodes[i].geometryIDX != -1)
     {
       CSFSGGeometry& geometry = sgGeometries[it->geometryIDX];
-      nodes[i].numParts = checked_cast<int>( geometry.parts.size() );
+      nodes[i].numParts = dp::checked_cast<int>( geometry.parts.size() );
 
       // because geometries get primitives added in a deferred fashion
       // this object might reference geometry which in the end has more parts

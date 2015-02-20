@@ -26,7 +26,6 @@
 
 #include <dp/sg/core/CoreTypes.h>
 #include <dp/sg/core/IndexSet.h>
-#include <dp/util/Types.h>
 #include <dp/sg/core/BufferHost.h>
 
 namespace dp
@@ -51,7 +50,7 @@ namespace dp
       }
 
       IndexSet::IndexSet()
-      : m_dataType( dp::util::DT_UNSIGNED_INT_32 )
+      : m_dataType( dp::DT_UNSIGNED_INT_32 )
       , m_primitiveRestartIndex(~0)
       , m_numberOfIndices(0)
       {
@@ -101,9 +100,9 @@ namespace dp
         return( *this );
       }
 
-      void IndexSet::setIndexDataType( dp::util::DataType type )
+      void IndexSet::setIndexDataType( dp::DataType type )
       {
-        DP_ASSERT( (type == dp::util::DT_UNSIGNED_INT_32) || (type == dp::util::DT_UNSIGNED_INT_16) || (type == dp::util::DT_UNSIGNED_INT_8) );
+        DP_ASSERT( (type == dp::DT_UNSIGNED_INT_32) || (type == dp::DT_UNSIGNED_INT_16) || (type == dp::DT_UNSIGNED_INT_8) );
         if ( m_dataType != type )
         {
           m_dataType = type;
@@ -122,7 +121,7 @@ namespace dp
 
       void IndexSet::copyDataToBuffer( const void * ptr, unsigned int count )
       {
-        size_t typeScale = dp::util::getSizeOf( m_dataType );
+        size_t typeScale = dp::getSizeOf( m_dataType );
 
         if( m_buffer == 0 )
         {
@@ -140,7 +139,7 @@ namespace dp
         }
       }
 
-      void IndexSet::setData( const void * indices, unsigned int count, dp::util::DataType dataType, unsigned int primitiveRestartIndex )
+      void IndexSet::setData( const void * indices, unsigned int count, dp::DataType dataType, unsigned int primitiveRestartIndex )
       {
         setIndexDataType( dataType );
 
@@ -152,17 +151,17 @@ namespace dp
 
       void IndexSet::setData( const unsigned int   * indices, unsigned int count, unsigned int primitiveRestartIndex )
       {
-        setData( indices, count, dp::util::DT_UNSIGNED_INT_32, primitiveRestartIndex );
+        setData( indices, count, dp::DT_UNSIGNED_INT_32, primitiveRestartIndex );
       }
 
       void IndexSet::setData( const unsigned short * indices, unsigned int count, unsigned int primitiveRestartIndex )
       {
-        setData( indices, count, dp::util::DT_UNSIGNED_INT_16, primitiveRestartIndex );
+        setData( indices, count, dp::DT_UNSIGNED_INT_16, primitiveRestartIndex );
       }
 
       void IndexSet::setData( const unsigned char  * indices, unsigned int count, unsigned int primitiveRestartIndex )
       {
-        setData( indices, count, dp::util::DT_UNSIGNED_INT_8, primitiveRestartIndex );
+        setData( indices, count, dp::DT_UNSIGNED_INT_8, primitiveRestartIndex );
       }
 
       bool IndexSet::getData( void * destination ) const
@@ -173,7 +172,7 @@ namespace dp
 
         if( m_buffer )
         {
-          size_t sizeInBytes = ( m_dataType == dp::util::DT_UNSIGNED_INT_32 ? 4 : m_dataType == dp::util::DT_UNSIGNED_INT_16 ? 2 : 1 ) * getNumberOfIndices();
+          size_t sizeInBytes = ( m_dataType == dp::DT_UNSIGNED_INT_32 ? 4 : m_dataType == dp::DT_UNSIGNED_INT_16 ? 2 : 1 ) * getNumberOfIndices();
 
           m_buffer->getData( 0, sizeInBytes, destination );
           result = true;
@@ -182,8 +181,7 @@ namespace dp
         return result;
       }
 
-      void IndexSet::setBuffer( const BufferSharedPtr &buffer, unsigned int count, dp::util::DataType type, 
-                                                                                   unsigned int primitiveRestartIndex )
+      void IndexSet::setBuffer( const BufferSharedPtr &buffer, unsigned int count, dp::DataType type, unsigned int primitiveRestartIndex )
       {
         m_numberOfIndices = count;
         setPrimitiveRestartIndex( primitiveRestartIndex );
@@ -246,7 +244,7 @@ namespace dp
 
             if ( !equi && deepCompare )
             {
-              unsigned int numBytes = util::checked_cast<unsigned int>( dp::util::getSizeOf( m_dataType ) * m_numberOfIndices );
+              unsigned int numBytes = dp::checked_cast<unsigned int>( dp::getSizeOf( m_dataType ) * m_numberOfIndices );
               Buffer::DataReadLock rhsBuffer( m_buffer );
               Buffer::DataReadLock lhsBuffer( is->m_buffer );
               equi = ( memcmp( rhsBuffer.getPtr(), lhsBuffer.getPtr(), numBytes ) == 0 );

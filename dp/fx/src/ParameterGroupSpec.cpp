@@ -90,7 +90,7 @@ namespace dp
       {
         if ( ! it->first.getName().empty() )
         {
-          hg.update( reinterpret_cast<const unsigned char *>(&it->first.getName()[0]), checked_cast<unsigned int>(it->first.getName().size()) );
+          hg.update( reinterpret_cast<const unsigned char *>(&it->first.getName()[0]), dp::checked_cast<unsigned int>(it->first.getName().size()) );
         }
         unsigned int tmp = it->first.getType();
         hg.update( reinterpret_cast<const unsigned char *>(&tmp), sizeof(tmp) );

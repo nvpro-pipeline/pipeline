@@ -832,7 +832,7 @@ namespace dp
 
 
           glutInitWindowPosition( x, y );
-          glutInitWindowSize( dp::util::checked_cast<int>(m_width), dp::util::checked_cast<int>(m_height) );
+          glutInitWindowSize( dp::checked_cast<int>(m_width), dp::checked_cast<int>(m_height) );
 
           glutInitDisplayMode( GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH | GLUT_ALPHA );
           m_windowId = glutCreateWindow( "SceniX minimal GLUT example" );
@@ -1099,7 +1099,7 @@ namespace dp
         void Widget::setWindowSize( size_t width, size_t height )
         {
           BindWidget bindWidget( m_windowId );
-          glutReshapeWindow( dp::util::checked_cast<int>(width), dp::util::checked_cast<int>(height) );
+          glutReshapeWindow( dp::checked_cast<int>(width), dp::checked_cast<int>(height) );
         }
 
         void Widget::setWindowFullScreen()
@@ -1193,7 +1193,7 @@ namespace dp
         unsigned int Widget::getNumberOfKeys() const
         {
           return 0;
-          //return dp::util::checked_cast<unsigned int>(m_keyInfos.size());
+          //return dp::checked_cast<unsigned int>(m_keyInfos.size());
         }
 
         std::string Widget::getKeyName( unsigned int key ) const

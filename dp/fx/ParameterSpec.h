@@ -29,12 +29,12 @@
 
 #include <cstring>
 #include <memory>
+#include <dp/Types.h>
 #include <dp/fx/Config.h>
 #include <dp/fx/EnumSpec.h>
 #include <dp/math/Matmnt.h>
 #include <dp/math/Vecnt.h>
 #include <dp/util/Semantic.h>
-#include <dp/util/Types.h>
 
 namespace dp
 {
@@ -348,7 +348,7 @@ namespace dp
         switch( type & PT_SCALAR_TYPE_MASK )
         {
         case PT_ENUM :
-          size = dp::util::checked_cast<unsigned int>( sizeof( EnumSpec::StorageType ) );
+          size = dp::checked_cast<unsigned int>( sizeof( EnumSpec::StorageType ) );
           break;
         case PT_BOOL :
           DP_STATIC_ASSERT( sizeof(bool) == 1 );

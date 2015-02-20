@@ -96,7 +96,7 @@ namespace dp
       size_t dataOffset = info.data.size();
       info.data.resize(dataOffset + size);
       memcpy(info.data.data() + dataOffset, data, size);
-      info.offsets.push_back(dp::util::checked_cast<dp::util::Uint32>(offset));
+      info.offsets.push_back(dp::checked_cast<dp::Uint32>(offset));
     }
 
     void BufferUpdater::executeUpdates()
@@ -132,7 +132,7 @@ namespace dp
         size_t numberOfBytes = info.offsets.size() * it->first;
         size_t numberOfVec4s = numberOfBytes / 16;
         size_t numberOfWorkgroups = (numberOfVec4s + LOCAL_SIZE_X - 1) / LOCAL_SIZE_X;
-        glDispatchCompute(dp::util::checked_cast<GLuint>(numberOfWorkgroups), 1, 1);
+        glDispatchCompute(dp::checked_cast<GLuint>(numberOfWorkgroups), 1, 1);
         GLenum error = glGetError();
       }
 

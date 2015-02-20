@@ -87,7 +87,7 @@ namespace dp
 
       void FaceConnections::disconnectFace( unsigned int fi  )
       {
-        unsigned int vpf = util::checked_cast<unsigned int>(m_faceSets.size() - 1);
+        unsigned int vpf = dp::checked_cast<unsigned int>(m_faceSets.size() - 1);
         for ( unsigned int i=0 ; i<vpf ; i++ )
         {
           unsigned int cfi = m_faceConnections[vpf*fi+i];
@@ -229,7 +229,7 @@ namespace dp
 
         copy( vertexList[li].begin(), vertexList[li].end(), back_inserter(stripIndices) );
         stripFaces.swap( faceList[li] );
-        return( util::checked_cast<unsigned int>(stripFaces.size()) );
+        return( dp::checked_cast<unsigned int>(stripFaces.size()) );
       }
 
       void checkTriStrip( dp::sg::core::IndexSet::ConstIterator<unsigned int> & indices, unsigned int fi, unsigned int le
@@ -262,7 +262,7 @@ namespace dp
               DP_ASSERT( faceConnections[3*nfi+ee] == fi );
               //  when there are odd elements in the forward list, the leaving edge is entering edge + 2
               //  otherwise it's the entering edge + 1
-              le = ( ee + 1 + ( util::checked_cast<unsigned int>(faceList.size()) % 2 ) ) % 3;
+              le = ( ee + 1 + ( dp::checked_cast<unsigned int>(faceList.size()) % 2 ) ) % 3;
               //  the vertex not on the entering edge is new in the strip
               vertexList.push_back( indices[3*nfi+( ee + 2 ) % 3] );
               faceList.push_back( nfi );
@@ -335,7 +335,7 @@ namespace dp
 
         copy( vertexList[li].begin(), vertexList[li].end(), back_inserter(stripIndices) );
         stripFaces.swap( faceList[li] );
-        return( util::checked_cast<unsigned int>(stripFaces.size()) );
+        return( dp::checked_cast<unsigned int>(stripFaces.size()) );
       }
 
       unsigned int findEdge( unsigned int fromFace, unsigned toFace, unsigned int ps
@@ -1083,7 +1083,7 @@ namespace dp
                                                                     , std::vector<unsigned int> & zeroIndices )
       {
         // get the zero-list faces and clear the zero-list
-        unsigned int primitiveSize = util::checked_cast<unsigned int>(m_faceSets.size() - 1);
+        unsigned int primitiveSize = dp::checked_cast<unsigned int>(m_faceSets.size() - 1);
         for ( std::set<unsigned int>::const_iterator fsit = m_faceSets[0].begin() ; fsit!= m_faceSets[0].end() ; ++fsit )
         {
           unsigned int bi = primitiveSize * *fsit;
@@ -1092,14 +1092,14 @@ namespace dp
             zeroIndices.push_back( allIndices[bi+i] );
           }
         }
-        unsigned int ret = util::checked_cast<unsigned int>(m_faceSets[0].size());
+        unsigned int ret = dp::checked_cast<unsigned int>(m_faceSets[0].size());
         m_faceSets[0].clear();
         return( ret );
       }
 
       void FaceConnections::getNeighbours( unsigned int fi, std::vector<unsigned int> & faces )
       {
-        unsigned int novpf = util::checked_cast<unsigned int>(m_faceSets.size() - 1);
+        unsigned int novpf = dp::checked_cast<unsigned int>(m_faceSets.size() - 1);
         faces.assign( m_faceConnections.begin() + novpf * fi,
                       m_faceConnections.begin() + novpf * fi + novpf );
       }

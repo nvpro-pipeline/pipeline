@@ -94,7 +94,7 @@ namespace dp
         Format &format = m_format[attributeIndex];
         if ( format.m_enabled )
         {
-          size += dp::util::getSizeOf( format.m_dataType ) * format.m_numComponents;
+          size += dp::getSizeOf( format.m_dataType ) * format.m_numComponents;
         }
 
         return size;

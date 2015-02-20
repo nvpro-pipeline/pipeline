@@ -26,9 +26,9 @@
 
 #pragma once
 
+#include <dp/Types.h>
 #include <dp/rix/core/RendererConfig.h>
 #include <dp/rix/core/HandledObject.h>
-#include <dp/util/Types.h>
 #include <cassert>
 #include <stddef.h>
 
@@ -397,15 +397,15 @@ namespace dp
       struct TextureDescription
       {
         RIX_CORE_API TextureDescription( TextureType type, InternalTextureFormat internalFormat,
-                                         dp::util::PixelFormat pixelFormat, dp::util::DataType dataType,
+                                         dp::PixelFormat pixelFormat, dp::DataType dataType,
                                          size_t width = 0, size_t height = 0, size_t depth = 0,
                                          size_t layers = 0, bool mipmaps = false );
         RIX_CORE_API virtual ~TextureDescription();
 
         TextureType           m_type;
         InternalTextureFormat m_internalFormat;
-        dp::util::PixelFormat m_pixelFormat;
-        dp::util::DataType    m_dataType;
+        dp::PixelFormat       m_pixelFormat;
+        dp::DataType          m_dataType;
         size_t                m_width;
         size_t                m_height;
         size_t                m_depth;
@@ -448,7 +448,7 @@ namespace dp
             \remarks This convenience constructor uses the intermediate pointer m_pData to construct the void** m_data, so 
             only a void* has to be passed into the struct
         **/
-        RIX_CORE_API TextureDataPtr( void const * data, dp::util::PixelFormat pixelFormat, dp::util::DataType pixelDataType );
+        RIX_CORE_API TextureDataPtr( void const * data, dp::PixelFormat pixelFormat, dp::DataType pixelDataType );
 
         /** \brief Provide data with MipMapLevels. Each provider is for one MipMap level.
             \param data Pointer to pixel data
@@ -456,7 +456,7 @@ namespace dp
             \param pixelFormat   The format of a pixel in data
             \param pixelDataType The data type of a pixel in data
         **/
-        RIX_CORE_API TextureDataPtr( void const * const *  data, unsigned int numMipMapLevels, dp::util::PixelFormat pixelFormat, dp::util::DataType pixelDataType );
+        RIX_CORE_API TextureDataPtr( void const * const *  data, unsigned int numMipMapLevels, dp::PixelFormat pixelFormat, dp::DataType pixelDataType );
 
         /** \brief Provide data with MipMapLevels and Number of layers. Data is organized as Layer0: MipMap0...n, Layer1: MipMap 0...n, ....
             \param data Pointer to pixel data
@@ -465,14 +465,14 @@ namespace dp
             \param pixelFormat   The format of a pixel in data
             \param pixelDataType The data type of a pixel in data
         **/
-        RIX_CORE_API TextureDataPtr( void const * const * data, unsigned int numMipMapLevels, unsigned int numLayers, dp::util::PixelFormat pixelFormat, dp::util::DataType pixelDataType );
+        RIX_CORE_API TextureDataPtr( void const * const * data, unsigned int numMipMapLevels, unsigned int numLayers, dp::PixelFormat pixelFormat, dp::DataType pixelDataType );
 
         void const *          m_pData; // intermediate pointer to data for TextureDataPtr( void const * data )
         void const * const *  m_data;
         unsigned int          m_numLayers;
         unsigned int          m_numMipMapLevels;
-        dp::util::PixelFormat m_pixelFormat;
-        dp::util::DataType    m_pixelDataType;
+        dp::PixelFormat       m_pixelFormat;
+        dp::DataType          m_pixelDataType;
       };
 
       struct GeometryInstanceDescription
@@ -705,7 +705,7 @@ namespace dp
 
         /* \brief attributeIndex attribute location in shader
         */ 
-        VertexFormatInfo( dp::util::Uint8 attributeIndex, dp::util::DataType dataType, dp::util::Uint8 numberOfComponents, bool normalized, dp::util::Uint8 streamId, size_t offset, size_t stride )
+        VertexFormatInfo( dp::Uint8 attributeIndex, dp::DataType dataType, dp::Uint8 numberOfComponents, bool normalized, dp::Uint8 streamId, size_t offset, size_t stride )
           : m_attributeIndex( attributeIndex )
           , m_numComponents( numberOfComponents )
           , m_streamId( streamId )
@@ -716,13 +716,13 @@ namespace dp
         {
         }
 
-        dp::util::Uint8     m_attributeIndex;
-        dp::util::Uint8     m_numComponents;
-        dp::util::Uint8     m_streamId;
-        bool                m_normalized;
-        dp::util::DataType  m_dataType;
-        size_t              m_offset;
-        size_t              m_stride;
+        dp::Uint8     m_attributeIndex;
+        dp::Uint8     m_numComponents;
+        dp::Uint8     m_streamId;
+        bool          m_normalized;
+        dp::DataType  m_dataType;
+        size_t        m_offset;
+        size_t        m_stride;
       };
 
       struct VertexFormatDescription
@@ -766,7 +766,7 @@ namespace dp
 
 
       // Helper Functions 
-      RIX_CORE_API size_t getSizeOf( dp::util::DataType dataType );
+      RIX_CORE_API size_t getSizeOf( dp::DataType dataType );
 
       class Renderer
       {
@@ -794,7 +794,7 @@ namespace dp
 
         /** Indices **/
         RIX_CORE_API virtual dp::rix::core::IndicesSharedHandle indicesCreate() = 0;
-        RIX_CORE_API virtual void indicesSetData( dp::rix::core::IndicesSharedHandle const & handle, dp::util::DataType dataType, dp::rix::core::BufferSharedHandle const & bufferHandle, size_t offset, size_t count ) = 0;
+        RIX_CORE_API virtual void indicesSetData( dp::rix::core::IndicesSharedHandle const & handle, dp::DataType dataType, dp::rix::core::BufferSharedHandle const & bufferHandle, size_t offset, size_t count ) = 0;
 
         /** Buffer **/
         RIX_CORE_API virtual dp::rix::core::BufferSharedHandle bufferCreate( dp::rix::core::BufferDescription const & bufferDescription = dp::rix::core::BufferDescription() ) = 0;

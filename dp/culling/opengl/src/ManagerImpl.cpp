@@ -240,7 +240,7 @@ namespace dp
         glDispatchCompute( static_cast<GLuint>(numberOfWorkingGroups), 1, 1 );
         glMemoryBarrier( GL_BUFFER_UPDATE_BARRIER_BIT ); // TODO This is way too slow to use, but correct.
         glMemoryBarrier( GL_SHADER_STORAGE_BARRIER_BIT );
-        dp::gl::MappedBuffer<dp::util::Uint32> visibleShader( groupImpl->getOutputBuffer(), GL_SHADER_STORAGE_BUFFER, GL_READ_WRITE );
+        dp::gl::MappedBuffer<dp::Uint32> visibleShader( groupImpl->getOutputBuffer(), GL_SHADER_STORAGE_BUFFER, GL_READ_WRITE );
         result.staticCast<ResultBitSet>()->updateChanged( visibleShader );
       }
 

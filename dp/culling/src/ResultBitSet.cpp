@@ -58,7 +58,7 @@ namespace dp
         return m_changedObjects;
       }
 
-      void ResultBitSet::updateChanged( dp::util::Uint32 const* visibility )
+      void ResultBitSet::updateChanged( dp::Uint32 const* visibility )
       {
         dp::util::ProfileEntry p("ResultBitSet::updateChanged");
 

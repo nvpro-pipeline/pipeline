@@ -416,14 +416,14 @@ GeoNodeSharedPtr createGeoNode( PrimitiveType pt, const vector<Vec3f> & vertices
 {
   // create VAS
   VertexAttributeSetSharedPtr vertexAttributeSet = VertexAttributeSet::create();
-  vertexAttributeSet->setVertices( &vertices[0], checked_cast<unsigned int>( vertices.size() ) );
+  vertexAttributeSet->setVertices( &vertices[0], dp::checked_cast<unsigned int>( vertices.size() ) );
   if ( !normals.empty() )
   {
-    vertexAttributeSet->setNormals( &normals[0], checked_cast<unsigned int>( normals.size() ) );
+    vertexAttributeSet->setNormals( &normals[0], dp::checked_cast<unsigned int>( normals.size() ) );
   }
   if ( !textures.empty() )
   {
-    vertexAttributeSet->setTexCoords( 0, &textures[0], checked_cast<unsigned int>( textures.size() ) );
+    vertexAttributeSet->setTexCoords( 0, &textures[0], dp::checked_cast<unsigned int>( textures.size() ) );
   }
 
   // create Primitive
@@ -433,7 +433,7 @@ GeoNodeSharedPtr createGeoNode( PrimitiveType pt, const vector<Vec3f> & vertices
   if ( ! indices.empty() )
   {
     IndexSetSharedPtr indexSet = IndexSet::create();
-    indexSet->setData( &indices[0], checked_cast<unsigned int>( indices.size() ) );
+    indexSet->setData( &indices[0], dp::checked_cast<unsigned int>( indices.size() ) );
     primitive->setIndexSet( indexSet );
   }
 
@@ -496,7 +496,7 @@ void gatherFromTriangles( const A3DTessBaseData & tbd, const A3DTess3DData & t3d
     for ( unsigned int j=0 ; j<3 ; j++ )
     {
       is = getIndexSet<N>( indices, triIndex, tbd, t3d );
-      pair<IndexMap<N>::const_iterator,bool> pitb = indexData.indexMap.insert( make_pair( is, checked_cast<unsigned int>(indexData.indexMap.size()) ) );
+      pair<IndexMap<N>::const_iterator,bool> pitb = indexData.indexMap.insert( make_pair( is, dp::checked_cast<unsigned int>(indexData.indexMap.size()) ) );
       indexData.newIndices.push_back( pitb.first->second );
     }
   }
@@ -527,7 +527,7 @@ void gatherFromTrianglesOneNormal( const A3DTessBaseData & tbd, const A3DTess3DD
     for ( unsigned int j=0 ; j<3 ; j++ )
     {
       is = getIndexSet<N>( indices, triIndex, tbd, t3d, true, is[0] );
-      pair<IndexMap<N>::const_iterator,bool> pitb = indexData.indexMap.insert( make_pair( is, checked_cast<unsigned int>(indexData.indexMap.size()) ) );
+      pair<IndexMap<N>::const_iterator,bool> pitb = indexData.indexMap.insert( make_pair( is, dp::checked_cast<unsigned int>(indexData.indexMap.size()) ) );
       indexData.newIndices.push_back( pitb.first->second );
     }
   }
@@ -567,13 +567,13 @@ void gatherFromFans( const A3DTessBaseData & tbd, const A3DTess3DData & t3d, con
     DP_ASSERT( oneNormalLocal ? ( (count + 1 + idx) <= t3d.m_uiTriangulatedIndexSize ) : ( (2 * count + idx) <= t3d.m_uiTriangulatedIndexSize ) );
 
     is0 = getIndexSet<N>( indices, idx, tbd, t3d );
-    pair<IndexMap<N>::const_iterator,bool> pitb = indexData.indexMap.insert( make_pair( is0, checked_cast<unsigned int>(indexData.indexMap.size()) ) );
+    pair<IndexMap<N>::const_iterator,bool> pitb = indexData.indexMap.insert( make_pair( is0, dp::checked_cast<unsigned int>(indexData.indexMap.size()) ) );
     unsigned int idx0 = pitb.first->second;
 
     is2[0] = oneNormalLocal ? is0[0] : indices[idx++];
     is2[1] = indices[idx++];
     DP_ASSERT( (is2[1]+2) < tbd.m_uiCoordSize && (is2[0]+2) < t3d.m_uiNormalSize );
-    pitb = indexData.indexMap.insert( make_pair( is2, checked_cast<unsigned int>(indexData.indexMap.size()) ) );
+    pitb = indexData.indexMap.insert( make_pair( is2, dp::checked_cast<unsigned int>(indexData.indexMap.size()) ) );
     unsigned int idx2 = pitb.first->second;
 
     for ( unsigned int j=2 ; j<count ; j++ )
@@ -581,7 +581,7 @@ void gatherFromFans( const A3DTessBaseData & tbd, const A3DTess3DData & t3d, con
       unsigned int idx1 = idx2;
 
       is2 = getIndexSet<N>( indices, idx, tbd, t3d, oneNormalLocal, is0[0] );
-      pitb = indexData.indexMap.insert( make_pair( is2, checked_cast<unsigned int>(indexData.indexMap.size()) ) );
+      pitb = indexData.indexMap.insert( make_pair( is2, dp::checked_cast<unsigned int>(indexData.indexMap.size()) ) );
       idx2 = pitb.first->second;
 
       indexData.newIndices.push_back( idx0 );
@@ -626,11 +626,11 @@ void gatherFromStrips( const A3DTessBaseData & tbd, const A3DTess3DData & t3d, c
     DP_ASSERT( ( oneNormalLocal ? (1 + count + idx) : (2 * count + idx) ) <= t3d.m_uiTriangulatedIndexSize );
 
     is1 = getIndexSet<N>( indices, idx, tbd, t3d );
-    pair<IndexMap<N>::const_iterator,bool> pitb = indexData.indexMap.insert( make_pair( is1, checked_cast<unsigned int>(indexData.indexMap.size()) ) );
+    pair<IndexMap<N>::const_iterator,bool> pitb = indexData.indexMap.insert( make_pair( is1, dp::checked_cast<unsigned int>(indexData.indexMap.size()) ) );
     unsigned int idx1 = pitb.first->second;
 
     is2 = getIndexSet<N>( indices, idx, tbd, t3d, oneNormalLocal, is1[0] );
-    pitb = indexData.indexMap.insert( make_pair( is2, checked_cast<unsigned int>(indexData.indexMap.size()) ) );
+    pitb = indexData.indexMap.insert( make_pair( is2, dp::checked_cast<unsigned int>(indexData.indexMap.size()) ) );
     unsigned int idx2 = pitb.first->second;
 
     for ( unsigned int j=2 ; j<count ; j++ )
@@ -642,7 +642,7 @@ void gatherFromStrips( const A3DTessBaseData & tbd, const A3DTess3DData & t3d, c
       idx1 = idx2;
 
       is2 =getIndexSet<N>( indices, idx, tbd, t3d, oneNormalLocal, is0[0] );
-      pitb = indexData.indexMap.insert( make_pair( is2, checked_cast<unsigned int>(indexData.indexMap.size()) ) );
+      pitb = indexData.indexMap.insert( make_pair( is2, dp::checked_cast<unsigned int>(indexData.indexMap.size()) ) );
       idx2 = pitb.first->second;
 
       if ( j % 2 )
@@ -687,7 +687,7 @@ void gatherFromLineStrips( const A3DTessBaseData & tbd, const A3DTess3DData & t3
       v[0] = indices[idx++];
       DP_ASSERT( (v[0]+2) < tbd.m_uiCoordSize );
 
-      pair<IndexMap<1>::const_iterator,bool> pitb = indexData.indexMap.insert( make_pair( v, checked_cast<unsigned int>(indexData.indexMap.size()) ) );
+      pair<IndexMap<1>::const_iterator,bool> pitb = indexData.indexMap.insert( make_pair( v, dp::checked_cast<unsigned int>(indexData.indexMap.size()) ) );
       indexData.newIndices.push_back( pitb.first->second );
     }
 
@@ -696,7 +696,7 @@ void gatherFromLineStrips( const A3DTessBaseData & tbd, const A3DTess3DData & t3
       v[0] = indices[idx-count];
       DP_ASSERT( (v[0]+2) < tbd.m_uiCoordSize );
 
-      pair<IndexMap<1>::const_iterator,bool> pitb = indexData.indexMap.insert( make_pair( v, checked_cast<unsigned int>(indexData.indexMap.size()) ) );
+      pair<IndexMap<1>::const_iterator,bool> pitb = indexData.indexMap.insert( make_pair( v, dp::checked_cast<unsigned int>(indexData.indexMap.size()) ) );
       indexData.newIndices.push_back( pitb.first->second );
     }
 
@@ -1149,8 +1149,8 @@ A3DStatus HOOPSLoader::parseTess3DWire( const A3DRiRepresentationItem * pRepItem
 
     // create VAS
     VertexAttributeSetSharedPtr vasSP( VertexAttributeSet::create() );
-    vasSP->setVertices( &vertices[0], checked_cast< unsigned int >( vertices.size() ) );
-    vasSP->setColors( &colors[0], checked_cast< unsigned int >( colors.size() ) );
+    vasSP->setVertices( &vertices[0], dp::checked_cast< unsigned int >( vertices.size() ) );
+    vasSP->setColors( &colors[0], dp::checked_cast< unsigned int >( colors.size() ) );
 
     // create Primitive
     PrimitiveSharedPtr primSP( Primitive::create( PRIMITIVE_LINE_STRIP ) );

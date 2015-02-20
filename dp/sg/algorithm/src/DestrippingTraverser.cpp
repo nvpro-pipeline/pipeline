@@ -609,7 +609,7 @@ namespace dp
             {
               *newIndexSet = *p->getIndexSet();
             }
-            newIndexSet->setData( &newIndices[0], checked_cast<unsigned int>(newIndices.size()) );
+            newIndexSet->setData( &newIndices[0], dp::checked_cast<unsigned int>(newIndices.size()) );
             newIndexSet->setPrimitiveRestartIndex( ~0 );
             PrimitiveSharedPtr primitive = Primitive::create( newPrimitiveType );
             *primitive = *p;

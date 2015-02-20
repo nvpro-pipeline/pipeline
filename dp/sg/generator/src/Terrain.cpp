@@ -106,25 +106,25 @@ namespace dp
       std::vector<dp::math::Vec3f> generateTerrainVertices( dp::util::ImageSharedPtr const & heightMap
                                                           , dp::math::Vec3f const & resolution, dp::math::Vec3f const & offset )
       {
-        DP_ASSERT( heightMap->getPixelFormat() == dp::util::PF_LUMINANCE );
+        DP_ASSERT( heightMap->getPixelFormat() == dp::PF_LUMINANCE );
         switch( heightMap->getDataType() )
         {
-        case dp::util::DT_UNSIGNED_INT_8:
-          return generateTerrainVertices<dp::util::Uint8>( heightMap, resolution, offset );
-        case dp::util::DT_UNSIGNED_INT_16:
-          return generateTerrainVertices<dp::util::Uint16>( heightMap, resolution, offset );
-        case dp::util::DT_UNSIGNED_INT_32:
-          return generateTerrainVertices<dp::util::Uint32>( heightMap, resolution, offset );
-        case dp::util::DT_INT_8:
-          return generateTerrainVertices<dp::util::Int8>( heightMap, resolution, offset );
-        case dp::util::DT_INT_16:
-          return generateTerrainVertices<dp::util::Int16>( heightMap, resolution, offset );
-        case dp::util::DT_INT_32:
-          return generateTerrainVertices<dp::util::Int32>( heightMap, resolution, offset );
-        case dp::util::DT_FLOAT_32:
-          return generateTerrainVertices<dp::util::Int32>( heightMap, resolution, offset );
-        case dp::util::DT_FLOAT_64:
-          return generateTerrainVertices<dp::util::Int64>( heightMap, resolution, offset );
+        case dp::DT_UNSIGNED_INT_8:
+          return generateTerrainVertices<dp::Uint8>( heightMap, resolution, offset );
+        case dp::DT_UNSIGNED_INT_16:
+          return generateTerrainVertices<dp::Uint16>( heightMap, resolution, offset );
+        case dp::DT_UNSIGNED_INT_32:
+          return generateTerrainVertices<dp::Uint32>( heightMap, resolution, offset );
+        case dp::DT_INT_8:
+          return generateTerrainVertices<dp::Int8>( heightMap, resolution, offset );
+        case dp::DT_INT_16:
+          return generateTerrainVertices<dp::Int16>( heightMap, resolution, offset );
+        case dp::DT_INT_32:
+          return generateTerrainVertices<dp::Int32>( heightMap, resolution, offset );
+        case dp::DT_FLOAT_32:
+          return generateTerrainVertices<dp::Int32>( heightMap, resolution, offset );
+        case dp::DT_FLOAT_64:
+          return generateTerrainVertices<dp::Int64>( heightMap, resolution, offset );
         default:
           DP_ASSERT( !"Unknown heightmap format" );
         }
@@ -149,7 +149,7 @@ namespace dp
         {
           // generate vertices & normals
           std::vector<dp::math::Vec3f> vertices = generateTerrainVertices( heightMap, resolution, offset );
-          vertexAttributeset->setVertices( 0, &vertices[0], dp::util::checked_cast<unsigned int>(vertices.size()), true );
+          vertexAttributeset->setVertices( 0, &vertices[0], dp::checked_cast<unsigned int>(vertices.size()), true );
 
           Clamped2DArrayAccessor<dp::math::Vec3f> cpa( heightMap->getWidth(), heightMap->getHeight(), &vertices[0]);
 
@@ -167,7 +167,7 @@ namespace dp
             }
           }
 
-          vertexAttributeset->setNormals( 0, &normals[0], dp::util::checked_cast<unsigned int>(normals.size()), true );
+          vertexAttributeset->setNormals( 0, &normals[0], dp::checked_cast<unsigned int>(normals.size()), true );
         }
 
         if ( colorMap )
@@ -184,7 +184,7 @@ namespace dp
               uv.push_back( dp::math::Vec2f(u, v) );
             }
           }
-          vertexAttributeset->setTexCoords( 0, 0, &uv[0], dp::util::checked_cast<unsigned int>(uv.size()), true );
+          vertexAttributeset->setTexCoords( 0, 0, &uv[0], dp::checked_cast<unsigned int>(uv.size()), true );
         }
 
         {
@@ -194,12 +194,12 @@ namespace dp
           {
             for ( int x = 0; x < int( heightMap->getWidth() - 1 ) ; ++x )
             {
-              dp::util::Uint32 base = dp::util::checked_cast<dp::util::Uint32>(y * heightMap->getWidth() + x);
-              indices.push_back( dp::math::Vec3ui( base, base + 1, base + dp::util::Uint32(heightMap->getWidth()) + 1 ) );
-              indices.push_back( dp::math::Vec3ui( base + dp::util::Uint32(heightMap->getWidth()) + 1, base + dp::util::Uint32(heightMap->getWidth()), base ) );
+              dp::Uint32 base = dp::checked_cast<dp::Uint32>(y * heightMap->getWidth() + x);
+              indices.push_back( dp::math::Vec3ui( base, base + 1, base + dp::Uint32(heightMap->getWidth()) + 1 ) );
+              indices.push_back( dp::math::Vec3ui( base + dp::Uint32(heightMap->getWidth()) + 1, base + dp::Uint32(heightMap->getWidth()), base ) );
             }
           }
-          indexSet->setData( &indices[0], dp::util::Uint32(indices.size() * 3) );
+          indexSet->setData( &indices[0], dp::Uint32(indices.size() * 3) );
         }
 
         primitive->setIndexSet(indexSet);
@@ -314,7 +314,7 @@ namespace dp
         dp::sg::core::BufferHostSharedPtr buffer = dp::sg::core::BufferHost::create();
         buffer->setSize(1); // currently it's necessary to have at least one byte in the buffer for other parts of the pipeline.
           
-        va.setData( 3, dp::util::DT_FLOAT_32, buffer, 0, 0, (unsigned int)(verticesPerTexel * numRects) );
+        va.setData( 3, dp::DT_FLOAT_32, buffer, 0, 0, (unsigned int)(verticesPerTexel * numRects) );
         dp::sg::core::VertexAttributeSetSharedPtr vertexAttributeset = dp::sg::core::VertexAttributeSet::create();
         vertexAttributeset->setVertexAttribute(dp::sg::core::VertexAttributeSet::DP_SG_POSITION, va);
 

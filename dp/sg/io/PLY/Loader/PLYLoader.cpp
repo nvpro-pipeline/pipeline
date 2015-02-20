@@ -912,7 +912,7 @@ SceneSharedPtr PLYLoader::load(const string& filename, const vector<string> &sea
       if (success)
       {
         IndexSetSharedPtr iset( IndexSet::create() );
-        iset->setData( &indices[0], checked_cast<unsigned int>(indices.size()) );
+        iset->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
         bool generateNormals = false;
         VertexAttributeSetSharedPtr cvas = VertexAttributeSet::create();

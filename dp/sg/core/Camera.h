@@ -27,6 +27,7 @@
 #pragma once
 /** @file */
 
+#include <dp/Types.h>
 #include <dp/math/Quatt.h>
 #include <dp/util/HashGenerator.h>
 #include <dp/sg/core/Object.h> // base class definition
@@ -493,7 +494,7 @@ namespace dp
 
       inline unsigned int Camera::getNumberOfHeadLights( void ) const
       {
-        return( dp::util::checked_cast<unsigned int>(m_headLights.size()) );
+        return( dp::checked_cast<unsigned int>(m_headLights.size()) );
       }
 
       inline const dp::math::Quatf & Camera::getOrientation( void ) const

@@ -108,7 +108,7 @@ namespace dp
       {
         unsigned int elementSize = it->first.getElementSizeInBytes();
         const char * charValue = reinterpret_cast<const char *>(value);
-        unsigned int count = std::max( dp::util::checked_cast<unsigned int>(it->first.getArraySize()), (unsigned int)(1) );
+        unsigned int count = std::max( dp::checked_cast<unsigned int>(it->first.getArraySize()), (unsigned int)(1) );
         for ( unsigned int i=0 ; i<count ; i++ )
         {
           updateValue( it, i, charValue );

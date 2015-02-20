@@ -69,9 +69,9 @@ namespace dp
             m_rix->bufferSetSize( vbuffers[curAttr], meshIn->m_attributes[curAttr].m_data.size() * sizeof(float) );
             m_rix->bufferUpdateData( vbuffers[curAttr], 0, &meshIn->m_attributes[curAttr].m_data[0], meshIn->m_attributes[curAttr].m_data.size() * sizeof(float) );
 
-            dp::util::Uint8 streamId = dp::util::checked_cast<dp::util::Uint8>( vfis.size() );
+            dp::Uint8 streamId = dp::checked_cast<dp::Uint8>( vfis.size() );
 
-            vfis.push_back( VertexFormatInfo( i, dp::util::DT_FLOAT_32, meshIn->m_attributes[curAttr].m_dimensionality, false, 
+            vfis.push_back( VertexFormatInfo( i, dp::DT_FLOAT_32, meshIn->m_attributes[curAttr].m_dimensionality, false, 
                                               streamId, 0, meshIn->m_attributes[curAttr].m_dimensionality * sizeof(float)) );
 
             m_rix->vertexDataSet( vertexData, streamId, vbuffers[curAttr], 0, meshIn->m_attributes[curAttr].m_data.size() / meshIn->m_attributes[curAttr].m_dimensionality );
@@ -88,7 +88,7 @@ namespace dp
         if( !meshIn->m_indices.empty() )
         {
           indices = m_rix->indicesCreate();
-          m_rix->indicesSetData( indices, dp::util::DT_UNSIGNED_INT_32, ibuffer, 0, meshIn->m_indices.size() );
+          m_rix->indicesSetData( indices, dp::DT_UNSIGNED_INT_32, ibuffer, 0, meshIn->m_indices.size() );
         }
 
         GeometryDescriptionSharedHandle geometryDescription = m_rix->geometryDescriptionCreate();

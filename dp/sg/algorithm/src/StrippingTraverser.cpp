@@ -148,7 +148,7 @@ namespace dp
 
         dp::sg::core::IndexSetSharedPtr strippedIndexSet = dp::sg::core::IndexSet::create();
         *((dp::sg::core::Object*)strippedIndexSet.getWeakPtr()) = *(m_strip->getIndexSet().getWeakPtr());
-        strippedIndexSet->setData( &strippedIndices[0], dp::util::checked_cast<unsigned int>(strippedIndices.size()) );
+        strippedIndexSet->setData( &strippedIndices[0], dp::checked_cast<unsigned int>(strippedIndices.size()) );
         strippedIndexSet->setPrimitiveRestartIndex( ~0 );
 
         m_strip->setIndexSet( strippedIndexSet );

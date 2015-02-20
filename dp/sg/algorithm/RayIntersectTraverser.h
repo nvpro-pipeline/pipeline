@@ -467,7 +467,7 @@ namespace dp
 
       inline unsigned int RayIntersectTraverser::getNumberOfIntersections() const
       {
-        return( dp::util::checked_cast<unsigned int>(m_intersectionList.size()) );
+        return( dp::checked_cast<unsigned int>(m_intersectionList.size()) );
       }
 
       inline const Intersection & RayIntersectTraverser::getNearest() const

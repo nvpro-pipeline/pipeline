@@ -125,11 +125,11 @@ void Feature_texture_native::createScene()
 
   ContainerDescriptorSharedHandle vertexContainerDescriptor = 
     m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( &vertexProgramParameters[0],
-    util::checked_cast<unsigned int>(vertexProgramParameters.size()) ) );
+    dp::checked_cast<unsigned int>(vertexProgramParameters.size()) ) );
 
   ContainerDescriptorSharedHandle fragmentContainerDescriptor = 
     m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( &fragmentProgramParameters[0],
-    util::checked_cast<unsigned int>(fragmentProgramParameters.size()) ) );
+    dp::checked_cast<unsigned int>(fragmentProgramParameters.size()) ) );
 
   ContainerEntry containerEntryModel2world = m_rix->containerDescriptorGetEntry( vertexContainerDescriptor, "model2world" );
   ContainerEntry containerEntryWorld2view  = m_rix->containerDescriptorGetEntry( vertexContainerDescriptor, "world2view" );
@@ -145,7 +145,7 @@ void Feature_texture_native::createScene()
   ShaderType  shaderTypes[] = { ST_VERTEX_SHADER, ST_FRAGMENT_SHADER };
   ProgramShaderCode programShaderCode( sizeof util::array( shaders ), shaders, shaderTypes );
 
-  ProgramDescription programDescription( programShaderCode, &containerDescriptors[0], util::checked_cast<unsigned int>(containerDescriptors.size() ));
+  ProgramDescription programDescription( programShaderCode, &containerDescriptors[0], dp::checked_cast<unsigned int>(containerDescriptors.size() ));
 
   // here we need a current context
 
@@ -179,7 +179,7 @@ void Feature_texture_native::createScene()
   m_rix->containerSetData( vertexContainer, containerEntryModel2world, ContainerDataRaw( 0, trafo.getMatrix().getPtr(), 16*sizeof(float) ) );
 
   // prepare & set texture
-  TextureDescription textureDescription( TT_2D, ITF_RGBA32F, dp::util::PF_RGBA, dp::util::DT_FLOAT_32, tex2DWidth, tex2DHeight );
+  TextureDescription textureDescription( TT_2D, ITF_RGBA32F, dp::PF_RGBA, dp::DT_FLOAT_32, tex2DWidth, tex2DHeight );
 
   TextureSharedHandle texture = m_rix->textureCreate( textureDescription );
 

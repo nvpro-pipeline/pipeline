@@ -29,7 +29,6 @@
 #include <vector>
 #include <dp/util/DPAssert.h>
 #include <deque>
-#include <dp/util/Types.h>
 
 namespace dp
 {
@@ -37,7 +36,7 @@ namespace dp
   {
     namespace xbar
     {
-      typedef dp::util::Uint32 ObjectTreeIndex;
+      typedef dp::Uint32 ObjectTreeIndex;
 
       template< class NodeClass, class IndexClass >
       class TreeBaseClass
@@ -113,7 +112,7 @@ namespace dp
           IndexClass firstNew = size;
 
           // resize to factor of old size
-          m_tree.resize( dp::util::checked_cast<size_t>(size * 1.5f) );
+          m_tree.resize( dp::checked_cast<size_t>(size * 1.5f) );
           IndexType newSize = IndexType(m_tree.size());
 
           // generate a new chain of free objects, with the last one pointing to ~0
@@ -295,8 +294,8 @@ namespace dp
         }
 
       public:
-        typedef dp::util::Uint32 NodeIndex;
-        typedef dp::util::Uint32 DirtyBits;
+        typedef dp::Uint32 NodeIndex;
+        typedef dp::Uint32 DirtyBits;
 
         NodeIndex m_parentIndex; // index of this node's parent
         NodeIndex m_nextSibling; // index of this node's next sibling (for child iteration)

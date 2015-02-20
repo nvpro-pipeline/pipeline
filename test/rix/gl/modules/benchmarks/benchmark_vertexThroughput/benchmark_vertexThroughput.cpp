@@ -201,7 +201,7 @@ void Benchmark_vertexThroughput::generateGeometry(const char * vertexShader,
 
   ContainerDescriptorSharedHandle vertexContainerDescriptor =
     m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( &vertexProgramParameters[0],
-    checked_cast<unsigned int>(vertexProgramParameters.size()) ) );
+    dp::checked_cast<unsigned int>(vertexProgramParameters.size()) ) );
 
   ContainerEntry containerEntryModel2World = m_rix->containerDescriptorGetEntry( vertexContainerDescriptor, "model2world" );
 
@@ -214,7 +214,7 @@ void Benchmark_vertexThroughput::generateGeometry(const char * vertexShader,
   ShaderType  shaderTypes[] = { ST_VERTEX_SHADER, ST_FRAGMENT_SHADER };
   ProgramShaderCode programShaderCode( sizeof util::array( shaders ), shaders, shaderTypes );
 
-  ProgramDescription programDescription( programShaderCode, &containerDescriptors[0], checked_cast<unsigned int>(containerDescriptors.size() ));
+  ProgramDescription programDescription( programShaderCode, &containerDescriptors[0], dp::checked_cast<unsigned int>(containerDescriptors.size() ));
 
   ProgramSharedHandle program = m_rix->programCreate( programDescription );
 

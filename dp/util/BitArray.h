@@ -26,9 +26,7 @@
 
 #pragma once
 
-#include <dp/util/Config.h>
-#include <dp/util/Types.h>
-#include <dp/util/DPAssert.h>
+#include <dp/Types.h>
 #include <algorithm>
 #include <cstring>
 #include <memory>
@@ -60,7 +58,7 @@ namespace dp
 
 
 #if (defined(DP_ARCH_X86) || defined(DP_ARCH_X86_64)) && defined(_MSC_VER)
-    template <typename Visitor> inline void bitTraverse( dp::util::Uint32 bits, Visitor& visitor )
+    template <typename Visitor> inline void bitTraverse( dp::Uint32 bits, Visitor& visitor )
     {
       unsigned long localIndex;
       while ( _BitScanForward( &localIndex, bits ) )
@@ -70,23 +68,23 @@ namespace dp
       }
     }
 
-    template <typename Visitor> inline void bitTraverse( dp::util::Uint64 bits, Visitor& visitor )
+    template <typename Visitor> inline void bitTraverse( dp::Uint64 bits, Visitor& visitor )
     {
       unsigned long localIndex;
       while ( _BitScanForward64( &localIndex, bits ) )
       {
         visitor( localIndex );
-        bits ^= dp::util::Uint64(1) << localIndex; // clear the current bit so that the next one is being found by the bitscan
+        bits ^= dp::Uint64(1) << localIndex; // clear the current bit so that the next one is being found by the bitscan
       }
     }
 
-    inline size_t clz(dp::util::Uint64 bits)
+    inline size_t clz(dp::Uint64 bits)
     {
       unsigned long localIndex;
       return _BitScanForward64(&localIndex,bits) ? localIndex : 64;
     }
 
-    inline size_t clz(dp::util::Uint32 bits)
+    inline size_t clz(dp::Uint32 bits)
     {
       unsigned long localIndex;
       return _BitScanForward(&localIndex,bits) ? localIndex : 32;

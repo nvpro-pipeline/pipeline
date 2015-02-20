@@ -1648,7 +1648,7 @@ namespace dp
 
         unsigned int SceniXQGLWidget::getNumberOfKeys() const
         {
-          return checked_cast<unsigned int>(m_keyInfos.size());
+          return dp::checked_cast<unsigned int>(m_keyInfos.size());
         }
 
         std::string SceniXQGLWidget::getKeyName( unsigned int key ) const

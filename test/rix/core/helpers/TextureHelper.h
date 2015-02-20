@@ -92,8 +92,8 @@ namespace dp
 
       DPHELPERS_API core::TextureSharedHandle generateTexture( dp::rix::core::Renderer* rix 
                                                              , dp::util::generator::TextureObjectDataSharedPtr data
-                                                             , dp::util::PixelFormat pixelFormat = dp::util::PF_RGBA
-                                                             , dp::util::DataType dataType = dp::util::DT_FLOAT_32
+                                                             , dp::PixelFormat pixelFormat = dp::PF_RGBA
+                                                             , dp::DataType dataType = dp::DT_FLOAT_32
                                                              , core::InternalTextureFormat internalFormat = core::ITF_RGBA8
                                                              , bool generateMipmaps = false );
 

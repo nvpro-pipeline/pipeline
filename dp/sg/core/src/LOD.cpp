@@ -93,7 +93,7 @@ namespace dp
 
       unsigned int LOD::getNumberOfRanges() const
       {
-        return( util::checked_cast<unsigned int>(m_ranges.size()) );
+        return( dp::checked_cast<unsigned int>(m_ranges.size()) );
       }
 
       const float * LOD::getRanges() const
@@ -215,7 +215,7 @@ namespace dp
       {
         Group::feedHashGenerator( hg );
         hg.update( reinterpret_cast<const unsigned char *>(&m_center), sizeof(m_center) );
-        hg.update( reinterpret_cast<const unsigned char *>(&m_ranges), util::checked_cast<unsigned int>(m_ranges.size() * sizeof(float) ) );
+        hg.update( reinterpret_cast<const unsigned char *>(&m_ranges), dp::checked_cast<unsigned int>(m_ranges.size() * sizeof(float) ) );
         hg.update( reinterpret_cast<const unsigned char *>(&m_rangeLock), sizeof(m_rangeLock) );
         hg.update( reinterpret_cast<const unsigned char *>(&m_isRangeLocked), sizeof(m_isRangeLocked) );
       }

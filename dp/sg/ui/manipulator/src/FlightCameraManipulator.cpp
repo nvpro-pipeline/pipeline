@@ -40,7 +40,7 @@ namespace dp
       namespace manipulator
       {
 
-        static const dp::util::Uint32 AREAOFPEACE = 1;
+        static const dp::Uint32 AREAOFPEACE = 1;
 
         FlightCameraManipulator::FlightCameraManipulator( const dp::math::Vec2f & sensitivity )
         : Manipulator()

@@ -740,7 +740,7 @@ namespace dp
         if (!m_intersectionList.empty() && dist < m_intersectionList[m_nearestIntIdx].getDist())
         {
           // we can use the size as the index, because we have not added the intersection yet
-          m_nearestIntIdx = checked_cast<unsigned int>(m_intersectionList.size());
+          m_nearestIntIdx = dp::checked_cast<unsigned int>(m_intersectionList.size());
         }
 
         // OK, here we have an intersection, so let's store it

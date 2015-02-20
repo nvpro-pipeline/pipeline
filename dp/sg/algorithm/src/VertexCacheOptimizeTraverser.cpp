@@ -67,7 +67,7 @@ namespace dp
               IndexSet::ConstIterator<unsigned int> idx( p->getIndexSet(), p->getElementOffset() );
               for ( unsigned int i=0 ; i<count ; i++ )
               {
-                m_newIndices[i] = checked_cast<int>( idx[i] );
+                m_newIndices[i] = dp::checked_cast<int>( idx[i] );
               }
             }
 

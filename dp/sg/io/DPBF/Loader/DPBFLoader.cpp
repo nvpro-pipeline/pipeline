@@ -1633,37 +1633,37 @@ DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFTriPatches4,8);      // Compile-time assert 
 
 #pragma pack(pop)
 
-inline dp::util::DataType DPBFLoader::convertDataType( unsigned int dataType )
+inline dp::DataType DPBFLoader::convertDataType( unsigned int dataType )
 {
   if ( (m_nbfMajor < 0x54) || (m_nbfMajor == 0x54 && m_nbfMinor < 0x02) )
   {
     switch (dataType)
     {
     case 0: // was DP_BYTE
-      return DT_INT_8;
+      return dp::DT_INT_8;
     case 1:
-      return DT_UNSIGNED_INT_8; // was DP_UNSIGNED_BYTE
+      return dp::DT_UNSIGNED_INT_8; // was DP_UNSIGNED_BYTE
     case 2:
-      return DT_INT_16; // was DP_SHORT
+      return dp::DT_INT_16; // was DP_SHORT
     case 3:
-      return DT_UNSIGNED_INT_16; // was DP_UNSIGNED_SHORT
+      return dp::DT_UNSIGNED_INT_16; // was DP_UNSIGNED_SHORT
     case 4:
-      return DT_INT_32; // was DP_INT
+      return dp::DT_INT_32; // was DP_INT
     case 5:
-      return DT_UNSIGNED_INT_32; // was DP_UNSIGNED_INT
+      return dp::DT_UNSIGNED_INT_32; // was DP_UNSIGNED_INT
     case 6:
-      return DT_FLOAT_32; // was DP_FLOAT
+      return dp::DT_FLOAT_32; // was DP_FLOAT
     case 7:
-      return DT_FLOAT_64; // was DP_DOUBLE
+      return dp::DT_FLOAT_64; // was DP_DOUBLE
     case ~0:
-      return DT_UNKNOWN;
+      return dp::DT_UNKNOWN;
     }
     DP_ASSERT( !"unsupported datatype");
-    return DT_UNKNOWN;
+    return dp::DT_UNKNOWN;
   }
   else
   {
-    return static_cast<dp::util::DataType>(dataType);
+    return static_cast<dp::DataType>(dataType);
   }
 }
 
@@ -3508,7 +3508,7 @@ PrimitiveSharedPtr DPBFLoader::loadMeshes(uint_t offset)
       }
     }
     IndexSetSharedPtr iset( IndexSet::create() );
-    iset->setData( &meshSet[0], checked_cast<unsigned int>(meshSet.size()) );
+    iset->setData( &meshSet[0], dp::checked_cast<unsigned int>(meshSet.size()) );
 
     meshesHdl->setIndexSet( iset );
   }
@@ -3566,7 +3566,7 @@ PrimitiveSharedPtr DPBFLoader::loadStrips(uint_t offset)
     }
     stripSet.pop_back();
     IndexSetSharedPtr iset( IndexSet::create() );
-    iset->setData( &stripSet[0], checked_cast<unsigned int>(stripSet.size()) );
+    iset->setData( &stripSet[0], dp::checked_cast<unsigned int>(stripSet.size()) );
 
     stripsHdl->setIndexSet( iset );
   }
@@ -4872,8 +4872,8 @@ ParameterGroupDataSharedPtr DPBFLoader::loadLineAttribute_nbf_54(uint_t offset)
   DP_ASSERT(laPtr->objectCode==NBF_LINE_ATTRIBUTE);
 
   ParameterGroupDataSharedPtr materialData = getMaterialParameterGroup( "standardMaterialParameters" );
-  DP_VERIFY( materialData->setParameter( "lineStippleFactor", checked_cast<Uint16>(laPtr->stippleFactor) ) );
-  DP_VERIFY( materialData->setParameter( "lineStipplePattern", checked_cast<Uint16>(laPtr->stipplePattern) ) );
+  DP_VERIFY( materialData->setParameter( "lineStippleFactor", dp::checked_cast<dp::Uint16>(laPtr->stippleFactor) ) );
+  DP_VERIFY( materialData->setParameter( "lineStipplePattern", dp::checked_cast<dp::Uint16>(laPtr->stipplePattern) ) );
 
   ParameterGroupDataSharedPtr geometryData = getMaterialParameterGroup( "standardGeometryParameters" );
   DP_VERIFY( geometryData->setParameter( "lineWidth", laPtr->width ) );
@@ -5583,7 +5583,7 @@ void DPBFLoader::readPrimitive_nbf_4d( PrimitiveSharedPtr const& dst, const NBFP
   {
     IndexSetSharedPtr iset( IndexSet::create() );
 
-    unsigned int byteSize = checked_cast<unsigned int>(dp::util::getSizeOf( convertDataType(src->indexSet.dataType) ) * src->indexSet.numberOfIndices);
+    unsigned int byteSize = dp::checked_cast<unsigned int>(dp::getSizeOf( convertDataType(src->indexSet.dataType) ) * src->indexSet.numberOfIndices);
     Offset_AutoPtr<byte_t> indicesPtr( m_fm, callback(), src->indexSet.idata, byteSize );
 
     iset->setData( indicesPtr, src->indexSet.numberOfIndices, convertDataType(src->indexSet.dataType), src->indexSet.primitiveRestartIndex );
@@ -5932,7 +5932,7 @@ void DPBFLoader::readVertexAttributeSet( VertexAttributeSetSharedPtr const& dst,
   {
     if ( src->vattribs[i].numVData )
     {
-      uint_t sizeofVertex = checked_cast<uint_t>(src->vattribs[i].size * dp::util::getSizeOf( convertDataType(src->vattribs[i].type) ));
+      uint_t sizeofVertex = dp::checked_cast<uint_t>(src->vattribs[i].size * dp::getSizeOf( convertDataType(src->vattribs[i].type) ));
       Offset_AutoPtr<byte_t> vdata( m_fm, callback(), src->vattribs[i].vdata,
         src->vattribs[i].numVData * sizeofVertex );
 
@@ -5960,7 +5960,7 @@ IndexSetSharedPtr DPBFLoader::loadIndexSet( uint_t offset )
     IndexSetSharedPtr iset;
     if ( !loadSharedObject<IndexSet>( iset, isPtr ) )
     {
-      unsigned int byteSize = checked_cast<uint_t>(dp::util::getSizeOf( convertDataType(isPtr->dataType) ) * isPtr->numberOfIndices);
+      unsigned int byteSize = dp::checked_cast<uint_t>(dp::getSizeOf( convertDataType(isPtr->dataType) ) * isPtr->numberOfIndices);
       Offset_AutoPtr<byte_t> indicesPtr( m_fm, callback(), isPtr->idata, byteSize );
 
       iset->setData( indicesPtr, isPtr->numberOfIndices, convertDataType(isPtr->dataType), isPtr->primitiveRestartIndex );
@@ -6031,7 +6031,7 @@ VertexAttributeSetSharedPtr DPBFLoader::loadVertexAttributeSet_nbf_3a( uint_t va
       {
         if ( vasPtr->vattribs[i].numVData )
         {
-          uint_t sizeofVertex = checked_cast<uint_t>(vasPtr->vattribs[i].size * dp::util::getSizeOf( convertDataType(vasPtr->vattribs[i].type) ));
+          uint_t sizeofVertex = dp::checked_cast<uint_t>(vasPtr->vattribs[i].size * dp::getSizeOf( convertDataType(vasPtr->vattribs[i].type) ));
           Offset_AutoPtr<byte_t> vdata( m_fm, callback(), vasPtr->vattribs[i].vdata,
             vasPtr->vattribs[i].numVData * sizeofVertex );
 
@@ -6083,7 +6083,7 @@ VertexAttributeSetSharedPtr DPBFLoader::loadVertexAttributeSet_nbf_38( uint_t va
           if ( tcSets[i].numTexCoords )
           {
             Offset_AutoPtr<float> coords(m_fm, callback(), tcSets[i].texCoords, tcSets[i].numTexCoords * tcSets[i].coordDim);
-            cvas->setVertexData( VertexAttributeSet::DP_SG_TEXCOORD0+i, tcSets[i].coordDim, dp::util::DT_FLOAT_32, coords, 0, tcSets[i].numTexCoords );
+            cvas->setVertexData( VertexAttributeSet::DP_SG_TEXCOORD0+i, tcSets[i].coordDim, dp::DT_FLOAT_32, coords, 0, tcSets[i].numTexCoords );
             cvas->setEnabled(VertexAttributeSet::DP_SG_TEXCOORD0+i, true); // generic API require explicit enable
           }
         }
@@ -6093,7 +6093,7 @@ VertexAttributeSetSharedPtr DPBFLoader::loadVertexAttributeSet_nbf_38( uint_t va
       if ( vasPtr->numColors )
       {
         Offset_AutoPtr<float> colors(m_fm, callback(), vasPtr->colors, vasPtr->numColors * vasPtr->colorDim);
-        cvas->setVertexData( VertexAttributeSet::DP_SG_COLOR, vasPtr->colorDim, dp::util::DT_FLOAT_32, colors, 0, vasPtr->numColors );
+        cvas->setVertexData( VertexAttributeSet::DP_SG_COLOR, vasPtr->colorDim, dp::DT_FLOAT_32, colors, 0, vasPtr->numColors );
         cvas->setEnabled(VertexAttributeSet::DP_SG_COLOR, true);
       }
 
@@ -6101,7 +6101,7 @@ VertexAttributeSetSharedPtr DPBFLoader::loadVertexAttributeSet_nbf_38( uint_t va
       if ( vasPtr->numSecondaryColors )
       {
         Offset_AutoPtr<float> colors(m_fm, callback(), vasPtr->secondaryColors, vasPtr->numSecondaryColors * vasPtr->secondaryColorDim);
-        cvas->setVertexData( VertexAttributeSet::DP_SG_SECONDARY_COLOR, vasPtr->secondaryColorDim, dp::util::DT_FLOAT_32, colors, 0, vasPtr->numSecondaryColors );
+        cvas->setVertexData( VertexAttributeSet::DP_SG_SECONDARY_COLOR, vasPtr->secondaryColorDim, dp::DT_FLOAT_32, colors, 0, vasPtr->numSecondaryColors );
         cvas->setEnabled(VertexAttributeSet::DP_SG_SECONDARY_COLOR, true); // generic API require explicit enable
       }
 

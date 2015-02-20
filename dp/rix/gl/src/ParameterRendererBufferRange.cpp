@@ -44,7 +44,7 @@ namespace dp
         , m_target( target )
         , m_uboBinding( GLint(uboBinding) )
         , m_uboBlockSize( uboBlockSize )
-        , m_cacheData( new dp::util::Uint8[uboBlockSize] )
+        , m_cacheData( new dp::Uint8[uboBlockSize] )
         , m_bufferUpdater(new dp::gl::BufferUpdater(ubo))
       {
         DP_ASSERT( !m_parameters.empty() );

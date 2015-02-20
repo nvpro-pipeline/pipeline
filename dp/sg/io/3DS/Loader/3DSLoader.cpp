@@ -1577,7 +1577,7 @@ ThreeDSLoader::constructGeometry(GroupSharedPtr const& group, char *name, Lib3ds
   }
 
   IndexSetSharedPtr iset( IndexSet::create() );
-  iset->setData( &indices[0], checked_cast<unsigned int>(indices.size()) );
+  iset->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
   // calculate the vertex normals for each smoothing group in this mesh
   for(j=0; j<smoothGroups.size(); j++)
@@ -1618,8 +1618,8 @@ ThreeDSLoader::constructGeometry(GroupSharedPtr const& group, char *name, Lib3ds
   if(m_numMaterials == 0 || !hasMaterial)
   {
     VertexAttributeSetSharedPtr hVas(VertexAttributeSet::create());
-    hVas->setVertices( &vertex[0], checked_cast<unsigned int>( vertex.size() ) );
-    hVas->setNormals( &normals[0], checked_cast<unsigned int>( normals.size() ) );
+    hVas->setVertices( &vertex[0], dp::checked_cast<unsigned int>( vertex.size() ) );
+    hVas->setNormals( &normals[0], dp::checked_cast<unsigned int>( normals.size() ) );
 
     // there are no materials present; export this whole mesh as one Primitive
     // create the triangle group to hold the vertex data, faces, and possibly texture coordinates
@@ -1730,12 +1730,12 @@ ThreeDSLoader::constructGeometry(GroupSharedPtr const& group, char *name, Lib3ds
       { 
         VertexAttributeSetSharedPtr hVas(VertexAttributeSet::create());
 
-        hVas->setVertices(&(matGroup->vertices.at(0)), checked_cast<unsigned int>( matGroup->vertices.size() ) );
-        hVas->setNormals(&(matGroup->normals.at(0)), checked_cast<unsigned int>( matGroup->normals.size() ) );
+        hVas->setVertices(&(matGroup->vertices.at(0)), dp::checked_cast<unsigned int>( matGroup->vertices.size() ) );
+        hVas->setNormals(&(matGroup->normals.at(0)), dp::checked_cast<unsigned int>( matGroup->normals.size() ) );
         if(hasTexture)
         {
           // if there was a texture, it was bound to texunit 0
-          hVas->setTexCoords(0, &(matGroup->texCoords.at(0)), checked_cast<unsigned int>( matGroup->texCoords.size() ) );
+          hVas->setTexCoords(0, &(matGroup->texCoords.at(0)), dp::checked_cast<unsigned int>( matGroup->texCoords.size() ) );
         }
         else if(m_hasTexture[mat])
         {
@@ -1750,7 +1750,7 @@ ThreeDSLoader::constructGeometry(GroupSharedPtr const& group, char *name, Lib3ds
           vector<unsigned int> indices;
           vector<int>* vVec = &(matGroup->visibilities);
           DP_ASSERT( matGroup->indices.size() % 3 == 0 );
-          int numFaces = checked_cast<int>(matGroup->indices.size() / 3);
+          int numFaces = dp::checked_cast<int>(matGroup->indices.size() / 3);
 
           for(int k=0; k<numFaces; k++)
           {
@@ -1787,7 +1787,7 @@ ThreeDSLoader::constructGeometry(GroupSharedPtr const& group, char *name, Lib3ds
           {
             // add the list of segments to the Lines object
             IndexSetSharedPtr iset( IndexSet::create() );
-            iset->setData( &indices[0], checked_cast<unsigned int>(indices.size()) );
+            iset->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
             hLines->setIndexSet( iset );
           }
           // add the vertex data to the LineStrips object
@@ -1800,7 +1800,7 @@ ThreeDSLoader::constructGeometry(GroupSharedPtr const& group, char *name, Lib3ds
           PrimitiveSharedPtr hTris = Primitive::create( PRIMITIVE_TRIANGLES );
           // add the list of faces to the Triangles object
           IndexSetSharedPtr iset( IndexSet::create() );
-          iset->setData( &matGroup->indices[0], checked_cast<unsigned int>(matGroup->indices.size()) );
+          iset->setData( &matGroup->indices[0], dp::checked_cast<unsigned int>(matGroup->indices.size()) );
           hTris->setIndexSet( iset );
           // add the vertex data to the Triangles object
           hTris->setVertexAttributeSet( hVas );

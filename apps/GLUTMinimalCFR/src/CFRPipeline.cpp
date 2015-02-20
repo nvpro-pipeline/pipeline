@@ -181,7 +181,7 @@ bool CFRPipeline::init( const dp::gl::RenderContextSharedPtr &renderContext,
 
 void CFRPipeline::resize( size_t width, size_t height )
 {
-  m_compositeTexture->resize( dp::util::checked_cast<unsigned int>( width ), dp::util::checked_cast<unsigned int>( height ) );
+  m_compositeTexture->resize( dp::checked_cast<unsigned int>( width ), dp::checked_cast<unsigned int>( height ) );
 
   for ( size_t i = 0; i < m_rendererCount; ++i )
   {
@@ -189,7 +189,7 @@ void CFRPipeline::resize( size_t width, size_t height )
     if( i != m_primaryGpuIndex )
     {
       // render target of primary gpu doesn't need a resize (it's the final rendertarget)
-      gpuData.m_renderTarget->setSize( dp::util::checked_cast<unsigned int>( width ), dp::util::checked_cast<unsigned int>( height ) );
+      gpuData.m_renderTarget->setSize( dp::checked_cast<unsigned int>( width ), dp::checked_cast<unsigned int>( height ) );
     }
 
     gpuData.m_renderTarget->setClearMask( dp::gl::TBM_COLOR_BUFFER | dp::gl::TBM_DEPTH_BUFFER | dp::gl::TBM_STENCIL_BUFFER );
@@ -198,7 +198,7 @@ void CFRPipeline::resize( size_t width, size_t height )
     // enable stencil test, set stencil func/value to only render to tile with value i
     glEnable( GL_STENCIL_TEST );
     glStencilOp( GL_KEEP, GL_KEEP, GL_KEEP );
-    glStencilFunc( GL_EQUAL, dp::util::checked_cast<GLuint>(i), ~0 );
+    glStencilFunc( GL_EQUAL, dp::checked_cast<GLuint>(i), ~0 );
 
     // initialize stencil buffer of render targets with a regular pattern
     generateStencilPattern( gpuData.m_renderTarget );
@@ -281,13 +281,13 @@ void CFRPipeline::doRender(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::
 
 #if CFRPIPELINE_PRIMARY_GPU_IMPROVEMENT
   //  use the stencil buffer to composite correctly (draw all except the primary gpu tiles)
-  glStencilFunc( GL_NOTEQUAL, dp::util::checked_cast<GLuint>(m_primaryGpuIndex), ~0 );
+  glStencilFunc( GL_NOTEQUAL, dp::checked_cast<GLuint>(m_primaryGpuIndex), ~0 );
 #endif
 
   m_outputRenderer->presentTexture2D( m_compositeTexture, renderTargetGL, false );
 
 #if CFRPIPELINE_PRIMARY_GPU_IMPROVEMENT
-  glStencilFunc( GL_EQUAL, dp::util::checked_cast<GLuint>(m_primaryGpuIndex), ~0 );
+  glStencilFunc( GL_EQUAL, dp::checked_cast<GLuint>(m_primaryGpuIndex), ~0 );
 #endif
 
   renderTargetGL->endRendering();
@@ -387,10 +387,10 @@ void CFRPipeline::generateStencilPattern( dp::gl::RenderTargetSharedPtr renderTa
     {
       size_t x = tileX * m_tileWidth;
       size_t y = tileY * m_tileHeight;
-      GLuint value = dp::util::checked_cast<GLuint>( (tileX + m_rendererCount - (tileY % m_rendererCount) ) % m_rendererCount );
+      GLuint value = dp::checked_cast<GLuint>( (tileX + m_rendererCount - (tileY % m_rendererCount) ) % m_rendererCount );
 
-      glScissor( dp::util::checked_cast<GLuint>(x),            dp::util::checked_cast<GLuint>(y)
-               , dp::util::checked_cast<GLsizei>(m_tileWidth), dp::util::checked_cast<GLsizei>(m_tileHeight) );
+      glScissor( dp::checked_cast<GLuint>(x),            dp::checked_cast<GLuint>(y)
+               , dp::checked_cast<GLsizei>(m_tileWidth), dp::checked_cast<GLsizei>(m_tileHeight) );
 
       glClearBufferuiv( GL_STENCIL, 0, &value );
     }

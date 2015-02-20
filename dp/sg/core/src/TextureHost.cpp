@@ -985,7 +985,7 @@ namespace dp
         m_images.push_back( std::vector<Image>() );
         m_images.back().push_back( Image(width, height, depth, format, type));
         invalidateHashKey();
-        return( util::checked_cast<unsigned int>(m_images.size() - 1) ); 
+        return( dp::checked_cast<unsigned int>(m_images.size() - 1) ); 
       }
 
       void TextureHost::setImageData( unsigned int image, const void * pixels
@@ -2159,7 +2159,7 @@ namespace dp
         }
         else
         {
-          hg.update( reinterpret_cast<const unsigned char *>(m_filename.c_str()), util::checked_cast<unsigned int>(m_filename.length()) );
+          hg.update( reinterpret_cast<const unsigned char *>(m_filename.c_str()), dp::checked_cast<unsigned int>(m_filename.length()) );
         }
         hg.update( reinterpret_cast<const unsigned char *>(&m_gpuFormat), sizeof(m_gpuFormat) );
       }

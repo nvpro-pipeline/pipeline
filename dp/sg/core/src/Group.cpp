@@ -92,7 +92,7 @@ namespace dp
       Group::ChildrenContainer::iterator Group::doInsertChild( const ChildrenContainer::iterator & gcci, const NodeSharedPtr & child )
       {
         DP_ASSERT( child );
-        unsigned int idx = util::checked_cast<unsigned int>(std::distance( m_children.begin(), gcci ));
+        unsigned int idx = dp::checked_cast<unsigned int>(std::distance( m_children.begin(), gcci ));
         preAddChild( idx );
         ChildrenContainer::iterator position = m_children.insert( gcci, child );
         child->attach( this );
@@ -102,7 +102,7 @@ namespace dp
 
       Group::ChildrenContainer::iterator Group::doRemoveChild( const ChildrenContainer::iterator & cci )
       {
-        unsigned int idx = util::checked_cast<unsigned int>(std::distance<ChildrenContainer::iterator>( m_children.begin(), cci ));
+        unsigned int idx = dp::checked_cast<unsigned int>(std::distance<ChildrenContainer::iterator>( m_children.begin(), cci ));
         preRemoveChild( idx );
         (*cci)->detach( this );
         ChildrenContainer::iterator ret = m_children.erase( cci );
@@ -116,7 +116,7 @@ namespace dp
         newChild->attach( this );
         (*cci)->detach( this );
 
-        unsigned int idx = util::checked_cast<unsigned int>(std::distance<ChildrenContainer::iterator>( m_children.begin(), cci ));
+        unsigned int idx = dp::checked_cast<unsigned int>(std::distance<ChildrenContainer::iterator>( m_children.begin(), cci ));
         notify( Event( this, Event::PRE_CHILD_REMOVE, m_children[idx], idx ) );
         *cci = newChild;
         notify( Event( this, Event::POST_CHILD_ADD, m_children[idx], idx ) );
@@ -209,7 +209,7 @@ namespace dp
           {
             spheres.push_back( (*it)->getBoundingSphere() );
           }
-          sphere = boundingSphere( &spheres[0], dp::util::checked_cast<unsigned int>(spheres.size()) );
+          sphere = boundingSphere( &spheres[0], dp::checked_cast<unsigned int>(spheres.size()) );
         }
         return( sphere );
       }

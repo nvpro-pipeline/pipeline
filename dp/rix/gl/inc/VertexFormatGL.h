@@ -48,7 +48,7 @@ namespace dp
           Format()
             : m_enabled(false)
             , m_streamId( 0 )
-            , m_dataType( dp::util::DT_UNSIGNED_INT_8 )
+            , m_dataType( dp::DT_UNSIGNED_INT_8 )
             , m_numComponents( 0 )
             , m_normalized( false )
             , m_offset( 0 )
@@ -58,13 +58,13 @@ namespace dp
 
           bool operator==( const VertexFormatGL::Format& rhs ) const;
 
-          bool                m_enabled;
-          unsigned int        m_streamId;
-          dp::util::DataType  m_dataType;
-          unsigned int        m_numComponents;
-          bool                m_normalized;
-          unsigned int        m_offset;
-          unsigned int        m_stride;
+          bool          m_enabled;
+          unsigned int  m_streamId;
+          dp::DataType  m_dataType;
+          unsigned int  m_numComponents;
+          bool          m_normalized;
+          unsigned int  m_offset;
+          unsigned int  m_stride;
         };
 
         bool operator==( const VertexFormatGL &rhs ) const;

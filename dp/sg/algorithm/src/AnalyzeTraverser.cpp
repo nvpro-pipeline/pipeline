@@ -318,8 +318,8 @@ namespace dp
             DP_ASSERT( m_countMap.find( ci->first ) != m_countMap.end() );
             er->objectCount = m_countMap.find( ci->first )->second;
 
-            er->equivalentCount = checked_cast<unsigned int>(ci->second.equivalentObjects.size());
-            er->reducedCount    = checked_cast<unsigned int>(ci->second.uniqueObjects.size());
+            er->equivalentCount = dp::checked_cast<unsigned int>(ci->second.equivalentObjects.size());
+            er->reducedCount    = dp::checked_cast<unsigned int>(ci->second.uniqueObjects.size());
             results.push_back( er );
           }
         }
@@ -417,7 +417,7 @@ namespace dp
               uvr = new UnusedVerticesResult;
             }
             uvr->objectCount++;
-            uvr->unusedVerticesCount += checked_cast<unsigned int>(ci->second.size());
+            uvr->unusedVerticesCount += dp::checked_cast<unsigned int>(ci->second.size());
           }
         }
         if ( uvr != nullptr )
@@ -425,7 +425,7 @@ namespace dp
           results.push_back( uvr );
         }
 
-        return( checked_cast<unsigned int>(results.size()) );
+        return( dp::checked_cast<unsigned int>(results.size()) );
       }
 
       void AnalyzeTraverser::handleBillboard( const Billboard *p )
@@ -648,7 +648,7 @@ namespace dp
           if ( ! it->second.empty() )
           {
             m_combinableInfo[OC_GEONODE].first++;
-            m_combinableInfo[OC_GEONODE].second += checked_cast<unsigned int>(it->second.size());
+            m_combinableInfo[OC_GEONODE].second += dp::checked_cast<unsigned int>(it->second.size());
           }
         }
         for ( map<LODSharedPtr,vector<LODSharedPtr> >::const_iterator it = lods.begin() ; it != lods.end() ; ++it )
@@ -656,7 +656,7 @@ namespace dp
           if ( ! it->second.empty() )
           {
             m_combinableInfo[OC_LOD].first++;
-            m_combinableInfo[OC_LOD].second += checked_cast<unsigned int>(it->second.size());
+            m_combinableInfo[OC_LOD].second += dp::checked_cast<unsigned int>(it->second.size());
           }
         }
         for ( map<TransformSharedPtr,vector<TransformSharedPtr> >::const_iterator it = transforms.begin() ; it != transforms.end() ; ++it )
@@ -664,7 +664,7 @@ namespace dp
           if ( ! it->second.empty() )
           {
             m_combinableInfo[OC_TRANSFORM].first++;
-            m_combinableInfo[OC_TRANSFORM].second += checked_cast<unsigned int>(it->second.size());
+            m_combinableInfo[OC_TRANSFORM].second += dp::checked_cast<unsigned int>(it->second.size());
           }
         }
       }

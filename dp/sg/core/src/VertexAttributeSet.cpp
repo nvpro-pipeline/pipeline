@@ -120,10 +120,10 @@ namespace dp
       }
 
       void VertexAttributeSet::reserveVertexData( unsigned int attrib, unsigned int size
-                                                , dp::util::DataType type, unsigned int count )
+                                                , dp::DataType type, unsigned int count )
       {
         DP_ASSERT( ( DP_SG_POSITION <= attrib ) && ( attrib <= DP_SG_ATTR15 ) );
-        DP_ASSERT( ( dp::util::DT_INT_8 <= type ) && ( type <= dp::util::DT_NUM_DATATYPES ) );
+        DP_ASSERT( ( dp::DT_INT_8 <= type ) && ( type <= dp::DT_NUM_DATATYPES ) );
 
         // we alias generic and conventional vertex attributes, that is - 
         // pairs of generic and conventional vertex attributes are sharing the same storage
@@ -149,12 +149,12 @@ namespace dp
         subscribeBuffer( it );
       }
 
-      void VertexAttributeSet::setVertexData( unsigned int attrib, unsigned int size, dp::util::DataType type
+      void VertexAttributeSet::setVertexData( unsigned int attrib, unsigned int size, dp::DataType type
                                             , const void * data, unsigned int stride, unsigned int count
                                             , bool enable )
       {
         DP_ASSERT( ( DP_SG_POSITION <= attrib ) && ( attrib <= DP_SG_ATTR15 ) );
-        DP_ASSERT( ( dp::util::DT_INT_8 <= type ) && ( type <= dp::util::DT_NUM_DATATYPES ) );
+        DP_ASSERT( ( dp::DT_INT_8 <= type ) && ( type <= dp::DT_NUM_DATATYPES ) );
         DP_ASSERT( data );
 
         // we alias generic and conventional vertex attributes, that is - 
@@ -183,11 +183,11 @@ namespace dp
       }
 
       void VertexAttributeSet::setVertexData( unsigned int attrib, unsigned int pos, unsigned int size
-                                            , dp::util::DataType type, const void * data, unsigned int stride
+                                            , dp::DataType type, const void * data, unsigned int stride
                                             , unsigned int count, bool enable )
       {
         DP_ASSERT( ( DP_SG_POSITION <= attrib ) && ( attrib <= DP_SG_ATTR15 ) );
-        DP_ASSERT( ( dp::util::DT_INT_8 <= type ) && ( type <= dp::util::DT_NUM_DATATYPES ) );
+        DP_ASSERT( ( dp::DT_INT_8 <= type ) && ( type <= dp::DT_NUM_DATATYPES ) );
         DP_ASSERT( data );
 
         // we alias generic and conventional vertex attributes, that is - 
@@ -222,13 +222,13 @@ namespace dp
         notify( Event(this ) );
       }
 
-      void VertexAttributeSet::setVertexData(  unsigned int attrib, unsigned int size, dp::util::DataType type
+      void VertexAttributeSet::setVertexData(  unsigned int attrib, unsigned int size, dp::DataType type
                                              , const BufferSharedPtr &buffer, unsigned int offset
                                              , unsigned int strideInBytes, unsigned int count
                                              , bool enable )
       {
         DP_ASSERT( ( DP_SG_POSITION <= attrib ) && ( attrib <= DP_SG_ATTR15 ) );
-        DP_ASSERT( ( dp::util::DT_INT_8 <= type ) && ( type <= dp::util::DT_NUM_DATATYPES ) );
+        DP_ASSERT( ( dp::DT_INT_8 <= type ) && ( type <= dp::DT_NUM_DATATYPES ) );
         DP_ASSERT( buffer );
 
         // we alias generic and conventional vertex attributes, that is - 
@@ -261,12 +261,12 @@ namespace dp
       // FIXME This will run extremly slow due to a lot of setData calls.
       void VertexAttributeSet::setVertexData( unsigned int attrib, const unsigned int * to
                                             , const unsigned int * from, unsigned int size
-                                            , dp::util::DataType type, const void * data, unsigned int stride
+                                            , dp::DataType type, const void * data, unsigned int stride
                                             , unsigned int count, bool enable )
       {
         DP_ASSERT( ( DP_SG_POSITION <= attrib ) && ( attrib <= DP_SG_ATTR15 ) );
         DP_ASSERT( from );
-        DP_ASSERT( ( dp::util::DT_INT_8 <= type ) && ( type <= dp::util::DT_NUM_DATATYPES ) );
+        DP_ASSERT( ( dp::DT_INT_8 <= type ) && ( type <= dp::DT_NUM_DATATYPES ) );
         DP_ASSERT( data );
   
         // we alias generic and conventional vertex attributes, that is - 
@@ -385,11 +385,11 @@ namespace dp
         return( ( it == m_vattribs.end() ) ? 0 : it->second.getVertexDataSize() );
       }
 
-      dp::util::DataType VertexAttributeSet::getTypeOfVertexData(unsigned int attrib) const
+      dp::DataType VertexAttributeSet::getTypeOfVertexData(unsigned int attrib) const
       {
         DP_ASSERT( ( DP_SG_POSITION <= attrib ) && ( attrib <= DP_SG_ATTR15 ) ); // undefined behavior on invalid attrib
         AttributeContainer::const_iterator it = m_vattribs.find( attrib );
-        return( ( it == m_vattribs.end() ) ? dp::util::DT_UNKNOWN : it->second.getVertexDataType() );
+        return( ( it == m_vattribs.end() ) ? dp::DT_UNKNOWN : it->second.getVertexDataType() );
       }
 
       unsigned int VertexAttributeSet::getNumberOfVertexData(unsigned int attrib) const
@@ -716,11 +716,11 @@ namespace dp
                   ; equi && thisit != m_vattribs.end() && thatit != vas->m_vattribs.end()
                   ; ++thisit, ++thatit )
               {
-                dp::util::DataType type = thisit->second.getVertexDataType();
+                dp::DataType type = thisit->second.getVertexDataType();
                 size_t vertexDataCount = thisit->second.getVertexDataCount();
                 size_t vertexDataBytes = thisit->second.getVertexDataBytes();
 
-                if ( type != dp::util::DT_UNKNOWN )
+                if ( type != dp::DT_UNKNOWN )
                 {
                   if ( isIntegerType(type) )
                   {
@@ -737,7 +737,7 @@ namespace dp
                   else
                   {
                     unsigned int numComps = thisit->second.getVertexDataCount() * thisit->second.getVertexDataSize();
-                    if ( type == dp::util::DT_FLOAT_32 )
+                    if ( type == dp::DT_FLOAT_32 )
                     {
                       Buffer::ConstIterator<float>::Type lhsData = getVertexData<float>(thisit->first);
                       Buffer::ConstIterator<float>::Type rhsData = vas->getVertexData<float>(thisit->first);
@@ -756,7 +756,7 @@ namespace dp
                     }
                     else
                     {
-                      DP_ASSERT(type==dp::util::DT_FLOAT_64);
+                      DP_ASSERT(type==dp::DT_FLOAT_64);
                       Buffer::ConstIterator<double>::Type lhsData = getVertexData<double>(thisit->first);
                       Buffer::ConstIterator<double>::Type rhsData = vas->getVertexData<double>(thisit->first);
 
@@ -803,7 +803,7 @@ namespace dp
         {
           if ( indexMap[indices[i]] == 0xFFFFFFFF )
           {
-            indexMap[indices[i]] = util::checked_cast<unsigned int>(iFrom.size());
+            indexMap[indices[i]] = dp::checked_cast<unsigned int>(iFrom.size());
             iFrom.push_back(indices[i]);
           }
         }
@@ -816,11 +816,11 @@ namespace dp
             Buffer::DataReadLock lock( oldData );
 
             unsigned int size = from->getSizeOfVertexData( slot );
-            dp::util::DataType type = from->getTypeOfVertexData( slot ); 
+            dp::DataType type = from->getTypeOfVertexData( slot ); 
 
             to->setVertexData( slot, NULL, &iFrom[0], size, type, lock.getPtr()
                                 , from->getStrideOfVertexData( slot ) 
-                                , util::checked_cast<unsigned int>(iFrom.size()) );
+                                , dp::checked_cast<unsigned int>(iFrom.size()) );
 
             // inherit enable states from source attrib
             // normalize-enable state only meaningful for generic aliases!
@@ -848,7 +848,7 @@ namespace dp
           {
             if ( indexMap[indices[i][j]] == ~0 )
             {
-              indexMap[indices[i][j]] = util::checked_cast<unsigned int>(iFrom.size());
+              indexMap[indices[i][j]] = dp::checked_cast<unsigned int>(iFrom.size());
               iFrom.push_back(indices[i][j]);
             }
           }
@@ -862,11 +862,11 @@ namespace dp
             Buffer::DataReadLock lock( oldData );
 
             unsigned int size = from->getSizeOfVertexData( slot );
-            dp::util::DataType type = from->getTypeOfVertexData( slot ); 
+            dp::DataType type = from->getTypeOfVertexData( slot ); 
 
             to->setVertexData( slot, NULL, &iFrom[0], size, type, lock.getPtr()
                              , from->getStrideOfVertexData( slot )
-                             , util::checked_cast<unsigned int>(iFrom.size()) );
+                             , dp::checked_cast<unsigned int>(iFrom.size()) );
 
             // inherit enable states from source attrib
             // normalize-enable state only meaningful for generic aliases!

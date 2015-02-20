@@ -218,7 +218,7 @@ namespace dp
 
       inline unsigned int Scene::getNumberOfCameras() const
       {
-        return( dp::util::checked_cast<unsigned int>(m_cameras.size()) );
+        return( dp::checked_cast<unsigned int>(m_cameras.size()) );
       }
 
       inline Scene::CameraConstIterator Scene::beginCameras() const

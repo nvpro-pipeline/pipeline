@@ -29,7 +29,6 @@
 #include <dp/rix/gl/Config.h>
 #include <dp/gl/Buffer.h>
 #include <dp/gl/Texture.h>
-#include <dp/util/Types.h>
 #include <dp/rix/core/RiX.h>
 #include <dp/util/BitArray.h>
 
@@ -148,7 +147,7 @@ namespace dp
         // same constructor as in the base class to lower danger of parameter confusion when changing from base class
         // to GL class. the additional info has to be set explicitly, after base info was set to native.
         TextureDescriptionGL( dp::rix::core::TextureType type, dp::rix::core::InternalTextureFormat internalFormat,
-          dp::util::PixelFormat pixelFormat, dp::util::DataType dataType,
+          dp::PixelFormat pixelFormat, dp::DataType dataType,
           size_t width = 0, size_t height = 0, size_t depth = 0, size_t layers = 0, bool mipmaps = false )
           : TextureDescription( type, internalFormat, pixelFormat, dataType, width, height, depth, layers, mipmaps )
           , m_typeGL( 0 )
@@ -229,7 +228,7 @@ namespace dp
 
       struct BufferStoredReferenceGL : public dp::rix::core::BufferStoredReference 
       {
-        dp::util::Uint64  address;
+        dp::Uint64  address;
       };
 
       class RiXGL : public dp::rix::core::Renderer
@@ -264,7 +263,7 @@ namespace dp
 
         /** Indices **/
         RIX_GL_API virtual dp::rix::core::IndicesSharedHandle indicesCreate();
-        RIX_GL_API virtual void indicesSetData( dp::rix::core::IndicesSharedHandle const & handle, dp::util::DataType dataType, dp::rix::core::BufferSharedHandle const & bufferHandle, size_t offset, size_t count );
+        RIX_GL_API virtual void indicesSetData( dp::rix::core::IndicesSharedHandle const & handle, dp::DataType dataType, dp::rix::core::BufferSharedHandle const & bufferHandle, size_t offset, size_t count );
 
         /** Buffer **/
         RIX_GL_API virtual dp::rix::core::BufferSharedHandle bufferCreate( dp::rix::core::BufferDescription const & bufferDescription = dp::rix::core::BufferDescription() );

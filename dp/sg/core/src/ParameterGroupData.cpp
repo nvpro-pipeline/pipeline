@@ -706,7 +706,7 @@ namespace dp
       {
         Object::feedHashGenerator( hg );
         hg.update( m_parameterGroupSpec );
-        hg.update( reinterpret_cast<const unsigned char *>(m_data.data()), util::checked_cast<unsigned int>(m_data.size()) );
+        hg.update( reinterpret_cast<const unsigned char *>(m_data.data()), dp::checked_cast<unsigned int>(m_data.size()) );
       }
 
       void ParameterGroupData::setParameterIntern( const dp::fx::ParameterGroupSpec::iterator& it, const SamplerSharedPtr & value )

@@ -32,7 +32,6 @@
 
 #include "ContainerGL.h"
 #include <dp/gl/Program.h>
-#include <dp/util/Types.h>
 #include <dp/rix/gl/RiXGL.h>
 
 namespace dp

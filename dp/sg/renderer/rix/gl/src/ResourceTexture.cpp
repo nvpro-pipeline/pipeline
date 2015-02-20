@@ -61,27 +61,27 @@ namespace dp
             return resourceTexture;
           }
 
-          inline dp::util::PixelFormat getRiXPixelFormat( dp::sg::core::Image::PixelFormat pixelFormat )
+          inline dp::PixelFormat getRiXPixelFormat( dp::sg::core::Image::PixelFormat pixelFormat )
           {
             switch ( pixelFormat )
             {
             case dp::sg::core::Image::IMG_RGB:
-              return dp::util::PF_RGB;
+              return dp::PF_RGB;
             case dp::sg::core::Image::IMG_RGBA:
-              return dp::util::PF_RGBA;
+              return dp::PF_RGBA;
             case dp::sg::core::Image::IMG_BGR:
-              return dp::util::PF_BGR;
+              return dp::PF_BGR;
             case dp::sg::core::Image::IMG_BGRA:
-              return dp::util::PF_BGRA;
+              return dp::PF_BGRA;
             case dp::sg::core::Image::IMG_LUMINANCE:
-              return dp::util::PF_LUMINANCE;
+              return dp::PF_LUMINANCE;
             case dp::sg::core::Image::IMG_ALPHA:
-              return dp::util::PF_ALPHA;
+              return dp::PF_ALPHA;
             case dp::sg::core::Image::IMG_LUMINANCE_ALPHA:
-              return dp::util::PF_LUMINANCE_ALPHA;
+              return dp::PF_LUMINANCE_ALPHA;
             default:
               DP_ASSERT( !"unknown pixel format, assuming IMG_RGB");
-              return dp::util::PF_RGB;
+              return dp::PF_RGB;
             }
           }
 
@@ -230,8 +230,8 @@ namespace dp
             std::vector<dp::sg::core::Buffer::DataReadLock> buffers; // Keep these locks until textureSetData() is done with the input pointers.
             std::vector<void const *> data;
 
-            dp::util::PixelFormat pixelFormat = getRiXPixelFormat( texture->getFormat() );
-            dp::util::DataType pixelDataType = getRiXDataType( texture->getType() );
+            dp::PixelFormat pixelFormat = getRiXPixelFormat( texture->getFormat() );
+            dp::DataType pixelDataType = getRiXDataType( texture->getType() );
 
             for ( unsigned int img = 0; img < texture->getNumberOfImages(); ++img )
             {

@@ -349,7 +349,7 @@ private:
   dp::sg::core::EffectDataSharedPtr getMaterialEffect();
 
 private:
-  dp::util::DataType convertDataType( unsigned int dataType );
+  dp::DataType convertDataType( unsigned int dataType );
 
   std::vector<std::string>        m_searchPaths;  // a private copy of the search pathes given to us via the load API
   std::map<uint_t, dp::sg::core::ObjectSharedPtr> m_offsetObjectMap; // mapping offsets to SceniX objects

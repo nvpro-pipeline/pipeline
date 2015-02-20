@@ -42,7 +42,7 @@ namespace dp
 
       void RenderGroupGL::Cache::addGeometryInstance( GeometryInstanceGLHandle gi )
       {
-        gi->m_payload.m_position = dp::util::checked_cast<dp::util::Uint32>(m_geometryInstances.size());
+        gi->m_payload.m_position = dp::checked_cast<dp::Uint32>(m_geometryInstances.size());
         gi->m_payload.m_gi = gi;
 
         gi->m_renderGroup = m_renderGroup;
@@ -60,7 +60,7 @@ namespace dp
       {
         gi->detach( m_renderGroup, &gi->m_payload );
 
-        dp::util::Uint32 pos = gi->m_payload.m_position;
+        dp::Uint32 pos = gi->m_payload.m_position;
         m_dirty = true;
 
         // replace gi with the one at the back to avoid moving gis

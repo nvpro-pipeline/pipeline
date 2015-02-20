@@ -54,7 +54,7 @@ namespace dp
           {
           }
 
-          dp::util::Uint32 m_position;
+          dp::Uint32 m_position;
           GeometryInstanceGLHandle m_gi;
         };
 

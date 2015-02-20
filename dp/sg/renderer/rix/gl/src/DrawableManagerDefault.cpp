@@ -333,7 +333,7 @@ namespace dp
             }
           }
 
-          void DrawableManagerDefault::setDrawableInstanceTraversalMask( Handle handle, dp::util::Uint32 traversalMask )
+          void DrawableManagerDefault::setDrawableInstanceTraversalMask( Handle handle, dp::Uint32 traversalMask )
           {
             DP_ASSERT( handle.isPtrTo<DefaultHandleData>() );
             DefaultHandleDataSharedPtr const& handleData = handle.staticCast<DefaultHandleData>();

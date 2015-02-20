@@ -473,7 +473,7 @@ namespace dp
         std::vector<OBB> const &obbs = groupImpl->getOBBs();
 
         // TODO this is an allocation which is potential slow. Keep memory allocated per group?
-        DP_STATIC_ASSERT( sizeof( dp::util::BitArray::BitStorageType) % sizeof(dp::util::Uint32) == 0 );
+        DP_STATIC_ASSERT( sizeof( dp::util::BitArray::BitStorageType) % sizeof(dp::Uint32) == 0 );
         dp::util::BitArray visible( groupImpl->getObjectCount() );
 
         char const* basePtr = reinterpret_cast<char const*>(groupImpl->getMatrices());
@@ -514,7 +514,7 @@ namespace dp
           }
         }
 
-        result.staticCast<ResultBitSet>()->updateChanged( reinterpret_cast<dp::util::Uint32 const*>( visible.getBits() ) );
+        result.staticCast<ResultBitSet>()->updateChanged( reinterpret_cast<dp::Uint32 const*>( visible.getBits() ) );
       }
 
     } // namespace cpu

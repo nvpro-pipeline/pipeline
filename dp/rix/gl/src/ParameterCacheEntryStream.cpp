@@ -50,7 +50,7 @@ namespace dp
       /* ParameterCacheEntryUniform                                           */
       /************************************************************************/
       ParameterCacheEntryStream::ParameterCacheEntryStream( size_t cacheOffset, size_t containerOffset, size_t arraySize, size_t size )
-        : m_arraySize( dp::util::Uint32(arraySize) )
+        : m_arraySize( dp::Uint32(arraySize) )
         , m_cacheOffset( cacheOffset )
         , m_containerOffset( containerOffset )
         , m_size( size )
@@ -129,25 +129,25 @@ namespace dp
         class CacheEntryntConversion : public ParameterCacheEntryStream
         {
         public:
-          static dp::util::SharedPtr<CacheEntryntConversion> create( ProgramGLHandle program, dp::util::Int32 uniformLocation, size_t cacheOffset, size_t containerOffset, size_t arraySize );
+          static dp::util::SharedPtr<CacheEntryntConversion> create( ProgramGLHandle program, dp::Int32 uniformLocation, size_t cacheOffset, size_t containerOffset, size_t arraySize );
           virtual void render( const void* cache ) const;
           virtual void update( void* cache, const void* containerData ) const;
 
         protected:
-          CacheEntryntConversion( ProgramGLHandle /*program*/, dp::util::Int32 uniformLocation, size_t cacheOffset, size_t containerOffset, size_t arraySize );
+          CacheEntryntConversion( ProgramGLHandle /*program*/, dp::Int32 uniformLocation, size_t cacheOffset, size_t containerOffset, size_t arraySize );
 
         private:
           GLint m_uniformLocation;
         };
 
         template<unsigned int n, typename T, typename SourceType>
-        dp::util::SharedPtr<CacheEntryntConversion<n, T, SourceType>> CacheEntryntConversion<n,T,SourceType>::create( ProgramGLHandle program, dp::util::Int32 uniformLocation, size_t cacheOffset, size_t containerOffset, size_t arraySize )
+        dp::util::SharedPtr<CacheEntryntConversion<n, T, SourceType>> CacheEntryntConversion<n,T,SourceType>::create( ProgramGLHandle program, dp::Int32 uniformLocation, size_t cacheOffset, size_t containerOffset, size_t arraySize )
         {
           return( std::shared_ptr<CacheEntryntConversion<n,T,SourceType>>( new CacheEntryntConversion<n,T,SourceType>( program, uniformLocation, cacheOffset, containerOffset, arraySize ) ) );
         }
 
         template<unsigned int n, typename T, typename SourceType>
-        CacheEntryntConversion<n, T, SourceType>::CacheEntryntConversion( ProgramGLHandle /*program*/, dp::util::Int32 uniformLocation
+        CacheEntryntConversion<n, T, SourceType>::CacheEntryntConversion( ProgramGLHandle /*program*/, dp::Int32 uniformLocation
                                                                         , size_t cacheOffset, size_t containerOffset, size_t arraySize )
           : ParameterCacheEntryStream( cacheOffset, containerOffset, arraySize, sizeof( T ) * n * arraySize )
           , m_uniformLocation( uniformLocation )
@@ -174,24 +174,24 @@ namespace dp
         class CacheEntrynmt : public ParameterCacheEntryStream
         {
         public:
-          static dp::util::SharedPtr<CacheEntrynmt> create( ProgramGLHandle /*program*/, dp::util::Int32 m_uniformLocation, size_t m_cacheOffset, size_t m_containerOffset, size_t m_arraySize );
+          static dp::util::SharedPtr<CacheEntrynmt> create( ProgramGLHandle /*program*/, dp::Int32 m_uniformLocation, size_t m_cacheOffset, size_t m_containerOffset, size_t m_arraySize );
           virtual void render( const void* cache ) const;
           virtual void update( void* cache, void const* containerData ) const;
 
           int          m_uniformLocation;
 
         protected:
-          CacheEntrynmt( ProgramGLHandle /*program*/, dp::util::Int32 m_uniformLocation, size_t m_cacheOffset, size_t m_containerOffset, size_t m_arraySize );
+          CacheEntrynmt( ProgramGLHandle /*program*/, dp::Int32 m_uniformLocation, size_t m_cacheOffset, size_t m_containerOffset, size_t m_arraySize );
         };
 
         template<unsigned int n, unsigned int m, typename T>
-        dp::util::SharedPtr<CacheEntrynmt<n,m,T>> CacheEntrynmt<n,m,T>::create( ProgramGLHandle program, dp::util::Int32 uniformLocation, size_t cacheOffset, size_t containerOffset, size_t arraySize )
+        dp::util::SharedPtr<CacheEntrynmt<n,m,T>> CacheEntrynmt<n,m,T>::create( ProgramGLHandle program, dp::Int32 uniformLocation, size_t cacheOffset, size_t containerOffset, size_t arraySize )
         {
           return( std::shared_ptr<CacheEntrynmt<n,m,T>>( new CacheEntrynmt<n,m,T>( program, uniformLocation, cacheOffset, containerOffset, arraySize ) ) );
         }
 
         template<unsigned int n, unsigned int m, typename T>
-        CacheEntrynmt<n, m, T>::CacheEntrynmt( ProgramGLHandle /*program*/, dp::util::Int32 uniformLocation
+        CacheEntrynmt<n, m, T>::CacheEntrynmt( ProgramGLHandle /*program*/, dp::Int32 uniformLocation
                                              , size_t cacheOffset, size_t containerOffset, size_t arraySize )
           : ParameterCacheEntryStream( cacheOffset, containerOffset, arraySize, sizeof(T) * arraySize * m * n )
           , m_uniformLocation( uniformLocation )
@@ -326,7 +326,7 @@ namespace dp
         class CacheEntryImage : public ParameterCacheEntryStream
         {
         public:
-          static dp::util::SharedPtr<CacheEntryImage> create( ProgramGLHandle program, dp::util::Int32 uniformLocation, size_t cacheOffset, size_t containerOffset, size_t arraySize );
+          static dp::util::SharedPtr<CacheEntryImage> create( ProgramGLHandle program, dp::Int32 uniformLocation, size_t cacheOffset, size_t containerOffset, size_t arraySize );
           virtual void render( void const* cache ) const;
           virtual void update( void* cache, void const* containerData ) const;
 
@@ -343,15 +343,15 @@ namespace dp
           int    m_unit;
 
         protected:
-          CacheEntryImage( ProgramGLHandle program, dp::util::Int32 uniformLocation, size_t cacheOffset, size_t containerOffset, size_t arraySize );
+          CacheEntryImage( ProgramGLHandle program, dp::Int32 uniformLocation, size_t cacheOffset, size_t containerOffset, size_t arraySize );
         };
 
-        dp::util::SharedPtr<CacheEntryImage> CacheEntryImage::create( ProgramGLHandle program, dp::util::Int32 uniformLocation, size_t cacheOffset, size_t containerOffset, size_t arraySize )
+        dp::util::SharedPtr<CacheEntryImage> CacheEntryImage::create( ProgramGLHandle program, dp::Int32 uniformLocation, size_t cacheOffset, size_t containerOffset, size_t arraySize )
         {
           return( std::shared_ptr<CacheEntryImage>( new CacheEntryImage( program, uniformLocation, cacheOffset, containerOffset, arraySize ) ) );
         }
 
-        CacheEntryImage::CacheEntryImage( ProgramGLHandle program, dp::util::Int32 uniformLocation, size_t cacheOffset, size_t containerOffset, size_t arraySize )
+        CacheEntryImage::CacheEntryImage( ProgramGLHandle program, dp::Int32 uniformLocation, size_t cacheOffset, size_t containerOffset, size_t arraySize )
           : ParameterCacheEntryStream( cacheOffset, containerOffset, arraySize, arraySize * sizeof(CacheInfo) )
         {
           DP_ASSERT( arraySize == 1 );
@@ -399,13 +399,13 @@ namespace dp
         class CacheEntryBufferBinding : public ParameterCacheEntryStream
         {
         public:
-          static dp::util::SharedPtr<CacheEntryBufferBinding> create( dp::util::Int32 bindingIndex, size_t cacheOffset, size_t containerOffset, size_t arraySize );
+          static dp::util::SharedPtr<CacheEntryBufferBinding> create( dp::Int32 bindingIndex, size_t cacheOffset, size_t containerOffset, size_t arraySize );
           virtual void render( void const* cache ) const;
           virtual void update( void* cache, void const* container ) const;
           void doUpdateConverted( void const* converted ) const;
 
         protected:
-          CacheEntryBufferBinding( dp::util::Int32 bindingIndex, size_t cacheOffset, size_t containerOffset, size_t arraySize );
+          CacheEntryBufferBinding( dp::Int32 bindingIndex, size_t cacheOffset, size_t containerOffset, size_t arraySize );
 
         private:
           GLuint     m_bindingIndex;
@@ -418,13 +418,13 @@ namespace dp
         };
 
         template <GLenum BufferBinding>
-        dp::util::SharedPtr<CacheEntryBufferBinding<BufferBinding>> CacheEntryBufferBinding<BufferBinding>::create( dp::util::Int32 bindingIndex, size_t cacheOffset, size_t containerOffset, size_t arraySize )
+        dp::util::SharedPtr<CacheEntryBufferBinding<BufferBinding>> CacheEntryBufferBinding<BufferBinding>::create( dp::Int32 bindingIndex, size_t cacheOffset, size_t containerOffset, size_t arraySize )
         {
           return( std::shared_ptr<CacheEntryBufferBinding<BufferBinding>>( new CacheEntryBufferBinding<BufferBinding>( bindingIndex, cacheOffset, containerOffset, arraySize ) ) );
         }
 
         template <GLenum BufferBinding>
-        CacheEntryBufferBinding<BufferBinding>::CacheEntryBufferBinding( dp::util::Int32 bindingIndex, size_t cacheOffset, size_t containerOffset, size_t arraySize )
+        CacheEntryBufferBinding<BufferBinding>::CacheEntryBufferBinding( dp::Int32 bindingIndex, size_t cacheOffset, size_t containerOffset, size_t arraySize )
           : ParameterCacheEntryStream( cacheOffset, containerOffset, arraySize, sizeof(CacheInfo) * arraySize )
           , m_bindingIndex( bindingIndex )
         {
@@ -475,13 +475,13 @@ namespace dp
         class CacheEntryBufferBindingBindless : public ParameterCacheEntryStream
         {
         public:
-          static dp::util::SharedPtr<CacheEntryBufferBindingBindless> create( dp::util::Int32 bindingIndex, size_t cacheOffset, size_t containerOffset, size_t arraySize );
+          static dp::util::SharedPtr<CacheEntryBufferBindingBindless> create( dp::Int32 bindingIndex, size_t cacheOffset, size_t containerOffset, size_t arraySize );
           virtual void render( void const* cache ) const;
           virtual void update( void* cache, void const* container ) const;
           void doUpdateConverted( void const* converted ) const;
 
         protected:
-          CacheEntryBufferBindingBindless( dp::util::Int32 bindingIndex, size_t cacheOffset, size_t containerOffset, size_t arraySize );
+          CacheEntryBufferBindingBindless( dp::Int32 bindingIndex, size_t cacheOffset, size_t containerOffset, size_t arraySize );
 
         private:
           GLuint     m_bindingIndex;
@@ -493,13 +493,13 @@ namespace dp
         };
 
         template <GLenum BufferBinding>
-        dp::util::SharedPtr<CacheEntryBufferBindingBindless<BufferBinding>> CacheEntryBufferBindingBindless<BufferBinding>::create( dp::util::Int32 bindingIndex, size_t cacheOffset, size_t containerOffset, size_t arraySize )
+        dp::util::SharedPtr<CacheEntryBufferBindingBindless<BufferBinding>> CacheEntryBufferBindingBindless<BufferBinding>::create( dp::Int32 bindingIndex, size_t cacheOffset, size_t containerOffset, size_t arraySize )
         {
           return( std::shared_ptr<CacheEntryBufferBindingBindless<BufferBinding>>( new CacheEntryBufferBindingBindless<BufferBinding>( bindingIndex, cacheOffset, containerOffset, arraySize ) ) );
         }
 
         template <GLenum BufferBinding>
-        CacheEntryBufferBindingBindless<BufferBinding>::CacheEntryBufferBindingBindless( dp::util::Int32 bindingIndex, size_t cacheOffset, size_t containerOffset, size_t arraySize )
+        CacheEntryBufferBindingBindless<BufferBinding>::CacheEntryBufferBindingBindless( dp::Int32 bindingIndex, size_t cacheOffset, size_t containerOffset, size_t arraySize )
           : ParameterCacheEntryStream( cacheOffset, containerOffset, arraySize, sizeof(CacheInfo) * arraySize )
           , m_bindingIndex( bindingIndex )
         {
@@ -547,23 +547,23 @@ namespace dp
         class CacheEntryShaderBuffer : public ParameterCacheEntryStream
         {
         public:
-          static dp::util::SharedPtr<CacheEntryShaderBuffer> create( ProgramGLHandle program, dp::util::Int32 uniformLocation, size_t cacheOffset, size_t containerOffset, size_t arraySize );
+          static dp::util::SharedPtr<CacheEntryShaderBuffer> create( ProgramGLHandle program, dp::Int32 uniformLocation, size_t cacheOffset, size_t containerOffset, size_t arraySize );
           virtual void render( void const* cache ) const;
           virtual void update( void* cache, void const* containerData ) const;
 
         protected:
-          CacheEntryShaderBuffer( ProgramGLHandle program, dp::util::Int32 uniformLocation, size_t cacheOffset, size_t containerOffset, size_t arraySize );
+          CacheEntryShaderBuffer( ProgramGLHandle program, dp::Int32 uniformLocation, size_t cacheOffset, size_t containerOffset, size_t arraySize );
 
         private:
           GLint m_uniformLocation;
         };
 
-        dp::util::SharedPtr<CacheEntryShaderBuffer> CacheEntryShaderBuffer::create( UNUSED ProgramGLHandle program, dp::util::Int32 uniformLocation, size_t cacheOffset, size_t containerOffset, UNUSED size_t arraySize )
+        dp::util::SharedPtr<CacheEntryShaderBuffer> CacheEntryShaderBuffer::create( UNUSED ProgramGLHandle program, dp::Int32 uniformLocation, size_t cacheOffset, size_t containerOffset, UNUSED size_t arraySize )
         {
           return( std::shared_ptr<CacheEntryShaderBuffer>( new CacheEntryShaderBuffer( program, uniformLocation, cacheOffset, containerOffset, arraySize ) ) );
         }
 
-        CacheEntryShaderBuffer::CacheEntryShaderBuffer( UNUSED ProgramGLHandle program, dp::util::Int32 uniformLocation, size_t cacheOffset, size_t containerOffset, UNUSED size_t arraySize )
+        CacheEntryShaderBuffer::CacheEntryShaderBuffer( UNUSED ProgramGLHandle program, dp::Int32 uniformLocation, size_t cacheOffset, size_t containerOffset, UNUSED size_t arraySize )
           : ParameterCacheEntryStream( cacheOffset, containerOffset, arraySize, sizeof(GLuint64EXT) * arraySize )
           , m_uniformLocation( uniformLocation )
         {
@@ -623,155 +623,155 @@ namespace dp
 
         case dp::rix::core::CPT_INT_8:
           DP_ASSERT( uniform.type == GL_INT );
-          parameterCacheEntry = CacheEntryntConversion<1, dp::util::Int32, dp::util::Int8>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
+          parameterCacheEntry = CacheEntryntConversion<1, dp::Int32, dp::Int8>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_INT2_8:
           DP_ASSERT( uniform.type == GL_INT_VEC2 );
-          parameterCacheEntry = CacheEntryntConversion<2, dp::util::Int32, dp::util::Int8>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
+          parameterCacheEntry = CacheEntryntConversion<2, dp::Int32, dp::Int8>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_INT3_8:
           DP_ASSERT( uniform.type == GL_INT_VEC3 );
-          parameterCacheEntry = CacheEntryntConversion<3, dp::util::Int32, dp::util::Int8>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
+          parameterCacheEntry = CacheEntryntConversion<3, dp::Int32, dp::Int8>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_INT4_8:
           DP_ASSERT( uniform.type == GL_INT_VEC4 );
-          parameterCacheEntry = CacheEntryntConversion<4, dp::util::Int32, dp::util::Int8>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
+          parameterCacheEntry = CacheEntryntConversion<4, dp::Int32, dp::Int8>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
           break;
 
         case dp::rix::core::CPT_INT_16:
           DP_ASSERT( uniform.type == GL_INT );
-          parameterCacheEntry = CacheEntryntConversion<1, dp::util::Int32, dp::util::Int16>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
+          parameterCacheEntry = CacheEntryntConversion<1, dp::Int32, dp::Int16>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_INT2_16:
           DP_ASSERT( uniform.type == GL_INT_VEC2 );
-          parameterCacheEntry = CacheEntryntConversion<2, dp::util::Int32, dp::util::Int16>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
+          parameterCacheEntry = CacheEntryntConversion<2, dp::Int32, dp::Int16>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_INT3_16:
           DP_ASSERT( uniform.type == GL_INT_VEC3 );
-          parameterCacheEntry = CacheEntryntConversion<3, dp::util::Int32, dp::util::Int16>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
+          parameterCacheEntry = CacheEntryntConversion<3, dp::Int32, dp::Int16>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_INT4_16:
           DP_ASSERT( uniform.type == GL_INT_VEC4 );
-          parameterCacheEntry = CacheEntryntConversion<4, dp::util::Int32, dp::util::Int16>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
+          parameterCacheEntry = CacheEntryntConversion<4, dp::Int32, dp::Int16>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
           break;
 
         case dp::rix::core::CPT_INT_32:
           DP_ASSERT( uniform.type == GL_INT );
-          parameterCacheEntry = CacheEntrynt<1, dp::util::Int32>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
+          parameterCacheEntry = CacheEntrynt<1, dp::Int32>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_INT2_32:
           DP_ASSERT( uniform.type == GL_INT_VEC2 );
-          parameterCacheEntry = CacheEntrynt<2, dp::util::Int32>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
+          parameterCacheEntry = CacheEntrynt<2, dp::Int32>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_INT3_32:
           DP_ASSERT( uniform.type == GL_INT_VEC3 );
-          parameterCacheEntry = CacheEntrynt<3, dp::util::Int32>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
+          parameterCacheEntry = CacheEntrynt<3, dp::Int32>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_INT4_32:
           DP_ASSERT( uniform.type == GL_INT_VEC4 );
-          parameterCacheEntry = CacheEntrynt<4, dp::util::Int32>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
+          parameterCacheEntry = CacheEntrynt<4, dp::Int32>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
           break;
 
         case dp::rix::core::CPT_INT_64:
           DP_ASSERT( uniform.type == GL_INT64_NV );
-          parameterCacheEntry = CacheEntrynt<1, dp::util::Int64>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
+          parameterCacheEntry = CacheEntrynt<1, dp::Int64>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_INT2_64:
           DP_ASSERT( uniform.type == GL_INT64_VEC2_NV );
-          parameterCacheEntry = CacheEntrynt<2, dp::util::Int64>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
+          parameterCacheEntry = CacheEntrynt<2, dp::Int64>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_INT3_64:
           DP_ASSERT( uniform.type == GL_INT64_VEC3_NV );
-          parameterCacheEntry = CacheEntrynt<3, dp::util::Int64>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
+          parameterCacheEntry = CacheEntrynt<3, dp::Int64>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_INT4_64:
           DP_ASSERT( uniform.type == GL_INT64_VEC4_NV );
-          parameterCacheEntry = CacheEntrynt<4, dp::util::Int64>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
+          parameterCacheEntry = CacheEntrynt<4, dp::Int64>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
           break;
 
         case dp::rix::core::CPT_UINT_8:
           DP_ASSERT( uniform.type == GL_UNSIGNED_INT );
-          parameterCacheEntry = CacheEntryntConversion<1, dp::util::Int32, dp::util::Uint8>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
+          parameterCacheEntry = CacheEntryntConversion<1, dp::Int32, dp::Uint8>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_UINT2_8:
           DP_ASSERT( uniform.type == GL_UNSIGNED_INT_VEC2 );
-          parameterCacheEntry = CacheEntryntConversion<2, dp::util::Int32, dp::util::Uint8>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
+          parameterCacheEntry = CacheEntryntConversion<2, dp::Int32, dp::Uint8>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_UINT3_8:
           DP_ASSERT( uniform.type == GL_UNSIGNED_INT_VEC3 );
-          parameterCacheEntry = CacheEntryntConversion<3, dp::util::Int32, dp::util::Uint8>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
+          parameterCacheEntry = CacheEntryntConversion<3, dp::Int32, dp::Uint8>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_UINT4_8:
           DP_ASSERT( uniform.type == GL_UNSIGNED_INT_VEC4 );
-          parameterCacheEntry = CacheEntryntConversion<4, dp::util::Int32, dp::util::Uint8>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
+          parameterCacheEntry = CacheEntryntConversion<4, dp::Int32, dp::Uint8>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
           break;
 
         case dp::rix::core::CPT_UINT_16:
           DP_ASSERT( uniform.type == GL_UNSIGNED_INT );
-          parameterCacheEntry = CacheEntryntConversion<1, dp::util::Int32, dp::util::Uint16>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
+          parameterCacheEntry = CacheEntryntConversion<1, dp::Int32, dp::Uint16>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_UINT2_16:
           DP_ASSERT( uniform.type == GL_UNSIGNED_INT_VEC2 );
-          parameterCacheEntry = CacheEntryntConversion<2, dp::util::Int32, dp::util::Uint16>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
+          parameterCacheEntry = CacheEntryntConversion<2, dp::Int32, dp::Uint16>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_UINT3_16:
           DP_ASSERT( uniform.type == GL_UNSIGNED_INT_VEC3 );
-          parameterCacheEntry = CacheEntryntConversion<3, dp::util::Int32, dp::util::Uint16>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
+          parameterCacheEntry = CacheEntryntConversion<3, dp::Int32, dp::Uint16>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_UINT4_16:
           DP_ASSERT( uniform.type == GL_UNSIGNED_INT_VEC4 );
-          parameterCacheEntry = CacheEntryntConversion<4, dp::util::Int32, dp::util::Uint16>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
+          parameterCacheEntry = CacheEntryntConversion<4, dp::Int32, dp::Uint16>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
           break;
 
         case dp::rix::core::CPT_UINT_32:
           DP_ASSERT( uniform.type == GL_UNSIGNED_INT );
-          parameterCacheEntry = CacheEntrynt<1, dp::util::Uint32>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
+          parameterCacheEntry = CacheEntrynt<1, dp::Uint32>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_UINT2_32:
           DP_ASSERT( uniform.type == GL_UNSIGNED_INT_VEC2 );
-          parameterCacheEntry = CacheEntrynt<2, dp::util::Uint32>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
+          parameterCacheEntry = CacheEntrynt<2, dp::Uint32>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_UINT3_32:
           DP_ASSERT( uniform.type == GL_UNSIGNED_INT_VEC3 );
-          parameterCacheEntry = CacheEntrynt<3, dp::util::Uint32>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
+          parameterCacheEntry = CacheEntrynt<3, dp::Uint32>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_UINT4_32:
           DP_ASSERT( uniform.type == GL_UNSIGNED_INT_VEC4 );
-          parameterCacheEntry = CacheEntrynt<4, dp::util::Uint32>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
+          parameterCacheEntry = CacheEntrynt<4, dp::Uint32>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
           break;
 
         case dp::rix::core::CPT_UINT_64:
           DP_ASSERT( uniform.type == GL_UNSIGNED_INT64_NV );
-          parameterCacheEntry = CacheEntrynt<1, dp::util::Uint64>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
+          parameterCacheEntry = CacheEntrynt<1, dp::Uint64>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_UINT2_64:
           DP_ASSERT( uniform.type == GL_UNSIGNED_INT64_VEC2_NV );
-          parameterCacheEntry = CacheEntrynt<2, dp::util::Uint64>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
+          parameterCacheEntry = CacheEntrynt<2, dp::Uint64>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_UINT3_64:
           DP_ASSERT( uniform.type == GL_UNSIGNED_INT64_VEC3_NV );
-          parameterCacheEntry = CacheEntrynt<3, dp::util::Uint64>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
+          parameterCacheEntry = CacheEntrynt<3, dp::Uint64>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_UINT4_64:
           DP_ASSERT( uniform.type == GL_UNSIGNED_INT64_VEC4_NV );
-          parameterCacheEntry = CacheEntrynt<4, dp::util::Uint64>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
+          parameterCacheEntry = CacheEntrynt<4, dp::Uint64>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
           break;
 
         case dp::rix::core::CPT_BOOL:
           DP_ASSERT( uniform.type == GL_BOOL );
-          parameterCacheEntry = CacheEntryntConversion<1, dp::util::Int32, bool>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
+          parameterCacheEntry = CacheEntryntConversion<1, dp::Int32, bool>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_BOOL2:
           DP_ASSERT( uniform.type == GL_BOOL_VEC2 );
-          parameterCacheEntry = CacheEntryntConversion<2, dp::util::Int32, bool>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
+          parameterCacheEntry = CacheEntryntConversion<2, dp::Int32, bool>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_BOOL3:
           DP_ASSERT( uniform.type == GL_BOOL_VEC3 );
-          parameterCacheEntry = CacheEntryntConversion<3, dp::util::Int32, bool>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
+          parameterCacheEntry = CacheEntryntConversion<3, dp::Int32, bool>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_BOOL4:
           DP_ASSERT( uniform.type == GL_BOOL_VEC4 );
-          parameterCacheEntry = CacheEntryntConversion<4, dp::util::Int32, bool>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
+          parameterCacheEntry = CacheEntryntConversion<4, dp::Int32, bool>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
           break;
 
         case dp::rix::core::CPT_MAT2X2:
@@ -814,7 +814,7 @@ namespace dp
           break;
         case dp::rix::core::CPT_BUFFER_ADDRESS:
           DP_ASSERT( uniform.type == GL_GPU_ADDRESS_NV );
-          parameterCacheEntry = CacheEntrynt<1, dp::util::Uint64>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
+          parameterCacheEntry = CacheEntrynt<1, dp::Uint64>::create( program, uniform.location, cacheOffset, containerOffset, newArraySize );
           break;
         case dp::rix::core::CPT_SAMPLER:
           DP_ASSERT( dp::gl::isSamplerType( uniform.type ) );

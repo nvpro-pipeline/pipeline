@@ -44,7 +44,6 @@ set(DPUTIL_INCLUDES
   Timer.h
   Tokenizer.h
   Tools.h
-  Types.h
 )
 
 add_definitions("-DDP_UTIL_USE_BOOST")

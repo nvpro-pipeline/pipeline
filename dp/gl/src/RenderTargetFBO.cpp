@@ -113,7 +113,7 @@ namespace dp
       else
       {
         // extension is being checked in setDrawBuffers 
-        glDrawBuffers( dp::util::checked_cast<GLsizei>(m_drawBuffers.size()), &m_drawBuffers[0] ); 
+        glDrawBuffers( dp::checked_cast<GLsizei>(m_drawBuffers.size()), &m_drawBuffers[0] ); 
       }
     }
 
@@ -127,7 +127,7 @@ namespace dp
       RenderTarget::makeNoncurrent();
     }
 
-    dp::util::ImageSharedPtr RenderTargetFBO::getImage( dp::util::PixelFormat pixelFormat, dp::util::DataType pixelDataType, unsigned int index )
+    dp::util::ImageSharedPtr RenderTargetFBO::getImage( dp::PixelFormat pixelFormat, dp::DataType pixelDataType, unsigned int index )
     {
       if (! m_stereoEnabled )
       {

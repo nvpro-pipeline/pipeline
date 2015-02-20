@@ -41,7 +41,7 @@ namespace dp
       namespace manipulator
       {
 
-        static const dp::util::Uint32 AREAOFPEACE = 1;
+        static const dp::Uint32 AREAOFPEACE = 1;
 
         WalkCameraManipulator::WalkCameraManipulator( const dp::math::Vec2f & sensitivity )
         : Manipulator()

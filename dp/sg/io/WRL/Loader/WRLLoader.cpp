@@ -2146,7 +2146,7 @@ void WRLLoader::interpretColor( ColorSharedPtr const& pColor )
   {
     if ( pColor->set_color )
     {
-      interpretColorInterpolator( pColor->set_color, checked_cast<unsigned int>(pColor->color.size()) );
+      interpretColorInterpolator( pColor->set_color, dp::checked_cast<unsigned int>(pColor->color.size()) );
     }
     pColor->interpreted = true;
   }
@@ -2177,7 +2177,7 @@ void WRLLoader::interpretCoordinate( CoordinateSharedPtr const& pCoordinate )
     if ( pCoordinate->set_point )
     {
       interpretCoordinateInterpolator( pCoordinate->set_point
-                                     , checked_cast<unsigned int>(pCoordinate->point.size()) );
+                                     , dp::checked_cast<unsigned int>(pCoordinate->point.size()) );
     }
     pCoordinate->interpreted = true;
   }
@@ -2497,7 +2497,7 @@ void  WRLLoader::interpretIndexedFaceSet( IndexedFaceSetSharedPtr const& pIndexe
     if ( triFaces.size() )
     {
       VertexAttributeSetSharedPtr vas = interpretVertexAttributeSet( pIndexedFaceSet
-                                                                   , checked_cast<unsigned int>(3*triFaces.size())
+                                                                   , dp::checked_cast<unsigned int>(3*triFaces.size())
                                                                    , triVerts, triFaces );
 
       //  create the Triangles
@@ -2519,7 +2519,7 @@ void  WRLLoader::interpretIndexedFaceSet( IndexedFaceSetSharedPtr const& pIndexe
     if ( quadFaces.size() )
     {
       VertexAttributeSetSharedPtr vas = interpretVertexAttributeSet( pIndexedFaceSet
-                                                                   , checked_cast<unsigned int>(4*quadFaces.size())
+                                                                   , dp::checked_cast<unsigned int>(4*quadFaces.size())
                                                                    , quadVerts, quadFaces );
 
       //  create the Quads
@@ -2553,7 +2553,7 @@ void  WRLLoader::interpretIndexedFaceSet( IndexedFaceSetSharedPtr const& pIndexe
       }
       indices.pop_back();
       IndexSetSharedPtr is = IndexSet::create();
-      is->setData( &indices[0], checked_cast<unsigned int>( indices.size() ) );
+      is->setData( &indices[0], dp::checked_cast<unsigned int>( indices.size() ) );
 
       // create the VertexAttributeSet
       VertexAttributeSetSharedPtr vas = interpretVertexAttributeSet( pIndexedFaceSet, numberOfVertices
@@ -2790,17 +2790,17 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
       LinearInterpolatedVertexAttributeAnimationDescriptionSharedPtr livaadh = LinearInterpolatedVertexAttributeAnimationDescription::create();
       {
         LinearInterpolatedVertexAttributeAnimationDescriptionLock liadva(livaadh);
-        unsigned int keyCount = checked_cast<unsigned int>(pCoordinate->set_point->key.size());
+        unsigned int keyCount = dp::checked_cast<unsigned int>(pCoordinate->set_point->key.size());
         liadva->reserveKeys( keyCount );
 
         vector<Vec3f> vertices;
-        unsigned int pointCount = checked_cast<unsigned int>(pCoordinate->point.size());
+        unsigned int pointCount = dp::checked_cast<unsigned int>(pCoordinate->point.size());
         for ( unsigned int i=0 ; i<keyCount ; i++ )
         {
           gatherPerVertex<Vec3f>( vertices, pCoordinate->set_point->keyValue, pIndexedFaceSet->coordIndex
                                 , numberOfVertices, i*pointCount, startIndices, pIndexedFaceSet->ccw );
           VertexAttribute va;
-          va.setData( 3, dp::util::DT_FLOAT_32, &vertices[0], 0, checked_cast<unsigned int>(vertices.size()) );
+          va.setData( 3, dp::DT_FLOAT_32, &vertices[0], 0, dp::checked_cast<unsigned int>(vertices.size()) );
           liadva->addKey( pCoordinate->set_point->steps[i], va );
         }
       }
@@ -2822,11 +2822,11 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
       LinearInterpolatedVertexAttributeAnimationDescriptionSharedPtr livaadh = LinearInterpolatedVertexAttributeAnimationDescription::create();
       {
         LinearInterpolatedVertexAttributeAnimationDescriptionLock liadva(livaadh);
-        unsigned int keyCount = checked_cast<unsigned int>(pNormal->set_vector->key.size());
+        unsigned int keyCount = dp::checked_cast<unsigned int>(pNormal->set_vector->key.size());
         liadva->reserveKeys( keyCount );
 
         vector<Vec3f> normals;
-        unsigned int normalCount = checked_cast<unsigned int>(pNormal->vector.size());
+        unsigned int normalCount = dp::checked_cast<unsigned int>(pNormal->vector.size());
         if ( pIndexedFaceSet->normalPerVertex )
         {
           if ( pIndexedFaceSet->normalIndex.empty() )
@@ -2836,7 +2836,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
               gatherPerVertex<Vec3f>( normals, pNormal->set_vector->keyValue, pIndexedFaceSet->coordIndex
                                     , numberOfVertices, i*normalCount, startIndices, pIndexedFaceSet->ccw );
               VertexAttribute va;
-              va.setData( 3, dp::util::DT_FLOAT_32, &normals[0], 0, checked_cast<unsigned int>(normals.size()) );
+              va.setData( 3, dp::DT_FLOAT_32, &normals[0], 0, dp::checked_cast<unsigned int>(normals.size()) );
               liadva->addKey( pNormal->set_vector->steps[i], va );
             }
           }
@@ -2847,7 +2847,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
               gatherPerVertex<Vec3f>( normals, pNormal->set_vector->keyValue, pIndexedFaceSet->normalIndex
                                     , numberOfVertices, i*normalCount, startIndices, pIndexedFaceSet->ccw );
               VertexAttribute va;
-              va.setData( 3, dp::util::DT_FLOAT_32, &normals[0], 0, checked_cast<unsigned int>(normals.size()) );
+              va.setData( 3, dp::DT_FLOAT_32, &normals[0], 0, dp::checked_cast<unsigned int>(normals.size()) );
               liadva->addKey( pNormal->set_vector->steps[i], va );
             }
           }
@@ -2861,7 +2861,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
               gatherVec3fPerFace( normals, pNormal->set_vector->keyValue, pIndexedFaceSet->coordIndex
                                 , numberOfVertices, i*normalCount, startIndices, faceIndices );
               VertexAttribute va;
-              va.setData( 3, dp::util::DT_FLOAT_32, &normals[0], 0, checked_cast<unsigned int>(normals.size()) );
+              va.setData( 3, dp::DT_FLOAT_32, &normals[0], 0, dp::checked_cast<unsigned int>(normals.size()) );
               liadva->addKey( pNormal->set_vector->steps[i], va );
             }
           }
@@ -2873,7 +2873,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
                                        , pIndexedFaceSet->normalIndex, numberOfVertices
                                        , i*normalCount, startIndices, faceIndices );
               VertexAttribute va;
-              va.setData( 3, dp::util::DT_FLOAT_32, &normals[0], 0, checked_cast<unsigned int>(normals.size()) );
+              va.setData( 3, dp::DT_FLOAT_32, &normals[0], 0, dp::checked_cast<unsigned int>(normals.size()) );
               liadva->addKey( pNormal->set_vector->steps[i], va );
             }
           }
@@ -2897,11 +2897,11 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
       LinearInterpolatedVertexAttributeAnimationDescriptionSharedPtr livaadh = LinearInterpolatedVertexAttributeAnimationDescription::create();
       {
         LinearInterpolatedVertexAttributeAnimationDescriptionLock liadva(livaadh);
-        unsigned int keyCount = checked_cast<unsigned int>(pColor->set_color->key.size());
+        unsigned int keyCount = dp::checked_cast<unsigned int>(pColor->set_color->key.size());
         liadva->reserveKeys( keyCount );
 
         vector<Vec3f> colors;
-        unsigned int colorCount = checked_cast<unsigned int>(pColor->color.size());
+        unsigned int colorCount = dp::checked_cast<unsigned int>(pColor->color.size());
         if ( pIndexedFaceSet->colorPerVertex )
         {
           if ( pIndexedFaceSet->colorIndex.empty() )
@@ -2911,7 +2911,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
               gatherPerVertex<Vec3f>( colors, pColor->set_color->keyValue, pIndexedFaceSet->coordIndex
                                     , numberOfVertices, i*colorCount, startIndices, pIndexedFaceSet->ccw );
               VertexAttribute va;
-              va.setData( 3, dp::util::DT_FLOAT_32, &colors[0], 0, checked_cast<unsigned int>(colors.size()) );
+              va.setData( 3, dp::DT_FLOAT_32, &colors[0], 0, dp::checked_cast<unsigned int>(colors.size()) );
               liadva->addKey( pColor->set_color->steps[i], va );
             }
           }
@@ -2922,7 +2922,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
               gatherPerVertex<Vec3f>( colors, pColor->set_color->keyValue, pIndexedFaceSet->colorIndex
                                     , numberOfVertices, i*colorCount, startIndices, pIndexedFaceSet->ccw );
               VertexAttribute va;
-              va.setData( 3, dp::util::DT_FLOAT_32, &colors[0], 0, checked_cast<unsigned int>(colors.size()) );
+              va.setData( 3, dp::DT_FLOAT_32, &colors[0], 0, dp::checked_cast<unsigned int>(colors.size()) );
               liadva->addKey( pColor->set_color->steps[i], va );
             }
           }
@@ -2936,7 +2936,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
               gatherVec3fPerFace( colors, pColor->set_color->keyValue, pIndexedFaceSet->coordIndex
                                 , numberOfVertices, i*colorCount, startIndices, faceIndices );
               VertexAttribute va;
-              va.setData( 3, dp::util::DT_FLOAT_32, &colors[0], 0, checked_cast<unsigned int>(colors.size()) );
+              va.setData( 3, dp::DT_FLOAT_32, &colors[0], 0, dp::checked_cast<unsigned int>(colors.size()) );
               liadva->addKey( pColor->set_color->steps[i], va );
             }
           }
@@ -2948,7 +2948,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
                                        , pIndexedFaceSet->colorIndex, numberOfVertices
                                        , i*colorCount, startIndices, faceIndices );
               VertexAttribute va;
-              va.setData( 3, dp::util::DT_FLOAT_32, &colors[0], 0, checked_cast<unsigned int>(colors.size()) );
+              va.setData( 3, dp::DT_FLOAT_32, &colors[0], 0, dp::checked_cast<unsigned int>(colors.size()) );
               liadva->addKey( pColor->set_color->steps[i], va );
             }
           }
@@ -3073,7 +3073,7 @@ void  WRLLoader::interpretIndexedLineSet( IndexedLineSetSharedPtr const& pIndexe
       indices.pop_back();
     }
     IndexSetSharedPtr iset( IndexSet::create() );
-    iset->setData( &indices[0] , checked_cast<unsigned int>(indices.size()) );
+    iset->setData( &indices[0] , dp::checked_cast<unsigned int>(indices.size()) );
 
     DP_ASSERT( pIndexedLineSet->coord.isPtrTo<Coordinate>() );
     CoordinateSharedPtr const& pCoordinate = pIndexedLineSet->coord.staticCast<Coordinate>();
@@ -3087,7 +3087,7 @@ void  WRLLoader::interpretIndexedLineSet( IndexedLineSetSharedPtr const& pIndexe
       }
     }
     VertexAttributeSetSharedPtr cvas = VertexAttributeSet::create();
-    cvas->setVertices( &vertices[0], checked_cast<unsigned int>(vertices.size()) );
+    cvas->setVertices( &vertices[0], dp::checked_cast<unsigned int>(vertices.size()) );
 
     if ( pIndexedLineSet->color )
     {
@@ -3137,7 +3137,7 @@ void  WRLLoader::interpretIndexedLineSet( IndexedLineSetSharedPtr const& pIndexe
           }
         }
       }
-      cvas->setColors( &colors[0], checked_cast<unsigned int>(colors.size()) );
+      cvas->setColors( &colors[0], dp::checked_cast<unsigned int>(colors.size()) );
     }
     
     PrimitiveSharedPtr pLineStrips = Primitive::create( PRIMITIVE_LINE_STRIP );
@@ -3179,7 +3179,7 @@ dp::sg::core::LODSharedPtr WRLLoader::interpretLOD( vrml::LODSharedPtr const& pV
     interpretChildren( pVRMLLOD->children, pLOD );
     if ( pVRMLLOD->range.size() != 0 )
     {
-      pLOD->setRanges( &pVRMLLOD->range[0], checked_cast<unsigned int>(pVRMLLOD->range.size()) );
+      pLOD->setRanges( &pVRMLLOD->range[0], dp::checked_cast<unsigned int>(pVRMLLOD->range.size()) );
     }
     else
     {
@@ -3199,7 +3199,7 @@ dp::sg::core::LODSharedPtr WRLLoader::interpretLOD( vrml::LODSharedPtr const& pV
       {
         ranges[i] = dist;
       }
-      pLOD->setRanges( &ranges[0], checked_cast<unsigned int>(ranges.size()) );
+      pLOD->setRanges( &ranges[0], dp::checked_cast<unsigned int>(ranges.size()) );
     }
     pLOD->setCenter( pVRMLLOD->center );
 
@@ -3255,7 +3255,7 @@ void WRLLoader::interpretNormal( NormalSharedPtr const& pNormal )
   {
     if ( pNormal->set_vector )
     {
-      interpretNormalInterpolator( pNormal->set_vector, checked_cast<unsigned int>(pNormal->vector.size()) );
+      interpretNormalInterpolator( pNormal->set_vector, dp::checked_cast<unsigned int>(pNormal->vector.size()) );
     }
     pNormal->interpreted = true;
   }
@@ -3338,7 +3338,7 @@ void  WRLLoader::interpretPointSet( PointSetSharedPtr const& pPointSet, vector<P
     {
       vertices[i] = pCoordinate->point[i];
     }
-    cvas->setVertices( &vertices[0], checked_cast<unsigned int>(vertices.size()) );
+    cvas->setVertices( &vertices[0], dp::checked_cast<unsigned int>(vertices.size()) );
 
     if ( pPointSet->color )
     {
@@ -3350,7 +3350,7 @@ void  WRLLoader::interpretPointSet( PointSetSharedPtr const& pPointSet, vector<P
       {
         colors[i] = pColor->color[i];
       }
-      cvas->setColors( &colors[0], checked_cast<unsigned int>(colors.size()) );
+      cvas->setColors( &colors[0], dp::checked_cast<unsigned int>(colors.size()) );
     }
 
     PrimitiveSharedPtr pPoints = Primitive::create( PRIMITIVE_POINTS );
@@ -3672,7 +3672,7 @@ dp::sg::core::TransformSharedPtr WRLLoader::interpretTransform( vrml::TransformS
 
       LinearInterpolatedTrafoAnimationDescriptionSharedPtr litadh = LinearInterpolatedTrafoAnimationDescription::create();
       LinearInterpolatedTrafoAnimationDescriptionLock liadt( litadh );
-      liadt->reserveKeys( checked_cast<unsigned int>(keys.size()) );
+      liadt->reserveKeys( dp::checked_cast<unsigned int>(keys.size()) );
 
       for ( size_t i=0, centerStep=0, rotationStep=0, scaleStep=0, translationStep=0 ; i<keys.size() ; i++ )
       {
@@ -3842,7 +3842,7 @@ dp::sg::core::ObjectSharedPtr  WRLLoader::interpretViewpoint( ViewpointSharedPtr
     LinearInterpolatedTrafoAnimationDescriptionSharedPtr litadh = LinearInterpolatedTrafoAnimationDescription::create();
     {
       LinearInterpolatedTrafoAnimationDescriptionLock liadt(litadh);
-      liadt->reserveKeys( checked_cast<unsigned int>(keys.size()) );
+      liadt->reserveKeys( dp::checked_cast<unsigned int>(keys.size()) );
 
       for ( unsigned int i=0, orientationStep=0, positionStep=0 ; i<keys.size() ; i++ )
       {
@@ -5289,7 +5289,7 @@ IndexedFaceSetSharedPtr WRLLoader::readIndexedFaceSet( const string &nodeName )
         if ( pIndexedFaceSet->colorIndex.empty() )
         {
           DP_ASSERT( pIndexedFaceSet->color.staticCast<Color>()->color.size() <= INT_MAX );
-          int maxColorIndex = checked_cast<int>(pIndexedFaceSet->color.staticCast<Color>()->color.size());
+          int maxColorIndex = dp::checked_cast<int>(pIndexedFaceSet->color.staticCast<Color>()->color.size());
           if ( maxColorIndex <= maxIndex )
           {
             onIncompatibleValues( maxIndex, maxColorIndex, "IndexedFaceSet", "coordIndex.size", "colors.max" );
@@ -5328,7 +5328,7 @@ IndexedFaceSetSharedPtr WRLLoader::readIndexedFaceSet( const string &nodeName )
           if ( pIndexedFaceSet->color.staticCast<Color>()->color.size() < numberOfFaces )
           {
             onIncompatibleValues( numberOfFaces
-                                , checked_cast<int>(pIndexedFaceSet->color.staticCast<Color>()->color.size())
+                                , dp::checked_cast<int>(pIndexedFaceSet->color.staticCast<Color>()->color.size())
                                 , "IndexedFaceSet", "faces.size", "colors.size" );
             pIndexedFaceSet->color.reset();
           }
@@ -5377,7 +5377,7 @@ IndexedFaceSetSharedPtr WRLLoader::readIndexedFaceSet( const string &nodeName )
         // retest normalIndex on emptiness: might be cleared above
         if ( pIndexedFaceSet->normalIndex.empty() )
         {
-          int maxNormalIndex = checked_cast<int>(pIndexedFaceSet->normal.staticCast<Normal>()->vector.size());
+          int maxNormalIndex = dp::checked_cast<int>(pIndexedFaceSet->normal.staticCast<Normal>()->vector.size());
           if ( maxNormalIndex <= maxIndex )
           {
             onIncompatibleValues( maxIndex, maxNormalIndex, "IndexedFaceSet", "coordIndex.max", "normals.size" );
@@ -5416,7 +5416,7 @@ IndexedFaceSetSharedPtr WRLLoader::readIndexedFaceSet( const string &nodeName )
           if ( pIndexedFaceSet->normal.staticCast<Normal>()->vector.size() < numberOfFaces )
           {
             onIncompatibleValues( numberOfFaces
-                                , checked_cast<int>(pIndexedFaceSet->normal.staticCast<Normal>()->vector.size())
+                                , dp::checked_cast<int>(pIndexedFaceSet->normal.staticCast<Normal>()->vector.size())
                                 , "IndexedFaceSet", "faces.size", "normals.size" );
             pIndexedFaceSet->normal.reset();
           }
@@ -5460,7 +5460,7 @@ IndexedFaceSetSharedPtr WRLLoader::readIndexedFaceSet( const string &nodeName )
       // retest texCoordIndex on emptiness: might be cleared above
       if ( pIndexedFaceSet->texCoordIndex.empty() )
       {
-        int maxTexCoordIndex = checked_cast<int>(pIndexedFaceSet->texCoord.staticCast<TextureCoordinate>()->point.size());
+        int maxTexCoordIndex = dp::checked_cast<int>(pIndexedFaceSet->texCoord.staticCast<TextureCoordinate>()->point.size());
         if ( maxTexCoordIndex <= maxIndex )
         {
           onIncompatibleValues( maxIndex, maxTexCoordIndex, "IndexedFaceSet", "coordIndex.max", "texCoord.size" );
@@ -5470,10 +5470,10 @@ IndexedFaceSetSharedPtr WRLLoader::readIndexedFaceSet( const string &nodeName )
     }
 
     //  filter invalid indices
-    int numberOfPoints = checked_cast<int>(pIndexedFaceSet->coord.staticCast<Coordinate>()->point.size());
-    int numberOfColors = pIndexedFaceSet->color ? checked_cast<int>(pIndexedFaceSet->color.staticCast<Color>()->color.size()) : 0;
-    int numberOfNormals = pIndexedFaceSet->normal ? checked_cast<int>(pIndexedFaceSet->normal.staticCast<Normal>()->vector.size()) : 0;
-    int numberOfTexCoords = pIndexedFaceSet->texCoord ? checked_cast<int>(pIndexedFaceSet->texCoord.staticCast<TextureCoordinate>()->point.size()) : 0;
+    int numberOfPoints = dp::checked_cast<int>(pIndexedFaceSet->coord.staticCast<Coordinate>()->point.size());
+    int numberOfColors = pIndexedFaceSet->color ? dp::checked_cast<int>(pIndexedFaceSet->color.staticCast<Color>()->color.size()) : 0;
+    int numberOfNormals = pIndexedFaceSet->normal ? dp::checked_cast<int>(pIndexedFaceSet->normal.staticCast<Normal>()->vector.size()) : 0;
+    int numberOfTexCoords = pIndexedFaceSet->texCoord ? dp::checked_cast<int>(pIndexedFaceSet->texCoord.staticCast<TextureCoordinate>()->point.size()) : 0;
     for ( unsigned int i=0 ; i<pIndexedFaceSet->coordIndex.size() ; )
     {
       if ( pIndexedFaceSet->coordIndex[i] != -1 )

@@ -150,11 +150,11 @@ void GLUTAnimationWidget::paint()
   dp::util::FrameProfiler::instance().beginFrame();
   if ( m_animateColors )
   {
-    m_animatedScene->update( dp::util::checked_cast<float>(m_animationTimer.getTime()) );
+    m_animatedScene->update( dp::checked_cast<float>(m_animationTimer.getTime()) );
   }
   if ( m_animateTransforms )
   {
-    m_animatedScene->updateTransforms( dp::util::checked_cast<float>(m_animationTimer.getTime()) );
+    m_animatedScene->updateTransforms( dp::checked_cast<float>(m_animationTimer.getTime()) );
   }
   dp::sg::ui::glut::SceneRendererWidget::paint();
 

@@ -43,7 +43,7 @@ namespace dp
       IndicesGL::IndicesGL()
         : m_markedForUpload( false )
         , m_bufferGLSize( 0 )
-        , m_dataType( dp::util::DT_UNSIGNED_INT_8 )
+        , m_dataType( dp::DT_UNSIGNED_INT_8 )
         , m_bufferHandle( nullptr )
         , m_offset( 0 )
         , m_count( 0 )
@@ -60,7 +60,7 @@ namespace dp
         handleReset( m_bufferHandle );
       }
 
-      void IndicesGL::setData( dp::util::DataType dataType, dp::rix::core::BufferHandle bufferHandle, size_t offset, size_t count )
+      void IndicesGL::setData( dp::DataType dataType, dp::rix::core::BufferHandle bufferHandle, size_t offset, size_t count )
       {
         if ( m_bufferHandle )
         {

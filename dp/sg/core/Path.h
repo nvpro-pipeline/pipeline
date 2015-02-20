@@ -27,8 +27,8 @@
 #pragma once
 /** @file */
 
+#include <dp/Types.h>
 #include <dp/sg/core/Config.h>
-#include <dp/util/Types.h>
 #include <dp/sg/core/CoreTypes.h>
 
 namespace dp
@@ -204,7 +204,7 @@ namespace dp
 
       inline unsigned int Path::getLength() const
       {
-        return( dp::util::checked_cast<unsigned int>(m_path.size()) );
+        return( dp::checked_cast<unsigned int>(m_path.size()) );
       }
 
       inline void Path::pop()
