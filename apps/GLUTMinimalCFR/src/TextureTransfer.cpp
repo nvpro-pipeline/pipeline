@@ -174,10 +174,10 @@ void TextureTransfer::transfer( size_t index
 
     dp::gl::ProgramUseGuard pug( m_copyProgram );
 
-    glUniform1i( 0, dp::util::checked_cast<GLint>(m_maxIndex) );
-    glUniform1i( 1, dp::util::checked_cast<GLint>(index) );
+    glUniform1i( 0, dp::checked_cast<GLint>(m_maxIndex) );
+    glUniform1i( 1, dp::checked_cast<GLint>(index) );
 
-    glDispatchCompute( dp::util::checked_cast<GLuint>(tilesXPerGpu), dp::util::checked_cast<GLuint>(tilesY), 1 );
+    glDispatchCompute( dp::checked_cast<GLuint>(tilesXPerGpu), dp::checked_cast<GLuint>(tilesY), 1 );
   }
   else
   {
@@ -191,10 +191,10 @@ void TextureTransfer::transfer( size_t index
     {
       dp::gl::ProgramUseGuard pug( m_compressProgram );
 
-      glUniform1i( 0, dp::util::checked_cast<GLint>(m_maxIndex) );
-      glUniform1i( 1, dp::util::checked_cast<GLint>(index) );
+      glUniform1i( 0, dp::checked_cast<GLint>(m_maxIndex) );
+      glUniform1i( 1, dp::checked_cast<GLint>(index) );
 
-      glDispatchCompute( dp::util::checked_cast<GLuint>(tilesXPerGpu), dp::util::checked_cast<GLuint>(tilesY), 1 );
+      glDispatchCompute( dp::checked_cast<GLuint>(tilesXPerGpu), dp::checked_cast<GLuint>(tilesY), 1 );
     }
 
     contextStack.pop();
@@ -214,8 +214,8 @@ void TextureTransfer::transfer( size_t index
       dp::util::ProfileEntry p("wglCopyImageSubDataNV");
       DP_VERIFY( wglCopyImageSubDataNV( hglrcSrc, idSrc, GL_TEXTURE_2D, 0, 0, 0, 0
         , hglrcDst, idDst, GL_TEXTURE_2D, 0, 0, 0, 0
-        , dp::util::checked_cast<GLsizei>(tmpTexWidth)
-        , dp::util::checked_cast<GLsizei>(tmpTexHeight)
+        , dp::checked_cast<GLsizei>(tmpTexWidth)
+        , dp::checked_cast<GLsizei>(tmpTexHeight)
         , 1 ) );
     }
 
@@ -225,10 +225,10 @@ void TextureTransfer::transfer( size_t index
 
     dp::gl::ProgramUseGuard pug( m_decompressProgram );
 
-    glUniform1i( 0, dp::util::checked_cast<GLint>(m_maxIndex) );
-    glUniform1i( 1, dp::util::checked_cast<GLint>(index) );
+    glUniform1i( 0, dp::checked_cast<GLint>(m_maxIndex) );
+    glUniform1i( 1, dp::checked_cast<GLint>(index) );
 
-    glDispatchCompute( dp::util::checked_cast<GLuint>(tilesXPerGpu), dp::util::checked_cast<GLuint>(tilesY), 1 );
+    glDispatchCompute( dp::checked_cast<GLuint>(tilesXPerGpu), dp::checked_cast<GLuint>(tilesY), 1 );
   }
 
   contextStack.pop();
@@ -247,8 +247,8 @@ void TextureTransfer::transfer( size_t index
 
   wglCopyImageSubDataNV( hglrcSrc, idSrc, GL_TEXTURE_2D, 0, 0, 0, 0
                        , hglrcDst, idDst, GL_TEXTURE_2D, 0, 0, 0, 0
-                       , dp::util::checked_cast<GLsizei>(width)
-                       , dp::util::checked_cast<GLsizei>(height)
+                       , dp::checked_cast<GLsizei>(width)
+                       , dp::checked_cast<GLsizei>(height)
                        , 1 );
 
 #endif
@@ -320,7 +320,7 @@ dp::gl::Texture2DSharedPtr const& TextureTransfer::getTmpTexture( dp::gl::Render
   if ( it == m_tmpTextures.end() || it->second->getWidth() != width || it->second->getHeight() != height )
   {
     // element doesn't exist yet, or size does not match, create a new texture with the correct size
-    dp::gl::Texture2DSharedPtr tex = dp::gl::Texture2D::create( GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE, dp::util::checked_cast<GLsizei>(width), dp::util::checked_cast<GLsizei>(height) );
+    dp::gl::Texture2DSharedPtr tex = dp::gl::Texture2D::create( GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE, dp::checked_cast<GLsizei>(width), dp::checked_cast<GLsizei>(height) );
 
     if ( it == m_tmpTextures.end() )
     {

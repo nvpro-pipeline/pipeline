@@ -26,8 +26,8 @@
 
 #pragma once
 
+#include <dp/Types.h>
 #include <dp/culling/Manager.h>
-#include <dp/util/Types.h>
 
 namespace dp
 {

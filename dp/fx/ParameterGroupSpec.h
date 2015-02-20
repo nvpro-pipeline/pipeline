@@ -30,7 +30,6 @@
 #include <dp/fx/Config.h>
 #include <dp/fx/ParameterSpec.h>
 #include <dp/util/HashGenerator.h>
-#include <dp/util/Types.h>
 
 namespace dp
 {
@@ -88,7 +87,7 @@ namespace dp
 
     inline unsigned int ParameterGroupSpec::getNumberOfParameterSpecs() const
     {
-      return( dp::util::checked_cast<unsigned int>(m_specs.size()) );
+      return( dp::checked_cast<unsigned int>(m_specs.size()) );
     }
 
     inline unsigned int ParameterGroupSpec::getDataSize() const

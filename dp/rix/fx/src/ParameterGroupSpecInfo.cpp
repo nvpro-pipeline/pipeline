@@ -113,7 +113,7 @@ namespace dp
                 // TODO no gl available here. where to get alignment?
                 GLint glAlignment;
                 glGetIntegerv( GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, &glAlignment );
-                alignment = dp::util::checked_cast<size_t>(glAlignment);
+                alignment = dp::checked_cast<size_t>(glAlignment);
 #else
                 // TODO hard code 256 since this can be assumed on current hardware
                 size_t alignment = 256;

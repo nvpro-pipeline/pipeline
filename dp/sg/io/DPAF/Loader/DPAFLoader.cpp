@@ -903,9 +903,9 @@ void  DPAFLoader::readChildren( GroupSharedPtr const& group )
   }
 }
 
-dp::util::DataType DPAFLoader::readType( const char *token )
+dp::DataType DPAFLoader::readType( const char *token )
 {
-  return( static_cast<dp::util::DataType>(atoi( token ? token : getNextToken().c_str() )) );
+  return( static_cast<dp::DataType>(atoi( token ? token : getNextToken().c_str() )) );
 }
 
 Billboard::Alignment DPAFLoader::readAlignment()
@@ -1577,7 +1577,7 @@ LODSharedPtr DPAFLoader::readLOD( const char *name, const std::string & extName 
         {
           vector<float> ranges;
           readScalarArray<float>( getNextToken(), ranges );
-          lod->setRanges( &ranges[0], checked_cast<unsigned int>(ranges.size()) );
+          lod->setRanges( &ranges[0], dp::checked_cast<unsigned int>(ranges.size()) );
         }
         else
         {
@@ -2349,7 +2349,7 @@ IndexSetSharedPtr DPAFLoader::readIndexSet( const char * name )
       if ( token == "dataType" )
       {
         unsigned int val = readScalar<unsigned int>( getNextToken() );
-        iset->setIndexDataType( static_cast<dp::util::DataType>(val) );
+        iset->setIndexDataType( static_cast<dp::DataType>(val) );
       }
       else if ( token == "primitiveRestartIndex" )
       {
@@ -2368,7 +2368,7 @@ IndexSetSharedPtr DPAFLoader::readIndexSet( const char * name )
         DP_ASSERT( numberOfIndices );
 
         BufferHostSharedPtr buffer = BufferHost::create();
-        buffer->setSize( dp::util::getSizeOf( iset->getIndexDataType() ) * numberOfIndices );
+        buffer->setSize( dp::getSizeOf( iset->getIndexDataType() ) * numberOfIndices );
 
         Buffer::DataWriteLock writer( buffer, Buffer::MAP_WRITE );
         unsigned char * bufPtr = writer.getPtr<unsigned char>();
@@ -2381,17 +2381,17 @@ IndexSetSharedPtr DPAFLoader::readIndexSet( const char * name )
         {
           switch( iset->getIndexDataType() )
           {
-            case dp::util::DT_UNSIGNED_INT_32:
+            case dp::DT_UNSIGNED_INT_32:
               *((unsigned int *)bufPtr) = readScalar<unsigned int>( token );
               bufPtr += sizeof( unsigned int );
               break;
 
-            case dp::util::DT_UNSIGNED_INT_16:
+            case dp::DT_UNSIGNED_INT_16:
               *((unsigned short *)bufPtr) = readScalar<unsigned short>( token );
               bufPtr += sizeof( unsigned short );
               break;
 
-            case dp::util::DT_UNSIGNED_INT_8:
+            case dp::DT_UNSIGNED_INT_8:
               *bufPtr++ = readScalar<unsigned char>( token );
               break;
           }
@@ -2612,11 +2612,11 @@ T DPAFLoader::readScalar( const string & token )
     char *endPtr;
     if ( std::numeric_limits<T>::is_signed )
     {
-      return( checked_cast<T>( strtol( token.c_str(), &endPtr, 0 ) ) );
+      return( dp::checked_cast<T>( strtol( token.c_str(), &endPtr, 0 ) ) );
     }
     else
     {
-      return( checked_cast<T>( strtoul( token.c_str(), &endPtr, 0 ) ) );
+      return( dp::checked_cast<T>( strtoul( token.c_str(), &endPtr, 0 ) ) );
     }
   }
   else
@@ -2966,26 +2966,26 @@ void DPAFLoader::readVertexData( unsigned int type, unsigned char * vdata, strin
   {
     switch ( type )
     {
-      case dp::util::DT_INT_8:
-      case dp::util::DT_UNSIGNED_INT_8:
+      case dp::DT_INT_8:
+      case dp::DT_UNSIGNED_INT_8:
         *vdata = (unsigned char)atoi(token.c_str()); 
         vdata++;
         break;
-      case dp::util::DT_INT_16:
-      case dp::util::DT_UNSIGNED_INT_16:
+      case dp::DT_INT_16:
+      case dp::DT_UNSIGNED_INT_16:
         *(unsigned short*)vdata = (unsigned short)atoi(token.c_str()); 
         vdata += sizeof(unsigned short); 
         break;
-      case dp::util::DT_INT_32:
-      case dp::util::DT_UNSIGNED_INT_32:
+      case dp::DT_INT_32:
+      case dp::DT_UNSIGNED_INT_32:
         *(unsigned int*)vdata = static_cast<unsigned int>(atoi(token.c_str()));
         vdata += sizeof(unsigned int); 
         break;
-      case dp::util::DT_FLOAT_32:
+      case dp::DT_FLOAT_32:
         *(float*)vdata = _atof(token.c_str()); 
         vdata += sizeof(float); 
         break;
-      case dp::util::DT_FLOAT_64:
+      case dp::DT_FLOAT_64:
         *(double*)vdata = atof(token.c_str()); 
         vdata += sizeof(double); 
         break;
@@ -3039,7 +3039,7 @@ bool DPAFLoader::readVertexAttributeSetToken( VertexAttributeSetSharedPtr const&
     DP_ASSERT(attrIndex < VertexAttributeSet::DP_SG_VERTEX_ATTRIB_COUNT);
 
     unsigned int size = readScalar<unsigned int>( getNextToken() );
-    dp::util::DataType type = readType();
+    dp::DataType type = readType();
     BufferSharedPtr buffer = m_buffers[ getNextToken() ];
     unsigned int offset = readScalar<unsigned int>( getNextToken() );
     unsigned int stride = readScalar<unsigned int>( getNextToken() );

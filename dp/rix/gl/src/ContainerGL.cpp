@@ -28,7 +28,6 @@
 #include "BufferGL.h"
 #include "Sampler.h"
 #include "DataTypeConversionGL.h"
-#include <dp/util/Types.h>
 #include <algorithm>
 #include <cstring>
 #include <typeinfo>
@@ -42,15 +41,15 @@ namespace dp
     {
       using namespace dp::rix::core;
 
-      using dp::util::Int8;
-      using dp::util::Int16;
-      using dp::util::Int32;
-      using dp::util::Int64;
+      using dp::Int8;
+      using dp::Int16;
+      using dp::Int32;
+      using dp::Int64;
 
-      using dp::util::Uint8;
-      using dp::util::Uint16;
-      using dp::util::Uint32;
-      using dp::util::Uint64;
+      using dp::Uint8;
+      using dp::Uint16;
+      using dp::Uint32;
+      using dp::Uint64;
 
       size_t getSizeOfComponent( ContainerParameterType parameterType )
       {

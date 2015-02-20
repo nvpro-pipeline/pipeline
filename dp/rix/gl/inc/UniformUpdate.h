@@ -25,7 +25,6 @@
 
 
 #include "GL/glew.h"
-#include <dp/util/Types.h>
 
 namespace dp
 {
@@ -82,37 +81,37 @@ namespace dp
       }
 
       // glUniform{1,2,3,4}iv
-      template<> inline void setUniform<1, dp::util::Int32>(int uniformLocation, unsigned int arraySize, const void *data )
+      template<> inline void setUniform<1, dp::Int32>(int uniformLocation, unsigned int arraySize, const void *data )
       {
         glUniform1iv( uniformLocation, arraySize, static_cast<const int *>( data ));
       }
-      template<> inline void setUniform<2, dp::util::Int32>(int uniformLocation, unsigned int arraySize, const void *data )
+      template<> inline void setUniform<2, dp::Int32>(int uniformLocation, unsigned int arraySize, const void *data )
       {
         glUniform2iv( uniformLocation, arraySize, static_cast<const int *>( data ));
       }
-      template<> inline void setUniform<3, dp::util::Int32>(int uniformLocation, unsigned int arraySize, const void *data )
+      template<> inline void setUniform<3, dp::Int32>(int uniformLocation, unsigned int arraySize, const void *data )
       {
         glUniform3iv( uniformLocation, arraySize, static_cast<const int *>( data ));
       }
-      template<> inline void setUniform<4, dp::util::Int32>(int uniformLocation, unsigned int arraySize, const void *data )
+      template<> inline void setUniform<4, dp::Int32>(int uniformLocation, unsigned int arraySize, const void *data )
       {
         glUniform4iv( uniformLocation, arraySize, static_cast<const int *>( data ));
       }
 
       // glUniform{1,2,3,4}uiv
-      template<> inline void setUniform<1, dp::util::Uint32>(int uniformLocation, unsigned int arraySize, const void *data )
+      template<> inline void setUniform<1, dp::Uint32>(int uniformLocation, unsigned int arraySize, const void *data )
       {
         glUniform1uiv( uniformLocation, arraySize, static_cast<const unsigned int *>( data ));
       }
-      template<> inline void setUniform<2, dp::util::Uint32>(int uniformLocation, unsigned int arraySize, const void *data )
+      template<> inline void setUniform<2, dp::Uint32>(int uniformLocation, unsigned int arraySize, const void *data )
       {
         glUniform2uiv( uniformLocation, arraySize, static_cast<const unsigned int *>( data ));
       }
-      template<> inline void setUniform<3, dp::util::Uint32>(int uniformLocation, unsigned int arraySize, const void *data )
+      template<> inline void setUniform<3, dp::Uint32>(int uniformLocation, unsigned int arraySize, const void *data )
       {
         glUniform3uiv( uniformLocation, arraySize, static_cast<const unsigned int *>( data ));
       }
-      template<> inline void setUniform<4, dp::util::Uint32>(int uniformLocation, unsigned int arraySize, const void *data )
+      template<> inline void setUniform<4, dp::Uint32>(int uniformLocation, unsigned int arraySize, const void *data )
       {
         glUniform4uiv( uniformLocation, arraySize, static_cast<const unsigned int *>( data ));
       }

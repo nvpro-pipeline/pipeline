@@ -44,7 +44,7 @@ namespace dp
               dp::rix::core::IndicesSharedHandle getIndices(dp::rix::core::Renderer *renderer, dp::sg::core::IndexSetSharedPtr const & indexSet, unsigned int &baseIndex);
 
               size_t allocateVertices(dp::rix::core::Renderer *renderer, dp::rix::core::VertexFormatSharedHandle, unsigned int elementSize, size_t numElements, dp::rix::core::VertexAttributesSharedHandle &vertexAttributesHandle, dp::rix::core::BufferSharedHandle &buffer);
-              size_t allocateIndices(dp::rix::core::Renderer *renderer, dp::util::DataType dataType, size_t numElements, dp::rix::core::IndicesSharedHandle &indices, dp::rix::core::BufferSharedHandle &buffer);
+              size_t allocateIndices(dp::rix::core::Renderer *renderer, dp::DataType dataType, size_t numElements, dp::rix::core::IndicesSharedHandle &indices, dp::rix::core::BufferSharedHandle &buffer);
 
           private:
             struct BufferInfo {
@@ -75,7 +75,7 @@ namespace dp
                 dp::rix::core::IndicesSharedHandle indices;
             };
 
-            typedef std::map<dp::util::DataType, IndicesInfo> IndicesInfos;
+            typedef std::map<dp::DataType, IndicesInfo> IndicesInfos;
 
             VertexAttributeInfos m_vertexAttributeInfos;
             IndicesInfos m_indicesInfos;

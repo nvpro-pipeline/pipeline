@@ -88,7 +88,7 @@ public:
             const std::vector<Vec2f> & texcoords,
             const OBJMaterial & material )
   {
-    unsigned int startIndex = checked_cast<unsigned int>(m_verts.size());
+    unsigned int startIndex = dp::checked_cast<unsigned int>(m_verts.size());
 
     if ( indices.size() && verts.size() )
     {
@@ -102,8 +102,8 @@ public:
       // save materials
       m_materials.push_back( material );
       m_materialMappings.push_back( 
-        make_pair<unsigned int,unsigned int>( checked_cast<unsigned int>( m_indices.size() ),
-                                              checked_cast<unsigned int>( m_materials.size() - 1) ) );
+        make_pair<unsigned int,unsigned int>( dp::checked_cast<unsigned int>( m_indices.size() ),
+                                              dp::checked_cast<unsigned int>( m_materials.size() - 1) ) );
 
       for (size_t i = 0; i < indices.size(); i++)
       {
@@ -113,8 +113,8 @@ public:
     else
     {
       printf("ERR: indices.size() = %d - verts.size() = %d\n", 
-             checked_cast<unsigned int>(indices.size()),
-             checked_cast<unsigned int>(verts.size()) );
+             dp::checked_cast<unsigned int>(indices.size()),
+             dp::checked_cast<unsigned int>(verts.size()) );
     }
   }
 

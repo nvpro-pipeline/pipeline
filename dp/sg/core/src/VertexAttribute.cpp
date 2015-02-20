@@ -28,7 +28,6 @@
 #include <dp/math/Vecnt.h>
 #include <dp/util/Memory.h>
 #include <dp/sg/core/VertexAttribute.h>
-#include <dp/util/Types.h>
 #include <dp/sg/core/CoreTypes.h>
 #include <dp/sg/core/BufferHost.h>
 
@@ -43,7 +42,7 @@ namespace dp
 
       VertexAttribute::VertexAttribute()
       : m_size(0)
-      , m_type(dp::util::DT_UNKNOWN)
+      , m_type(dp::DT_UNKNOWN)
       , m_bytes(0)
       , m_strideInBytes(0)
       , m_offset(0)
@@ -96,17 +95,17 @@ namespace dp
         }
       }
 
-      void VertexAttribute::initData( unsigned int size, dp::util::DataType type )
+      void VertexAttribute::initData( unsigned int size, dp::DataType type )
       {
         m_size = size;
         m_type = type;
-        m_bytes = util::checked_cast<unsigned int>( m_size * dp::util::getSizeOf(type) );
+        m_bytes = dp::checked_cast<unsigned int>( m_size * dp::getSizeOf(type) );
       }
 
-      void VertexAttribute::reserveData( unsigned int size, dp::util::DataType type, unsigned int count )
+      void VertexAttribute::reserveData( unsigned int size, dp::DataType type, unsigned int count )
       {
         DP_ASSERT( size <= 4 );
-        DP_ASSERT( ( dp::util::DT_INT_8 <= type ) && ( type <= dp::util::DT_NUM_DATATYPES ) );
+        DP_ASSERT( ( dp::DT_INT_8 <= type ) && ( type <= dp::DT_NUM_DATATYPES ) );
         DP_ASSERT( !m_buffer || ( ( size == m_size ) && ( type == m_type ) ) );
 
         initData( size, type );
@@ -125,10 +124,10 @@ namespace dp
         }
       }
 
-      void VertexAttribute::setData(unsigned int size, dp::util::DataType type, const void * data, unsigned int stride, unsigned int count)
+      void VertexAttribute::setData(unsigned int size, dp::DataType type, const void * data, unsigned int stride, unsigned int count)
       {
         DP_ASSERT( size <= 4 );
-        DP_ASSERT( ( dp::util::DT_INT_8 <= type ) && ( type <= dp::util::DT_NUM_DATATYPES ) );
+        DP_ASSERT( ( dp::DT_INT_8 <= type ) && ( type <= dp::DT_NUM_DATATYPES ) );
         DP_ASSERT( data );
 
         initData( size, type );
@@ -143,10 +142,10 @@ namespace dp
         dp::util::stridedMemcpy( lock.getPtr(), 0, m_strideInBytes, data, 0, stride ? stride : m_bytes, m_bytes, count );
       }
 
-      void VertexAttribute::setData(unsigned int pos, unsigned int size, dp::util::DataType type, const void * data, unsigned int stride, unsigned int count)
+      void VertexAttribute::setData(unsigned int pos, unsigned int size, dp::DataType type, const void * data, unsigned int stride, unsigned int count)
       {
         DP_ASSERT(size <=4);
-        DP_ASSERT(type>=dp::util::DT_INT_8 && type <=dp::util::DT_FLOAT_64);
+        DP_ASSERT(type>=dp::DT_INT_8 && type <=dp::DT_FLOAT_64);
 
         if ( !m_buffer )
         {
@@ -195,10 +194,10 @@ namespace dp
         util::stridedMemcpy( lock.getPtr(), 0, m_strideInBytes, data, 0, stride ? stride : m_bytes, m_bytes, count );
       }
 
-      void VertexAttribute::setData(unsigned int size, dp::util::DataType type, const BufferSharedPtr &buffer, unsigned int offset, unsigned int strideInBytes, unsigned int count)
+      void VertexAttribute::setData(unsigned int size, dp::DataType type, const BufferSharedPtr &buffer, unsigned int offset, unsigned int strideInBytes, unsigned int count)
       {
         DP_ASSERT( size <= 4 );
-        DP_ASSERT( ( dp::util::DT_INT_8 <= type ) && ( type <= dp::util::DT_NUM_DATATYPES ) );
+        DP_ASSERT( ( dp::DT_INT_8 <= type ) && ( type <= dp::DT_NUM_DATATYPES ) );
         DP_ASSERT( buffer );
 
         initData( size, type );
@@ -214,7 +213,7 @@ namespace dp
       {
         m_buffer.reset();
         m_size = 0;
-        m_type = dp::util::DT_UNKNOWN;
+        m_type = dp::DT_UNKNOWN;
         m_bytes = 0;
         m_count = 0;
         m_strideInBytes = 0;
@@ -241,7 +240,7 @@ namespace dp
           }
           // on float and double data, just take all but the lowest byte to calculate the hash
           // that allows for more advanced approximate compares
-          else if ( m_type == dp::util::DT_FLOAT_32 )
+          else if ( m_type == dp::DT_FLOAT_32 )
           {
             for ( size_t i=0 ; i<m_count ; ++i )
             {
@@ -256,7 +255,7 @@ namespace dp
           }
           else
           {
-            DP_ASSERT( m_type == dp::util::DT_FLOAT_64 );
+            DP_ASSERT( m_type == dp::DT_FLOAT_64 );
             for ( size_t i=0 ; i<m_count ; ++i )
             {
               const unsigned char *p = ptr;
@@ -310,10 +309,10 @@ namespace dp
       {
         switch( va.getVertexDataType() )
         {
-          case dp::util::DT_FLOAT_32 :
+          case dp::DT_FLOAT_32 :
             _normalize<float>( va );
             break;
-          case dp::util::DT_FLOAT_64 :
+          case dp::DT_FLOAT_64 :
             _normalize<double>( va );
             break;
           default :
@@ -375,28 +374,28 @@ namespace dp
 
       switch( va0.getVertexDataType() )
       {
-        case dp::util::DT_INT_8 :
+        case dp::DT_INT_8 :
           _lerp<char>( alpha, va0, va1, var );
           break;
-        case dp::util::DT_UNSIGNED_INT_8 :
+        case dp::DT_UNSIGNED_INT_8 :
           _lerp<unsigned char>( alpha, va0, va1, var );
           break;
-        case dp::util::DT_INT_16 :
+        case dp::DT_INT_16 :
           _lerp<short>( alpha, va0, va1, var );
           break;
-        case dp::util::DT_UNSIGNED_INT_16 :
+        case dp::DT_UNSIGNED_INT_16 :
           _lerp<unsigned short>( alpha, va0, va1, var );
           break;
-        case dp::util::DT_INT_32 :
+        case dp::DT_INT_32 :
           _lerp<int>( alpha, va0, va1, var );
           break;
-        case dp::util::DT_UNSIGNED_INT_32 :
+        case dp::DT_UNSIGNED_INT_32 :
           _lerp<unsigned int>( alpha, va0, va1, var );
           break;
-        case dp::util::DT_FLOAT_32 :
+        case dp::DT_FLOAT_32 :
           _lerp<float>( alpha, va0, va1, var );
           break;
-        case dp::util::DT_FLOAT_64 :
+        case dp::DT_FLOAT_64 :
           _lerp<double>( alpha, va0, va1, var );
           break;
         default :

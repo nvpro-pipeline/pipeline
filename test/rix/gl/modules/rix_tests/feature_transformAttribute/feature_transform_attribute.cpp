@@ -159,11 +159,11 @@ void Feature_transform_attribute::createScene()
 
   m_vertexContainerDescriptor = 
     m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( &vertexProgramParameters[0],
-    util::checked_cast<unsigned int>(vertexProgramParameters.size()) ) );
+    dp::checked_cast<unsigned int>(vertexProgramParameters.size()) ) );
 
   m_fragmentContainerDescriptor = 
     m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( &fragmentProgramParameters[0],
-    util::checked_cast<unsigned int>(fragmentProgramParameters.size()) ) );
+    dp::checked_cast<unsigned int>(fragmentProgramParameters.size()) ) );
 
   m_containerEntryModel2world = m_rix->containerDescriptorGetEntry( m_vertexContainerDescriptor, "model2world" );
   m_containerEntryWorld2view  = m_rix->containerDescriptorGetEntry( m_vertexContainerDescriptor, "world2view" );
@@ -179,14 +179,14 @@ void Feature_transform_attribute::createScene()
   containerDescriptors.push_back( m_vertexContainerDescriptor );
   containerDescriptors.push_back( m_fragmentContainerDescriptor );
 
-  ProgramDescription programDescription( programShaderCode, &containerDescriptors[0], util::checked_cast<unsigned int>(containerDescriptors.size()));
+  ProgramDescription programDescription( programShaderCode, &containerDescriptors[0], dp::checked_cast<unsigned int>(containerDescriptors.size()));
   m_programSampler = m_rix->programCreate( programDescription );
 
   // prepare & set texture
-  TextureDescription textureDescription( TT_2D, ITF_RGBA32F, dp::util::PF_RGBA, dp::util::DT_FLOAT_32, tex2DWidth, tex2DHeight, 0, 0, true );
+  TextureDescription textureDescription( TT_2D, ITF_RGBA32F, dp::PF_RGBA, dp::DT_FLOAT_32, tex2DWidth, tex2DHeight, 0, 0, true );
   m_textureHandle = m_rix->textureCreate( textureDescription );
 
-  TextureDataPtr textureDataPtr( tex2D, dp::util::PF_RGBA, dp::util::DT_FLOAT_32 );
+  TextureDataPtr textureDataPtr( tex2D, dp::PF_RGBA, dp::DT_FLOAT_32 );
   m_rix->textureSetData( m_textureHandle, textureDataPtr );
 
   RenderGroupSharedHandle renderGroup = m_rix->renderGroupCreate();

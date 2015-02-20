@@ -30,7 +30,6 @@
 #include <dp/gl/RenderTarget.h>
 #include <dp/util/Image.h>
 #include <dp/util/SharedPtr.h>
-#include <dp/util/Types.h>
 
 #include <test/rix/core/framework/RiXBackend.h>
 #include <test/rix/core/helpers/GeometryHelper.h>

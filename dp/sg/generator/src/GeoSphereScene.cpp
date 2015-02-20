@@ -64,8 +64,8 @@ static void doSubdivision( const std::vector<unsigned int>& indicesIn,
 {
   MapTriangleEdgeToIndex edgeToIndex;
   
-  unsigned int nextIndex    = dp::util::checked_cast<unsigned int>( vertices.size() );
-  unsigned int numTriangles = dp::util::checked_cast<unsigned int>( indicesIn.size() ) / 3;
+  unsigned int nextIndex    = dp::checked_cast<unsigned int>( vertices.size() );
+  unsigned int numTriangles = dp::checked_cast<unsigned int>( indicesIn.size() ) / 3;
   
   indicesOut.clear();
 
@@ -133,7 +133,7 @@ void doHole( const Vec3f& center, float radius,
   DP_ASSERT( holeIndices.empty() );
   DP_ASSERT( holeEdges.empty() );
 
-  unsigned int numTriangles = dp::util::checked_cast<unsigned int>( indicesIn.size() ) / 3;
+  unsigned int numTriangles = dp::checked_cast<unsigned int>( indicesIn.size() ) / 3;
 
   for ( unsigned int i = 0; i < numTriangles; ++i ) 
   {
@@ -236,7 +236,7 @@ void doRim( const Vec3f& center, float radius,
       Vec3f n = c * xAxis + s * yAxis;   // Normal.
       Vec3f p = (1.0f - THICKNESS_HALF) * v + THICKNESS_HALF * n; // Center of the rim plus scaled normal gives the point.
 
-      rim[j].push_back( dp::util::checked_cast<unsigned int>( vertices.size() ) ); // Store the new index in the rim's longitude indices.
+      rim[j].push_back( dp::checked_cast<unsigned int>( vertices.size() ) ); // Store the new index in the rim's longitude indices.
 
       normals.push_back( n );
       vertices.push_back( p );
@@ -390,7 +390,7 @@ static PrimitiveSharedPtr createGeoSphereObject()
   }
 
   // Generate the inner shell vertices and normals.
-  unsigned int countVertices = dp::util::checked_cast<unsigned int>( vertices.size() ); // Important, this is the offset for all inner triangle indices.
+  unsigned int countVertices = dp::checked_cast<unsigned int>( vertices.size() ); // Important, this is the offset for all inner triangle indices.
   std::vector<Vec3f> normals = vertices; // The unit vectors of the outer shell are the normals.
   for ( unsigned int i = 0; i < countVertices; ++i )
   {
@@ -450,12 +450,12 @@ static PrimitiveSharedPtr createGeoSphereObject()
 
   // Create a VertexAttributeSet with vertices and normals
   VertexAttributeSetSharedPtr vertexAttributeSet = VertexAttributeSet::create();
-  vertexAttributeSet->setVertices( &verticesFinal[0], dp::util::checked_cast<unsigned int>(verticesFinal.size()) );
-  vertexAttributeSet->setNormals( &normalsFinal[0], dp::util::checked_cast<unsigned int>(normalsFinal.size()) );
+  vertexAttributeSet->setVertices( &verticesFinal[0], dp::checked_cast<unsigned int>(verticesFinal.size()) );
+  vertexAttributeSet->setNormals( &normalsFinal[0], dp::checked_cast<unsigned int>(normalsFinal.size()) );
 
   // Create a Primitive
   IndexSetSharedPtr indexSet = IndexSet::create();
-  indexSet->setData( &indices[src][0], dp::util::checked_cast<unsigned int>(indices[src].size()) );
+  indexSet->setData( &indices[src][0], dp::checked_cast<unsigned int>(indices[src].size()) );
 
   // create pointer to return
   PrimitiveSharedPtr primitive = Primitive::create( PRIMITIVE_TRIANGLES );

@@ -27,10 +27,10 @@
 #pragma once
 /** @file */
 
+#include <dp/Types.h>
 #include <dp/sg/core/Config.h>
-#include <dp/util/HashGenerator.h>
-#include <dp/util/Types.h>
 #include <dp/sg/core/Buffer.h>
+#include <dp/util/HashGenerator.h>
 
 namespace dp
 {
@@ -42,7 +42,7 @@ namespace dp
       /*! \brief Class to hold the data of one vertex attribute.
        *  \remarks A VertexAttribute holds \c VertexDataCount elements, each one with \c VertexDataSize
        *  components or coordinates, each one in turn of type \c VertexDataType. For a set of
-       *  normals for example, \c VertexDataSize is three and the \c VertexDataType is dp::util::DT_FLOAT_32.
+       *  normals for example, \c VertexDataSize is three and the \c VertexDataType is dp::DT_FLOAT_32.
        *  \sa VertexAttributeSet */
       class VertexAttribute
       {
@@ -72,21 +72,21 @@ namespace dp
           /*! \brief Reserves space for data in this VerexAttribute.
            *  \param size Specifies the number of coordinates per vertex; must be 1, 2, 3, or 4.
            *  \param type Specifies the data type of each coordinate in the input data array. In general,
-           *  sympbolic constants dp::util::DT_INT_8, dp::util::DT_UNSIGNED_INT_8, dp::util::DT_INT_16, dp::util::DT_UNSIGNED_INT_16,
-           *  dp::util::DT_INT_32, dp::util::DT_UNSIGNED_INT_32, dp::util::DT_FLOAT_32, and dp::util::DT_FLOAT_64 are accepted.
+           *  sympbolic constants dp::DT_INT_8, dp::DT_UNSIGNED_INT_8, dp::DT_INT_16, dp::DT_UNSIGNED_INT_16,
+           *  dp::DT_INT_32, dp::DT_UNSIGNED_INT_32, dp::DT_FLOAT_32, and dp::DT_FLOAT_64 are accepted.
            *  \param count Specifies the number of vertex data to copy to reserve space for.
            *  \remarks If no buffer has been allocated before a new buffer will be allocated. If the buffer size
            *  is less than the given size the buffer will be resized accordingly. Otherwise the size of the buffer
            *  remains unchanged.
            *  \sa getData, setData, removeData, getVertexDataCount, getVertexDataSize, getVertexDataType,
            *  getVertexDataBytes */
-          DP_SG_CORE_API void reserveData( unsigned int size, dp::util::DataType type, unsigned int count );
+          DP_SG_CORE_API void reserveData( unsigned int size, dp::DataType type, unsigned int count );
 
           /*! \brief Copies data into this VertexAttribute.
            *  \param size Specifies the number of coordinates per vertex; must be 1, 2, 3, or 4.
            *  \param type Specifies the data type of each coordinate in the input data array. In general,
-           *  sympbolic constants dp::util::DT_INT_8, dp::util::DT_UNSIGNED_INT_8, dp::util::DT_INT_16, dp::util::DT_UNSIGNED_INT_16,
-           *  dp::util::DT_INT_32, dp::util::DT_UNSIGNED_INT_32, dp::util::DT_FLOAT_32, and dp::util::DT_FLOAT_64 are accepted.
+           *  sympbolic constants dp::DT_INT_8, dp::DT_UNSIGNED_INT_8, dp::DT_INT_16, dp::DT_UNSIGNED_INT_16,
+           *  dp::DT_INT_32, dp::DT_UNSIGNED_INT_32, dp::DT_FLOAT_32, and dp::DT_FLOAT_64 are accepted.
            *  \param data Specifies the start address of the input data array.
            *  \param strideInBytes Specifies the stride between two elements in data. A stride of 0 assumes packed data.
            *  \param count Specifies the number of vertex data to copy.
@@ -95,7 +95,7 @@ namespace dp
            *  the new data.
            *  \sa getData, removeData, reserveData, getVertexDataCount, getVertexDataSize,
            *  getVertexDataType, getVertexDataBytes */
-          DP_SG_CORE_API void setData(unsigned int size, dp::util::DataType type, const void * data, unsigned int strideInBytes, unsigned int count);
+          DP_SG_CORE_API void setData(unsigned int size, dp::DataType type, const void * data, unsigned int strideInBytes, unsigned int count);
 
           /*! \brief Overwrites data in this VertexAttribute.
            *  \param pos Marks the position of the first vertex inside this VertexAttribute, where
@@ -103,8 +103,8 @@ namespace dp
            *  appended to the array of vertex data.
            *  \param size Specifies the number of coordinates per vertex; must be 1, 2, 3, or 4.
            *  \param type Specifies the data type of each coordinate in the input data array. In general,
-           *  symbolic constants dp::util::DT_INT_8, dp::util::DT_UNSIGNED_INT_8, dp::util::DT_INT_16, dp::util::DT_UNSIGNED_INT_16,
-           *  dp::util::DT_INT_32, dp::util::DT_UNSIGNED_INT_32, dp::util::DT_FLOAT_32, and dp::util::DT_FLOAT_64 are accepted.
+           *  symbolic constants dp::DT_INT_8, dp::DT_UNSIGNED_INT_8, dp::DT_INT_16, dp::DT_UNSIGNED_INT_16,
+           *  dp::DT_INT_32, dp::DT_UNSIGNED_INT_32, dp::DT_FLOAT_32, and dp::DT_FLOAT_64 are accepted.
            *  \param data Specifies the start address of the input data array.
            *  \param strideInBytes Specifies the stride between two elements in data. A stride of 0 assumes packed data.
            *  \param count Specifies the number of vertex data to copy.
@@ -116,13 +116,13 @@ namespace dp
            *  It is safe to use this function if there is only one chunk of interleaved data in this buffer.
            *  \sa getData, removeData, reserveData, getVertexDataCount, getVertexDataSize,
            *  getVertexDataType, getVertexDataBytes */
-          DP_SG_CORE_API void setData(unsigned int pos, unsigned int size, dp::util::DataType type, const void * data, unsigned int strideInBytes, unsigned int count);
+          DP_SG_CORE_API void setData(unsigned int pos, unsigned int size, dp::DataType type, const void * data, unsigned int strideInBytes, unsigned int count);
 
           /*! \brief Sets the buffer of this vertex attribute
            *  \param size Specifies the number of coordinates per vertex; must be 1, 2, 3, or 4.
            *  \param type Specifies the data type of each coordinate in the input data array. In general,
-           *  sympbolic constants dp::util::DT_INT_8, dp::util::DT_UNSIGNED_INT_8, dp::util::DT_INT_16, dp::util::DT_UNSIGNED_INT_16,
-           *  dp::util::DT_INT_32, dp::util::DT_UNSIGNED_INT_32, dp::util::DT_FLOAT_32, and dp::util::DT_FLOAT_64 are accepted.
+           *  sympbolic constants dp::DT_INT_8, dp::DT_UNSIGNED_INT_8, dp::DT_INT_16, dp::DT_UNSIGNED_INT_16,
+           *  dp::DT_INT_32, dp::DT_UNSIGNED_INT_32, dp::DT_FLOAT_32, and dp::DT_FLOAT_64 are accepted.
            *  \param buffer Specifies the buffer to use for this VertexAttribute.
            *  \param offset Offset of the first element in the buffer in bytes
            *  \param strideInBytes stride between two vertex elements in the buffer.
@@ -132,7 +132,7 @@ namespace dp
            *           No data is being copied in this function call.
            *  \sa getData, removeData, reserveData, getVertexDataCount, getVertexDataSize,
            *  getVertexDataType, getVertexDataBytes */
-          DP_SG_CORE_API void setData(unsigned int size, dp::util::DataType type, const BufferSharedPtr &buffer, unsigned int offset, unsigned int strideInBytes, unsigned int count);
+          DP_SG_CORE_API void setData(unsigned int size, dp::DataType type, const BufferSharedPtr &buffer, unsigned int offset, unsigned int strideInBytes, unsigned int count);
 
           /*! \brief Get a constant pointer to the vertex data of this VertexAttribute.
            *  \return The functions returns a type-less pointer to the vertex data of this
@@ -202,18 +202,18 @@ namespace dp
           /*! \brief Get the type identifier of the coordinates of the vertex data elements.
            *  \return The function returns a symbolic constant indicating the type of each coordinate of
            *  the vertex data elements. If no vertex data was specified, the function returns
-           *  dp::util::DT_UNKNOWN.
+           *  dp::DT_UNKNOWN.
            *  \remarks The function returns the type specifier that was used with a corresponding call
            *  to setData. Use getVertexDataSize to query the number of coordinates for each vertex data.
-           *  You can use the dp::util::getSizeOf convenient function to determine the size in bytes of the
+           *  You can use the dp::getSizeOf convenient function to determine the size in bytes of the
            *  type returned by this function.
-           *  \sa setData, getVertexDataCount, getVertexDataSize, getVertexDataBytes, dp::util::getSizeOf */
-          DP_SG_CORE_API dp::util::DataType getVertexDataType()  const;
+           *  \sa setData, getVertexDataCount, getVertexDataSize, getVertexDataBytes, dp::getSizeOf */
+          DP_SG_CORE_API dp::DataType getVertexDataType()  const;
 
           /*! \brief Get the size of one vertex data element in bytes.
            *  \return The function returns the size of a vertex data element in bytes.
-           *  \remarks This is simply the cached result of getVertexDataSize * dp::util::getSizeOf(getVertexDataType).
-           *  \sa setData, getVertexDataCount, getVertexDataSize, getVertexDataType, dp::util::getSizeOf */
+           *  \remarks This is simply the cached result of getVertexDataSize * dp::getSizeOf(getVertexDataType).
+           *  \sa setData, getVertexDataCount, getVertexDataSize, getVertexDataType, dp::getSizeOf */
           DP_SG_CORE_API unsigned int getVertexDataBytes() const;
 
           /*! \brief Get the stride between two vertex data elements in the buffer
@@ -254,16 +254,16 @@ namespace dp
 
         private:
           //initiatialize m_size, m_type and m_bytes
-          void initData( unsigned int size, dp::util::DataType type );
+          void initData( unsigned int size, dp::DataType type );
 
         private:      
-          unsigned int       m_count;  // # vertex data
-          unsigned int       m_size;   // # coordinates per vertex 
-          dp::util::DataType m_type;   // symbolic constant indicating the type of coordinates
-          unsigned int       m_bytes;  // size of vertex in bytes
-          unsigned int       m_offset;
-          unsigned int       m_strideInBytes; // stride in bytes between two elements in the buffer
-          BufferSharedPtr    m_buffer;
+          unsigned int    m_count;  // # vertex data
+          unsigned int    m_size;   // # coordinates per vertex 
+          dp::DataType    m_type;   // symbolic constant indicating the type of coordinates
+          unsigned int    m_bytes;  // size of vertex in bytes
+          unsigned int    m_offset;
+          unsigned int    m_strideInBytes; // stride in bytes between two elements in the buffer
+          BufferSharedPtr m_buffer;
       };
 
       /*! \brief Normalize all vertex data elements of a VertexAttribute.
@@ -308,7 +308,7 @@ namespace dp
         return( m_size );
       }
 
-      inline dp::util::DataType VertexAttribute::getVertexDataType() const
+      inline dp::DataType VertexAttribute::getVertexDataType() const
       {
         return( m_type );
       }

@@ -78,7 +78,7 @@ public:
 
   /** \brief Exit after the given number of frames + 1. Use getExitCode() to retrieve the framerate.
   **/
-  void setNumberOfFrames( dp::util::Uint32 numberOfFrames );
+  void setNumberOfFrames( dp::Uint32 numberOfFrames );
 
   /** \brief Exit after the given duration. Use getExitCode() to retrieve the framerate.
   **/
@@ -106,18 +106,18 @@ private:
   };
 
   // benchmark
-  dp::util::Uint32 m_renderedFrames;
-  dp::util::Uint32 m_benchmarkFrames;
-  dp::util::Timer  m_benchmarkTimer;
-  dp::util::Timer  m_benchmarkProgressTimer;
-  int              m_exitCode;
-  double           m_duration;
+  dp::Uint32      m_renderedFrames;
+  dp::Uint32      m_benchmarkFrames;
+  dp::util::Timer m_benchmarkTimer;
+  dp::util::Timer m_benchmarkProgressTimer;
+  int             m_exitCode;
+  double          m_duration;
 
-  bool             m_engineBindless;
-  AttributeType    m_attributeType;
+  bool            m_engineBindless;
+  AttributeType   m_attributeType;
 
-  std::string      m_renderEngine;
-  dp::fx::Manager  m_shaderManager;
+  std::string     m_renderEngine;
+  dp::fx::Manager m_shaderManager;
 };
 
 GLUTMinimal::GLUTMinimal()
@@ -140,7 +140,7 @@ GLUTMinimal::~GLUTMinimal()
   setManipulator( 0 );
 }
 
-void GLUTMinimal::setNumberOfFrames( dp::util::Uint32 numberOfFrames )
+void GLUTMinimal::setNumberOfFrames( dp::Uint32 numberOfFrames )
 {
   m_benchmarkFrames = numberOfFrames;
   if( numberOfFrames != ~0 )

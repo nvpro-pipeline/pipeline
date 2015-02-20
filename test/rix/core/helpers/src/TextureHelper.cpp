@@ -42,13 +42,13 @@ namespace dp
     {
 
       template<typename T>
-      void setTextureData( dp::rix::core::Renderer* rix, TextureSharedHandle const & textureHandle, dp::util::PixelFormat pixelFormat, dp::util::DataType dataType
+      void setTextureData( dp::rix::core::Renderer* rix, TextureSharedHandle const & textureHandle, dp::PixelFormat pixelFormat, dp::DataType dataType
                          , dp::util::generator::TextureObjectDataSharedPtr& data )
       {
         unsigned char components;
         bool swapRB = false;
 
-        components = dp::util::getComponentCount(pixelFormat);
+        components = dp::getComponentCount(pixelFormat);
 
         vector<T> out;
         convertTextureData(data->m_data, out, components, swapRB);
@@ -87,7 +87,7 @@ namespace dp
 
       dp::util::ImageSharedPtr getEyeZFromDepthBuffer( const dp::util::ImageSharedPtr& depthBuffer, float nearPlane, float farPlane )
       {
-        DP_ASSERT( depthBuffer->getDataType() == dp::util::DT_FLOAT_32 );
+        DP_ASSERT( depthBuffer->getDataType() == dp::DT_FLOAT_32 );
         DP_ASSERT( getComponentCount( depthBuffer->getPixelFormat() ) == 1 );
 
         size_t width = depthBuffer->getWidth();
@@ -103,7 +103,7 @@ namespace dp
 
         convertPixelData( depthPixels, visualPixels, calculateEyeZ, &nearFarPlanes );
 
-        return dp::util::Image::create(width, height, dp::util::PF_RGB, dp::util::DT_INT_8, (const void* const* )&visualPixels[0][0] );
+        return dp::util::Image::create(width, height, dp::PF_RGB, dp::DT_INT_8, (const void* const* )&visualPixels[0][0] );
       }
       
       void alphaToColors( const math::Vecnt<1, unsigned char>& alphaIn
@@ -118,7 +118,7 @@ namespace dp
       dp::util::ImageSharedPtr getGrayscaleFromAlphaImage( const dp::util::ImageSharedPtr& alphaImage )
       {
         DP_ASSERT( getComponentCount( alphaImage->getPixelFormat() ) == 1 );
-        DP_ASSERT( alphaImage->getDataType() == dp::util::DT_UNSIGNED_INT_8 );
+        DP_ASSERT( alphaImage->getDataType() == dp::DT_UNSIGNED_INT_8 );
 
         size_t width = alphaImage->getWidth();
         size_t height = alphaImage->getHeight();
@@ -131,7 +131,7 @@ namespace dp
 
         convertPixelData( alphaPixels, colorPixels, alphaToColors, nullptr );
 
-        return dp::util::Image::create(width, height, dp::util::PF_RGB, dp::util::DT_UNSIGNED_INT_8, (const void* const* )&colorPixels[0][0] );
+        return dp::util::Image::create(width, height, dp::PF_RGB, dp::DT_UNSIGNED_INT_8, (const void* const* )&colorPixels[0][0] );
       }
       
       void alphaToColorsRange( const math::Vecnt<1, float>& alphaIn
@@ -149,7 +149,7 @@ namespace dp
       dp::util::ImageSharedPtr getGrayscaleFromAlphaImageFloatRange( const dp::util::ImageSharedPtr& alphaImage, float from, float to )
       {
         DP_ASSERT( getComponentCount( alphaImage->getPixelFormat() ) == 1 );
-        DP_ASSERT( alphaImage->getDataType() == dp::util::DT_FLOAT_32 );
+        DP_ASSERT( alphaImage->getDataType() == dp::DT_FLOAT_32 );
 
         size_t width = alphaImage->getWidth();
         size_t height = alphaImage->getHeight();
@@ -164,13 +164,13 @@ namespace dp
 
         convertPixelData( alphaPixels, colorPixels, alphaToColorsRange, &range );
 
-        return dp::util::Image::create(width, height, dp::util::PF_RGB, dp::util::DT_INT_8, (const void* const* )&colorPixels[0][0] );
+        return dp::util::Image::create(width, height, dp::PF_RGB, dp::DT_INT_8, (const void* const* )&colorPixels[0][0] );
       }
 
       TextureSharedHandle generateTexture( dp::rix::core::Renderer* rix 
                                          , dp::util::generator::TextureObjectDataSharedPtr data
-                                         , dp::util::PixelFormat pixelFormat /*= PF_RGBA */
-                                         , dp::util::DataType dataType /*= DT_FLOAT_32 */
+                                         , dp::PixelFormat pixelFormat /*= PF_RGBA */
+                                         , dp::DataType dataType /*= DT_FLOAT_32 */
                                          , InternalTextureFormat internalFormat /*= ITF_RGBA8*/
                                          , bool generateMipmaps /*= false*/)
       {
@@ -179,28 +179,28 @@ namespace dp
 
         switch( dataType )
         {
-        case dp::util::DT_UNSIGNED_INT_8:
+        case dp::DT_UNSIGNED_INT_8:
           setTextureData<unsigned char>(rix, textureHandle, pixelFormat, dataType, data);
           break;
-        case dp::util::DT_UNSIGNED_INT_16:
+        case dp::DT_UNSIGNED_INT_16:
           setTextureData<unsigned short>(rix, textureHandle, pixelFormat, dataType, data);
           break;
-        case dp::util::DT_UNSIGNED_INT_32:
+        case dp::DT_UNSIGNED_INT_32:
           setTextureData<unsigned int>(rix, textureHandle, pixelFormat, dataType, data);
           break;
-        case dp::util::DT_INT_8:
+        case dp::DT_INT_8:
           setTextureData<char>(rix, textureHandle, pixelFormat, dataType, data);
           break;
-        case dp::util::DT_INT_16:
+        case dp::DT_INT_16:
           setTextureData<short>(rix, textureHandle, pixelFormat, dataType, data);
           break;
-        case dp::util::DT_INT_32:
+        case dp::DT_INT_32:
           setTextureData<int>(rix, textureHandle, pixelFormat, dataType, data);
           break;
-        case dp::util::DT_FLOAT_32:
+        case dp::DT_FLOAT_32:
           setTextureData<float>(rix, textureHandle, pixelFormat, dataType, data);
           break;
-        case dp::util::DT_FLOAT_64:
+        case dp::DT_FLOAT_64:
           setTextureData<double>(rix, textureHandle, pixelFormat, dataType, data);
           break;
         default:
@@ -219,7 +219,7 @@ namespace dp
         DP_ASSERT(texImage);
 
         std::vector<const void*> texData = texImage->getLayerDataArray();
-        unsigned int numMipmapLevels = dp::util::checked_cast<unsigned int>(texImage->getMipmapLevels());
+        unsigned int numMipmapLevels = dp::checked_cast<unsigned int>(texImage->getMipmapLevels());
         size_t texWidth = texImage->getWidth();
         size_t texHeight = texImage->getHeight();
         DP_ASSERT( texImage->getNumLayers() == 1 );
@@ -232,8 +232,8 @@ namespace dp
           texHeight = 0;
         }
 
-        dp::util::DataType dataType = texImage->getDataType();
-        dp::util::PixelFormat pixelFormat = texImage->getPixelFormat();
+        dp::DataType dataType = texImage->getDataType();
+        dp::PixelFormat pixelFormat = texImage->getPixelFormat();
 
         TextureDescription textureDescription( tt, internalFormat, pixelFormat, dataType, texWidth, texHeight, 0, 0, generateMipmaps || !!numMipmapLevels );
         TextureSharedHandle texture = rix->textureCreate( textureDescription );
@@ -254,9 +254,9 @@ namespace dp
         dp::util::ImageSharedPtr cubeMapImage = dp::util::imageFromFile(filename);
         DP_ASSERT(cubeMapImage);
 
-        dp::util::DataType dataType = cubeMapImage->getDataType();
-        dp::util::PixelFormat pixelFormat = cubeMapImage->getPixelFormat();
-        unsigned int numMipmaps = dp::util::checked_cast<unsigned int>( cubeMapImage->getMipmapLevels() );
+        dp::DataType dataType = cubeMapImage->getDataType();
+        dp::PixelFormat pixelFormat = cubeMapImage->getPixelFormat();
+        unsigned int numMipmaps = dp::checked_cast<unsigned int>( cubeMapImage->getMipmapLevels() );
         size_t numFaces = cubeMapImage->getNumLayers();
         size_t texWidth = cubeMapImage->getWidth();
         

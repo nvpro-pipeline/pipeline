@@ -186,7 +186,7 @@ namespace dp
       DP_ASSERT( m_nvPmApi );
       DP_VERIFY( m_nvPmApi->EndExperiment( m_nvPmApiContext ) == NVPM_OK );
 
-      NVPMUINT numSamples = checked_cast<NVPMUINT>(m_samples.size());
+      NVPMUINT numSamples = dp::checked_cast<NVPMUINT>(m_samples.size());
       if ( numSamples )
       {
         results.resize( numSamples );

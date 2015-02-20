@@ -294,7 +294,7 @@ void DPBFSaveTraverser::doApply( const NodeSharedPtr & root )
   if ( !calculatingStorageRequirements() )
   {
     DP_ASSERT( m_preCalculatedFileSize < UINT_MAX );
-    m_fm = new WriteMapping( m_fileName, checked_cast<size_t>(m_preCalculatedFileSize) );
+    m_fm = new WriteMapping( m_fileName, dp::checked_cast<size_t>(m_preCalculatedFileSize) );
     if ( ! m_fm || ! m_fm->isValid() )
     {
       m_errorMessage = "Could not establish a file mapping!";
@@ -403,7 +403,7 @@ uint_t DPBFSaveTraverser::handleScene( SceneSharedPtr const& scene )
       if ( ! ti->getFileName().empty() )
       {
         // determine storage requirements for the image file name
-        pseudoAlloc( checked_cast<unsigned int>(ti->getFileName().length()+1)*sizeof(char)); // ... texture image file
+        pseudoAlloc( dp::checked_cast<unsigned int>(ti->getFileName().length()+1)*sizeof(char)); // ... texture image file
       }
       else if ( 0 < ti->getNumberOfImages() )
       { // no filename specified, but images
@@ -447,7 +447,7 @@ uint_t DPBFSaveTraverser::handleScene( SceneSharedPtr const& scene )
       }
     }
     
-    scenePtr->numObjectLinks = checked_cast<uint_t>( m_links.size() );
+    scenePtr->numObjectLinks = dp::checked_cast<uint_t>( m_links.size() );
     if ( m_links.size() )
     {
       // allocate slot where to write the links below
@@ -612,8 +612,8 @@ void DPBFSaveTraverser::handleEffectData( const EffectData * p )
       pseudoAllocObject(p); // an EffectData is an Object
       DP_ASSERT( ! es->getName().empty() );
       pseudoAlloc(2*sizeof(str_t));
-      pseudoAlloc(checked_cast<unsigned int>(effectFile.length()+1)*sizeof(char));
-      pseudoAlloc(checked_cast<unsigned int>(es->getName().length()+1)*sizeof(char));
+      pseudoAlloc(dp::checked_cast<unsigned int>(effectFile.length()+1)*sizeof(char));
+      pseudoAlloc(dp::checked_cast<unsigned int>(es->getName().length()+1)*sizeof(char));
       pseudoAlloc((es->getNumberOfParameterGroupSpecs())*sizeof(uint_t)); // ParameterGroupData offsets
     }
     else
@@ -623,14 +623,14 @@ void DPBFSaveTraverser::handleEffectData( const EffectData * p )
 
       // allocate str_t object to hold the EffectSpec filename
       DP_ASSERT( !effectFile.empty() );
-      edPtr->effectFileName.numChars = checked_cast<uint_t>( effectFile.length() );
+      edPtr->effectFileName.numChars = dp::checked_cast<uint_t>( effectFile.length() );
       Offset_AutoPtr<char> fileChars( this, edPtr->effectFileName.chars, edPtr->effectFileName.numChars + 1 );
       strncpy( fileChars, effectFile.c_str(), edPtr->effectFileName.numChars + 1 );
 
       // allocate str_t object to hold the EffectSpec name 
       DP_ASSERT( ! es->getName().empty() );
       const string & name = es->getName();
-      edPtr->effectSpecName.numChars = checked_cast<uint_t>( name.length() );
+      edPtr->effectSpecName.numChars = dp::checked_cast<uint_t>( name.length() );
       Offset_AutoPtr<char> chars( this, edPtr->effectSpecName.chars, edPtr->effectSpecName.numChars + 1 );
       strncpy( chars, name.c_str(), edPtr->effectSpecName.numChars + 1 );
 
@@ -669,7 +669,7 @@ void DPBFSaveTraverser::handleParameterGroupData( const ParameterGroupData * p )
       pseudoAllocObject(p); // a ParameterGroupData is an Object
       DP_ASSERT( !pgs->getName().empty() );
       pseudoAlloc(sizeof(str_t));
-      pseudoAlloc(checked_cast<unsigned int>(pgs->getName().length()+1)*sizeof(char));
+      pseudoAlloc(dp::checked_cast<unsigned int>(pgs->getName().length()+1)*sizeof(char));
       pseudoAlloc( pgs->getDataSize() * sizeof(byte_t) );
     }
     else
@@ -680,7 +680,7 @@ void DPBFSaveTraverser::handleParameterGroupData( const ParameterGroupData * p )
       // allocate str_t object to hold the EffectSpec name 
       DP_ASSERT( ! pgs->getName().empty() );
       const string & name = pgs->getName();
-      pgdPtr->parameterGroupSpecName.numChars = checked_cast<uint_t>( name.length() );
+      pgdPtr->parameterGroupSpecName.numChars = dp::checked_cast<uint_t>( name.length() );
       Offset_AutoPtr<char> chars( this, pgdPtr->parameterGroupSpecName.chars, pgdPtr->parameterGroupSpecName.numChars + 1 );
       strncpy( chars, name.c_str(), pgdPtr->parameterGroupSpecName.numChars + 1 );
 
@@ -734,7 +734,7 @@ void DPBFSaveTraverser::handleSampler( const Sampler * p )
         {
           // determine storage requirements for the image file name
           DP_ASSERT( th->getFileName().length() <= UINT_MAX );
-          pseudoAlloc( checked_cast<unsigned int>(th->getFileName().length()+1)*sizeof(char)); // ... texture image file
+          pseudoAlloc( dp::checked_cast<unsigned int>(th->getFileName().length()+1)*sizeof(char)); // ... texture image file
         }
         else if ( 0 < th->getNumberOfImages() )
         { // no filename specified, but images
@@ -906,7 +906,7 @@ void DPBFSaveTraverser::handleSwitch(const Switch *p)
           ; it = p->getNextMaskIterator(it) )
       {
         DP_ASSERT( p->getSwitchMask(it).size() <= UINT_MAX );
-        pseudoAlloc( checked_cast<unsigned int>(p->getSwitchMask(it).size())*sizeof(uint_t));
+        pseudoAlloc( dp::checked_cast<unsigned int>(p->getSwitchMask(it).size())*sizeof(uint_t));
       }
     }
     else
@@ -932,7 +932,7 @@ void DPBFSaveTraverser::handleSwitch(const Switch *p)
         DP_ASSERT(i < switchPtr->numMasks); // severe error if this fires!
         const Switch::SwitchMask& mask = p->getSwitchMask(it);
         masks[i].maskKey = p->getMaskKey(it);
-        masks[i].numChildren = checked_cast<uint_t>(mask.size());
+        masks[i].numChildren = dp::checked_cast<uint_t>(mask.size());
         masks[i].children = 0; // just give it a defined offset
 
         // allocate only if children are available in the mask
@@ -1047,7 +1047,7 @@ void DPBFSaveTraverser::handleIndexSet( const IndexSet * p )
         isPtr->primitiveRestartIndex = p->getPrimitiveRestartIndex();
         isPtr->numberOfIndices       = p->getNumberOfIndices();
 
-        unsigned int numBytes = static_cast<unsigned int>(dp::util::getSizeOf( static_cast<dp::util::DataType>(isPtr->dataType) ) * isPtr->numberOfIndices);
+        unsigned int numBytes = static_cast<unsigned int>(dp::getSizeOf( static_cast<dp::DataType>(isPtr->dataType) ) * isPtr->numberOfIndices);
         Offset_AutoPtr<byte_t> idata( this, isPtr->idata, numBytes );
         Buffer::DataReadLock reader( p->getBuffer() );
         memcpy( idata, reader.getPtr(), numBytes );
@@ -1119,7 +1119,7 @@ void DPBFSaveTraverser::writeObject(const Object* objPtr, NBFObject * nbfObjPtr,
     const string& name = objPtr->getName();
     Offset_AutoPtr<str_t> nameStr(this, nbfObjPtr->objectName);
     // allocate memory for the actual string
-    nameStr->numChars = checked_cast<uint_t>(name.length()); // without terminating 0!
+    nameStr->numChars = dp::checked_cast<uint_t>(name.length()); // without terminating 0!
     Offset_AutoPtr<char> chars(this, nameStr->chars, nameStr->numChars+1);    
     strncpy(chars, name.c_str(), nameStr->numChars+1); // copy string, including terminating 0!
   }
@@ -1131,7 +1131,7 @@ void DPBFSaveTraverser::writeObject(const Object* objPtr, NBFObject * nbfObjPtr,
     const string& anno = objPtr->getAnnotation();
     Offset_AutoPtr<str_t> annoStr(this, nbfObjPtr->objectAnno);
     // allocate memory for the actual string
-    annoStr->numChars = checked_cast<uint_t>(anno.length()); // without terminating 0!
+    annoStr->numChars = dp::checked_cast<uint_t>(anno.length()); // without terminating 0!
     Offset_AutoPtr<char> chars(this, annoStr->chars, annoStr->numChars+1);    
     strncpy(chars, anno.c_str(), annoStr->numChars+1); // copy string, including terminating 0!
   }
@@ -1190,7 +1190,7 @@ void DPBFSaveTraverser::writeVertexAttributeSet(const VertexAttributeSet * vasPt
       nbfVASPtr->vattribs[i].size = vasPtr->getSizeOfVertexData(i);
       nbfVASPtr->vattribs[i].type = vasPtr->getTypeOfVertexData(i);
       nbfVASPtr->vattribs[i].numVData = vasPtr->getNumberOfVertexData(i);
-      uint_t sizeOfVertex = static_cast<unsigned int>(nbfVASPtr->vattribs[i].size * dp::util::getSizeOf(static_cast<dp::util::DataType>(nbfVASPtr->vattribs[i].type) ));
+      uint_t sizeOfVertex = static_cast<unsigned int>(nbfVASPtr->vattribs[i].size * dp::getSizeOf(static_cast<dp::DataType>(nbfVASPtr->vattribs[i].type) ));
       unsigned int numBytes = nbfVASPtr->vattribs[i].numVData * sizeOfVertex;
       Offset_AutoPtr<byte_t> vdata(this, nbfVASPtr->vattribs[i].vdata, numBytes);
 
@@ -1280,7 +1280,7 @@ void DPBFSaveTraverser::writeTexImage( const string& file, TextureHostSharedPtr 
 
   if ( !file.empty() )
   {    
-    nbfImg->file.numChars = checked_cast<uint_t>(file.length());
+    nbfImg->file.numChars = dp::checked_cast<uint_t>(file.length());
     Offset_AutoPtr<char> chars(this, nbfImg->file.chars, nbfImg->file.numChars+1);
     strcpy(chars, file.c_str());
   }
@@ -1318,7 +1318,7 @@ void DPBFSaveTraverser::pseudoAllocIndexSet( const IndexSet * p )
 {
   DP_ASSERT(calculatingStorageRequirements());
   pseudoAllocObject( p );
-  pseudoAlloc( static_cast<unsigned int>(dp::util::getSizeOf( p->getIndexDataType() ) * p->getNumberOfIndices()) );
+  pseudoAlloc( static_cast<unsigned int>(dp::getSizeOf( p->getIndexDataType() ) * p->getNumberOfIndices()) );
 }
 
 void DPBFSaveTraverser::pseudoAllocObject(const Object* p)
@@ -1333,12 +1333,12 @@ void DPBFSaveTraverser::pseudoAllocObject(const Object* p)
   if ( !p->getName().empty() )
   {
     pseudoAlloc(sizeof(str_t));
-    pseudoAlloc(checked_cast<unsigned int>(p->getName().length()+1)*sizeof(char));
+    pseudoAlloc(dp::checked_cast<unsigned int>(p->getName().length()+1)*sizeof(char));
   }
   if ( !p->getAnnotation().empty() )
   {
     pseudoAlloc(sizeof(str_t));
-    pseudoAlloc(checked_cast<unsigned int>(p->getAnnotation().length()+1)*sizeof(char));
+    pseudoAlloc(dp::checked_cast<unsigned int>(p->getAnnotation().length()+1)*sizeof(char));
   }
 }
 
@@ -1386,7 +1386,7 @@ void DPBFSaveTraverser::pseudoAllocTexImage(const string& file, const TextureHos
   DP_ASSERT(calculatingStorageRequirements());
   pseudoAlloc(sizeof(texImage_t));
   DP_ASSERT( file.length() <= UINT_MAX );
-  pseudoAlloc( checked_cast<unsigned int>(file.length()) + !file.empty());
+  pseudoAlloc( dp::checked_cast<unsigned int>(file.length()) + !file.empty());
   if ( file.empty() && img!=NULL )
   {
     pseudoAlloc( img->getNumberOfBytes( ) );
@@ -1398,7 +1398,7 @@ void DPBFSaveTraverser::pseudoAllocVertexAttributeSet( const VertexAttributeSet 
   pseudoAllocObject(vas);   // a VertexAttributeSet is an Object
   for ( unsigned int i=0; i<VertexAttributeSet::DP_SG_VERTEX_ATTRIB_COUNT; ++i )
   {
-    uint_t sizeofVertex = static_cast<uint_t>(vas->getSizeOfVertexData(i) * dp::util::getSizeOf(vas->getTypeOfVertexData(i)));
+    uint_t sizeofVertex = static_cast<uint_t>(vas->getSizeOfVertexData(i) * dp::getSizeOf(vas->getTypeOfVertexData(i)));
     pseudoAlloc(vas->getNumberOfVertexData(i)*sizeofVertex);
   }
 }

@@ -27,7 +27,6 @@
 #pragma once
 
 #include <dp/gl/Config.h>
-#include <dp/util/Types.h>
 #include <set>
 
 #if defined(DP_OS_WINDOWS)

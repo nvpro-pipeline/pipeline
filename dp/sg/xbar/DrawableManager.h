@@ -100,7 +100,7 @@ namespace dp
         DP_SG_XBAR_API virtual void removeDrawableInstance( Handle handle ) = 0;
         DP_SG_XBAR_API virtual void updateDrawableInstance( Handle handle ) = 0;
         DP_SG_XBAR_API virtual void setDrawableInstanceActive( Handle handle, bool visible ) = 0;
-        DP_SG_XBAR_API virtual void setDrawableInstanceTraversalMask( Handle handle, dp::util::Uint32 traversalMask ) = 0;
+        DP_SG_XBAR_API virtual void setDrawableInstanceTraversalMask( Handle handle, dp::Uint32 traversalMask ) = 0;
 
       private:
         /** \brief Detach from current SceneTree. Called from setSceneTree. Calls removeDrawableInstance for all Drawables **/

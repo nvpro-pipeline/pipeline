@@ -541,9 +541,9 @@ int ExtractGeometryTraverser::addPrimitive(int geometryIDX, const Primitive* p)
 
     for (size_t i = 0; i < indexSize; i+=3)
     {
-      geometry.indices.push_back( dp::util::checked_cast<unsigned int, size_t>(oldVertexSize) + indices[i+0] );
-      geometry.indices.push_back( dp::util::checked_cast<unsigned int, size_t>(oldVertexSize) + indices[i+1] );
-      geometry.indices.push_back( dp::util::checked_cast<unsigned int, size_t>(oldVertexSize) + indices[i+2] );
+      geometry.indices.push_back( dp::checked_cast<unsigned int, size_t>(oldVertexSize) + indices[i+0] );
+      geometry.indices.push_back( dp::checked_cast<unsigned int, size_t>(oldVertexSize) + indices[i+1] );
+      geometry.indices.push_back( dp::checked_cast<unsigned int, size_t>(oldVertexSize) + indices[i+2] );
     }
 
     CSFGeometryPart part;

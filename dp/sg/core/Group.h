@@ -33,7 +33,6 @@
 #include <dp/sg/core/Node.h>
 #include <dp/sg/core/ConstIterator.h>
 #include <dp/util/HashGenerator.h>
-#include <dp/util/Types.h>
 #include <dp/math/Planent.h>
 
 namespace dp
@@ -462,7 +461,7 @@ namespace dp
 
       inline unsigned int Group::getNumberOfChildren() const
       {
-        return( dp::util::checked_cast<unsigned int>(m_children.size()) );
+        return( dp::checked_cast<unsigned int>(m_children.size()) );
       }
 
       inline Group::ChildrenConstIterator Group::beginChildren() const
@@ -504,7 +503,7 @@ namespace dp
 
       inline unsigned int Group::getNumberOfClipPlanes() const
       {
-        return( dp::util::checked_cast<unsigned int>(m_clipPlanes.size()) );
+        return( dp::checked_cast<unsigned int>(m_clipPlanes.size()) );
       }
 
       inline Group::ClipPlaneConstIterator Group::beginClipPlanes() const

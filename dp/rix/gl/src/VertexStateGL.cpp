@@ -98,7 +98,7 @@ namespace dp
         VertexFormat newFormat;
         memset( &newFormat, 0, sizeof( newFormat ) );
 
-        dp::util::Int8 streamMap[RIX_GL_MAX_ATTRIBUTES];
+        dp::Int8 streamMap[RIX_GL_MAX_ATTRIBUTES];
         memset( streamMap, -1, RIX_GL_MAX_ATTRIBUTES );
         int numStreams = 0;
 

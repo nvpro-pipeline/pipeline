@@ -24,9 +24,9 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+#include <dp/Types.h>
 #include <dp/sg/core/TextureFile.h>
 #include <dp/util/Observer.h>
-#include <dp/util/Types.h>
 #include <boost/make_shared.hpp>
 
 namespace dp
@@ -163,7 +163,7 @@ namespace dp
 
       void TextureFile::feedHashGenerator( dp::util::HashGenerator & hg ) const
       {
-        hg.update( reinterpret_cast<const unsigned char *>(m_filename.c_str()), dp::util::checked_cast<unsigned int>(m_filename.length()) );
+        hg.update( reinterpret_cast<const unsigned char *>(m_filename.c_str()), dp::checked_cast<unsigned int>(m_filename.length()) );
         Texture::feedHashGenerator( hg );
       }
 

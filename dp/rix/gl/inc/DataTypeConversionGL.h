@@ -50,27 +50,27 @@ namespace dp
         };
       }
 
-      inline GLenum getGLDataType( dp::util::DataType dataType )
+      inline GLenum getGLDataType( dp::DataType dataType )
       {
         switch ( dataType )
         {
-        case dp::util::DT_UNSIGNED_INT_8:
+        case dp::DT_UNSIGNED_INT_8:
           return GL_UNSIGNED_BYTE;
-        case dp::util::DT_UNSIGNED_INT_16:
+        case dp::DT_UNSIGNED_INT_16:
           return GL_UNSIGNED_SHORT;
-        case dp::util::DT_UNSIGNED_INT_32:
+        case dp::DT_UNSIGNED_INT_32:
           return GL_UNSIGNED_INT;
-        case dp::util::DT_INT_8:
+        case dp::DT_INT_8:
           return GL_BYTE;
-        case dp::util::DT_INT_16:
+        case dp::DT_INT_16:
           return GL_SHORT;
-        case dp::util::DT_INT_32:
+        case dp::DT_INT_32:
           return GL_INT;
-        case dp::util::DT_FLOAT_16:
+        case dp::DT_FLOAT_16:
           return GL_HALF_FLOAT;
-        case dp::util::DT_FLOAT_32:
+        case dp::DT_FLOAT_32:
           return GL_FLOAT;
-        case dp::util::DT_FLOAT_64:
+        case dp::DT_FLOAT_64:
           return GL_DOUBLE;
         default:
           DP_ASSERT( !"Unknwon RiX DataType" );
@@ -78,26 +78,26 @@ namespace dp
         };
       }
 
-      inline dp::util::DataType getDPDataType( GLenum dataType )
+      inline dp::DataType getDPDataType( GLenum dataType )
       {
         switch( dataType )
         {
-          case GL_UNSIGNED_BYTE   : return( dp::util::DT_UNSIGNED_INT_8 );
-          case GL_UNSIGNED_SHORT  : return( dp::util::DT_UNSIGNED_INT_16 );
-          case GL_UNSIGNED_INT    : return( dp::util::DT_UNSIGNED_INT_32 );
-          case GL_BYTE            : return( dp::util::DT_UNSIGNED_INT_8 );
-          case GL_SHORT           : return( dp::util::DT_INT_16 );
-          case GL_INT             : return( dp::util::DT_INT_32 );
-          case GL_HALF_FLOAT      : return( dp::util::DT_FLOAT_16 );
-          case GL_FLOAT           : return( dp::util::DT_FLOAT_32 );
-          case GL_DOUBLE          : return( dp::util::DT_FLOAT_64 );
+          case GL_UNSIGNED_BYTE   : return( dp::DT_UNSIGNED_INT_8 );
+          case GL_UNSIGNED_SHORT  : return( dp::DT_UNSIGNED_INT_16 );
+          case GL_UNSIGNED_INT    : return( dp::DT_UNSIGNED_INT_32 );
+          case GL_BYTE            : return( dp::DT_UNSIGNED_INT_8 );
+          case GL_SHORT           : return( dp::DT_INT_16 );
+          case GL_INT             : return( dp::DT_INT_32 );
+          case GL_HALF_FLOAT      : return( dp::DT_FLOAT_16 );
+          case GL_FLOAT           : return( dp::DT_FLOAT_32 );
+          case GL_DOUBLE          : return( dp::DT_FLOAT_64 );
           default :
               DP_ASSERT( !"Unknown GL Data Type!" );
-              return( dp::util::DT_UNKNOWN );
+              return( dp::DT_UNKNOWN );
         }
       }
 
-      inline GLenum getGLPixelFormat( dp::util::PixelFormat pixelFormat, GLenum internalFormat )
+      inline GLenum getGLPixelFormat( dp::PixelFormat pixelFormat, GLenum internalFormat )
       {
         // handle integer formats differently
         switch (internalFormat) 
@@ -128,23 +128,23 @@ namespace dp
         case GL_RGBA32UI:
           switch ( pixelFormat )
           {
-          case dp::util::PF_R:
+          case dp::PF_R:
             return GL_RED_INTEGER;
-          case dp::util::PF_RG:
+          case dp::PF_RG:
             return GL_RG_INTEGER;
-          case dp::util::PF_RGB:
+          case dp::PF_RGB:
             return GL_RGB_INTEGER;
-          case dp::util::PF_RGBA:
+          case dp::PF_RGBA:
             return GL_RGBA_INTEGER;
-          case dp::util::PF_BGR:
+          case dp::PF_BGR:
             return GL_BGR_INTEGER;
-          case dp::util::PF_BGRA:
+          case dp::PF_BGRA:
             return GL_BGRA_INTEGER;
-          case dp::util::PF_LUMINANCE:
+          case dp::PF_LUMINANCE:
             return GL_LUMINANCE_INTEGER_EXT;
-          case dp::util::PF_ALPHA:
+          case dp::PF_ALPHA:
             return GL_ALPHA_INTEGER;
-          case dp::util::PF_LUMINANCE_ALPHA:
+          case dp::PF_LUMINANCE_ALPHA:
             return GL_LUMINANCE_ALPHA_INTEGER_EXT;
             // TODO
             /*
@@ -163,23 +163,23 @@ namespace dp
         default:
           switch ( pixelFormat )
           {
-          case dp::util::PF_R:
+          case dp::PF_R:
             return GL_RED;
-          case dp::util::PF_RG:
+          case dp::PF_RG:
             return GL_RG;
-          case dp::util::PF_RGB:
+          case dp::PF_RGB:
             return GL_RGB;
-          case dp::util::PF_RGBA:
+          case dp::PF_RGBA:
             return GL_RGBA;
-          case dp::util::PF_BGR:
+          case dp::PF_BGR:
             return GL_BGR;
-          case dp::util::PF_BGRA:
+          case dp::PF_BGRA:
             return GL_BGRA;
-          case dp::util::PF_LUMINANCE:
+          case dp::PF_LUMINANCE:
             return GL_LUMINANCE;
-          case dp::util::PF_ALPHA:
+          case dp::PF_ALPHA:
             return GL_ALPHA;
-          case dp::util::PF_LUMINANCE_ALPHA:
+          case dp::PF_LUMINANCE_ALPHA:
             return GL_LUMINANCE_ALPHA;
             // TODO
             /*
@@ -197,22 +197,22 @@ namespace dp
         }
       }
 
-      inline dp::util::PixelFormat getDPPixelFormat( GLenum pixelFormat )
+      inline dp::PixelFormat getDPPixelFormat( GLenum pixelFormat )
       {
         switch( pixelFormat )
         {
-          case GL_RED             : return( dp::util::PF_R );
-          case GL_RG              : return( dp::util::PF_RG );
-          case GL_RGB             : return( dp::util::PF_RGB );
-          case GL_RGBA            : return( dp::util::PF_RGBA );
-          case GL_BGR             : return( dp::util::PF_BGR );
-          case GL_BGRA            : return( dp::util::PF_BGRA );
-          case GL_LUMINANCE       : return( dp::util::PF_LUMINANCE );
-          case GL_ALPHA           : return( dp::util::PF_ALPHA );
-          case GL_LUMINANCE_ALPHA : return( dp::util::PF_LUMINANCE_ALPHA );
+          case GL_RED             : return( dp::PF_R );
+          case GL_RG              : return( dp::PF_RG );
+          case GL_RGB             : return( dp::PF_RGB );
+          case GL_RGBA            : return( dp::PF_RGBA );
+          case GL_BGR             : return( dp::PF_BGR );
+          case GL_BGRA            : return( dp::PF_BGRA );
+          case GL_LUMINANCE       : return( dp::PF_LUMINANCE );
+          case GL_ALPHA           : return( dp::PF_ALPHA );
+          case GL_LUMINANCE_ALPHA : return( dp::PF_LUMINANCE_ALPHA );
           default :
             DP_ASSERT( !"Unknown GL Pixel Format!" );
-            return( dp::util::PF_UNKNOWN );
+            return( dp::PF_UNKNOWN );
         }
       }
 

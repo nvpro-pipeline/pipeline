@@ -24,8 +24,8 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+#include <dp/Types.h>
 #include <dp/fx/EnumSpec.h>
-#include <dp/util/Types.h>
 #include <algorithm>
 
 namespace dp
@@ -42,7 +42,7 @@ namespace dp
       : m_type(type)
       , m_values(values)
     {
-      DP_ASSERT( m_values.size() < dp::util::checked_cast<size_t>(std::numeric_limits<StorageType>::max()) );
+      DP_ASSERT( m_values.size() < dp::checked_cast<size_t>(std::numeric_limits<StorageType>::max()) );
     }
 
     EnumSpec::~EnumSpec()
@@ -56,18 +56,18 @@ namespace dp
 
     unsigned int EnumSpec::getValueCount() const
     {
-      return(dp::util::checked_cast<unsigned int>(m_values.size()));
+      return(dp::checked_cast<unsigned int>(m_values.size()));
     }
 
     EnumSpec::StorageType EnumSpec::getValue( std::string const& name ) const
     {
       std::vector<std::string>::const_iterator it = std::find( m_values.begin(), m_values.end(), name );
-      return((it == m_values.end()) ? ~0 : dp::util::checked_cast<StorageType>(distance(m_values.begin(), it)));
+      return((it == m_values.end()) ? ~0 : dp::checked_cast<StorageType>(distance(m_values.begin(), it)));
     }
 
     std::string const& EnumSpec::getValueName( unsigned int idx ) const
     {
-      DP_ASSERT(dp::util::checked_cast<size_t>(idx) < m_values.size());
+      DP_ASSERT(dp::checked_cast<size_t>(idx) < m_values.size());
       return( m_values[idx] );
     }
 

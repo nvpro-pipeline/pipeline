@@ -323,7 +323,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       it = mapEdgeToIndex.find( edge01 );
       if (it == mapEdgeToIndex.end()) 
       {
-        i4 = dp::util::checked_cast<int>( vertices.size() );
+        i4 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(0, 1);
         mirrorAttributes.insert( i4 + 1 ); // Only the normal space is mirrored to keep the mesh gap free.
         mapEdgeToIndex[edge01] = i4;
@@ -336,7 +336,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       it = mapEdgeToIndex.find( edge30 );
       if (it == mapEdgeToIndex.end()) 
       {
-        i7 = dp::util::checked_cast<int>( vertices.size() );
+        i7 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(0, 3);
         mirrorAttributes.insert( i7 + 1 ); // Only the normal space is mirrored to keep the mehs gap free.
         mapEdgeToIndex[edge30] = i7;
@@ -371,7 +371,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       it = mapEdgeToIndex.find( edge01 );
       if (it == mapEdgeToIndex.end()) 
       {
-        i4 = dp::util::checked_cast<int>( vertices.size() );
+        i4 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(1, 0);
         mirrorAttributes.insert( i4 + 1 );
         mapEdgeToIndex[edge01] = i4;
@@ -384,7 +384,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       it = mapEdgeToIndex.find( edge12 );
       if (it == mapEdgeToIndex.end()) 
       {
-        i5 = dp::util::checked_cast<int>( vertices.size() );
+        i5 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(1, 2);
         mirrorAttributes.insert( i5 + 1 );
         mapEdgeToIndex[edge12] = i5;
@@ -420,7 +420,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       it = mapEdgeToIndex.find( edge12 );
       if (it == mapEdgeToIndex.end()) 
       {
-        i5 = dp::util::checked_cast<int>( vertices.size() );
+        i5 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(1, 2);
         mirrorAttributes.insert( i5 + 1 );
         mapEdgeToIndex[edge12] = i5;
@@ -433,7 +433,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       it = mapEdgeToIndex.find( edge30 );
       if (it == mapEdgeToIndex.end()) 
       {
-        i7 = dp::util::checked_cast<int>( vertices.size() );
+        i7 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(0, 3);
         mirrorAttributes.insert( i7 + 1 );
         mapEdgeToIndex[edge30] = i7;
@@ -468,7 +468,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       it = mapEdgeToIndex.find( edge12 );
       if (it == mapEdgeToIndex.end()) 
       {
-        i5 = dp::util::checked_cast<int>( vertices.size() );
+        i5 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(2, 1);
         mirrorAttributes.insert( i5 + 1 );
         mapEdgeToIndex[edge12] = i5;
@@ -481,7 +481,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       it = mapEdgeToIndex.find( edge23 );
       if (it == mapEdgeToIndex.end()) 
       {
-        i6 = dp::util::checked_cast<int>( vertices.size() );
+        i6 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(2, 3);
         mirrorAttributes.insert( i6 + 1 );
         mapEdgeToIndex[edge23] = i6;
@@ -517,7 +517,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       it = mapEdgeToIndex.find( edge01 );
       if (it == mapEdgeToIndex.end()) 
       {
-        i4 = dp::util::checked_cast<int>( vertices.size() );
+        i4 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(0, 1);
         mirrorAttributes.insert( i4 + 1 );
         mapEdgeToIndex[edge01] = i4;
@@ -530,7 +530,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       it = mapEdgeToIndex.find( edge30 );
       if (it == mapEdgeToIndex.end()) 
       {
-        i7 = dp::util::checked_cast<int>( vertices.size() );
+        i7 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(0, 3);
         mirrorAttributes.insert( i7 + 1 );
         mapEdgeToIndex[edge30] = i7;
@@ -543,7 +543,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       it = mapEdgeToIndex.find( edge12 );
       if (it == mapEdgeToIndex.end()) 
       {
-        i5 = dp::util::checked_cast<int>( vertices.size() );
+        i5 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(2, 1);
         mirrorAttributes.insert( i5 + 1 );
         mapEdgeToIndex[edge12] = i5;
@@ -556,7 +556,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       it = mapEdgeToIndex.find( edge23 );
       if (it == mapEdgeToIndex.end()) 
       {
-        i6 = dp::util::checked_cast<int>( vertices.size() );
+        i6 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(2, 3);
         mirrorAttributes.insert( i6 + 1 );
         mapEdgeToIndex[edge23] = i6;
@@ -600,7 +600,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       it = mapEdgeToIndex.find( edge01 );
       if (it == mapEdgeToIndex.end()) 
       {
-        i4 = dp::util::checked_cast<int>( vertices.size() );
+        i4 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(1, 0);
         mirrorAttributes.insert( i4 + 1 );
 
@@ -614,7 +614,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       it = mapEdgeToIndex.find( edge23 );
       if (it == mapEdgeToIndex.end()) 
       {
-        i6 = dp::util::checked_cast<int>( vertices.size() );
+        i6 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(2, 3);
         mirrorAttributes.insert( i6 + 1 );
         mapEdgeToIndex[edge23] = i6;
@@ -651,7 +651,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       it = mapEdgeToIndex.find( edge23 );
       if (it == mapEdgeToIndex.end()) 
       {
-        i6 = dp::util::checked_cast<int>( vertices.size() );
+        i6 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(2, 3);
         mirrorAttributes.insert( i6 + 1 );
         mapEdgeToIndex[edge23] = i6;
@@ -664,7 +664,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       it = mapEdgeToIndex.find( edge30 );
       if (it == mapEdgeToIndex.end()) 
       {
-        i7 = dp::util::checked_cast<int>( vertices.size() );
+        i7 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(0, 3);
         mirrorAttributes.insert( i7 + 1 );
         mapEdgeToIndex[edge30] = i7;
@@ -699,7 +699,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       it = mapEdgeToIndex.find( edge23 );
       if (it == mapEdgeToIndex.end()) 
       {
-        i6 = dp::util::checked_cast<int>( vertices.size() );
+        i6 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(3, 2);
         mirrorAttributes.insert( i6 + 1 );
         mapEdgeToIndex[edge23] = i6;
@@ -712,7 +712,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       it = mapEdgeToIndex.find( edge30 );
       if (it == mapEdgeToIndex.end()) 
       {
-        i7 = dp::util::checked_cast<int>( vertices.size() );
+        i7 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(3, 0);
         mirrorAttributes.insert( i7 + 1 );
         mapEdgeToIndex[edge30] = i7;
@@ -748,7 +748,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       it = mapEdgeToIndex.find( edge12 );
       if (it == mapEdgeToIndex.end()) 
       {
-        i4 = dp::util::checked_cast<int>( vertices.size() );
+        i4 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(0, 1);
         mirrorAttributes.insert( i4 + 1 );
         mapEdgeToIndex[edge12] = i4;
@@ -761,7 +761,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       it = mapEdgeToIndex.find( edge23 );
       if (it == mapEdgeToIndex.end()) 
       {
-        i6 = dp::util::checked_cast<int>( vertices.size() );
+        i6 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(3, 2);
         mirrorAttributes.insert( i6 + 1 );
         mapEdgeToIndex[edge23] = i6;
@@ -797,7 +797,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       it = mapEdgeToIndex.find( edge01 );
       if (it == mapEdgeToIndex.end()) 
       {
-        i4 = dp::util::checked_cast<int>( vertices.size() );
+        i4 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(1, 0);
         mirrorAttributes.insert( i4 + 1 );
         mapEdgeToIndex[edge01] = i4;
@@ -810,7 +810,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       it = mapEdgeToIndex.find( edge12 );
       if (it == mapEdgeToIndex.end()) 
       {
-        i5 = dp::util::checked_cast<int>( vertices.size() );
+        i5 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(1, 2);
         mirrorAttributes.insert( i5 + 1 );
         mapEdgeToIndex[edge12] = i5;
@@ -823,7 +823,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       it = mapEdgeToIndex.find( edge23 );
       if (it == mapEdgeToIndex.end()) 
       {
-        i6 = dp::util::checked_cast<int>( vertices.size() );
+        i6 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(3, 2);
         mirrorAttributes.insert( i6 + 1 );
         mapEdgeToIndex[edge23] = i6;
@@ -836,7 +836,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       it = mapEdgeToIndex.find( edge30 );
       if (it == mapEdgeToIndex.end()) 
       {
-        i7 = dp::util::checked_cast<int>( vertices.size() );
+        i7 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(3, 0);
         mirrorAttributes.insert( i7 + 1 );
         mapEdgeToIndex[edge30] = i7;
@@ -881,7 +881,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       it = mapEdgeToIndex.find( edge12 );
       if (it == mapEdgeToIndex.end()) 
       {
-        i5 = dp::util::checked_cast<int>( vertices.size() );
+        i5 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(1, 2);
         mirrorAttributes.insert( i5 + 1 );
         mapEdgeToIndex[edge12] = i5;
@@ -894,7 +894,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       it = mapEdgeToIndex.find( edge23 );
       if (it == mapEdgeToIndex.end()) 
       {
-        i6 = dp::util::checked_cast<int>( vertices.size() );
+        i6 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(3, 2);
         mirrorAttributes.insert( i6 + 1 );
         mapEdgeToIndex[edge23] = i6;
@@ -930,7 +930,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       it = mapEdgeToIndex.find( edge12 );
       if (it == mapEdgeToIndex.end()) 
       {
-        i5 = dp::util::checked_cast<int>( vertices.size() );
+        i5 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(2, 1);
         mirrorAttributes.insert( i5 + 1 );
         mapEdgeToIndex[edge12] = i5;
@@ -943,7 +943,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       it = mapEdgeToIndex.find( edge30 );
       if (it == mapEdgeToIndex.end()) 
       {
-        i7 = dp::util::checked_cast<int>( vertices.size() );
+        i7 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(3, 0);
         mirrorAttributes.insert( i7 + 1 );
         mapEdgeToIndex[edge30] = i7;
@@ -980,7 +980,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       it = mapEdgeToIndex.find( edge01 );
       if (it == mapEdgeToIndex.end()) 
       {
-        i4 = dp::util::checked_cast<int>( vertices.size() );
+        i4 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(0, 1);
         mirrorAttributes.insert( i4 + 1 );
         mapEdgeToIndex[edge01] = i4;
@@ -993,7 +993,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       it = mapEdgeToIndex.find( edge12 );
       if (it == mapEdgeToIndex.end()) 
       {
-        i5 = dp::util::checked_cast<int>( vertices.size() );
+        i5 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(2, 1);
         mirrorAttributes.insert( i5 + 1 );
         mapEdgeToIndex[edge12] = i5;
@@ -1030,7 +1030,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       it = mapEdgeToIndex.find( edge01 );
       if (it == mapEdgeToIndex.end()) 
       {
-        i4 = dp::util::checked_cast<int>( vertices.size() );
+        i4 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(1, 0);
         mirrorAttributes.insert( i4 + 1 );
         mapEdgeToIndex[edge01] = i4;
@@ -1043,7 +1043,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       it = mapEdgeToIndex.find( edge30 );
       if (it == mapEdgeToIndex.end()) 
       {
-        i7 = dp::util::checked_cast<int>( vertices.size() );
+        i7 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(3, 0);
         mirrorAttributes.insert( i7 + 1 );
         mapEdgeToIndex[edge30] = i7;
@@ -1128,7 +1128,7 @@ static PrimitiveSharedPtr createPreviewMainObject( int m )
 
   // We have generated m + 1 vertices per latitude.
   int columns = m + 1;
-  int n = dp::util::checked_cast<int>( verticesIn.size() ); // The number of latitudinal rings.
+  int n = dp::checked_cast<int>( verticesIn.size() ); // The number of latitudinal rings.
   
   // Track vertex indices created during dent tessellation to reuse them on adjacent cells.
   MapEdgeToIndex mapEdgeToIndex;
@@ -1191,7 +1191,7 @@ static PrimitiveSharedPtr createPreviewMainObject( int m )
   }
 
 
-  unsigned int numVertices = dp::util::checked_cast<unsigned int>( verticesOut.size() );
+  unsigned int numVertices = dp::checked_cast<unsigned int>( verticesOut.size() );
   
   // Finally place it above the platform. TODO Could use transforms per sub-object.
   for (unsigned int i = 0; i < numVertices; ++i)
@@ -1208,7 +1208,7 @@ static PrimitiveSharedPtr createPreviewMainObject( int m )
   vasPtr->setTexCoords( VertexAttributeSet::DP_SG_BINORMAL - VertexAttributeSet::DP_SG_TEXCOORD0, &binormalsOut[0], numVertices );
 
   IndexSetSharedPtr indexSet = IndexSet::create();
-  indexSet->setData( &indices[0], dp::util::checked_cast<unsigned int>(indices.size()) );
+  indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
   PrimitiveSharedPtr primitivePtr = Primitive::create( PRIMITIVE_TRIANGLES );
   primitivePtr->setVertexAttributeSet( vasPtr );
@@ -1336,7 +1336,7 @@ static PrimitiveSharedPtr createPreviewBowl( int m )
 
   // We have generated m + 1 vertices per latitude.
   int columns = m + 1;
-  int n = dp::util::checked_cast<int>( verticesIn.size() ); // The number of latitudinal rings.
+  int n = dp::checked_cast<int>( verticesIn.size() ); // The number of latitudinal rings.
   
   for( int latitude = 0; latitude < n - 1; latitude++ )
   {                                           
@@ -1352,7 +1352,7 @@ static PrimitiveSharedPtr createPreviewBowl( int m )
     }
   }
 
-  unsigned int numVertices = dp::util::checked_cast<unsigned int>( verticesOut.size() );
+  unsigned int numVertices = dp::checked_cast<unsigned int>( verticesOut.size() );
 
   // Create a VertexAttributeSet with vertices, normals and texcoords
   VertexAttributeSetSharedPtr vasPtr = VertexAttributeSet::create();
@@ -1363,7 +1363,7 @@ static PrimitiveSharedPtr createPreviewBowl( int m )
   vasPtr->setTexCoords( VertexAttributeSet::DP_SG_BINORMAL - VertexAttributeSet::DP_SG_TEXCOORD0, &binormalsOut[0], numVertices );
 
   IndexSetSharedPtr indexSet( IndexSet::create() );
-  indexSet->setData( &indices[0], dp::util::checked_cast<unsigned int>(indices.size()) );
+  indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
   // create pointer to return
   PrimitiveSharedPtr primitivePtr = Primitive::create( PRIMITIVE_TRIANGLES );
@@ -1449,7 +1449,7 @@ static PrimitiveSharedPtr createPreviewSphere( int m )
 
   // We have generated m + 1 vertices per latitude.
   int columns = m + 1;
-  int n = dp::util::checked_cast<int>( verticesIn.size() ); // The number of latitudinal rings.
+  int n = dp::checked_cast<int>( verticesIn.size() ); // The number of latitudinal rings.
   
   for( int latitude = 0; latitude < n - 1; latitude++ )
   {                                           
@@ -1465,7 +1465,7 @@ static PrimitiveSharedPtr createPreviewSphere( int m )
     }
   }
 
-  unsigned int numVertices = dp::util::checked_cast<unsigned int>( verticesOut.size() );
+  unsigned int numVertices = dp::checked_cast<unsigned int>( verticesOut.size() );
 
   // Create a VertexAttributeSet with vertices, normals and texcoords
   VertexAttributeSetSharedPtr vasPtr = VertexAttributeSet::create();
@@ -1476,7 +1476,7 @@ static PrimitiveSharedPtr createPreviewSphere( int m )
   vasPtr->setTexCoords( VertexAttributeSet::DP_SG_BINORMAL - VertexAttributeSet::DP_SG_TEXCOORD0, &binormalsOut[0], numVertices );
 
   IndexSetSharedPtr indexSet( IndexSet::create() );
-  indexSet->setData( &indices[0], dp::util::checked_cast<unsigned int>(indices.size()) );
+  indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
   // create pointer to return
   PrimitiveSharedPtr primitivePtr = Primitive::create( PRIMITIVE_TRIANGLES );
@@ -1632,7 +1632,7 @@ static PrimitiveSharedPtr createPreviewPlatform( int m )
 
   // We have generated m + 1 vertices per latitude.
   int columns = m + 1;
-  int n = dp::util::checked_cast<int>( verticesIn.size() ); // The number of latitudinal rings.
+  int n = dp::checked_cast<int>( verticesIn.size() ); // The number of latitudinal rings.
   
   for( int latitude = 0; latitude < n - 1; latitude++ )
   {                                           
@@ -1648,7 +1648,7 @@ static PrimitiveSharedPtr createPreviewPlatform( int m )
     }
   }
 
-  unsigned int numVertices = dp::util::checked_cast<unsigned int>( verticesOut.size() );
+  unsigned int numVertices = dp::checked_cast<unsigned int>( verticesOut.size() );
 
   // Create a VertexAttributeSet with vertices, normals and texcoords
   VertexAttributeSetSharedPtr vasPtr = VertexAttributeSet::create();
@@ -1659,7 +1659,7 @@ static PrimitiveSharedPtr createPreviewPlatform( int m )
   vasPtr->setTexCoords( VertexAttributeSet::DP_SG_BINORMAL - VertexAttributeSet::DP_SG_TEXCOORD0, &binormalsOut[0], numVertices );
 
   IndexSetSharedPtr indexSet( IndexSet::create() );
-  indexSet->setData( &indices[0], dp::util::checked_cast<unsigned int>(indices.size()) );
+  indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
   // Create a Primitive
   PrimitiveSharedPtr primitivePtr = Primitive::create( PRIMITIVE_TRIANGLES );
@@ -1883,7 +1883,7 @@ static PrimitiveSharedPtr createPreviewRing( int m )
 
   // We have generated m + 1 vertices per latitude.
   int columns = m + 1;
-  int n = dp::util::checked_cast<int>( verticesIn.size() ); // The number of latitudinal rings.
+  int n = dp::checked_cast<int>( verticesIn.size() ); // The number of latitudinal rings.
   
   for( int latitude = 0; latitude < n - 1; latitude++ )
   {                                           
@@ -1902,7 +1902,7 @@ static PrimitiveSharedPtr createPreviewRing( int m )
   // Cut planes closing the ring object.
 
   // Get the vertex indices of the five helper points.
-  int A = dp::util::checked_cast<int>( verticesOut.size() );
+  int A = dp::checked_cast<int>( verticesOut.size() );
   int B = A + 1;
   int C = A + 2;
   int D = A + 3;
@@ -1982,7 +1982,7 @@ static PrimitiveSharedPtr createPreviewRing( int m )
   normalsOut.push_back( no1 );
   texcoordsOut.push_back( Vec2f( 3.0f * d, 3.0f * d ) );
 
-  int idxBaseXY = dp::util::checked_cast<int>( verticesOut.size() );
+  int idxBaseXY = dp::checked_cast<int>( verticesOut.size() );
 
   // The cut planes need to duplicate the vertices because the normals and texture coordinates must not be shared.
   // Copy the first longitudinal ring in the xy-plane and append it with new attributes.
@@ -1997,7 +1997,7 @@ static PrimitiveSharedPtr createPreviewRing( int m )
     texcoordsOut.push_back( Vec2f(v[0] - offset[0], v[1] - offset[1]) );
   }
 
-  int idxBaseYZ = dp::util::checked_cast<int>( verticesOut.size() );
+  int idxBaseYZ = dp::checked_cast<int>( verticesOut.size() );
 
   // Copy the last longitudinal ring in the yz-plane and append it with new attributes.
   for ( int latitude = 0; latitude < n; latitude++ )
@@ -2088,7 +2088,7 @@ static PrimitiveSharedPtr createPreviewRing( int m )
     indices.push_back(idx0);
   }
 
-  unsigned int numVertices = dp::util::checked_cast<unsigned int>( verticesOut.size() );
+  unsigned int numVertices = dp::checked_cast<unsigned int>( verticesOut.size() );
 
   // Create a VertexAttributeSet with vertices, normals and texcoords
   VertexAttributeSetSharedPtr vasPtr = VertexAttributeSet::create();
@@ -2099,7 +2099,7 @@ static PrimitiveSharedPtr createPreviewRing( int m )
   vasPtr->setTexCoords( VertexAttributeSet::DP_SG_BINORMAL - VertexAttributeSet::DP_SG_TEXCOORD0, &binormalsOut[0], numVertices );
 
   IndexSetSharedPtr indexSet( IndexSet::create() );
-  indexSet->setData( &indices[0], dp::util::checked_cast<unsigned int>(indices.size()) );
+  indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
   // Create a Primitive
   PrimitiveSharedPtr primitivePtr = Primitive::create( PRIMITIVE_TRIANGLES );

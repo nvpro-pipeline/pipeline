@@ -200,9 +200,9 @@ namespace dp
 
           void TransparencyManagerOITAll::initializeParameterContainer( dp::rix::core::Renderer * renderer, dp::math::Vec2ui const & viewportSize )
           {
-            m_perFragmentCountTexture   = renderer->textureCreate( dp::rix::core::TextureDescription( dp::rix::core::TT_2D, dp::rix::core::ITF_R32UI, dp::util::PF_R, dp::util::DT_UNSIGNED_INT_32 ) );
-            m_perFragmentOffsetTexture  = renderer->textureCreate( dp::rix::core::TextureDescription( dp::rix::core::TT_2D, dp::rix::core::ITF_R32UI, dp::util::PF_R, dp::util::DT_UNSIGNED_INT_32 ) );
-            m_samplesTexture  = renderer->textureCreate( dp::rix::core::TextureDescription( dp::rix::core::TT_BUFFER, dp::rix::core::ITF_RG32UI, dp::util::PF_RG, dp::util::DT_UNSIGNED_INT_32 ) );
+            m_perFragmentCountTexture   = renderer->textureCreate( dp::rix::core::TextureDescription( dp::rix::core::TT_2D, dp::rix::core::ITF_R32UI, dp::PF_R, dp::DT_UNSIGNED_INT_32 ) );
+            m_perFragmentOffsetTexture  = renderer->textureCreate( dp::rix::core::TextureDescription( dp::rix::core::TT_2D, dp::rix::core::ITF_R32UI, dp::PF_R, dp::DT_UNSIGNED_INT_32 ) );
+            m_samplesTexture  = renderer->textureCreate( dp::rix::core::TextureDescription( dp::rix::core::TT_BUFFER, dp::rix::core::ITF_RG32UI, dp::PF_RG, dp::DT_UNSIGNED_INT_32 ) );
 
             std::vector<dp::rix::core::ProgramParameter> parameters;
             parameters.push_back( dp::rix::core::ProgramParameter( "perFragmentCount", dp::rix::core::CPT_IMAGE, 0 ) );

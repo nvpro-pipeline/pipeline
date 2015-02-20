@@ -144,7 +144,7 @@ namespace dp
                                    , m_triangulatedPrimitive->getIndexSet()->getPrimitiveRestartIndex() );
             IndexSetSharedPtr triangulatedIndexSet = IndexSet::create();
             *static_cast<Object*>(triangulatedIndexSet.getWeakPtr()) = *( m_triangulatedPrimitive->getIndexSet().getWeakPtr() );
-            triangulatedIndexSet->setData( &newIndices[0], checked_cast<unsigned int>(newIndices.size()) );
+            triangulatedIndexSet->setData( &newIndices[0], dp::checked_cast<unsigned int>(newIndices.size()) );
             triangulatedIndexSet->setPrimitiveRestartIndex( ~0 );
           }
         }

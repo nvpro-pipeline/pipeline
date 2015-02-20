@@ -82,7 +82,7 @@ class ExtractGeometryTraverser : public dp::sg::algorithm::SharedTraverser
 
     int makeIDX (size_t idx)
     {
-      return dp::util::checked_cast<int,size_t>(idx);
+      return dp::checked_cast<int,size_t>(idx);
     }
 
     int addPrimitive(int geometryIDX, const dp::sg::core::Primitive* primitive);

@@ -367,7 +367,7 @@ namespace dp
     template<typename T>
     inline unsigned int BezierCurve<T>::degree() const
     {
-      return( dp::util::checked_cast<unsigned int>(m_vertices.size()-1) );
+      return( dp::checked_cast<unsigned int>(m_vertices.size()-1) );
     }
 
     template<typename T>

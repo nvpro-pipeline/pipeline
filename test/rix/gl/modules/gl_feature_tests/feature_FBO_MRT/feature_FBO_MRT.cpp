@@ -29,7 +29,6 @@
 
 #include <dp/util/Image.h>
 #include <dp/util/SharedPtr.h>
-#include <dp/util/Types.h>
 
 #include <test/rix/core/framework/RiXBackend.h>
 #include <test/rix/core/helpers/GeometryHelper.h>
@@ -142,13 +141,13 @@ bool Feature_FBO_MRT::onClear()
 {
   if(m_screenshotFBO)
   {
-    dp::util::ImageSharedPtr fboColorShot0 = m_fbo->getImage(util::PF_RGBA, util::DT_UNSIGNED_INT_8);
+    dp::util::ImageSharedPtr fboColorShot0 = m_fbo->getImage(dp::PF_RGBA, dp::DT_UNSIGNED_INT_8);
     dp::util::imageToFile(fboColorShot0, std::string(CURRENT_MODULE_DIR) + "/feature_FBO_MRT/color_0_" + m_screenshotFBOName + ".png" );
 
-    dp::util::ImageSharedPtr fboColorShot1 = m_fbo->getImage(util::PF_RGBA, util::DT_UNSIGNED_INT_8, 1);
+    dp::util::ImageSharedPtr fboColorShot1 = m_fbo->getImage(dp::PF_RGBA, dp::DT_UNSIGNED_INT_8, 1);
     dp::util::imageToFile(fboColorShot1, std::string(CURRENT_MODULE_DIR) + "/feature_FBO_MRT/color_1_" + m_screenshotFBOName + ".png" );
 
-    dp::util::ImageSharedPtr fboDepth = dp::rix::util::getEyeZFromDepthBuffer( m_fbo->getImage(util::PF_DEPTH_COMPONENT, util::DT_FLOAT_32), m_nearPlane, m_farPlane );
+    dp::util::ImageSharedPtr fboDepth = dp::rix::util::getEyeZFromDepthBuffer( m_fbo->getImage(dp::PF_DEPTH_COMPONENT, dp::DT_FLOAT_32), m_nearPlane, m_farPlane );
     dp::util::imageToFile(fboDepth, std::string(CURRENT_MODULE_DIR) + "/feature_FBO_MRT/depth_" + m_screenshotFBOName + ".png" );
   }
 
@@ -472,8 +471,8 @@ void Feature_FBO_MRT::createScene()
                                                                                   , Vec4f(1.0, 0.0f, 0.0f, 1.0)
                                                                                   , Vec4f(0.0, 1.0f, 0.0f, 1.0)
                                                                                   , Vec4f(0.0, 0.0f, 1.0f, 1.0) )
-                                                                                  , util::PF_RGBA
-                                                                                  , util::DT_UNSIGNED_INT_8
+                                                                                  , dp::PF_RGBA
+                                                                                  , dp::DT_UNSIGNED_INT_8
                                                                                   , ITF_RGBA8 );
 
   // Set Container Data
@@ -666,8 +665,8 @@ void Feature_FBO_MRT::createSecondPass()
   TextureSharedHandle textureFBO0;
   TextureSharedHandle textureFBO1;
   {
-    TextureDescription textureDescription0( TT_2D, ITF_RGBA32F, dp::util::PF_RGBA, dp::util::DT_FLOAT_32, m_width, m_height );
-    TextureDescription textureDescription1( TT_2D, ITF_R32F, dp::util::PF_R, dp::util::DT_FLOAT_32, m_width, m_height, 0, 0, true );
+    TextureDescription textureDescription0( TT_2D, ITF_RGBA32F, dp::PF_RGBA, dp::DT_FLOAT_32, m_width, m_height );
+    TextureDescription textureDescription1( TT_2D, ITF_R32F, dp::PF_R, dp::DT_FLOAT_32, m_width, m_height, 0, 0, true );
     textureFBO0 = m_rix->textureCreate( textureDescription0 );
     textureFBO1 = m_rix->textureCreate( textureDescription1 );
 

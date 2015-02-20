@@ -61,7 +61,7 @@ namespace
     }
 
     dst->setVertexData( attrib, n, src->getTypeOfVertexData( attrib ),
-                        (void *) &a[0], 0, checked_cast<unsigned int>( a.size() ) );
+                        (void *) &a[0], 0, dp::checked_cast<unsigned int>( a.size() ) );
   }
 
 
@@ -71,28 +71,28 @@ namespace
   {
     switch( src->getTypeOfVertexData( attrib ) )
     {
-      case dp::util::DT_INT_8 :
+      case dp::DT_INT_8 :
         copyVertexDataNT<n,char>( dst, src, attrib, indices, count, pri );
         break;
-      case dp::util::DT_UNSIGNED_INT_8 :
+      case dp::DT_UNSIGNED_INT_8 :
         copyVertexDataNT<n,unsigned char>( dst, src, attrib, indices, count, pri );
         break;
-      case dp::util::DT_INT_16 :
+      case dp::DT_INT_16 :
         copyVertexDataNT<n,short>( dst, src, attrib, indices, count, pri );
         break;
-      case dp::util::DT_UNSIGNED_INT_16 :
+      case dp::DT_UNSIGNED_INT_16 :
         copyVertexDataNT<n,unsigned short>( dst, src, attrib, indices, count, pri );
         break;
-      case dp::util::DT_INT_32 :
+      case dp::DT_INT_32 :
         copyVertexDataNT<n,int>( dst, src, attrib, indices, count, pri );
         break;
-      case dp::util::DT_UNSIGNED_INT_32 :
+      case dp::DT_UNSIGNED_INT_32 :
         copyVertexDataNT<n,unsigned int>( dst, src, attrib, indices, count, pri );
         break;
-      case dp::util::DT_FLOAT_32 :
+      case dp::DT_FLOAT_32 :
         copyVertexDataNT<n,float>( dst, src, attrib, indices, count, pri );
         break;
-      case dp::util::DT_FLOAT_64 :
+      case dp::DT_FLOAT_64 :
         copyVertexDataNT<n,double>( dst, src, attrib, indices, count, pri );
         break;
       default :

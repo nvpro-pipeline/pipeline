@@ -52,28 +52,28 @@ namespace dp
         IndicesGL();
         ~IndicesGL();
 
-        void setData( dp::util::DataType dataType, dp::rix::core::BufferHandle bufferHandle, size_t offset, size_t count ) ;
+        void setData( dp::DataType dataType, dp::rix::core::BufferHandle bufferHandle, size_t offset, size_t count ) ;
         void upload();
         virtual void onNotify(  const dp::util::Event &event, dp::util::Payload *payload );
         virtual void onDestroyed( const dp::util::Subject& subject, dp::util::Payload* payload );
 
-        dp::util::DataType getDataType() const;
-        BufferGLHandle     getBufferHandle() const;
-        size_t             getOffset() const;
-        size_t             getCount()  const;
+        dp::DataType    getDataType() const;
+        BufferGLHandle  getBufferHandle() const;
+        size_t          getOffset() const;
+        size_t          getCount()  const;
 
-        bool              m_markedForUpload;
-        GLsizei           m_bufferGLSize;
+        bool    m_markedForUpload;
+        GLsizei m_bufferGLSize;
 
       private:
-        dp::util::DataType m_dataType;
-        BufferGLHandle    m_bufferHandle;
-        size_t            m_offset;
-        size_t            m_count;
+        dp::DataType    m_dataType;
+        BufferGLHandle  m_bufferHandle;
+        size_t          m_offset;
+        size_t          m_count;
 
       };
 
-      inline dp::util::DataType IndicesGL::getDataType() const
+      inline dp::DataType IndicesGL::getDataType() const
       {
         return m_dataType;
       }

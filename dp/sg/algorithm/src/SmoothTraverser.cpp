@@ -226,8 +226,8 @@ namespace dp
             {
               Buffer::DataReadLock indexBufferLock( p->getIndexSet()->getBuffer() );
               const T * idxPtr = indexBufferLock.getPtr<T>();
-              dp::util::DataType type = vas->getTypeOfVertexData(i);
-              unsigned int size = dp::util::checked_cast<unsigned int>(vas->getSizeOfVertexData(i) * dp::util::getSizeOf( type ));
+              dp::DataType type = vas->getTypeOfVertexData(i);
+              unsigned int size = dp::checked_cast<unsigned int>(vas->getSizeOfVertexData(i) * dp::getSizeOf( type ));
               unsigned int stride = vas->getStrideOfVertexData(i);
               DP_ASSERT( size <= stride );
               unsigned int numIndices = p->getIndexSet()->getNumberOfIndices();
@@ -269,13 +269,13 @@ namespace dp
           {
             switch( p->getIndexSet()->getIndexDataType() )
             {
-              case dp::util::DT_UNSIGNED_INT_8 :
+              case dp::DT_UNSIGNED_INT_8 :
                 deIndexPrimitiveT<unsigned char>( p );
                 break;
-              case dp::util::DT_UNSIGNED_INT_16 :
+              case dp::DT_UNSIGNED_INT_16 :
                 deIndexPrimitiveT<unsigned short>( p );
                 break;
-              case dp::util::DT_UNSIGNED_INT_32 :
+              case dp::DT_UNSIGNED_INT_32 :
                 deIndexPrimitiveT<unsigned int>( p );
                 break;
               default :

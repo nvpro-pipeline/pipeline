@@ -67,7 +67,7 @@ namespace dp
       GLuint id = glCreateShader( type );
       setGLId( id );
 
-      GLint length = dp::util::checked_cast<GLint>(source.length());
+      GLint length = dp::checked_cast<GLint>(source.length());
       GLchar const* src = source.c_str();
       glShaderSource( id, 1, &src, &length );
       glCompileShader( id );

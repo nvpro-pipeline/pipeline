@@ -292,8 +292,8 @@ void Feature_texture_cube_maps::createScene()
   // 0: position, stream 0
   // 8: texture coordinate 0, stream 1
   VertexFormatInfo   vertexInfos[] = {
-    VertexFormatInfo( 0, dp::util::DT_FLOAT_32, coordsPerVertex, false, 0, 0, coordsPerVertex*sizeof(float)),
-    VertexFormatInfo( 8, dp::util::DT_FLOAT_32, texCoordsPerVertex, false, 1, 0, texCoordsPerVertex*sizeof(float)),
+    VertexFormatInfo( 0, dp::DT_FLOAT_32, coordsPerVertex, false, 0, 0, coordsPerVertex*sizeof(float)),
+    VertexFormatInfo( 8, dp::DT_FLOAT_32, texCoordsPerVertex, false, 1, 0, texCoordsPerVertex*sizeof(float)),
   };
   VertexFormatDescription vertexFormatDescription( vertexInfos, sizeof util::array(vertexInfos) );
   VertexFormatSharedHandle vertexFormat = m_rix->vertexFormatCreate( vertexFormatDescription );
@@ -306,7 +306,7 @@ void Feature_texture_cube_maps::createScene()
   m_rix->vertexAttributesSet( vertexAttributes, vertexData, vertexFormat );
 
   IndicesSharedHandle indices = m_rix->indicesCreate();
-  m_rix->indicesSetData( indices, dp::util::DT_UNSIGNED_INT_8, indexBuffer, 0, indexSetSize );
+  m_rix->indicesSetData( indices, dp::DT_UNSIGNED_INT_8, indexBuffer, 0, indexSetSize );
 
   GeometryDescriptionSharedHandle geometryDescription = m_rix->geometryDescriptionCreate();
   m_rix->geometryDescriptionSet( geometryDescription, GPT_TRIANGLES );
@@ -342,7 +342,7 @@ void Feature_texture_cube_maps::createScene()
   ShaderType  shaderTypes[] = { ST_VERTEX_SHADER, ST_FRAGMENT_SHADER };
   ProgramShaderCode programShaderCode( sizeof util::array( shaders ), shaders, shaderTypes );
 
-  ProgramDescription programDescription( programShaderCode, &containerDescriptorsColor[0], util::checked_cast<unsigned int>(containerDescriptorsColor.size() ));
+  ProgramDescription programDescription( programShaderCode, &containerDescriptorsColor[0], dp::checked_cast<unsigned int>(containerDescriptorsColor.size() ));
 
   ProgramSharedHandle programColor = m_rix->programCreate( programDescription );
   ContainerSharedHandle vertexContainerColor = m_rix->containerCreate( vertexContainerDescriptor );
@@ -429,11 +429,11 @@ TextureSharedHandle Feature_texture_cube_maps::createDebugCubeMap( size_t texWid
     }
   }
 
-  TextureDescription textureDescription( TT_CUBEMAP, ITF_RGBA8, dp::util::PF_RGBA, dp::util::DT_UNSIGNED_INT_8, texWidth, texWidth );
+  TextureDescription textureDescription( TT_CUBEMAP, ITF_RGBA8, dp::PF_RGBA, dp::DT_UNSIGNED_INT_8, texWidth, texWidth );
 
   TextureSharedHandle texture = m_rix->textureCreate( textureDescription );
 
-  TextureDataPtr textureDataPtr( &tex[0], 0, 6, dp::util::PF_RGBA, dp::util::DT_UNSIGNED_INT_8 );
+  TextureDataPtr textureDataPtr( &tex[0], 0, 6, dp::PF_RGBA, dp::DT_UNSIGNED_INT_8 );
 
   m_rix->textureSetData( texture, textureDataPtr );
 
@@ -481,11 +481,11 @@ TextureSharedHandle Feature_texture_cube_maps::createColorCubeMap( size_t texWid
     }
   }
 
-  TextureDescription textureDescription( TT_CUBEMAP, ITF_RGBA8, dp::util::PF_RGBA, dp::util::DT_UNSIGNED_INT_8, texWidth, texWidth );
+  TextureDescription textureDescription( TT_CUBEMAP, ITF_RGBA8, dp::PF_RGBA, dp::DT_UNSIGNED_INT_8, texWidth, texWidth );
 
   TextureSharedHandle texture = m_rix->textureCreate( textureDescription );
 
-  TextureDataPtr textureDataPtr( &tex[0], 0, 6, dp::util::PF_RGBA, dp::util::DT_UNSIGNED_INT_8 );
+  TextureDataPtr textureDataPtr( &tex[0], 0, 6, dp::PF_RGBA, dp::DT_UNSIGNED_INT_8 );
 
   m_rix->textureSetData( texture, textureDataPtr );
 

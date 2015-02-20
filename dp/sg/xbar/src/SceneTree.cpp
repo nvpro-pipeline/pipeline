@@ -286,7 +286,7 @@ namespace dp
               ObjectTreeNode& childNode = m_objectTree[childIndex];
               DP_ASSERT( childNode.m_parentIndex == index );
 
-              bool newActive = swp->isActive( checked_cast<unsigned int>(i) );
+              bool newActive = swp->isActive( dp::checked_cast<unsigned int>(i) );
               if ( childNode.m_localActive != newActive )
               {
                 childNode.m_localActive = newActive;

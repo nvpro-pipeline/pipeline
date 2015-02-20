@@ -144,13 +144,13 @@ namespace dp
         if ( isSamplerType( m_uniforms[i].type ) )
         {
           DP_ASSERT( m_uniforms[i].arraySize == 1 );
-          glProgramUniform1i( getGLId(), m_uniforms[i].location, dp::util::checked_cast<GLint>(m_samplerUniforms.size() ) );
+          glProgramUniform1i( getGLId(), m_uniforms[i].location, dp::checked_cast<GLint>(m_samplerUniforms.size() ) );
           m_samplerUniforms.push_back( i );
         }
         else if ( isImageType( m_uniforms[i].type ) )
         {
           DP_ASSERT( m_uniforms[i].arraySize == 1 );
-          glProgramUniform1i( getGLId(), m_uniforms[i].location, dp::util::checked_cast<GLint>(m_imageUniforms.size()) );
+          glProgramUniform1i( getGLId(), m_uniforms[i].location, dp::checked_cast<GLint>(m_imageUniforms.size()) );
           m_imageUniforms.push_back( ImageData() );
           m_imageUniforms.back().index = i;
         }

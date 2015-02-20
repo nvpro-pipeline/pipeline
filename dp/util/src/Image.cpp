@@ -27,7 +27,6 @@
 #include <dp/util/DPAssert.h>
 #include <dp/util/Image.h>
 #include <dp/util/File.h>
-#include <dp/util/Types.h>
 #include <dp/util/Singleton.h>
 #include <il.h>
 
@@ -410,8 +409,8 @@ namespace dp
       }
 
       // image dimension in pixels
-      unsigned int width = checked_cast<unsigned int>(image->getWidth());
-      unsigned int height = checked_cast<unsigned int>(image->getHeight());
+      unsigned int width = dp::checked_cast<unsigned int>(image->getWidth());
+      unsigned int height = dp::checked_cast<unsigned int>(image->getHeight());
       size_t bpp = image->getBytesPerPixel();
       size_t numLayers = image->getNumLayers();
       size_t numMipmaps = image->getMipmapLevels();
@@ -449,7 +448,7 @@ namespace dp
         }
 
         //specify the IL image
-        ilTexImage( width, height, face+1, checked_cast<ILubyte>(image->getBytesPerPixel()), format, dataType, nullptr );
+        ilTexImage( width, height, face+1, dp::checked_cast<ILubyte>(image->getBytesPerPixel()), format, dataType, nullptr );
         //Set the data
         void* destpixels = ilGetData();
         memcpy( destpixels, rawData[face], singleLayerSize );

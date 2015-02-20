@@ -37,7 +37,6 @@
 #include "dp/sg/core/HandledObject.h"
 #include <dp/util/BitMask.h>
 #include <dp/util/HashGenerator.h>
-#include <dp/util/Types.h>
 
 namespace dp
 {

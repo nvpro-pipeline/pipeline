@@ -36,7 +36,6 @@
 #include <dp/math/Vecnt.h>
 #include <dp/util/Observer.h>
 #include <dp/util/Semantic.h>
-#include <dp/util/Types.h>
 
 namespace dp
 {
@@ -735,7 +734,7 @@ namespace dp
 
       virtual unsigned int getEnumsCount() const
       {
-        return( dp::util::checked_cast<unsigned int>(EnumReflection<ValueType>::values.size()) );
+        return( dp::checked_cast<unsigned int>(EnumReflection<ValueType>::values.size()) );
       }
 
       virtual std::string const & getEnumName( unsigned int idx ) const

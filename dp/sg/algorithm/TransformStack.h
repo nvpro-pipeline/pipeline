@@ -218,7 +218,7 @@ namespace dp
       inline  unsigned int  TransformStack::getStackDepth( void ) const
       {
         DP_ASSERT( m_modelWorld.size() == m_worldModel.size() );
-        return( dp::util::checked_cast<unsigned int>(m_modelWorld.size()) );
+        return( dp::checked_cast<unsigned int>(m_modelWorld.size()) );
       }
 
       inline  void  TransformStack::popModelToWorld( void )

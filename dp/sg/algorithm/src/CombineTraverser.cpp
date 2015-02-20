@@ -339,7 +339,7 @@ namespace dp
               noi = basePrimitive->getElementCount();
               if ( needsPrimitiveRestartIndex( basePrimitive->getPrimitiveType() ) )
               {
-                noi += checked_cast<unsigned int>( it->second.size() );
+                noi += dp::checked_cast<unsigned int>( it->second.size() );
               }
               nov = basePrimitive->getVertexAttributeSet()->getNumberOfVertexData( 0 );
 
@@ -507,7 +507,7 @@ namespace dp
             }
           }
           if ( p->setRanges( combinedRanges.empty() ? NULL : &combinedRanges[0]
-                           , checked_cast<unsigned int>(combinedRanges.size()) ) )
+                           , dp::checked_cast<unsigned int>(combinedRanges.size()) ) )
           {
             setTreeModified();
           }
@@ -714,7 +714,7 @@ namespace dp
             if ( oldData.getPtr() )
             {
               unsigned int size = p->getSizeOfVertexData(i);
-              dp::util::DataType type = p->getTypeOfVertexData(i);
+              dp::DataType type = p->getTypeOfVertexData(i);
 
               newVASH->setVertexData( i, &to[0], &from[0], size, type, oldData.getPtr(), p->getStrideOfVertexData(i), foundIndices );
 
@@ -801,7 +801,7 @@ namespace dp
             }
 
             IndexSetSharedPtr newIndexSet( IndexSet::create() );
-            newIndexSet->setData( &newIndices[0], checked_cast<unsigned int>(newIndices.size()) );
+            newIndexSet->setData( &newIndices[0], dp::checked_cast<unsigned int>(newIndices.size()) );
             newIndexSet->setPrimitiveRestartIndex( pri );
 
             p->setVertexAttributeSet( newVASH ); // this replaces the former VAS

@@ -75,7 +75,7 @@ namespace dp
         {
           float step = 2.0f/(float)(subdiv + 1);
           unsigned int row = subdiv + 2;
-          unsigned int offset = checked_cast<unsigned int>(vertices.size());
+          unsigned int offset = dp::checked_cast<unsigned int>(vertices.size());
 
 
           // This is expensive do it once outside the loops!
@@ -184,7 +184,7 @@ namespace dp
         vasPtr->setNormals( &normals[0], size_v );
 
         IndexSetSharedPtr indexSet( IndexSet::create() );
-        indexSet->setData( &indices[0], checked_cast<unsigned int>(indices.size()) );
+        indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
         // Create a Primitive
         primitivePtr = Primitive::create( PRIMITIVE_QUADS );
@@ -237,7 +237,7 @@ namespace dp
         vasPtr->setNormals( &normals[0], size_v );
 
         IndexSetSharedPtr indexSet( IndexSet::create() );
-        indexSet->setData( &indices[0], checked_cast<unsigned int>(indices.size()) );
+        indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
         // Create a Primitive
         primitivePtr = Primitive::create( PRIMITIVE_QUAD_STRIP );
@@ -304,7 +304,7 @@ namespace dp
         vasPtr->setNormals( &normals[0], size_v );
 
         IndexSetSharedPtr indexSet( IndexSet::create() );
-        indexSet->setData( &indices[0], checked_cast<unsigned int>(indices.size()) );
+        indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
         PrimitiveSharedPtr primitivePtr = Primitive::create( PRIMITIVE_TRIANGLES );
         primitivePtr->setVertexAttributeSet( vasPtr );
@@ -372,7 +372,7 @@ namespace dp
         vasPtr->setNormals( &normals[0], n + 2 );
 
         IndexSetSharedPtr indexSet( IndexSet::create() );
-        indexSet->setData( &indices[0], checked_cast<unsigned int>(indices.size()) );
+        indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
         // create pointer to return
         PrimitiveSharedPtr primitivePtr = Primitive::create( PRIMITIVE_TRIANGLE_FAN );
@@ -422,7 +422,7 @@ namespace dp
         vasPtr->setNormals( &normals[0], size_v );
 
         IndexSetSharedPtr indexSet( IndexSet::create() );
-        indexSet->setData( &indices[0], checked_cast<unsigned int>(indices.size()) );
+        indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
         // create pointer to return
         PrimitiveSharedPtr primitivePtr = Primitive::create( PRIMITIVE_TRIANGLE_STRIP );
@@ -478,7 +478,7 @@ namespace dp
 
         // Create a VertexAttributeSet
         VertexAttributeSetSharedPtr vas = VertexAttributeSet::create();
-        vas->setVertices( &vertices[0], checked_cast<unsigned int>(vertices.size()) );
+        vas->setVertices( &vertices[0], dp::checked_cast<unsigned int>(vertices.size()) );
 
         // Create a Primitive as triangular patches with 10 vertices per patch
         PrimitiveSharedPtr triPatches = Primitive::create( PATCHES_CUBIC_BEZIER_TRIANGLES, PATCHES_MODE_TRIANGLES );
@@ -571,7 +571,7 @@ namespace dp
 
         // Create a VertexAttributeSet
         VertexAttributeSetSharedPtr vas = VertexAttributeSet::create();
-        vas->setVertices( &vertices[0], checked_cast<unsigned int>( vertices.size() ) );
+        vas->setVertices( &vertices[0], dp::checked_cast<unsigned int>( vertices.size() ) );
 
         // Create a Primitive as rectangular patches with 16 vertices per patch
         PrimitiveSharedPtr patches = Primitive::create( PATCHES_CUBIC_BEZIER_QUADS, PATCHES_MODE_QUADS );
@@ -686,7 +686,7 @@ namespace dp
         vasPtr->setTexCoords( 0, tc, 36 );
 
         IndexSetSharedPtr indexSet( IndexSet::create() );
-        indexSet->setData( &indices[0], checked_cast<unsigned int>(indices.size()) );
+        indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
         // Create a Primitive
         PrimitiveSharedPtr primitivePtr = Primitive::create( PRIMITIVE_TRIANGLES );
@@ -782,7 +782,7 @@ namespace dp
         vasPtr->setTexCoords( 0, tc, 12 );
 
         IndexSetSharedPtr indexSet( IndexSet::create() );
-        indexSet->setData( &indices[0], checked_cast<unsigned int>(indices.size()) );
+        indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
         primitivePtr = Primitive::create( PRIMITIVE_TRIANGLES );
         primitivePtr->setVertexAttributeSet( vasPtr );
@@ -894,7 +894,7 @@ namespace dp
         vasPtr->setTexCoords( 0, tc, 24 );
 
         IndexSetSharedPtr indexSet( IndexSet::create() );
-        indexSet->setData( &indices[0], checked_cast<unsigned int>(indices.size()) );
+        indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
         // Create a Primitive
         PrimitiveSharedPtr primitivePtr = Primitive::create( PRIMITIVE_TRIANGLES );
@@ -1047,7 +1047,7 @@ namespace dp
         vasPtr->setNormals( &vn[0], 72 );
 
         IndexSetSharedPtr indexSet( IndexSet::create() );
-        indexSet->setData( &indices[0], checked_cast<unsigned int>(indices.size()) );
+        indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
         // create a Primitive
         PrimitiveSharedPtr primitivePtr = Primitive::create( PRIMITIVE_TRIANGLES );
@@ -1142,7 +1142,7 @@ namespace dp
         vasPtr->setNormals( &vn[0], 60 );
 
         IndexSetSharedPtr indexSet( IndexSet::create() );
-        indexSet->setData( &indices[0], checked_cast<unsigned int>(indices.size()) );
+        indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
         // Create a Primitive
         PrimitiveSharedPtr primitivePtr = Primitive::create( PRIMITIVE_TRIANGLES );
@@ -1236,7 +1236,7 @@ namespace dp
         vasPtr->setTexCoords( VertexAttributeSet::DP_SG_BINORMAL - VertexAttributeSet::DP_SG_TEXCOORD0, &binormals[0], size_v );
 
         IndexSetSharedPtr indexSet( IndexSet::create() );
-        indexSet->setData( &indices[0], checked_cast<unsigned int>(indices.size()) );
+        indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
         // Create a Primitive
         PrimitiveSharedPtr primitivePtr = Primitive::create( PRIMITIVE_TRIANGLES );
@@ -1405,7 +1405,7 @@ namespace dp
         vasPtr->setTexCoords( 0, &texcoords[0], size_v );
 
         IndexSetSharedPtr indexSet( IndexSet::create() );
-        indexSet->setData( &indices[0], checked_cast<unsigned int>(indices.size()) );
+        indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
         PrimitiveSharedPtr primitivePtr = Primitive::create( PRIMITIVE_TRIANGLES );
         primitivePtr->setVertexAttributeSet( vasPtr );
@@ -1513,7 +1513,7 @@ namespace dp
         vasPtr->setTexCoords( VertexAttributeSet::DP_SG_BINORMAL - VertexAttributeSet::DP_SG_TEXCOORD0, &binormals[0], size_v );
 
         IndexSetSharedPtr indexSet( IndexSet::create() );
-        indexSet->setData( &indices[0], checked_cast<unsigned int>(indices.size()) );
+        indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
         PrimitiveSharedPtr primitivePtr = Primitive::create( PRIMITIVE_QUADS );
         primitivePtr->setVertexAttributeSet( vasPtr );
@@ -1548,7 +1548,7 @@ namespace dp
         vasPtr->setTexCoords( 0, &texcoords[0], size_v );
 
         IndexSetSharedPtr indexSet( IndexSet::create() );
-        indexSet->setData( &indices[0], checked_cast<unsigned int>(indices.size()) );
+        indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
         PrimitiveSharedPtr primitivePtr = Primitive::create( PRIMITIVE_TRIANGLES );
         primitivePtr->setVertexAttributeSet( vasPtr );
@@ -1670,7 +1670,7 @@ namespace dp
         vasPtr->setTexCoords( 0, &texcoords[0], size_v );
 
         IndexSetSharedPtr indexSet( IndexSet::create() );
-        indexSet->setData( &indices[0], checked_cast<unsigned int>(indices.size()) );
+        indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
         // Create a Primitive
         PrimitiveSharedPtr primitivePtr = Primitive::create( PRIMITIVE_TRIANGLES );

@@ -129,39 +129,39 @@ namespace dp
       GLenum format = ~0;
       switch (pixelFormat)
       {
-      case dp::util::PixelFormat::PF_RGB:
+      case dp::PixelFormat::PF_RGB:
         format = GL_RGB;
         components = 3;
       break;
-      case dp::util::PixelFormat::PF_RGBA:
+      case dp::PixelFormat::PF_RGBA:
         format = GL_RGBA;
         components = 4;
       break;
-      case dp::util::PixelFormat::PF_BGR:
+      case dp::PixelFormat::PF_BGR:
         format = GL_BGR;
         components = 3;
       break;
-      case dp::util::PixelFormat::PF_BGRA:
+      case dp::PixelFormat::PF_BGRA:
         format = GL_BGRA;
         components = 4;
       break;
-      case dp::util::PixelFormat::PF_LUMINANCE:
+      case dp::PixelFormat::PF_LUMINANCE:
         format = GL_LUMINANCE;
         components = 1;
       break;
-      case dp::util::PixelFormat::PF_ALPHA:
+      case dp::PixelFormat::PF_ALPHA:
         format = GL_ALPHA;
         components = 1;
       break;
-      case dp::util::PixelFormat::PF_LUMINANCE_ALPHA:
+      case dp::PixelFormat::PF_LUMINANCE_ALPHA:
         format = GL_LUMINANCE_ALPHA;
         components = 2;
       break;
-      case dp::util::PixelFormat::PF_DEPTH_COMPONENT:
+      case dp::PixelFormat::PF_DEPTH_COMPONENT:
         format = GL_DEPTH_COMPONENT;
         components = 1;
       break;
-      case dp::util::PixelFormat::PF_DEPTH_STENCIL:
+      case dp::PixelFormat::PF_DEPTH_STENCIL:
         format = GL_DEPTH24_STENCIL8;
         components = 1;
       break;
@@ -172,35 +172,35 @@ namespace dp
       GLenum dataType = ~0;
       switch (pixelDataType)
       {
-      case dp::util::PixelFormat::PF_BYTE:
+      case dp::PixelFormat::PF_BYTE:
         dataType = GL_BYTE;
         bytesPerComponent = 1;
       break;
-      case dp::util::PixelFormat::PF_UNSIGNED_BYTE:
+      case dp::PixelFormat::PF_UNSIGNED_BYTE:
         dataType = GL_UNSIGNED_BYTE;
         bytesPerComponent = 1;
       break;
-      case dp::util::PixelFormat::PF_SHORT:
+      case dp::PixelFormat::PF_SHORT:
         dataType = GL_SHORT;
         bytesPerComponent = 2;
       break;
-      case dp::util::PixelFormat::PF_UNSIGNED_SHORT:
+      case dp::PixelFormat::PF_UNSIGNED_SHORT:
         dataType = GL_UNSIGNED_SHORT;
         bytesPerComponent = 2;
       break;
-      case dp::util::PixelFormat::PF_INT:
+      case dp::PixelFormat::PF_INT:
         dataType = GL_INT;
         bytesPerComponent = 4;
       break;
-      case dp::util::PixelFormat::PF_UNSIGNED_INT:
+      case dp::PixelFormat::PF_UNSIGNED_INT:
         dataType = GL_UNSIGNED_INT;
         bytesPerComponent = 4;
       break;
-      case dp::util::PixelFormat::PF_FLOAT32:
+      case dp::PixelFormat::PF_FLOAT32:
         dataType = GL_FLOAT;
         bytesPerComponent = 4;
       break;
-      case dp::util::PixelFormat::PF_FLOAT16:
+      case dp::PixelFormat::PF_FLOAT16:
         dataType = GL_HALF_FLOAT;
         bytesPerComponent = 2;
       break;
@@ -237,7 +237,7 @@ namespace dp
     }
 #endif
 
-    std::vector<dp::util::Uint8> RenderTarget::getImagePixels( GLenum mode, dp::util::PixelFormat pixelFormat, dp::util::DataType pixelDataType )
+    std::vector<dp::Uint8> RenderTarget::getImagePixels( GLenum mode, dp::PixelFormat pixelFormat, dp::DataType pixelDataType )
     {
       // FIXME use C++ object for current/noncurrent for exception safety
       makeCurrent();
@@ -259,43 +259,43 @@ namespace dp
       GLenum format = ~0;
       switch (pixelFormat)
       {
-      case dp::util::PF_RGB:
+      case dp::PF_RGB:
         format = GL_RGB;
         components = 3;
         break;
-      case dp::util::PF_RGBA:
+      case dp::PF_RGBA:
         format = GL_RGBA;
         components = 4;
         break;
-      case dp::util::PF_BGR:
+      case dp::PF_BGR:
         format = GL_BGR;
         components = 3;
         break;
-      case dp::util::PF_BGRA:
+      case dp::PF_BGRA:
         format = GL_BGRA;
         components = 4;
         break;
-      case dp::util::PF_LUMINANCE:
+      case dp::PF_LUMINANCE:
         format = GL_LUMINANCE;
         components = 1;
         break;
-      case dp::util::PF_ALPHA:
+      case dp::PF_ALPHA:
         format = GL_ALPHA;
         components = 1;
         break;
-      case dp::util::PF_LUMINANCE_ALPHA:
+      case dp::PF_LUMINANCE_ALPHA:
         format = GL_LUMINANCE_ALPHA;
         components = 2;
         break;
-      case dp::util::PF_DEPTH_COMPONENT:
+      case dp::PF_DEPTH_COMPONENT:
         format = GL_DEPTH_COMPONENT;
         components = 1;
         break;
-      case dp::util::PF_DEPTH_STENCIL:
+      case dp::PF_DEPTH_STENCIL:
         format = GL_DEPTH_STENCIL;
         components = 1;
         break;
-      case dp::util::PF_STENCIL_INDEX:
+      case dp::PF_STENCIL_INDEX:
         format = GL_STENCIL_INDEX;
         components = 1;
         break;
@@ -306,35 +306,35 @@ namespace dp
       GLenum dataType = ~0;
       switch (pixelDataType)
       {
-      case dp::util::DT_INT_8:
+      case dp::DT_INT_8:
         dataType = GL_BYTE;
         bytesPerComponent = 1;
         break;
-      case dp::util::DT_UNSIGNED_INT_8:
+      case dp::DT_UNSIGNED_INT_8:
         dataType = GL_UNSIGNED_BYTE;
         bytesPerComponent = 1;
         break;
-      case dp::util::DT_INT_16:
+      case dp::DT_INT_16:
         dataType = GL_SHORT;
         bytesPerComponent = 2;
         break;
-      case dp::util::DT_UNSIGNED_INT_16:
+      case dp::DT_UNSIGNED_INT_16:
         dataType = GL_UNSIGNED_SHORT;
         bytesPerComponent = 2;
         break;
-      case dp::util::DT_INT_32:
+      case dp::DT_INT_32:
         dataType = GL_INT;
         bytesPerComponent = 4;
         break;
-      case dp::util::DT_UNSIGNED_INT_32:
+      case dp::DT_UNSIGNED_INT_32:
         dataType = GL_UNSIGNED_INT;
         bytesPerComponent = 4;
         break;
-      case dp::util::DT_FLOAT_32:
+      case dp::DT_FLOAT_32:
         dataType = GL_FLOAT;
         bytesPerComponent = 4;
         break;
-      case dp::util::DT_FLOAT_16:
+      case dp::DT_FLOAT_16:
         dataType = GL_HALF_FLOAT;
         bytesPerComponent = 2;
         break;
@@ -343,7 +343,7 @@ namespace dp
       }
 
       size_t imageSizeInBytes = m_width * m_height * components * bytesPerComponent;
-      std::vector<dp::util::Uint8> output(imageSizeInBytes);
+      std::vector<dp::Uint8> output(imageSizeInBytes);
 
       if ( imageSizeInBytes )
       {
@@ -360,19 +360,19 @@ namespace dp
     }
 
     dp::util::ImageSharedPtr
-    RenderTarget::getImage( dp::util::PixelFormat pixelFormat, dp::util::DataType pixelDataType, unsigned int index )
+    RenderTarget::getImage( dp::PixelFormat pixelFormat, dp::DataType pixelDataType, unsigned int index )
     {
       return getTargetAsImage( GL_FRONT, pixelFormat, pixelDataType );
     }
 
     dp::util::ImageSharedPtr
-    RenderTarget::getTargetAsImage( GLenum mode, dp::util::PixelFormat pixelFormat, dp::util::DataType pixelDataType )
+    RenderTarget::getTargetAsImage( GLenum mode, dp::PixelFormat pixelFormat, dp::DataType pixelDataType )
     {
       // FIXME use C++ object for current/noncurrent for exception safety
       makeCurrent();
 
       dp::util::ImageSharedPtr image = dp::util::Image::create();
-      std::vector<dp::util::Uint8> pixels = getImagePixels( mode, pixelFormat, pixelDataType );
+      std::vector<dp::Uint8> pixels = getImagePixels( mode, pixelFormat, pixelDataType );
       if ( !pixels.empty() )
       {
         image->setSingleLayerData( m_width, m_height, pixelFormat, pixelDataType, &pixels[0] );

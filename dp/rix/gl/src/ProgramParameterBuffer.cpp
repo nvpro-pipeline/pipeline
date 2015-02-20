@@ -165,45 +165,45 @@ namespace dp
       template class ParameterntBuffer<3, double>;
       template class ParameterntBuffer<4, double>;
 
-      template class ParameterntBufferConversion<1, dp::util::Int32, dp::util::Int8>;
-      template class ParameterntBufferConversion<2, dp::util::Int32, dp::util::Int8>;
-      template class ParameterntBufferConversion<3, dp::util::Int32, dp::util::Int8>;
-      template class ParameterntBufferConversion<4, dp::util::Int32, dp::util::Int8>;
+      template class ParameterntBufferConversion<1, dp::Int32, dp::Int8>;
+      template class ParameterntBufferConversion<2, dp::Int32, dp::Int8>;
+      template class ParameterntBufferConversion<3, dp::Int32, dp::Int8>;
+      template class ParameterntBufferConversion<4, dp::Int32, dp::Int8>;
 
-      template class ParameterntBufferConversion<1, dp::util::Int32, dp::util::Int16>;
-      template class ParameterntBufferConversion<2, dp::util::Int32, dp::util::Int16>;
-      template class ParameterntBufferConversion<3, dp::util::Int32, dp::util::Int16>;
-      template class ParameterntBufferConversion<4, dp::util::Int32, dp::util::Int16>;
+      template class ParameterntBufferConversion<1, dp::Int32, dp::Int16>;
+      template class ParameterntBufferConversion<2, dp::Int32, dp::Int16>;
+      template class ParameterntBufferConversion<3, dp::Int32, dp::Int16>;
+      template class ParameterntBufferConversion<4, dp::Int32, dp::Int16>;
 
-      template class ParameterntBuffer<1, dp::util::Int32>;
-      template class ParameterntBuffer<2, dp::util::Int32>;
-      template class ParameterntBuffer<3, dp::util::Int32>;
-      template class ParameterntBuffer<4, dp::util::Int32>;
+      template class ParameterntBuffer<1, dp::Int32>;
+      template class ParameterntBuffer<2, dp::Int32>;
+      template class ParameterntBuffer<3, dp::Int32>;
+      template class ParameterntBuffer<4, dp::Int32>;
 
-      template class ParameterntBuffer<1, dp::util::Int64>;
-      template class ParameterntBuffer<2, dp::util::Int64>;
-      template class ParameterntBuffer<3, dp::util::Int64>;
-      template class ParameterntBuffer<4, dp::util::Int64>;
+      template class ParameterntBuffer<1, dp::Int64>;
+      template class ParameterntBuffer<2, dp::Int64>;
+      template class ParameterntBuffer<3, dp::Int64>;
+      template class ParameterntBuffer<4, dp::Int64>;
 
-      template class ParameterntBufferConversion<1, dp::util::Uint32, dp::util::Uint8>;
-      template class ParameterntBufferConversion<2, dp::util::Uint32, dp::util::Uint8>;
-      template class ParameterntBufferConversion<3, dp::util::Uint32, dp::util::Uint8>;
-      template class ParameterntBufferConversion<4, dp::util::Uint32, dp::util::Uint8>;
+      template class ParameterntBufferConversion<1, dp::Uint32, dp::Uint8>;
+      template class ParameterntBufferConversion<2, dp::Uint32, dp::Uint8>;
+      template class ParameterntBufferConversion<3, dp::Uint32, dp::Uint8>;
+      template class ParameterntBufferConversion<4, dp::Uint32, dp::Uint8>;
 
-      template class ParameterntBufferConversion<1, dp::util::Uint32, dp::util::Uint16>;
-      template class ParameterntBufferConversion<2, dp::util::Uint32, dp::util::Uint16>;
-      template class ParameterntBufferConversion<3, dp::util::Uint32, dp::util::Uint16>;
-      template class ParameterntBufferConversion<4, dp::util::Uint32, dp::util::Uint16>;
+      template class ParameterntBufferConversion<1, dp::Uint32, dp::Uint16>;
+      template class ParameterntBufferConversion<2, dp::Uint32, dp::Uint16>;
+      template class ParameterntBufferConversion<3, dp::Uint32, dp::Uint16>;
+      template class ParameterntBufferConversion<4, dp::Uint32, dp::Uint16>;
 
-      template class ParameterntBuffer<1, dp::util::Uint32>;
-      template class ParameterntBuffer<2, dp::util::Uint32>;
-      template class ParameterntBuffer<3, dp::util::Uint32>;
-      template class ParameterntBuffer<4, dp::util::Uint32>;
+      template class ParameterntBuffer<1, dp::Uint32>;
+      template class ParameterntBuffer<2, dp::Uint32>;
+      template class ParameterntBuffer<3, dp::Uint32>;
+      template class ParameterntBuffer<4, dp::Uint32>;
 
-      template class ParameterntBuffer<1, dp::util::Uint64>;
-      template class ParameterntBuffer<2, dp::util::Uint64>;
-      template class ParameterntBuffer<3, dp::util::Uint64>;
-      template class ParameterntBuffer<4, dp::util::Uint64>;
+      template class ParameterntBuffer<1, dp::Uint64>;
+      template class ParameterntBuffer<2, dp::Uint64>;
+      template class ParameterntBuffer<3, dp::Uint64>;
+      template class ParameterntBuffer<4, dp::Uint64>;
 
       template class ParameternmtBuffer<2, 2, float>;
       template class ParameternmtBuffer<2, 3, float>;

@@ -36,12 +36,12 @@ namespace
   {
     // TODO pack matrix into 4th component of extent!
     //dp::math::Mat44f matrix;
-    dp::util::Uint32 matrix;
-    dp::util::Uint32 pad0;
-    dp::util::Uint32 pad1;
-    dp::util::Uint32 pad2;
-    dp::math::Vec4f  lowerLeft;
-    dp::math::Vec4f  extent;
+    dp::Uint32      matrix;
+    dp::Uint32      pad0;
+    dp::Uint32      pad1;
+    dp::Uint32      pad2;
+    dp::math::Vec4f lowerLeft;
+    dp::math::Vec4f extent;
   };
 }
 
@@ -94,7 +94,7 @@ namespace dp
           {
             const ObjectBitSetSharedPtr& objectImpl = getObject( index );
             ShaderObject &object = inputs[index];
-            object.matrix = static_cast<dp::util::Uint32>(objectImpl->getTransformIndex());
+            object.matrix = static_cast<dp::Uint32>(objectImpl->getTransformIndex());
             object.lowerLeft = objectImpl->getLowerLeft();
             object.extent = objectImpl->getExtent();
           }

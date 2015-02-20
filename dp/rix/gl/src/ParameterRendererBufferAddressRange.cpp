@@ -45,7 +45,7 @@ namespace dp
         , m_bindingIndex( GLint(bindingIndex) )
         , m_baseAddress( 0 )
         , m_bindingLength( bindingLength )
-        , m_cacheData( new dp::util::Uint8[m_bindingLength] )
+        , m_cacheData( new dp::Uint8[m_bindingLength] )
         , m_bufferUpdater(new dp::gl::BufferUpdater(buffer))
       {
         DP_ASSERT( !m_parameters.empty() );

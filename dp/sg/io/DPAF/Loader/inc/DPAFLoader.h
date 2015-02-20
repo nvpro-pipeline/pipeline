@@ -134,7 +134,7 @@ class DPAFLoader : public dp::sg::io::SceneLoader
     dp::sg::core::NodeSharedPtr                       readChild( const std::string & token );
     void                                              readChildren( dp::sg::core::GroupSharedPtr const& group );
     bool                                              readFrustumCameraToken( dp::sg::core::FrustumCameraSharedPtr const& camera, std::string & token );
-    dp::util::DataType                                readType( const char *token = NULL );
+    dp::DataType                                      readType( const char *token = NULL );
     dp::sg::core::EffectDataSharedPtr                 readEffectData( const char * name );
     void                                              readEnumArray( const std::string & token, std::vector<int> & values, const dp::fx::ParameterSpec & ps );
     template<unsigned int m, unsigned int n> dp::math::Matmnt<m,n,char> readEnumMatrix( const std::string & t, const dp::fx::ParameterSpec & ps );

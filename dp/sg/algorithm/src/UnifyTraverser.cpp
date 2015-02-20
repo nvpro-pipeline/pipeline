@@ -393,11 +393,11 @@ namespace dp
               {
                 newIndices[i] = ( oldIndices[i] == pri ) ? pri : it->second.m_indexMap[i];
               }
-              newIndexSet->setData( &newIndices[0], checked_cast<unsigned int>(newIndices.size()) );
+              newIndexSet->setData( &newIndices[0], dp::checked_cast<unsigned int>(newIndices.size()) );
             }
             else
             {
-              newIndexSet->setData( it->second.m_indexMap.data(), checked_cast<unsigned int>(it->second.m_indexMap.size()) );
+              newIndexSet->setData( it->second.m_indexMap.data(), dp::checked_cast<unsigned int>(it->second.m_indexMap.size()) );
             }
             p->setIndexSet( newIndexSet );
             p->setVertexAttributeSet( it->second.m_vas );
@@ -504,8 +504,8 @@ namespace dp
               for ( unsigned int i=0 ; i<VertexAttributeSet::DP_SG_VERTEX_ATTRIB_COUNT ; i++ )
               {
                 unsigned int type = p->getTypeOfVertexData(i);
-                if (  type != dp::util::DT_UNKNOWN // no data is ok!
-                   && type != dp::util::DT_FLOAT_32 )  
+                if (  type != dp::DT_UNKNOWN // no data is ok!
+                   && type != dp::DT_FLOAT_32 )  
                 {
                   DP_ASSERT( !"This algorithm currently only works for float-typed vertex data!" );
                   return; 
@@ -553,7 +553,7 @@ namespace dp
               VUTOctreeNode * octree = new VUTOctreeNode();
               octree->init( boundingBox<3, float, Buffer::ConstIterator<Vec3f>::Type >( p->getVertices(), p->getNumberOfVertices() )
                           , std::max( (unsigned int)32, (unsigned int)pow( p->getNumberOfVertices(), 0.25 ) ) );
-              unsigned int count = checked_cast<unsigned int>(valuesIn.size());
+              unsigned int count = dp::checked_cast<unsigned int>(valuesIn.size());
               for ( unsigned int i=0 ; i<count ; i++ )
               {
                 octree->addVertex( valuesIn, i, dimension, m_epsilon );
@@ -598,7 +598,7 @@ namespace dp
                         vad[dim*k+l] = valuesOut[k][j+l];
                       }
                     }
-                    newVAS->setVertexData( i, dim, dp::util::DT_FLOAT_32, &vad[0], 0, checked_cast<unsigned int>(vad.size()/dim) );
+                    newVAS->setVertexData( i, dim, dp::DT_FLOAT_32, &vad[0], 0, dp::checked_cast<unsigned int>(vad.size()/dim) );
 
                     // inherit enable states from source attrib
                     // normalize-enable state only meaningful for generic aliases!
@@ -1032,7 +1032,7 @@ namespace dp
         {
           nop += it->size();
         }
-        return( checked_cast<unsigned int>(nop) );
+        return( dp::checked_cast<unsigned int>(nop) );
       }
 
       void VUTOctreeIndices::mapValues( const vector<float *> & valuesIn, vector<float *> & valuesOut, unsigned int dimension, vector<unsigned int> &indexMap, unsigned int &index )

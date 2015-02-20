@@ -27,17 +27,17 @@
 #pragma once
 /** @file */
 
-#include <dp/sg/core/Config.h>
+#include <dp/Types.h>
 #include <dp/math/math.h>
+#include <dp/sg/core/Config.h>
+#include <dp/sg/core/Buffer.h>
 #include <dp/sg/core/CoreTypes.h>
 #include <dp/sg/core/Texture.h>
 #include <dp/util/BitMask.h>
-#include <dp/util/Types.h>
 #include <math.h>
 #include <vector>
 #include <map>
 #include <string>
-#include <dp/sg/core/Buffer.h>
 
 // VERTICAL_CROSS_FORMAT(w,h) macro evaluates to true if 
 // width and height comply with vertical cross format:
@@ -1227,13 +1227,13 @@ namespace dp
 
       inline unsigned int TextureHost::getNumberOfImages() const
       {
-        return( dp::util::checked_cast<unsigned int>(m_images.size()) );
+        return( dp::checked_cast<unsigned int>(m_images.size()) );
       }
 
       inline unsigned int TextureHost::getNumberOfMipmaps(unsigned int image) const
       {
         DP_ASSERT( ( image < m_images.size() ) && ( 0 < m_images[image].size() ) );
-        return( dp::util::checked_cast<unsigned int>(m_images[image].size() - 1) );
+        return( dp::checked_cast<unsigned int>(m_images[image].size() - 1) );
       }
 
       inline Image::PixelFormat TextureHost::getFormat(unsigned int image, unsigned int mipmap) const

@@ -27,7 +27,6 @@
 #pragma once
 
 #include <dp/rix/core/RiX.h>
-#include <dp/util/Types.h>
 #include <dp/sg/core/TextureHost.h>
 
 namespace dp
@@ -44,29 +43,29 @@ namespace dp
           /************************************************************************/
           /* Utility functions                                                    */
           /************************************************************************/
-          inline dp::util::DataType getRiXDataType( dp::sg::core::Image::PixelDataType scenixDataType )
+          inline dp::DataType getRiXDataType( dp::sg::core::Image::PixelDataType scenixDataType )
           {
             switch( scenixDataType )
             {
             case dp::sg::core::Image::IMG_BYTE:
-              return dp::util::DT_INT_8;
+              return dp::DT_INT_8;
             case dp::sg::core::Image::IMG_UNSIGNED_BYTE:
-              return dp::util::DT_UNSIGNED_INT_8;
+              return dp::DT_UNSIGNED_INT_8;
             case dp::sg::core::Image::IMG_SHORT:
-              return dp::util::DT_INT_16;
+              return dp::DT_INT_16;
             case dp::sg::core::Image::IMG_UNSIGNED_SHORT:
-              return dp::util::DT_UNSIGNED_INT_16;
+              return dp::DT_UNSIGNED_INT_16;
             case dp::sg::core::Image::IMG_INT:
-              return dp::util::DT_INT_32;
+              return dp::DT_INT_32;
             case dp::sg::core::Image::IMG_UNSIGNED_INT:
-              return dp::util::DT_UNSIGNED_INT_32;
+              return dp::DT_UNSIGNED_INT_32;
             case dp::sg::core::Image::IMG_FLOAT16:
-              return dp::util::DT_FLOAT_16;
+              return dp::DT_FLOAT_16;
             case dp::sg::core::Image::IMG_FLOAT32:
-              return dp::util::DT_FLOAT_32;
+              return dp::DT_FLOAT_32;
             default:
               DP_ASSERT( false && "unknown datatype");
-              return dp::util::DT_UNKNOWN;
+              return dp::DT_UNKNOWN;
             }
           }
 

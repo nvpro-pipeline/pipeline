@@ -31,7 +31,6 @@
 
 #include <dp/util/Config.h>
 #include <dp/util/SharedPtr.h>
-#include <dp/util/Types.h>
 #include <dp/math/Vecnt.h>
 
 namespace dp
