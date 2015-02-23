@@ -11,6 +11,7 @@
 
 cmake_minimum_required(VERSION 2.6)
 cmake_policy(SET CMP0020 OLD)
+cmake_policy(SET CMP0043 NEW)
 
 find_package( Qt5Widgets QUIET )
 

@@ -11,6 +11,7 @@
 
 cmake_minimum_required(VERSION 2.8)
 cmake_policy(SET CMP0020 NEW)
+cmake_policy(SET CMP0043 NEW)
 
 find_package( Qt5Widgets QUIET )
 
@@ -191,21 +192,21 @@ if(Qt5Widgets_FOUND AND TARGET DPSgUIQt5)
   add_dependencies( Viewer
     3DSLoader
     DAELoader
+    DPAFLoader
+    DPAFSaver
+    DPBFLoader
+    DPBFSaver
     EXRLoader
     FLTLoader
     HOOPSLoader
     ILTexLoader
     MBSDFLoader
-    NBFLoader
-    NVSGLoader
     OBJLoader
     PLYLoader
     WRLLoader
     XMLLoader
     CSFSaver
     ILTexSaver
-    NBFSaver
-    NVSGSaver
     OBJSaver
   )
 
