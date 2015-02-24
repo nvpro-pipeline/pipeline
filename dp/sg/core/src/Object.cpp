@@ -305,11 +305,12 @@ namespace dp
               dp::util::PropertyId propertyId = propertyEvent.getPropertyId();
               if ( (propertyId == dp::sg::core::LOD::PID_Center)
                 || (propertyId == dp::sg::core::Switch::PID_ActiveSwitchMask)
+                || (propertyId == dp::sg::core::Transform::PID_Center)
                 || (propertyId == dp::sg::core::Transform::PID_Matrix)
-                || (propertyId == dp::sg::core::Transform::PID_Translation)
+                || (propertyId == dp::sg::core::Transform::PID_Orientation)
                 || (propertyId == dp::sg::core::Transform::PID_Scaling)
                 || (propertyId == dp::sg::core::Transform::PID_ScaleOrientation)
-                || (propertyId == dp::sg::core::Transform::PID_Orientation)
+                || (propertyId == dp::sg::core::Transform::PID_Translation)
                  )
               {
                 changedState |= DP_SG_BOUNDING_VOLUMES;
