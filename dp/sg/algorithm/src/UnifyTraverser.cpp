@@ -391,7 +391,8 @@ namespace dp
               IndexSet::ConstIterator<unsigned int> oldIndices( oldIndexSet, p->getElementOffset() );
               for ( size_t i=0 ; i<newIndices.size() ; i++ )
               {
-                newIndices[i] = ( oldIndices[i] == pri ) ? pri : it->second.m_indexMap[i];
+                DP_ASSERT( oldIndices[i] < it->second.m_indexMap.size() );
+                newIndices[i] = ( oldIndices[i] == pri ) ? pri : it->second.m_indexMap[oldIndices[i]];
               }
               newIndexSet->setData( &newIndices[0], dp::checked_cast<unsigned int>(newIndices.size()) );
             }
