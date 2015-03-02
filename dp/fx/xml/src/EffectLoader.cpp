@@ -48,8 +48,6 @@
 #include <exception>
 #include <boost/make_shared.hpp>
 
-#include <dp/util/DPAssert.h>
-
 using namespace dp::util;
 using std::auto_ptr;
 using std::map;

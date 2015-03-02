@@ -11,6 +11,7 @@ include_directories(
 )
 
 set(PUBLIC_HEADERS
+  Assert.h
   Config.h
   DP.h
   Types.h
@@ -19,6 +20,7 @@ set(PUBLIC_HEADERS
 
 #let cmake determine linker language
 set(SOURCES
+  src/Assert.cpp
   src/DP.cpp
   src/Exception.cpp
 )

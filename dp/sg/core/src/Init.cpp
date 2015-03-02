@@ -26,7 +26,6 @@
 
 #include <dp/fx/EffectLibrary.h>
 #include <dp/util/PlugIn.h>
-#include <dp/util/DPAssert.h>
 #include <dp/util/File.h>
 #include <string>
 

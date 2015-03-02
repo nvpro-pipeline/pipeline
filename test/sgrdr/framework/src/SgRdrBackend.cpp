@@ -34,8 +34,8 @@
 #include <windows.h>
 #include <GL/freeglut.h>
 
+#include <dp/Assert.h>
 #include <dp/util/SharedPtr.h>
-#include <dp/util/DPAssert.h>
 #include <iostream>
 #include <tchar.h>
 

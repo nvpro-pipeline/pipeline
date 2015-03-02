@@ -27,10 +27,10 @@
 #include <test/testfw/core/Test.h>
 #include <test/testfw/core/TestObject.h>
 
+#include <dp/Assert.h>
 #include <dp/util/File.h>
 #include <dp/util/DynamicLibrary.h>
 
-#include <dp/util/DPAssert.h>
 #include <memory>
 #include <iostream>
 

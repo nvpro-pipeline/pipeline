@@ -24,12 +24,10 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#include <dp/util/DPAssert.h>
-#include <dp/util/SimplexNoise1234.h>
 #include <dp/math/math.h>
 #include <dp/math/Matmnt.h>
-
 #include <dp/util/generator/Textures.h>
+#include <dp/util/SimplexNoise1234.h>
 
 namespace dp
 {

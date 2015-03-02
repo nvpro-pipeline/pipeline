@@ -24,8 +24,8 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+#include <dp/Assert.h>
 #include <dp/math/Spherent.h>
-#include "dp/util/DPAssert.h"
 #include <limits>
 
 #include <dp/sg/core/Primitive.h>

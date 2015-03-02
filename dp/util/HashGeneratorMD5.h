@@ -29,8 +29,6 @@
 
 #include <dp/util/Config.h>
 #include <dp/util/HashGenerator.h>
-#include <dp/util/DPAssert.h>
-
 #include <string>
 
 namespace dp

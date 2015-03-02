@@ -21,7 +21,6 @@ set(DPUTIL_INCLUDES
   BitArray.h
   BitMask.h
   Config.h
-  DPAssert.h
   DynamicLibrary.h
   File.h
   FrameProfiler.h
@@ -62,7 +61,6 @@ source_group(headers/generator FILES ${DPUTIL_GENERATOR_INCLUDES})
 set(DPUTIL_SOURCES
   src/Backtrace.cpp
   src/BitArray.cpp
-  src/DPAssert.cpp
   src/DynamicLibrary.cpp
   src/File.cpp
   src/FileMapping.cpp
@@ -115,6 +113,7 @@ target_link_libraries( DPUtil
 
 if (MSVC)
   target_link_libraries( DPUtil
+    DP
     DbgHelp
   )
 endif()

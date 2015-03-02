@@ -25,8 +25,8 @@
 
 
 #include <test/testfw/core/MeasurementFunctorTimer.h>
+#include <dp/Assert.h>
 #include <dp/util/File.h>
-#include <dp/util/DPAssert.h>
 #include <iostream>
 
 #include <boost/program_options.hpp>

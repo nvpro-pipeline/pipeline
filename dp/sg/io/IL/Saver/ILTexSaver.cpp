@@ -33,10 +33,9 @@
 #endif
 #include <typeinfo>
 
+#include <dp/Assert.h>
 #include <dp/sg/io/PlugInterfaceID.h>
 #include <dp/sg/core/TextureHost.h>
-
-#include <dp/util/DPAssert.h>
 #include <dp/util/File.h>
 #include <dp/util/Tools.h>
 

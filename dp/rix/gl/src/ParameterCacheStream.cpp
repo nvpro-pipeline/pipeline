@@ -31,6 +31,7 @@
 #include <dp/rix/gl/inc/ParameterRendererBufferAddressRange.h>
 #include <dp/rix/gl/inc/ParameterRendererBufferDSA.h>
 #include <dp/rix/gl/inc/ParameterRendererBufferRange.h>
+#include <dp/Assert.h>
 #include <dp/util/Array.h>
 
 namespace dp

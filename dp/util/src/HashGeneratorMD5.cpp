@@ -24,8 +24,8 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+#include <dp/Assert.h>
 #include <dp/util/HashGeneratorMD5.h>
-#include <dp/util/DPAssert.h>
 #include <string.h>
 #include <sstream>
 

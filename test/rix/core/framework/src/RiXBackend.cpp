@@ -26,7 +26,7 @@
 
 #include <test/rix/core/framework/RiXBackend.h>
 
-#include <dp/util/DPAssert.h>
+#include <dp/Assert.h>
 
 namespace dp
 {

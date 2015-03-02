@@ -26,8 +26,8 @@
 
 #pragma once
 
+#include <dp/Assert.h>
 #include <dp/util/Config.h>
-#include <dp/util/DPAssert.h>
 #include <limits>
 
 #if defined(DP_OS_LINUX)
