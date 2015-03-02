@@ -140,9 +140,10 @@ add_library( RiXGL SHARED
 )
 
 target_link_libraries( RiXGL
-  RiXCore
+  DP
   DPGL
   DPUtil
+  RiXCore
   ${OPENGL_gl_LIBRARY}
   ${GLEW_LIBRARY}
 )

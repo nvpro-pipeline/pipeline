@@ -33,7 +33,6 @@
 #include <dp/sg/algorithm/Optimize.h>
 #include "OptimizerDialog.h"
 #include "Viewer.h"
-#include <dp/util/DPAssert.h>
 
 using namespace dp::sg::core;
 

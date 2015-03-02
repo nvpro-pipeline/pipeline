@@ -33,7 +33,7 @@
 #include <limits>
 #include <list>
 #include <vector>
-#include <dp/util/DPAssert.h>
+#include <dp/Assert.h>
 
 namespace dp
 {

@@ -24,10 +24,10 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+#include <dp/Assert.h>
 #include <dp/gl/Config.h>
 #include <dp/gl/RenderContext.h>
 #include <dp/gl/RenderTargetFB.h>
-#include <dp/util/DPAssert.h>
 
 namespace dp
 {

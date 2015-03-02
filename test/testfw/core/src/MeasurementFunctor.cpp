@@ -26,8 +26,8 @@
 
 #include <test/testfw/core/Test.h>
 #include <test/testfw/core/MeasurementFunctor.h>
+#include <dp/Assert.h>
 #include <dp/util/File.h>
-#include <dp/util/DPAssert.h>
 #include <iostream>
 
 namespace dp

@@ -25,7 +25,6 @@
 
 
 #include <dp/util/Tools.h>
-#include <dp/util/DPAssert.h>
 
 namespace dp
 {

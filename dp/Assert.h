@@ -26,24 +26,21 @@
 
 #pragma once
 
-#include <dp/util/Config.h>
+#include <dp/Config.h>
 
 namespace dp
 {
-  namespace util
-  {
-    typedef int (*UserAssertCallback)( const char * message );
+  typedef int (*UserAssertCallback)( const char * message );
     
-    DP_UTIL_API UserAssertCallback SetUserAssertCallback( UserAssertCallback callback );
-    DP_UTIL_API void AssertionFailed(const char * expr, const char * file, unsigned int line); 
-  }
+  DP_API UserAssertCallback setUserAssertCallback( UserAssertCallback callback );
+  DP_API void assertionFailed(const char * expr, const char * file, unsigned int line); 
 }
 
 #undef DP_ASSERT
 
 #if !defined(NDEBUG)
-// Mind the ", 0" after AssertionFailed() to get a boolean expression after the ||
-#define DP_ASSERT_IMPL(expr) (void)( (!!(expr)) || (dp::util::AssertionFailed(#expr, __FILE__, __LINE__), 0) );
+// Mind the ", 0" after assertionFailed() to get a boolean expression after the ||
+#define DP_ASSERT_IMPL(expr) (void)( (!!(expr)) || (dp::assertionFailed(#expr, __FILE__, __LINE__), 0) );
 #else
 #define DP_ASSERT_IMPL(expr)
 #endif

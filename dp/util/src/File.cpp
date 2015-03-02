@@ -26,10 +26,9 @@
 
 #include <cstring>
 #include <boost/filesystem.hpp>
-#include <dp/util/DPAssert.h>
+#include <dp/Assert.h>
 #include <dp/util/Config.h>
 #include <dp/util/File.h>
-#include <cstring>
 
 namespace dp
 {

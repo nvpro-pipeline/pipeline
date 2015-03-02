@@ -32,8 +32,8 @@
 #include <float.h>
 #include <limits>
 #include <string>
+#include <dp/Assert.h>
 #include <dp/math/Config.h>
-#include <dp/util/DPAssert.h>
 
 
 namespace dp

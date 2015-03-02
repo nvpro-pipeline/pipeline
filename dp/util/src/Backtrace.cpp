@@ -24,7 +24,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#include <dp/util/DPAssert.h>
+#include <dp/Assert.h>
 #include <dp/util/Backtrace.h>
 #include <map>
 #include <sstream>

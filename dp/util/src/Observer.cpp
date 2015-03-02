@@ -25,7 +25,6 @@
 
 
 #include <dp/util/Observer.h>
-#include <dp/util/DPAssert.h>
 
 #include <algorithm>
 

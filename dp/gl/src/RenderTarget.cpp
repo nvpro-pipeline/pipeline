@@ -24,9 +24,9 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+#include <dp/Assert.h>
 #include <dp/gl/RenderTarget.h>
 #include <dp/gl/RenderContext.h>
-#include <dp/util/DPAssert.h>
 
 namespace dp
 {

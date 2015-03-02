@@ -26,8 +26,8 @@
 
 #pragma once
 
+#include <dp/Assert.h>
 #include <dp/rix/core/RendererConfig.h>
-#include <dp/util/DPAssert.h>
 
 #include <boost/type_traits.hpp>
 

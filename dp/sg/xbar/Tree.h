@@ -26,9 +26,9 @@
 
 #pragma once
 
-#include <vector>
-#include <dp/util/DPAssert.h>
 #include <deque>
+#include <vector>
+#include <dp/Assert.h>
 
 namespace dp
 {

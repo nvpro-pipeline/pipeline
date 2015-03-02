@@ -28,7 +28,7 @@
 
 #include <vector>
 #include <map>
-
+#include <dp/Types.h>
 #include <dp/util/Config.h>
 #include <dp/util/SharedPtr.h>
 #include <dp/math/Vecnt.h>

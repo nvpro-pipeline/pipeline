@@ -24,7 +24,6 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#include <dp/util/DPAssert.h>
 #include <dp/util/Config.h>
 #include <dp/util/Tokenizer.h>
 

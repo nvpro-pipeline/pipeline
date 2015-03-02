@@ -25,8 +25,8 @@
 
 
 #include <test/testfw/core/MeasurementFunctorNVPM.h>
+#include <dp/Assert.h>
 #include <dp/util/File.h>
-#include <dp/util/DPAssert.h>
 #include <fstream>
 #include <iostream>
 
