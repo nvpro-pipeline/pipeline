@@ -46,9 +46,11 @@ namespace dp
         DP_GL_API ShareGroupSharedPtr getShareGroup() const;
         DP_GL_API void setGLId( GLuint id );
 
-      private:
+      protected:
         GLuint              m_id;           //!< OpenGL id
-        ShareGroupSharedPtr m_shareGroup;   //!< The share group holding this texture
+
+      private:
+        ShareGroupSharedPtr m_shareGroup;   //!< The share group holding this object
     };
 
   } // namespace gl

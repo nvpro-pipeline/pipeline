@@ -1924,9 +1924,12 @@ namespace dp
       return( std::shared_ptr<TextureBuffer>( new TextureBuffer( internalFormat, buffer ) ) );
     }
 
-    TextureBufferSharedPtr TextureBuffer::create( GLenum internalFormat, unsigned int size, GLvoid const* data, GLenum usage )
+    TextureBufferSharedPtr TextureBuffer::create(GLenum internalFormat, unsigned int size, GLvoid const* data, GLenum usage)
     {
-      return( std::shared_ptr<TextureBuffer>( new TextureBuffer( internalFormat, Buffer::create( GL_TEXTURE_BUFFER, size, data, usage ) ) ) );
+      dp::gl::BufferSharedPtr buffer = dp::gl::Buffer::create(dp::gl::Buffer::CORE, usage, GL_TEXTURE_BUFFER);
+      buffer->setSize(size);
+      buffer->update(data);
+      return( std::shared_ptr<TextureBuffer>(new TextureBuffer(internalFormat, buffer)));
     }
 
     TextureBuffer::TextureBuffer( GLenum internalFormat, BufferSharedPtr const& buffer )

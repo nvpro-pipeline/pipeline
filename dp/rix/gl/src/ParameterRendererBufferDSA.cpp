@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2013
+// Copyright NVIDIA Corporation 2013-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -33,8 +33,8 @@ namespace dp
     namespace gl
     {
 
-      ParameterRendererBufferDSA::ParameterRendererBufferDSA( ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::BufferSharedPtr const& ubo, GLenum target, size_t uboBinding, size_t uboOffset, GLsizeiptr uboBlockSize )
-        : ParameterRendererBuffer( parameterCacheEntries, ubo, target, uboBinding, uboOffset, uboBlockSize )
+      ParameterRendererBufferDSA::ParameterRendererBufferDSA(ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::BufferSharedPtr const& ubo, GLenum target, size_t uboBinding, size_t uboOffset, GLsizeiptr uboBlockSize)
+        : ParameterRendererBuffer(parameterCacheEntries, ubo, target, uboBinding, uboOffset, uboBlockSize)
       {
       }
 

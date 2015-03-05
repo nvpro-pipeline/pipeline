@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2014-2015
+// Copyright NVIDIA Corporation 2013-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -24,12 +24,8 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#pragma once
-
-#include <dp/rix/gl/inc/ParameterCacheStream.h>
-#include <dp/rix/gl/inc/ParameterRendererStreamBuffer.h>
-#include <dp/gl/BufferUpdater.h>
-#include <memory>
+#include <dp/rix/gl/inc/ParameterRendererPersistentBufferMappingUnifiedMemory.h>
+#include <dp/rix/gl/inc/BufferGL.h>
 
 namespace dp
 {
@@ -38,30 +34,37 @@ namespace dp
     namespace gl
     {
 
-      /************************************************************************/
-      /* ParameterRendererBufferAddressRange                                  */
-      /************************************************************************/
-
-      class ParameterRendererBufferAddressRange : public ParameterRendererStreamBuffer
+      ParameterRendererPersistentBufferMappingUnifiedMemory::ParameterRendererPersistentBufferMappingUnifiedMemory(ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::BufferSharedPtr const& ubo, GLenum target, size_t uboBinding, GLsizeiptr uboBlockSize)
+        : ParameterRendererStreamBuffer(parameterCacheEntries)
+        , m_ubo(ubo)
+        , m_uboBaseAddress(0)
+        , m_target(target)
+        , m_uboBinding(GLint(uboBinding))
+        , m_uboBlockSize(uboBlockSize)
       {
-      public:
-        ParameterRendererBufferAddressRange( ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::BufferSharedPtr const& ubo, GLenum target, size_t uboBinding, GLsizeiptr uboBlockSize );
+      }
 
-        virtual void activate();
+      void ParameterRendererPersistentBufferMappingUnifiedMemory::activate()
+      {
+        m_uboBaseAddress = m_ubo->getAddress();
+      }
 
-        virtual void render( void const* cache );
-        virtual void update( void* cache, void const* container );
-        virtual size_t getCacheSize() const;
+      void ParameterRendererPersistentBufferMappingUnifiedMemory::render(void const* cache)
+      { 
+        GLsizeiptr const offset = reinterpret_cast<GLintptr>(cache);
+        glBufferAddressRangeNV(m_target, m_uboBinding, m_uboBaseAddress + offset, m_uboBlockSize);
+      }
 
-      protected:
-        GLenum                                  m_target;
-        dp::gl::BufferSharedPtr                 m_buffer;
-        GLint                                   m_bindingIndex;
-        GLuint64                                m_baseAddress;
-        GLsizeiptr                              m_bindingLength;
-        std::unique_ptr<dp::Uint8[]>            m_cacheData;
-        std::unique_ptr<dp::gl::BufferUpdater>  m_bufferUpdater;
-      };
+      void ParameterRendererPersistentBufferMappingUnifiedMemory::update(void* cache, void const* container)
+      {
+        updateParameters(reinterpret_cast<char*>(m_ubo->getMappedAddress()) + size_t(cache), container);
+      }
+
+      size_t ParameterRendererPersistentBufferMappingUnifiedMemory::getCacheSize() const
+      {
+        // TODO determine alignment requirement of binding!
+        return (m_uboBlockSize + 255) & ~255;
+      }
 
     } // namespace gl
   } // namespace rix

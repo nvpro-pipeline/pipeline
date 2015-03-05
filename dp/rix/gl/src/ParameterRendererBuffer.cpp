@@ -33,20 +33,15 @@ namespace dp
     namespace gl
     {
 
-      ParameterRendererBuffer::ParameterRendererBuffer()
+      ParameterRendererBuffer::ParameterRendererBuffer(ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::BufferSharedPtr const& ubo, GLenum target, size_t uboBinding, size_t uboOffset, GLsizeiptr uboBlockSize)
+        : ParameterRendererStreamBuffer(parameterCacheEntries)
+        , m_ubo(ubo)
+        , m_target(target)
+        , m_uboBinding(GLint(uboBinding))
+        , m_uboOffset(GLsizeiptr(uboOffset))
+        , m_uboBlockSize(uboBlockSize)
+        , m_isBindlessUBOSupported(RIX_GL_USE_UNIFORM_BUFFER_UNIFIED_MEMORY && !!glewGetExtension("GL_NV_uniform_buffer_unified_memory"))
       {
-      }
-
-      ParameterRendererBuffer::ParameterRendererBuffer( ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::BufferSharedPtr const& ubo, GLenum target, size_t uboBinding, size_t uboOffset, GLsizeiptr uboBlockSize )
-        : m_parameters( parameterCacheEntries )
-        , m_ubo( ubo )
-        , m_target( target )
-        , m_uboBinding( GLint(uboBinding) )
-        , m_uboOffset( GLsizeiptr(uboOffset) )
-        , m_uboBlockSize( uboBlockSize )
-        , m_isBindlessUBOSupported(USE_UNIFORM_BUFFER_UNIFIED_MEMORY && !!glewGetExtension("GL_NV_uniform_buffer_unified_memory"))
-      {
-        DP_ASSERT( !m_parameters.empty() );
       }
 
       void ParameterRendererBuffer::activate()
@@ -63,24 +58,12 @@ namespace dp
 
       void ParameterRendererBuffer::render( void const* cache )
       { 
-        m_ubo->setSubData( m_target, m_uboOffset, m_uboBlockSize, cache );
+        m_ubo->update(cache, m_uboOffset, m_uboBlockSize);
       }
 
       void ParameterRendererBuffer::update( void* cache, void const* container )
       {
-        // TODO ensure that update is called only on non-empty containers
-        size_t numParameters = m_parameters.size();
-        if ( numParameters )
-        {
-          ParameterCacheEntryStreamBufferSharedPtr const* parameterObjects = &m_parameters[0];
-          ParameterCacheEntryStreamBufferSharedPtr const* const parameterObjectsEnd = parameterObjects + numParameters;
-
-          for( ParameterCacheEntryStreamBufferSharedPtr const* parameterObject = parameterObjects; parameterObject != parameterObjectsEnd
-            ; ++parameterObject )
-          {
-            (*parameterObject)->update( cache, container );
-          }
-        }
+        updateParameters(cache, container);
       }
 
       size_t ParameterRendererBuffer::getCacheSize( ) const

@@ -55,7 +55,6 @@ namespace dp
 
         virtual void render( void const* cache ) = 0;
         virtual void update( void* cache, void const* container ) = 0;
-
       };
 
     } // namespace gl

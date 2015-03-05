@@ -54,14 +54,14 @@ namespace dp
         {
           // TODO ensure that render is called only on non-empty containers
           size_t numParameters = m_numParameterObjects;
-          ParameterCacheEntryStreamSharedPtr const* parameterObjects = &m_parameters[0];
-          ParameterCacheEntryStreamSharedPtr const* const parameterObjectsEnd = parameterObjects + numParameters;
+          ParameterCacheEntryStreamSharedPtr const* parameterObject = m_parameters.data();
+          ParameterCacheEntryStreamSharedPtr const* const parameterObjectEnd = parameterObject + numParameters;
 
-          for( ParameterCacheEntryStreamSharedPtr const* parameterObject = parameterObjects; parameterObject != parameterObjectsEnd
-            ; ++parameterObject )
+          do 
           {
             (*parameterObject)->render( cache );
-          }
+            ++parameterObject;
+          } while (parameterObject != parameterObjectEnd);
         }
       }
 
@@ -70,15 +70,13 @@ namespace dp
         // TODO ensure that update is called only on non-empty containers
         if ( m_parameters.size() )
         {
-          size_t numParameters = m_numParameterObjects;
-          ParameterCacheEntryStreamSharedPtr const* parameterObjects = &m_parameters[0];
-          ParameterCacheEntryStreamSharedPtr const* const parameterObjectsEnd = parameterObjects + numParameters;
-
-          for( ParameterCacheEntryStreamSharedPtr const* parameterObject = parameterObjects; parameterObject != parameterObjectsEnd
-            ; ++parameterObject )
+          ParameterCacheEntryStreamSharedPtr const* parameterObject = m_parameters.data();
+          ParameterCacheEntryStreamSharedPtr const* const parameterObjectEnd = parameterObject + m_parameters.size();
+          do 
           {
-            (*parameterObject)->update( cache, container );
-          }
+            (*parameterObject)->update(cache, container);
+            ++parameterObject;
+          } while (parameterObject != parameterObjectEnd);
         }
       }
 

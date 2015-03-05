@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2014-2015
+// Copyright NVIDIA Corporation 2013-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -39,13 +39,13 @@ namespace dp
     {
 
       /************************************************************************/
-      /* ParameterRendererBufferAddressRange                                  */
+      /* ParameterRendererPersistentBufferMappingUnifiedMemory                                         */
       /************************************************************************/
-
-      class ParameterRendererBufferAddressRange : public ParameterRendererStreamBuffer
+      
+      class ParameterRendererPersistentBufferMappingUnifiedMemory : public ParameterRendererStreamBuffer
       {
       public:
-        ParameterRendererBufferAddressRange( ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::BufferSharedPtr const& ubo, GLenum target, size_t uboBinding, GLsizeiptr uboBlockSize );
+        ParameterRendererPersistentBufferMappingUnifiedMemory(ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::BufferSharedPtr const& ubo, GLenum target, size_t uboBinding, GLsizeiptr uboBlockSize);
 
         virtual void activate();
 
@@ -54,13 +54,11 @@ namespace dp
         virtual size_t getCacheSize() const;
 
       protected:
-        GLenum                                  m_target;
-        dp::gl::BufferSharedPtr                 m_buffer;
-        GLint                                   m_bindingIndex;
-        GLuint64                                m_baseAddress;
-        GLsizeiptr                              m_bindingLength;
-        std::unique_ptr<dp::Uint8[]>            m_cacheData;
-        std::unique_ptr<dp::gl::BufferUpdater>  m_bufferUpdater;
+        GLenum                                 m_target;
+        dp::gl::BufferSharedPtr                m_ubo;
+        GLuint64                               m_uboBaseAddress;
+        GLint                                  m_uboBinding;
+        GLsizeiptr                             m_uboBlockSize;
       };
 
     } // namespace gl

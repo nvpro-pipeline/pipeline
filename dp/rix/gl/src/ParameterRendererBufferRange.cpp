@@ -34,12 +34,8 @@ namespace dp
     namespace gl
     {
 
-      ParameterRendererBufferRange::ParameterRendererBufferRange()
-      {
-      }
-
-      ParameterRendererBufferRange::ParameterRendererBufferRange( ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::BufferSharedPtr const& ubo, GLenum target, size_t uboBinding, GLsizeiptr uboBlockSize )
-        : m_parameters( parameterCacheEntries )
+      ParameterRendererBufferRange::ParameterRendererBufferRange(ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::BufferSharedPtr const& ubo, GLenum target, size_t uboBinding, GLsizeiptr uboBlockSize)
+        : ParameterRendererStreamBuffer( parameterCacheEntries )
         , m_ubo( ubo->getGLId() )
         , m_target( target )
         , m_uboBinding( GLint(uboBinding) )
@@ -47,7 +43,6 @@ namespace dp
         , m_cacheData( new dp::Uint8[uboBlockSize] )
         , m_bufferUpdater(new dp::gl::BufferUpdater(ubo))
       {
-        DP_ASSERT( !m_parameters.empty() );
       }
 
       void ParameterRendererBufferRange::activate()
@@ -63,23 +58,7 @@ namespace dp
 
       void ParameterRendererBufferRange::update( void* cache, void const* container )
       {
-        // TODO cache is offset to m_ubo
-        // keep temporary std::vector for data
-        // TODO ensure that update is called only on non-empty containers
-        size_t numParameters = m_parameters.size();
-        if ( numParameters )
-        {
-          ParameterCacheEntryStreamBufferSharedPtr const* parameterObjects = &m_parameters[0];
-          ParameterCacheEntryStreamBufferSharedPtr const* const parameterObjectsEnd = parameterObjects + numParameters;
-
-          for( ParameterCacheEntryStreamBufferSharedPtr const* parameterObject = parameterObjects; parameterObject != parameterObjectsEnd
-            ; ++parameterObject )
-          {
-            (*parameterObject)->update( m_cacheData.get(), container );
-          }
-        }
-        
-
+        updateParameters(m_cacheData.get(), container);
         m_bufferUpdater->update(reinterpret_cast<size_t>(cache), m_uboBlockSize, m_cacheData.get());
       }
 

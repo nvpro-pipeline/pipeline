@@ -58,7 +58,7 @@ namespace dp
           m_stateFlags |= STATE_CAPABILITY_COPY;
         }
 
-        m_buffer = dp::gl::Buffer::create();
+        m_buffer = dp::gl::Buffer::create(dp::gl::Buffer::CORE, m_usage);
       }
 
     #if 0
@@ -72,46 +72,6 @@ namespace dp
       {
       }
 
-      static inline GLvoid* BufferGLMapRange( dp::gl::BufferSharedPtr const& buffer, unsigned int stateFlags, core::Buffer::MapMode mapMode, size_t offset, size_t size )
-      {
-        DP_ASSERT( mapMode != core::Buffer::MAP_NONE );
-        DP_ASSERT( buffer && buffer->getGLId() );
-
-        DP_STATIC_ASSERT( core::Buffer::MAP_READ == GL_MAP_READ_BIT );
-        DP_STATIC_ASSERT( core::Buffer::MAP_WRITE == GL_MAP_WRITE_BIT );
-
-        if ( (stateFlags & BufferGL::STATE_CAPABILITY_RANGEANDCOPY) == BufferGL::STATE_CAPABILITY_RANGEANDCOPY )
-        {
-          return( buffer->mapRange( GL_COPY_READ_BUFFER, offset, size, mapMode ) );
-        }
-        else if ( stateFlags & BufferGL::STATE_CAPABILITY_RANGE )
-        {
-          return( buffer->mapRange( GL_ARRAY_BUFFER, offset, size, mapMode ) );
-        }
-        else
-        {
-          GLenum access;
-          switch (mapMode)
-          {
-          case core::Buffer::MAP_READ:
-            access = GL_READ_ONLY;
-            break;
-          case core::Buffer::MAP_WRITE:
-            access = GL_WRITE_ONLY;
-            break;
-          case core::Buffer::MAP_READWRITE:
-            access = GL_READ_WRITE;
-            break;
-          case core::Buffer::MAP_NONE:
-          default:
-            return 0;
-          }
-
-          char *mappedbytes = reinterpret_cast<char*>(buffer->map( GL_ARRAY_BUFFER, access ));
-          return reinterpret_cast<void*>( mappedbytes + offset );
-        }
-      }
-
       void *BufferGL::map( MapMode mapMode, size_t offset, size_t size)
       {
         DP_ASSERT( m_mapMode == MAP_NONE );
@@ -120,7 +80,25 @@ namespace dp
 
         m_mapMode = mapMode;
 
-        return BufferGLMapRange( m_buffer, m_stateFlags, mapMode, offset, size );
+        GLbitfield access;
+        switch (mapMode)
+        {
+        case core::Buffer::MAP_READ:
+          access |= GL_MAP_READ_BIT;
+          break;
+        case core::Buffer::MAP_WRITE:
+          access |= GL_MAP_WRITE_BIT;
+            break;
+        case core::Buffer::MAP_READWRITE:
+          access = GL_MAP_READ_BIT | GL_MAP_WRITE_BIT;
+          break;
+        case core::Buffer::MAP_NONE:
+        default:
+          return nullptr;
+        }
+
+
+        return m_buffer->map(access, offset, size );
       }
 
       const void *BufferGL::mapRead( size_t offset, size_t size ) const
@@ -131,7 +109,7 @@ namespace dp
 
         m_mapMode = MAP_READ;
 
-        return BufferGLMapRange( m_buffer, m_stateFlags, MAP_READ, offset, size );
+        return m_buffer->map(GL_MAP_READ_BIT, offset, size);
       }
 
       void BufferGL::unmap( )
@@ -141,14 +119,14 @@ namespace dp
           notify( Event( this ) );
         }
 
-        m_buffer->unmap( GL_ARRAY_BUFFER );
+        m_buffer->unmap();
         m_mapMode = MAP_NONE;
       }
 
       void BufferGL::unmapRead( ) const
       {
-        DP_ASSERT( m_mapMode == MAP_READ );
-        DP_VERIFY( m_buffer->unmap( GL_ARRAY_BUFFER ) );
+        DP_ASSERT(m_mapMode == MAP_READ);
+        DP_VERIFY(m_buffer->unmap());
         m_mapMode = MAP_NONE;
       }
 
@@ -192,10 +170,7 @@ namespace dp
         DP_ASSERT( m_stateFlags & STATE_MANAGED );
         DP_ASSERT( m_mapMode == MAP_NONE );
 
-        if ( size != m_buffer->getSize() )
-        {
-          m_buffer->setData( GL_ARRAY_BUFFER, size, 0, m_usage );
-        }
+        m_buffer->setSize(size);
       }
 
       dp::gl::BufferSharedPtr const& BufferGL::getBuffer() const

@@ -27,7 +27,7 @@
 #pragma once
 
 #include <dp/rix/gl/inc/ParameterCacheStream.h>
-#include <dp/rix/gl/inc/ParameterRendererStream.h>
+#include <dp/rix/gl/inc/ParameterRendererStreamBuffer.h>
 #include <dp/gl/BufferUpdater.h>
 #include <memory>
 
@@ -42,11 +42,10 @@ namespace dp
       /* ParameterRendererBufferRange                                         */
       /************************************************************************/
       
-      class ParameterRendererBufferRange : public ParameterRendererStream
+      class ParameterRendererBufferRange : public ParameterRendererStreamBuffer
       {
       public:
-        ParameterRendererBufferRange();
-        ParameterRendererBufferRange( ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::BufferSharedPtr const& ubo, GLenum target, size_t uboBinding, GLsizeiptr uboBlockSize );
+        ParameterRendererBufferRange(ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::BufferSharedPtr const& ubo, GLenum target, size_t uboBinding, GLsizeiptr uboBlockSize);
 
         virtual void activate();
 
