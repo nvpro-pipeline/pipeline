@@ -34,21 +34,16 @@ namespace dp
     namespace gl
     {
 
-      ParameterRendererBufferAddressRange::ParameterRendererBufferAddressRange()
-      {
-      }
-
-      ParameterRendererBufferAddressRange::ParameterRendererBufferAddressRange( ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::BufferSharedPtr const& buffer, GLenum target, size_t bindingIndex, GLsizeiptr bindingLength )
-        : m_parameters( parameterCacheEntries )
-        , m_buffer( buffer )
-        , m_target( target )
-        , m_bindingIndex( GLint(bindingIndex) )
-        , m_baseAddress( 0 )
-        , m_bindingLength( bindingLength )
-        , m_cacheData( new dp::Uint8[m_bindingLength] )
+      ParameterRendererBufferAddressRange::ParameterRendererBufferAddressRange(ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::BufferSharedPtr const& buffer, GLenum target, size_t bindingIndex, GLsizeiptr bindingLength)
+        : ParameterRendererStreamBuffer(parameterCacheEntries)
+        , m_buffer(buffer)
+        , m_target(target)
+        , m_bindingIndex(GLint(bindingIndex))
+        , m_baseAddress(0)
+        , m_bindingLength(bindingLength)
+        , m_cacheData(new dp::Uint8[m_bindingLength])
         , m_bufferUpdater(new dp::gl::BufferUpdater(buffer))
       {
-        DP_ASSERT( !m_parameters.empty() );
       }
 
       void ParameterRendererBufferAddressRange::activate()
@@ -66,23 +61,8 @@ namespace dp
 
       void ParameterRendererBufferAddressRange::update( void* cache, void const* container )
       {
-        // TODO cache is offset to m_ubo
-        // keep temporary std::vector for data
-        // TODO ensure that update is called only on non-empty containers
-        size_t numParameters = m_parameters.size();
-        if ( numParameters )
-        {
-          ParameterCacheEntryStreamBufferSharedPtr const* parameterObject = m_parameters.data();
-          ParameterCacheEntryStreamBufferSharedPtr const* const parameterObjectEnd = parameterObject + numParameters;
-
-          do
-          {
-            (*parameterObject)->update( m_cacheData.get(), container );
-          } while (++parameterObject != parameterObjectEnd);
-
-          m_bufferUpdater->update(reinterpret_cast<size_t>(cache), m_bindingLength, m_cacheData.get());
-        }
-        
+        updateParameters(m_cacheData.get(), container);
+        m_bufferUpdater->update(reinterpret_cast<size_t>(cache), m_bindingLength, m_cacheData.get());
       }
 
       size_t ParameterRendererBufferAddressRange::getCacheSize( ) const

@@ -27,7 +27,7 @@
 #pragma once
 
 #include <dp/rix/gl/inc/ParameterCacheStream.h>
-#include <dp/rix/gl/inc/ParameterRendererStream.h>
+#include <dp/rix/gl/inc/ParameterRendererStreamBuffer.h>
 
 namespace dp
 {
@@ -40,11 +40,10 @@ namespace dp
       /* ParameterRendererBuffer                                              */
       /************************************************************************/
 
-      class ParameterRendererBuffer : public ParameterRendererStream
+      class ParameterRendererBuffer : public ParameterRendererStreamBuffer
       {
       public:
-        ParameterRendererBuffer();
-        ParameterRendererBuffer( ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::BufferSharedPtr const& ubo, GLenum target, size_t uboBinding, size_t uboOffset, GLsizeiptr uboBlockSize );
+        ParameterRendererBuffer(ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::BufferSharedPtr const& ubo, GLenum target, size_t uboBinding, size_t uboOffset, GLsizeiptr uboBlockSize);
 
         virtual void activate();
 
@@ -53,7 +52,6 @@ namespace dp
         virtual size_t getCacheSize() const;
 
       protected:
-        ParameterCacheEntryStreamBuffers m_parameters;
         dp::gl::BufferSharedPtr          m_ubo;
         GLenum                           m_target;
         GLint                            m_uboBinding;

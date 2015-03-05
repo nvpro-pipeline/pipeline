@@ -220,7 +220,8 @@ namespace dp
 
         UniformBlock uniformBlock;
         uniformBlock.bufferBinding = values[1];
-        uniformBlock.buffer = Buffer::create( GL_UNIFORM_BUFFER, values[2], nullptr, GL_DYNAMIC_DRAW );
+        uniformBlock.buffer = Buffer::create(Buffer::CORE, GL_DYNAMIC_DRAW, GL_UNIFORM_BUFFER);
+        uniformBlock.buffer->setSize(values[2]);
 
         m_uniformBlocks.push_back( uniformBlock );
         m_uniformBlocksMap[name.data()] = i;

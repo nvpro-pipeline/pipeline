@@ -433,6 +433,22 @@ namespace dp
         }
       }
 
+      inline GLbitfield getGLAccessBitField( dp::rix::core::AccessType access )
+      {
+        switch ( access )
+        {
+        case dp::rix::core::AT_READ_ONLY:
+          return GL_MAP_READ_BIT;
+        case dp::rix::core::AT_WRITE_ONLY:
+          return GL_MAP_WRITE_BIT;
+        case dp::rix::core::AT_READ_WRITE:
+          return GL_MAP_READ_BIT | GL_MAP_WRITE_BIT;
+        default:
+          DP_ASSERT( !"Unexpected RiX AccessType" );
+          return 0;
+        }
+      }
+
       
       inline GLenum getGLProgramDomain( dp::rix::core::ShaderType shaderType )
       {

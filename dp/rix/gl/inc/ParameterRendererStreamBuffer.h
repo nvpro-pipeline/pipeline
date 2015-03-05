@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2014-2015
+// Copyright NVIDIA Corporation 2013
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -26,10 +26,7 @@
 
 #pragma once
 
-#include <dp/rix/gl/inc/ParameterCacheStream.h>
-#include <dp/rix/gl/inc/ParameterRendererStreamBuffer.h>
-#include <dp/gl/BufferUpdater.h>
-#include <memory>
+#include <dp/rix/gl/inc/ParameterRenderer.h>
 
 namespace dp
 {
@@ -38,30 +35,33 @@ namespace dp
     namespace gl
     {
 
-      /************************************************************************/
-      /* ParameterRendererBufferAddressRange                                  */
-      /************************************************************************/
-
-      class ParameterRendererBufferAddressRange : public ParameterRendererStreamBuffer
+      class ParameterRendererStreamBuffer : public ParameterRendererStream
       {
       public:
-        ParameterRendererBufferAddressRange( ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::BufferSharedPtr const& ubo, GLenum target, size_t uboBinding, GLsizeiptr uboBlockSize );
-
-        virtual void activate();
-
-        virtual void render( void const* cache );
-        virtual void update( void* cache, void const* container );
-        virtual size_t getCacheSize() const;
+        ParameterRendererStreamBuffer(ParameterCacheEntryStreamBuffers const& parameterCacheEntries)
+          : m_parameters(parameterCacheEntries)
+        {
+          DP_ASSERT( !m_parameters.empty() );
+        }
 
       protected:
-        GLenum                                  m_target;
-        dp::gl::BufferSharedPtr                 m_buffer;
-        GLint                                   m_bindingIndex;
-        GLuint64                                m_baseAddress;
-        GLsizeiptr                              m_bindingLength;
-        std::unique_ptr<dp::Uint8[]>            m_cacheData;
-        std::unique_ptr<dp::gl::BufferUpdater>  m_bufferUpdater;
+        void updateParameters(void* cache, void const* container);
+
+      private:
+        ParameterCacheEntryStreamBuffers       m_parameters;
       };
+
+      inline void ParameterRendererStreamBuffer::updateParameters(void* basePtr, void const* container)
+      {
+        ParameterCacheEntryStreamBufferSharedPtr const* parameterObject = m_parameters.data();
+        ParameterCacheEntryStreamBufferSharedPtr const* const parameterObjectEnd = parameterObject + m_parameters.size();
+        // there's at least one parameter in the list, assert in constructor.
+        do 
+        {
+          (*parameterObject)->update(basePtr , container);
+          ++parameterObject;
+        } while (parameterObject != parameterObjectEnd);
+      }
 
     } // namespace gl
   } // namespace rix

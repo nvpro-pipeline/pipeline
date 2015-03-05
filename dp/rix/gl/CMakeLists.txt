@@ -33,6 +33,8 @@ set( SOURCES
   src/ParameterRendererBufferAddressRange.cpp
   src/ParameterRendererBufferDSA.cpp
   src/ParameterRendererBufferRange.cpp
+  src/ParameterRendererPersistentBufferMapping.cpp
+  src/ParameterRendererPersistentBufferMappingUnifiedMemory.cpp
   src/ParameterRendererUniform.cpp
   src/ProgramGL.cpp
   src/ProgramParameterBuffer.cpp
@@ -85,7 +87,10 @@ set(HEADERS
   inc/ParameterRendererBufferAddressRange.h
   inc/ParameterRendererBufferDSA.h
   inc/ParameterRendererBufferRange.h
+  inc/ParameterRendererPersistentBufferMapping.h
+  inc/ParameterRendererPersistentBufferMappingUnifiedMemory.h
   inc/ParameterRendererStream.h
+  inc/ParameterRendererStreamBuffer.h
   inc/ParameterRendererUniform.h
   inc/ProgramParameterBuffer.h
   inc/ProgramParameterCache.h

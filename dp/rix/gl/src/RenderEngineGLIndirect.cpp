@@ -144,7 +144,7 @@ namespace dp
         pointer.m_range = buffer->getSize();
         entry.m_indexPointers.push_back( pointer );
 #else
-        dp::gl::MappedBuffer<unsigned int> indices( entry.m_indexBuffer, GL_ELEMENT_ARRAY_BUFFER, GL_READ_ONLY );
+        dp::gl::MappedBuffer<unsigned int> indices( entry.m_indexBuffer, GL_MAP_READ_BIT );
 
         unsigned int first = 0;
         unsigned int current = 0;

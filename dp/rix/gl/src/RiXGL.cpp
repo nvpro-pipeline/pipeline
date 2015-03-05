@@ -644,6 +644,7 @@ namespace dp
           {
             // the interface of the debugprocarb changed in OpenGL 4.5. Use a cast to make it work in all cases.
             glDebugMessageCallbackARB( reinterpret_cast<GLDEBUGPROCARB>(debugMessageCallback), nullptr );
+            glEnable(GL_DEBUG_OUTPUT);
           }
 #endif
 

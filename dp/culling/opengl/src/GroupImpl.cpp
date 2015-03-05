@@ -80,13 +80,13 @@ namespace dp
         {
           if ( ! m_inputBuffer )
           {
-            m_inputBuffer = dp::gl::Buffer::create();
+            m_inputBuffer = dp::gl::Buffer::create(dp::gl::Buffer::CORE, GL_STATIC_DRAW, GL_SHADER_STORAGE_BUFFER);
           }
 
           size_t const numberOfObjects = getObjectCount();
           size_t const numberOfWorkingGroups = (numberOfObjects + workgroupSize - 1) / workgroupSize;
-          m_inputBuffer->setData( GL_SHADER_STORAGE_BUFFER, numberOfWorkingGroups * workgroupSize * sizeof(ShaderObject), nullptr, GL_STATIC_DRAW );
-          dp::gl::MappedBuffer<ShaderObject> inputs( m_inputBuffer, GL_SHADER_STORAGE_BUFFER, GL_WRITE_ONLY );
+          m_inputBuffer->setSize(numberOfWorkingGroups * workgroupSize * sizeof(ShaderObject));
+          dp::gl::MappedBuffer<ShaderObject> inputs(m_inputBuffer, GL_MAP_WRITE_BIT);
           DP_ASSERT( inputs );
 
           // generate list of objects to cull from shader
@@ -126,10 +126,10 @@ namespace dp
 
           if ( ! m_outputBuffer )
           {
-            m_outputBuffer = dp::gl::Buffer::create();
+            m_outputBuffer = dp::gl::Buffer::create(dp::gl::Buffer::CORE, GL_STATIC_DRAW, GL_SHADER_STORAGE_BUFFER);
           }
 
-          m_outputBuffer->setData( GL_SHADER_STORAGE_BUFFER, m_outputBufferSize, nullptr, GL_STATIC_DRAW );
+          m_outputBuffer->setSize(m_outputBufferSize);
         }
       }
 
@@ -140,12 +140,12 @@ namespace dp
         {
           if ( ! m_matricesBuffer )
           {
-            m_matricesBuffer = dp::gl::Buffer::create();
+            m_matricesBuffer = dp::gl::Buffer::create(dp::gl::Buffer::CORE, GL_STATIC_DRAW, GL_SHADER_STORAGE_BUFFER);
           }
 
           // copy over matrices
-          m_matricesBuffer->setData( GL_SHADER_STORAGE_BUFFER, getMatricesCount() * sizeof( dp::math::Mat44f ), nullptr, GL_STATIC_DRAW );
-          dp::gl::MappedBuffer<dp::math::Mat44f> matrices( m_matricesBuffer, GL_SHADER_STORAGE_BUFFER, GL_WRITE_ONLY );
+          m_matricesBuffer->setSize(getMatricesCount() * sizeof( dp::math::Mat44f ));
+          dp::gl::MappedBuffer<dp::math::Mat44f> matrices( m_matricesBuffer, GL_MAP_WRITE_BIT );
           char const* basePtr = reinterpret_cast<char const*>(getMatrices());
           for ( size_t index = 0; index < getMatricesCount(); ++index )
           {

@@ -67,8 +67,8 @@ namespace dp
     BufferUpdater::BufferUpdater(dp::gl::BufferSharedPtr const& buffer)
       : m_buffer(buffer)
     {
-      m_bufferData = dp::gl::Buffer::create(GL_SHADER_STORAGE_BUFFER, 0, NULL, GL_STREAM_DRAW);
-      m_bufferChunkOffsets = dp::gl::Buffer::create(GL_SHADER_STORAGE_BUFFER, 0, NULL, GL_STREAM_DRAW);
+      m_bufferData = dp::gl::Buffer::create(dp::gl::Buffer::CORE, GL_STREAM_DRAW, GL_SHADER_STORAGE_BUFFER);
+      m_bufferChunkOffsets = dp::gl::Buffer::create(dp::gl::Buffer::CORE, GL_STREAM_DRAW, GL_SHADER_STORAGE_BUFFER);
       m_programUpdate = dp::gl::Program::create(dp::gl::ComputeShader::create(shader));
     }
 
@@ -119,8 +119,11 @@ namespace dp
           info.offsets[index] /= 16;
         }
 
-        m_bufferData->setData(GL_SHADER_STORAGE_BUFFER, info.data.size(), info.data.data(), GL_DYNAMIC_DRAW);
-        m_bufferChunkOffsets->setData(GL_SHADER_STORAGE_BUFFER, info.offsets.size() * 4, info.offsets.data(), GL_DYNAMIC_DRAW);
+        m_bufferData->setSize(info.data.size());
+        m_bufferData->update(info.data.data());
+
+        m_bufferChunkOffsets->setSize(info.offsets.size() * 4);
+        m_bufferChunkOffsets->update(info.offsets.data());
 
         m_programUpdate->setUniform("chunkSize", static_cast<int>(it->first / 16));
         m_programUpdate->setUniform("numChunks", static_cast<int>(info.offsets.size()));

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010
+// Copyright NVIDIA Corporation 2010-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -33,30 +33,149 @@ namespace dp
 {
   namespace gl
   {
+    /** \brief Buffer is a class around the OpenGL buffer object.
+               It tries to utilize DSA for operations if possible. If DSA
+               is not available it'll use a configurable standard-target for
+               all operations. The target can be changed after any call in this class
+
+               setSize() is also supported for immutable buffers. In this case setSize()
+               will destroy the current buffer and create a new one.
+    **/
     class Buffer : public Object
     {
       public:
-        DP_GL_API static BufferSharedPtr create();
-        DP_GL_API static BufferSharedPtr create( GLenum target, size_t size, GLvoid const* data, GLenum usage );
+        enum Mode_Core {CORE};
+        enum Mode_Persistent_Buffer {PERSISTENT_BUFFER};
+
+        /** \brief Create a new standard OpenGL buffer
+            \param mode         Must be CORE
+            \param usage        Usage flags passed to glBufferData
+            \param defaultTaget Target used for operations if DSA is not available
+        **/
+        DP_GL_API static BufferSharedPtr create(Mode_Core, GLenum usage, GLenum defaultTarget = GL_UNIFORM_BUFFER);
+
+        /** \brief Create a new OpenGL buffer
+            \param mode Must be PERSISTENT_BUFFER creates an immutable buffer.
+            \param mode GLbitfield from OpenGL (GL_MAP_WRITE_BIT, GL_MAP_READ_BIT, ...)
+        **/
+        DP_GL_API static BufferSharedPtr create(Mode_Persistent_Buffer, GLbitfield modeBits);
         DP_GL_API virtual ~Buffer();
 
       public:
-        DP_GL_API GLuint64EXT getAddress();
-        DP_GL_API size_t getSize() const;
-        DP_GL_API void setData( GLenum target, size_t size, GLvoid const* data, GLenum usage );
-        DP_GL_API void setSubData( GLenum target, size_t offset, size_t size, GLvoid const* data );
-        DP_GL_API void* map( GLenum target, GLenum access );
-        DP_GL_API void* mapRange( GLenum target, GLintptr offset, GLsizeiptr length, GLbitfield access );
-        DP_GL_API GLboolean unmap( GLenum target );
+        /** \brief Update the content of the buffer. 
+            \param data The data to put into this buffer
+            \param offset The offset where to put the data into this buffer
+            \param length The number of bytes to update. If size is ~0 this function will update
+                   (getSize() - offset) bytes.
+        **/
+        DP_GL_API virtual void update(void const *data, size_t offset = 0, size_t length = ~0) = 0;
+
+        /** \brief Map a subrange of the buffer on the host.
+            \param access The access bits when mapping the buffer.
+            \param offset The first byte of the buffer to map
+            \param length The number of bytes of the buffer to map. If the length is ~0 
+                   (getSize() - offset) bytes will be mapped.
+        **/
+        DP_GL_API virtual void* map(GLbitfield access, size_t offset = 0, size_t length = ~0) = 0;
+
+        /** \brief Remove the buffer mapping from the host
+        **/
+        DP_GL_API virtual GLboolean unmap() = 0;
+
+        /** \brief Get the currently mapped address of the buffer.
+            \return The currently mapped address of the buffer. If the buffer is not 
+                    mapped a std::runtime error will be thrown.
+        **/
+        void* getMappedAddress() const;
+
+        /** \brief Query if the buffer is currently mapped on the host side
+            \return true if the buffer is currently mapped on the host side
+        **/
+        bool isMapped() const;
+
+        /** \brief Set the new size of the buffer.
+            \param size The new size of the buffer.
+            If the buffer is a CORE buffer all data is lost and the buffer id is the same.
+            If the buffer is a PERSISTENT_BUFFER all data is lost and the buffer id will change.
+        **/
+        DP_GL_API virtual void setSize(size_t size) = 0;
+
+        /** \brief Invalidate the content of the buffer.
+        **/
+        DP_GL_API virtual void invalidate() = 0;
+
+        /** \brief Get the current size of the buffer.
+            \return The current size of the buffer.
+        **/
+        size_t getSize() const;
+
+        // unified memory
+
+        /** \brief Make the buffer resident on the current context. If the buffer is already resident
+                   in any context a std::runtime error will be thrown.
+        **/
+        DP_GL_API virtual void makeResident() = 0;
+
+        /** \brief Make the buffer non-resident. This function does not check if the buffer is
+                   resident in the current context, thus it is not valid to call makeNonResident
+                   in another context than makeResident. If the buffer is not resident in any
+                   context a std::runtime error will be thrown.
+        **/
+        DP_GL_API virtual void makeNonResident() = 0;
+
+        /** \brief Get the GPU address of the buffer. If the buffer is not resident 
+                   \sa Buffer::makeResident() will be called.
+                   \return The current GPU address
+        **/
+        GLuint64EXT getAddress();
+
+        /** \brief Check if the buffer is resident on the GPU
+            \return true if the buffer buffer is resident on the GPU.
+        **/
+        bool        isResident() const;
 
       protected:
         DP_GL_API Buffer();
 
-      private:
-        GLuint64EXT m_address; // 64-bit bindless address
-        size_t      m_size;
+      protected:
+        mutable GLuint64EXT m_address; // 64-bit bindless address
+        size_t              m_size;
+        void*               m_mappedAddress;
     };
 
+    inline size_t Buffer::getSize() const
+    {
+      return m_size;
+    }
+
+
+    inline void* Buffer::getMappedAddress() const
+    {
+      if (!m_mappedAddress) {
+        throw std::runtime_error("buffer is not mapped");
+      }
+      return m_mappedAddress;
+    }
+
+    inline bool Buffer::isMapped() const
+    {
+      return !!m_mappedAddress;
+    }
+
+    inline GLuint64EXT Buffer::getAddress()
+    {
+      if (!m_address)
+      {
+        makeResident();
+      }
+      DP_ASSERT(m_address);
+      return m_address;
+    }
+
+    inline bool Buffer::isResident() const
+    {
+      return !!m_address;
+    }
 
     DP_GL_API void bind( GLenum target, BufferSharedPtr const& buffer );
     DP_GL_API void copy( BufferSharedPtr const& src, BufferSharedPtr const& dst, size_t srcOffset, size_t dstOffset, size_t size );
@@ -66,7 +185,7 @@ namespace dp
     class MappedBuffer
     {
       public:
-        MappedBuffer( BufferSharedPtr const& buffer, GLenum target, GLenum access );
+        MappedBuffer( BufferSharedPtr const& buffer, GLbitfield access );
         ~MappedBuffer();
 
       public:
@@ -74,23 +193,21 @@ namespace dp
 
       private:
         BufferSharedPtr   m_buffer;
-        GLenum            m_target;
         T               * m_ptr;
     };
 
 
     template <typename T>
-    inline MappedBuffer<T>::MappedBuffer( BufferSharedPtr const& buffer, GLenum target, GLenum access )
+    inline MappedBuffer<T>::MappedBuffer( BufferSharedPtr const& buffer, GLbitfield access )
       : m_buffer( buffer )
-      , m_target( target )
     {
-      m_ptr = reinterpret_cast<T*>(m_buffer->map( m_target, access ));
+      m_ptr = reinterpret_cast<T*>(m_buffer->map(access));
     }
 
     template <typename T>
     inline MappedBuffer<T>::~MappedBuffer()
     {
-      DP_VERIFY( m_buffer->unmap( m_target ) );
+      DP_VERIFY(m_buffer->unmap());
     }
 
     template <typename T>

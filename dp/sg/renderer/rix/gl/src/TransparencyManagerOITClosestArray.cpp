@@ -110,7 +110,9 @@ namespace dp
             {
               // create the VBO for the full screen quad
               GLfloat fullScreenQuadVertices[8] = { -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f };
-              m_fullScreenQuad = dp::gl::Buffer::create( GL_ARRAY_BUFFER, 8 * sizeof(GLfloat), fullScreenQuadVertices, GL_STATIC_DRAW );
+              m_fullScreenQuad = dp::gl::Buffer::create(dp::gl::Buffer::CORE, GL_STATIC_DRAW, GL_ARRAY_BUFFER);
+              m_fullScreenQuad->setSize(8 * sizeof(GLfloat));
+              m_fullScreenQuad->update(fullScreenQuadVertices);
 
               dp::gl::VertexShaderSharedPtr vertexShader = dp::gl::VertexShader::create( dp::util::loadStringFromFile( dp::home() + "/media/dpfx/passThroughPosition_vs.glsl" ) );
               dp::gl::FragmentShaderSharedPtr fragmentShader = dp::gl::FragmentShader::create( dp::util::loadStringFromFile( dp::home() + "/media/dpfx/oitClosestArrayClear_fs.glsl" ) );

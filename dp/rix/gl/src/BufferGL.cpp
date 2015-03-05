@@ -79,7 +79,7 @@ namespace dp
         // That means to generate one here. Ownership automatically belongs to this BufferGL then. 
         if ( !m_buffer )
         {
-          m_buffer = dp::gl::Buffer::create();
+          m_buffer = dp::gl::Buffer::create(dp::gl::Buffer::CORE, m_usageHint);
           DP_ASSERT( m_buffer && "Couldn't create OpenGL buffer object" );
 #if !defined(NDEBUG)
           m_managesData     = true;
@@ -125,7 +125,7 @@ namespace dp
 
         if ( size != m_buffer->getSize() )
         {
-          m_buffer->setData( GL_COPY_WRITE_BUFFER, size, nullptr, m_usageHint );
+          m_buffer->setSize(size);
           notify( Event( this, Event::DATA_AND_SIZE_CHANGED ) ); // Data is undefined after glBufferData with nullptr.
         }
       }
@@ -151,7 +151,7 @@ namespace dp
         DP_ASSERT( m_managesData );
         // DP_ASSERT( m_format != dp::rix::core::BF_UNKNOWN ); // TODO: check this when setFormat and setElementsize are implemented
 
-        m_buffer->setSubData( GL_COPY_WRITE_BUFFER, offset, size, data );
+        m_buffer->update(data, offset, size);
         notify( Event( this, Event::DATA_CHANGED ) );
       }
 
@@ -290,7 +290,7 @@ namespace dp
         m_accessType = accessType;
 #endif
 
-        return( m_buffer->map( GL_ARRAY_BUFFER, getGLAccessMode( accessType ) ) );
+        return( m_buffer->map( getGLAccessBitField( accessType ) ) );
       }
 
       bool BufferGL::unmap()
@@ -299,7 +299,7 @@ namespace dp
         DP_ASSERT( m_buffer->getGLId() );
         DP_ASSERT( m_accessType != dp::rix::core::AT_NONE );
 
-        bool success = !!m_buffer->unmap( GL_ARRAY_BUFFER );
+        bool success = !!m_buffer->unmap();
 
 #if !defined(NDEBUG)
         m_accessType = dp::rix::core::AT_NONE; // Not mapped.
