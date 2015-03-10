@@ -19,6 +19,7 @@ set(SOURCES
   src/DisplayList.cpp
   src/Object.cpp
   src/Program.cpp
+  src/Query.cpp
   src/Renderbuffer.cpp
   src/RenderContext.cpp
   src/RenderContextFormat.cpp
@@ -37,6 +38,7 @@ set(PUBLIC_HEADERS
   DisplayList.h
   Object.h
   Program.h
+  Query.h
   Renderbuffer.h
   RenderContext.h
   RenderContextFormat.h
