@@ -47,6 +47,7 @@ namespace dp
     DEFINE_PTR_TYPES(GeometryShader);
     DEFINE_PTR_TYPES(Object);
     DEFINE_PTR_TYPES(Program);
+    DEFINE_PTR_TYPES(Query);
     DEFINE_PTR_TYPES(Renderbuffer);
     DEFINE_PTR_TYPES(RenderContext);
     DEFINE_PTR_TYPES(RenderTarget);

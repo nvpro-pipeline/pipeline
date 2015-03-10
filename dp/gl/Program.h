@@ -77,7 +77,7 @@ namespace dp
         DP_GL_API static ProgramSharedPtr create( std::vector<ShaderSharedPtr> const& shaders, Parameters const& parameters = Parameters() );
         DP_GL_API static ProgramSharedPtr create( VertexShaderSharedPtr const& vertexShader, FragmentShaderSharedPtr const& fragmentShader, Parameters const& parameters = Parameters() );
         DP_GL_API static ProgramSharedPtr create( ComputeShaderSharedPtr const& computeShader, Parameters const& programParameters = Parameters() );
-        DP_GL_API ~Program();
+        DP_GL_API virtual ~Program();
 
         DP_GL_API unsigned int getActiveAttributesCount() const;
         DP_GL_API unsigned int getActiveAttributesMask() const;

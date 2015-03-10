@@ -994,7 +994,7 @@ namespace dp
       public:
         DP_GL_API static TextureBufferSharedPtr create( GLenum internalFormat, BufferSharedPtr const& buffer );
         DP_GL_API static TextureBufferSharedPtr create( GLenum internalFormat, unsigned int size = 0, GLvoid const* data = nullptr, GLenum usage = GL_DYNAMIC_COPY );
-        DP_GL_API ~TextureBuffer();
+        DP_GL_API virtual ~TextureBuffer();
 
       public:
         DP_GL_API BufferSharedPtr const& getBuffer() const;
