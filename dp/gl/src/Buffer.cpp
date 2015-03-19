@@ -243,6 +243,7 @@ namespace dp
         m_address = 0;
       }
 
+#if defined(GL_VERSION_4_5)
       /************************************************************************/
       /* BufferCoreDSA                                                        */
       /************************************************************************/
@@ -596,12 +597,13 @@ namespace dp
         }
         m_address = 0;
       }
+#endif
 
     } // namespace anonymous
 
-
     BufferSharedPtr Buffer::create(Mode_Core, GLenum mode, GLenum defaultTarget)
     {
+#if defined(GL_VERSION_4_5)
       if (GLEW_VERSION_4_5)
       {
         return(std::shared_ptr<Buffer>(new BufferCoreDSA(mode)));
@@ -610,15 +612,22 @@ namespace dp
       {
         return(std::shared_ptr<Buffer>(new BufferCore(mode, defaultTarget)));
       }
+#else
+      return(std::shared_ptr<Buffer>(new BufferCore(mode, defaultTarget)));
+#endif
     }
 
     BufferSharedPtr Buffer::create(Mode_Persistent_Buffer, GLbitfield modeBits)
     {
+#if defined(GL_VERSION_4_5)
       if (!GLEW_ARB_buffer_storage)
       {
         throw std::runtime_error("ARB_buffer_storage not available");
       }
       return(std::shared_ptr<Buffer>(new BufferPersistentDSA(modeBits)));
+#else
+      throw std::runtime_error("GL 4.5 support not enabled");
+#endif
     }
 
 

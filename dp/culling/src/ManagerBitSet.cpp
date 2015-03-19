@@ -29,6 +29,7 @@
 #include <dp/culling/ManagerBitSet.h>
 #include <dp/culling/GroupBitSet.h>
 #include <dp/util/BitArray.h>
+#include <dp/util/SharedPtr.h>
 #include <boost/scoped_array.hpp>
 
 #include <dp/util/FrameProfiler.h>
@@ -215,7 +216,7 @@ namespace dp
 #elif defined(NEON)
         if ( useNEON )
         {
-          const GroupBitSetSharedPtr& groupImpl = dp::util::smart_cast<GroupBitSet>( group );
+          const GroupBitSetSharedPtr& groupImpl = group.staticCast<GroupBitSet>();
 
           float32x4_t minValue = vdupq_n_f32( std::numeric_limits<float>::max() );
           float32x4_t maxValue = vdupq_n_f32( -std::numeric_limits<float>::max() );
@@ -223,7 +224,7 @@ namespace dp
           char const* basePtr = reinterpret_cast<char const*>(groupImpl->getMatrices());
           for ( size_t index = 0;index < groupImpl->getObjectCount(); ++index )
           {
-            const ObjectBitSetSharedPtr objectImpl = dp::util::smart_cast<ObjectBitSet>( groupImpl->getObject( index ) );
+            const ObjectBitSetSharedPtr objectImpl = groupImpl->getObject( index ).staticCast<ObjectBitSet>();
             dp::math::neon::Mat44f const& modelView = *reinterpret_cast<dp::math::neon::Mat44f const*>(basePtr + objectImpl->getTransformIndex() * groupImpl->getMatricesStride());
             dp::math::Vec4f const& extent = objectImpl->getExtent();
 

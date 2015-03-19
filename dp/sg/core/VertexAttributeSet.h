@@ -868,7 +868,7 @@ namespace dp
         AttributeContainer::const_iterator it = m_vattribs.find( attrIndex );
         if ( it == m_vattribs.end() )
         {
-          return Buffer::ConstIterator<ValueType>::Type();
+          return typename Buffer::ConstIterator<ValueType>::Type();
         }
         else
         {

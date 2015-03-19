@@ -30,6 +30,7 @@
 #include <dp/Types.h>
 #include <dp/sg/core/Config.h>
 #include <dp/sg/core/CoreTypes.h>
+#include <cstring>
 
 namespace dp
 {

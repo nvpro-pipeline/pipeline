@@ -59,9 +59,10 @@ namespace dp
       std::map<GLint,BufferSharedPtr>::iterator it = m_attributes.find( location );
       if ( it == m_attributes.end() )
       {
-        it = m_attributes.insert( std::make_pair( location, Buffer::create() ) ).first;
+        it = m_attributes.insert( std::make_pair( location, Buffer::create(dp::gl::Buffer::CORE, usage, GL_ARRAY_BUFFER) ) ).first;
       }
-      it->second->setData( GL_ARRAY_BUFFER, values.size() * sizeof(T), values.data(), usage );
+      it->second->setSize(values.size() * sizeof(T));
+      it->second->update(values.data());
 
       glBindVertexArray( getGLId() );
       glBindBuffer( GL_ARRAY_BUFFER, it->second->getGLId() );
@@ -91,9 +92,10 @@ namespace dp
       DP_STATIC_ASSERT( std::numeric_limits<T>::is_integer );
       if ( !m_indices )
       {
-        m_indices = Buffer::create();
+        m_indices = Buffer::create(dp::gl::Buffer::CORE, usage, GL_ELEMENT_ARRAY_BUFFER);
       }
-      m_indices->setData( GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(T), indices.data(), usage );
+      m_indices->setSize(indices.size() * sizeof(T));
+      m_indices->update(indices.data());
 
       glBindVertexArray( getGLId() );
       glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_indices->getGLId() );

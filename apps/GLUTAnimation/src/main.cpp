@@ -230,7 +230,7 @@ int runApp( int argc, char *argv[], bool stereo, bool continuous, int frames, co
   dp::gl::RenderContextFormat format;
 
 #if !defined(NDEBUG)
-  int gridSize = 10;
+  int gridSize = 20;
 #else
   int gridSize = 80;
 #endif

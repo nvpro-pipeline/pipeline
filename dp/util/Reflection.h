@@ -30,6 +30,7 @@
 #include <set>
 #include <vector>
 #include <string>
+#include <dp/Types.h>
 #include <dp/math/Boxnt.h>
 #include <dp/math/Quatt.h>
 #include <dp/math/Trafo.h>

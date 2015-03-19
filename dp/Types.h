@@ -76,6 +76,9 @@ namespace dp
   typedef float              Float32; ///< 32-bit float.
   typedef double             Float64; ///< 64-bit float.
 
+#if defined(Bool)
+  #undef Bool
+#endif
   typedef bool               Bool;    ///< Boolean value
 #endif
 
