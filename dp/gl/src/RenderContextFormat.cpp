@@ -33,6 +33,7 @@
 
 #include <vector>
 #include <cstring>
+#include <dp/Assert.h>
 
 namespace dp
 {

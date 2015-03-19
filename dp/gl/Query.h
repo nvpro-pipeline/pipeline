@@ -66,7 +66,9 @@ namespace dp
     template <typename T>
     inline T Query::get( GLenum param ) const
     {
+#if defined(_MSVC_VER)
       DP_STATIC_ASSERT( !"no specialization for type T available!" );
+#endif
     }
 
     template <>

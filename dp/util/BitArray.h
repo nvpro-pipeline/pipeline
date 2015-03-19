@@ -90,8 +90,13 @@ namespace dp
       return _BitScanForward(&localIndex,bits) ? localIndex : 32;
     }
 #else
+    inline size_t clz(dp::Uint32 bits)
+    {
+      return (bits != 0) ? __builtin_ctz(bits) : 32;
+    }
+
     // TODO implement GCC version!
-    template <typename BitType, typename Visitor> inline void bitTraverse( BitType bits, Visitor& visitor )
+    template <typename BitType, typename Visitor> inline void bitTraverse( BitType bits, Visitor visitor )
     {
       size_t index = 0;
       while (bits)
@@ -176,7 +181,7 @@ namespace dp
 
 
       /** \brief call Visitor( size_t index ) on all bits which are set. **/
-      template <typename Visitor> void traverseBits( Visitor &visitor );
+      template <typename Visitor> void traverseBits( Visitor visitor );
 
       DP_UTIL_API size_t countLeadingZeroes() const;
       
@@ -280,9 +285,8 @@ namespace dp
 
     /** \brief call Visitor( size_t index ) on all bits which are set. **/
     template <typename Visitor>
-    inline void BitArray::traverseBits( Visitor &visitor )
+    inline void BitArray::traverseBits( Visitor visitor )
     {
-      size_t index = 0; // index of bit
       bitTraverse(m_bits.get(), determineNumberOfElements(), visitor );
     }
 
@@ -291,7 +295,7 @@ namespace dp
       if ( m_size )
       {
         size_t usedBitsInLastElement = m_size % StorageBitsPerElement;
-        m_bits[determineNumberOfElements() - 1] &= ~BitStorageType(0) >> ((StorageBitsPerElement - usedBitsInLastElement) & StorageBitsPerElement - 1);
+        m_bits[determineNumberOfElements() - 1] &= ~BitStorageType(0) >> ((StorageBitsPerElement - usedBitsInLastElement) & (StorageBitsPerElement - 1));
       }
     }
 

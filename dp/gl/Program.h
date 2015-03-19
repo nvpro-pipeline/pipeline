@@ -32,12 +32,19 @@
 #include <dp/gl/Texture.h>
 #include <dp/math/Matmnt.h>
 #include <GL/glew.h>
+#include <cstring>
 
 namespace dp
 {
   namespace gl
   {
     class ProgramUseGuard;
+
+    template <typename T>
+    void setProgramUniform( GLint program, GLint location, T const& value );
+
+    template <typename T>
+    void setBufferData( GLint buffer, GLint offset, GLint matrixStride, T const& value );
 
     class Program : public Object
     {

@@ -42,10 +42,7 @@ set_target_properties( DPSgUI PROPERTIES COMPILE_DEFINITIONS DP_SG_UI_EXPORTS )
 
 add_subdirectory( manipulator )
 
-if ( NOT "${DP_ARCH}" STREQUAL "armv7l")
-  add_subdirectory( qt5 )
-endif()
-
+add_subdirectory( qt5 )
 add_subdirectory(glut)
 
 set_target_properties( DPSgUI PROPERTIES FOLDER "SG" )

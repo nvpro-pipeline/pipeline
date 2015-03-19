@@ -35,6 +35,7 @@ add_executable(MaterialExchanger
 target_link_libraries(MaterialExchanger
   ${TINYXML_LIBRARIES}
   DPSgIO
+  DP
 )
 
 set_target_properties( MaterialExchanger PROPERTIES FOLDER "Apps")
