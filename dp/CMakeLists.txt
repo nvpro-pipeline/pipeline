@@ -39,11 +39,11 @@ target_link_libraries(DP ${Boost_LIBRARIES} )
 
 set_target_properties( DP PROPERTIES COMPILE_DEFINITIONS DP_EXPORTS )
 
+add_subdirectory( cuda )
+add_subdirectory( culling )
 add_subdirectory( fx )
+add_subdirectory( gl )
 add_subdirectory( math )
 add_subdirectory( rix )
-
-add_subdirectory( culling )
 add_subdirectory( sg )
 add_subdirectory( ui )
-add_subdirectory( gl )
