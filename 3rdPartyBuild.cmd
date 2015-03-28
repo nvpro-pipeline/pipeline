@@ -11,8 +11,12 @@ if exist %VS2013_ENV_CMD% (
   goto visual_studio_not_found
 )
 
+set DPHOME=%~dp0
+set DP_3RDPARTY_PATH=%DPHOME%3rdparty
+
 :build_3rdparty
 cmake -P 3rdPartyBuild.cmake
+mkdir builds
 goto :eof
 
 :visual_studio_not_found
