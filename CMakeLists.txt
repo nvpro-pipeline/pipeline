@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 2.8)
 PROJECT( Pipeline )
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake")
+
 include("dp")
 include("dp3rdParty")
 
@@ -58,11 +59,15 @@ elseif(MSVC11)
   set (CRT "crt110")
   #enable multiprocessor build on visual studio 2012
   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
+elseif(MSVC12)
+  set (CRT "crt120")
+  #enable multiprocessor build on visual studio 2012
+  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
 #else()
 #  message(FATAL_ERROR "Compiler version not supported")
 endif()
-  
-if(UNIX) 
+
+if(UNIX)
   set(OS "linux")
   add_definitions("-DLINUX")
   add_definitions("-Wno-unused-local-typedefs -Wno-delete-non-virtual-dtor")
@@ -93,7 +98,7 @@ endif()
 
 if(UNIX)
   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
- 
+
   if (DP_ARCH STREQUAL "amd64")
     set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -msse4.1")
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse4.1")
@@ -164,4 +169,3 @@ if( WIN32 AND BUILD_DPT )
 endif()
 
 add_subdirectory( apps )
-
