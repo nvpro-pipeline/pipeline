@@ -35,6 +35,8 @@
 #include <GL/glxew.h>
 #endif
 
+#include <algorithm> // for std::max
+
 namespace dp
 {
   namespace gl
