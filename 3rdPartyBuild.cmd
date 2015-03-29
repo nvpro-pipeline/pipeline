@@ -3,10 +3,17 @@
 set VS2013_ENV_CMD="C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat"
 set VS2012_ENV_CMD="C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\vcvarsall.bat"
 
+mkdir builds
 if exist %VS2013_ENV_CMD% (
   call %VS2013_ENV_CMD%
+  cd builds
+  mkdir vc12-amd64
+  cd ..
 ) else if exist %VS2012_ENV_CMD% (
   call %VS2012_ENV_CMD%
+  cd builds
+  mkdir vc11-amd64
+  cd ..
 ) else (
   goto visual_studio_not_found
 )
@@ -16,7 +23,6 @@ set DP_3RDPARTY_PATH=%DPHOME%3rdparty
 
 :build_3rdparty
 cmake -P 3rdPartyBuild.cmake
-mkdir builds
 goto :eof
 
 :visual_studio_not_found
