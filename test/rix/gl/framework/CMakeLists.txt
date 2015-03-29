@@ -41,8 +41,9 @@ add_library( DPTRiXGL SHARED
 )
 
 set_target_properties( DPTRiXGL PROPERTIES SUFFIX ".bkd" FOLDER "DPT/RiX/GL" )
+set_target_properties( DPTRiXGL PROPERTIES LINK_FLAGS "/NODEFAULTLIB:\"freeglutd.lib\" /NODEFAULTLIB:\"freeglut.lib\"" )
 
-target_link_libraries( DPTRiXGL 
+target_link_libraries( DPTRiXGL
   ${GLUT_LIBRARIES}
   DPUtil
   DPTcore

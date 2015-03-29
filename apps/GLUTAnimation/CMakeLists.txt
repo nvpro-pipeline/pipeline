@@ -55,5 +55,4 @@ target_link_libraries( GLUTAnimation
 CopyGLEW( GLUTAnimation "${DP_BINARY_PATH}" )
 
 set_target_properties( GLUTAnimation PROPERTIES FOLDER "Apps")
-
-
+set_target_properties( GLUTAnimation PROPERTIES LINK_FLAGS "/NODEFAULTLIB:\"freeglutd.lib\" /NODEFAULTLIB:\"freeglut.lib\"" )

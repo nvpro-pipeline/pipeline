@@ -58,3 +58,4 @@ CopyGLEW( GLUTMinimal "${DP_BINARY_PATH}" )
 CopyGLUT( GLUTMinimal "${DP_BINARY_PATH}" )
 
 set_target_properties( GLUTMinimal PROPERTIES FOLDER "Apps")
+set_target_properties( GLUTMinimal PROPERTIES LINK_FLAGS "/NODEFAULTLIB:\"freeglutd.lib\" /NODEFAULTLIB:\"freeglut.lib\"" )
