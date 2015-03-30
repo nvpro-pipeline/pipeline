@@ -1,7 +1,5 @@
 include("dp")
 
-file( TO_CMAKE_PATH "$ENV{DP_3RDPARTY_PATH}" DP_3RDPARTY_PATH)
-
 if( UNIX )
   set(Boost_USE_STATIC_LIBS       OFF)
   set(Boost_USE_MULTITHREADED      ON)
@@ -93,9 +91,14 @@ if(WIN32)
       else()
         set(QtVersion "5.3")
       endif()
-    else()
+    elseif(MSVC12)
       set(QtCompiler "msvc2013")
-      set(QtVersion "5.3")
+      set(QtVersion "5.4")
+	  
+	  if(NOT EXISTS "${QtRoot}/${QtVersion}")
+		message("Qt 5.4 not found. Fall back to Qt 5.3")
+		set(QtVersion "5.3")
+	  endif()
     endif()
     
     list(APPEND CMAKE_PREFIX_PATH "${QtRoot}/${QtVersion}/${QtCompiler}${QtArch}_opengl/lib/cmake")

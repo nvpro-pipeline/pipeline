@@ -232,6 +232,8 @@ if(Qt5Widgets_FOUND AND TARGET DPSgUIQt5)
   # Not sure we really need these any more, probably just for convenience.
   #
 
+  file(TO_CMAKE_PATH "${Qt5Core_DIR}/../../.." QTDIR)
+
   # Target which copies necessary files from Qt to bin folder
   add_custom_target(CopyQtDlls ${CMAKE_COMMAND}
     -D "build_configuration:STRING=$(ConfigurationName)"
@@ -239,7 +241,7 @@ if(Qt5Widgets_FOUND AND TARGET DPSgUIQt5)
     -D "BUILDDIR:PATH=${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
     -D "CMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}"
     -D "CMAKE_GENERATOR=${CMAKE_GENERATOR}"
-    -D "QTDIR:PATH=$ENV{QTDIR}"
+    -D "QTDIR:PATH=${QTDIR}"
     -P "${CMAKE_CURRENT_SOURCE_DIR}/copyqt.cmake"
     )
 

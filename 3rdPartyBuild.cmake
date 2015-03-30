@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 2.8.12)
 
+########################################################################################################################
+
 # Possible generators for Windows, choose one
 set(GENERATOR "Visual Studio 12 2013 Win64")
 #set(GENERATOR "Visual Studio 11 2012 Win64")
@@ -12,6 +14,8 @@ set(BUILD_TINYXML ON)
 set(BUILD_DEVIL ON)
 set(BUILD_FREEGLUT ON)
 set(BUILD_GLEW ON)
+
+########################################################################################################################
 
 set(BUILD_ARCH x64)
 set(CMAKE_INSTALL_PREFIX "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty" CACHE PATH "default install path" FORCE)
