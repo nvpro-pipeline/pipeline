@@ -1,21 +1,24 @@
 @echo off
 
-set VS2013_ENV_CMD="C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat"
-set VS2012_ENV_CMD="C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\vcvarsall.bat"
+set USE_VS2013=1
+REM set USE_VS2012=1
+REM set USE_VS2010=1
 
-mkdir builds
-if exist %VS2013_ENV_CMD% (
-  call %VS2013_ENV_CMD%
-  cd builds
-  mkdir vc12-amd64
-  cd ..
-) else if exist %VS2012_ENV_CMD% (
-  call %VS2012_ENV_CMD%
-  cd builds
-  mkdir vc11-amd64
-  cd ..
+set VS2013_ENV_CMD="%VS120COMNTOOLS%..\..\VC\vcvarsall.bat"
+set VS2012_ENV_CMD="%VS110COMNTOOLS%..\..\VC\vcvarsall.bat"
+set VS2010_ENV_CMD="%VS100COMNTOOLS%..\..\VC\vcvarsall.bat"
+
+if "%USE_VS2013%"=="1" (
+  call %VS2013_ENV_CMD% amd64
+  if not exist builds\vc12-amd64 mkdir build\vc12-amd64
+) else if "%USE_VS2012%"=="1" (
+  call %VS2012_ENV_CMD% amd64
+  if not exist builds\vc11-amd64 mkdir build\vc11-amd64
+) else if "%USE_VS2010%"=="''" (
+  call %VS2010_ENV_CMD% amd64
+  if not exist builds\vc10-amd64 mkdir build\vc10-amd64
 ) else (
-  goto visual_studio_not_found
+    goto visual_studio_not_found
 )
 
 set DPHOME=%~dp0
@@ -23,6 +26,7 @@ set DP_3RDPARTY_PATH=%DPHOME%3rdparty
 
 :build_3rdparty
 cmake -P 3rdPartyBuild.cmake
+pause
 goto :eof
 
 :visual_studio_not_found

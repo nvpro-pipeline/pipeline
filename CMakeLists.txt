@@ -43,15 +43,15 @@ find_package( Boost REQUIRED )
 if(WIN32)
   if(MSVC10)
     set (CRT "crt100")
-    #enable multiprocessor build on visual studio 2010
+    #enable multiprocessor build on Visual Studio 2010
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
   elseif(MSVC11)
     set (CRT "crt110")
-    #enable multiprocessor build on visual studio 2012
+    #enable multiprocessor build on Visual Studio 2012
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
   elseif(MSVC12)
     set (CRT "crt120")
-    #enable multiprocessor build on visual studio 2012
+    #enable multiprocessor build on Visual Studio 2013
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
   else()
     message(FATAL_ERROR "Compiler version not supported")

@@ -5,10 +5,11 @@ cmake_minimum_required(VERSION 2.8.12)
 # Possible generators for Windows, choose one
 set(GENERATOR "Visual Studio 12 2013 Win64")
 #set(GENERATOR "Visual Studio 11 2012 Win64")
+#set(GENERATOR "Visual Studio 10 2010 Win64")
 
 # Comment lines below to enable/disable download/build of 3rdParty modules
 set(BUILD_LIB3DS ON)
-set(BUILD_FTLLIB ON)
+set(BUILD_FTLLIB OFF)
 set(BUILD_BOOST ON)
 set(BUILD_TINYXML ON)
 set(BUILD_DEVIL ON)
