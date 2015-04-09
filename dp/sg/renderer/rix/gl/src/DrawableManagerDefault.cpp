@@ -436,6 +436,7 @@ namespace dp
           {
             setActiveTraversalMask( viewState->getTraversalMask() );
             m_shaderManager->update( viewState );
+            DrawableManager::update();
           }
 
           void DrawableManagerDefault::update( dp::math::Vec2ui const & viewportSize )
