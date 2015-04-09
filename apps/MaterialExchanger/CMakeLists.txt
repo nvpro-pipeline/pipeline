@@ -37,5 +37,8 @@ target_link_libraries(MaterialExchanger
   DPSgIO
   DP
 )
+if (UNIX)
+  target_link_libraries(MaterialExchanger dl)
+endif()
 
 set_target_properties( MaterialExchanger PROPERTIES FOLDER "Apps")

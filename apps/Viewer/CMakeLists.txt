@@ -221,6 +221,7 @@ if(Qt5Widgets_FOUND AND TARGET DPSgUIQt5)
 
   target_link_libraries(makenbf
     ${QT_LIBRARIES}
+    DP
     DPSgCore
     DPSgIO
   )
