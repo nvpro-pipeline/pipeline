@@ -56,9 +56,6 @@ set(PUBLIC_HEADERS
 )
 
 set(PRIVATE_HEADERS
-  inc/BufferBind.h
-  inc/BufferDSA.h
-  inc/IBuffer.h
   inc/ITexture.h
   inc/TextureBind.h
   inc/TextureDSA.h
