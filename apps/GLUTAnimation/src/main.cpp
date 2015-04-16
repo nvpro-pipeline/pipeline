@@ -94,7 +94,7 @@ GLUTAnimationWidget::GLUTAnimationWidget( const dp::gl::RenderContextFormat &for
   , m_trackballHIDSync(new dp::sg::ui::manipulator::TrackballCameraManipulatorHIDSync( ) )
 {
   ViewStateSharedPtr viewState = ViewState::create();
-  viewState->setScene( m_animatedScene->getScene() );
+  viewState->setSceneTree( dp::sg::xbar::SceneTree::create( m_animatedScene->getScene() ) );
   setupDefaultViewState(viewState);
   viewState->getCamera()->addHeadLight( dp::sg::core::createStandardPointLight() );
   setViewState(viewState);

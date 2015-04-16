@@ -490,7 +490,7 @@ dp::sg::ui::ViewStateSharedPtr loadScene( std::string const& filename )
       scene = simpleScene.m_sceneHandle;
     }
     viewState = dp::sg::ui::ViewState::create();
-    viewState->setScene( scene );
+    viewState->setSceneTree( dp::sg::xbar::SceneTree::create( scene ) );
   }
   return viewState;
 }
