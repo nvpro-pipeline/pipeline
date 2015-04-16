@@ -1,3 +1,4 @@
+// Copyright NVIDIA Corporation 2011-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -23,7 +24,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#include "GeometryGL.h"
+#include <dp/rix/gl/inc/GeometryGL.h>
 
 namespace dp
 {

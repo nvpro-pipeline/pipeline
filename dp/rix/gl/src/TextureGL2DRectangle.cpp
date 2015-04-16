@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright NVIDIA Corporation 2011-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -24,8 +24,8 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#include "DataTypeConversionGL.h"
-#include "TextureGL2DRectangle.h"
+#include <dp/rix/gl/inc/DataTypeConversionGL.h>
+#include <dp/rix/gl/inc/TextureGL2DRectangle.h>
 #include <dp/util/SharedPtr.h>
 
 namespace dp

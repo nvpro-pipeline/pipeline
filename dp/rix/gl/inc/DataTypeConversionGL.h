@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright NVIDIA Corporation 2011-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -100,7 +100,7 @@ namespace dp
       inline GLenum getGLPixelFormat( dp::PixelFormat pixelFormat, GLenum internalFormat )
       {
         // handle integer formats differently
-        switch (internalFormat) 
+        switch (internalFormat)
         {
         case GL_R8I:
         case GL_R8UI:
@@ -181,6 +181,10 @@ namespace dp
             return GL_ALPHA;
           case dp::PF_LUMINANCE_ALPHA:
             return GL_LUMINANCE_ALPHA;
+          case dp::PF_DEPTH_COMPONENT:
+            return GL_DEPTH_COMPONENT;
+          case dp::PF_DEPTH_STENCIL:
+            return GL_DEPTH_STENCIL;
             // TODO
             /*
             case dp::util::PF_NATIVE:
@@ -210,6 +214,8 @@ namespace dp
           case GL_LUMINANCE       : return( dp::PF_LUMINANCE );
           case GL_ALPHA           : return( dp::PF_ALPHA );
           case GL_LUMINANCE_ALPHA : return( dp::PF_LUMINANCE_ALPHA );
+          case GL_DEPTH_COMPONENT : return( dp::PF_DEPTH_COMPONENT );
+          case GL_DEPTH_STENCIL   : return( dp::PF_DEPTH_STENCIL );
           default :
             DP_ASSERT( !"Unknown GL Pixel Format!" );
             return( dp::PF_UNKNOWN );
@@ -449,7 +455,7 @@ namespace dp
         }
       }
 
-      
+
       inline GLenum getGLProgramDomain( dp::rix::core::ShaderType shaderType )
       {
         switch ( shaderType )

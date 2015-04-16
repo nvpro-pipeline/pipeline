@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2014
+// Copyright NVIDIA Corporation 2011-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -30,9 +30,8 @@
 #include <dp/gl/Buffer.h>
 #include <dp/rix/gl/RiXGL.h>
 
-#include <TextureGL.h>
-#include <TextureGL.h>
-#include <SamplerStateGL.h>
+#include <dp/rix/gl/inc/TextureGL.h>
+#include <dp/rix/gl/inc/SamplerStateGL.h>
 
 #include <dp/util/Observer.h>
 
@@ -68,7 +67,7 @@ namespace dp
       public:
         static BufferGLHandle create( const dp::rix::core::BufferDescription& bufferDescription );
 
-        dp::gl::BufferSharedPtr const&  getBuffer() const;
+        dp::gl::BufferSharedPtr const&  getBuffer() const { return( m_buffer ); }
 
         void setSize( size_t width, size_t height = 0, size_t depth = 0 );
         void setElementSize( size_t elementSize );

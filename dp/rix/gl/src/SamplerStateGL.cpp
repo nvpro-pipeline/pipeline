@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright NVIDIA Corporation 2011-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -25,8 +25,8 @@
 
 
 #include <cstring>
-#include "SamplerStateGL.h"
-#include "DataTypeConversionGL.h"
+#include <dp/rix/gl/inc/SamplerStateGL.h>
+#include <dp/rix/gl/inc/DataTypeConversionGL.h>
 
 namespace dp
 {

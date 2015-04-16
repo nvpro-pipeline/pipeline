@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright NVIDIA Corporation 2011-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -24,16 +24,16 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#include "ContainerGL.h"
-#include "RenderGroupGL.h"
-#include "GeometryInstanceGL.h"
-#include "GeometryGL.h"
-#include "ProgramGL.h"
-#include "ProgramPipelineGL.h"
-#include "VertexAttributesGL.h"
-#include "VertexFormatGL.h"
-#include "GeometryDescriptionGL.h"
-#include "IndicesGL.h"
+#include <dp/rix/gl/inc/ContainerGL.h>
+#include <dp/rix/gl/inc/RenderGroupGL.h>
+#include <dp/rix/gl/inc/GeometryInstanceGL.h>
+#include <dp/rix/gl/inc/GeometryGL.h>
+#include <dp/rix/gl/inc/ProgramGL.h>
+#include <dp/rix/gl/inc/ProgramPipelineGL.h>
+#include <dp/rix/gl/inc/VertexAttributesGL.h>
+#include <dp/rix/gl/inc/VertexFormatGL.h>
+#include <dp/rix/gl/inc/GeometryDescriptionGL.h>
+#include <dp/rix/gl/inc/IndicesGL.h>
 
 namespace dp
 {

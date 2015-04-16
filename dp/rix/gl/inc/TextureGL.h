@@ -78,7 +78,7 @@ namespace dp
         virtual BindlessReferenceHandle getBindlessTextureHandle( SamplerStateGLHandle samplerState );
         virtual BindlessReferenceHandle getBindlessTextureHandle( GLint level, GLboolean layered, GLint layer, GLint format, GLenum access );
 
-        dp::gl::TextureSharedPtr const& getTexture() const;
+        dp::gl::TextureSharedPtr const& getTexture() const { return( m_texture ); }
 
         // TODO: TextureDescriptionGL could be stored here
         bool    m_hasMipmaps;
