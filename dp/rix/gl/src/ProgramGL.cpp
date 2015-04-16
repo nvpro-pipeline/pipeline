@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2012
+// Copyright NVIDIA Corporation 2011-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -24,16 +24,14 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#include "ProgramGL.h"
+#include <dp/rix/gl/inc/ProgramGL.h>
 
-#include "BufferGL.h"
-#include "TextureGL.h"
-#include "ContainerGL.h"
-#include "SamplerStateGL.h"
-#include "DataTypeConversionGL.h"
-#include "ProgramParameterBuffer.h"
-
-#include "GL/glew.h"
+#include <dp/rix/gl/inc/BufferGL.h>
+#include <dp/rix/gl/inc/TextureGL.h>
+#include <dp/rix/gl/inc/ContainerGL.h>
+#include <dp/rix/gl/inc/SamplerStateGL.h>
+#include <dp/rix/gl/inc/DataTypeConversionGL.h>
+#include <dp/rix/gl/inc/ProgramParameterBuffer.h>
 
 #include <iomanip>
 #include <iostream>

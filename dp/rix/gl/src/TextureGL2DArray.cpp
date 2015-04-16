@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright NVIDIA Corporation 2011-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -24,8 +24,8 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#include "DataTypeConversionGL.h"
-#include "TextureGL2DArray.h"
+#include <dp/rix/gl/inc/DataTypeConversionGL.h>
+#include <dp/rix/gl/inc/TextureGL2DArray.h>
 #include <dp/util/SharedPtr.h>
 
 namespace dp
@@ -53,14 +53,11 @@ namespace dp
         DP_ASSERT( description.m_depth == 0 );
       }
 
-      // TODO is this correct?
-      void TextureGL2DArray::upload(unsigned int mipMapLevel, unsigned int /*layer*/, const void* data)
+      void TextureGL2DArray::upload(unsigned int mipMapLevel, unsigned int layer, const void* data)
       {
-        dp::util::shared_cast<dp::gl::Texture2DArray>( getTexture() )->setData( data, mipMapLevel );
+        dp::util::shared_cast<dp::gl::Texture2DArray>( getTexture() )->setData( data, layer, mipMapLevel );
       }
 
     } // namespace gl
   } // namespace rix
 } // namespace dp
-
-

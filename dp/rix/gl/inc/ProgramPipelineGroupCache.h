@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright NVIDIA Corporation 2012-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -27,11 +27,11 @@
 #pragma once
 
 #include <dp/rix/core/HandledObject.h>
-#include "ProgramPipelineGL.h"
-#include "RenderGroupGL.h"
-#include "GeometryInstanceGL.h"
-#include "ProgramParameterCache.h"
-#include "ParameterCacheStream.h"
+#include <dp/rix/gl/inc/ProgramPipelineGL.h>
+#include <dp/rix/gl/inc/RenderGroupGL.h>
+#include <dp/rix/gl/inc/GeometryInstanceGL.h>
+#include <dp/rix/gl/inc/ProgramParameterCache.h>
+#include <dp/rix/gl/inc/ParameterCacheStream.h>
 #include <vector>
 #include <memory>
 

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright NVIDIA Corporation 2011-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -28,12 +28,12 @@
 
 #include <dp/rix/gl/RiXGL.h>
 
-#include "RendererGLConfig.h"
-#include "VertexCacheGL.h"
-#include "ProgramGL.h"
-#include "ProgramPipelineGL.h"
-#include "VertexCacheGL.h"
-#include "RenderEngineGLDrawCall.h"
+#include <dp/rix/gl/inc/RendererGLConfig.h>
+#include <dp/rix/gl/inc/VertexCacheGL.h>
+#include <dp/rix/gl/inc/ProgramGL.h>
+#include <dp/rix/gl/inc/ProgramPipelineGL.h>
+#include <dp/rix/gl/inc/VertexCacheGL.h>
+#include <dp/rix/gl/inc/RenderEngineGLDrawCall.h>
 
 #include <dp/util/Observer.h>
 

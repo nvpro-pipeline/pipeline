@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright NVIDIA Corporation 2011-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -28,13 +28,13 @@
 
 #if defined(GL_VERSION_4_3)
 
-#include "VertexCacheGL.h"
+#include <dp/rix/gl/inc/VertexCacheGL.h>
 #include <dp/rix/gl/RiXGL.h>
-#include "RendererGLConfig.h"
-#include "VertexStateGL.h"
-#include "RenderEngineGLDrawCall.h"
-#include "GeometryInstanceGL.h"
-#include "ProgramPipelineGL.h"
+#include <dp/rix/gl/inc/RendererGLConfig.h>
+#include <dp/rix/gl/inc/VertexStateGL.h>
+#include <dp/rix/gl/inc/RenderEngineGLDrawCall.h>
+#include <dp/rix/gl/inc/GeometryInstanceGL.h>
+#include <dp/rix/gl/inc/ProgramPipelineGL.h>
 #include <GL/glew.h>
 
 namespace dp

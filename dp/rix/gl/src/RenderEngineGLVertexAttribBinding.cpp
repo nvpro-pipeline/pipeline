@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright NVIDIA Corporation 2011-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -24,16 +24,16 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#include "RenderEngineGLImpl.hpp"
-#include "RenderEngineGLVertexAttribBinding.h"
-#include "GeometryGL.h"
-#include "GeometryDescriptionGL.h"
-#include "GeometryInstanceGL.h"
-#include "VertexAttributesGL.h"
-#include "ProgramGL.h"
-#include "IndicesGL.h"
-#include "VertexFormatGL.h"
-#include "DataTypeConversionGL.h"
+#include <dp/rix/gl/inc/RenderEngineGLImpl.hpp>
+#include <dp/rix/gl/inc/RenderEngineGLVertexAttribBinding.h>
+#include <dp/rix/gl/inc/GeometryGL.h>
+#include <dp/rix/gl/inc/GeometryDescriptionGL.h>
+#include <dp/rix/gl/inc/GeometryInstanceGL.h>
+#include <dp/rix/gl/inc/VertexAttributesGL.h>
+#include <dp/rix/gl/inc/ProgramGL.h>
+#include <dp/rix/gl/inc/IndicesGL.h>
+#include <dp/rix/gl/inc/VertexFormatGL.h>
+#include <dp/rix/gl/inc/DataTypeConversionGL.h>
 
 #if defined(GL_VERSION_4_3)
 

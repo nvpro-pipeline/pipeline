@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright NVIDIA Corporation 2011-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -28,12 +28,12 @@
 
 #include <dp/rix/gl/RiXGL.h>
 
-#include "VertexAttributesGL.h"
-#include "IndicesGL.h"
-#include "GeometryDescriptionGL.h"
+#include <dp/rix/gl/inc/VertexAttributesGL.h>
+#include <dp/rix/gl/inc/IndicesGL.h>
+#include <dp/rix/gl/inc/GeometryDescriptionGL.h>
 
-#include "dp/util/Observer.h"
-  
+#include <dp/util/Observer.h>
+
 namespace dp
 {
   namespace rix

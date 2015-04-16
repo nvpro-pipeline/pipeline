@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright NVIDIA Corporation 2011-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -27,12 +27,10 @@
 #pragma once
 
 #include <dp/rix/gl/RiXGL.h>
-#include "VertexFormatGL.h"
-#include "VertexDataGL.h"
+#include <dp/rix/gl/inc/VertexFormatGL.h>
+#include <dp/rix/gl/inc/VertexDataGL.h>
 
 #include <dp/util/Observer.h>
-
-#include "GL/glew.h"
 
 namespace dp
 {

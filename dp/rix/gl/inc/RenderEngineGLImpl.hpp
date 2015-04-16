@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2014
+// Copyright NVIDIA Corporation 2011-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -26,9 +26,9 @@
 
 #pragma once
 
-#include "RenderEngineGL.h"
-#include "VertexCacheGL.h"
-#include "ProgramPipelineGroupCache.h"
+#include <dp/rix/gl/inc/RenderEngineGL.h>
+#include <dp/rix/gl/inc/VertexCacheGL.h>
+#include <dp/rix/gl/inc/ProgramPipelineGroupCache.h>
 #include <GL/glew.h>
 
 #if defined(WIN32)
