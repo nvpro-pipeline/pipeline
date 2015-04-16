@@ -41,8 +41,9 @@ add_library( DPTSgRdr SHARED
 )
 
 set_target_properties( DPTSgRdr PROPERTIES SUFFIX ".bkd" FOLDER "DPT/SgRdr" )
+set_target_properties( DPTSgRdr PROPERTIES LINK_FLAGS "/NODEFAULTLIB:\"freeglutd.lib\" /NODEFAULTLIB:\"freeglut.lib\"" )
 
-target_link_libraries( DPTSgRdr 
+target_link_libraries( DPTSgRdr
   ${GLUT_LIBRARIES}
   DPUtil
   DPTcore
@@ -61,4 +62,3 @@ add_dependencies( DPTSgRdr
 )
 
 CopyGLUT( DPTSgRdr "${DP_BINARY_PATH}" )
-

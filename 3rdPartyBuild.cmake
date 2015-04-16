@@ -1,8 +1,23 @@
 cmake_minimum_required(VERSION 2.8.12)
 
-message("Creating 3rdparty library folder for Visual Studio 2011 Win64")
+########################################################################################################################
 
-set(GENERATOR "Visual Studio 11 Win64")
+# Possible generators for Windows, choose one
+set(GENERATOR "Visual Studio 12 2013 Win64")
+#set(GENERATOR "Visual Studio 11 2012 Win64")
+#set(GENERATOR "Visual Studio 10 2010 Win64")
+
+# Comment lines below to enable/disable download/build of 3rdParty modules
+set(BUILD_LIB3DS ON)
+set(BUILD_FTLLIB OFF)
+set(BUILD_BOOST ON)
+set(BUILD_TINYXML ON)
+set(BUILD_DEVIL ON)
+set(BUILD_FREEGLUT ON)
+set(BUILD_GLEW ON)
+
+########################################################################################################################
+
 set(BUILD_ARCH x64)
 set(CMAKE_INSTALL_PREFIX "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty" CACHE PATH "default install path" FORCE)
 set(SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/temp/sources")
@@ -10,7 +25,8 @@ set(DOWNLOAD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/downloads")
 set(PATCH_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/patches")
 set(BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/temp/build")
 
-message("Install prefix: ${CMAKE_INSTALL_PREFIX} ${ARGC} ${ARGV}")
+message("Creating 3rdparty library folder for ${GENERATOR}")
+message("Install prefix: ${CMAKE_INSTALL_PREFIX}")
 
 file(MAKE_DIRECTORY ${SOURCE_DIR})
 file(MAKE_DIRECTORY ${BUILD_DIR})
@@ -23,7 +39,7 @@ macro(lib3ds)
     endif()
     execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf ${DOWNLOAD_DIR}/${FILENAME} WORKING_DIRECTORY "${SOURCE_DIR}")
     execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf ${PATCH_DIR}/${FILENAME} WORKING_DIRECTORY "${SOURCE_DIR}")
-    
+
     set(BUILD_DIRECTORY "${BUILD_DIR}/lib3ds")
     if (EXISTS "${BUILD_DIRECTORY}")
       execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${BUILD_DIRECTORY}")
@@ -42,7 +58,7 @@ macro(fltlib)
     endif()
     execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf "${DOWNLOAD_DIR}/${FILENAME}" WORKING_DIRECTORY "${SOURCE_DIR}")
     execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf "${PATCH_DIR}/${FILENAME}" WORKING_DIRECTORY "${SOURCE_DIR}")
-    
+
     set(BUILD_DIRECTORY "${BUILD_DIR}/fltlib")
     if (EXISTS "${BUILD_DIRECTORY}")
       execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${BUILD_DIRECTORY}")
@@ -61,7 +77,7 @@ macro(tinyxml)
     endif()
     execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf "${DOWNLOAD_DIR}/${FILENAME}" WORKING_DIRECTORY "${SOURCE_DIR}")
     execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf "${PATCH_DIR}/${FILENAME}" WORKING_DIRECTORY "${SOURCE_DIR}")
-    
+
     set(BUILD_DIRECTORY "${BUILD_DIR}/tinyxml")
     if (EXISTS "${BUILD_DIRECTORY}")
       execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${BUILD_DIRECTORY}")
@@ -74,55 +90,105 @@ endmacro()
 
 macro(boost)
     message("Building Boost.")
-    if (NOT EXISTS "${DOWNLOAD_DIR}/boost_1_56_0.tar.bz2")
+    set(BOOST_VERSION "1.57.0")
+    string(REPLACE "." "_" BOOST_VERSION_NAME ${BOOST_VERSION}) #replace "." with "_" in BOOST_VERSION variable
+    set(BOOST_PACKAGE_FILENAME "${DOWNLOAD_DIR}/boost_${BOOST_VERSION_NAME}.tar.bz2")
+    if (NOT EXISTS ${BOOST_PACKAGE_FILENAME})
       message("Downloading Boost. This might take a while.")
-      file(DOWNLOAD "http://downloads.sourceforge.net/project/boost/boost/1.56.0/boost_1_56_0.tar.bz2" "${DOWNLOAD_DIR}/boost_1_56_0.tar.bz2" STATUS downloaded)
+      # set SHOW_PROGRESS since this is a big file
+      file(DOWNLOAD "http://downloads.sourceforge.net/project/boost/boost/${BOOST_VERSION}/boost_${BOOST_VERSION_NAME}.tar.bz2" ${BOOST_PACKAGE_FILENAME} SHOW_PROGRESS STATUS downloaded)
     endif()
-    execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf "${DOWNLOAD_DIR}/boost_1_56_0.tar.bz2" WORKING_DIRECTORY "${SOURCE_DIR}")
-    
-    execute_process(COMMAND cmd.exe "/C" "bootstrap.bat" WORKING_DIRECTORY "${SOURCE_DIR}/boost_1_56_0")
-    execute_process(COMMAND cmd.exe /C b2 -j "$ENV{NUMBER_OF_PROCESSORS}" --toolset=msvc-11.0 address-model=64 install --prefix=${CMAKE_INSTALL_PREFIX}/boost/ WORKING_DIRECTORY "${SOURCE_DIR}/boost_1_56_0")
+    message("Extracting Boost")
+    execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf ${BOOST_PACKAGE_FILENAME} WORKING_DIRECTORY "${SOURCE_DIR}")
+    execute_process(COMMAND cmd.exe "/C" "bootstrap.bat" WORKING_DIRECTORY "${SOURCE_DIR}/boost_${BOOST_VERSION_NAME}")
+
+    # select the boost toolset according to the compiler being used
+    if ("${GENERATOR}" MATCHES "^(Visual Studio 12).*")
+      set(BOOST_TOOLSET msvc-12.0)
+    else()
+      set(BOOST_TOOLSET msvc-11.0)
+    endif()
+
+    execute_process(COMMAND cmd.exe /C b2 -j "$ENV{NUMBER_OF_PROCESSORS}" --toolset=${BOOST_TOOLSET} address-model=64 install --prefix=${CMAKE_INSTALL_PREFIX}/boost/ WORKING_DIRECTORY "${SOURCE_DIR}/boost_1_57_0")
 endmacro()
 
 macro(devil)
     if (NOT EXISTS "${DOWNLOAD_DIR}/DevIL-SDK-x64-1.7.8.zip")
+      message("Downloading DeVIL")
       file(DOWNLOAD "http://downloads.sourceforge.net/project/openil/DevIL%20Windows%20SDK/1.7.8/DevIL-SDK-x64-1.7.8.zip" "${DOWNLOAD_DIR}/DevIL-SDK-x64-1.7.8.zip" STATUS downloaded)
     endif()
+    message("Installing DeVIL")
     file(MAKE_DIRECTORY "${CMAKE_INSTALL_PREFIX}/devil")
     execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf "${DOWNLOAD_DIR}/DevIL-SDK-x64-1.7.8.zip" WORKING_DIRECTORY "${CMAKE_INSTALL_PREFIX}/devil")
 endmacro()
 
 macro(freeglut)
-    message("downloading freeglut")
-    if (NOT EXISTS "${DOWNLOAD_DIR}/freeglut-MSVC.zip")
-        file(DOWNLOAD "http://files.transmissionzero.co.uk/software/development/GLUT/freeglut-MSVC.zip" "${DOWNLOAD_DIR}/freeglut-MSVC.zip" STATUS downloaded)
+    set(FREEGLUT_VERSION "3.0.0")
+    set(FREEGLUT_PACKAGE_FILE ${DOWNLOAD_DIR}/freeglut-${FREEGLUT_VERSION}.tar.gz)
+
+    if(NOT EXISTS ${FREEGLUT_PACKAGE_FILE})
+      file(DOWNLOAD http://sourceforge.net/projects/freeglut/files/freeglut/${FREEGLUT_VERSION}/freeglut-${FREEGLUT_VERSION}.tar.gz ${FREEGLUT_PACKAGE_FILE} SHOW_PROGRESS STATUS downloaded)
     endif()
-    execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf "${DOWNLOAD_DIR}/freeglut-MSVC.zip" WORKING_DIRECTORY "${CMAKE_INSTALL_PREFIX}")
+    message("Building freeglut")
+    execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf ${FREEGLUT_PACKAGE_FILE} WORKING_DIRECTORY "${SOURCE_DIR}")
+
+    set(BUILD_DIRECTORY "${BUILD_DIR}/freeglut-${FREEGLUT_VERSION}")
+    if (EXISTS "${BUILD_DIRECTORY}")
+      execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${BUILD_DIRECTORY}")
+    endif()
+    file(MAKE_DIRECTORY "${BUILD_DIRECTORY}")
+
+    set(FREEGLUT_CMAKE_ARGUMENTS -DFREEGLUT_BUILD_DEMOS=OFF -DFREEGLUT_BUILD_SHARED_LIBS=ON -DFREEGLUT_BUILD_STATIC_LIBS=OFF -DFREEGLUT_GLES=OFF -DFREEGLUT_PRINT_ERRORS=OFF -DFREEGLUT_PRINT_WARNINGS=OFF -DINSTALL_PDB=ON)
+    execute_process(COMMAND ${CMAKE_COMMAND} "-G${GENERATOR}" "-DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}/freeglut" "-DCMAKE_CXX_FLAGS=/MP" ${FREEGLUT_CMAKE_ARGUMENTS} "${SOURCE_DIR}/freeglut-${FREEGLUT_VERSION}" WORKING_DIRECTORY "${BUILD_DIRECTORY}")
+    execute_process(COMMAND devenv.exe "${BUILD_DIRECTORY}/freeglut.sln" /Build "Release|${BUILD_ARCH}" WORKING_DIRECTORY "${BUILD_DIRECTORY}")
+    execute_process(COMMAND devenv.exe "${BUILD_DIRECTORY}/freeglut.sln" /Build "Release|${BUILD_ARCH}" /Project INSTALL WORKING_DIRECTORY "${BUILD_DIRECTORY}")
 endmacro()
 
 macro(glew)
-    message("downloading GLEW")
-    set(FILENAME "glew-1.11.0-win32.zip")
+    message("Downloading GLEW")
+    set(GLEW_VERSION "1.12.0")
+    set(FILENAME "glew-${GLEW_VERSION}-win32.zip")
     if (NOT EXISTS "${DOWNLOAD_DIR}/${FILENAME}")
-        file(DOWNLOAD "http://downloads.sourceforge.net/project/glew/glew/1.11.0/${FILENAME}" "${DOWNLOAD_DIR}/${FILENAME}" STATUS downloaded)
+        file(DOWNLOAD "http://downloads.sourceforge.net/project/glew/glew/${GLEW_VERSION}/${FILENAME}" "${DOWNLOAD_DIR}/${FILENAME}" STATUS downloaded)
     endif()
+    message("Installing GLEW")
     execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf "${DOWNLOAD_DIR}/${FILENAME}" WORKING_DIRECTORY "${CMAKE_INSTALL_PREFIX}")
-    
+
     # remove old glew directory
     if (EXISTS "${CMAKE_INSTALL_PREFIX}/glew")
       execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_INSTALL_PREFIX}/glew")
     endif()
-    
-    file(RENAME "${CMAKE_INSTALL_PREFIX}/glew-1.11.0" "${CMAKE_INSTALL_PREFIX}/glew")
+
+    file(RENAME "${CMAKE_INSTALL_PREFIX}/glew-${GLEW_VERSION}" "${CMAKE_INSTALL_PREFIX}/glew")
 endmacro()
 
-lib3ds()
-#fltlib()
-tinyxml()
-boost()
-devil()
-freeglut()
-glew()
+if(BUILD_LIB3DS)
+  lib3ds()
+endif(BUILD_LIB3DS)
 
-#message("Cleaning up")
-#execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_CURRENT_SOURCE_DIR}/temp")
+if(BUILD_FTLLIB)
+  fltlib()
+endif(BUILD_FTLLIB)
+
+if(BUILD_TINYXML)
+  tinyxml()
+endif(BUILD_TINYXML)
+
+if(BUILD_BOOST)
+  boost()
+endif(BUILD_BOOST)
+
+if(BUILD_DEVIL)
+  devil()
+endif(BUILD_DEVIL)
+
+if(BUILD_FREEGLUT)
+  freeglut()
+endif(BUILD_FREEGLUT)
+
+if(BUILD_GLEW)
+  glew()
+endif(BUILD_GLEW)
+
+message("Cleaning up")
+execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_CURRENT_SOURCE_DIR}/temp")
