@@ -57,7 +57,6 @@ namespace dp
         virtual void onDetach( ObjectTreeIndex index )
         {
           m_dirtyGeoNodes.erase( index );
-          m_sceneTree->getObjectTreeNode(index).m_isDrawable = false;
         }
 
         void popDirtyGeoNodes( ObjectTreeIndexSet & currentSet ) const 

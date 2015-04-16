@@ -295,7 +295,7 @@ void ViewerRendererWidget::setScene( dp::sg::core::SceneSharedPtr const & scene 
 
   if ( scene )
   {
-    m_viewState->setScene( scene );
+    m_viewState->setSceneTree( GetApp()->getViewState()->getSceneTree() );
 
     // reset manipulator in case the manip corrects for scene size and whatnot
     ManipulatorType mt = getManipulatorType();
@@ -305,7 +305,7 @@ void ViewerRendererWidget::setScene( dp::sg::core::SceneSharedPtr const & scene 
   else
   {
     // reset scene and camera here
-    m_viewState->setScene( SceneSharedPtr::null );
+    m_viewState->setSceneTree( dp::sg::xbar::SceneTreeSharedPtr::null );
     m_viewState->setCamera( CameraSharedPtr::null );
   }
 

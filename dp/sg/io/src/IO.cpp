@@ -120,9 +120,9 @@ namespace dp
         {
           viewState = dp::sg::ui::ViewState::create();
         }
-        if ( !viewState->getScene() )
+        if ( !viewState->getSceneTree() )
         {
-          viewState->setScene( scene );
+          viewState->setSceneTree( dp::sg::xbar::SceneTree::create( scene ) );
         }
 
         return viewState;
