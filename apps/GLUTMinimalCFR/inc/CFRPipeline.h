@@ -68,6 +68,7 @@ public:
 protected:
   virtual void doRender(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget);
   virtual void onEnvironmentSamplerChanged();
+  virtual void onEnvironmentRenderingEnabledChanged();
 
 private:
   DEFINE_PTR_TYPES( MonoViewStateProvider );

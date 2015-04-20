@@ -51,6 +51,8 @@ class PreferencesDialog : public QDialog
     void selectEnvironmentMap( bool checked );
     void selectMaterialCatalogPath( bool checked );
 
+    void toggledEnvironmentBox( bool on );
+
   private:
     QListWidget * m_searchPaths;
     QListWidget * m_effectFiles;
@@ -58,6 +60,7 @@ class PreferencesDialog : public QDialog
     QLabel      * m_materialCatalogLabel;
 
     QStringList m_restoreSearchPaths;
+    bool        m_restoreEnvironmentEnabled;
     QString     m_restoreEnvironmentTextureName;
     QString     m_restoreMaterialCatalogPath;
 };

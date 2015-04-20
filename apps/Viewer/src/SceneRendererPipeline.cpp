@@ -53,7 +53,6 @@ SceneRendererPipelineSharedPtr SceneRendererPipeline::create()
 // allows to set the scene renderer before any OpenGL resources have been allocated.
 SceneRendererPipeline::SceneRendererPipeline()
 : m_highlighting( false )
-, m_backdropEnabled( GetApp()->isBackdropEnabled() )
 , m_tonemapperEnabled( false ) 
 , m_tonemapperValuesChanged( false )
 {
@@ -72,7 +71,6 @@ SceneRendererPipeline::~SceneRendererPipeline()
 {
   // The ViewerRendererWidget destructor makes the context current to allow cleanup of OpenGL resources!
   m_tonemapper.reset();
-  m_environmentBackdrop.reset();
   m_rendererHighlight.reset();
   m_rendererStencilToColor.reset();
   m_sceneRendererHighlight.reset();
@@ -88,6 +86,10 @@ bool SceneRendererPipeline::init(const dp::gl::RenderContextSharedPtr &renderCon
   vector<string> searchPaths;
   searchPaths.push_back( dp::home() + "/apps/Viewer/res" );
   dp::fx::EffectLibrary::instance()->loadEffects( "viewerEffects.xml", searchPaths );
+
+  DP_ASSERT( m_sceneRenderer );
+  m_sceneRenderer->setRenderTarget( renderTarget );
+  m_sceneRenderer->setEnvironmentRenderingEnabled( GetApp()->getPreferences()->getEnvironmentEnabled() );
 
   // Create an FBO with 2D texture color attachment and depth stencil render buffers.
   // This one remains monoscopic, SceneRendererPipeline::doRender() works per eye.
@@ -132,7 +134,10 @@ bool SceneRendererPipeline::init(const dp::gl::RenderContextSharedPtr &renderCon
   {
     initTonemapper();
   }
-  initBackdrop();
+  if ( GetApp()->getPreferences()->getEnvironmentEnabled() )
+  {
+    initBackdrop();
+  }
 
   // Create a full screen quad renderer for the stencil buffer to color attachment migration.
   m_rendererStencilToColor = dp::sg::renderer::rix::gl::FSQRenderer::create(m_highlightFBO);
@@ -176,90 +181,8 @@ void SceneRendererPipeline::doRender(dp::sg::ui::ViewStateSharedPtr const& viewS
   }
 }
 
-void SceneRendererPipeline::doRenderBackdrop(dp::sg::ui::ViewStateSharedPtr const& viewState)
-{
-  // must not be called if backdrop is deactivated
-  DP_ASSERT(m_backdropEnabled);
-    
-  // texture coord setup for mapping the backdrop
-  //
-  dp::sg::core::FrustumCameraSharedPtr const& theCamera = viewState->getCamera().staticCast<dp::sg::core::FrustumCamera>();
-
-  dp::math::Vec3f lookdir = theCamera->getDirection();
-  DP_ASSERT( isNormalized( lookdir ) );
-
-  dp::math::Vec3f up = theCamera->getUpVector();
-  DP_ASSERT( isNormalized( up ) );
-
-  dp::math::Vec3f camera_u = lookdir ^ up;
-  dp::math::Vec3f camera_v = camera_u ^ lookdir;
-  normalize(camera_u);
-  normalize(camera_v);
-
-  float focusDistance = theCamera->getFocusDistance();
-  dp::math::Vec2f wo = theCamera->getWindowOffset();  // default (0, 0)
-  dp::math::Vec2f ws = theCamera->getWindowSize();    // default (1, 1)
-  dp::math::Box2f wr = theCamera->getWindowRegion();
-  //theCamera->getWindowRegion(ll, ur); // defaults (0, 0) and (1, 1)
-  dp::math::Vec2f ll = wr.getLower();
-  dp::math::Vec2f ur = wr.getUpper();
-
-  // This is the window into the world at focus distance.
-  float l = wo[0] - 0.5f * ws[0];
-  float b = wo[1] - 0.5f * ws[1];
-      
-  //  adjust the l/r/b/t values to the window region to view
-  float r = l + ur[0] * ws[0];
-  l += ll[0] * ws[0];
-      
-  float t = b + ur[1] * ws[1];
-  b += ll[1] * ws[1];
-      
-  // The vector to the window region center.
-  lookdir = lookdir * focusDistance;
-  lookdir += camera_u * 0.5f * (l + r);
-  lookdir += camera_v * 0.5f * (b + t);
-
-  // Half sized vector of window region u and v directions.
-  camera_u *= 0.5f * (r - l);
-  camera_v *= 0.5f * (t - b);
-
-  // Mind, lookdir and camera_u, camera_v are not normalized!
-
-  // Seeding the texture coordinate 2 of the FSQ with the frustum corner vectors.
-  std::vector<dp::math::Vec4f> worldFrustum;
-  worldFrustum.push_back(dp::math::Vec4f(lookdir - camera_u - camera_v, 0.0f)); // lower left
-  worldFrustum.push_back(dp::math::Vec4f(lookdir + camera_u - camera_v, 0.0f)); // lower right
-  worldFrustum.push_back(dp::math::Vec4f(lookdir + camera_u + camera_v, 0.0f)); // upper right
-  worldFrustum.push_back(dp::math::Vec4f(lookdir - camera_u + camera_v, 0.0f)); // upper left
-
-  m_environmentBackdrop->setTexCoords(2, worldFrustum);
-
-  m_environmentBackdrop->render();
-}
-
 void SceneRendererPipeline::doRenderStandard(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget)
 {
-  dp::gl::RenderTargetSharedPtr const & renderTargetGL = dp::util::shared_cast<dp::gl::RenderTarget>(renderTarget);
-  dp::gl::TargetBufferMask clearMask = renderTargetGL->getClearMask();
-
-  if (m_backdropEnabled)
-  {
-    // Instead of glClear the viewport before rendering the scene, 
-    // render a full screen quad with the environment backdrop effect applied
-    //
-    // We render the color buffer, depth and stencil might still be cleared.
-    renderTargetGL->setClearMask( clearMask & ~dp::gl::TBM_COLOR_BUFFER );
-
-    // render the backdrop instead of clearing the color buffer
-    doRenderBackdrop( viewState );
-  }
-  else
-  {
-    // ensure to clear the color buffer for no backdrop
-    renderTargetGL->setClearMask( clearMask | dp::gl::TBM_COLOR_BUFFER );
-  }
-
   // Call the current scene renderer and render the whole scene into the main render target (tonemapFBO).
   DP_ASSERT( viewState->getTraversalMask() == ~0 );
 
@@ -278,23 +201,6 @@ void SceneRendererPipeline::doRenderTonemap(dp::sg::ui::ViewStateSharedPtr const
   unsigned int height;
   renderTarget->getSize(width, height);
   m_tonemapFBO->setSize(width, height);
-
-  if (m_backdropEnabled)
-  {
-    // Instead of glClear the viewport before rendering the scene, 
-    // render a full screen quad with the environment backdrop effect applied
-    //
-    // We render the color buffer, depth and stencil might still be cleared.
-    m_tonemapFBO->setClearMask( clearMask & ~dp::gl::TBM_COLOR_BUFFER );
-
-    // render the backdrop instead of clearing the color buffer
-    doRenderBackdrop( viewState );
-  }
-  else
-  {
-    // ensure to clear the color buffer for no backdrop
-    m_tonemapFBO->setClearMask( clearMask | dp::gl::TBM_COLOR_BUFFER );
-  }
 
   // Call the current scene renderer and render the whole scene into the main render target (tonemapFBO).
   DP_ASSERT( viewState->getTraversalMask() == ~0 );
@@ -394,6 +300,11 @@ void SceneRendererPipeline::setSceneRenderer(const dp::sg::ui::SceneRendererShar
   // Do not separate the ViewState camera another time during the render() call issued inside the SceneRendererPipeline.
   m_sceneRenderer->setStereoViewStateProvider(m_monoViewStateProvider);
 
+  if ( GetApp()->isBackdropEnabled() )
+  {
+    updateEnvironment();
+  }
+
   // If the renderer is a SceneRendererGL2 reuse it for the highlighting to keep the number of RenderLists small.
   if ( m_sceneRenderer.isPtrTo<dp::sg::renderer::rix::gl::SceneRenderer>() )
   {
@@ -425,12 +336,15 @@ void SceneRendererPipeline::onEnvironmentSamplerChanged()
   m_sceneRenderer->setEnvironmentSampler( getEnvironmentSampler() );
 }
 
+void SceneRendererPipeline::onEnvironmentRenderingEnabledChanged()
+{
+  DP_ASSERT( GetApp()->getPreferences()->getEnvironmentEnabled() != m_sceneRenderer->getEnvironmentRenderingEnabled() );
+  m_sceneRenderer->setEnvironmentRenderingEnabled( GetApp()->getPreferences()->getEnvironmentEnabled() );
+}
+
 void SceneRendererPipeline::updateEnvironment()
 {
-  if ( m_environmentBackdrop )
-  {
-    m_environmentBackdrop->setSamplerByName( "environment", GetApp()->getEnvironmentSampler() );
-  }
+  m_sceneRenderer->setEnvironmentSampler( GetApp()->getEnvironmentSampler() );
 }
 
 std::map<dp::fx::Domain,std::string> SceneRendererPipeline::getShaderSources( const dp::sg::core::GeoNodeSharedPtr & geoNode, bool depthPass ) const
@@ -528,23 +442,13 @@ void SceneRendererPipeline::setTonemapperValues( const TonemapperValues& values 
 
 void SceneRendererPipeline::initBackdrop()
 {
-  // initialize everything required to render the backdrop
-  if ( m_tonemapperEnabled )
-  {
-    m_environmentBackdrop = dp::sg::renderer::rix::gl::FSQRenderer::create( m_tonemapFBO ); // Render the backdrop to the tonemapper texture.
-  }
-  else
-  {
-    m_environmentBackdrop = dp::sg::renderer::rix::gl::FSQRenderer::create( m_renderTarget ); // Render to the standard framebuffer.
-  }
-  m_environmentBackdrop->setEffect( dp::sg::core::EffectData::create( EffectLibrary::instance()->getEffectSpec( std::string("environmentBackdrop") ) ) );
-
   dp::sg::core::SamplerSharedPtr environmentSampler = dp::sg::core::Sampler::create( GetApp()->getEnvironmentSampler()->getTexture() );
   environmentSampler->setWrapModes( dp::sg::core::TWM_REPEAT, dp::sg::core::TWM_CLAMP_TO_EDGE, dp::sg::core::TWM_REPEAT );
   environmentSampler->setMagFilterMode( dp::sg::core::TFM_MAG_LINEAR );
   environmentSampler->setMinFilterMode( dp::sg::core::TFM_MIN_LINEAR );
 
-  m_environmentBackdrop->setSamplerByName( "environment", environmentSampler );
+  DP_ASSERT( m_sceneRenderer );
+  m_sceneRenderer->setEnvironmentSampler( environmentSampler );
 }
 
 void SceneRendererPipeline::initTonemapper()

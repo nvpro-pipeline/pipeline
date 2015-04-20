@@ -42,6 +42,7 @@ class Preferences : public QObject
   //
 
   Q_PROPERTY( bool          depthPass               READ  getDepthPass              WRITE setDepthPass )
+  Q_PROPERTY( bool          environmentEnabled      READ  getEnvironmentEnabled     WRITE setEnvironmentEnabled )
   Q_PROPERTY( QString       environmentTextureName  READ  getEnvironmentTextureName WRITE setEnvironmentTextureName )
   Q_PROPERTY( QString       materialCatalogPath     READ  getMaterialCatalogPath    WRITE setMaterialCatalogPath )
   Q_PROPERTY( float         normalsLineLength       READ  getNormalsLineLength      WRITE setNormalsLineLength )
@@ -57,6 +58,9 @@ class Preferences : public QObject
   public:
     void setDepthPass( bool enabled );
     bool getDepthPass() const;
+
+    void setEnvironmentEnabled( bool enabled );
+    bool getEnvironmentEnabled() const;
 
     void setEnvironmentTextureName( const QString & name );
     QString getEnvironmentTextureName() const;
@@ -86,6 +90,7 @@ class Preferences : public QObject
 
 signals:
     void depthPassEnabled( bool enabled );
+    void environmentEnabledChanged();
     void environmentTextureNameChanged( QString const& name );
     void materialCatalogPathChanged( QString const& name );
     void normalsLineLengthChanged( float len );
@@ -93,6 +98,7 @@ signals:
 
   private:
     bool          m_depthPassEnabled;
+    bool          m_environmentEnabled;
     QString       m_environmentTextureName;
     QString       m_materialCatalogPath;
     float         m_normalsLineLength;
