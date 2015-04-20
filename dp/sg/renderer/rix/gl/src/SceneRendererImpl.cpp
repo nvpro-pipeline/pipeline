@@ -25,6 +25,7 @@
 
 
 #include <dp/DP.h>
+#include <dp/fx/EffectLibrary.h>
 #include <dp/sg/renderer/rix/gl/TransparencyManagerNone.h>
 #include <dp/sg/renderer/rix/gl/TransparencyManagerOITAll.h>
 #include <dp/sg/renderer/rix/gl/TransparencyManagerOITClosestArray.h>
@@ -136,6 +137,7 @@ namespace dp
 
               glStack.pop();
             }
+            m_environmentRenderer.reset();
           }
 
           void SceneRendererImpl::addRendererOptions( const dp::sg::ui::RendererOptionsSharedPtr &rendererOptions )
@@ -235,6 +237,7 @@ namespace dp
 
                 m_drawableManager = createDrawableManager( m_resourceManager );
                 m_drawableManager->setSceneTree( m_sceneTree );
+                m_drawableManager->setEnvironmentSampler( getEnvironmentRenderingEnabled() ? getEnvironmentSampler() : dp::sg::core::SamplerSharedPtr::null );
                 m_drawableManager->update( m_viewportSize );
 
                 DrawableManagerDefault* drawableManagerDefault = dynamic_cast<DrawableManagerDefault*>( m_drawableManager );
@@ -244,7 +247,7 @@ namespace dp
                 m_transparencyManager->useParameterContainer( m_resourceManager->getRenderer(), drawableManagerDefault->getRenderGroupTransparent() );
                 m_transparencyManager->useParameterContainer( m_resourceManager->getRenderer(), drawableManagerDefault->getRenderGroupTransparentDepthPass() );
               }
-      
+
               // Refresh all observed data
               {
                 // Refresh the Scene Tree (the caches need to be filled for the first render)
@@ -254,12 +257,7 @@ namespace dp
                 m_resourceManager->updateResources();
               }
 
-              {
-        
-                PROFILE( "Render");
-                doRenderDrawables( viewState, renderTargetGL );
-              }
-            }
+              doRenderDrawables( viewState, renderTargetGL );            }
           }
 
           DrawableManager* SceneRendererImpl::createDrawableManager( const ResourceManagerSharedPtr &resourceManager ) const
@@ -271,8 +269,73 @@ namespace dp
             return( dmd );
           }
 
+          void SceneRendererImpl::doRenderEnvironmentMap( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::gl::RenderTargetSharedPtr const& renderTarget )
+          {
+            NSIGHT_START_RANGE( "EnvironmentMap" );
+            // must not be called if backdrop is deactivated
+            DP_ASSERT(m_environmentRenderer);
+
+            // texture coord setup for mapping the backdrop
+            //
+            dp::sg::core::FrustumCameraSharedPtr const& theCamera = viewState->getCamera().staticCast<dp::sg::core::FrustumCamera>();
+
+            dp::math::Vec3f lookdir = theCamera->getDirection();
+            DP_ASSERT( isNormalized( lookdir ) );
+
+            dp::math::Vec3f up = theCamera->getUpVector();
+            DP_ASSERT( isNormalized( up ) );
+
+            dp::math::Vec3f camera_u = lookdir ^ up;
+            dp::math::Vec3f camera_v = camera_u ^ lookdir;
+            normalize(camera_u);
+            normalize(camera_v);
+
+            float focusDistance = theCamera->getFocusDistance();
+            dp::math::Vec2f wo = theCamera->getWindowOffset();  // default (0, 0)
+            dp::math::Vec2f ws = theCamera->getWindowSize();    // default (1, 1)
+            dp::math::Box2f wr = theCamera->getWindowRegion();
+            //theCamera->getWindowRegion(ll, ur); // defaults (0, 0) and (1, 1)
+            dp::math::Vec2f ll = wr.getLower();
+            dp::math::Vec2f ur = wr.getUpper();
+
+            // This is the window into the world at focus distance.
+            float l = wo[0] - 0.5f * ws[0];
+            float b = wo[1] - 0.5f * ws[1];
+
+            //  adjust the l/r/b/t values to the window region to view
+            float r = l + ur[0] * ws[0];
+            l += ll[0] * ws[0];
+
+            float t = b + ur[1] * ws[1];
+            b += ll[1] * ws[1];
+
+            // The vector to the window region center.
+            lookdir = lookdir * focusDistance;
+            lookdir += camera_u * 0.5f * (l + r);
+            lookdir += camera_v * 0.5f * (b + t);
+
+            // Half sized vector of window region u and v directions.
+            camera_u *= 0.5f * (r - l);
+            camera_v *= 0.5f * (t - b);
+
+            // Mind, lookdir and camera_u, camera_v are not normalized!
+
+            // Seeding the texture coordinate 2 of the FSQ with the frustum corner vectors.
+            std::vector<dp::math::Vec4f> worldFrustum;
+            worldFrustum.push_back(dp::math::Vec4f(lookdir - camera_u - camera_v, 0.0f)); // lower left
+            worldFrustum.push_back(dp::math::Vec4f(lookdir + camera_u - camera_v, 0.0f)); // lower right
+            worldFrustum.push_back(dp::math::Vec4f(lookdir + camera_u + camera_v, 0.0f)); // upper right
+            worldFrustum.push_back(dp::math::Vec4f(lookdir - camera_u + camera_v, 0.0f)); // upper left
+
+            m_environmentRenderer->setTexCoords(2, worldFrustum);
+            m_environmentRenderer->render( renderTarget );
+            NSIGHT_STOP_RANGE();
+          }
+
           void SceneRendererImpl::doRenderDrawables( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::gl::RenderTargetSharedPtr const& renderTarget )
           {
+            PROFILE( "Render");
+
             CameraSharedPtr camera = viewState->getCamera();
 
             DrawableManagerDefault *drawableManagerDefault = dynamic_cast<DrawableManagerDefault*>(m_drawableManager);
@@ -296,60 +359,65 @@ namespace dp
             // cull
             drawableManagerDefault->cull( camera );
 
-            if( drawableManagerDefault )
+            NSIGHT_START_RANGE( "Frame" );
+            dp::gl::RenderTargetSharedPtr const & renderTargetGL = dp::util::shared_cast<dp::gl::RenderTarget>(renderTarget);
+            dp::gl::TargetBufferMask clearMask = renderTargetGL->getClearMask();
+            if ( getEnvironmentRenderingEnabled() )
             {
-              NSIGHT_START_RANGE( "Frame" );
-              glEnable(GL_DEPTH_TEST);
-              if ( m_depthPass )
-              {
-                NSIGHT_START_RANGE( "DepthPass" );
-                glDepthFunc(GL_LEQUAL);
-                glColorMask( GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE );
-                m_renderer->render( drawableManagerDefault->getRenderGroupDepthPass() );
-                glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE );
-                NSIGHT_STOP_RANGE();
-              }
+              // render the backdrop instead of clearing the color buffer
+              doRenderEnvironmentMap( viewState, renderTarget );
+            }
 
-              NSIGHT_START_RANGE( "OpaquePass" );
-              m_renderer->render( drawableManagerDefault->getRenderGroup() );
-              NSIGHT_STOP_RANGE();
-              if ( drawableManagerDefault->containsTransparentGIs() )
-              {
-                bool done;
-                do
-                {
-                  NSIGHT_START_RANGE( "Begin TransparentPass" );
-                  m_transparencyManager->beginTransparentPass( m_renderer.get() );
-                  NSIGHT_STOP_RANGE();
-                  if ( m_transparencyManager->supportsDepthPass() )
-                  {
-                    NSIGHT_START_RANGE( "TransparentPass Depth" );
-                    m_renderer->render( drawableManagerDefault->getRenderGroupTransparentDepthPass() );
-                    NSIGHT_STOP_RANGE();
-                    NSIGHT_START_RANGE( "TransparentPass Resolve Depth" );
-                    m_transparencyManager->resolveDepthPass();
-                    NSIGHT_STOP_RANGE();
-                  }
-                  if ( m_transparencyManager->needsSortedRendering() )
-                  {
-                    std::vector<dp::rix::core::GeometryInstanceSharedHandle> const & sortedGIs = drawableManagerDefault->getSortedTransparentGIs( camera->getPosition() );
-                    NSIGHT_START_RANGE( "TransparentPass Sorted" );
-                    m_renderer->render( drawableManagerDefault->getRenderGroupTransparent(), &sortedGIs[0], sortedGIs.size() );
-                    NSIGHT_STOP_RANGE();
-                  }
-                  else
-                  {
-                    NSIGHT_START_RANGE( "TransparentPass Unsorted" );
-                    m_renderer->render( drawableManagerDefault->getRenderGroupTransparent() );
-                    NSIGHT_STOP_RANGE();
-                  }
-                  NSIGHT_START_RANGE( "End TransparentPass" );
-                  done = m_transparencyManager->endTransparentPass();
-                  NSIGHT_STOP_RANGE();
-                } while ( !done );
-              }
+            glEnable(GL_DEPTH_TEST);
+            if ( m_depthPass )
+            {
+              NSIGHT_START_RANGE( "DepthPass" );
+              glDepthFunc(GL_LEQUAL);
+              glColorMask( GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE );
+              m_renderer->render( drawableManagerDefault->getRenderGroupDepthPass() );
+              glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE );
               NSIGHT_STOP_RANGE();
             }
+
+            NSIGHT_START_RANGE( "OpaquePass" );
+            m_renderer->render( drawableManagerDefault->getRenderGroup() );
+            NSIGHT_STOP_RANGE();
+            if ( drawableManagerDefault->containsTransparentGIs() )
+            {
+              bool done;
+              do
+              {
+                NSIGHT_START_RANGE( "Begin TransparentPass" );
+                m_transparencyManager->beginTransparentPass( m_renderer.get() );
+                NSIGHT_STOP_RANGE();
+                if ( m_transparencyManager->supportsDepthPass() )
+                {
+                  NSIGHT_START_RANGE( "TransparentPass Depth" );
+                  m_renderer->render( drawableManagerDefault->getRenderGroupTransparentDepthPass() );
+                  NSIGHT_STOP_RANGE();
+                  NSIGHT_START_RANGE( "TransparentPass Resolve Depth" );
+                  m_transparencyManager->resolveDepthPass();
+                  NSIGHT_STOP_RANGE();
+                }
+                if ( m_transparencyManager->needsSortedRendering() )
+                {
+                  std::vector<dp::rix::core::GeometryInstanceSharedHandle> const & sortedGIs = drawableManagerDefault->getSortedTransparentGIs( camera->getPosition() );
+                  NSIGHT_START_RANGE( "TransparentPass Sorted" );
+                  m_renderer->render( drawableManagerDefault->getRenderGroupTransparent(), &sortedGIs[0], sortedGIs.size() );
+                  NSIGHT_STOP_RANGE();
+                }
+                else
+                {
+                  NSIGHT_START_RANGE( "TransparentPass Unsorted" );
+                  m_renderer->render( drawableManagerDefault->getRenderGroupTransparent() );
+                  NSIGHT_STOP_RANGE();
+                }
+                NSIGHT_START_RANGE( "End TransparentPass" );
+                done = m_transparencyManager->endTransparentPass();
+                NSIGHT_STOP_RANGE();
+              } while ( !done );
+            }
+            NSIGHT_STOP_RANGE();
           }
 
           void SceneRendererImpl::onEnvironmentSamplerChanged()
@@ -357,6 +425,28 @@ namespace dp
             if ( m_drawableManager )
             {
               m_drawableManager->setEnvironmentSampler( getEnvironmentSampler() );
+            }
+          }
+
+          void SceneRendererImpl::onEnvironmentRenderingEnabledChanged()
+          {
+            DP_ASSERT( getRenderTarget().dynamicCast<dp::gl::RenderTarget>() );
+            dp::gl::RenderTargetSharedPtr glRenderTarget = getRenderTarget().staticCast<dp::gl::RenderTarget>();
+            if ( getEnvironmentRenderingEnabled() )
+            {
+              m_environmentRenderer = dp::sg::renderer::rix::gl::FSQRenderer::create( glRenderTarget );
+              m_environmentRenderer->setEffect( dp::sg::core::EffectData::create( dp::fx::EffectLibrary::instance()->getEffectSpec( std::string("environmentBackdrop") ) ) );
+              m_environmentRenderer->setSamplerByName( "environment", getEnvironmentSampler() );
+              glRenderTarget->setClearMask( glRenderTarget->getClearMask() & ~dp::gl::TBM_COLOR_BUFFER );
+            }
+            else
+            {
+              m_environmentRenderer.reset();
+              glRenderTarget->setClearMask( glRenderTarget->getClearMask() | dp::gl::TBM_COLOR_BUFFER );
+            }
+            if ( m_drawableManager )
+            {
+              m_drawableManager->setEnvironmentSampler( getEnvironmentRenderingEnabled() ? getEnvironmentSampler() : dp::sg::core::SamplerSharedPtr::null );
             }
           }
 
@@ -439,7 +529,6 @@ namespace dp
           {
             return m_renderEngine;
           }
-
 
           void SceneRendererImpl::shutdownRenderer()
           {

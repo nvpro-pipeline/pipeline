@@ -109,6 +109,9 @@ namespace dp
         DP_SG_UI_API void setStereoViewStateProvider( StereoViewStateProviderSharedPtr const& viewStateProvider );
         DP_SG_UI_API StereoViewStateProviderSharedPtr const& getStereoViewStateProvider() const;
 
+        DP_SG_UI_API void setEnvironmentRenderingEnabled( bool enabled );
+        DP_SG_UI_API bool getEnvironmentRenderingEnabled() const;
+
         DP_SG_UI_API void setEnvironmentSampler( const dp::sg::core::SamplerSharedPtr & sampler );
         DP_SG_UI_API const dp::sg::core::SamplerSharedPtr & getEnvironmentSampler() const;
 
@@ -165,6 +168,7 @@ namespace dp
         **/
         DP_SG_UI_API virtual void doRender( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget ) = 0;
 
+        DP_SG_UI_API virtual void onEnvironmentRenderingEnabledChanged();
         DP_SG_UI_API virtual void onEnvironmentSamplerChanged();
 
       protected:
@@ -174,6 +178,7 @@ namespace dp
         dp::sg::ui::RendererOptionsWeakPtr  m_rendererOptions;
 
       private:
+        bool                              m_environmentRenderingEnabled;
         StereoViewStateProviderSharedPtr  m_stereoViewStateProvider;
         unsigned int                      m_traversalMaskOverride;
         dp::sg::core::SamplerSharedPtr    m_environmentSampler;

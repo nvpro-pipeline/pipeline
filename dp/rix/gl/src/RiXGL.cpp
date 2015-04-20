@@ -591,42 +591,63 @@ namespace dp
 
         switch ( type )
         {
-        case GL_DEBUG_TYPE_ERROR_ARB:
+        case GL_DEBUG_TYPE_ERROR:
           header += "ERROR ";
           break;
-        case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR_ARB:
+        case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
           header += "Deprecated Behavior ";
           break;
-        case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR_ARB:
+        case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
           header += "Undefined Behavior ";
           break;
-        case GL_DEBUG_TYPE_PORTABILITY_ARB:
+        case GL_DEBUG_TYPE_PORTABILITY:
           header += "Portability ";
           break;
-        case GL_DEBUG_TYPE_PERFORMANCE_ARB:
+        case GL_DEBUG_TYPE_PERFORMANCE:
+          {
+            std::string ignoredMessage( "Program/shader state performance warning: Fragment Shader is going to be recompiled because the shader key based on GL state mismatches." );
+            if ( strncmp( message, ignoredMessage.c_str(), ignoredMessage.size() ) == 0 )
+            {
+              DP_ASSERT( severity == GL_DEBUG_SEVERITY_MEDIUM );
+              return;   //  ignore this performance message
+            }
+          }
           header += "Performance ";
           break;
-        case GL_DEBUG_TYPE_OTHER_ARB:
+        case GL_DEBUG_TYPE_OTHER:
+          {
+            std::string bufferObjectMessage( "Buffer detailed info: Buffer object" );
+            if ( strncmp( message, bufferObjectMessage.c_str(), bufferObjectMessage.size() ) == 0 )
+            {
+              DP_ASSERT( severity == GL_DEBUG_SEVERITY_NOTIFICATION );
+              return;   //  ignore this notification
+            }
+          }
           header += "Other ";
           break;
         }
 
         switch ( severity )
         {
-        case GL_DEBUG_SEVERITY_HIGH_ARB:
+        case GL_DEBUG_SEVERITY_NOTIFICATION :
+          header += "(notification): ";
+          break;
+        case GL_DEBUG_SEVERITY_HIGH:
           header += "(high): ";
           break;
-        case GL_DEBUG_SEVERITY_MEDIUM_ARB:
+        case GL_DEBUG_SEVERITY_MEDIUM:
           header += "(medium): ";
           break;
-        case GL_DEBUG_SEVERITY_LOW_ARB:
+        case GL_DEBUG_SEVERITY_LOW:
           header += "(low): ";
           break;
         }
 
         std::cerr << header << message << std::endl;
 
-        if ( type == GL_DEBUG_TYPE_ERROR_ARB ) 
+        DP_ASSERT( !"encountered unhandled debug message!" );
+
+        if ( type == GL_DEBUG_TYPE_ERROR )
         {
           // DAR FIXME The OpenGL driver reports an error when a texture sampler is unassigned although it's not used, that is not fatal: DP_ASSERT( 0 && "OpenGL Error" );
         }

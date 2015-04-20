@@ -298,12 +298,10 @@ namespace dp
 
           void ShaderManagerRiXFx::updateEnvironment( ResourceSamplerSharedPtr environmentSampler )
           {
-            DP_ASSERT( environmentSampler );
-
             dp::rix::core::ContainerEntry entry = m_renderer->containerDescriptorGetEntry( m_descriptorEnvironment, "sys_EnvironmentSampler" );
-            m_renderer->containerSetData( m_containerEnvironment, entry, dp::rix::core::ContainerDataSampler( environmentSampler->m_samplerHandle ) );
+            m_renderer->containerSetData( m_containerEnvironment, entry, dp::rix::core::ContainerDataSampler( environmentSampler ? environmentSampler->m_samplerHandle : nullptr ) );
 
-            unsigned char enabled = ( environmentSampler->m_resourceTexture && environmentSampler->m_resourceTexture->m_textureHandle );
+            unsigned char enabled = ( environmentSampler && environmentSampler->m_resourceTexture && environmentSampler->m_resourceTexture->m_textureHandle );
             entry = m_renderer->containerDescriptorGetEntry( m_descriptorEnvironment, "sys_EnvironmentSamplerEnabled" );
             m_renderer->containerSetData( m_containerEnvironment, entry, dp::rix::core::ContainerDataRaw( 0, &enabled, sizeof(enabled) ) );
           }

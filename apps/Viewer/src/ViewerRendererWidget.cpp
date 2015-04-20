@@ -140,6 +140,7 @@ ViewerRendererWidget::setRendererType( RendererType type )
                                                             viewer->getShaderManagerType(),
                                                             viewer->getCullingMode(),
                                                             viewer->getTransparencyMode() );
+        ssrgl->setEnvironmentSampler( GetApp()->getEnvironmentSampler() );
         ssrgl->setDepthPass( GetApp()->getPreferences()->getDepthPass() );
         setSceneRenderer( ssrgl );
       }
@@ -244,7 +245,8 @@ ViewerRendererWidget::addDefaultActions()
   m_contextMenuEntries.push_back( GetApp()->getMainWindow()->getMenu( MainWindow::MID_CULLING ) );
   m_contextMenuEntries.push_back( GetApp()->getMainWindow()->getMenu( MainWindow::MID_VIEWPORT_FORMAT ) );
 
-  connect(GetApp(), SIGNAL(environmentChanged()), this, SLOT(updateEnvironment()));
+  connect( GetApp()->getPreferences(), SIGNAL(environmentEnabledChanged()), this, SLOT(setEnvironmentEnabledChanged()) );
+  connect( GetApp(), SIGNAL(environmentChanged()), this, SLOT(updateEnvironment()) );
 }
 
 void
@@ -931,8 +933,6 @@ dp::sg::ui::SceneRendererSharedPtr ViewerRendererWidget::getSceneRenderer() cons
 
 void ViewerRendererWidget::setSceneRenderer( const dp::sg::ui::SceneRendererSharedPtr & ssr )
 {
-  ssr->setEnvironmentSampler( GetApp()->getEnvironmentSampler() );
-
   DP_ASSERT( m_sceneRendererPipeline );
   m_sceneRendererPipeline->setSceneRenderer( ssr );
 
@@ -1261,6 +1261,11 @@ void ViewerRendererWidget::triggeredViewportFormatStereo( bool checked )
     setFormat( format );
     restartUpdate();
   }
+}
+
+void ViewerRendererWidget::setEnvironmentEnabledChanged()
+{
+  m_sceneRendererPipeline->setEnvironmentRenderingEnabled( GetApp()->getPreferences()->getEnvironmentEnabled() );
 }
 
 void ViewerRendererWidget::updateEnvironment()

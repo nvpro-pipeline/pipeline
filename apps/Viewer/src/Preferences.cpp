@@ -35,6 +35,7 @@
 
 Preferences::Preferences( QObject * parent )
   : QObject( parent )
+  , m_environmentEnabled( true )
   , m_normalsLineLength( 1.f )
   , m_transparencyMode( dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_CLOSEST_ARRAY )
 {
@@ -114,6 +115,20 @@ void Preferences::setDepthPass( bool enabled )
 bool Preferences::getDepthPass() const
 {
   return( m_depthPassEnabled );
+}
+
+void Preferences::setEnvironmentEnabled( bool enabled )
+{
+  if ( m_environmentEnabled != enabled )
+  {
+    m_environmentEnabled = enabled;
+    emit environmentEnabledChanged();
+  }
+}
+
+bool Preferences::getEnvironmentEnabled() const
+{
+  return( m_environmentEnabled );
 }
 
 void Preferences::setEnvironmentTextureName( const QString & name )

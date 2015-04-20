@@ -80,6 +80,7 @@ protected:
   SceneRendererPipeline();
   virtual void doRender(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget);
   virtual void onEnvironmentSamplerChanged();
+  virtual void onEnvironmentRenderingEnabledChanged();
 
 private:
   DEFINE_PTR_TYPES( MonoViewStateProvider );
@@ -96,7 +97,6 @@ private:
   };
 
   // helpers called from doRender to keep the code more readable
-  void doRenderBackdrop(dp::sg::ui::ViewStateSharedPtr const& viewState);
   void doRenderTonemap(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget);
   void doRenderStandard(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget);
   void doRenderHighlight(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget);
@@ -113,10 +113,8 @@ private:
   dp::sg::renderer::rix::gl::SceneRendererSharedPtr m_sceneRendererHighlight;   // The renderer for the highlighted objects into the FBO.
   dp::sg::renderer::rix::gl::FSQRendererSharedPtr   m_rendererStencilToColor;
   dp::sg::renderer::rix::gl::FSQRendererSharedPtr   m_rendererHighlight;
-  dp::sg::renderer::rix::gl::FSQRendererSharedPtr   m_environmentBackdrop;
   dp::sg::renderer::rix::gl::FSQRendererSharedPtr   m_tonemapper;
   bool                                              m_highlighting;
-  bool                                              m_backdropEnabled;
   bool                                              m_tonemapperEnabled;
 
   // Tonemapper values in the GUI:

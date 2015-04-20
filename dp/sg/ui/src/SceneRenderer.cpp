@@ -101,6 +101,7 @@ namespace dp
 
       SceneRenderer::SceneRenderer( const dp::ui::RenderTargetSharedPtr &renderTarget )
         : Renderer( renderTarget )
+        , m_environmentRenderingEnabled( false )
         , m_preserveTexturesAfterUpload( true )
         , m_traversalMaskOverride( 0 )
       {
@@ -206,6 +207,24 @@ namespace dp
 
       void SceneRenderer::addRendererOptions( const dp::sg::ui::RendererOptionsSharedPtr &rendererOptions )
       {
+      }
+
+      void SceneRenderer::onEnvironmentRenderingEnabledChanged()
+      {
+      }
+
+      void SceneRenderer::setEnvironmentRenderingEnabled( bool enabled )
+      {
+        if ( m_environmentRenderingEnabled != enabled )
+        {
+          m_environmentRenderingEnabled = enabled;
+          onEnvironmentRenderingEnabledChanged();
+        }
+      }
+
+      bool SceneRenderer::getEnvironmentRenderingEnabled() const
+      {
+        return( m_environmentRenderingEnabled );
       }
 
       void SceneRenderer::setEnvironmentSampler( const dp::sg::core::SamplerSharedPtr & sampler )

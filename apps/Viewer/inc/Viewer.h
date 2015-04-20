@@ -97,6 +97,7 @@ class Viewer : public QApplication
     void sceneTreeChanged();
 
   private slots:
+    void setEnvironmentEnabledChanged();
     void setEnvironmentTextureName( const QString & name );
     void runStartupFile();
     void runStartupScript();

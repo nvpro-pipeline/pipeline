@@ -38,6 +38,7 @@ PreferencesDialog::PreferencesDialog( QWidget * parent )
 {
   Preferences *preferences = GetPreferences();
   m_restoreSearchPaths            = preferences->getSearchPaths();
+  m_restoreEnvironmentEnabled     = preferences->getEnvironmentEnabled();
   m_restoreEnvironmentTextureName = preferences->getEnvironmentTextureName();
   m_restoreMaterialCatalogPath    = preferences->getMaterialCatalogPath();
 
@@ -57,7 +58,10 @@ PreferencesDialog::PreferencesDialog( QWidget * parent )
   environmentLayout->addRow( "Environment Map", environmentMapLayout );
 
   QGroupBox * environmentBox = new QGroupBox( "Environment" );
+  environmentBox->setCheckable( true );
+  environmentBox->setChecked( m_restoreEnvironmentEnabled );
   environmentBox->setLayout( environmentLayout );
+  connect( environmentBox, SIGNAL(toggled(bool)), this, SLOT(toggledEnvironmentBox(bool)) );
 
 
   m_materialCatalogLabel = new QLabel( m_restoreMaterialCatalogPath );
@@ -192,6 +196,12 @@ void PreferencesDialog::moveDownPath(bool checked)
   }
 }
 
+void PreferencesDialog::toggledEnvironmentBox( bool on )
+{
+  DP_ASSERT( GetPreferences()->getEnvironmentEnabled() != on );
+  GetPreferences()->setEnvironmentEnabled( on );
+}
+
 void PreferencesDialog::selectEnvironmentMap( bool checked )
 {
   QString textureFile = GetApp()->getMainWindow()->getTextureFile( dp::fx::PT_SAMPLER_2D );
@@ -218,6 +228,7 @@ void PreferencesDialog::restore()
   Preferences *preferences = GetPreferences();
 
   preferences->setSearchPaths( m_restoreSearchPaths );
+  preferences->setEnvironmentEnabled( m_restoreEnvironmentEnabled );
   preferences->setEnvironmentTextureName( m_restoreEnvironmentTextureName );
   preferences->setMaterialCatalogPath( m_restoreMaterialCatalogPath );
 }
