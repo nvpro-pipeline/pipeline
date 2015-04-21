@@ -77,7 +77,7 @@ add_library(DPFx SHARED
   ${SOURCES}
 )
 
-target_link_libraries( DPFx DP DPFxXML DPUtil ${TINYXML_LIBS} )
+target_link_libraries( DPFx DPFxGLSL DP DPUtil ${TINYXML_LIBS} )
 
 set_property(TARGET DPFx PROPERTY LINK_INTERFACE_LIBRARIES "")
 
@@ -93,3 +93,7 @@ endif(WIN32)
 # add subdirectories in the end so that 'if available' linking works.
 add_subdirectory( glsl )
 add_subdirectory( xml )
+
+if (TARGET DPFxXML)
+  target_link_libraries(DPFx DPFxXML)
+endif()

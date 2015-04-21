@@ -1,12 +1,15 @@
 project(DPUtil)
 
 find_package(Boost COMPONENTS filesystem system REQUIRED )
-find_package(DevIL REQUIRED)
+find_package(DevIL)
+
+if(NOT IL_FOUND)
+  message("DevIL not found, disabling support for image file io in DPUtil.")
+endif()
 
 include( CopyFile )
 
 include_directories( ${Boost_INCLUDE_DIRS}
-                     ${IL_INCLUDE_DIR}
                      ${NVPMAPI_INCLUDE_DIR} 
                    )
 
@@ -14,6 +17,11 @@ add_definitions(
   "-DDP_UTIL_EXPORTS"
   ${GLEW_DEFINITIONS}
 )
+
+if (IL_FOUND)
+  include_directories(${IL_INCLUDE_DIR})
+  add_definitions(-DHAVE_IL)
+endif()
 
 set(DPUTIL_INCLUDES
   Array.h
@@ -107,9 +115,12 @@ CopyDevIL( DPUtil "${DP_BINARY_PATH}" )
 CopyGLEW( DPUtil "${DP_BINARY_PATH}" )
 
 target_link_libraries( DPUtil
-    ${Boost_LIBRARIES}
-    ${IL_LIBRARIES}
+  ${Boost_LIBRARIES}
 )
+
+if (IL_FOUND)
+  target_link_libraries( DPUtil ${IL_LIBRARIES})
+endif()
 
 if (MSVC)
   target_link_libraries( DPUtil

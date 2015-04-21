@@ -15,49 +15,53 @@ cmake_minimum_required(VERSION 2.6)
 if ( NOT "${DP_ARCH}" STREQUAL "armv7l")
   project( TerrainRendering )
 
-  find_package(OpenGL REQUIRED )
-  find_package(GLUT REQUIRED )
-  find_package(GLEW REQUIRED )
-
+  find_package(OpenGL REQUIRED)
+  find_package(GLEW REQUIRED)
+  find_package(GLUT)
   find_package( Boost COMPONENTS program_options REQUIRED )
 
-  set( SOURCES
-    src/main.cpp
-  )
+  if (GLUT_FOUND)
+    set( SOURCES
+      src/main.cpp
+    )
 
-  set ( HEADERS
-  )
+    set ( HEADERS
+    )
 
-  include_directories( "."
-                       "inc"
-                       ${Boost_INCLUDE_DIRS}
-                       ${GLEW_INCLUDE_DIRS}
-                       ${GLUT_INCLUDE_DIR}
-                     )
+    include_directories( "."
+                         "inc"
+                         ${Boost_INCLUDE_DIRS}
+                         ${GLEW_INCLUDE_DIRS}
+                         ${GLUT_INCLUDE_DIR}
+                       )
 
-  add_definitions( ${GLEW_DEFINITIONS} )
+    add_definitions( ${GLEW_DEFINITIONS} )
 
-  add_executable( TerrainRendering
-    ${SOURCES}
-    ${HEADERS}
-  )
+    add_executable( TerrainRendering
+      ${SOURCES}
+      ${HEADERS}
+    )
 
-  target_link_libraries( TerrainRendering
-    ${GLUT_LIBRARIES}
-    ${OPENGL_gl_LIBRARY}
-    ${GLEW_LIBRARY}
-    ${Boost_LIBRARIES}
-    DPSgCore
-    DPSgGL
-    DPSgRdrRiXGL
-    DPSgIO
-    DPSgUIManipulator
-    DPSgGenerator
-    DPSgUIGLUT
-  )
+    target_link_libraries( TerrainRendering
+      ${GLUT_LIBRARIES}
+      ${OPENGL_gl_LIBRARY}
+      ${GLEW_LIBRARY}
+      ${Boost_LIBRARIES}
+      DPSgCore
+      DPSgGL
+      DPSgRdrRiXGL
+      DPSgIO
+      DPSgUIManipulator
+      DPSgGenerator
+      DPSgUIGLUT
+    )
 
-  CopyGLEW( TerrainRendering "${DP_BINARY_PATH}" )
-  CopyGLUT( TerrainRendering "${DP_BINARY_PATH}" )
+    CopyGLEW( TerrainRendering "${DP_BINARY_PATH}" )
+    CopyGLUT( TerrainRendering "${DP_BINARY_PATH}" )
 
-  set_target_properties( TerrainRendering PROPERTIES FOLDER "Apps")
+    set_target_properties( TerrainRendering PROPERTIES FOLDER "Apps")
+  else()
+    message("GLUT not found, disabling TerrainRendering.")
+  endif()
+
 endif()

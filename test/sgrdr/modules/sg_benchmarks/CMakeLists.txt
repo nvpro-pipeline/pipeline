@@ -24,24 +24,28 @@ include_directories(
   "${GLEW_INCLUDE_DIRS}"
 )
 
-add_library( ${LINK_NAME} SHARED
-   ${LINK_SOURCES}
-)
+if (TARGET DPTSgRdr)
+  add_library( ${LINK_NAME} SHARED
+     ${LINK_SOURCES}
+  )
 
-target_link_libraries( ${LINK_NAME}
-  ${GLEW_LIBRARY}
-  DPTcore
-  DPUtil
-  DPTRiX
-  RiXCore
-  RiXGL
-  DPTestManager
-  DPHelpers
-  DPTSgRdr
-  DPSgIO
-  DPSgGenerator
-  DPSgCore
-  DPSgRdrRiXGL
-)
+  target_link_libraries( ${LINK_NAME}
+    ${GLEW_LIBRARY}
+    DPTcore
+    DPUtil
+    DPTRiX
+    RiXCore
+    RiXGL
+    DPTestManager
+    DPHelpers
+    DPTSgRdr
+    DPSgIO
+    DPSgGenerator
+    DPSgCore
+    DPSgRdrRiXGL
+  )
 
-add_dependencies( ${LINK_NAME} DPHelpers )
+  add_dependencies( ${LINK_NAME} DPHelpers )
+
+endif()
+

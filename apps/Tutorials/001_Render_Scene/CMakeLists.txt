@@ -13,48 +13,52 @@ cmake_minimum_required(VERSION 2.6)
 
 project( Tutorial_001_Render_Scene )
 
-find_package( OpenGL REQUIRED )
-find_package( GLUT REQUIRED )
-find_package( GLEW REQUIRED )
+find_package(OpenGL REQUIRED)
+find_package(GLEW REQUIRED)
+find_package(GLUT)
 
 find_package( Boost COMPONENTS program_options REQUIRED )
 
-set( SOURCES
-  src/main.cpp
-)
+if (GLUT_FOUND)
+  set( SOURCES
+    src/main.cpp
+  )
 
-set ( HEADERS
-)
+  set ( HEADERS
+  )
 
-include_directories( "."
-                     "inc"
-                     ${Boost_INCLUDE_DIRS}
-                     ${GLEW_INCLUDE_DIRS}
-                     ${GLUT_INCLUDE_DIR}
-                   )
+  include_directories( "."
+                       "inc"
+                       ${Boost_INCLUDE_DIRS}
+                       ${GLEW_INCLUDE_DIRS}
+                       ${GLUT_INCLUDE_DIR}
+                     )
 
-add_definitions( ${GLEW_DEFINITIONS} )
+  add_definitions( ${GLEW_DEFINITIONS} )
 
-add_executable( Tutorial_001_Render_Scene
-  ${SOURCES}
-  ${HEADERS}
-)
+  add_executable( Tutorial_001_Render_Scene
+    ${SOURCES}
+    ${HEADERS}
+  )
 
-target_link_libraries( Tutorial_001_Render_Scene
-  ${GLUT_LIBRARIES}
-  ${OPENGL_gl_LIBRARY}
-  ${GLEW_LIBRARY}
-  ${Boost_LIBRARIES}
-  DPSgCore
-  DPSgGL
-  DPSgRdrRiXGL
-  DPSgIO
-  DPSgUIManipulator
-  DPSgGenerator
-  DPSgUIGLUT
-)
+  target_link_libraries( Tutorial_001_Render_Scene
+    ${GLUT_LIBRARIES}
+    ${OPENGL_gl_LIBRARY}
+    ${GLEW_LIBRARY}
+    ${Boost_LIBRARIES}
+    DPSgCore
+    DPSgGL
+    DPSgRdrRiXGL
+    DPSgIO
+    DPSgUIManipulator
+    DPSgGenerator
+    DPSgUIGLUT
+  )
 
-CopyGLEW( GLUTMinimal "${DP_BINARY_PATH}" )
-CopyGLUT( GLUTMinimal "${DP_BINARY_PATH}" )
+  CopyGLEW( GLUTMinimal "${DP_BINARY_PATH}" )
+  CopyGLUT( GLUTMinimal "${DP_BINARY_PATH}" )
 
-set_target_properties( Tutorial_001_Render_Scene PROPERTIES FOLDER "Tutorial")
+  set_target_properties( Tutorial_001_Render_Scene PROPERTIES FOLDER "Tutorial")
+else()
+  message("GLUT not found, disabling Tutorial_001_Render_Scene.")
+endif()

@@ -1,12 +1,10 @@
 find_package( CUDA REQUIRED )
 find_package( GLEW REQUIRED )
-find_package( GLUT REQUIRED)
 
 #includes
 include_directories(
   ${CUDA_INCLUDE_DIRS}
   ${GLEW_INCLUDE_DIRS}
-  ${GLUT_INCLUDE_DIR}
 )
 #definitions
 add_definitions(

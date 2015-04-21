@@ -14,55 +14,59 @@ cmake_minimum_required(VERSION 2.6)
 if(WIN32)
   project( GLUTMinimalCFR )
 
-  find_package( OpenGL REQUIRED )
-  find_package( GLUT REQUIRED )
-  find_package( GLEW REQUIRED )
+  find_package(OpenGL REQUIRED)
+  find_package(GLEW REQUIRED)
+  find_package(GLUT)
 
-  find_package( Boost COMPONENTS program_options REQUIRED )
+  if (GLUT_FOUND)
+    find_package( Boost COMPONENTS program_options REQUIRED )
 
-  set( SOURCES
-    src/CFRPipeline.cpp
-    src/GLUTMinimalCFR.cpp
-    src/TextureTransfer.cpp
-    main.cpp
-  )
+    set( SOURCES
+      src/CFRPipeline.cpp
+      src/GLUTMinimalCFR.cpp
+      src/TextureTransfer.cpp
+      main.cpp
+    )
 
-  set ( HEADERS
-    inc/CFRPipeline.h
-    inc/GLUTMinimalCFR.h
-    inc/TextureTransfer.h
-  )
+    set ( HEADERS
+      inc/CFRPipeline.h
+      inc/GLUTMinimalCFR.h
+      inc/TextureTransfer.h
+    )
 
-  include_directories( "."
-                       "inc"
-                       ${Boost_INCLUDE_DIRS}
-                       ${GLEW_INCLUDE_DIRS}
-                       ${GLUT_INCLUDE_DIR}
-                     )
+    include_directories( "."
+                         "inc"
+                         ${Boost_INCLUDE_DIRS}
+                         ${GLEW_INCLUDE_DIRS}
+                         ${GLUT_INCLUDE_DIR}
+                       )
 
-  add_definitions( ${GLEW_DEFINITIONS} )
+    add_definitions( ${GLEW_DEFINITIONS} )
 
-  add_executable( GLUTMinimalCFR
-    ${SOURCES}
-    ${HEADERS}
-  )
+    add_executable( GLUTMinimalCFR
+      ${SOURCES}
+      ${HEADERS}
+    )
 
-  target_link_libraries( GLUTMinimalCFR
-    ${GLUT_LIBRARIES}
-    ${OPENGL_gl_LIBRARY}
-    ${GLEW_LIBRARY}
-    ${Boost_LIBRARIES}
-    DPSgCore
-    DPSgGL
-    DPSgRdrRiXGL
-    DPSgIO
-    DPSgUIManipulator
-    DPSgGenerator
-    DPSgUIGLUT
-  )
+    target_link_libraries( GLUTMinimalCFR
+      ${GLUT_LIBRARIES}
+      ${OPENGL_gl_LIBRARY}
+      ${GLEW_LIBRARY}
+      ${Boost_LIBRARIES}
+      DPSgCore
+      DPSgGL
+      DPSgRdrRiXGL
+      DPSgIO
+      DPSgUIManipulator
+      DPSgGenerator
+      DPSgUIGLUT
+    )
 
-  CopyGLEW( GLUTMinimalCFR "${DP_BINARY_PATH}" )
-  CopyGLUT( GLUTMinimalCFR "${DP_BINARY_PATH}" )
+    CopyGLEW( GLUTMinimalCFR "${DP_BINARY_PATH}" )
+    CopyGLUT( GLUTMinimalCFR "${DP_BINARY_PATH}" )
 
-  set_target_properties( GLUTMinimalCFR PROPERTIES FOLDER "Apps")
+    set_target_properties( GLUTMinimalCFR PROPERTIES FOLDER "Apps")
+  else()
+    message("GLUT not found, disabling GLUTMinimalCFR.")
+  endif()
 endif()

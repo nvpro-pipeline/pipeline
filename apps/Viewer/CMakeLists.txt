@@ -191,7 +191,7 @@ if(Qt5Widgets_FOUND AND TARGET DPSgUIQt5)
     DPSgUIQt5
   )
 
-  add_dependencies( Viewer
+  set(VIEWER_DEPENDENCIES
     3DSLoader
     DAELoader
     DPAFLoader
@@ -211,6 +211,12 @@ if(Qt5Widgets_FOUND AND TARGET DPSgUIQt5)
     ILTexSaver
     OBJSaver
   )
+
+  foreach(DEPENDENCY ${VIEWER_DEPENDENCIES})
+    if (TARGET ${DEPENDENCY})
+      add_dependencies(Viewer ${DEPENDENCY})
+    endif()
+  endforeach()
 
   CopyGLEW( Viewer "${DP_BINARY_PATH}" )
 
