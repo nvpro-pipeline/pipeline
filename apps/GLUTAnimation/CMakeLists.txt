@@ -14,46 +14,49 @@ cmake_minimum_required(VERSION 2.6)
 project( GLUTAnimation )
 
 find_package(OpenGL REQUIRED )
-find_package(GLUT REQUIRED )
+find_package(GLUT)
 find_package(GLEW REQUIRED )
 
-set( SCENIX_COMMON_BASE "${SCENIX_HOME}/samples/common" )
+if (GLUT_FOUND)
+  set( SCENIX_COMMON_BASE "${SCENIX_HOME}/samples/common" )
 
-set( GLUTANIMATION_SOURCES
-  src/main.cpp
-  src/AnimatedScene.cpp
-)
+  set( GLUTANIMATION_SOURCES
+    src/main.cpp
+    src/AnimatedScene.cpp
+  )
 
-set (GLUTANIMATION_HEADERS
-  AnimatedScene.h
-)
+  set (GLUTANIMATION_HEADERS
+    AnimatedScene.h
+  )
 
-include_directories( "." )
-include_directories( "inc" )
-include_directories( ${GLEW_INCLUDE_DIRS} )
-include_directories( ${GLUT_INCLUDE_DIR} )
+  include_directories( "." )
+  include_directories( "inc" )
+  include_directories( ${GLEW_INCLUDE_DIRS} )
+  include_directories( ${GLUT_INCLUDE_DIR} )
 
-add_definitions( ${GLEW_DEFINITIONS} )
+  add_definitions( ${GLEW_DEFINITIONS} )
 
-add_executable( GLUTAnimation
-  ${GLUTANIMATION_SOURCES}
-  ${GLUTANIMATION_HEADERS}
-)
+  add_executable( GLUTAnimation
+    ${GLUTANIMATION_SOURCES}
+    ${GLUTANIMATION_HEADERS}
+  )
 
-target_link_libraries( GLUTAnimation
-  ${OPENGL_gl_LIBRARY}
-  ${GLEW_LIBRARY}
-  DPSgCore
-  DPSgGL
-  DPSgRdrRiXGL
-  DPSgIO
-  DPSgUIManipulator
-  DPSgUIGLUT
-  DPSgGenerator
-)
+  target_link_libraries( GLUTAnimation
+    ${OPENGL_gl_LIBRARY}
+    ${GLEW_LIBRARY}
+    DPSgCore
+    DPSgGL
+    DPSgRdrRiXGL
+    DPSgIO
+    DPSgUIManipulator
+    DPSgUIGLUT
+    DPSgGenerator
+  )
 
-CopyGLEW( GLUTAnimation "${DP_BINARY_PATH}" )
+  CopyGLEW( GLUTAnimation "${DP_BINARY_PATH}" )
 
-set_target_properties( GLUTAnimation PROPERTIES FOLDER "Apps")
-
+  set_target_properties( GLUTAnimation PROPERTIES FOLDER "Apps")
+else()
+  message("FreeGLUT not found, disabling GLUTAnimation")
+endif()
 
