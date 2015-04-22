@@ -38,132 +38,6 @@ namespace dp
 {
   namespace gl
   {
-    class ProgramInstance
-    {
-      public:
-        struct ImageUniformData
-        {
-          GLenum            access;
-          TextureSharedPtr  texture;
-        };
-
-        struct SamplerUniformData
-        {
-          SamplerSharedPtr  sampler;
-          TextureSharedPtr  texture;
-        };
-
-      public:
-        DP_GL_API static ProgramInstanceSharedPtr create( ProgramSharedPtr const& program );
-        DP_GL_API virtual ~ProgramInstance();
-
-        DP_GL_API void apply() const;
-        DP_GL_API ProgramSharedPtr const& getProgram() const;
-
-        DP_GL_API void setImageUniform( std::string const& uniformName, TextureSharedPtr const& texture, GLenum access );
-        DP_GL_API void setImageUniform( size_t uniformIndex, TextureSharedPtr const& texture, GLenum access );
-        DP_GL_API ImageUniformData const& getImageUniform( std::string const& uniformName ) const;
-        DP_GL_API ImageUniformData const& getImageUniform( size_t uniformIndex ) const;
-
-        DP_GL_API void setSamplerUniform( std::string const& uniformName, TextureSharedPtr const& texture, SamplerSharedPtr const& sampler );
-        DP_GL_API void setSamplerUniform( size_t uniformIndex, TextureSharedPtr const& texture, SamplerSharedPtr const& sampler );
-        DP_GL_API SamplerUniformData const& getSamplerUniform( std::string const& uniformName ) const;
-        DP_GL_API SamplerUniformData const& getSamplerUniform( size_t uniformIndex ) const;
-
-        DP_GL_API void setShaderStorageBuffer( std::string const& ssbName, BufferSharedPtr const& buffer );
-        DP_GL_API void setShaderStorageBuffer( size_t ssbIndex, BufferSharedPtr const& buffer );
-        DP_GL_API BufferSharedPtr const& getShaderStorageBuffer( std::string const& ssbName ) const;
-        DP_GL_API BufferSharedPtr const& getShaderStorageBuffer( size_t ssbIndex ) const;
-
-        template <typename T> void setUniform( std::string const& uniformName, T const& value );
-        template <typename T> void setUniform( size_t uniformIndex, T const& value );
-        template <typename T> bool getUniform( std::string const& uniformName, T & value ) const;
-        template <typename T> bool getUniform( size_t uniformIndex, T & value ) const;
-
-      protected:
-        DP_GL_API ProgramInstance( ProgramSharedPtr const& program );
-
-      private:
-        ProgramSharedPtr                    m_program;
-        std::map<size_t,ImageUniformData>   m_imageUniforms;
-        std::map<size_t,SamplerUniformData> m_samplerUniforms;
-        std::vector<BufferSharedPtr>        m_shaderStorageBuffers;
-        std::vector<BufferSharedPtr>        m_uniformBuffers;
-        std::map<size_t,std::vector<char>>  m_uniforms;
-#if !defined(NDEBUG)
-        std::set<size_t>  m_unsetShaderStorageBlocks;
-        std::set<size_t>  m_unsetUniforms;
-#endif
-    };
-
-    template <typename T>
-    inline void ProgramInstance::setUniform( std::string const& uniformName, T const& value )
-    {
-      size_t uniformIndex = m_program->getActiveUniformIndex( uniformName );
-      if ( uniformIndex != ~0 )
-      {
-        setUniform( uniformIndex, value );
-      }
-    }
-
-    template <typename T>
-    inline void ProgramInstance::setUniform( size_t uniformIndex, T const& value )
-    {
-      Program::Uniform const& uniform = m_program->getActiveUniform( uniformIndex );
-      DP_ASSERT( !isImageType( uniform.type ) && !isSamplerType( uniform.type ) );
-      DP_ASSERT( TypeTraits<T>::glType() == uniform.type );
-      DP_ASSERT( uniform.arraySize == 1 );
-      if ( uniform.location != -1 )
-      {
-        DP_ASSERT( uniform.blockIndex == -1 );
-        std::map<size_t,std::vector<char>>::iterator it = m_uniforms.find( uniformIndex );
-        DP_ASSERT( ( it != m_uniforms.end() ) && ( it->second.size() == sizeOfType( uniform.type ) ) );
-        memcpy( it->second.data(), &value, sizeOfType( uniform.type ) );
-      }
-      else
-      {
-        DP_ASSERT( uniform.blockIndex != -1 );
-        DP_ASSERT( uniform.blockIndex < m_uniformBuffers.size() );
-        setBufferUniform( m_uniformBuffers[uniform.blockIndex], uniform, value );
-      }
-#if !defined(NDEBUG)
-      m_unsetUniforms.erase( uniformIndex );
-#endif
-    }
-
-    template <typename T>
-    inline bool ProgramInstance::getUniform( std::string const& uniformName, T & value ) const
-    {
-      size_t uniformIndex = m_program->getActiveUniformIndex( uniformName );
-      if ( uniformIndex != ~0 )
-      {
-        return( getUniform( uniformIndex, value ) );
-      }
-      return( false );
-    }
-
-    template <typename T>
-    inline bool ProgramInstance::getUniform( size_t uniformIndex, T & value ) const
-    {
-      DP_ASSERT( m_unsetUniforms.find( uniformIndex ) == m_unsetUniforms.end() );
-      Program::Uniform const& uniform = m_program->getActiveUniform( uniformIndex );
-      DP_ASSERT( !isImageType( uniform.type ) && !isSamplerType( uniform.type ) );
-      DP_ASSERT( TypeTraits<T>::glType() == uniform.type );
-      DP_ASSERT( uniform.arraySize == 1 );
-      if ( uniform.location != -1 )
-      {
-        DP_ASSERT( uniform.blockIndex == -1 );
-        std::map<size_t,UniformData>::iterator it = m_uniforms.find( uniformIndex );
-        DP_ASSERT( ( it != m_uniforms.end() ) && ( it->second.size() == sizeOfType( uniform.type ) ) );
-        memcpy( &value, it->second.data(), sizeOfType( uniform.type ) );
-      }
-      else
-      {
-        DP_ASSERT( uniform.blockIndex != -1 );
-        DP_ASSERT( uniform.blockIndex < m_uniformBuffers.size() );
-        getBufferUniform( m_uniformBuffers[uniform.blockIndex], uniform, value );
-      }
-    }
 
     namespace
     {
@@ -215,6 +89,135 @@ namespace dp
         memcpy( &value[2], ptr + 8, 3*sizeof(float) );
       }
 
+    }
+
+    class ProgramInstance
+    {
+      public:
+        struct ImageUniformData
+        {
+          GLenum            access;
+          TextureSharedPtr  texture;
+        };
+
+        struct SamplerUniformData
+        {
+          SamplerSharedPtr  sampler;
+          TextureSharedPtr  texture;
+        };
+
+        typedef std::vector<char> UniformData;
+
+      public:
+        DP_GL_API static ProgramInstanceSharedPtr create( ProgramSharedPtr const& program );
+        DP_GL_API virtual ~ProgramInstance();
+
+        DP_GL_API void apply() const;
+        DP_GL_API ProgramSharedPtr const& getProgram() const;
+
+        DP_GL_API void setImageUniform( std::string const& uniformName, TextureSharedPtr const& texture, GLenum access );
+        DP_GL_API void setImageUniform( size_t uniformIndex, TextureSharedPtr const& texture, GLenum access );
+        DP_GL_API ImageUniformData const& getImageUniform( std::string const& uniformName ) const;
+        DP_GL_API ImageUniformData const& getImageUniform( size_t uniformIndex ) const;
+
+        DP_GL_API void setSamplerUniform( std::string const& uniformName, TextureSharedPtr const& texture, SamplerSharedPtr const& sampler );
+        DP_GL_API void setSamplerUniform( size_t uniformIndex, TextureSharedPtr const& texture, SamplerSharedPtr const& sampler );
+        DP_GL_API SamplerUniformData const& getSamplerUniform( std::string const& uniformName ) const;
+        DP_GL_API SamplerUniformData const& getSamplerUniform( size_t uniformIndex ) const;
+
+        DP_GL_API void setShaderStorageBuffer( std::string const& ssbName, BufferSharedPtr const& buffer );
+        DP_GL_API void setShaderStorageBuffer( size_t ssbIndex, BufferSharedPtr const& buffer );
+        DP_GL_API BufferSharedPtr const& getShaderStorageBuffer( std::string const& ssbName ) const;
+        DP_GL_API BufferSharedPtr const& getShaderStorageBuffer( size_t ssbIndex ) const;
+
+        template <typename T> void setUniform( std::string const& uniformName, T const& value );
+        template <typename T> void setUniform( size_t uniformIndex, T const& value );
+        template <typename T> bool getUniform( std::string const& uniformName, T & value ) const;
+        template <typename T> bool getUniform( size_t uniformIndex, T & value ) const;
+
+      protected:
+        DP_GL_API ProgramInstance( ProgramSharedPtr const& program );
+
+      private:
+        ProgramSharedPtr                    m_program;
+        std::map<size_t,ImageUniformData>   m_imageUniforms;
+        std::map<size_t,SamplerUniformData> m_samplerUniforms;
+        std::vector<BufferSharedPtr>        m_shaderStorageBuffers;
+        std::vector<BufferSharedPtr>        m_uniformBuffers;
+        std::map<size_t,UniformData>        m_uniforms;
+#if !defined(NDEBUG)
+        std::set<size_t>  m_unsetShaderStorageBlocks;
+        std::set<size_t>  m_unsetUniforms;
+#endif
+    };
+
+    template <typename T>
+    inline void ProgramInstance::setUniform( std::string const& uniformName, T const& value )
+    {
+      size_t uniformIndex = m_program->getActiveUniformIndex( uniformName );
+      if ( uniformIndex != ~0 )
+      {
+        setUniform( uniformIndex, value );
+      }
+    }
+
+    template <typename T>
+    inline void ProgramInstance::setUniform( size_t uniformIndex, T const& value )
+    {
+      Program::Uniform const& uniform = m_program->getActiveUniform( uniformIndex );
+      DP_ASSERT( !isImageType( uniform.type ) && !isSamplerType( uniform.type ) );
+      DP_ASSERT( TypeTraits<T>::glType() == uniform.type );
+      DP_ASSERT( uniform.arraySize == 1 );
+      if ( uniform.location != -1 )
+      {
+        DP_ASSERT( uniform.blockIndex == -1 );
+        std::map<size_t,UniformData>::iterator it = m_uniforms.find( uniformIndex );
+        DP_ASSERT( ( it != m_uniforms.end() ) && ( it->second.size() == sizeOfType( uniform.type ) ) );
+        memcpy( it->second.data(), &value, sizeOfType( uniform.type ) );
+      }
+      else
+      {
+        DP_ASSERT( uniform.blockIndex != -1 );
+        DP_ASSERT( uniform.blockIndex < m_uniformBuffers.size() );
+        setBufferUniform( m_uniformBuffers[uniform.blockIndex], uniform, value );
+      }
+#if !defined(NDEBUG)
+      m_unsetUniforms.erase( uniformIndex );
+#endif
+    }
+
+    template <typename T>
+    inline bool ProgramInstance::getUniform( std::string const& uniformName, T & value ) const
+    {
+      size_t uniformIndex = m_program->getActiveUniformIndex( uniformName );
+      if ( uniformIndex != ~0 )
+      {
+        return( getUniform( uniformIndex, value ) );
+      }
+      return( false );
+    }
+
+    template <typename T>
+    inline bool ProgramInstance::getUniform( size_t uniformIndex, T & value ) const
+    {
+      DP_ASSERT( m_unsetUniforms.find( uniformIndex ) == m_unsetUniforms.end() );
+      Program::Uniform const& uniform = m_program->getActiveUniform( uniformIndex );
+      DP_ASSERT( !isImageType( uniform.type ) && !isSamplerType( uniform.type ) );
+      DP_ASSERT( TypeTraits<T>::glType() == uniform.type );
+      DP_ASSERT( uniform.arraySize == 1 );
+      if ( uniform.location != -1 )
+      {
+        DP_ASSERT( uniform.blockIndex == -1 );
+        std::map<size_t,UniformData>::iterator it = m_uniforms.find( uniformIndex );
+        DP_ASSERT( ( it != m_uniforms.end() ) && ( it->second.size() == sizeOfType( uniform.type ) ) );
+        memcpy( &value, it->second.data(), sizeOfType( uniform.type ) );
+      }
+      else
+      {
+        DP_ASSERT( uniform.blockIndex != -1 );
+        DP_ASSERT( uniform.blockIndex < m_uniformBuffers.size() );
+        getBufferUniform( m_uniformBuffers[uniform.blockIndex], uniform, value );
+      }
     }
 
   } // namespace gl
