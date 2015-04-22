@@ -95,7 +95,7 @@ namespace dp
       typename HandleTrait<DestType>::Type handleCast( SourceType handle )
       {
         DP_ASSERT( !handle || handleIsTypeOf<DestType>( handle ) );
-        return handle ? static_cast<typename HandleTrait<DestType>::Type>( handle ) : nullptr;
+        return static_cast<typename HandleTrait<DestType>::Type>( handle );
       }
 
       template <typename HandleType>
