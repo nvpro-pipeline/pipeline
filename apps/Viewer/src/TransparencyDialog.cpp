@@ -44,18 +44,18 @@ TransparencyDialog::TransparencyDialog( QWidget * parent, ViewerRendererWidget *
   setWindowFlags( windowFlags() & ~Qt::WindowContextHelpButtonHint );
 
   m_restoreTransparencyMode = m_renderer->getTransparencyMode();
+  QRadioButton * noneButton = new QRadioButton( "None" );
+  noneButton->setChecked( m_restoreTransparencyMode == dp::sg::renderer::rix::gl::TM_NONE );
   QRadioButton * sortedBlendedButton = new QRadioButton( "Sorted Blended" );
   sortedBlendedButton->setChecked( m_restoreTransparencyMode == dp::sg::renderer::rix::gl::TM_SORTED_BLENDED );
-  QRadioButton * orderIndependentClosestArrayButton = new QRadioButton( "Order Independent Closest Array" );
-  orderIndependentClosestArrayButton->setChecked( m_restoreTransparencyMode == dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_CLOSEST_ARRAY );
   QRadioButton * orderIndependentClosestListButton = new QRadioButton( "Order Independent Closest List" );
   orderIndependentClosestListButton->setChecked( m_restoreTransparencyMode == dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_CLOSEST_LIST );
   QRadioButton * orderIndependentAllButton = new QRadioButton( "Order Independent All" );
   orderIndependentAllButton->setChecked( m_restoreTransparencyMode == dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_ALL );
 
   QButtonGroup * buttonGroup = new QButtonGroup();
+  buttonGroup->addButton( noneButton, dp::sg::renderer::rix::gl::TM_NONE );
   buttonGroup->addButton( sortedBlendedButton, dp::sg::renderer::rix::gl::TM_SORTED_BLENDED );
-  buttonGroup->addButton( orderIndependentClosestArrayButton, dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_CLOSEST_ARRAY );
   buttonGroup->addButton( orderIndependentClosestListButton, dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_CLOSEST_LIST );
   buttonGroup->addButton( orderIndependentAllButton, dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_ALL );
   connect( buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(buttonClicked(int)) );
@@ -80,8 +80,8 @@ TransparencyDialog::TransparencyDialog( QWidget * parent, ViewerRendererWidget *
   connect( dbb, SIGNAL(rejected()), this, SLOT(reject()) );
 
   QVBoxLayout * vLayout = new QVBoxLayout();
+  vLayout->addWidget( noneButton );
   vLayout->addWidget( sortedBlendedButton );
-  vLayout->addWidget( orderIndependentClosestArrayButton );
   vLayout->addWidget( orderIndependentClosestListButton );
   vLayout->addLayout( layersLayout );
   vLayout->addWidget( orderIndependentAllButton );

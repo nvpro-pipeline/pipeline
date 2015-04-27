@@ -91,8 +91,8 @@ dp::fx::Manager determineShaderManagerType( std::string const& name )
 dp::sg::renderer::rix::gl::TransparencyMode determineTransparencyMode( std::string const & name )
 {
   static std::map<std::string,dp::sg::renderer::rix::gl::TransparencyMode> transparencyModes = boost::assign::map_list_of
+    ( "None", dp::sg::renderer::rix::gl::TM_NONE )
     ( "OITAll", dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_ALL )
-    ( "OITClosestArray",  dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_CLOSEST_ARRAY )
     ( "OITClosestList",  dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_CLOSEST_LIST )
     ( "SB", dp::sg::renderer::rix::gl::TM_SORTED_BLENDED );
 
@@ -113,7 +113,7 @@ void Viewer::parseCommandLine( int & argc, char ** argv )
     ( "script", boost::program_options::value<std::string>()->default_value(""), "script to run" )
     ( "shadermanager", boost::program_options::value<std::string>()->default_value("rix:ubo140"), "rixfx:uniform|rixfx:ubo140|rixfx:ssbo140|rixfx:shaderbufferload" )
     ( "tonemapper", boost::program_options::value<bool>()->default_value(false), "true|false" )
-    ( "transparency", boost::program_options::value<std::string>()->default_value("OITClosestList"), "OITAll|OITClosestArray|OITClosestList|SB" )
+    ( "transparency", boost::program_options::value<std::string>()->default_value("OITAll"), "None|OITAll|OITClosestList|SB" )
     ( "width", boost::program_options::value<int>()->default_value(0), "Application width" )
     ;
 
@@ -135,7 +135,10 @@ void Viewer::parseCommandLine( int & argc, char ** argv )
     m_renderEngine = opts["renderengine"].as<std::string>();
     m_runScript = opts["script"].as<std::string>().c_str();
     m_shaderManagerType = determineShaderManagerType( opts["shadermanager"].as<std::string>() );
-    m_transparencyMode = determineTransparencyMode( opts["transparency"].as<std::string>() );
+    if ( !opts["transparency"].empty() )
+    {
+      m_preferences->setTransparencyMode( determineTransparencyMode( opts["transparency"].as<std::string>() ) );
+    }
     m_width = opts["width"].as<int>();
   }
   catch ( boost::program_options::unknown_option e )
@@ -159,7 +162,6 @@ Viewer::Viewer( int & argc, char ** argv )
 , m_height(0)
 , m_cullingMode(dp::culling::MODE_AUTO)
 , m_renderEngine("Bindless")
-, m_transparencyMode(dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_CLOSEST_LIST)
 {
   processEvents();
 
@@ -181,14 +183,11 @@ Viewer::Viewer( int & argc, char ** argv )
   // print is more common in javascript - but assign to the same function
   m_scriptSystem->addFunction( "print", LogMethod ); 
 
-  m_preferences = new Preferences( this );
   connect( m_preferences, SIGNAL(environmentEnabledChanged()), this, SLOT(setEnvironmentEnabledChanged()) );
   connect( m_preferences, SIGNAL(environmentTextureNameChanged(const QString&)), this, SLOT(setEnvironmentTextureName(const QString&)) );
 
   dp::sg::core::TextureFileSharedPtr textureFile = dp::sg::core::TextureFile::create( m_preferences->getEnvironmentTextureName().toStdString(), dp::sg::core::TT_TEXTURE_2D );
   textureFile->incrementMipmapUseCount();
-
-  m_transparencyMode = dp::sg::renderer::rix::gl::TransparencyMode(m_preferences->getTransparencyMode());
 
   m_environmentSampler = dp::sg::core::Sampler::create( textureFile );
   m_environmentSampler->setMagFilterMode( dp::sg::core::TFM_MAG_LINEAR );

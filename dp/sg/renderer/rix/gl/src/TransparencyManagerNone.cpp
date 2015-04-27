@@ -46,7 +46,7 @@ namespace dp
           }
 
           TransparencyManagerNone::TransparencyManagerNone()
-            : TransparencyManager( TM_SORTED_BLENDED )
+            : TransparencyManager( TM_NONE )
           {
           }
 
