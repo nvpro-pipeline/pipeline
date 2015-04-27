@@ -126,7 +126,6 @@ class Viewer : public QApplication
     QTimer                                        m_scriptTimer;
     dp::fx::Manager                               m_shaderManagerType;
     QString                                       m_startupFile;
-    dp::sg::renderer::rix::gl::TransparencyMode   m_transparencyMode;
     viewerPlugInCallbackSharedPtr                 m_viewerPlugInCallback;
     dp::sg::ui::ViewStateSharedPtr                m_viewState;
     int                                           m_width;
@@ -190,7 +189,7 @@ inline dp::culling::Mode Viewer::getCullingMode() const
 
 inline dp::sg::renderer::rix::gl::TransparencyMode Viewer::getTransparencyMode() const
 {
-  return( m_transparencyMode );
+  return( dp::sg::renderer::rix::gl::TransparencyMode( m_preferences->getTransparencyMode() ) );
 }
 
 inline bool Viewer::isBackdropEnabled() const

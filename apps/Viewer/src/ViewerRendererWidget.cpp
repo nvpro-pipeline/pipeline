@@ -363,17 +363,17 @@ void ViewerRendererWidget::keyPressEvent ( QKeyEvent * keyEvent )
       case Qt::Key_T :
         switch( getTransparencyMode() )
         {
-          case dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_CLOSEST_ARRAY :
+          case dp::sg::renderer::rix::gl::TM_NONE :
+            setTransparencyMode( dp::sg::renderer::rix::gl::TM_SORTED_BLENDED );
+            break;
+          case dp::sg::renderer::rix::gl::TM_SORTED_BLENDED :
             setTransparencyMode( dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_CLOSEST_LIST );
             break;
           case dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_CLOSEST_LIST :
             setTransparencyMode( dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_ALL );
             break;
           case dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_ALL :
-            setTransparencyMode( dp::sg::renderer::rix::gl::TM_SORTED_BLENDED );
-            break;
-          case dp::sg::renderer::rix::gl::TM_SORTED_BLENDED :
-            setTransparencyMode( dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_CLOSEST_ARRAY );
+            setTransparencyMode( dp::sg::renderer::rix::gl::TM_NONE );
             break;
           default :
             DP_ASSERT( !"ViewerRendererWidget::keyPressEvent: unknown transparency mode encountered!" );

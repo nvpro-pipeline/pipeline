@@ -37,7 +37,7 @@ Preferences::Preferences( QObject * parent )
   : QObject( parent )
   , m_environmentEnabled( true )
   , m_normalsLineLength( 1.f )
-  , m_transparencyMode( dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_CLOSEST_ARRAY )
+  , m_transparencyMode( dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_ALL )
 {
   load();
 
