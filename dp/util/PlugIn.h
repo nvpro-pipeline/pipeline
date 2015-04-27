@@ -28,6 +28,7 @@
 /** \file */
 
 #include <dp/util/Config.h>
+#include <dp/util/DynamicLibrary.h>
 #include <dp/util/PlugInCallback.h>
 #include <dp/util/SharedPtr.h>
 #include <dp/util/Singleton.h>
@@ -45,34 +46,7 @@ namespace dp
   namespace util
   {
 
-    /*! \def HLIB
-     *  Platform independent define for a library handle. On Windows, this resolves to HMODULE, on Linux to void*.*/
-    /*! \def MapLibrary(name)
-     *  Platform independent define to open a library. On Windows, this resolves to LoadLibrary(name), on Linux to
-     *  dlopen(name,RTLD_LAZY). */
-    /*! \def UnMapLibrary
-     *  Platform independent define to free a library. On Windows, this resolves to FreeLibrary, on Linux to dlclose. */
-    /*! \def GetFuncAddress
-     *  Platform independet define to get a function from a library. On Windows, this resolves to GetProcAddress, on
-     *  Linux to dlsym. */
-    /*! \def LibExtStr
-     *  Platform independent define for the SceniX plugin standard file extension. On both Windows and Linux, this
-     *  resolves to "*.nxm". */
-    #if defined(_WIN32) 
-    # define HLIB                 HMODULE
-    # define MapLibrary(name)     LoadLibrary(name)
-    # define UnMapLibrary         FreeLibrary
-    # define GetFuncAddress       GetProcAddress  
     # define LibExtStr            "*.nxm"
-    #elif defined(LINUX)
-    # define HLIB                 void*
-    # define MapLibrary(name)     dlopen(name, RTLD_LAZY)
-    # define UnMapLibrary(handle) dlclose(handle)
-    # define GetFuncAddress       dlsym  
-    # define LibExtStr            "*.nxm"
-    #else
-    # error Undefined Operating System!  
-    #endif
 
     //! Unique Plug Interface Type ID
     /** A helper class for assembling unique IDs that identify a certain plug interface type.
@@ -428,17 +402,10 @@ namespace dp
     private:
       struct PlugInData
       {
-        PlugInData() : lib(0), pfnGetPlugInterface(0) {}
-        ~PlugInData()
-        {
-          if ( lib )
-          {
-            UnMapLibrary( lib );
-          }
-        }
+        PlugInData() : pfnGetPlugInterface(0) {}
 
         std::string         fileName;
-        HLIB                lib;
+        DynamicLibrarySharedPtr dynamicLibrary;
         PFNGETPLUGINTERFACE pfnGetPlugInterface;
       };
 

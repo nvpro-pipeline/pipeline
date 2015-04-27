@@ -201,6 +201,7 @@ void GLUTMinimal::paint()
       {
         m_benchmarkTimer.stop();
         m_exitCode = int(double(m_renderedFrames) / m_benchmarkTimer.getTime());
+        std::cout << "FPS: " << std::fixed << std::setprecision(2) << double(m_renderedFrames) / m_benchmarkTimer.getTime() << std::endl;
         glutLeaveMainLoop();
       }
 

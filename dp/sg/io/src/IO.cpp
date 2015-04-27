@@ -72,58 +72,63 @@ namespace dp
         std::string ext = dp::util::getFileExtension( filename );
         dp::util::UPIID piid = dp::util::UPIID( ext.c_str(), dp::util::UPITID( UPITID_SCENE_LOADER, UPITID_VERSION ) );
 
-        dp::util::PlugInSharedPtr plug;
-        if ( !dp::util::getInterface(binSearchPaths, piid, plug) )
         {
-          throw std::runtime_error( std::string( "Scene Plugin not found: " + ext ) );
-        }
-        SceneLoaderSharedPtr loader = plug.staticCast<SceneLoader>();
-        loader->setCallback( callback );
+          dp::util::PlugInSharedPtr plug;
+          if ( !dp::util::getInterface(binSearchPaths, piid, plug) )
+          {
+            throw std::runtime_error( std::string( "Scene Plugin not found: " + ext ) );
+          }
+          SceneLoaderSharedPtr loader = plug.staticCast<SceneLoader>();
+          loader->setCallback( callback );
 
-        vector<string> sceneSearchPaths = binSearchPaths;
+          vector<string> sceneSearchPaths = binSearchPaths;
 
-        // add the scene path, if it's not the current path (-> dir.empty()) and not yet added
-        dir = dp::util::getFilePath( filename );
-        if ( !dir.empty() && find( sceneSearchPaths.begin(), sceneSearchPaths.end(), dir ) == sceneSearchPaths.end() )
-        {
-          sceneSearchPaths.push_back(dir);
+          // add the scene path, if it's not the current path (-> dir.empty()) and not yet added
+          dir = dp::util::getFilePath( filename );
+          if ( !dir.empty() && find( sceneSearchPaths.begin(), sceneSearchPaths.end(), dir ) == sceneSearchPaths.end() )
+          {
+            sceneSearchPaths.push_back(dir);
+          }
+
+          // for supplied models add additional resource paths to make sure
+          // that required resources will be found by subsequent loaders
+          size_t pos = dir.rfind("media");
+          if ( pos != string::npos )
+          {
+            string sdk(dir.substr(0, pos));
+            sceneSearchPaths.push_back(sdk + "media/effects");
+            sceneSearchPaths.push_back(sdk + "media/textures");
+          }
+
+          dp::sg::core::SceneSharedPtr scene;
+          try
+          {
+            scene = loader->load( filename, sceneSearchPaths, viewState );
+          }
+          catch (...)
+          {
+            // TODO another non RAII pattern, callback should be passed to load
+            loader->setCallback( dp::util::PlugInCallbackSharedPtr::null );
+            throw;
+          }
+          if ( !scene )
+          {
+            throw std::runtime_error( std::string("Failed to load scene: " + filename ) );
+          }
+
+          // create a new viewstate if necessary
+          if ( !viewState )
+          {
+            viewState = dp::sg::ui::ViewState::create();
+          }
+          if ( !viewState->getSceneTree() )
+          {
+            viewState->setSceneTree( dp::sg::xbar::SceneTree::create( scene ) );
+          }
         }
 
-        // for supplied models add additional resource paths to make sure
-        // that required resources will be found by subsequent loaders
-        size_t pos = dir.rfind("media");
-        if ( pos != string::npos )
-        {
-          string sdk(dir.substr(0, pos));
-          sceneSearchPaths.push_back(sdk + "media/effects");
-          sceneSearchPaths.push_back(sdk + "media/textures");
-        }
-
-        dp::sg::core::SceneSharedPtr scene;
-        try
-        {
-          scene = loader->load( filename, sceneSearchPaths, viewState );
-        }
-        catch (...)
-        {
-          // TODO another non RAII pattern, callback should be passed to load
-          loader->setCallback( dp::util::PlugInCallbackSharedPtr::null );
-          throw;
-        }
-        if ( !scene )
-        {
-          throw std::runtime_error( std::string("Failed to load scene: " + filename ) );
-        }
-
-        // create a new viewstate if necessary
-        if ( !viewState )
-        {
-          viewState = dp::sg::ui::ViewState::create();
-        }
-        if ( !viewState->getSceneTree() )
-        {
-          viewState->setSceneTree( dp::sg::xbar::SceneTree::create( scene ) );
-        }
+        // FIXME interface needs to be released since the cleanup order (first dp::sg::core, then dp::util) causes problems upon destruction.
+        dp::util::releaseInterface(piid);
 
         return viewState;
       }
@@ -153,19 +158,24 @@ namespace dp
 
         dp::util::UPIID piid = dp::util::UPIID(dp::util::getFileExtension( filename ).c_str(), PITID_SCENE_SAVER);
 
-        dp::util::PlugInSharedPtr plug;
-        if ( getInterface( searchPaths, piid, plug ) )
         {
-          SceneSaverSharedPtr ss = plug.staticCast<SceneSaver>();
-          try
+          dp::util::PlugInSharedPtr plug;
+          if ( getInterface( searchPaths, piid, plug ) )
           {
-            dp::sg::core::SceneSharedPtr scene( viewState->getScene() ); // DAR HACK Change SceneSaver interface later.
-            result = ss->save( scene, viewState, filename );
-          }
-          catch(...) // catch all others
-          {
+            SceneSaverSharedPtr ss = plug.staticCast<SceneSaver>();
+            try
+            {
+              dp::sg::core::SceneSharedPtr scene( viewState->getScene() ); // DAR HACK Change SceneSaver interface later.
+              result = ss->save( scene, viewState, filename );
+            }
+            catch(...) // catch all others
+            {
+            }
           }
         }
+
+        // FIXME interface needs to be released since the cleanup order (first dp::sg::core, then dp::util) causes problems upon destruction.
+        dp::util::releaseInterface(piid);
 
         return result;
       }
@@ -183,12 +193,17 @@ namespace dp
         //
         // MMM - TODO - Update me for stereo images
         //
-        dp::util::PlugInSharedPtr plug;
-        if ( getInterface( searchPaths, piid, plug ) )
         {
-          TextureSaverSharedPtr ts = plug.staticCast<TextureSaver>();
-          retval = ts->save( tih, filename );
+          dp::util::PlugInSharedPtr plug;
+          if ( getInterface( searchPaths, piid, plug ) )
+          {
+            TextureSaverSharedPtr ts = plug.staticCast<TextureSaver>();
+            retval = ts->save( tih, filename );
+          }
         }
+
+        // FIXME interface needs to be released since the cleanup order (first dp::sg::core, then dp::util) causes problems upon destruction.
+        dp::util::releaseInterface(piid);
 
         return retval;
       }
@@ -219,13 +234,19 @@ namespace dp
           dp::util::UPIID piid = dp::util::UPIID( ext.c_str(), dp::util::UPITID(UPITID_TEXTURE_LOADER, UPITID_VERSION) );
 
           // TODO - Update me for stereo images
-          dp::util::PlugInSharedPtr plug;
-          if ( getInterface( binSearchPaths, piid, plug ) )
           {
-            TextureLoaderSharedPtr tl = plug.staticCast<TextureLoader>();
-            tih = tl->load( foundFile );
+            dp::util::PlugInSharedPtr plug;
+            if ( getInterface( binSearchPaths, piid, plug ) )
+            {
+              TextureLoaderSharedPtr tl = plug.staticCast<TextureLoader>();
+              tih = tl->load( foundFile );
+            }
           }
+
+          // FIXME interface needs to be released since the cleanup order (first dp::sg::core, then dp::util) causes problems upon destruction.
+          dp::util::releaseInterface(piid);
         }
+
         return tih;
       }
 
