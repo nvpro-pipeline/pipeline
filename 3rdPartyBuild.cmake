@@ -105,8 +105,10 @@ macro(boost)
     # select the boost toolset according to the compiler being used
     if ("${GENERATOR}" MATCHES "^(Visual Studio 12).*")
       set(BOOST_TOOLSET msvc-12.0)
-    else()
+    elseif("${GENERATOR}" MATCHES "^(Visual Studio 11).*")
       set(BOOST_TOOLSET msvc-11.0)
+    elseif("${GENERATOR}" MATCHES "^(Visual Studio 10).*")
+      set(BOOST_TOOLSET msvc-10.0)
     endif()
 
     execute_process(COMMAND cmd.exe /C b2 -j "$ENV{NUMBER_OF_PROCESSORS}" --toolset=${BOOST_TOOLSET} address-model=64 install --prefix=${CMAKE_INSTALL_PREFIX}/boost/ WORKING_DIRECTORY "${SOURCE_DIR}/boost_1_57_0")

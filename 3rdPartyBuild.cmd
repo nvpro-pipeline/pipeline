@@ -10,13 +10,13 @@ set VS2010_ENV_CMD="%VS100COMNTOOLS%..\..\VC\vcvarsall.bat"
 
 if "%USE_VS2013%"=="1" (
   call %VS2013_ENV_CMD% amd64
-  if not exist builds\vc12-amd64 mkdir build\vc12-amd64
+  if not exist builds\vc12-amd64 mkdir builds\vc12-amd64
 ) else if "%USE_VS2012%"=="1" (
   call %VS2012_ENV_CMD% amd64
-  if not exist builds\vc11-amd64 mkdir build\vc11-amd64
+  if not exist builds\vc11-amd64 mkdir builds\vc11-amd64
 ) else if "%USE_VS2010%"=="''" (
   call %VS2010_ENV_CMD% amd64
-  if not exist builds\vc10-amd64 mkdir build\vc10-amd64
+  if not exist builds\vc10-amd64 mkdir builds\vc10-amd64
 ) else (
     goto visual_studio_not_found
 )
