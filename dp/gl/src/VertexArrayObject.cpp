@@ -36,14 +36,12 @@ namespace dp
 
     VertexArrayObject::VertexArrayObject()
     {
-      GLuint id;
-      glGenVertexArrays( 1, &id );
-      setGLId( id );
+      glGenVertexArrays( 1, &m_id );
     }
 
     VertexArrayObject::~VertexArrayObject()
     {
-      if ( getGLId() )
+      if ( m_id )
       {
         if ( getShareGroup() )
         {
@@ -68,15 +66,20 @@ namespace dp
           // make destructor exception safe
           try
           {
-            getShareGroup()->executeTask( CleanupTask::create( getGLId() ) );
+            getShareGroup()->executeTask( CleanupTask::create( m_id ) );
           } catch (...) {}
         }
         else
         {
-          GLuint id = getGLId();
-          glDeleteVertexArrays( 1, &id );
+          glDeleteVertexArrays( 1, &m_id );
         }
       }
+    }
+
+    void VertexArrayObject::setIndices()
+    {
+      glBindVertexArray( m_id );
+      glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_indices->getGLId() );
     }
 
   } // namespace gl

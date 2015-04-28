@@ -112,7 +112,7 @@ dp::sg::ui::ViewStateSharedPtr Benchmark_model::createScene()
   }
 
   dp::sg::ui::ViewStateSharedPtr viewStateHandle = dp::sg::ui::ViewState::create();
-  viewStateHandle->setScene( scene );
+  viewStateHandle->setSceneTree( dp::sg::xbar::SceneTree::create( scene ) );
 
   return viewStateHandle;
 }

@@ -229,10 +229,11 @@ namespace dp
       {
         ++index;
       }
+
       size_t leadingZeroes = index * StorageBitsPerElement;
       if (index < determineNumberOfElements())
       {
-        leadingZeroes += clz(m_bits[index]);
+        leadingZeroes += ctz(m_bits[index]);
       }
 
       return std::min(leadingZeroes, getSize());

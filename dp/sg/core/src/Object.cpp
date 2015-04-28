@@ -262,6 +262,9 @@ namespace dp
                       case dp::sg::core::GeoNode::Event::PRIMITIVE_CHANGED:
                         changedState |= DP_SG_BOUNDING_VOLUMES;
                         break;
+                      case dp::sg::core::GeoNode::Event::EFFECT_DATA_CHANGED:
+                        changedState |= DP_SG_HASH_KEY;
+                        break;
                       default:
                         DP_ASSERT(!"encountered unhandled geonode event type!");
                         break;

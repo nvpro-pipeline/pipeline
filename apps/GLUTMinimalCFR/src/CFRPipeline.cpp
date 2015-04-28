@@ -305,6 +305,11 @@ void CFRPipeline::onEnvironmentSamplerChanged()
   */
 }
 
+void CFRPipeline::onEnvironmentRenderingEnabledChanged()
+{
+  DP_ASSERT( false );
+}
+
 std::map<dp::fx::Domain,std::string> CFRPipeline::getShaderSources( const dp::sg::core::GeoNodeSharedPtr & geoNode, bool depthPass ) const
 {
   DP_ASSERT(false);

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright NVIDIA Corporation 2011-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -30,8 +30,8 @@
 #include <GeometryInstanceGL.h>
 #include <GeometryDescriptionGL.h>
 #include <IndicesGL.h>
-#include "DataTypeConversionGL.h"
-#include "VertexAttributesGL.h"
+#include <dp/rix/gl/inc/DataTypeConversionGL.h>
+#include <dp/rix/gl/inc/VertexAttributesGL.h>
 
 
 namespace dp

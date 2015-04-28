@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright NVIDIA Corporation 2011-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -24,10 +24,10 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#include "RenderGroupGL.h"
-#include "ContainerGL.h"
-#include "GeometryInstanceGL.h"
-#include "RenderEngineGL.h"
+#include <dp/rix/gl/inc/RenderGroupGL.h>
+#include <dp/rix/gl/inc/ContainerGL.h>
+#include <dp/rix/gl/inc/GeometryInstanceGL.h>
+#include <dp/rix/gl/inc/RenderEngineGL.h>
 
 namespace dp
 {

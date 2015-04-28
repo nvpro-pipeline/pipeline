@@ -1,54 +1,58 @@
-find_package( GLEW REQUIRED)
-find_package( GLUT REQUIRED)
+find_package(GLEW REQUIRED)
+find_package(GLUT)
 
-#includes
-include_directories(
-  ${GLEW_INCLUDE_DIRS}
-  ${GLUT_INCLUDE_DIR}
-)
+if (GLUT_FOUND)
+  #includes
+  include_directories(
+    ${GLEW_INCLUDE_DIRS}
+    ${GLUT_INCLUDE_DIR}
+  )
 
-#definitions
-add_definitions(
-  -DDP_SG_UI_GLUT_EXPORTS
-  ${GLEW_DEFINITIONS}
-)
+  #definitions
+  add_definitions(
+    -DDP_SG_UI_GLUT_EXPORTS
+    ${GLEW_DEFINITIONS}
+  )
 
-#sources
-set(SOURCES
-  src/SceneRendererWidget.cpp
-  src/Widget.cpp
-)
+  #sources
+  set(SOURCES
+    src/SceneRendererWidget.cpp
+    src/Widget.cpp
+  )
 
-set(PRIVATE_HEADERS
-)
+  set(PRIVATE_HEADERS
+  )
 
-set(PUBLIC_HEADERS
-  Config.h
-  SceneRendererWidget.h
-  Widget.h
-)
+  set(PUBLIC_HEADERS
+    Config.h
+    SceneRendererWidget.h
+    Widget.h
+  )
 
-source_group(source FILES ${SOURCES})
-source_group(header FILES ${PRIVATE_HEADERS})
-source_group(""     FILES ${PUBLIC_HEADERS})
+  source_group(source FILES ${SOURCES})
+  source_group(header FILES ${PRIVATE_HEADERS})
+  source_group(""     FILES ${PUBLIC_HEADERS})
 
-#target
-add_library( DPSgUIGLUT SHARED
-  ${SOURCES}
-  ${HEADERS}
-  ${PUBLIC_HEADERS}
-)
+  #target
+  add_library( DPSgUIGLUT SHARED
+    ${SOURCES}
+    ${HEADERS}
+    ${PUBLIC_HEADERS}
+  )
 
-target_link_libraries( DPSgUIGLUT
-  DPSgCore
-  DPGL
-  ${GLEW_LIBRARY}
-  ${GLUT_LIBRARIES}
-  ${OPENGL_gl_LIBRARY}
-)
+  target_link_libraries( DPSgUIGLUT
+    DPSgCore
+    DPGL
+    ${GLEW_LIBRARY}
+    ${GLUT_LIBRARIES}
+    ${OPENGL_gl_LIBRARY}
+  )
 
-CopyGLEW( DPSgUIGLUT "${DP_BINARY_PATH}" )
-CopyGLUT( DPSgUIGLUT "${DP_BINARY_PATH}" )
+  CopyGLEW( DPSgUIGLUT "${DP_BINARY_PATH}" )
+  CopyGLUT( DPSgUIGLUT "${DP_BINARY_PATH}" )
 
-set_target_properties( DPSgUIGLUT PROPERTIES FOLDER "SG" )
-set_target_properties( DPSgUIGLUT PROPERTIES LINK_FLAGS "/NODEFAULTLIB:\"freeglutd.lib\" /NODEFAULTLIB:\"freeglut.lib\"" )
+  set_target_properties( DPSgUIGLUT PROPERTIES FOLDER "SG" )
+  set_target_properties( DPSgUIGLUT PROPERTIES LINK_FLAGS "/NODEFAULTLIB:\"freeglutd.lib\" /NODEFAULTLIB:\"freeglut.lib\"" )
+else()
+  message("GLUT not found, disalbing DpSgUIGLUT.")
+endif()

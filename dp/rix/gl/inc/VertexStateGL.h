@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright NVIDIA Corporation 2011-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -27,9 +27,9 @@
 #pragma once
 
 #include <GL/glew.h>
-#include "RendererGLConfig.h"
+#include <dp/rix/gl/inc/RendererGLConfig.h>
+#include <dp/rix/gl/inc/ProgramGL.h>
 #include <vector>
-#include "ProgramGL.h"
 
 
 namespace dp

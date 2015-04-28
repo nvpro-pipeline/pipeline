@@ -25,24 +25,11 @@
 
 
 #include <dp/gl/Buffer.h>
-#include <dp/gl/inc/BufferBind.h>
-#include <dp/gl/inc/BufferDSA.h>
 
 namespace dp
 {
   namespace gl
   {
-    namespace
-    {
-      inline IBuffer * getGLInterface()
-      {
-        static BufferBind  glInterfaceBind;
-        static BufferDSA   glInterfaceDSA;
-        static IBuffer * glInterface = GLEW_EXT_direct_state_access ? static_cast<IBuffer*>(&glInterfaceDSA) : static_cast<IBuffer*>(&glInterfaceBind);
-        return( glInterface );
-      }
-    }
-
     namespace
     {
 
@@ -673,7 +660,21 @@ namespace dp
     {
       DP_ASSERT( ( srcOffset <= srcOffset + size ) && ( srcOffset + size <= srcBuffer->getSize() ) );
       DP_ASSERT( ( dstOffset <= dstOffset + size ) && ( dstOffset + size <= dstBuffer->getSize() ) );
-      getGLInterface()->copySubData( srcBuffer->getGLId(), dstBuffer->getGLId(), srcOffset, dstOffset, size );
+#if defined(GL_VERSION_4_5)
+      if (GLEW_VERSION_4_5)
+      {
+        DP_ASSERT( srcBuffer.dynamicCast<BufferCoreDSA>() || srcBuffer.dynamicCast<BufferPersistentDSA>() );
+        DP_ASSERT( dstBuffer.dynamicCast<BufferCoreDSA>() || dstBuffer.dynamicCast<BufferPersistentDSA>() );
+        glNamedCopyBufferSubDataEXT( srcBuffer->getGLId(), dstBuffer->getGLId(), srcOffset, dstOffset, size );
+      }
+      else
+#endif
+      {
+        DP_ASSERT( srcBuffer.dynamicCast<BufferCore>() && dstBuffer.dynamicCast<BufferCore>() );
+        glBindBuffer( GL_COPY_READ_BUFFER, srcBuffer->getGLId() );
+        glBindBuffer( GL_COPY_WRITE_BUFFER, dstBuffer->getGLId() );
+        glCopyBufferSubData( GL_COPY_READ_BUFFER, GL_COPY_WRITE_BUFFER, srcOffset, dstOffset, size );
+      }
     }
 
   } // namespace gl

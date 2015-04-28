@@ -13,29 +13,36 @@ cmake_minimum_required(VERSION 2.8)
 
 project(MaterialExchanger)
 
-find_package( NVTinyXML)
+find_package(NVTinyXML)
 
-add_definitions(
-  "-D_CRT_SECURE_NO_WARNINGS"
-)
+if (TINYXML_FOUND)
+  add_definitions(
+    "-D_CRT_SECURE_NO_WARNINGS"
+  )
 
-include_directories(
-  ${TINYXML_INCLUDE_DIRS}
-)
+  include_directories(
+    ${TINYXML_INCLUDE_DIRS}
+  )
 
-set (SOURCES
-  exchanger.cpp
-)
+  set (SOURCES
+    exchanger.cpp
+  )
 
-add_executable(MaterialExchanger
-  ${SOURCES}
-  ${HEADERS}
-)
+  add_executable(MaterialExchanger
+    ${SOURCES}
+    ${HEADERS}
+  )
 
-target_link_libraries(MaterialExchanger
-  ${TINYXML_LIBRARIES}
-  DPSgIO
-  DP
-)
+  target_link_libraries(MaterialExchanger
+    ${TINYXML_LIBRARIES}
+    DPSgIO
+    DP
+  )
+  if (UNIX)
+    target_link_libraries(MaterialExchanger dl)
+  endif()
 
-set_target_properties( MaterialExchanger PROPERTIES FOLDER "Apps")
+  set_target_properties( MaterialExchanger PROPERTIES FOLDER "Apps")
+else()
+  message("TinyXML not found, disabling MaterialExchanger")
+endif()

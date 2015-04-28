@@ -26,7 +26,6 @@
 
 #pragma once
 
-#include <dp/gl/Program.h>
 #include <dp/gl/Texture.h>
 #include <dp/sg/renderer/rix/gl/inc/ShaderManager.h>
 #include <dp/sg/renderer/rix/gl/TransparencyManager.h>
@@ -79,16 +78,16 @@ namespace dp
               dp::rix::core::TextureSharedHandle              m_perFragmentSpinLockTexture;
               dp::rix::core::TextureSharedHandle              m_samplesTexture;
 
-              dp::gl::ProgramSharedPtr        m_clearProgram;
-              dp::gl::BufferSharedPtr         m_fullScreenQuad;
-              bool                            m_initializedBuffers;
-              bool                            m_initializedHandles;
-              dp::gl::Texture2DSharedPtr      m_perFragmentCountTextureGL;
-              dp::gl::Texture2DSharedPtr      m_perFragmentIndexTextureGL;
-              dp::gl::Texture2DSharedPtr      m_perFragmentSamplesAccuTextureGL;
-              dp::gl::Texture2DSharedPtr      m_perFragmentSpinLockTextureGL;
-              dp::gl::ProgramSharedPtr        m_resolveProgram;
-              dp::gl::TextureBufferSharedPtr  m_samplesTextureGL;
+              dp::gl::ProgramInstanceSharedPtr  m_clearProgram;
+              dp::gl::BufferSharedPtr           m_fullScreenQuad;
+              bool                              m_initializedBuffers;
+              bool                              m_initializedHandles;
+              dp::gl::Texture2DSharedPtr        m_perFragmentCountTextureGL;
+              dp::gl::Texture2DSharedPtr        m_perFragmentIndexTextureGL;
+              dp::gl::Texture2DSharedPtr        m_perFragmentSamplesAccuTextureGL;
+              dp::gl::Texture2DSharedPtr        m_perFragmentSpinLockTextureGL;
+              dp::gl::ProgramInstanceSharedPtr  m_resolveProgram;
+              dp::gl::TextureBufferSharedPtr    m_samplesTextureGL;
           };
 
         } // namespace gl

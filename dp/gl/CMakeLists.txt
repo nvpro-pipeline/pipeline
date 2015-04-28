@@ -19,6 +19,7 @@ set(SOURCES
   src/DisplayList.cpp
   src/Object.cpp
   src/Program.cpp
+  src/ProgramInstance.cpp
   src/Query.cpp
   src/Renderbuffer.cpp
   src/RenderContext.cpp
@@ -26,6 +27,7 @@ set(SOURCES
   src/RenderTarget.cpp
   src/RenderTargetFB.cpp
   src/RenderTargetFBO.cpp
+  src/Sampler.cpp
   src/Shader.cpp
   src/Texture.cpp
   src/VertexArrayObject.cpp
@@ -38,6 +40,7 @@ set(PUBLIC_HEADERS
   DisplayList.h
   Object.h
   Program.h
+  ProgramInstance.h
   Query.h
   Renderbuffer.h
   RenderContext.h
@@ -45,6 +48,7 @@ set(PUBLIC_HEADERS
   RenderTarget.h
   RenderTargetFB.h
   RenderTargetFBO.h
+  Sampler.h
   Shader.h
   Texture.h
   Types.h
@@ -52,9 +56,6 @@ set(PUBLIC_HEADERS
 )
 
 set(PRIVATE_HEADERS
-  inc/BufferBind.h
-  inc/BufferDSA.h
-  inc/IBuffer.h
   inc/ITexture.h
   inc/TextureBind.h
   inc/TextureDSA.h

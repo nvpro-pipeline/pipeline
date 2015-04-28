@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2005
+// Copyright NVIDIA Corporation 2002-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -93,11 +93,11 @@ namespace dp
 
       for ( std::vector<std::string>::const_iterator it = plugInFiles.begin() ; it != plugInFiles.end() ; ++it )
       {
-        HLIB lib = MapLibrary( it->c_str() );
+        DynamicLibrarySharedPtr dynamicLibrary = DynamicLibrary::createFromFile(it->c_str());
 
-        if ( lib ) 
+        if ( dynamicLibrary )
         {
-          PFNQUERYPLUGINTERFACEPIIDS pfnQueryPlugInterfacePIIDs = (PFNQUERYPLUGINTERFACEPIIDS)GetFuncAddress(lib, "queryPlugInterfacePIIDs");
+          PFNQUERYPLUGINTERFACEPIIDS pfnQueryPlugInterfacePIIDs = (PFNQUERYPLUGINTERFACEPIIDS)dynamicLibrary->getSymbol("queryPlugInterfacePIIDs");
           if ( pfnQueryPlugInterfacePIIDs ) 
           {
             std::vector<UPIID> upiids;
@@ -108,31 +108,7 @@ namespace dp
               m_plugIns[*upiidit].fileName = *it;
             }
           }
-          UnMapLibrary(lib);
         }
-#if !defined( NDEBUG )
-        else
-        {
-          std::stringstream errorStream;
-#if defined( _WIN32 )
-          DWORD dw = GetLastError(); 
-
-          // If dwFlags includes FORMAT_MESSAGE_ALLOCATE_BUFFER, the function 
-          // allocates a buffer using the LocalAlloc function, and places the
-          // pointer to the buffer at the address specified in lpBuffer.
-          LPVOID lpMsgBuf = NULL;
-          FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL, dw, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR) &lpMsgBuf, 0, NULL );
-
-          errorStream << "MapLibrary( " << *it << " ) failed with error " << dw << ": " << (LPCTSTR)lpMsgBuf;
-          LocalFree( lpMsgBuf );
-#elif defined(LINUX)
-          errorStream << "MapLibrary failed with error: " << dlerror();
-#endif // PLATFORM
-
-          fprintf(stderr, "%s\n", errorStream.str().c_str() );
-          DP_ASSERT( false && "MapLibrary failed." );  
-        }
-#endif // NDEBUG
       }
     }
 
@@ -151,23 +127,20 @@ namespace dp
         {
           if ( !plugInMapIt->second.pfnGetPlugInterface )
           {
-            HLIB lib = MapLibrary( plugInMapIt->second.fileName.c_str() );
-            if ( lib )
+            DynamicLibrarySharedPtr dynamicLibrary = DynamicLibrary::createFromFile(plugInMapIt->second.fileName.c_str());
+            if ( dynamicLibrary )
             {
-              PFNGETPLUGINTERFACE pfnGetPlugInterface = (PFNGETPLUGINTERFACE)GetFuncAddress( lib, "getPlugInterface" );
+              PFNGETPLUGINTERFACE pfnGetPlugInterface = (PFNGETPLUGINTERFACE)dynamicLibrary->getSymbol("getPlugInterface");
               if ( pfnGetPlugInterface )
               {
-                plugInMapIt->second.lib = lib;
+                plugInMapIt->second.dynamicLibrary = dynamicLibrary;
                 plugInMapIt->second.pfnGetPlugInterface = pfnGetPlugInterface;
-              }
-              else
-              {
-                UnMapLibrary( lib );
               }
             }
           }
           if ( plugInMapIt->second.pfnGetPlugInterface )
           {
+            // TODO keep reference to DynamicLibrary inside plugin to ensure that the cleanup order is always correct
             DP_VERIFY( (*plugInMapIt->second.pfnGetPlugInterface)( piid, plugIn ) );
           }
           else
@@ -204,10 +177,9 @@ namespace dp
       PlugInMap::iterator it = m_plugIns.find( piid );
       if ( it != m_plugIns.end() )
       {
-        if ( it->second.lib )
+        if ( it->second.dynamicLibrary )
         {
-          UnMapLibrary( it->second.lib );
-          it->second.lib = 0;
+          it->second.dynamicLibrary.reset();
           it->second.pfnGetPlugInterface = 0;
         }
       }
@@ -247,24 +219,28 @@ namespace dp
     }
 
     bool getInterface(const std::vector<std::string>& searchPath, const UPIID& piid, dp::util::PlugInSharedPtr & plugIn)
-    {// call the singleton's implementation
+    {
+      // call the singleton's implementation
       return PIS::instance()->getInterfaceImpl(searchPath, piid, plugIn);
     }
 
     bool queryInterfaceType(const std::vector<std::string>& searchPath, const UPITID& pitid, std::vector<UPIID>& piids)
-    {// call the singleton's implementation
+    {
+      // call the singleton's implementation
       return PIS::instance()->queryInterfaceTypeImpl(searchPath, pitid, piids);
     }
 
     /* release the interface identified by piid */
     void releaseInterface(const UPIID& piid)
-    {// call the singleton's implementation
+    {
+      // call the singleton's implementation
       PIS::instance()->releaseInterfaceImpl(piid);
     }
 
     /* set file filter specified by filter */
     void setPlugInFileFilter(const std::string& filter)
-    {// call the singleton's implementation
+    {
+      // call the singleton's implementation
       PIS::instance()->setFileFilterImpl(filter);
     }
 

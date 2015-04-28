@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright NVIDIA Corporation 2011-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -26,8 +26,8 @@
 
 #pragma once
 
-#include "ProgramGL.h"
-#include "VertexStateGL.h"
+#include <dp/rix/gl/inc/ProgramGL.h>
+#include <dp/rix/gl/inc/VertexStateGL.h>
 
 namespace dp
 {

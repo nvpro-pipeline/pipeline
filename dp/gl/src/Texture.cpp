@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2014
+// Copyright NVIDIA Corporation 2014-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -1753,7 +1753,7 @@ namespace dp
         m_width = width;
         m_height = height;
 
-        TextureBinding( getTarget(), getGLId() );
+        TextureBinding tb( getTarget(), getGLId() );
         glTexImage2DMultisample( getTarget(), m_samples, getInternalFormat(), m_width, m_height, m_fixedLocations );
       }
     }
@@ -1767,7 +1767,7 @@ namespace dp
       {
         m_samples = samples;
 
-        TextureBinding( getTarget(), getGLId() );
+        TextureBinding tb( getTarget(), getGLId() );
         glTexImage2DMultisample( getTarget(), m_samples, getInternalFormat(), m_width, m_height, m_fixedLocations );
       }
     }
@@ -1847,7 +1847,7 @@ namespace dp
         m_height = height;
         m_layers = layers;
 
-        TextureBinding( getTarget(), getGLId() );
+        TextureBinding tb( getTarget(), getGLId() );
         glTexImage3DMultisample( getTarget(), m_samples, getInternalFormat(), m_width, m_height, m_layers, m_fixedLocations );
       }
     }
@@ -1862,7 +1862,7 @@ namespace dp
         DP_ASSERT( samples <= getMaximumSamples() );
         m_samples = samples;
 
-        TextureBinding( getTarget(), getGLId() );
+        TextureBinding tb( getTarget(), getGLId() );
         glTexImage3DMultisample( getTarget(), m_samples, getInternalFormat(), m_width, m_height, m_layers, m_fixedLocations );
       }
     }

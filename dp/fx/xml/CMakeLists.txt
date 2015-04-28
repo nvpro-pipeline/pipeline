@@ -1,40 +1,45 @@
 project(DPFxXML)
 
-find_package( NVTinyXML )
+find_package(NVTinyXML)
 
-#Need to define this since this lib will be linked to DPFx
-add_definitions(
-  "-DDP_FX_EXPORTS"
-  "-D_CRT_SECURE_NO_WARNINGS"
-)
+if (TINYXML_FOUND)
 
-include_directories( "${CMAKE_CURRENT_SOURCE_DIR}/inc" )
-include_directories( ${TINYXML_INCLUDE_DIRS} )
+  #Need to define this since this lib will be linked to DPFx
+  add_definitions(
+    "-DDP_FX_EXPORTS"
+    "-D_CRT_SECURE_NO_WARNINGS"
+  )
 
-set(PUBLIC_HEADERS
-  Config.h
-  EffectLoader.h
-)
+  include_directories( "${CMAKE_CURRENT_SOURCE_DIR}/inc" )
+  include_directories( ${TINYXML_INCLUDE_DIRS} )
 
-#let cmake determine linker language
-set(SOURCES
-  src/EffectLoader.cpp
-)
+  set(PUBLIC_HEADERS
+    Config.h
+    EffectLoader.h
+  )
 
-source_group(sources FILES ${SOURCES})
-source_group("" FILES ${PUBLIC_HEADERS})
+  #let cmake determine linker language
+  set(SOURCES
+    src/EffectLoader.cpp
+  )
 
-add_library(DPFxXML STATIC
-  ${PUBLIC_HEADERS}
-  ${SOURCES}
-)
+  source_group(sources FILES ${SOURCES})
+  source_group("" FILES ${PUBLIC_HEADERS})
 
-target_link_libraries( DPFxXML DPUtil DPFxGLSL ${TINYXML_LIBRARIES} )
+  add_library(DPFxXML STATIC
+    ${PUBLIC_HEADERS}
+    ${SOURCES}
+  )
 
-set_target_properties( DPFxXML PROPERTIES FOLDER "Fx" )
+  target_link_libraries( DPFxXML DPUtil DPFxGLSL ${TINYXML_LIBRARIES} )
 
-if(UNIX)
-  set_target_properties( DPFxXML PROPERTIES COMPILE_FLAGS -fPIC )
+  set_target_properties( DPFxXML PROPERTIES FOLDER "Fx" )
+
+  if(UNIX)
+    set_target_properties( DPFxXML PROPERTIES COMPILE_FLAGS -fPIC )
+  endif()
+
+  target_include_symbol( DPFx dp_fx_xml_initialized )
+else()
+  message("TinyXML not found, disabling DPFxXML")
 endif()
-
-target_include_symbol( DPFx dp_fx_xml_initialized )

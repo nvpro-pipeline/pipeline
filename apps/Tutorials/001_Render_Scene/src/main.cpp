@@ -99,8 +99,8 @@ int runApp()
   // create a ViewState objects which combines the scene and the camera.
   dp::sg::ui::ViewStateSharedPtr viewState = dp::sg::ui::ViewState::create();
 
-  // attach the simple scene to the ViewState
-  viewState->setScene(simpleScene.m_sceneHandle);
+  // attach the simple scene tree to the ViewState
+  viewState->setSceneTree( dp::sg::xbar::SceneTree::create( simpleScene.m_sceneHandle ) );
   
   // determine the near/far plane of the camera automatically based on the scenes bounding box.
   viewState->setAutoClipPlanes(true);

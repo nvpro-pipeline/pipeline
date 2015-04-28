@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright NVIDIA Corporation 2012-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -26,7 +26,7 @@
 
 #pragma once
 
-#include "RenderEngineGL.h"
+#include <dp/rix/gl/inc/RenderEngineGL.h>
 
 namespace dp
 {

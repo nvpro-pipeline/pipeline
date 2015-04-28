@@ -140,6 +140,7 @@ ViewerRendererWidget::setRendererType( RendererType type )
                                                             viewer->getShaderManagerType(),
                                                             viewer->getCullingMode(),
                                                             viewer->getTransparencyMode() );
+        ssrgl->setEnvironmentSampler( GetApp()->getEnvironmentSampler() );
         ssrgl->setDepthPass( GetApp()->getPreferences()->getDepthPass() );
         setSceneRenderer( ssrgl );
       }
@@ -244,7 +245,8 @@ ViewerRendererWidget::addDefaultActions()
   m_contextMenuEntries.push_back( GetApp()->getMainWindow()->getMenu( MainWindow::MID_CULLING ) );
   m_contextMenuEntries.push_back( GetApp()->getMainWindow()->getMenu( MainWindow::MID_VIEWPORT_FORMAT ) );
 
-  connect(GetApp(), SIGNAL(environmentChanged()), this, SLOT(updateEnvironment()));
+  connect( GetApp()->getPreferences(), SIGNAL(environmentEnabledChanged()), this, SLOT(setEnvironmentEnabledChanged()) );
+  connect( GetApp(), SIGNAL(environmentChanged()), this, SLOT(updateEnvironment()) );
 }
 
 void
@@ -295,7 +297,7 @@ void ViewerRendererWidget::setScene( dp::sg::core::SceneSharedPtr const & scene 
 
   if ( scene )
   {
-    m_viewState->setScene( scene );
+    m_viewState->setSceneTree( GetApp()->getViewState()->getSceneTree() );
 
     // reset manipulator in case the manip corrects for scene size and whatnot
     ManipulatorType mt = getManipulatorType();
@@ -305,7 +307,7 @@ void ViewerRendererWidget::setScene( dp::sg::core::SceneSharedPtr const & scene 
   else
   {
     // reset scene and camera here
-    m_viewState->setScene( SceneSharedPtr::null );
+    m_viewState->setSceneTree( dp::sg::xbar::SceneTreeSharedPtr::null );
     m_viewState->setCamera( CameraSharedPtr::null );
   }
 
@@ -931,8 +933,6 @@ dp::sg::ui::SceneRendererSharedPtr ViewerRendererWidget::getSceneRenderer() cons
 
 void ViewerRendererWidget::setSceneRenderer( const dp::sg::ui::SceneRendererSharedPtr & ssr )
 {
-  ssr->setEnvironmentSampler( GetApp()->getEnvironmentSampler() );
-
   DP_ASSERT( m_sceneRendererPipeline );
   m_sceneRendererPipeline->setSceneRenderer( ssr );
 
@@ -1261,6 +1261,11 @@ void ViewerRendererWidget::triggeredViewportFormatStereo( bool checked )
     setFormat( format );
     restartUpdate();
   }
+}
+
+void ViewerRendererWidget::setEnvironmentEnabledChanged()
+{
+  m_sceneRendererPipeline->setEnvironmentRenderingEnabled( GetApp()->getPreferences()->getEnvironmentEnabled() );
 }
 
 void ViewerRendererWidget::updateEnvironment()

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2012
+// Copyright NVIDIA Corporation 2011-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -27,7 +27,7 @@
 #include <BufferGL.h>
 #include <typeinfo>
 
-#include "DataTypeConversionGL.h"
+#include <dp/rix/gl/inc/DataTypeConversionGL.h>
 
 namespace dp
 {
@@ -74,9 +74,9 @@ namespace dp
           m_managesData = false;
 #endif
         }
-        
+
         // For dp::rix::core::BufferDescription or BufferdescriptionGL default values the OpenGL buffer ID is zero.
-        // That means to generate one here. Ownership automatically belongs to this BufferGL then. 
+        // That means to generate one here. Ownership automatically belongs to this BufferGL then.
         if ( !m_buffer )
         {
           m_buffer = dp::gl::Buffer::create(dp::gl::Buffer::CORE, m_usageHint);
@@ -109,7 +109,7 @@ namespace dp
         m_depth  = depth;
 
         // calculate dimensionality: W -> 1, WH -> 2, WHD -> 3
-        unsigned int dimensionality = !m_width ? 0 : ( !m_height ? 1 : ( !m_depth ? 2 : 3 ) ); 
+        unsigned int dimensionality = !m_width ? 0 : ( !m_height ? 1 : ( !m_depth ? 2 : 3 ) );
         DP_ASSERT( dimensionality != 0 );
 
         // Calculate the size in bytes to verify later setData() calls.
@@ -276,11 +276,6 @@ namespace dp
       }
 #endif
 
-      dp::gl::BufferSharedPtr const& BufferGL::getBuffer() const
-      {
-        return( m_buffer );
-      }
-
       void* BufferGL::map( dp::rix::core::AccessType accessType )
       {
         DP_ASSERT( !"never passed this path!" );
@@ -340,4 +335,3 @@ namespace dp
     } // namespace gl
   } // namespace rix
 } // namespace dp
-

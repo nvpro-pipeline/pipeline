@@ -25,6 +25,9 @@
 
 
 #include <dp/DP.h>
+#include <dp/gl/Program.h>
+#include <dp/gl/ProgramInstance.h>
+#include <dp/gl/Shader.h>
 #include <dp/rix/gl/RiXGL.h>
 #include <dp/sg/renderer/rix/gl/TransparencyManagerOITClosestList.h>
 #include <dp/sg/renderer/rix/gl/inc/DrawableManagerDefault.h>
@@ -97,7 +100,7 @@ namespace dp
 
               dp::gl::VertexShaderSharedPtr vertexShader = dp::gl::VertexShader::create( dp::util::loadStringFromFile( dp::home() + "/media/dpfx/passThroughPosition_vs.glsl" ) );
               dp::gl::FragmentShaderSharedPtr fragmentShader = dp::gl::FragmentShader::create( dp::util::loadStringFromFile( dp::home() + "/media/dpfx/oitClosestListClear_fs.glsl" ) );
-              m_clearProgram = dp::gl::Program::create( vertexShader, fragmentShader );
+              m_clearProgram = dp::gl::ProgramInstance::create( dp::gl::Program::create( vertexShader, fragmentShader ) );
 
               // create fragment shader source
               std::string resolveFragmentCode = dp::util::loadStringFromFile( dp::home() + "/media/dpfx/oitClosestListResolve_fs.glsl" );
@@ -108,7 +111,7 @@ namespace dp
 
               // vertexShader is the same as for m_clearProgram !
               fragmentShader = dp::gl::FragmentShader::create( resolveFragmentSource.get() );
-              m_resolveProgram = dp::gl::Program::create( vertexShader, fragmentShader );
+              m_resolveProgram = dp::gl::ProgramInstance::create( dp::gl::Program::create( vertexShader, fragmentShader ) );
 
               m_initializedHandles = true;
             }
@@ -127,26 +130,23 @@ namespace dp
               renderer->textureSetData( m_fragmentsTexture, dp::rix::gl::TextureDataGLTexture( m_fragmentsTextureGL ) );
               renderer->textureSetData( m_offsetsTexture, dp::rix::gl::TextureDataGLTexture( m_perFragmentOffsetsTextureGL ) );
 
-              m_clearProgram->setImageTexture( "counterAccu", m_counterTextureGL, GL_WRITE_ONLY );
-              m_clearProgram->setImageTexture( "perFragmentOffset", m_perFragmentOffsetsTextureGL, GL_WRITE_ONLY );
+              m_clearProgram->setImageUniform( "counterAccu", m_counterTextureGL, GL_WRITE_ONLY );
+              m_clearProgram->setImageUniform( "perFragmentOffset", m_perFragmentOffsetsTextureGL, GL_WRITE_ONLY );
 
-              m_resolveProgram->setImageTexture( "samplesBuffer", m_fragmentsTextureGL, GL_READ_ONLY );
-              m_resolveProgram->setImageTexture( "perFragmentOffset", m_perFragmentOffsetsTextureGL, GL_READ_ONLY );
+              m_resolveProgram->setImageUniform( "samplesBuffer", m_fragmentsTextureGL, GL_READ_ONLY );
+              m_resolveProgram->setImageUniform( "perFragmentOffset", m_perFragmentOffsetsTextureGL, GL_READ_ONLY );
 
               m_initializedBuffers = true;
             }
 
-            {
-              // clear the oit buffers
-              dp::gl::ProgramUseGuard pug( m_clearProgram );
-
-              glColorMask( GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE );
-              glDepthMask( GL_FALSE );
-              drawQuad();
-              glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE );
-              glDepthMask( GL_TRUE );
-              glMemoryBarrier( GL_SHADER_IMAGE_ACCESS_BARRIER_BIT );
-            }
+            // clear the oit buffers
+            glColorMask( GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE );
+            glDepthMask( GL_FALSE );
+            m_clearProgram->apply();
+            drawQuad();
+            glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE );
+            glDepthMask( GL_TRUE );
+            glMemoryBarrier( GL_SHADER_IMAGE_ACCESS_BARRIER_BIT );
 
             // settings for oit path
             glColorMask( GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE );
@@ -164,18 +164,15 @@ namespace dp
             glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE );
             glDepthMask( GL_TRUE );
 
-            {
-              // resolve the oit buffers
-              dp::gl::ProgramUseGuard pug( m_resolveProgram );
-
-              glMemoryBarrier( GL_SHADER_IMAGE_ACCESS_BARRIER_BIT );
-              glEnable( GL_BLEND );
-              glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-              glDisable( GL_DEPTH_TEST );
-              drawQuad();
-              glDisable( GL_BLEND );
-              glEnable( GL_DEPTH_TEST );
-            }
+            // resolve the oit buffers
+            glMemoryBarrier( GL_SHADER_IMAGE_ACCESS_BARRIER_BIT );
+            glEnable( GL_BLEND );
+            glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+            glDisable( GL_DEPTH_TEST );
+            m_resolveProgram->apply();
+            drawQuad();
+            glDisable( GL_BLEND );
+            glEnable( GL_DEPTH_TEST );
 
             // check if the transparent render step needed more fragments than were available in the fragmentsBuffer
             // -> do it after resolving to prevent stalling the render pipeline just to get the result

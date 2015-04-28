@@ -28,7 +28,7 @@
 
 #include <dp/culling/opengl/Manager.h>
 #include <GL/glew.h>
-#include <dp/gl/Program.h>
+#include <dp/gl/ProgramInstance.h>
 
 #if defined(GL_VERSION_4_3)
 
@@ -55,9 +55,9 @@ namespace dp
         /************************************************************************/
         /* OpenGL resources                                                     */
         /************************************************************************/
-        dp::gl::ProgramSharedPtr  m_program;
-        GLint                     m_uniformViewProjection;
-        bool                      m_shaderInitialized;
+        dp::gl::ProgramInstanceSharedPtr  m_program;
+        GLint                             m_uniformViewProjection;
+        bool                              m_shaderInitialized;
       };
 
     } // namespace opengl

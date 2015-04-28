@@ -201,6 +201,7 @@ void GLUTMinimal::paint()
       {
         m_benchmarkTimer.stop();
         m_exitCode = int(double(m_renderedFrames) / m_benchmarkTimer.getTime());
+        std::cout << "FPS: " << std::fixed << std::setprecision(2) << double(m_renderedFrames) / m_benchmarkTimer.getTime() << std::endl;
         glutLeaveMainLoop();
       }
 
@@ -490,7 +491,7 @@ dp::sg::ui::ViewStateSharedPtr loadScene( std::string const& filename )
       scene = simpleScene.m_sceneHandle;
     }
     viewState = dp::sg::ui::ViewState::create();
-    viewState->setScene( scene );
+    viewState->setSceneTree( dp::sg::xbar::SceneTree::create( scene ) );
   }
   return viewState;
 }

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2014
+// Copyright NVIDIA Corporation 2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -24,23 +24,40 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#pragma once
-
-#include <GL/glew.h>
+#include <driver_types.h>
+#include <cuda_runtime_api.h>
+#include <dp/cuda/BufferHost.h>
 
 namespace dp
 {
-  namespace gl
+  namespace cuda
   {
-    class IBuffer
+    BufferHostSharedPtr BufferHost::create( size_t size, unsigned int flags )
     {
-      public:
-        virtual void copySubData( GLuint srcBuffer, GLuint dstBuffer, size_t srcOffset, size_t dstOffset, size_t size ) = 0;
-        virtual void setData( GLuint buffer, GLenum target, size_t size, GLvoid const* data, GLenum usage ) = 0;
-        virtual void setSubData( GLuint buffer, GLenum target, size_t offset, size_t size, GLvoid const* data ) = 0;
-        virtual void* map( GLuint buffer, GLenum target, GLenum access ) = 0;
-        virtual void* mapRange( GLuint buffer, GLenum target, GLintptr offset, GLsizeiptr length, GLbitfield access ) = 0;
-        virtual GLboolean unmap( GLuint buffer, GLenum target ) = 0;
-    };
-  } // namespace gl
+      return( std::shared_ptr<BufferHost>( new BufferHost( size, flags ) ) );
+    }
+
+    BufferHost::BufferHost( size_t size, unsigned int flags )
+      : m_isMapped( !!( flags & cudaHostAllocMapped ) )
+#if !defined(NDEBUG)
+      , m_isPortable( !!( flags & cudaHostAllocPortable ) )
+#endif
+      , m_size( size )
+    {
+      DP_ASSERT( ( flags & ( cudaHostAllocDefault | cudaHostAllocPortable | cudaHostAllocMapped | cudaHostAllocWriteCombined ) ) == flags );
+      CUDA_VERIFY( cudaHostAlloc( &m_pointer, m_size, flags ) );
+#if !defined(NDEBUG)
+      if ( m_isMapped && !m_isPortable )
+      {
+        CUDA_VERIFY( cudaGetDevice( &m_deviceID ) );
+      }
+#endif
+    }
+
+    BufferHost::~BufferHost( )
+    {
+      CUDA_VERIFY( cudaFreeHost( m_pointer ) );
+    }
+
+  } // namespace cuda
 } // namespace dp

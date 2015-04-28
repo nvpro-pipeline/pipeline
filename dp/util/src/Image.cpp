@@ -28,7 +28,10 @@
 #include <dp/util/Image.h>
 #include <dp/util/File.h>
 #include <dp/util/Singleton.h>
-#include <il.h>
+
+#if defined(HAVE_IL)
+  #include <il.h>
+#endif
 
 #include <iostream>
 #include <cstring>
@@ -255,6 +258,7 @@ namespace dp
       }
     }
 
+#if defined(HAVE_IL)
     static inline DataType convertDT_IL2DP( ILint ildt )
     {
       switch( ildt )
@@ -366,9 +370,11 @@ namespace dp
         return 0;
       }
     }
+#endif
 
     bool imageToFile(const ImageSharedPtr& image, std::string filename, bool layersAsFaces)
     {
+#if defined(HAVE_IL)
       unsigned int imageID;
       ilGenImages( 1, (ILuint *) &imageID );
       ilBindImage( imageID );  
@@ -476,11 +482,13 @@ namespace dp
 
       // free all resources associated with the DevIL image
       ilDeleteImages(1, &imageID);
+#endif
       return false;
     }
 
     ImageSharedPtr imageFromFile( const string & filename, bool layersAsFaces )
     {
+#if defined(HAVE_IL)
       unsigned int imageID;
       ilGenImages( 1, (ILuint *) &imageID );
       ilBindImage( imageID );  
@@ -563,9 +571,11 @@ ERROREXIT:
       // free all resources associated with the DevIL image
       ilDeleteImages(1, &imageID);
       DP_ASSERT(IL_NO_ERROR == ilGetError());
+#endif
       return( ImageSharedPtr::null );
     }
 
+#if defined(HAVE_IL)
     class DevILInitShutdown
     {
     public:
@@ -586,6 +596,7 @@ ERROREXIT:
     }
 
     static DevILInitShutdown* __dis = GlobalDeVILInitShutdown::instance();
+#endif
 
   } // namespace util 
 } // namespace dp

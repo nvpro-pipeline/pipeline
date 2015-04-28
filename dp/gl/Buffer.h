@@ -86,12 +86,12 @@ namespace dp
             \return The currently mapped address of the buffer. If the buffer is not 
                     mapped a std::runtime error will be thrown.
         **/
-        void* getMappedAddress() const;
+        DP_GL_API void* getMappedAddress() const;
 
         /** \brief Query if the buffer is currently mapped on the host side
             \return true if the buffer is currently mapped on the host side
         **/
-        bool isMapped() const;
+        DP_GL_API bool isMapped() const;
 
         /** \brief Set the new size of the buffer.
             \param size The new size of the buffer.
@@ -107,7 +107,7 @@ namespace dp
         /** \brief Get the current size of the buffer.
             \return The current size of the buffer.
         **/
-        size_t getSize() const;
+        DP_GL_API size_t getSize() const;
 
         // unified memory
 
@@ -127,12 +127,12 @@ namespace dp
                    \sa Buffer::makeResident() will be called.
                    \return The current GPU address
         **/
-        GLuint64EXT getAddress();
+        DP_GL_API GLuint64EXT getAddress();
 
         /** \brief Check if the buffer is resident on the GPU
             \return true if the buffer buffer is resident on the GPU.
         **/
-        bool        isResident() const;
+        DP_GL_API bool        isResident() const;
 
       protected:
         DP_GL_API Buffer();

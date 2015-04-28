@@ -265,7 +265,7 @@ dp::sg::ui::ViewStateSharedPtr loadTerrain( std::string const& fileHeightMap, st
 
   scene->setRootNode(geoNode);
 
-  viewStateHandle->setScene(scene);
+  viewStateHandle->setSceneTree( dp::sg::xbar::SceneTree::create( scene ) );
 
   return viewStateHandle;
 

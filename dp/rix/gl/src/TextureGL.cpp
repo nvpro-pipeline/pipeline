@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2014
+// Copyright NVIDIA Corporation 2014-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -24,19 +24,19 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#include "TextureGL.h"
-#include "DataTypeConversionGL.h"
+#include <dp/rix/gl/inc/TextureGL.h>
+#include <dp/rix/gl/inc/DataTypeConversionGL.h>
 
-#include "BufferGL.h"
-#include "SamplerStateGL.h"
-#include "TextureGLBuffer.h"
-#include "TextureGL1D.h"
-#include "TextureGL1DArray.h"
-#include "TextureGL2D.h"
-#include "TextureGL2DArray.h"
-#include "TextureGL2DRectangle.h"
-#include "TextureGL3D.h"
-#include "TextureGLCubeMap.h"
+#include <dp/rix/gl/inc/BufferGL.h>
+#include <dp/rix/gl/inc/SamplerStateGL.h>
+#include <dp/rix/gl/inc/TextureGLBuffer.h>
+#include <dp/rix/gl/inc/TextureGL1D.h>
+#include <dp/rix/gl/inc/TextureGL1DArray.h>
+#include <dp/rix/gl/inc/TextureGL2D.h>
+#include <dp/rix/gl/inc/TextureGL2DArray.h>
+#include <dp/rix/gl/inc/TextureGL2DRectangle.h>
+#include <dp/rix/gl/inc/TextureGL3D.h>
+#include <dp/rix/gl/inc/TextureGLCubeMap.h>
 
 namespace dp
 {
@@ -316,11 +316,6 @@ namespace dp
           glMakeTextureHandleNonResidentNV( m_handle );
         }
   #endif
-      }
-
-      dp::gl::TextureSharedPtr const& TextureGL::getTexture() const
-      {
-        return( m_texture );
       }
 
       void TextureGL::setTexture( dp::gl::TextureSharedPtr const& texture )

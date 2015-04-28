@@ -28,9 +28,9 @@
 
 #include <dp/rix/core/HandledObject.h>
 #include <dp/rix/gl/inc/ParameterCacheStream.h>
-#include "ProgramPipelineGL.h"
-#include "RenderGroupGL.h"
-#include "GeometryInstanceGL.h"
+#include <dp/rix/gl/inc/ProgramPipelineGL.h>
+#include <dp/rix/gl/inc/RenderGroupGL.h>
+#include <dp/rix/gl/inc/GeometryInstanceGL.h>
 #include <vector>
 #include <memory>
 

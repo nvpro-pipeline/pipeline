@@ -1,4 +1,6 @@
 find_package( DevIL )
 
-add_subdirectory( Loader )
-add_subdirectory( Saver )
+if (IL_FOUND)
+  add_subdirectory( Loader )
+  add_subdirectory( Saver )
+endif()

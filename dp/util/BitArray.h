@@ -78,19 +78,24 @@ namespace dp
       }
     }
 
-    inline size_t clz(dp::Uint64 bits)
+    inline size_t ctz(dp::Uint64 bits)
     {
       unsigned long localIndex;
       return _BitScanForward64(&localIndex,bits) ? localIndex : 64;
     }
 
-    inline size_t clz(dp::Uint32 bits)
+    inline size_t ctz(dp::Uint32 bits)
     {
       unsigned long localIndex;
       return _BitScanForward(&localIndex,bits) ? localIndex : 32;
     }
 #else
-    inline size_t clz(dp::Uint32 bits)
+    inline size_t ctz(dp::Uint64 bits)
+    {
+      return (bits != 0) ? __builtin_ctzl(bits) : 64;
+    }
+
+    inline size_t ctz(dp::Uint32 bits)
     {
       return (bits != 0) ? __builtin_ctz(bits) : 32;
     }

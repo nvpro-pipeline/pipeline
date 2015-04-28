@@ -27,6 +27,7 @@
 #pragma once
 
 #include <dp/sg/renderer/rix/gl/SceneRenderer.h>
+#include <dp/sg/renderer/rix/gl/FSQRenderer.h>
 #include <dp/sg/renderer/rix/gl/inc/ResourceManager.h>
 #include <dp/sg/xbar/SceneTree.h>
 #include <dp/sg/xbar/DrawableManager.h>
@@ -103,6 +104,7 @@ namespace dp
             virtual dp::sg::xbar::DrawableManager *createDrawableManager( const ResourceManagerSharedPtr &resourceManager ) const;
             dp::sg::xbar::DrawableManager* getDrawableManager() const { return m_drawableManager; }
 
+            virtual void onEnvironmentRenderingEnabledChanged();
             virtual void onEnvironmentSamplerChanged();
 
             virtual void setCullingEnabled( bool enabled );
@@ -119,6 +121,9 @@ namespace dp
 
             virtual dp::sg::renderer::rix::gl::TransparencyMode getTransparencyMode() const;
             virtual void setTransparencyMode( dp::sg::renderer::rix::gl::TransparencyMode mode );
+
+          private:
+            void doRenderEnvironmentMap( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::gl::RenderTargetSharedPtr const& renderTarget );
 
           protected:
             bool initializeRenderer();
@@ -143,6 +148,7 @@ namespace dp
             dp::math::Vec2ui                         m_viewportSize;
 
           private:
+            dp::sg::renderer::rix::gl::FSQRendererSharedPtr         m_environmentRenderer;
             dp::sg::renderer::rix::gl::TransparencyManagerSharedPtr m_transparencyManager;
           };
 

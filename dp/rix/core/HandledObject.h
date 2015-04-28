@@ -94,7 +94,7 @@ namespace dp
       template<typename DestType, typename SourceType>
       typename HandleTrait<DestType>::Type handleCast( SourceType handle )
       {
-        DP_ASSERT( handleIsTypeOf<DestType>( handle ) );
+        DP_ASSERT( !handle || handleIsTypeOf<DestType>( handle ) );
         return static_cast<typename HandleTrait<DestType>::Type>( handle );
       }
 
@@ -264,7 +264,7 @@ namespace dp
       template<typename DestType, typename SourceType>
       SmartHandle< DestType > handleCast( SmartHandle<SourceType> const & handle )
       {
-        DP_ASSERT( handleIsTypeOf<DestType>( handle ) );
+        DP_ASSERT( !handle.get() || handleIsTypeOf<DestType>( handle ) );
         return SmartHandle<DestType>( handleCast<DestType>(handle.get() ) );
       }
 

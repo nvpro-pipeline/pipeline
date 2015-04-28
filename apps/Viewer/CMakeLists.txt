@@ -191,7 +191,7 @@ if(Qt5Widgets_FOUND AND TARGET DPSgUIQt5)
     DPSgUIQt5
   )
 
-  add_dependencies( Viewer
+  set(VIEWER_DEPENDENCIES
     3DSLoader
     DAELoader
     DPAFLoader
@@ -212,6 +212,12 @@ if(Qt5Widgets_FOUND AND TARGET DPSgUIQt5)
     OBJSaver
   )
 
+  foreach(DEPENDENCY ${VIEWER_DEPENDENCIES})
+    if (TARGET ${DEPENDENCY})
+      add_dependencies(Viewer ${DEPENDENCY})
+    endif()
+  endforeach()
+
   CopyGLEW( Viewer "${DP_BINARY_PATH}" )
 
   # Target for file format optimizer
@@ -221,6 +227,7 @@ if(Qt5Widgets_FOUND AND TARGET DPSgUIQt5)
 
   target_link_libraries(makenbf
     ${QT_LIBRARIES}
+    DP
     DPSgCore
     DPSgIO
   )

@@ -181,6 +181,7 @@ public slots:
   void triggeredViewportFormatStencil( bool checked );
   void triggeredViewportFormatStereo( bool checked );
 
+  void setEnvironmentEnabledChanged();
   void updateEnvironment(); // gets called on an environmentChanged signal and propagates 
 
 protected slots:

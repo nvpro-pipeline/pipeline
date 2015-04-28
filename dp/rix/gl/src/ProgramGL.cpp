@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2012
+// Copyright NVIDIA Corporation 2011-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -24,16 +24,14 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#include "ProgramGL.h"
+#include <dp/rix/gl/inc/ProgramGL.h>
 
-#include "BufferGL.h"
-#include "TextureGL.h"
-#include "ContainerGL.h"
-#include "SamplerStateGL.h"
-#include "DataTypeConversionGL.h"
-#include "ProgramParameterBuffer.h"
-
-#include "GL/glew.h"
+#include <dp/rix/gl/inc/BufferGL.h>
+#include <dp/rix/gl/inc/TextureGL.h>
+#include <dp/rix/gl/inc/ContainerGL.h>
+#include <dp/rix/gl/inc/SamplerStateGL.h>
+#include <dp/rix/gl/inc/DataTypeConversionGL.h>
+#include <dp/rix/gl/inc/ProgramParameterBuffer.h>
 
 #include <iomanip>
 #include <iostream>
@@ -140,35 +138,23 @@ namespace dp
         }
 #endif
 
-        dp::gl::ProgramUseGuard( m_program, false );    // no binding
-
-        // iterate samplers and images
-        GLint maxBlockNameLen = 0;
-        glGetProgramiv( programID, GL_ACTIVE_UNIFORM_BLOCK_MAX_NAME_LENGTH, &maxBlockNameLen );
-
-        std::vector<char> name;
-        name.resize(maxBlockNameLen);
-
-        // query uniform buffer objects
-        GLint numBuffers;
-        int bufferBinding = 0;
-        glGetProgramiv( programID,GL_ACTIVE_UNIFORM_BLOCKS, &numBuffers );
-        for (int i = 0 ; i < numBuffers; i++)
+        std::vector<dp::gl::Program::Block> const& ubos = m_program->getActiveUniformBlocks();
+        for ( size_t i=0 ; i<ubos.size() ; i++ )
         {
-          GLint nameLen = 0;
-          glGetActiveUniformBlockName( programID, i, maxBlockNameLen, &nameLen, &name[0] );
-          std::string bufferName(&name[0],nameLen);
-          registerBufferBinding( bufferName, bufferBinding, BBT_UBO );
-          glUniformBlockBinding( programID, i, bufferBinding++ );
+          registerBufferBinding( ubos[i].name, ubos[i].binding, BBT_UBO );
         }
+
+        glUseProgram( m_program->getGLId() );
 
         // build map of active atomic counters
         GLint maxUniformNameLen  = 0;
         glGetProgramiv( programID, GL_ACTIVE_UNIFORM_MAX_LENGTH, &maxUniformNameLen );
+        std::vector<char> name;
         name.resize(maxUniformNameLen); // atomic counters may not be grouped into blocks
 
         if( GLEW_ARB_shader_atomic_counters )
         {
+          GLint numBuffers;
           glGetProgramiv( programID, GL_ACTIVE_ATOMIC_COUNTER_BUFFERS, &numBuffers );
           for( GLint bufferIndex = 0; bufferIndex < numBuffers; ++bufferIndex )
           {
@@ -195,65 +181,11 @@ namespace dp
         }
         name.clear();
 
-#if defined(GL_VERSION_4_3)
-        // shader_storage_object
-        if ( GLEW_ARB_program_interface_query )
+        std::vector<dp::gl::Program::Block> const& ssbs = m_program->getShaderStorageBlocks();
+        for ( size_t i=0 ; i<ssbs.size() ; i++ )
         {
-          dp::gl::Program::Uniforms uniforms = m_program->getActiveBufferVariables();
-
-          GLint activeShaderStorageBlocks = 0;
-          glGetProgramInterfaceiv( programID, GL_SHADER_STORAGE_BLOCK, GL_ACTIVE_RESOURCES, &activeShaderStorageBlocks );
-
-          if ( activeShaderStorageBlocks )
-          {
-            GLint maxNameLength = 0;
-            glGetProgramInterfaceiv( programID, GL_SHADER_STORAGE_BLOCK, GL_MAX_NAME_LENGTH, &maxNameLength );
-
-            std::vector<char> nameVector( maxNameLength + 1 );
-            char* name = &nameVector[0];
-
-            std::set<GLint> usedBindings;
-
-            typedef std::pair<int, std::string> IndexInfo;
-            std::set<IndexInfo> unboundIndices;
-            for ( GLint index = 0; index < activeShaderStorageBlocks; ++index )
-            {
-              GLsizei nameLength;
-              glGetProgramResourceName( programID, GL_SHADER_STORAGE_BLOCK, index, static_cast<GLsizei>(nameVector.size()), &nameLength, name );
-
-              GLenum enumBufferBinding = GL_BUFFER_BINDING;
-              GLint bufferBinding;
-              GLsizei bindingLength;
-
-              glGetProgramResourceiv( programID, GL_SHADER_STORAGE_BLOCK, index, 1, &enumBufferBinding, 1, &bindingLength, &bufferBinding );
-              if ( bufferBinding )
-              {
-                usedBindings.insert( bufferBinding );
-                registerBufferBinding( name, bufferBinding, BBT_SHADER_STORAGE_BUFFER );
-              }
-              else
-              {
-                unboundIndices.insert( std::make_pair(index, name) );
-              }
-            }
-
-            GLint currentBinding = 1;
-            for ( std::set<IndexInfo>::iterator it = unboundIndices.begin(); it != unboundIndices.end(); ++it )
-            {
-              // search first free binding
-              while ( usedBindings.find( currentBinding) != usedBindings.end() )
-              {
-                ++currentBinding;
-              }
-
-              glShaderStorageBlockBinding( programID, it->first, currentBinding );
-              registerBufferBinding( it->second, currentBinding, BBT_SHADER_STORAGE_BUFFER );
-
-              ++currentBinding;
-            }
-          }
+          registerBufferBinding( ssbs[i].name, ssbs[i].binding, BBT_SHADER_STORAGE_BUFFER );
         }
-#endif
       }
 
       void ProgramGL::addDescriptor( ContainerDescriptorGLSharedHandle const& cd, unsigned int position )

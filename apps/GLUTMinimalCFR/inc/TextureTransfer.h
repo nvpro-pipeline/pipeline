@@ -26,7 +26,6 @@
 
 #pragma once
 
-#include <dp/gl/Program.h>
 #include <dp/gl/RenderContext.h>
 #include <dp/gl/Texture.h>
 #include <map>
@@ -68,10 +67,10 @@ private:
   size_t m_tileHeight;
   size_t m_maxIndex;
 
-  dp::gl::ProgramSharedPtr  m_compressProgram;
-  dp::gl::ProgramSharedPtr  m_decompressProgram;
-  dp::gl::ProgramSharedPtr  m_copyProgram;
-  bool m_shadersInitialized;
+  dp::gl::ProgramInstanceSharedPtr  m_compressProgram;
+  dp::gl::ProgramInstanceSharedPtr  m_decompressProgram;
+  dp::gl::ProgramInstanceSharedPtr  m_copyProgram;
+  bool                              m_shadersInitialized;
 
   Textures m_tmpTextures;
 };

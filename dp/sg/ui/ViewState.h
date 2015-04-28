@@ -217,13 +217,6 @@ namespace dp
           */
           DP_SG_UI_API dp::sg::core::SceneSharedPtr const& getScene() const;
 
-          /*! \brief Creates a new SceneTree for the given Scene.
-           *  \param scene The Scene for the new SceneTree
-           *  \deprecated
-           *  \remarks The new SceneTree is even created if the Scene of the current SceneTree matches the passed Scene.
-          */
-          DP_SG_UI_API void setScene(dp::sg::core::SceneSharedPtr const& scene);
-
           /*! \brief Set the dp::sg::xbar::SceneTree of the ViewState
           *   \param sceneTree The new SceneTree.
               \remarks This function also updates the Scene of the ViewState.

@@ -108,7 +108,7 @@ namespace dp
         }
         if ( rhs.m_sceneTree )
         {
-          m_sceneTree = dp::sg::xbar::SceneTree::create(rhs.getScene());
+          m_sceneTree = rhs.getSceneTree();
         }
       }
 
@@ -152,11 +152,6 @@ namespace dp
           }
           notify( dp::util::Event( ) );
         }
-      }
-
-      void ViewState::setScene( const SceneSharedPtr & scene )
-      {
-        setSceneTree(dp::sg::xbar::SceneTree::create(scene));
       }
 
       const SceneSharedPtr & ViewState::getScene( ) const
