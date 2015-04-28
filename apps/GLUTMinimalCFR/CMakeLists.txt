@@ -65,4 +65,5 @@ if(WIN32)
   CopyGLUT( GLUTMinimalCFR "${DP_BINARY_PATH}" )
 
   set_target_properties( GLUTMinimalCFR PROPERTIES FOLDER "Apps")
+  set_target_properties( GLUTMinimalCFR PROPERTIES LINK_FLAGS "/NODEFAULTLIB:\"freeglutd.lib\" /NODEFAULTLIB:\"freeglut.lib\"" )
 endif()

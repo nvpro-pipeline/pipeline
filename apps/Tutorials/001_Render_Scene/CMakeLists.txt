@@ -58,3 +58,4 @@ CopyGLEW( GLUTMinimal "${DP_BINARY_PATH}" )
 CopyGLUT( GLUTMinimal "${DP_BINARY_PATH}" )
 
 set_target_properties( Tutorial_001_Render_Scene PROPERTIES FOLDER "Tutorial")
+set_target_properties( Tutorial_001_Render_Scene PROPERTIES LINK_FLAGS "/NODEFAULTLIB:\"freeglutd.lib\" /NODEFAULTLIB:\"freeglut.lib\"" )
