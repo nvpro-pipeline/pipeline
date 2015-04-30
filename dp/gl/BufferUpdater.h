@@ -63,8 +63,10 @@ namespace dp
     public:
       /** \brief Create BufferUpdater class
           \param Buffer is the buffer which will be updated upon the executeUpdates call.
+          \param bachedUpdates If true, updates will be gathered into a big buffer and scattered on the GPU with a shader.
+          \remarks Updates that are not aligned to 4 bytes or have a size which is not a multiple of 4 will not be batched.
       **/
-      DP_GL_API BufferUpdater(dp::gl::BufferSharedPtr const& buffer);
+      DP_GL_API BufferUpdater(dp::gl::BufferSharedPtr const& buffer, bool batchedUpdates);
       DP_GL_API ~BufferUpdater();
 
       /** \brief Add an update to the update queue.
@@ -83,16 +85,21 @@ namespace dp
     private:
       /** \brief There's one UpdateInfo for each updateSize **/
       struct UpdateInfo {
-        std::vector<char> data;
-        std::vector<int>  offsets;
+        std::vector<char>   data;
+        std::vector<Uint32> offsets;
+        Uint32              offsetMask; // value with all offsets or'ed.
       };
 
-      std::map<size_t, UpdateInfo>      m_updateInfos;         // One updateInfo per update size
-      dp::gl::BufferSharedPtr           m_buffer;              // Buffer to update
-      dp::gl::BufferSharedPtr           m_bufferData;          // Buffer with data to update
-      dp::gl::BufferSharedPtr           m_bufferChunkOffsets;  // Buffer with offsets of the chunks to update
-      dp::gl::ProgramInstanceSharedPtr  m_programUpdate;       // Program used to scatter data on the GPU.
+      bool                              m_batchedUpdates; // Use shader to do batched updates on GPU
+      std::map<Uint32, UpdateInfo>      m_updateInfos;          // One updateInfo per update size
+      dp::gl::BufferSharedPtr           m_buffer;               // Buffer to update
+      dp::gl::BufferSharedPtr           m_bufferData;           // Buffer with data to update
+      dp::gl::BufferSharedPtr           m_bufferChunkOffsets;   // Buffer with offsets of the chunks to update
+      dp::gl::ProgramInstanceSharedPtr  m_programUpdate4;       // Program used to scatter 4-byte aligned data on the GPU.
+      dp::gl::ProgramInstanceSharedPtr  m_programUpdate8;       // Program used to scatter 8-byte aligned data on the GPU.
+      dp::gl::ProgramInstanceSharedPtr  m_programUpdate16;      // Program used to scatter 16-byte aligned data on the GPU.
     };
 
   } // namespace gl
 } // namespace dp
+

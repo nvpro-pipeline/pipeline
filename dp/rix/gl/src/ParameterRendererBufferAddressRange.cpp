@@ -42,7 +42,7 @@ namespace dp
         , m_baseAddress(0)
         , m_bindingLength(bindingLength)
         , m_cacheData(new dp::Uint8[m_bindingLength])
-        , m_bufferUpdater(new dp::gl::BufferUpdater(buffer))
+        , m_bufferUpdater(new dp::gl::BufferUpdater(buffer, bufferUpdaterBatchedUpdates))
       {
       }
 
