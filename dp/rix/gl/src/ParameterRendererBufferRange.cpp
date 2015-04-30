@@ -41,7 +41,7 @@ namespace dp
         , m_uboBinding( GLint(uboBinding) )
         , m_uboBlockSize( uboBlockSize )
         , m_cacheData( new dp::Uint8[uboBlockSize] )
-        , m_bufferUpdater(new dp::gl::BufferUpdater(ubo))
+        , m_bufferUpdater(new dp::gl::BufferUpdater(ubo, bufferUpdaterBatchedUpdates))
       {
       }
 

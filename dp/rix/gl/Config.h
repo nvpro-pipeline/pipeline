@@ -69,6 +69,8 @@ namespace dp
       };
 
       static const BufferMode BUFFER_MODE = BM_BIND_BUFFER_RANGE;
+      
+      static bool bufferUpdaterBatchedUpdates = true; 
     }
   }
 }
