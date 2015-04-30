@@ -25,22 +25,36 @@
 
 
 #pragma once
-/** @file */
 
-#include <dp/util/SharedPtr.h>
+#include <driver_types.h>
+#include <dp/cuda/Config.h>
+#include <dp/cuda/Types.h>
+#include <dp/math/Vecnt.h>
 
-// required declaration
 namespace dp
 {
   namespace cuda
   {
-    DEFINE_PTR_TYPES(Buffer);
-    DEFINE_PTR_TYPES(Buffer3D);
-    DEFINE_PTR_TYPES(BufferHost);
-    DEFINE_PTR_TYPES(Device);
-    DEFINE_PTR_TYPES(Event);
-    DEFINE_PTR_TYPES(GraphicsResource);
-    DEFINE_PTR_TYPES(Stream);
-    DEFINE_PTR_TYPES(TextureReference);
+
+    class Device
+    {
+      public:
+        DP_CUDA_API static DeviceSharedPtr create();
+        DP_CUDA_API virtual ~Device();
+
+      public:
+        DP_CUDA_API dp::math::Vec3i getMaxThreadsDim() const;
+        DP_CUDA_API bool isCurrent() const;
+        DP_CUDA_API void synchronize();
+
+      protected:
+        DP_CUDA_API Device();
+        DP_CUDA_API int getDevice() const;
+
+      private:
+        int             m_device;
+        cudaDeviceProp  m_properties;
+    };
+
   } // namespace cuda
 } // namespace dp

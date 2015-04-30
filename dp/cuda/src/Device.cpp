@@ -24,23 +24,53 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#pragma once
-/** @file */
+#include <dp/cuda/Device.h>
 
-#include <dp/util/SharedPtr.h>
-
-// required declaration
 namespace dp
 {
   namespace cuda
   {
-    DEFINE_PTR_TYPES(Buffer);
-    DEFINE_PTR_TYPES(Buffer3D);
-    DEFINE_PTR_TYPES(BufferHost);
-    DEFINE_PTR_TYPES(Device);
-    DEFINE_PTR_TYPES(Event);
-    DEFINE_PTR_TYPES(GraphicsResource);
-    DEFINE_PTR_TYPES(Stream);
-    DEFINE_PTR_TYPES(TextureReference);
+    DeviceSharedPtr Device::create()
+    {
+      return( std::shared_ptr<Device>( new Device() ) );
+    }
+
+    Device::Device()
+    {
+      CUDA_VERIFY( cudaGetDevice( &m_device ) );
+      CUDA_VERIFY( cudaGetDeviceProperties( &m_properties, m_device ) );
+    }
+
+    Device::~Device( )
+    {
+      DP_ASSERT( isCurrent() );
+      CUDA_VERIFY( cudaDeviceReset() );
+    }
+
+    dp::math::Vec3i Device::getMaxThreadsDim() const
+    {
+      DP_ASSERT( isCurrent() );
+      return( dp::math::Vec3i( m_properties.maxThreadsDim[0], m_properties.maxThreadsDim[1], m_properties.maxThreadsDim[2] ) );
+    }
+
+    int Device::getDevice() const
+    {
+      DP_ASSERT( isCurrent() );
+      return( m_device );
+    }
+
+    bool Device::isCurrent() const
+    {
+      int dev;
+      CUDA_VERIFY( cudaGetDevice( &dev ) );
+      return( dev == m_device );
+    }
+
+    void Device::synchronize()
+    {
+      DP_ASSERT( isCurrent() );
+      cudaDeviceSynchronize();
+    }
+
   } // namespace cuda
 } // namespace dp

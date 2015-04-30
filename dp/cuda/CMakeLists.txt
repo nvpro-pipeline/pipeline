@@ -19,6 +19,7 @@ if (CUDA_FOUND)
     src/Buffer.cpp
     src/Buffer3D.cpp
     src/BufferHost.cpp
+    src/Device.cpp
     src/Event.cpp
     src/GraphicsResource.cpp
     src/Stream.cpp
@@ -29,6 +30,7 @@ if (CUDA_FOUND)
     Buffer3D.h
     BufferHost.h
     Config.h
+    Device.h
     Event.h
     GraphicsResource.h
     Stream.h
