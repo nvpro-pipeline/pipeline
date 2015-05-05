@@ -50,7 +50,8 @@ namespace dp
         typedef typename ParameterCache<ParameterCacheType>::ContainerCacheEntry ContainerCacheEntry;
         typedef typename ParameterCache<ParameterCacheType>::ContainerLocations  ContainerLocations;
 
-        ProgramParameterCache( RenderGroupGLHandle renderGroup, ProgramPipelineGLHandle programPipeline );
+        ProgramParameterCache( RenderGroupGLHandle renderGroup, ProgramPipelineGLHandle pipeline
+                             , bool useUniformBufferUnifiedMemory, BufferMode bufferMode, bool batchedUpdates );
         ~ProgramParameterCache();
 
         virtual void useContainer(  ContainerGLHandle container );
@@ -116,15 +117,22 @@ namespace dp
         void onContainerDestroyed( dp::util::Subject const& subject, dp::util::Payload* payload );
 
         std::unique_ptr<ContainerObserver>   m_containerObserver;
-        dp::util::BitArray                   m_containerDirty; // specifies if a container is dirty
-        dp::util::BitArray                   m_containerKnown; // specifies if a container is already known 
-        std::vector<ContainerGLSharedHandle> m_containers;     // All known containers, shared as they're being observed
+        dp::util::BitArray                   m_containerDirty;                // specifies if a container is dirty
+        dp::util::BitArray                   m_containerKnown;                // specifies if a container is already known 
+        std::vector<ContainerGLSharedHandle> m_containers;                    // All known containers, shared as they're being observed
+        bool                                 m_useUniformBufferUnifiedMemory; // Use unified_buffer_unified_memory extension for UBO bindings
+        bool                                 m_batchedUpdates;                // Use shader to batch updates to buffers
+        BufferMode                           m_bufferMode;                    // Method to use when switching between UBO or SSBO parameters
       };
 
       template <typename ParameterCacheType>
-      ProgramParameterCache<ParameterCacheType>::ProgramParameterCache( RenderGroupGLHandle renderGroup, ProgramPipelineGLHandle programPipeline )
+      ProgramParameterCache<ParameterCacheType>::ProgramParameterCache( RenderGroupGLHandle renderGroup, ProgramPipelineGLHandle programPipeline
+                                                                      , bool useUniformBufferUnifiedMemory, BufferMode bufferMode, bool batchedUpdates)
         : m_uniformDataDirty( true )
         , m_programPipeline( programPipeline )
+        , m_useUniformBufferUnifiedMemory(useUniformBufferUnifiedMemory)
+        , m_batchedUpdates(batchedUpdates)
+        , m_bufferMode(bufferMode)
       {
         m_containerObserver.reset( new ContainerObserver( *this ) );
 
@@ -135,7 +143,7 @@ namespace dp
         {
           descriptors.push_back( (*it).m_descriptor );
         }
-        m_parameterCache.reset( new ParameterCache<ParameterCacheType>( programPipeline, descriptors ) );
+        m_parameterCache.reset( new ParameterCache<ParameterCacheType>( programPipeline, descriptors, useUniformBufferUnifiedMemory, bufferMode, batchedUpdates ) );
 
         const RenderGroupGL::ContainerMap& globalContainers = renderGroup->getGlobalContainers();
         for( RenderGroupGL::ContainerMap::const_iterator it = globalContainers.begin(); it != globalContainers.end(); ++it )
@@ -237,6 +245,7 @@ namespace dp
         {
           m_containerDirty.traverseBits([&](size_t index) {m_parameterCache->updateContainer(m_containers[index].get());});
           m_uniformDataDirty = false;
+          m_containerDirty.clear();
         }
       }
 
@@ -308,7 +317,7 @@ namespace dp
         {
           descriptors.push_back( it->container->m_descriptor.get() );
         }
-        m_parameterCacheGlobal.reset( new ParameterCache<ParameterCacheType>( m_programPipeline.get(), descriptors ) );
+        m_parameterCacheGlobal.reset( new ParameterCache<ParameterCacheType>( m_programPipeline.get(), descriptors, m_useUniformBufferUnifiedMemory, m_bufferMode, m_batchedUpdates ) );
 
         m_parameterCacheGlobal->allocationBegin();
         size_t index = 0;

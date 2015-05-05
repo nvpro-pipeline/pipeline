@@ -115,7 +115,7 @@ namespace dp
             dp::rix::core::PFNCREATERENDERER createRenderer = (dp::rix::core::PFNCREATERENDERER)m_rendererGLLib->getSymbol( "createRenderer" );
             DP_ASSERT( createRenderer );
 
-            m_renderer = (*createRenderer)( "VBO" );
+            m_renderer = (*createRenderer)( "vertex=VBO" );
             DP_ASSERT( m_renderer );
 
             m_resourceManager = ResourceManager::create( m_renderer, dp::fx::MANAGER_UNIFORM );

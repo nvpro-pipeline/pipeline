@@ -121,7 +121,8 @@ namespace dp
           ProgramPipelineGroupCache* m_programPipelineGroupCache;
         };
 
-        ProgramPipelineGroupCache( RenderGroupGLHandle renderGroup, ProgramPipelineGLHandle programPipeline );
+        ProgramPipelineGroupCache( RenderGroupGLHandle renderGroup, ProgramPipelineGLHandle programPipeline
+                                 , bool useUniformBufferUnifiedMemory, BufferMode bufferMode, bool batchedUpdates);
         ~ProgramPipelineGroupCache();
 
         void activate();
@@ -151,9 +152,10 @@ namespace dp
       };
 
       template <typename VertexCache>
-      ProgramPipelineGroupCache<VertexCache>::ProgramPipelineGroupCache( RenderGroupGLHandle renderGroup, ProgramPipelineGLHandle programPipeline )
+      ProgramPipelineGroupCache<VertexCache>::ProgramPipelineGroupCache( RenderGroupGLHandle renderGroup, ProgramPipelineGLHandle programPipeline
+                                                                       , bool useUniformBufferUnifiedMemory, BufferMode bufferMode, bool batchedUpdates )
         : RenderGroupGL::Cache( renderGroup, programPipeline )
-        , ProgramParameterCache<PCT>( renderGroup, programPipeline )
+        , ProgramParameterCache<PCT>( renderGroup, programPipeline, useUniformBufferUnifiedMemory, bufferMode, batchedUpdates )
         , m_geometryInstanceCache( nullptr )
       {
         const RenderGroupGL::ContainerMap& globalContainers = renderGroup->getGlobalContainers();

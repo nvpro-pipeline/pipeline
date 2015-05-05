@@ -34,7 +34,9 @@ namespace dp
     namespace gl
     {
 
-      ParameterRendererBufferAddressRange::ParameterRendererBufferAddressRange(ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::BufferSharedPtr const& buffer, GLenum target, size_t bindingIndex, GLsizeiptr bindingLength)
+      ParameterRendererBufferAddressRange::ParameterRendererBufferAddressRange(ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::BufferSharedPtr const& buffer
+                                                                              , GLenum target, size_t bindingIndex, GLsizeiptr bindingLength
+                                                                              , bool batchedUpdates)
         : ParameterRendererStreamBuffer(parameterCacheEntries)
         , m_buffer(buffer)
         , m_target(target)
@@ -42,7 +44,7 @@ namespace dp
         , m_baseAddress(0)
         , m_bindingLength(bindingLength)
         , m_cacheData(new dp::Uint8[m_bindingLength])
-        , m_bufferUpdater(new dp::gl::BufferUpdater(buffer, bufferUpdaterBatchedUpdates))
+        , m_bufferUpdater(new dp::gl::BufferUpdater(buffer, batchedUpdates))
       {
       }
 

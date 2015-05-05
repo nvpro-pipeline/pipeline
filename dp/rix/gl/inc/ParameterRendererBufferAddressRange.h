@@ -45,10 +45,12 @@ namespace dp
       class ParameterRendererBufferAddressRange : public ParameterRendererStreamBuffer
       {
       public:
-        ParameterRendererBufferAddressRange( ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::BufferSharedPtr const& ubo, GLenum target, size_t uboBinding, GLsizeiptr uboBlockSize );
+        ParameterRendererBufferAddressRange( ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::BufferSharedPtr const& buffer
+                                           , GLenum target, size_t bindingIndex, GLsizeiptr bindingLength
+                                           , bool batchedUpdates);
 
         virtual void activate();
-
+        
         virtual void render( void const* cache );
         virtual void update( void* cache, void const* container );
         virtual size_t getCacheSize() const;

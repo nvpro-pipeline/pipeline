@@ -43,7 +43,9 @@ namespace dp
       class ParameterRendererBuffer : public ParameterRendererStreamBuffer
       {
       public:
-        ParameterRendererBuffer(ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::BufferSharedPtr const& ubo, GLenum target, size_t uboBinding, size_t uboOffset, GLsizeiptr uboBlockSize);
+        ParameterRendererBuffer(ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::BufferSharedPtr const& ubo, GLenum target
+                               , size_t uboBinding, size_t uboOffset, GLsizeiptr uboBlockSize
+                               , bool useUniformBufferUnifiedMemory);
 
         virtual void activate();
 
@@ -57,7 +59,7 @@ namespace dp
         GLint                            m_uboBinding;
         GLintptr                         m_uboOffset;
         GLsizeiptr                       m_uboBlockSize;
-        bool                             m_isBindlessUBOSupported;
+        bool                             m_useUniformBufferUnifiedMemory;
       };
 
     } // namespace gl

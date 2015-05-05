@@ -47,16 +47,16 @@ namespace dp
       template <typename VertexCache> class RenderEngineGLImpl;
 
       template<typename VertexCache>
-      RenderEngineGL* renderEngineCreate()
+      RenderEngineGL* renderEngineCreate(std::map<std::string, std::string> const & options)
       {
-        return new RenderEngineGLImpl<VertexCache>();
+        return new RenderEngineGLImpl<VertexCache>(options);
       }
 
       template <typename VertexCache>
       class RenderEngineGLImpl : public RenderEngineGL, public VertexAttributeCache<VertexCache>
       {
       public:
-        RenderEngineGLImpl();
+        RenderEngineGLImpl(std::map<std::string, std::string> const & options);
 
         virtual void beginRender();
         virtual void render( RenderGroupGLSharedHandle const & groupHandle, dp::rix::core::RenderOptions const & renderOptions );
@@ -82,6 +82,9 @@ namespace dp
 
         void changeProgramPipelineCache( RenderGroupCache* programPipelineGroupCache );
 
+        bool                    m_useUniformBufferUnifiedMemory;
+        bool                    m_batchedUpdates;
+        BufferMode              m_bufferMode;
         RenderGroupCache*       m_currentProgramPipelineCache;
 
         // the following is needed for gcc name lookup 
@@ -101,9 +104,44 @@ namespace dp
       };
 
       template <typename VertexCache>
-      RenderEngineGLImpl<VertexCache>::RenderEngineGLImpl() 
+      RenderEngineGLImpl<VertexCache>::RenderEngineGLImpl(std::map<std::string, std::string> const & options) 
         : m_currentProgramPipelineCache( nullptr )
       {
+        auto itUniformBufferUnifiedMemory = options.find("uniformBufferUnifiedMemory");
+        m_useUniformBufferUnifiedMemory = itUniformBufferUnifiedMemory != options.end() && itUniformBufferUnifiedMemory->second == "true";
+
+        auto itBatchedUpdates = options.find("batchedUpdates");
+        m_batchedUpdates = itBatchedUpdates != options.end() && itBatchedUpdates->second == "true";
+
+        auto itBufferMode = options.find("bufferMode");
+        if (itBufferMode != options.end())
+        {
+          if (itBufferMode->second == "bufferSubData")
+          {
+            m_bufferMode = BM_BUFFER_SUBDATA;
+          }
+          else if (itBufferMode->second == "bindBufferRange")
+          {
+            m_bufferMode = BM_BIND_BUFFER_RANGE;
+          }
+          else if (itBufferMode->second == "persistentBufferMapping")
+          {
+            m_bufferMode = BM_PERSISTENT_BUFFER_MAPPING;
+          }
+          else
+          {
+            throw std::runtime_error("Invalid bufferMode. Valid values are bufferSubData, bindBufferRange, and persistentBufferMapping");
+          }
+        }
+        else
+        {
+          m_bufferMode = BM_BIND_BUFFER_RANGE;
+        }
+
+        if (m_bufferMode == BM_BUFFER_SUBDATA && m_useUniformBufferUnifiedMemory == true)
+        {
+          throw std::runtime_error("bufferMode=bufferSubData is currently not compatible with uniformUnifiedMemory=true");
+        }
       }
 
       template<typename VertexCache>
@@ -204,8 +242,7 @@ namespace dp
           }
         }
 
-        // todo usage of bindless ubos should be a configuration flag
-        if (RIX_GL_USE_UNIFORM_BUFFER_UNIFIED_MEMORY && glewGetExtension("GL_NV_uniform_buffer_unified_memory")) {
+        if (m_useUniformBufferUnifiedMemory) {
           glEnableClientState(GL_UNIFORM_BUFFER_UNIFIED_NV);
         }
       }
@@ -213,7 +250,7 @@ namespace dp
       template <typename VertexCache>
       void RenderEngineGLImpl<VertexCache>::endRender()
       {
-        if (RIX_GL_USE_UNIFORM_BUFFER_UNIFIED_MEMORY && glewGetExtension("GL_NV_uniform_buffer_unified_memory")) {
+        if (m_useUniformBufferUnifiedMemory) {
           glDisableClientState(GL_UNIFORM_BUFFER_UNIFIED_NV);
         }
 
@@ -362,7 +399,7 @@ namespace dp
       template <typename VertexCache>
       RenderGroupGL::SmartCache RenderEngineGLImpl<VertexCache>::createCache( RenderGroupGLSharedHandle const & renderGroupGL, ProgramPipelineGLSharedHandle const & programPipeline )
       {
-        return new RenderGroupCache( renderGroupGL.get(), programPipeline.get() );
+        return new RenderGroupCache( renderGroupGL.get(), programPipeline.get(), m_useUniformBufferUnifiedMemory, m_bufferMode, m_batchedUpdates );
       }
 
     } // namespace gl
