@@ -78,7 +78,10 @@ namespace dp
 
         /** \brief Construct ParameterCache for the given ProgramPipeline
         **/
-        ParameterCache( ProgramPipelineGLHandle programPipeline, std::vector<ContainerDescriptorGLHandle> const& descriptors );
+        ParameterCache( ProgramPipelineGLHandle programPipeline, std::vector<ContainerDescriptorGLHandle> const& descriptors
+                      , bool useUniformBufferUnifiedMemory
+                      , BufferMode bufferMode
+                      , bool batchedUpdates);
         virtual ~ParameterCache();
 
         /** \brief Clear all allocations in the cache **/
@@ -146,7 +149,9 @@ namespace dp
         ProgramPipelineGLHandle      m_programPipeline;
         std::vector<ContainerDescriptorGLHandle> m_descriptors;
 
-        bool m_isBindlessUBOSupported;                // true if GL_NV_uniform_buffer_unified_memory is supported and should be used
+        bool       m_useUniformBufferUnifiedMemory; // GL_NV_uniform_buffer_unified_memory is enabled and must be used
+        bool       m_batchedUpdates;                // use shader to batch buffer updates
+        BufferMode m_bufferMode;                    // Mode to use when switching between parameters when using UBOs and SSBOs
       };
 
 

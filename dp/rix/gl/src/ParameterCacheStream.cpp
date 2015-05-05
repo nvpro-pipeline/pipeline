@@ -47,13 +47,16 @@ namespace dp
       /************************************************************************/
       /* ParameterCache                                                       */
       /************************************************************************/
-      ParameterCache<ParameterCacheStream>::ParameterCache( ProgramPipelineGLHandle programPipeline, std::vector<ContainerDescriptorGLHandle> const &descriptors )
+      ParameterCache<ParameterCacheStream>::ParameterCache( ProgramPipelineGLHandle programPipeline, std::vector<ContainerDescriptorGLHandle> const &descriptors
+                                                          , bool useUniformBufferUnifiedMemory, BufferMode bufferMode, bool batchedUpdates)
         : m_programPipeline( programPipeline )
         , m_descriptors( descriptors )
-        , m_isBindlessUBOSupported(RIX_GL_USE_UNIFORM_BUFFER_UNIFIED_MEMORY && !!glewGetExtension("GL_NV_uniform_buffer_unified_memory"))
         , m_containerLocationsValid(0)
+        , m_useUniformBufferUnifiedMemory(useUniformBufferUnifiedMemory)
+        , m_batchedUpdates(batchedUpdates)
+        , m_bufferMode(bufferMode)
       {
-        switch(BUFFER_MODE)
+        switch(m_bufferMode)
         {
         case BM_PERSISTENT_BUFFER_MAPPING:
           m_uboDataUBO = dp::gl::Buffer::create(dp::gl::Buffer::PERSISTENT_BUFFER, GL_DYNAMIC_STORAGE_BIT | GL_MAP_WRITE_BIT | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT);
@@ -108,18 +111,18 @@ namespace dp
             ParameterCacheEntryStreamBuffers parameterCacheEntries = createParameterCacheEntriesStreamBuffer( program, m_descriptors[i], uniformInfos );
             parameterState.m_numParameterObjects = parameterCacheEntries.size();
 
-            switch ( BUFFER_MODE )
+            switch (m_bufferMode)
             {
             case BM_BUFFER_SUBDATA:
               {
                 dp::gl::BufferSharedPtr ubo = dp::gl::Buffer::create(dp::gl::Buffer::CORE, GL_STREAM_DRAW, GL_UNIFORM_BUFFER);
                 if ( glNamedBufferSubDataEXT /** GLEW_EXT_direct_state_access, glew has a bug not reporting this extension because the double versions are missing **/)
                 {
-                  parameterState.m_parameterRenderer.reset( new ParameterRendererBufferDSA( parameterCacheEntries, ubo, GL_UNIFORM_BUFFER, binding, 0, blockSize ) );
+                  parameterState.m_parameterRenderer.reset( new ParameterRendererBufferDSA( parameterCacheEntries, ubo, GL_UNIFORM_BUFFER, binding, 0, blockSize, m_useUniformBufferUnifiedMemory ) );
                 }
                 else
                 {
-                  parameterState.m_parameterRenderer.reset( new ParameterRendererBuffer( parameterCacheEntries, ubo, GL_UNIFORM_BUFFER, binding, 0, blockSize ) );
+                  parameterState.m_parameterRenderer.reset( new ParameterRendererBuffer( parameterCacheEntries, ubo, GL_UNIFORM_BUFFER, binding, 0, blockSize, m_useUniformBufferUnifiedMemory ) );
                 }
                 ubo->setSize(blockSize);
 
@@ -128,19 +131,19 @@ namespace dp
               }
               break;
             case BM_BIND_BUFFER_RANGE:
-              if ( m_isBindlessUBOSupported )
+              if ( m_useUniformBufferUnifiedMemory )
               {
-                parameterState.m_parameterRenderer.reset( new ParameterRendererBufferAddressRange( parameterCacheEntries, m_uboDataUBO, GL_UNIFORM_BUFFER_ADDRESS_NV, binding, blockSize ) );
+                parameterState.m_parameterRenderer.reset( new ParameterRendererBufferAddressRange( parameterCacheEntries, m_uboDataUBO, GL_UNIFORM_BUFFER_ADDRESS_NV, binding, blockSize, m_batchedUpdates ) );
               }
               else
               {
-                parameterState.m_parameterRenderer.reset( new ParameterRendererBufferRange( parameterCacheEntries, m_uboDataUBO, GL_UNIFORM_BUFFER, binding, blockSize ) );
+                parameterState.m_parameterRenderer.reset( new ParameterRendererBufferRange( parameterCacheEntries, m_uboDataUBO, GL_UNIFORM_BUFFER, binding, blockSize, m_batchedUpdates ) );
               }
 
               m_isUBOData.push_back(true);
               break;
             case BM_PERSISTENT_BUFFER_MAPPING:
-              if ( m_isBindlessUBOSupported )
+              if ( m_useUniformBufferUnifiedMemory )
               {
                 parameterState.m_parameterRenderer.reset(new ParameterRendererPersistentBufferMappingUnifiedMemory(parameterCacheEntries, m_uboDataUBO, GL_UNIFORM_BUFFER_ADDRESS_NV, binding, blockSize));
               }
@@ -173,18 +176,18 @@ namespace dp
             ParameterCacheEntryStreamBuffers parameterCacheEntries = createParameterCacheEntriesStreamBuffer( program, m_descriptors[i], bufferVariables );
             parameterState.m_numParameterObjects = parameterCacheEntries.size();
 
-            switch ( BUFFER_MODE )
+            switch (m_bufferMode)
             {
             case BM_BUFFER_SUBDATA:
               {
                 dp::gl::BufferSharedPtr ubo = dp::gl::Buffer::create(dp::gl::Buffer::CORE, GL_STREAM_DRAW, GL_UNIFORM_BUFFER);
                 if ( glNamedBufferSubDataEXT /** GLEW_EXT_direct_state_access, glew has a bug not reporting this extension because the double versions are missing **/)
                 {
-                  parameterState.m_parameterRenderer.reset( new ParameterRendererBufferDSA( parameterCacheEntries, ubo, GL_SHADER_STORAGE_BUFFER, binding, 0, blockSize ) );
+                  parameterState.m_parameterRenderer.reset( new ParameterRendererBufferDSA( parameterCacheEntries, ubo, GL_SHADER_STORAGE_BUFFER, binding, 0, blockSize, m_useUniformBufferUnifiedMemory ) );
                 }
                 else
                 {
-                  parameterState.m_parameterRenderer.reset( new ParameterRendererBuffer( parameterCacheEntries, ubo, GL_SHADER_STORAGE_BUFFER, binding, 0, blockSize ) );
+                  parameterState.m_parameterRenderer.reset( new ParameterRendererBuffer( parameterCacheEntries, ubo, GL_SHADER_STORAGE_BUFFER, binding, 0, blockSize, m_useUniformBufferUnifiedMemory ) );
                 }
                 ubo->setSize(blockSize);
 
@@ -193,7 +196,7 @@ namespace dp
               }
               break;
             case BM_BIND_BUFFER_RANGE:
-              parameterState.m_parameterRenderer.reset( new ParameterRendererBufferRange( parameterCacheEntries, m_uboDataUBO, GL_SHADER_STORAGE_BUFFER, binding, blockSize ) );
+              parameterState.m_parameterRenderer.reset( new ParameterRendererBufferRange( parameterCacheEntries, m_uboDataUBO, GL_SHADER_STORAGE_BUFFER, binding, blockSize, m_batchedUpdates) );
               m_isUBOData.push_back(true);
               break;
             default:
@@ -204,7 +207,7 @@ namespace dp
           }
           else
           {
-            ParameterCacheEntryStreams parameterCacheEntries = createParameterCacheEntryStreams( program, m_descriptors[i], m_isBindlessUBOSupported );
+            ParameterCacheEntryStreams parameterCacheEntries = createParameterCacheEntryStreams( program, m_descriptors[i], m_useUniformBufferUnifiedMemory );
             parameterState.m_parameterRenderer.reset( new ParameterRendererUniform( parameterCacheEntries ) );
             parameterState.m_numParameterObjects = parameterCacheEntries.size();
             m_isUBOData.push_back(false);
@@ -292,19 +295,19 @@ namespace dp
         m_uniformData.resize( m_currentUniformOffset );
         if (m_uboDataUBO->getSize() != m_currentUBOOffset) {
 
-          if (m_isBindlessUBOSupported && m_uboDataUBO->isResident())
+          if (m_useUniformBufferUnifiedMemory && m_uboDataUBO->isResident())
           {
             m_uboDataUBO->makeNonResident();
           }
 
-          if (BUFFER_MODE == BM_PERSISTENT_BUFFER_MAPPING && m_uboDataUBO->isMapped())
+          if (m_bufferMode == BM_PERSISTENT_BUFFER_MAPPING && m_uboDataUBO->isMapped())
           {
             m_uboDataUBO->unmap();
           }
 
           m_uboDataUBO->setSize(m_currentUBOOffset);
 
-          if (BUFFER_MODE == BM_PERSISTENT_BUFFER_MAPPING)
+          if (m_bufferMode == BM_PERSISTENT_BUFFER_MAPPING)
           {
             m_uboDataUBO->map(GL_MAP_WRITE_BIT | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT);
           }

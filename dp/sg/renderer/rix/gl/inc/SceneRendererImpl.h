@@ -135,7 +135,7 @@ namespace dp
             dp::sg::xbar::DrawableManager*           m_drawableManager;
             ResourceManagerSharedPtr                 m_resourceManager;
             dp::fx::Manager                          m_shaderManager;
-            std::string                              m_renderEngine;
+            std::string                              m_renderEngineOptions;
 
             bool                                     m_contextRegistered;
             bool                                     m_rendererInitialized;

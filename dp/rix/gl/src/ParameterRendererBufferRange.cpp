@@ -34,14 +34,16 @@ namespace dp
     namespace gl
     {
 
-      ParameterRendererBufferRange::ParameterRendererBufferRange(ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::BufferSharedPtr const& ubo, GLenum target, size_t uboBinding, GLsizeiptr uboBlockSize)
+      ParameterRendererBufferRange::ParameterRendererBufferRange(ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::BufferSharedPtr const& buffer
+                                                                , GLenum target, size_t bindingIndex, GLsizeiptr bindingLength
+                                                                , bool batchedUpdates)
         : ParameterRendererStreamBuffer( parameterCacheEntries )
-        , m_ubo( ubo->getGLId() )
+        , m_ubo( buffer->getGLId() )
         , m_target( target )
-        , m_uboBinding( GLint(uboBinding) )
-        , m_uboBlockSize( uboBlockSize )
-        , m_cacheData( new dp::Uint8[uboBlockSize] )
-        , m_bufferUpdater(new dp::gl::BufferUpdater(ubo, bufferUpdaterBatchedUpdates))
+        , m_uboBinding( GLint(bindingIndex) )
+        , m_uboBlockSize( bindingLength )
+        , m_cacheData( new dp::Uint8[bindingLength] )
+        , m_bufferUpdater(new dp::gl::BufferUpdater(buffer, batchedUpdates))
       {
       }
 

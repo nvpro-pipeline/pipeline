@@ -33,20 +33,22 @@ namespace dp
     namespace gl
     {
 
-      ParameterRendererBuffer::ParameterRendererBuffer(ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::BufferSharedPtr const& ubo, GLenum target, size_t uboBinding, size_t uboOffset, GLsizeiptr uboBlockSize)
+      ParameterRendererBuffer::ParameterRendererBuffer(ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::BufferSharedPtr const& ubo, GLenum target
+                                                      , size_t uboBinding, size_t uboOffset, GLsizeiptr uboBlockSize
+                                                      , bool useUniformBufferUnifiedMemory)
         : ParameterRendererStreamBuffer(parameterCacheEntries)
         , m_ubo(ubo)
         , m_target(target)
         , m_uboBinding(GLint(uboBinding))
         , m_uboOffset(GLsizeiptr(uboOffset))
         , m_uboBlockSize(uboBlockSize)
-        , m_isBindlessUBOSupported(RIX_GL_USE_UNIFORM_BUFFER_UNIFIED_MEMORY && !!glewGetExtension("GL_NV_uniform_buffer_unified_memory"))
+        , m_useUniformBufferUnifiedMemory()
       {
       }
 
       void ParameterRendererBuffer::activate()
       {
-        if (m_isBindlessUBOSupported) {
+        if (m_useUniformBufferUnifiedMemory) {
             // TODO hack, query alignment from driver!
             glBufferAddressRangeNV(GL_UNIFORM_BUFFER_ADDRESS_NV, m_uboBinding, m_ubo->getAddress(), (m_uboBlockSize + 0xff) & ~0xff);
         }

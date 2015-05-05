@@ -100,7 +100,7 @@ namespace dp
             return( std::shared_ptr<SceneRendererImpl>( new SceneRendererImpl( renderEngine, shaderManagerType, cullingMode, transparencyMode, renderTarget ) ) );
           }
 
-          SceneRendererImpl::SceneRendererImpl( const char *renderEngine, dp::fx::Manager shaderManagerType
+          SceneRendererImpl::SceneRendererImpl( const char *renderEngineOptions, dp::fx::Manager shaderManagerType
                                               , dp::culling::Mode cullingMode, TransparencyMode transparencyMode
                                               , const dp::gl::RenderTargetSharedPtr &renderTarget )
             : SceneRenderer( renderTarget )
@@ -109,7 +109,7 @@ namespace dp
             , m_contextRegistered( false )
             , m_rendererInitialized( false )
             , m_shaderManager( shaderManagerType )
-            , m_renderEngine( renderEngine )
+            , m_renderEngineOptions( renderEngineOptions )
             , m_cullingMode( cullingMode )
             , m_cullingEnabled( true )
             , m_viewportSize( 0, 0 )
@@ -518,16 +518,16 @@ namespace dp
 
           void SceneRendererImpl::setRenderEngine( std::string const& renderEngine )
           {
-            if ( renderEngine != m_renderEngine )
+            if ( renderEngine != m_renderEngineOptions )
             {
-              m_renderEngine = renderEngine;
+              m_renderEngineOptions = renderEngine;
               shutdownRenderer();
             }
           }
 
           std::string const& SceneRendererImpl::getRenderEngine() const
           {
-            return m_renderEngine;
+            return m_renderEngineOptions;
           }
 
           void SceneRendererImpl::shutdownRenderer()
@@ -554,7 +554,7 @@ namespace dp
               DP_ASSERT( m_rix && "Could not load dynamic library RiXGL.rdr" );
 
               dp::rix::core::PFNCREATERENDERER createRenderer = reinterpret_cast<dp::rix::core::PFNCREATERENDERER>(m_rix->getSymbol("createRenderer"));
-              m_renderer.reset(dynamic_cast<dp::rix::gl::RiXGL*>((*createRenderer)( m_renderEngine.c_str() )));
+              m_renderer.reset(dynamic_cast<dp::rix::gl::RiXGL*>((*createRenderer)( m_renderEngineOptions.c_str() )));
               DP_ASSERT( m_renderer && "Could not create RiXGL renderer" );
 
               m_resourceManager = ResourceManager::create( m_renderer.get(), m_shaderManager );

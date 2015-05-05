@@ -37,7 +37,7 @@ namespace dp
     namespace gl
     {
 
-      typedef RenderEngineGL*(*RenderEngineCreator)();
+      typedef RenderEngineGL*(*RenderEngineCreator)(std::map<std::string, std::string> const & options);
 
       typedef std::map<std::string, RenderEngineCreator> RenderEngineMap;
 

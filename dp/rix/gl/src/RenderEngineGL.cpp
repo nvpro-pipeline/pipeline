@@ -33,6 +33,7 @@
 #include <IndicesGL.h>
 #include <ProgramGL.h>
 #include <VertexAttributesGL.h>
+#include <boost/algorithm/string.hpp>
 
 namespace dp
 {
@@ -60,13 +61,33 @@ namespace dp
         return false;
       }
 
-      RenderEngineGL* getRenderEngine( const char *renderEngine )
+      RenderEngineGL* getRenderEngine( const char *renderEngineOptions )
       {
+        std::map<std::string, std::string> options;
+        std::vector<std::string> tokens;
+        boost::split(tokens, std::string(renderEngineOptions), boost::is_any_of(";"));
+        for (auto it = tokens.begin(); it != tokens.end(); ++it)
+        {
+          std::vector<std::string> values;
+          if (it->empty())
+          {
+            throw std::runtime_error("Empty tokens are not allowed in the RiX config string.");
+          }
+          boost::split(values, *it, boost::is_any_of("="));
+          if (values.empty() || values.size() > 2)
+          {
+            throw std::runtime_error(std::string("invalid token") + *it + "\n");
+          }
+          options[values[0]] = (values.size() == 2) ? values[1] : "";
+        }
+
         RenderEngineMap& renderEngineMap = getRenderEngineMap();
-        RenderEngineMap::iterator it = renderEngineMap.find( renderEngine );
+
+        auto itRenderEngine = options.find("vertex");
+        RenderEngineMap::iterator it = renderEngineMap.find(itRenderEngine != options.end() ? itRenderEngine->second : "VAB");
         if ( it != renderEngineMap.end() )
         {
-          return it->second();
+          return it->second(options);
         }
         DP_ASSERT( !"renderEngine not found!" );
         return nullptr;

@@ -51,9 +51,6 @@
 // Define for how many attributes RiXGL is compiled
 #define RIX_GL_MAX_ATTRIBUTES 16
 
-// Use UNIFORM_BUFFER_UNIFIED_MEMORY extension if available
-#define RIX_GL_USE_UNIFORM_BUFFER_UNIFIED_MEMORY true
-
 namespace dp
 {
   namespace rix
@@ -68,9 +65,6 @@ namespace dp
         BM_PERSISTENT_BUFFER_MAPPING  // put parameters in a big persistently mapped UBO, use glBindBufferRange to switch between parameters
       };
 
-      static const BufferMode BUFFER_MODE = BM_BIND_BUFFER_RANGE;
-      
-      static bool bufferUpdaterBatchedUpdates = true; 
     }
   }
 }
