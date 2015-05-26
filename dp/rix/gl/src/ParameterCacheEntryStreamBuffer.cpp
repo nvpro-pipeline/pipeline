@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2013
+// Copyright NVIDIA Corporation 2013-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -70,7 +70,7 @@ namespace dp
         , m_arrayStride( uniformInfo.arrayStride )
         , m_matrixStride( uniformInfo.matrixStride )
       {
-        DP_ASSERT( (uniformInfo.arraySize == 0 && size == 1) || (uniformInfo.arraySize == size) );
+        DP_ASSERT( (uniformInfo.arraySize == 0 && size == 1) || (uniformInfo.arraySize == dp::checked_cast<GLint>(size)) );
 
         if ( n > 1 )
         {

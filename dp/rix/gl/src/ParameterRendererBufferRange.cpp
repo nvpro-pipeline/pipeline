@@ -38,8 +38,8 @@ namespace dp
                                                                 , GLenum target, size_t bindingIndex, GLsizeiptr bindingLength
                                                                 , bool batchedUpdates)
         : ParameterRendererStreamBuffer( parameterCacheEntries )
-        , m_ubo( buffer->getGLId() )
         , m_target( target )
+        , m_ubo( buffer->getGLId() )
         , m_uboBinding( GLint(bindingIndex) )
         , m_uboBlockSize( bindingLength )
         , m_cacheData( new dp::Uint8[bindingLength] )

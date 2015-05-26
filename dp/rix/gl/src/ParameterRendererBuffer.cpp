@@ -42,7 +42,7 @@ namespace dp
         , m_uboBinding(GLint(uboBinding))
         , m_uboOffset(GLsizeiptr(uboOffset))
         , m_uboBlockSize(uboBlockSize)
-        , m_useUniformBufferUnifiedMemory()
+        , m_useUniformBufferUnifiedMemory(useUniformBufferUnifiedMemory)
       {
       }
 

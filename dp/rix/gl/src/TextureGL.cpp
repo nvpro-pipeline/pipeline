@@ -216,7 +216,7 @@ namespace dp
   #if RIX_GL_SAMPLEROBJECT_SUPPORT
   #else
         DP_ASSERT( m_defaultSamplerStateHandle );
-        applySamplerState( m_defaultSamplerStateHandle );
+        applySamplerState( m_defaultSamplerStateHandle.get() );
   #endif
       }
 
