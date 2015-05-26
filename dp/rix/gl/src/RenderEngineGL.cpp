@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright NVIDIA Corporation 2011-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -65,7 +65,8 @@ namespace dp
       {
         std::map<std::string, std::string> options;
         std::vector<std::string> tokens;
-        boost::split(tokens, std::string(renderEngineOptions), boost::is_any_of(";"));
+        std::string renderEngineOptionsString(renderEngineOptions);
+        boost::split(tokens, renderEngineOptionsString, boost::is_any_of(";"));
         for (auto it = tokens.begin(); it != tokens.end(); ++it)
         {
           std::vector<std::string> values;

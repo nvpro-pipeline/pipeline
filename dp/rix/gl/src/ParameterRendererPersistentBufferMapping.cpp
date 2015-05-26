@@ -36,8 +36,8 @@ namespace dp
 
       ParameterRendererPersistentBufferMapping::ParameterRendererPersistentBufferMapping(ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::BufferSharedPtr const& ubo, GLenum target, size_t uboBinding, GLsizeiptr uboBlockSize)
         : ParameterRendererStreamBuffer( parameterCacheEntries )
-        , m_ubo( ubo )
         , m_target( target )
+        , m_ubo( ubo )
         , m_uboBinding( GLint(uboBinding) )
         , m_uboBlockSize( uboBlockSize )
       {

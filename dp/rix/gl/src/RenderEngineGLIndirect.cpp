@@ -413,7 +413,7 @@ namespace dp
         //return RenderGroupGL::SmartCache(new RenderGroupGLCache);
       }
 
-      RenderEngineGL* create(std::map<std::string, std::string> const & options)
+      RenderEngineGL* create(std::map<std::string, std::string> const & /*options*/)
       {
         assert( !"update me");
         return nullptr;

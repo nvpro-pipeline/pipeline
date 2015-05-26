@@ -225,7 +225,7 @@ namespace dp
         {
           return it->second;
         }
-        return ~0;
+        return ~(unsigned int)(0);
       }
 
       ProgramGL::UniformInfos ProgramGL::getUniformInfos( ContainerDescriptorGLHandle containerDescriptor ) const
@@ -238,7 +238,7 @@ namespace dp
         {
           std::string name = containerDescriptor->m_parameterInfos[index].m_name;
           size_t uniformIndex = m_program->getActiveUniformIndex( name );
-          if ( uniformIndex != ~0 )
+          if ( uniformIndex != ~size_t(0) )
           {
             uniformInfos[containerDescriptor->getEntry( name.c_str() )] = m_program->getActiveUniform( uniformIndex );
           }
@@ -256,7 +256,7 @@ namespace dp
         {
           std::string name = containerDescriptor->m_parameterInfos[index].m_name;
           size_t bufferVariableIndex = m_program->getActiveBufferVariableIndex( name );
-          if ( bufferVariableIndex != ~0 )
+          if ( bufferVariableIndex != ~size_t(0) )
           {
             uniformInfos[containerDescriptor->getEntry( name.c_str() )] = m_program->getActiveBufferVariable( bufferVariableIndex );
           }

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2013-2014
+// Copyright NVIDIA Corporation 2013-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -70,7 +70,7 @@ namespace dp
           {
             const SourceType* source = reinterpret_cast<const SourceType*>(src);
             DestinationType* destination = reinterpret_cast<DestinationType*>(dst);
-            for ( size_t element = 0; element < numberOfElements; ++element )
+            for ( unsigned int element = 0; element < numberOfElements; ++element )
             {
               destination[element] = source[element];
             }
@@ -274,10 +274,12 @@ namespace dp
           {
             SamplerHandle const& sampler = parameterDataSampler[index].m_samplerHandle;
             TextureGLHandle texture = sampler ? sampler->getTexture().get() : nullptr;
-            SamplerStateGLHandle samplerState = sampler ? sampler->getSamplerState().get() : nullptr;
-
             cacheInfo[index].m_textureId = texture ? texture->getTexture()->getGLId() : 0;
+
+#if RIX_GL_SAMPLEROBJECT_SUPPORT == 1
+            SamplerStateGLHandle samplerState = sampler ? sampler->getSamplerState().get() : nullptr;
             cacheInfo[index].m_samplerId = samplerState ? samplerState->m_id : 0;
+#endif
           }
         }
 
@@ -867,7 +869,7 @@ namespace dp
         for ( std::vector<ContainerDescriptorGL::ParameterInfo>::iterator it = descriptor->m_parameterInfos.begin(); it != descriptor->m_parameterInfos.end(); ++it )
         {
           size_t uniformIndex = program->getProgram()->getActiveUniformIndex( it->m_name );
-          if ( uniformIndex != ~0 )
+          if ( uniformIndex != ~size_t(0) )
           {
             dp::gl::Program::Uniform const& uniform = program->getProgram()->getActiveUniform( uniformIndex );
             // is it a uniform?
