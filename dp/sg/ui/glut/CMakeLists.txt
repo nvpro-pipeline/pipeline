@@ -52,6 +52,7 @@ if (GLUT_FOUND)
   CopyGLUT( DPSgUIGLUT "${DP_BINARY_PATH}" )
 
   set_target_properties( DPSgUIGLUT PROPERTIES FOLDER "SG" )
+  set_target_properties( DPSgUIGLUT PROPERTIES LINK_FLAGS "/NODEFAULTLIB:\"freeglutd.lib\" /NODEFAULTLIB:\"freeglut.lib\"" )
 else()
   message("GLUT not found, disalbing DpSgUIGLUT.")
 endif()

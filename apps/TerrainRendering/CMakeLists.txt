@@ -64,4 +64,5 @@ if ( NOT "${DP_ARCH}" STREQUAL "armv7l")
     message("GLUT not found, disabling TerrainRendering.")
   endif()
 
+  set_target_properties( TerrainRendering PROPERTIES LINK_FLAGS "/NODEFAULTLIB:\"freeglutd.lib\" /NODEFAULTLIB:\"freeglut.lib\"" )
 endif()

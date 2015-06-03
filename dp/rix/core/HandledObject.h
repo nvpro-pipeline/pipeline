@@ -202,7 +202,6 @@ namespace dp
         #if _MSC_VER >= 1800
         // From VS2013 on VS supports explicit operators. This fixes all issues with implicit casts for operator bool()
         explicit
-        #error "reminder: verify functionality of explicit!"
         #endif
         operator bool() const
         {
@@ -291,4 +290,3 @@ namespace dp
     } // namespace core
   } // namespace rix
 } // namespace dp
-

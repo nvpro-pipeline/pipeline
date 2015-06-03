@@ -283,7 +283,17 @@ int runApp( options::variables_map const& opts )
   renderer->setCullingEnabled( false );
 
   dp::math::Vec3f offset( 0.0f, 0.0f, 0.0f );
-  std::vector<float> resolution = opts["resolution"].as<std::vector<float> >();
+  std::vector<float> resolution;
+  try
+  {
+	   resolution = opts["resolution"].as<std::vector<float> >();
+  }
+  catch (boost::bad_any_cast&)
+  {
+	  resolution.push_back(640);
+	  resolution.push_back(480);
+	  resolution.push_back(100);
+  }
   if ( !opts["offset"].empty() )
   {
     std::vector<float> ov = opts["resolution"].as<std::vector<float> >();

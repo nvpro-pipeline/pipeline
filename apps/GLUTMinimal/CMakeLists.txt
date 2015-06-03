@@ -63,3 +63,5 @@ else()
   message("GLUT not found, disabling GLUTAnimation.")
 endif()
 
+set_target_properties( GLUTMinimal PROPERTIES FOLDER "Apps")
+set_target_properties( GLUTMinimal PROPERTIES LINK_FLAGS "/NODEFAULTLIB:\"freeglutd.lib\" /NODEFAULTLIB:\"freeglut.lib\"" )

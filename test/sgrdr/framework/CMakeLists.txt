@@ -41,6 +41,7 @@ if (GLUT_FOUND)
   )
 
   set_target_properties( DPTSgRdr PROPERTIES SUFFIX ".bkd" FOLDER "DPT/SgRdr" )
+set_target_properties( DPTSgRdr PROPERTIES LINK_FLAGS "/NODEFAULTLIB:\"freeglutd.lib\" /NODEFAULTLIB:\"freeglut.lib\"" )
 
   target_link_libraries( DPTSgRdr 
     ${GLUT_LIBRARIES}
@@ -59,6 +60,7 @@ if (GLUT_FOUND)
     RiXGL
     DPSgRdrRiXGL
   )
+
 
   CopyGLUT( DPTSgRdr "${DP_BINARY_PATH}" )
 else()

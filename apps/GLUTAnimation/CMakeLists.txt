@@ -59,4 +59,5 @@ if (GLUT_FOUND)
 else()
   message("FreeGLUT not found, disabling GLUTAnimation")
 endif()
+set_target_properties( GLUTAnimation PROPERTIES LINK_FLAGS "/NODEFAULTLIB:\"freeglutd.lib\" /NODEFAULTLIB:\"freeglut.lib\"" )
 

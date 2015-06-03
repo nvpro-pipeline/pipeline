@@ -42,19 +42,21 @@ if (GLUT_FOUND)
   )
 
   set_target_properties( DPTRiXGL PROPERTIES SUFFIX ".bkd" FOLDER "DPT/RiX/GL" )
+set_target_properties( DPTRiXGL PROPERTIES LINK_FLAGS "/NODEFAULTLIB:\"freeglutd.lib\" /NODEFAULTLIB:\"freeglut.lib\"" )
 
-  target_link_libraries( DPTRiXGL 
-    ${GLUT_LIBRARIES}
-    DPUtil
-    DPTcore
-    RiXGL
-    DPTRiX
-    DPGL
-  )
+target_link_libraries( DPTRiXGL
+  ${GLUT_LIBRARIES}
+  DPUtil
+  DPTcore
+  RiXGL
+  DPTRiX
+  DPGL
+)
 
   CopyGLUT( DPTRiXGL "${DP_BINARY_PATH}" )
 
   add_dependencies( DPTRiXGL DPUtil DPTcore DPTRiX RiXCore RiXGL )
+  
 else()
   message("GLUT not found, disabling DPTRiXGL.")
 endif()
