@@ -876,26 +876,28 @@ namespace dp
         DP_ASSERT( param->Attribute( "semantic" ) );
         Semantic semantic = stringToSemantic( param->Attribute( "semantic" ) );
 
+        std::string value = param->Attribute( "value" ) ? param->Attribute( "value" ) : "";
+        std::string annotation = param->Attribute( "annotation" ) ? param->Attribute( "annotation" ) : "";
+
         int arraySize = 0;
         // Ok, this sets the integer to zero if the attribute is not found.
         param->Attribute("size", &arraySize);
-        const char *value = param->Attribute("value");
 
         unsigned int typeId = getParameterTypeFromGLSLType( type );
         if ( typeId == PT_ENUM )
         {
           DP_ASSERT( semantic == SEMANTIC_VALUE );
-          psc.push_back( ParameterSpec( name, getEffectLibrary()->getEnumSpec( type ), arraySize, value ? string( value ) : "" ) );
+          psc.push_back( ParameterSpec( name, getEffectLibrary()->getEnumSpec( type ), arraySize, value, annotation ) );
         }
-        else if ( ( ( typeId & PT_POINTER_TYPE_MASK ) == PT_SAMPLER_PTR ) && value )
+        else if ( ( ( typeId & PT_POINTER_TYPE_MASK ) == PT_SAMPLER_PTR ) && !value.empty() )
         {
           DP_ASSERT( arraySize == 0 );
           std::string fileName = dp::util::findFileRecursive( value, m_localSearchPaths );
-          psc.push_back( ParameterSpec( name, typeId, semantic, arraySize, fileName.empty() ? string( value ) : fileName ) );
+          psc.push_back( ParameterSpec( name, typeId, semantic, arraySize, fileName.empty() ? value : fileName, annotation ) );
         }
         else
         {
-          psc.push_back( ParameterSpec( name, typeId, semantic, arraySize, value ? string( value ) : "" ) );
+          psc.push_back( ParameterSpec( name, typeId, semantic, arraySize, value, annotation ) );
         }
       }
 
