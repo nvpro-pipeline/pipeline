@@ -617,7 +617,11 @@ namespace dp
         case GL_DEBUG_TYPE_OTHER:
           {
             std::string bufferObjectMessage( "Buffer detailed info: Buffer object" );
-            if ( strncmp( message, bufferObjectMessage.c_str(), bufferObjectMessage.size() ) == 0 )
+            std::string freeingVBOMessage( "Buffer detailed info: Freeing VBO" );
+            std::string tryingToAllocateVBOMessage( "Buffer detailed info: Trying to allocate VBO" );
+            if ( ( strncmp( message, bufferObjectMessage.c_str(), bufferObjectMessage.size() ) == 0 )
+              || ( strncmp( message, freeingVBOMessage.c_str(), freeingVBOMessage.size() ) == 0 )
+              || ( strncmp( message, tryingToAllocateVBOMessage.c_str(), tryingToAllocateVBOMessage.size() ) == 0 ) )
             {
               DP_ASSERT( severity == GL_DEBUG_SEVERITY_NOTIFICATION );
               return;   //  ignore this notification

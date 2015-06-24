@@ -406,9 +406,8 @@ namespace dp
         }
 
         // some files still reside in dpfx
-        m_localSearchPaths.push_back( dp::home() + "/media/dpfx" );
-        m_localSearchPaths.push_back( dp::home() + "/media/textures" );
-        convertPath( m_localSearchPaths.back() );
+        m_fileFinder.addSearchPath( dp::home() + "/media/dpfx" );
+        m_fileFinder.addSearchPath( dp::home() + "/media/textures" );
       }
 
       EffectLoader::~EffectLoader()
@@ -429,10 +428,7 @@ namespace dp
         {
           // This search path is going to be used to find the files referenced inside the XML effects description.
           std::string dir = dp::util::getFilePath( filename );
-          if ( std::find( m_localSearchPaths.begin(), m_localSearchPaths.end(), dir ) == m_localSearchPaths.end() )
-          {
-            m_localSearchPaths.push_back(dir);
-          }
+          bool addedSearchPath = m_fileFinder.addSearchPath( dir );
 
           std::unique_ptr<TiXmlDocument> doc(new TiXmlDocument(filename.c_str()));
           if ( !doc )
@@ -455,6 +451,11 @@ namespace dp
 
           m_loadedFiles.insert( filename );
           parseLibrary( root );
+
+          if ( addedSearchPath )
+          {
+            m_fileFinder.removeSearchPath( dir );
+          }
         }
 
         return true;
@@ -559,7 +560,7 @@ namespace dp
 
       SnippetSharedPtr EffectLoader::getSourceSnippet( string const & filename )
       {
-        string name = dp::util::findFile( filename, m_localSearchPaths );
+        std::string name = m_fileFinder.find( filename );
         if ( name.empty() )
         {
           throw std::runtime_error( std::string("EffectLoader::loadSource(): File " + filename + "not found." ) );
@@ -892,7 +893,7 @@ namespace dp
         else if ( ( ( typeId & PT_POINTER_TYPE_MASK ) == PT_SAMPLER_PTR ) && !value.empty() )
         {
           DP_ASSERT( arraySize == 0 );
-          std::string fileName = dp::util::findFileRecursive( value, m_localSearchPaths );
+          std::string fileName = m_fileFinder.findRecursive( value );
           psc.push_back( ParameterSpec( name, typeId, semantic, arraySize, fileName.empty() ? value : fileName, annotation ) );
         }
         else
@@ -911,7 +912,7 @@ namespace dp
         }
         else
         {
-          getEffectLibrary()->loadEffects( file, m_localSearchPaths );
+          getEffectLibrary()->loadEffects( file, m_fileFinder.getSearchPaths() );
         }
       }
 
@@ -930,7 +931,7 @@ namespace dp
                 if ( element->Attribute( "file" ) )
                 {
                   char const *filename = element->Attribute( "file" );
-                  string name = dp::util::findFile( filename, m_localSearchPaths );
+                  std::string name = m_fileFinder.find( filename );
                   if ( !name.empty() )
                   {
                     snippets.push_back( std::make_shared<FileSnippet>( name ) );

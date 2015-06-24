@@ -29,6 +29,7 @@
 
 #include  <dp/sg/io/PlugInterface.h>
 #include  <dp/sg/algorithm/SmoothTraverser.h>
+#include  <dp/util/FileFinder.h>
 #include  "VRMLTypes.h"
 #include  <fstream>
 #include  <set>
@@ -435,6 +436,7 @@ class WRLLoader : public dp::sg::io::SceneLoader
     std::map<std::string,vrml::SFNode>                        m_defNodes;
     bool                                                      m_eof;
     FILE                                                    * m_fh;
+    dp::util::FileFinder                                      m_fileFinder;
     std::map<vrml::MFString,vrml::InlineSharedPtr>            m_inlines;
     char                                                    * m_line;
     unsigned int                                              m_lineLength;
@@ -445,7 +447,6 @@ class WRLLoader : public dp::sg::io::SceneLoader
     std::set<std::string>                                     m_PROTONames;
     dp::sg::core::GroupSharedPtr                              m_rootNode;
     dp::sg::core::SceneSharedPtr                              m_scene;
-    std::vector<std::string>                                  m_searchPaths;
     std::unique_ptr<dp::sg::algorithm::SmoothTraverser>       m_smoothTraverser;
     unsigned int                                              m_stepsPerUnit;
     vrml::GroupSharedPtr                                      m_topLevelGroup;

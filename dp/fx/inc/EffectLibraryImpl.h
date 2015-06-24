@@ -31,6 +31,7 @@
 #include <dp/fx/EffectSpec.h>
 #include <dp/fx/EffectData.h>
 #include <dp/fx/inc/Snippet.h>
+#include <dp/util/FileFinder.h>
 #include <dp/util/SharedPtr.h>
 #include <stack>
 
@@ -79,8 +80,7 @@ namespace dp
 
     private:
 
-      typedef std::vector< std::string> SearchPaths;
-      SearchPaths m_searchPaths;
+      dp::util::FileFinder  m_fileFinder;
 
       typedef std::map<std::string, EffectLoaderSharedPtr> EffectLoaders;
       EffectLoaders m_effectLoaders;

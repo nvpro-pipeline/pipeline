@@ -29,7 +29,7 @@
 
 #include <dp/sg/core/Config.h>
 #include <dp/sg/core/CoreTypes.h>
-#include <dp/util/File.h>
+#include <dp/util/FileFinder.h>
 #include <dp/util/Tools.h>
 #include <dp/util/Tokenizer.h>
 #include <dp/sg/io/PlugInterface.h>
@@ -212,6 +212,7 @@ class DPAFLoader : public dp::sg::io::SceneLoader
     std::string                                                     m_currentLine;
     std::string                                                     m_currentString;
     std::map<std::string,dp::sg::core::EffectDataSharedPtr>         m_effectData;
+    dp::util::FileFinder                                            m_fileFinder;
     std::map<std::string,dp::sg::core::GeoNodeSharedPtr>            m_geoNodes;
     std::map<std::string,dp::sg::core::GroupSharedPtr>              m_groups;
     std::ifstream                                                   m_ifs;
@@ -228,7 +229,6 @@ class DPAFLoader : public dp::sg::io::SceneLoader
     std::map<std::string,dp::sg::core::PrimitiveSharedPtr>          m_quadMeshes;
     std::map<std::string,dp::sg::core::SamplerSharedPtr>            m_samplers;
     dp::sg::core::SceneSharedPtr                                    m_scene;
-    std::vector<std::string>                                        m_searchPaths;
     std::map<std::string,dp::sg::core::SwitchSharedPtr>             m_switches;
     std::map<std::string,dp::sg::core::TextureHostSharedPtr>        m_textureImages;
     std::map<std::string,dp::sg::core::TransformSharedPtr>          m_transforms;

@@ -55,11 +55,9 @@ namespace dp
 
     EffectLibraryImpl::EffectLibraryImpl()
     {
-      // determine default search paths
-      m_searchPaths.push_back( dp::home() + "/media/dpfx" );
-      dp::util::convertPath( m_searchPaths.back() );
-      m_searchPaths.push_back( dp::home() + "/media/effects" );
-      dp::util::convertPath( m_searchPaths.back() );
+      // set default search paths
+      m_fileFinder.addSearchPath( dp::home() + "/media/dpfx" );
+      m_fileFinder.addSearchPath( dp::home() + "/media/effects" );
     }
 
     EffectLibraryImpl::~EffectLibraryImpl()
@@ -99,29 +97,20 @@ namespace dp
         return( true );
       }
 
-      // filter out paths, that already are part of the search paths
-      // as we're going to findFileRecursive, also filter out paths that are more specific than what we already have
-      // but don't just use the outer-most part we can find, as more specific paths listed before more general paths
-      // should be searched through first, even though they'd be searched through a second time, then.
-      std::vector<std::string> fullSearchPaths = m_searchPaths;
+      std::vector<std::string> newPaths;
       for ( std::vector<std::string>::const_iterator it = searchPaths.begin() ; it != searchPaths.end() ; ++it )
       {
-        std::vector<std::string>::const_iterator fit = fullSearchPaths.begin();
-        for ( ; fit != fullSearchPaths.end() ; ++fit )
+        if ( m_fileFinder.addSearchPath( *it ) )
         {
-          // check if the new search path starts with one of those we already have
-          if ( it->compare( 0, fit->length(), *fit, 0, fit->length() ) == 0 )
-          {
-            break;
-          }
-        }
-        if ( fit == fullSearchPaths.end() )
-        {
-          fullSearchPaths.push_back( *it );
+          newPaths.push_back( *it );
         }
       }
+      std::string file = m_fileFinder.findRecursive( filename );
+      for ( std::vector<std::string>::const_iterator it = newPaths.begin() ; it != newPaths.end() ; ++it )
+      {
+        m_fileFinder.removeSearchPath( *it );
+      }
 
-      std::string file = dp::util::findFileRecursive( filename, fullSearchPaths );
       if ( file.empty() )
       {
         // if it could not be found in the search directories, look relative to dp::home()

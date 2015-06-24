@@ -26,6 +26,7 @@
 
 #pragma once
 
+#include <dp/util/FileFinder.h>
 #include <dp/util/FileMapping.h>
 #include <dp/sg/io/PlugInterface.h>
 #include <dp/sg/io/DPBF/DPBF.h> // dpbf structs 
@@ -351,7 +352,7 @@ private:
 private:
   dp::DataType convertDataType( unsigned int dataType );
 
-  std::vector<std::string>        m_searchPaths;  // a private copy of the search pathes given to us via the load API
+  dp::util::FileFinder  m_fileFinder;
   std::map<uint_t, dp::sg::core::ObjectSharedPtr> m_offsetObjectMap; // mapping offsets to SceniX objects
   std::map<dp::sg::core::DataID, dp::sg::core::ObjectSharedPtr> m_sharedObjectsMap; // lookup shared objects given the corresponding objectID
 

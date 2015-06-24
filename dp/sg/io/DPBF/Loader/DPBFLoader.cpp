@@ -1846,13 +1846,8 @@ SceneSharedPtr DPBFLoader::load(const string& filename, const vector<string> &se
   
   // take a copy of the given search pathes, we might need them with looking up 
   // adherent files like texture image file or effect sources
-  m_searchPaths = searchPaths;
-
-  string localPath = dp::util::getFilePath( filename );
-  if ( std::find( m_searchPaths.begin(), m_searchPaths.end(), localPath ) == m_searchPaths.end() )
-  {
-    m_searchPaths.insert( m_searchPaths.begin(), localPath );
-  }
+  m_fileFinder.addSearchPaths( searchPaths );
+  m_fileFinder.addSearchPath( dp::util::getFilePath( filename ) );
 
   try
   {
@@ -2890,6 +2885,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, const vector<string> &se
     m_stateSetToEffect.clear();
     m_materialToMaterialEffect.clear();
     m_materialEffect.reset();
+    m_fileFinder.clear();
 
     // pass on caught exception to next handler
     throw;
@@ -2901,6 +2897,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, const vector<string> &se
   m_stateSetToEffect.clear();
   m_materialToMaterialEffect.clear();
   DP_ASSERT( !m_materialEffect );
+  m_fileFinder.clear();
 
   return scene;
 }
@@ -5204,7 +5201,7 @@ TextureHostSharedPtr DPBFLoader::loadTextureHost(uint_t offset, std::string& fil
 
   if ( imgPtr->file.numChars )
   { // we have a file to load from
-    file = dp::util::findFile( mapString( imgPtr->file ), m_searchPaths );
+    file = m_fileFinder.find( mapString( imgPtr->file ) );
     if ( !file.empty() )
     {
       map<string,TextureHostWeakPtr>::const_iterator it = m_textureImages.find( file );
@@ -5214,7 +5211,7 @@ TextureHostSharedPtr DPBFLoader::loadTextureHost(uint_t offset, std::string& fil
       }
       else
       {
-        imgHdl = dp::sg::io::loadTextureHost(file, m_searchPaths);
+        imgHdl = dp::sg::io::loadTextureHost(file, m_fileFinder.getSearchPaths());
         imgHdl->setTextureTarget( (TextureTarget)imgPtr->target );
         m_textureImages[file] = imgHdl.getWeakPtr();
       }
@@ -5260,7 +5257,7 @@ TextureHostSharedPtr DPBFLoader::loadTextureHost_nbf_4b(uint_t offset, std::stri
 
   if ( imgPtr->file.numChars )
   { // we have a file to load from
-    file = dp::util::findFile( mapString( imgPtr->file ), m_searchPaths );
+    file = m_fileFinder.find( mapString( imgPtr->file ) );
     if ( !file.empty() )
     {
       map<string,TextureHostWeakPtr>::const_iterator it = m_textureImages.find( file );
@@ -5270,7 +5267,7 @@ TextureHostSharedPtr DPBFLoader::loadTextureHost_nbf_4b(uint_t offset, std::stri
       }
       else
       {
-        imgHdl = dp::sg::io::loadTextureHost(file, m_searchPaths);
+        imgHdl = dp::sg::io::loadTextureHost(file, m_fileFinder.getSearchPaths());
         m_textureImages[file] = imgHdl.getWeakPtr();
       }
     }
@@ -6128,7 +6125,7 @@ EffectDataSharedPtr DPBFLoader::loadEffectData( uint_t offset )
     // undefined behavior if called for other objects!
     DP_ASSERT( edPtr->objectCode == NBF_EFFECT_DATA );
 
-    DP_VERIFY( dp::fx::EffectLibrary::instance()->loadEffects( mapString( edPtr->effectFileName ), m_searchPaths ) );
+    DP_VERIFY( dp::fx::EffectLibrary::instance()->loadEffects( mapString( edPtr->effectFileName ), m_fileFinder.getSearchPaths() ) );
     m_currentEffectSpec = dp::fx::EffectLibrary::instance()->getEffectSpec( mapString( edPtr->effectSpecName ) );
     if ( m_currentEffectSpec )
     {

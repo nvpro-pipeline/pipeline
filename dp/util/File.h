@@ -35,12 +35,13 @@
 #include <unistd.h>
 #endif
 
-#include <vector>
-#include <string>
-#include <sstream>
-
-#include <stdio.h>
 #include <iomanip>
+#include <set>
+#include <stdio.h>
+#include <sstream>
+#include <string>
+#include <vector>
+#include <boost/filesystem.hpp>
 
 namespace dp
 {
@@ -69,10 +70,6 @@ namespace dp
 
     //! Return filesize in bytes of an existing file. Supports filesizes up to 2GB only.
     DP_UTIL_API size_t fileSize( const std::string& filepath );
-
-    DP_UTIL_API std::string findFile( std::string const& name, std::vector<std::string> const& paths );
-
-    DP_UTIL_API std::string findFileRecursive( std::string const& name, std::vector<std::string> const& paths );
 
     DP_UTIL_API bool findFiles( std::string const& extension, std::string const& path, std::vector<std::string> & results );
 

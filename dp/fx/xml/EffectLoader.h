@@ -35,6 +35,7 @@
 #include <dp/fx/EffectSpec.h>
 #include <dp/fx/ParameterGroupSpec.h>
 #include <dp/rix/core/RiX.h>
+#include <dp/util/FileFinder.h>
 #include <dp/util/SharedPtr.h>
 
 #include <map>
@@ -239,7 +240,7 @@ namespace dp
 
         std::set<std::string> m_loadedFiles;
 
-        std::vector<std::string> m_localSearchPaths; // Files referenced inside the XML file are expected to be located relative to it.
+        dp::util::FileFinder  m_fileFinder;
 
         std::map<std::string, unsigned int> m_mapGLSLtoPT;
         std::map<unsigned int, std::string> m_mapPTtoGLSL;

@@ -2385,7 +2385,7 @@ ParameterGroupDataSharedPtr WRLLoader::interpretImageTexture( ImageTextureShared
       TextureHostSharedPtr texImg;
       if ( it == m_textureFiles.end() )
       {
-        texImg = dp::sg::io::loadTextureHost(fileName, m_searchPaths);
+        texImg = dp::sg::io::loadTextureHost(fileName, m_fileFinder.getSearchPaths());
         DP_ASSERT( texImg );
         texImg->setTextureTarget(TT_TEXTURE_2D); // TEXTURE_2D is the only target known by VRML
         m_textureFiles[fileName] = texImg.getWeakPtr();
@@ -3156,7 +3156,7 @@ NodeSharedPtr WRLLoader::interpretInline( InlineSharedPtr const& pInline )
     string  fileName;
     if ( interpretURL( pInline->url, fileName ) )
     {
-      dp::sg::ui::ViewStateSharedPtr viewState = dp::sg::io::loadScene( fileName, m_searchPaths, callback() );
+      dp::sg::ui::ViewStateSharedPtr viewState = dp::sg::io::loadScene( fileName, m_fileFinder.getSearchPaths(), callback() );
       DP_ASSERT( viewState && viewState->getScene() );
       pInline->pNode = viewState->getScene()->getRootNode();
     }
@@ -3810,7 +3810,7 @@ bool  WRLLoader::interpretURL( const MFString &url, string &fileName )
   bool found = false;
   for ( size_t i=0 ; ! found && i<url.size() ; i++ )
   {
-    fileName = dp::util::findFile( url[i], m_searchPaths );
+    fileName = m_fileFinder.find( url[i] );
     found = !fileName.empty();
   }
   onFilesNotFound( found, url );
@@ -3950,15 +3950,8 @@ SceneSharedPtr WRLLoader::load( string const& filename, vector<string> const& se
 
   viewState.reset(); // loading of ViewState currently not supported
 
-  // private copy of the search paths
-  m_searchPaths = searchPaths;
-
-  //  add the path to the found file to the search paths
-  string dir = dp::util::getFilePath( filename );
-  if ( std::find( m_searchPaths.begin(), m_searchPaths.end(), dir ) == m_searchPaths.end() )
-  {
-    m_searchPaths.push_back( dir );
-  }
+  m_fileFinder.addSearchPaths( searchPaths );
+  m_fileFinder.addSearchPath( dp::util::getFilePath( filename ) );
 
   // run the importer
   try
@@ -3993,6 +3986,7 @@ SceneSharedPtr WRLLoader::load( string const& filename, vector<string> const& se
   m_smoothTraverser = nullptr;
   m_rootNode.reset();
   m_scene.reset();
+  m_fileFinder.clear();
 
   if ( !scene )
   {

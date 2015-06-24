@@ -502,7 +502,8 @@ void ViewerRendererWidget::dehighlightAll()
 
 void ViewerRendererWidget::dropEvent( QDropEvent * event )
 {
-  if( event->source() == this )
+  // To be determined: under what circumstances m_seledctedGeoNodes can be empty here !!
+  if ( ( event->source() == this ) || m_selectedGeoNodes.empty() )
   {
     // ignore our own
     return;

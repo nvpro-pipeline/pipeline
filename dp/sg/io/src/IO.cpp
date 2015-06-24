@@ -30,6 +30,7 @@
 #include <dp/sg/core/TextureHost.h>
 #include <dp/sg/ui/ViewState.h>
 #include <dp/util/File.h>
+#include <dp/util/FileFinder.h>
 
 #if defined(DP_OS_WINDOWS)
 #include <windows.h>
@@ -211,22 +212,13 @@ namespace dp
       dp::sg::core::TextureHostSharedPtr loadTextureHost( const std::string & filename, const std::vector<std::string> &searchPaths )
       {
         dp::sg::core::TextureHostSharedPtr tih;
-        // appropriate search paths for the loader dll and the sample file.
-        vector<string> binSearchPaths = searchPaths;
 
-        std::string curDir = dp::util::getCurrentPath();
-        if ( find( binSearchPaths.begin(), binSearchPaths.end(), curDir ) == binSearchPaths.end() )
-        {
-          binSearchPaths.push_back(curDir);
-        }
+        dp::util::FileFinder fileFinder;
+        fileFinder.addSearchPaths( searchPaths );
+        fileFinder.addSearchPath( dp::util::getCurrentPath() );
+        fileFinder.addSearchPath( dp::util::getModulePath() );
 
-        std::string modulePath = dp::util::getModulePath();
-        if ( find( binSearchPaths.begin(), binSearchPaths.end(), modulePath ) == binSearchPaths.end() )
-        {
-          binSearchPaths.push_back(modulePath);
-        }
-
-        std::string foundFile = dp::util::findFile( filename, binSearchPaths );
+        std::string foundFile = fileFinder.find( filename );
         if (!foundFile.empty())
         {
           std::string ext = dp::util::getFileExtension( filename );
@@ -236,7 +228,7 @@ namespace dp
           // TODO - Update me for stereo images
           {
             dp::util::PlugInSharedPtr plug;
-            if ( getInterface( binSearchPaths, piid, plug ) )
+            if ( getInterface( fileFinder.getSearchPaths(), piid, plug ) )
             {
               TextureLoaderSharedPtr tl = plug.staticCast<TextureLoader>();
               tih = tl->load( foundFile );

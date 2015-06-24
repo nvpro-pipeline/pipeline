@@ -41,6 +41,7 @@
 #include <dp/sg/core/Config.h>
 #include <dp/sg/core/Scene.h>
 #include <dp/sg/io/PlugInterface.h>
+#include <dp/util/FileFinder.h>
 
 #ifdef _WIN32
 // microsoft specific storage-class defines
@@ -83,7 +84,7 @@ private:
                     TiXmlNode * node );
 
   std::map< std::string, dp::sg::core::SceneSharedPtr > m_fileCache;
-  std::vector< std::string > m_searchPath;
+  dp::util::FileFinder  m_fileFinder;
   dp::sg::ui::ViewStateWeakPtr m_viewState;
 };
 

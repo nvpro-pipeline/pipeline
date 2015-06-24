@@ -31,6 +31,7 @@ set(DPUTIL_INCLUDES
   Config.h
   DynamicLibrary.h
   File.h
+  FileFinder.h
   FrameProfiler.h
   HashGenerator.h
   HashGeneratorMurMur.h
@@ -71,6 +72,7 @@ set(DPUTIL_SOURCES
   src/BitArray.cpp
   src/DynamicLibrary.cpp
   src/File.cpp
+  src/FileFinder.cpp
   src/FileMapping.cpp
   src/FrameProfiler.cpp
   src/HashGeneratorMurMur.cpp

@@ -137,10 +137,10 @@ XMLLoader::lookupFile( const string & file )
   if( iter == m_fileCache.end() )
   {
     // find file
-    std::string foundFile = dp::util::findFile( file, m_searchPath );
+    std::string foundFile = m_fileFinder.find( file );
     if ( !foundFile.empty() )
     {
-      dp::sg::ui::ViewStateSharedPtr viewState = dp::sg::io::loadScene( foundFile, m_searchPath );
+      dp::sg::ui::ViewStateSharedPtr viewState = dp::sg::io::loadScene( foundFile, m_fileFinder.getSearchPaths() );
       if ( viewState )
       {
         scene = viewState->getScene();
@@ -258,7 +258,7 @@ XMLLoader::buildScene( GroupSharedPtr const& parent, TiXmlDocument & doc, TiXmlN
     else if( value == "searchpath" )
     {
       //cout << "XMLLoader: Adding SearchPath: " << element->GetText() << endl;
-      m_searchPath.push_back( element->GetText() );
+      m_fileFinder.addSearchPath( element->GetText() );
     }
     else if( value == "env" )
     {
@@ -302,7 +302,7 @@ XMLLoader::load( std::string const& filename
 
   m_viewState = viewState.getWeakPtr();
 
-  m_searchPath = searchPaths;
+  m_fileFinder.addSearchPaths( searchPaths );
 
 #if 0
   for(unsigned int i=0;i<m_searchPath.size();i++)
@@ -334,6 +334,8 @@ XMLLoader::load( std::string const& filename
 
   // add group as scene's toplevel
   hScene->setRootNode( hGroup );
+
+  m_fileFinder.clear();
 
   return hScene;
 }
