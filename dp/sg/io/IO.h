@@ -29,8 +29,9 @@
 #include <dp/sg/io/Config.h>
 #include <dp/sg/core/CoreTypes.h>
 #include <dp/sg/ui/ViewState.h>
-#include <string>
+#include <dp/util/FileFinder.h>
 #include <dp/util/PlugInCallback.h>
+#include <string>
 
 namespace dp
 {
@@ -46,7 +47,7 @@ namespace dp
        *  \return A ViewState containing loaded scene on success. Throws otherwise.
        *  \sa saveScene */
       DP_SG_IO_API dp::sg::ui::ViewStateSharedPtr loadScene( std::string const& filename
-                                                           , std::vector<std::string> const& searchPaths = std::vector<std::string>()
+                                                           , dp::util::FileFinder const& fileFinder = dp::util::FileFinder()
                                                            , dp::util::PlugInCallbackSharedPtr const& callback = dp::util::PlugInCallbackSharedPtr::null );
 
       /*! \brief Save a scene, internally doing all the SceneSaver handling.
@@ -65,7 +66,7 @@ namespace dp
        * \param searchPaths additional search paths
        * \return true if save was successful
        */
-     DP_SG_IO_API dp::sg::core::TextureHostSharedPtr loadTextureHost( const std::string & filename, const std::vector<std::string> &searchPaths = std::vector<std::string>() );
+     DP_SG_IO_API dp::sg::core::TextureHostSharedPtr loadTextureHost( const std::string & filename, dp::util::FileFinder const& fileFinder = dp::util::FileFinder() );
 
      /*! \brief Save a texture image to disk
        * \param filename disk file to save image to

@@ -81,7 +81,7 @@ public:
     * \returns  A pointer to the loaded scene. */
   dp::sg::core::SceneSharedPtr load( 
     const std::string& filename            //!<  file to load
-  , const std::vector<std::string> &searchPaths //!<  paths to search through
+  , dp::util::FileFinder const& fileFinder    //!< file finder to search the filename
   , dp::sg::ui::ViewStateSharedPtr & viewState     /*!< If the function succeeded, this points to the optional
                                                 ViewState stored with the scene. */
   );

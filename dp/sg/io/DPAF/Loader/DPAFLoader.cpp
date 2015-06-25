@@ -188,7 +188,7 @@ void DPAFLoader::assertClean()
 }
 #endif
 
-SceneSharedPtr DPAFLoader::load( const string& filename, const vector<string> &searchPaths, dp::sg::ui::ViewStateSharedPtr & viewState )
+SceneSharedPtr DPAFLoader::load( const string& filename, dp::util::FileFinder const& fileFinder, dp::sg::ui::ViewStateSharedPtr & viewState )
 {
 #if !defined(NDEBUG)
   assertClean();
@@ -203,7 +203,7 @@ SceneSharedPtr DPAFLoader::load( const string& filename, const vector<string> &s
   TempLocale tl("C");
 
   // private copy of the search paths
-  m_fileFinder.addSearchPaths( searchPaths );
+  m_fileFinder = fileFinder;
 
   // run the importer
   try
@@ -637,7 +637,7 @@ SamplerSharedPtr DPAFLoader::readSampler( const string & name )
           std::string foundFile = m_fileFinder.find( textureName );
           if ( !foundFile.empty() )
           {
-            TextureHostSharedPtr textureHost = dp::sg::io::loadTextureHost( foundFile, m_fileFinder.getSearchPaths() );
+            TextureHostSharedPtr textureHost = dp::sg::io::loadTextureHost( foundFile, m_fileFinder );
             if ( textureHost )
             {
               TextureTarget texTarget = textureHost->getTextureTarget();
@@ -2050,7 +2050,7 @@ ParameterGroupDataSharedPtr DPAFLoader::readParameterGroupData( const char * nam
           encounteredEffectFile = true;
 #endif
           std::string effectFile = readName( getNextToken() );
-          DP_VERIFY( dp::fx::EffectLibrary::instance()->loadEffects( effectFile, m_fileFinder.getSearchPaths() ) );
+          DP_VERIFY( dp::fx::EffectLibrary::instance()->loadEffects( effectFile, m_fileFinder ) );
         }
         else if ( token == "parameterGroupSpec" )
         {
@@ -2674,7 +2674,7 @@ SceneSharedPtr DPAFLoader::readScene( void )
         std::string foundFile = m_fileFinder.find( fileName );
         if ( !foundFile.empty() )
         { 
-          TextureHostSharedPtr texImg = dp::sg::io::loadTextureHost( foundFile, m_fileFinder.getSearchPaths() );
+          TextureHostSharedPtr texImg = dp::sg::io::loadTextureHost( foundFile, m_fileFinder );
           if ( texImg )
           {
             scene->setBackImage( texImg );

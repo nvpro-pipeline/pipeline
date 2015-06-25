@@ -114,9 +114,7 @@ ThreeDSLoader::~ThreeDSLoader()
 {
 }
 
-SceneSharedPtr ThreeDSLoader::load( std::string const& filename
-                                  , std::vector<std::string> const& searchPaths
-                                  , dp::sg::ui::ViewStateSharedPtr & viewState )
+SceneSharedPtr ThreeDSLoader::load( std::string const& filename, dp::util::FileFinder const& fileFinder, dp::sg::ui::ViewStateSharedPtr & viewState )
 {
   if ( !dp::util::fileExists(filename) )
   {
@@ -135,14 +133,8 @@ SceneSharedPtr ThreeDSLoader::load( std::string const& filename
   // the file was successfully parsed and the 3ds data structure has been loaded into memory  
 
   // set search paths for textures
-  m_searchPaths = searchPaths;
-
-  //  add the path to the found file to the search paths
-  std::string dir = dp::util::getFilePath( filename );
-  if ( std::find( m_searchPaths.begin(), m_searchPaths.end(), dir ) == m_searchPaths.end() )
-  {
-    m_searchPaths.push_back( dir );
-  }
+  m_fileFinder = fileFinder;
+  m_fileFinder.addSearchPath( dp::util::getFilePath( filename ) );
 
   // create toplevel scene
   m_scene = Scene::create();
@@ -172,7 +164,7 @@ SceneSharedPtr ThreeDSLoader::load( std::string const& filename
 
 void ThreeDSLoader::cleanup()
 {
-  m_searchPaths.clear();
+  m_fileFinder.clear();
   m_scene.reset();
   m_topLevel.reset();
 
@@ -1884,11 +1876,6 @@ ThreeDSLoader::postProcessCamerasAndLights()
 void
 ThreeDSLoader::constructMaterials( std::vector<dp::sg::core::EffectDataSharedPtr> & materials, Lib3dsFile *data )
 {
-  if( m_searchPaths.size() )
-  {
-    m_searchPaths.push_back(m_searchPaths[0] + "maps");
-  }
-
   m_wirePresent = false;
 
   // iterate over all materials saved in the 3ds file
@@ -1993,7 +1980,7 @@ ThreeDSLoader::constructMaterials( std::vector<dp::sg::core::EffectDataSharedPtr
              texName.replace(idx,4,".GIF");
           }
 
-          ParameterGroupDataSharedPtr textureParameters = createTexture( m->texture1_map, m_searchPaths, texName, false );
+          ParameterGroupDataSharedPtr textureParameters = createTexture( m->texture1_map, m_fileFinder, texName, false );
           if ( textureParameters )
           {
             me->setParameterGroupData( pgsit, textureParameters );
@@ -2007,7 +1994,7 @@ ThreeDSLoader::constructMaterials( std::vector<dp::sg::core::EffectDataSharedPtr
         if ( reflMap )
         {
           // attempt to create reflection map texture
-          ParameterGroupDataSharedPtr textureParameters = createTexture( m->reflection_map, m_searchPaths, reflectName, true );
+          ParameterGroupDataSharedPtr textureParameters = createTexture( m->reflection_map, m_fileFinder, reflectName, true );
           if ( textureParameters )
           {
             me->setParameterGroupData( pgsit, textureParameters );
@@ -2034,14 +2021,14 @@ ThreeDSLoader::constructMaterials( std::vector<dp::sg::core::EffectDataSharedPtr
 }
 
 ParameterGroupDataSharedPtr ThreeDSLoader::createTexture( Lib3dsTextureMap &texture
-                                                        , std::vector< std::string > & searchPath
+                                                        , dp::util::FileFinder const& fileFinder
                                                         , const std::string & filename
                                                         , bool isEnvMap )
 {
   ParameterGroupDataSharedPtr parameterGroupData;
 
   // first, create texture from file name
-  TextureHostSharedPtr textureHost = dp::sg::io::loadTextureHost( filename, searchPath );
+  TextureHostSharedPtr textureHost = dp::sg::io::loadTextureHost( filename, fileFinder );
   if ( textureHost )
   {
     TextureWrapMode wrapS, wrapT;

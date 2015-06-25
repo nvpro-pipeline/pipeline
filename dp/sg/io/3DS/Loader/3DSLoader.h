@@ -109,9 +109,7 @@ public:
   static ThreeDSLoaderSharedPtr create();
   virtual ~ThreeDSLoader(void);
 
-  dp::sg::core::SceneSharedPtr load( const std::string& filename,
-                               const std::vector<std::string> &searchPaths,
-                               dp::sg::ui::ViewStateSharedPtr & viewState );
+  dp::sg::core::SceneSharedPtr load( const std::string& filename, dp::util::FileFinder const& fileFinder, dp::sg::ui::ViewStateSharedPtr & viewState );
 
 protected:
   ThreeDSLoader();
@@ -154,7 +152,7 @@ private:
   void constructMaterials( std::vector< dp::sg::core::EffectDataSharedPtr > & materials, Lib3dsFile *data );
 
   // parse and load a texture from the 3ds data structure
-  dp::sg::core::ParameterGroupDataSharedPtr createTexture( Lib3dsTextureMap &texture, std::vector< std::string > & searchPath, const std::string & filename, bool isEnvMap );
+  dp::sg::core::ParameterGroupDataSharedPtr createTexture( Lib3dsTextureMap &texture, dp::util::FileFinder const& fileFinder, const std::string & filename, bool isEnvMap );
   
   // lineraly interpolate between two vectors as a function of the current frame between a left and right frame
   void vecInterp(dp::math::Vec3f &target, dp::math::Vec3f &lData, dp::math::Vec3f &rData, int leftFrame, int rightFrame, int currFrame);
@@ -175,7 +173,7 @@ private:
   void cleanup();
 
 private:
-  vector< std::string > m_searchPaths;
+  dp::util::FileFinder  m_fileFinder;
   dp::sg::core::SceneSharedPtr m_scene;
   dp::sg::core::GroupSharedPtr m_topLevel;
 

@@ -237,7 +237,7 @@ void PLYLoader::cleanup( void )
   }
   m_pElements.clear();
   m_line = 0;
-  m_searchPaths.clear();
+  m_fileFinder.clear();
 }
 
 // Finds the next ASCII token, copies its string into m_token and
@@ -322,7 +322,7 @@ int PLYLoader::skipLine(void)
 */
 
 // SceneLoader API
-SceneSharedPtr PLYLoader::load(const string& filename, const vector<string> &searchPaths, dp::sg::ui::ViewStateSharedPtr & viewState)
+SceneSharedPtr PLYLoader::load(const string& filename, dp::util::FileFinder const& fileFinder, dp::sg::ui::ViewStateSharedPtr & viewState)
 {
   if ( !dp::util::fileExists(filename) )
   {
@@ -341,10 +341,8 @@ SceneSharedPtr PLYLoader::load(const string& filename, const vector<string> &sea
   SceneSharedPtr sceneResult;
   
   // Make a copy of the given search paths.
-  m_searchPaths = searchPaths;
-
-  string localPath = dp::util::getFilePath( filename );
-  m_searchPaths.insert(m_searchPaths.begin(), localPath);
+  m_fileFinder = fileFinder;
+  m_fileFinder.addSearchPath( dp::util::getFilePath( filename ) );
 
   try
   {

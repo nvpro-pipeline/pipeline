@@ -41,16 +41,20 @@ namespace dp
     class FileFinder
     {
       public:
+        DP_UTIL_API FileFinder();
+        DP_UTIL_API FileFinder( std::string const& path );
+        DP_UTIL_API FileFinder( std::vector<std::string> const& paths );
+
         DP_UTIL_API bool addSearchPath( std::string const& path );
         DP_UTIL_API void addSearchPaths( std::vector<std::string> const& paths );
         DP_UTIL_API void clear();
-        DP_UTIL_API std::string find( std::string const& file );
-        DP_UTIL_API std::string findRecursive( std::string const& file );
+        DP_UTIL_API std::string find( std::string const& file ) const;
+        DP_UTIL_API std::string findRecursive( std::string const& file ) const;
         DP_UTIL_API std::vector<std::string> getSearchPaths() const;
         DP_UTIL_API bool removeSearchPath( std::string const& path );
 
       private:
-        boost::filesystem::path           m_latestHit;
+        mutable boost::filesystem::path   m_latestHit;
         std::set<boost::filesystem::path> m_searchPaths;
     };
 

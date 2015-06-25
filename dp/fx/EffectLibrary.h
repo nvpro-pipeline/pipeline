@@ -34,7 +34,7 @@
 #include <dp/fx/ParameterGroupSpec.h>
 #include <dp/fx/ParameterGroupLayout.h>
 #include <dp/fx/inc/Snippet.h>
-
+#include <dp/util/FileFinder.h>
 #include <map>
 #include <string>
 #include <vector>
@@ -128,7 +128,7 @@ namespace dp
 
       static DP_FX_API EffectLibrary* instance();
 
-      DP_FX_API virtual bool loadEffects(const std::string& filename, const std::vector<std::string> &searchPaths = std::vector<std::string>() ) = 0;
+      DP_FX_API virtual bool loadEffects(const std::string& filename, dp::util::FileFinder const& fileFinder = dp::util::FileFinder() ) = 0;
       DP_FX_API virtual bool save( const EffectDataSharedPtr& effectData, const std::string& filename ) = 0;
 
       DP_FX_API virtual void getEffectNames( std::vector<std::string>& names ) = 0;

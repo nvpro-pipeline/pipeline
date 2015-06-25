@@ -252,7 +252,7 @@ class PLYLoader : public dp::sg::io::SceneLoader
       * through the \a searchPaths.
       * \returns  A pointer to the loaded scene. */
     dp::sg::core::SceneSharedPtr load( std::string const& filename                  //!<  file to load
-                                     , std::vector<std::string> const& searchPaths  //!<  paths to search through
+                                     , dp::util::FileFinder const& fileFinder       //!<  file findes to search through paths
                                      , dp::sg::ui::ViewStateSharedPtr & viewState   /*!< If the function succeeded, this points to the optional
                                                                                          ViewState stored with the scene. */
                                      );
@@ -379,9 +379,8 @@ class PLYLoader : public dp::sg::io::SceneLoader
     bool                       onUnsupportedToken( const std::string &context, const std::string &token ) const;
 
   private :
-
-    unsigned int                       m_line;
-    std::vector<std::string>           m_searchPaths;
+    dp::util::FileFinder  m_fileFinder;
+    unsigned int          m_line;
 };
 
 

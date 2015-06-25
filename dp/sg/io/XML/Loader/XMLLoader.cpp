@@ -140,7 +140,7 @@ XMLLoader::lookupFile( const string & file )
     std::string foundFile = m_fileFinder.find( file );
     if ( !foundFile.empty() )
     {
-      dp::sg::ui::ViewStateSharedPtr viewState = dp::sg::io::loadScene( foundFile, m_fileFinder.getSearchPaths() );
+      dp::sg::ui::ViewStateSharedPtr viewState = dp::sg::io::loadScene( foundFile, m_fileFinder );
       if ( viewState )
       {
         scene = viewState->getScene();
@@ -286,9 +286,7 @@ XMLLoader::buildScene( GroupSharedPtr const& parent, TiXmlDocument & doc, TiXmlN
 }
 
 SceneSharedPtr
-XMLLoader::load( std::string const& filename
-               , std::vector<std::string> const& searchPaths
-               , dp::sg::ui::ViewStateSharedPtr & viewState )
+XMLLoader::load( std::string const& filename, dp::util::FileFinder const& fileFinder, dp::sg::ui::ViewStateSharedPtr & viewState )
 {
   if ( !dp::util::fileExists(filename) )
   {
@@ -302,7 +300,7 @@ XMLLoader::load( std::string const& filename
 
   m_viewState = viewState.getWeakPtr();
 
-  m_fileFinder.addSearchPaths( searchPaths );
+  m_fileFinder = fileFinder;
 
 #if 0
   for(unsigned int i=0;i<m_searchPath.size();i++)

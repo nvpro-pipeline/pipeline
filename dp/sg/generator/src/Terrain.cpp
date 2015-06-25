@@ -247,9 +247,7 @@ namespace dp
       TerrainNode::TerrainNode( dp::sg::core::TextureHostSharedPtr const & heightMap, dp::sg::core::TextureHostSharedPtr const & colorMap
                               , dp::math::Vec3f const & resolution, dp::math::Vec3f const & offset, Mode mode )
       {
-        std::vector<std::string> searchPaths;
-        searchPaths.push_back( dp::home() + "/media/effects/xml");
-        dp::fx::EffectLibrary::instance()->loadEffects( "terrain.xml", searchPaths );
+        dp::fx::EffectLibrary::instance()->loadEffects( "terrain.xml", dp::util::FileFinder( dp::home() + "/media/effects/xml" ) );
 
         std::string effectName;
         dp::sg::core::PrimitiveType primitiveType = dp::sg::core::PRIMITIVE_TRIANGLES;
@@ -371,9 +369,7 @@ namespace dp
       {
         if ( false ) // vertices terrain mode is for testing only atm
         {
-          std::vector<std::string> searchPaths;
-          searchPaths.push_back( dp::home() + "/media/effects/xml");
-          dp::fx::EffectLibrary::instance()->loadEffects( "terrain.xml", searchPaths );
+          dp::fx::EffectLibrary::instance()->loadEffects( "terrain.xml", dp::util::FileFinder( dp::home() + "/media/effects/xml" ) );
           return generateTerrainVertices( filenameHeightMap, filenameColorMap, resolution, offset );
         }
         else

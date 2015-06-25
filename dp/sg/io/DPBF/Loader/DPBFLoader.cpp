@@ -1830,7 +1830,7 @@ inline void DPBFLoader::remapObject(uint_t offset, const ObjectSharedPtr & objec
 }
 
 // SceneLoader API
-SceneSharedPtr DPBFLoader::load(const string& filename, const vector<string> &searchPaths, dp::sg::ui::ViewStateSharedPtr & viewState)
+SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder const& fileFinder, dp::sg::ui::ViewStateSharedPtr & viewState)
 {
   DP_ASSERT( m_textureImages.empty() );
 
@@ -1846,7 +1846,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, const vector<string> &se
   
   // take a copy of the given search pathes, we might need them with looking up 
   // adherent files like texture image file or effect sources
-  m_fileFinder.addSearchPaths( searchPaths );
+  m_fileFinder = fileFinder;
   m_fileFinder.addSearchPath( dp::util::getFilePath( filename ) );
 
   try
@@ -5211,7 +5211,7 @@ TextureHostSharedPtr DPBFLoader::loadTextureHost(uint_t offset, std::string& fil
       }
       else
       {
-        imgHdl = dp::sg::io::loadTextureHost(file, m_fileFinder.getSearchPaths());
+        imgHdl = dp::sg::io::loadTextureHost(file, m_fileFinder);
         imgHdl->setTextureTarget( (TextureTarget)imgPtr->target );
         m_textureImages[file] = imgHdl.getWeakPtr();
       }
@@ -5267,7 +5267,7 @@ TextureHostSharedPtr DPBFLoader::loadTextureHost_nbf_4b(uint_t offset, std::stri
       }
       else
       {
-        imgHdl = dp::sg::io::loadTextureHost(file, m_fileFinder.getSearchPaths());
+        imgHdl = dp::sg::io::loadTextureHost(file, m_fileFinder);
         m_textureImages[file] = imgHdl.getWeakPtr();
       }
     }
@@ -6125,7 +6125,7 @@ EffectDataSharedPtr DPBFLoader::loadEffectData( uint_t offset )
     // undefined behavior if called for other objects!
     DP_ASSERT( edPtr->objectCode == NBF_EFFECT_DATA );
 
-    DP_VERIFY( dp::fx::EffectLibrary::instance()->loadEffects( mapString( edPtr->effectFileName ), m_fileFinder.getSearchPaths() ) );
+    DP_VERIFY( dp::fx::EffectLibrary::instance()->loadEffects( mapString( edPtr->effectFileName ), m_fileFinder ) );
     m_currentEffectSpec = dp::fx::EffectLibrary::instance()->getEffectSpec( mapString( edPtr->effectSpecName ) );
     if ( m_currentEffectSpec )
     {

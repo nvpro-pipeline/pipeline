@@ -167,13 +167,13 @@ AnimatedScene::AnimatedScene( const dp::math::Vec2f& gridSize, const dp::math::V
 
   m_itColors = m_effectSpec->findParameterGroupSpec( std::string("standardMaterialParameters") );
 
-  std::vector<std::string> searchPaths;
-  searchPaths.push_back( dp::home() + "/media/effects/xml" );
-  searchPaths.push_back( dp::home() + "/media/textures" );
-  dp::fx::EffectLibrary::instance()->loadEffects( "carpaint.xml", searchPaths );
-  dp::fx::EffectLibrary::instance()->loadEffects( "phong.xml", searchPaths );
-  dp::fx::EffectLibrary::instance()->loadEffects( "standard_material.xml", searchPaths );
-  dp::fx::EffectLibrary::instance()->loadEffects( "thinglass.xml", searchPaths );
+  dp::util::FileFinder fileFinder;
+  fileFinder.addSearchPath( dp::home() + "/media/effects/xml" );
+  fileFinder.addSearchPath( dp::home() + "/media/textures" );
+  dp::fx::EffectLibrary::instance()->loadEffects( "carpaint.xml", fileFinder );
+  dp::fx::EffectLibrary::instance()->loadEffects( "phong.xml", fileFinder );
+  dp::fx::EffectLibrary::instance()->loadEffects( "standard_material.xml", fileFinder );
+  dp::fx::EffectLibrary::instance()->loadEffects( "thinglass.xml", fileFinder );
   
   m_carpaint = dp::sg::core::EffectData::create( dp::fx::EffectLibrary::instance()->getEffectData("carpaint") );
   m_phong = dp::sg::core::EffectData::create( dp::fx::EffectLibrary::instance()->getEffectData("phong") );

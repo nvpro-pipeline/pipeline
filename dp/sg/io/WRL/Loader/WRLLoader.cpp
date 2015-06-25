@@ -2385,7 +2385,7 @@ ParameterGroupDataSharedPtr WRLLoader::interpretImageTexture( ImageTextureShared
       TextureHostSharedPtr texImg;
       if ( it == m_textureFiles.end() )
       {
-        texImg = dp::sg::io::loadTextureHost(fileName, m_fileFinder.getSearchPaths());
+        texImg = dp::sg::io::loadTextureHost(fileName, m_fileFinder);
         DP_ASSERT( texImg );
         texImg->setTextureTarget(TT_TEXTURE_2D); // TEXTURE_2D is the only target known by VRML
         m_textureFiles[fileName] = texImg.getWeakPtr();
@@ -3156,7 +3156,7 @@ NodeSharedPtr WRLLoader::interpretInline( InlineSharedPtr const& pInline )
     string  fileName;
     if ( interpretURL( pInline->url, fileName ) )
     {
-      dp::sg::ui::ViewStateSharedPtr viewState = dp::sg::io::loadScene( fileName, m_fileFinder.getSearchPaths(), callback() );
+      dp::sg::ui::ViewStateSharedPtr viewState = dp::sg::io::loadScene( fileName, m_fileFinder, callback() );
       DP_ASSERT( viewState && viewState->getScene() );
       pInline->pNode = viewState->getScene()->getRootNode();
     }
@@ -3932,7 +3932,7 @@ bool  WRLLoader::isValidScaling( const SFVec3f &sfVec3f ) const
   return( ( FLT_EPSILON < sfVec3f[0] ) && ( FLT_EPSILON < sfVec3f[1] ) && ( FLT_EPSILON < sfVec3f[2] ) );
 }
 
-SceneSharedPtr WRLLoader::load( string const& filename, vector<string> const& searchPaths, dp::sg::ui::ViewStateSharedPtr & viewState )
+SceneSharedPtr WRLLoader::load( string const& filename, dp::util::FileFinder const& fileFinder, dp::sg::ui::ViewStateSharedPtr & viewState )
 {
   if ( !dp::util::fileExists(filename) )
   {
@@ -3950,7 +3950,7 @@ SceneSharedPtr WRLLoader::load( string const& filename, vector<string> const& se
 
   viewState.reset(); // loading of ViewState currently not supported
 
-  m_fileFinder.addSearchPaths( searchPaths );
+  m_fileFinder = fileFinder;
   m_fileFinder.addSearchPath( dp::util::getFilePath( filename ) );
 
   // run the importer

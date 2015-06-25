@@ -50,7 +50,7 @@ namespace dp
       static EffectLibrary* instance();
 
       // public interface
-      virtual bool loadEffects(const std::string& filename, const std::vector<std::string> &searchPaths );
+      virtual bool loadEffects(const std::string& filename, dp::util::FileFinder const& fileFinder );
       virtual bool save( const EffectDataSharedPtr& effectData, const std::string& filename );
       virtual void getEffectNames(std::vector<std::string>& names );
       virtual void getEffectNames( const std::string & filename, EffectSpec::Type type, std::vector<std::string> & names ) const;

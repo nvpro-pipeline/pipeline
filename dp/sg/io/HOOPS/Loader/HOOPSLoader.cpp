@@ -1888,9 +1888,7 @@ HOOPSLoader::traverseModel()
 }
 
 SceneSharedPtr
-HOOPSLoader::load(  string const& filename,
-                    vector<string> const& searchPaths,
-                    dp::sg::ui::ViewStateSharedPtr & viewState )
+HOOPSLoader::load( string const& filename, dp::util::FileFinder const& fileFinder, dp::sg::ui::ViewStateSharedPtr & viewState )
 {
   if ( sInitializationCount == 0 )
   {

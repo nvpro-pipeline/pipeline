@@ -87,9 +87,7 @@ public:
   void deleteThis( void );
 
   dp::sg::core::SceneSharedPtr
-  HOOPSLoader::load( std::string const& filename
-                   , std::vector<std::string> const& searchPaths
-                   , dp::sg::ui::ViewStateSharedPtr & viewState );
+  HOOPSLoader::load( std::string const& filename, dp::util::FileFinder const& fileFinder, dp::sg::ui::ViewStateSharedPtr & viewState );
 
 protected:
   virtual ~HOOPSLoader(void);

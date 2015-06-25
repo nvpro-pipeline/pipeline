@@ -912,7 +912,7 @@ namespace dp
         }
         else
         {
-          getEffectLibrary()->loadEffects( file, m_fileFinder.getSearchPaths() );
+          getEffectLibrary()->loadEffects( file, m_fileFinder );
         }
       }
 

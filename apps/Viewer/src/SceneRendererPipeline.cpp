@@ -83,9 +83,7 @@ bool SceneRendererPipeline::init(const dp::gl::RenderContextSharedPtr &renderCon
 {
   m_renderTarget = renderTarget;
 
-  vector<string> searchPaths;
-  searchPaths.push_back( dp::home() + "/apps/Viewer/res" );
-  dp::fx::EffectLibrary::instance()->loadEffects( "viewerEffects.xml", searchPaths );
+  dp::fx::EffectLibrary::instance()->loadEffects( "viewerEffects.xml", dp::util::FileFinder( dp::home() + "/apps/Viewer/res" ) );
 
   DP_ASSERT( m_sceneRenderer );
   m_sceneRenderer->setRenderTarget( renderTarget );

@@ -89,7 +89,7 @@ namespace dp
         *     if ( foundAppropriate )
         *     {
         *       dp::util::PlugIn * plug; 
-        *       if ( dp::util::getInterface(searchPaths, dpbfLoaderInterfaceID, plug) )
+        *       if ( dp::util::getInterface(fileFinder, dpbfLoaderInterfaceID, plug) )
         *       {
         *         dp::sg::core::SceneLoader * loader = reinterpret_cast<SceneLoader*>(plug);
         *         theScene = loader->load("c:\\myscenes\\sample.dpbf", searchPaths, viewState);
@@ -116,7 +116,7 @@ namespace dp
             * \returns A a SceneSharedPtr specifying the loaded scene if successful, a null pointer otherwise.
             */
           DP_SG_IO_API virtual dp::sg::core::SceneSharedPtr load( std::string const& filename                 //!< A string that holds the name of the scene file to be loaded.
-                                                                , std::vector<std::string> const& searchPaths //!< A collection of search paths used to look up the file.
+                                                                , dp::util::FileFinder const& fileFinder      //!< A file finder used to look up the files
                                                                 , dp::sg::ui::ViewStateSharedPtr & viewState  /*!< If the function succeeded, this points to the optional
                                                                                                                    ViewState stored with the scene. */
                                                                 ) = 0;

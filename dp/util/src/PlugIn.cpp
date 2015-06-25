@@ -86,10 +86,10 @@ namespace dp
       m_plugIns.clear();
     }
 
-    void PlugInServer::gatherPlugIns( std::vector<std::string> const& searchPaths )
+    void PlugInServer::gatherPlugIns( dp::util::FileFinder const& fileFinder )
     {
       std::vector<std::string> plugInFiles;
-      findPlugIns( searchPaths, plugInFiles );
+      findPlugIns( fileFinder, plugInFiles );
 
       for ( std::vector<std::string>::const_iterator it = plugInFiles.begin() ; it != plugInFiles.end() ; ++it )
       {
@@ -112,7 +112,7 @@ namespace dp
       }
     }
 
-    bool PlugInServer::getInterfaceImpl(const vector<string>& searchPath, const UPIID& piid, dp::util::PlugInSharedPtr & plugIn)
+    bool PlugInServer::getInterfaceImpl(dp::util::FileFinder const& fileFinder, const UPIID& piid, dp::util::PlugInSharedPtr & plugIn)
     {
       plugIn.reset();
       if ( m_unsupportedUPIIDs.find( piid ) == m_unsupportedUPIIDs.end() )
@@ -120,7 +120,7 @@ namespace dp
         PlugInMap::iterator plugInMapIt = m_plugIns.find( piid );
         if ( plugInMapIt == m_plugIns.end() )
         {
-          gatherPlugIns( searchPath );
+          gatherPlugIns( fileFinder );
           plugInMapIt = m_plugIns.find( piid );
         }
         if ( plugInMapIt != m_plugIns.end() )
@@ -159,7 +159,7 @@ namespace dp
       // TODO actually calling function needs to call gather plugins each time a new search path has been added...
       if ( m_plugIns.empty() )
       {
-        gatherPlugIns( searchPath );
+        gatherPlugIns( dp::util::FileFinder( searchPath ) );
       }
 
       for ( PlugInMap::iterator it = m_plugIns.begin(); it != m_plugIns.end(); ++it )
@@ -194,34 +194,27 @@ namespace dp
       }
     }
 
-    bool PlugInServer::findPlugIns(const vector<string>& searchPath, vector<string>& plugIns)
+    bool PlugInServer::findPlugIns(dp::util::FileFinder const& fileFinder, vector<string>& plugIns)
     {
       plugIns.clear();
-      vector<string> _searchPath(searchPath);                 //temporary search path variable
-
-      for ( std::vector<std::string>::const_iterator it = getPlugInSearchPath().begin() ; it != getPlugInSearchPath().end() ; ++it )
-      {
-        if ( std::find( _searchPath.begin(), _searchPath.end(), *it ) == _searchPath.end() )
-        {
-          _searchPath.push_back( *it );
-        }
-      }
+      dp::util::FileFinder localFF( fileFinder );
+      localFF.addSearchPaths( getPlugInSearchPath() );
 
       StrTokenizer tok(";");
       tok.setInput( m_filter );
         
       while ( tok.hasMoreTokens() )
       {
-        findFiles( tok.getNextToken().substr( 1 ), _searchPath, plugIns );
+        findFiles( tok.getNextToken().substr( 1 ), localFF.getSearchPaths(), plugIns );
       }
 
       return !plugIns.empty();
     }
 
-    bool getInterface(const std::vector<std::string>& searchPath, const UPIID& piid, dp::util::PlugInSharedPtr & plugIn)
+    bool getInterface(dp::util::FileFinder const& fileFinder, const UPIID& piid, dp::util::PlugInSharedPtr & plugIn)
     {
       // call the singleton's implementation
-      return PIS::instance()->getInterfaceImpl(searchPath, piid, plugIn);
+      return PIS::instance()->getInterfaceImpl(fileFinder, piid, plugIn);
     }
 
     bool queryInterfaceType(const std::vector<std::string>& searchPath, const UPITID& pitid, std::vector<UPIID>& piids)

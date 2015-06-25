@@ -29,6 +29,7 @@
 
 #include <dp/util/Config.h>
 #include <dp/util/DynamicLibrary.h>
+#include <dp/util/FileFinder.h>
 #include <dp/util/PlugInCallback.h>
 #include <dp/util/SharedPtr.h>
 #include <dp/util/Singleton.h>
@@ -314,8 +315,8 @@ namespace dp
         *
         * \returns \c true if successfull, false otherwise.
         */
-      DP_UTIL_API bool getInterface( 
-        const std::vector<std::string>& searchPath  //!< The optional path to search for the plug-ins.
+      DP_UTIL_API bool getInterface(
+        dp::util::FileFinder const& fileFinder      //!< The file finder to search for the plug-ins.
       , const UPIID& piid                           //!< Identifies the interface to search for.
       , dp::util::PlugInSharedPtr & plugIn              //!< Holds the interface object (plug-in), if successfull.
       );
@@ -380,7 +381,7 @@ namespace dp
     class PlugInServer
     {
     public:
-      friend DP_UTIL_API bool getInterface( const std::vector<std::string> & searchPath, const UPIID & piid, dp::util::PlugInSharedPtr & plugIn );
+      friend DP_UTIL_API bool getInterface( dp::util::FileFinder const& fileFinder, const UPIID & piid, dp::util::PlugInSharedPtr & plugIn );
       friend DP_UTIL_API bool queryInterfaceType( const std::vector<std::string> & searchPath, const UPITID & pitid, std::vector<UPIID> & piids );
       friend DP_UTIL_API void releaseInterface( const UPIID & piid );
       friend DP_UTIL_API void setPlugInFileFilter( const std::string & filter );
@@ -392,12 +393,12 @@ namespace dp
 
     private:
       // hidden interface
-      bool getInterfaceImpl(const std::vector<std::string>& searchPath, const UPIID& piid, dp::util::PlugInSharedPtr & plugIn);
+      bool getInterfaceImpl(dp::util::FileFinder const& fileFinder, const UPIID& piid, dp::util::PlugInSharedPtr & plugIn);
       bool queryInterfaceTypeImpl(const std::vector<std::string>& searchPath, const UPITID& pitid, std::vector<UPIID>& piids);
       void releaseInterfaceImpl(const UPIID& piid);
       void setFileFilterImpl(const std::string& filter);
-      bool findPlugIns(const std::vector<std::string>& searchPath, std::vector<std::string>& plugIns);
-      void gatherPlugIns( std::vector<std::string> const& searchPaths );
+      bool findPlugIns(dp::util::FileFinder const& fileFinder, std::vector<std::string>& plugIns);
+      void gatherPlugIns( dp::util::FileFinder const& fileFinder );
 
     private:
       struct PlugInData

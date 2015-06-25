@@ -90,25 +90,17 @@ namespace dp
       return( false );
     }
 
-    bool EffectLibraryImpl::loadEffects( const std::string& filename, const std::vector<std::string> &searchPaths )
+    bool EffectLibraryImpl::loadEffects( const std::string& filename, dp::util::FileFinder const& fileFinder )
     {
       if ( m_loadedFiles.find( filename ) != m_loadedFiles.end() )
       {
         return( true );
       }
 
-      std::vector<std::string> newPaths;
-      for ( std::vector<std::string>::const_iterator it = searchPaths.begin() ; it != searchPaths.end() ; ++it )
+      std::string file = fileFinder.findRecursive( filename );
+      if ( file.empty() )
       {
-        if ( m_fileFinder.addSearchPath( *it ) )
-        {
-          newPaths.push_back( *it );
-        }
-      }
-      std::string file = m_fileFinder.findRecursive( filename );
-      for ( std::vector<std::string>::const_iterator it = newPaths.begin() ; it != newPaths.end() ; ++it )
-      {
-        m_fileFinder.removeSearchPath( *it );
+        file = m_fileFinder.findRecursive( filename );
       }
 
       if ( file.empty() )

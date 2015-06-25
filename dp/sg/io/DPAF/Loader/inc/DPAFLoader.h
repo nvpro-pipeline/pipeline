@@ -88,7 +88,7 @@ class DPAFLoader : public dp::sg::io::SceneLoader
       * through the \a searchPaths.
       * \returns  A pointer to the loaded scene. */
     dp::sg::core::SceneSharedPtr load( std::string const& filename                  //!<  file to load
-                                     , std::vector<std::string> const& searchPaths  //!<  paths to search through
+                                     , dp::util::FileFinder const& fileFinder       //!<  the file finder to use for searching
                                      , dp::sg::ui::ViewStateSharedPtr & viewState   /*!< If the function succeeded, this points to the optional
                                                                                          ViewState stored with the scene. */
                                      );

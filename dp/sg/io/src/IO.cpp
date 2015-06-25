@@ -48,26 +48,16 @@ namespace dp
     namespace io
     {
 
-      dp::sg::ui::ViewStateSharedPtr loadScene( const std::string & filename, const std::vector<std::string> &searchPaths, dp::util::PlugInCallbackSharedPtr const& callback )
+      dp::sg::ui::ViewStateSharedPtr loadScene( const std::string & filename, dp::util::FileFinder const& fileFinder, dp::util::PlugInCallbackSharedPtr const& callback )
       {
         dp::sg::ui::ViewStateSharedPtr viewState;
 
         // appropriate search paths for the
         // loader dll and the sample file.
         string dir;
-        vector<string> binSearchPaths = searchPaths;
-
-        string curDir = dp::util::getCurrentPath();
-        if ( find( binSearchPaths.begin(), binSearchPaths.end(), curDir ) == binSearchPaths.end() )
-        {
-          binSearchPaths.push_back(curDir);
-        }
-
-        std::string modulePath = dp::util::getModulePath();
-        if ( find( binSearchPaths.begin(), binSearchPaths.end(), modulePath ) == binSearchPaths.end() )
-        {
-          binSearchPaths.push_back(modulePath);
-        }
+        dp::util::FileFinder localFF( fileFinder );
+        localFF.addSearchPath( dp::util::getCurrentPath() );
+        localFF.addSearchPath( dp::util::getModulePath() );
         
         // receive the unique scene loader plug interface ID from the file extension 
         std::string ext = dp::util::getFileExtension( filename );
@@ -75,21 +65,15 @@ namespace dp
 
         {
           dp::util::PlugInSharedPtr plug;
-          if ( !dp::util::getInterface(binSearchPaths, piid, plug) )
+          if ( !dp::util::getInterface(localFF, piid, plug) )
           {
             throw std::runtime_error( std::string( "Scene Plugin not found: " + ext ) );
           }
           SceneLoaderSharedPtr loader = plug.staticCast<SceneLoader>();
           loader->setCallback( callback );
 
-          vector<string> sceneSearchPaths = binSearchPaths;
-
           // add the scene path, if it's not the current path (-> dir.empty()) and not yet added
-          dir = dp::util::getFilePath( filename );
-          if ( !dir.empty() && find( sceneSearchPaths.begin(), sceneSearchPaths.end(), dir ) == sceneSearchPaths.end() )
-          {
-            sceneSearchPaths.push_back(dir);
-          }
+          localFF.addSearchPath( dp::util::getFilePath( filename ) );
 
           // for supplied models add additional resource paths to make sure
           // that required resources will be found by subsequent loaders
@@ -97,14 +81,14 @@ namespace dp
           if ( pos != string::npos )
           {
             string sdk(dir.substr(0, pos));
-            sceneSearchPaths.push_back(sdk + "media/effects");
-            sceneSearchPaths.push_back(sdk + "media/textures");
+            localFF.addSearchPath(sdk + "media/effects");
+            localFF.addSearchPath(sdk + "media/textures");
           }
 
           dp::sg::core::SceneSharedPtr scene;
           try
           {
-            scene = loader->load( filename, sceneSearchPaths, viewState );
+            scene = loader->load( filename, localFF, viewState );
           }
           catch (...)
           {
@@ -140,28 +124,17 @@ namespace dp
         // define a unique plug-interface ID for SceneLoader
         const dp::util::UPITID PITID_SCENE_SAVER(UPITID_SCENE_SAVER, UPITID_VERSION);
 
-        vector<string> searchPaths;
-        searchPaths.push_back( dp::util::getCurrentPath() );
-
-        std::string modulePath = dp::util::getModulePath();
-        if ( std::find( searchPaths.begin(), searchPaths.end(), modulePath ) == searchPaths.end() )
-        {
-          searchPaths.push_back( modulePath );
-        }
-
+        dp::util::FileFinder fileFinder( dp::util::getCurrentPath() );
+        fileFinder.addSearchPath( dp::util::getModulePath() );
 #if defined(DP_OS_WINDOWS)
-        modulePath = dp::util::getModulePath( reinterpret_cast<HMODULE>(&__ImageBase) );
-        if ( std::find( searchPaths.begin(), searchPaths.end(), modulePath ) == searchPaths.end() )
-        {
-          searchPaths.push_back( modulePath );
-        }
+        fileFinder.addSearchPath( dp::util::getModulePath( reinterpret_cast<HMODULE>(&__ImageBase) ) );
 #endif
 
         dp::util::UPIID piid = dp::util::UPIID(dp::util::getFileExtension( filename ).c_str(), PITID_SCENE_SAVER);
 
         {
           dp::util::PlugInSharedPtr plug;
-          if ( getInterface( searchPaths, piid, plug ) )
+          if ( getInterface( fileFinder, piid, plug ) )
           {
             SceneSaverSharedPtr ss = plug.staticCast<SceneSaver>();
             try
@@ -186,9 +159,8 @@ namespace dp
         // load the saver plug-in  - this should be configured
         dp::util::UPIID piid = dp::util::UPIID(dp::util::getFileExtension( filename ).c_str(), dp::util::UPITID(UPITID_TEXTURE_SAVER, UPITID_VERSION) );
 
-        std::vector<std::string> searchPaths;
-        searchPaths.push_back( dp::util::getCurrentPath() );
-        searchPaths.push_back( dp::util::getModulePath() );
+        dp::util::FileFinder fileFinder( dp::util::getCurrentPath() );
+        fileFinder.addSearchPath( dp::util::getModulePath() );
 
         bool retval = false;
         //
@@ -196,7 +168,7 @@ namespace dp
         //
         {
           dp::util::PlugInSharedPtr plug;
-          if ( getInterface( searchPaths, piid, plug ) )
+          if ( getInterface( fileFinder, piid, plug ) )
           {
             TextureSaverSharedPtr ts = plug.staticCast<TextureSaver>();
             retval = ts->save( tih, filename );
@@ -209,16 +181,15 @@ namespace dp
         return retval;
       }
 
-      dp::sg::core::TextureHostSharedPtr loadTextureHost( const std::string & filename, const std::vector<std::string> &searchPaths )
+      dp::sg::core::TextureHostSharedPtr loadTextureHost( const std::string & filename, dp::util::FileFinder const& fileFinder )
       {
         dp::sg::core::TextureHostSharedPtr tih;
 
-        dp::util::FileFinder fileFinder;
-        fileFinder.addSearchPaths( searchPaths );
-        fileFinder.addSearchPath( dp::util::getCurrentPath() );
-        fileFinder.addSearchPath( dp::util::getModulePath() );
+        dp::util::FileFinder localFF( fileFinder );
+        localFF.addSearchPath( dp::util::getCurrentPath() );
+        localFF.addSearchPath( dp::util::getModulePath() );
 
-        std::string foundFile = fileFinder.find( filename );
+        std::string foundFile = localFF.find( filename );
         if (!foundFile.empty())
         {
           std::string ext = dp::util::getFileExtension( filename );
@@ -228,7 +199,7 @@ namespace dp
           // TODO - Update me for stereo images
           {
             dp::util::PlugInSharedPtr plug;
-            if ( getInterface( fileFinder.getSearchPaths(), piid, plug ) )
+            if ( getInterface( fileFinder, piid, plug ) )
             {
               TextureLoaderSharedPtr tl = plug.staticCast<TextureLoader>();
               tih = tl->load( foundFile );

@@ -43,6 +43,20 @@ namespace dp
       fileName = reducedPath;
     }
 
+    FileFinder::FileFinder()
+    {
+    }
+
+    FileFinder::FileFinder( std::string const& path )
+    {
+      DP_VERIFY( addSearchPath( path ) );
+    }
+
+    FileFinder::FileFinder( std::vector<std::string> const& paths )
+    {
+      addSearchPaths( paths );
+    }
+
     bool FileFinder::addSearchPath( std::string const& path )
     {
       DP_ASSERT( boost::filesystem::exists( boost::filesystem::path( path ) ) );
@@ -51,7 +65,10 @@ namespace dp
 
     void FileFinder::addSearchPaths( std::vector<std::string> const& paths )
     {
-      m_searchPaths.insert( paths.begin(), paths.end() );
+      for ( std::vector<std::string>::const_iterator it = paths.begin() ; it != paths.end() ; ++it )
+      {
+        addSearchPath( *it );
+      }
     }
 
     void FileFinder::clear()
@@ -60,7 +77,7 @@ namespace dp
       m_searchPaths.clear();
     }
 
-    std::string FileFinder::find( std::string const& file )
+    std::string FileFinder::find( std::string const& file ) const
     {
       boost::filesystem::path filePath( file );
       if ( boost::filesystem::is_regular_file( filePath ) )
@@ -83,7 +100,7 @@ namespace dp
       return( "" );
     }
 
-    std::string FileFinder::findRecursive( std::string const& file )
+    std::string FileFinder::findRecursive( std::string const& file ) const
     {
       boost::filesystem::path filePath( file );
       if ( boost::filesystem::is_regular_file( filePath ) )
