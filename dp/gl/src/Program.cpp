@@ -471,6 +471,7 @@ namespace dp
         case GL_SAMPLER_2D :          return(      sizeof(int) );
         case GL_SAMPLER_3D :          return(      sizeof(int) );
         case GL_SAMPLER_BUFFER :      return(      sizeof(int) );
+        case GL_UNSIGNED_INT :        return(      sizeof(unsigned int) );
         default :
           DP_ASSERT( false );
           return( 0 );

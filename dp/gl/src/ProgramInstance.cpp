@@ -64,6 +64,9 @@ namespace dp
           case GL_INT_VEC3 :
             glProgramUniform3iv( programID, location, 1, reinterpret_cast<GLint const*>(data.data()) );
             break;
+          case GL_UNSIGNED_INT :
+            glProgramUniform1uiv( programID, location, 1, reinterpret_cast<GLuint const*>(data.data()) );
+            break;
           default :
             DP_ASSERT( !"setProgramUniform: encountered unhandled uniform type!" );
             break;
