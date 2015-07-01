@@ -38,8 +38,6 @@
 #include <dp/sg/core/FrustumCamera.h>
 #include <dp/util/SharedPtr.h>
 
-#define ENABLE_PROFILING 0
-#include <dp/util/Profile.h>
 #include <dp/util/File.h>
 
 #define ENABLE_NSIGHT_PROFILING 0
@@ -334,8 +332,6 @@ namespace dp
 
           void SceneRendererImpl::doRenderDrawables( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::gl::RenderTargetSharedPtr const& renderTarget )
           {
-            PROFILE( "Render");
-
             CameraSharedPtr camera = viewState->getCamera();
 
             DrawableManagerDefault *drawableManagerDefault = dynamic_cast<DrawableManagerDefault*>(m_drawableManager);

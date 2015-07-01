@@ -29,9 +29,6 @@
 #include <dp/gl/ProgramInstance.h>
 #include <dp/util/FrameProfiler.h>
 
-// #define ENABLE_PROFILING 0
-// #include <dp/util/Profile.h>
-
 #include <boost/scoped_array.hpp>
 #include <sstream>
 
@@ -147,8 +144,6 @@ void TextureTransfer::transfer( size_t index
                               , dp::gl::Texture2DSharedPtr dstTexture
                               , dp::gl::Texture2DSharedPtr srcTexture )
 {
-  //PROFILE( "Copy " );
-
 #if 1
 
   if( !m_shadersInitialized )

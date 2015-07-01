@@ -30,9 +30,6 @@
 #include <dp/sg/ui/ViewState.h>
 #include <dp/rix/gl/RiXGL.h>
 
-#define ENABLE_PROFILING 0
-#include <dp/util/Profile.h>
-
 #include <iostream>
 
 using namespace dp::math;

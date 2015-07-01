@@ -42,7 +42,6 @@ set(DPUTIL_INCLUDES
   Observer.h
   PlugIn.h
   PlugInCallback.h
-  Profile.h
   Reflection.h
   Semantic.h
   SharedPtr.h
@@ -82,7 +81,6 @@ set(DPUTIL_SOURCES
   src/NVPerfMon.cpp
   src/Observer.cpp
   src/PlugIn.cpp
-  src/Profile.cpp
   src/Reflection.cpp
   src/SimplexNoise1234.cpp
   src/Timer.cpp
