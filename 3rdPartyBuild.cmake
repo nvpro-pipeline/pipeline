@@ -1,9 +1,39 @@
 cmake_minimum_required(VERSION 2.8.12)
 
-message("Creating 3rdparty library folder for Visual Studio 2011 Win64")
+#determine Visual Studio compiler version
+execute_process(COMMAND "cl.exe" OUTPUT_VARIABLE dummy ERROR_VARIABLE cl_info_string)
+string(REGEX REPLACE ".*Version (..).*" "\\1" cl_major_version ${cl_info_string})
+string(REGEX REPLACE ".*for (...).*" "\\1" cl_architecture ${cl_info_string})
 
-set(GENERATOR "Visual Studio 11 Win64")
-set(BUILD_ARCH x64)
+if ("${cl_architecture}" STREQUAL "x64")
+  set(BUILD_ARCH x64)
+  set(GENERATOR_ARCH Win64)
+  set(BOOST_ADDRESS_MODEL 64)
+elseif ("${cl_architecture}" STREQUAL "x86")
+  set(BUILD_ARCH x86)
+  set(GENERATOR_ARCH)
+  set(BOOST_ADDRESS_MODEL 32)
+else()
+  message(FATAL_ERROR "unsupported CPU architecture")
+endif()
+
+if("${cl_major_version}" STREQUAL "17")
+  set(GENERATOR "Visual Studio 11 ${GENERATOR_ARCH}")
+  set(BOOST_TOOLSET msvc-11.0)
+endif()
+
+if("${cl_major_version}" STREQUAL "18")
+  set(GENERATOR "Visual Studio 12 ${GENERATOR_ARCH}")
+  set(BOOST_TOOLSET msvc-12.0)
+endif()
+
+if (NOT GENERATOR)
+  message(FATAL_ERROR "no generator found, exit")
+endif()
+
+message("Creating 3rdparty library folder for ${GENERATOR}")
+
+
 set(CMAKE_INSTALL_PREFIX "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty" CACHE PATH "default install path" FORCE)
 set(SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/temp/sources")
 set(DOWNLOAD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/downloads")
@@ -81,7 +111,7 @@ macro(boost)
     execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf "${DOWNLOAD_DIR}/boost_1_58_0.tar.bz2" WORKING_DIRECTORY "${SOURCE_DIR}")
     
     execute_process(COMMAND cmd.exe "/C" "bootstrap.bat" WORKING_DIRECTORY "${SOURCE_DIR}/boost_1_58_0")
-    execute_process(COMMAND cmd.exe /C b2 -j "$ENV{NUMBER_OF_PROCESSORS}" --toolset=msvc-11.0 address-model=64 install --prefix=${CMAKE_INSTALL_PREFIX}/boost/ WORKING_DIRECTORY "${SOURCE_DIR}/boost_1_58_0")
+    execute_process(COMMAND cmd.exe /C b2 -j "$ENV{NUMBER_OF_PROCESSORS}" --toolset=${BOOST_TOOLSET} address-model=${BOOST_ADDRESS_MODEL} install --prefix=${CMAKE_INSTALL_PREFIX}/boost/ WORKING_DIRECTORY "${SOURCE_DIR}/boost_1_58_0")
 endmacro()
 
 macro(devil)

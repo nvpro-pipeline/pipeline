@@ -79,29 +79,45 @@ if(WIN32)
       message("Windows Kit not found. Qt might not find glu32.lib")
     endif()
   endif()
-    
-  get_filename_component(QtRoot "[HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Qt;InstallLocation]" ABSOLUTE)
-  if (EXISTS ${QtRoot})
-    if (${DP_ARCH} STREQUAL "amd64")
-      set(QtArch "_64")
-    endif()
-    
-    if (MSVC11)
-      set(QtCompiler "msvc2012")
-      if (${DP_ARCH} STREQUAL "amd64")
-        set(QtVersion "5.2.1")
-      else()
-        set(QtVersion "5.3")
-      endif()
-    else()
-      set(QtCompiler "msvc2013")
-      set(QtVersion "5.3")
-    endif()
-    
-    list(APPEND CMAKE_PREFIX_PATH "${QtRoot}/${QtVersion}/${QtCompiler}${QtArch}_opengl/lib/cmake")
-    
+
+  if (MSVC11)
+    set(QtCompiler "msvc2012")
+  elseif(MSVC12)
+    set(QtCompiler "msvc2013")
   endif()
- 
+
+  if (${DP_ARCH} STREQUAL "amd64")
+    set(QtArch "_64")
+  endif()
+    
+  if (QtCompiler)
+    set(QtRegistryKeys
+     "[HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Qt;InstallLocation]"
+     "[HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{0bdb0613-2f59-49c2-93b6-3016f4b1a43b};InstallLocation]"
+    )
+    
+    foreach(QtRegistryKey ${QtRegistryKeys})
+      get_filename_component(QtRoot ${QtRegistryKey} REALPATH)
+      if (EXISTS ${QtRoot})
+        message("Qt installation: ${QtRoot}")
+        
+        set(QtVersions 5.7 5.6 5.5 5.4 5.3 5.2.1)
+        foreach(QtVersion ${QtVersions})
+          set(QtPath "${QtRoot}/${QtVersion}/${QtCompiler}${QtArch}/lib/cmake")
+          if (EXISTS ${QtPath})
+            message("Using Qt ${QtVersion}: ${QtRoot}/${QtVersion}/${QtCompiler}${QtArch}")
+            list(APPEND CMAKE_PREFIX_PATH ${QtPath})
+            set(QtFound TRUE)
+            break()
+          endif()
+          if (QtFound)
+            break()
+          endif()
+        endforeach()
+      endif()
+    endforeach()
+  endif()
+
 endif()
 
 macro(CopyDevIL)
