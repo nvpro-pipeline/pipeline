@@ -59,8 +59,13 @@ namespace dp
 
     bool FileFinder::addSearchPath( std::string const& path )
     {
-      DP_ASSERT( boost::filesystem::exists( boost::filesystem::path( path ) ) );
-      return( m_searchPaths.insert( boost::filesystem::path( path ) ).second );
+      bool result = false;
+      boost::filesystem::path boostPath(path);
+      if (boost::filesystem::exists(boostPath))
+      {
+        result = m_searchPaths.insert(boostPath).second;
+      }
+      return result;
     }
 
     void FileFinder::addSearchPaths( std::vector<std::string> const& paths )
