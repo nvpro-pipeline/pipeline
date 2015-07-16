@@ -45,12 +45,5 @@ target_link_libraries( DPSgXbarCulling
   DPCullingOpenGL
 )
 
-if( USE_CUDA )
-  target_link_libraries( DPSgXbarCulling
-    DPCullingCUDA
-  )
-endif()
-
-
 set_target_properties( DPSgXbarCulling PROPERTIES FOLDER "SG/XBAR" )
 set_target_properties( DPSgXbarCulling PROPERTIES COMPILE_DEFINITIONS DP_SG_XBAR_CULLING_EXPORTS )

@@ -39,7 +39,9 @@ target_link_libraries(DP ${Boost_LIBRARIES} )
 
 set_target_properties( DP PROPERTIES COMPILE_DEFINITIONS DP_EXPORTS )
 
-add_subdirectory( cuda )
+if (USE_CUDA)
+  add_subdirectory( cuda )
+endif()
 add_subdirectory( culling )
 add_subdirectory( fx )
 add_subdirectory( gl )
