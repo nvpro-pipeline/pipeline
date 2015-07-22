@@ -27,6 +27,11 @@ if("${cl_major_version}" STREQUAL "18")
   set(BOOST_TOOLSET msvc-12.0)
 endif()
 
+if("${cl_major_version}" STREQUAL "19")
+  set(GENERATOR "Visual Studio 14 ${GENERATOR_ARCH}")
+  set(BOOST_TOOLSET msvc-14.0)
+endif()
+
 if (NOT GENERATOR)
   message(FATAL_ERROR "no generator found, exit")
 endif()

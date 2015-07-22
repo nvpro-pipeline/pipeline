@@ -84,6 +84,8 @@ if(WIN32)
     set(QtCompiler "msvc2012")
   elseif(MSVC12)
     set(QtCompiler "msvc2013")
+  elseif(MSVC14)
+    set(QtCompiler "msvc2015")
   endif()
 
   if (${DP_ARCH} STREQUAL "amd64")

@@ -57,18 +57,14 @@ namespace dp
         // A handle cannot be a simple unsigned int. It needs to be able to store more 
         // information like which rendergroup(s) the geonode belongs to. Of course having
         // an indirection would be possible too.
-        DP_SG_XBAR_API class HandleData
+        class HandleData
         {
         public:
-          DP_SG_XBAR_API static dp::util::SharedPtr<HandleData> create()
-          {
-            return( std::shared_ptr<HandleData>( new HandleData() ) );
-          }
-
-          DP_SG_XBAR_API virtual ~HandleData() {}
+					DP_SG_XBAR_API static dp::util::SharedPtr<HandleData> create();
+		      DP_SG_XBAR_API virtual ~HandleData();
 
         protected:
-          DP_SG_XBAR_API HandleData() {}
+          HandleData() {}
         };
 
         typedef dp::util::SharedPtr<HandleData> Handle;
