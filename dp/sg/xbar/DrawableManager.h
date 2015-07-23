@@ -60,8 +60,8 @@ namespace dp
         class HandleData
         {
         public:
-					DP_SG_XBAR_API static dp::util::SharedPtr<HandleData> create();
-		      DP_SG_XBAR_API virtual ~HandleData();
+          DP_SG_XBAR_API static dp::util::SharedPtr<HandleData> create();
+          DP_SG_XBAR_API virtual ~HandleData();
 
         protected:
           HandleData() {}

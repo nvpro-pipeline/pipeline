@@ -36,14 +36,14 @@ namespace dp
     namespace xbar
     {
 
-			DrawableManager::HandleData::~HandleData()
-			{
-			}
+      DrawableManager::HandleData::~HandleData()
+      {
+      }
 
-			dp::util::SharedPtr<DrawableManager::HandleData> DrawableManager::HandleData::create()
-			{
-				return(std::shared_ptr<DrawableManager::HandleData>(new DrawableManager::HandleData()));
-			}
+      dp::util::SharedPtr<DrawableManager::HandleData> DrawableManager::HandleData::create()
+      {
+        return(std::shared_ptr<DrawableManager::HandleData>(new DrawableManager::HandleData()));
+      }
 
 
       class SceneTreeObserver : public dp::util::Observer
