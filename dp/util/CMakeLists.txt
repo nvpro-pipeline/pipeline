@@ -49,7 +49,6 @@ set(DPUTIL_INCLUDES
   Singleton.h
   StridedIterator.h
   Timer.h
-  Tokenizer.h
   Tools.h
 )
 
@@ -84,7 +83,6 @@ set(DPUTIL_SOURCES
   src/Reflection.cpp
   src/SimplexNoise1234.cpp
   src/Timer.cpp
-  src/Tokenizer.cpp
   src/Tools.cpp
 )
 

@@ -31,8 +31,8 @@
 #include <dp/sg/core/CoreTypes.h>
 #include <dp/util/FileFinder.h>
 #include <dp/util/Tools.h>
-#include <dp/util/Tokenizer.h>
 #include <dp/sg/io/PlugInterface.h>
+#include <boost/tokenizer.hpp>
 
 #include <fstream>
 
@@ -114,7 +114,7 @@ class DPAFLoader : public dp::sg::io::SceneLoader
   private :
     void                                              cleanup( void );
     bool                                              getNextLine( void );
-    const std::string                               & getNextToken( void );
+    std::string                                       getNextToken( void );
     dp::sg::core::SceneSharedPtr                      import( std::string const& filename, dp::sg::ui::ViewStateSharedPtr & viewState );
     bool                                              onIncompatibleValues( int value0, int value1, const std::string &node, const std::string &field0, const std::string &field1 ) const;
     template<typename T> bool                         onInvalidValue( T value, const std::string &node, const std::string &field ) const;
@@ -231,9 +231,10 @@ class DPAFLoader : public dp::sg::io::SceneLoader
     dp::sg::core::SceneSharedPtr                                    m_scene;
     std::map<std::string,dp::sg::core::SwitchSharedPtr>             m_switches;
     std::map<std::string,dp::sg::core::TextureHostSharedPtr>        m_textureImages;
+    boost::tokenizer<boost::char_separator<char>>                   m_tokenizer;
+    boost::tokenizer<boost::char_separator<char>>::const_iterator   m_tokenizerIterator;
     std::map<std::string,dp::sg::core::TransformSharedPtr>          m_transforms;
     std::map<std::string,dp::sg::core::VertexAttributeSetSharedPtr> m_vertexAttributeSets;
-    dp::util::StrTokenizer                                          m_strTok;
 };
 
 template <typename ObjectType>

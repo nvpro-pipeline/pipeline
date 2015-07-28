@@ -2163,7 +2163,7 @@ string  DPAFSaveTraverser::getObjectName( const Object *p )
   // The DPAFLoader, on the other side, will remove the "_dpaf#" part from each objects name, such
   // that the original (empty or non-unique) name is reconstructed.
   string name = p->getName();
-  if ( name.empty() || m_nameSet.insert( name ).second )
+  if ( name.empty() || !m_nameSet.insert( name ).second )
   {
     // if there's no name, or that same name has been encountered before, decorate it
     static const char * postfix = "_dpaf";

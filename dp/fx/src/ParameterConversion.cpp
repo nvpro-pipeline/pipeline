@@ -26,7 +26,8 @@
 
 #include <dp/fx/ParameterConversion.h>
 #include <dp/fx/ParameterSpec.h>
-#include <dp/util/Tokenizer.h>
+#include <boost/tokenizer.hpp>
+#include <sstream>
 
 using namespace dp::util;
 using std::max;
@@ -125,11 +126,11 @@ namespace dp
 
         unsigned int count = std::max( (unsigned int)1, arraySize );
 
-        StrTokenizer tokenizer( " " );
-        tokenizer.setInput( valueString );
-        for ( unsigned int i=0 ; i<count && tokenizer.hasMoreTokens() ; i++ )
+        boost::tokenizer<boost::char_separator<char>> tokenizer( valueString, boost::char_separator<char>( " " ) );
+        boost::tokenizer<boost::char_separator<char>>::const_iterator it = tokenizer.begin();
+        for ( unsigned int i=0 ; i<count && it != tokenizer.end() ; ++it, i++ )
         {
-          valueArray[i] = enumSpec->getValue( tokenizer.getNextToken() );
+          valueArray[i] = enumSpec->getValue( *it );
         }
       }
 

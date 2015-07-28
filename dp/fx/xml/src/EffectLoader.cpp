@@ -27,7 +27,6 @@
 #include <dp/util/File.h>
 #include <dp/util/SharedPtr.h>
 #include <dp/util/Singleton.h>
-#include <dp/util/Tokenizer.h>
 #include <dp/fx/xml/EffectLoader.h>
 #include <dp/fx/ParameterConversion.h>
 #include <dp/fx/ParameterGroupLayout.h>
@@ -40,6 +39,7 @@
 #include <dp/fx/inc/StringSnippet.h>
 #include <dp/DP.h>
 #include <boost/bind.hpp>
+#include <boost/tokenizer.hpp>
 
 #include <tinyxml.h>
 #include <iostream>
@@ -626,15 +626,14 @@ namespace dp
         DP_ASSERT( element->Attribute( "type" ) );
         string type = element->Attribute( "type" );
 
-        const char * values = element->Attribute( "values" );
-        DP_ASSERT( values );
+        DP_ASSERT( element->Attribute( "values" ) );
+        string values = element->Attribute( "values" );
 
         vector<string> valueVector;
-        dp::util::StrTokenizer tokenizer( " " );
-        tokenizer.setInput( values );
-        for ( int i=0 ; tokenizer.hasMoreTokens() ; i++ )
+        boost::tokenizer<boost::char_separator<char>> tokenizer( values, boost::char_separator<char>( " " ) );
+        for ( boost::tokenizer<boost::char_separator<char>>::const_iterator it = tokenizer.begin(); it != tokenizer.end() ; ++it )
         {
-          valueVector.push_back( tokenizer.getNextToken() );
+          valueVector.push_back( *it );
         }
 
         EnumSpecSharedPtr spec = EnumSpec::create( type, valueVector );

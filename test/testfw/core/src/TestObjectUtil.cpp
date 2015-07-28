@@ -27,7 +27,6 @@
 #include <test/testfw/core/TestObjectUtil.h>
 #include <dp/util/File.h>
 #include <dp/util/DynamicLibrary.h>
-#include <dp/util/Tokenizer.h>
 
 #include <iostream>
 #include <map>

@@ -273,6 +273,8 @@ namespace dp
 
           case Image::IMG_RGBA :
           case Image::IMG_BGRA :
+          case Image::IMG_INTEGER_RGBA :
+          case Image::IMG_INTEGER_BGRA :
           case Image::IMG_COMPRESSED_RGBA_DXT1 :
           case Image::IMG_COMPRESSED_RGBA_DXT3 :
           case Image::IMG_COMPRESSED_RGBA_DXT5 :

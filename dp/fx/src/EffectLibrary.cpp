@@ -26,7 +26,6 @@
 
 #include <dp/util/File.h>
 #include <dp/util/Singleton.h>
-#include <dp/util/Tokenizer.h>
 #include <dp/fx/EffectLibrary.h>
 #include <dp/fx/glsl/UniformGenerator.h>
 #include <dp/fx/glsl/UniformGeneratorGLSLStandard.h>

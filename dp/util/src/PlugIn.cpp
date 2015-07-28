@@ -25,8 +25,8 @@
 
 
 #include <dp/util/PlugIn.h>
-#include <dp/util/Tokenizer.h>
 #include <dp/util/File.h>
+#include <boost/tokenizer.hpp>
 #include <algorithm>
 
 #if !defined( NDEBUG )
@@ -200,12 +200,10 @@ namespace dp
       dp::util::FileFinder localFF( fileFinder );
       localFF.addSearchPaths( getPlugInSearchPath() );
 
-      StrTokenizer tok(";");
-      tok.setInput( m_filter );
-        
-      while ( tok.hasMoreTokens() )
+      boost::tokenizer<boost::char_separator<char>> tokenizer( m_filter, boost::char_separator<char>( ";" ) );
+      for ( boost::tokenizer<boost::char_separator<char>>::const_iterator it = tokenizer.begin(); it != tokenizer.end() ; ++it )
       {
-        findFiles( tok.getNextToken().substr( 1 ), localFF.getSearchPaths(), plugIns );
+        findFiles( it->substr( 1 ), localFF.getSearchPaths(), plugIns );
       }
 
       return !plugIns.empty();

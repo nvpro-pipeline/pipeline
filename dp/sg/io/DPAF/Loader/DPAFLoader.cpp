@@ -112,8 +112,10 @@ DPAFLoaderSharedPtr DPAFLoader::create()
 
 DPAFLoader::DPAFLoader()
 : m_line(0)
-, m_strTok(" ,;\t\n")
+, m_tokenizer( std::string(), boost::char_separator<char>( " ,;\t\n" ) )
 {
+  m_tokenizer.assign( m_currentLine );        // need to assign a valid string (not a temporary created one)
+  m_tokenizerIterator = m_tokenizer.end();    // to get an iterator the end
 }
 
 DPAFLoader::~DPAFLoader()
@@ -240,17 +242,18 @@ bool DPAFLoader::getNextLine( void )
   return( m_ifs.good() );
 }
 
-const string& DPAFLoader::getNextToken( void )
+std::string DPAFLoader::getNextToken( void )
 {
-  onUnexpectedEndOfFile(!m_strTok.hasMoreTokens() && m_ifs.eof());
+  onUnexpectedEndOfFile( ( m_tokenizerIterator == m_tokenizer.end() ) && m_ifs.eof() );
 
-  while( !m_strTok.hasMoreTokens() && ! m_ifs.eof() )
+  while ( ( m_tokenizerIterator == m_tokenizer.end() ) && !m_ifs.eof() )
   {
     getNextLine();
-    m_strTok.setInput( m_currentLine );
+    m_tokenizer.assign( m_currentLine );
+    m_tokenizerIterator = m_tokenizer.begin();
   }
 
-  return m_strTok.getNextToken();
+  return( ( m_tokenizerIterator != m_tokenizer.end() ) ? *m_tokenizerIterator++ : "" );
 }
 
 SceneSharedPtr DPAFLoader::import( const string &filename, dp::sg::ui::ViewStateSharedPtr & viewState )
@@ -469,7 +472,7 @@ BillboardSharedPtr DPAFLoader::readBillboard( const char *name, const std::strin
 
 bool  DPAFLoader::readBool( const std::string & token )
 {
-  return( !!strcmp( token.empty() ? getNextToken().c_str() : token.c_str(), "FALSE" ) );
+  return( ( token.empty() ? getNextToken() : token ) == "TRUE" );
 }
 
 BufferSharedPtr DPAFLoader::readBuffer()
@@ -709,13 +712,13 @@ TextureCompareMode  DPAFLoader::readTextureCompareMode()
 
 TextureMagFilterMode  DPAFLoader::readTextureMagFilterMode( void )
 {
-  const char  *token = getNextToken().c_str();
+  std::string token = getNextToken();
   TextureMagFilterMode tmfm = TFM_MAG_NEAREST;
-  if ( !strcmp( token, "NEAREST" ) )
+  if ( token == "NEAREST" )
   {
     tmfm = TFM_MAG_NEAREST;
   }
-  else if ( !strcmp( token, "LINEAR" ) )
+  else if ( token == "LINEAR" )
   {
     tmfm = TFM_MAG_LINEAR;
   }
@@ -729,29 +732,29 @@ TextureMagFilterMode  DPAFLoader::readTextureMagFilterMode( void )
 
 TextureMinFilterMode  DPAFLoader::readTextureMinFilterMode( void )
 {
-  const char  *token = getNextToken().c_str();
+  std::string token = getNextToken();
   TextureMinFilterMode tmfm = TFM_MIN_NEAREST;
-  if ( !strcmp( token, "NEAREST" ) )
+  if ( token == "NEAREST" )
   {
     tmfm = TFM_MIN_NEAREST;
   }
-  else if ( !strcmp( token, "LINEAR" ) )
+  else if ( token == "LINEAR" )
   {
     tmfm = TFM_MIN_LINEAR;
   }
-  else if ( !strcmp( token, "LINEAR_MIPMAP_LINEAR" ) )
+  else if ( token == "LINEAR_MIPMAP_LINEAR" )
   {
     tmfm = TFM_MIN_LINEAR_MIPMAP_LINEAR;
   }
-  else if ( !strcmp( token, "NEAREST_MIPMAP_NEAREST" ) )
+  else if ( token == "NEAREST_MIPMAP_NEAREST" )
   {
     tmfm = TFM_MIN_NEAREST_MIPMAP_NEAREST;
   }
-  else if ( !strcmp( token, "NEAREST_MIPMAP_LINEAR" ) )
+  else if ( token == "NEAREST_MIPMAP_LINEAR" )
   {
     tmfm = TFM_MIN_NEAREST_MIPMAP_LINEAR;
   }
-  else if ( !strcmp( token, "LINEAR_MIPMAP_NEAREST" ) )
+  else if ( token == "LINEAR_MIPMAP_NEAREST" )
   {
     tmfm = TFM_MIN_LINEAR_MIPMAP_NEAREST;
   }
@@ -765,37 +768,37 @@ TextureMinFilterMode  DPAFLoader::readTextureMinFilterMode( void )
 
 TextureWrapMode DPAFLoader::readTextureWrapMode( void )
 {
-  const char *token = getNextToken().c_str();
+  std::string token = getNextToken();
   TextureWrapMode twm = TWM_REPEAT;
-  if ( !strcmp( token, "CLAMP" ) )
+  if ( token == "CLAMP" )
   {
     twm = TWM_CLAMP;
   }
-  else if ( !strcmp( token, "CLAMP_TO_BORDER" ) )
+  else if ( token == "CLAMP_TO_BORDER" )
   {
     twm = TWM_CLAMP_TO_BORDER;
   }
-  else if ( !strcmp( token, "CLAMP_TO_EDGE" ) )
+  else if ( token == "CLAMP_TO_EDGE" )
   {
     twm = TWM_CLAMP_TO_EDGE;
   }
-  else if ( ( !strcmp( token, "MIRROR" ) ) || !strcmp( token, "MIRROR_REPEAT" ) )
+  else if ( ( token == "MIRROR" ) || ( token == "MIRROR_REPEAT" ) )
   {
     twm = TWM_MIRROR_REPEAT;
   }
-  else if ( !strcmp( token, "MIRROR_CLAMP" ) )
+  else if ( token == "MIRROR_CLAMP" )
   {
     twm = TWM_MIRROR_CLAMP;
   }
-  else if ( !strcmp( token, "MIRROR_CLAMP_TO_BORDER" ) )
+  else if ( token == "MIRROR_CLAMP_TO_BORDER" )
   {
     twm = TWM_MIRROR_CLAMP_TO_BORDER;
   }
-  else if ( !strcmp( token, "MIRROR_CLAMP_TO_EDGE" ) )
+  else if ( token == "MIRROR_CLAMP_TO_EDGE" )
   {
     twm = TWM_MIRROR_CLAMP_TO_EDGE;
   }
-  else if ( !strcmp( token, "REPEAT" ) )
+  else if ( token == "REPEAT" )
   {
     twm = TWM_REPEAT;
   }
@@ -896,19 +899,20 @@ LightSourceSharedPtr DPAFLoader::readLightSourceReferences( const string & token
 
 void  DPAFLoader::readChildren( GroupSharedPtr const& group )
 {
-  const char * token = getNextToken().c_str();
+  std::string token = getNextToken();
   onUnexpectedToken( "[", token );
-  token = getNextToken().c_str();
-  while ( strcmp( token, "]" ) )
+  token = getNextToken();
+  while ( token != "]" )
   {
     group->addChild( readChild( token ) );
-    token = getNextToken().c_str();
+    token = getNextToken();
   }
 }
 
 dp::DataType DPAFLoader::readType( const char *token )
 {
-  return( static_cast<dp::DataType>(atoi( token ? token : getNextToken().c_str() )) );
+  std::string t( token ? token : getNextToken() );
+  return( static_cast<dp::DataType>( atoi( t.c_str() ) ) );
 }
 
 Billboard::Alignment DPAFLoader::readAlignment()
@@ -1079,19 +1083,19 @@ GeoNodeSharedPtr DPAFLoader::readGeoNode( const char *name )
 {
   GeoNodeSharedPtr geoNode;
 
-  const char *token = getNextToken().c_str();
+  std::string token = getNextToken();
 
-  if ( ! strcmp( token, "{" ) )
+  if ( token == "{" )
   {
     geoNode = GeoNode::create();
-    token = getNextToken().c_str();
-    while ( strcmp( token, "}" ) )
+    token = getNextToken();
+    while ( token != "}" )
     {
       if ( ! readNodeToken( geoNode, token ) )
       {
-        if ( !strcmp( token, "primitive" ) )
+        if ( token == "primitive" )
         {
-          token = getNextToken().c_str();
+          token = getNextToken();
           string name = readName( token );
           if ( m_primitives.find( name ) != m_primitives.end() )
           {
@@ -1102,9 +1106,9 @@ GeoNodeSharedPtr DPAFLoader::readGeoNode( const char *name )
             onUndefinedToken( "GeoNode.drawables", name );
           }
         }
-        else if ( !strcmp( token, "materialEffect" ) )
+        else if ( token == "materialEffect" )
         {
-          token = getNextToken().c_str();
+          token = getNextToken();
           string name = readName( token );
 
           if ( m_effectData.find( name ) != m_effectData.end() )
@@ -1121,7 +1125,7 @@ GeoNodeSharedPtr DPAFLoader::readGeoNode( const char *name )
           onUnknownToken( "GeoNode", token );
         }
       }
-      token = getNextToken().c_str();
+      token = getNextToken();
     };
     geoNode->setName( name );
   }
@@ -1142,19 +1146,19 @@ GroupSharedPtr DPAFLoader::readGroup( const char *name, const std::string & extN
 {
   GroupSharedPtr group;
 
-  const char *token = getNextToken().c_str();
+  std::string token = getNextToken();
 
-  if ( ! strcmp( token, "{" ) )
+  if ( token == "{" )
   {
     group = Group::create();
-    token = getNextToken().c_str();
-    while ( strcmp( token, "}" ) )
+    token = getNextToken();
+    while ( token != "}" )
     {
       if ( ! readGroupToken( group, token, extName ) )
       {
         onUnknownToken( "Group", token );
       }
-      token = getNextToken().c_str();
+      token = getNextToken();
     };
     group->setName( name );
   }
@@ -1305,136 +1309,136 @@ bool  DPAFLoader::readLightSourceToken( LightSourceSharedPtr const& light, const
 Image::PixelFormat DPAFLoader::readPixelFormat()
 {
   Image::PixelFormat pf = Image::IMG_UNKNOWN_FORMAT;
-  const char * token = getNextToken().c_str();
-  if ( !strcmp( token, "COLOR_INDEX" ) )
+  std::string token = getNextToken();
+  if ( token == "COLOR_INDEX" )
   {
     pf = Image::IMG_COLOR_INDEX;
   }
-  else if ( !strcmp( token, "RGB" ) )
+  else if ( token == "RGB" )
   {
     pf = Image::IMG_RGB;
   }
-  else if ( !strcmp( token, "RGBA" ) )
+  else if ( token == "RGBA" )
   {
     pf = Image::IMG_RGBA;
   }
-  else if ( !strcmp( token, "BGR" ) )
+  else if ( token == "BGR" )
   {
     pf = Image::IMG_BGR;
   }
-  else if ( !strcmp( token, "BGRA" ) )
+  else if ( token == "BGRA" )
   {
     pf = Image::IMG_BGRA;
   }
-  else if ( !strcmp( token, "LUMINANCE" ) )
+  else if ( token == "LUMINANCE" )
   {
     pf = Image::IMG_LUMINANCE;
   }
-  else if ( !strcmp( token, "IMG_LUMINANCE_ALPHA" ) )
+  else if ( token == "IMG_LUMINANCE_ALPHA" )
   {
     pf = Image::IMG_LUMINANCE_ALPHA;
   }
-  else if ( !strcmp( token, "IMG_ALPHA" ) )
+  else if ( token == "IMG_ALPHA" )
   {
     pf = Image::IMG_ALPHA;
   }
-  else if ( !strcmp( token, "IMG_DEPTH_COMPONENT" ) )
+  else if ( token == "IMG_DEPTH_COMPONENT" )
   {
     pf = Image::IMG_DEPTH_COMPONENT;
   }
-  else if ( !strcmp( token, "IMG_DEPTH_STENCIL" ) )
+  else if ( token == "IMG_DEPTH_STENCIL" )
   {
     pf = Image::IMG_DEPTH_STENCIL;
   }
-  else if ( !strcmp( token, "IMG_INTEGER_ALPHA" ) )
+  else if ( token == "IMG_INTEGER_ALPHA" )
   {
     pf = Image::IMG_INTEGER_ALPHA;
   }
-  else if ( !strcmp( token, "IMG_INTEGER_LUMINANCE" ) )
+  else if ( token == "IMG_INTEGER_LUMINANCE" )
   {
     pf = Image::IMG_INTEGER_LUMINANCE;
   }
-  else if ( !strcmp( token, "IMG_INTEGER_LUMINANCE_ALPHA" ) )
+  else if ( token == "IMG_INTEGER_LUMINANCE_ALPHA" )
   {
     pf = Image::IMG_INTEGER_LUMINANCE_ALPHA;
   }
-  else if ( !strcmp( token, "IMG_INTEGER_RGB" ) )
+  else if ( token == "IMG_INTEGER_RGB" )
   {
     pf = Image::IMG_INTEGER_RGB;
   }
-  else if ( !strcmp( token, "IMG_INTEGER_BGR" ) )
+  else if ( token == "IMG_INTEGER_BGR" )
   {
     pf = Image::IMG_INTEGER_BGR;
   }
-  else if ( !strcmp( token, "IMG_INTEGER_RGBA" ) )
+  else if ( token == "IMG_INTEGER_RGBA" )
   {
     pf = Image::IMG_INTEGER_RGBA;
   }
-  else if ( !strcmp( token, "IMG_INTEGER_BGRA" ) )
+  else if ( token == "IMG_INTEGER_BGRA" )
   {
     pf = Image::IMG_INTEGER_BGRA;
   }
-  else if ( !strcmp( token, "IMG_COMPRESSED_LUMINANCE_LATC1" ) )
+  else if ( token == "IMG_COMPRESSED_LUMINANCE_LATC1" )
   {
     pf = Image::IMG_COMPRESSED_LUMINANCE_LATC1;
   }
-  else if ( !strcmp( token, "IMG_COMPRESSED_SIGNED_LUMINANCE_LATC1" ) )
+  else if ( token == "IMG_COMPRESSED_SIGNED_LUMINANCE_LATC1" )
   {
     pf = Image::IMG_COMPRESSED_SIGNED_LUMINANCE_LATC1;
   }
-  else if ( !strcmp( token, "IMG_COMPRESSED_LUMINANCE_ALPHA_LATC2" ) )
+  else if ( token == "IMG_COMPRESSED_LUMINANCE_ALPHA_LATC2" )
   {
     pf = Image::IMG_COMPRESSED_LUMINANCE_ALPHA_LATC2;
   }
-  else if ( !strcmp( token, "IMG_COMPRESSED_SIGNED_LUMINANCE_ALPHA_LATC2" ) )
+  else if ( token == "IMG_COMPRESSED_SIGNED_LUMINANCE_ALPHA_LATC2" )
   {
     pf = Image::IMG_COMPRESSED_SIGNED_LUMINANCE_ALPHA_LATC2;
   }
-  else if ( !strcmp( token, "IMG_COMPRESSED_RED_RGTC1" ) )
+  else if ( token == "IMG_COMPRESSED_RED_RGTC1" )
   {
     pf = Image::IMG_COMPRESSED_RED_RGTC1;
   }
-  else if ( !strcmp( token, "IMG_COMPRESSED_SIGNED_RED_RGTC1" ) )
+  else if ( token == "IMG_COMPRESSED_SIGNED_RED_RGTC1" )
   {
     pf = Image::IMG_COMPRESSED_SIGNED_RED_RGTC1;
   }
-  else if ( !strcmp( token, "IMG_COMPRESSED_RG_RGTC2" ) )
+  else if ( token == "IMG_COMPRESSED_RG_RGTC2" )
   {
     pf = Image::IMG_COMPRESSED_RG_RGTC2;
   }
-  else if ( !strcmp( token, "IMG_COMPRESSED_SIGNED_RG_RGTC2" ) )
+  else if ( token == "IMG_COMPRESSED_SIGNED_RG_RGTC2" )
   {
     pf = Image::IMG_COMPRESSED_SIGNED_RG_RGTC2;
   }
-  else if ( !strcmp( token, "IMG_COMPRESSED_RGB_DXT1" ) )
+  else if ( token == "IMG_COMPRESSED_RGB_DXT1" )
   {
     pf = Image::IMG_COMPRESSED_RGB_DXT1;
   }
-  else if ( !strcmp( token, "IMG_COMPRESSED_RGBA_DXT1" ) )
+  else if ( token == "IMG_COMPRESSED_RGBA_DXT1" )
   {
     pf = Image::IMG_COMPRESSED_RGBA_DXT1;
   }
-  else if ( !strcmp( token, "IMG_COMPRESSED_RGBA_DXT3" ) )
+  else if ( token == "IMG_COMPRESSED_RGBA_DXT3" )
   {
     pf = Image::IMG_COMPRESSED_RGBA_DXT3;
   }
-  else if ( !strcmp( token, "IMG_COMPRESSED_RGBA_DXT5" ) )
+  else if ( token == "IMG_COMPRESSED_RGBA_DXT5" )
   {
     pf = Image::IMG_COMPRESSED_RGBA_DXT5;
   }
-  else if ( !strcmp( token, "IMG_COMPRESSED_SRGB_DXT1" ) )
+  else if ( token == "IMG_COMPRESSED_SRGB_DXT1" )
   {
     pf = Image::IMG_COMPRESSED_SRGB_DXT1;
   }
-  else if ( !strcmp( token, "IMG_COMPRESSED_SRGBA_DXT1" ) )
+  else if ( token == "IMG_COMPRESSED_SRGBA_DXT1" )
   {
     pf = Image::IMG_COMPRESSED_SRGBA_DXT1;
   }
-  else if ( !strcmp( token, "IMG_COMPRESSED_SRGBA_DXT3" ) )
+  else if ( token == "IMG_COMPRESSED_SRGBA_DXT3" )
   {
     pf = Image::IMG_COMPRESSED_SRGBA_DXT3;
   }
-  else if ( !strcmp( token, "IMG_COMPRESSED_SRGBA_DXT5" ) )
+  else if ( token == "IMG_COMPRESSED_SRGBA_DXT5" )
   {
     pf = Image::IMG_COMPRESSED_SRGBA_DXT5;
   }
@@ -1448,36 +1452,36 @@ Image::PixelFormat DPAFLoader::readPixelFormat()
 Image::PixelDataType DPAFLoader::readPixelType()
 {
   Image::PixelDataType pt = Image::IMG_UNKNOWN_TYPE;
-  const char *token = getNextToken().c_str();
-  if ( !strcmp( token, "BYTE" ) )
+  std::string token = getNextToken();
+  if ( token == "BYTE" )
   {
     pt = Image::IMG_BYTE;
   }
-  else if ( !strcmp( token, "UNSIGNED_BYTE" ) )
+  else if ( token == "UNSIGNED_BYTE" )
   {
     pt = Image::IMG_UNSIGNED_BYTE;
   }
-  else if ( !strcmp( token, "SHORT" ) )
+  else if ( token == "SHORT" )
   {
     pt = Image::IMG_SHORT;
   }
-  else if ( !strcmp( token, "UNSIGNED_SHORT" ) )
+  else if ( token == "UNSIGNED_SHORT" )
   {
     pt = Image::IMG_UNSIGNED_SHORT;
   }
-  else if ( !strcmp( token, "INT" ) )
+  else if ( token == "INT" )
   {
     pt = Image::IMG_INT;
   }
-  else if ( !strcmp( token, "UNSIGNED_INT" ) )
+  else if ( token == "UNSIGNED_INT" )
   {
     pt = Image::IMG_UNSIGNED_INT;
   }
-  else if ( !strcmp( token, "FLOAT" ) )
+  else if ( token == "FLOAT" )
   {
     pt = Image::IMG_FLOAT;
   }
-  else if ( !strcmp( token, "HALF" ) )
+  else if ( token == "HALF" )
   {
     pt = Image::IMG_HALF;
   }
@@ -1507,13 +1511,13 @@ template<typename T>
 unsigned char * DPAFLoader::readPixels( unsigned int nov )
 {
   T * pixels = new T[nov];
-  const char *token = getNextToken().c_str();
+  std::string token = getNextToken();
   onUnexpectedToken( "[", token );
-  token = getNextToken().c_str();
-  for ( unsigned int i=0 ; i<nov && strcmp( token, "]" ) ; i++ )
+  token = getNextToken();
+  for ( unsigned int i=0 ; i<nov && ( token != "]" ) ; i++ )
   {
     readPixelComponent( token, pixels[i] );
-    token = getNextToken().c_str();
+    token = getNextToken();
   }
   onUnexpectedToken( "]", token );
   return( (unsigned char *)pixels );
@@ -1562,21 +1566,21 @@ LODSharedPtr DPAFLoader::readLOD( const char *name, const std::string & extName 
 {
   LODSharedPtr lod;
 
-  const char *token = getNextToken().c_str();
+  std::string token = getNextToken();
 
-  if ( ! strcmp( token, "{" ) )
+  if ( token == "{" )
   {
     lod = LOD::create();
-    token = getNextToken().c_str();
-    while ( strcmp( token, "}" ) )
+    token = getNextToken();
+    while ( token != "}" )
     {
       if ( ! readGroupToken( lod, token, extName ) )
       {
-        if ( !strcmp( token, "center" ) )
+        if ( token == "center" )
         {
           lod->setCenter( readVector<3,float>( getNextToken() ) );
         }
-        else if ( !strcmp( token, "ranges" ) )
+        else if ( token == "ranges" )
         {
           vector<float> ranges;
           readScalarArray<float>( getNextToken(), ranges );
@@ -1587,7 +1591,7 @@ LODSharedPtr DPAFLoader::readLOD( const char *name, const std::string & extName 
           onUnknownToken( "LOD", token );
         }
       }
-      token = getNextToken().c_str();
+      token = getNextToken();
     }
     lod->setName( name );
   }
@@ -1714,17 +1718,17 @@ MatrixCameraSharedPtr DPAFLoader::readMatrixCamera( const char *name )
 void DPAFLoader::readMipmaps( unsigned int width, unsigned int height, unsigned int depth
                              , unsigned int noc, Image::PixelDataType pt, vector<const void *> & mipmaps )
 {
-  const char * token = getNextToken().c_str();
+  std::string token = getNextToken();
   onUnexpectedToken( "{", token );
-  token = getNextToken().c_str();
-  while ( strcmp( token, "}" ) )
+  token = getNextToken();
+  while ( token != "}" )
   {
     DP_ASSERT( 1 < width * height * depth );
     width = ( width == 1 ) ? 1 : width / 2;
     height = ( height == 1 ) ? 1 : height / 2;
     depth = ( depth == 1 ) ? 1 : depth / 2;
     mipmaps.push_back( readPixels( width * height * depth * noc, pt ) );
-    token = getNextToken().c_str();
+    token = getNextToken();
   }
 }
 
@@ -2649,18 +2653,18 @@ void DPAFLoader::readScalarArray( const string & t, vector<T> & values )
 SceneSharedPtr DPAFLoader::readScene( void )
 {
   SceneSharedPtr scene = Scene::create();
-  const char * token = getNextToken().c_str();
-  while ( strcmp( token, "}" ) )
+  std::string token = getNextToken();
+  while ( token != "}" )
   {
-    if ( !strcmp( token, "ambientColor" ) )
+    if ( token == "ambientColor" )
     {
       scene->setAmbientColor( readVector<3,float>( getNextToken() ) );
     }
-    else if ( !strcmp( token, "backColor" ) )
+    else if ( token == "backColor" )
     {
       scene->setBackColor( readVector<4,float>( getNextToken() ) );
     }
-    else if ( !strcmp( token, "backImage" ) )
+    else if ( token == "backImage" )
     {
       // backImage is either the name of a TextureHost, which should be in m_textureImages, or a file name, which should be found in m_searchPaths
       string fileName = readName( getNextToken() );
@@ -2686,12 +2690,12 @@ SceneSharedPtr DPAFLoader::readScene( void )
         }
       }
     }
-    else if ( !strcmp( token, "cameras" ) )
+    else if ( token == "cameras" )
     {
-      token = getNextToken().c_str();
+      token = getNextToken();
       onUnexpectedToken( "[", token );
-      token = getNextToken().c_str();
-      while ( strcmp( token, "]" ) )
+      token = getNextToken();
+      while ( token != "]" )
       {
         string name = readName( token );
         if ( m_matrixCameras.find( name ) != m_matrixCameras.end() )
@@ -2710,10 +2714,10 @@ SceneSharedPtr DPAFLoader::readScene( void )
         {
           onUndefinedToken( "Scene.cameras", name );
         }
-        token = getNextToken().c_str();
+        token = getNextToken();
       }
     }
-    else if ( !strcmp( token, "root" ) )
+    else if ( token == "root" )
     {
       scene->setRootNode( readChild( getNextToken() ) );
     }
@@ -2721,7 +2725,7 @@ SceneSharedPtr DPAFLoader::readScene( void )
     {
       onUndefinedToken( "Scene", token );
     }
-    token = getNextToken().c_str();
+    token = getNextToken();
   }
   return( scene );
 }
@@ -2782,44 +2786,44 @@ SwitchSharedPtr DPAFLoader::readSwitch( const char *name, const std::string & ex
 TextureTarget DPAFLoader::readTextureTarget()
 {
   TextureTarget target = TT_UNSPECIFIED_TEXTURE_TARGET;
-  const char *token = getNextToken().c_str();
-  if ( !strcmp( token, "TEXTURE_1D" ) )
+  std::string token = getNextToken();
+  if ( token == "TEXTURE_1D" )
   {
     target = TT_TEXTURE_1D;
   }
-  else if ( !strcmp( token, "TEXTURE_2D" ) )
+  else if ( token == "TEXTURE_2D" )
   {
     target = TT_TEXTURE_2D;
   }
-  else if ( !strcmp( token, "TEXTURE_3D" ) )
+  else if ( token == "TEXTURE_3D" )
   {
     target = TT_TEXTURE_3D;
   }
-  else if ( !strcmp( token, "TEXTURE_CUBE" ) )
+  else if ( token == "TEXTURE_CUBE" )
   {
     target = TT_TEXTURE_CUBE;
   }
-  else if ( !strcmp( token, "TEXTURE_1D_ARRAY" ) )
+  else if ( token == "TEXTURE_1D_ARRAY" )
   {
     target = TT_TEXTURE_1D_ARRAY;
   }
-  else if ( !strcmp( token, "TEXTURE_2D_ARRAY" ) )
+  else if ( token == "TEXTURE_2D_ARRAY" )
   {
     target = TT_TEXTURE_2D_ARRAY;
   }
-  else if ( !strcmp( token, "TEXTURE_RECTANGLE" ) )
+  else if ( token == "TEXTURE_RECTANGLE" )
   {
     target = TT_TEXTURE_RECTANGLE;
   }
-  else if ( !strcmp( token, "TEXTURE_CUBE_ARRAY" ) )
+  else if ( token == "TEXTURE_CUBE_ARRAY" )
   {
     target = TT_TEXTURE_CUBE_ARRAY;
   }
-  else if ( !strcmp( token, "TEXTURE_BUFFER" ) )
+  else if ( token == "TEXTURE_BUFFER" )
   {
     target = TT_TEXTURE_BUFFER;
   }
-  else if ( !strcmp( token, "TEXTURE_UNSPECIFIED" ) )
+  else if ( token == "TEXTURE_UNSPECIFIED" )
   {
     target = TT_UNSPECIFIED_TEXTURE_TARGET;
   }
@@ -2882,19 +2886,19 @@ TransformSharedPtr DPAFLoader::readTransform( const char *name, const std::strin
 {
   TransformSharedPtr transform;
 
-  const char *token = getNextToken().c_str();
+  std::string token = getNextToken();
 
-  if ( ! strcmp( token, "{" ) )
+  if ( token == "{" )
   {
     transform = Transform::create();
-    token = getNextToken().c_str();
-    while ( strcmp( token, "}" ) )
+    token = getNextToken();
+    while ( token != "}" )
     {
       if ( ! readTransformToken( transform, token, extName ) )
       {
         onUnknownToken( "Transform", token );
       }
-      token = getNextToken().c_str();
+      token = getNextToken();
     };
     transform->setName( name );
   }
@@ -3003,19 +3007,19 @@ VertexAttributeSetSharedPtr DPAFLoader::readVertexAttributeSet( const char *name
 {
   VertexAttributeSetSharedPtr vas;
 
-  const char *token = getNextToken().c_str();
+  std::string token = getNextToken();
 
-  if ( ! strcmp( token, "{" ) )
+  if ( token == "{" )
   {
     vas = VertexAttributeSet::create();
-    token = getNextToken().c_str();
-    while ( strcmp( token, "}" ) )
+    token = getNextToken();
+    while ( token != "}" )
     {
       if ( ! readVertexAttributeSetToken( vas, token ) )
       {
         onUnknownToken( "VertexAttributeSet", token );
       }
-      token = getNextToken().c_str();
+      token = getNextToken();
     }
     vas->setName( name );
   }

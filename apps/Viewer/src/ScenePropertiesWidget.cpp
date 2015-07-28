@@ -88,8 +88,8 @@ bool isRanged( dp::util::PropertyId pid, const std::string & name, T & min, T & 
   if ( ! range.empty() )
   {
     std::istringstream iss( range );
-    iss >> min;
-    iss >> max;
+    char comma;
+    iss >> min >> comma >> max;
     return( true );
   }
   return( false );

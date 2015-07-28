@@ -364,7 +364,7 @@ bool ILTexSaver::save( const TextureHostSharedPtr & image, const string & fileNa
 
     // specify the IL image
     image->getSubImagePixels(i, 0, 0, 0, 0, width, height, depth, pixels);
-    ilTexImage( width, height, depth, image->getBytesPerPixel(), ilFormat, ilType, NULL  );
+    ilTexImage( width, height, depth, dp::sg::core::numberOfComponents( image->getFormat() ), ilFormat, ilType, NULL  );
     void* destpixels = ilGetData();
     memcpy(destpixels, pixels, image->getNumberOfBytes());
 
