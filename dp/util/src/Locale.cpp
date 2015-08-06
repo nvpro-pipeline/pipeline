@@ -24,37 +24,21 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#pragma once
-/** \file */
-
-#include <dp/util/Config.h>
-#include <vector>
-#include <string>
-#include <stdio.h>
-
-#if defined(DP_OS_WINDOWS)
-#include <windows.h>
-#endif
+#include <dp/util/Locale.h>
 
 namespace dp
-{ 
+{
   namespace util
   {
-    //! Sets a temporary locale for the lifetime of the object
-    class TempLocale
+    Locale::Locale( std::string tempLocale )
     {
-    public:
-      /*! \brief Create a scoped locale information.
-       *  \param tempLocale String containing the name of a C locale.
-       *  \remarks The available locales are system specific, but at least the two locales "C" and "" must exist. */
-      explicit DP_UTIL_API TempLocale( std::string tempLocale );
+      oldLocale = setlocale(LC_ALL, NULL);
+      setlocale(LC_ALL, tempLocale.c_str());
+    }
 
-      /*! \brief Destructor of a TempLocale. */
-      DP_UTIL_API ~TempLocale();
-
-    private:
-      std::string oldLocale;
-    };
-
+    Locale::~Locale()
+    {
+      setlocale(LC_ALL, oldLocale.c_str());
+    }
   } // namespace util
 } // namespace dp

@@ -49,7 +49,7 @@
 #include <dp/sg/ui/ViewState.h>
 #include <dp/sg/io/PlugInterfaceID.h>
 #include <dp/util/File.h>
-#include <dp/util/Tools.h>
+#include <dp/util/Locale.h>
 #include <dp/sg/io/DPAF/Saver/inc/DPAFSaver.h>
 
 using namespace dp::sg::core;
@@ -895,7 +895,7 @@ DPAFSaver::~DPAFSaver()
 bool  DPAFSaver::save( SceneSharedPtr const& scene, dp::sg::ui::ViewStateSharedPtr const& viewState, string const& filename )
 {
   // set the locale temporarily to the default "C" to make printf behave predictably
-  TempLocale tl("C");
+  dp::util::Locale tl("C");
 
   FILE *fh = fopen( filename.c_str(), "w" );
   if ( fh )

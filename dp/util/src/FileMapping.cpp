@@ -26,7 +26,6 @@
 
 #include <dp/Assert.h>
 #include <dp/util/FileMapping.h>
-#include <dp/util/Tools.h>
 #include <algorithm>
 
 #if defined(LINUX)

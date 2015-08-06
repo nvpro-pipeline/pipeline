@@ -50,7 +50,7 @@
 #include <dp/sg/io/PlugInterfaceID.h>
 #include <dp/sg/io/IO.h>
 #include <dp/util/File.h>
-#include <dp/util/Tools.h>
+#include <dp/util/Locale.h>
 #include <dp/sg/io/DPBF/Loader/inc/DPBFLoader.h>
 #include <set>
 #include <sstream>
@@ -1840,7 +1840,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
   }
 
   // set locale temporarily to standard "C" locale
-  dp::util::TempLocale tl("C");
+  dp::util::Locale tl("C");
 
   SceneSharedPtr scene;
   

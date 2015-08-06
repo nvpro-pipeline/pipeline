@@ -41,7 +41,7 @@
 #include <dp/sg/core/Scene.h>
 #include <dp/sg/io/PlugInterface.h>
 #include <dp/util/File.h>
-#include <dp/util/Tools.h>
+#include <dp/util/Locale.h>
 #include "3DSLoader.h"
 
 #include <dp/sg/core/GeoNode.h>
@@ -122,7 +122,7 @@ SceneSharedPtr ThreeDSLoader::load( std::string const& filename, dp::util::FileF
   }
 
   // set locale temporarily to standard "C" locale
-  TempLocale tl("C");
+  dp::util::Locale tl("C");
 
   Lib3dsFile *f = lib3ds_file_open( filename.c_str() );
   if ( !f )

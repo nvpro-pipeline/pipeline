@@ -40,7 +40,7 @@
 #include <dp/sg/io/IO.h>
 #include <dp/sg/io/PlugInterfaceID.h>
 #include <dp/util/File.h>
-#include <dp/util/Tools.h>
+#include <dp/util/Locale.h>
 
 #include <iterator>
 
@@ -3942,7 +3942,7 @@ SceneSharedPtr WRLLoader::load( string const& filename, dp::util::FileFinder con
   DP_ASSERT( m_textureFiles.empty() );
 
   // set the locale temporarily to the default "C" to make atof behave predictably
-  dp::util::TempLocale tl("C"); 
+  dp::util::Locale tl("C"); 
 
   //  (re-)initialize member variables
   m_eof = false;

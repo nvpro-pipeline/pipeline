@@ -28,7 +28,7 @@
 #include <sstream>
 #include <dp/sg/core/Scene.h>
 #include <dp/util/File.h>
-#include <dp/util/Tools.h>
+#include <dp/util/Locale.h>
 #include "OBJSaver.h"
 #include "ExtractGeometryTraverser.h"
 
@@ -189,7 +189,7 @@ bool  OBJSaver::save( SceneSharedPtr const& scene, dp::sg::ui::ViewStateSharedPt
   FILE *mh = fopen( string( filename + ".mtl" ).c_str() , "w" );
   
   // set locale temporarily to standard "C" locale
-  dp::util::TempLocale tl("C");
+  dp::util::Locale tl("C");
 
   if ( fh && mh )
   {

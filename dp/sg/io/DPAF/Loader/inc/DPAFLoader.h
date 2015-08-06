@@ -30,7 +30,6 @@
 #include <dp/sg/core/Config.h>
 #include <dp/sg/core/CoreTypes.h>
 #include <dp/util/FileFinder.h>
-#include <dp/util/Tools.h>
 #include <dp/sg/io/PlugInterface.h>
 #include <boost/tokenizer.hpp>
 

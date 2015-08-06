@@ -48,7 +48,7 @@
 
 #include <dp/util/PlugIn.h>
 #include <dp/util/File.h>
-#include <dp/util/Tools.h>
+#include <dp/util/Locale.h>
 
 // optimizers
 #include <dp/sg/algorithm/CombineTraverser.h>
@@ -294,7 +294,7 @@ XMLLoader::load( std::string const& filename, dp::util::FileFinder const& fileFi
   }
 
   // set locale temporarily to standard "C" locale
-  dp::util::TempLocale tl("C");
+  dp::util::Locale tl("C");
 
   TiXmlDocument doc( filename.c_str() );
 

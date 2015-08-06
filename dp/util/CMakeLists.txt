@@ -49,7 +49,7 @@ set(DPUTIL_INCLUDES
   Singleton.h
   StridedIterator.h
   Timer.h
-  Tools.h
+  Locale.h
 )
 
 add_definitions("-DDP_UTIL_USE_BOOST")
@@ -83,7 +83,7 @@ set(DPUTIL_SOURCES
   src/Reflection.cpp
   src/SimplexNoise1234.cpp
   src/Timer.cpp
-  src/Tools.cpp
+  src/Locale.cpp
 )
 
 source_group(sources FILES ${DPUTIL_SOURCES})

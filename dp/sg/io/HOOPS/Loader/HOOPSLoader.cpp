@@ -40,7 +40,7 @@
 #include <dp/sg/core/VertexAttributeSet.h>
 #include <dp/sg/core/Primitive.h>
 #include <dp/util/File.h>
-#include <dp/util/Tools.h>
+#include <dp/util/Locale.h>
 #include <dp/util/Timer.h>
 #include <dp/math/Vecnt.h>
 #include <dp/fx/EffectLibrary.h>
@@ -1902,7 +1902,7 @@ HOOPSLoader::load( string const& filename, dp::util::FileFinder const& fileFinde
 
 
   // set the locale temporarily to the default "C" to make atof behave predictably
-  TempLocale tl("C");
+  dp::util::Locale tl("C");
 
   if( !loadFile( filename ) )
   {

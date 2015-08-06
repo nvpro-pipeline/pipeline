@@ -47,9 +47,9 @@
 #include <dp/sg/core/Transform.h>
 #include <dp/sg/core/HandledObject.h>
 #include <dp/sg/ui/ViewState.h>
-#include <dp/util/Tools.h>
 #include <dp/sg/io/PlugInterfaceID.h>
 #include <dp/sg/io/DPBF/Saver/inc/DPBFSaver.h>
+#include <dp/util/Locale.h>
 #include <algorithm>
 #include <functional>
 #include <string>
@@ -178,7 +178,7 @@ DPBFSaver::~DPBFSaver()
 bool DPBFSaver::save( SceneSharedPtr const& scene, dp::sg::ui::ViewStateSharedPtr const& viewState, string const& filename)
 {
   // set locale temporarily to standard "C" locale
-  TempLocale tl("C");
+  dp::util::Locale tl("C");
 
   DPBFSaveTraverser saver;
   saver.setViewState(viewState);

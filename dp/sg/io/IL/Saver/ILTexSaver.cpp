@@ -37,7 +37,7 @@
 #include <dp/sg/io/PlugInterfaceID.h>
 #include <dp/sg/core/TextureHost.h>
 #include <dp/util/File.h>
-#include <dp/util/Tools.h>
+#include <dp/util/Locale.h>
 
 #include "ILTexSaver.h"
 #include "il.h"
@@ -262,7 +262,7 @@ bool ILTexSaver::save( const TextureHostSharedPtr & image, const string & fileNa
   DP_ASSERT(image);
   
   // set locale temporarily to standard "C" locale
-  dp::util::TempLocale tl("C");
+  dp::util::Locale tl("C");
 
   bool isCube;
   unsigned int imageID;

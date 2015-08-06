@@ -30,7 +30,6 @@
 #include <functional>
 #include <dp/sg/core/Scene.h>
 #include <dp/util/File.h>
-#include <dp/util/Tools.h>
 #include <dp/sg/algorithm/Optimize.h>
 #include <dp/sg/io/CSF/Saver/inc/CSFSaver.h>
 #include <dp/sg/io/CSF/Saver/inc/ExtractGeometryTraverser.h>

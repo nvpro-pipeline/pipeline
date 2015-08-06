@@ -52,7 +52,7 @@
 #include <dp/sg/io/PlugInterfaceID.h>
 #include <dp/sg/io/IO.h>
 #include <dp/util/File.h>
-#include <dp/util/Tools.h>
+#include <dp/util/Locale.h>
 #include "DPAFLoader.h"
 #include <utility>
 
@@ -202,7 +202,7 @@ SceneSharedPtr DPAFLoader::load( const string& filename, dp::util::FileFinder co
   }
 
   // set the locale temporarily to the default "C" to make atof behave predictably
-  TempLocale tl("C");
+  dp::util::Locale tl("C");
 
   // private copy of the search paths
   m_fileFinder = fileFinder;

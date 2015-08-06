@@ -40,7 +40,7 @@
 #include <dp/sg/io/PlugInterfaceID.h>
 #include <dp/sg/core/TextureHost.h>
 #include <dp/util/File.h>
-#include <dp/util/Tools.h>
+#include <dp/util/Locale.h>
 
 #include "ILTexLoader.h"
 #include "il.h"
@@ -253,7 +253,7 @@ bool ILTexLoader::onLoad( TextureHostSharedPtr const& texImg
   const string & filename = texImg->getFileName();
 
   // set locale temporarily to standard "C" locale
-  TempLocale tl("C");
+  dp::util::Locale tl("C");
 
   bool cube;
   unsigned int imageID;
