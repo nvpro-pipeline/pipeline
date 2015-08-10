@@ -45,7 +45,7 @@ REGISTER_TEST("feature_FBO_MRT", "Render to texture with native gl calls", creat
 using namespace dp;
 using namespace math;
 using namespace rix::core;
-using namespace util::generator;
+using namespace rix::util;
 
 namespace options = boost::program_options;
 

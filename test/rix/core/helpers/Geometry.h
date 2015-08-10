@@ -29,15 +29,17 @@
 #include <vector>
 #include <map>
 #include <dp/Types.h>
-#include <dp/util/Config.h>
 #include <dp/util/SharedPtr.h>
+#include <dp/math/math.h>
+#include <dp/math/Matmnt.h>
 #include <dp/math/Vecnt.h>
+#include <test/rix/core/helpers/inc/Config.h>
 
 namespace dp
 {
-  namespace util
+  namespace rix
   {
-    namespace generator
+    namespace util
     {
       #define NUM_ATTRIBS 16
       enum AttributeID
@@ -91,20 +93,20 @@ namespace dp
       class GeometryData
       {
       public:
-        DP_UTIL_API static GeometryDataSharedPtr create( GeometryPrimitiveType gpt );
-        DP_UTIL_API static GeometryDataSharedPtr create( GeometryDataSharedPtr const& rhs );
-        DP_UTIL_API ~GeometryData();
+        DPHELPERS_API static GeometryDataSharedPtr create( GeometryPrimitiveType gpt );
+        DPHELPERS_API static GeometryDataSharedPtr create( GeometryDataSharedPtr const& rhs );
+        DPHELPERS_API ~GeometryData();
 
         std::vector<unsigned int> m_indices;
         std::map<AttributeID,AttributeData> m_attributes;
         GeometryPrimitiveType m_gpt;
 #if !defined(NDEBUG)
-        DP_UTIL_API bool checkConsistency() const;
+        DPHELPERS_API bool checkConsistency() const;
 #endif
 
       protected:
-        DP_UTIL_API GeometryData( GeometryPrimitiveType gpt );
-        DP_UTIL_API GeometryData( GeometryDataSharedPtr const& rhs);
+        DPHELPERS_API GeometryData( GeometryPrimitiveType gpt );
+        DPHELPERS_API GeometryData( GeometryDataSharedPtr const& rhs);
       };
 
       class AttributeFeed
@@ -223,7 +225,7 @@ namespace dp
         return meshOut;
       }
 
-      DP_UTIL_API GeometryDataSharedPtr createQuad( unsigned int attrMask
+      DPHELPERS_API GeometryDataSharedPtr createQuad( unsigned int attrMask
                                                   , math::Vec3f v0 = math::Vec3f(0.0f, 0.0f, 0.0f)
                                                   , math::Vec3f v1 = math::Vec3f(1.0f, 0.0f, 0.0f)
                                                   , math::Vec3f v2 = math::Vec3f(0.0f, 1.0f, 0.0f)
@@ -231,12 +233,12 @@ namespace dp
                                                   , math::Vec2f t1 = math::Vec2f(1.0f, 0.0f)
                                                   , math::Vec2f t2 = math::Vec2f(0.0f, 1.0f) );
 
-      DP_UTIL_API GeometryDataSharedPtr createQuadIndexed( unsigned int attrMask
+      DPHELPERS_API GeometryDataSharedPtr createQuadIndexed( unsigned int attrMask
                                                          , math::Vec2f t0 = math::Vec2f(0.0f, 0.0f)
                                                          , math::Vec2f t1 = math::Vec2f(1.0f, 0.0f)
                                                          , math::Vec2f t2 = math::Vec2f(0.0f, 1.0f) );
 
-      DP_UTIL_API GeometryDataSharedPtr createTriangle( unsigned int attrMask
+      DPHELPERS_API GeometryDataSharedPtr createTriangle( unsigned int attrMask
                                                       , math::Vec3f v0 = math::Vec3f(0.0f, 0.0f, 0.0f)
                                                       , math::Vec3f v1 = math::Vec3f(1.0f, 0.0f, 0.0f) 
                                                       , math::Vec3f v2 = math::Vec3f(0.0f, 1.0f, 0.0f)
@@ -245,23 +247,23 @@ namespace dp
                                                       , math::Vec2f t2 = math::Vec2f(0.0f, 1.0f) );
 
       //TODO: The float t{Left|Top|Right|Bottom} needs to be adapted to Vec4f tRect
-      DP_UTIL_API GeometryDataSharedPtr createRectangle( unsigned int attrMask
+      DPHELPERS_API GeometryDataSharedPtr createRectangle( unsigned int attrMask
                                                        , float left, float top, float right, float bottom
                                                        , float tLeft = 0.0f, float tTop = 1.0f
                                                        , float tRight = 1.0f, float tBottom = 0.0f);
 
-      DP_UTIL_API GeometryDataSharedPtr createCube( unsigned int attrMask
+      DPHELPERS_API GeometryDataSharedPtr createCube( unsigned int attrMask
                                                   , math::Vec2f t0 = math::Vec2f(0.0f, 0.0f)
                                                   , math::Vec2f t1 = math::Vec2f(1.0f, 0.0f)
                                                   , math::Vec2f t2 = math::Vec2f(0.0f, 1.0f) );
 
-      DP_UTIL_API GeometryDataSharedPtr createCylinder( unsigned int attrMask
+      DPHELPERS_API GeometryDataSharedPtr createCylinder( unsigned int attrMask
                                                       , unsigned int longitudeDivs                   //Number of times to subdivide the circular cross-section
                                                       , unsigned int heightDivs = 2                  //Number of times to subdivide the height span of the cylinder
                                                       , float longitudeEnd = 0.0f                    //Optionally set the ending angle of the circular cross-section
                                                       , float innerRadius = 0.0f );                  //Optionally set an inner Radius, thus making the shape a solid tube
 
-      DP_UTIL_API GeometryDataSharedPtr createSphere( unsigned int attrMask
+      DPHELPERS_API GeometryDataSharedPtr createSphere( unsigned int attrMask
                                                     , unsigned int longitudeDivs                     //Number of axial subdivisions (y-axis)  
                                                     , unsigned int latitudeDivs                      //Number of meridional subdivisions
                                                     , float longitudeEnd = 0.0f                      //Optionally set the ending longitudinal angle

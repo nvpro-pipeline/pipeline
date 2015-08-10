@@ -43,7 +43,7 @@ REGISTER_TEST("feature_tangent_space", "tests simple usage of the RiX API", crea
 
 using namespace dp;
 using namespace rix::core;
-using namespace util::generator;
+using namespace rix::util;
 
 Feature_tangent_space::Feature_tangent_space()
   : m_numFrames(0)
@@ -402,11 +402,11 @@ void Feature_tangent_space::createScene()
   m_rix->containerSetData( vertVarContainer3,   containerEntryModel2worldIT, ContainerDataRaw( 0, model2world3IT.getPtr(), 16 * sizeof(float) ) );
   m_rix->containerSetData( fragContainer3,      containerEntryColor,       ContainerDataRaw( 0, white, 4 * sizeof(float) ) );
 
-  dp::util::generator::TextureObjectDataSharedPtr noiseTexture = dp::util::generator::createNoiseTexture( math::Vec2ui(256, 256), 10.0f, 20.0f );
-  dp::util::generator::TextureObjectDataSharedPtr normalTexture = dp::util::generator::convertHeightMapToNormalMap( noiseTexture, 0.014f );
+  dp::rix::util::TextureObjectDataSharedPtr noiseTexture = dp::rix::util::createNoiseTexture( math::Vec2ui(256, 256), 10.0f, 20.0f );
+  dp::rix::util::TextureObjectDataSharedPtr normalTexture = dp::rix::util::convertHeightMapToNormalMap( noiseTexture, 0.014f );
   TextureSharedHandle noiseNormalMap = dp::rix::util::generateTexture( m_rix, normalTexture, dp::PF_RGBA, dp::DT_UNSIGNED_INT_32, ITF_RGBA8 );
 
-  dp::util::generator::TextureObjectDataSharedPtr pyramidNormalTexture = dp::util::generator::createPyramidNormalMap( math::Vec2ui(256, 256), math::Vec2ui(16, 16), 0.03125f );
+  dp::rix::util::TextureObjectDataSharedPtr pyramidNormalTexture = dp::rix::util::createPyramidNormalMap( math::Vec2ui(256, 256), math::Vec2ui(16, 16), 0.03125f );
   TextureSharedHandle pyramidNormalMap = dp::rix::util::generateTexture( m_rix, pyramidNormalTexture, dp::PF_RGBA, dp::DT_UNSIGNED_INT_32, ITF_RGBA8 );
 
   rix::core::SamplerSharedHandle samplerNoiseNormalMap = m_rix->samplerCreate();

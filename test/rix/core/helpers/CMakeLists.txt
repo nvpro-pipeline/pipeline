@@ -1,12 +1,16 @@
 
 set( HELPERS_SOURCES
+  src/Geometry.cpp
   src/GeometryHelper.cpp
   src/TextureHelper.cpp
+  src/Textures.cpp
 )
 
 set( HELPERS_HEADERS
+  Geometry.h
   GeometryHelper.h
   TextureHelper.h
+  Textures.h
 )
 
 add_definitions(

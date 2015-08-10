@@ -27,17 +27,16 @@
 #include <dp/Assert.h>
 #include <dp/math/math.h>
 #include <dp/math/Matmnt.h>
-
-#include <dp/util/generator/Geometry.h>
+#include <test/rix/core/helpers/Geometry.h>
 
 namespace dp
 {
-  namespace util
+  namespace rix
   {
     using namespace std;
     using namespace math;
 
-    namespace generator
+    namespace util
     {
       GeometryDataSharedPtr GeometryData::create( GeometryPrimitiveType gpt )
       {
@@ -65,7 +64,7 @@ namespace dp
       }
 
 #if !defined(NDEBUG)
-      DP_UTIL_API bool GeometryData::checkConsistency() const
+      bool GeometryData::checkConsistency() const
       {
         size_t numElements = 0;
         for(map<AttributeID,AttributeData>::const_iterator it = m_attributes.begin(); it != m_attributes.end(); it++)

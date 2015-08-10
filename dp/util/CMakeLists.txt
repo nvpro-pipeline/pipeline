@@ -56,15 +56,6 @@ add_definitions("-DDP_UTIL_USE_BOOST")
 
 source_group(headers FILES ${DPUTIL_INCLUDES})
 
-source_group(headers/ui FILES ${DPUTIL_UI_INCLUDES})
-
-set(DPUTIL_GENERATOR_INCLUDES
-  generator/Geometry.h
-  generator/Textures.h
-)
-
-source_group(headers/generator FILES ${DPUTIL_GENERATOR_INCLUDES})
-
 set(DPUTIL_SOURCES
   src/Backtrace.cpp
   src/BitArray.cpp
@@ -89,24 +80,9 @@ set(DPUTIL_SOURCES
 source_group(sources FILES ${DPUTIL_SOURCES})
 
 
-source_group(sources/ui FILES ${DPUTIL_UI_SOURCES})
-
-
-set(DPUTIL_GENERATOR_SOURCES
-  generator/src/Geometry.cpp
-  generator/src/Textures.cpp
-)
-
-source_group(sources/generator FILES ${DPUTIL_GENERATOR_SOURCES})
-
-
 add_library(DPUtil SHARED
   ${DPUTIL_INCLUDES}
-  ${DPUTIL_UI_INCLUDES}
-  ${DPUTIL_GENERATOR_INCLUDES}
   ${DPUTIL_SOURCES}
-  ${DPUTIL_UI_SOURCES}
-  ${DPUTIL_GENERATOR_SOURCES}
 )
 
 CopyDevIL( DPUtil "${DP_BINARY_PATH}" )

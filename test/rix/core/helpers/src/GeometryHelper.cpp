@@ -38,16 +38,16 @@ namespace dp
     namespace util
     {
 
-      GeometrySharedHandle generateGeometry( dp::util::generator::GeometryDataSharedPtr& meshIn, dp::rix::core::Renderer* m_rix )
+      GeometrySharedHandle generateGeometry( dp::rix::util::GeometryDataSharedPtr& meshIn, dp::rix::core::Renderer* m_rix )
       {
         unsigned int attrMask = 0;
 
-        for( map<dp::util::generator::AttributeID, dp::util::generator::AttributeData>::iterator it = meshIn->m_attributes.begin(); it != meshIn->m_attributes.end(); ++it )
+        for( map<dp::rix::util::AttributeID, dp::rix::util::AttributeData>::iterator it = meshIn->m_attributes.begin(); it != meshIn->m_attributes.end(); ++it )
         {
           attrMask |= it->first;
         }
 
-        map<dp::util::generator::AttributeID, BufferSharedHandle> vbuffers;
+        map<dp::rix::util::AttributeID, BufferSharedHandle> vbuffers;
         vector<VertexFormatInfo> vfis;
 
         BufferSharedHandle ibuffer;
@@ -62,7 +62,7 @@ namespace dp
         VertexDataSharedHandle vertexData = m_rix->vertexDataCreate();
         for(unsigned int i = 0; i < NUM_ATTRIBS; i++)
         {
-          dp::util::generator::AttributeID curAttr = (dp::util::generator::AttributeID)(1 << i);
+          dp::rix::util::AttributeID curAttr = (dp::rix::util::AttributeID)(1 << i);
           if( attrMask & curAttr )
           {
             vbuffers[curAttr] = m_rix->bufferCreate();

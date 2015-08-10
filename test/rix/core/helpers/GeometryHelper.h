@@ -28,10 +28,8 @@
 
 #include <dp/rix/core/RiX.h>
 #include <test/rix/core/helpers/inc/Config.h>
+#include <test/rix/core/helpers/Geometry.h>
 #include <dp/math/Matmnt.h>
-
-
-#include <dp/util/generator/Geometry.h>
 
 namespace dp
 {
@@ -39,7 +37,7 @@ namespace dp
   {
     namespace util
     {
-      DPHELPERS_API core::GeometrySharedHandle generateGeometry( dp::util::generator::GeometryDataSharedPtr& meshIn, dp::rix::core::Renderer* m_rix );
+      DPHELPERS_API core::GeometrySharedHandle generateGeometry( dp::rix::util::GeometryDataSharedPtr& meshIn, dp::rix::core::Renderer* m_rix );
     } // namespace util
   } // namespace rix
 } // namespace dp

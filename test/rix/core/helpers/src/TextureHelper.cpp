@@ -24,7 +24,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#include <dp/util/generator/Textures.h>
+#include <test/rix/core/helpers/Textures.h>
 #include <test/rix/core/helpers/TextureHelper.h>
 
 #include <dp/util/Image.h>
@@ -43,7 +43,7 @@ namespace dp
 
       template<typename T>
       void setTextureData( dp::rix::core::Renderer* rix, TextureSharedHandle const & textureHandle, dp::PixelFormat pixelFormat, dp::DataType dataType
-                         , dp::util::generator::TextureObjectDataSharedPtr& data )
+                         , dp::rix::util::TextureObjectDataSharedPtr& data )
       {
         unsigned char components;
         bool swapRB = false;
@@ -168,7 +168,7 @@ namespace dp
       }
 
       TextureSharedHandle generateTexture( dp::rix::core::Renderer* rix 
-                                         , dp::util::generator::TextureObjectDataSharedPtr data
+                                         , dp::rix::util::TextureObjectDataSharedPtr data
                                          , dp::PixelFormat pixelFormat /*= PF_RGBA */
                                          , dp::DataType dataType /*= DT_FLOAT_32 */
                                          , InternalTextureFormat internalFormat /*= ITF_RGBA8*/

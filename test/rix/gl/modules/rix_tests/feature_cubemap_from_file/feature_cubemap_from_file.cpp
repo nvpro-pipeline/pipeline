@@ -43,7 +43,7 @@ REGISTER_TEST("feature_cubemap_from_file", "Loads a cubemap and uses it on a sph
 using namespace dp;
 using namespace math;
 using namespace rix::core;
-using namespace util::generator;
+using namespace rix::util;
 
 Feature_cubemap_from_file::Feature_cubemap_from_file()
   : m_renderData(nullptr)

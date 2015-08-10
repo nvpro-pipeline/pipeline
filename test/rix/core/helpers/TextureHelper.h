@@ -27,6 +27,7 @@
 #pragma once
 
 #include <test/rix/core/helpers/inc/Config.h>
+#include <test/rix/core/helpers/Textures.h>
 #include <dp/rix/core/RiX.h>
 
 #include <dp/util/Image.h>
@@ -34,8 +35,6 @@
 
 #include <limits>
 
-
-#include <dp/util/generator/Textures.h>
 
 namespace dp
 {
@@ -91,7 +90,7 @@ namespace dp
       DPHELPERS_API dp::util::ImageSharedPtr getGrayscaleFromAlphaImageFloatRange( const dp::util::ImageSharedPtr& alphaImage, float from, float to );
 
       DPHELPERS_API core::TextureSharedHandle generateTexture( dp::rix::core::Renderer* rix 
-                                                             , dp::util::generator::TextureObjectDataSharedPtr data
+                                                             , dp::rix::util::TextureObjectDataSharedPtr data
                                                              , dp::PixelFormat pixelFormat = dp::PF_RGBA
                                                              , dp::DataType dataType = dp::DT_FLOAT_32
                                                              , core::InternalTextureFormat internalFormat = core::ITF_RGBA8
