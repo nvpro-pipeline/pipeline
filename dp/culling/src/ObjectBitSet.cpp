@@ -40,7 +40,6 @@ namespace dp
       : m_userData( userData )
       , m_transformIndex( ~0 )
       , m_groupIndex( ~0 )
-      , m_group( nullptr )
       {
       };
 
@@ -51,7 +50,7 @@ namespace dp
 
       GroupBitSetSharedPtr ObjectBitSet::getGroup() const
       {
-        return( m_group ? GroupSharedPtr( m_group->shared_from_this() ).staticCast<GroupBitSet>() : GroupBitSetSharedPtr::null );
+        return( m_group.getSharedPtr() );
       }
 
   } // namespace culling

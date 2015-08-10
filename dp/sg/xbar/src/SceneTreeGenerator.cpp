@@ -46,12 +46,12 @@ namespace dp
     namespace xbar
     {
 
-      SceneTreeGenerator::SceneTreeGenerator( const SceneTreeWeakPtr& sceneTree )
+      SceneTreeGenerator::SceneTreeGenerator( SceneTreeSharedPtr const& sceneTree )
         : m_sceneTree( sceneTree )
       {
         setTraversalMaskOverride( ~0 );
 
-        m_generatorState = GeneratorState::create( m_sceneTree );
+        m_generatorState = GeneratorState::create( m_sceneTree.getSharedPtr() );
       }
 
       void SceneTreeGenerator::doApply( const dp::sg::core::NodeSharedPtr & root )
@@ -72,17 +72,15 @@ namespace dp
       void  SceneTreeGenerator::addClipPlane( const ClipPlaneWeakPtr& clipPlane )
       {
         ClipPlaneInstanceSharedPtr instance( ClipPlaneInstance::create() );
-        instance->m_clipPlane = clipPlane->getSharedPtr<ClipPlane>();
+        instance->m_clipPlane = clipPlane.getSharedPtr();
         instance->m_transformIndex = m_generatorState->getParentTransformIndex();
         m_generatorState->addClipPlane( instance );
       }
 
       void SceneTreeGenerator::handleTransform( const dp::sg::core::Transform * p )
       {
-        TransformWeakPtr transform = dp::util::getWeakPtr<Transform>(p);
-
         // add transform to transform stack
-        m_generatorState->pushTransform( transform );
+        m_generatorState->pushTransform( p->getSharedPtr<dp::sg::core::Transform>() );
 
         // skip Transform traversal, directly traverse Transform as Group
         SharedTraverser::traverseGroup( p );
@@ -94,7 +92,7 @@ namespace dp
       void SceneTreeGenerator::handleBillboard( const dp::sg::core::Billboard *p )
       {
         // add billboard as a transform 
-        m_generatorState->pushTransform( dp::util::getWeakPtr<Billboard>(p) );
+        m_generatorState->pushTransform( p->getSharedPtr<dp::sg::core::Billboard>() );
 
         // add transform index to dynamic transforms list
         m_generatorState->addDynamicTransformIndex( m_generatorState->getParentTransformIndex() );

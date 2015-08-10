@@ -36,7 +36,6 @@
 #include <dp/fx/ParameterGroupSpec.h>
 #include <dp/rix/core/RiX.h>
 #include <dp/util/FileFinder.h>
-#include <dp/util/SharedPtr.h>
 
 #include <map>
 #include <memory>

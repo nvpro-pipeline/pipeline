@@ -518,7 +518,7 @@ namespace dp
         {
           m_countMap[p->getObjectCode()]++;
           analyzeEquivalent( p );
-          analyzeMissing( p, p->getTexture().getWeakPtr() );
+          analyzeMissing( p, p->getTexture() );
           SharedTraverser::handleSampler( p );
         }
       }
@@ -683,18 +683,18 @@ namespace dp
         bool foundEquivalent = false;
         for ( size_t i=0 ; i<ei.uniqueObjects.size() ; i++ )
         {
-          foundEquivalent =   ( getWeakPtr<Object>(p) != ei.uniqueObjects[i] )
-                          &&  p->isEquivalent( ei.uniqueObjects[i]->getSharedPtr<Object>() );
+          foundEquivalent =   ( p->getSharedPtr<dp::sg::core::Object>() != ei.uniqueObjects[i] )
+                          &&  p->isEquivalent( ei.uniqueObjects[i] );
           if ( foundEquivalent )
           {
-            ei.equivalentObjects.insert( getWeakPtr<Object>(p) );
+            ei.equivalentObjects.insert( p->getSharedPtr<dp::sg::core::Object>() );
             ei.equivalentObjects.insert( ei.uniqueObjects[i] );
             break;
           }
         }
         if ( ! foundEquivalent )
         {
-          ei.uniqueObjects.push_back( getWeakPtr<Object>(p) );
+          ei.uniqueObjects.push_back( p->getSharedPtr<dp::sg::core::Object>() );
         }
       }
 
@@ -740,7 +740,7 @@ namespace dp
         }
       }
 
-      void AnalyzeTraverser::analyzeMissing( const Object * p, const void * ptr )
+      void AnalyzeTraverser::analyzeMissing( const Object * p, dp::sg::core::TextureSharedPtr const& ptr )
       {
         if ( ! ptr )
         {
@@ -844,12 +844,12 @@ namespace dp
 
         if ( isSP )
         {
-          VertexUseMap::iterator it = m_vertexUseMap.find( vasSP.getWeakPtr() );
+          VertexUseMap::iterator it = m_vertexUseMap.find( vasSP );
           if ( it == m_vertexUseMap.end() )
           {
             // if this VertexAttributeSet hasn't been encounterd before, put it in the map and initialize the set with
             // all indices from 0 to vas->getNumberOfVertices()
-            pair<VertexUseMap::iterator,bool> pitb = m_vertexUseMap.insert( make_pair( vasSP.getWeakPtr(), set<unsigned int>() ) );
+            pair<VertexUseMap::iterator,bool> pitb = m_vertexUseMap.insert( make_pair( vasSP, set<unsigned int>() ) );
             DP_ASSERT( pitb.second );
             it = pitb.first;
             for ( unsigned int i=0 ; i<nov ; i++)
@@ -869,12 +869,12 @@ namespace dp
         }
         else if ( ( offset != 0 ) || ( count != nov ) )
         {
-          VertexUseMap::iterator it = m_vertexUseMap.find( vasSP.getWeakPtr() );
+          VertexUseMap::iterator it = m_vertexUseMap.find( vasSP );
           if ( it == m_vertexUseMap.end() )
           {
             // if this VertexAttributeSet hasn't been encounterd before, put it in the map and initialize the set with
             // all indices from 0 to offset, and from offset + count to nov
-            pair<VertexUseMap::iterator,bool> pitb = m_vertexUseMap.insert( make_pair( vasSP.getWeakPtr(), set<unsigned int>() ) );
+            pair<VertexUseMap::iterator,bool> pitb = m_vertexUseMap.insert( make_pair( vasSP, set<unsigned int>() ) );
             DP_ASSERT( pitb.second );
             it = pitb.first;
             for ( unsigned int i=0 ; i<offset ; i++)
@@ -899,7 +899,7 @@ namespace dp
         else
         {
           // when there is no IndexSet, and no offset/count, the complete VertexAttributeSet is used -> mark it as clear
-          m_vertexUseMap[vasSP.getWeakPtr()].clear();
+          m_vertexUseMap[vasSP].clear();
         }
       }
 
@@ -909,7 +909,7 @@ namespace dp
         {
           for ( Group::ChildrenConstIterator gcci = m_currentLOD->beginChildren() ; gcci != m_currentLOD->endChildren() ; ++gcci )
           {
-            if ( gcci->getWeakPtr() == getWeakPtr<Object>(p) )
+            if ( *gcci == p->getSharedPtr<dp::sg::core::Node>() )
             {
               return( true );
             }

@@ -28,7 +28,6 @@
 #include <dp/rix/gl/inc/DataTypeConversionGL.h>
 #include <dp/rix/gl/inc/TextureGLBuffer.h>
 #include <dp/rix/gl/inc/SamplerStateGL.h>
-#include <dp/util/SharedPtr.h>
 #include <cmath>
 
 namespace dp
@@ -65,7 +64,7 @@ namespace dp
             DP_ASSERT( handleIsTypeOf<BufferGL>( dataBuffer.m_buffer ) );
             BufferGLHandle buffer = handleCast<BufferGL>( dataBuffer.m_buffer.get() );
 
-            dp::util::shared_cast<dp::gl::TextureBuffer>( getTexture() )->setBuffer( buffer->getBuffer() );
+            getTexture().inplaceCast<dp::gl::TextureBuffer>()->setBuffer( buffer->getBuffer() );
 
             m_textureBuffer = buffer;
           }

@@ -204,11 +204,11 @@ namespace dp
         Node::feedHashGenerator( hg );
         if ( m_materialEffect )
         {
-          hg.update( reinterpret_cast<const unsigned char *>(m_materialEffect.getWeakPtr()), sizeof(const EffectData *) );
+          hg.update( m_materialEffect );
         }
         if ( m_primitive )
         {
-          hg.update( reinterpret_cast<const unsigned char *>(m_primitive.getWeakPtr()), sizeof(const Primitive *) );
+          hg.update( m_primitive );
         }
       }
 

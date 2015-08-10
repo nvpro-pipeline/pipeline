@@ -27,6 +27,7 @@
 #pragma once
 
 #include <dp/util/Config.h>
+#include <dp/util/SharedPtr.h>
 #include <memory>
 #include <vector>
 
@@ -42,6 +43,9 @@ namespace dp
     public:
       DP_UTIL_API virtual ~Payload();
     };
+
+    DEFINE_PTR_TYPES( Payload );
+
 
     class Event
     {
@@ -77,8 +81,8 @@ namespace dp
 
       DP_UTIL_API virtual ~Subject();
 
-      DP_UTIL_API void attach( Observer* observer, Payload* payload = nullptr );
-      DP_UTIL_API void detach( Observer* observer, Payload* payload = nullptr );
+      DP_UTIL_API void attach( Observer* observer, Payload * payload = nullptr );
+      DP_UTIL_API void detach( Observer* observer, Payload * payload = nullptr  );
       DP_UTIL_API bool isAttached( Observer * observer, Payload * payload = nullptr ) const;
 
     protected:
@@ -91,12 +95,15 @@ namespace dp
     private:
       Observers m_observers;
     };
-    
+
+    DEFINE_PTR_TYPES( Subject );
+
+
     class Observer
     {
     public:
       DP_UTIL_API virtual void onNotify( dp::util::Event const & event, dp::util::Payload * payload ) = 0;
-      DP_UTIL_API virtual void onDestroyed( dp::util::Subject const & subject, dp::util::Payload* payload ) = 0;
+      DP_UTIL_API virtual void onDestroyed( dp::util::Subject const & subject, dp::util::Payload * payload ) = 0;
     };
 
 

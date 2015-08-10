@@ -29,7 +29,6 @@
 #include <dp/culling/ManagerBitSet.h>
 #include <dp/culling/GroupBitSet.h>
 #include <dp/util/BitArray.h>
-#include <dp/util/SharedPtr.h>
 #include <boost/scoped_array.hpp>
 
 #include <dp/util/FrameProfiler.h>

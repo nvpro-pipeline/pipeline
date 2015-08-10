@@ -73,7 +73,7 @@ namespace dp
 
       void Group::preRemoveChild(unsigned int index)
       {
-        notify( Event( this, Event::PRE_CHILD_REMOVE, m_children[index], index ) );
+        notify( Event( this->getSharedPtr<Group>(), Event::PRE_CHILD_REMOVE, m_children[index], index ) );
       }
 
       void Group::postRemoveChild(unsigned int index)
@@ -86,7 +86,7 @@ namespace dp
 
       void Group::postAddChild(unsigned int index)
       {
-        notify( Event( this, Event::POST_CHILD_ADD, m_children[index], index ) );
+        notify( Event( this->getSharedPtr<Group>(), Event::POST_CHILD_ADD, m_children[index], index ) );
       }
 
       Group::ChildrenContainer::iterator Group::doInsertChild( const ChildrenContainer::iterator & gcci, const NodeSharedPtr & child )
@@ -117,9 +117,9 @@ namespace dp
         (*cci)->detach( this );
 
         unsigned int idx = dp::checked_cast<unsigned int>(std::distance<ChildrenContainer::iterator>( m_children.begin(), cci ));
-        notify( Event( this, Event::PRE_CHILD_REMOVE, m_children[idx], idx ) );
+        notify( Event( this->getSharedPtr<Group>(), Event::PRE_CHILD_REMOVE, m_children[idx], idx ) );
         *cci = newChild;
-        notify( Event( this, Event::POST_CHILD_ADD, m_children[idx], idx ) );
+        notify( Event( this->getSharedPtr<Group>(), Event::POST_CHILD_ADD, m_children[idx], idx ) );
 
         return( cci );
       }
@@ -182,7 +182,7 @@ namespace dp
         {
           // this is nearly a nop if the bounding volumes are already dirty and cheap in comparison to what happens int he background
           // if the observer calls getBounding*() it's necessary that the dirty flag has already been set.
-          notify( Event( this, Event::PRE_CHILD_REMOVE, m_children[0], 0 ) );
+          notify( Event( this->getSharedPtr<Group>(), Event::PRE_CHILD_REMOVE, m_children[0], 0 ) );
           (*cci)->detach( this );
         }
         m_children.clear();
@@ -262,7 +262,7 @@ namespace dp
           copyChildren(rhs.m_children);
           copyClipPlanes(rhs.m_clipPlanes);
 
-          notify( Event( this, Event::POST_GROUP_EXCHANGED ) );
+          notify( Event( this->getSharedPtr<Group>(), Event::POST_GROUP_EXCHANGED ) );
         }
         return *this;
       }
@@ -349,7 +349,7 @@ namespace dp
           m_clipPlanes.push_back( plane );
           cpci = m_clipPlanes.end() - 1;
       
-          notify( Group::Event( this, Group::Event::CLIP_PLANES_CHANGED ) );
+          notify( Group::Event( this->getSharedPtr<Group>(), Group::Event::CLIP_PLANES_CHANGED ) );
         }
         return( ClipPlaneIterator( cpci ) );
       }
@@ -359,7 +359,7 @@ namespace dp
         (*cpci)->detach( this );
 
         Group::ClipPlaneContainer::iterator it = m_clipPlanes.erase( cpci );
-        notify( Group::Event( this, Group::Event::CLIP_PLANES_CHANGED ) );
+        notify( Group::Event( this->getSharedPtr<Group>(), Group::Event::CLIP_PLANES_CHANGED ) );
 
         return it;
       }
@@ -394,7 +394,7 @@ namespace dp
           (*cpci)->detach( this );
         }
         m_clipPlanes.clear();
-        notify( Group::Event( this, Group::Event::CLIP_PLANES_CHANGED ) );
+        notify( Group::Event( this->getSharedPtr<Group>(), Group::Event::CLIP_PLANES_CHANGED ) );
       }
 
       void Group::removeChildren()
@@ -420,11 +420,11 @@ namespace dp
         Node::feedHashGenerator( hg );
         for ( size_t i=0 ; i<m_children.size() ; ++i )
         {
-          hg.update( reinterpret_cast<const unsigned char *>(m_children[i].getWeakPtr()), sizeof(const Node *) );
+          hg.update( m_children[i] );
         }
         for ( size_t i=0 ; i<m_clipPlanes.size() ; ++i )
         {
-          hg.update( reinterpret_cast<const unsigned char *>(m_clipPlanes[i].getWeakPtr()), sizeof(const ClipPlane *) );
+          hg.update( m_clipPlanes[i] );
         }
       }
 

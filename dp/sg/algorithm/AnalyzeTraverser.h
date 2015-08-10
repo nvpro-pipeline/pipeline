@@ -384,8 +384,8 @@ namespace dp
           class EquivalenceInfo
           {
             public :
-              std::vector<dp::sg::core::ObjectWeakPtr> uniqueObjects;
-              std::set<dp::sg::core::ObjectWeakPtr>    equivalentObjects;
+              std::vector<dp::sg::core::ObjectSharedPtr>  uniqueObjects;
+              std::set<dp::sg::core::ObjectSharedPtr>     equivalentObjects;
           };
 
           class EffectSpecEquivalenceInfo
@@ -402,7 +402,7 @@ namespace dp
               std::set<dp::fx::ParameterGroupSpecSharedPtr>     equivalentSpecs;
           };
 
-          typedef std::map<dp::sg::core::VertexAttributeSetWeakPtr,std::set<unsigned int> > VertexUseMap;
+          typedef std::map<dp::sg::core::VertexAttributeSetSharedPtr,std::set<unsigned int> > VertexUseMap;
 
         private:
           void analyzeCombinable( const dp::sg::core::Group * p );
@@ -412,7 +412,7 @@ namespace dp
           void analyzeEquivalentParameterGroupSpec( const dp::fx::ParameterGroupSpecSharedPtr & p );
           void analyzeNormalsNormalized( dp::sg::core::Buffer::ConstIterator<dp::math::Vec3f>::Type normals, unsigned int non
                                        , unsigned int &nullNormals, unsigned int &denormalizedNormals );
-          void analyzeMissing( const dp::sg::core::Object * p, const void * ptr );
+          void analyzeMissing( const dp::sg::core::Object * p, dp::sg::core::TextureSharedPtr const& ptr );
           void analyzeRedundantIndexSet( const dp::sg::core::IndexSetSharedPtr & p, unsigned int offset, unsigned int count );
           void analyzeRedundantLODRanges( const dp::sg::core::LOD * p );
           void analyzeSingleChild( const dp::sg::core::Group * p );

@@ -110,7 +110,7 @@ namespace dp
     template <typename T>
     inline void HashGenerator::update( SharedPtr<T> const& ptr )
     {
-      update( reinterpret_cast<const unsigned char *>( ptr.getWeakPtr() ), sizeof(const T *) );
+      update( reinterpret_cast<const unsigned char *>( ptr.operator->() ), sizeof(const T *) );
     }
 
   } // namespace util

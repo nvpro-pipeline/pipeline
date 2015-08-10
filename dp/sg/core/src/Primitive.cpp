@@ -472,11 +472,11 @@ namespace dp
         hg.update( reinterpret_cast<const unsigned char *>(&m_instanceCount), sizeof(m_instanceCount) );
         if ( m_indexSet )
         {
-          hg.update( reinterpret_cast<const unsigned char *>(m_indexSet.getWeakPtr()), sizeof(const IndexSet *) );
+          hg.update( m_indexSet );
         }
         if ( m_vertexAttributeSet )
         {
-          hg.update( reinterpret_cast<const unsigned char *>(m_vertexAttributeSet.getWeakPtr()), sizeof(const VertexAttributeSet *) );
+          hg.update( m_vertexAttributeSet );
         }
         if ( m_primitiveType == PRIMITIVE_PATCHES )
         {

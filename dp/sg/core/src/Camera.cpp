@@ -364,7 +364,7 @@ namespace dp
         Object::feedHashGenerator( hg );
         for ( HeadLightContainer::const_iterator hlcci = m_headLights.begin() ; hlcci != m_headLights.end() ; ++hlcci )
         {
-          hg.update( reinterpret_cast<const unsigned char *>(hlcci->getWeakPtr()), sizeof(const LightSource *) );
+          hg.update( *hlcci );
         }
         hg.update( reinterpret_cast<const unsigned char *>(&m_orientation), sizeof(m_orientation) );
         hg.update( reinterpret_cast<const unsigned char *>(&m_position), sizeof(m_position) );

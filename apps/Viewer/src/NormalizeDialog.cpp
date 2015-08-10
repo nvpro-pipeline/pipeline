@@ -89,11 +89,10 @@ NormalizeDialog::NormalizeDialog( const SceneSharedPtr & scene, QWidget * parent
   searchTraverser.setClassName( "class dp::sg::core::VertexAttributeSet" );
   searchTraverser.setBaseClassSearch( true );
   searchTraverser.apply( m_scene );
-  const vector<ObjectWeakPtr> &vp = searchTraverser.getResults();
+  const vector<ObjectSharedPtr> &vp = searchTraverser.getResults();
   for ( size_t i=0 ; i<vp.size() ; i++ )
   {
-    DP_ASSERT( dynamic_cast<VertexAttributeSetWeakPtr>(vp[i]) );
-    VertexAttributeSetSharedPtr const& vas = vp[i]->getSharedPtr<VertexAttributeSet>();
+    dp::sg::core::VertexAttributeSetSharedPtr const& vas = vp[i].staticCast<dp::sg::core::VertexAttributeSet>();
     for ( unsigned int attrib = 0 ; attrib<16 ; ++attrib )
     {
       if ( vas->getNumberOfVertexData( attrib ) )

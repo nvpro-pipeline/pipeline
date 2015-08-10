@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2009-2015
+// Copyright (c) 2009-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -256,10 +256,10 @@ void QtMinimalWidget::resizeEvent( QResizeEvent *re )
 void combineVertexAttributes( dp::sg::ui::ViewStateSharedPtr const& viewState )
 {
   DP_ASSERT( viewState && viewState->getScene() && viewState->getScene()->getRootNode() );
-  std::vector<dp::sg::core::ObjectWeakPtr> results = dp::sg::algorithm::searchClass( viewState->getScene()->getRootNode(), "class::dp::sg::core::VertexAttributeSet" );
-  for ( std::vector<dp::sg::core::ObjectWeakPtr>::iterator it = results.begin(); it != results.end(); ++it )
+  std::vector<dp::sg::core::ObjectSharedPtr> results = dp::sg::algorithm::searchClass( viewState->getScene()->getRootNode(), "class::dp::sg::core::VertexAttributeSet" );
+  for ( std::vector<dp::sg::core::ObjectSharedPtr>::iterator it = results.begin(); it != results.end(); ++it )
   {
-    dp::util::weakPtr_cast<dp::sg::core::VertexAttributeSet>(*it)->combineBuffers();
+    it->inplaceCast<dp::sg::core::VertexAttributeSet>()->combineBuffers();
   }
 }
 
@@ -462,11 +462,10 @@ int runApp( int argc, char *argv[], options::variables_map const& opts )
     DP_ASSERT( replacement );
 
     DP_ASSERT( viewState && viewState->getScene() && viewState->getScene()->getRootNode() );
-    const std::vector<dp::sg::core::ObjectWeakPtr> vp = dp::sg::algorithm::searchClass( viewState->getScene()->getRootNode(), "class dp::sg::core::GeoNode", true );
+    const std::vector<dp::sg::core::ObjectSharedPtr> vp = dp::sg::algorithm::searchClass( viewState->getScene()->getRootNode(), "class dp::sg::core::GeoNode", true );
     for ( size_t i=0 ; i<vp.size() ; i++ )
     {
-      DP_ASSERT( dynamic_cast<dp::sg::core::GeoNodeWeakPtr>(vp[i]) );
-      static_cast<dp::sg::core::GeoNodeWeakPtr>(vp[i])->setMaterialEffect( replacement );
+      vp[i].inplaceCast<dp::sg::core::GeoNode>()->setMaterialEffect( replacement );
     }
   }
 
@@ -475,27 +474,25 @@ int runApp( int argc, char *argv[], options::variables_map const& opts )
     dp::sg::core::TextureCoordType tct = getTextureCoordType( opts["generateTexCoords"].as<std::string>() );
 
     DP_ASSERT( viewState && viewState->getScene() && viewState->getScene()->getRootNode() );
-    const std::vector<dp::sg::core::ObjectWeakPtr> vp = dp::sg::algorithm::searchClass( viewState->getScene()->getRootNode(), "class dp::sg::core::Primitive", true );
+    const std::vector<dp::sg::core::ObjectSharedPtr> vp = dp::sg::algorithm::searchClass( viewState->getScene()->getRootNode(), "class dp::sg::core::Primitive", true );
     for ( size_t i=0 ; i<vp.size() ; i++ )
     {
-      DP_ASSERT( dynamic_cast<dp::sg::core::PrimitiveWeakPtr>(vp[i]) );
-      static_cast<dp::sg::core::PrimitiveWeakPtr>(vp[i])->generateTexCoords( tct, dp::sg::core::VertexAttributeSet::DP_SG_TEXCOORD0, false );
-      // don't overwrite if there already are some texture coordinate                                                               ^^^^^
+      vp[i].inplaceCast<dp::sg::core::Primitive>()->generateTexCoords( tct, dp::sg::core::VertexAttributeSet::DP_SG_TEXCOORD0, false );
+      // don't overwrite if there already are some texture coordinate                                                          ^^^^^
     }
   }
 
   if ( !opts["generateTangentSpace"].empty() )
   {
     DP_ASSERT( viewState && viewState->getScene() && viewState->getScene()->getRootNode() );
-    const std::vector<dp::sg::core::ObjectWeakPtr> vp = dp::sg::algorithm::searchClass( viewState->getScene()->getRootNode(), "class dp::sg::core::Primitive", true );
+    const std::vector<dp::sg::core::ObjectSharedPtr> vp = dp::sg::algorithm::searchClass( viewState->getScene()->getRootNode(), "class dp::sg::core::Primitive", true );
     for ( size_t i=0 ; i<vp.size() ; i++ )
     {
-      DP_ASSERT( dynamic_cast<dp::sg::core::PrimitiveWeakPtr>(vp[i]) );
-      static_cast<dp::sg::core::PrimitiveWeakPtr>(vp[i])->generateTangentSpace( dp::sg::core::VertexAttributeSet::DP_SG_TEXCOORD0
-                                                                              , dp::sg::core::VertexAttributeSet::DP_SG_TANGENT
-                                                                              , dp::sg::core::VertexAttributeSet::DP_SG_BINORMAL
-                                                                              , false );
-      // don't overwrite if there already are some texture coordinate           ^^^^^
+      vp[i].inplaceCast<dp::sg::core::Primitive>()->generateTangentSpace( dp::sg::core::VertexAttributeSet::DP_SG_TEXCOORD0
+                                                                        , dp::sg::core::VertexAttributeSet::DP_SG_TANGENT
+                                                                        , dp::sg::core::VertexAttributeSet::DP_SG_BINORMAL
+                                                                        , false );
+      // don't overwrite if there already are some texture coordinate     ^^^^^
     }
   }
 

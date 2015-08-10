@@ -52,7 +52,7 @@ namespace dp
             DP_ASSERT( texture );
             DP_ASSERT( !!resourceManager );
 
-            ResourceTextureSharedPtr resourceTexture = resourceManager->getResource<ResourceTexture>( reinterpret_cast<size_t>(texture.getWeakPtr()) );
+            ResourceTextureSharedPtr resourceTexture = resourceManager->getResource<ResourceTexture>( reinterpret_cast<size_t>(texture.operator->()) );   // Big Hack !!
             if ( !resourceTexture )
             {
               resourceTexture = std::shared_ptr<ResourceTexture>( new ResourceTexture( texture, resourceManager ) );
@@ -256,7 +256,7 @@ namespace dp
           }
 
           ResourceTexture::ResourceTexture( const dp::sg::core::TextureSharedPtr& texture, const ResourceManagerSharedPtr& resourceManager )
-            : ResourceManager::Resource( reinterpret_cast<size_t>( texture.getWeakPtr() ), resourceManager )
+            : ResourceManager::Resource( reinterpret_cast<size_t>( texture.operator->() ), resourceManager )    // Big Hack !!
             , m_texture( texture )
             , m_isNativeTexture( false )
           {

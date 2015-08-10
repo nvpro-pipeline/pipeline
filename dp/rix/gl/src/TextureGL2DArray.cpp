@@ -26,7 +26,6 @@
 
 #include <dp/rix/gl/inc/DataTypeConversionGL.h>
 #include <dp/rix/gl/inc/TextureGL2DArray.h>
-#include <dp/util/SharedPtr.h>
 
 namespace dp
 {
@@ -55,7 +54,7 @@ namespace dp
 
       void TextureGL2DArray::upload(unsigned int mipMapLevel, unsigned int layer, const void* data)
       {
-        dp::util::shared_cast<dp::gl::Texture2DArray>( getTexture() )->setData( data, layer, mipMapLevel );
+        getTexture().inplaceCast<dp::gl::Texture2DArray>()->setData( data, layer, mipMapLevel );
       }
 
     } // namespace gl

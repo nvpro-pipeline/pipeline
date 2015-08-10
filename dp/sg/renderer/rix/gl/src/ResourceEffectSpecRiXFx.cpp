@@ -52,7 +52,7 @@ namespace dp
             assert( effectSpec );
             assert( !!resourceManager );
 
-            ResourceEffectSpecRiXFxSharedPtr resourceEffectSpec = resourceManager->getResource<ResourceEffectSpecRiXFx>( reinterpret_cast<size_t>(effectSpec.getWeakPtr()) );
+            ResourceEffectSpecRiXFxSharedPtr resourceEffectSpec = resourceManager->getResource<ResourceEffectSpecRiXFx>( reinterpret_cast<size_t>(effectSpec.operator->()) );   // Big Hack !!
             if ( !resourceEffectSpec )
             {
               resourceEffectSpec = std::shared_ptr<ResourceEffectSpecRiXFx>( new ResourceEffectSpecRiXFx( effectSpec, rixFx, resourceManager ) );
@@ -62,7 +62,7 @@ namespace dp
           }
 
           ResourceEffectSpecRiXFx::ResourceEffectSpecRiXFx( const EffectSpecSharedPtr& effectSpec, const dp::rix::fx::ManagerSharedPtr& rixfx, const ResourceManagerSharedPtr& resourceManager )
-            : ResourceManager::Resource( reinterpret_cast<size_t>( effectSpec.getWeakPtr() ), resourceManager )
+            : ResourceManager::Resource( reinterpret_cast<size_t>( effectSpec.operator->() ), resourceManager )   // Big Hack !!
             , m_resourceManager( resourceManager )
             , m_effectSpec( effectSpec )
           {

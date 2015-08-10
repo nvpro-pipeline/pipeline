@@ -35,7 +35,6 @@
 #include <GL/freeglut.h>
 
 #include <dp/Assert.h>
-#include <dp/util/SharedPtr.h>
 #include <iostream>
 #include <tchar.h>
 
@@ -221,7 +220,7 @@ namespace dp
 
           dp::ui::RenderTargetSharedPtr displayTarget = dp::gl::RenderTargetFB::create( dp::gl::RenderContext::create( dp::gl::RenderContext::Attach() ) );
           displayTarget->setSize(width, height);
-          dp::util::shared_cast<dp::gl::RenderTargetFB>(displayTarget)->setClearMask( dp::gl::TBM_COLOR_BUFFER | dp::gl::TBM_DEPTH_BUFFER );
+          displayTarget.inplaceCast<dp::gl::RenderTargetFB>()->setClearMask( dp::gl::TBM_COLOR_BUFFER | dp::gl::TBM_DEPTH_BUFFER );
 
           return displayTarget;
         }

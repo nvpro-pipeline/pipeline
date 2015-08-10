@@ -53,7 +53,6 @@ namespace dp
       };
 
       FrustumStereoViewStateProvider::FrustumStereoViewStateProvider()
-        : m_lastViewState(0) // weakptr is not an object yet
       {
       }
 
@@ -112,7 +111,7 @@ namespace dp
         m_viewState = viewState;
         if( m_viewState )
         {
-          if( m_viewState->getRendererOptions().getWeakPtr() != m_rendererOptions )  
+          if( m_viewState->getRendererOptions() != m_rendererOptions.getSharedPtr() )  
           {
             // update renderer options
             m_rendererOptions = m_viewState->getRendererOptions().getWeakPtr();
@@ -187,7 +186,7 @@ namespace dp
         if ( viewState )
         {
           DP_ASSERT( viewState->getRendererOptions() );
-          if( viewState->getRendererOptions() && viewState->getRendererOptions().getWeakPtr() != m_rendererOptions )  
+          if( viewState->getRendererOptions() && viewState->getRendererOptions() != m_rendererOptions.getSharedPtr() )
           {
             // update renderer options
             m_rendererOptions = viewState->getRendererOptions().getWeakPtr();

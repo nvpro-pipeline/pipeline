@@ -59,24 +59,24 @@ namespace dp
           }
         };
 
-        Observer( SceneTreeWeakPtr const& sceneTree );
+        Observer( SceneTreeSharedPtr const& sceneTree );
         virtual ~Observer();
 
-        void attach( dp::util::Subject *subject, const PayloadSharedPtr &payload );
+        void attach( dp::util::SubjectSharedPtr const& subject, PayloadSharedPtr const& payload );
         void detach( IndexType index );
         void detachAll();
 
-        virtual void onDestroyed( dp::util::Subject const& subject, dp::util::Payload *payload );
+        virtual void onDestroyed( dp::util::Subject const& subject, dp::util::Payload * payload );
       protected:
         virtual void onDetach( IndexType index ) {};
 
-        typedef std::multimap<ObjectTreeIndex, std::pair<dp::util::Subject *, PayloadSharedPtr> > IndexMap;
+        typedef std::multimap<ObjectTreeIndex, std::pair<dp::util::SubjectWeakPtr, PayloadSharedPtr> > IndexMap;
         IndexMap m_indexMap;
-        SceneTreeWeakPtr m_sceneTree;
+        SceneTreeSharedPtr m_sceneTree;
       };
 
       template <typename IndexType>
-      Observer<IndexType>::Observer( const SceneTreeWeakPtr& sceneTree )
+      Observer<IndexType>::Observer( SceneTreeSharedPtr const& sceneTree )
         : m_sceneTree( sceneTree )
       {
       }
@@ -88,10 +88,10 @@ namespace dp
       }
 
       template <typename IndexType>
-      void Observer<IndexType>::attach( dp::util::Subject *subject, const PayloadSharedPtr &payload )
+      void Observer<IndexType>::attach( dp::util::SubjectSharedPtr const& subject, PayloadSharedPtr const& payload )
       {
-        m_indexMap.insert( std::make_pair(payload->m_index, std::make_pair( subject, payload ) ) );
-        subject->attach( this, payload.getWeakPtr() );
+        m_indexMap.insert( std::make_pair(payload->m_index, std::make_pair( subject.getWeakPtr(), payload ) ) );
+        subject->attach( this, payload.operator->() );    // BIG HACK!! we somehow need to align dp::util::Payload and dp::sg::xbar::Observer<IndexType::Payload
       }
 
       template <typename IndexType>
@@ -102,8 +102,9 @@ namespace dp
         typename IndexMap::iterator it = m_indexMap.find( index );
         DP_ASSERT( it != m_indexMap.end() );
 
-        it->second.first->detach( this, it->second.second.getWeakPtr());
-
+        dp::util::SubjectSharedPtr subject = it->second.first.getSharedPtr();
+        DP_ASSERT( subject );
+        subject->detach( this, it->second.second.operator->() );    // BIG HACK!! we somehow need to align dp::util::Payload and dp::sg::xbar::Observer<IndexType::Payload
 
         m_indexMap.erase( it );
       }
@@ -114,14 +115,16 @@ namespace dp
         typename IndexMap::iterator it, it_end = m_indexMap.end();
         for( it = m_indexMap.begin(); it != it_end; ++it )
         {
-          it->second.first->detach( this, it->second.second.getWeakPtr() );
+          dp::util::SubjectSharedPtr subject = it->second.first.getSharedPtr();
+          DP_ASSERT( subject );
+          subject->detach( this, it->second.second.operator->() );    // BIG HACK!! we somehow need to align dp::util::Payload and dp::sg::xbar::Observer<IndexType::Payload
         }
         m_indexMap.clear();
       }
 
 
       template <typename IndexType>
-      void Observer<IndexType>::onDestroyed( dp::util::Subject const& subject, dp::util::Payload* payload )
+      void Observer<IndexType>::onDestroyed( dp::util::Subject const& subject, dp::util::Payload * payload )
       {
         DP_ASSERT( dynamic_cast<Payload*>(payload) );
         Payload const* p = static_cast<Payload const*>(payload);

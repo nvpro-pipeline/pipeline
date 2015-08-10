@@ -33,7 +33,6 @@
 #include <dp/math/Vecnt.h>
 #include <dp/math/Matmnt.h>
 #include <dp/ui/RenderTarget.h>
-#include <dp/util/SharedPtr.h>
 
 // required declaration
 namespace dp

@@ -28,7 +28,6 @@
 
 #include <dp/fx/EffectDefs.h>
 #include <dp/fx/ParameterGroupSpec.h>
-#include <dp/util/SharedPtr.h>
 
 namespace dp
 {

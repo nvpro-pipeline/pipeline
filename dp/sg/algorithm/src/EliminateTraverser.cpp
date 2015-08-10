@@ -218,7 +218,7 @@ namespace dp
 
       void EliminateTraverser::eliminateGroups( Group *p )
       {
-        std::set<Group*> groups;
+        std::set<GroupSharedPtr> groups;
 
         if( !optimizationAllowed( p->getSharedPtr<Group>() ) )
         {
@@ -245,7 +245,7 @@ namespace dp
                     )
                 )
             {
-              groups.insert( group.getWeakPtr() );
+              groups.insert( group );
             }
           }
         }
@@ -256,7 +256,7 @@ namespace dp
 
           for ( Group::ChildrenIterator gci = p->beginChildren() ; gci != p->endChildren() ; ++gci )
           {
-            if ( !gci->isPtrTo<Group>() || groups.find( static_cast<Group*>( gci->getWeakPtr() ) ) == groups.end() )
+            if ( !gci->isPtrTo<Group>() || ( groups.find( gci->inplaceCast<dp::sg::core::Group>() ) == groups.end() ) )
             {
               newChildren.push_back( *gci );
             }

@@ -348,7 +348,7 @@ namespace dp
 
               if ( parameterData->m_samplerHandle )
               {
-                parameterData->m_samplerHandle->detach( this, nullptr );
+                parameterData->m_samplerHandle->detach( this );
                 handleReset( parameterData->m_samplerHandle );
               }
             }
@@ -369,7 +369,7 @@ namespace dp
               ParameterDataBuffer *parameterData = reinterpret_cast<ParameterDataBuffer*>(selfdata);
               if ( parameterData->m_bufferHandle )
               {
-                parameterData->m_bufferHandle->detach( this, nullptr );
+                parameterData->m_bufferHandle->detach( this );
                 handleReset(parameterData->m_bufferHandle);
               }
             }
@@ -515,12 +515,12 @@ namespace dp
               // observe buffer to get notified about buffer size changes
               if ( parameterData->m_bufferHandle )
               {
-                parameterData->m_bufferHandle->detach( this, nullptr );
+                parameterData->m_bufferHandle->detach( this );
               }
 
               if ( bufferGL )
               {
-                bufferGL->attach( this, nullptr );
+                bufferGL->attach( this );
               }
 
               // assign new buffer
@@ -551,14 +551,14 @@ namespace dp
 
             if ( parameterData->m_samplerHandle )
             {
-              parameterData->m_samplerHandle->detach( this, nullptr );
+              parameterData->m_samplerHandle->detach( this );
             }
 
             handleAssign( parameterData->m_samplerHandle, handleCast<Sampler>( containerData.m_samplerHandle ) );
 
             if ( parameterData->m_samplerHandle )
             {
-              parameterData->m_samplerHandle->attach( this, nullptr );
+              parameterData->m_samplerHandle->attach( this );
             }
 
           }

@@ -31,7 +31,6 @@
 #include <dp/util/DynamicLibrary.h>
 #include <dp/util/FileFinder.h>
 #include <dp/util/PlugInCallback.h>
-#include <dp/util/SharedPtr.h>
 #include <dp/util/Singleton.h>
 #include <map>
 #include <set>

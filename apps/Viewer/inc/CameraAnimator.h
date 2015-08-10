@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2009-2010
+// Copyright (c) 2009-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -44,8 +44,8 @@ public:
   ~CameraAnimator();
 
   void setViewState( dp::sg::ui::ViewStateSharedPtr const& vsp );
-  void moveToCamera( const dp::sg::core::FrustumCameraWeakPtr & cam );
-  void moveToLight( const dp::sg::core::LightSourceWeakPtr & light );
+  void moveToCamera( dp::sg::core::FrustumCameraSharedPtr const& cam );
+  void moveToLight( dp::sg::core::LightSourceSharedPtr const& light );
   void zoomAll();
   void cameraOrbitX( bool );
   void cameraOrbitY( bool );
@@ -66,9 +66,9 @@ signals:
 private:
   void cameraMoveDurationFactor(double);
   double determineDurationFactor();
-  dp::sg::core::FrustumCameraWeakPtr findNextIterationCamera();
-  void initCameraMove( const dp::sg::core::FrustumCameraWeakPtr & targetCam );
-  void initCameraMoveToLight( const dp::sg::core::LightSourceWeakPtr & targetLight );
+  dp::sg::core::FrustumCameraSharedPtr const& findNextIterationCamera();
+  void initCameraMove( dp::sg::core::FrustumCameraSharedPtr const& targetCam );
+  void initCameraMoveToLight( dp::sg::core::LightSourceSharedPtr const& targetLight );
   void initCameraZoomAll();
   void moveCamera( double t );
   void orbitCamera( unsigned int axisID, bool cameraRelative, float radians );

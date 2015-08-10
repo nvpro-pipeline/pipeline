@@ -983,11 +983,11 @@ void  DPAFSaveTraverser::handleGeoNode( const GeoNode *p )
       nodeData( p );
       if ( p->getMaterialEffect() )
       {
-        fprintf( m_fh, "\tmaterialEffect\t%s\n", m_objectNames[p->getMaterialEffect().getWeakPtr()].c_str() );
+        fprintf( m_fh, "\tmaterialEffect\t%s\n", m_objectNames[p->getMaterialEffect()].c_str() );
       }
       if ( p->getPrimitive() )
       {
-        fprintf( m_fh, "\tprimitive\t%s\n", m_objectNames[p->getPrimitive().getWeakPtr()].c_str() );
+        fprintf( m_fh, "\tprimitive\t%s\n", m_objectNames[p->getPrimitive()].c_str() );
       }
       fprintf( m_fh, "}\n\n" );
     }
@@ -1325,7 +1325,7 @@ void DPAFSaveTraverser::handleIndexSet( const IndexSet * p )
   }
   else
   {
-    DP_ASSERT(m_objectNames.find(getWeakPtr<Object>(p))!=m_objectNames.end());
+    DP_ASSERT(m_objectNames.find(p->getSharedPtr<Object>())!=m_objectNames.end());
   }
 }
 
@@ -1338,7 +1338,7 @@ void  DPAFSaveTraverser::handleVertexAttributeSet( const VertexAttributeSet *p )
     {
       if ( p->getSizeOfVertexData(i) )
       {
-        buffer( p->getVertexBuffer(i).getWeakPtr() );
+        buffer( p->getVertexBuffer(i) );
       }
     }
 
@@ -1361,7 +1361,7 @@ void  DPAFSaveTraverser::handleVertexAttributeSet( const VertexAttributeSet *p )
   }
   else
   {
-    DP_ASSERT(m_objectNames.find(getWeakPtr<Object>(p))!=m_objectNames.end());
+    DP_ASSERT(m_objectNames.find(p->getSharedPtr<Object>())!=m_objectNames.end());
   }
 }
 
@@ -1395,8 +1395,8 @@ void DPAFSaveTraverser::handleEffectData( const EffectData * p )
         const ParameterGroupDataSharedPtr & pgd = p->getParameterGroupData( it );
         if ( pgd )
         {
-          DP_ASSERT( m_objectNames.find( pgd.getWeakPtr() ) != m_objectNames.end() );
-          fprintf( m_fh, "\t\t%s\n", m_objectNames[pgd.getWeakPtr()].c_str() );
+          DP_ASSERT( m_objectNames.find( pgd ) != m_objectNames.end() );
+          fprintf( m_fh, "\t\t%s\n", m_objectNames[pgd].c_str() );
         }
       }
       fprintf( m_fh, "\t]\n" );
@@ -1406,7 +1406,7 @@ void DPAFSaveTraverser::handleEffectData( const EffectData * p )
   }
   else
   {
-    DP_ASSERT(m_objectNames.find(getWeakPtr<Object>(p))!=m_objectNames.end());
+    DP_ASSERT(m_objectNames.find(p->getSharedPtr<Object>())!=m_objectNames.end());
   }
 }
 
@@ -1792,16 +1792,16 @@ string DPAFSaveTraverser::parameterString( const ParameterGroupData * p, dp::fx:
         {
           const BufferSharedPtr & buffer = p->getParameter<BufferSharedPtr>( it );
           DP_ASSERT( buffer );
-          DP_ASSERT( m_storedBuffers.find( buffer.getWeakPtr() ) != m_storedBuffers.end() );
-          return( m_storedBuffers[buffer.getWeakPtr()] );
+          DP_ASSERT( m_storedBuffers.find( buffer ) != m_storedBuffers.end() );
+          return( m_storedBuffers[buffer] );
         }
         break;
       case dp::fx::PT_SAMPLER_PTR :
         {
           const SamplerSharedPtr & sampler = p->getParameter<SamplerSharedPtr>( it );
           DP_ASSERT( sampler );
-          DP_ASSERT( m_storedSamplers.find( sampler.getWeakPtr() ) != m_storedSamplers.end() );
-          return( m_storedSamplers[sampler.getWeakPtr()] );
+          DP_ASSERT( m_storedSamplers.find( sampler ) != m_storedSamplers.end() );
+          return( m_storedSamplers[sampler] );
         }
         break;
       default :
@@ -1845,7 +1845,7 @@ void DPAFSaveTraverser::handleParameterGroupData( const ParameterGroupData * p )
   }
   else
   {
-    DP_ASSERT(m_objectNames.find(getWeakPtr<Object>(p))!=m_objectNames.end());
+    DP_ASSERT(m_objectNames.find(p->getSharedPtr<Object>())!=m_objectNames.end());
   }
 }
 
@@ -1887,8 +1887,8 @@ void DPAFSaveTraverser::handleSampler( const Sampler * p )
         TextureHostSharedPtr const& textureHost = texture.staticCast<TextureHost>();
         if ( textureHost->getFileName().empty() )
         {
-          DP_ASSERT( m_textureImageNames.find(textureHost.getWeakPtr()) != m_textureImageNames.end() );
-          fprintf( m_fh, "\ttextureImage\t%s\n", m_textureImageNames[textureHost.getWeakPtr()].c_str() );
+          DP_ASSERT( m_textureImageNames.find(textureHost) != m_textureImageNames.end() );
+          fprintf( m_fh, "\ttextureImage\t%s\n", m_textureImageNames[textureHost].c_str() );
         }
         else
         {
@@ -1904,13 +1904,13 @@ void DPAFSaveTraverser::handleSampler( const Sampler * p )
       fprintfCompareMode( m_fh, "\tcompareMode\t", p->getCompareMode() );
       fprintf( m_fh, "}\n\n" );
 
-      DP_ASSERT( m_storedSamplers.find( p ) == m_storedSamplers.end() );
-      m_storedSamplers.insert( std::pair<const Sampler *, std::string>( p, name ) );
+      DP_ASSERT( m_storedSamplers.find( p->getSharedPtr<Sampler>() ) == m_storedSamplers.end() );
+      m_storedSamplers.insert( std::make_pair( p->getSharedPtr<Sampler>(), name ) );
     }
   }
   else
   {
-    DP_ASSERT(m_objectNames.find(getWeakPtr<Object>(p))!=m_objectNames.end());
+    DP_ASSERT(m_objectNames.find(p->getSharedPtr<Object>())!=m_objectNames.end());
   }
 }
 
@@ -2033,9 +2033,10 @@ void DPAFSaveTraverser::doApply( const NodeSharedPtr & root )
 {
   DP_ASSERT( m_scene && "This traverser needs a valid Scene. Use setScene() prior calling apply()");
   DP_ASSERT( m_scene->getRootNode() == root );
-  DP_ASSERT( m_storedBuffers.empty() && m_storedSamplers.empty() );
+  DP_ASSERT( m_objectNames.empty() && m_sharedObjects.empty() && m_storedBuffers.empty() && m_storedSamplers.empty() );
 
-  initUnnamedCounters();
+  m_nameSet.clear();
+  m_nameCount = 0;
 
   fprintf( m_fh, "#DPAF V1.0\n\n" );
 
@@ -2058,28 +2059,28 @@ void DPAFSaveTraverser::doApply( const NodeSharedPtr & root )
   if ( backImage )
   {
     fprintf( m_fh, "\tbackImage\t%s\n", backImage->getFileName().empty()
-      ? m_textureImageNames[backImage.getWeakPtr()].c_str()
+      ? m_textureImageNames[backImage].c_str()
       : getName( backImage->getFileName() ).c_str() );
   }
   if ( m_scene->getNumberOfCameras() )
   {
     if ( m_scene->getNumberOfCameras() == 1 )
     {
-      fprintf( m_fh, "\tcameras\t\t\t[ %s ]\n", m_objectNames[m_scene->beginCameras()->getWeakPtr()].c_str() );
+      fprintf( m_fh, "\tcameras\t\t\t[ %s ]\n", m_objectNames[*m_scene->beginCameras()].c_str() );
     }
     else
     {
       fprintf( m_fh, "\tcameras\t\t\t[\n" );
       for ( Scene::CameraIterator scci = m_scene->beginCameras() ; scci != m_scene->endCameras() ; ++scci )
       {
-        fprintf( m_fh, "\t       \t\t\t \t%s\n", m_objectNames[scci->getWeakPtr()].c_str() );
+        fprintf( m_fh, "\t       \t\t\t \t%s\n", m_objectNames[*scci].c_str() );
       }
       fprintf( m_fh, "\t       \t\t\t]\n" );
     }
   }
   if ( m_scene->getRootNode() )
   {
-    fprintf( m_fh, "\troot\t\t\t%s\n", m_objectNames[m_scene->getRootNode().getWeakPtr()].c_str() );
+    fprintf( m_fh, "\troot\t\t\t%s\n", m_objectNames[m_scene->getRootNode()].c_str() );
   }
 
 
@@ -2092,7 +2093,7 @@ void DPAFSaveTraverser::doApply( const NodeSharedPtr & root )
 
     fprintf( m_fh, "ViewState\n{\n" );
     fprintfBool( m_fh, "\tautoClip\t", m_viewState->getAutoClipPlanes() );
-    fprintf( m_fh, "\tcamera\t%s\n", m_objectNames[m_viewState->getCamera().getWeakPtr()].c_str() );
+    fprintf( m_fh, "\tcamera\t%s\n", m_objectNames[m_viewState->getCamera()].c_str() );
     fprintfBool( m_fh, "\tstereoState\t", false );//m_viewState->getRenderTarget() ? m_viewState->getRenderTarget()->isStereoEnabled() : false );
     fprintfBool( m_fh, "\tstereoAutomaticEyeDistanceAdjustment\t", m_viewState->isStereoAutomaticEyeDistanceAdjustment() );
     fprintf( m_fh, "\tstereoAutomaticEyeDistanceFactor\t%f\n", m_viewState->getStereoAutomaticEyeDistanceFactor() );
@@ -2107,16 +2108,18 @@ void DPAFSaveTraverser::doApply( const NodeSharedPtr & root )
     fprintf( m_fh, "Links\n{\n" );
     for ( unsigned int i=0 ; i<m_links.size() ; i++ )
     {
-      DP_ASSERT( m_objectNames.find( m_links[i].subject ) != m_objectNames.end() );
-      DP_ASSERT( m_objectNames.find( m_links[i].observer ) != m_objectNames.end() );
+      DP_ASSERT( m_objectNames.find( m_links[i].subject.getSharedPtr() ) != m_objectNames.end() );
+      DP_ASSERT( m_objectNames.find( m_links[i].observer.getSharedPtr() ) != m_objectNames.end() );
       fprintf( m_fh, "\t%s %s, %s;\n" , m_links[i].name.c_str()
-        , m_objectNames[m_links[i].subject].c_str()
-        , m_objectNames[m_links[i].observer].c_str() );
+        , m_objectNames[m_links[i].subject.getSharedPtr()].c_str()
+        , m_objectNames[m_links[i].observer.getSharedPtr()].c_str() );
     }
     fprintf( m_fh, "}\n\n" );
     m_links.clear();
   }
 
+  m_objectNames.clear();
+  m_sharedObjects.clear();
   m_storedBuffers.clear();
   m_storedSamplers.clear();
 }
@@ -2133,7 +2136,7 @@ void  DPAFSaveTraverser::cameraData( const Camera *p )
     fprintf( m_fh, "\theadLights\t[\n" );
     for ( Camera::HeadLightConstIterator hlci = p->beginHeadLights() ; hlci != p->endHeadLights() ; ++hlci )
     {
-      fprintf( m_fh, "\t          \t %s\n", m_objectNames[hlci->getWeakPtr()].c_str() );
+      fprintf( m_fh, "\t          \t %s\n", m_objectNames[*hlci].c_str() );
     }
     fprintf( m_fh, "\t          \t]\n" );
   }
@@ -2186,7 +2189,7 @@ string  DPAFSaveTraverser::getObjectName( const Object *p )
     ost << "\"" << name.c_str() << "\"";
     name = ost.str();
   }
-  DP_VERIFY( m_objectNames.insert( std::make_pair( getWeakPtr<Object>(p), name ) ).second );
+  DP_VERIFY( m_objectNames.insert( std::make_pair( p->getSharedPtr<Object>(), name ) ).second );
   return( name );
 }
 
@@ -2234,14 +2237,14 @@ void  DPAFSaveTraverser::groupData( const Group *p )
   {
     if ( p->getNumberOfChildren() == 1 )
     {
-      fprintf( m_fh, "\tchildren\t[ %s ]\n", m_objectNames[p->beginChildren()->getWeakPtr()].c_str() );
+      fprintf( m_fh, "\tchildren\t[ %s ]\n", m_objectNames[*p->beginChildren()].c_str() );
     }
     else
     {
       fprintf( m_fh, "\tchildren\t[\n" );
       for ( Group::ChildrenConstIterator gcci = p->beginChildren() ; gcci != p->endChildren() ; ++gcci )
       {
-        fprintf( m_fh, "\t        \t \t%s\n", m_objectNames[gcci->getWeakPtr()].c_str() );
+        fprintf( m_fh, "\t        \t \t%s\n", m_objectNames[*gcci].c_str() );
       }
       fprintf( m_fh, "\t        \t]\n" );
     }
@@ -2262,10 +2265,10 @@ void  DPAFSaveTraverser::primitiveData( const Primitive *p )
     fprintfPatchesSpacing( m_fh, "\tpatchesSpacing\t", p->getPatchesSpacing() );
   }
   fprintf( m_fh, "\tinstanceCount %u\n",       p->getInstanceCount() ); 
-  fprintf( m_fh, "\tvertexAttributeSet\t%s\n", m_objectNames[p->getVertexAttributeSet().getWeakPtr()].c_str() );
+  fprintf( m_fh, "\tvertexAttributeSet\t%s\n", m_objectNames[p->getVertexAttributeSet()].c_str() );
   if( p->isIndexed() )
   {
-    fprintf( m_fh, "\tindexSet\t%s\n", m_objectNames[p->getIndexSet().getWeakPtr()].c_str() );
+    fprintf( m_fh, "\tindexSet\t%s\n", m_objectNames[p->getIndexSet()].c_str() );
   }
 
   // set these after setting VAS and IndexSet so that they are read in the proper order
@@ -2277,17 +2280,9 @@ void  DPAFSaveTraverser::primitiveData( const Primitive *p )
   fprintf( m_fh, "\telementCount %u\n",  count ); 
 }
 
-void DPAFSaveTraverser::initUnnamedCounters( void )
-{
-  m_objectNames.clear();
-  m_nameSet.clear();
-  m_sharedObjects.clear();
-  m_nameCount = 0;
-}
-
 bool  DPAFSaveTraverser::isFirstTime( const HandledObject *p )
 {
-  return( m_sharedObjects.insert( p ).second );
+  return( m_sharedObjects.insert( p->getSharedPtr<HandledObject>() ).second );
 }
 
 void  DPAFSaveTraverser::lightSourceData( const LightSource *p )
@@ -2297,7 +2292,7 @@ void  DPAFSaveTraverser::lightSourceData( const LightSource *p )
   fprintfBool( m_fh, "\tshadowCasting\t", p->isShadowCasting() );
   if ( p->getLightEffect() )
   {
-    fprintf( m_fh, "\tlightEffect\t%s\n", m_objectNames[p->getLightEffect().getWeakPtr()].c_str() );
+    fprintf( m_fh, "\tlightEffect\t%s\n", m_objectNames[p->getLightEffect()].c_str() );
   }
 }
 
@@ -2312,12 +2307,12 @@ void  DPAFSaveTraverser::textureImage( const TextureHostSharedPtr & tih )
   DP_ASSERT( tih );
   static int count = 0;
 
-  if ( m_textureImageNames.find( tih.getWeakPtr() ) == m_textureImageNames.end() )
+  if ( m_textureImageNames.find( tih ) == m_textureImageNames.end() )
   {
     std::ostringstream ost;
     ost << "_dpafTextureHost" << count++;
     string name(ost.str());
-    m_textureImageNames[tih.getWeakPtr()] = name;
+    m_textureImageNames[tih] = name;
 
     fprintf( m_fh, "TextureHost\t%s\n{\n", name.c_str() );
     fprintf( m_fh, "\tcreationFlags\t0x%x\n", tih->getCreationFlags() );
@@ -2382,11 +2377,11 @@ void DPAFSaveTraverser::vertexAttributeSetData( const VertexAttributeSet * p )
     {
       unsigned int count = p->getNumberOfVertexData(i);
       DP_ASSERT( p->getNumberOfVertexData(i) <= UINT_MAX );
-      DP_ASSERT( m_storedBuffers.find( p->getVertexBuffer(i).getWeakPtr() ) != m_storedBuffers.end() );
+      DP_ASSERT( m_storedBuffers.find( p->getVertexBuffer(i) ) != m_storedBuffers.end() );
 
       fprintf( m_fh, "\tvattrib%u\t%u\t%u\t%s\t%u\t%u\t%u\n", i, 
         p->getSizeOfVertexData(i), p->getTypeOfVertexData(i)
-        , m_storedBuffers[ p->getVertexBuffer(i).getWeakPtr() ].c_str()
+        , m_storedBuffers[p->getVertexBuffer(i)].c_str()
         , p->getOffsetOfVertexData(i), p->getStrideOfVertexData(i)
         , count);
     }
@@ -2395,7 +2390,7 @@ void DPAFSaveTraverser::vertexAttributeSetData( const VertexAttributeSet * p )
   fprintf( m_fh, "\tnormalizeFlags\t0x%X\n", normalizeFlags);  
 }
 
-void DPAFSaveTraverser::buffer( const Buffer *p )
+void DPAFSaveTraverser::buffer( BufferSharedPtr const& p )
 {
   DP_ASSERT( p->getSize() <= UINT_MAX );
 
@@ -2404,8 +2399,8 @@ void DPAFSaveTraverser::buffer( const Buffer *p )
     std::ostringstream name;
     name << "buffer_" << m_nameCount++;
     fprintf( m_fh, "Buffer %s\n{\n\ttype host\n\tdata", name.str().c_str() );
-    fprintfArray( m_fh, dp::DT_UNSIGNED_INT_8, 1, dp::checked_cast<unsigned int>(p->getSize()), Buffer::DataReadLock( p->getSharedPtr<Buffer>() ), 1, "\t\t" );
+    fprintfArray( m_fh, dp::DT_UNSIGNED_INT_8, 1, dp::checked_cast<unsigned int>(p->getSize()), Buffer::DataReadLock( p ), 1, "\t\t" );
     fprintf( m_fh, "}\n\n" );
-    m_storedBuffers.insert( std::pair<const Buffer *, std::string>( p, name.str() ) );
+    m_storedBuffers.insert( std::make_pair( p, name.str() ) );
   }
 }

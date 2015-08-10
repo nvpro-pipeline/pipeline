@@ -37,7 +37,7 @@ namespace dp
       {
       }
 
-      void ObjectObserver::attach( const dp::sg::core::ObjectWeakPtr& obj, ObjectTreeIndex index )
+      void ObjectObserver::attach( dp::sg::core::ObjectSharedPtr const& obj, ObjectTreeIndex index )
       {
         DP_ASSERT( m_indexMap.find(index) == m_indexMap.end() );
 
@@ -62,7 +62,7 @@ namespace dp
         }
       }
 
-      void ObjectObserver::onNotify( const dp::util::Event &event, dp::util::Payload *payload )
+      void ObjectObserver::onNotify( const dp::util::Event &event, dp::util::Payload * payload )
       {
         switch ( event.getType() )
         {
@@ -78,6 +78,7 @@ namespace dp
               data.m_hints = o->getHints();
               data.m_mask  = o->getTraversalMask();
 
+              DP_ASSERT( dynamic_cast<Payload*>(payload) );
               m_newCacheData[static_cast<Payload*>(payload)->m_index] = data;
             }
           }
@@ -88,6 +89,7 @@ namespace dp
             if ( coreEvent.getType() == dp::sg::core::Event::GROUP )
             {
               dp::sg::core::Group::Event const& groupEvent = static_cast<dp::sg::core::Group::Event const&>(coreEvent);
+              DP_ASSERT( dynamic_cast<Payload*>(payload) );
               Payload* groupPayload = static_cast<Payload*>(payload);
 
               switch ( groupEvent.getType() )
@@ -99,7 +101,7 @@ namespace dp
                 onPreRemoveChild( groupEvent.getGroup(), groupEvent.getChild(), groupEvent.getIndex(), groupPayload );
                 break;
               case dp::sg::core::Group::Event::POST_GROUP_EXCHANGED:
-                m_sceneTree->replaceSubTree( dp::util::getWeakPtr<dp::sg::core::Node>(groupEvent.getGroup()), groupPayload->m_index );
+                m_sceneTree->replaceSubTree( groupEvent.getGroup(), groupPayload->m_index );
                 break;
               case dp::sg::core::Group::Event::CLIP_PLANES_CHANGED:
                 DP_ASSERT( !"clipplanes not supported" );
@@ -111,7 +113,7 @@ namespace dp
         }
       }
 
-      void ObjectObserver::onPreRemoveChild( const dp::sg::core::Group *group, dp::sg::core::NodeSharedPtr const & child, unsigned int index, Payload* payload )
+      void ObjectObserver::onPreRemoveChild( dp::sg::core::GroupSharedPtr const& group, dp::sg::core::NodeSharedPtr const & child, unsigned int index, Payload * payload )
       {
         ObjectTreeIndex objectIndex = payload->m_index;
 
@@ -123,8 +125,8 @@ namespace dp
         bool handleAsGroup = true;
         if ( group->getObjectCode() == dp::sg::core::OC_SWITCH )
         {
-          dp::sg::core::Switch const * s = static_cast<dp::sg::core::Switch const *>( group );
-          handleAsGroup = !!s->getHints( dp::sg::core::Object::DP_SG_HINT_DYNAMIC );
+          DP_ASSERT( group.dynamicCast<dp::sg::core::Switch>() );
+          handleAsGroup = !!group.inplaceCast<dp::sg::core::Switch>()->getHints( dp::sg::core::Object::DP_SG_HINT_DYNAMIC );
         }
 
         if ( handleAsGroup )
@@ -140,7 +142,8 @@ namespace dp
         else
         {
           DP_ASSERT( group->getObjectCode() == dp::sg::core::OC_SWITCH );
-          dp::sg::core::Switch const * s = static_cast<dp::sg::core::Switch const*>( group );
+          DP_ASSERT( group.dynamicCast<dp::sg::core::Switch>() );
+          dp::sg::core::SwitchSharedPtr const& s = group.inplaceCast<dp::sg::core::Switch>();
           if ( ! s->isActive( index ) )
           {
             childIndex = ~0;
@@ -161,7 +164,7 @@ namespace dp
         }
       }
 
-      void ObjectObserver::onPostAddChild( dp::sg::core::Group const *group, dp::sg::core::NodeSharedPtr const & child, unsigned int index, Payload* payload )
+      void ObjectObserver::onPostAddChild( dp::sg::core::GroupSharedPtr const& group, dp::sg::core::NodeSharedPtr const & child, unsigned int index, Payload * payload )
       {
         ObjectTreeIndex objectIndex = payload->m_index;
 
@@ -186,7 +189,7 @@ namespace dp
         // leftSibling advanced one step too far. 
         leftSibling = currentLeftSibling;
 
-        m_sceneTree->addSubTree( child.getWeakPtr(), objectIndex, leftSibling, parentTransformIndex, leftSiblingTransformIndex );
+        m_sceneTree->addSubTree( child, objectIndex, leftSibling, parentTransformIndex, leftSiblingTransformIndex );
       }
 
     } // namespace xbar

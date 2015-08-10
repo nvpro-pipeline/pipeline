@@ -51,7 +51,7 @@ namespace dp
       public:
         SceneTreeObserver( DrawableManager * drawableManager );
         virtual void onNotify( dp::util::Event const & event, dp::util::Payload * payload );
-        virtual void onDestroyed( dp::util::Subject const & subject, dp::util::Payload* payload );
+        virtual void onDestroyed( dp::util::Subject const & subject, dp::util::Payload * payload );
 
       private:
         DrawableManager* m_drawableManager;
@@ -71,8 +71,10 @@ namespace dp
         case SceneTree::Event::Object:
           {
             SceneTree::EventObject const& eventObject = static_cast<SceneTree::EventObject const&>( eventSceneTree );
-            dp::sg::core::GeoNodeWeakPtr geoNodeWeakPtr = dp::util::weakPtr_cast<dp::sg::core::GeoNode>(eventObject.getNode().m_object);
             ObjectTreeNode const &node = eventObject.getNode();
+            DP_ASSERT( node.m_object.getSharedPtr() );
+            dp::sg::core::GeoNodeSharedPtr geoNode = node.m_object.getSharedPtr().dynamicCast<dp::sg::core::GeoNode>();
+            DP_ASSERT( geoNode );
 
             if ( m_drawableManager->m_dis.size() != m_drawableManager->m_sceneTree->getObjectTree().size() )
             {
@@ -85,9 +87,9 @@ namespace dp
               DP_ASSERT( !m_drawableManager->m_dis[eventObject.getIndex()] );
 
               // TODO there're two locations which execute this code, unify with as function
-              m_drawableManager->m_dis[eventObject.getIndex()] = m_drawableManager->addDrawableInstance( geoNodeWeakPtr, eventObject.getIndex() ); // TODO, don't pass geonode?
+              m_drawableManager->m_dis[eventObject.getIndex()] = m_drawableManager->addDrawableInstance( geoNode.getWeakPtr(), eventObject.getIndex() ); // TODO, don't pass geonode?
               m_drawableManager->setDrawableInstanceActive( m_drawableManager->m_dis[eventObject.getIndex()], node.m_worldActive );
-              m_drawableManager->m_geoNodeObserver->attach( geoNodeWeakPtr, eventObject.getIndex() );
+              m_drawableManager->m_geoNodeObserver->attach( geoNode, eventObject.getIndex() );
               break;
             case SceneTree::EventObject::Removed:
               DP_ASSERT( m_drawableManager->m_dis[eventObject.getIndex()] );
@@ -127,7 +129,7 @@ namespace dp
       DrawableManager::~DrawableManager()
       {
         if (m_sceneTree) {
-          m_sceneTree->detach( m_sceneTreeObserver.get(), nullptr );
+          m_sceneTree->detach( m_sceneTreeObserver.get() );
         }
       }
 
@@ -171,12 +173,14 @@ namespace dp
           {
             if ( m_objectTree[index].m_isDrawable )
             {
-              dp::sg::core::GeoNodeWeakPtr geoNodeWeakPtr = dp::util::weakPtr_cast<dp::sg::core::GeoNode>(m_objectTree[index].m_object);
               ObjectTreeNode const &node = m_objectTree[index];
+              DP_ASSERT( node.m_object.getSharedPtr() );
+              dp::sg::core::GeoNodeSharedPtr geoNode = node.m_object.getSharedPtr().dynamicCast<dp::sg::core::GeoNode>();
+              DP_ASSERT( geoNode );
 
-              m_drawableManager->m_dis[index] = m_drawableManager->addDrawableInstance( geoNodeWeakPtr, index );
+              m_drawableManager->m_dis[index] = m_drawableManager->addDrawableInstance( geoNode.getWeakPtr(), index );
               m_drawableManager->setDrawableInstanceActive( m_drawableManager->m_dis[index], node.m_worldActive );
-              m_drawableManager->m_geoNodeObserver->attach( geoNodeWeakPtr, index );
+              m_drawableManager->m_geoNodeObserver->attach( geoNode, index );
             }
             return true;
           }
@@ -194,13 +198,13 @@ namespace dp
         m_dis.resize( getSceneTree()->getObjectTree().size() );
 
         // create GeoNodeObserver
-        m_geoNodeObserver = GeoNodeObserver::create( m_sceneTree.getWeakPtr() );
+        m_geoNodeObserver = GeoNodeObserver::create( m_sceneTree );
 
         dp::sg::xbar::PreOrderTreeTraverser<ObjectTree, Visitor> p;
         Visitor v( this, m_sceneTree->getObjectTree() );
         p.traverse( m_sceneTree->getObjectTree(), v );
 
-        m_sceneTree->attach( m_sceneTreeObserver.get(), nullptr );
+        m_sceneTree->attach( m_sceneTreeObserver.get() );
       }
 
       void DrawableManager::detachSceneTree()
@@ -242,7 +246,7 @@ namespace dp
           DrawableManager  * m_drawableManager;
         };
 
-        m_sceneTree->detach( m_sceneTreeObserver.get(), nullptr );
+        m_sceneTree->detach( m_sceneTreeObserver.get() );
 
         m_sceneTree->getObjectTree();
         dp::sg::xbar::PreOrderTreeTraverser<ObjectTree, Visitor> p;
@@ -264,7 +268,8 @@ namespace dp
           DP_ASSERT( m_dis[index] );
           // Remove/Add to change GeometryInstance
           removeDrawableInstance( m_dis[index] );
-          m_dis[index] = addDrawableInstance( dp::util::weakPtr_cast<dp::sg::core::GeoNode>(node.m_object), index ); // TODO, don't pass geonode?
+          DP_ASSERT( node.m_object.getSharedPtr() );
+          m_dis[index] = addDrawableInstance( node.m_object.getSharedPtr().dynamicCast<dp::sg::core::GeoNode>().getWeakPtr(), index );    // TODO, don't pass geonode?
           setDrawableInstanceActive( m_dis[index], node.m_worldActive );
           break;
         }

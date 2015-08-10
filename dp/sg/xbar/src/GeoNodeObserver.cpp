@@ -37,12 +37,12 @@ namespace dp
       {
       }
 
-      void GeoNodeObserver::onNotify( const dp::util::Event &event, dp::util::Payload *payload )
+      void GeoNodeObserver::onNotify( const dp::util::Event &event, dp::util::Payload * payload )
       {
         if( m_sceneTree )
         {
-          Payload* newPayLoad = static_cast<Payload*>(payload);
-          m_dirtyGeoNodes.insert( newPayLoad->m_index );
+          DP_ASSERT( dynamic_cast<Payload*>(payload) );
+          m_dirtyGeoNodes.insert( static_cast<Payload*>(payload)->m_index );
         }
       }
 

@@ -45,7 +45,7 @@ namespace dp
             assert( buffer );
             assert( !!resourceManager );
     
-            ResourceBufferSharedPtr resourceBuffer = resourceManager->getResource<ResourceBuffer>( reinterpret_cast<size_t>(buffer.getWeakPtr()) );
+            ResourceBufferSharedPtr resourceBuffer = resourceManager->getResource<ResourceBuffer>( reinterpret_cast<size_t>(buffer.operator->()) );   // Big Hack !!
             if ( !resourceBuffer )
             {
               resourceBuffer = std::shared_ptr<ResourceBuffer>( new ResourceBuffer( buffer, resourceManager ) );
@@ -68,7 +68,7 @@ namespace dp
           }
 
           ResourceBuffer::ResourceBuffer( const dp::sg::core::BufferSharedPtr &buffer, const ResourceManagerSharedPtr& resourceManager )
-            : ResourceManager::Resource( reinterpret_cast<size_t>( buffer.getWeakPtr() ), resourceManager )
+            : ResourceManager::Resource( reinterpret_cast<size_t>( buffer.operator->() ), resourceManager )   // Big Hack !!
             , m_buffer( buffer )
             , m_isNativeBuffer( false )
             , m_bufferSize( 0 )

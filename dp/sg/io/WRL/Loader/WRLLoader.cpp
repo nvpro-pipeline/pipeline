@@ -2392,7 +2392,7 @@ ParameterGroupDataSharedPtr WRLLoader::interpretImageTexture( ImageTextureShared
       }
       else
       {
-        texImg = it->second->getSharedPtr<TextureHost>();
+        texImg = it->second.getSharedPtr().staticCast<TextureHost>();
       }
 
       SamplerSharedPtr sampler = Sampler::create( texImg );

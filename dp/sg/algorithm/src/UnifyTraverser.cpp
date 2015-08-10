@@ -831,7 +831,6 @@ namespace dp
         typedef multimap<HashKey,PrimitiveSharedPtr>::const_iterator I;
         pair<I,I> itp = v.equal_range( hashKey );
         PrimitiveSharedPtr primitive = p->getSharedPtr<Primitive>();
-        PrimitiveWeakPtr pwp = getWeakPtr<Primitive>( p );
         for ( I it = itp.first ; it != itp.second && !found ; ++it )
         {
           // check if any of those Primitives is equal or equivalent to the currently handled

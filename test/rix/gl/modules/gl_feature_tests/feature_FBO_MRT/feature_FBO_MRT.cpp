@@ -28,7 +28,6 @@
 #include "feature_FBO_MRT.h"
 
 #include <dp/util/Image.h>
-#include <dp/util/SharedPtr.h>
 
 #include <test/rix/core/framework/RiXBackend.h>
 #include <test/rix/core/helpers/GeometryHelper.h>
@@ -95,12 +94,12 @@ bool Feature_FBO_MRT::onInit()
   DP_ASSERT(m_renderGroupSecondPass);
 
   // Set the clear color for our main framebuffer
-  dp::util::shared_cast<dp::gl::RenderTarget>( m_displayTarget )->setClearColor( 0.46f, 0.72f, 0.0f, 1.0f );
+  m_displayTarget.inplaceCast<dp::gl::RenderTarget>()->setClearColor( 0.46f, 0.72f, 0.0f, 1.0f );
   // Set the clear color for our FBO
-  dp::util::shared_cast<dp::gl::RenderTarget>(m_fbo)->setClearMask( gl::TBM_COLOR_BUFFER0 | gl::TBM_COLOR_BUFFER1 | gl::TBM_DEPTH_BUFFER );
-  dp::util::shared_cast<dp::gl::RenderTarget>(m_fbo)->setClearColor( 0.46f, 0.72f, 0.0f, 1.0f, 0 );
-  dp::util::shared_cast<dp::gl::RenderTarget>(m_fbo)->setClearColor( 0.0f,  0.0f,  0.0f, 1.0f, 1 );
-  dp::util::shared_cast<dp::gl::RenderTarget>(m_fbo)->setClearDepth( 1.0f );
+  m_fbo.inplaceCast<dp::gl::RenderTarget>()->setClearMask( gl::TBM_COLOR_BUFFER0 | gl::TBM_COLOR_BUFFER1 | gl::TBM_DEPTH_BUFFER );
+  m_fbo.inplaceCast<dp::gl::RenderTarget>()->setClearColor( 0.46f, 0.72f, 0.0f, 1.0f, 0 );
+  m_fbo.inplaceCast<dp::gl::RenderTarget>()->setClearColor( 0.0f,  0.0f,  0.0f, 1.0f, 1 );
+  m_fbo.inplaceCast<dp::gl::RenderTarget>()->setClearDepth( 1.0f );
 
   return true;
 }
@@ -110,7 +109,7 @@ bool Feature_FBO_MRT::onRunInit( unsigned int i )
   std::vector<GLenum> drawBuffers;
   drawBuffers.push_back(GL_COLOR_ATTACHMENT0);
   drawBuffers.push_back(GL_COLOR_ATTACHMENT1);
-  dp::util::shared_cast<dp::gl::RenderTargetFBO>(m_fbo)->setDrawBuffers(drawBuffers);
+  m_fbo.inplaceCast<dp::gl::RenderTargetFBO>()->setDrawBuffers(drawBuffers);
 
   return true;
 }
@@ -676,9 +675,9 @@ void Feature_FBO_MRT::createSecondPass()
 
     m_colorGlowBuf = gl::Texture2D::create( GL_R32F, GL_RGBA, GL_UNSIGNED_BYTE, 2*m_width, 2*m_height );
 
-    dp::util::shared_cast<dp::gl::RenderTargetFBO>(m_fbo)->setAttachment( gl::RenderTargetFBO::COLOR_ATTACHMENT0, m_colorBuf );
-    dp::util::shared_cast<dp::gl::RenderTargetFBO>(m_fbo)->setAttachment( gl::RenderTargetFBO::COLOR_ATTACHMENT1, m_colorGlowBuf );
-    dp::util::shared_cast<dp::gl::RenderTargetFBO>(m_fbo)->setAttachment( gl::RenderTargetFBO::DEPTH_ATTACHMENT, m_depthBuf );
+    m_fbo.inplaceCast<dp::gl::RenderTargetFBO>()->setAttachment( gl::RenderTargetFBO::COLOR_ATTACHMENT0, m_colorBuf );
+    m_fbo.inplaceCast<dp::gl::RenderTargetFBO>()->setAttachment( gl::RenderTargetFBO::COLOR_ATTACHMENT1, m_colorGlowBuf );
+    m_fbo.inplaceCast<dp::gl::RenderTargetFBO>()->setAttachment( gl::RenderTargetFBO::DEPTH_ATTACHMENT, m_depthBuf );
 
     rix::gl::TextureDataGLTexture textureDataGLTexture0( m_colorBuf );
     m_rix->textureSetData( textureFBO0, textureDataGLTexture0 );

@@ -26,7 +26,6 @@
 
 #include <dp/rix/gl/inc/TextureGL3D.h>
 #include <dp/rix/gl/inc/DataTypeConversionGL.h>
-#include <dp/util/SharedPtr.h>
 
 namespace dp
 {
@@ -60,7 +59,7 @@ namespace dp
         {
           /* TODO throw exception */
         }
-        dp::util::shared_cast<dp::gl::Texture3D>( getTexture() )->setData( data, mipMapLevel );
+        getTexture().inplaceCast<dp::gl::Texture3D>()->setData( data, mipMapLevel );
       }
 
     } // namespace gl

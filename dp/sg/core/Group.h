@@ -426,7 +426,7 @@ namespace dp
           , CLIP_PLANES_CHANGED
         };
 
-        Event( Group const* group, Type type, const NodeSharedPtr& child, unsigned int index = 0 )
+        Event( GroupSharedPtr const& group, Type type, const NodeSharedPtr& child, unsigned int index = 0 )
           : core::Event( core::Event::GROUP )
           , m_group( group )
           , m_child( child )
@@ -435,7 +435,7 @@ namespace dp
         {
         }
 
-        Event( Group const* group, Type type )
+        Event( GroupSharedPtr const& group, Type type )
           : core::Event( core::Event::GROUP )
           , m_group( group )
           , m_child( NodeSharedPtr::null )
@@ -444,18 +444,18 @@ namespace dp
         {
         }
 
-        Group const* getGroup() const         { return m_group; }
-        const NodeSharedPtr& getChild() const { return m_child; }
-        unsigned int  getIndex() const        { return m_index; }
+        GroupSharedPtr const& getGroup() const  { return m_group; }
+        NodeSharedPtr const& getChild() const   { return m_child; }
+        unsigned int  getIndex() const          { return m_index; }
 
         // override getType from dp::sg::core::Event
         Type          getType() const         { return m_type; }
 
       private:
-        Group const*   m_group;
-        Type           m_type;
-        const NodeSharedPtr& m_child;
-        unsigned int   m_index;
+        GroupSharedPtr const& m_group;
+        Type                  m_type;
+        const NodeSharedPtr&  m_child;
+        unsigned int          m_index;
       };
 
 

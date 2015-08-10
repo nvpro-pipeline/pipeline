@@ -60,7 +60,7 @@ ExtractGeometryTraverser::ExtractGeometryTraverser()
   m_materials.push_back(csfsgmaterial);
   m_materialIDX = 0;
 
-  m_materialMap.insert(CSFSGMaterialHashPair(nullptr,m_materialIDX));
+  m_materialMap.insert(CSFSGMaterialHashPair(dp::sg::core::EffectDataSharedPtr::null,m_materialIDX));
 
   CSFSGNode csfsgroot;
   csfsgroot.geometryIDX = -1;
@@ -143,7 +143,7 @@ void  ExtractGeometryTraverser::handleGeoNode( const GeoNode * p )
     const dp::sg::core::ParameterGroupDataSharedPtr & smp = ed->findParameterGroupData( string( "standardMaterialParameters" ) );
     if ( smp )
     {
-      CSFSGMaterialHashMap::const_iterator itSearch = m_materialMap.find(ed.getWeakPtr());
+      CSFSGMaterialHashMap::const_iterator itSearch = m_materialMap.find(ed);
       if ( itSearch == m_materialMap.end() )
       {
         ParameterGroupSpecSharedPtr pgs = smp->getParameterGroupSpec();
@@ -155,7 +155,7 @@ void  ExtractGeometryTraverser::handleGeoNode( const GeoNode * p )
 
         m_materialIDX = makeIDX( m_materials.size() );
 
-        m_materialMap.insert(CSFSGMaterialHashPair(ed.getWeakPtr(),m_materialIDX));
+        m_materialMap.insert(CSFSGMaterialHashPair(ed,m_materialIDX));
         m_materials.push_back(material);
       }
       else{

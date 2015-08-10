@@ -56,7 +56,7 @@ namespace dp
     namespace xbar
     {
 
-      GeneratorState::GeneratorState( const SceneTreeWeakPtr& sceneTree )
+      GeneratorState::GeneratorState( SceneTreeSharedPtr const& sceneTree )
         : m_sceneTree( sceneTree )
       {
       }
@@ -76,14 +76,14 @@ namespace dp
         m_clipPlaneGroups.push_back( node.m_clipPlaneGroup );
       }
 
-      void GeneratorState::pushTransform( const TransformWeakPtr & tp )
+      void GeneratorState::pushTransform( TransformSharedPtr const& tp )
       {
         TransformTreeIndex parentIndex = getParentTransformIndex();
         TransformTreeIndex siblingIndex = getSiblingTransformIndex();
 
         // create node and fill with information
         TransformTreeNode node;
-        node.m_transform = tp;
+        node.m_transform = tp.getWeakPtr();
 
         // add node to tree
         TransformTreeIndex index = m_sceneTree->addTransform( node, parentIndex, siblingIndex );
@@ -96,14 +96,14 @@ namespace dp
         m_transformParentSiblingStack.push( make_pair( index, ~0 ) );
       }
 
-      void GeneratorState::pushTransform( const BillboardWeakPtr& bb )
+      void GeneratorState::pushTransform( BillboardSharedPtr const& bb )
       {
         TransformTreeIndex parentIndex = getParentTransformIndex();
         TransformTreeIndex siblingIndex = getSiblingTransformIndex();
 
         // create node and fill with information
         TransformTreeNode node;
-        node.m_billboard = bb;
+        node.m_billboard = bb.getWeakPtr();
 
         // add node to tree
         TransformTreeIndex index = m_sceneTree->addTransform( node, parentIndex, siblingIndex );
@@ -182,7 +182,7 @@ namespace dp
         // build a TT nodes -> OT nodes relation
         // if g is the current active transform, it was just inserted via pushTransform
         TransformTreeNode const& tnode = m_sceneTree->getTransformTreeNode( getParentTransformIndex() );
-        if( group == tnode.m_transform || group == tnode.m_billboard )
+        if( group == tnode.m_transform.getSharedPtr() || group == tnode.m_billboard.getSharedPtr() )
         {
           m_sceneTree->transformSetObjectTreeIndex( getParentTransformIndex(), index );
         }

@@ -27,6 +27,7 @@
 #include <dp/Types.h>
 #include <dp/sg/core/TextureFile.h>
 #include <dp/util/Observer.h>
+#include <dp/util/WeakPtr.h>
 #include <boost/make_shared.hpp>
 
 namespace dp
@@ -103,15 +104,16 @@ namespace dp
           payload->m_filename = filename;
           TextureFileSharedPtr textureFile = std::shared_ptr<TextureFile>( new TextureFile( filename, textureTarget ) );
           payload->m_textureFile = textureFile.getWeakPtr();
-          payload->m_textureFile->attach( &self, payload.getWeakPtr() );
+          textureFile->attach( &self, payload.operator->() );   // Big Hack !!
           it = self.m_cache.insert( std::make_pair( filename, payload) ).first;
           return textureFile;
         }
         else
         {
           // else assert that the textureTarget hasn't changed.
-          DP_ASSERT( it->second->m_textureFile->getTextureTarget() == textureTarget );
-          return it->second->m_textureFile->getSharedPtr<TextureFile>();
+          DP_ASSERT( it->second->m_textureFile.getSharedPtr() );
+          DP_ASSERT( it->second->m_textureFile.getSharedPtr()->getTextureTarget() == textureTarget );
+          return it->second->m_textureFile.getSharedPtr();
         }
       }
 

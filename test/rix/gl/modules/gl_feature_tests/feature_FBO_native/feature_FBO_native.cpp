@@ -28,7 +28,6 @@
 #include "feature_FBO_native.h"
 
 #include <dp/util/Image.h>
-#include <dp/util/SharedPtr.h>
 
 #include <test/rix/core/framework/RiXBackend.h>
 #include <test/rix/core/helpers/GeometryHelper.h>
@@ -63,7 +62,7 @@ bool Feature_FBO_native::onInit()
 {
   DP_ASSERT( dynamic_cast<test::framework::RiXBackend*>(&(*m_backend)) );
   m_rix = dynamic_cast<test::framework::RiXBackend*>(&(*m_backend))->getRenderer();
-  dp::util::shared_cast<dp::gl::RenderTarget>( m_displayTarget )->setClearColor( 0.46f, 0.72f, 0.0f, 1.0f );
+  m_displayTarget.inplaceCast<dp::gl::RenderTarget>()->setClearColor( 0.46f, 0.72f, 0.0f, 1.0f );
   
   m_renderData = new test::framework::RenderDataRiX;
 

@@ -32,7 +32,6 @@
 #include <dp/fx/EffectData.h>
 #include <dp/fx/inc/Snippet.h>
 #include <dp/util/FileFinder.h>
-#include <dp/util/SharedPtr.h>
 #include <stack>
 
 namespace dp

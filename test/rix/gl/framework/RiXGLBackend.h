@@ -86,7 +86,7 @@ extern "C"
                                ? "Bindless"
                                : (it+1)->c_str();
 
-    return dp::rix::gl::test::framework::RiXGLBackend::create( rendererName, renderEngine ).getWeakPtr();
+    return dp::rix::gl::test::framework::RiXGLBackend::create( rendererName, renderEngine ).operator->();   // Big Hack !!
   }
 
   DPTRIXGL_API int getNumSupportedRenderers()

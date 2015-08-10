@@ -69,7 +69,6 @@ namespace dp
 
       SearchTraverser::SearchTraverser(void)
       : m_currentPath(dp::sg::core::Path::create())
-      , m_objectPointer(NULL)
       , m_searchBaseClass( false )
       {
       }
@@ -80,7 +79,7 @@ namespace dp
 
       void SearchTraverser::addItem( const Object * obj )
       {
-        m_foundObjects.insert( obj );
+        m_foundObjects.insert( obj->getSharedPtr<dp::sg::core::Object>() );
         m_paths.push_back( dp::sg::core::Path::create( m_currentPath ) );
       }
 
@@ -103,15 +102,12 @@ namespace dp
         return( m_paths );
       }
 
-      const vector<ObjectWeakPtr> & SearchTraverser::getResults()
+      const vector<ObjectSharedPtr> & SearchTraverser::getResults()
       {
         if ( m_results.empty() && !m_foundObjects.empty() )
         {
           m_results.reserve( m_foundObjects.size() );
-          for ( set<const Object *>::const_iterator it = m_foundObjects.begin() ; it != m_foundObjects.end() ; ++it )
-          {
-            m_results.push_back( dp::util::getWeakPtr<Object>(*it) );
-          }
+          m_results.assign( m_foundObjects.begin(), m_foundObjects.end() );
         }
         return( m_results );
       }
@@ -126,7 +122,7 @@ namespace dp
             search( static_cast<Group const*>(p) );
           }
         }
-        else if( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
+        else if ( m_objectPointer == p->getSharedPtr<Object>() )
         {
           addItem(p);
         }
@@ -144,7 +140,7 @@ namespace dp
             search( static_cast<Object const*>(p) );
           }
         }
-        else if ( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
+        else if ( m_objectPointer == p->getSharedPtr<Object>() )
         {
           addItem(p);
         }
@@ -162,7 +158,7 @@ namespace dp
             search( static_cast<Node const*>(p) );
           }
         }
-        else if( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
+        else if ( m_objectPointer == p->getSharedPtr<Object>() )
         {
           addItem(p);
         }
@@ -177,7 +173,7 @@ namespace dp
         {
           search( p );
         }
-        else if( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
+        else if ( m_objectPointer == p->getSharedPtr<Object>() )
         {
           addItem(p);
         }
@@ -195,7 +191,7 @@ namespace dp
             search( static_cast<Group const*>(p) );
           }
         }
-        else if ( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
+        else if ( m_objectPointer == p->getSharedPtr<Object>() )
         {
           addItem(p);
         }
@@ -213,7 +209,7 @@ namespace dp
             search( static_cast<Object const*>(p) );
           }
         }
-        else if ( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
+        else if ( m_objectPointer == p->getSharedPtr<Object>() )
         {
           addItem(p);
         }
@@ -231,7 +227,7 @@ namespace dp
             search( static_cast<Object const*>(p) );
           }
         }
-        else if ( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
+        else if ( m_objectPointer == p->getSharedPtr<Object>() )
         {
           addItem(p);
         }
@@ -249,7 +245,7 @@ namespace dp
             search( static_cast<Group const*>(p) );
           }
         }
-        else if ( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
+        else if ( m_objectPointer == p->getSharedPtr<Object>() )
         {
           addItem(p);
         }
@@ -264,7 +260,7 @@ namespace dp
         {
           search( p );
         }
-        else if ( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
+        else if ( m_objectPointer == p->getSharedPtr<Object>() )
         {
           addItem(p);
         }
@@ -282,7 +278,7 @@ namespace dp
             search( static_cast<Node const*>(p) );
           }
         }
-        else if ( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
+        else if ( m_objectPointer == p->getSharedPtr<Object>() )
         {
           addItem(p);
         }
@@ -300,7 +296,7 @@ namespace dp
             search( static_cast<Object const*>(p) );
           }
         }
-        else if ( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
+        else if ( m_objectPointer == p->getSharedPtr<Object>() )
         {
           addItem(p);
         }
@@ -318,7 +314,7 @@ namespace dp
             search( static_cast<FrustumCamera const*>(p) );
           }
         }
-        else if ( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
+        else if ( m_objectPointer == p->getSharedPtr<Object>() )
         {
           addItem(p);
         }
@@ -336,7 +332,7 @@ namespace dp
             search( static_cast<FrustumCamera const*>(p) );
           }
         }
-        else if ( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
+        else if ( m_objectPointer == p->getSharedPtr<Object>() )
         {
           addItem(p);
         }
@@ -354,7 +350,7 @@ namespace dp
             search( static_cast<Camera const*>(p) );
           }
         }
-        else if ( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
+        else if ( m_objectPointer == p->getSharedPtr<Object>() )
         {
           addItem(p);
         }
@@ -369,7 +365,7 @@ namespace dp
         {
           search( p );
         }
-        else if ( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
+        else if ( m_objectPointer == p->getSharedPtr<Object>() )
         {
           addItem( p );
         }
@@ -387,7 +383,7 @@ namespace dp
             search( static_cast<Object const*>(p) );
           }
         }
-        else if ( m_objectPointer == dp::util::getWeakPtr<Object>( p ) )
+        else if ( m_objectPointer == p->getSharedPtr<Object>() )
         {
           addItem( p );
         }

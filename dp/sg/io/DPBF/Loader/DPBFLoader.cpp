@@ -5207,7 +5207,7 @@ TextureHostSharedPtr DPBFLoader::loadTextureHost(uint_t offset, std::string& fil
       map<string,TextureHostWeakPtr>::const_iterator it = m_textureImages.find( file );
       if ( it != m_textureImages.end() )
       {
-        imgHdl = it->second->getSharedPtr<TextureHost>();
+        imgHdl = it->second.getSharedPtr().staticCast<TextureHost>();
       }
       else
       {
@@ -5263,7 +5263,7 @@ TextureHostSharedPtr DPBFLoader::loadTextureHost_nbf_4b(uint_t offset, std::stri
       map<string,TextureHostWeakPtr>::const_iterator it = m_textureImages.find( file );
       if ( it != m_textureImages.end() )
       {
-        imgHdl = it->second->getSharedPtr<TextureHost>();
+        imgHdl = it->second.getSharedPtr().staticCast<TextureHost>();
       }
       else
       {

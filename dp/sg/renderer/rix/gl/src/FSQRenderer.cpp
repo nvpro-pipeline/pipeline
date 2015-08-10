@@ -26,7 +26,6 @@
 
 #include <dp/sg/renderer/rix/gl/FSQRenderer.h>
 #include <dp/sg/renderer/rix/gl/inc/FSQRendererImpl.h>
-#include <dp/util/SharedPtr.h>
 
 namespace dp
 {
@@ -49,7 +48,7 @@ namespace dp
             GL_TEXTURE_2D_ARRAY_EXT, GL_TEXTURE_RECTANGLE_ARB }; 
 
           FSQRenderer::FSQRenderer( const dp::gl::RenderTargetSharedPtr &target )
-            : Renderer( dp::util::shared_cast<dp::ui::RenderTarget>(target) )
+            : Renderer( target )
           {  
           }
 

@@ -43,7 +43,7 @@ namespace dp
             assert( sampler );
             assert( resourceManager );
 
-            ResourceSamplerSharedPtr resourceSampler = resourceManager->getResource<ResourceSampler>( reinterpret_cast<size_t>(sampler.getWeakPtr()) );
+            ResourceSamplerSharedPtr resourceSampler = resourceManager->getResource<ResourceSampler>( reinterpret_cast<size_t>(sampler.operator->()) );   // Big Hack !!
             if ( !resourceSampler )
             {
               resourceSampler = std::shared_ptr<ResourceSampler>( new ResourceSampler( sampler, resourceManager ) );
@@ -54,7 +54,7 @@ namespace dp
           }
 
           ResourceSampler::ResourceSampler( const dp::sg::core::SamplerSharedPtr &sampler, const ResourceManagerSharedPtr& resourceManager )
-            : ResourceManager::Resource( reinterpret_cast<size_t>( sampler.getWeakPtr() ), resourceManager )
+            : ResourceManager::Resource( reinterpret_cast<size_t>( sampler.operator->() ), resourceManager )    // Big Hack !!
             , m_sampler( sampler )
           {
             resourceManager->subscribe( this );

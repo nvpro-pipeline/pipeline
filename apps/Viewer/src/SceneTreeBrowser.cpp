@@ -266,7 +266,7 @@ void SceneTreeBrowser::itemPressed( QTreeWidgetItem * item, int column )
       item = item->parent();
 
       DP_ASSERT( static_cast<SceneTreeItem*>(item)->getObject().isPtrTo<GeoNode>() );
-      GeoNode * geoNode = static_cast<SceneTreeItem*>(item)->getObject().staticCast<GeoNode>().getWeakPtr();
+      GeoNodeSharedPtr geoNode = static_cast<SceneTreeItem*>(item)->getObject().staticCast<GeoNode>();
       QByteArray qba( reinterpret_cast<char*>(&geoNode), sizeof(void*) );
 
       QMimeData * mimeData = new QMimeData;

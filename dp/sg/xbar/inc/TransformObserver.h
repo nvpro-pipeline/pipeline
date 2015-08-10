@@ -67,12 +67,12 @@ namespace dp
         virtual ~TransformObserver();
 
       public:
-        static TransformObserverSharedPtr create( SceneTreeWeakPtr sceneTree )
+        static TransformObserverSharedPtr create( SceneTreeSharedPtr const& sceneTree )
         {
           return( std::shared_ptr<TransformObserver>( new TransformObserver(sceneTree) ) );
         }
 
-        void attach( dp::sg::core::TransformWeakPtr const & t, TransformTreeIndex index );
+        void attach( dp::sg::core::TransformSharedPtr const & t, TransformTreeIndex index );
 
         const DirtyPayloads& getDirtyPayloads( ) const 
         {
@@ -85,11 +85,11 @@ namespace dp
         }
 
       protected:
-        TransformObserver( SceneTreeWeakPtr sceneTree ) : Observer<TransformTreeIndex>( sceneTree )
+        TransformObserver( SceneTreeSharedPtr const& sceneTree ) : Observer<TransformTreeIndex>( sceneTree )
         {
         }
 
-        void onNotify( const dp::util::Event &event, dp::util::Payload *payload );
+        void onNotify( const dp::util::Event &event, dp::util::Payload * payload );
         virtual void onDetach( TransformTreeIndex index );
 
       private:

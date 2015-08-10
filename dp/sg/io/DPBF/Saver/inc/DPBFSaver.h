@@ -330,7 +330,7 @@ class DPBFSaveTraverser : public dp::sg::algorithm::SharedTraverser
     std::string               m_errorMessage; //!< contains the error if saving was not successful
     unsigned int              m_fileOffset; // actual file offset
 
-    std::map<dp::sg::core::ObjectWeakPtr, uint_t>       m_objectOffsetMap; // mapping DP objects to the corresponding offsets in file mapping
+    std::map<dp::sg::core::ObjectSharedPtr, uint_t>     m_objectOffsetMap; // mapping DP objects to the corresponding offsets in file mapping
     std::map<dp::sg::core::DataID, uint_t>              m_objectDataIDOffsetMap; // mapping object IDs of shared objects to corresponding offsets
 
     const dp::util::PlugInCallback  * m_pic;

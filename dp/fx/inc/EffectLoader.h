@@ -32,7 +32,6 @@
 #include <dp/fx/EffectSpec.h>
 #include <dp/fx/EffectLibrary.h>
 #include <dp/fx/inc/Snippet.h>
-#include <dp/util/SharedPtr.h>
 #include <string>
 
 namespace dp

@@ -286,7 +286,6 @@ void DPBFSaveTraverser::doApply( const NodeSharedPtr & root )
 {
   NBFHeader * nbfHdr;
 
-  m_objectOffsetMap.clear();
   m_fileOffset = 0;
   m_success = true;
   m_errorMessage = "";
@@ -377,6 +376,8 @@ void DPBFSaveTraverser::doApply( const NodeSharedPtr & root )
     delete m_fm;                  // delete file mapping at the end
     m_fm = NULL;
   }
+
+  m_objectOffsetMap.clear();
 }
 
 // Scene
@@ -442,8 +443,8 @@ uint_t DPBFSaveTraverser::handleScene( SceneSharedPtr const& scene )
       unsigned int i = 0;
       for ( Scene::CameraIterator sci = scene->beginCameras() ; sci != scene->endCameras() ; ++sci, ++i )
       { // write offset
-        DP_ASSERT( m_objectOffsetMap.find( sci->getWeakPtr() ) != m_objectOffsetMap.end() );
-        camOffs[i] = m_objectOffsetMap[sci->getWeakPtr()];
+        DP_ASSERT( m_objectOffsetMap.find( *sci ) != m_objectOffsetMap.end() );
+        camOffs[i] = m_objectOffsetMap[*sci];
       }
     }
     
@@ -456,19 +457,19 @@ uint_t DPBFSaveTraverser::handleScene( SceneSharedPtr const& scene )
       for ( unsigned int i=0; i<scenePtr->numObjectLinks ; ++i )
       {
         // write offset
-        DP_ASSERT( m_objectOffsetMap.find( m_links[i].subject ) != m_objectOffsetMap.end() );
-        DP_ASSERT( m_objectOffsetMap.find( m_links[i].observer ) != m_objectOffsetMap.end() );
+        DP_ASSERT( m_objectOffsetMap.find( m_links[i].subject.getSharedPtr() ) != m_objectOffsetMap.end() );
+        DP_ASSERT( m_objectOffsetMap.find( m_links[i].observer.getSharedPtr() ) != m_objectOffsetMap.end() );
         links[i].linkID = m_links[i].id;
-        links[i].subject = m_objectOffsetMap[m_links[i].subject];
-        links[i].observer = m_objectOffsetMap[m_links[i].observer];
+        links[i].subject = m_objectOffsetMap[m_links[i].subject.getSharedPtr()];
+        links[i].observer = m_objectOffsetMap[m_links[i].observer.getSharedPtr()];
       }
     }
 
     // root node
     if ( scene->getRootNode() )
     { // write offset to scene's root node
-      DP_ASSERT(m_objectOffsetMap.find(scene->getRootNode().getWeakPtr())!=m_objectOffsetMap.end());
-      scenePtr->root = m_objectOffsetMap[scene->getRootNode().getWeakPtr()];
+      DP_ASSERT(m_objectOffsetMap.find(scene->getRootNode())!=m_objectOffsetMap.end());
+      scenePtr->root = m_objectOffsetMap[scene->getRootNode()];
     }
   }
   return sceneOffs;
@@ -489,8 +490,8 @@ uint_t DPBFSaveTraverser::handleViewState( dp::sg::ui::ViewStateSharedPtr const&
       Offset_AutoPtr<NBFViewState> viewStatePtr(this, vsOffs);       
       // write view state specific data
       // ... camera
-      DP_ASSERT( !viewState->getCamera() || m_objectOffsetMap.find(viewState->getCamera().getWeakPtr())!=m_objectOffsetMap.end() );
-      viewStatePtr->camera = viewState->getCamera() ? m_objectOffsetMap[viewState->getCamera().getWeakPtr()] : 0;
+      DP_ASSERT( !viewState->getCamera() || m_objectOffsetMap.find(viewState->getCamera())!=m_objectOffsetMap.end() );
+      viewStatePtr->camera = viewState->getCamera() ? m_objectOffsetMap[viewState->getCamera()] : 0;
       // ... jitter settings
       // ... stereo settings
       viewStatePtr->isStereo = false; //viewState->getRenderTarget() ? viewState->getRenderTarget()->isStereoEnabled() : false;
@@ -506,7 +507,7 @@ uint_t DPBFSaveTraverser::handleViewState( dp::sg::ui::ViewStateSharedPtr const&
 // Cameras
 void DPBFSaveTraverser::handleParallelCamera(const ParallelCamera *p)
 {
-  ObjectWeakPtr ph = getWeakPtr<Object>(p);
+  ObjectSharedPtr ph = p->getSharedPtr<Object>();
   if ( m_objectOffsetMap.find(ph) == m_objectOffsetMap.end() )
   {
     SharedTraverser::handleParallelCamera(p);
@@ -527,7 +528,7 @@ void DPBFSaveTraverser::handleParallelCamera(const ParallelCamera *p)
 
 void DPBFSaveTraverser::handlePerspectiveCamera(const PerspectiveCamera *p)
 {
-  ObjectWeakPtr ph = getWeakPtr<Object>(p);
+  ObjectSharedPtr ph = p->getSharedPtr<Object>();
   if ( m_objectOffsetMap.find(ph) == m_objectOffsetMap.end() )
   {
     SharedTraverser::handlePerspectiveCamera(p);
@@ -548,7 +549,7 @@ void DPBFSaveTraverser::handlePerspectiveCamera(const PerspectiveCamera *p)
 
 void DPBFSaveTraverser::handleMatrixCamera(const MatrixCamera *p)
 {
-  ObjectWeakPtr ph = getWeakPtr<Object>(p);
+  ObjectSharedPtr ph = p->getSharedPtr<Object>();
   if ( m_objectOffsetMap.find(ph) == m_objectOffsetMap.end() )
   {
     SharedTraverser::handleMatrixCamera(p);
@@ -572,7 +573,7 @@ void DPBFSaveTraverser::handleMatrixCamera(const MatrixCamera *p)
 // Nodes
 void DPBFSaveTraverser::handleBillboard(const Billboard *p)
 {
-  ObjectWeakPtr ph = getWeakPtr<Object>(p);
+  ObjectSharedPtr ph = p->getSharedPtr<Object>();
   if ( m_objectOffsetMap.find(ph) == m_objectOffsetMap.end() )
   {
     // call base implementation for further traversing the tree
@@ -598,7 +599,7 @@ void DPBFSaveTraverser::handleBillboard(const Billboard *p)
 
 void DPBFSaveTraverser::handleEffectData( const EffectData * p )
 {
-  ObjectWeakPtr ph = getWeakPtr<Object>(p);
+  ObjectSharedPtr ph = p->getSharedPtr<Object>();
   if ( m_objectOffsetMap.find(ph) == m_objectOffsetMap.end() )
   {
     SharedTraverser::handleEffectData( p );         // walk the EffectData's parameter groups invoking the base implementation
@@ -642,8 +643,8 @@ void DPBFSaveTraverser::handleEffectData( const EffectData * p )
         const ParameterGroupDataSharedPtr & pgd = p->getParameterGroupData( it );
         if ( pgd )
         {
-          DP_ASSERT( m_objectOffsetMap.find( pgd.getWeakPtr() ) != m_objectOffsetMap.end() );
-          pgds[i++] = m_objectOffsetMap[pgd.getWeakPtr()];
+          DP_ASSERT( m_objectOffsetMap.find( pgd ) != m_objectOffsetMap.end() );
+          pgds[i++] = m_objectOffsetMap[pgd];
         }
         else
         {
@@ -657,7 +658,7 @@ void DPBFSaveTraverser::handleEffectData( const EffectData * p )
 
 void DPBFSaveTraverser::handleParameterGroupData( const ParameterGroupData * p )
 {
-  ObjectWeakPtr ph = getWeakPtr<Object>(p);
+  ObjectSharedPtr ph = p->getSharedPtr<Object>();
   if ( m_objectOffsetMap.find(ph) == m_objectOffsetMap.end() )
   {
     SharedTraverser::handleParameterGroupData( p );
@@ -700,8 +701,8 @@ void DPBFSaveTraverser::handleParameterGroupData( const ParameterGroupData * p )
           ObjectSharedPtr obj = p->getParameter<ObjectSharedPtr>( it );
           if ( obj )
           {
-            DP_ASSERT( m_objectOffsetMap.find( obj.getWeakPtr() ) != m_objectOffsetMap.end() );
-            memcpy( &data[it->second], &m_objectOffsetMap[obj.getWeakPtr()], sizeof(uint_t) );
+            DP_ASSERT( m_objectOffsetMap.find( obj ) != m_objectOffsetMap.end() );
+            memcpy( &data[it->second], &m_objectOffsetMap[obj], sizeof(uint_t) );
           }
           else
           {
@@ -715,7 +716,7 @@ void DPBFSaveTraverser::handleParameterGroupData( const ParameterGroupData * p )
 
 void DPBFSaveTraverser::handleSampler( const Sampler * p )
 {
-  ObjectWeakPtr ph = getWeakPtr<Object>(p);
+  ObjectSharedPtr ph = p->getSharedPtr<Object>();
   if ( m_objectOffsetMap.find(ph) == m_objectOffsetMap.end() )
   {
     SharedTraverser::handleSampler( p );
@@ -773,7 +774,7 @@ void DPBFSaveTraverser::handleSampler( const Sampler * p )
 
 void DPBFSaveTraverser::handleGeoNode(const GeoNode *p)
 {
-  ObjectWeakPtr ph = getWeakPtr<Object>(p);
+  ObjectSharedPtr ph = p->getSharedPtr<Object>();
   if ( m_objectOffsetMap.find(ph) == m_objectOffsetMap.end() )
   {
     // walk the GeoNode's geometry by invoking the base implementation
@@ -791,8 +792,8 @@ void DPBFSaveTraverser::handleGeoNode(const GeoNode *p)
       writeNode(p, nodePtr, NBF_GEO_NODE); // a GeoNode is a Node
 
       // GeoNode specific data    
-      nodePtr->materialEffect = p->getMaterialEffect() ? m_objectOffsetMap[p->getMaterialEffect().getWeakPtr()] : 0;
-      nodePtr->primitive = p->getPrimitive() ? m_objectOffsetMap[p->getPrimitive().getWeakPtr()] : 0;
+      nodePtr->materialEffect = p->getMaterialEffect() ? m_objectOffsetMap[p->getMaterialEffect()] : 0;
+      nodePtr->primitive = p->getPrimitive() ? m_objectOffsetMap[p->getPrimitive()] : 0;
       nodePtr->stateSet = 0;
     }
   }
@@ -800,7 +801,7 @@ void DPBFSaveTraverser::handleGeoNode(const GeoNode *p)
 
 void DPBFSaveTraverser::handleGroup(const Group *p)
 {
-  ObjectWeakPtr ph = getWeakPtr<Object>(p);
+  ObjectSharedPtr ph = p->getSharedPtr<Object>();
   if ( m_objectOffsetMap.find(ph) == m_objectOffsetMap.end() )
   {
     // call base implementation for further traversing the tree
@@ -822,7 +823,7 @@ void DPBFSaveTraverser::handleGroup(const Group *p)
 
 void DPBFSaveTraverser::handleTransform(const Transform *p)
 {
-  ObjectWeakPtr ph = getWeakPtr<Object>(p);
+  ObjectSharedPtr ph = p->getSharedPtr<Object>();
   if ( m_objectOffsetMap.find(ph) == m_objectOffsetMap.end() )
   {
     // call base implementation for further traversing the tree
@@ -847,7 +848,7 @@ void DPBFSaveTraverser::handleTransform(const Transform *p)
 
 void DPBFSaveTraverser::handleLOD(const LOD *p)
 {
-  ObjectWeakPtr ph = getWeakPtr<Object>(p);
+  ObjectSharedPtr ph = p->getSharedPtr<Object>();
   if ( m_objectOffsetMap.find(ph) == m_objectOffsetMap.end() )
   {
     // NOTE: the base implementation traverses only active childs of a LOD node, and Hence, 
@@ -885,7 +886,7 @@ void DPBFSaveTraverser::handleLOD(const LOD *p)
 
 void DPBFSaveTraverser::handleSwitch(const Switch *p)
 {
-  ObjectWeakPtr ph = getWeakPtr<Object>(p);
+  ObjectSharedPtr ph = p->getSharedPtr<Object>();
   if ( m_objectOffsetMap.find(ph) == m_objectOffsetMap.end() )
   {
     // NOTE: the base implementation traverses only active childs of a Switch, and Hence, 
@@ -949,7 +950,7 @@ void DPBFSaveTraverser::handleSwitch(const Switch *p)
 
 void DPBFSaveTraverser::handleLightSource( const LightSource * p )
 {
-  ObjectWeakPtr ph = getWeakPtr<Object>(p);
+  ObjectSharedPtr ph = p->getSharedPtr<Object>();
   if ( m_objectOffsetMap.find(ph) == m_objectOffsetMap.end() )
   {
     // call base implementation for further traversing the tree
@@ -995,14 +996,14 @@ void DPBFSaveTraverser::writePrimitive(const Primitive * prim, NBFPrimitive * nb
   nbfPrim->instanceCount    = prim->getInstanceCount();
   nbfPrim->renderFlags      = prim->getRenderFlags();
 
-  DP_ASSERT( m_objectOffsetMap.find( prim->getVertexAttributeSet().getWeakPtr() ) != m_objectOffsetMap.end() );
-  nbfPrim->vertexAttributeSet = m_objectOffsetMap[prim->getVertexAttributeSet().getWeakPtr()];
-  nbfPrim->indexSet = prim->getIndexSet() ? m_objectOffsetMap[prim->getIndexSet().getWeakPtr()] : 0;
+  DP_ASSERT( m_objectOffsetMap.find( prim->getVertexAttributeSet() ) != m_objectOffsetMap.end() );
+  nbfPrim->vertexAttributeSet = m_objectOffsetMap[prim->getVertexAttributeSet()];
+  nbfPrim->indexSet = prim->getIndexSet() ? m_objectOffsetMap[prim->getIndexSet()] : 0;
 }
 
 void DPBFSaveTraverser::handlePrimitive( const Primitive *p )
 {
-  ObjectWeakPtr ph = getWeakPtr<Object>(p);
+  ObjectSharedPtr ph = p->getSharedPtr<Object>();
   if ( m_objectOffsetMap.find(ph) == m_objectOffsetMap.end() )
   {
     SharedTraverser::traversePrimitive( p );
@@ -1026,7 +1027,7 @@ void DPBFSaveTraverser::handlePrimitive( const Primitive *p )
 
 void DPBFSaveTraverser::handleIndexSet( const IndexSet * p )
 {
-  ObjectWeakPtr ph = getWeakPtr<Object>(p);
+  ObjectSharedPtr ph = p->getSharedPtr<Object>();
   if ( m_objectOffsetMap.find(ph) == m_objectOffsetMap.end() )
   {
     if ( calculatingStorageRequirements() )
@@ -1058,7 +1059,7 @@ void DPBFSaveTraverser::handleIndexSet( const IndexSet * p )
 
 void DPBFSaveTraverser::handleVertexAttributeSet( const VertexAttributeSet *p )
 {
-  ObjectWeakPtr ph = getWeakPtr<Object>(p);
+  ObjectSharedPtr ph = p->getSharedPtr<Object>();
   if ( m_objectOffsetMap.find(ph) == m_objectOffsetMap.end() )
   {
     if ( calculatingStorageRequirements() )
@@ -1090,7 +1091,7 @@ bool DPBFSaveTraverser::processSharedObject(const Object * obj, uint_t objCode)
 
     // independent of the object type, it is sufficient to write general object data only,
     // and just link to the corresponding source object
-    Offset_AutoPtr<NBFObject> objPtr(this, m_objectOffsetMap[getWeakPtr<Object>(obj)]);
+    Offset_AutoPtr<NBFObject> objPtr(this, m_objectOffsetMap[obj->getSharedPtr<Object>()]);
 
     // write object data
     writeObject(obj, objPtr, objCode);
@@ -1157,8 +1158,8 @@ void DPBFSaveTraverser::writeGroup(const Group * grpPtr, NBFGroup * nbfGrpPtr, u
   unsigned int i=0;
   for ( Group::ChildrenConstIterator gcci = grpPtr->beginChildren() ; gcci != grpPtr->endChildren() ; ++gcci, ++i )
   {
-    DP_ASSERT( m_objectOffsetMap.find( gcci->getWeakPtr() ) != m_objectOffsetMap.end() );
-    childOffs[i] = m_objectOffsetMap[gcci->getWeakPtr()];
+    DP_ASSERT( m_objectOffsetMap.find( *gcci ) != m_objectOffsetMap.end() );
+    childOffs[i] = m_objectOffsetMap[*gcci];
   }
 
   // allocate slot where to write the clip planes, and write them
@@ -1219,8 +1220,8 @@ void DPBFSaveTraverser::writeLightSource(const LightSource* lightSrcPtr, NBFLigh
   nbfLightSrcPtr->animation = 0;
   if ( lightSrcPtr->getLightEffect() )
   {
-    DP_ASSERT(m_objectOffsetMap.find(lightSrcPtr->getLightEffect().getWeakPtr())!=m_objectOffsetMap.end());
-    nbfLightSrcPtr->lightEffect = m_objectOffsetMap[lightSrcPtr->getLightEffect().getWeakPtr()];
+    DP_ASSERT(m_objectOffsetMap.find(lightSrcPtr->getLightEffect())!=m_objectOffsetMap.end());
+    nbfLightSrcPtr->lightEffect = m_objectOffsetMap[lightSrcPtr->getLightEffect()];
   }
 }
 
@@ -1255,8 +1256,8 @@ void DPBFSaveTraverser::writeCamera(const Camera * camPtr, NBFCamera * nbfCamPtr
     unsigned int i=0;
     for ( Camera::HeadLightConstIterator hlci = camPtr->beginHeadLights() ; hlci != camPtr->endHeadLights() ; ++hlci, ++i )
     {
-      DP_ASSERT(m_objectOffsetMap.find(hlci->getWeakPtr())!=m_objectOffsetMap.end());
-      lightOffs[i] = m_objectOffsetMap[hlci->getWeakPtr()];
+      DP_ASSERT(m_objectOffsetMap.find(*hlci)!=m_objectOffsetMap.end());
+      lightOffs[i] = m_objectOffsetMap[*hlci];
     }
   }
 }

@@ -995,7 +995,7 @@ namespace dp
 
       inline void SharedTraverser::doTraverseObject( const dp::sg::core::ObjectSharedPtr & p )
       {
-        traverseLockedObject( p.getWeakPtr() );
+        traverseLockedObject( p.operator->() );   // Big Hack !!
       }
 
       template <typename T, typename U> 
@@ -1014,7 +1014,7 @@ namespace dp
 
       inline void ExclusiveTraverser::doTraverseObject( const dp::sg::core::ObjectSharedPtr & p )
       {
-        traverseLockedObject( p.getWeakPtr() );
+        traverseLockedObject( p.operator->() );   // Big Hack !!
       }
 
       inline void ExclusiveTraverser::setTreeModified()

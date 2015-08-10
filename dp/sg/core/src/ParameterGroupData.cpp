@@ -32,6 +32,7 @@
 #include <dp/sg/core/TextureFile.h>
 #include <dp/sg/core/TextureHost.h>
 #include <dp/util/File.h>
+#include <dp/util/WeakPtr.h>
 #include <boost/algorithm/string.hpp>
 
 using namespace dp::fx;
@@ -48,7 +49,7 @@ namespace dp
         DERIVE_STATIC_PROPERTIES( ParameterGroupData, Object )
       END_REFLECTION_INFO
 
-      typedef std::map<ParameterGroupSpec*,std::pair<unsigned int,dp::util::PropertyListChain *> > SpecToPropertyListChainMap;
+      typedef std::map<ParameterGroupSpec const*,std::pair<unsigned int,dp::util::PropertyListChain *> > SpecToPropertyListChainMap;
       static SpecToPropertyListChainMap gSpecToPropertyMap;
 
       ParameterGroupDataSharedPtr ParameterGroupData::create( const ParameterGroupSpecSharedPtr & parameterGroupSpec )
@@ -533,7 +534,7 @@ namespace dp
 
         // If it's not the last ParameterGroupData to this ParameterGroupSpec, we don't want to delete the
         // PropertyListChain here, as the ParameterGroupSpec holds the master (no refcount!)
-        SpecToPropertyListChainMap::iterator pit = gSpecToPropertyMap.find( m_parameterGroupSpec.getWeakPtr() );
+        SpecToPropertyListChainMap::iterator pit = gSpecToPropertyMap.find( m_parameterGroupSpec.operator->() );    // Big Hack !!
         DP_ASSERT( pit != gSpecToPropertyMap.end() && pit->second.first );
         pit->second.first--;
         if ( pit->second.first )
@@ -555,7 +556,7 @@ namespace dp
         DP_ASSERT( !m_propertyLists );
 
         // create the PropertyList, if it's not yet there
-        SpecToPropertyListChainMap::iterator it = gSpecToPropertyMap.find( m_parameterGroupSpec.getWeakPtr() );
+        SpecToPropertyListChainMap::iterator it = gSpecToPropertyMap.find( m_parameterGroupSpec.operator->() );   // Big Hack !!
         if ( it == gSpecToPropertyMap.end() )
         {
           dp::util::PropertyListImpl * pli = new dp::util::PropertyListImpl( false );   // create a non-static, local PropertyList
@@ -568,7 +569,7 @@ namespace dp
           m_propertyLists = new dp::util::PropertyListChain( false );
           m_propertyLists->addPropertyList( pli );
 
-          gSpecToPropertyMap[m_parameterGroupSpec.getWeakPtr()] = std::make_pair( 1, m_propertyLists );
+          gSpecToPropertyMap[m_parameterGroupSpec.operator->()] = std::make_pair( 1, m_propertyLists );   // Big Hack !!
         }
         else
         {

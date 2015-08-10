@@ -66,9 +66,9 @@
 #endif
 
 QString analyze( dp::sg::core::SceneSharedPtr const & scene );
-bool containsQuadPrimitives( std::vector<dp::sg::core::ObjectWeakPtr> const & vp );
-bool containsStripablePrimitives( std::vector<dp::sg::core::ObjectWeakPtr> const & vp );
-bool containsStrippedPrimitives( std::vector<dp::sg::core::ObjectWeakPtr> const & vp );
+bool containsQuadPrimitives( std::vector<dp::sg::core::ObjectSharedPtr> const & vp );
+bool containsStripablePrimitives( std::vector<dp::sg::core::ObjectSharedPtr> const & vp );
+bool containsStrippedPrimitives( std::vector<dp::sg::core::ObjectSharedPtr> const & vp );
 bool findOrCreateCameras( dp::sg::ui::ViewStateSharedPtr const& viewState, std::vector<dp::sg::core::CameraSharedPtr> & cameras );
 void nameCamera( const dp::sg::core::CameraSharedPtr & camera, const std::string & baseName, unsigned int & index );
 std::string samplerTypeToString( unsigned int samplerType );
@@ -154,7 +154,7 @@ void MainWindow::aboutToShowConvertSceneMenu()
   searchTraverser.setBaseClassSearch( true );
   searchTraverser.apply( scene );
 
-  const std::vector<dp::sg::core::ObjectWeakPtr> &vp = searchTraverser.getResults();
+  const std::vector<dp::sg::core::ObjectSharedPtr> &vp = searchTraverser.getResults();
 
   m_destripSceneAction->setEnabled( containsStrippedPrimitives( vp ) );
   m_stripSceneAction->setEnabled( containsStripablePrimitives( vp ) );
@@ -609,11 +609,11 @@ void MainWindow::selectObject( dp::sg::core::PathSharedPtr const& path )
   dp::sg::core::ObjectSharedPtr object = path->getTail();
   if ( object.isPtrTo<dp::sg::core::FrustumCamera>() )
   {
-    static_cast<CameraAnimator*>(getCurrentCameraAnimator())->moveToCamera( object.staticCast<dp::sg::core::FrustumCamera>().getWeakPtr() );
+    static_cast<CameraAnimator*>(getCurrentCameraAnimator())->moveToCamera( object.staticCast<dp::sg::core::FrustumCamera>() );
   }
   else if ( object.isPtrTo<dp::sg::core::LightSource>() )
   {
-    static_cast<CameraAnimator*>(getCurrentCameraAnimator())->moveToLight( object.staticCast<dp::sg::core::LightSource>().getWeakPtr() );
+    static_cast<CameraAnimator*>(getCurrentCameraAnimator())->moveToLight( object.staticCast<dp::sg::core::LightSource>() );
   }
 }
 
@@ -1827,12 +1827,11 @@ QString analyze( const dp::sg::core::SceneSharedPtr & scene )
   return( plainText );
 }
 
-bool containsQuadPrimitives( std::vector<dp::sg::core::ObjectWeakPtr> const & vp )
+bool containsQuadPrimitives( std::vector<dp::sg::core::ObjectSharedPtr> const & vp )
 {
   for ( size_t i=0 ; i<vp.size() ; i++ )
   {
-    DP_ASSERT( dynamic_cast<dp::sg::core::PrimitiveWeakPtr>(vp[i]) );
-    dp::sg::core::PrimitiveType pt = static_cast<dp::sg::core::PrimitiveWeakPtr>(vp[i])->getPrimitiveType();
+    dp::sg::core::PrimitiveType pt = vp[i].inplaceCast<dp::sg::core::Primitive>()->getPrimitiveType();
     if ( ( pt == dp::sg::core::PRIMITIVE_QUADS ) || ( pt == dp::sg::core::PRIMITIVE_QUAD_STRIP ) )
     {
       return( true );
@@ -1841,12 +1840,11 @@ bool containsQuadPrimitives( std::vector<dp::sg::core::ObjectWeakPtr> const & vp
   return( false );
 }
 
-bool containsStripablePrimitives( std::vector<dp::sg::core::ObjectWeakPtr> const & vp )
+bool containsStripablePrimitives( std::vector<dp::sg::core::ObjectSharedPtr> const & vp )
 {
   for ( size_t i=0 ; i<vp.size() ; i++ )
   {
-    DP_ASSERT( dynamic_cast<dp::sg::core::PrimitiveWeakPtr>(vp[i]) );
-    dp::sg::core::PrimitiveType pt = static_cast<dp::sg::core::PrimitiveWeakPtr>(vp[i])->getPrimitiveType();
+    dp::sg::core::PrimitiveType pt = vp[i].inplaceCast<dp::sg::core::Primitive>()->getPrimitiveType();
     if ( ( pt == dp::sg::core::PRIMITIVE_QUADS ) || ( pt == dp::sg::core::PRIMITIVE_TRIANGLES ) )
     {
       return( true );
@@ -1855,12 +1853,11 @@ bool containsStripablePrimitives( std::vector<dp::sg::core::ObjectWeakPtr> const
   return( false );
 }
 
-bool containsStrippedPrimitives( std::vector<dp::sg::core::ObjectWeakPtr> const & vp )
+bool containsStrippedPrimitives( std::vector<dp::sg::core::ObjectSharedPtr> const & vp )
 {
   for ( size_t i=0 ; i<vp.size() ; i++ )
   {
-    DP_ASSERT( dynamic_cast<dp::sg::core::PrimitiveWeakPtr>(vp[i]) );
-    dp::sg::core::PrimitiveType pt = static_cast<dp::sg::core::PrimitiveWeakPtr>(vp[i])->getPrimitiveType();
+    dp::sg::core::PrimitiveType pt = vp[i].inplaceCast<dp::sg::core::Primitive>()->getPrimitiveType();
     if (    ( pt == dp::sg::core::PRIMITIVE_LINE_STRIP )
         ||  ( pt == dp::sg::core::PRIMITIVE_LINE_LOOP )
         ||  ( pt == dp::sg::core::PRIMITIVE_TRIANGLE_STRIP )
@@ -1984,10 +1981,10 @@ void setTraversalMasks( dp::sg::core::SceneSharedPtr const & scene, unsigned int
     searchTraverser.setBaseClassSearch( true );
     searchTraverser.apply( scene );  
 
-    const std::vector<dp::sg::core::ObjectWeakPtr> & searchResults = searchTraverser.getResults();
-    for ( std::vector<dp::sg::core::ObjectWeakPtr>::const_iterator it = searchResults.begin() ; it != searchResults.end() ; ++it )
+    const std::vector<dp::sg::core::ObjectSharedPtr> & searchResults = searchTraverser.getResults();
+    for ( std::vector<dp::sg::core::ObjectSharedPtr>::const_iterator it = searchResults.begin() ; it != searchResults.end() ; ++it )
     {
-      dp::util::weakPtr_cast<dp::sg::core::GeoNode>(*it)->setTraversalMask( mask );
+      it->inplaceCast<dp::sg::core::GeoNode>()->setTraversalMask( mask );
     }
   }
 }

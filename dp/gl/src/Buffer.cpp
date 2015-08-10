@@ -638,17 +638,25 @@ namespace dp
     {
 #if !defined(NDEBUG)
       DP_ASSERT( RenderContext::getCurrentRenderContext() );
-      static std::map<std::pair<RenderContext*,GLenum>,Buffer*> boundBufferMap;
+      static std::map<RenderContextSharedPtr,std::map<GLenum,BufferSharedPtr>> boundBufferMap;
       if ( buffer )
       {
-        boundBufferMap[std::make_pair( RenderContext::getCurrentRenderContext().getWeakPtr(), target )] = buffer.getWeakPtr();
+        boundBufferMap[RenderContext::getCurrentRenderContext()][target] = buffer;
       }
       else
       {
-        std::map<std::pair<RenderContext*,GLenum>,Buffer*>::iterator it = boundBufferMap.find( std::make_pair( RenderContext::getCurrentRenderContext().getWeakPtr(), target ) );
-        if ( it != boundBufferMap.end() )
+        std::map<RenderContextSharedPtr,std::map<GLenum,BufferSharedPtr>>::iterator rcit = boundBufferMap.find( RenderContext::getCurrentRenderContext() );
+        if ( rcit != boundBufferMap.end() )
         {
-          boundBufferMap.erase( it );
+          std::map<GLenum,BufferSharedPtr>::iterator it = rcit->second.find( target );
+          if ( it != rcit->second.end() )
+          {
+            rcit->second.erase( it );
+            if ( rcit->second.empty() )
+            {
+              boundBufferMap.erase( rcit );
+            }
+          }
         }
       }
 #endif

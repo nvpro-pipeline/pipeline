@@ -52,12 +52,12 @@ namespace dp
       public:
         virtual ~ObjectObserver();
 
-        static ObjectObserverSharedPtr create( SceneTreeWeakPtr sceneTree )
+        static ObjectObserverSharedPtr create( SceneTreeSharedPtr sceneTree )
         {
           return( std::shared_ptr<ObjectObserver>( new ObjectObserver( sceneTree ) ) );
         }
 
-        void attach( const dp::sg::core::ObjectWeakPtr& obj, ObjectTreeIndex index );
+        void attach( dp::sg::core::ObjectSharedPtr const& obj, ObjectTreeIndex index );
         virtual void onDetach( ObjectTreeIndex index );
 
         void popNewCacheData( NewCacheData & currentData ) const 
@@ -67,12 +67,12 @@ namespace dp
         }
 
       protected:
-        ObjectObserver( const SceneTreeWeakPtr& sceneTree ) : Observer<ObjectTreeIndex>( sceneTree )
+        ObjectObserver( SceneTreeSharedPtr const& sceneTree ) : Observer<ObjectTreeIndex>( sceneTree )
         {
         }
-        void onNotify( const dp::util::Event &event, dp::util::Payload *payload );
-        virtual void onPreRemoveChild( const dp::sg::core::Group *group, dp::sg::core::NodeSharedPtr const & child, unsigned int index, Payload* payload );
-        virtual void onPostAddChild( dp::sg::core::Group const *group, dp::sg::core::NodeSharedPtr const & child, unsigned int index, Payload* payload );
+        void onNotify( const dp::util::Event &event, dp::util::Payload * payload );
+        virtual void onPreRemoveChild( dp::sg::core::GroupSharedPtr const& group, dp::sg::core::NodeSharedPtr const & child, unsigned int index, Payload * payload );
+        virtual void onPostAddChild( dp::sg::core::GroupSharedPtr const& group, dp::sg::core::NodeSharedPtr const & child, unsigned int index, Payload * payload );
 
       private:
         mutable NewCacheData m_newCacheData;

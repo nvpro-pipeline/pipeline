@@ -94,7 +94,7 @@ namespace dp
           class ShaderManager
           {
           public:
-            ShaderManager( dp::sg::xbar::SceneTree *sceneTree, const ResourceManagerSharedPtr& resourceManager, TransparencyManagerSharedPtr const & transparencyManager );
+            ShaderManager( dp::sg::xbar::SceneTreeSharedPtr const& sceneTree, const ResourceManagerSharedPtr& resourceManager, TransparencyManagerSharedPtr const & transparencyManager );
             virtual ~ShaderManager() {};
 
             void setEnvironmentSampler( const dp::sg::core::SamplerSharedPtr & sampler );
@@ -131,7 +131,7 @@ namespace dp
                                                                              dp::rix::core::GeometryInstanceSharedHandle &geometryInstance,
                                                                              RenderPassType rpt );
 
-            dp::sg::xbar::SceneTree* m_sceneTree;
+            dp::sg::xbar::SceneTreeWeakPtr m_sceneTree;
             dp::rix::core::Renderer* m_renderer;
             ResourceManagerSharedPtr m_resourceManager;
 
@@ -176,7 +176,7 @@ namespace dp
             };
 
           public:
-            ShaderManagerLights( dp::sg::xbar::SceneTree *sceneTree, const ResourceManagerSharedPtr& resourceManager );
+            ShaderManagerLights( dp::sg::xbar::SceneTreeSharedPtr const& sceneTree, const ResourceManagerSharedPtr& resourceManager );
             virtual ~ShaderManagerLights();
 
             void updateLights( dp::sg::ui::ViewStateSharedPtr const& vs );
@@ -184,7 +184,7 @@ namespace dp
             const dp::rix::core::ContainerDescriptorSharedHandle& getDescriptor() const { return m_descriptorLight; }
 
           protected:
-            dp::sg::xbar::SceneTree                         * m_sceneTree;
+            dp::sg::xbar::SceneTreeWeakPtr                    m_sceneTree;
             dp::rix::core::ContainerDescriptorSharedHandle    m_descriptorLight;
             ResourceManagerSharedPtr                          m_resourceManager;
             LightInformation                                  m_lightInformation;

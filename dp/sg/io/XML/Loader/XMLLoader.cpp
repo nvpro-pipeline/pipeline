@@ -93,7 +93,6 @@ XMLLoaderSharedPtr XMLLoader::create()
 }
 
 XMLLoader::XMLLoader()
-  : m_viewState(NULL)
 {
 }
 

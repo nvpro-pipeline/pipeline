@@ -141,7 +141,7 @@ class DPAFLoader : public dp::sg::io::SceneLoader
     dp::sg::core::GeoNodeSharedPtr                    readGeoNode( const char *name );
     dp::sg::core::GroupSharedPtr                      readGroup( const char *name, const std::string & extName );
     bool                                              readGroupToken( dp::sg::core::GroupSharedPtr const& group, const std::string & token, const std::string & extName );
-    void                                              readImages( dp::sg::core::TextureHost * ti );
+    void                                              readImages( dp::sg::core::TextureHostSharedPtr const& th );
     dp::sg::core::IndexSetSharedPtr                   readIndexSet( const char * name );
     dp::sg::core::LightSourceSharedPtr                readLightSource( const std::string & token );
     dp::sg::core::LightSourceSharedPtr                readLightSourceReferences( const std::string & token );

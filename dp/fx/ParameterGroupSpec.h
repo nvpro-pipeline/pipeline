@@ -39,7 +39,7 @@ namespace dp
     // The spec for a group of parameters
     DEFINE_PTR_TYPES( ParameterGroupSpec );
 
-    class ParameterGroupSpec
+    class ParameterGroupSpec : public std::enable_shared_from_this<ParameterGroupSpec>
     {
       private:
         typedef std::vector<std::pair<ParameterSpec,unsigned int> >  ParameterSpecsContainer;
@@ -112,7 +112,7 @@ namespace dp
 
     inline bool ParameterGroupSpec::isEquivalent( const ParameterGroupSpecSharedPtr & p, bool ignoreNames, bool /*deepCompare*/ ) const
     {
-      return(   ( p.getWeakPtr() == this )
+      return(   ( this->shared_from_this() == p )
             ||  (   ( ignoreNames ? true : m_name == p->m_name )
                 &&  ( m_dataSize == p->m_dataSize )
                 &&  ( m_specs == p->m_specs ) ) );

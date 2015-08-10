@@ -57,12 +57,10 @@ namespace dp
       DEFINE_PTR_TYPES( TransformObserver );
       DEFINE_PTR_TYPES( ObjectObserver );
       DEFINE_PTR_TYPES( SceneObserver );
-
       DEFINE_PTR_TYPES( SceneTree );
-      typedef SceneTree*                    SceneTreeWeakPtr;
 
       /*===========================================================================*/
-      class SceneTree : public dp::util::Subject
+      class SceneTree : public dp::util::Subject, public std::enable_shared_from_this<SceneTree>
       { 
       protected:
         SceneTree(const dp::sg::core::SceneSharedPtr & scene );
@@ -145,7 +143,7 @@ namespace dp
 
         DP_SG_XBAR_API dp::sg::core::SceneSharedPtr const & getScene() const;
 
-        DP_SG_XBAR_API void addSubTree( const dp::sg::core::NodeWeakPtr& root, 
+        DP_SG_XBAR_API void addSubTree( const dp::sg::core::NodeSharedPtr& root, 
                                   ObjectTreeIndex parentIndex, ObjectTreeIndex leftSibling,
                                   TransformTreeIndex parentTransform, TransformTreeIndex leftSiblingTransform );
 
@@ -153,7 +151,7 @@ namespace dp
             \param root node of the new subtree to put into the SceneTree
             \param nodeIndex index of the node which should be replaced by the new subtree
         **/
-        DP_SG_XBAR_API void replaceSubTree( const dp::sg::core::NodeWeakPtr &root, ObjectTreeIndex nodeIndex );
+        DP_SG_XBAR_API void replaceSubTree( dp::sg::core::NodeSharedPtr const& root, ObjectTreeIndex nodeIndex );
 
         //! Add all renderer options required by this renderer to the given rendererOptions object.
         DP_SG_XBAR_API void addRendererOptions( const dp::sg::ui::RendererOptionsSharedPtr& rendererOptions );
@@ -208,6 +206,7 @@ namespace dp
         DP_SG_XBAR_API void onRootNodeChanged( );
 
       private:
+        DP_SG_XBAR_API void init();
         DP_SG_XBAR_API void notifyTransformUpdated( TransformTreeIndex index, TransformTreeNode const& node );
 
         friend class UpdateTransformVisitor;

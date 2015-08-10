@@ -28,7 +28,6 @@
 #include <dp/sg/algorithm/RayIntersectTraverser.h>
 #include <dp/sg/core/FrustumCamera.h>
 #include <dp/sg/ui/manipulator/TrackballCameraManipulator.h>
-#include <dp/util/SharedPtr.h>
 #include <GL/glew.h>
 
 using namespace dp::math;
@@ -533,8 +532,8 @@ namespace dp
 
                 GLint viewport[4];
                 unsigned int width, height;
-                dp::util::shared_cast<dp::gl::RenderTarget>(getRenderTarget())->getPosition( viewport[0], viewport[1] );
-                dp::util::shared_cast<dp::gl::RenderTarget>(getRenderTarget())->getSize( width, height );
+                getRenderTarget().inplaceCast<dp::gl::RenderTarget>()->getPosition( viewport[0], viewport[1] );
+                getRenderTarget().inplaceCast<dp::gl::RenderTarget>()->getSize( width, height );
                 width = GLint(width);
                 height = GLint(height);
 

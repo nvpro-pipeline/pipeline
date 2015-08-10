@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2013
+// Copyright (c) 2013-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -152,9 +152,8 @@ namespace dp
 
         void CullingImpl::updateBoundingBox( ObjectTreeIndex objectTreeIndex )
         {
-          dp::sg::core::GeoNodeWeakPtr geoNodeWeakPtr = dp::util::weakPtr_cast<dp::sg::core::GeoNode>(m_sceneTree->getObjectTreeNode( objectTreeIndex ).m_object);
-          dp::sg::core::PrimitiveSharedPtr primitive = geoNodeWeakPtr->getPrimitive();
-          m_culling->objectSetBoundingBox( m_objects[objectTreeIndex], geoNodeWeakPtr->getBoundingBox() );
+          dp::sg::core::GeoNodeSharedPtr geoNode = m_sceneTree->getObjectTreeNode( objectTreeIndex ).m_object.getSharedPtr().staticCast<dp::sg::core::GeoNode>();
+          m_culling->objectSetBoundingBox( m_objects[objectTreeIndex], geoNode->getBoundingBox() );
         }
 
         void CullingImpl::addObject( ObjectTreeIndex index )

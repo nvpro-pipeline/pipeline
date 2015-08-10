@@ -1208,7 +1208,7 @@ bool  DPAFLoader::readGroupToken( GroupSharedPtr const& group, const string & to
   return( b );
 }
 
-void DPAFLoader::readImages( TextureHost * ti )
+void DPAFLoader::readImages( TextureHostSharedPtr const& th )
 {
   string token = getNextToken();
   onUnexpectedToken( "[", token );
@@ -1263,7 +1263,7 @@ void DPAFLoader::readImages( TextureHost * ti )
     DP_ASSERT( pixels );
     // disable coverity errors for pixel==NULL
     // coverity[var_deref_model]
-    ti->createImage( width, height, depth, pf, pt, pixels, mipmaps );
+    th->createImage( width, height, depth, pf, pt, pixels, mipmaps );
 
     delete[] pixels;
     for ( size_t i=0 ; i<mipmaps.size() ; i++ )
@@ -2859,7 +2859,7 @@ TextureHostSharedPtr DPAFLoader::readTextureHost( const char *name )
       }
       else if ( token == "images" )
       {
-        readImages( textureHost.getWeakPtr() );
+        readImages( textureHost );
       }
       else
       {

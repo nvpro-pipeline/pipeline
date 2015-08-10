@@ -37,6 +37,7 @@ set(DPUTIL_INCLUDES
   HashGeneratorMurMur.h
   HashGeneratorMD5.h
   Image.h
+  Locale.h
   Memory.h
   NVPerfMon.h
   Observer.h
@@ -49,7 +50,7 @@ set(DPUTIL_INCLUDES
   Singleton.h
   StridedIterator.h
   Timer.h
-  Locale.h
+  WeakPtr.h
 )
 
 add_definitions("-DDP_UTIL_USE_BOOST")
@@ -67,6 +68,7 @@ set(DPUTIL_SOURCES
   src/HashGeneratorMurMur.cpp
   src/HashGeneratorMD5.cpp
   src/Image.cpp
+  src/Locale.cpp
   src/Memory.cpp
   src/NVPerfMon.cpp
   src/Observer.cpp
@@ -74,7 +76,6 @@ set(DPUTIL_SOURCES
   src/Reflection.cpp
   src/SimplexNoise1234.cpp
   src/Timer.cpp
-  src/Locale.cpp
 )
 
 source_group(sources FILES ${DPUTIL_SOURCES})

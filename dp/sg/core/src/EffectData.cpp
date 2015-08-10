@@ -27,7 +27,6 @@
 #include <dp/sg/core/EffectData.h>
 #include <dp/sg/core/TextureFile.h>
 #include <dp/fx/EffectLibrary.h>
-#include <dp/util/SharedPtr.h>
 
 using namespace dp::math;
 using namespace dp::fx;
@@ -327,7 +326,7 @@ namespace dp
         {
           if ( m_parameterGroupData[i] )
           {
-            hg.update( reinterpret_cast<const unsigned char *>(m_parameterGroupData[i].getWeakPtr()), sizeof(const ParameterGroupData *) );
+            hg.update( m_parameterGroupData[i] );
           }
         }
       }
@@ -363,7 +362,7 @@ namespace dp
       bool EffectData::save( const std::string & filename ) const
       {
         EffectDataLocalSharedPtr edl = EffectDataLocal::create( this );
-        return( EffectLibrary::instance()->save( dp::util::shared_cast<dp::fx::EffectData>( edl ), filename ) );
+        return( EffectLibrary::instance()->save( edl.inplaceCast<dp::fx::EffectData>(), filename ) );
       }
 
       const EffectSpecSharedPtr& getStandardGeometrySpec()

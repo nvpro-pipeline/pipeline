@@ -47,7 +47,7 @@ namespace dp
           class ShaderManagerRiXFx : public ShaderManager
           {
           public:
-            ShaderManagerRiXFx( dp::sg::xbar::SceneTree *sceneTree, dp::fx::Manager managerType, const ResourceManagerSharedPtr& resourceManager, TransparencyManagerSharedPtr const & transparencyManager );
+            ShaderManagerRiXFx( dp::sg::xbar::SceneTreeSharedPtr const& sceneTree, dp::fx::Manager managerType, const ResourceManagerSharedPtr& resourceManager, TransparencyManagerSharedPtr const & transparencyManager );
 
             virtual void updateCameraState( const dp::math::Mat44f& worldToProj, const dp::math::Mat44f& viewToWorld );
             virtual void updateTransforms();

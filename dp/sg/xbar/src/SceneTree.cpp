@@ -77,9 +77,25 @@ namespace dp
         , m_dirty( false )
         , m_switchObserver( SwitchObserver::create() )
       {
-        m_objectObserver = ObjectObserver::create( this );
-        m_transformObserver = TransformObserver::create( this );
-        m_sceneObserver = SceneObserver::create( this );
+      }
+
+      SceneTree::~SceneTree()
+      {
+        m_sceneObserver.reset();
+      }
+
+      SceneTreeSharedPtr SceneTree::create( SceneSharedPtr const & scene )
+      {
+        SceneTreeSharedPtr st = std::shared_ptr<SceneTree>( new SceneTree( scene ) );
+        st->init();
+        return( st );
+      }
+
+      void SceneTree::init()
+      {
+        m_objectObserver = ObjectObserver::create( shared_from_this() );
+        m_transformObserver = TransformObserver::create( shared_from_this() );
+        m_sceneObserver = SceneObserver::create( shared_from_this() );
 
         // push an identity transform onto the transform tree so objects without transforms get the identity
         TransformTreeNode TransformTreeSentinel;
@@ -94,23 +110,13 @@ namespace dp
         m_objectTree[m_objectTreeSentinel].m_transformIndex = transformTreeSentinel;
         m_transformTree[transformTreeSentinel].m_objectTreeIndex = m_objectTreeSentinel;
 
-        SceneTreeGenerator rlg( this );
+        SceneTreeGenerator rlg( this->shared_from_this() );
         rlg.setCurrentTransformTreeData( transformTreeSentinel, ~0 );
         rlg.setCurrentObjectTreeData( m_objectTreeSentinel, ~0 );
-        rlg.apply( scene );
+        rlg.apply( m_scene );
 
         // root node is first child below sentinel
         m_objectTreeRootNode = m_objectTree[m_objectTreeSentinel].m_firstChild;
-      }
-
-      SceneTree::~SceneTree()
-      {
-        m_sceneObserver.reset();
-      }
-
-      SceneTreeSharedPtr SceneTree::create( SceneSharedPtr const & scene )
-      {
-        return( std::shared_ptr<SceneTree>( new SceneTree( scene ) ) );
       }
 
       dp::sg::core::SceneSharedPtr const & SceneTree::getScene() const
@@ -118,19 +124,19 @@ namespace dp
         return m_scene;
       }
 
-      void SceneTree::addSubTree( const NodeWeakPtr& root, 
+      void SceneTree::addSubTree( NodeSharedPtr const& root, 
         ObjectTreeIndex parentIndex, ObjectTreeIndex leftSibling, 
         TransformTreeIndex parentTransform, TransformTreeIndex leftSiblingTransform )
       {
-        SceneTreeGenerator rlg( this );
+        SceneTreeGenerator rlg( this->shared_from_this() );
 
         rlg.setCurrentObjectTreeData( parentIndex, leftSibling );
         rlg.setCurrentTransformTreeData( parentTransform, leftSiblingTransform );
 
-        rlg.apply( root->getSharedPtr<Node>() );
+        rlg.apply( root );
       }
 
-      void SceneTree::replaceSubTree( const NodeWeakPtr &node, ObjectTreeIndex objectIndex )
+      void SceneTree::replaceSubTree( NodeSharedPtr const& node, ObjectTreeIndex objectIndex )
       {
         ObjectTreeIndex objectParent = m_objectTree[objectIndex].m_parentIndex;
 
@@ -192,9 +198,10 @@ namespace dp
           {
             TransformTreeIndex index = (*it)->m_index;
             TransformTreeNode& node = m_transformTree[index];
-            DP_ASSERT( node.m_transform != nullptr );
+            dp::sg::core::TransformSharedPtr transform = node.m_transform.getSharedPtr();
+            DP_ASSERT( transform );
 
-            const Trafo& t = node.m_transform->getTrafo();
+            const Trafo& t = transform->getTrafo();
             node.m_localMatrix = t.getMatrix();
 
             const Vec3f& s( t.getScaling() );
@@ -218,9 +225,10 @@ namespace dp
             TransformTreeIndex index = *it;
             TransformTreeNode& node = m_transformTree[index];
 
-            if( node.m_transform )
+            dp::sg::core::TransformSharedPtr transform = node.m_transform.getSharedPtr();
+            if ( transform )
             {
-              Trafo t = node.m_transform->getTrafo();
+              Trafo t = transform->getTrafo();
               node.m_localMatrix = t.getMatrix();
 
               const Vec3f& s( t.getScaling() );
@@ -274,8 +282,8 @@ namespace dp
           {
             ObjectTreeIndex index = *it;
 
-            SwitchWeakPtr swp = m_objectTree.m_switchNodes[ index ];
-            DP_ASSERT( swp );
+            SwitchSharedPtr ssp = m_objectTree.m_switchNodes[ index ].getSharedPtr();
+            DP_ASSERT( ssp );
 
             ObjectTreeIndex childIndex = m_objectTree[index].m_firstChild;
             // counter for the i-th child
@@ -286,7 +294,7 @@ namespace dp
               ObjectTreeNode& childNode = m_objectTree[childIndex];
               DP_ASSERT( childNode.m_parentIndex == index );
 
-              bool newActive = swp->isActive( dp::checked_cast<unsigned int>(i) );
+              bool newActive = ssp->isActive( dp::checked_cast<unsigned int>(i) );
               if ( childNode.m_localActive != newActive )
               {
                 childNode.m_localActive = newActive;
@@ -312,7 +320,9 @@ namespace dp
 
             const Mat44f modelToWorld = getTransformMatrix( node.m_transformIndex );
             const Mat44f modelToView = modelToWorld * worldToView;
-            ObjectTreeIndex activeIndex = it->second->getLODToUse( modelToView, lodRangeScale );
+            dp::sg::core::LODSharedPtr lod = it->second.getSharedPtr();
+            DP_ASSERT( lod );
+            ObjectTreeIndex activeIndex = lod->getLODToUse( modelToView, lodRangeScale );
 
             ObjectTreeIndex childIndex = m_objectTree[index].m_firstChild;
             // counter for the i-th child
@@ -353,9 +363,10 @@ namespace dp
         TransformTreeIndex index = m_transformTree.insertNode( node, parentIndex, siblingIndex );
 
         // observe transform
-        if( node.m_transform )
+        dp::sg::core::TransformSharedPtr transform = node.m_transform.getSharedPtr();
+        if ( transform )
         {
-          m_transformObserver->attach( node.m_transform, index );
+          m_transformObserver->attach( transform, index );
         }
 
         return index;
@@ -367,8 +378,9 @@ namespace dp
         ObjectTreeIndex index = m_objectTree.insertNode( node, parentIndex, siblingIndex );
 
         // observe object
-        DP_ASSERT( node.m_object );
-        m_objectObserver->attach( node.m_object, index );
+        dp::sg::core::ObjectSharedPtr object = node.m_object.getSharedPtr();
+        DP_ASSERT( object );
+        m_objectObserver->attach( object, index );
 
         return index;
       }
@@ -426,7 +438,8 @@ namespace dp
           ++begin;
           ObjectTreeNode& current = m_objectTree[currentIndex];
 
-          if ( isPtrTo<LightSource>( m_objectTree[currentIndex].m_object ) )
+          DP_ASSERT( m_objectTree[currentIndex].m_object.getSharedPtr() );
+          if ( m_objectTree[currentIndex].m_object.getSharedPtr().dynamicCast<dp::sg::core::LightSource>() )
           {
             DP_VERIFY( m_lightSources.erase( currentIndex ) == 1 );
           }
@@ -466,7 +479,7 @@ namespace dp
             removeTransformTreeIndex( current.m_transformIndex );
           }
 
-          current.m_object = nullptr;
+          current.m_object.reset();
 
           // insert all children into stack for further traversal
           ObjectTreeIndex child = current.m_firstChild;
@@ -545,7 +558,7 @@ namespace dp
 
       void SceneTree::onRootNodeChanged()
       {
-        replaceSubTree( m_scene->getRootNode().getWeakPtr(), m_objectTreeRootNode );
+        replaceSubTree( m_scene->getRootNode(), m_objectTreeRootNode );
         m_rootNode = m_scene->getRootNode();
       }
 

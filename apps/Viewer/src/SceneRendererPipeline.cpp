@@ -32,7 +32,6 @@
 #include <dp/sg/core/FrustumCamera.h>
 #include <dp/fx/EffectLibrary.h>
 #include <dp/sg/gl/TextureGL.h>
-#include <dp/util/SharedPtr.h>
 #include "SceneRendererPipeline.h"
 
 using namespace dp::fx;
@@ -147,7 +146,7 @@ bool SceneRendererPipeline::init(const dp::gl::RenderContextSharedPtr &renderCon
 
   // m_rendererHighlight uses the previously rendered texture rectangle as input for the shader.
   const dp::gl::RenderTargetFBO::SharedAttachment &attachment = m_highlightFBO->getAttachment(dp::gl::RenderTargetFBO::COLOR_ATTACHMENT0);
-  const dp::gl::RenderTargetFBO::SharedAttachmentTexture &texAtt = dp::util::shared_cast<dp::gl::RenderTargetFBO::AttachmentTexture>(attachment);
+  const dp::gl::RenderTargetFBO::SharedAttachmentTexture &texAtt = attachment.inplaceCast<dp::gl::RenderTargetFBO::AttachmentTexture>();
   if (texAtt)
   {
     const dp::sg::gl::TextureGLSharedPtr texGL = dp::sg::gl::TextureGL::create( texAtt->getTexture() );
@@ -191,7 +190,7 @@ void SceneRendererPipeline::doRenderStandard(dp::sg::ui::ViewStateSharedPtr cons
 
 void SceneRendererPipeline::doRenderTonemap(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget)
 {
-  dp::gl::RenderTargetSharedPtr const & renderTargetGL = dp::util::shared_cast<dp::gl::RenderTarget>(renderTarget);
+  dp::gl::RenderTargetSharedPtr const & renderTargetGL = renderTarget.inplaceCast<dp::gl::RenderTarget>();
   dp::gl::TargetBufferMask clearMask = renderTargetGL->getClearMask();
 
   // Match the size of the tonemapFBO to the destination renderTarget.
@@ -281,7 +280,7 @@ void SceneRendererPipeline::doRenderHighlight(dp::sg::ui::ViewStateSharedPtr con
   glPopAttrib();
 
   // Render the outline around the highlighted object onto the main renderTarget (framebuffer).
-  dp::gl::RenderTargetSharedPtr const & renderTargetGL = dp::util::shared_cast<dp::gl::RenderTarget>(renderTarget);
+  dp::gl::RenderTargetSharedPtr const & renderTargetGL = renderTarget.inplaceCast<dp::gl::RenderTarget>();
   dp::gl::TargetBufferMask clearMask = renderTargetGL->getClearMask();
   
   // keep the following render call from clearing the previous rendered content
@@ -481,7 +480,7 @@ void SceneRendererPipeline::initTonemapper()
   m_tonemapper->setEffect( m_tonemapperData );
 
   const dp::gl::RenderTargetFBO::SharedAttachment &attachmentTonemap = m_tonemapFBO->getAttachment(dp::gl::RenderTargetFBO::COLOR_ATTACHMENT0);
-  const dp::gl::RenderTargetFBO::SharedAttachmentTexture &texAttTonemap = dp::util::shared_cast<dp::gl::RenderTargetFBO::AttachmentTexture>(attachmentTonemap);
+  const dp::gl::RenderTargetFBO::SharedAttachmentTexture &texAttTonemap = attachmentTonemap.dynamicCast<dp::gl::RenderTargetFBO::AttachmentTexture>();
   if ( texAttTonemap )
   {
     const dp::sg::gl::TextureGLSharedPtr texGL = dp::sg::gl::TextureGL::create( texAttTonemap->getTexture() );

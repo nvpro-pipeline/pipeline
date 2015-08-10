@@ -88,13 +88,13 @@ namespace dp
             const TransformTreeNode& curParent = m_transformTree[ current.m_parentIndex ];
 
             // update local transform if needed
-            if( current.m_billboard != nullptr )
+            dp::sg::core::BillboardSharedPtr billboard = current.m_billboard.getSharedPtr();
+            if ( billboard )
             {
               // billboards always need an update
               dp::math::Mat44f mat = curParent.m_worldMatrix;
               mat.invert();
-              DP_ASSERT( current.m_billboard != nullptr );
-              dp::math::Trafo t = current.m_billboard->getTrafo( m_camera, mat );
+              dp::math::Trafo t = billboard->getTrafo( m_camera, mat );
               current.m_localMatrix = t.getMatrix();
 
               dp::math::Vec3f const& s( t.getScaling() );

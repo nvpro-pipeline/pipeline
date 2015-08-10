@@ -143,7 +143,7 @@ namespace dp
             resource->setPayload( payload );
 
             dp::util::Subject* subject = dynamic_cast<dp::util::Subject*>(resource->getHandledObject().operator->());
-            subject->attach( static_cast<dp::util::Observer*>(this), payload.getWeakPtr() );
+            subject->attach( static_cast<dp::util::Observer*>(this), payload.operator->() );    // Big Hack !!
           }
 
           void ResourceManager::ResourceObserver::unsubscribe( Resource *resource )
@@ -154,7 +154,7 @@ namespace dp
             if ( resource->getHandledObject() )
             {
               dp::util::Subject* subject = dynamic_cast<dp::util::Subject*>(resource->getHandledObject().operator->());
-              subject->detach( static_cast<dp::util::Observer*>(this), resource->getPayload().getWeakPtr() );
+              subject->detach( static_cast<dp::util::Observer*>(this), resource->getPayload().operator->() );   // Big Hack !!
             }
           }
 

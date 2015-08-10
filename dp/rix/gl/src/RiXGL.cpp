@@ -30,6 +30,7 @@
 #include <cassert>
 #include <cstdlib>
 #include <cstring>
+#include <boost/algorithm/string/predicate.hpp>
 #include <dp/rix/gl/inc/RenderGroupGL.h>
 #include <dp/rix/gl/inc/BufferGL.h>
 #include <dp/rix/gl/inc/ContainerGL.h>
@@ -605,8 +606,8 @@ namespace dp
           break;
         case GL_DEBUG_TYPE_PERFORMANCE:
           {
-            std::string ignoredMessage( "Program/shader state performance warning: Fragment Shader is going to be recompiled because the shader key based on GL state mismatches." );
-            if ( strncmp( message, ignoredMessage.c_str(), ignoredMessage.size() ) == 0 )
+            if ( boost::algorithm::starts_with( message, "Program/shader state performance warning:" )
+              && boost::algorithm::ends_with( message, "Shader is going to be recompiled because the shader key based on GL state mismatches." ) )
             {
               DP_ASSERT( severity == GL_DEBUG_SEVERITY_MEDIUM );
               return;   //  ignore this performance message

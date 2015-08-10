@@ -116,10 +116,10 @@ protected:
 
 private:
   // build the scene from the loaded 3ds data structure
-  void buildScene( dp::sg::core::Group *, Lib3dsFile * data );
+  void buildScene( dp::sg::core::GroupSharedPtr const& root, Lib3dsFile * data );
 
   // recursively build the node tree from the 3ds data
-  void buildTree( dp::sg::core::Group *, Lib3dsNode * n, dp::math::Vec3f &piv, Lib3dsFile * data );
+  void buildTree( dp::sg::core::GroupSharedPtr const& parent, Lib3dsNode * n, dp::math::Vec3f &piv, Lib3dsFile * data );
 
   // recursively search the node tree for a node of the given name and type
   Lib3dsNode *searchNodeTree( Lib3dsNode *n, int nodeType, char *nodeName);
@@ -131,19 +131,19 @@ private:
   void orientNode( dp::math::Trafo &, Lib3dsMeshInstanceNode * mnode, dp::math::Vec3f &piv);
 
   // given all the necessary data, set up and add a PerspectiveCamera to the scene
-  void configureCamera( dp::sg::core::Group *, Lib3dsNode *n, dp::math::Vec3f &piv, bool hasTarget, Lib3dsFile *data );
+  void configureCamera( dp::sg::core::GroupSharedPtr const& parent, Lib3dsNode *n, dp::math::Vec3f &piv, bool hasTarget, Lib3dsFile *data );
   
   // given all the necessary data, add a spotlight target or camera target to the scene
-  void configureTarget( dp::sg::core::Group *, Lib3dsNode *n, dp::math::Vec3f &piv, bool isCamera, Lib3dsFile *data );
+  void configureTarget( dp::sg::core::GroupSharedPtr const& parent, Lib3dsNode *n, dp::math::Vec3f &piv, bool isCamera, Lib3dsFile *data );
   
   // given all the necessary data, add a PointLight to the scene
-  void configurePointlight( dp::sg::core::Group *, Lib3dsNode *n, dp::math::Vec3f &piv, Lib3dsFile *data );
+  void configurePointlight( dp::sg::core::GroupSharedPtr const& parent, Lib3dsNode *n, dp::math::Vec3f &piv, Lib3dsFile *data );
 
   // given all the necessary data, add a SpotLight to the scene
-  void configureSpotlight( dp::sg::core::Group *, Lib3dsNode *n, dp::math::Vec3f &piv, bool hasTarget, Lib3dsFile *data );
+  void configureSpotlight( dp::sg::core::GroupSharedPtr const& parent, Lib3dsNode *n, dp::math::Vec3f &piv, bool hasTarget, Lib3dsFile *data );
 
   // recursively add all children of the given node to the scene
-  int addAllChildren( dp::sg::core::Group *, Lib3dsNode *n, dp::math::Vec3f &piv, Lib3dsFile *data );
+  int addAllChildren( dp::sg::core::GroupSharedPtr const& parent, Lib3dsNode *n, dp::math::Vec3f &piv, Lib3dsFile *data );
 
   // read the 3ds mesh data and add all of its geometry to the scene
   bool constructGeometry( dp::sg::core::GroupSharedPtr const& group, char *name, Lib3dsFile * data );
@@ -185,12 +185,12 @@ private:
   bool m_wirePresent;
 
   // global lists of cameras, spotlights, and targets used for resolving callbacks
-  std::vector < dp::sg::core::PerspectiveCameraWeakPtr >   m_camList;
-  std::vector < dp::sg::core::LightSourceWeakPtr >         m_spotList;
-  std::map < std::string, dp::sg::core::TransformWeakPtr > m_camLocationList;
-  std::map < std::string, dp::sg::core::TransformWeakPtr > m_spotLocationList;
-  std::map < std::string, dp::sg::core::TransformWeakPtr > m_camTargetList;
-  std::map < std::string, dp::sg::core::TransformWeakPtr > m_spotTargetList;
+  std::vector<dp::sg::core::PerspectiveCameraSharedPtr>   m_camList;
+  std::vector<dp::sg::core::LightSourceSharedPtr>         m_spotList;
+  std::map<std::string, dp::sg::core::TransformSharedPtr> m_camLocationList;
+  std::map<std::string, dp::sg::core::TransformSharedPtr> m_spotLocationList;
+  std::map<std::string, dp::sg::core::TransformSharedPtr> m_camTargetList;
+  std::map<std::string, dp::sg::core::TransformSharedPtr> m_spotTargetList;
   
   int m_numMaterials;
   int m_numFrames;

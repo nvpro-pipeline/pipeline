@@ -92,16 +92,10 @@ namespace dp
         DP_ASSERT( !m_strip );
         m_strip = dp::sg::core::Primitive::create( ( vpp == 3 ) ? dp::sg::core::PRIMITIVE_TRIANGLE_STRIP : dp::sg::core::PRIMITIVE_QUAD_STRIP );
 
-        *((dp::sg::core::Object*)m_strip.getWeakPtr()) = *p;    // copy all but the Primitive itself
-        //m_strip->setName( p->getName() );
-        //m_strip->setAnnotation( p->getAnnotation() );
-        //m_strip->setHints( p->getHints() );
-        //for ( Object::CallbackContainer occ = p->beginAppTraverserCallbacks() ; occ != p->endAppTraverserCallbacks() ; ++occ )
-        //{
-        //  m_strip->addAppTraverserCallback( *occ );
-        //}
-        //m_strip->setTraversalMask( p->getTraversalMask() );
-        //DP_ASSERT( !p->getSkin() );
+        m_strip->setName( p->getName() );
+        m_strip->setAnnotation( p->getAnnotation() );
+        m_strip->setHints( p->getHints() );
+        m_strip->setTraversalMask( p->getTraversalMask() );
         m_strip->setInstanceCount( p->getInstanceCount() );
         m_strip->setVertexAttributeSet( p->getVertexAttributeSet() );
         m_strip->setIndexSet( p->getIndexSet() );
@@ -146,8 +140,7 @@ namespace dp
         }
         strippedIndices.pop_back();      // remove the last pri again
 
-        dp::sg::core::IndexSetSharedPtr strippedIndexSet = dp::sg::core::IndexSet::create();
-        *((dp::sg::core::Object*)strippedIndexSet.getWeakPtr()) = *(m_strip->getIndexSet().getWeakPtr());
+        dp::sg::core::IndexSetSharedPtr strippedIndexSet = m_strip->getIndexSet().clone();
         strippedIndexSet->setData( &strippedIndices[0], dp::checked_cast<unsigned int>(strippedIndices.size()) );
         strippedIndexSet->setPrimitiveRestartIndex( ~0 );
 

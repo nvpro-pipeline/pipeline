@@ -63,7 +63,7 @@ namespace dp
           /*! \brief Returns all objects found.
            * \return The function returns all objects found during traversal.
            */
-          DP_SG_ALGORITHM_API const std::vector<dp::sg::core::ObjectWeakPtr> & getResults();
+          DP_SG_ALGORITHM_API const std::vector<dp::sg::core::ObjectSharedPtr> & getResults();
 
           /*! \brief Sets a class name as serach criterion.
            * \param name Specifies the class name to use as search criterion. 
@@ -109,7 +109,7 @@ namespace dp
            * \remarks If a particular object is used as search criterion, other search criteria like
            * class name or object name will be ignored.
            */
-          DP_SG_ALGORITHM_API void setObjectPointer( const dp::sg::core::ObjectWeakPtr & ptr );
+          DP_SG_ALGORITHM_API void setObjectPointer( dp::sg::core::ObjectSharedPtr const& ptr );
 
           /*! \brief Returns the object to search for.
            * \return The function returns the object last set using setObjectPtr. 
@@ -247,14 +247,14 @@ namespace dp
         private:
           bool searchObject(const dp::sg::core::Object* p, const std::string &classNameToHandle);
 
-          dp::sg::core::PathSharedPtr               m_currentPath;
-          std::string                               m_className;
-          std::set<const dp::sg::core::Object *>    m_foundObjects;
-          std::string                               m_objectName;
-          dp::sg::core::ObjectWeakPtr               m_objectPointer;
-          std::vector<dp::sg::core::PathSharedPtr>  m_paths;
-          std::vector<dp::sg::core::ObjectWeakPtr>  m_results;
-          bool                                      m_searchBaseClass;
+          dp::sg::core::PathSharedPtr                 m_currentPath;
+          std::string                                 m_className;
+          std::set<dp::sg::core::ObjectSharedPtr>     m_foundObjects;
+          std::string                                 m_objectName;
+          dp::sg::core::ObjectSharedPtr               m_objectPointer;
+          std::vector<dp::sg::core::PathSharedPtr>    m_paths;
+          std::vector<dp::sg::core::ObjectSharedPtr>  m_results;
+          bool                                        m_searchBaseClass;
       };
 
       inline void SearchTraverser::setClassName( const std::string& name )
@@ -285,7 +285,7 @@ namespace dp
         return m_objectName;
       }
 
-      inline void SearchTraverser::setObjectPointer( const dp::sg::core::ObjectWeakPtr & ptr )
+      inline void SearchTraverser::setObjectPointer( dp::sg::core::ObjectSharedPtr const& ptr )
       {
         m_objectPointer = ptr;
       }

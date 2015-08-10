@@ -26,7 +26,6 @@
 
 #include <dp/rix/gl/inc/DataTypeConversionGL.h>
 #include <dp/rix/gl/inc/TextureGL2DRectangle.h>
-#include <dp/util/SharedPtr.h>
 
 namespace dp
 {
@@ -68,7 +67,7 @@ namespace dp
           /* TODO throw exception */
         }
 
-        dp::util::shared_cast<dp::gl::TextureRectangle>( getTexture() )->setData( data );
+        getTexture().inplaceCast<dp::gl::TextureRectangle>()->setData( data );
       }
 
     } // namespace gl

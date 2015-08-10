@@ -27,7 +27,6 @@
 #include <dp/sg/ui/qt5/SceniXQGLSceneRendererWidget.h>
 #include <dp/sg/ui/ViewState.h>
 #include <dp/gl/RenderTarget.h>
-#include <dp/util/SharedPtr.h>
 
 namespace dp
 {
@@ -76,7 +75,7 @@ namespace dp
 
           glEnable( GL_DEPTH_TEST );
 
-          dp::util::shared_cast<dp::gl::RenderTarget>(getRenderTarget())->setClearMask( dp::gl::TBM_COLOR_BUFFER | dp::gl::TBM_DEPTH_BUFFER );
+          getRenderTarget().inplaceCast<dp::gl::RenderTarget>()->setClearMask( dp::gl::TBM_COLOR_BUFFER | dp::gl::TBM_DEPTH_BUFFER );
           if ( m_manipulator )
           {
             m_manipulator->setRenderTarget( getRenderTarget() );

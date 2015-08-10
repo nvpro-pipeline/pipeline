@@ -148,7 +148,6 @@ private:
     std::string getObjectName( const dp::sg::core::Object *p );
     void    objectData( const dp::sg::core::Object *p ); // writes object data
     void    groupData( const dp::sg::core::Group *p );
-    void    initUnnamedCounters( void );
     bool    isFirstTime( const dp::sg::core::HandledObject * p );
     void    lightSourceData( const dp::sg::core::LightSource *p );
     void    nodeData( const dp::sg::core::Node *p );
@@ -158,7 +157,7 @@ private:
     void    transformData( const dp::sg::core::Transform * p );
     void    vertexAttributeSetData( const dp::sg::core::VertexAttributeSet * p );
     void    writeVertexData( const dp::sg::core::VertexAttribute & va );
-    void    buffer( const dp::sg::core::Buffer *p );
+    void    buffer( dp::sg::core::BufferSharedPtr const& p );
   private:
     struct CallbackLink
     {
@@ -170,18 +169,17 @@ private:
   private:
     FILE * m_fh;
 
-    std::vector<std::string>                                m_basePaths;
-    std::string                                             m_effectSpecName;
-    std::map<dp::sg::core::DataID, std::string>             m_sharedData;
-    std::set<const dp::sg::core::HandledObject *>           m_sharedObjects;
-    std::map<const dp::sg::core::Buffer *, std::string>     m_storedBuffers;
-    std::map<const dp::sg::core::Sampler *, std::string>    m_storedSamplers;
-    std::map<dp::sg::core::ObjectWeakPtr, std::string>      m_objectNames;
-    unsigned int                                            m_nameCount;
-    std::set<std::string>                                   m_nameSet;
-    std::map<dp::sg::core::TextureHostWeakPtr, std::string> m_textureImageNames;
-    std::map<dp::sg::core::TransformWeakPtr, std::string>   m_unnamedTransforms;
-    std::vector<CallbackLink>                               m_links;
+    std::vector<std::string>                                  m_basePaths;
+    std::string                                               m_effectSpecName;
+    std::map<dp::sg::core::DataID, std::string>               m_sharedData;
+    std::set<dp::sg::core::HandledObjectSharedPtr>            m_sharedObjects;
+    std::map<dp::sg::core::BufferSharedPtr, std::string>      m_storedBuffers;
+    std::map<dp::sg::core::SamplerSharedPtr, std::string>     m_storedSamplers;
+    std::map<dp::sg::core::ObjectSharedPtr, std::string>      m_objectNames;
+    unsigned int                                              m_nameCount;
+    std::set<std::string>                                     m_nameSet;
+    std::map<dp::sg::core::TextureHostSharedPtr, std::string> m_textureImageNames;
+    std::vector<CallbackLink>                                 m_links;
 };
 
 DEFINE_PTR_TYPES( DPAFSaver );

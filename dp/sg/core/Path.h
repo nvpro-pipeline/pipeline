@@ -30,6 +30,7 @@
 #include <dp/Types.h>
 #include <dp/sg/core/Config.h>
 #include <dp/sg/core/CoreTypes.h>
+#include <dp/util/WeakPtr.h>
 #include <cstring>
 
 namespace dp
@@ -72,7 +73,7 @@ namespace dp
            *  \remarks The head object is the first object in the path chain. 
            *  the call Path::getFromHead(0) is equivalent to Path::getHead().
            *  \sa getTail, getFromHead, getFromTail */
-          ObjectSharedPtr getHead() const;
+          ObjectSharedPtr const& getHead() const;
 
           /*! \brief Get the tail object of the path.
            *  \return This function returns a pointer to the constant tail object or NULL when the
@@ -80,7 +81,7 @@ namespace dp
            *  \remarks The tail object is the last object in the path chain. 
            *  the call Path::getFromTail(0) is equivalent to Path::getTail().
            *  \sa getHead, getFromHead, getFromTail */
-          ObjectSharedPtr getTail() const;
+          ObjectSharedPtr const& getTail() const;
 
           /*! \brief Get an object on the path. 
            *  \param i Null based index of the node to get from the path. The behavior of this 
@@ -89,7 +90,7 @@ namespace dp
            *  \remarks The returned object is the object at the requested position. Providing an index
            *  of 0 corresponds to the call to Path::getHead.
            *  \sa getHead, getFromHead, getFromTail */ 
-          ObjectSharedPtr getFromHead(unsigned int i) const;
+          ObjectSharedPtr const& getFromHead(unsigned int i) const;
 
           /*! \brief Get an object on the path. 
            *  \param i Null based index of the node to get from the path. The behavior of this 
@@ -98,7 +99,7 @@ namespace dp
            *  \remarks The returned object is the object at the requested position. Providing an index
            *  of 0 corresponds to the call to Path::getTail.
            *  \sa getTail, getFromHead, getFromTail */ 
-          ObjectSharedPtr getFromTail(unsigned int i) const;
+          ObjectSharedPtr const& getFromTail(unsigned int i) const;
       
           /*! \brief Remove the last object from the path. 
            *  \remarks This function simply removes the last (tail) object from the current path chain.
@@ -174,33 +175,33 @@ namespace dp
 
 
         private:
-          std::vector<ObjectWeakPtr> m_path;   //!< Vector of objects representing a path chain.
+          std::vector<ObjectSharedPtr> m_path;   //!< Vector of objects representing a path chain.
       };
 
       // - - - - - - - - - - - - - - - - - - -
       // inlines
       // - - - - - - - - - - - - - - - - - - -
 
-      inline ObjectSharedPtr Path::getHead() const
+      inline ObjectSharedPtr const& Path::getHead() const
       {
-        return( m_path.empty() ? ObjectSharedPtr::null : m_path.front()->getSharedPtr<Object>() );
+        return( m_path.empty() ? ObjectSharedPtr::null : m_path.front() );
       }
 
-      inline ObjectSharedPtr Path::getTail() const
+      inline ObjectSharedPtr const& Path::getTail() const
       {
-        return( m_path.empty() ? ObjectSharedPtr::null : m_path.back()->getSharedPtr<Object>() );
+        return( m_path.empty() ? ObjectSharedPtr::null : m_path.back() );
       }
 
-      inline ObjectSharedPtr Path::getFromHead( unsigned int i ) const
+      inline ObjectSharedPtr const& Path::getFromHead( unsigned int i ) const
       {
         DP_ASSERT(0 <= i && i < m_path.size());
-        return( m_path[i]->getSharedPtr<Object>() );
+        return( m_path[i] );
       }
 
-      inline ObjectSharedPtr Path::getFromTail( unsigned int i ) const
+      inline ObjectSharedPtr const& Path::getFromTail( unsigned int i ) const
       {
         DP_ASSERT(0 <= i && i < m_path.size());
-        return( m_path[m_path.size()-i-1]->getSharedPtr<Object>() );
+        return( m_path[m_path.size()-i-1] );
       }
 
       inline unsigned int Path::getLength() const

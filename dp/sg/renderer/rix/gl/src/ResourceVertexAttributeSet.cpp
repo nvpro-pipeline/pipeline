@@ -43,7 +43,7 @@ namespace dp
             assert( vertexAttributeSet );
             assert( resourceManager );
 
-            ResourceVertexAttributeSetSharedPtr resourceVertexAttributeSet = resourceManager->getResource<ResourceVertexAttributeSet>( reinterpret_cast<size_t>(vertexAttributeSet.getWeakPtr()) );
+            ResourceVertexAttributeSetSharedPtr resourceVertexAttributeSet = resourceManager->getResource<ResourceVertexAttributeSet>( reinterpret_cast<size_t>(vertexAttributeSet.operator->()) );   // Big Hack !!
             if ( !resourceVertexAttributeSet )
             {
               resourceVertexAttributeSet = std::shared_ptr<ResourceVertexAttributeSet>( new ResourceVertexAttributeSet( vertexAttributeSet, resourceManager ) );
@@ -54,7 +54,7 @@ namespace dp
           }
 
           ResourceVertexAttributeSet::ResourceVertexAttributeSet( const dp::sg::core::VertexAttributeSetSharedPtr &vertexAttributeSet, const ResourceManagerSharedPtr& resourceManager )
-            : ResourceManager::Resource( reinterpret_cast<size_t>( vertexAttributeSet.getWeakPtr() ), resourceManager )
+            : ResourceManager::Resource( reinterpret_cast<size_t>( vertexAttributeSet.operator->() ), resourceManager )   // Big Hack !!
             , m_vertexAttributeSet( vertexAttributeSet )
           {
             resourceManager->subscribe( this );

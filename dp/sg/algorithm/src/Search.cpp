@@ -34,7 +34,7 @@ namespace dp
     namespace algorithm
     {
 
-      const std::vector<dp::sg::core::ObjectWeakPtr> searchClass( const dp::sg::core::NodeSharedPtr & root, const std::string& name, bool baseClassSearch /* = false */ )
+      const std::vector<dp::sg::core::ObjectSharedPtr> searchClass( const dp::sg::core::NodeSharedPtr & root, const std::string& name, bool baseClassSearch /* = false */ )
       {
         SearchTraverser st;
 

@@ -25,7 +25,6 @@
 
 
 #include <dp/util/File.h>
-#include <dp/util/SharedPtr.h>
 #include <dp/util/Singleton.h>
 #include <dp/fx/xml/EffectLoader.h>
 #include <dp/fx/ParameterConversion.h>
@@ -468,7 +467,7 @@ namespace dp
       {
         snippets.clear();
 
-        dp::fx::xml::EffectSpecSharedPtr effectSpec = dp::util::shared_cast<EffectSpec>( dp::fx::EffectLibrary::instance()->getEffectSpec( configuration.getName() ) );
+        dp::fx::xml::EffectSpecSharedPtr const& effectSpec = dp::fx::EffectLibrary::instance()->getEffectSpec( configuration.getName() ).inplaceCast<dp::fx::xml::EffectSpec>();
 
         // All other domains have only one set of code snippets per technique and ignore the signature.
         
@@ -1007,7 +1006,7 @@ namespace dp
             }
             element = element->NextSiblingElement();
           }
-          m_parameterGroupDataLookup[id] = dp::util::shared_cast<ParameterGroupData>( parameterGroupData );
+          m_parameterGroupDataLookup[id] = parameterGroupData;
         }
         else if ( pg->Attribute( "ref" ) )  // Reference existing parameterGroupData defined before.
         {
@@ -1018,7 +1017,7 @@ namespace dp
           {
             throw std::runtime_error( "parameterGroupData for " + ref + " not found in global scope." );
           }
-          parameterGroupData = dp::util::shared_cast<ParameterGroupDataPrivate>( itpgd->second );
+          parameterGroupData = itpgd->second.staticCast<dp::fx::ParameterGroupDataPrivate>();
         }
         else
         {
@@ -1100,7 +1099,7 @@ namespace dp
             }
           }
 
-          dp::fx::EffectSpecSharedPtr es = dp::util::shared_cast<dp::fx::EffectSpec>( EffectSpec::create( id, domainSpecs ) );
+          dp::fx::EffectSpecSharedPtr es = dp::fx::xml::EffectSpec::create( id, domainSpecs );
           dp::fx::EffectSpecSharedPtr registeredEffectSpec = getEffectLibrary()->registerSpec( es, this );
           if ( es == registeredEffectSpec )
           {
@@ -1177,7 +1176,7 @@ namespace dp
       {
         ShaderPipelineImplSharedPtr shaderPipeline = ShaderPipelineImpl::create();
 
-        EffectSpecSharedPtr effectSpec = dp::util::shared_cast<EffectSpec>( dp::fx::EffectLibrary::instance()->getEffectSpec( configuration.getName() ) );
+        EffectSpecSharedPtr effectSpec = dp::fx::EffectLibrary::instance()->getEffectSpec( configuration.getName() ).staticCast<dp::fx::xml::EffectSpec>();
         EffectSpec::DomainSpecs const & domainSpecs = effectSpec->getDomainSpecs();
 
         for ( EffectSpec::DomainSpecs::const_iterator it = domainSpecs.begin(); it != domainSpecs.end(); ++it ) 
@@ -1217,7 +1216,7 @@ namespace dp
       bool EffectLoader::effectHasTechnique( dp::fx::EffectSpecSharedPtr const& effectSpec, std::string const& techniqueName, bool /*rasterizer*/ )
       {
         bool hasTechnique = true;
-        EffectSpecSharedPtr xmlEffectSpec = dp::util::shared_cast<EffectSpec>( effectSpec );
+        EffectSpecSharedPtr xmlEffectSpec = effectSpec.staticCast<dp::fx::xml::EffectSpec>();
         for ( EffectSpec::DomainSpecs::const_iterator it = xmlEffectSpec->getDomainSpecs().begin() ; it != xmlEffectSpec->getDomainSpecs().end() && hasTechnique ; ++it )
         {
             switch( it->second->getDomain() )

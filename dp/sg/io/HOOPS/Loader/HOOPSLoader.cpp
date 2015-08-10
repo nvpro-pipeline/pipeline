@@ -1376,7 +1376,7 @@ A3DStatus HOOPSLoader::traverseTess3DWire( const A3DRiRepresentationItem * pRepI
 
 A3DStatus HOOPSLoader::traverseBrepModel( const A3DRiBrepModel * pBrepModel )
 {
-  // ASU: What is A3DCopyAndAdaptBrepModel supposed to give?
+  // What is A3DCopyAndAdaptBrepModel supposed to give?
   //      Seems, it always returns something of type kA3DTypeRiBrepModel -> infinite recursion
   //reportUnsupported("RiBrepModel");   // floods the message area with messages, which makes loading really slow!!
 #if HANDLE_BREP
@@ -1435,19 +1435,19 @@ A3DStatus HOOPSLoader::traversePartDef( const A3DAsmPartDefinition * pPart, cons
 
   for ( A3DUns32 ui=0 ; ui<sData.m_uiAnnotationsSize ; ui++ )
   {
-    // ASU: what's an annotation ?
+    // what's an annotation ?
     DP_ASSERT( !"never passed this path" );
   }
 
   for ( A3DUns32 ui=0 ; ui<sData.m_uiViewsSize ; ui++ )
   {
-    // ASU: what's a view ?
+    // what's a view ?
     DP_ASSERT( !"never passed this path" );
   }
 
   for ( A3DUns32 ui=0 ; ui<sData.m_uiDrawingModelsSize ; ui++ )
   {
-    // ASU: what's a drawing model ?
+    // what's a drawing model ?
     DP_ASSERT( !"never passed this path" );
   }
 
@@ -1562,7 +1562,7 @@ A3DStatus HOOPSLoader::traversePOccurrence( const A3DAsmProductOccurrence * pOcc
 
   if ( sData.m_pExternalData )
   {
-    // ASU: What's external data?
+    // What's external data?
     CHECK_RET( traversePOccurrence( sData.m_pExternalData, ca, true ) );
   }
 
@@ -1578,46 +1578,46 @@ A3DStatus HOOPSLoader::traversePOccurrence( const A3DAsmProductOccurrence * pOcc
 
   for ( A3DUns32 ui=0 ; ui<sData.m_uiEntityReferenceSize ; ui++ )
   {
-    // ASU: what's an entity reference ?
+    // what's an entity reference ?
     DP_ASSERT( !"never passed this path" );
   }
 
   for ( A3DUns32 ui=0 ; ui<sData.m_uiAnnotationsSize ; ui++ )
   {
-    // ASU: what's an annotation ?
+    // what's an annotation ?
     //DP_ASSERT( !"never passed this path" );
   }
 
   for ( A3DUns32 ui=0 ; ui<sData.m_uiViewsSize ; ui++ )
   {
-    // ASU: what's a view ?
+    // what's a view ?
     //DP_ASSERT( !"never passed this path" );
   }
 
   if ( sData.m_pEntityFilter )
   {
-    // ASU: what's an entity filter ?
+    // what's an entity filter ?
     DP_ASSERT( !"never passed this path" );
   }
 
   for ( A3DUns32 ui=0 ; ui<sData.m_uiDisplayFilterSize ; ui++ )
   {
-    // ASU: what's a display filter ?
+    // what's a display filter ?
     //DP_ASSERT( !"never passed this path" );
   }
 
   for ( A3DUns32 ui=0 ; ui<sData.m_uiSceneDisplayParameterSize ; ui++ )
   {
-    // ASU: what's a scene display parameter ?
+    // what's a scene display parameter ?
     //DP_ASSERT( !"never passed this path" );
   }
 
   popGroup();
 
-  // ASU: do we need to handle m_eProductLoadStatus ?
-  // ASU: do we need to handle m_uiProductFlags ?
-  // ASU: do we need to handle m_bUnitFromCAD and m_dUnit ?
-  // ASU: do we need to handle m_eModellerType ?
+  // do we need to handle m_eProductLoadStatus ?
+  // do we need to handle m_uiProductFlags ?
+  // do we need to handle m_bUnitFromCAD and m_dUnit ?
+  // do we need to handle m_eModellerType ?
 
   return( A3DAsmProductOccurrenceGet( NULL, &sData ) );
 }

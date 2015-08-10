@@ -179,7 +179,7 @@ namespace dp
             assert( primitive );
             assert( resourceManager );
 
-            ResourcePrimitiveSharedPtr resourcePrimitive = resourceManager->getResource<ResourcePrimitive>( reinterpret_cast<size_t>(primitive.getWeakPtr()) );
+            ResourcePrimitiveSharedPtr resourcePrimitive = resourceManager->getResource<ResourcePrimitive>( reinterpret_cast<size_t>(primitive.operator->()) );   // Big Hack !!
             if ( !resourcePrimitive )
             {
 #if defined(USE_SUBALLOCATOR)
@@ -194,7 +194,7 @@ namespace dp
           }
 
           ResourcePrimitive::ResourcePrimitive( const dp::sg::core::PrimitiveSharedPtr &primitive, const ResourceManagerSharedPtr& resourceManager )
-            : ResourceManager::Resource( reinterpret_cast<size_t>( primitive.getWeakPtr() ), resourceManager )
+            : ResourceManager::Resource( reinterpret_cast<size_t>( primitive.operator->() ), resourceManager )    // Big Hack !!
             , m_primitive( primitive )
           {
             resourceManager->subscribe( this );

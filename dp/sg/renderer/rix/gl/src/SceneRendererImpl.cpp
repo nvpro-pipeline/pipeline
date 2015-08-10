@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2014
+// Copyright (c) 2010-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -36,8 +36,6 @@
 #include <dp/sg/ui/ViewState.h>
 #include <dp/rix/gl/RiXGL.h>
 #include <dp/sg/core/FrustumCamera.h>
-#include <dp/util/SharedPtr.h>
-
 #include <dp/util/File.h>
 
 #define ENABLE_NSIGHT_PROFILING 0
@@ -165,8 +163,7 @@ namespace dp
             {
               SceneRenderer::beginRendering( viewState, renderTarget );
 
-              dp::gl::RenderTargetSharedPtr renderTargetGL = dp::util::shared_cast<dp::gl::RenderTarget>( renderTarget );
-              DP_ASSERT( renderTargetGL );
+              dp::gl::RenderTargetSharedPtr renderTargetGL = renderTarget.staticCast<dp::gl::RenderTarget>();
 
               if ( !m_userRenderContext )
               {
@@ -208,8 +205,7 @@ namespace dp
           {
             if ( m_rendererInitialized )
             {
-              dp::gl::RenderTargetSharedPtr renderTargetGL = dp::util::shared_cast<dp::gl::RenderTarget>( renderTarget );
-              DP_ASSERT( renderTargetGL );
+              dp::gl::RenderTargetSharedPtr renderTargetGL = renderTarget.staticCast<dp::gl::RenderTarget>();
               renderTargetGL->endRendering();
 
               SceneRenderer::endRendering( viewState, renderTarget );
@@ -225,8 +221,7 @@ namespace dp
           {
             if ( m_rendererInitialized )
             {
-              dp::gl::RenderTargetSharedPtr renderTargetGL = dp::util::shared_cast<dp::gl::RenderTarget>( renderTarget );
-              DP_ASSERT( renderTargetGL );
+              dp::gl::RenderTargetSharedPtr renderTargetGL = renderTarget.staticCast<dp::gl::RenderTarget>();
 
               if (viewState->getSceneTree() != m_sceneTree)
               {
@@ -356,7 +351,7 @@ namespace dp
             drawableManagerDefault->cull( camera );
 
             NSIGHT_START_RANGE( "Frame" );
-            dp::gl::RenderTargetSharedPtr const & renderTargetGL = dp::util::shared_cast<dp::gl::RenderTarget>(renderTarget);
+            dp::gl::RenderTargetSharedPtr const& renderTargetGL = renderTarget.staticCast<dp::gl::RenderTarget>();
             dp::gl::TargetBufferMask clearMask = renderTargetGL->getClearMask();
             if ( getEnvironmentRenderingEnabled() )
             {

@@ -464,7 +464,7 @@ namespace dp
     bool RenderContext::makeCurrent()
     {
       bool result = m_context->makeCurrent();
-      if ( result && ( getThreadData()->currentRenderContext.getWeakPtr() != this ) )
+      if ( result && ( getThreadData()->currentRenderContext != this->shared_from_this() ) )
       {
         getThreadData()->currentRenderContext = shared_from_this();
       }

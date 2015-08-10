@@ -28,7 +28,6 @@
 /** \file */
 
 #include <dp/fx/ParameterGroupSpec.h>
-#include <dp/util/SharedPtr.h>
 #include <map>
 
 namespace dp

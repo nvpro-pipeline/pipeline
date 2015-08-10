@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012-2015
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -450,10 +450,10 @@ void combineVertexAttributes( dp::sg::ui::ViewStateSharedPtr const& viewState )
   dp::sg::algorithm::SearchTraverser searchTraverser;
   searchTraverser.setClassName("class dp::sg::core::VertexAttributeSet");
   searchTraverser.apply( viewState );
-  std::vector<dp::sg::core::ObjectWeakPtr> results = searchTraverser.getResults();
-  for ( std::vector<dp::sg::core::ObjectWeakPtr>::iterator it = results.begin(); it != results.end(); ++it )
+  std::vector<dp::sg::core::ObjectSharedPtr> results = searchTraverser.getResults();
+  for ( std::vector<dp::sg::core::ObjectSharedPtr>::iterator it = results.begin(); it != results.end(); ++it )
   {
-    dp::util::weakPtr_cast<dp::sg::core::VertexAttributeSet>(*it)->combineBuffers();
+    it->inplaceCast<dp::sg::core::VertexAttributeSet>()->combineBuffers();
   }
 }
 

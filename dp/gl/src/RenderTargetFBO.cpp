@@ -27,7 +27,6 @@
 #include <dp/gl/RenderTargetFBO.h>
 
 #include <dp/util/BitMask.h>
-#include <dp/util/SharedPtr.h>
 
 namespace dp
 {
@@ -469,33 +468,33 @@ namespace dp
     void RenderTargetFBO::AttachmentTexture::resizeTexture1D( int width, int height )
     {
       DP_ASSERT( height == 1 );
-      dp::util::shared_cast<Texture1D>(m_texture)->resize( width );
+      m_texture.inplaceCast<dp::gl::Texture1D>()->resize( width );
     }
 
     void RenderTargetFBO::AttachmentTexture::resizeTexture2D( int width, int height )
     {
-      dp::util::shared_cast<Texture2D>(m_texture)->resize( width, height );
+      m_texture.inplaceCast<dp::gl::Texture2D>()->resize( width, height );
     }
 
     void RenderTargetFBO::AttachmentTexture::resizeTexture3D( int width, int height )
     {
-      dp::util::shared_cast<Texture3D>(m_texture)->resize( width, height, dp::util::shared_cast<Texture3D>(m_texture)->getDepth() );
+      m_texture.inplaceCast<dp::gl::Texture3D>()->resize( width, height, m_texture.inplaceCast<dp::gl::Texture3D>()->getDepth() );
     }
 
     void RenderTargetFBO::AttachmentTexture::resizeTexture1DArray( int width, int height )
     {
       DP_ASSERT( height == 1 );
-      dp::util::shared_cast<Texture1DArray>(m_texture)->resize( width, dp::util::shared_cast<Texture1DArray>(m_texture)->getLayers() );
+      m_texture.inplaceCast<dp::gl::Texture1DArray>()->resize( width, m_texture.inplaceCast<dp::gl::Texture1DArray>()->getLayers() );
     }
 
     void RenderTargetFBO::AttachmentTexture::resizeTexture2DArray( int width, int height )
     {
-      dp::util::shared_cast<Texture2DArray>(m_texture)->resize( width, height, dp::util::shared_cast<Texture2DArray>(m_texture)->getLayers() );
+      m_texture.inplaceCast<dp::gl::Texture2DArray>()->resize( width, height, m_texture.inplaceCast<dp::gl::Texture2DArray>()->getLayers() );
     }
 
     void RenderTargetFBO::AttachmentTexture::resizeTextureCubemap( int width, int height )
     {
-      dp::util::shared_cast<TextureCubemap>(m_texture)->resize( width, height );
+      m_texture.inplaceCast<dp::gl::TextureCubemap>()->resize( width, height );
     }
 
     /******************/

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2015
+// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -30,7 +30,6 @@
 #include <dp/sg/core/CoreTypes.h>
 #include <dp/fx/EffectLibrary.h>
 #include <dp/sg/gl/TextureGL.h>
-#include <dp/util/SharedPtr.h>
 
 #include "CFRPipeline.h"
 #include "TextureTransfer.h"
@@ -212,7 +211,7 @@ void CFRPipeline::resize( size_t width, size_t height )
 // Mind, this is called for left and right eye independently.
 void CFRPipeline::doRender(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget)
 {
-  const dp::gl::RenderTargetSharedPtr renderTargetGL = dp::util::shared_cast<dp::gl::RenderTarget>(renderTarget);
+  const dp::gl::RenderTargetSharedPtr renderTargetGL = renderTarget.staticCast<dp::gl::RenderTarget>();
   DP_ASSERT( renderTargetGL );
   if( m_gpuData.empty() )
   {
@@ -250,8 +249,8 @@ void CFRPipeline::doRender(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::
 
     GpuData& gpuData = m_gpuData[i];
 
-    const dp::gl::RenderTargetFBO::SharedAttachment &attachment = dp::util::shared_cast<dp::gl::RenderTargetFBO>(gpuData.m_renderTarget)->getAttachment(dp::gl::RenderTargetFBO::COLOR_ATTACHMENT0);
-    const dp::gl::RenderTargetFBO::SharedAttachmentTexture &texAtt = dp::util::shared_cast<dp::gl::RenderTargetFBO::AttachmentTexture>(attachment);
+    const dp::gl::RenderTargetFBO::SharedAttachment &attachment = gpuData.m_renderTarget.inplaceCast<dp::gl::RenderTargetFBO>()->getAttachment(dp::gl::RenderTargetFBO::COLOR_ATTACHMENT0);
+    const dp::gl::RenderTargetFBO::SharedAttachmentTexture &texAtt = attachment.inplaceCast<dp::gl::RenderTargetFBO::AttachmentTexture>();
 
     DP_ASSERT( texAtt );
 
@@ -259,7 +258,7 @@ void CFRPipeline::doRender(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::
     gpuData.m_renderTarget->setClearMask(0);
     gpuData.m_renderTarget->beginRendering();
 
-    gpuData.m_textureTransfer->transfer( i, m_compositeTexture, dp::util::shared_cast<dp::gl::Texture2D>(texAtt->getTexture()) );
+    gpuData.m_textureTransfer->transfer( i, m_compositeTexture, texAtt->getTexture().inplaceCast<dp::gl::Texture2D>() );
 
     gpuData.m_renderTarget->endRendering();
     gpuData.m_renderTarget->setClearMask( dp::gl::TBM_COLOR_BUFFER | dp::gl::TBM_DEPTH_BUFFER );

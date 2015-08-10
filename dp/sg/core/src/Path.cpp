@@ -71,17 +71,16 @@ namespace dp
     #if !defined(NDEBUG)
         if ( !m_path.empty() )
         {
-          if ( isPtrTo<Group>(m_path.back()) )
+          GroupSharedPtr const& pGroup = m_path.back().dynamicCast<Group>();
+          if ( pGroup )
           {
-            GroupSharedPtr pGroup( m_path.back()->getSharedPtr<Group>() );
             DP_ASSERT( object.isPtrTo<Node>() );
-            bool found = ( pGroup->findChild( pGroup->beginChildren(), object->getSharedPtr<Node>() ) != pGroup->endChildren() );
-            DP_ASSERT( found );
+            DP_ASSERT( pGroup->findChild( pGroup->beginChildren(), object.inplaceCast<Node>() ) != pGroup->endChildren() );
           }
         }
     #endif
 
-        m_path.push_back( object.getWeakPtr() );
+        m_path.push_back( object );
       }
 
       void Path::truncate( unsigned int start )

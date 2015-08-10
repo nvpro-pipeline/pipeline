@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2013
+// Copyright NVIDIA Corporation 2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -25,36 +25,50 @@
 
 
 #pragma once
-
-#include <dp/util/Observer.h>
+/** @file */
 
 namespace dp
 {
-  namespace sg
+  namespace util
   {
-    namespace xbar
+    template <typename T>
+    class WeakPtr : public std::weak_ptr<T>
     {
-      DEFINE_PTR_TYPES( SceneObserver );
-
-      class SceneTree;
-      DEFINE_PTR_TYPES( SceneTree );
-
-      class SceneObserver : public dp::util::Observer
-      {
       public:
-        static SceneObserverSharedPtr create( SceneTreeSharedPtr const& sceneTree );
-        virtual ~SceneObserver();
+        WeakPtr();
+        WeakPtr( std::weak_ptr<T> const& wp );
 
-      protected:
-        SceneObserver( SceneTreeSharedPtr const& sceneTree );
+        // implicit upcast (Derived -> Base)
+        template <typename U> WeakPtr( std::weak_ptr<U> const& sp );
 
-        virtual void onNotify( const dp::util::Event &event, dp::util::Payload * payload );
-        virtual void onDestroyed( const dp::util::Subject& subject, dp::util::Payload * payload );
+        SharedPtr<T> getSharedPtr() const;
+    };
 
-      protected:
-        SceneTreeSharedPtr m_sceneTree;
-      };
 
-    } // namespace xbar
-  } // namespace sg
-} // namespace dp
+    template <typename T>
+    inline WeakPtr<T>::WeakPtr()
+    {
+    }
+
+    template <typename T>
+    inline WeakPtr<T>::WeakPtr( std::weak_ptr<T> const& wp )
+      : std::weak_ptr<T>( wp )
+    {
+    }
+
+    template <typename T>
+    template <typename U>
+    inline WeakPtr<T>::WeakPtr( std::weak_ptr<U> const& wp )
+      : std::weak_ptr<T>( wp )
+    {
+      DP_STATIC_ASSERT(( boost::is_base_of<T,U>::value ));
+    }
+
+    template <typename T>
+    inline SharedPtr<T> WeakPtr<T>::getSharedPtr() const
+    {
+      return( this->lock() );
+    }
+
+  }//namespace util
+}//namespace dp

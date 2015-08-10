@@ -145,7 +145,7 @@ namespace dp
             m_instances.push_back( Instance() );
             Instance &di = m_instances.back();
             di.m_handle = handle;
-            di.m_geoNode = geoNode->getSharedPtr<dp::sg::core::GeoNode>();
+            di.m_geoNode = geoNode.getSharedPtr();
             di.m_objectTreeIndex = objectTreeIndex;
             di.m_transformIndex = objectTreeNode.m_transformIndex;
             di.m_transparent = false;
@@ -180,7 +180,7 @@ namespace dp
 
             if( di.m_effectDataAttached )
             {
-              di.m_currentEffectSurface->detach( m_effectDataObserver.get(), di.m_payload.getWeakPtr() );
+              di.m_currentEffectSurface->detach( m_effectDataObserver.get(), di.m_payload.operator->() );   // Big Hack !!
               di.m_effectDataAttached = false;
             }
 
@@ -260,7 +260,7 @@ namespace dp
               {
                 if ( di.m_effectDataAttached )
                 {
-                  di.m_currentEffectSurface->detach( m_effectDataObserver.get(), di.m_payload.getWeakPtr() );
+                  di.m_currentEffectSurface->detach( m_effectDataObserver.get(), di.m_payload.operator->() );   // Big Hack !!
                 }
 
                 di.m_currentEffectSurface = effectDataSurface;
@@ -268,7 +268,7 @@ namespace dp
                 di.m_smartShaderObject = m_shaderManager->registerGeometryInstance(geoNode, di.m_objectTreeIndex, di.m_geometryInstance );
                 di.m_smartShaderObjectDepthPass = m_shaderManager->registerGeometryInstance(geoNode, di.m_objectTreeIndex, di.m_geometryInstanceDepthPass, RPT_DEPTH );
 
-                di.m_currentEffectSurface->attach( m_effectDataObserver.get(), di.m_payload.getWeakPtr() );
+                di.m_currentEffectSurface->attach( m_effectDataObserver.get(), di.m_payload.operator->() );   // Big Hack !!
                 di.m_effectDataAttached = true;
               }
 
@@ -518,7 +518,7 @@ namespace dp
             {
               if ( it->m_effectDataAttached )
               {
-                it->m_currentEffectSurface->detach( m_effectDataObserver.get(), it->m_payload.getWeakPtr() );
+                it->m_currentEffectSurface->detach( m_effectDataObserver.get(), it->m_payload.operator->() );   // Big Hack !!
                 it->m_effectDataAttached = false;
               }
             }
@@ -545,10 +545,10 @@ namespace dp
               case dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX_FX:
               case dp::fx::MANAGER_SHADER_STORAGE_BUFFER_OBJECT:
               case dp::fx::MANAGER_SHADER_STORAGE_BUFFER_OBJECT_RIX:
-                m_shaderManager.reset( new ShaderManagerRiXFx( getSceneTree().getWeakPtr(), m_shaderManagerType, m_resourceManager, m_transparencyManager ) );
+                m_shaderManager.reset( new ShaderManagerRiXFx( getSceneTree(), m_shaderManagerType, m_resourceManager, m_transparencyManager ) );
                 break;
               default:
-                m_shaderManager.reset( new ShaderManagerRiXFx( getSceneTree().getWeakPtr(), dp::fx::MANAGER_UNIFORM, m_resourceManager, m_transparencyManager ) );
+                m_shaderManager.reset( new ShaderManagerRiXFx( getSceneTree(), dp::fx::MANAGER_UNIFORM, m_resourceManager, m_transparencyManager ) );
               }
 
               dp::rix::core::Renderer *renderer = m_resourceManager->getRenderer();

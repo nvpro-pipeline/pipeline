@@ -28,6 +28,7 @@
 
 #include <dp/Types.h>
 #include <dp/culling/Manager.h>
+#include <dp/util/WeakPtr.h>
 
 namespace dp
 {
@@ -72,7 +73,7 @@ namespace dp
       size_t              m_transformIndex;
       PayloadSharedPtr    m_userData;
       size_t              m_groupIndex;
-      GroupBitSet       * m_group;
+      GroupBitSetWeakPtr  m_group;
     };
 
     inline void ObjectBitSet::setTransformIndex( size_t transformIndex )

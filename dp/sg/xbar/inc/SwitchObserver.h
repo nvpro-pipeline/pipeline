@@ -82,10 +82,10 @@ namespace dp
         }
 
       protected:
-        SwitchObserver() : Observer<ObjectTreeIndex>( nullptr )
+        SwitchObserver() : Observer<ObjectTreeIndex>( dp::sg::xbar::SceneTreeSharedPtr::null )
           , m_changed(false)
         {}
-        void onNotify( const dp::util::Event &event, dp::util::Payload *payload );
+        void onNotify( const dp::util::Event &event, dp::util::Payload * payload );
         virtual void onDetach( ObjectTreeIndex index );
 
       private:

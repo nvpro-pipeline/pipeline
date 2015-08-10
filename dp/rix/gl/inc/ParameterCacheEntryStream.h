@@ -27,7 +27,6 @@
 #pragma once
 
 #include <dp/rix/core/RiX.h>
-#include <dp/util/SharedPtr.h>
 #include <dp/rix/gl/inc/ProgramGL.h>
 
 namespace dp

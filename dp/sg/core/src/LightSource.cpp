@@ -174,7 +174,7 @@ namespace dp
         hg.update( reinterpret_cast<const unsigned char *>(&m_enabled), sizeof(m_enabled) );
         if ( m_lightEffect )
         {
-          hg.update( reinterpret_cast<const unsigned char *>(m_lightEffect.getWeakPtr()), sizeof(const EffectData *) );
+          hg.update( m_lightEffect );
         }
       }
 

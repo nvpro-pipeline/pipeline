@@ -91,7 +91,7 @@ namespace dp
           ++itSrc1;
         }
 
-        v0.setData( v0.getVertexDataSize(), v0.getVertexDataType(), buffer.getWeakPtr(), (unsigned int)vertexDataBytes, v0.getVertexDataCount() + v1.getVertexDataCount() );
+        v0.setData( v0.getVertexDataSize(), v0.getVertexDataType(), buffer, 0, (unsigned int)vertexDataBytes, v0.getVertexDataCount() + v1.getVertexDataCount() );
       }
 
       static bool needsPrimitiveRestartIndex( PrimitiveType type )

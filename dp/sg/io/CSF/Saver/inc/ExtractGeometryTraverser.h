@@ -51,8 +51,8 @@ class ExtractGeometryTraverser : public dp::sg::algorithm::SharedTraverser
     std::vector<CSFSGMaterial>& getMaterials();
     std::vector<CSFSGGeometry>& getGeometries();
 
-    typedef std::map <const dp::sg::core::EffectData*,int>  CSFSGMaterialHashMap;
-    typedef std::pair<const dp::sg::core::EffectData*,int>  CSFSGMaterialHashPair;
+    typedef std::map <const dp::sg::core::EffectDataSharedPtr,int>  CSFSGMaterialHashMap;
+    typedef std::pair<const dp::sg::core::EffectDataSharedPtr,int>  CSFSGMaterialHashPair;
 
     typedef std::pair<int,int>                                                CSFSGGeometryHashEntry;
     typedef std::pair<const dp::sg::core::Primitive*,CSFSGGeometryHashEntry>  CSFSGGeometryHashPair;

@@ -41,7 +41,7 @@ namespace dp
       class SceneTreeGenerator : public dp::sg::algorithm::SharedTraverser
       {
       public:
-        DP_SG_XBAR_API SceneTreeGenerator( const SceneTreeWeakPtr& SceneTree );
+        DP_SG_XBAR_API SceneTreeGenerator( SceneTreeSharedPtr const& sceneTree );
         DP_SG_XBAR_API ~SceneTreeGenerator() { /* NOP */ }
 
         DP_SG_XBAR_API virtual void doApply( const dp::sg::core::NodeSharedPtr & root );

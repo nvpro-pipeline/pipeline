@@ -37,7 +37,7 @@ namespace dp
       {
       }
 
-      void TransformObserver::attach( dp::sg::core::TransformWeakPtr const & t, TransformTreeIndex index )
+      void TransformObserver::attach( dp::sg::core::TransformSharedPtr const & t, TransformTreeIndex index )
       {
         DP_ASSERT( m_indexMap.find( index ) == m_indexMap.end() );
 
@@ -45,7 +45,7 @@ namespace dp
         Observer<TransformTreeIndex>::attach( t, payload );
 
         payload->m_dirty = true;
-        m_dirtyPayloads.push_back( payload.getWeakPtr() );
+        m_dirtyPayloads.push_back( payload.operator->() );    // Big Hack !!
       }
 
       void TransformObserver::onNotify( const dp::util::Event &event, dp::util::Payload *payload )

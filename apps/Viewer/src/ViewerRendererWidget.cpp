@@ -463,11 +463,11 @@ void ViewerRendererWidget::highlightObject( const dp::sg::core::NodeSharedPtr & 
   searchTraverser.setClassName("class dp::sg::core::GeoNode");
   searchTraverser.apply( which );
 
-  const vector<ObjectWeakPtr> & searchResults = searchTraverser.getResults();
-  vector<ObjectWeakPtr>::const_iterator it;
+  const vector<ObjectSharedPtr> & searchResults = searchTraverser.getResults();
+  vector<ObjectSharedPtr>::const_iterator it;
   for(it=searchResults.begin(); it!=searchResults.end(); it++)
   {
-    highlightGeoNode( (*it)->getSharedPtr<GeoNode>() );
+    highlightGeoNode( it->inplaceCast<dp::sg::core::GeoNode>() );
   }
 }
 
@@ -522,7 +522,7 @@ void ViewerRendererWidget::dropEvent( QDropEvent * event )
   else if ( mimeData->hasFormat( "EffectData" ) )
   {
     // EffectData delivers the GeoNode, as both material and geometry effect needs to be copied
-    dp::sg::core::GeoNodeSharedPtr geoNode( (*(reinterpret_cast<dp::sg::core::GeoNodeWeakPtr*>( mimeData->data( "EffectData" ).data() )))->getSharedPtr<GeoNode>() );
+    dp::sg::core::GeoNodeSharedPtr geoNode( reinterpret_cast<dp::sg::core::GeoNode*>( mimeData->data( "EffectData" ).data() )->getSharedPtr<GeoNode>() );
 
     DP_ASSERT( m_selectedGeoNodes.size() == 1 );
     DP_ASSERT( m_selectedGeoNodes.begin()->isPtrTo<GeoNode>() );
@@ -813,7 +813,7 @@ void ViewerRendererWidget::addSpotLight()
   ExecuteCommand( new CommandAddObject( group, spotLight ) );
 }
 
-static void nameCamera( CameraWeakPtr camWP, const std::string & baseName, unsigned int index )
+static void nameCamera( CameraSharedPtr camWP, const std::string & baseName, unsigned int index )
 {
   std::ostringstream ss;
   ss << baseName << setw(2) << setfill('0') << index;
@@ -829,7 +829,7 @@ void ViewerRendererWidget::addCamera()
   if( pcamh )
   {
     PerspectiveCameraSharedPtr newPcamh = pcamh.clone();
-    nameCamera( newPcamh.getWeakPtr(), "SVPerspectiveCamera", s_cameraCount++ );
+    nameCamera( newPcamh, "SVPerspectiveCamera", s_cameraCount++ );
 
     // so this can be used for camera cycling
     newPcamh->setUserData( nullptr );

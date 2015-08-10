@@ -41,7 +41,6 @@ namespace dp
     namespace xbar
     {
       DEFINE_PTR_TYPES( SceneTree );
-      typedef SceneTree*                       SceneTreeWeakPtr;
 
       class DrawableInstance;
       typedef DrawableInstance* DrawableInstanceWeakPtr;
@@ -51,7 +50,7 @@ namespace dp
       class GeneratorState
       {
       public:
-        static GeneratorStateSharedPtr create( const SceneTreeWeakPtr& sceneTree )
+        static GeneratorStateSharedPtr create( SceneTreeSharedPtr const& sceneTree )
         {
           return( std::shared_ptr<GeneratorState>( new GeneratorState( sceneTree ) ) );
         }
@@ -62,8 +61,8 @@ namespace dp
         DP_SG_XBAR_API void setCurrentObjectTreeData( ObjectTreeIndex parentIndex, ObjectTreeIndex siblingIndex );  
 
         // build up transform tree
-        DP_SG_XBAR_API void pushTransform( const dp::sg::core::TransformWeakPtr& t );
-        DP_SG_XBAR_API void pushTransform( const dp::sg::core::BillboardWeakPtr& bb );
+        DP_SG_XBAR_API void pushTransform( dp::sg::core::TransformSharedPtr const& t );
+        DP_SG_XBAR_API void pushTransform( dp::sg::core::BillboardSharedPtr const& bb );
         DP_SG_XBAR_API void popTransform();
         DP_SG_XBAR_API TransformTreeIndex getParentTransformIndex() const;
         DP_SG_XBAR_API TransformTreeIndex getSiblingTransformIndex() const;
@@ -95,7 +94,7 @@ namespace dp
         DP_SG_XBAR_API const SmartClipPlaneGroup& getClipPlaneGroup();
 
       protected:
-        GeneratorState( const SceneTreeWeakPtr& sceneTree );
+        GeneratorState( SceneTreeSharedPtr const& sceneTree );
 
       private:
         typedef std::stack< std::pair< TransformTreeIndex, TransformTreeIndex> > TransformParentSiblingStack;
@@ -106,7 +105,7 @@ namespace dp
         ObjectTreeIndex insertNode( dp::sg::core::ObjectSharedPtr const& g );
 
       private:
-        SceneTreeWeakPtr             m_sceneTree;
+        SceneTreeSharedPtr            m_sceneTree;
 
         TransformParentSiblingStack   m_transformParentSiblingStack; // A stack of indices of the current parent and sibling nodes
         ObjectParentSiblingStack      m_objectParentSiblingStack;    // A stack of indices of the current parent and sibling nodes

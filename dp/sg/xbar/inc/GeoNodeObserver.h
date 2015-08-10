@@ -42,12 +42,12 @@ namespace dp
       public:
         virtual ~GeoNodeObserver();
 
-        static GeoNodeObserverSharedPtr create( const SceneTreeWeakPtr &sceneTree )
+        static GeoNodeObserverSharedPtr create( SceneTreeSharedPtr const& sceneTree )
         {
           return( std::shared_ptr<GeoNodeObserver>( new GeoNodeObserver( sceneTree ) ) );
         }
 
-        void attach( dp::sg::core::GeoNodeWeakPtr geoNode, ObjectTreeIndex index )
+        void attach( dp::sg::core::GeoNodeSharedPtr const& geoNode, ObjectTreeIndex index )
         {
           DP_ASSERT( m_indexMap.find( index ) == m_indexMap.end() );
 
@@ -65,13 +65,13 @@ namespace dp
           m_dirtyGeoNodes.clear(); 
         }
 
-      protected:        
-        GeoNodeObserver( const SceneTreeWeakPtr &sceneTree ) : Observer<ObjectTreeIndex>( sceneTree )
+      protected:
+        GeoNodeObserver( SceneTreeSharedPtr const& sceneTree ) : Observer<ObjectTreeIndex>( sceneTree )
         {
         }
         //TODO if the bounding volume has changed
         //TODO bounding volume does not get updated if any child of geonode changes
-        virtual void onNotify( const dp::util::Event &event, dp::util::Payload *payload );
+        virtual void onNotify( const dp::util::Event &event, dp::util::Payload * payload );
 
       private:
         mutable ObjectTreeIndexSet m_dirtyGeoNodes;

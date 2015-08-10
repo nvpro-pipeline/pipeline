@@ -32,6 +32,7 @@
 #include <dp/math/Matmnt.h>
 #include <dp/util/BitMask.h>
 #include <dp/util/Config.h>
+#include <dp/util/WeakPtr.h>
 
 namespace dp
 {
@@ -55,9 +56,7 @@ namespace dp
         };
 
         TransformTreeNode()
-          : m_transform( nullptr )
-          , m_billboard( nullptr )
-          , m_localBits( 0 )
+          : m_localBits( 0 )
           , m_worldBits( 0 )
           , m_objectTreeIndex( ~0 )
         {

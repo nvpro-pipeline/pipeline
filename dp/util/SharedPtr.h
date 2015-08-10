@@ -46,7 +46,7 @@ typedef uintptr_t UINT_PTR;   //!< Linux specific type definition for UINT_PTR, 
 #define DEFINE_PTR_TYPES(T)                     \
   class T;                                      \
   typedef dp::util::SharedPtr<T>  T##SharedPtr; \
-  typedef T*                      T##WeakPtr;
+  typedef dp::util::WeakPtr<T>    T##WeakPtr;
 
 
 /*! \brief Macro to define ObjectType and our four standard SHARED_TYPES of a base type T as part of a templated struct.
@@ -57,7 +57,7 @@ template <> struct ObjectTraits<T>            \
 {                                             \
   typedef T                       ObjectType; \
   typedef dp::util::SharedPtr<T>  SharedPtr;  \
-  typedef T*                      WeakPtr;    \
+  typedef dp::util::WeakPtr<T>    WeakPtr;    \
 }
 
 /*! \brief Macro to define ObjectType and our five standard SHARED_TYPES of a type T, with base type BT, as part of a templated struct.
@@ -69,7 +69,7 @@ template <> struct ObjectTraits<T>            \
   typedef T                       ObjectType; \
   typedef BT                      Base;       \
   typedef dp::util::SharedPtr<T>  SharedPtr;  \
-  typedef T*                      WeakPtr;    \
+  typedef dp::util::WeakPtr<T>    WeakPtr;    \
 }
 
 
@@ -78,6 +78,7 @@ namespace dp
   namespace util
   {
     template <typename ObjectType> struct ObjectTraits {};
+    template <typename T> class WeakPtr;
 
     template <typename T>
     class SharedPtr : public std::shared_ptr<T>
@@ -102,13 +103,12 @@ namespace dp
 
         // convenience handling on clone
         SharedPtr<T> clone() const;
-
-        T * getWeakPtr() const;
+        WeakPtr<T> getWeakPtr() const;
 
         template <typename U> bool operator==( U const* rhs ) const;
 
       private:
-        T * get() const;    // hide std::shared_ptr<T>::get(), use getWeakPtr(), instead
+        T * get() const;    // hide std::shared_ptr<T>::get()
 
         // hide some functions from std::shared_ptr<T> to make dp::util::SharedPtr<T> more stable on counting
         template <class U> void reset (U* p);                 // hide std::shared_ptr<T>::reset( U* p )
@@ -118,6 +118,7 @@ namespace dp
       public:
         static SharedPtr<T> const null;
     };
+
 
     template <typename T>
     inline SharedPtr<T>::SharedPtr()
@@ -175,9 +176,9 @@ namespace dp
     }
 
     template <typename T>
-    inline T * SharedPtr<T>::getWeakPtr() const
+    inline WeakPtr<T> SharedPtr<T>::getWeakPtr() const
     {
-      return( std::shared_ptr<T>::get() );
+      return( std::weak_ptr<T>( *this ) );
     }
 
     template <typename T>
@@ -188,6 +189,7 @@ namespace dp
     }
 
     template<typename T> const SharedPtr<T> SharedPtr<T>::null( nullptr );
+
 
     /*! \brief Functor class to clone an object
       *  \remark This Functor can be used, for example, to clone all objects of a STL container, using the
@@ -204,49 +206,5 @@ namespace dp
       }
     };
 
-    /*! \brief Special casting operator for const WeakPtr.
-      *  \param rhs The const WeakPtr to cast.
-      *  \return \a rhs casted from type \c const \c UWeakPtr to type \c const \c WeakPtr<T>.
-      *  \remark A weakPtr_cast can be used to do a downcast a WeakPtr. In debug builds, it is checked whether
-      *  that downcast is allowed. */
-    template<typename T, typename UWeakPtr>
-    inline const typename ObjectTraits<T>::WeakPtr & weakPtr_cast( const UWeakPtr & rhs )
-    {
-      DP_ASSERT( !rhs || dynamic_cast<typename ObjectTraits<T>::WeakPtr>(rhs) );
-      return( *reinterpret_cast<const typename ObjectTraits<T>::WeakPtr *>(&rhs) );
-    }
-
-    /*! \brief Special casting operator for WeakPtr.
-      *  \param rhs The WeakPtr to cast.
-      *  \return \a rhs casted from type \c UWeakPtr to type \c WeakPtr<T>.
-      *  \remark A weakPtr_cast can be used to do a downcast a WeakPtr. In debug builds, it is checked whether
-      *  that downcast is allowed. */
-    template<typename T, typename UWeakPtr>
-    inline typename ObjectTraits<T>::WeakPtr & weakPtr_cast( UWeakPtr & rhs )
-    {
-      DP_ASSERT( !rhs || dynamic_cast<typename ObjectTraits<T>::WeakPtr>(rhs) );
-      return( *reinterpret_cast<typename ObjectTraits<T>::WeakPtr *>(&rhs) );
-    }
-
-    template<typename T, typename U>
-    inline typename ObjectTraits<T>::WeakPtr const & weakPtr_cast( U const* p )
-    {
-      DP_ASSERT( !p || dynamic_cast<T const*>(p) );
-      return( *reinterpret_cast<typename ObjectTraits<T>::WeakPtr *>(p) );
-    }
-
-    template<typename T, typename U>
-    inline typename ObjectTraits<T>::WeakPtr getWeakPtr( U const* p )
-    {
-      DP_STATIC_ASSERT(( boost::is_base_of<T,U>::value ));
-      return( typename ObjectTraits<T>::WeakPtr(p) );
-    }
-
-    template<typename T, typename U>
-    inline const std::shared_ptr<T> & shared_cast( const std::shared_ptr<U> & rhs )
-    {
-      DP_ASSERT( !rhs || dynamic_cast<T*>(rhs.get()) );
-      return( *reinterpret_cast<const std::shared_ptr<T>*>(&rhs) );
-    }
   }//namespace util
 }//namespace dp

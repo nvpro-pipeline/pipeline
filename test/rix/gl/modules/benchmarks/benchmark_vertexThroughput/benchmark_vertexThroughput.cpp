@@ -28,7 +28,6 @@
 #include "benchmark_vertexThroughput.h"
 
 #include <dp/util/File.h>
-#include <dp/util/SharedPtr.h>
 #include <dp/math/math.h>
 
 #include <test/rix/core/framework/RiXBackend.h>
@@ -112,7 +111,7 @@ bool Benchmark_vertexThroughput::onInit()
   createScene();
 
   DP_ASSERT( dynamic_cast<test::framework::RiXBackend*>(&(*m_backend)) )
-  dp::util::shared_cast<dp::gl::RenderTarget>( m_displayTarget )->setClearColor( 0.46f, 0.72f, 0.0f, 0.0f );
+  m_displayTarget.inplaceCast<dp::gl::RenderTarget>()->setClearColor( 0.46f, 0.72f, 0.0f, 0.0f );
 
   return true;  
 }

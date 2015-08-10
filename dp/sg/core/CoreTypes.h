@@ -28,7 +28,6 @@
 /** @file */
 
 #include <dp/util/Reflection.h>
-#include <dp/util/SharedPtr.h>
 
 // required declaration
 namespace dp

@@ -217,7 +217,7 @@ namespace dp
         // TODO: should we add hash key handling to Buffer ?
         if ( m_buffer )
         {
-          hg.update( reinterpret_cast<const unsigned char *>(m_buffer.getWeakPtr()), sizeof(const Buffer *) );
+          hg.update( m_buffer );
         }
       }
 

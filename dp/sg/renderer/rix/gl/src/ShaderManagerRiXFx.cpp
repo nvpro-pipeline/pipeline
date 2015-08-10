@@ -61,7 +61,7 @@ namespace dp
           class ShaderManagerTransformsRiXFx
           {
           public:
-            ShaderManagerTransformsRiXFx( dp::sg::xbar::SceneTree* sceneTree, const ResourceManagerSharedPtr& resourceManager, dp::rix::fx::ManagerSharedPtr m_rixFxManager );
+            ShaderManagerTransformsRiXFx( dp::sg::xbar::SceneTreeSharedPtr const& sceneTree, const ResourceManagerSharedPtr& resourceManager, dp::rix::fx::ManagerSharedPtr m_rixFxManager );
             virtual ~ShaderManagerTransformsRiXFx();
 
             virtual void updateTransforms();
@@ -76,7 +76,7 @@ namespace dp
             TransformGroupDatas                           m_transformGroupDatas;
             std::vector<dp::sg::xbar::TransformTreeIndex> m_newContainerTransforms;
 
-            dp::sg::xbar::SceneTree             * m_sceneTree;
+            dp::sg::xbar::SceneTreeSharedPtr      m_sceneTree;
             ResourceManagerSharedPtr              m_resourceManager;
             dp::rix::fx::ManagerSharedPtr         m_rixFxManager;
             dp::fx::ParameterGroupSpecSharedPtr   m_groupSpecWorldMatrices;
@@ -90,8 +90,8 @@ namespace dp
           };
 
 
-          ShaderManagerTransformsRiXFx::ShaderManagerTransformsRiXFx( SceneTree *sceneTree, const ResourceManagerSharedPtr& resourceManager, dp::rix::fx::ManagerSharedPtr rixFxManager )
-            : m_sceneTree( sceneTree)
+          ShaderManagerTransformsRiXFx::ShaderManagerTransformsRiXFx( SceneTreeSharedPtr const& sceneTree, const ResourceManagerSharedPtr& resourceManager, dp::rix::fx::ManagerSharedPtr rixFxManager )
+            : m_sceneTree( sceneTree )
             , m_resourceManager( resourceManager )
             , m_rixFxManager( rixFxManager )
           {
@@ -225,7 +225,7 @@ namespace dp
           {
           }
 
-          ShaderManagerRiXFx::ShaderManagerRiXFx( SceneTree *sceneTree, dp::fx::Manager managerType, const ResourceManagerSharedPtr& resourceManager, TransparencyManagerSharedPtr const & transparencyManager )
+          ShaderManagerRiXFx::ShaderManagerRiXFx( SceneTreeSharedPtr const& sceneTree, dp::fx::Manager managerType, const ResourceManagerSharedPtr& resourceManager, TransparencyManagerSharedPtr const & transparencyManager )
             : ShaderManager( sceneTree, resourceManager, transparencyManager )
             , m_shaderManagerLights( sceneTree, resourceManager )
           {
@@ -334,7 +334,8 @@ namespace dp
           void ShaderManagerRiXFx::addSystemContainers( ShaderManagerInstanceSharedPtr const & shaderObject )
           {
             const dp::rix::core::GeometryInstanceSharedHandle& geometryInstance = shaderObject->geometryInstance;
-            const dp::sg::xbar::ObjectTreeNode &objectTreeNode = m_sceneTree->getObjectTreeNode( shaderObject->objectTreeIndex );
+            DP_ASSERT( m_sceneTree.getSharedPtr() );
+            const dp::sg::xbar::ObjectTreeNode &objectTreeNode = m_sceneTree.getSharedPtr()->getObjectTreeNode( shaderObject->objectTreeIndex );
 
             ShaderManagerRiXFxInstanceSharedPtr o = shaderObject.staticCast<ShaderManagerRiXFxInstance>();
 
@@ -377,7 +378,6 @@ namespace dp
               {
                 o = ShaderManagerRiXFxInstance::create();
                 o->geometryInstance = geometryInstance;
-                o->geoNode = nullptr; // no updating supported
                 o->objectTreeIndex = objectTreeIndex;
                 o->resourceEffectDataRiXFx = resourceEffectData;
 

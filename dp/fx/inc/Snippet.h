@@ -28,7 +28,6 @@
 
 #include <dp/fx/EffectDefs.h>
 #include <dp/fx/EnumSpec.h>
-#include <dp/util/SharedPtr.h>
 #include <memory>
 #include <set>
 

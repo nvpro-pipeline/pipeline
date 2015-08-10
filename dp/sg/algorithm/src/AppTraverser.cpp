@@ -46,10 +46,8 @@ namespace dp
     {
 
       AppTraverser::AppTraverser()
-      : m_pLastViewState(NULL)
-      , m_pLastRoot(NULL)
-      , m_animationFrame(0)
-      , m_forcedTraversal(false)                     
+      : m_animationFrame(0)
+      , m_forcedTraversal(false)
       {
       }
 

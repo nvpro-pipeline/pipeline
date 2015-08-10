@@ -54,7 +54,6 @@ namespace dp
 
         ObjectTreeNode()
           : m_transformIndex( 0 )
-          , m_object( nullptr )
           , m_localHints( 0 )
           , m_worldHints( 0 )
           , m_localActive( true )

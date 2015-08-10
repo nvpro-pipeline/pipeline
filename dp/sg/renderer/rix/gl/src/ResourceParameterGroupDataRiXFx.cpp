@@ -45,7 +45,7 @@ namespace dp
             assert( parameterGroupData );
             assert( !!resourceManager );
 
-            ResourceParameterGroupDataRiXFxSharedPtr resourceParameterGroupData = resourceManager->getResource<ResourceParameterGroupDataRiXFx>( reinterpret_cast<size_t>(parameterGroupData.getWeakPtr()) );
+            ResourceParameterGroupDataRiXFxSharedPtr resourceParameterGroupData = resourceManager->getResource<ResourceParameterGroupDataRiXFx>( reinterpret_cast<size_t>(parameterGroupData.operator->()) );    // Big Hack !!
             if ( !resourceParameterGroupData )
             {
               resourceParameterGroupData = std::shared_ptr<ResourceParameterGroupDataRiXFx>( new ResourceParameterGroupDataRiXFx( parameterGroupData, rixFx, resourceManager ) );
@@ -56,7 +56,7 @@ namespace dp
           }
 
           ResourceParameterGroupDataRiXFx::ResourceParameterGroupDataRiXFx( const dp::sg::core::ParameterGroupDataSharedPtr& parameterGroupData, const dp::rix::fx::ManagerSharedPtr& rixFx, const ResourceManagerSharedPtr& resourceManager )
-            : ResourceManager::Resource( reinterpret_cast<size_t>( parameterGroupData.getWeakPtr() ), resourceManager )
+            : ResourceManager::Resource( reinterpret_cast<size_t>( parameterGroupData.operator->() ), resourceManager )   // Big Hack !!
             , m_parameterGroupData( parameterGroupData )
             , m_rixFx( rixFx )
           {

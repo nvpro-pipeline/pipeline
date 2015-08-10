@@ -37,7 +37,6 @@
 #include <GL/freeglut.h>
 
 #include <dp/Assert.h>
-#include <dp/util/SharedPtr.h>
 #include <iostream>
 #include <tchar.h>
 
@@ -97,8 +96,8 @@ namespace dp
             m_context = dp::gl::RenderContext::create( dp::gl::RenderContext::Attach() );
 
             dp::ui::RenderTargetSharedPtr displayTarget = createContextedRenderTarget<dp::gl::RenderTargetFB>(m_context);
-            dp::util::shared_cast<dp::gl::RenderTargetFB>(displayTarget)->setSwapBuffersEnabled(true);
-            dp::util::shared_cast<dp::gl::RenderTargetFB>(displayTarget)->setClearMask( dp::gl::TBM_COLOR_BUFFER | dp::gl::TBM_DEPTH_BUFFER );
+            displayTarget.inplaceCast<dp::gl::RenderTargetFB>()->setSwapBuffersEnabled( true );
+            displayTarget.inplaceCast<dp::gl::RenderTargetFB>()->setClearMask( dp::gl::TBM_COLOR_BUFFER | dp::gl::TBM_DEPTH_BUFFER );
 
             m_context->makeCurrent();
 

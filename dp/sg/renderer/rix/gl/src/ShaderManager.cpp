@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2012
+// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -80,8 +80,8 @@ namespace dp
           {
           }
 
-          ShaderManager::ShaderManager( SceneTree* sceneTree, const ResourceManagerSharedPtr& resourceManager, TransparencyManagerSharedPtr const & transparencyManager )
-            : m_sceneTree( sceneTree )
+          ShaderManager::ShaderManager( SceneTreeSharedPtr const& sceneTree, const ResourceManagerSharedPtr& resourceManager, TransparencyManagerSharedPtr const & transparencyManager )
+            : m_sceneTree( sceneTree.getWeakPtr() )
             , m_resourceManager( resourceManager )
             , m_environmentNeedsUpdate( false )
             , m_environmentSampler( nullptr )
@@ -228,8 +228,8 @@ namespace dp
             return( copied );
           }
 
-          ShaderManagerLights::ShaderManagerLights( SceneTree *sceneTree, const ResourceManagerSharedPtr& resourceManager )
-            : m_sceneTree( sceneTree )
+          ShaderManagerLights::ShaderManagerLights( SceneTreeSharedPtr const& sceneTree, const ResourceManagerSharedPtr& resourceManager )
+            : m_sceneTree( sceneTree.getWeakPtr() )
             , m_resourceManager( resourceManager )
           {
             // create light descriptor
@@ -301,14 +301,15 @@ namespace dp
             }
 
             // copy scene lights
-            TransformTree const& transformTree = m_sceneTree->getTransformTree();
-            const std::set< ObjectTreeIndex >& lightSources = m_sceneTree->getLightSources();
+            dp::sg::xbar::SceneTreeSharedPtr sceneTree = m_sceneTree.getSharedPtr();
+            DP_ASSERT( sceneTree );
+            TransformTree const& transformTree = sceneTree->getTransformTree();
+            const std::set< ObjectTreeIndex >& lightSources = sceneTree->getLightSources();
             for ( std::set< ObjectTreeIndex >::const_iterator itLight = lightSources.begin(); itLight != lightSources.end() && lightId < MAXLIGHTS; ++itLight )
             {
-              ObjectTreeNode& otn = m_sceneTree->getObjectTreeNode(*itLight);
+              ObjectTreeNode& otn = sceneTree->getObjectTreeNode(*itLight);
 
-              DP_ASSERT( dynamic_cast<dp::sg::core::LightSourceWeakPtr>(otn.m_object) );
-              dp::sg::core::LightSourceSharedPtr ls = otn.m_object->getSharedPtr<dp::sg::core::LightSource>();
+              dp::sg::core::LightSourceSharedPtr ls = otn.m_object.getSharedPtr().staticCast<dp::sg::core::LightSource>();
 
               ShaderLight &light = lightState.lights[lightId];
 

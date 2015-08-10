@@ -33,7 +33,6 @@
 #include <dp/sg/core/TextureHost.h>
 #include <dp/sg/core/Primitive.h>
 #include <dp/sg/core/VertexAttributeSet.h>
-#include <dp/util/SharedPtr.h>
 
 using namespace dp::fx;
 using namespace dp::math;
@@ -156,7 +155,7 @@ namespace dp
           //
           void RendererFSQImpl::doRender( const dp::ui::RenderTargetSharedPtr &renderTarget )
           {
-            dp::gl::RenderTargetSharedPtr rtgl = dp::util::shared_cast<dp::gl::RenderTarget>( renderTarget );
+            dp::gl::RenderTargetSharedPtr rtgl = renderTarget.staticCast<dp::gl::RenderTarget>();
 
             if( !rtgl )
             {

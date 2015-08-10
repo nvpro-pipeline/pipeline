@@ -29,7 +29,6 @@
 #include <dp/fx/ParameterSpec.h>
 #include <dp/rix/core/RiX.h>
 #include <dp/sg/renderer/rix/gl/Config.h>
-#include <dp/util/SharedPtr.h>
 
 namespace dp
 {

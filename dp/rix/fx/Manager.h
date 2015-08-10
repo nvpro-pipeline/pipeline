@@ -27,7 +27,6 @@
 #pragma once
 
 #include <dp/rix/fx/Config.h>
-#include <dp/util/SharedPtr.h>
 #include <dp/rix/core/RiX.h>
 #include <dp/fx/EffectLibrary.h>
 

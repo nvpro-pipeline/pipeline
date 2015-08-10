@@ -144,7 +144,7 @@ SceneSharedPtr ThreeDSLoader::load( std::string const& filename, dp::util::FileF
   m_topLevel->setName( "3DS scene" );
 
   // build scene
-  buildScene( m_topLevel.getWeakPtr(), f );
+  buildScene( m_topLevel, f );
 
   // use the lib3ds library to free the memory reserved for the Lib3dsFile
   lib3ds_file_free( f );
@@ -192,7 +192,7 @@ bool noHierarchy( Lib3dsNode * node )
 }
 
 void 
-ThreeDSLoader::buildScene( Group * parent, Lib3dsFile * data )
+ThreeDSLoader::buildScene( GroupSharedPtr const& parent, Lib3dsFile * data )
 {
   if (data == NULL)
   {
@@ -241,7 +241,7 @@ ThreeDSLoader::buildScene( Group * parent, Lib3dsFile * data )
 }
 
 void
-ThreeDSLoader::buildTree(Group *parent, Lib3dsNode *n, Vec3f &piv, Lib3dsFile *data) 
+ThreeDSLoader::buildTree(GroupSharedPtr const& parent, Lib3dsNode *n, Vec3f &piv, Lib3dsFile *data) 
 {
   // act differently depending on what type of node this is
   switch(n->type) 
@@ -401,7 +401,7 @@ ThreeDSLoader::buildTree(Group *parent, Lib3dsNode *n, Vec3f &piv, Lib3dsFile *d
           parent->addChild( hTrans );
 
           // add all of this group's children to the tree
-          addAllChildren( hTrans.getWeakPtr(), n, thisPivot, data);
+          addAllChildren( hTrans, n, thisPivot, data);
         }
       }
       else 
@@ -466,7 +466,7 @@ ThreeDSLoader::buildTree(Group *parent, Lib3dsNode *n, Vec3f &piv, Lib3dsFile *d
           }
 
           // add all of this node's children to the tree
-          int numChildren = addAllChildren( hTrans.getWeakPtr(), n, thisPivot, data );
+          int numChildren = addAllChildren( hTrans, n, thisPivot, data );
 
           // only add this animation node if there is geometry beneath it
           if(hadGeometry || numChildren > 0)
@@ -507,7 +507,7 @@ ThreeDSLoader::orientNode(Trafo &t, Lib3dsMeshInstanceNode * mnode, Vec3f &piv)
 }
 
 void
-ThreeDSLoader::configureCamera( Group *parent, Lib3dsNode *n, Vec3f &piv, bool hasTarget, Lib3dsFile *data )
+ThreeDSLoader::configureCamera( GroupSharedPtr const& parent, Lib3dsNode *n, Vec3f &piv, bool hasTarget, Lib3dsFile *data )
 {
   Lib3dsCameraNode *cnode = (Lib3dsCameraNode *)n;
   Lib3dsTrack pTrack = cnode->pos_track; // position track for this camera's animation
@@ -559,7 +559,7 @@ ThreeDSLoader::configureCamera( Group *parent, Lib3dsNode *n, Vec3f &piv, bool h
   }
 
   // add this camera to the global list to be postprocessed with callbacks later
-  m_camList.push_back(hCamera.getWeakPtr());
+  m_camList.push_back(hCamera);
  
   // fill any tracks with zero or null keys to default values
   checkTracks(&pTrack, NULL, NULL, &rollTrack);
@@ -586,10 +586,10 @@ ThreeDSLoader::configureCamera( Group *parent, Lib3dsNode *n, Vec3f &piv, bool h
       hTrans->setTrafo(t);
 
       // add this Transform to the global camera location list to be postprocessed later
-      m_camLocationList[n->name] = hTrans.getWeakPtr();
+      m_camLocationList[n->name] = hTrans;
 
       // add all of this camera's children (linked meshes) to the scene
-      addAllChildren( hTrans.getWeakPtr(), n, piv, data );
+      addAllChildren( hTrans, n, piv, data );
     }
 
     parent->addChild( hTrans );
@@ -619,7 +619,7 @@ ThreeDSLoader::configureCamera( Group *parent, Lib3dsNode *n, Vec3f &piv, bool h
 }
 
 void 
-ThreeDSLoader::configurePointlight( Group *parent, Lib3dsNode *n, Vec3f &piv, Lib3dsFile *data )
+ThreeDSLoader::configurePointlight( GroupSharedPtr const& parent, Lib3dsNode *n, Vec3f &piv, Lib3dsFile *data )
 {
   Lib3dsOmnilightNode *onode = (Lib3dsOmnilightNode *)n;
 
@@ -686,7 +686,7 @@ ThreeDSLoader::configurePointlight( Group *parent, Lib3dsNode *n, Vec3f &piv, Li
       hTrans->addChild( pointLight );
 
        // add all the children of this point light to the scene
-       addAllChildren( hTrans.getWeakPtr(), n, piv, data );
+       addAllChildren( hTrans, n, piv, data );
     }
 
     // add this transform to the parent above
@@ -717,7 +717,7 @@ ThreeDSLoader::configurePointlight( Group *parent, Lib3dsNode *n, Vec3f &piv, Li
 }
 
 void 
-ThreeDSLoader::configureSpotlight( Group *parent, Lib3dsNode *n, Vec3f &piv, bool hasTarget, Lib3dsFile *data )
+ThreeDSLoader::configureSpotlight( GroupSharedPtr const& parent, Lib3dsNode *n, Vec3f &piv, bool hasTarget, Lib3dsFile *data )
 {
   Lib3dsSpotlightNode *snode = (Lib3dsSpotlightNode *)n;
   Lib3dsTrack pTrack = snode->pos_track;
@@ -770,7 +770,7 @@ ThreeDSLoader::configureSpotlight( Group *parent, Lib3dsNode *n, Vec3f &piv, boo
   }
 
   // add this spotlight to the global list to be postprocessed later
-  m_spotList.push_back( spotLight.getWeakPtr() );
+  m_spotList.push_back( spotLight );
 
   // fill any tracks with zero or null keys to default values
   checkTracks(&pTrack, NULL, NULL, NULL);
@@ -789,13 +789,13 @@ ThreeDSLoader::configureSpotlight( Group *parent, Lib3dsNode *n, Vec3f &piv, boo
       hTrans->setTrafo(t);
 
       // add this Transform to the global spotlight location list to be postprocessed later
-      m_spotLocationList[n->name] = hTrans.getWeakPtr();
+      m_spotLocationList[n->name] = hTrans;
 
       // add the spotlight below the transform
       hTrans->addChild( spotLight );
 
       // add all of this spotlight's children (linked meshes) to the scene
-      addAllChildren( hTrans.getWeakPtr(), n, piv, data );
+      addAllChildren( hTrans, n, piv, data );
     }
 
     parent->addChild( hTrans );
@@ -826,7 +826,7 @@ ThreeDSLoader::configureSpotlight( Group *parent, Lib3dsNode *n, Vec3f &piv, boo
 
 
 void
-ThreeDSLoader::configureTarget( Group *parent, Lib3dsNode *n, Vec3f &piv, bool isCamera, Lib3dsFile *data )
+ThreeDSLoader::configureTarget( GroupSharedPtr const& parent, Lib3dsNode *n, Vec3f &piv, bool isCamera, Lib3dsFile *data )
 {
   Lib3dsTargetNode *tnode = (Lib3dsTargetNode *)n;
   Lib3dsTrack pTrack = tnode->pos_track;
@@ -855,16 +855,16 @@ ThreeDSLoader::configureTarget( Group *parent, Lib3dsNode *n, Vec3f &piv, bool i
       if(isCamera) // we're dealing with a camera
       {
         // add this Transform to the global camera target list to be postprocessed later
-        m_camTargetList[n->name] = hTrans.getWeakPtr();
+        m_camTargetList[n->name] = hTrans;
       }
       else // we're dealling with a spotlight
       {
         // add this Tranform to the global spotlight target list to be postprocessed later
-        m_spotTargetList[n->name] = hTrans.getWeakPtr();
+        m_spotTargetList[n->name] = hTrans;
       }
 
       // add all of this target's children to the transform
-      addAllChildren( hTrans.getWeakPtr(), n, piv, data );
+      addAllChildren( hTrans, n, piv, data );
     }
 
     parent->addChild( hTrans );
@@ -958,7 +958,7 @@ ThreeDSLoader::checkTracks(Lib3dsTrack *pTrack, Lib3dsTrack *rTrack, Lib3dsTrack
 }
 
 int
-ThreeDSLoader::addAllChildren( Group *parent, Lib3dsNode *n, Vec3f &piv, Lib3dsFile *data )
+ThreeDSLoader::addAllChildren( GroupSharedPtr const& parent, Lib3dsNode *n, Vec3f &piv, Lib3dsFile *data )
 {
   int childCount = 0;
 
@@ -1820,7 +1820,7 @@ ThreeDSLoader::constructGeometry(GroupSharedPtr const& group, char *name, Lib3ds
 void
 ThreeDSLoader::postProcessCamerasAndLights()
 {
-  vector <PerspectiveCameraWeakPtr>::iterator camIter = m_camList.begin();
+  vector <PerspectiveCameraSharedPtr>::iterator camIter = m_camList.begin();
   
   // process each camera in the global list
   while(camIter != m_camList.end())
@@ -1828,8 +1828,8 @@ ThreeDSLoader::postProcessCamerasAndLights()
     std::string camName = (*camIter)->getName();
 
     // check if we've stored both a location and target for this camera in the global maps
-    TransformWeakPtr camLoc = m_camLocationList[camName];
-    TransformWeakPtr camTarget = m_camTargetList[camName];
+    TransformSharedPtr const& camLoc = m_camLocationList[camName];
+    TransformSharedPtr const& camTarget = m_camTargetList[camName];
 
     // if both the location and target were found, add the callbacks
     if(camLoc && camTarget)
@@ -1846,7 +1846,7 @@ ThreeDSLoader::postProcessCamerasAndLights()
     ++camIter;
   } 
 
-  vector <LightSourceWeakPtr>::iterator spotIter = m_spotList.begin();
+  vector <LightSourceSharedPtr>::iterator spotIter = m_spotList.begin();
   
   // process each spotlight in the global list
   while(spotIter != m_spotList.end())
@@ -1854,8 +1854,8 @@ ThreeDSLoader::postProcessCamerasAndLights()
     std::string spotName = (*spotIter)->getName();
 
     // check if we've stored both a location and target for this spotlight in the global maps
-    TransformWeakPtr spotLoc = m_spotLocationList[spotName];
-    TransformWeakPtr spotTarget = m_spotTargetList[spotName];
+    TransformSharedPtr const& spotLoc = m_spotLocationList[spotName];
+    TransformSharedPtr const& spotTarget = m_spotTargetList[spotName];
 
     // if both the location and target were found, add the callbacks
     if(spotLoc && spotTarget)

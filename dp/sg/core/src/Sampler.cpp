@@ -278,7 +278,7 @@ namespace dp
         Object::feedHashGenerator( hg );
         if ( m_texture )
         {
-          hg.update( reinterpret_cast<const unsigned char *>(m_texture.getWeakPtr()), sizeof(const Texture *) );
+          hg.update( m_texture );
         }
         hg.update( reinterpret_cast<const unsigned char *>( &m_borderColor ), sizeof( dp::math::Vec4f ) );
         hg.update( reinterpret_cast<const unsigned char *>( &m_magFilterMode ), sizeof( TextureMagFilterMode ) );

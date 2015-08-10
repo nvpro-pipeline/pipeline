@@ -45,7 +45,7 @@ namespace dp
           \param name The class name that the search should look for
           \return A vector of weak pointers to all objects that were found during the search
       **/
-      DP_SG_ALGORITHM_API const std::vector<dp::sg::core::ObjectWeakPtr> searchClass( const dp::sg::core::NodeSharedPtr& root, const std::string& name, bool baseClassSearch = false );
+      DP_SG_ALGORITHM_API const std::vector<dp::sg::core::ObjectSharedPtr> searchClass( const dp::sg::core::NodeSharedPtr& root, const std::string& name, bool baseClassSearch = false );
 
       /** \brief Find all nodes of a certain class below a node
           \param root The node the search shall start at

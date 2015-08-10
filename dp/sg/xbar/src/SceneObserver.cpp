@@ -35,23 +35,23 @@ namespace dp
     namespace xbar
     {
 
-      SceneObserverSharedPtr SceneObserver::create( SceneTreeWeakPtr sceneTree )
+      SceneObserverSharedPtr SceneObserver::create( SceneTreeSharedPtr const& sceneTree )
       {
         return( std::shared_ptr<SceneObserver>( new SceneObserver( sceneTree) ) );
       }
 
-      SceneObserver::SceneObserver( SceneTreeWeakPtr sceneTree )
+      SceneObserver::SceneObserver( SceneTreeSharedPtr const& sceneTree )
         : m_sceneTree( sceneTree )
       {
-        m_sceneTree->getScene()->attach( this, nullptr );
+        m_sceneTree->getScene()->attach( this );
       }
 
       SceneObserver::~SceneObserver()
       {
-        m_sceneTree->getScene()->detach( this, nullptr );
+        m_sceneTree->getScene()->detach( this );
       }
 
-      void SceneObserver::onNotify( const dp::util::Event &event, dp::util::Payload *payload )
+      void SceneObserver::onNotify( const dp::util::Event &event, dp::util::Payload * payload )
       {
         switch ( event.getType() )
         {
@@ -68,7 +68,7 @@ namespace dp
         }
       }
 
-      void SceneObserver::onDestroyed( const dp::util::Subject& subject, dp::util::Payload* payload )
+      void SceneObserver::onDestroyed( const dp::util::Subject& subject, dp::util::Payload * payload )
       {
         DP_ASSERT( !"should not happen" );
       }
