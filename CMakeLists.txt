@@ -67,6 +67,8 @@ else(UNIX)
 endif(UNIX)
 
 if ("${CMAKE_GENERATOR}" MATCHES "^(Visual Studio).*")
+  set (CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} /MP")
+  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
   set (DP_CONFIG "$(ConfigurationName)")
 else()
   if( "${CMAKE_BUILD_TYPE}" STREQUAL "" )
