@@ -14,11 +14,14 @@ if(WIN32)
   if (NOT BOOSTROOT)
     file( TO_CMAKE_PATH "${DP_3RDPARTY_PATH}/Boost" BOOSTROOT)
     
-    if ( EXISTS "${BOOSTROOT}" )
-      set( BOOST_ROOT "${BOOSTROOT}")
+    if (EXISTS "${BOOSTROOT}")
+      set(BOOST_ROOT "${BOOSTROOT}")
       set(Boost_USE_STATIC_LIBS "ON")
     endif()
   endif()
+
+  # CMake doesn't know about newer boost versions yet
+  set(Boost_ADDITIONAL_VERSIONS "1.59.0" "1.59")
 
   ### fltlib
   # Currently disabled since a new version is required
