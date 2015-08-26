@@ -31,7 +31,6 @@
 #include <dp/sg/xbar/xbar.h>
 #include <dp/sg/xbar/SceneTree.h>
 #include <dp/sg/xbar/Tree.h>
-#include <dp/sg/core/CoreTypes.h>
 #include <dp/sg/ui/ViewState.h>
 #include <boost/scoped_ptr.hpp>
 

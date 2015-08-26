@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2012
+// Copyright NVIDIA Corporation 2010-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -27,7 +27,6 @@
 #pragma once
 
 #include <dp/sg/xbar/xbar.h>
-#include <dp/sg/xbar/TransformTree.h>
 #include <dp/sg/xbar/ObjectTree.h>
 #include <dp/sg/core/CoreTypes.h>
 #include <dp/sg/core/GeoNode.h>
@@ -57,17 +56,8 @@ namespace dp
 
       public:
         // set current environment for transform and object tree
-        DP_SG_XBAR_API void setCurrentTransformTreeData( TransformTreeIndex parentIndex, TransformTreeIndex siblingIndex );
         DP_SG_XBAR_API void setCurrentObjectTreeData( ObjectTreeIndex parentIndex, ObjectTreeIndex siblingIndex );  
 
-        // build up transform tree
-        DP_SG_XBAR_API void pushTransform( dp::sg::core::TransformSharedPtr const& t );
-        DP_SG_XBAR_API void pushTransform( dp::sg::core::BillboardSharedPtr const& bb );
-        DP_SG_XBAR_API void popTransform();
-        DP_SG_XBAR_API TransformTreeIndex getParentTransformIndex() const;
-        DP_SG_XBAR_API TransformTreeIndex getSiblingTransformIndex() const;
-
-        DP_SG_XBAR_API void addDynamicTransformIndex( TransformTreeIndex index );
 
         // build up object tree
         DP_SG_XBAR_API void pushObject( dp::sg::core::GroupSharedPtr const& group );
@@ -97,7 +87,6 @@ namespace dp
         GeneratorState( SceneTreeSharedPtr const& sceneTree );
 
       private:
-        typedef std::stack< std::pair< TransformTreeIndex, TransformTreeIndex> > TransformParentSiblingStack;
         typedef std::stack< std::pair< ObjectTreeIndex,    ObjectTreeIndex > >   ObjectParentSiblingStack;
 
       private:
@@ -107,7 +96,6 @@ namespace dp
       private:
         SceneTreeSharedPtr            m_sceneTree;
 
-        TransformParentSiblingStack   m_transformParentSiblingStack; // A stack of indices of the current parent and sibling nodes
         ObjectParentSiblingStack      m_objectParentSiblingStack;    // A stack of indices of the current parent and sibling nodes
 
         //TODO0 initialize these two before inserting

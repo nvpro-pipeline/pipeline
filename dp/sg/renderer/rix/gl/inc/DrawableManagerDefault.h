@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2012
+// Copyright NVIDIA Corporation 2011-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -167,7 +167,7 @@ namespace dp
               // culling information
               dp::math::Vec4f                  m_boundingBoxLower;
               dp::math::Vec4f                  m_boundingBoxExtent;
-              dp::sg::xbar::TransformTreeIndex m_transformIndex;
+              dp::sg::xbar::TransformIndex     m_transformIndex;
 
               PayloadSharedPtr  m_payload;
               bool              m_effectDataAttached;

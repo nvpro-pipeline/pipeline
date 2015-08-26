@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2013
+// Copyright NVIDIA Corporation 2010-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -47,7 +47,7 @@ namespace dp
 
         struct Data {};
 
-        bool preTraverse( TransformTreeIndex index, const Data& data )
+        bool preTraverse( ObjectTreeIndex index, const Data& data )
         {
           ObjectTreeNode& current = m_objectTree[index];
 
@@ -119,8 +119,9 @@ namespace dp
           return true;
         };
 
-        void postTraverse( TransformTreeIndex index, const Data& data )
+        void postTraverse( ObjectTreeIndex index, const Data& data )
         {
+          // TODO hack! need better dirty handling
           //m_objectTree[index].m_dirtyBits &= ~( ObjectTreeNode::DEFAULT_DIRTY );
           m_objectTree[index].m_dirtyBits = 0;
         };

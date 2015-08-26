@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2013
+// Copyright NVIDIA Corporation 2010-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -37,7 +37,7 @@ namespace dp
     {
       DEFINE_PTR_TYPES( TransformObserver );
 
-      class TransformObserver : public Observer<TransformTreeIndex>
+      class TransformObserver : public Observer<ObjectTreeIndex>
       {
       public:
         DEFINE_PTR_TYPES( DirtyPayload );
@@ -45,7 +45,7 @@ namespace dp
         class DirtyPayload : public Payload
         {
         public:
-          static DirtyPayloadSharedPtr create( TransformTreeIndex index )
+          static DirtyPayloadSharedPtr create( ObjectTreeIndex index )
           {
             return( std::shared_ptr<DirtyPayload>( new DirtyPayload( index ) ) );
           }
@@ -54,7 +54,7 @@ namespace dp
           bool m_dirty;
 
         protected:
-          DirtyPayload( TransformTreeIndex index )
+          DirtyPayload( ObjectTreeIndex index )
             : Payload( index )
             , m_dirty( false )
           {
@@ -72,7 +72,7 @@ namespace dp
           return( std::shared_ptr<TransformObserver>( new TransformObserver(sceneTree) ) );
         }
 
-        void attach( dp::sg::core::TransformSharedPtr const & t, TransformTreeIndex index );
+        void attach( dp::sg::core::TransformSharedPtr const & t, ObjectTreeIndex index );
 
         const DirtyPayloads& getDirtyPayloads( ) const 
         {
@@ -85,12 +85,12 @@ namespace dp
         }
 
       protected:
-        TransformObserver( SceneTreeSharedPtr const& sceneTree ) : Observer<TransformTreeIndex>( sceneTree )
+        TransformObserver( SceneTreeSharedPtr const& sceneTree ) : Observer<ObjectTreeIndex>( sceneTree )
         {
         }
 
         void onNotify( const dp::util::Event &event, dp::util::Payload * payload );
-        virtual void onDetach( TransformTreeIndex index );
+        virtual void onDetach( ObjectTreeIndex index );
 
       private:
         mutable std::vector<DirtyPayload*> m_dirtyPayloads;

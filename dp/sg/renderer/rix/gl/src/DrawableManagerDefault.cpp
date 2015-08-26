@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2013
+// Copyright NVIDIA Corporation 2011-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -147,7 +147,7 @@ namespace dp
             di.m_handle = handle;
             di.m_geoNode = geoNode.getSharedPtr();
             di.m_objectTreeIndex = objectTreeIndex;
-            di.m_transformIndex = objectTreeNode.m_transformIndex;
+            di.m_transformIndex = objectTreeNode.m_transform;
             di.m_transparent = false;
             di.m_currentRenderGroup = nullptr;
             di.m_isVisible = true; // gis are visible by default
@@ -397,8 +397,6 @@ namespace dp
 
           std::vector<dp::rix::core::GeometryInstanceSharedHandle>& DrawableManagerDefault::getSortedTransparentGIs( const Vec3f& cameraPosition )
           {
-            TransformTree const& transformTree = getSceneTree()->getTransformTree();
-
             std::vector<SortInfo> sortInfo;
             for ( std::vector<DefaultHandleDataSharedPtr>::iterator it = m_transparentDIs.begin(); it != m_transparentDIs.end(); ++it )
             {
@@ -409,7 +407,7 @@ namespace dp
                 info.gi = instance.m_geometryInstance.get();
 
                 Vec4f center = instance.m_boundingBoxLower + 0.5 * instance.m_boundingBoxExtent;
-                center = center * transformTree[instance.m_transformIndex].m_worldMatrix;
+                center = center * getSceneTree()->getTransformEntry(instance.m_transformIndex).world;
                 Vec3f distance = Vec3f(center) - cameraPosition;
                 info.squaredDistance = lengthSquared(distance);
                 sortInfo.push_back( info );

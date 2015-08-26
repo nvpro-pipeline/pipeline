@@ -28,7 +28,6 @@
 
 #include <dp/math/Trafo.h>
 #include <dp/sg/xbar/xbar.h>
-#include <dp/sg/xbar/TransformTree.h>
 #include <dp/sg/xbar/ObjectTree.h>
 #include <dp/sg/core/CoreTypes.h>
 #include <dp/sg/core/ClipPlane.h>
@@ -66,6 +65,13 @@ namespace dp
         SceneTree(const dp::sg::core::SceneSharedPtr & scene );
 
       public:
+        struct TransformEntry {
+          dp::math::Mat44f local;
+          dp::math::Mat44f world;
+        };
+
+        typedef std::vector<TransformEntry> Transforms;
+
         class Event : public dp::util::Event
         {
         public:
@@ -122,19 +128,19 @@ namespace dp
         class EventTransform : public Event
         {
         public:
-          EventTransform( TransformTreeIndex index, TransformTreeNode const& node )
+          EventTransform(TransformIndex index, dp::sg::xbar::SceneTree::TransformEntry const& node)
             : Event( Event::Transform )
             , m_index( index )
             , m_node ( node )
           {
           }
 
-          TransformTreeIndex getIndex() const { return m_index; }
-          TransformTreeNode const& getNode() const { return m_node; }
+          TransformIndex getIndex() const { return m_index; }
+          dp::sg::xbar::SceneTree::TransformEntry const& getNode() const { return m_node; }
 
         private:
-          TransformTreeIndex       m_index;
-          TransformTreeNode const& m_node;
+          TransformIndex                                   m_index;
+          dp::sg::xbar::SceneTree::TransformEntry const & m_node;
         };
 
       public:
@@ -143,9 +149,7 @@ namespace dp
 
         DP_SG_XBAR_API dp::sg::core::SceneSharedPtr const & getScene() const;
 
-        DP_SG_XBAR_API void addSubTree( const dp::sg::core::NodeSharedPtr& root, 
-                                  ObjectTreeIndex parentIndex, ObjectTreeIndex leftSibling,
-                                  TransformTreeIndex parentTransform, TransformTreeIndex leftSiblingTransform );
+        DP_SG_XBAR_API void addSubTree(const dp::sg::core::NodeSharedPtr& root, ObjectTreeIndex parentIndex, ObjectTreeIndex leftSibling);
 
         /** \brief Replace a subtree by a another subtree.
             \param root node of the new subtree to put into the SceneTree
@@ -157,18 +161,16 @@ namespace dp
         DP_SG_XBAR_API void addRendererOptions( const dp::sg::ui::RendererOptionsSharedPtr& rendererOptions );
 
         //! Transform Tree access function
-        const dp::math::Mat44f& getTransformMatrix( TransformTreeIndex index ) const { return m_transformTree[index].m_worldMatrix; }
-        bool isMirrorTransform( TransformTreeIndex index ) const { return m_transformTree.operator[](index).m_worldBits & TransformTreeNode::ISMIRRORTRANSFORM; }
+        const dp::math::Mat44f& getTransformMatrix( TransformIndex index ) const { return m_transforms[index].world; }
+        
+        // TODO reimplement support? Not required due to two sided rendering...
+        //bool isMirrorTransform( TransformIndex index ) const { return m_transformTree.operator[](index).m_worldBits & TransformTreeNode::ISMIRRORTRANSFORM; }
+        bool isMirrorTransform(TransformIndex index) const { assert(!"not implemented");/*return m_transformTree.operator[](index).m_worldBits & TransformTreeNode::ISMIRRORTRANSFORM;*/ }
 
         DP_SG_XBAR_API void update(dp::sg::core::CameraSharedPtr const& camera, float lodScaleRange); 
 
-        // TODO documentation.
-        // adders - no not the snakes.
-        DP_SG_XBAR_API TransformTreeIndex addTransform( const TransformTreeNode & node, TransformTreeIndex parentIndex, TransformTreeIndex siblingIndex );
+        //! Add a new object to the Tree
         DP_SG_XBAR_API ObjectTreeIndex addObject( const ObjectTreeNode & node, ObjectTreeIndex parentIndex, ObjectTreeIndex siblingIndex );
-
-        // special function to mark certain transform tree indices as dynamic
-        DP_SG_XBAR_API void markTransformDynamic( TransformTreeIndex index );
 
         // special functions to mark object tree indices as special nodes
         DP_SG_XBAR_API void addLOD( dp::sg::core::LODSharedPtr const& lod, ObjectTreeIndex index );
@@ -181,37 +183,34 @@ namespace dp
         // note: doesnt work for the root node, as this requires a SceneTree rebuild
         DP_SG_XBAR_API void removeObjectTreeIndex( ObjectTreeIndex index );
 
-        // remove an index and the tree below it from the object tree.
-        // detaches affected transforms from the TransformTraverser
-        // note: doesnt work for the root node, as this requires a SceneTree rebuild
-        DP_SG_XBAR_API void removeTransformTreeIndex( TransformTreeIndex index );
-
-        DP_SG_XBAR_API TransformTree const& getTransformTree() const;
         DP_SG_XBAR_API ObjectTree& getObjectTree();
 
-        DP_SG_XBAR_API TransformTreeNode const& getTransformTreeNode( TransformTreeIndex index ) const;
+        dp::sg::xbar::SceneTree::TransformEntry const& getTransformEntry(TransformIndex index) const { return m_transforms[index]; }
         DP_SG_XBAR_API ObjectTreeNode& getObjectTreeNode( ObjectTreeIndex index );
 
         DP_SG_XBAR_API const std::set< ObjectTreeIndex >& getLightSources() const { return m_lightSources; }
 
-        const std::vector<TransformTreeIndex>& getChangedTransforms() const { return m_changedTransforms; }
-        const std::vector<TransformTreeIndex>& getChangedObjects() const { return m_changedObjects; }
-
-        void transformSetObjectTreeIndex( TransformTreeIndex transformTreeIndex, ObjectTreeIndex objectTreeIndex );
+        Transforms const & getTransforms() { return m_transforms; }
+        const std::vector<TransformIndex>& getChangedTransforms() const { return m_changedTransforms; }
+        const std::vector<TransformIndex>& getChangedObjects() const { return m_changedObjects; }
 
       protected:
+        // remove a transform from the transform array
+        DP_SG_XBAR_API void removeTransform(TransformIndex index);
         DP_SG_XBAR_API void updateTransformTree(dp::sg::core::CameraSharedPtr const& camera);
         DP_SG_XBAR_API void updateObjectTree(dp::sg::core::CameraSharedPtr const& camera, float lodScaleRange);
 
         DP_SG_XBAR_API void onRootNodeChanged( );
 
       private:
-        DP_SG_XBAR_API void init();
-        DP_SG_XBAR_API void notifyTransformUpdated( TransformTreeIndex index, TransformTreeNode const& node );
+        void init();
+        void notifyTransformUpdated(TransformIndex index, dp::sg::xbar::SceneTree::TransformEntry const & node);
 
         friend class UpdateTransformVisitor;
         friend class UpdateObjectVisitor;
         friend class SceneObserver;
+        friend class SceneGenerator;
+        friend class GeneratorState;
 
         dp::sg::core::SceneSharedPtr m_scene;
         // keep a reference to the root node of the scene so that treplaceSubTree works if the root node of the scene gets exchanged.
@@ -225,19 +224,48 @@ namespace dp
         SwitchObserverSharedPtr    m_switchObserver;
         SceneObserverSharedPtr     m_sceneObserver;
 
-        TransformTree                            m_transformTree;
-        TransformTreeIndexSet                    m_dynamicTransformIndices;
-     
+
         ObjectTree                               m_objectTree;
         ObjectTreeIndex                          m_objectTreeSentinel;
         ObjectTreeIndex                          m_objectTreeRootNode;
-        std::vector< TransformTreeIndex >        m_transformIndexStack; // temp variable
         std::vector< ObjectTreeIndex >           m_objectIndexStack;    // temp variable
 
-        std::vector< TransformTreeIndex >        m_changedTransforms;
+        // Transforms
+        std::vector< TransformIndex >            m_changedTransforms;
         std::vector< ObjectTreeIndex >           m_changedObjects;
+        bool                                     m_firstTransformUpdate;
 
         std::set< ObjectTreeIndex >              m_lightSources;
+
+        // Transform related functions
+        TransformIndex allocateTransform();
+        void freeTransform(TransformIndex transformIndex);
+
+        dp::util::BitArray m_transformFreeVector; // free if bit is true, occupied otherwise
+
+        Transforms m_transforms;
+
+        struct TransformListEntry {
+          unsigned int parent;    // index to parent transform in transform array
+          unsigned int transform; // index to transform in transform array
+        };
+
+        struct BillboardListEntry {
+          unsigned int parent;    // index to parent transform in transform array
+          unsigned int transform; // index to transform in transform array
+          dp::sg::core::BillboardSharedPtr billboard; // billboard to use for computation
+        };
+
+        typedef std::vector<TransformListEntry> TransformListEntries;
+        typedef std::vector<BillboardListEntry> BillboardListEntries;
+
+        struct TransformLevel {
+          TransformListEntries transformListEntries;
+          BillboardListEntries billboardListEntries;
+        };
+
+        typedef std::vector<TransformLevel> TransformLevels;
+        TransformLevels m_transformLevels;
       };
 
       /*===========================================================================*/
@@ -265,15 +293,9 @@ namespace dp
           return m_transformIndex == rhs.m_transformIndex && m_clipPlane == rhs.m_clipPlane;
         }
 
-        TransformTreeIndex m_transformIndex;
+        TransformIndex m_transformIndex;
         dp::sg::core::ClipPlaneSharedPtr m_clipPlane;
       };
-
-
-      inline void SceneTree::transformSetObjectTreeIndex( TransformTreeIndex transformTreeIndex, ObjectTreeIndex objectTreeIndex )
-      {
-        m_transformTree[transformTreeIndex].m_objectTreeIndex = objectTreeIndex;
-      }
 
     } // namespace xbar
   } // namespace sg

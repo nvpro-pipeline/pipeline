@@ -47,7 +47,6 @@ namespace dp
         DP_SG_XBAR_API virtual void doApply( const dp::sg::core::NodeSharedPtr & root );
 
         // functions for SceneTree update
-        DP_SG_XBAR_API void setCurrentTransformTreeData( TransformTreeIndex parentIndex, TransformTreeIndex siblingIndex );
         DP_SG_XBAR_API void setCurrentObjectTreeData( ObjectTreeIndex parentIndex, ObjectTreeIndex siblingIndex );  
 
         DP_SG_XBAR_API void addClipPlane( const dp::sg::core::ClipPlaneWeakPtr& clipPlane );
@@ -55,10 +54,6 @@ namespace dp
       protected:  
         DP_SG_XBAR_API virtual bool preTraverseGroup( const dp::sg::core::Group *p );
         DP_SG_XBAR_API virtual void postTraverseGroup( const dp::sg::core::Group *p );
-
-        DP_SG_XBAR_API virtual void handleTransform( const dp::sg::core::Transform * p );
-
-        DP_SG_XBAR_API virtual void handleBillboard( const dp::sg::core::Billboard *p );
 
         DP_SG_XBAR_API virtual void handleLOD( const dp::sg::core::LOD *p );
         DP_SG_XBAR_API virtual void handleSwitch( const dp::sg::core::Switch *p );  

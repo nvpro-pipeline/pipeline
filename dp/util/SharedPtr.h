@@ -208,3 +208,5 @@ namespace dp
 
   }//namespace util
 }//namespace dp
+
+#include <dp/util/WeakPtr.h>

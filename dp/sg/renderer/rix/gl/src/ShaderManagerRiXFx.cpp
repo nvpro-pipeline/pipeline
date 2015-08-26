@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright NVIDIA Corporation 2012-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -26,7 +26,6 @@
 
 #include <dp/DP.h>
 #include <dp/sg/renderer/rix/gl/inc/ShaderManager.h>
-#include <dp/sg/renderer/rix/gl/inc/ShaderManagerUniform.h>
 #include <dp/sg/renderer/rix/gl/inc/ShaderManagerRiXFx.h>
 #include <dp/sg/core/LightSource.h>
 #include <dp/sg/core/Camera.h>
@@ -65,7 +64,7 @@ namespace dp
             virtual ~ShaderManagerTransformsRiXFx();
 
             virtual void updateTransforms();
-            virtual dp::rix::fx::GroupDataSharedHandle getGroupData( dp::sg::xbar::TransformTreeIndex transformIndex );
+            virtual dp::rix::fx::GroupDataSharedHandle getGroupData(dp::sg::xbar::TransformIndex);
             virtual dp::fx::EffectSpecSharedPtr getSystemSpec() { return m_effectSpecMatrices; }
 
           protected:
@@ -73,8 +72,7 @@ namespace dp
 
             typedef std::vector<dp::rix::fx::GroupDataSharedHandle> TransformGroupDatas;
 
-            TransformGroupDatas                           m_transformGroupDatas;
-            std::vector<dp::sg::xbar::TransformTreeIndex> m_newContainerTransforms;
+            TransformGroupDatas                       m_transformGroupDatas;
 
             dp::sg::xbar::SceneTreeSharedPtr      m_sceneTree;
             ResourceManagerSharedPtr              m_resourceManager;
@@ -86,7 +84,7 @@ namespace dp
             dp::fx::ParameterGroupSpec::iterator  m_itWorldMatrixIT;
 
           private:
-            void updateTransformNode( const dp::rix::fx::ManagerSharedPtr& manager, const dp::rix::fx::GroupDataSharedHandle& groupHandle, const TransformTreeNode& node );
+            void updateTransformNode(const dp::rix::fx::ManagerSharedPtr& manager, const dp::rix::fx::GroupDataSharedHandle& groupHandle, dp::math::Mat44f const & matrix);
           };
 
 
@@ -116,57 +114,48 @@ namespace dp
           {
           }
 
-          dp::rix::fx::GroupDataSharedHandle ShaderManagerTransformsRiXFx::getGroupData( dp::sg::xbar::TransformTreeIndex transformIndex )
+          dp::rix::fx::GroupDataSharedHandle ShaderManagerTransformsRiXFx::getGroupData(dp::sg::xbar::TransformIndex transformIndex)
           {
             dp::rix::core::Renderer *renderer = m_resourceManager->getRenderer();
 
             // keep same size as transform tree for a 1-1 mapping of transforms
             if ( m_transformGroupDatas.size() <= transformIndex )
             {
-              m_transformGroupDatas.resize( m_sceneTree->getTransformTree().m_tree.size());
+              m_transformGroupDatas.resize( m_sceneTree->getTransforms().size());
             }
             DP_ASSERT( transformIndex < m_transformGroupDatas.size() && "passed invalid transform index");
 
             if ( !m_transformGroupDatas[transformIndex] )
             {
-              // TODO create group data here!
               m_transformGroupDatas[transformIndex] = m_rixFxManager->groupDataCreate( m_groupSpecWorldMatrices );
-              m_newContainerTransforms.push_back(transformIndex);
             }
 
             return m_transformGroupDatas[transformIndex];
           }
 
-          inline void ShaderManagerTransformsRiXFx::updateTransformNode( const dp::rix::fx::ManagerSharedPtr& manager, const dp::rix::fx::GroupDataSharedHandle& groupHandle, const TransformTreeNode &node )
+          inline void ShaderManagerTransformsRiXFx::updateTransformNode(const dp::rix::fx::ManagerSharedPtr& manager, const dp::rix::fx::GroupDataSharedHandle& groupHandle, dp::math::Mat44f const &worldMatrix)
           {
-            // compute world matrices
+              // compute world matrices
 
-            Mat44f inverseTranspose;
-            dp::math::invertTranspose( node.m_worldMatrix, inverseTranspose );
-            manager->groupDataSetValue( groupHandle, m_itWorldMatrix, dp::rix::core::ContainerDataRaw(0, &node.m_worldMatrix, sizeof(Mat44f) ) );
-            manager->groupDataSetValue( groupHandle, m_itWorldMatrixIT, dp::rix::core::ContainerDataRaw(0, &inverseTranspose, sizeof(Mat44f) ) );
+              Mat44f inverseTranspose;
+              dp::math::invertTranspose(worldMatrix, inverseTranspose);
+              manager->groupDataSetValue(groupHandle, m_itWorldMatrix, dp::rix::core::ContainerDataRaw(0, &worldMatrix, sizeof(Mat44f)));
+              manager->groupDataSetValue(groupHandle, m_itWorldMatrixIT, dp::rix::core::ContainerDataRaw(0, &inverseTranspose, sizeof(Mat44f)));
           }
 
           void ShaderManagerTransformsRiXFx::updateTransforms()
           {
             dp::rix::core::Renderer *renderer = m_resourceManager->getRenderer();
 
-            std::vector<TransformTreeIndex>::iterator it = m_newContainerTransforms.begin();
-            while ( it != m_newContainerTransforms.end() )
-            {
-              updateTransformNode( m_rixFxManager, m_transformGroupDatas[*it], m_sceneTree->getTransformTreeNode( *it ) );
-              ++it;
-            }
-            m_newContainerTransforms.clear();
-
-            const std::vector<TransformTreeIndex>& transforms = m_sceneTree->getChangedTransforms();
-            std::vector<TransformTreeIndex>::const_iterator it2 = transforms.begin();
+            const std::vector<TransformIndex>& transforms = m_sceneTree->getChangedTransforms();
+            std::vector<TransformIndex>::const_iterator it2 = transforms.begin();
             while ( it2 != transforms.end() )
             {
               // update only used transforms
               if ( ( *it2 < m_transformGroupDatas.size() ) && m_transformGroupDatas[*it2] )
               {
-                updateTransformNode( m_rixFxManager, m_transformGroupDatas[*it2], m_sceneTree->getTransformTreeNode( *it2 ) );
+                dp::math::Mat44f const & worldMatrix = m_sceneTree->getTransformEntry(*it2).world;
+                updateTransformNode(m_rixFxManager, m_transformGroupDatas[*it2], worldMatrix);
               }
               ++it2;
             }
@@ -333,13 +322,9 @@ namespace dp
 
           void ShaderManagerRiXFx::addSystemContainers( ShaderManagerInstanceSharedPtr const & shaderObject )
           {
-            const dp::rix::core::GeometryInstanceSharedHandle& geometryInstance = shaderObject->geometryInstance;
-            DP_ASSERT( m_sceneTree.getSharedPtr() );
-            const dp::sg::xbar::ObjectTreeNode &objectTreeNode = m_sceneTree.getSharedPtr()->getObjectTreeNode( shaderObject->objectTreeIndex );
-
+            const dp::sg::xbar::ObjectTreeNode &objectTreeNode = m_sceneTree->getObjectTreeNode( shaderObject->objectTreeIndex );
             ShaderManagerRiXFxInstanceSharedPtr o = shaderObject.staticCast<ShaderManagerRiXFxInstance>();
-
-            m_rixFxManager->instanceUseGroupData( o->instance.get(), m_shaderManagerTransforms->getGroupData( objectTreeNode.m_transformIndex ).get() );
+            m_rixFxManager->instanceUseGroupData(o->instance.get(), m_shaderManagerTransforms->getGroupData(objectTreeNode.m_transform).get());
           }
 
           void ShaderManagerRiXFx::addSystemContainers( ShaderManagerRenderGroupSharedPtr const & renderGroup )

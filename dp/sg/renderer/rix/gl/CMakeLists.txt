@@ -34,7 +34,6 @@ set(SOURCES
   src/SceneRendererImpl.cpp
   src/ShaderManager.cpp
   src/ShaderManagerRiXFx.cpp
-  src/ShaderManagerUniform.cpp
   src/TransparencyManager.cpp
   src/TransparencyManagerNone.cpp
   src/TransparencyManagerOITAll.cpp
@@ -60,7 +59,6 @@ set(PRIVATE_HEADERS
   inc/SceneRendererImpl.h
   inc/ShaderManager.h
   inc/ShaderManagerRiXFx.h
-  inc/ShaderManagerUniform.h
   inc/Utility.h
 )
 

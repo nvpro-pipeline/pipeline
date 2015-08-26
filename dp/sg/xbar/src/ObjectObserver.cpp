@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2013
+// Copyright NVIDIA Corporation 2010-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -170,17 +170,11 @@ namespace dp
 
         // find the left sibling and the left transform of our new child
         ObjectTree& tree = m_sceneTree->getObjectTree();
-        TransformTreeIndex parentTransformIndex = tree[objectIndex].m_transformIndex;
         ObjectTreeIndex leftSibling = tree[objectIndex].m_firstChild; 
-        TransformTreeIndex leftSiblingTransformIndex = ~0;
         ObjectTreeIndex currentLeftSibling = ~0;
 
         while ( index > 0 )
         {
-          if( tree[leftSibling].m_transformIndex != parentTransformIndex )
-          {
-            leftSiblingTransformIndex = tree[leftSibling].m_transformIndex;
-          }
           currentLeftSibling = leftSibling;
           leftSibling = tree[leftSibling].m_nextSibling;
           --index;
@@ -189,7 +183,7 @@ namespace dp
         // leftSibling advanced one step too far. 
         leftSibling = currentLeftSibling;
 
-        m_sceneTree->addSubTree( child, objectIndex, leftSibling, parentTransformIndex, leftSiblingTransformIndex );
+        m_sceneTree->addSubTree(child, objectIndex, leftSibling);
       }
 
     } // namespace xbar

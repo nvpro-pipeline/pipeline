@@ -85,7 +85,7 @@ namespace dp
               return true;
             }
 
-            void postTraverse( TransformTreeIndex index, const Data& data )
+            void postTraverse( ObjectTreeIndex index, const Data& data )
             {
             }
 
@@ -126,8 +126,11 @@ namespace dp
         void CullingImpl::cull( ResultSharedPtr const & result, dp::math::Mat44f const & world2ViewProjection )
         {
           ResultImplSharedPtr const & resultImpl = result.staticCast<ResultImpl>();
-          dp::sg::xbar::TransformTree const & transformTree = m_sceneTree->getTransformTree();
-          m_culling->groupSetMatrices( m_cullingGroup, &transformTree[0].m_worldMatrix, transformTree.size(), sizeof( transformTree[0]) );
+          dp::sg::xbar::SceneTree::Transforms const & transforms = m_sceneTree->getTransforms();
+          if (!transforms.empty())
+          {
+            m_culling->groupSetMatrices(m_cullingGroup, &transforms[0].world, transforms.size(), sizeof(transforms[0]));
+          }
           m_culling->cull( m_cullingGroup, resultImpl->getResult(), world2ViewProjection );
 
           std::vector<dp::culling::ObjectSharedPtr> const & changedObjects = m_culling->resultGetChanged( resultImpl->getResult() );
@@ -145,9 +148,12 @@ namespace dp
 
         dp::math::Box3f CullingImpl::getBoundingBox()
         {
-          dp::sg::xbar::TransformTree const & transformTree = m_sceneTree->getTransformTree();
-          m_culling->groupSetMatrices( m_cullingGroup, &transformTree[0].m_worldMatrix, transformTree.size(), sizeof( transformTree[0]) );
-          return m_culling->getBoundingBox( m_cullingGroup );
+          dp::sg::xbar::SceneTree::Transforms const & transforms = m_sceneTree->getTransforms();
+          if (!transforms.empty())
+          {
+            m_culling->groupSetMatrices(m_cullingGroup, &transforms[0].world, transforms.size(), sizeof(transforms[0]));
+          }
+          return m_culling->getBoundingBox(m_cullingGroup);
         }
 
         void CullingImpl::updateBoundingBox( ObjectTreeIndex objectTreeIndex )
@@ -172,7 +178,7 @@ namespace dp
           ObjectTreeNode const &node = m_sceneTree->getObjectTreeNode( index );
           m_objects[index] = m_culling->objectCreate( Payload::create( index ) );
           m_culling->groupAddObject( m_cullingGroup, m_objects[index] );
-          m_culling->objectSetTransformIndex( m_objects[index], node.m_transformIndex );
+          m_culling->objectSetTransformIndex(m_objects[index], node.m_transform);
           updateBoundingBox( index );
         }
 

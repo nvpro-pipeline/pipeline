@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2013
+// Copyright NVIDIA Corporation 2010-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -102,9 +102,7 @@ namespace dp
         typename IndexMap::iterator it = m_indexMap.find( index );
         DP_ASSERT( it != m_indexMap.end() );
 
-        dp::util::SubjectSharedPtr subject = it->second.first.getSharedPtr();
-        DP_ASSERT( subject );
-        subject->detach( this, it->second.second.operator->() );    // BIG HACK!! we somehow need to align dp::util::Payload and dp::sg::xbar::Observer<IndexType::Payload
+        it->second.first->detach( this, it->second.second.operator->() );    // BIG HACK!! we somehow need to align dp::util::Payload and dp::sg::xbar::Observer<IndexType::Payload
 
         m_indexMap.erase( it );
       }
@@ -115,9 +113,7 @@ namespace dp
         typename IndexMap::iterator it, it_end = m_indexMap.end();
         for( it = m_indexMap.begin(); it != it_end; ++it )
         {
-          dp::util::SubjectSharedPtr subject = it->second.first.getSharedPtr();
-          DP_ASSERT( subject );
-          subject->detach( this, it->second.second.operator->() );    // BIG HACK!! we somehow need to align dp::util::Payload and dp::sg::xbar::Observer<IndexType::Payload
+          it->second.first->detach( this, it->second.second.operator->() );    // BIG HACK!! we somehow need to align dp::util::Payload and dp::sg::xbar::Observer<IndexType::Payload
         }
         m_indexMap.clear();
       }

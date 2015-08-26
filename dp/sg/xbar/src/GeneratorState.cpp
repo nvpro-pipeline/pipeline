@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2012
+// Copyright NVIDIA Corporation 2010-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -61,11 +61,6 @@ namespace dp
       {
       }
 
-      void GeneratorState::setCurrentTransformTreeData( TransformTreeIndex parentIndex, TransformTreeIndex siblingIndex )
-      {
-        m_transformParentSiblingStack.push( make_pair( parentIndex, siblingIndex ) );
-      }
-
       void GeneratorState::setCurrentObjectTreeData( ObjectTreeIndex parentIndex, ObjectTreeIndex siblingIndex )
       {
         m_objectParentSiblingStack.push( make_pair( parentIndex, siblingIndex ) );
@@ -76,80 +71,6 @@ namespace dp
         m_clipPlaneGroups.push_back( node.m_clipPlaneGroup );
       }
 
-      void GeneratorState::pushTransform( TransformSharedPtr const& tp )
-      {
-        TransformTreeIndex parentIndex = getParentTransformIndex();
-        TransformTreeIndex siblingIndex = getSiblingTransformIndex();
-
-        // create node and fill with information
-        TransformTreeNode node;
-        node.m_transform = tp.getWeakPtr();
-
-        // add node to tree
-        TransformTreeIndex index = m_sceneTree->addTransform( node, parentIndex, siblingIndex );
-
-        // update info for next node insertion
-        if( !m_transformParentSiblingStack.empty() )
-        {
-          m_transformParentSiblingStack.top().second = index;
-        }
-        m_transformParentSiblingStack.push( make_pair( index, ~0 ) );
-      }
-
-      void GeneratorState::pushTransform( BillboardSharedPtr const& bb )
-      {
-        TransformTreeIndex parentIndex = getParentTransformIndex();
-        TransformTreeIndex siblingIndex = getSiblingTransformIndex();
-
-        // create node and fill with information
-        TransformTreeNode node;
-        node.m_billboard = bb.getWeakPtr();
-
-        // add node to tree
-        TransformTreeIndex index = m_sceneTree->addTransform( node, parentIndex, siblingIndex );
-
-        // update info for next node insertion
-        if( !m_transformParentSiblingStack.empty() )
-        {
-          m_transformParentSiblingStack.top().second = index;
-        }
-        m_transformParentSiblingStack.push( make_pair( index, ~0 ) );
-      }
-
-      void GeneratorState::popTransform()
-      {
-        m_transformParentSiblingStack.pop();
-      }
-
-      TransformTreeIndex GeneratorState::getParentTransformIndex() const
-      {
-        if( !m_transformParentSiblingStack.empty() )
-        {
-          return m_transformParentSiblingStack.top().first;
-        }
-        else
-        {
-          return ~0;
-        }
-      }
-
-      TransformTreeIndex GeneratorState::getSiblingTransformIndex() const
-      {
-        if( !m_transformParentSiblingStack.empty() )
-        {
-          return m_transformParentSiblingStack.top().second;
-        }
-        else
-        {
-          return ~0;
-        }
-      }
-
-      void GeneratorState::addDynamicTransformIndex( TransformTreeIndex index )
-      {
-        m_sceneTree->markTransformDynamic( index );
-      }
-
       ObjectTreeIndex GeneratorState::insertNode( ObjectSharedPtr const& o )
       {
         ObjectTreeIndex parentIndex = getParentObjectIndex();
@@ -157,7 +78,6 @@ namespace dp
 
         // Create node and fill with information
         ObjectTreeNode node;
-        node.m_transformIndex = getParentTransformIndex();
         node.m_object         = o.getWeakPtr();
         node.m_clipPlaneGroup = m_clipPlaneGroups.back();
 
@@ -179,12 +99,57 @@ namespace dp
 
         m_objectParentSiblingStack.push( make_pair( index, ~0 ) );
 
-        // build a TT nodes -> OT nodes relation
-        // if g is the current active transform, it was just inserted via pushTransform
-        TransformTreeNode const& tnode = m_sceneTree->getTransformTreeNode( getParentTransformIndex() );
-        if( group == tnode.m_transform.getSharedPtr() || group == tnode.m_billboard.getSharedPtr() )
+        // TODO It's most likely best to move this logic to the SceneTree
+        ObjectTree &ot = m_sceneTree->getObjectTree();
+        ObjectTreeNode &otn = m_sceneTree->getObjectTreeNode(index);
+        ObjectTreeNode &otnParent = m_sceneTree->getObjectTreeNode(otn.m_parentIndex);
+
+        // handle Transform nodes
+        if (group.isPtrTo<dp::sg::core::Transform>() || group.isPtrTo <dp::sg::core::Billboard>())
         {
-          m_sceneTree->transformSetObjectTreeIndex( getParentTransformIndex(), index );
+          if (group.isPtrTo<dp::sg::core::Billboard>())
+          {
+            otn.m_isBillboard = true;
+          }
+          otn.m_isTransform = true;
+          otn.m_transformLevel = otnParent.m_transformLevel + 1;
+          otn.m_transform = m_sceneTree->allocateTransform();
+          dp::sg::xbar::SceneTree::TransformEntry te;
+          if (group.isPtrTo<dp::sg::core::Transform>()) {
+            te.local = group.inplaceCast<dp::sg::core::Transform>()->getMatrix();
+          }
+          else
+          {
+            te.local = dp::math::cIdentity44f;
+          }
+          m_sceneTree->m_transforms.push_back(te);
+
+          if (m_sceneTree->m_transformLevels.size() < (otn.m_transformLevel + 1)) {
+            m_sceneTree->m_transformLevels.resize(otn.m_transformLevel + 1);
+          }
+
+          // add entry to list of transforms to work through
+          if (group.isPtrTo<dp::sg::core::Billboard>())
+          {
+            dp::sg::xbar::SceneTree::BillboardListEntry ble;
+            ble.parent = otnParent.m_transform;
+            ble.transform = otn.m_transform;
+            ble.billboard = group.inplaceCast<dp::sg::core::Billboard>();
+            m_sceneTree->m_transformLevels[otn.m_transformLevel].billboardListEntries.push_back(ble);
+          }
+          else
+          {
+            dp::sg::xbar::SceneTree::TransformListEntry tle;
+            tle.parent = otnParent.m_transform;
+            tle.transform = otn.m_transform;
+            m_sceneTree->m_transformLevels[otn.m_transformLevel].transformListEntries.push_back(tle);
+          }
+        }
+
+        // if the parent objectNode is a transform set it as parent
+        // otherwise copy the transform information as parent
+        if (otnParent.m_isTransform) {
+          otn.m_transformParent = otn.m_parentIndex;
         }
       }
 
@@ -215,6 +180,11 @@ namespace dp
       {
         // only insert the node, don't alter parent information (node is a leaf)
         ObjectTreeIndex index = insertNode( geoNode );
+
+        ObjectTreeNode &otn = m_sceneTree->getObjectTreeNode(index);
+        ObjectTreeNode &otnParent = m_sceneTree->getObjectTreeNode(otn.m_parentIndex);
+        otn.m_transform = otnParent.m_transform;
+        otn.m_transformLevel = otnParent.m_transformLevel;
 
         m_sceneTree->addGeoNode( index );
 

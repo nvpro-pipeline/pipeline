@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2012
+// Copyright NVIDIA Corporation 2011-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -27,8 +27,15 @@
 #pragma once
 
 #include <dp/math/Boxnt.h>
+#include <dp/sg/core/CoreTypes.h>
 #include <dp/sg/xbar/Tree.h>
 #include <dp/sg/xbar/TreeResourceGroup.h>
+#include <dp/util/BitMask.h>
+#include <dp/util/BitArray.h>
+#include <dp/sg/core/Object.h>
+#include <set>
+#include <vector>
+#include <map>
 
 namespace dp
 {
@@ -37,8 +44,8 @@ namespace dp
     namespace xbar
     {
 
-      typedef TreeNodeBaseClass::NodeIndex TransformTreeIndex;
       typedef TreeNodeBaseClass::NodeIndex ObjectTreeIndex;
+      typedef unsigned int                 TransformIndex;
 
       DEFINE_PTR_TYPES( ClipPlaneInstance );
 
@@ -53,62 +60,39 @@ namespace dp
         };
 
         ObjectTreeNode()
-          : m_transformIndex( 0 )
-          , m_localHints( 0 )
+          : m_localHints( 0 )
           , m_worldHints( 0 )
           , m_localActive( true )
           , m_worldActive( true )
           , m_isDrawable( false )
+          , m_isTransform( false )
+          , m_isBillboard( false )
           , m_localMask( ~0 )
           , m_worldMask( ~0 )
         {}
 
-        ObjectTreeNode( const ObjectTreeNode &rhs )
-          : TreeNodeBaseClass( rhs )
-          , m_transformIndex( rhs.m_transformIndex )
-          , m_object( rhs.m_object )
-          , m_localHints( rhs.m_localHints )
-          , m_worldHints( rhs.m_worldHints )
-          , m_localActive( rhs.m_localActive )
-          , m_worldActive( rhs.m_worldActive )
-          , m_isDrawable( rhs.m_isDrawable )
-          , m_localMask( rhs.m_localMask )
-          , m_worldMask( rhs.m_worldMask )
-          , m_clipPlaneGroup( rhs.m_clipPlaneGroup )
-        {
-        }
-
-        ObjectTreeNode& operator=( const ObjectTreeNode &rhs )
-        {
-          TreeNodeBaseClass::operator=(rhs);
-
-          m_transformIndex = rhs.m_transformIndex;
-          m_object = rhs.m_object;
-          m_localHints = rhs.m_localHints;
-          m_worldHints = rhs.m_worldHints;
-          m_localActive = rhs.m_localActive;
-          m_worldActive = rhs.m_worldActive;
-          m_isDrawable  = rhs.m_isDrawable;
-          m_localMask = rhs.m_localMask;
-          m_worldMask = rhs.m_worldMask;
-          m_clipPlaneGroup = rhs.m_clipPlaneGroup;
-
-          return *this;
-        }
 
         ~ObjectTreeNode()
         {
         }
 
-        TransformTreeIndex          m_transformIndex; // index of the current parent transform
         dp::sg::core::ObjectWeakPtr m_object;         // the node's object in the tree
+
+        // new transform hierarchy
+        TransformIndex              m_transform;       // id in transform array
+        ObjectTreeIndex             m_transformParent; // object index of parent in transform hierarchy
+        unsigned int                m_transformLevel;  // level in transform hierarchy
+
         unsigned int                m_localHints;     // the hints the corresponding node/primitive provides
         unsigned int                m_worldHints;     // the resulting hints for this node
         unsigned int                m_localMask;      // mask of the node's object
         unsigned int                m_worldMask;      // resulting mask
+        // TODO try bitmask for all those booleans and check if it has impact on performance
         bool                        m_localActive;    // false iff node is hidden due to Switch/LOD/FBA (can only be child of one at a time -> bool)
         bool                        m_worldActive;    // false iff node is hidden due to !m_localActive or !parent.m_localActive
         bool                        m_isDrawable;
+        bool                        m_isTransform;    // object is any kind of transform
+        bool                        m_isBillboard;    // object is billboard
                                     
         SmartClipPlaneGroup         m_clipPlaneGroup;
       };

@@ -59,11 +59,6 @@ namespace dp
         SharedTraverser::doApply( root );
       }
 
-      void SceneTreeGenerator::setCurrentTransformTreeData( TransformTreeIndex parentIndex, TransformTreeIndex siblingIndex )
-      {
-        m_generatorState->setCurrentTransformTreeData( parentIndex, siblingIndex );
-      }
-
       void SceneTreeGenerator::setCurrentObjectTreeData( ObjectTreeIndex parentIndex, ObjectTreeIndex siblingIndex )
       {
         m_generatorState->setCurrentObjectTreeData( parentIndex, siblingIndex );
@@ -73,40 +68,12 @@ namespace dp
       {
         ClipPlaneInstanceSharedPtr instance( ClipPlaneInstance::create() );
         instance->m_clipPlane = clipPlane.getSharedPtr();
-        instance->m_transformIndex = m_generatorState->getParentTransformIndex();
+        instance->m_transformIndex = m_sceneTree->getObjectTreeNode(m_generatorState->getParentObjectIndex()).m_transform;
         m_generatorState->addClipPlane( instance );
-      }
-
-      void SceneTreeGenerator::handleTransform( const dp::sg::core::Transform * p )
-      {
-        // add transform to transform stack
-        m_generatorState->pushTransform( p->getSharedPtr<dp::sg::core::Transform>() );
-
-        // skip Transform traversal, directly traverse Transform as Group
-        SharedTraverser::traverseGroup( p );
-
-        // remove transform from stack
-        m_generatorState->popTransform();
-      }
-
-      void SceneTreeGenerator::handleBillboard( const dp::sg::core::Billboard *p )
-      {
-        // add billboard as a transform 
-        m_generatorState->pushTransform( p->getSharedPtr<dp::sg::core::Billboard>() );
-
-        // add transform index to dynamic transforms list
-        m_generatorState->addDynamicTransformIndex( m_generatorState->getParentTransformIndex() );
-
-        // skip Billboiard traversal, directly traverse Billboard as Group
-        SharedTraverser::traverseGroup( p );
-
-        // remove trensform from stack
-        m_generatorState->popTransform();
       }
 
       bool SceneTreeGenerator::preTraverseGroup( const dp::sg::core::Group *p )
       {
-
         bool ok = SharedTraverser::preTraverseGroup(p);
 
         if( ok )
@@ -129,11 +96,11 @@ namespace dp
             m_generatorState->pushClipPlaneSet();
 
             Group::ClipPlaneConstIterator it_end = p->endClipPlanes();
-            for( Group::ClipPlaneConstIterator it = p->beginClipPlanes(); it != it_end; ++it )
+            for (Group::ClipPlaneConstIterator it = p->beginClipPlanes(); it != it_end; ++it)
             {
-              ClipPlaneInstanceSharedPtr instance( ClipPlaneInstance::create() );
+              ClipPlaneInstanceSharedPtr instance(ClipPlaneInstance::create());
               instance->m_clipPlane = *it;
-              instance->m_transformIndex = m_generatorState->getParentTransformIndex();
+              instance->m_transformIndex = m_sceneTree->getObjectTreeNode(m_generatorState->getParentObjectIndex()).m_transform;
               m_generatorState->addClipPlane( instance );
             }
           }

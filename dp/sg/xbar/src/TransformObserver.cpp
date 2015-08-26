@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2013
+// Copyright NVIDIA Corporation 2010-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -37,12 +37,12 @@ namespace dp
       {
       }
 
-      void TransformObserver::attach( dp::sg::core::TransformSharedPtr const & t, TransformTreeIndex index )
+      void TransformObserver::attach( dp::sg::core::TransformSharedPtr const & t, ObjectTreeIndex index )
       {
         DP_ASSERT( m_indexMap.find( index ) == m_indexMap.end() );
 
         DirtyPayloadSharedPtr payload( DirtyPayload::create( index ) );
-        Observer<TransformTreeIndex>::attach( t, payload );
+        Observer<ObjectTreeIndex>::attach( t, payload );
 
         payload->m_dirty = true;
         m_dirtyPayloads.push_back( payload.operator->() );    // Big Hack !!
@@ -71,7 +71,7 @@ namespace dp
         }
       }
 
-      void TransformObserver::onDetach( TransformTreeIndex index )
+      void TransformObserver::onDetach(ObjectTreeIndex index )
       {
         for ( DirtyPayloads::iterator it = m_dirtyPayloads.begin(); it != m_dirtyPayloads.end(); ++it )
         {

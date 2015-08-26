@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright NVIDIA Corporation 2011-2015
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -196,7 +196,7 @@ namespace dp
             virtual ~ShaderManagerTransforms();
 
             virtual void updateTransforms() = 0;
-            virtual dp::rix::core::ContainerSharedHandle getTransformContainer( dp::sg::xbar::TransformTreeIndex transformIndex ) = 0;
+            virtual dp::rix::core::ContainerSharedHandle getTransformContainer(dp::sg::xbar::TransformIndex transformIndex) = 0;
 
             virtual const dp::rix::core::ContainerDescriptorSharedHandle& getDescriptor() = 0;
           protected:

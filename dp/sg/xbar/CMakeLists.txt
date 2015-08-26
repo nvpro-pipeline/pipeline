@@ -27,7 +27,6 @@ set(XBAR_PUBLIC_HEADERS
   DrawableManager.h
   ObjectTree.h
   SceneTree.h
-  TransformTree.h
   Tree.h
   TreeResourceGroup.h
   xbar.h
@@ -43,7 +42,6 @@ set(XBAR_PRIVATE_HEADERS
   inc/SwitchObserver.h
   inc/TransformObserver.h
   inc/UpdateObjectVisitor.h
-  inc/UpdateTransformVisitor.h
 )
 
 source_group(sources FILES ${XBAR_SOURCES})
