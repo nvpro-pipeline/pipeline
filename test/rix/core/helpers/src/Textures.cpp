@@ -26,7 +26,7 @@
 
 #include <dp/math/math.h>
 #include <dp/math/Matmnt.h>
-#include <dp/util/SimplexNoise1234.h>
+#include <test/rix/core/helpers/SimplexNoise1234.h>
 #include <test/rix/core/helpers/Textures.h>
 
 namespace dp
@@ -165,7 +165,7 @@ namespace dp
           {
             unsigned int curTexel = iy * texWidth + ix;
 
-            float intensity = 0.5f * ( dp::util::SimplexNoise1234::noise( frequencyX * iy / texHeight - 1.0f, frequencyY * ix / texWidth - 1.0f ) + 1.0f );
+            float intensity = 0.5f * ( dp::rix::util::SimplexNoise1234::noise( frequencyX * iy / texHeight - 1.0f, frequencyY * ix / texWidth - 1.0f ) + 1.0f );
             texture->m_data[curTexel][0] = intensity;
             texture->m_data[curTexel][1] = intensity;
             texture->m_data[curTexel][2] = intensity;

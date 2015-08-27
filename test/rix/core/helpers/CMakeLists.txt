@@ -2,6 +2,7 @@
 set( HELPERS_SOURCES
   src/Geometry.cpp
   src/GeometryHelper.cpp
+  src/SimplexNoise1234.cpp
   src/TextureHelper.cpp
   src/Textures.cpp
 )
@@ -9,6 +10,7 @@ set( HELPERS_SOURCES
 set( HELPERS_HEADERS
   Geometry.h
   GeometryHelper.h
+  SimplexNoise1234.h
   TextureHelper.h
   Textures.h
 )

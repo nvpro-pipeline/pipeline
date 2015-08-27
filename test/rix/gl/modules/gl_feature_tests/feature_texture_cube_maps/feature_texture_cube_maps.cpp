@@ -29,10 +29,10 @@
 
 #include <dp/gl/RenderTarget.h>
 #include <dp/util/Array.h>
-#include <dp/util/simplexnoise1234.h>
 #include <dp/math/Vecnt.h>
 
 #include <test/rix/core/framework/RiXBackend.h>
+#include <test/rix/core/helpers/SimplexNoise1234.h>
 
 #include <limits>
 
@@ -419,7 +419,7 @@ TextureSharedHandle Feature_texture_cube_maps::createDebugCubeMap( size_t texWid
 
         vec *= 3.0f;
 
-        float intensity = 0.5f * ( dp::util::SimplexNoise1234::noise( vec[0], vec[1], vec[2], salt ) + 1.0f );
+        float intensity = 0.5f * ( dp::rix::util::SimplexNoise1234::noise( vec[0], vec[1], vec[2], salt ) + 1.0f );
         texData[layer][  pos] = (unsigned char)(intensity * 255 * ((col[layer] & 4)/4));
         texData[layer][1+pos] = (unsigned char)(intensity * 255 * ((col[layer] & 2)/2));
         texData[layer][2+pos] = (unsigned char)(intensity * 255 * ((col[layer] & 1)/1));
@@ -472,9 +472,9 @@ TextureSharedHandle Feature_texture_cube_maps::createColorCubeMap( size_t texWid
 
         vec *= 3.0f;
 
-        texData[layer][  pos] = (unsigned char)(r * 255 * 0.5f * ( dp::util::SimplexNoise1234::noise( vec[0], vec[1], vec[2], 1.0f + salt ) + 1.0f ));
-        texData[layer][1+pos] = (unsigned char)(g * 255 * 0.5f * ( dp::util::SimplexNoise1234::noise( vec[0], vec[1], vec[2], 2.0f + salt ) + 1.0f ));
-        texData[layer][2+pos] = (unsigned char)(b * 255 * 0.5f * ( dp::util::SimplexNoise1234::noise( vec[0], vec[1], vec[2], 3.0f + salt ) + 1.0f ));
+        texData[layer][  pos] = (unsigned char)(r * 255 * 0.5f * ( dp::rix::util::SimplexNoise1234::noise( vec[0], vec[1], vec[2], 1.0f + salt ) + 1.0f ));
+        texData[layer][1+pos] = (unsigned char)(g * 255 * 0.5f * ( dp::rix::util::SimplexNoise1234::noise( vec[0], vec[1], vec[2], 2.0f + salt ) + 1.0f ));
+        texData[layer][2+pos] = (unsigned char)(b * 255 * 0.5f * ( dp::rix::util::SimplexNoise1234::noise( vec[0], vec[1], vec[2], 3.0f + salt ) + 1.0f ));
         texData[layer][3+pos] = 255;
       }
     }

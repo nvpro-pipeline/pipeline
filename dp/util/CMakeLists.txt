@@ -46,7 +46,6 @@ set(DPUTIL_INCLUDES
   Reflection.h
   Semantic.h
   SharedPtr.h
-  SimplexNoise1234.h
   Singleton.h
   StridedIterator.h
   Timer.h
@@ -74,7 +73,6 @@ set(DPUTIL_SOURCES
   src/Observer.cpp
   src/PlugIn.cpp
   src/Reflection.cpp
-  src/SimplexNoise1234.cpp
   src/Timer.cpp
 )
 
