@@ -279,8 +279,11 @@ namespace dp
                       case dp::sg::core::Group::Event::POST_CHILD_ADD:
                       case dp::sg::core::Group::Event::PRE_CHILD_REMOVE:
                       case dp::sg::core::Group::Event::POST_GROUP_EXCHANGED:
+                      {
                         changedState |= DP_SG_BOUNDING_VOLUMES;
-                        break;
+                        notify(dp::sg::core::Object::Event(this));
+                        return;
+                      }
                       default:
                         DP_ASSERT(!"encountered unhandled group event type!");
                         break;
@@ -288,8 +291,11 @@ namespace dp
                   }
                   break;
                 case dp::sg::core::Event::OBJECT:
+                {
                   changedState |= DP_SG_BOUNDING_VOLUMES;
+                  changedState |= static_cast<dp::sg::core::Object::Event const &>(coreEvent).getObject()->m_dirtyState;
                   break;
+                }
                 case dp::sg::core::Event::PARAMETER_GROUP_DATA:
                   break;
                 default:
