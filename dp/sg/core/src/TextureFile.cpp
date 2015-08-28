@@ -111,8 +111,7 @@ namespace dp
         else
         {
           // else assert that the textureTarget hasn't changed.
-          DP_ASSERT( it->second->m_textureFile.getSharedPtr() );
-          DP_ASSERT( it->second->m_textureFile.getSharedPtr()->getTextureTarget() == textureTarget );
+          DP_ASSERT( it->second->m_textureFile->getTextureTarget() == textureTarget );
           return it->second->m_textureFile.getSharedPtr();
         }
       }

@@ -42,6 +42,7 @@ namespace dp
         template <typename U> WeakPtr( std::weak_ptr<U> const& sp );
 
         SharedPtr<T> getSharedPtr() const;
+        SharedPtr<T> operator->() const;
     };
 
 
@@ -68,6 +69,14 @@ namespace dp
     inline SharedPtr<T> WeakPtr<T>::getSharedPtr() const
     {
       return( this->lock() );
+    }
+
+    template <typename T>
+    inline SharedPtr<T> WeakPtr<T>::operator->() const
+    {
+      SharedPtr<T> sp = getSharedPtr();
+      DP_ASSERT( sp );
+      return( sp );
     }
 
   }//namespace util
