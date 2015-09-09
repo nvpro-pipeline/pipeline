@@ -150,15 +150,15 @@ namespace dp
 
           // LightState
           struct ShaderLight {
-            Vec4f ambient;             
-            Vec4f diffuse;             
-            Vec4f specular;            
-            Vec4f position;            
-            Vec4f direction;           
-            float spotExponent;        
-            float spotCutoff;          
-            float constantAttenuation; 
-            float linearAttenuation;   
+            Vec4f ambient;
+            Vec4f diffuse;
+            Vec4f specular;
+            Vec4f position;
+            Vec4f direction;
+            float spotExponent;
+            float spotCutoff;
+            float constantAttenuation;
+            float linearAttenuation;
             float quadraticAttenuation;
             float _pad0[3];
           };
@@ -233,7 +233,7 @@ namespace dp
             , m_resourceManager( resourceManager )
           {
             // create light descriptor
-            dp::rix::core::ProgramParameter programParametersLight[] = 
+            dp::rix::core::ProgramParameter programParametersLight[] =
             {
               dp::rix::core::ProgramParameter( "sys_LightsBuffer", dp::rix::core::CPT_BUFFER, 0 )
             };
@@ -260,7 +260,7 @@ namespace dp
 
               dp::rix::core::BufferSharedHandle buffer = renderer->bufferCreate();
               renderer->bufferSetSize( buffer, sizeof( ShaderLightState ) );
-              renderer->bufferUpdateData( buffer, 0, &shaderLightState, sizeof( ShaderLightState ) ); 
+              renderer->bufferUpdateData( buffer, 0, &shaderLightState, sizeof( ShaderLightState ) );
 
               dp::rix::core::ContainerSharedHandle container = renderer->containerCreate( m_descriptorLight );
               dp::rix::core::ContainerEntry  entry     = renderer->containerDescriptorGetEntry( m_descriptorLight, "sys_LightsBuffer" );
@@ -280,7 +280,7 @@ namespace dp
             dp::sg::core::CameraSharedPtr const& camera = vs->getCamera();
             Trafo trafo;
             trafo.setTranslation( camera->getPosition() );
-            
+
             dp::sg::core::SceneSharedPtr scene = vs->getScene();
             Vec3f ambientColor = scene->getAmbientColor();
 
@@ -303,8 +303,8 @@ namespace dp
             // copy scene lights
             dp::sg::xbar::SceneTreeSharedPtr sceneTree = m_sceneTree.getSharedPtr();
             DP_ASSERT( sceneTree );
-            dp::sg::xbar::SceneTree::Transforms transforms = sceneTree->getTransforms();
-            const std::set< ObjectTreeIndex >& lightSources = sceneTree->getLightSources();
+            dp::sg::xbar::SceneTree::Transforms const & transforms = sceneTree->getTransforms();
+            std::set< ObjectTreeIndex > const & lightSources = sceneTree->getLightSources();
             for ( std::set< ObjectTreeIndex >::const_iterator itLight = lightSources.begin(); itLight != lightSources.end() && lightId < MAXLIGHTS; ++itLight )
             {
               ObjectTreeNode& otn = sceneTree->getObjectTreeNode(*itLight);
@@ -336,5 +336,3 @@ namespace dp
     } // namespace renderer
   } // namespace sg
 } // namespace dp
-
-
