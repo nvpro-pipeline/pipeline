@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012-2015
+// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -145,6 +145,7 @@ namespace dp
         std::vector< GeometryInstanceGLHandle > m_sortedGIs; // sorted list of geometry instances
 
         // stream cache
+        dp::util::BitArray                     m_geometryInstanceVisibility;
         std::unique_ptr<GeometryInstanceCache> m_geometryInstanceCache;
 
       private:
@@ -359,7 +360,7 @@ namespace dp
       {
         if ( m_geometryInstanceCache && geometryInstance->m_pipelineGroupCacheIndex != ~size_t(0) )
         {
-          m_geometryInstanceCache->m_geometryInstanceCacheEntries[geometryInstance->m_pipelineGroupCacheIndex].m_isVisible = geometryInstance->isVisible();
+          m_geometryInstanceVisibility.setBit(geometryInstance->m_pipelineGroupCacheIndex, geometryInstance->isVisible());
         }
       }
 

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2015
+// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -30,13 +30,6 @@
 #include <dp/rix/gl/inc/VertexCacheGL.h>
 #include <dp/rix/gl/inc/ProgramPipelineGroupCache.h>
 #include <GL/glew.h>
-
-#if defined(WIN32)
-#include <xmmintrin.h>
-#endif
-
-// TODO Usually this is bad style. In this case this is not a header, but more a implementation.
-#define GL_CONSTANT_FRAME_RATE_HINT_NV 0x8E8B 
 
 namespace dp
 {
@@ -160,16 +153,17 @@ namespace dp
         GeometryInstanceCache* giCache = static_cast<GeometryInstanceCache*>(programPipelineCache->m_geometryInstanceCache.get());
         giCache->m_numGeometryInstanceCacheEntries = programPipelineCache->m_sortedGIs.size();
         giCache->m_geometryInstanceCacheEntries = new GeometryInstanceCacheEntry[giCache->m_numGeometryInstanceCacheEntries];
+        programPipelineCache->m_geometryInstanceVisibility.resize(giCache->m_numGeometryInstanceCacheEntries);
+        programPipelineCache->m_geometryInstanceVisibility.fill();
 
         giCache->m_numAttributeCacheEntries = programPipelineCache->m_sortedGIs.size() * programPipeline->m_numberOfActiveAttributes;
         giCache->m_attributeCacheEntries = new AttributeCacheEntry[giCache->m_numAttributeCacheEntries];
-        
-        
+
         for ( size_t j = 0; j < programPipelineCache->m_sortedGIs.size(); ++j )
         {
           GeometryInstanceGLHandle& gi = programPipelineCache->m_sortedGIs[j];
           GeometryInstanceCacheEntry &geometryInstanceCacheEntry = giCache->m_geometryInstanceCacheEntries[j];
-          geometryInstanceCacheEntry.m_isVisible = gi->isVisible(); // TODO move to next update-call?
+          programPipelineCache->m_geometryInstanceVisibility.setBit(j, gi->isVisible()); // TODO move to next update-call?
           updateGeometryInstanceCacheEntry( gi, geometryInstanceCacheEntry, giCache->m_attributeCacheEntries + j * programPipeline->m_numberOfActiveAttributes );
         }
       }
@@ -177,9 +171,6 @@ namespace dp
       template<typename VertexCache>
       void RenderEngineGLImpl<VertexCache>::beginRender( )
       {
-        //glHint( GL_CONSTANT_FRAME_RATE_HINT_NV, GL_NICEST );
-        //glGetError();
-
         m_currentProgramPipelineCache = nullptr;
 
         glPrimitiveRestartIndex( ~0 );
@@ -295,7 +286,6 @@ namespace dp
         }
       }
 
-#if 1 // #if 1 -> optimized use streaming cache loop, if 0 -> loop over gis and render
       template <typename VertexCache>
       void RenderEngineGLImpl<VertexCache>::render( RenderGroupGLSharedHandle const & groupHandle, dp::rix::core::RenderOptions const & renderOptions )
       {
@@ -317,53 +307,16 @@ namespace dp
             GeometryInstanceCache* giCache = static_cast<GeometryInstanceCache*>(giList->m_geometryInstanceCache.get());
             GeometryInstanceCacheEntry* giCacheEntry = giCache->m_geometryInstanceCacheEntries;
 
-            //ContainerCacheEntry const* containerCache = m_currentProgramPipelineCache->getContainerCacheEntries();
+            m_currentProgramPipelineCache->m_geometryInstanceVisibility.traverseBits( [&](size_t index) {
+              m_currentProgramPipelineCache->renderParameters(index);
+              renderGeometryInstance(*(giCacheEntry + index));
+            });
 
-            for ( size_t idx = 0; idx < numGIs; ++idx )
-            {
-#if 0 // prefetching currently not used. Might bring another performance boost when done on attributes.
-              if ( idx + 4 < size )
-              {
-                //data_prefetch( (const char*) &caches[idx + 4], _MM_HINT_T2 );
-                //data_prefetch( (const char*) caches[idx + 2], _MM_HINT_T2 );
-              }
-#endif
-              if ( giCacheEntry->m_isVisible )
-              {
-                //m_currentProgramPipelineCache->renderParameters( containerCache);
-                m_currentProgramPipelineCache->renderParameters( idx );
-                renderGeometryInstance( *giCacheEntry );
-              }
-              ++giCacheEntry;
-              //containerCache += m_numVariableParameterStates;
-            }
           }
         }
 
         postRender( groupHandle );
       }
-#else
-      template <typename VertexCache>
-      void RenderEngineGLImpl<VertexCache>::render( RenderGroupGLHandle groupHandle, size_t numInstances )
-      {
-        m_numInstances = (unsigned int)(numInstances);
-
-        preRender( groupHandle );
-        RenderGroupGL::ProgramPipelineCaches::iterator it;
-        RenderGroupGL::ProgramPipelineCaches::iterator it_end = groupHandle->m_programPipelineCaches.end();
-        for ( it = groupHandle->m_programPipelineCaches.begin(); it != it_end; ++it )
-        {
-          RenderGroupCache* giList = it->second.get<RenderGroupCache>();
-          const size_t numGIs = giList->m_sortedGIs.size();
-          for ( size_t idx = 0;idx < numGIs; ++idx )
-          {
-            render( giList->m_sortedGIs[idx] );
-          }
-        }
-        postRender( groupHandle );
-      }
-
-#endif
 
       template <typename VertexCache>
       void RenderEngineGLImpl<VertexCache>::changeProgramPipelineCache( RenderGroupCache* programPipelineGroupCache )

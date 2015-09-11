@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2015
+// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -104,7 +104,6 @@ namespace dp
 
         struct Cache
         {
-          bool m_isVisible;
           ContainerCacheEntry *m_containerCacheEntry;
         };
 
