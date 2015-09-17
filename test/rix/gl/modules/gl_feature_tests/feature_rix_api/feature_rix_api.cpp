@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -29,6 +29,7 @@
 
 #include <dp/gl/RenderTarget.h>
 #include <dp/math/Trafo.h>
+#include <dp/util/Array.h>
 
 #include <test/rix/core/framework/RiXBackend.h>
 #include <test/rix/core/helpers/GeometryHelper.h>
@@ -58,7 +59,7 @@ bool Feature_rix_api::onInit()
   m_displayTarget.inplaceCast<dp::gl::RenderTarget>()->setClearColor( 0.46f, 0.72f, 0.0f, 1.0f );
 
   m_renderData = new test::framework::RenderDataRiX;
-  
+
   createScene();
 
   return true;
@@ -107,7 +108,7 @@ void Feature_rix_api::createScene()
     "  gl_Position = world2view * model2world * vec4( Position, 1.0 );\n"
     "}\n";
 
-  const char * fragmentShader = "" 
+  const char * fragmentShader = ""
     "#version 330\n"
     "uniform vec4 color;\n"
     "layout(location = 0, index = 0) out vec4 Color;\n"
@@ -135,7 +136,7 @@ void Feature_rix_api::createScene()
   VertexFormatInfo   vertexInfos[] = {
     VertexFormatInfo( 0, dp::DT_FLOAT_32, coordsPerVertex, false, 0, 0, coordsPerVertex*sizeof(float)),
   };
-  VertexFormatDescription vertexFormatDescription( vertexInfos, sizeof util::array(vertexInfos) );
+  VertexFormatDescription vertexFormatDescription( vertexInfos, sizeof dp::util::array(vertexInfos) );
   VertexFormatSharedHandle vertexFormat = m_rix->vertexFormatCreate( vertexFormatDescription );
 
   VertexDataSharedHandle vertexData = m_rix->vertexDataCreate();
@@ -176,15 +177,15 @@ void Feature_rix_api::createScene()
   };
 
   ProgramParameter fragmentProgramParameters[] = {
-    ProgramParameter("color", CPT_FLOAT4) 
+    ProgramParameter("color", CPT_FLOAT4)
   };
 
   ContainerDescriptorSharedHandle vertConstContainerDescriptor =
-    m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( vertexConstProgramParameters, 
+    m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( vertexConstProgramParameters,
     sizeof util::array(vertexConstProgramParameters) ) );
 
   ContainerDescriptorSharedHandle vertVarContainerDescriptor =
-    m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( vertexVarProgramParameters, 
+    m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( vertexVarProgramParameters,
     sizeof util::array(vertexVarProgramParameters) ) );
 
   ContainerDescriptorSharedHandle fragContainerDescriptor =

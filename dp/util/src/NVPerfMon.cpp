@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -33,7 +33,6 @@
 #include <iostream>
 #include <iomanip>
 #include <fstream>
-#include <dp/util/Array.h>
 #include <dp/util/NVPerfMon.h>
 
 using std::make_pair;

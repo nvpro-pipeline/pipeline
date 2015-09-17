@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -30,7 +30,6 @@
 #include <boost/scoped_array.hpp>
 #include <dp/fx/EffectSpec.h>
 #include <dp/fx/EffectData.h>
-#include <dp/util/Array.h>
 #include <dp/sg/core/Object.h>
 #include <dp/sg/core/ParameterGroupData.h>
 
@@ -146,13 +145,13 @@ namespace dp
                                                                      , const dp::math::Vec3f & ambient = dp::math::Vec3f( 0.0f, 0.0f, 0.0f )
                                                                      , const dp::math::Vec3f & diffuse = dp::math::Vec3f( 1.0f, 1.0f, 1.0f )
                                                                      , const dp::math::Vec3f & specular = dp::math::Vec3f( 1.0f, 1.0f, 1.0f )
-                                                                     , const boost::array<float,3> & attenuations = dp::util::makeArray( 1.0f, 0.0f, 0.0f ) );
+                                                                     , const boost::array<float, 3> & attenuations = { 1.0f, 0.0f, 0.0f } );
       DP_SG_CORE_API EffectDataSharedPtr createStandardSpotLightData( const dp::math::Vec3f & position = dp::math::Vec3f( 0.0f, 0.0f, 1.0f )
                                                                     , const dp::math::Vec3f & direction = dp::math::Vec3f( 0.0f, 0.0f, -1.0f )
                                                                     , const dp::math::Vec3f & ambient = dp::math::Vec3f( 0.0f, 0.0f, 0.0f )
                                                                     , const dp::math::Vec3f & diffuse = dp::math::Vec3f( 1.0f, 1.0f, 1.0f )
                                                                     , const dp::math::Vec3f & specular = dp::math::Vec3f( 1.0f, 1.0f, 1.0f )
-                                                                    , const boost::array<float,3> & attenuations = dp::util::makeArray( 1.0f, 0.0f, 0.0f )
+                                                                    , const boost::array<float, 3> & attenuations = { 1.0f, 0.0f, 0.0f }
                                                                     , float exponent = 0.0f
                                                                     , float cutoff = 45.0f );
       DP_SG_CORE_API EffectDataSharedPtr createStandardMaterialData( const dp::math::Vec3f & ambientColor = dp::math::Vec3f( 0.2f, 0.2f, 0.2f )

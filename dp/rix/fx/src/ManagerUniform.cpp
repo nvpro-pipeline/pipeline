@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012-2015
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -51,7 +51,6 @@
 #include <typeinfo>
 
 using namespace dp::rix::core;
-using dp::util::array;
 
 namespace dp
 {
@@ -106,7 +105,7 @@ namespace dp
             configuration.addSourceCode( it->first, it->second );
           }
           dp::fx::ShaderPipelineSharedPtr shaderPipeline = dp::fx::EffectLibrary::instance()->generateShaderPipeline( configuration );
-         
+
 #if !defined(NDEBUG)
           const dp::fx::ShaderPipeline::iterator itStageVertex   = shaderPipeline->getStage( dp::fx::DOMAIN_VERTEX );
           const dp::fx::ShaderPipeline::iterator itStageFragment = shaderPipeline->getStage( dp::fx::DOMAIN_FRAGMENT );
@@ -176,7 +175,7 @@ namespace dp
           }
 
           DP_ASSERT( !shaderSources.empty() );
-          
+
           dp::rix::core::ProgramShaderCode programShaderCode( shaderSources.size(), &shaderSources[0], &shaderEnums[0] );
 
           /************************************************************************/
@@ -227,7 +226,7 @@ namespace dp
 
           dp::rix::core::ProgramDescription description( programShaderCode, descriptors.empty() ? nullptr : &descriptors[0], descriptors.size() );
           dp::rix::core::ProgramSharedHandle programs[] = { manager->getRenderer()->programCreate( description ) };
-          m_programPipeline = manager->getRenderer()->programPipelineCreate( programs, sizeof array( programs ) );
+          m_programPipeline = manager->getRenderer()->programPipelineCreate( programs, sizeof dp::util::array( programs ) );
         }
       }
 
@@ -241,7 +240,7 @@ namespace dp
       std::vector<dp::fx::SnippetSharedPtr> shaderSnippets;
 
       dp::fx::ShaderPipeline::Stage const & stage = *pipeline->getStage( domain );
-      
+
       // generate header only if a body had been generated
       if ( stage.source )
       {
@@ -322,7 +321,7 @@ namespace dp
       }
         }
 
-    class ManagerUniform::Instance : public dp::rix::fx::Instance 
+    class ManagerUniform::Instance : public dp::rix::fx::Instance
     {
     public:
       virtual void setProgram( dp::rix::core::Renderer * renderer, ManagerUniform::ProgramSharedHandle ) = 0;
@@ -335,7 +334,7 @@ namespace dp
       class InstanceGeometryInstance : public ManagerUniform::Instance
       {
       public:
-        InstanceGeometryInstance(core::GeometryInstanceHandle gi) 
+        InstanceGeometryInstance(core::GeometryInstanceHandle gi)
           : m_gi(gi)
         {
         }
@@ -373,7 +372,7 @@ namespace dp
       class InstanceRenderGroup : public ManagerUniform::Instance
       {
       public:
-        InstanceRenderGroup(core::RenderGroupHandle renderGroup) 
+        InstanceRenderGroup(core::RenderGroupHandle renderGroup)
           : m_renderGroup(renderGroup)
         {
         }
@@ -546,7 +545,7 @@ namespace dp
         {
           configuration.addSourceCode( it->first, it->second );
         }
-        
+
         if ( depthPass )
         {
           configuration.setTechnique( "depthPass" );
@@ -589,7 +588,7 @@ namespace dp
         return instance->useGroupData( getRenderer(), groupHandle );
       }
 
-      SmartParameterGroupSpecInfoHandle ManagerUniform::getParameterGroupSpecInfo( const dp::fx::ParameterGroupSpecSharedPtr& spec ) 
+      SmartParameterGroupSpecInfoHandle ManagerUniform::getParameterGroupSpecInfo( const dp::fx::ParameterGroupSpecSharedPtr& spec )
       {
         ParameterGroupSpecInfoMap::iterator it = m_groupInfos.find(spec);
         if ( it == m_groupInfos.end() )
@@ -600,7 +599,7 @@ namespace dp
           // keep track of BufferManagers for update function
           if ( specInfo->m_bufferManager )
           {
-            m_bufferManagers.push_back( specInfo->m_bufferManager ); 
+            m_bufferManagers.push_back( specInfo->m_bufferManager );
           }
 
           return specInfo;

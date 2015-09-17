@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2015
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -1712,10 +1712,10 @@ inline Vec4Type convert(const float4_t& from)
 
 inline Mat44f convert( const float44_t & from )
 {
-  return( Mat44f( makeArray( from[0][0], from[0][1], from[0][2], from[0][3]
-                           , from[1][0], from[1][1], from[1][2], from[1][3]
-                           , from[2][0], from[2][1], from[2][2], from[2][3]
-                           , from[3][0], from[3][1], from[3][2], from[3][3] ) ) );
+  return( Mat44f( { from[0][0], from[0][1], from[0][2], from[0][3]
+                  , from[1][0], from[1][1], from[1][2], from[1][3]
+                  , from[2][0], from[2][1], from[2][2], from[2][3]
+                  , from[3][0], from[3][1], from[3][2], from[3][3] } ) );
 }
 
 inline Trafo convert(const trafo_t_nbf_f& from)
@@ -4497,7 +4497,7 @@ LightSourceSharedPtr DPBFLoader::loadPointLight_nbf_53(uint_t offset)
                                                             , convert( lightPtr->ambientColor )
                                                             , convert( lightPtr->diffuseColor )
                                                             , convert( lightPtr->specularColor )
-                                                            , makeArray( lightPtr->attenuation[0], lightPtr->attenuation[1], lightPtr->attenuation[2] ) );
+                                                            , { lightPtr->attenuation[0], lightPtr->attenuation[1], lightPtr->attenuation[2] } );
   readObject( pointLight, lightPtr );
   readNode( pointLight, lightPtr );
   readLightSource_nbf_53( pointLight, lightPtr );
@@ -4519,7 +4519,7 @@ LightSourceSharedPtr DPBFLoader::loadPointLight_nbf_52(uint_t offset)
                                                             , convert( lightPtr->ambientColor )
                                                             , convert( lightPtr->diffuseColor )
                                                             , convert( lightPtr->specularColor )
-                                                            , makeArray( lightPtr->attenuation[0], lightPtr->attenuation[1], lightPtr->attenuation[2] ) );
+                                                            , { lightPtr->attenuation[0], lightPtr->attenuation[1], lightPtr->attenuation[2] } );
   readObject( pointLight, lightPtr );
   readNode( pointLight, lightPtr );
   readLightSource_nbf_52( pointLight, lightPtr );
@@ -4541,7 +4541,7 @@ LightSourceSharedPtr DPBFLoader::loadPointLight_nbf_50(uint_t offset)
                                                             , convert( lightPtr->ambientColor )
                                                             , convert( lightPtr->diffuseColor )
                                                             , convert( lightPtr->specularColor )
-                                                            , makeArray( lightPtr->attenuation[0], lightPtr->attenuation[1], lightPtr->attenuation[2] ) );
+                                                            , { lightPtr->attenuation[0], lightPtr->attenuation[1], lightPtr->attenuation[2] } );
   readObject( pointLight, lightPtr );
   readLightSource_nbf_50( pointLight, lightPtr );
 
@@ -4562,7 +4562,7 @@ LightSourceSharedPtr DPBFLoader::loadPointLight_nbf_12(uint_t offset)
                                                             , convert( lightPtr->ambientColor )
                                                             , convert( lightPtr->diffuseColor )
                                                             , convert( lightPtr->specularColor )
-                                                            , makeArray( lightPtr->attenuation[0], lightPtr->attenuation[1], lightPtr->attenuation[2] ) );
+                                                            , { lightPtr->attenuation[0], lightPtr->attenuation[1], lightPtr->attenuation[2] } );
   readObject( pointLight, lightPtr );
   readLightSource_nbf_12( pointLight, lightPtr );
 
@@ -4584,7 +4584,7 @@ LightSourceSharedPtr DPBFLoader::loadSpotLight_nbf_53(uint_t offset)
                                                           , lightPtr->intensity * convert( lightPtr->ambientColor )
                                                           , lightPtr->intensity * convert( lightPtr->diffuseColor )
                                                           , lightPtr->intensity * convert( lightPtr->specularColor )
-                                                          , makeArray( lightPtr->attenuation[0], lightPtr->attenuation[1], lightPtr->attenuation[2] )
+                                                          , { lightPtr->attenuation[0], lightPtr->attenuation[1], lightPtr->attenuation[2] }
                                                           , lightPtr->falloffExponent
                                                           , radToDeg( lightPtr->cutoffAngle ) );
   readObject( spotLight, lightPtr );
@@ -4609,7 +4609,7 @@ LightSourceSharedPtr DPBFLoader::loadSpotLight_nbf_52(uint_t offset)
                                                           , lightPtr->intensity * convert( lightPtr->ambientColor )
                                                           , lightPtr->intensity * convert( lightPtr->diffuseColor )
                                                           , lightPtr->intensity * convert( lightPtr->specularColor )
-                                                          , makeArray( lightPtr->attenuation[0], lightPtr->attenuation[1], lightPtr->attenuation[2] )
+                                                          , { lightPtr->attenuation[0], lightPtr->attenuation[1], lightPtr->attenuation[2] }
                                                           , lightPtr->falloffExponent
                                                           , radToDeg( lightPtr->cutoffAngle ) );
   readObject( spotLight, lightPtr );
@@ -4634,7 +4634,7 @@ LightSourceSharedPtr DPBFLoader::loadSpotLight_nbf_50(uint_t offset)
                                                           , lightPtr->intensity * convert( lightPtr->ambientColor )
                                                           , lightPtr->intensity * convert( lightPtr->diffuseColor )
                                                           , lightPtr->intensity * convert( lightPtr->specularColor )
-                                                          , makeArray( lightPtr->attenuation[0], lightPtr->attenuation[1], lightPtr->attenuation[2] )
+                                                          , { lightPtr->attenuation[0], lightPtr->attenuation[1], lightPtr->attenuation[2] }
                                                           , lightPtr->falloffExponent
                                                           , radToDeg( lightPtr->cutoffAngle ) );
   readObject( spotLight, lightPtr );
@@ -4665,7 +4665,7 @@ LightSourceSharedPtr DPBFLoader::loadSpotLight_nbf_12(uint_t offset)
                                                           , lightPtr->intensity * convert( lightPtr->ambientColor )
                                                           , lightPtr->intensity * convert( lightPtr->diffuseColor )
                                                           , lightPtr->intensity * convert( lightPtr->specularColor )
-                                                          , makeArray( lightPtr->attenuation[0], lightPtr->attenuation[1], lightPtr->attenuation[2] )
+                                                          , { lightPtr->attenuation[0], lightPtr->attenuation[1], lightPtr->attenuation[2] }
                                                           , lightPtr->falloffExponent, cutoffAngle );
   readObject( spotLight, lightPtr );
   readNode( spotLight, lightPtr );

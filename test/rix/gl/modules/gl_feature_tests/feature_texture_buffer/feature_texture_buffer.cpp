@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -29,6 +29,7 @@
 
 #include <dp/gl/RenderTarget.h>
 #include <dp/math/Trafo.h>
+#include <dp/util/Array.h>
 
 #include <test/rix/core/framework/RiXBackend.h>
 #include <test/rix/core/helpers/GeometryHelper.h>
@@ -56,12 +57,12 @@ bool Feature_texture_buffer::onInit()
   DP_ASSERT( dynamic_cast<rix::core::test::framework::RiXBackend*>(&(*m_backend)) );
   m_rix = static_cast<rix::core::test::framework::RiXBackend*>(&(*m_backend))->getRenderer();
   m_displayTarget.inplaceCast<dp::gl::RenderTarget>()->setClearColor( 0.46f, 0.72f, 0.0f, 1.0f );
-  
+
   m_renderData = new rix::core::test::framework::RenderDataRiX;
-  
+
   createScene();
 
-  return true;  
+  return true;
 }
 
 void Feature_texture_buffer::createScene()
@@ -122,11 +123,11 @@ void Feature_texture_buffer::createScene()
   fragmentProgramParameters.push_back( ProgramParameter("buf", CPT_SAMPLER) );
   fragmentProgramParameters.push_back( ProgramParameter("color", CPT_FLOAT4) );
 
-  ContainerDescriptorSharedHandle vertexContainerDescriptor = 
+  ContainerDescriptorSharedHandle vertexContainerDescriptor =
     m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( &vertexProgramParameters[0],
     dp::checked_cast<unsigned int>(vertexProgramParameters.size()) ) );
 
-  ContainerDescriptorSharedHandle fragmentContainerDescriptor = 
+  ContainerDescriptorSharedHandle fragmentContainerDescriptor =
     m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( &fragmentProgramParameters[0],
     dp::checked_cast<unsigned int>(fragmentProgramParameters.size()) ) );
 
@@ -142,7 +143,7 @@ void Feature_texture_buffer::createScene()
 
   const char* shaders[] = {vertexShader, fragmentShader};
   ShaderType  shaderTypes[] = { ST_VERTEX_SHADER, ST_FRAGMENT_SHADER };
-  ProgramShaderCode programShaderCode( sizeof util::array( shaders ), shaders, shaderTypes );
+  ProgramShaderCode programShaderCode( sizeof dp::util::array( shaders ), shaders, shaderTypes );
 
   ProgramDescription programDescription( programShaderCode, &containerDescriptors[0], dp::checked_cast<unsigned int>(containerDescriptors.size() ));
 
@@ -204,7 +205,7 @@ bool Feature_texture_buffer::onRun( unsigned int idx )
 {
   render(m_renderData, m_displayTarget);
 
-  return true;  
+  return true;
 }
 
 bool Feature_texture_buffer::onClear()

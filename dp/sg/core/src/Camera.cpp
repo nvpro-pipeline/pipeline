@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2007
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -212,8 +212,8 @@ namespace dp
           else
           {
             Quatf orientation = getOrientation();
-            // Added the normalize step. It shouldn't be necessary 
-            // but it seems that rounding errors can hit us even in the case when 
+            // Added the normalize step. It shouldn't be necessary
+            // but it seems that rounding errors can hit us even in the case when
             // m_orientation and axis are normalized
             Vec3f newAxis( axis * ~orientation );
             newAxis.normalize();
@@ -280,7 +280,7 @@ namespace dp
         DP_ASSERT( areOrthonormal( dir, up ) );
         Vec3f scaling;
         Quatf scaleOrientation, orientation;
-        Mat33f  m = ~Mat33f( util::makeArray( dir ^ up, up, -dir ) );
+        Mat33f  m = ~Mat33f( { dir ^ up, up, -dir } );
         decompose( m, orientation, scaling, scaleOrientation );
         setOrientation( ~orientation );
       }
@@ -343,7 +343,7 @@ namespace dp
         if (&rhs != this)
         {
           Object::operator=(rhs);
-   
+
           removeHeadLights();
           copyHeadLights(rhs);
 

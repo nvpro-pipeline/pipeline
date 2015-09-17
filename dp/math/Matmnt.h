@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2009-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -30,7 +30,6 @@
 #include <dp/math/Config.h>
 #include <dp/math/Quatt.h>
 #include <dp/math/Vecnt.h>
-#include <dp/util/Array.h>
 #include <boost/array.hpp>
 
 namespace dp
@@ -68,9 +67,9 @@ namespace dp
 
         /*! \brief Constructor for a matrix by an array of m rows of type Vecnt<n,T>.
          *  \param rows An array of m rows of type Vecnt<n,T>
-         *  \remarks This constructor can easily be called, using the helper function makeArray:
+         *  \remarks This constructor can easily be called, using an initializer-list
          *  \code
-         *    Mat33f m33f( makeArray( xAxis, yAxis, zAxis ) );
+         *    Mat33f m33f( { xAxis, yAxis, zAxis } );
          *  \endcode */
         explicit Matmnt( const boost::array<Vecnt<n,T>,m> & rows );
 
@@ -92,9 +91,9 @@ namespace dp
 
         /*! \brief Constructor for a matrix by an array of m*n scalars of type T.
          *  \param scalars An array of m*n scalars of type T
-         *  \remarks This constructor can easily be called, using the helper function makeArray:
+         *  \remarks This constructor can easily be called, using an initializer-list
          *  \code
-         *    Mat33f m33f( makeArray( m00, m01, m02, m10, m11, m12, m20, m21, m22 ) );
+         *    Mat33f m33f( { m00, m01, m02, m10, m11, m12, m20, m21, m22 } );
          *  \endcode */
         explicit Matmnt( const boost::array<T,m*n> & scalars );
 
@@ -201,9 +200,9 @@ namespace dp
     };
 
 
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // non-member functions
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     /*! \brief Determine the determinant of a matrix.
      *  \param mat A constant reference to the matrix to determine the determinant from.
@@ -443,9 +442,9 @@ namespace dp
       void setIdentity( Matmnt<n,n,T> & mat );
 
 
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // non-member functions, specialized for m,n == 3
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     /*! \brief Test if a 3 by 3 matrix represents a rotation.
      *  \param mat A constant reference to the matrix to test.
@@ -482,9 +481,9 @@ namespace dp
       Matmnt<3,3,T> & setMat( Matmnt<3,3,T> & mat, const Vecnt<3,T> & axis, T angle );
 
 
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // non-member functions, specialized for m,n == 3, T == float
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     /*! \brief Decompose a 3 by 3 matrix.
      *  \param mat A constant reference to the matrix to decompose.
@@ -497,9 +496,9 @@ namespace dp
                            , Vecnt<3,float> &scaling, Quatt<float> &scaleOrientation );
 
 
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // non-member functions, specialized for m,n == 4
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     /*!\brief Test if a 4 by 4 matrix represents a mirror transform
      * \param mat A const reference to the matrix to test.
@@ -538,9 +537,9 @@ namespace dp
     }
 
 
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // non-member functions, specialized for m,n == 4, T == float
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     /*! \brief Decompose a 4 by 4 matrix of floats.
      *  \param mat A constant reference to the matrix to decompose.
@@ -555,18 +554,18 @@ namespace dp
                            , Quatt<float> &scaleOrientation );
 
 
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Convenience type definitions
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     typedef Matmnt<3,3,float>   Mat33f;
     typedef Matmnt<3,3,double>  Mat33d;
     typedef Matmnt<4,4,float>   Mat44f;
     typedef Matmnt<4,4,double>  Mat44d;
 
 
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // inlined member functions
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     template<unsigned int m, unsigned int n, typename T>
     inline Matmnt<m,n,T>::Matmnt()
@@ -744,9 +743,9 @@ namespace dp
     }
 
 
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // inlined non-member functions
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     template<unsigned int n, typename T, unsigned int k>
     inline T calculateDeterminant( const Matmnt<n,n,T> & mat, const Vecnt<k,unsigned int> & first, const Vecnt<k,unsigned int> & second )
     {
@@ -1047,9 +1046,9 @@ namespace dp
     }
 
 
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // inlined non-member functions, specialized for m,n == 3
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     template<typename T>
     inline T determinant( const Matmnt<3,3,T> & mat )
     {
@@ -1113,9 +1112,9 @@ namespace dp
     }
 
 
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // inlined non-member functions, specialized for m,n == 4
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     template<typename T>
     inline T determinant( const Matmnt<4,4,T> & mat )
     {
@@ -1240,10 +1239,10 @@ namespace dp
      * \param eye The position of the eye point.
      * \param center The position of the reference point.
      * \param up The direction of the up vector.
-     * \remarks The makeLookAt function creates a viewing matrix derived from an eye point, a reference point indicating the center 
-     * of the scene, and an up vector. The matrix maps the reference point to the negative z-axis and the eye point to the 
-     * origin, so that when you use a typical projection matrix, the center of the scene maps to the center of the viewport. 
-     * Similarly, the direction described by the up vector projected onto the viewing plane is mapped to the positive y-axis so that 
+     * \remarks The makeLookAt function creates a viewing matrix derived from an eye point, a reference point indicating the center
+     * of the scene, and an up vector. The matrix maps the reference point to the negative z-axis and the eye point to the
+     * origin, so that when you use a typical projection matrix, the center of the scene maps to the center of the viewport.
+     * Similarly, the direction described by the up vector projected onto the viewing plane is mapped to the positive y-axis so that
      * it points upward in the viewport. The up vector must not be parallel to the line of sight from the eye to the reference point.
      * \note This documentation is adapted from gluLookAt, and is courtesy of SGI.
      */
@@ -1289,9 +1288,9 @@ namespace dp
      * \param znear The distance to the near clipping plane.  This distance is negative if the plane is behind the viewer.
      * \param zfar The distance to the far clipping plane.  This distance is negative if the plane is behind the viewer.
      * \remarks The makeOrtho function describes a perspective matrix that produces a parallel projection.  Assuming this function
-     * will be used to build a camera's Projection matrix, the (left, bottom, znear) and (right, top, znear) parameters specify the 
-     * points on the near clipping plane that are mapped to the lower-left and upper-right corners of the window, respectively, 
-     * assuming that the eye is located at (0, 0, 0). The far parameter specifies the location of the far clipping plane. Both znear 
+     * will be used to build a camera's Projection matrix, the (left, bottom, znear) and (right, top, znear) parameters specify the
+     * points on the near clipping plane that are mapped to the lower-left and upper-right corners of the window, respectively,
+     * assuming that the eye is located at (0, 0, 0). The far parameter specifies the location of the far clipping plane. Both znear
      * and zfar can be either positive or negative.
      * \note This documentation is adapted from glOrtho, and is courtesy of SGI.
      */
@@ -1302,10 +1301,10 @@ namespace dp
     {
       DP_ASSERT( (left != right) && (bottom != top) && (znear != zfar) && (zfar > znear) );
 
-      return Matmnt<4,4,T>( dp::util::makeArray( T(2)/(right-left),           T(0),                            T(0),                       T(0),
-                                                 T(0),                        T(2)/(top-bottom),               T(0),                       T(0),
-                                                 T(0),                        T(0),                            T(-2)/(zfar-znear),         T(0),
-                                                 -(right+left)/(right-left),  -(top+bottom)/(top-bottom),      -(zfar+znear)/(zfar-znear), T(1) ) );
+      return Matmnt<4,4,T>( { T(2)/(right-left),           T(0),                            T(0),                       T(0)
+                            , T(0),                        T(2)/(top-bottom),               T(0),                       T(0)
+                            , T(0),                        T(0),                            T(-2)/(zfar-znear),         T(0)
+                            , -(right+left)/(right-left),  -(top+bottom)/(top-bottom),      -(zfar+znear)/(zfar-znear), T(1) } );
     }
 
     /*! \brief makeFrustum defines a perspective projection matrix.
@@ -1316,9 +1315,9 @@ namespace dp
      * \param znear The distance to the near clipping plane.  The value must be greater than zero.
      * \param zfar The distance to the far clipping plane.  The value must be greater than znear.
      * \remarks The makeFrustum function describes a perspective matrix that produces a perspective projection.  Assuming this function
-     * will be used to build a camera's Projection matrix, the (left, bottom, znear) and (right, top, znear) parameters specify the 
-     * points on the near clipping plane that are mapped to the lower-left and upper-right corners of the window, respectively, 
-     * assuming that the eye is located at (0,0,0). The zfar parameter specifies the location of the far clipping plane.  Both znear 
+     * will be used to build a camera's Projection matrix, the (left, bottom, znear) and (right, top, znear) parameters specify the
+     * points on the near clipping plane that are mapped to the lower-left and upper-right corners of the window, respectively,
+     * assuming that the eye is located at (0,0,0). The zfar parameter specifies the location of the far clipping plane.  Both znear
      * and zfar must be positive.
      * \note This documentation is adapted from glFrustum, and is courtesy of SGI.
      */
@@ -1338,10 +1337,10 @@ namespace dp
       T v4 =  T(2)*znear/(right-left);
       T v5 =  T(2)*znear/(top-bottom);
 
-      return Matmnt<4,4,T>( dp::util::makeArray( v4,    T(0),  T(0),  T(0),
-                                                 T(0),  v5,    T(0),  T(0),
-                                                 v0,    v1,    v2,    T(-1),
-                                                 T(0),  T(0),  v3,    T(0)  ) );
+      return Matmnt<4,4,T>( { v4,    T(0),  T(0),  T(0)
+                            , T(0),  v5,    T(0),  T(0)
+                            , v0,    v1,    v2,    T(-1)
+                            , T(0),  T(0),  v3,    T(0)  } );
     }
 
     /*! \brief makePerspective builds a perspective projection matrix.
@@ -1349,9 +1348,9 @@ namespace dp
      * \param aspect The ratio of the viewport width / height.
      * \param znear The distance to the near clipping plane.  The value must be greater than zero.
      * \param zfar The distance to the far clipping plane.  The value must be greater than znear.
-     * \remarks Assuming makePerspective will be used to build a camera's Projection matrix, it specifies a viewing frustum into the 
-     * world coordinate system.  In general, the aspect ratio in makePerspective should match the aspect ratio of the associated 
-     * viewport.   For example, aspect = 2.0 means the viewer's angle of view is twice as wide in x as it is in y.  If the viewport 
+     * \remarks Assuming makePerspective will be used to build a camera's Projection matrix, it specifies a viewing frustum into the
+     * world coordinate system.  In general, the aspect ratio in makePerspective should match the aspect ratio of the associated
+     * viewport.   For example, aspect = 2.0 means the viewer's angle of view is twice as wide in x as it is in y.  If the viewport
      * is twice as wide as it is tall, it displays the image without distortion.
      * \note This documentation is adapted from gluPerspective, and is courtesy of SGI.
      */
@@ -1373,9 +1372,9 @@ namespace dp
     inline Vecnt<4,T> operator*( const Vecnt<4,T>& v, const Matmnt<4,4,T>& mat )
     {
       return Vecnt<4,T> (
-        v[0] * mat[0][0] + v[1]*mat[1][0] + v[2]*mat[2][0] + v[3]*mat[3][0], 
-        v[0] * mat[0][1] + v[1]*mat[1][1] + v[2]*mat[2][1] + v[3]*mat[3][1], 
-        v[0] * mat[0][2] + v[1]*mat[1][2] + v[2]*mat[2][2] + v[3]*mat[3][2], 
+        v[0] * mat[0][0] + v[1]*mat[1][0] + v[2]*mat[2][0] + v[3]*mat[3][0],
+        v[0] * mat[0][1] + v[1]*mat[1][1] + v[2]*mat[2][1] + v[3]*mat[3][1],
+        v[0] * mat[0][2] + v[1]*mat[1][2] + v[2]*mat[2][2] + v[3]*mat[3][2],
         v[0] * mat[0][3] + v[1]*mat[1][3] + v[2]*mat[2][3] + v[3]*mat[3][3] );
     }
 
@@ -1384,7 +1383,7 @@ namespace dp
     {
       Matmnt<4,4,T> result;
 
-      result[0] = Vecnt<4,T>(         
+      result[0] = Vecnt<4,T>(
         m0[0][0]*m1[0][0] + m0[0][1]*m1[1][0] + m0[0][2]*m1[2][0] + m0[0][3]*m1[3][0],
         m0[0][0]*m1[0][1] + m0[0][1]*m1[1][1] + m0[0][2]*m1[2][1] + m0[0][3]*m1[3][1],
         m0[0][0]*m1[0][2] + m0[0][1]*m1[1][2] + m0[0][2]*m1[2][2] + m0[0][3]*m1[3][2],
@@ -1415,9 +1414,9 @@ namespace dp
       return result;
     }
 
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // inlined non-member functions, specialized for m,n == 4, T == float
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     inline void decompose( const Matmnt<4,4,float> &mat, Vecnt<3,float> &translation
                          , Quatt<float> &orientation, Vecnt<3,float> &scaling
                          , Quatt<float> &scaleOrientation )

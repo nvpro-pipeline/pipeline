@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -25,19 +25,17 @@
 
 
 #include <dp/math/Matmnt.h>
-#include <dp/util/Array.h>
 
-using namespace dp::util;
 using std::abs;
 
 namespace dp
 {
   namespace math
   {
-    const Mat44f cIdentity44f( makeArray( 1.0f,0.0f,0.0f,0.0f
-                                        , 0.0f,1.0f,0.0f,0.0f
-                                        , 0.0f,0.0f,1.0f,0.0f
-                                        , 0.0f,0.0f,0.0f,1.0f ) );
+    const Mat44f cIdentity44f( { 1.0f, 0.0f, 0.0f, 0.0f
+                               , 0.0f, 1.0f, 0.0f, 0.0f
+                               , 0.0f, 0.0f, 1.0f, 0.0f
+                               , 0.0f, 0.0f, 0.0f, 1.0f } );
 
     template<unsigned int n, typename T>
     static T _colNorm( const Matmnt<n,n,T> &mat )
@@ -232,7 +230,7 @@ namespace dp
       T mRow = _rowNorm( mk );
       do
       {
-        Matmnt<3,3,T> mAdjTk( makeArray( mk[1] ^ mk[2], mk[2] ^ mk[0], mk[0] ^ mk[1] ) );
+        Matmnt<3, 3, T> mAdjTk( { mk[1] ^ mk[2], mk[2] ^ mk[0], mk[0] ^ mk[1] } );
         det = mk[0] * mAdjTk[0];
         T absDet = abs( det );
         if ( std::numeric_limits<T>::epsilon() < absDet )
@@ -390,7 +388,7 @@ namespace dp
       scaling = _spectralDecomposition( sca, so );
 #if !defined( NDEBUG )
       {
-        Matmnt<3,3,double> k( makeArray( (double)scaling[0], 0.0, 0.0, 0.0, (double)scaling[1], 0.0, 0.0, 0.0, (double)scaling[2] ) );
+        Matmnt<3, 3, double> k( { (double)scaling[0], 0.0, 0.0, 0.0, (double)scaling[1], 0.0, 0.0, 0.0, (double)scaling[2] } );
         Matmnt<3,3,double> diff = sca - ~so * k * so;
         double eps = std::max( 1.0f, maxElement( scaling ) ) * std::numeric_limits<float>::epsilon();
         int a = 0;
@@ -400,7 +398,7 @@ namespace dp
       scaleOrientation = Quatt<float>(Quatt<double>( so ));
 
 #if !defined( NDEBUG )
-      Matmnt<3,3,double> ms( makeArray( (double)scaling[0], 0.0, 0.0, 0.0, (double)scaling[1], 0.0, 0.0, 0.0, (double)scaling[2] ) );
+      Matmnt<3, 3, double> ms( { (double)scaling[0], 0.0, 0.0, 0.0, (double)scaling[1], 0.0, 0.0, 0.0, (double)scaling[2] } );
       Matmnt<3,3,double> mso( so );
       Matmnt<3,3,float> diff = mat - Matmnt<3,3,float>(~mso * ms * mso * rot);
       float eps = std::max( 1.0f, maxElement( scaling ) ) * std::numeric_limits<float>::epsilon();

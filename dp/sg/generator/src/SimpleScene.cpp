@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012-2015
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -37,6 +37,7 @@
 #include <dp/math/math.h>
 #include <dp/math/Vecnt.h>
 #include <dp/fx/EffectLibrary.h>
+#include <dp/util/Array.h>
 
 using namespace dp::math;
 using namespace dp::sg::core;
@@ -49,7 +50,7 @@ namespace dp
     {
 
       SimpleScene::SimpleScene()
-      {  
+      {
         m_sceneHandle = Scene::create();
 
         m_sceneHandle->setBackColor(  Vec4f( 71.0f/255.0f, 111.0f/255.0f, 0.0f, 1.0f ) );

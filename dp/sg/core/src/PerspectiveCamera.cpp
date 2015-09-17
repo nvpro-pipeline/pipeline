@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2011
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -101,10 +101,10 @@ namespace dp
         float fpn  = f+n;   // zFar plus zNear
 
         // projection matrix
-        return( Mat44f( util::makeArray( _2n/rml,    0.0f,      0.0f,  0.0f
-                                       ,    0.0f, _2n/tmb,      0.0f,  0.0f
-                                       , rpl/rml, tpb/tmb, - fpn/fmn, -1.0f
-                                       ,    0.0f,    0.0f, -_2nf/fmn,  0.0f ) ) );
+        return( Mat44f( { _2n/rml,    0.0f,      0.0f,  0.0f
+                        ,    0.0f, _2n/tmb,      0.0f,  0.0f
+                        , rpl/rml, tpb/tmb, - fpn/fmn, -1.0f
+                        ,    0.0f,    0.0f, -_2nf/fmn,  0.0f } ) );
       }
 
       Mat44f  PerspectiveCamera::getInverseProjection( void ) const
@@ -131,10 +131,10 @@ namespace dp
         float fmn  = f-n;   // zFar minus zNear
         float fpn  = f+n;   // zFar plus zNear
 
-        return( Mat44f( util::makeArray( rml/_2n,    0.0f,  0.0f,      0.0f
-                                       ,    0.0f, tmb/_2n,  0.0f,      0.0f
-                                       ,    0.0f,    0.0f,  0.0f, -fmn/_2nf
-                                       , rpl/_2n, tpb/_2n, -1.0f,  fpn/_2nf ) ) );
+        return( Mat44f( { rml/_2n,    0.0f,  0.0f,      0.0f
+                        ,    0.0f, tmb/_2n,  0.0f,      0.0f
+                        ,    0.0f,    0.0f,  0.0f, -fmn/_2nf
+                        , rpl/_2n, tpb/_2n, -1.0f,  fpn/_2nf } ) );
       }
 
       void  PerspectiveCamera::setFocusDistance( float td )
@@ -202,7 +202,7 @@ namespace dp
         //  With t the target distance, sx the window size in x, we get d = sqrt( t*t + 0.25*sx*sx ),
         //  the distance from the camera to the right border of the window. With alpha horizontal
         //  field of view, we get sinAlpha = 0.5 * sx / d, cosAlpha = t / d.
-        //  We also have to take the window offset and window region into account (e.g. in a cluster). 
+        //  We also have to take the window offset and window region into account (e.g. in a cluster).
 
         //  front plane: n = 0,0,-1, p = 0,0,-near => n*p + d = near + d = 0 => d = -near
         //    => cf = n * c + d = -center.z - near

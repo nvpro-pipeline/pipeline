@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2011
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -87,10 +87,10 @@ namespace dp
         float fmn  = f-n;   // zFar minus zNear
         float fpn  = f+n;   // zFar plus zNear
 
-        return( Mat44f( util::makeArray( 2.0f/rml,     0.0f,      0.0f, 0.0f
-                                       ,     0.0f, 2.0f/tmb,      0.0f, 0.0f
-                                       ,     0.0f,     0.0f, -2.0f/fmn, 0.0f
-                                       , -rpl/rml, -tpb/tmb,  -fpn/fmn, 1.0f ) ) );
+        return( Mat44f( { 2.0f/rml,     0.0f,      0.0f, 0.0f
+                        ,     0.0f, 2.0f/tmb,      0.0f, 0.0f
+                        ,     0.0f,     0.0f, -2.0f/fmn, 0.0f
+                        , -rpl/rml, -tpb/tmb,  -fpn/fmn, 1.0f } ) );
       }
 
       Mat44f  ParallelCamera::getInverseProjection( void ) const
@@ -114,10 +114,10 @@ namespace dp
         float fmn  = f-n;   // zFar minus zNear
         float fpn  = f+n;   // zFar plus zNear
 
-        return( Mat44f( util::makeArray( rml*0.5f,     0.0f,      0.0f, 0.0f
-                                       ,     0.0f, tmb*0.5f,      0.0f, 0.0f
-                                       ,     0.0f,     0.0f, -fmn*0.5f, 0.0f
-                                       , rpl*0.5f, tpb*0.5f,  fpn*0.5f, 1.0f ) ) );
+        return( Mat44f( { rml*0.5f,     0.0f,      0.0f, 0.0f
+                        ,     0.0f, tmb*0.5f,      0.0f, 0.0f
+                        ,     0.0f,     0.0f, -fmn*0.5f, 0.0f
+                        , rpl*0.5f, tpb*0.5f,  fpn*0.5f, 1.0f } ) );
       }
 
       void  ParallelCamera::getPickRay(int x, int y, int w, int h, Vec3f& rayOrigin, Vec3f& rayDir) const

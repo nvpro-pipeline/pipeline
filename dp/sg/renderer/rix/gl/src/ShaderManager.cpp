@@ -40,7 +40,6 @@
 using namespace dp::fx;
 using namespace dp::math;
 using namespace dp::sg::xbar;
-using dp::util::array;
 
 namespace dp
 {
@@ -238,7 +237,7 @@ namespace dp
               dp::rix::core::ProgramParameter( "sys_LightsBuffer", dp::rix::core::CPT_BUFFER, 0 )
             };
 
-            m_descriptorLight = m_resourceManager->getRenderer()->containerDescriptorCreate( dp::rix::core::ProgramParameterDescriptorCommon( programParametersLight, sizeof array(programParametersLight) ) );
+            m_descriptorLight = m_resourceManager->getRenderer()->containerDescriptorCreate( dp::rix::core::ProgramParameterDescriptorCommon( programParametersLight, sizeof dp::util::array(programParametersLight) ) );
           }
 
           ShaderManagerLights::~ShaderManagerLights()

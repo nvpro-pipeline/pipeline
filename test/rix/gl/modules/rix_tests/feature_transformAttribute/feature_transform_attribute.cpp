@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -29,6 +29,7 @@
 
 #include <dp/gl/RenderTarget.h>
 #include <dp/math/Trafo.h>
+#include <dp/util/Array.h>
 
 #include <test/rix/core/framework/RiXBackend.h>
 #include <test/rix/core/helpers/GeometryHelper.h>
@@ -78,7 +79,7 @@ void Feature_transform_attribute::createScene()
 
   const size_t tex2DWidth     = 8;
   const size_t tex2DHeight    = 8;
-  const size_t tex2DArraySize = tex2DWidth * tex2DHeight * nc; 
+  const size_t tex2DArraySize = tex2DWidth * tex2DHeight * nc;
   const size_t tex2DSize      = tex2DArraySize * bpc;
   float        tex2D[tex2DArraySize];
   for( unsigned int i = 0; i < tex2DWidth; ++i )
@@ -156,11 +157,11 @@ void Feature_transform_attribute::createScene()
   fragmentProgramParameters.push_back( ProgramParameter("tex", CPT_SAMPLER) );
   fragmentProgramParameters.push_back( ProgramParameter("color", CPT_FLOAT4) );
 
-  m_vertexContainerDescriptor = 
+  m_vertexContainerDescriptor =
     m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( &vertexProgramParameters[0],
     dp::checked_cast<unsigned int>(vertexProgramParameters.size()) ) );
 
-  m_fragmentContainerDescriptor = 
+  m_fragmentContainerDescriptor =
     m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( &fragmentProgramParameters[0],
     dp::checked_cast<unsigned int>(fragmentProgramParameters.size()) ) );
 
@@ -172,7 +173,7 @@ void Feature_transform_attribute::createScene()
 
   const char* shaders[] = {vertexShader, fragmentShader};
   ShaderType  shaderTypes[] = { ST_VERTEX_SHADER, ST_FRAGMENT_SHADER };
-  ProgramShaderCode programShaderCode( sizeof util::array( shaders ) , shaders, shaderTypes );
+  ProgramShaderCode programShaderCode( sizeof dp::util::array( shaders ) , shaders, shaderTypes );
 
   std::vector<ContainerDescriptorSharedHandle> containerDescriptors;
   containerDescriptors.push_back( m_vertexContainerDescriptor );
@@ -202,7 +203,7 @@ bool Feature_transform_attribute::onRun( unsigned int idx )
 {
   render(m_renderData, m_displayTarget);
 
-  return true;  
+  return true;
 }
 
 bool Feature_transform_attribute::onClear()

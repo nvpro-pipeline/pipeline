@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -27,8 +27,6 @@
 #pragma once
 /** @file */
 
-#include <boost/array.hpp>
-
 namespace dp
 {
   namespace util
@@ -36,38 +34,6 @@ namespace dp
 
     // template to determine #elements of an static array, usage sizeof array( yourarray );
     template< typename T, size_t N> char(&array(T(&)[N]))[N];
-
-    template<typename T>
-    boost::array<T,3> makeArray( const T & t0, const T & t1, const T & t2 )
-    {
-      boost::array<T,3> a;
-      a[0] = t0;  a[1] = t1;  a[2] = t2;
-      return( a );
-    }
-
-    template<typename T>
-    boost::array<T,4> makeArray( const T & t0, const T & t1, const T & t2, const T & t3 )
-    {
-      boost::array<T,4> a;
-      a[0] = t0;  a[1] = t1;  a[2] = t2;  a[3] = t3;
-      return( a );
-    }
-
-    template<typename T>
-    boost::array<T,9> makeArray( const T & t0, const T & t1, const T & t2, const T & t3, const T & t4, const T & t5, const T & t6, const T & t7, const T & t8 )
-    {
-      boost::array<T,9> a;
-      a[0] = t0;  a[1] = t1;  a[2] = t2;  a[3] = t3;  a[4] = t4;  a[5] = t5;  a[6] = t6;  a[7] = t7;  a[8] = t8;
-      return( a );
-    }
-
-    template<typename T>
-    boost::array<T,16> makeArray( const T & t0, const T & t1, const T & t2, const T & t3, const T & t4, const T & t5, const T & t6, const T & t7, const T & t8, const T & t9, const T & t10, const T & t11, const T & t12, const T & t13, const T & t14, const T & t15 )
-    {
-      boost::array<T,16> a;
-      a[0] = t0;  a[1] = t1;  a[2] = t2;  a[3] = t3;  a[4] = t4;  a[5] = t5;  a[6] = t6;  a[7] = t7;  a[8] = t8;  a[9] = t9;  a[10] = t10;  a[11] = t11;  a[12] = t12;  a[13] = t13;  a[14] = t14;  a[15] = t15;
-      return( a );
-    }
 
   } // namespace util
 } // namespace dp

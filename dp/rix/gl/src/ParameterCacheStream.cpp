@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2013-2015
+// Copyright (c) 2013-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -33,9 +33,8 @@
 #include <dp/rix/gl/inc/ParameterRendererBufferRange.h>
 #include <dp/rix/gl/inc/ParameterRendererPersistentBufferMapping.h>
 #include <dp/rix/gl/inc/ParameterRendererPersistentBufferMappingUnifiedMemory.h>
-
-#include <dp/Assert.h>
 #include <dp/util/Array.h>
+#include <dp/Assert.h>
 
 namespace dp
 {
@@ -94,7 +93,7 @@ namespace dp
           ParameterState parameterState;
           parameterState.m_program             = program;
           parameterState.m_uniqueDescriptorIdx = i;
-            
+
           ProgramGL::UniformInfos uniformInfos = program->getUniformInfos( m_descriptors[i] );
           ProgramGL::UniformInfos bufferVariables = program->getBufferInfos( m_descriptors[i] );
 
@@ -238,7 +237,7 @@ namespace dp
               glActiveShaderProgram( m_currentProgramPipeline->m_pipelineId, parameterState[idx].m_program->m_programId );
 #endif
               m_parameterStates[idx].m_parameterRenderer->render( cacheEntry->m_containerData );
-            } 
+            }
             ++cacheEntry;
           }
         }

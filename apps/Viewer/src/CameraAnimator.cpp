@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2009-2010
+// Copyright (c) 2009-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -43,7 +43,7 @@ CameraAnimator::CameraAnimator( QObject * parent )
 }
 
 CameraAnimator::~CameraAnimator()
-{ 
+{
 }
 
 void
@@ -95,9 +95,9 @@ void CameraAnimator::orbitCamera( unsigned int axisID, bool cameraRelative, floa
 {
   dp::sg::core::FrustumCameraSharedPtr const& fch = m_viewState->getCamera().staticCast<dp::sg::core::FrustumCamera>();
   float targetDistance = m_viewState->getTargetDistance();
-  dp::math::Vec3f axis( (axisID & BIT0) ? 1.0f : 0.0f, 
-                        (axisID & BIT1) ? 1.0f : 0.0f, 
-                        (axisID & BIT2) ? 1.0f : 0.0f ); 
+  dp::math::Vec3f axis( (axisID & BIT0) ? 1.0f : 0.0f,
+                        (axisID & BIT1) ? 1.0f : 0.0f,
+                        (axisID & BIT2) ? 1.0f : 0.0f );
   normalize( axis );
   fch->orbit( axis, targetDistance, radians, cameraRelative );
 }
@@ -189,9 +189,9 @@ void CameraAnimator::initCameraMoveToLight( dp::sg::core::LightSourceSharedPtr c
               normalize( up );
 
               // X east, Y up, -Z north
-              dp::math::Mat33f lookat( dp::util::makeArray(   right[0],    right[1],    right[2],
-                                                                 up[0],       up[1],       up[2],
-                                                           -forward[0], -forward[1], -forward[2] ) );
+              dp::math::Mat33f lookat( {   right[0],    right[1],    right[2],
+                                              up[0],       up[1],       up[2],
+                                        -forward[0], -forward[1], -forward[2] } );
 
               dp::math::Quatf ori( lookat );
               m_cameraMoveTarget->setOrientation( ori );
@@ -380,7 +380,7 @@ dp::sg::core::FrustumCameraSharedPtr const& CameraAnimator::findNextIterationCam
   while( m_cameraIterationIndex != first )
   {
     // check if its a frustum camera, and is not one of the ones being used in any of the viewports (userdata)
-    if ( scci->isPtrTo<dp::sg::core::FrustumCamera>() && (*scci)->getUserData() == nullptr ) 
+    if ( scci->isPtrTo<dp::sg::core::FrustumCamera>() && (*scci)->getUserData() == nullptr )
     {
       return( scci->inplaceCast<dp::sg::core::FrustumCamera>() );
     }

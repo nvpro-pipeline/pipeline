@@ -1,3 +1,4 @@
+// Copyright (c) 2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -36,8 +37,9 @@
 #include <dp/math/math.h>
 #include <dp/math/Vecnt.h>
 
-
 #include <dp/fx/EffectLibrary.h>
+
+#include <dp/util/Array.h>
 
 using namespace dp::math;
 using namespace dp::sg::core;
@@ -63,13 +65,13 @@ static void calculateTextureCoordinates( const vector< Vec3f >& vertices, vector
   // Calculate the texture v-coordinate by wrapping the range [0, 1] around the length of the outline.
   size_t size = vertices.size();
   float len = 0.0f;
-  for (size_t i = 0; i < size - 1; ++i) 
+  for (size_t i = 0; i < size - 1; ++i)
   {
     len += length(vertices[i + 1] - vertices[i]);
   }
   // Now again for the wrapping of the v-coordinate:
   float texV = 0.0f;
-  for (size_t i = 0; i < size - 1; ++i) 
+  for (size_t i = 0; i < size - 1; ++i)
   {
     texcoords.push_back( texV );
     texV += length(vertices[i + 1] - vertices[i]) / len;
@@ -78,12 +80,12 @@ static void calculateTextureCoordinates( const vector< Vec3f >& vertices, vector
 }
 
 
-static void lathe( int m, float angle, const Vec3f& offset, 
+static void lathe( int m, float angle, const Vec3f& offset,
                    const vector< Vec3f >& verticesIn,
                    const vector< Vec3f >& tangentsIn,
                    const vector< Vec3f >& binormalsIn,
                    const vector< Vec3f >& normalsIn,
-                   const vector< float >& texcoordsIn, 
+                   const vector< float >& texcoordsIn,
                    vector< Vec3f >& verticesOut,
                    vector< Vec3f >& tangentsOut,
                    vector< Vec3f >& binormalsOut,
@@ -127,11 +129,11 @@ static void lathe( int m, float angle, const Vec3f& offset,
 //   The number of points on the bevel and inner section are determined from that
 //   depending on the section length to result in even spacing.
 // closureOuter A value < 1.0 defining the maximum theta angle of the outer section.
-//              The smaller the bigger the hole at the top. 0.85f is a good value.  
+//              The smaller the bigger the hole at the top. 0.85f is a good value.
 static void createMainObject( int nOuter,
                               vector< Vec3f >& vertices,
                               vector< Vec3f >& tangents,
-                              vector< Vec3f >& binormals, 
+                              vector< Vec3f >& binormals,
                               vector< Vec3f >& normals,
                               vector< float >& texcoords )
 {
@@ -147,9 +149,9 @@ static void createMainObject( int nOuter,
 
   // The angle between the x-axis and this vector is:
   float angleInner = atan(v[1] / v[0]) + PI_HALF;  // max theta for the inner sphere.
-  Vec2f pInner = Vec2f( sin(angleInner) * g_radiusInner, 
+  Vec2f pInner = Vec2f( sin(angleInner) * g_radiusInner,
                        -cos(angleInner) * g_radiusInner + offsetInner );
-  int nInner = nOuter; 
+  int nInner = nOuter;
   float thetaStepInner = angleInner / (float) ( nInner - 1 );
 
   // Center of th bevel half circle.
@@ -175,13 +177,13 @@ static void createMainObject( int nOuter,
 
   // BEVEL
   // Neither generate the first nor the last ring, because those are part of the sphere arcs' latitudinal rings.
-  for ( int latitude = 1; latitude < nBevel - 1; latitude++ ) // theta angle. 
+  for ( int latitude = 1; latitude < nBevel - 1; latitude++ ) // theta angle.
   {
     float theta = angleOuter + (float) latitude * thetaStepBevel;
     float sinTheta = sin(theta);
     float cosTheta = cos(theta);
 
-    vertices.push_back( Vec3f( centerBevel[0] + sinTheta * radiusBevel, 
+    vertices.push_back( Vec3f( centerBevel[0] + sinTheta * radiusBevel,
                                centerBevel[1] - cosTheta * radiusBevel,
                                0.0f ) );
     tangents.push_back( Vec3f(0.0f, 0.0f, -1.0f) );
@@ -232,15 +234,15 @@ static void createMainObject( int nOuter,
 
 // Marching Quads algorithm to re-tessellate the dent's outer circle onto the main object's outer sphere.
 // This results in a perfectly sharp watertight crease.
-static void tessellateDent( int i0, int i1, int i2, int i3, 
-                            vector<unsigned int>& indices, 
-                            vector<Vec3f>& vertices, 
-                            vector<Vec3f>& tangents, 
-                            vector<Vec3f>& binormals, 
+static void tessellateDent( int i0, int i1, int i2, int i3,
+                            vector<unsigned int>& indices,
+                            vector<Vec3f>& vertices,
+                            vector<Vec3f>& tangents,
+                            vector<Vec3f>& binormals,
                             vector<Vec3f>& normals,
                             vector<Vec2f>& texcoords,
                             MapEdgeToIndex& mapEdgeToIndex,
-                            std::set<int>& mirrorVertices, 
+                            std::set<int>& mirrorVertices,
                             std::set<int>& mirrorAttributes )
 {
   Vec3f v[4] = { vertices[i0],   // lower left
@@ -271,8 +273,8 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
 
   float d[4]; // distance values needed twice.
 
-  float threshold = (g_radiusInner + 1.0f) * 0.5f; // Only need to consider these vertices because 
-  DP_ASSERT( threshold < cos(g_dentAngle) ); // Make sure the threshold test is 
+  float threshold = (g_radiusInner + 1.0f) * 0.5f; // Only need to consider these vertices because
+  DP_ASSERT( threshold < cos(g_dentAngle) ); // Make sure the threshold test is
 
   float radius = sin(g_dentAngle);
 
@@ -282,7 +284,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
   {
     // Need the distance to the cylinder along x for inside and outside vertices to calculate the interpolant.
     d[i] = sqrtf( v[i][1] * v[i][1] + v[i][2] * v[i][2] ) - radius; // negative is inside, positive is outside (distance field).
-    
+
     // Limit the vertices looked at to the outside main sphere with this simple threshold check.
     if (threshold < v[i][0] && d[i] <= 0.0f ) // "Equal" is included because that needs a new normal.
     {
@@ -301,7 +303,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
   pair<int, int> edge12(i1, i2);
   pair<int, int> edge23(i2, i3);
   pair<int, int> edge30(i3, i0);
-  
+
   MapEdgeToIndex::const_iterator it;
 
   switch (bits)
@@ -315,13 +317,13 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
     indices.push_back(i3);
     indices.push_back(i0);
     break;
-  
+
   case 1:
     {
       mirrorVertices.insert( i0 );
 
       it = mapEdgeToIndex.find( edge01 );
-      if (it == mapEdgeToIndex.end()) 
+      if (it == mapEdgeToIndex.end())
       {
         i4 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(0, 1);
@@ -334,7 +336,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       }
 
       it = mapEdgeToIndex.find( edge30 );
-      if (it == mapEdgeToIndex.end()) 
+      if (it == mapEdgeToIndex.end())
       {
         i7 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(0, 3);
@@ -369,7 +371,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       mirrorVertices.insert( i1 );
 
       it = mapEdgeToIndex.find( edge01 );
-      if (it == mapEdgeToIndex.end()) 
+      if (it == mapEdgeToIndex.end())
       {
         i4 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(1, 0);
@@ -382,7 +384,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       }
 
       it = mapEdgeToIndex.find( edge12 );
-      if (it == mapEdgeToIndex.end()) 
+      if (it == mapEdgeToIndex.end())
       {
         i5 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(1, 2);
@@ -418,7 +420,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       mirrorVertices.insert( i1 );
 
       it = mapEdgeToIndex.find( edge12 );
-      if (it == mapEdgeToIndex.end()) 
+      if (it == mapEdgeToIndex.end())
       {
         i5 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(1, 2);
@@ -431,7 +433,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       }
 
       it = mapEdgeToIndex.find( edge30 );
-      if (it == mapEdgeToIndex.end()) 
+      if (it == mapEdgeToIndex.end())
       {
         i7 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(0, 3);
@@ -466,7 +468,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       mirrorVertices.insert( i2 );
 
       it = mapEdgeToIndex.find( edge12 );
-      if (it == mapEdgeToIndex.end()) 
+      if (it == mapEdgeToIndex.end())
       {
         i5 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(2, 1);
@@ -479,7 +481,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       }
 
       it = mapEdgeToIndex.find( edge23 );
-      if (it == mapEdgeToIndex.end()) 
+      if (it == mapEdgeToIndex.end())
       {
         i6 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(2, 3);
@@ -515,7 +517,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       mirrorVertices.insert( i2 );
 
       it = mapEdgeToIndex.find( edge01 );
-      if (it == mapEdgeToIndex.end()) 
+      if (it == mapEdgeToIndex.end())
       {
         i4 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(0, 1);
@@ -528,7 +530,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       }
 
       it = mapEdgeToIndex.find( edge30 );
-      if (it == mapEdgeToIndex.end()) 
+      if (it == mapEdgeToIndex.end())
       {
         i7 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(0, 3);
@@ -541,7 +543,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       }
 
       it = mapEdgeToIndex.find( edge12 );
-      if (it == mapEdgeToIndex.end()) 
+      if (it == mapEdgeToIndex.end())
       {
         i5 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(2, 1);
@@ -554,7 +556,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       }
 
       it = mapEdgeToIndex.find( edge23 );
-      if (it == mapEdgeToIndex.end()) 
+      if (it == mapEdgeToIndex.end())
       {
         i6 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(2, 3);
@@ -598,7 +600,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       mirrorVertices.insert( i2 );
 
       it = mapEdgeToIndex.find( edge01 );
-      if (it == mapEdgeToIndex.end()) 
+      if (it == mapEdgeToIndex.end())
       {
         i4 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(1, 0);
@@ -612,7 +614,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       }
 
       it = mapEdgeToIndex.find( edge23 );
-      if (it == mapEdgeToIndex.end()) 
+      if (it == mapEdgeToIndex.end())
       {
         i6 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(2, 3);
@@ -649,7 +651,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       mirrorVertices.insert( i2 );
 
       it = mapEdgeToIndex.find( edge23 );
-      if (it == mapEdgeToIndex.end()) 
+      if (it == mapEdgeToIndex.end())
       {
         i6 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(2, 3);
@@ -662,7 +664,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       }
 
       it = mapEdgeToIndex.find( edge30 );
-      if (it == mapEdgeToIndex.end()) 
+      if (it == mapEdgeToIndex.end())
       {
         i7 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(0, 3);
@@ -697,7 +699,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       mirrorVertices.insert( i3 );
 
       it = mapEdgeToIndex.find( edge23 );
-      if (it == mapEdgeToIndex.end()) 
+      if (it == mapEdgeToIndex.end())
       {
         i6 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(3, 2);
@@ -710,7 +712,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       }
 
       it = mapEdgeToIndex.find( edge30 );
-      if (it == mapEdgeToIndex.end()) 
+      if (it == mapEdgeToIndex.end())
       {
         i7 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(3, 0);
@@ -746,7 +748,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       mirrorVertices.insert( i3 );
 
       it = mapEdgeToIndex.find( edge12 );
-      if (it == mapEdgeToIndex.end()) 
+      if (it == mapEdgeToIndex.end())
       {
         i4 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(0, 1);
@@ -759,7 +761,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       }
 
       it = mapEdgeToIndex.find( edge23 );
-      if (it == mapEdgeToIndex.end()) 
+      if (it == mapEdgeToIndex.end())
       {
         i6 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(3, 2);
@@ -795,7 +797,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       mirrorVertices.insert( i3 );
 
       it = mapEdgeToIndex.find( edge01 );
-      if (it == mapEdgeToIndex.end()) 
+      if (it == mapEdgeToIndex.end())
       {
         i4 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(1, 0);
@@ -808,7 +810,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       }
 
       it = mapEdgeToIndex.find( edge12 );
-      if (it == mapEdgeToIndex.end()) 
+      if (it == mapEdgeToIndex.end())
       {
         i5 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(1, 2);
@@ -821,7 +823,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       }
 
       it = mapEdgeToIndex.find( edge23 );
-      if (it == mapEdgeToIndex.end()) 
+      if (it == mapEdgeToIndex.end())
       {
         i6 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(3, 2);
@@ -834,7 +836,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       }
 
       it = mapEdgeToIndex.find( edge30 );
-      if (it == mapEdgeToIndex.end()) 
+      if (it == mapEdgeToIndex.end())
       {
         i7 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(3, 0);
@@ -879,7 +881,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       mirrorVertices.insert( i3 );
 
       it = mapEdgeToIndex.find( edge12 );
-      if (it == mapEdgeToIndex.end()) 
+      if (it == mapEdgeToIndex.end())
       {
         i5 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(1, 2);
@@ -892,7 +894,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       }
 
       it = mapEdgeToIndex.find( edge23 );
-      if (it == mapEdgeToIndex.end()) 
+      if (it == mapEdgeToIndex.end())
       {
         i6 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(3, 2);
@@ -928,7 +930,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       mirrorVertices.insert( i3 );
 
       it = mapEdgeToIndex.find( edge12 );
-      if (it == mapEdgeToIndex.end()) 
+      if (it == mapEdgeToIndex.end())
       {
         i5 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(2, 1);
@@ -941,7 +943,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       }
 
       it = mapEdgeToIndex.find( edge30 );
-      if (it == mapEdgeToIndex.end()) 
+      if (it == mapEdgeToIndex.end())
       {
         i7 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(3, 0);
@@ -978,7 +980,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       mirrorVertices.insert( i3 );
 
       it = mapEdgeToIndex.find( edge01 );
-      if (it == mapEdgeToIndex.end()) 
+      if (it == mapEdgeToIndex.end())
       {
         i4 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(0, 1);
@@ -991,7 +993,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       }
 
       it = mapEdgeToIndex.find( edge12 );
-      if (it == mapEdgeToIndex.end()) 
+      if (it == mapEdgeToIndex.end())
       {
         i5 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(2, 1);
@@ -1028,7 +1030,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       mirrorVertices.insert( i3 );
 
       it = mapEdgeToIndex.find( edge01 );
-      if (it == mapEdgeToIndex.end()) 
+      if (it == mapEdgeToIndex.end())
       {
         i4 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(1, 0);
@@ -1041,7 +1043,7 @@ static void tessellateDent( int i0, int i1, int i2, int i3,
       }
 
       it = mapEdgeToIndex.find( edge30 );
-      if (it == mapEdgeToIndex.end()) 
+      if (it == mapEdgeToIndex.end())
       {
         i7 = dp::checked_cast<int>( vertices.size() );
         INTERPOLATE(3, 0);
@@ -1102,9 +1104,9 @@ static PrimitiveSharedPtr createPreviewMainObject( int m )
   vector< float > texcoordsIn;
 
   vector< Vec3f > verticesOut;
-  vector< Vec3f > tangentsOut;  
-  vector< Vec3f > binormalsOut;  
-  vector< Vec3f > normalsOut;  
+  vector< Vec3f > tangentsOut;
+  vector< Vec3f > binormalsOut;
+  vector< Vec3f > normalsOut;
   vector< Vec2f > texcoordsOut;
 
   // First create the main outer object.
@@ -1112,10 +1114,10 @@ static PrimitiveSharedPtr createPreviewMainObject( int m )
   createMainObject( nOuter,
                     verticesIn,
                     tangentsIn,
-                    binormalsIn, 
+                    binormalsIn,
                     normalsIn,
                     texcoordsIn );
-  
+
   Vec3f vertexOffset( 0.0f, 1.375f, 0.0f ); // Don't apply during lathing. The dent is applied while the sphere is placed at the origin.
 
   lathe( m, 2.0f * PI, Vec3f(0.0f, 0.0f, 0.0f),
@@ -1129,23 +1131,23 @@ static PrimitiveSharedPtr createPreviewMainObject( int m )
   // We have generated m + 1 vertices per latitude.
   int columns = m + 1;
   int n = dp::checked_cast<int>( verticesIn.size() ); // The number of latitudinal rings.
-  
+
   // Track vertex indices created during dent tessellation to reuse them on adjacent cells.
   MapEdgeToIndex mapEdgeToIndex;
   std::set<int> mirrorVertices;   // Set of vertex indices which need to be moved and inversed.
   std::set<int> mirrorAttributes; // Set of indices exactly on the crease where only the normal space needs to be mirrored to not generate gaps.
 
   for( int latitude = 0; latitude < n - 1; latitude++ )
-  {                                           
+  {
     for( int longitude = 0; longitude < m; longitude++ )
     {
       int i0 =  latitude      * columns + longitude    ;  // lower left
       int i1 =  latitude      * columns + longitude + 1;  // lower right
-      int i2 = (latitude + 1) * columns + longitude + 1;  // upper right 
-      int i3 = (latitude + 1) * columns + longitude    ;  // upper left 
+      int i2 = (latitude + 1) * columns + longitude + 1;  // upper right
+      int i3 = (latitude + 1) * columns + longitude    ;  // upper left
 
-      tessellateDent( i0, i1, i2, i3, indices, 
-                      verticesOut, tangentsOut, binormalsOut, normalsOut, texcoordsOut, 
+      tessellateDent( i0, i1, i2, i3, indices,
+                      verticesOut, tangentsOut, binormalsOut, normalsOut, texcoordsOut,
                       mapEdgeToIndex, mirrorVertices, mirrorAttributes );
     }
   }
@@ -1192,7 +1194,7 @@ static PrimitiveSharedPtr createPreviewMainObject( int m )
 
 
   unsigned int numVertices = dp::checked_cast<unsigned int>( verticesOut.size() );
-  
+
   // Finally place it above the platform. TODO Could use transforms per sub-object.
   for (unsigned int i = 0; i < numVertices; ++i)
   {
@@ -1221,7 +1223,7 @@ static PrimitiveSharedPtr createPreviewMainObject( int m )
 static void createBowl( int nBowl, /* float radiusInner, float thicknessBowl, */
                         vector< Vec3f >& vertices,
                         vector< Vec3f >& tangents,
-                        vector< Vec3f >& binormals, 
+                        vector< Vec3f >& binormals,
                         vector< Vec3f >& normals,
                         vector< float >& texcoords )
 {
@@ -1251,7 +1253,7 @@ static void createBowl( int nBowl, /* float radiusInner, float thicknessBowl, */
     float cosTheta = cos(theta);
 
     vertices.push_back( Vec3f( sinTheta * radiusBowlOuter,
-                              -cosTheta * radiusBowlOuter, 
+                              -cosTheta * radiusBowlOuter,
                                0.0f) );
     tangents.push_back( Vec3f(0.0f, 0.0f, -1.0f) );
     binormals.push_back( Vec3f(cosTheta, sinTheta, 0.0f) );
@@ -1264,7 +1266,7 @@ static void createBowl( int nBowl, /* float radiusInner, float thicknessBowl, */
   binormals.push_back( Vec3f( -sin(PI_QUARTER), cos(PI_QUARTER), 0.0f) );
   normals.push_back( Vec3f( cos(PI_QUARTER), sin(PI_QUARTER), 0.0f) );
 
-  for (int latitude = 1; latitude < nBowlEdge - 1; latitude++) // flat top 
+  for (int latitude = 1; latitude < nBowlEdge - 1; latitude++) // flat top
   {
     float x = (float) latitude * stepBowlEdge;
     vertices.push_back( Vec3f( x0 - x, y0 + gridSize, 0.0f ) ); // Push this a little upwards to make room for the bevel points
@@ -1310,9 +1312,9 @@ static PrimitiveSharedPtr createPreviewBowl( int m )
   vector< float > texcoordsIn;
 
   vector< Vec3f > verticesOut;
-  vector< Vec3f > tangentsOut;  
-  vector< Vec3f > binormalsOut;  
-  vector< Vec3f > normalsOut;  
+  vector< Vec3f > tangentsOut;
+  vector< Vec3f > binormalsOut;
+  vector< Vec3f > normalsOut;
   vector< Vec2f > texcoordsOut;
 
   // First create the main outer object.
@@ -1320,10 +1322,10 @@ static PrimitiveSharedPtr createPreviewBowl( int m )
   createBowl( m / 2, // nBowl
               verticesIn,
               tangentsIn,
-              binormalsIn, 
+              binormalsIn,
               normalsIn,
               texcoordsIn );
-  
+
   float offsetInner = (1.0f - g_radiusInner) * g_offsetScale;
 
   lathe( m, 2.0f * PI, Vec3f( 0.0f, 1.375f + offsetInner, 0.0f ),
@@ -1337,16 +1339,16 @@ static PrimitiveSharedPtr createPreviewBowl( int m )
   // We have generated m + 1 vertices per latitude.
   int columns = m + 1;
   int n = dp::checked_cast<int>( verticesIn.size() ); // The number of latitudinal rings.
-  
+
   for( int latitude = 0; latitude < n - 1; latitude++ )
-  {                                           
+  {
     for( int longitude = 0; longitude < m; longitude++ )
     {
       indices.push_back(  latitude      * columns + longitude     );  // lower left
       indices.push_back(  latitude      * columns + longitude + 1 );  // lower right
-      indices.push_back( (latitude + 1) * columns + longitude + 1 );  // upper right 
+      indices.push_back( (latitude + 1) * columns + longitude + 1 );  // upper right
 
-      indices.push_back( (latitude + 1) * columns + longitude + 1 );  // upper right 
+      indices.push_back( (latitude + 1) * columns + longitude + 1 );  // upper right
       indices.push_back( (latitude + 1) * columns + longitude     );  // upper left
       indices.push_back(  latitude      * columns + longitude     );  // lower left
     }
@@ -1377,13 +1379,13 @@ static PrimitiveSharedPtr createPreviewBowl( int m )
 static void createCenterSphere( int nSphere, float radiusSphere,
                                 vector< Vec3f >& vertices,
                                 vector< Vec3f >& tangents,
-                                vector< Vec3f >& binormals, 
+                                vector< Vec3f >& binormals,
                                 vector< Vec3f >& normals,
                                 vector< float >& texcoords )
 {
   float angleSphere = (float) PI; // Maximum theta for the outer sphere arc.
   float thetaStepSphere = angleSphere / (float) (nSphere - 1);
-  
+
   float texVStep = 1.0f / (float) (nSphere - 1);  // Texture v coordinate from 0.0 at the south pole to 1.0 at the north pole.
 
   // Starting at the south pole going upwards.
@@ -1392,11 +1394,11 @@ static void createCenterSphere( int nSphere, float radiusSphere,
     float theta = (float) latitude * thetaStepSphere;
     float sinTheta = sin(theta);
     float cosTheta = cos(theta);
-  
+
     float texV = (float) latitude * texVStep;
 
     vertices.push_back( Vec3f( sinTheta * radiusSphere,
-                              -cosTheta * radiusSphere, 
+                              -cosTheta * radiusSphere,
                                0.0f) );
     tangents.push_back( Vec3f(0.0f, 0.0f, -1.0f) );
     binormals.push_back( Vec3f(cosTheta, sinTheta, 0.0f) );
@@ -1418,27 +1420,27 @@ static PrimitiveSharedPtr createPreviewSphere( int m )
   vector< float > texcoordsIn;
 
   vector< Vec3f > verticesOut;
-  vector< Vec3f > tangentsOut;  
-  vector< Vec3f > binormalsOut;  
-  vector< Vec3f > normalsOut;  
-  vector< Vec2f > texcoordsOut;  
+  vector< Vec3f > tangentsOut;
+  vector< Vec3f > binormalsOut;
+  vector< Vec3f > normalsOut;
+  vector< Vec2f > texcoordsOut;
 
   // First create the main outer object.
   int nSphere = m / 2; // The number of latitudinal rings on the very outer arc. The returned vertexIn.size() is bigger!
-  
+
   float radiusBowl   = g_radiusInner * g_gapScale * g_thicknessBowl; // Smaller than the inner sphere
   float radiusSphere = radiusBowl * 0.85f;
-  
+
   float offsetInner = (1.0f - g_radiusInner) * g_offsetScale;
   float offsetSphere = offsetInner - (radiusBowl - radiusSphere) * 0.9f;
-  
+
   createCenterSphere( nSphere, radiusSphere,
                       verticesIn,
                       tangentsIn,
-                      binormalsIn, 
+                      binormalsIn,
                       normalsIn,
                       texcoordsIn );
-  
+
   lathe( m, 2.0f * PI, Vec3f( 0.0f, 1.375f + offsetSphere, 0.0f ),
          verticesIn,  tangentsIn,  binormalsIn,  normalsIn,  texcoordsIn,
          verticesOut, tangentsOut, binormalsOut, normalsOut, texcoordsOut );
@@ -1450,16 +1452,16 @@ static PrimitiveSharedPtr createPreviewSphere( int m )
   // We have generated m + 1 vertices per latitude.
   int columns = m + 1;
   int n = dp::checked_cast<int>( verticesIn.size() ); // The number of latitudinal rings.
-  
+
   for( int latitude = 0; latitude < n - 1; latitude++ )
-  {                                           
+  {
     for( int longitude = 0; longitude < m; longitude++ )
     {
       indices.push_back(  latitude      * columns + longitude     );  // lower left
       indices.push_back(  latitude      * columns + longitude + 1 );  // lower right
-      indices.push_back( (latitude + 1) * columns + longitude + 1 );  // upper right 
+      indices.push_back( (latitude + 1) * columns + longitude + 1 );  // upper right
 
-      indices.push_back( (latitude + 1) * columns + longitude + 1 );  // upper right 
+      indices.push_back( (latitude + 1) * columns + longitude + 1 );  // upper right
       indices.push_back( (latitude + 1) * columns + longitude     );  // upper left
       indices.push_back(  latitude      * columns + longitude     );  // lower left
     }
@@ -1491,7 +1493,7 @@ static PrimitiveSharedPtr createPreviewSphere( int m )
 // The profile is just a number of straight lines with bevel edges at the corners.
 static void createPlatform( vector< Vec3f >& vertices,
                             vector< Vec3f >& tangents,
-                            vector< Vec3f >& binormals, 
+                            vector< Vec3f >& binormals,
                             vector< Vec3f >& normals,
                             vector< float >& texcoords )
 {
@@ -1501,7 +1503,7 @@ static void createPlatform( vector< Vec3f >& vertices,
 
   Vec3f nR ( 1.0f,  0.0f, 0.0f); // right
   Vec3f nUR(   sc,    sc, 0.0f); // upper right
-  Vec3f nU ( 0.0f,  1.0f, 0.0f); // up 
+  Vec3f nU ( 0.0f,  1.0f, 0.0f); // up
   Vec3f nUL(  -sc,    sc, 0.0f); // upper left
   Vec3f nL (-1.0f,  0.0f, 0.0f); // left
   Vec3f nBL(  -sc,   -sc, 0.0f); // bottom left
@@ -1615,9 +1617,9 @@ static PrimitiveSharedPtr createPreviewPlatform( int m )
   vector< float > texcoordsIn;
 
   vector< Vec3f > verticesOut;
-  vector< Vec3f > tangentsOut;  
-  vector< Vec3f > binormalsOut;  
-  vector< Vec3f > normalsOut;  
+  vector< Vec3f > tangentsOut;
+  vector< Vec3f > binormalsOut;
+  vector< Vec3f > normalsOut;
   vector< Vec2f > texcoordsOut;
 
   createPlatform( verticesIn, tangentsIn, binormalsIn, normalsIn, texcoordsIn );
@@ -1633,16 +1635,16 @@ static PrimitiveSharedPtr createPreviewPlatform( int m )
   // We have generated m + 1 vertices per latitude.
   int columns = m + 1;
   int n = dp::checked_cast<int>( verticesIn.size() ); // The number of latitudinal rings.
-  
+
   for( int latitude = 0; latitude < n - 1; latitude++ )
-  {                                           
+  {
     for( int longitude = 0; longitude < m; longitude++ )
     {
       indices.push_back(  latitude      * columns + longitude     );  // lower left
       indices.push_back(  latitude      * columns + longitude + 1 );  // lower right
-      indices.push_back( (latitude + 1) * columns + longitude + 1 );  // upper right 
+      indices.push_back( (latitude + 1) * columns + longitude + 1 );  // upper right
 
-      indices.push_back( (latitude + 1) * columns + longitude + 1 );  // upper right 
+      indices.push_back( (latitude + 1) * columns + longitude + 1 );  // upper right
       indices.push_back( (latitude + 1) * columns + longitude     );  // upper left
       indices.push_back(  latitude      * columns + longitude     );  // lower left
     }
@@ -1675,7 +1677,7 @@ static PrimitiveSharedPtr createPreviewPlatform( int m )
 // The profile is just a number of straight lines with bevel edges at the corners.
 static void createRing( vector< Vec3f >& vertices,
                         vector< Vec3f >& tangents,
-                        vector< Vec3f >& binormals, 
+                        vector< Vec3f >& binormals,
                         vector< Vec3f >& normals,
                         vector< float >& texcoords )
 {
@@ -1685,7 +1687,7 @@ static void createRing( vector< Vec3f >& vertices,
 
   Vec3f nR ( 1.0f,  0.0f, 0.0f); // right
   Vec3f nUR(   sc,    sc, 0.0f); // upper right
-  Vec3f nU ( 0.0f,  1.0f, 0.0f); // up 
+  Vec3f nU ( 0.0f,  1.0f, 0.0f); // up
   Vec3f nUL(  -sc,    sc, 0.0f); // upper left
   Vec3f nL (-1.0f,  0.0f, 0.0f); // left
   Vec3f nBL(  -sc,   -sc, 0.0f); // bottom left
@@ -1694,7 +1696,7 @@ static void createRing( vector< Vec3f >& vertices,
 
   Vec3f t(0.0f, 0.0f, -1.0f);
 
-  float d = 0.125f; // Grid for the tesselation of the cutplane 
+  float d = 0.125f; // Grid for the tesselation of the cutplane
   float g = 0.0125f; // offset for the corner surrounding points.
 
   vertices.push_back( Vec3f( 0.3f * g, 0.3f * g, 0.0f ) ); // corner
@@ -1776,7 +1778,7 @@ static void createRing( vector< Vec3f >& vertices,
   tangents.push_back(t);
   binormals.push_back(nL);
   normals.push_back(nU);
-  
+
   vertices.push_back( Vec3f( 2.5f * d, 4.0f * d, 0.0f ) ); // corner
   tangents.push_back(t);
   binormals.push_back(nBL);
@@ -1864,15 +1866,15 @@ static PrimitiveSharedPtr createPreviewRing( int m )
   vector< float > texcoordsIn;
 
   vector< Vec3f > verticesOut;
-  vector< Vec3f > tangentsOut;  
-  vector< Vec3f > binormalsOut;  
-  vector< Vec3f > normalsOut;  
+  vector< Vec3f > tangentsOut;
+  vector< Vec3f > binormalsOut;
+  vector< Vec3f > normalsOut;
   vector< Vec2f > texcoordsOut;
 
   createRing( verticesIn, tangentsIn, binormalsIn, normalsIn, texcoordsIn );
-  
+
   Vec3f offset( 0.85f, 0.125f + 0.0025f, 0.0f);
-  
+
   lathe( m, 1.5f * PI, offset, // 0 - 270 degrees
          verticesIn,  tangentsIn,  binormalsIn,  normalsIn,  texcoordsIn,
          verticesOut, tangentsOut, binormalsOut, normalsOut, texcoordsOut );
@@ -1884,16 +1886,16 @@ static PrimitiveSharedPtr createPreviewRing( int m )
   // We have generated m + 1 vertices per latitude.
   int columns = m + 1;
   int n = dp::checked_cast<int>( verticesIn.size() ); // The number of latitudinal rings.
-  
+
   for( int latitude = 0; latitude < n - 1; latitude++ )
-  {                                           
+  {
     for( int longitude = 0; longitude < m; longitude++ )
     {
       indices.push_back(  latitude      * columns + longitude     );  // lower left
       indices.push_back(  latitude      * columns + longitude + 1 );  // lower right
-      indices.push_back( (latitude + 1) * columns + longitude + 1 );  // upper right 
+      indices.push_back( (latitude + 1) * columns + longitude + 1 );  // upper right
 
-      indices.push_back( (latitude + 1) * columns + longitude + 1 );  // upper right 
+      indices.push_back( (latitude + 1) * columns + longitude + 1 );  // upper right
       indices.push_back( (latitude + 1) * columns + longitude     );  // upper left
       indices.push_back(  latitude      * columns + longitude     );  // lower left
     }
@@ -1908,12 +1910,12 @@ static PrimitiveSharedPtr createPreviewRing( int m )
   int D = A + 3;
   int E = A + 4;
 
-  float d = 0.125f; // Grid for the tesselation of the cutplane 
+  float d = 0.125f; // Grid for the tesselation of the cutplane
 
   // On the xy-plane
-  Vec3f ta0(1.0f, 0.0f, 0.0f); 
-  Vec3f bi0(0.0f, 1.0f, 0.0f); 
-  Vec3f no0(0.0f, 0.0f, 1.0f); 
+  Vec3f ta0(1.0f, 0.0f, 0.0f);
+  Vec3f bi0(0.0f, 1.0f, 0.0f);
+  Vec3f no0(0.0f, 0.0f, 1.0f);
 
   verticesOut.push_back( Vec3f( d, d, 0.0f ) + offset ); // A
   tangentsOut.push_back( ta0 );
@@ -1946,9 +1948,9 @@ static PrimitiveSharedPtr createPreviewRing( int m )
   texcoordsOut.push_back( Vec2f( 3.0f * d, 3.0f * d ) );
 
   // On the yz-plane
-  Vec3f ta1(0.0f, 0.0f, -1.0f); 
-  Vec3f bi1(0.0f, 1.0f,  0.0f); 
-  Vec3f no1(1.0f, 0.0f,  0.0f); 
+  Vec3f ta1(0.0f, 0.0f, -1.0f);
+  Vec3f bi1(0.0f, 1.0f,  0.0f);
+  Vec3f no1(1.0f, 0.0f,  0.0f);
 
   Vec3f offsetYZ = Vec3f(0.0, offset[1], offset[0]); // Swap x- and z-offsets for the yz-cutplane coordinates.
 
@@ -2012,20 +2014,20 @@ static PrimitiveSharedPtr createPreviewRing( int m )
   }
 
    // Indices in this list need to be multiplied by the colums.
-  const static int cutPlane[] = 
+  const static int cutPlane[] =
   {
     0, 1, 29,   // lower left corner
     25, 26, 27, // upper left corner
 
     A, 29, 1,
-    A, 1, 2, 
+    A, 1, 2,
     A, 2, 3,
-    A, 3, B, 
-    A, B, 22, 
+    A, 3, B,
+    A, B, 22,
     A, 22, 23,
     A, 23, 24,
-    A, 24, 25, 
-    A, 25, 27, 
+    A, 24, 25,
+    A, 25, 27,
     A, 27, 28,
     A, 28, 29,
 
@@ -2059,10 +2061,10 @@ static PrimitiveSharedPtr createPreviewRing( int m )
     E, 18, 19
   };
 
-  for (size_t i = 0; i < sizeof(cutPlane) / sizeof(int); i++ ) 
+  for (size_t i = 0; i < sizeof(cutPlane) / sizeof(int); i++ )
   {
     int idx = cutPlane[i];
-    // Each latitudinal ring has columns vertices in the array, 
+    // Each latitudinal ring has columns vertices in the array,
     // Adjust the idx to the ones which are on the first longitude!
     if (idx < A)
     {
@@ -2071,12 +2073,12 @@ static PrimitiveSharedPtr createPreviewRing( int m )
     indices.push_back(idx);
   }
 
-  for (size_t i = 0; i < sizeof(cutPlane) / sizeof(int); i += 3 ) 
+  for (size_t i = 0; i < sizeof(cutPlane) / sizeof(int); i += 3 )
   {
     int idx0 = cutPlane[i    ];
     int idx1 = cutPlane[i + 1];
     int idx2 = cutPlane[i + 2];
-    
+
     // The five helper point indices on the yz-plane are directly behind the A-E ones.
     idx0 += (A <= idx0) ? 5 : idxBaseYZ;
     idx1 += (A <= idx1) ? 5 : idxBaseYZ;
@@ -2111,15 +2113,15 @@ static PrimitiveSharedPtr createPreviewRing( int m )
 
 
 PreviewScene::PreviewScene()
-{  
+{
   m_primitive[0] = createPreviewMainObject( 90 );
   m_primitive[1] = createPreviewSphere( 90 );
   m_primitive[2] = createPreviewBowl( 90 );
-  
+
   m_primitive[3] = createPreviewRing( 90 );
   m_primitive[4] = createPreviewPlatform( 90 );
 
-  
+
   dp::fx::EffectLibrary::instance()->loadEffects( "PreviewScene.xml");
 
   char const* const names[] =
@@ -2140,7 +2142,7 @@ PreviewScene::PreviewScene()
     , "phong_white"
   };
 
-  for (int i = 0; i < 5; i++) 
+  for (int i = 0; i < 5; i++)
   {
     m_geoNodeHandle[i] = GeoNode::create();
     m_geoNodeHandle[i]->setPrimitive( m_primitive[i] );
@@ -2150,8 +2152,8 @@ PreviewScene::PreviewScene()
 
   m_transformHandle = Transform::create();
   Trafo trafo;
-  trafo.setCenter( Vec3f( 0.0f, 1.375f, 0.0f ) ); 
-  trafo.setOrientation( Quatf( Vec3f(0.0f, 0.0f, 1.0f), -PI_QUARTER * 0.65f ) * 
+  trafo.setCenter( Vec3f( 0.0f, 1.375f, 0.0f ) );
+  trafo.setOrientation( Quatf( Vec3f(0.0f, 0.0f, 1.0f), -PI_QUARTER * 0.65f ) *
                         Quatf( Vec3f(0.0f, 1.0f, 0.0f), -PI_QUARTER ) );
 
   // Create a Transform

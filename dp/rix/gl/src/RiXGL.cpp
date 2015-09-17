@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2015
+// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -229,7 +229,7 @@ namespace dp
 
       /** VertexAttributes **/
       dp::rix::core::VertexAttributesSharedHandle RiXGL::vertexAttributesCreate()
-      {         
+      {
         return new VertexAttributesGL();
       }
 
@@ -491,7 +491,7 @@ namespace dp
 
         dp::rix::core::handleCast<GeometryInstanceGL>(handle)->setProgramPipeline( dp::rix::core::handleCast<ProgramPipelineGL>( programPipelineHandle ) );
       }
-  
+
       void RiXGL::geometryInstanceSetVisible( dp::rix::core::GeometryInstanceSharedHandle const & handle, bool visible )
       {
         DP_ASSERT(dp::rix::core::handleIsTypeOf<GeometryInstanceGL>( handle ));
@@ -563,7 +563,7 @@ namespace dp
       ID RiXGL::aquireContainerID()
       {
         size_t freeID = m_containerFreeIDs.countLeadingZeroes();
-        if (freeID == m_containerFreeIDs.getSize()) 
+        if (freeID == m_containerFreeIDs.getSize())
         {
           freeID = m_containerFreeIDs.getSize();
           // no free ids left, enlarge buffer
@@ -607,7 +607,7 @@ namespace dp
         case GL_DEBUG_TYPE_PERFORMANCE:
           {
             if ( boost::algorithm::starts_with( message, "Program/shader state performance warning:" )
-              && boost::algorithm::ends_with( message, "Shader is going to be recompiled because the shader key based on GL state mismatches." ) )
+              && boost::algorithm::ends_with( message, "is being recompiled based on GL state." ) )
             {
               DP_ASSERT( severity == GL_DEBUG_SEVERITY_MEDIUM );
               return;   //  ignore this performance message

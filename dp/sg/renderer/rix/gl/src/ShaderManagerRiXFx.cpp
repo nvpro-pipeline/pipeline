@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012-2015
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -40,7 +40,6 @@
 
 using namespace dp::fx;
 using namespace dp::math;
-using dp::util::array;
 using namespace dp::sg::xbar;
 
 namespace dp
@@ -249,7 +248,7 @@ namespace dp
               dp::rix::core::ProgramParameter( "sys_EnvironmentSampler",        dp::rix::core::CPT_SAMPLER ),
               dp::rix::core::ProgramParameter( "sys_EnvironmentSamplerEnabled", dp::rix::core::CPT_BOOL)
             };
-            m_descriptorEnvironment = m_renderer->containerDescriptorCreate( dp::rix::core::ProgramParameterDescriptorCommon( programParametersEnvironment, sizeof array(programParametersEnvironment) ) );
+            m_descriptorEnvironment = m_renderer->containerDescriptorCreate( dp::rix::core::ProgramParameterDescriptorCommon( programParametersEnvironment, sizeof dp::util::array(programParametersEnvironment) ) );
             m_containerEnvironment  = m_renderer->containerCreate( m_descriptorEnvironment );
 
             std::vector<dp::rix::core::ProgramParameter> programParametersFragment;
@@ -342,7 +341,7 @@ namespace dp
             m_shaderManagerLights.updateLights( vs );
           }
 
-          ShaderManagerInstanceSharedPtr ShaderManagerRiXFx::registerGeometryInstance( 
+          ShaderManagerInstanceSharedPtr ShaderManagerRiXFx::registerGeometryInstance(
             const dp::sg::core::EffectDataSharedPtr &effectData,
             dp::sg::xbar::ObjectTreeIndex objectTreeIndex,
             dp::rix::core::GeometryInstanceSharedHandle &geometryInstance,

@@ -1,4 +1,4 @@
- // Copyright NVIDIA Corporation 2002-2013
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -212,9 +212,9 @@ WRLLoader::WRLLoader()
   m_subdivisions[SUBDIVISION_SPHERE_MIN]     = 12;  // minimum       // 30 degrees
   m_subdivisions[SUBDIVISION_SPHERE_DEFAULT] = 36;  // at radius 1.0 // 10 degrees
   m_subdivisions[SUBDIVISION_SPHERE_MAX]     = 90;  // maximum       //  4 degrees
-  
+
   // The rectangular ones used for the Box. (It needs a much lower maximum!)
-  m_subdivisions[SUBDIVISION_BOX_MIN]     = 2;  // minimum 
+  m_subdivisions[SUBDIVISION_BOX_MIN]     = 2;  // minimum
   m_subdivisions[SUBDIVISION_BOX_DEFAULT] = 4;  // at size 1.0! (Box default size is 2.0 though.)
   m_subdivisions[SUBDIVISION_BOX_MAX]     = 8;  // maximum
 
@@ -224,7 +224,7 @@ WRLLoader::WRLLoader()
     std::string values( env );
     std::string token;
     string::size_type tokenEnd = 0;
-    
+
     for (int i = 0; i < 6; ++i)
     {
       string::size_type tokenStart = findNotDelimiter( values, tokenEnd );
@@ -250,7 +250,7 @@ WRLLoader::WRLLoader()
       m_subdivisions[SUBDIVISION_SPHERE_MAX] = m_subdivisions[SUBDIVISION_SPHERE_MIN];
     }
     // Make sure the subdivision at radius 1.0 is within the limits.
-    m_subdivisions[SUBDIVISION_SPHERE_DEFAULT] = 
+    m_subdivisions[SUBDIVISION_SPHERE_DEFAULT] =
       clamp(m_subdivisions[SUBDIVISION_SPHERE_DEFAULT], m_subdivisions[SUBDIVISION_SPHERE_MIN], m_subdivisions[SUBDIVISION_SPHERE_MAX]);
 
     // Now the same for the Box:
@@ -264,7 +264,7 @@ WRLLoader::WRLLoader()
       m_subdivisions[SUBDIVISION_BOX_MAX] = m_subdivisions[SUBDIVISION_BOX_MIN];
     }
     // Make sure the subdivision at size 1.0 is within the limits.
-    m_subdivisions[SUBDIVISION_BOX_DEFAULT] = 
+    m_subdivisions[SUBDIVISION_BOX_DEFAULT] =
       clamp(m_subdivisions[SUBDIVISION_BOX_DEFAULT], m_subdivisions[SUBDIVISION_BOX_MIN], m_subdivisions[SUBDIVISION_BOX_MAX]);
   }
 }
@@ -308,7 +308,7 @@ void WRLLoader::createBox( IndexedFaceSetSharedPtr & pIndexedFaceSet, const SFVe
     pIndexedFaceSet->texCoordIndex.reserve( numIndices );
   }
 
-  float xCoord; 
+  float xCoord;
   float yCoord;
   float zCoord;
   float uCoord;
@@ -327,7 +327,7 @@ void WRLLoader::createBox( IndexedFaceSetSharedPtr & pIndexedFaceSet, const SFVe
     {
       uCoord = (float) lon / (float) (d - 1); // [0.0, 1.0]
       zCoord = -depth * (uCoord - 0.5f);      // [-depth/2, depth/2]
-      
+
       pCoordinate->point.push_back( SFVec3f( xCoord, yCoord, zCoord ) );
       pNormal->vector.push_back( SFVec3f( 1.0f, 0.0f, 0.0f) );
       if (textured)
@@ -343,7 +343,7 @@ void WRLLoader::createBox( IndexedFaceSetSharedPtr & pIndexedFaceSet, const SFVe
     {
       int ll =  lat      * d +  lon     ;  // lower left
       int lr =  lat      * d + (lon + 1);  // lower right
-      int ur = (lat + 1) * d + (lon + 1);  // upper right 
+      int ur = (lat + 1) * d + (lon + 1);  // upper right
       int ul = (lat + 1) * d +  lon     ;  // upper left
 
       ll += indexOffset;
@@ -356,7 +356,7 @@ void WRLLoader::createBox( IndexedFaceSetSharedPtr & pIndexedFaceSet, const SFVe
       pIndexedFaceSet->coordIndex.push_back( ur );
       pIndexedFaceSet->coordIndex.push_back( ul );
       pIndexedFaceSet->coordIndex.push_back( -1 );
-      
+
       pIndexedFaceSet->normalIndex.push_back( ll );
       pIndexedFaceSet->normalIndex.push_back( lr );
       pIndexedFaceSet->normalIndex.push_back( ur );
@@ -373,7 +373,7 @@ void WRLLoader::createBox( IndexedFaceSetSharedPtr & pIndexedFaceSet, const SFVe
       }
     }
   }
-  indexOffset += h * d; 
+  indexOffset += h * d;
 
   // Positive y-axis vertices, normals, texcoords:
   yCoord = height * 0.5f;
@@ -386,7 +386,7 @@ void WRLLoader::createBox( IndexedFaceSetSharedPtr & pIndexedFaceSet, const SFVe
     {
       uCoord = (float) lon / (float) (w - 1); // [0.0, 1.0]
       xCoord = width * (uCoord - 0.5f);       // [-width/2, width/2]
-      
+
       pCoordinate->point.push_back( SFVec3f( xCoord, yCoord, zCoord ) );
       pNormal->vector.push_back( SFVec3f( 0.0f, 1.0f, 0.0f) );
       if (textured)
@@ -401,7 +401,7 @@ void WRLLoader::createBox( IndexedFaceSetSharedPtr & pIndexedFaceSet, const SFVe
     {
       int ll =  lat      * w +  lon     ;  // lower left
       int lr =  lat      * w + (lon + 1);  // lower right
-      int ur = (lat + 1) * w + (lon + 1);  // upper right 
+      int ur = (lat + 1) * w + (lon + 1);  // upper right
       int ul = (lat + 1) * w +  lon     ;  // upper left
 
       ll += indexOffset;
@@ -414,7 +414,7 @@ void WRLLoader::createBox( IndexedFaceSetSharedPtr & pIndexedFaceSet, const SFVe
       pIndexedFaceSet->coordIndex.push_back( ur );
       pIndexedFaceSet->coordIndex.push_back( ul );
       pIndexedFaceSet->coordIndex.push_back( -1 );
-      
+
       pIndexedFaceSet->normalIndex.push_back( ll );
       pIndexedFaceSet->normalIndex.push_back( lr );
       pIndexedFaceSet->normalIndex.push_back( ur );
@@ -431,7 +431,7 @@ void WRLLoader::createBox( IndexedFaceSetSharedPtr & pIndexedFaceSet, const SFVe
       }
     }
   }
-  indexOffset += d * w; 
+  indexOffset += d * w;
 
   // Positive z-axis vertices, normals, texcoords:
   zCoord = depth * 0.5f;
@@ -444,7 +444,7 @@ void WRLLoader::createBox( IndexedFaceSetSharedPtr & pIndexedFaceSet, const SFVe
     {
       uCoord = (float) lon / (float) (w - 1); // [0.0, 1.0]
       xCoord = width * (uCoord - 0.5f);       // [-width/2, width/2]
-      
+
       pCoordinate->point.push_back( SFVec3f( xCoord, yCoord, zCoord ) );
       pNormal->vector.push_back( SFVec3f( 0.0f, 0.0f, 1.0f) );
       if (textured)
@@ -459,7 +459,7 @@ void WRLLoader::createBox( IndexedFaceSetSharedPtr & pIndexedFaceSet, const SFVe
     {
       int ll =  lat      * w +  lon     ;  // lower left
       int lr =  lat      * w + (lon + 1);  // lower right
-      int ur = (lat + 1) * w + (lon + 1);  // upper right 
+      int ur = (lat + 1) * w + (lon + 1);  // upper right
       int ul = (lat + 1) * w +  lon     ;  // upper left
 
       ll += indexOffset;
@@ -472,7 +472,7 @@ void WRLLoader::createBox( IndexedFaceSetSharedPtr & pIndexedFaceSet, const SFVe
       pIndexedFaceSet->coordIndex.push_back( ur );
       pIndexedFaceSet->coordIndex.push_back( ul );
       pIndexedFaceSet->coordIndex.push_back( -1 );
-      
+
       pIndexedFaceSet->normalIndex.push_back( ll );
       pIndexedFaceSet->normalIndex.push_back( lr );
       pIndexedFaceSet->normalIndex.push_back( ur );
@@ -502,7 +502,7 @@ void WRLLoader::createBox( IndexedFaceSetSharedPtr & pIndexedFaceSet, const SFVe
     {
       uCoord = (float) lon / (float) (d - 1); // [0.0, 1.0]
       zCoord = depth * (uCoord - 0.5f);       // [-depth/2, depth/2]
-      
+
       pCoordinate->point.push_back( SFVec3f( xCoord, yCoord, zCoord ) );
       pNormal->vector.push_back( SFVec3f( -1.0f, 0.0f, 0.0f) );
       if (textured)
@@ -518,7 +518,7 @@ void WRLLoader::createBox( IndexedFaceSetSharedPtr & pIndexedFaceSet, const SFVe
     {
       int ll =  lat      * d +  lon     ;  // lower left
       int lr =  lat      * d + (lon + 1);  // lower right
-      int ur = (lat + 1) * d + (lon + 1);  // upper right 
+      int ur = (lat + 1) * d + (lon + 1);  // upper right
       int ul = (lat + 1) * d +  lon     ;  // upper left
 
       ll += indexOffset;
@@ -531,7 +531,7 @@ void WRLLoader::createBox( IndexedFaceSetSharedPtr & pIndexedFaceSet, const SFVe
       pIndexedFaceSet->coordIndex.push_back( ur );
       pIndexedFaceSet->coordIndex.push_back( ul );
       pIndexedFaceSet->coordIndex.push_back( -1 );
-      
+
       pIndexedFaceSet->normalIndex.push_back( ll );
       pIndexedFaceSet->normalIndex.push_back( lr );
       pIndexedFaceSet->normalIndex.push_back( ur );
@@ -548,7 +548,7 @@ void WRLLoader::createBox( IndexedFaceSetSharedPtr & pIndexedFaceSet, const SFVe
       }
     }
   }
-  indexOffset += h * d; 
+  indexOffset += h * d;
 
   // Negative y-axis vertices, normals, texcoords:
   yCoord = -height * 0.5f;
@@ -561,7 +561,7 @@ void WRLLoader::createBox( IndexedFaceSetSharedPtr & pIndexedFaceSet, const SFVe
     {
       uCoord = (float) lon / (float) (w - 1); // [0.0, 1.0]
       xCoord = width * (uCoord - 0.5f);       // [-width/2, width/2]
-      
+
       pCoordinate->point.push_back( SFVec3f( xCoord, yCoord, zCoord ) );
       pNormal->vector.push_back( SFVec3f( 0.0f, -1.0f, 0.0f) );
       if (textured)
@@ -576,7 +576,7 @@ void WRLLoader::createBox( IndexedFaceSetSharedPtr & pIndexedFaceSet, const SFVe
     {
       int ll =  lat      * w +  lon     ;  // lower left
       int lr =  lat      * w + (lon + 1);  // lower right
-      int ur = (lat + 1) * w + (lon + 1);  // upper right 
+      int ur = (lat + 1) * w + (lon + 1);  // upper right
       int ul = (lat + 1) * w +  lon     ;  // upper left
 
       ll += indexOffset;
@@ -589,7 +589,7 @@ void WRLLoader::createBox( IndexedFaceSetSharedPtr & pIndexedFaceSet, const SFVe
       pIndexedFaceSet->coordIndex.push_back( ur );
       pIndexedFaceSet->coordIndex.push_back( ul );
       pIndexedFaceSet->coordIndex.push_back( -1 );
-      
+
       pIndexedFaceSet->normalIndex.push_back( ll );
       pIndexedFaceSet->normalIndex.push_back( lr );
       pIndexedFaceSet->normalIndex.push_back( ur );
@@ -606,7 +606,7 @@ void WRLLoader::createBox( IndexedFaceSetSharedPtr & pIndexedFaceSet, const SFVe
       }
     }
   }
-  indexOffset += d * w; 
+  indexOffset += d * w;
 
   // Negative z-axis vertices, normals, texcoords:
   zCoord = -depth * 0.5f;
@@ -619,7 +619,7 @@ void WRLLoader::createBox( IndexedFaceSetSharedPtr & pIndexedFaceSet, const SFVe
     {
       uCoord = (float) lon / (float) (w - 1); // [0.0, 1.0]
       xCoord = -width * (uCoord - 0.5f);      // [-width/2, width/2]
-      
+
       pCoordinate->point.push_back( SFVec3f( xCoord, yCoord, zCoord ) );
       pNormal->vector.push_back( SFVec3f( 0.0f, 0.0f, -1.0f) );
       if (textured)
@@ -634,7 +634,7 @@ void WRLLoader::createBox( IndexedFaceSetSharedPtr & pIndexedFaceSet, const SFVe
     {
       int ll =  lat      * w +  lon     ;  // lower left
       int lr =  lat      * w + (lon + 1);  // lower right
-      int ur = (lat + 1) * w + (lon + 1);  // upper right 
+      int ur = (lat + 1) * w + (lon + 1);  // upper right
       int ul = (lat + 1) * w +  lon     ;  // upper left
 
       ll += indexOffset;
@@ -647,7 +647,7 @@ void WRLLoader::createBox( IndexedFaceSetSharedPtr & pIndexedFaceSet, const SFVe
       pIndexedFaceSet->coordIndex.push_back( ur );
       pIndexedFaceSet->coordIndex.push_back( ul );
       pIndexedFaceSet->coordIndex.push_back( -1 );
-      
+
       pIndexedFaceSet->normalIndex.push_back( ll );
       pIndexedFaceSet->normalIndex.push_back( lr );
       pIndexedFaceSet->normalIndex.push_back( ur );
@@ -668,7 +668,7 @@ void WRLLoader::createBox( IndexedFaceSetSharedPtr & pIndexedFaceSet, const SFVe
 }
 
 void WRLLoader::createCone( IndexedFaceSetSharedPtr & pIndexedFaceSet,
-                            float radius, float height, 
+                            float radius, float height,
                             bool bottom, bool side, bool textured )
 {
   if ( !(bottom || side ) ) // Any geometry to create?
@@ -726,12 +726,12 @@ void WRLLoader::createCone( IndexedFaceSetSharedPtr & pIndexedFaceSet,
       float scale = 1.0f - (float) lat * scaleDec;
       for (int lon = 0; lon < m; lon++)
       {
-        // VRML defines the texture coordinates to start at the back of the cone, 
+        // VRML defines the texture coordinates to start at the back of the cone,
         // which means all phi angles need to be offset by pi/2. Top and bottom tesselation must match.
         float phi = (float) lon * phi_step + PI_HALF;
         float sinPhi = sinf(phi);
         float cosPhi = cosf(phi);
-        
+
         float xCoord =  cosPhi * scale;
         float zCoord = -sinPhi * scale;
         pCoordinate->point.push_back( SFVec3f( xCoord * radius, yCoord, zCoord * radius ) );
@@ -740,12 +740,12 @@ void WRLLoader::createCone( IndexedFaceSetSharedPtr & pIndexedFaceSet,
         {
           // "The bottom texture appears right side up when the top of the cone is tilted toward the -Z axis"
           float texu =  zCoord * 0.5f + 0.5f; // [-1.0, 1.0] => [0.0, 1.0]
-          float texv = -xCoord * 0.5f + 0.5f; 
+          float texv = -xCoord * 0.5f + 0.5f;
           pTextureCoordinate->point.push_back( SFVec2f( texu, texv ) );
         }
       }
     }
-  
+
     pCoordinate->point.push_back(SFVec3f(0.0f, yCoord, 0.0f));  // Center point (south pole).
     pNormal->vector.push_back(SFVec3f(0.0f, -1.0f, 0.0f));      // bottom
     if (textured)
@@ -754,12 +754,12 @@ void WRLLoader::createCone( IndexedFaceSetSharedPtr & pIndexedFaceSet,
     }
 
     for (int lat = 0; lat < k - 2; lat++)
-    {                                           
+    {
       for (int lon = 0; lon < m; lon++)
       {
         int ll =  lat      * m + lon          ;  // lower left
         int lr =  lat      * m + (lon + 1) % m;  // lower right
-        int ur = (lat + 1) * m + (lon + 1) % m;  // upper right 
+        int ur = (lat + 1) * m + (lon + 1) % m;  // upper right
         int ul = (lat + 1) * m + lon          ;  // upper left
 
         // Bottom disc inverts the winding!
@@ -791,7 +791,7 @@ void WRLLoader::createCone( IndexedFaceSetSharedPtr & pIndexedFaceSet,
     {
       int ll     = (k - 2) * m + lon;            // lower left
       int lr     = (k - 2) * m + (lon + 1) % m;  // lower right
-      int center = (k - 1) * m;                  // center 
+      int center = (k - 1) * m;                  // center
 
       // Bottom disc inverts the winding!
       pIndexedFaceSet->coordIndex.push_back( lr );
@@ -831,21 +831,21 @@ void WRLLoader::createCone( IndexedFaceSetSharedPtr & pIndexedFaceSet,
       float scale = (1.0f - texv) * radius;
 
       // Generate vertices along the latitudinal rings.
-      // On each latitude there are m + 1 vertices, 
+      // On each latitude there are m + 1 vertices,
       // the last one and the first one are on identical positions but have different texture coordinates.
       for ( int lon = 0; lon <= m; lon++ ) // phi angle
       {
-        // VRML defines the texture coordinates to start at the back of the cone, 
+        // VRML defines the texture coordinates to start at the back of the cone,
         // which means all phi angles need to be offset by pi/2.
         float phi = (float) lon * phi_step + PI_HALF;
         float sinPhi = sinf( phi );
         float cosPhi = cosf( phi );
         float texu = (float) lon / (float) m; // Range [0.0f, 1.0f]
-        
+
         pCoordinate->point.push_back( SFVec3f( cosPhi * scale, yCoord, -sinPhi * scale ) );
         // Rotate the side's normal around the y-axis.
-        pNormal->vector.push_back( SFVec3f( cosPhi * sideNormal[0] + sinPhi * sideNormal[2], 
-                                            sideNormal[1], 
+        pNormal->vector.push_back( SFVec3f( cosPhi * sideNormal[0] + sinPhi * sideNormal[2],
+                                            sideNormal[1],
                                            -sinPhi * sideNormal[0] + cosPhi * sideNormal[2] ) );
         if (textured)
         {
@@ -853,18 +853,18 @@ void WRLLoader::createCone( IndexedFaceSetSharedPtr & pIndexedFaceSet,
         }
       }
     }
-    
+
     // We have generated m + 1 vertices per lat.
     const int columns = m + 1;
 
     // Calculate indices. Using Quads for VRML.
     for ( int lat = 0; lat < n - 1; lat++ )
-    {                                           
+    {
       for ( int lon = 0; lon < m; lon++ )
       {
         SFInt32 ll =  lat      * columns + lon    ;  // lower left
         SFInt32 lr =  lat      * columns + lon + 1;  // lower right
-        SFInt32 ur = (lat + 1) * columns + lon + 1;  // upper right 
+        SFInt32 ur = (lat + 1) * columns + lon + 1;  // upper right
         SFInt32 ul = (lat + 1) * columns + lon    ;  // upper left
 
         ll += indexOffset;
@@ -877,7 +877,7 @@ void WRLLoader::createCone( IndexedFaceSetSharedPtr & pIndexedFaceSet,
         pIndexedFaceSet->coordIndex.push_back( ur );
         pIndexedFaceSet->coordIndex.push_back( ul );
         pIndexedFaceSet->coordIndex.push_back( -1 );
-        
+
         pIndexedFaceSet->normalIndex.push_back( ll );
         pIndexedFaceSet->normalIndex.push_back( lr );
         pIndexedFaceSet->normalIndex.push_back( ur );
@@ -898,12 +898,12 @@ void WRLLoader::createCone( IndexedFaceSetSharedPtr & pIndexedFaceSet,
 }
 
 void WRLLoader::createCylinder( IndexedFaceSetSharedPtr & pIndexedFaceSet,
-                                float radius, float height, 
+                                float radius, float height,
                                 bool bottom, bool side, bool top, bool textured )
 {
   if ( !(bottom || side || top) ) // Any geometry to create?
   {
-    return; 
+    return;
   }
 
   // Tessellate with square quads when inside the unclamped range.
@@ -928,7 +928,7 @@ void WRLLoader::createCylinder( IndexedFaceSetSharedPtr & pIndexedFaceSet,
     numVertices += (k - 1) * m + 1;
     numIndices  += (k - 2) * m * 5 + m * 4;
   }
-  
+
   CoordinateSharedPtr pCoordinate = Coordinate::create();
   pCoordinate->point.reserve( numVertices ); // vertices
   pIndexedFaceSet->coord = pCoordinate;
@@ -961,12 +961,12 @@ void WRLLoader::createCylinder( IndexedFaceSetSharedPtr & pIndexedFaceSet,
       float scale = 1.0f - (float) lat * scaleDec;
       for (int lon = 0; lon < m; lon++)
       {
-        // VRML defines the texture coordinates to start at the back of the cylinder, 
+        // VRML defines the texture coordinates to start at the back of the cylinder,
         // which means all phi angles need to be offset by pi/2. Top and bottom tesselation must match!
         float phi = (float) lon * phi_step + PI_HALF;
         float sinPhi = sinf(phi);
         float cosPhi = cosf(phi);
-        
+
         float xCoord =  cosPhi * scale;
         float zCoord = -sinPhi * scale;
         pCoordinate->point.push_back( SFVec3f( xCoord * radius, yCoord, zCoord * radius ) );
@@ -975,12 +975,12 @@ void WRLLoader::createCylinder( IndexedFaceSetSharedPtr & pIndexedFaceSet,
         {
           // "The bottom texture appears right side up when the top of the cylinder is tilted toward the -Z axis"
           float texu =  zCoord * 0.5f + 0.5f; // [-1.0, 1.0] => [0.0, 1.0]
-          float texv = -xCoord * 0.5f + 0.5f; 
+          float texv = -xCoord * 0.5f + 0.5f;
           pTextureCoordinate->point.push_back( SFVec2f( texu, texv ) );
         }
       }
     }
-  
+
     pCoordinate->point.push_back(SFVec3f(0.0f, yCoord, 0.0f));  // Center point (south pole).
     pNormal->vector.push_back(SFVec3f(0.0f, -1.0f, 0.0f));      // bottom
     if (textured)
@@ -989,12 +989,12 @@ void WRLLoader::createCylinder( IndexedFaceSetSharedPtr & pIndexedFaceSet,
     }
 
     for (int lat = 0; lat < k - 2; lat++)
-    {                                           
+    {
       for (int lon = 0; lon < m; lon++)
       {
         int ll =  lat      * m + lon          ;  // lower left
         int lr =  lat      * m + (lon + 1) % m;  // lower right
-        int ur = (lat + 1) * m + (lon + 1) % m;  // upper right 
+        int ur = (lat + 1) * m + (lon + 1) % m;  // upper right
         int ul = (lat + 1) * m + lon          ;  // upper left
 
         // Bottom disc inverts the winding!
@@ -1026,7 +1026,7 @@ void WRLLoader::createCylinder( IndexedFaceSetSharedPtr & pIndexedFaceSet,
     {
       int ll     = (k - 2) * m + lon;            // lower left
       int lr     = (k - 2) * m + (lon + 1) % m;  // lower right
-      int center = (k - 1) * m;                  // center 
+      int center = (k - 1) * m;                  // center
 
       // Bottom disc inverts the winding!
       pIndexedFaceSet->coordIndex.push_back( lr );
@@ -1062,17 +1062,17 @@ void WRLLoader::createCylinder( IndexedFaceSetSharedPtr & pIndexedFaceSet,
       float yCoord = height * (texv - 0.5f);    // Range [-height/2, height/2]
 
       // Generate vertices along the latitudinal rings.
-      // On each latitude there are m + 1 vertices, 
+      // On each latitude there are m + 1 vertices,
       // the last one and the first one are on identical positions but have different texture coordinates.
       for ( int lon = 0; lon <= m; lon++ ) // phi angle
       {
-        // VRML defines the texture coordinates to start at the back of the cylinder, 
+        // VRML defines the texture coordinates to start at the back of the cylinder,
         // which means all phi angles need to be offset by pi/2.
         float phi = (float) lon * phi_step + PI_HALF;
         float sinPhi = sinf( phi );
         float cosPhi = cosf( phi );
         float texu = (float) lon / (float) m; // Range [0.0f, 1.0f]
-        
+
         pCoordinate->point.push_back( SFVec3f( cosPhi * radius, yCoord, -sinPhi * radius ) );
         pNormal->vector.push_back( SFVec3f( cosPhi, 0.0f, -sinPhi ) );
         if (textured)
@@ -1081,18 +1081,18 @@ void WRLLoader::createCylinder( IndexedFaceSetSharedPtr & pIndexedFaceSet,
         }
       }
     }
-    
+
     // We have generated m + 1 vertices per lat.
     const int columns = m + 1;
 
     // Calculate indices. Using Quads for VRML.
     for ( int lat = 0; lat < n - 1; lat++ )
-    {                                           
+    {
       for ( int lon = 0; lon < m; lon++ )
       {
         SFInt32 ll =  lat      * columns + lon    ;  // lower left
         SFInt32 lr =  lat      * columns + lon + 1;  // lower right
-        SFInt32 ur = (lat + 1) * columns + lon + 1;  // upper right 
+        SFInt32 ur = (lat + 1) * columns + lon + 1;  // upper right
         SFInt32 ul = (lat + 1) * columns + lon    ;  // upper left
 
         ll += indexOffset;
@@ -1105,7 +1105,7 @@ void WRLLoader::createCylinder( IndexedFaceSetSharedPtr & pIndexedFaceSet,
         pIndexedFaceSet->coordIndex.push_back( ur );
         pIndexedFaceSet->coordIndex.push_back( ul );
         pIndexedFaceSet->coordIndex.push_back( -1 );
-        
+
         pIndexedFaceSet->normalIndex.push_back( ll );
         pIndexedFaceSet->normalIndex.push_back( lr );
         pIndexedFaceSet->normalIndex.push_back( ur );
@@ -1136,12 +1136,12 @@ void WRLLoader::createCylinder( IndexedFaceSetSharedPtr & pIndexedFaceSet,
       float scale = 1.0f - (float) lat * scaleDec;
       for (int lon = 0; lon < m; lon++)
       {
-        // VRML defines the texture coordinates to start at the back of the cylinder, 
+        // VRML defines the texture coordinates to start at the back of the cylinder,
         // which means all phi angles need to be offset by pi/2. Top and bottom tesselation must match.
         float phi = (float) lon * phi_step + PI_HALF;
         float sinPhi = sinf(phi);
         float cosPhi = cosf(phi);
-        
+
         float xCoord =  cosPhi * scale; // [-1.0, 1.0]
         float zCoord = -sinPhi * scale;
         pCoordinate->point.push_back( SFVec3f( xCoord * radius, yCoord, zCoord * radius ) );
@@ -1150,12 +1150,12 @@ void WRLLoader::createCylinder( IndexedFaceSetSharedPtr & pIndexedFaceSet,
         {
           // "The top texture appears right side up when the top of the cylinder is tilted toward the +Z axis"
           float texu = -zCoord * 0.5f + 0.5f; // [-1.0, 1.0] => [0.0, 1.0]
-          float texv = -xCoord * 0.5f + 0.5f; 
+          float texv = -xCoord * 0.5f + 0.5f;
           pTextureCoordinate->point.push_back( SFVec2f( texu, texv ) );
         }
       }
     }
-  
+
     pCoordinate->point.push_back(SFVec3f(0.0f, yCoord, 0.0f));  // Center point (north pole).
     pNormal->vector.push_back(SFVec3f(0.0f, 1.0f, 0.0f));       // top
     if (textured)
@@ -1164,26 +1164,26 @@ void WRLLoader::createCylinder( IndexedFaceSetSharedPtr & pIndexedFaceSet,
     }
 
     for (int lat = 0; lat < k - 2; lat++)
-    {                                           
+    {
       for (int lon = 0; lon < m; lon++)
       {
         int ll =  lat      * m + lon          ;  // lower left
         int lr =  lat      * m + (lon + 1) % m;  // lower right
-        int ur = (lat + 1) * m + (lon + 1) % m;  // upper right 
+        int ur = (lat + 1) * m + (lon + 1) % m;  // upper right
         int ul = (lat + 1) * m + lon          ;  // upper left
 
         ll += indexOffset;
         lr += indexOffset;
         ur += indexOffset;
         ul += indexOffset;
-        
+
         // Top disc uses standard CCW ordering.
         pIndexedFaceSet->coordIndex.push_back( ll );
         pIndexedFaceSet->coordIndex.push_back( lr );
         pIndexedFaceSet->coordIndex.push_back( ur );
         pIndexedFaceSet->coordIndex.push_back( ul );
         pIndexedFaceSet->coordIndex.push_back( -1 );
-        
+
         pIndexedFaceSet->normalIndex.push_back( ll );
         pIndexedFaceSet->normalIndex.push_back( lr );
         pIndexedFaceSet->normalIndex.push_back( ur );
@@ -1206,12 +1206,12 @@ void WRLLoader::createCylinder( IndexedFaceSetSharedPtr & pIndexedFaceSet,
     {
       int ll     = (k - 2) * m + lon;            // lower left
       int lr     = (k - 2) * m + (lon + 1) % m;  // lower right
-      int center = (k - 1) * m;                  // center 
+      int center = (k - 1) * m;                  // center
 
       ll     += indexOffset;
       lr     += indexOffset;
       center += indexOffset;
-      
+
       pIndexedFaceSet->coordIndex.push_back( ll );
       pIndexedFaceSet->coordIndex.push_back( lr );
       pIndexedFaceSet->coordIndex.push_back( center );
@@ -1274,19 +1274,19 @@ void WRLLoader::createSphere( IndexedFaceSetSharedPtr & pIndexedFaceSet, float r
     float texv = (float) latitude / (float) (n - 1); // Range [0.0f, 1.0f]
 
     // Generate vertices along the latitudinal rings.
-    // On each latitude there are m + 1 vertices, 
+    // On each latitude there are m + 1 vertices,
     // the last one and the first one are on identical positions but have different texture coordinates.
     for ( int longitude = 0; longitude <= m; longitude++ ) // phi angle
     {
-      // VRML defines the texture coordinates to start at the back of the sphere, 
+      // VRML defines the texture coordinates to start at the back of the sphere,
       // which means all phi angles need to be offset by pi/2.
       float phi = (float) longitude * phi_step + PI_HALF;
       float sinPhi = sinf( phi );
       float cosPhi = cosf( phi );
       float texu = (float) longitude / (float) m; // Range [0.0f, 1.0f]
-      
+
       // Unit sphere coordinates are the normals.
-      SFVec3f v = SFVec3f( cosPhi * sinTheta, 
+      SFVec3f v = SFVec3f( cosPhi * sinTheta,
                           -cosTheta,             // -y to start at the south pole.
                           -sinPhi * sinTheta );
 
@@ -1298,18 +1298,18 @@ void WRLLoader::createSphere( IndexedFaceSetSharedPtr & pIndexedFaceSet, float r
       }
     }
   }
-  
+
   // We have generated m + 1 vertices per latitude.
   const int columns = m + 1;
 
   // Calculate indices. Using Quads for VRML.
   for ( int latitude = 0; latitude < n - 1; latitude++ )
-  {                                           
+  {
     for ( int longitude = 0; longitude < m; longitude++ )
     {
       SFInt32 ll =  latitude      * columns + longitude    ;  // lower left
       SFInt32 lr =  latitude      * columns + longitude + 1;  // lower right
-      SFInt32 ur = (latitude + 1) * columns + longitude + 1;  // upper right 
+      SFInt32 ur = (latitude + 1) * columns + longitude + 1;  // upper right
       SFInt32 ul = (latitude + 1) * columns + longitude    ;  // upper left
 
       pIndexedFaceSet->coordIndex.push_back( ll );
@@ -1317,7 +1317,7 @@ void WRLLoader::createSphere( IndexedFaceSetSharedPtr & pIndexedFaceSet, float r
       pIndexedFaceSet->coordIndex.push_back( ur );
       pIndexedFaceSet->coordIndex.push_back( ul );
       pIndexedFaceSet->coordIndex.push_back( -1 );
-      
+
       pIndexedFaceSet->normalIndex.push_back( ll );
       pIndexedFaceSet->normalIndex.push_back( lr );
       pIndexedFaceSet->normalIndex.push_back( ur );
@@ -1389,11 +1389,11 @@ void WRLLoader::determineTexGen( IndexedFaceSetSharedPtr const& pIndexedFaceSet
   }
   Vec4f plane[2];
 
-  Plane3f p0( Vec3f( (first==0)?1.0f:0.0f, (first==1)?1.0f:0.0f, 
+  Plane3f p0( Vec3f( (first==0)?1.0f:0.0f, (first==1)?1.0f:0.0f,
                      (first==2)?1.0f:0.0f ), min );
   plane[0] = Vec4f( p0.getNormal(), p0.getOffset() );
 
-  Plane3f p1( Vec3f( (second==0)?1.0f:0.0f, (second==1)?1.0f:0.0f, 
+  Plane3f p1( Vec3f( (second==0)?1.0f:0.0f, (second==1)?1.0f:0.0f,
                      (second==2)?1.0f:0.0f ), min );
   plane[1] = Vec4f( p0.getNormal(), p0.getOffset() );
 
@@ -1860,7 +1860,7 @@ void  WRLLoader::interpretVRMLTree( void )
   {
     interpretChildren( m_topLevelGroup->children, m_rootNode );
   }
-  
+
   m_scene->setRootNode( m_rootNode );
 }
 
@@ -1965,7 +1965,7 @@ inline bool evalTextured( const dp::sg::core::PrimitiveSharedPtr & pset, bool te
     }
     return hasTexCoords!=textured;
   }
-  return false; 
+  return false;
 }
 
 void  WRLLoader::interpretBox( BoxSharedPtr const& pBox, vector<PrimitiveSharedPtr> &primitives, bool textured )
@@ -2032,7 +2032,7 @@ void  WRLLoader::interpretCone( ConeSharedPtr const& pCone, vector<PrimitiveShar
     IndexedFaceSetSharedPtr pIndexedFaceSet = IndexedFaceSet::create();
     pIndexedFaceSet->setName( pCone->getName() );
 
-    createCone( pIndexedFaceSet, pCone->bottomRadius, pCone->height, 
+    createCone( pIndexedFaceSet, pCone->bottomRadius, pCone->height,
                 pCone->bottom, pCone->side, textured );
 
     interpretIndexedFaceSet( pIndexedFaceSet, primitives );
@@ -2072,7 +2072,7 @@ void  WRLLoader::interpretCylinder( CylinderSharedPtr const& pCylinder, vector<P
     IndexedFaceSetSharedPtr pIndexedFaceSet = IndexedFaceSet::create();
     pIndexedFaceSet->setName( pCylinder->getName() );
 
-    createCylinder( pIndexedFaceSet, pCylinder->radius, pCylinder->height, 
+    createCylinder( pIndexedFaceSet, pCylinder->radius, pCylinder->height,
                     pCylinder->bottom, pCylinder->side, pCylinder->top, textured );
 
     interpretIndexedFaceSet( pIndexedFaceSet, primitives );
@@ -2702,7 +2702,7 @@ void WRLLoader::resampleKeyValues( MFFloat & keys, vector<T> & values, unsigned 
           // next key coincides with step position -> use just that key
           stepMap.push_back( make_pair(step,make_pair(startIndex+1,0)) );
         }
-        else 
+        else
         {
           // -> use startIndex and next
           stepMap.push_back( make_pair(step,make_pair(startIndex,startIndex+1)) );
@@ -3139,7 +3139,7 @@ void  WRLLoader::interpretIndexedLineSet( IndexedLineSetSharedPtr const& pIndexe
       }
       cvas->setColors( &colors[0], dp::checked_cast<unsigned int>(colors.size()) );
     }
-    
+
     PrimitiveSharedPtr pLineStrips = Primitive::create( PRIMITIVE_LINE_STRIP );
     pLineStrips->setName( pIndexedLineSet->getName() );
     pLineStrips->setIndexSet( iset );
@@ -3313,7 +3313,7 @@ LightSourceSharedPtr WRLLoader::interpretPointLight( vrml::PointLightSharedPtr c
                                           , pVRMLPointLight->ambientIntensity * color
                                           , pVRMLPointLight->intensity * color
                                           , pVRMLPointLight->intensity * color
-                                          , makeArray( pVRMLPointLight->attenuation[0], pVRMLPointLight->attenuation[1], pVRMLPointLight->attenuation[2] ) );
+                                          , { pVRMLPointLight->attenuation[0], pVRMLPointLight->attenuation[1], pVRMLPointLight->attenuation[2] } );
     lightSource->setName( pVRMLPointLight->getName() );
     lightSource->setEnabled( pVRMLPointLight->on );
   }
@@ -3561,7 +3561,7 @@ LightSourceSharedPtr WRLLoader::interpretSpotLight( vrml::SpotLightSharedPtr con
                                          , pVRMLSpotLight->ambientIntensity * color
                                          , pVRMLSpotLight->intensity * color
                                          , pVRMLSpotLight->intensity * color
-                                         , makeArray( pVRMLSpotLight->attenuation[0], pVRMLSpotLight->attenuation[1], pVRMLSpotLight->attenuation[2] )
+                                         , { pVRMLSpotLight->attenuation[0], pVRMLSpotLight->attenuation[1], pVRMLSpotLight->attenuation[2] }
                                          , exponent
                                          , pVRMLSpotLight->cutOffAngle );
     lightSource->setName( pVRMLSpotLight->getName() );
@@ -3942,7 +3942,7 @@ SceneSharedPtr WRLLoader::load( string const& filename, dp::util::FileFinder con
   DP_ASSERT( m_textureFiles.empty() );
 
   // set the locale temporarily to the default "C" to make atof behave predictably
-  dp::util::Locale tl("C"); 
+  dp::util::Locale tl("C");
 
   //  (re-)initialize member variables
   m_eof = false;

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2009-2011
+// Copyright (c) 2009-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -111,12 +111,12 @@ namespace dp
       //! Generate a tessellated plane with \a subdiv subdivisions and the possibility to apply a transformation matrix transf
       // supported attributes: vertex, normal, texcoord0 (2D)
       DP_SG_GENERATOR_API dp::sg::core::PrimitiveSharedPtr createTessellatedPlane( unsigned int subdiv
-                                                     , const dp::math::Mat44f &transf = dp::math::Mat44f( dp::util::makeArray( 1.0f, 0.0f, 0.0f, 0.0f
-                                                                                                                       , 0.0f, 1.0f, 0.0f, 0.0f
-                                                                                                                       , 0.0f, 0.0f, 1.0f, 0.0f
-                                                                                                                       , 0.0f, 0.0f, 0.0f, 1.0f ) ) );
+                                                     , const dp::math::Mat44f &transf = dp::math::Mat44f( { 1.0f, 0.0f, 0.0f, 0.0f
+                                                                                                            , 0.0f, 1.0f, 0.0f, 0.0f
+                                                                                                            , 0.0f, 0.0f, 1.0f, 0.0f
+                                                                                                            , 0.0f, 0.0f, 0.0f, 1.0f } ) );
 
-      /*! Create an XY aligned plane that could conveniantly be used to make pixel-aligned rectangles: ( \a x0, \a y0 ) - the bottom left corner of the rect, 
+      /*! Create an XY aligned plane that could conveniantly be used to make pixel-aligned rectangles: ( \a x0, \a y0 ) - the bottom left corner of the rect,
       and the width \a width in pixels, and the height \a height in pixels of the rect. \a wext and \a hext can be set to specify how far
       the texture coordinates extend at the top right corner of the rect*/
       DP_SG_GENERATOR_API dp::sg::core::PrimitiveSharedPtr createPlane( float x0, float y0, float width, float height, float wext = 1.0f, float hext = 1.0f);

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010
+// Copyright (c) 2010-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -261,13 +261,13 @@ HOOPSLoader::initHOOPS( const A3DUTF8Char * customerKey, const A3DUTF8Char * var
       reportError( "HOOPS 3DX ERROR: A3DLicPutLicense", A3D_ERROR );
       return false;
     }
-    
+
     A3DInt32 iMajorVersion=0, iMinorVersion=0;
     DP_VERIFY( A3DDllGetVersion(&iMajorVersion, &iMinorVersion) == A3D_SUCCESS );
     if (    ( iMajorVersion != A3D_DLL_MAJORVERSION )
         ||  ( ( iMajorVersion == A3D_DLL_MAJORVERSION ) && ( iMinorVersion < A3D_DLL_MINORVERSION ) ) )
     {
-      reportError( "HOOPS 3DX ERROR: A3DDllGetVersion returned incompatible version", A3D_ERROR ); 
+      reportError( "HOOPS 3DX ERROR: A3DDllGetVersion returned incompatible version", A3D_ERROR );
       return false;
     }
 
@@ -775,20 +775,20 @@ A3DStatus HOOPSLoader::parseTess3D( const A3DRiRepresentationItem * pRepItem, co
         gatherFromFans( tbd, t3d, tfd, sizeIndex, startOffset, effectIndicesMap[effectData].two, false );
       }
 
-      //Triangle strip. 
+      //Triangle strip.
       if ( flags & kA3DTessFaceDataTriangleStripe )
       {
         gatherFromStrips( tbd, t3d, tfd, sizeIndex, startOffset, effectIndicesMap[effectData].two, false );
       }
 
-      //Simple triangle with one normal. 
+      //Simple triangle with one normal.
       if ( flags & kA3DTessFaceDataTriangleOneNormal )
       {
         // don't care about kA3DTessFaceDataNormalSingle here !!
         gatherFromTrianglesOneNormal( tbd, t3d, tfd, sizeIndex, startOffset, effectIndicesMap[effectData].two );
       }
 
-      //Triangle fan with one normal and other characteristics depending on kA3DTessFaceDataNormalSingle. 
+      //Triangle fan with one normal and other characteristics depending on kA3DTessFaceDataNormalSingle.
       if ( flags & kA3DTessFaceDataTriangleFanOneNormal )
       {
         if( flags & kA3DTessFaceDataNormalSingle )
@@ -802,7 +802,7 @@ A3DStatus HOOPSLoader::parseTess3D( const A3DRiRepresentationItem * pRepItem, co
         }
       }
 
-      //Triangle strip with one normal and with indexes as specified by the kA3DTessFaceDataNormalSingle bit. 
+      //Triangle strip with one normal and with indexes as specified by the kA3DTessFaceDataNormalSingle bit.
       if ( flags & kA3DTessFaceDataTriangleStripeOneNormal )
       {
         if( flags & kA3DTessFaceDataNormalSingle )
@@ -818,7 +818,7 @@ A3DStatus HOOPSLoader::parseTess3D( const A3DRiRepresentationItem * pRepItem, co
 
       DP_ASSERT( ! ( flags & kA3DTessFaceDataPolyfaceTextured ) );
 
-      //Simple triangle with texture. 
+      //Simple triangle with texture.
       if ( flags & kA3DTessFaceDataTriangleTextured )
       {
         if ( tfd.m_uiTextureCoordIndexesSize == 1 )
@@ -833,7 +833,7 @@ A3DStatus HOOPSLoader::parseTess3D( const A3DRiRepresentationItem * pRepItem, co
         }
       }
 
-      //Triangle fan with texture. 
+      //Triangle fan with texture.
       if ( flags & kA3DTessFaceDataTriangleFanTextured )
       {
         DP_ASSERT( !"never passed this path" );
@@ -848,7 +848,7 @@ A3DStatus HOOPSLoader::parseTess3D( const A3DRiRepresentationItem * pRepItem, co
         }
       }
 
-      //Triangle strip with texture. 
+      //Triangle strip with texture.
       if ( flags & kA3DTessFaceDataTriangleStripeTextured )
       {
         DP_ASSERT( !"never passed this path" );
@@ -865,7 +865,7 @@ A3DStatus HOOPSLoader::parseTess3D( const A3DRiRepresentationItem * pRepItem, co
 
       DP_ASSERT( ! ( flags & kA3DTessFaceDataPolyfaceOneNormalTextured ) );
 
-      //Simple triangle with one normal and texture. 
+      //Simple triangle with one normal and texture.
       if ( flags & kA3DTessFaceDataTriangleOneNormalTextured )
       {
         DP_ASSERT( !"never passed this path" );
@@ -887,7 +887,7 @@ A3DStatus HOOPSLoader::parseTess3D( const A3DRiRepresentationItem * pRepItem, co
         }
       }
 
-      //Triangle fan with one normal and texture. 
+      //Triangle fan with one normal and texture.
       if ( flags & kA3DTessFaceDataTriangleFanOneNormalTextured )
       {
         DP_ASSERT( !"never passed this path" );
@@ -916,7 +916,7 @@ A3DStatus HOOPSLoader::parseTess3D( const A3DRiRepresentationItem * pRepItem, co
         }
       }
 
-      //Triangle strip with one normal and texture. 
+      //Triangle strip with one normal and texture.
       if ( flags & kA3DTessFaceDataTriangleStripeOneNormalTextured )
       {
         DP_ASSERT( !"never passed this path" );
@@ -1057,7 +1057,7 @@ A3DStatus HOOPSLoader::parseTess3DWire( const A3DRiRepresentationItem * pRepItem
   A3DDouble * verts  = tbd.m_pdCoords;
 
   // extract the wires
-  if( t3wd.m_uiSizesWiresSize ) 
+  if( t3wd.m_uiSizesWiresSize )
   {
     while( wIndex < t3wd.m_uiSizesWiresSize )
     {
@@ -1133,7 +1133,7 @@ A3DStatus HOOPSLoader::parseTess3DWire( const A3DRiRepresentationItem * pRepItem
   {
     //
     // if no WireSizes were specified, then data is all verts in the coords list
-    // 
+    //
     unsigned int count = tbd.m_uiCoordSize / 3;
 
     vector< Vec3f > vertices;
@@ -1490,7 +1490,7 @@ GroupSharedPtr HOOPSLoader::traverseTransform( const A3DMiscCartesianTransformat
     normalize( yvec );
     normalize( zvec );
 
-    Mat33f mat( makeArray( xvec, yvec, zvec ) );
+    Mat33f mat( { xvec, yvec, zvec } );
     Quatf quat( mat );
 
     trafo.setOrientation( quat );
@@ -1543,7 +1543,7 @@ A3DStatus HOOPSLoader::traversePOccurrence( const A3DAsmProductOccurrence * pOcc
   bool assemblyPart = assembly && !assemblyGroup;
 
   //
-  // If there is a "Location" then it is a transform, make sure all 
+  // If there is a "Location" then it is a transform, make sure all
   // children are added to the transform.
   //
   GroupSharedPtr group = sData.m_pLocation ? traverseTransform( sData.m_pLocation ) : Group::create();
@@ -1677,10 +1677,10 @@ A3DStatus HOOPSLoader::traverseGlobal( A3DGlobal * global )
 
       //
       // We compute a stipple pattern based on the values in the lengths array.  First, compute a
-      // percentage for each value in the lengths array.  Since the stipple pattern is 16 bits, we 
-      // compute the number of bits based on the length in the array.  
+      // percentage for each value in the lengths array.  Since the stipple pattern is 16 bits, we
+      // compute the number of bits based on the length in the array.
       //
-      // We start with "pen down", but m_dPhase is the distance from the start to begin, so we 
+      // We start with "pen down", but m_dPhase is the distance from the start to begin, so we
       // really start with pen-up for m_dPhase, then alternate down, up, for each set of values in
       // the m_pdLengths array.
       //
@@ -1701,10 +1701,10 @@ A3DStatus HOOPSLoader::traverseGlobal( A3DGlobal * global )
           vector< unsigned int > values( sLinePatternData.m_uiNumberOfLengths + 1 );
 
           // values are number of bits in each position in the stipple pattern
-          values[0] = (unsigned int)( floor( sLinePatternData.m_dPhase / total * 16.0 + 0.5 ) ); 
+          values[0] = (unsigned int)( floor( sLinePatternData.m_dPhase / total * 16.0 + 0.5 ) );
           for( A3DUns32 l = 0; l < sLinePatternData.m_uiNumberOfLengths; l ++ )
           {
-            values[l+1] = (unsigned int)( floor( sLinePatternData.m_pdLengths[l] / total * 16.0 + 0.5 ) ); 
+            values[l+1] = (unsigned int)( floor( sLinePatternData.m_pdLengths[l] / total * 16.0 + 0.5 ) );
           }
 
           unsigned short pattern = 0;
@@ -1740,7 +1740,7 @@ A3DStatus HOOPSLoader::traverseGlobal( A3DGlobal * global )
         A3DGlobalIsMaterialTexture(ui,&bIsTexture);
 
         if (bIsTexture)
-        {  
+        {
           A3DGraphTextureApplicationData sTextureApplicationData;
           A3D_INITIALIZE_DATA( A3DGraphTextureApplicationData, sTextureApplicationData);
           iRet=A3DGlobalGetGraphTextureApplicationData(ui,&sTextureApplicationData);
@@ -1749,7 +1749,7 @@ A3DStatus HOOPSLoader::traverseGlobal( A3DGlobal * global )
 
           A3DGlobalGetGraphTextureApplicationData(A3D_DEFAULT_MATERIAL_INDEX,&sTextureApplicationData);
         }
-        else  
+        else
         {
           A3DGraphMaterialData sMaterialData;
           A3D_INITIALIZE_DATA( A3DGraphMaterialData, sMaterialData);
@@ -1773,7 +1773,7 @@ A3DStatus HOOPSLoader::traverseGlobal( A3DGlobal * global )
         iRet=A3DGlobalGetGraphTextureDefinitionData(ui,&sTextureDefinitionData);
 
         // no report here
-        
+
         A3DGlobalGetGraphTextureDefinitionData(A3D_DEFAULT_TEXTURE_DEFINITION_INDEX,&sTextureDefinitionData);
       }
     }
@@ -1789,7 +1789,7 @@ A3DStatus HOOPSLoader::traverseGlobal( A3DGlobal * global )
         iRet=A3DGlobalGetGraphPictureData(ui,&sPictureData);
 
         // no report here
-        
+
         A3DGlobalGetGraphPictureData(A3D_DEFAULT_MATERIAL_INDEX,&sPictureData);
       }
     }
@@ -1822,7 +1822,7 @@ A3DStatus HOOPSLoader::traverseGlobal( A3DGlobal * global )
             iRet=A3DGlobalGetGraphSolidPatternData(A3D_DEFAULT_PATTERN_INDEX,&sSolidPatternData);
 
             // do something..
-            
+
             A3DGlobalGetGraphSolidPatternData(A3D_DEFAULT_PATTERN_INDEX,&sSolidPatternData);
             break;
           }
@@ -1833,7 +1833,7 @@ A3DStatus HOOPSLoader::traverseGlobal( A3DGlobal * global )
             iRet=A3DGlobalGetGraphDottingPatternData(A3D_DEFAULT_PATTERN_INDEX,&sDottingPatternData);
 
             // do something..
-            
+
             A3DGlobalGetGraphDottingPatternData(A3D_DEFAULT_PATTERN_INDEX,&sDottingPatternData);
             break;
           }
@@ -1844,7 +1844,7 @@ A3DStatus HOOPSLoader::traverseGlobal( A3DGlobal * global )
             iRet=A3DGlobalGetGraphVPicturePatternData(A3D_DEFAULT_PATTERN_INDEX,&sVPicturePatternData);
 
             // do something..
-            
+
             A3DGlobalGetGraphVPicturePatternData(A3D_DEFAULT_PATTERN_INDEX,&sVPicturePatternData);
             break;
           }
@@ -1856,7 +1856,7 @@ A3DStatus HOOPSLoader::traverseGlobal( A3DGlobal * global )
   return A3D_SUCCESS;
 }
 
-A3DStatus 
+A3DStatus
 HOOPSLoader::traverseModel()
 {
   A3DStatus iRet;

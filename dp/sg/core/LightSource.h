@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2011
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -103,7 +103,7 @@ namespace dp
           BEGIN_DECLARE_STATIC_PROPERTIES
               DP_SG_CORE_API DECLARE_STATIC_PROPERTY( Enabled );
               DP_SG_CORE_API DECLARE_STATIC_PROPERTY( ShadowCasting );
-          END_DECLARE_STATIC_PROPERTIES 
+          END_DECLARE_STATIC_PROPERTIES
 
         protected:
           /*! \brief Protected default constructor to prevent explicit creation.
@@ -142,7 +142,7 @@ namespace dp
       };
 
       /*! Generate a directed light with the direction \a direction, the ambient color \a ambientColor, the diffuse
-       *  color \a diffuseColor, a specular color of (0.0f,0.0f,0.0f), a specular exponent of 0.0f */ 
+       *  color \a diffuseColor, a specular color of (0.0f,0.0f,0.0f), a specular exponent of 0.0f */
       DP_SG_CORE_API LightSourceSharedPtr createStandardDirectedLight( const dp::math::Vec3f & direction = dp::math::Vec3f( 0.0f, 0.0f, -1.0f )
                                                                      , const dp::math::Vec3f & ambient = dp::math::Vec3f( 0.0f, 0.0f, 0.0f )
                                                                      , const dp::math::Vec3f & diffuse = dp::math::Vec3f( 1.0f, 1.0f, 1.0f )
@@ -153,7 +153,7 @@ namespace dp
                                                                   , const dp::math::Vec3f & ambient = dp::math::Vec3f( 0.0f, 0.0f, 0.0f )
                                                                   , const dp::math::Vec3f & diffuse = dp::math::Vec3f( 1.0f, 1.0f, 1.0f )
                                                                   , const dp::math::Vec3f & specular = dp::math::Vec3f( 1.0f, 1.0f, 1.0f )
-                                                                  , const boost::array<float,3> & attenuations = dp::util::makeArray( 1.0f, 0.0f, 0.0f ) );
+                                                                  , const boost::array<float, 3> & attenuations = { 1.0f, 0.0f, 0.0f } );
       DP_SG_CORE_API bool isStandardPointLight( const LightSourceSharedPtr & lightSource );
 
       DP_SG_CORE_API LightSourceSharedPtr createStandardSpotLight( const dp::math::Vec3f & position = dp::math::Vec3f( 0.0f, 0.0f, 0.0f )
@@ -161,7 +161,7 @@ namespace dp
                                                                  , const dp::math::Vec3f & ambient = dp::math::Vec3f( 0.0f, 0.0f, 0.0f )
                                                                  , const dp::math::Vec3f & diffuse = dp::math::Vec3f( 1.0f, 1.0f, 1.0f )
                                                                  , const dp::math::Vec3f & specular = dp::math::Vec3f( 1.0f, 1.0f, 1.0f )
-                                                                 , const boost::array<float,3> & attenuations = dp::util::makeArray( 1.0f, 0.0f, 0.0f )
+                                                                 , const boost::array<float, 3> & attenuations = { 1.0f, 0.0f, 0.0f }
                                                                  , float exponent = 0.0f
                                                                  , float cutoff = 45.0f );
       DP_SG_CORE_API bool isStandardSpotLight( const LightSourceSharedPtr & lightSource );

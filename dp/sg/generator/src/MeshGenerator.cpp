@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2009-2015
+// Copyright (c) 2009-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -92,7 +92,7 @@ namespace dp
             float x = -1.0f;
             for ( unsigned int sX = 0; sX < row; sX++ )
             {
-              vertices.push_back( Vec3f(Vec4f( x, y, 0.0f, 1.0f ) * transf ) ); 
+              vertices.push_back( Vec3f(Vec4f( x, y, 0.0f, 1.0f ) * transf ) );
               Vec3f normal(0.0f, 0.0f, 1.0f); // Initialize to some valid normal in case the transf matrix cannot be inverted.
               if ( validInverse )
               {
@@ -100,7 +100,7 @@ namespace dp
                 normal.normalize();
               }
               normals.push_back( normal );
-              texcoords.push_back( Vec2f( x * 0.5f + 0.5f, y * 0.5f + 0.5f ) );  
+              texcoords.push_back( Vec2f( x * 0.5f + 0.5f, y * 0.5f + 0.5f ) );
               x += step;
             }
             y += step;
@@ -123,7 +123,7 @@ namespace dp
       }
 
       // ===========================================================================
-  
+
       PrimitiveSharedPtr createQuadSet( unsigned int m, unsigned int n, const float size, const float gap )
       {
         DP_ASSERT( m >= 1 && n >= 1 && "createQuadSet(): m and n both have to be at least 1." );
@@ -142,7 +142,7 @@ namespace dp
         indices.reserve( size_v );
 
         // lower-left corner of the current tile
-        float dy = 0.0f; 
+        float dy = 0.0f;
 
         // n tiles in x-direction
         for( unsigned int i = 0; i < m; ++i )
@@ -165,7 +165,7 @@ namespace dp
 
             unsigned int first_index = ( i * n + j ) * 4;
             Vec3f n = calculateFaceNormal( a, b, d );
-        
+
             // Setup normals and faces
             for( unsigned int k = 0; k < 4; ++k )
             {
@@ -225,7 +225,7 @@ namespace dp
           normals.push_back( v );
           vertices.push_back( v * radius + Vec3f( 0.0f, height, 0.0f ) );
           vertices.push_back( v * radius );
-      
+
           indices.push_back( i * 2 );
           indices.push_back( i * 2 + 1 );
 
@@ -264,7 +264,7 @@ namespace dp
         indices.reserve( size_v );
 
         // lower-left corner of the current tile
-        float dy = 0.0f; 
+        float dy = 0.0f;
 
         // m tiles in y-direction
         for( unsigned int i = 0; i < m; ++i )
@@ -322,7 +322,7 @@ namespace dp
         // setup vertices and faces for n triangles
         vector<Vec3f> vertices;
         vector<unsigned int> indices;
-    
+
         vertices.reserve( n + 2 );
         indices.reserve( n + 2 );
 
@@ -397,7 +397,7 @@ namespace dp
         vertices.reserve( size_v );
         normals.reserve( size_v );
         indices.reserve( size_v );
-    
+
         for( unsigned int i = 0; i <= rows; ++i )
         {
           for( unsigned int j = 0; j <= columns; ++j )
@@ -443,8 +443,8 @@ namespace dp
         //  0 1 2 3
         //
         Vec3f verts[10] =
-        { 
-          Vec3f(size[0]*0.0f/4.0f, size[1]*0.0f/4.0f, size[2]*0.0f/4.0f), // 0 
+        {
+          Vec3f(size[0]*0.0f/4.0f, size[1]*0.0f/4.0f, size[2]*0.0f/4.0f), // 0
           Vec3f(size[0]*1.0f/4.0f, size[1]*0.0f/4.0f, size[2]*1.0f/4.0f), // 1
           Vec3f(size[0]*2.0f/4.0f, size[1]*0.0f/4.0f, size[2]*1.0f/4.0f), // 2
           Vec3f(size[0]*3.0f/4.0f, size[1]*0.0f/4.0f, size[2]*0.0f/4.0f), // 3
@@ -491,14 +491,14 @@ namespace dp
       // ===========================================================================
 
       GeoNodeSharedPtr createQuadPatches4x4( const std::vector<std::string> & searchPaths, unsigned int n, unsigned int m, const Vec2f & offset )
-      {  
-        const float r = std::min( offset[0], offset[1] )/2.0f * 0.75f;  
+      {
+        const float r = std::min( offset[0], offset[1] )/2.0f * 0.75f;
         const float dy = r;  // distance between rows of vertices
 
         // For a cylinder, we need four quad patches, each extruding an approximation
         // of a quarter of a circle
 
-        // For a bezier curve to approximate a quarter of a circle, we need to use a 
+        // For a bezier curve to approximate a quarter of a circle, we need to use a
         // cubic bezier curve with inner points at a distance x of r*4(sqrt(2)-1)/3 from
         // the end points in the tangent direction at the end points:
         //
@@ -508,13 +508,13 @@ namespace dp
         //   |       |
         //   *       3
         //
-    
+
         // Distance of the boundary control points to the corner control points
         const float d = r * 4.0f * (sqrt(2.0f)-1.0f)/3.0f;
 
         // A zero for nice alignment
         const float o = 0.0f;
-    
+
         // First construct the bezier curves to be extruded
         Vec3f bezierCurves[16];
         bezierCurves[ 0] = Vec3f( o, o, r ); //
@@ -526,18 +526,18 @@ namespace dp
         bezierCurves[ 6] = Vec3f( d, o,-r ); //     A  |  5
         bezierCurves[ 7] = Vec3f( o, o,-r ); //  --BC-----34--x
         bezierCurves[ 8] = Vec3f( o, o,-r ); //     D  |  2
-        bezierCurves[ 9] = Vec3f(-d, o,-r ); //      E F0 1 
-        bezierCurves[10] = Vec3f(-r, o,-d ); //        | 
-        bezierCurves[11] = Vec3f(-r, o, o ); //        z 
-        bezierCurves[12] = Vec3f(-r, o, o ); // 
-        bezierCurves[13] = Vec3f(-r, o, d ); //  
-        bezierCurves[14] = Vec3f(-d, o, r ); //  
-        bezierCurves[15] = Vec3f( o, o, r ); // 
+        bezierCurves[ 9] = Vec3f(-d, o,-r ); //      E F0 1
+        bezierCurves[10] = Vec3f(-r, o,-d ); //        |
+        bezierCurves[11] = Vec3f(-r, o, o ); //        z
+        bezierCurves[12] = Vec3f(-r, o, o ); //
+        bezierCurves[13] = Vec3f(-r, o, d ); //
+        bezierCurves[14] = Vec3f(-d, o, r ); //
+        bezierCurves[15] = Vec3f( o, o, r ); //
 
         // Extrude the curves to form the patches
-        //            y  C D E F  
-        // one patch: |  8 9 A B  
-        //            |  4 5 6 7  
+        //            y  C D E F
+        // one patch: |  8 9 A B
+        //            |  4 5 6 7
         //            O  0 1 2 3
         vector< Vec3f > verts;
         for( unsigned int i = 0; i < 4; ++i )
@@ -565,7 +565,7 @@ namespace dp
             for( unsigned int k = 0; k < verts.size(); ++k )
             {
               vertices.push_back( verts.at( k ) + Vec3f( x, o, z ) );
-            }        
+            }
           }
         }
 
@@ -604,10 +604,10 @@ namespace dp
           4--------------5
          z
         */
-    
+
         // Setup vertices
         static const Vec3f vertices[8] =
-        { 
+        {
           Vec3f( -1.0f, -1.0f, -1.0f ), // 0
           Vec3f(  1.0f, -1.0f, -1.0f ), // 1
           Vec3f( -1.0f,  1.0f, -1.0f ), // 2
@@ -626,7 +626,7 @@ namespace dp
           0, 1, 5, 5, 4, 0, // bottom
           4, 5, 7, 7, 6, 4, // front
           5, 1, 3, 3, 7, 5, // right
-          3, 2, 6, 6, 7, 3  // top 
+          3, 2, 6, 6, 7, 3  // top
         };
 
         // Setup texture coordinates
@@ -642,7 +642,7 @@ namespace dp
         Vec3f n[36];
         Vec2f tc[36];
         vector<unsigned int> indices;
-    
+
         Vec3f v0, v1, v2, fn;
 
         for ( int kf = 0, kv = 0; kf < 12; kf++, kv += 3 )
@@ -660,9 +660,9 @@ namespace dp
           v[kv+1]  = v1;
           v[kv+2]  = v2;
 
-          n[kv]    = fn; 
-          n[kv+1]  = fn; 
-          n[kv+2]  = fn; 
+          n[kv]    = fn;
+          n[kv+1]  = fn;
+          n[kv+2]  = fn;
 
           // Assign texture coordinates
           if (kf & 1)
@@ -678,7 +678,7 @@ namespace dp
             tc[kv+2]  = texcoords[2];
           }
         }
-          
+
         // Create a VertexAttributeSet with vertices, normals and texture coordinates
         VertexAttributeSetSharedPtr vasPtr = VertexAttributeSet::create();
         vasPtr->setVertices( v, 36 );
@@ -702,10 +702,10 @@ namespace dp
       {
         // create pointer to return
         PrimitiveSharedPtr primitivePtr;
-    
+
         // Setup vertices
         static const Vec3f vertices[4] =
-        { 
+        {
           Vec3f( -1.0f, -1.0f, -1.0f ),
           Vec3f( 1.0f, 1.0f, -1.0f ),
           Vec3f( 1.0f, -1.0f, 1.0f ),
@@ -755,9 +755,9 @@ namespace dp
           v[kv+1]  = v1;
           v[kv+2]  = v2;
 
-          n[kv]    = fn; 
-          n[kv+1]  = fn; 
-          n[kv+2]  = fn; 
+          n[kv]    = fn;
+          n[kv+1]  = fn;
+          n[kv+2]  = fn;
         }
 
         // Assign texture coordinates
@@ -797,7 +797,7 @@ namespace dp
       {
         // Setup vertices
         static const Vec3f vertices[6] =
-        { 
+        {
           Vec3f( 0.0f, 1.0f, 0.0f ),
           Vec3f( 0.0f, -1.0f, 0.0f ),
           Vec3f( 1.0f, 0.0f, 0.0f ),
@@ -836,7 +836,7 @@ namespace dp
 
         Vec3f v0, v1, v2, fn;
 
-        vector<unsigned int> indices;      
+        vector<unsigned int> indices;
 
         for ( int kf = 0, kv = 0; kf < 8; kf++, kv += 3 )
         {
@@ -854,9 +854,9 @@ namespace dp
           v[kv+1]  = v1;
           v[kv+2]  = v2;
 
-          n[kv]    = fn; 
-          n[kv+1]  = fn; 
-          n[kv+2]  = fn; 
+          n[kv]    = fn;
+          n[kv+1]  = fn;
+          n[kv+2]  = fn;
         }
 
 
@@ -914,7 +914,7 @@ namespace dp
         static const float z = 0.850650808352039932f;
 
         static const Vec3f icoVertices[12] =
-        { 
+        {
           Vec3f(   -x , 0.0f ,    z ),
           Vec3f(    x , 0.0f ,    z ),
           Vec3f(   -x , 0.0f ,   -z ),
@@ -956,7 +956,7 @@ namespace dp
         //--------------------------------------------------------
 
         // Setup indices of dodecahedron
-        static const int idxDode[12][5] = 
+        static const int idxDode[12][5] =
         {
           { 0,  1,  2,  4,  3}, //  0
           { 0,  3,  5,  6,  7}, //  1
@@ -976,7 +976,7 @@ namespace dp
         Vec3f vertices[20];
         Vec3f v;
 
-        // The 20 vertices of the dodecahedron are the centers of the 20 icosahedron triangle faces 
+        // The 20 vertices of the dodecahedron are the centers of the 20 icosahedron triangle faces
         // pushed out to unit sphere radius by normalization
         for ( int i = 0; i < 20; i++ )
         {
@@ -994,7 +994,7 @@ namespace dp
 
         vector<unsigned int> indices;
         indices.reserve( 180 );
-    
+
         for( unsigned int i = 0 ; i < 12; ++i )
         {
           Vec3f v( 0.0f, 0.0f, 0.0f );
@@ -1019,7 +1019,7 @@ namespace dp
           }
 
           unsigned int k = i * 6;
-      
+
           indices.push_back(k);
           indices.push_back(k+1);
           indices.push_back(k+2);
@@ -1066,7 +1066,7 @@ namespace dp
 
         // Setup vertices
         static const Vec3f vertices[12] =
-        { 
+        {
           Vec3f(   -x , 0.0f ,    z ),
           Vec3f(    x , 0.0f ,    z ),
           Vec3f(   -x , 0.0f ,   -z ),
@@ -1160,9 +1160,9 @@ namespace dp
 
         // setup vertices, normals, indices/faces and texture coordinates
         vector< Vec3f > vertices;
-        vector< Vec3f > tangents;  
-        vector< Vec3f > binormals;  
-        vector< Vec3f > normals;  
+        vector< Vec3f > tangents;
+        vector< Vec3f > binormals;
+        vector< Vec3f > normals;
         vector< Vec2f > texcoords;
         vector<unsigned int> indices;
 
@@ -1187,7 +1187,7 @@ namespace dp
           float texv = (float) latitude / (float) (n - 1); // Range [0.0f, 1.0f]
 
           // Generate vertices along the latitudinal rings.
-          // On each latitude there are m + 1 vertices, 
+          // On each latitude there are m + 1 vertices,
           // the last one and the first one are on identical positions but have different texture coordinates.
           for( unsigned int longitude = 0 ; longitude <= m ; longitude++ ) // phi angle
           {
@@ -1195,9 +1195,9 @@ namespace dp
             float sinPhi = sinf( phi );
             float cosPhi = cosf( phi );
             float texu = (float) longitude / (float) m; // Range [0.0f, 1.0f]
-        
+
             // Unit sphere coordinates are the normals.
-            Vec3f v = Vec3f( cosPhi * sinTheta, 
+            Vec3f v = Vec3f( cosPhi * sinTheta,
                             -cosTheta,                 // -y to start at the south pole.
                             -sinPhi * sinTheta );
 
@@ -1208,20 +1208,20 @@ namespace dp
             binormals.push_back( Vec3f( cosTheta * cosPhi, sinTheta, cosTheta * -sinPhi ) );
           }
         }
-    
+
         // We have generated m + 1 vertices per latitude.
         const unsigned int columns = m + 1;
 
         // Calculate indices
         for( unsigned int latitude = 0 ; latitude < n - 1 ; latitude++ )
-        {                                           
+        {
           for( unsigned int longitude = 0 ; longitude < m ; longitude++ )
           {
             indices.push_back(  latitude      * columns + longitude     );  // lower left
             indices.push_back(  latitude      * columns + longitude + 1 );  // lower right
-            indices.push_back( (latitude + 1) * columns + longitude + 1 );  // upper right 
+            indices.push_back( (latitude + 1) * columns + longitude + 1 );  // upper right
 
-            indices.push_back( (latitude + 1) * columns + longitude + 1 );  // upper right 
+            indices.push_back( (latitude + 1) * columns + longitude + 1 );  // upper right
             indices.push_back( (latitude + 1) * columns + longitude     );  // upper left
             indices.push_back(  latitude      * columns + longitude     );  // lower left
           }
@@ -1419,7 +1419,7 @@ namespace dp
       PrimitiveSharedPtr createTorus( unsigned int m, unsigned int n, float innerRadius , float outerRadius )
       {
         // The torus is a ring with radius outerRadius rotated around the y-axis along the circle with innerRadius.
-    
+
         /*           y
            ___       |       ___
          /     \           /     \
@@ -1472,20 +1472,20 @@ namespace dp
             float sinPhi = sinf(phi);
             float cosPhi = cosf(phi);
 
-            vertices.push_back( Vec3f( radius      *  cosPhi, 
-                                       outerRadius *  sinTheta, 
+            vertices.push_back( Vec3f( radius      *  cosPhi,
+                                       outerRadius *  sinTheta,
                                        radius      * -sinPhi ) );
 
             tangents.push_back( Vec3f( -sinPhi, 0.0f, -cosPhi ) );
 
             binormals.push_back( Vec3f( cosPhi * -sinTheta,
-                                        cosTheta, 
+                                        cosTheta,
                                         sinPhi * sinTheta ) );
 
             normals.push_back( Vec3f( cosPhi * cosTheta,
-                                      sinTheta,  
+                                      sinTheta,
                                      -sinPhi * cosTheta ) );
-        
+
             texcoords.push_back( Vec2f( (float) longitude / mf , (float) latitude / nf ) );
           }
         }
@@ -1493,7 +1493,7 @@ namespace dp
         const unsigned int columns = m + 1;
 
         // Setup indices
-        for( unsigned int latitude = 0 ; latitude < n ; latitude++ ) 
+        for( unsigned int latitude = 0 ; latitude < n ; latitude++ )
         {
           for( unsigned int longitude = 0 ; longitude < m ; longitude++ )
           {
@@ -1503,7 +1503,7 @@ namespace dp
             indices.push_back( (latitude + 1) * columns + longitude     );  // upper left
           }
         }
-    
+
         // Create a VertexAttributeSet with vertices, normals and texture coordinates
         VertexAttributeSetSharedPtr vasPtr = VertexAttributeSet::create();
         vasPtr->setVertices( &vertices[0], size_v );
@@ -1523,10 +1523,10 @@ namespace dp
       }
 
       // ===========================================================================
-  
+
       PrimitiveSharedPtr createTessellatedPlane( unsigned int subdiv, const Mat44f &transf )
       {
-        // Setup vertices, normals, faces and texture coordinates (and indices for primitive creation mode) 
+        // Setup vertices, normals, faces and texture coordinates (and indices for primitive creation mode)
         vector< Vec3f > vertices;
         vector< Vec3f > normals;
         vector< Vec2f > texcoords;
@@ -1559,7 +1559,7 @@ namespace dp
 
       // ===========================================================================
 
-      PrimitiveSharedPtr createPlane( float x0, float y0, 
+      PrimitiveSharedPtr createPlane( float x0, float y0,
         float width, float height,
         float wext, float hext)
       {
@@ -1628,36 +1628,36 @@ namespace dp
 
         // Setup transformations for 6 box sides
         Mat44f transf[6];
-        transf[0] = Mat44f( makeArray( 1.0f,  0.0f,  0.0f,  0.0f,
-                                       0.0f,  1.0f,  0.0f,  0.0f,
-                                       0.0f,  0.0f,  1.0f,  0.0f,
-                                       0.0f,  0.0f,  1.0f,  1.0f ) ); // front
+        transf[0] = Mat44f( { 1.0f,  0.0f,  0.0f,  0.0f,
+                              0.0f,  1.0f,  0.0f,  0.0f,
+                              0.0f,  0.0f,  1.0f,  0.0f,
+                              0.0f,  0.0f,  1.0f,  1.0f } ); // front
 
-        transf[1] = Mat44f( makeArray( -1.0f,  0.0f,  0.0f,  0.0f,
-                                        0.0f,  1.0f,  0.0f,  0.0f,
-                                        0.0f,  0.0f, -1.0f,  0.0f,
-                                        0.0f,  0.0f, -1.0f,  1.0f ) ); // back, 180 degrees around y-axis
+        transf[1] = Mat44f( { -1.0f,  0.0f,  0.0f,  0.0f,
+                               0.0f,  1.0f,  0.0f,  0.0f,
+                               0.0f,  0.0f, -1.0f,  0.0f,
+                               0.0f,  0.0f, -1.0f,  1.0f } ); // back, 180 degrees around y-axis
 
-        transf[2] = Mat44f( makeArray( 0.0f,  0.0f,  1.0f,  0.0f,
-                                       0.0f,  1.0f,  0.0f,  0.0f,
-                                      -1.0f,  0.0f,  0.0f,  0.0f,
-                                      -1.0f,  0.0f,  0.0f,  1.0f ) ); // left, -90 degrees around y-axis
+        transf[2] = Mat44f( { 0.0f,  0.0f,  1.0f,  0.0f,
+                              0.0f,  1.0f,  0.0f,  0.0f,
+                             -1.0f,  0.0f,  0.0f,  0.0f,
+                             -1.0f,  0.0f,  0.0f,  1.0f } ); // left, -90 degrees around y-axis
 
-        transf[3] = Mat44f( makeArray( 0.0f,  0.0f, -1.0f,  0.0f,
-                                       0.0f,  1.0f,  0.0f,  0.0f,
-                                       1.0f,  0.0f,  0.0f,  0.0f,
-                                       1.0f,  0.0f,  0.0f,  1.0f ) ); // right, 90 degrees around y-axis
+        transf[3] = Mat44f( { 0.0f,  0.0f, -1.0f,  0.0f,
+                              0.0f,  1.0f,  0.0f,  0.0f,
+                              1.0f,  0.0f,  0.0f,  0.0f,
+                              1.0f,  0.0f,  0.0f,  1.0f } ); // right, 90 degrees around y-axis
 
-        transf[4] = Mat44f( makeArray( 1.0f,  0.0f,  0.0f,  0.0f,
-                                       0.0f,  0.0f,  1.0f,  1.0f,
-                                       0.0f, -1.0f,  0.0f,  0.0f,
-                                       0.0f, -1.0f,  0.0f,  1.0f ) ); // bottom, 90 degrees around x-axis
+        transf[4] = Mat44f( { 1.0f,  0.0f,  0.0f,  0.0f,
+                              0.0f,  0.0f,  1.0f,  1.0f,
+                              0.0f, -1.0f,  0.0f,  0.0f,
+                              0.0f, -1.0f,  0.0f,  1.0f } ); // bottom, 90 degrees around x-axis
 
-        transf[5] = Mat44f( makeArray( 1.0f,  0.0f,  0.0f,  0.0f,
-                                       0.0f,  0.0f, -1.0f,  1.0f,
-                                       0.0f,  1.0f,  0.0f,  0.0f,
-                                       0.0f,  1.0f,  0.0f,  1.0f ) ); // top, -90 degrees around x-axis
-    
+        transf[5] = Mat44f( { 1.0f,  0.0f,  0.0f,  0.0f,
+                              0.0f,  0.0f, -1.0f,  1.0f,
+                              0.0f,  1.0f,  0.0f,  0.0f,
+                              0.0f,  1.0f,  0.0f,  1.0f } ); // top, -90 degrees around x-axis
+
         for ( unsigned int i=0; i<6; i++ )
         {
           setupTessellatedPlane( subdiv, transf[i], vertices, normals, texcoords, indices);
@@ -1724,7 +1724,7 @@ namespace dp
       {
         vector<Vec4f> tex;
         tex.resize(n*n);
-    
+
         // Create pattern
         for( unsigned int i = 0; i < n; ++i )
         {
@@ -1733,7 +1733,7 @@ namespace dp
             float dx = ( (float)i - (float)(n-1)/2.0f ) / ( (float)(n-1)/2.0f );
             float dy = ( (float)j - (float)(n-1)/2.0f ) / ( (float)(n-1)/2.0f );
 
-            float val = max(0.0f, 1.0f - (dx*dx+dy*dy));       
+            float val = max(0.0f, 1.0f - (dx*dx+dy*dy));
 
             unsigned int pos = i * n + j;
             Vec4f col( val, val, val, val );

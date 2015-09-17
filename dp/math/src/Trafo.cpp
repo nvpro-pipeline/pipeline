@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2005
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -25,9 +25,7 @@
 
 
 #include <dp/math/Trafo.h>
-#include <dp/util/Array.h>
 
-using namespace dp::util;
 
 namespace dp
 {
@@ -123,7 +121,7 @@ namespace dp
         // Inverting the matrix directly failed.
         // Try the more robust but also more expensive decomposition.
         // (Note that this still barely handles a uniform scaling of 2.2723e-6,
-        //  while the direct matrix inversion already dropped below the 
+        //  while the direct matrix inversion already dropped below the
         //  std::numeric_limits<double>::epsilon() of 2.2204460492503131e-016 for the determinant.)
         if ( !m_decompositionValid )
         {
@@ -150,7 +148,7 @@ namespace dp
         m1[2] = Vec4f( so[2], 0.0f ) / m_scaling[2];
         m1[3] = Vec4f( m_center, 1.0f );
 
-        inverse = m0 * m1; 
+        inverse = m0 * m1;
       }
       return inverse;
     }

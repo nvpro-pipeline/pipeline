@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2014
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -145,7 +145,7 @@ namespace dp
         Vec3f newXAxis = upVector ^ newZAxis;
 
         //  determine the rotation matrix that does just that
-        Mat33f rot( util::makeArray( newXAxis, upVector, newZAxis ) );
+        Mat33f rot( { newXAxis, upVector, newZAxis } );
         DP_ASSERT( isRotation( rot ) );
 
         //  and set the Orientation
@@ -182,7 +182,7 @@ namespace dp
           Vec3f newXAxis = newYAxis ^ newZAxis;
 
           //  determine the rotation matrix that does just that
-          Mat33f rot( util::makeArray( newXAxis, newYAxis, newZAxis ) );
+          Mat33f rot( { newXAxis, newYAxis, newZAxis } );
           DP_ASSERT( isRotation( rot ) );
 
           //  and set the Orientation
@@ -195,7 +195,7 @@ namespace dp
         if (&rhs != this)
         {
           Group::operator=(rhs);
-    
+
           m_rotationAxis = rhs.m_rotationAxis;
           m_alignment    = rhs.m_alignment;
         }

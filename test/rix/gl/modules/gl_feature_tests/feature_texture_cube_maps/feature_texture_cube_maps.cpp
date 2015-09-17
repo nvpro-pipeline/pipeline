@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -28,8 +28,8 @@
 #include "feature_texture_cube_maps.h"
 
 #include <dp/gl/RenderTarget.h>
-#include <dp/util/Array.h>
 #include <dp/math/Vecnt.h>
+#include <dp/util/Array.h>
 
 #include <test/rix/core/framework/RiXBackend.h>
 #include <test/rix/core/helpers/SimplexNoise1234.h>
@@ -44,11 +44,11 @@ REGISTER_TEST("feature_texture_cube_maps", "tests cube maps for RiX", create_fea
 
 using namespace math;
 
-const float identity[16] = 
+const float identity[16] =
 {
   1.0f, 0.0f, 0.0f, 0.0f,
   0.0f, 1.0f, 0.0f, 0.0f,
-  0.0f, 0.0f, 1.0f, 0.0f, 
+  0.0f, 0.0f, 1.0f, 0.0f,
   0.0f, 0.0f, 0.0f, 1.0f
 };
 
@@ -65,9 +65,9 @@ Feature_texture_cube_maps::~Feature_texture_cube_maps()
 
 }
 
-static void getOrthoProjection(float mat[16], 
-                        const float left,   const float right, 
-                        const float bottom, const float top, 
+static void getOrthoProjection(float mat[16],
+                        const float left,   const float right,
+                        const float bottom, const float top,
                         const float front,  const float back)
 {
   for( size_t i=0; i<16; ++i )
@@ -83,7 +83,7 @@ static void getOrthoProjection(float mat[16],
 }
 
 static void getTransformMatrix(float mat[16],
-                        const float scaleX, const float scaleY, const float scaleZ, 
+                        const float scaleX, const float scaleY, const float scaleZ,
                         const float transX, const float transY, const float transZ )
 {
   for( size_t i=0; i<16; ++i )
@@ -199,35 +199,35 @@ void Feature_texture_cube_maps::createScene()
   {
     1.0f, 0.0f, 0.0f,  // 0
     2.0f, 0.0f, 0.0f,  // 1 vertical cross:
-    1.0f, 1.0f, 0.0f,  // 2           
-    2.0f, 1.0f, 0.0f,  // 3     C D   
-    0.0f, 2.0f, 0.0f,  // 4   8 9 A B 
-    1.0f, 2.0f, 0.0f,  // 5   4 5 6 7 
-    2.0f, 2.0f, 0.0f,  // 6     2 3   
-    3.0f, 2.0f, 0.0f,  // 7     0 1   
-    0.0f, 3.0f, 0.0f,  // 8           
-    1.0f, 3.0f, 0.0f,  // 9           
-    2.0f, 3.0f, 0.0f,  // A           
-    3.0f, 3.0f, 0.0f,  // B           
-    1.0f, 4.0f, 0.0f,  // C           
-    2.0f, 4.0f, 0.0f,  // D           
+    1.0f, 1.0f, 0.0f,  // 2
+    2.0f, 1.0f, 0.0f,  // 3     C D
+    0.0f, 2.0f, 0.0f,  // 4   8 9 A B
+    1.0f, 2.0f, 0.0f,  // 5   4 5 6 7
+    2.0f, 2.0f, 0.0f,  // 6     2 3
+    3.0f, 2.0f, 0.0f,  // 7     0 1
+    0.0f, 3.0f, 0.0f,  // 8
+    1.0f, 3.0f, 0.0f,  // 9
+    2.0f, 3.0f, 0.0f,  // A
+    3.0f, 3.0f, 0.0f,  // B
+    1.0f, 4.0f, 0.0f,  // C
+    2.0f, 4.0f, 0.0f,  // D
   };
 
   const size_t texCoordsPerVertex = 4;
   const size_t textureCoordsSize = numVertices * texCoordsPerVertex;
-  const float textureCoords[textureCoordsSize] = 
+  const float textureCoords[textureCoordsSize] =
   {
     -1.0f, +1.0f, -1.0f, 0.0f,  // 0
     +1.0f, +1.0f, -1.0f, 0.0f,  // 1 texture coordinates as if the
     -1.0f, -1.0f, -1.0f, 0.0f,  // 2 vertical cross was folded to a cube
     +1.0f, -1.0f, -1.0f, 0.0f,  // 3
-    -1.0f, -1.0f, -1.0f, 0.0f,  // 4        08C     1BD 
-    -1.0f, -1.0f, +1.0f, 0.0f,  // 5                    
-    +1.0f, -1.0f, +1.0f, 0.0f,  // 6    9       A       
-    +1.0f, -1.0f, -1.0f, 0.0f,  // 7                    
-    -1.0f, +1.0f, -1.0f, 0.0f,  // 8                    
-    -1.0f, +1.0f, +1.0f, 0.0f,  // 9        24     37   
-    +1.0f, +1.0f, +1.0f, 0.0f,  // A    5       6       
+    -1.0f, -1.0f, -1.0f, 0.0f,  // 4        08C     1BD
+    -1.0f, -1.0f, +1.0f, 0.0f,  // 5
+    +1.0f, -1.0f, +1.0f, 0.0f,  // 6    9       A
+    +1.0f, -1.0f, -1.0f, 0.0f,  // 7
+    -1.0f, +1.0f, -1.0f, 0.0f,  // 8
+    -1.0f, +1.0f, +1.0f, 0.0f,  // 9        24     37
+    +1.0f, +1.0f, +1.0f, 0.0f,  // A    5       6
     +1.0f, +1.0f, -1.0f, 0.0f,  // B
     -1.0f, +1.0f, -1.0f, 0.0f,  // C
     +1.0f, +1.0f, -1.0f, 0.0f,  // D
@@ -263,7 +263,7 @@ void Feature_texture_cube_maps::createScene()
     "  vTexCoords = texCoord0;\n"
     "}\n";
 
-  const char * fragmentShaderColor = "" 
+  const char * fragmentShaderColor = ""
     "#version 330\n"
     "uniform samplerCube tex;\n"
     "uniform vec4 color;\n"
@@ -287,14 +287,14 @@ void Feature_texture_cube_maps::createScene()
   m_rix->bufferSetSize( indexBuffer, indexSetSize*sizeof(unsigned char) );
   m_rix->bufferUpdateData( indexBuffer, 0, indexSet, indexSetSize*sizeof(unsigned char) );
 
-  // vertex attributes: 
+  // vertex attributes:
   // 0: position, stream 0
   // 8: texture coordinate 0, stream 1
   VertexFormatInfo   vertexInfos[] = {
     VertexFormatInfo( 0, dp::DT_FLOAT_32, coordsPerVertex, false, 0, 0, coordsPerVertex*sizeof(float)),
     VertexFormatInfo( 8, dp::DT_FLOAT_32, texCoordsPerVertex, false, 1, 0, texCoordsPerVertex*sizeof(float)),
   };
-  VertexFormatDescription vertexFormatDescription( vertexInfos, sizeof util::array(vertexInfos) );
+  VertexFormatDescription vertexFormatDescription( vertexInfos, sizeof dp::util::array(vertexInfos) );
   VertexFormatSharedHandle vertexFormat = m_rix->vertexFormatCreate( vertexFormatDescription );
 
   VertexDataSharedHandle vertexData = m_rix->vertexDataCreate();
@@ -368,18 +368,18 @@ void Feature_texture_cube_maps::createScene()
   m_rix->containerSetData( vertexContainerColor, containerEntryModel2World, ContainerDataRaw( 0, model2world, 16*sizeof(float) ) );
   m_rix->containerSetData( fragmentContainerColor, containerEntryColor, ContainerDataRaw( 0, color, 4*sizeof(float) ) );
 
-  
+
   size_t texWidth = 128;
 
   TextureSharedHandle texture = createDebugCubeMap( texWidth );
   //TextureSharedHandle texture = createColorCubeMap( texWidth );
-  
+
   SamplerStateDataCommon samplerStateData( SSFM_LINEAR, SSFM_LINEAR );
 
   SamplerStateSharedHandle samplerState = m_rix->samplerStateCreate( samplerStateData );
   rix::core::SamplerSharedHandle sampler = m_rix->samplerCreate();
   m_rix->samplerSetTexture( sampler, texture );
-  
+
   m_rix->containerSetData( fragmentContainerColor, containerEntryTex, ContainerDataSampler( sampler ) );
 
 }

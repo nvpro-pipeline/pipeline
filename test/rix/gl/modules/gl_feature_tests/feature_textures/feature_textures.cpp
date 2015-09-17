@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -27,6 +27,7 @@
 #include <test/testfw/manager/Manager.h>
 #include "feature_textures.h"
 
+#include <dp/util/Array.h>
 #include <dp/util/Image.h>
 
 #include <test/rix/core/framework/RiXBackend.h>
@@ -39,17 +40,17 @@ using namespace dp::rix::core;
 //Automatically add the test to the module's global test list
 REGISTER_TEST("feature_textures", "tests RiX texture types", create_feature_textures);
 
-const float identity[16] = 
+const float identity[16] =
 {
   1.0f, 0.0f, 0.0f, 0.0f,
   0.0f, 1.0f, 0.0f, 0.0f,
-  0.0f, 0.0f, 1.0f, 0.0f, 
+  0.0f, 0.0f, 1.0f, 0.0f,
   0.0f, 0.0f, 0.0f, 1.0f
 };
 
-static void getOrthoProjection(float mat[16], 
-                        const float left,   const float right, 
-                        const float bottom, const float top, 
+static void getOrthoProjection(float mat[16],
+                        const float left,   const float right,
+                        const float bottom, const float top,
                         const float front,  const float back)
 {
   for( size_t i=0; i<16; ++i )
@@ -65,7 +66,7 @@ static void getOrthoProjection(float mat[16],
 }
 
 static void getTransformMatrix(float mat[16],
-  const float scaleX, const float scaleY, const float scaleZ, 
+  const float scaleX, const float scaleY, const float scaleZ,
   const float transX, const float transY, const float transZ )
 {
   for( size_t i=0; i<16; ++i )
@@ -109,7 +110,7 @@ bool Feature_textures::onRun( unsigned int idx )
 {
   render(m_renderData, m_displayTarget);
 
-  return true;  
+  return true;
 }
 
 bool Feature_textures::onClear()
@@ -127,21 +128,21 @@ void Feature_textures::createScene()
   const size_t numVertices = 8;
   const size_t coordsPerVertex = 3;
   const size_t vertexCoordsSize = numVertices * coordsPerVertex;
-  const float vertexCoords[vertexCoordsSize] = 
+  const float vertexCoords[vertexCoordsSize] =
   {
-    0.0f,  0.0f,  0.0f,    //                    
-    1.0f,  0.0f,  0.0f,    //       7       6    
-    1.0f,  1.0f,  0.0f,    //    3       2       
-    0.0f,  1.0f,  0.0f,    //                    
-    0.0f,  0.0f, -1.0f,    //                    
-    1.0f,  0.0f, -1.0f,    //       4       5    
-    1.0f,  1.0f, -1.0f,    //    0       1       
-    0.0f,  1.0f, -1.0f,    //                    
+    0.0f,  0.0f,  0.0f,    //
+    1.0f,  0.0f,  0.0f,    //       7       6
+    1.0f,  1.0f,  0.0f,    //    3       2
+    0.0f,  1.0f,  0.0f,    //
+    0.0f,  0.0f, -1.0f,    //
+    1.0f,  0.0f, -1.0f,    //       4       5
+    1.0f,  1.0f, -1.0f,    //    0       1
+    0.0f,  1.0f, -1.0f,    //
   };
 
   const size_t texCoordsPerVertex = 4;
   const size_t textureCoordsSize = numVertices * texCoordsPerVertex;
-  const float textureCoords[textureCoordsSize] = 
+  const float textureCoords[textureCoordsSize] =
   {
     0.0f,  0.0f,  0.0f,  1.0f,
     1.0f,  0.0f,  0.0f,  1.0f,
@@ -179,7 +180,7 @@ void Feature_textures::createScene()
         tex[1+pos] = 255 * (y & 1);
         tex[2+pos] = 255 * (z & 1);
         tex[3+pos] = 255;
-        
+
       }
     }
   }
@@ -252,7 +253,7 @@ void Feature_textures::createScene()
     "{\n"
     "  Color = texture( tex, vTexCoords.xy * textureSize(tex) );\n"
     "}\n";
-  
+
   const char * fragmentShaderSampler2DArray = "//sampler2DArray\n"
     "#version 330\n"
     "uniform sampler2DArray tex;\n"
@@ -276,7 +277,7 @@ void Feature_textures::createScene()
   //
   // prepare render API objects
   //
-  // 
+  //
   // vertex data (common for all geometry)
   //
   BufferSharedHandle vertexCoordBuffer = m_rix->bufferCreate();
@@ -288,8 +289,8 @@ void Feature_textures::createScene()
   size_t textureCoordBufferSize = textureCoordsSize*sizeof(float);
   m_rix->bufferSetSize(textureCoordBuffer, textureCoordBufferSize);
   m_rix->bufferUpdateData( textureCoordBuffer, 0, textureCoords, textureCoordBufferSize );
-  
-  // vertex attributes: 
+
+  // vertex attributes:
   // 0: position, stream 0
   // 8: texture coordinate 0, stream 1
   VertexFormatInfo   vertexInfos[] = {
@@ -314,7 +315,7 @@ void Feature_textures::createScene()
   ContainerEntry containerEntryWorld2View  = m_rix->containerDescriptorGetEntry( m_containerDescriptorWorld2View, "world2view" );
 
   m_vertexContainerW2V = m_rix->containerCreate( m_containerDescriptorWorld2View );
-  
+
   InternalTextureFormat itf = ITF_RGBA8;
   TextureDescription textureDescription1D     ( TT_1D,           itf, dp::PF_RGBA, dp::DT_UNSIGNED_INT_8, texWidth );
   TextureDescription textureDescription2D     ( TT_2D,           itf, dp::PF_RGBA, dp::DT_UNSIGNED_INT_8, texWidth, texHeight );
@@ -381,7 +382,7 @@ void Feature_textures::createScene()
   //
   // BUFFER ADDRESS TEST BEGIN
   //
-  // 
+  //
   {
 
     const char * fragmentShaderBufferAddress = "//buffer address\n"
@@ -446,7 +447,7 @@ void Feature_textures::createScene()
     std::vector<ProgramParameter> fragmentProgramParameters;
     fragmentProgramParameters.push_back( ProgramParameter("tex", CPT_BUFFER_ADDRESS) );
 
-    ContainerDescriptorSharedHandle fragmentContainerDescriptor = 
+    ContainerDescriptorSharedHandle fragmentContainerDescriptor =
       m_rix->containerDescriptorCreate( &fragmentProgramParameters[0],
       dp::checked_cast<unsigned int>(fragmentProgramParameters.size()) );
 
@@ -493,8 +494,8 @@ void Feature_textures::createScene()
   //
   // BUFFER ADDRESS TEST END
   //
-  // 
-  // 
+  //
+  //
 #endif
 }
 
@@ -539,7 +540,7 @@ void Feature_textures::generateGI
   std::vector<ProgramParameter> fragmentProgramParameters;
   fragmentProgramParameters.push_back( ProgramParameter("tex", samplerType) );
 
-  ContainerDescriptorSharedHandle fragmentContainerDescriptor = 
+  ContainerDescriptorSharedHandle fragmentContainerDescriptor =
     m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( &fragmentProgramParameters[0],
     dp::checked_cast<unsigned int>(fragmentProgramParameters.size()) ) );
 
@@ -556,7 +557,7 @@ void Feature_textures::generateGI
   ProgramShaderCode programShaderCode( sizeof dp::util::array( shaders ), shaders, shaderTypes );
 
   ProgramDescription programDescription( programShaderCode, &containerDescriptors[0], dp::checked_cast<unsigned int>(containerDescriptors.size() ));
-  
+
   ProgramSharedHandle program = m_rix->programCreate( programDescription );
 
   ContainerSharedHandle vertexContainer  = m_rix->containerCreate( vertexContainerDescriptor );
@@ -587,7 +588,7 @@ void Feature_textures::generateGI
   m_rix->samplerSetTexture( sampler, texture );
 
   if( samplerType != CPT_SAMPLER )
-  { 
+  {
     m_rix->samplerSetSamplerState( sampler, samplerStateHandle );
   }
   m_rix->containerSetData( fragmentContainer, containerEntryTex, ContainerDataSampler( sampler ) );

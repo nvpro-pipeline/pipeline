@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2015
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -130,7 +130,7 @@ SceneSharedPtr ThreeDSLoader::load( std::string const& filename, dp::util::FileF
     throw std::runtime_error( std::string("Failed to load 3ds file: " + filename ) );
   }
 
-  // the file was successfully parsed and the 3ds data structure has been loaded into memory  
+  // the file was successfully parsed and the 3ds data structure has been loaded into memory
 
   // set search paths for textures
   m_fileFinder = fileFinder;
@@ -191,7 +191,7 @@ bool noHierarchy( Lib3dsNode * node )
   return( !node || ( ( strcmp( node->name, "$$$DUMMY" ) == 0 ) && noHierarchy( node->next ) && noHierarchy( node->childs ) ) );
 }
 
-void 
+void
 ThreeDSLoader::buildScene( GroupSharedPtr const& parent, Lib3dsFile * data )
 {
   if (data == NULL)
@@ -218,7 +218,7 @@ ThreeDSLoader::buildScene( GroupSharedPtr const& parent, Lib3dsFile * data )
   m_numMaterials = data->nmaterials;
 
   m_materials.resize(m_numMaterials);
-  
+
   // flag vector indicating which materials come with textures
   m_hasTexture.resize(m_numMaterials+1,false);
 
@@ -231,7 +231,7 @@ ThreeDSLoader::buildScene( GroupSharedPtr const& parent, Lib3dsFile * data )
   Vec3f nullPivot (0,0,0);
 
   // build the hierarchy for all nodes beneath the top-level group
-  while(node) 
+  while(node)
   {
     buildTree( parent, node, nullPivot, data );
     node = node->next;
@@ -241,10 +241,10 @@ ThreeDSLoader::buildScene( GroupSharedPtr const& parent, Lib3dsFile * data )
 }
 
 void
-ThreeDSLoader::buildTree(GroupSharedPtr const& parent, Lib3dsNode *n, Vec3f &piv, Lib3dsFile *data) 
+ThreeDSLoader::buildTree(GroupSharedPtr const& parent, Lib3dsNode *n, Vec3f &piv, Lib3dsFile *data)
 {
   // act differently depending on what type of node this is
-  switch(n->type) 
+  switch(n->type)
   {
     case LIB3DS_NODE_AMBIENT_COLOR:
       {
@@ -252,10 +252,10 @@ ThreeDSLoader::buildTree(GroupSharedPtr const& parent, Lib3dsNode *n, Vec3f &piv
         Lib3dsAmbientColorNode *acnode = (Lib3dsAmbientColorNode *)n;
         Lib3dsKey *cKey = acnode->color_track.keys;
         m_scene->setAmbientColor(Vec3f(cKey->value[0],cKey->value[1],cKey->value[2]));
-      } 
+      }
       break;
 
-    case LIB3DS_NODE_CAMERA: 
+    case LIB3DS_NODE_CAMERA:
       {
         // search for this camera's target in the scene
         Lib3dsNode *targetNode = searchNodeTree(data->nodes, LIB3DS_NODE_CAMERA_TARGET, n->name);
@@ -264,12 +264,12 @@ ThreeDSLoader::buildTree(GroupSharedPtr const& parent, Lib3dsNode *n, Vec3f &piv
         if(!targetNode)
         {
           // print a warning message to the console and continue
-          INVOKE_CALLBACK(onUnLocalizedMessage("3DSLoader warning","target node " + std::string(n->name) + 
+          INVOKE_CALLBACK(onUnLocalizedMessage("3DSLoader warning","target node " + std::string(n->name) +
                                                " could not be located for the associated camera in the 3ds file. Adding non-animated camera to the scene.\n"));
 
           // set up camera without target data
           configureCamera(parent, n, piv, false, data);
-        } 
+        }
         else
         {
           // set up camera with target data
@@ -286,7 +286,7 @@ ThreeDSLoader::buildTree(GroupSharedPtr const& parent, Lib3dsNode *n, Vec3f &piv
         if(!camNode)
         {
           // print a warning message to the console and continue
-          INVOKE_CALLBACK(onUnLocalizedMessage("3DSLoader warning","target node " + std::string(n->name) + 
+          INVOKE_CALLBACK(onUnLocalizedMessage("3DSLoader warning","target node " + std::string(n->name) +
                                                " found with no associated camera in the 3ds file. Skipping this degenerate target.\n"));
         }
         else
@@ -294,7 +294,7 @@ ThreeDSLoader::buildTree(GroupSharedPtr const& parent, Lib3dsNode *n, Vec3f &piv
           // set up camera target
           configureTarget(parent, n, piv, true, data);
         }
-      } 
+      }
       break;
 
     case LIB3DS_NODE_OMNILIGHT:
@@ -313,12 +313,12 @@ ThreeDSLoader::buildTree(GroupSharedPtr const& parent, Lib3dsNode *n, Vec3f &piv
         if(!targetNode)
         {
           // print a warning message to the console and continue
-          INVOKE_CALLBACK(onUnLocalizedMessage("3DSLoader warning","target node " + std::string(n->name) + 
+          INVOKE_CALLBACK(onUnLocalizedMessage("3DSLoader warning","target node " + std::string(n->name) +
                                                " could not be located for the associated spotlight in the 3ds file. Adding non-animated spotlight to the scene.\n"));
 
           // set up spotlight without target data
           configureSpotlight(parent, n, piv, false, data);
-        } 
+        }
         else
         {
           // set up spotlight with target data
@@ -327,7 +327,7 @@ ThreeDSLoader::buildTree(GroupSharedPtr const& parent, Lib3dsNode *n, Vec3f &piv
       }
       break;
 
-    case LIB3DS_NODE_SPOTLIGHT_TARGET: 
+    case LIB3DS_NODE_SPOTLIGHT_TARGET:
       {
         // search for this target's spotlight in the scene
         Lib3dsNode *spotNode = searchNodeTree(data->nodes, LIB3DS_NODE_SPOTLIGHT, n->name);
@@ -335,7 +335,7 @@ ThreeDSLoader::buildTree(GroupSharedPtr const& parent, Lib3dsNode *n, Vec3f &piv
         if(!spotNode)
         {
           // print a warning message to the console and continue
-          INVOKE_CALLBACK(onUnLocalizedMessage("3DSLoader warning","target node " + std::string(n->name) + 
+          INVOKE_CALLBACK(onUnLocalizedMessage("3DSLoader warning","target node " + std::string(n->name) +
                                                " found with no associated spotlight in the 3ds file. Skipping this degenerate target.\n"));
         }
         else
@@ -343,12 +343,12 @@ ThreeDSLoader::buildTree(GroupSharedPtr const& parent, Lib3dsNode *n, Vec3f &piv
           // set up spotlight target
           configureTarget(parent, n, piv, false, data);
         }
-      } 
+      }
       break;
 
     case LIB3DS_NODE_MESH_INSTANCE:
       Lib3dsMeshInstanceNode *mnode = (Lib3dsMeshInstanceNode *)n;
-      
+
       Lib3dsTrack *pTrack = &mnode->pos_track;
       Lib3dsTrack *rTrack = &mnode->rot_track;
       Lib3dsTrack *sTrack = &mnode->scl_track;
@@ -362,12 +362,12 @@ ThreeDSLoader::buildTree(GroupSharedPtr const& parent, Lib3dsNode *n, Vec3f &piv
                 sTrack->nkeys > 1;
 
       Vec3f thisPivot = Vec3f(mnode->pivot[0],mnode->pivot[1],mnode->pivot[2]);
-      
-      if(strcmp(n->name,"$$$DUMMY") == 0) 
+
+      if(strcmp(n->name,"$$$DUMMY") == 0)
       {
         // this node is a dummy group (not a visible object) used to group other meshes together
 #if defined(KEEP_ANIMATION)
-        if(isAnimated) 
+        if(isAnimated)
         {
           AnimatedTransformSharedPtr hAnim( AnimatedTransform::create() );
           AnimatedTransformLock anim ( hAnim );
@@ -404,7 +404,7 @@ ThreeDSLoader::buildTree(GroupSharedPtr const& parent, Lib3dsNode *n, Vec3f &piv
           addAllChildren( hTrans, n, thisPivot, data);
         }
       }
-      else 
+      else
       {
         // this node is an actual mesh
         GroupSharedPtr group = Group::create();
@@ -413,18 +413,18 @@ ThreeDSLoader::buildTree(GroupSharedPtr const& parent, Lib3dsNode *n, Vec3f &piv
         bool hadGeometry = constructGeometry( group, n->name, data );
 
 #if defined(KEEP_ANIMATION)
-        if(isAnimated) 
+        if(isAnimated)
         {
           AnimatedTransformSharedPtr hAnim( AnimatedTransform::create() );
           AnimatedTransformLock anim ( hAnim );
-          
+
           anim->setName(std::string("Transform of mesh ") +
                         std::string( n->name ));
-          
+
           // do the actual trafo construction for this animation
           constructAnimation(anim, piv, thisPivot,
                              &mnode->pos_track,&mnode->rot_track,&mnode->scl_track,NULL,P_TRACK|R_TRACK|S_TRACK);
-          
+
           // only add this GeoNode if it has geometric data (vertices, faces, etc)
           if(hadGeometry)
           {
@@ -450,14 +450,14 @@ ThreeDSLoader::buildTree(GroupSharedPtr const& parent, Lib3dsNode *n, Vec3f &piv
           std::string transName = std::string("Transform of mesh ") + std::string(n->name) + std::string(mnode->instance_name);
 
           hTrans->setName(transName);
-          
+
           Trafo t;
-          
+
           // configure the trafo to reflect the orientation of this node
           orientNode(t, mnode, piv);
-          
+
           hTrans->setTrafo(t);
-          
+
           // only add the GeoNode if it had geometric data
           if(hadGeometry)
           {
@@ -486,7 +486,7 @@ ThreeDSLoader::orientNode(Trafo &t, Lib3dsMeshInstanceNode * mnode, Vec3f &piv)
   Lib3dsKey *pKey = mnode->pos_track.keys;
   Lib3dsKey *rKey = mnode->rot_track.keys;
   Lib3dsKey *sKey = mnode->scl_track.keys;
-  
+
   Vec3f thisPivot (mnode->pivot[0],mnode->pivot[1],mnode->pivot[2]);
   Vec3f meshPivot = thisPivot - piv;
 
@@ -495,8 +495,8 @@ ThreeDSLoader::orientNode(Trafo &t, Lib3dsMeshInstanceNode * mnode, Vec3f &piv)
 
   Vec3f axis (rKey->value[0],rKey->value[1],rKey->value[2]);
 
-  if(length(axis) != 0) 
-  { 
+  if(length(axis) != 0)
+  {
     // rotate quaternion around its negative axis
     Quatf q (axis,-rKey->value[3]);
 
@@ -516,7 +516,7 @@ ThreeDSLoader::configureCamera( GroupSharedPtr const& parent, Lib3dsNode *n, Vec
   // search for the correct camera
   Lib3dsCamera *c;
   bool cameraFound = false;
-  for(int i=0; i<data->ncameras; i++) 
+  for(int i=0; i<data->ncameras; i++)
   {
     c = data->cameras[i];
     if(strcmp(c->name,n->name) == 0)
@@ -529,7 +529,7 @@ ThreeDSLoader::configureCamera( GroupSharedPtr const& parent, Lib3dsNode *n, Vec
   if(!cameraFound)
   {
       // print a warning message to the console and do not process camera
-      INVOKE_CALLBACK(onUnLocalizedMessage("3DSLoader warning","camera data for '" + std::string(n->name) + 
+      INVOKE_CALLBACK(onUnLocalizedMessage("3DSLoader warning","camera data for '" + std::string(n->name) +
                                            "' could not be located in the 3ds file. Did not add this camera to the scene.\n"));
       return;
   }
@@ -560,7 +560,7 @@ ThreeDSLoader::configureCamera( GroupSharedPtr const& parent, Lib3dsNode *n, Vec
 
   // add this camera to the global list to be postprocessed with callbacks later
   m_camList.push_back(hCamera);
- 
+
   // fill any tracks with zero or null keys to default values
   checkTracks(&pTrack, NULL, NULL, &rollTrack);
 
@@ -618,7 +618,7 @@ ThreeDSLoader::configureCamera( GroupSharedPtr const& parent, Lib3dsNode *n, Vec
 #endif
 }
 
-void 
+void
 ThreeDSLoader::configurePointlight( GroupSharedPtr const& parent, Lib3dsNode *n, Vec3f &piv, Lib3dsFile *data )
 {
   Lib3dsOmnilightNode *onode = (Lib3dsOmnilightNode *)n;
@@ -638,7 +638,7 @@ ThreeDSLoader::configurePointlight( GroupSharedPtr const& parent, Lib3dsNode *n,
   if(!omnilightFound)
   {
     // print a warning message to the console and continue
-    INVOKE_CALLBACK(onUnLocalizedMessage("3DSLoader warning","point light data for '" + std::string(n->name) + 
+    INVOKE_CALLBACK(onUnLocalizedMessage("3DSLoader warning","point light data for '" + std::string(n->name) +
                                          "' could not be located in the 3ds file. Did not add this point light to the scene.\n"));
     return;
   }
@@ -652,13 +652,13 @@ ThreeDSLoader::configurePointlight( GroupSharedPtr const& parent, Lib3dsNode *n,
   Vec3f color = intensity * Vec3f( cKey->value[0], cKey->value[1], cKey->value[2] );
 
   // the 3ds file format only specifies constant attenuation
-  boost::array<float,3> attenuations = makeArray( FLT_EPSILON < li->attenuation ? li->attenuation : 1.0f, 0.0f, 0.0f );
+  boost::array<float, 3> attenuations{ FLT_EPSILON < li->attenuation ? li->attenuation : 1.0f, 0.0f, 0.0f };
 
   LightSourceSharedPtr pointLight = createStandardPointLight( Vec3f( 0.0f, 0.0f, 0.0f ), color, color, color, attenuations );
   pointLight->setName( li->name );
   pointLight->setEnabled( !li->off );
   pointLight->setShadowCasting( !!li->shadowed );
-  
+
   Lib3dsTrack pTrack = onode->pos_track;
 
   // fill any tracks with zero or null keys to default values
@@ -675,7 +675,7 @@ ThreeDSLoader::configurePointlight( GroupSharedPtr const& parent, Lib3dsNode *n,
 
       // set the position of this omnilight
       Lib3dsKey *pKey = pTrack.keys;
-      
+
       Vec3f pos (pKey->value[0],pKey->value[1],pKey->value[2]);
       Vec3f origPos = pos - piv;
       t.setTranslation(origPos);
@@ -716,7 +716,7 @@ ThreeDSLoader::configurePointlight( GroupSharedPtr const& parent, Lib3dsNode *n,
 #endif
 }
 
-void 
+void
 ThreeDSLoader::configureSpotlight( GroupSharedPtr const& parent, Lib3dsNode *n, Vec3f &piv, bool hasTarget, Lib3dsFile *data )
 {
   Lib3dsSpotlightNode *snode = (Lib3dsSpotlightNode *)n;
@@ -734,11 +734,11 @@ ThreeDSLoader::configureSpotlight( GroupSharedPtr const& parent, Lib3dsNode *n, 
       break;
     }
   }
-  
+
   if(!spotlightFound)
   {
     // print a warning message to the console and do not process this spotlight
-    INVOKE_CALLBACK(onUnLocalizedMessage("3DSLoader warning","spotlight data for '" + std::string(n->name) + 
+    INVOKE_CALLBACK(onUnLocalizedMessage("3DSLoader warning","spotlight data for '" + std::string(n->name) +
                                                "' could not be located in the 3ds file. Did not add this spotlight to the scene.\n"));
     return;
   }
@@ -752,7 +752,7 @@ ThreeDSLoader::configureSpotlight( GroupSharedPtr const& parent, Lib3dsNode *n, 
   Vec3f color = intensity * Vec3f( cKey->value[0], cKey->value[1], cKey->value[2] );
 
   // the 3ds file format only specifies constant attenuation
-  boost::array<float,3> attenuations = makeArray( FLT_EPSILON < li->attenuation ? li->attenuation : 1.0f, 0.0f, 0.0f );
+  boost::array<float, 3> attenuations{ FLT_EPSILON < li->attenuation ? li->attenuation : 1.0f, 0.0f, 0.0f };
 
   LightSourceSharedPtr spotLight = createStandardSpotLight( Vec3f( 0.0f, 0.0f, 0.0f ), Vec3f( 0.0f, 0.0f, -1.0f )
                                                           , color, color, color, attenuations
@@ -902,15 +902,15 @@ ThreeDSLoader::configureTarget( GroupSharedPtr const& parent, Lib3dsNode *n, Vec
 #endif
 }
 
-void 
+void
 ThreeDSLoader::checkTracks(Lib3dsTrack *pTrack, Lib3dsTrack *rTrack, Lib3dsTrack *sTrack, Lib3dsTrack *rollTrack)
 {
   // default position is (0,0,0)
   if(pTrack && (pTrack->keys==NULL || pTrack->nkeys <= 0))
   {
     lib3ds_track_resize(pTrack, 1);
-    DP_ASSERT( pTrack->keys );    
-    if ( pTrack->keys )   
+    DP_ASSERT( pTrack->keys );
+    if ( pTrack->keys )
     {
       pTrack->keys->value[0] = 0;
       pTrack->keys->value[1] = 0;
@@ -949,7 +949,7 @@ ThreeDSLoader::checkTracks(Lib3dsTrack *pTrack, Lib3dsTrack *rTrack, Lib3dsTrack
   if(rollTrack && (rollTrack->keys==NULL || rollTrack->nkeys <= 0))
   {
     lib3ds_track_resize(rollTrack, 1);
-    DP_ASSERT( rollTrack->keys );    
+    DP_ASSERT( rollTrack->keys );
     if ( rollTrack->keys )
     {
       rollTrack->keys->value[0] = 0;
@@ -963,7 +963,7 @@ ThreeDSLoader::addAllChildren( GroupSharedPtr const& parent, Lib3dsNode *n, Vec3
   int childCount = 0;
 
   Lib3dsNode *child = n->childs;
-  while(child) 
+  while(child)
   {
     buildTree( parent, child, piv, data );
     childCount++;
@@ -1020,9 +1020,9 @@ void
 ThreeDSLoader::vecInterp(Vec3f &target, Vec3f &lData, Vec3f &rData, int leftFrame, int rightFrame, int currFrame)
 {
   // if we're given coincident frames, return the left one
-  if(rightFrame==leftFrame) 
+  if(rightFrame==leftFrame)
   {
-    target = lData; 
+    target = lData;
     return;
   }
 
@@ -1033,12 +1033,12 @@ ThreeDSLoader::vecInterp(Vec3f &target, Vec3f &lData, Vec3f &rData, int leftFram
 
 #if defined(KEEP_ANIMATION)
 void
-ThreeDSLoader::constructAnimation( AnimatedTransform *anim, Vec3f &parentPivot, Vec3f &pivot, Lib3dsTrack *pTrack, Lib3dsTrack *rTrack, Lib3dsTrack *sTrack, 
+ThreeDSLoader::constructAnimation( AnimatedTransform *anim, Vec3f &parentPivot, Vec3f &pivot, Lib3dsTrack *pTrack, Lib3dsTrack *rTrack, Lib3dsTrack *sTrack,
                                                                    Lib3dsTrack *rollTrack, int flags)
 {
   FramedTrafoAnimationDescriptionSharedPtr hDesc = FramedTrafoAnimationDescription::create();
   FramedTrafoAnimationDescriptionLock desc( hDesc );
-  
+
   Vec3f accumPivot = pivot - parentPivot;
 
   // determine which types of animation we are including
@@ -1173,7 +1173,7 @@ ThreeDSLoader::constructAnimation( AnimatedTransform *anim, Vec3f &parentPivot, 
     Trafo tUnlink;
 
     t.setCenter(pivot);
-    
+
     // add position animation if required
     if(position)
     {
@@ -1196,14 +1196,14 @@ ThreeDSLoader::constructAnimation( AnimatedTransform *anim, Vec3f &parentPivot, 
         pKey = pNext;
         pNext = pNext+1;
         pKeysPassed++;
-        
+
         // check if we've reached the last position frame
-        if(pKeysPassed>pTrack->nkeys-1) 
+        if(pKeysPassed>pTrack->nkeys-1)
         {
           pNext = pKey;
           pComplete = true;
         }
-        
+
         // update the frame positions
         currPos = nextPos;
         nextPos = Vec3f(pNext->value[0],pNext->value[1],pNext->value[2]) - accumPivot;
@@ -1240,7 +1240,7 @@ ThreeDSLoader::constructAnimation( AnimatedTransform *anim, Vec3f &parentPivot, 
         rollKeysPassed++;
 
         // check if we've reached the last roll frame
-        if(rollKeysPassed>rollTrack->nkeys-1) 
+        if(rollKeysPassed>rollTrack->nkeys-1)
         {
           rollNext = rollKey;
           rollComplete = true;
@@ -1250,7 +1250,7 @@ ThreeDSLoader::constructAnimation( AnimatedTransform *anim, Vec3f &parentPivot, 
         nextRoll = rollNext->value[0];
       }
     } // roll
-    
+
     // add rotation animation if required
     // note: 3ds saves rotation animation as incremental rotations - how much the rotation has
     // changed since the last frame
@@ -1278,15 +1278,15 @@ ThreeDSLoader::constructAnimation( AnimatedTransform *anim, Vec3f &parentPivot, 
       {
         rKey = rNext;
         rNext = rNext+1;
-        
+
         // check if we've reached the last rotation frame
-        if(rKeysPassed>rTrack->nkeys-1) 
+        if(rKeysPassed>rTrack->nkeys-1)
         {
           rNext = rKey;
           rComplete = true;
         }
 
-        // update frame rotations. we rotate the next frame by our current orientation because 3ds files 
+        // update frame rotations. we rotate the next frame by our current orientation because 3ds files
         // use incremental (delta) angles, rather than absolute ones
         currRot = t.getOrientation();
         nextRot = currRot * Quatf(Vec3f(rNext->value[0],rNext->value[1],rNext->value[2]),-rNext->value[3]);
@@ -1308,16 +1308,16 @@ ThreeDSLoader::constructAnimation( AnimatedTransform *anim, Vec3f &parentPivot, 
       }
 
       t.setScaling(scale);
-   
+
       // if we've reached our right scaling frame, move to the next interval
       if((!sComplete)&&(sNext->frame == k))
       {
         sKey = sNext;
         sNext = sNext+1;
         sKeysPassed++;
-        
+
         // check if we've reached the last scaling frame
-        if(sKeysPassed>sTrack->nkeys-1) 
+        if(sKeysPassed>sTrack->nkeys-1)
         {
           sNext = sKey;
           sComplete = true;
@@ -1343,17 +1343,17 @@ ThreeDSLoader::constructAnimation( AnimatedTransform *anim, Vec3f &parentPivot, 
 #endif
 
 bool
-ThreeDSLoader::constructGeometry(GroupSharedPtr const& group, char *name, Lib3dsFile *data) 
-{  
+ThreeDSLoader::constructGeometry(GroupSharedPtr const& group, char *name, Lib3dsFile *data)
+{
   DP_ASSERT(data && data->meshes); // should already be true!
 
   Lib3dsMesh *currMesh = NULL;
   bool meshFound = false;
 
-  for(int k=0; k<data->nmeshes; k++) 
+  for(int k=0; k<data->nmeshes; k++)
   {
     currMesh = data->meshes[k];
-    if(currMesh && strcmp(currMesh->name,name) == 0) 
+    if(currMesh && strcmp(currMesh->name,name) == 0)
     {
       meshFound = true;
       break;
@@ -1361,7 +1361,7 @@ ThreeDSLoader::constructGeometry(GroupSharedPtr const& group, char *name, Lib3ds
 
   }
 
-  if(!meshFound) 
+  if(!meshFound)
   {
     // no matching mesh has been found, return false
     return false;
@@ -1392,13 +1392,13 @@ ThreeDSLoader::constructGeometry(GroupSharedPtr const& group, char *name, Lib3ds
   bool hasTexture = (currMesh->texcos != NULL);
 
   // construct the tranformation matrix for this mesh in order to un-transform all of its vertices
-  Mat44f meshMatrixInv ( makeArray( currMesh->matrix[0][0], currMesh->matrix[0][1], currMesh->matrix[0][2], currMesh->matrix[0][3],
-                                    currMesh->matrix[1][0], currMesh->matrix[1][1], currMesh->matrix[1][2], currMesh->matrix[1][3],
-                                    currMesh->matrix[2][0], currMesh->matrix[2][1], currMesh->matrix[2][2], currMesh->matrix[2][3],
-                                    currMesh->matrix[3][0], currMesh->matrix[3][1], currMesh->matrix[3][2], currMesh->matrix[3][3] ) );
+  Mat44f meshMatrixInv( { currMesh->matrix[0][0], currMesh->matrix[0][1], currMesh->matrix[0][2], currMesh->matrix[0][3]
+                        , currMesh->matrix[1][0], currMesh->matrix[1][1], currMesh->matrix[1][2], currMesh->matrix[1][3]
+                        , currMesh->matrix[2][0], currMesh->matrix[2][1], currMesh->matrix[2][2], currMesh->matrix[2][3]
+                        , currMesh->matrix[3][0], currMesh->matrix[3][1], currMesh->matrix[3][2], currMesh->matrix[3][3]
+                        } );
 
-
-  meshMatrixInv.invert();               
+  meshMatrixInv.invert();
 
   // allocate a vector with enough space for all verts in the mesh
   std::vector<Vec3f> vertex(nVertices);
@@ -1410,9 +1410,9 @@ ThreeDSLoader::constructGeometry(GroupSharedPtr const& group, char *name, Lib3ds
   float (*tex)[2] = currMesh->texcos;
 
   // transform all matrices to local as opposed to global coordinates
-  for(j=0; j<nVertices; j++) 
+  for(j=0; j<nVertices; j++)
   {
-    Vec4f augmented (v[j][0],v[j][1],v[j][2],1); 
+    Vec4f augmented (v[j][0],v[j][1],v[j][2],1);
     Vec4f transformed = augmented * meshMatrixInv;
     setVec(vertex[j], transformed[0],
           transformed[1],
@@ -1423,7 +1423,7 @@ ThreeDSLoader::constructGeometry(GroupSharedPtr const& group, char *name, Lib3ds
     {
       float f0 = tex[j][0];
       float f1 = tex[j][1];
-      
+
       // check if the texture coordinates contain invalid numbers; set them to zero
       if(abs(f0) > CORRUPTED_BUFFER)
       {
@@ -1450,9 +1450,9 @@ ThreeDSLoader::constructGeometry(GroupSharedPtr const& group, char *name, Lib3ds
   map<int,int> smoothDict; // a map of smoothing group number to index in the smoothGroups vector
   int nextSlot = 0; // next available index number in the smoothGroups vector
   int nextIndex = nVertices; // the next vertex index if we have to add more
-  
-  vector < SmoothingData > smoothGroups; 
- 
+
+  vector < SmoothingData > smoothGroups;
+
   // keep track of whether each vertex has already been used in a smoothing group
   vector <bool> vertexUsed (nVertices, false);
 
@@ -1484,7 +1484,7 @@ ThreeDSLoader::constructGeometry(GroupSharedPtr const& group, char *name, Lib3ds
                                 vector<int>(), // order
                                 vector<int>(nVertices,0)  }; // vertMap
       smoothGroups.push_back( smooth );
-      
+
       nextSlot++;
       smoothDict[group] = nextSlot;
     }
@@ -1510,13 +1510,13 @@ ThreeDSLoader::constructGeometry(GroupSharedPtr const& group, char *name, Lib3ds
 
           // save this index to the smoothing group's ordered vertex list
           smooth->order.push_back(idx);
-          
+
           // indicate that this vertex has been used in a group
           vertexUsed[idx] = true;
 
           // add a copy of this vertex to the smoothing group vertex list
           smooth->vertices.push_back(Vec3f(vertex[idx]));
-          
+
           if(hasTexture)
           {
             // add the associated texture coordinate for this vertex to the smoothing group texcoords list
@@ -1636,13 +1636,13 @@ ThreeDSLoader::constructGeometry(GroupSharedPtr const& group, char *name, Lib3ds
     vector < MatGroupData > matGroups (numMaterialGroups);     // a list of the data for each material group
 
     vector <int> matIndices; // a list of the material indices we process
-    
+
     // an array of flags indicating whether or not a list of vertices for each material has been created
     vector <bool> listCreated (numMaterialGroups,false);
 
     Lib3dsFace *currFace = currMesh->faces;
 
-    for(j=0; j<nFaces; j++) 
+    for(j=0; j<nFaces; j++)
     {
       // get the material index of this face
       int mat = currFace->material;
@@ -1707,7 +1707,7 @@ ThreeDSLoader::constructGeometry(GroupSharedPtr const& group, char *name, Lib3ds
         group->visibilities.push_back(currFace->flags);
       }
 
-      ++currFace;  
+      ++currFace;
     }
 
     for(unsigned int k=0; k<matIndices.size(); k++)
@@ -1719,7 +1719,7 @@ ThreeDSLoader::constructGeometry(GroupSharedPtr const& group, char *name, Lib3ds
       MatGroupData *matGroup = &matGroups[mat];
 
       PrimitiveSharedPtr primitive;
-      { 
+      {
         VertexAttributeSetSharedPtr hVas(VertexAttributeSet::create());
 
         hVas->setVertices(&(matGroup->vertices.at(0)), dp::checked_cast<unsigned int>( matGroup->vertices.size() ) );
@@ -1821,7 +1821,7 @@ void
 ThreeDSLoader::postProcessCamerasAndLights()
 {
   vector <PerspectiveCameraSharedPtr>::iterator camIter = m_camList.begin();
-  
+
   // process each camera in the global list
   while(camIter != m_camList.end())
   {
@@ -1844,10 +1844,10 @@ ThreeDSLoader::postProcessCamerasAndLights()
     }
 
     ++camIter;
-  } 
+  }
 
   vector <LightSourceSharedPtr>::iterator spotIter = m_spotList.begin();
-  
+
   // process each spotlight in the global list
   while(spotIter != m_spotList.end())
   {
@@ -1870,7 +1870,7 @@ ThreeDSLoader::postProcessCamerasAndLights()
     }
 
     ++spotIter;
-  } 
+  }
 }
 
 void
@@ -1882,7 +1882,7 @@ ThreeDSLoader::constructMaterials( std::vector<dp::sg::core::EffectDataSharedPtr
   for(int i=0; i<m_numMaterials; i++)
   {
     Lib3dsMaterial *m = data->materials[i];
-    
+
     // check if this material is supposed to be a wireframe
     bool usesWire = (m->use_wire == 1);
     m_wirePresent = m_wirePresent || usesWire;
@@ -1893,7 +1893,7 @@ ThreeDSLoader::constructMaterials( std::vector<dp::sg::core::EffectDataSharedPtr
     std::string reflectName(m->reflection_map.name);
     bool diffuseTexture = false;
     bool reflMap = false;
-    
+
     // if there is a diffuse texture map then flag that textures are present
     if(texName.length()>0)
     {
@@ -2065,15 +2065,15 @@ ParameterGroupDataSharedPtr ThreeDSLoader::createTexture( Lib3dsTextureMap &text
     parameterGroupData = createStandardTextureParameterData( sampler );
     parameterGroupData->setName( filename );
 
-    Mat44f trafo(  makeArray(  texture.scale[0],              0.0f, 0.0f, 0.0f
-                            ,              0.0f,  texture.scale[1], 0.0f, 0.0f
-                            ,              0.0f,              0.0f, 1.0f, 0.0f
-                            , texture.offset[0], texture.offset[1], 0.0f, 1.0f ) );
+    Mat44f trafo( { texture.scale[0],   0.0f,               0.0f, 0.0f
+                  , 0.0f,               texture.scale[1],   0.0f, 0.0f
+                  , 0.0f,               0.0f,               1.0f, 0.0f
+                  , texture.offset[0],  texture.offset[1],  0.0f, 1.0f } );
     DP_VERIFY( parameterGroupData->setParameter( "textureMatrix", trafo ) );
 
     if ( isEnvMap )
     {
-      static boost::array<dp::fx::EnumSpec::StorageType,4> texGenMode( makeArray<dp::fx::EnumSpec::StorageType>( TGM_REFLECTION_MAP, TGM_REFLECTION_MAP, TGM_REFLECTION_MAP, TGM_OFF ) );
+      static boost::array<dp::fx::EnumSpec::StorageType, 4> texGenMode{ TGM_REFLECTION_MAP, TGM_REFLECTION_MAP, TGM_REFLECTION_MAP, TGM_OFF };
 
       DP_VERIFY( (parameterGroupData->setParameterArray<dp::fx::EnumSpec::StorageType,4>( "genMode", texGenMode )) );
       DP_VERIFY( parameterGroupData->setParameter<Vec4f>( "envColor", Vec4f( texture.percent, texture.percent, texture.percent, texture.percent ) ) );

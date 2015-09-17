@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -29,6 +29,7 @@
 
 #include <dp/util/File.h>
 #include <dp/math/math.h>
+#include <dp/util/Array.h>
 
 #include <test/rix/core/framework/RiXBackend.h>
 #include <test/rix/core/helpers/GeometryHelper.h>
@@ -45,17 +46,17 @@ using namespace rix::core;
 //Automatically add the test to the module's global test list
 REGISTER_TEST("benchmark_vertexThroughput", "tests performance with varying vertex count", create_benchmark_vertexThroughput);
 
-const float identity[16] = 
+const float identity[16] =
 {
   1.0f, 0.0f, 0.0f, 0.0f,
   0.0f, 1.0f, 0.0f, 0.0f,
-  0.0f, 0.0f, 1.0f, 0.0f, 
+  0.0f, 0.0f, 1.0f, 0.0f,
   0.0f, 0.0f, 0.0f, 1.0f
 };
 
-static void getOrthoProjection(float mat[16], 
-                        const float left,   const float right, 
-                        const float bottom, const float top, 
+static void getOrthoProjection(float mat[16],
+                        const float left,   const float right,
+                        const float bottom, const float top,
                         const float front,  const float back)
 {
   for( size_t i=0; i<16; ++i )
@@ -71,7 +72,7 @@ static void getOrthoProjection(float mat[16],
 }
 
 static void getTransformMatrix(float mat[16],
-  const float scaleX, const float scaleY, const float scaleZ, 
+  const float scaleX, const float scaleY, const float scaleZ,
   const float transX, const float transY, const float transZ )
 {
   for( size_t i=0; i<16; ++i )
@@ -113,7 +114,7 @@ bool Benchmark_vertexThroughput::onInit()
   DP_ASSERT( dynamic_cast<test::framework::RiXBackend*>(&(*m_backend)) )
   m_displayTarget.inplaceCast<dp::gl::RenderTarget>()->setClearColor( 0.46f, 0.72f, 0.0f, 0.0f );
 
-  return true;  
+  return true;
 }
 
 bool Benchmark_vertexThroughput::onRunInit( unsigned int i )
@@ -131,7 +132,7 @@ bool Benchmark_vertexThroughput::onRun(unsigned int i)
 {
   render(m_renderData, m_displayTarget);
 
-  return true;  
+  return true;
 }
 
 bool Benchmark_vertexThroughput::onRunCheck( unsigned int i )
@@ -190,9 +191,9 @@ void Benchmark_vertexThroughput::createScene()
 
 void Benchmark_vertexThroughput::generateGeometry(const char * vertexShader,
                                                   const char * fragmentShader,
-                                                  const float scale, 
-                                                  const float transX, 
-                                                  const float transY, 
+                                                  const float scale,
+                                                  const float transX,
+                                                  const float transY,
                                                   const float transZ)
 {
   std::vector<ProgramParameter> vertexProgramParameters;
@@ -211,7 +212,7 @@ void Benchmark_vertexThroughput::generateGeometry(const char * vertexShader,
 
   const char* shaders[] = {vertexShader, fragmentShader};
   ShaderType  shaderTypes[] = { ST_VERTEX_SHADER, ST_FRAGMENT_SHADER };
-  ProgramShaderCode programShaderCode( sizeof util::array( shaders ), shaders, shaderTypes );
+  ProgramShaderCode programShaderCode( sizeof dp::util::array( shaders ), shaders, shaderTypes );
 
   ProgramDescription programDescription( programShaderCode, &containerDescriptors[0], dp::checked_cast<unsigned int>(containerDescriptors.size() ));
 
