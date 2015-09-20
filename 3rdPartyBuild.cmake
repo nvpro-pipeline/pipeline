@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8.12)
 #determine Visual Studio compiler version
 execute_process(COMMAND "cl.exe" OUTPUT_VARIABLE dummy ERROR_VARIABLE cl_info_string)
 string(REGEX REPLACE ".*Version (..).*" "\\1" cl_major_version ${cl_info_string})
-string(REGEX REPLACE ".*for (...).*" "\\1" cl_architecture ${cl_info_string})
+string(REGEX MATCH "x64|x86" cl_architecture ${cl_info_string})
 
 if ("${cl_architecture}" STREQUAL "x64")
   set(BUILD_ARCH x64)
@@ -58,7 +58,7 @@ macro(lib3ds)
     endif()
     execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf ${DOWNLOAD_DIR}/${FILENAME} WORKING_DIRECTORY "${SOURCE_DIR}")
     execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf ${PATCH_DIR}/${FILENAME} WORKING_DIRECTORY "${SOURCE_DIR}")
-    
+
     set(BUILD_DIRECTORY "${BUILD_DIR}/lib3ds")
     if (EXISTS "${BUILD_DIRECTORY}")
       execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${BUILD_DIRECTORY}")
@@ -77,7 +77,7 @@ macro(fltlib)
     endif()
     execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf "${DOWNLOAD_DIR}/${FILENAME}" WORKING_DIRECTORY "${SOURCE_DIR}")
     execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf "${PATCH_DIR}/${FILENAME}" WORKING_DIRECTORY "${SOURCE_DIR}")
-    
+
     set(BUILD_DIRECTORY "${BUILD_DIR}/fltlib")
     if (EXISTS "${BUILD_DIRECTORY}")
       execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${BUILD_DIRECTORY}")
@@ -96,7 +96,7 @@ macro(tinyxml)
     endif()
     execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf "${DOWNLOAD_DIR}/${FILENAME}" WORKING_DIRECTORY "${SOURCE_DIR}")
     execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf "${PATCH_DIR}/${FILENAME}" WORKING_DIRECTORY "${SOURCE_DIR}")
-    
+
     set(BUILD_DIRECTORY "${BUILD_DIR}/tinyxml")
     if (EXISTS "${BUILD_DIRECTORY}")
       execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${BUILD_DIRECTORY}")
@@ -120,7 +120,7 @@ macro(boost)
       file(DOWNLOAD "http://downloads.sourceforge.net/project/boost/boost/${BOOST_VERSION}/${BOOST_ARCHIVE}" "${DOWNLOAD_DIR}/${BOOST_ARCHIVE}" STATUS downloaded)
     endif()
     execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf "${DOWNLOAD_DIR}/${BOOST_ARCHIVE}" WORKING_DIRECTORY "${SOURCE_DIR}")
-    
+
     execute_process(COMMAND cmd.exe "/C" "bootstrap.bat" WORKING_DIRECTORY "${SOURCE_DIR}/${BOOST_FOLDER}")
     execute_process(COMMAND cmd.exe /C b2 -j "$ENV{NUMBER_OF_PROCESSORS}" --toolset=${BOOST_TOOLSET} address-model=${BOOST_ADDRESS_MODEL} install --prefix=${CMAKE_INSTALL_PREFIX}/boost/ WORKING_DIRECTORY "${SOURCE_DIR}/${BOOST_FOLDER}")
 endmacro()
@@ -148,12 +148,12 @@ macro(glew)
         file(DOWNLOAD "http://downloads.sourceforge.net/project/glew/glew/1.12.0/${FILENAME}" "${DOWNLOAD_DIR}/${FILENAME}" STATUS downloaded)
     endif()
     execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzf "${DOWNLOAD_DIR}/${FILENAME}" WORKING_DIRECTORY "${CMAKE_INSTALL_PREFIX}")
-    
+
     # remove old glew directory
     if (EXISTS "${CMAKE_INSTALL_PREFIX}/glew")
       execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory "${CMAKE_INSTALL_PREFIX}/glew")
     endif()
-    
+
     file(RENAME "${CMAKE_INSTALL_PREFIX}/glew-1.12.0" "${CMAKE_INSTALL_PREFIX}/glew")
 endmacro()
 
