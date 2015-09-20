@@ -244,7 +244,7 @@ int runApp( int argc, char *argv[], bool stereo, bool continuous, int frames, co
 
   // Keep only once reference to the renderer in the widget. This is necessary since the OpenGL resources
   // used by the renderer must be deleted before the window gets destroyed.
-  renderer.reset(); 
+  renderer.reset();
 
   glutMainLoop();
 

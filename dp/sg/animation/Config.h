@@ -1,4 +1,4 @@
-// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -25,17 +25,16 @@
 
 
 #pragma once
-/** @file */
 
 #include <dp/Config.h>
 
 #if defined(DP_OS_WINDOWS)
 // microsoft specific storage-class defines
-# if defined(DP_SG_CORE_EXPORTS) || defined(DP_SG_XBAR_EXPORTS) || defined(DP_SG_ALGORITHM_EXPORTS) || defined(DP_SG_UI_EXPORTS) || defined(DP_SG_ANIMATION_EXPORTS)
-#  define DP_SG_CORE_API __declspec(dllexport)
+# if defined(DP_SG_ANIMATION_EXPORTS) || defined(DP_SG_ALGORITHM_EXPORTS) || defined(DP_SG_CORE_EXPORTS) || defined(DP_SG_UI_EXPORTS) || defined(DP_SG_XBAR_EXPORTS)
+#  define DP_SG_ANIMATION_API  __declspec(dllexport)
 # else
-#  define DP_SG_CORE_API __declspec(dllimport)
+#  define DP_SG_ANIMATION_API __declspec(dllimport)
 # endif
 #else
-# define DP_SG_CORE_API
+# define DP_SG_ANIMATION_API
 #endif
