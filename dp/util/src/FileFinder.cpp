@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2015
+// Copyright (c) 2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -59,13 +59,13 @@ namespace dp
 
     bool FileFinder::addSearchPath( std::string const& path )
     {
-      bool result = false;
       boost::filesystem::path boostPath(path);
-      if (boost::filesystem::exists(boostPath))
+      bool toAdd = boost::filesystem::exists( boostPath ) && ( std::find( m_searchPaths.begin(), m_searchPaths.end(), path ) == m_searchPaths.end() );
+      if ( toAdd )
       {
-        result = m_searchPaths.insert(boostPath).second;
+        m_searchPaths.push_back( path );
       }
-      return result;
+      return toAdd;
     }
 
     void FileFinder::addSearchPaths( std::vector<std::string> const& paths )
@@ -91,7 +91,7 @@ namespace dp
       }
       while ( !filePath.empty() )
       {
-        for ( std::set<boost::filesystem::path>::const_iterator pit = m_searchPaths.begin() ; pit != m_searchPaths.end() ; ++pit )
+        for ( std::vector<boost::filesystem::path>::const_iterator pit = m_searchPaths.begin() ; pit != m_searchPaths.end() ; ++pit )
         {
           boost::filesystem::path dirPath( *pit );
           dirPath /= filePath;
@@ -124,7 +124,7 @@ namespace dp
           }
         }
 
-        for ( std::set<boost::filesystem::path>::const_iterator pit = m_searchPaths.begin() ; pit != m_searchPaths.end() ; ++pit )
+        for ( std::vector<boost::filesystem::path>::const_iterator pit = m_searchPaths.begin() ; pit != m_searchPaths.end() ; ++pit )
         {
           DP_ASSERT( boost::filesystem::exists( *pit ) );
           boost::filesystem::path dirPath( *pit );
@@ -155,7 +155,7 @@ namespace dp
     {
       std::vector<std::string> paths;
       paths.reserve( m_searchPaths.size() );
-      for ( std::set<boost::filesystem::path>::const_iterator it = m_searchPaths.begin() ; it != m_searchPaths.end() ; ++it )
+      for ( std::vector<boost::filesystem::path>::const_iterator it = m_searchPaths.begin() ; it != m_searchPaths.end() ; ++it )
       {
         paths.push_back( it->string() );
       }
@@ -164,15 +164,18 @@ namespace dp
 
     bool FileFinder::removeSearchPath( std::string const& path )
     {
-      std::set<boost::filesystem::path>::iterator it = m_searchPaths.find( boost::filesystem::path( path ) );
+      std::vector<boost::filesystem::path>::iterator it = std::find( m_searchPaths.begin(), m_searchPaths.end(), boost::filesystem::path( path ) );
       bool found = ( it != m_searchPaths.end() );
-      if ( found && ( m_latestHit == *it ) )
+      if ( found )
       {
-        m_latestHit.clear();
+        if ( m_latestHit == *it )
+        {
+          m_latestHit.clear();
+        }
+        m_searchPaths.erase( it );
       }
       return( found );
     }
 
   } // namespace util
 } // namespace dp
-

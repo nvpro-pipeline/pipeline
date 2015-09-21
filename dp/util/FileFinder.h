@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2015
+// Copyright (c) 2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -42,8 +42,8 @@ namespace dp
     {
       public:
         DP_UTIL_API FileFinder();
-        DP_UTIL_API FileFinder( std::string const& path );
-        DP_UTIL_API FileFinder( std::vector<std::string> const& paths );
+        DP_UTIL_API explicit FileFinder( std::string const& path );
+        DP_UTIL_API explicit FileFinder( std::vector<std::string> const& paths );
 
         DP_UTIL_API bool addSearchPath( std::string const& path );
         DP_UTIL_API void addSearchPaths( std::vector<std::string> const& paths );
@@ -54,11 +54,9 @@ namespace dp
         DP_UTIL_API bool removeSearchPath( std::string const& path );
 
       private:
-        mutable boost::filesystem::path   m_latestHit;
-        std::set<boost::filesystem::path> m_searchPaths;
+        mutable boost::filesystem::path       m_latestHit;
+        std::vector<boost::filesystem::path>  m_searchPaths;
     };
 
   } // namespace util
 } // namespace dp
-
-
