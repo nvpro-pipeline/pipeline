@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2011
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -200,7 +200,7 @@ namespace dp
 
       LightSourceSharedPtr createStandardPointLight( const Vec3f & position, const Vec3f & ambient
                                                    , const Vec3f & diffuse, const Vec3f & specular
-                                                   , const boost::array<float,3> & attenuations )
+                                                   , const std::array<float,3> & attenuations )
       {
         EffectDataSharedPtr lightEffect = createStandardPointLightData( position, ambient, diffuse, specular
                                                                       , attenuations );
@@ -218,7 +218,7 @@ namespace dp
 
       LightSourceSharedPtr createStandardSpotLight( const Vec3f & position, const Vec3f & direction
                                                   , const Vec3f & ambient, const Vec3f & diffuse
-                                                  , const Vec3f & specular, const boost::array<float,3> & attenuations
+                                                  , const Vec3f & specular, const std::array<float,3> & attenuations
                                                   , float exponent, float cutoff )
       {
         Vec3f dir = direction;

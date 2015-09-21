@@ -652,7 +652,7 @@ ThreeDSLoader::configurePointlight( GroupSharedPtr const& parent, Lib3dsNode *n,
   Vec3f color = intensity * Vec3f( cKey->value[0], cKey->value[1], cKey->value[2] );
 
   // the 3ds file format only specifies constant attenuation
-  boost::array<float, 3> attenuations{ FLT_EPSILON < li->attenuation ? li->attenuation : 1.0f, 0.0f, 0.0f };
+  std::array<float, 3> attenuations{ FLT_EPSILON < li->attenuation ? li->attenuation : 1.0f, 0.0f, 0.0f };
 
   LightSourceSharedPtr pointLight = createStandardPointLight( Vec3f( 0.0f, 0.0f, 0.0f ), color, color, color, attenuations );
   pointLight->setName( li->name );
@@ -752,7 +752,7 @@ ThreeDSLoader::configureSpotlight( GroupSharedPtr const& parent, Lib3dsNode *n, 
   Vec3f color = intensity * Vec3f( cKey->value[0], cKey->value[1], cKey->value[2] );
 
   // the 3ds file format only specifies constant attenuation
-  boost::array<float, 3> attenuations{ FLT_EPSILON < li->attenuation ? li->attenuation : 1.0f, 0.0f, 0.0f };
+  std::array<float, 3> attenuations{ FLT_EPSILON < li->attenuation ? li->attenuation : 1.0f, 0.0f, 0.0f };
 
   LightSourceSharedPtr spotLight = createStandardSpotLight( Vec3f( 0.0f, 0.0f, 0.0f ), Vec3f( 0.0f, 0.0f, -1.0f )
                                                           , color, color, color, attenuations
@@ -2073,7 +2073,7 @@ ParameterGroupDataSharedPtr ThreeDSLoader::createTexture( Lib3dsTextureMap &text
 
     if ( isEnvMap )
     {
-      static boost::array<dp::fx::EnumSpec::StorageType, 4> texGenMode{ TGM_REFLECTION_MAP, TGM_REFLECTION_MAP, TGM_REFLECTION_MAP, TGM_OFF };
+      static std::array<dp::fx::EnumSpec::StorageType, 4> texGenMode{ TGM_REFLECTION_MAP, TGM_REFLECTION_MAP, TGM_REFLECTION_MAP, TGM_OFF };
 
       DP_VERIFY( (parameterGroupData->setParameterArray<dp::fx::EnumSpec::StorageType,4>( "genMode", texGenMode )) );
       DP_VERIFY( parameterGroupData->setParameter<Vec4f>( "envColor", Vec4f( texture.percent, texture.percent, texture.percent, texture.percent ) ) );

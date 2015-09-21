@@ -30,7 +30,7 @@
 #include <dp/math/Config.h>
 #include <dp/math/Quatt.h>
 #include <dp/math/Vecnt.h>
-#include <boost/array.hpp>
+#include <array>
 
 namespace dp
 {
@@ -71,7 +71,7 @@ namespace dp
          *  \code
          *    Mat33f m33f( { xAxis, yAxis, zAxis } );
          *  \endcode */
-        explicit Matmnt( const boost::array<Vecnt<n,T>,m> & rows );
+        explicit Matmnt( const std::array<Vecnt<n,T>,m> & rows );
 
         /*! \brief Constructor for a matrix by an array of 2 rows of type Vecnt<n,T>.
          *  \param v1,v2 The vectors for the rows
@@ -95,7 +95,7 @@ namespace dp
          *  \code
          *    Mat33f m33f( { m00, m01, m02, m10, m11, m12, m20, m21, m22 } );
          *  \endcode */
-        explicit Matmnt( const boost::array<T,m*n> & scalars );
+        explicit Matmnt( const std::array<T,m*n> & scalars );
 
         /*! \brief Constructor for a 3 by 3 rotation matrix out of an axis and an angle.
          *  \param axis A reference to the constant axis to rotate about.
@@ -583,7 +583,7 @@ namespace dp
     }
 
     template<unsigned int m, unsigned int n, typename T>
-    inline Matmnt<m,n,T>::Matmnt( const boost::array<Vecnt<n,T>,m> & rows )
+    inline Matmnt<m,n,T>::Matmnt( const std::array<Vecnt<n,T>,m> & rows )
     {
       for ( unsigned int i=0 ; i<m ; i++ )
       {
@@ -619,7 +619,7 @@ namespace dp
     }
 
     template<unsigned int m, unsigned int n, typename T>
-    inline Matmnt<m,n,T>::Matmnt( const boost::array<T,m*n> & scalars )
+    inline Matmnt<m,n,T>::Matmnt( const std::array<T,m*n> & scalars )
     {
       for ( unsigned int i=0, idx=0 ; i<m ; i++ )
       {

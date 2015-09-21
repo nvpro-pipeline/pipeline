@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2015
+// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -98,7 +98,7 @@ namespace
       EffectDataLocal( const dp::sg::core::EffectData * effectData )
         : dp::fx::EffectData( effectData->getEffectSpec(), effectData->getName() )
       {
-        int i = 0; 
+        int i = 0;
         for ( dp::fx::EffectSpec::iterator it = m_effectSpec->beginParameterGroupSpecs() ; it != m_effectSpec->endParameterGroupSpecs() ; ++it, i++ )
         {
           m_parameterGroupDatas[i] = std::make_shared<ParameterGroupDataLocal>( effectData->getParameterGroupData( it ) );
@@ -371,7 +371,7 @@ namespace dp
         DP_ASSERT( !es->getTransparent() );
         return( es );
       }
-  
+
       const EffectSpecSharedPtr& getStandardDirectedLightSpec()
       {
         EffectSpecSharedPtr const & es = EffectLibrary::instance()->getEffectSpec( std::string("standardDirectedLightEffect") );
@@ -435,7 +435,7 @@ namespace dp
 
       EffectDataSharedPtr createStandardPointLightData( const Vec3f & position, const Vec3f & ambient
                                                       , const Vec3f & diffuse, const Vec3f & specular
-                                                      , const boost::array<float,3> & attenuations )
+                                                      , const std::array<float,3> & attenuations )
       {
         const EffectSpecSharedPtr & standardSpec = getStandardPointLightSpec();
         DP_ASSERT( standardSpec );
@@ -458,7 +458,7 @@ namespace dp
       EffectDataSharedPtr createStandardSpotLightData( const Vec3f & position, const Vec3f & direction
                                                      , const Vec3f & ambient, const Vec3f & diffuse
                                                      , const Vec3f & specular
-                                                     , const boost::array<float,3> & attenuations
+                                                     , const std::array<float,3> & attenuations
                                                      , float exponent, float cutoff )
       {
         const EffectSpecSharedPtr & standardSpec = getStandardSpotLightSpec();

@@ -145,13 +145,13 @@ namespace dp
                                                                      , const dp::math::Vec3f & ambient = dp::math::Vec3f( 0.0f, 0.0f, 0.0f )
                                                                      , const dp::math::Vec3f & diffuse = dp::math::Vec3f( 1.0f, 1.0f, 1.0f )
                                                                      , const dp::math::Vec3f & specular = dp::math::Vec3f( 1.0f, 1.0f, 1.0f )
-                                                                     , const boost::array<float, 3> & attenuations = { 1.0f, 0.0f, 0.0f } );
+                                                                     , const std::array<float, 3> & attenuations = { 1.0f, 0.0f, 0.0f } );
       DP_SG_CORE_API EffectDataSharedPtr createStandardSpotLightData( const dp::math::Vec3f & position = dp::math::Vec3f( 0.0f, 0.0f, 1.0f )
                                                                     , const dp::math::Vec3f & direction = dp::math::Vec3f( 0.0f, 0.0f, -1.0f )
                                                                     , const dp::math::Vec3f & ambient = dp::math::Vec3f( 0.0f, 0.0f, 0.0f )
                                                                     , const dp::math::Vec3f & diffuse = dp::math::Vec3f( 1.0f, 1.0f, 1.0f )
                                                                     , const dp::math::Vec3f & specular = dp::math::Vec3f( 1.0f, 1.0f, 1.0f )
-                                                                    , const boost::array<float, 3> & attenuations = { 1.0f, 0.0f, 0.0f }
+                                                                    , const std::array<float, 3> & attenuations = { 1.0f, 0.0f, 0.0f }
                                                                     , float exponent = 0.0f
                                                                     , float cutoff = 45.0f );
       DP_SG_CORE_API EffectDataSharedPtr createStandardMaterialData( const dp::math::Vec3f & ambientColor = dp::math::Vec3f( 0.2f, 0.2f, 0.2f )

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -60,7 +60,7 @@ namespace dp
           DP_SG_CORE_API const dp::fx::ParameterGroupSpecSharedPtr & getParameterGroupSpec() const;
 
           template <typename T> const T & getParameter( const dp::fx::ParameterGroupSpec::iterator& it ) const;
-          template <typename T> const T & getParameter( const std::string & name ) const;          
+          template <typename T> const T & getParameter( const std::string & name ) const;
           template <typename T> void setParameter( const dp::fx::ParameterGroupSpec::iterator& it, const T & value );
           template <typename T> bool setParameter( const std::string & name, const T & value );
 
@@ -68,9 +68,9 @@ namespace dp
           template <typename T> void setParameterArray( const dp::fx::ParameterGroupSpec::iterator& it, const std::vector<T> & data );
           template <typename T> bool setParameterArray( const std::string & name, const std::vector<T> & data );
 
-          template <typename T, unsigned int n> void getParameterArray( const dp::fx::ParameterGroupSpec::iterator& it, boost::array<T,n> & data ) const;
-          template <typename T, unsigned int n> void setParameterArray( const dp::fx::ParameterGroupSpec::iterator& it, const boost::array<T,n> & data );
-          template <typename T, unsigned int n> bool setParameterArray( const std::string & name, const boost::array<T,n> & data );
+          template <typename T, unsigned int n> void getParameterArray( const dp::fx::ParameterGroupSpec::iterator& it, std::array<T,n> & data ) const;
+          template <typename T, unsigned int n> void setParameterArray( const dp::fx::ParameterGroupSpec::iterator& it, const std::array<T,n> & data );
+          template <typename T, unsigned int n> bool setParameterArray( const std::string & name, const std::array<T,n> & data );
 
           template <typename T> const T & getParameterArrayElement( const dp::fx::ParameterGroupSpec::iterator& it, unsigned int index ) const;
           template <typename T> void setParameterArrayElement( const dp::fx::ParameterGroupSpec::iterator& it, unsigned int index, const T & value );
@@ -280,7 +280,7 @@ namespace dp
       }
 
       template <typename T, unsigned int n>
-      inline void ParameterGroupData::getParameterArray( const dp::fx::ParameterGroupSpec::iterator& it, boost::array<T,n> & data ) const
+      inline void ParameterGroupData::getParameterArray( const dp::fx::ParameterGroupSpec::iterator& it, std::array<T,n> & data ) const
       {
         DP_ASSERT( it != m_parameterGroupSpec->endParameterSpecs() );
         DP_ASSERT( ( ( it->first.getType() & ( dp::fx::PT_SCALAR_TYPE_MASK | dp::fx::PT_SCALAR_MODIFIER_MASK ) ) == it->first.getType() )
@@ -295,7 +295,7 @@ namespace dp
       }
 
       template <typename T, unsigned int n>
-      inline void ParameterGroupData::setParameterArray( const dp::fx::ParameterGroupSpec::iterator& it, const boost::array<T,n> & data )
+      inline void ParameterGroupData::setParameterArray( const dp::fx::ParameterGroupSpec::iterator& it, const std::array<T,n> & data )
       {
         DP_ASSERT( it != m_parameterGroupSpec->endParameterSpecs() );
         DP_ASSERT( ( ( it->first.getType() & ( dp::fx::PT_SCALAR_TYPE_MASK | dp::fx::PT_SCALAR_MODIFIER_MASK ) ) == it->first.getType() )
@@ -310,7 +310,7 @@ namespace dp
       }
 
       template <typename T, unsigned int n>
-      inline bool ParameterGroupData::setParameterArray( const std::string & name, const boost::array<T,n> & data )
+      inline bool ParameterGroupData::setParameterArray( const std::string & name, const std::array<T,n> & data )
       {
         for ( dp::fx::ParameterGroupSpec::iterator it = m_parameterGroupSpec->beginParameterSpecs() ; it != m_parameterGroupSpec->endParameterSpecs() ; ++it )
         {
@@ -353,7 +353,7 @@ namespace dp
           notify( Event( it ) );
         }
       }
-  
+
       template <typename T>
       inline bool ParameterGroupData::setParameterArrayElement( const std::string & name, unsigned int index, const T & value )
       {
