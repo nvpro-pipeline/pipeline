@@ -1,5 +1,4 @@
-
-// Copyright NVIDIA Corporation 2009-2010
+// Copyright (c) 2009-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -49,6 +48,7 @@ Preferences::Preferences( QObject * parent )
   // Different paths can be added inside the Preferences Dialog.
   if ( !m_searchPaths.count() )
   {
+    m_searchPaths.append( home + QString( "/media/dpfx" ) );
     m_searchPaths.append( home + QString("/media/effects") );
     m_searchPaths.append( home + QString("/media/effects/xml") );
     m_searchPaths.append( home + QString("/media/textures") );
@@ -208,7 +208,7 @@ std::vector<std::string> Preferences::getSearchPathsAsStdVector() const
     searchPaths.push_back( m_searchPaths.at(i).toStdString() );
     dp::util::convertPath( searchPaths.back() );
   }
-  
+
   return searchPaths;
 }
 

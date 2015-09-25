@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -168,7 +168,7 @@ namespace dp
         DP_FX_XML_API static EffectLoaderSharedPtr create( EffectLibraryImpl * effectLibrary );
         DP_FX_XML_API ~EffectLoader();
 
-        DP_FX_XML_API virtual bool loadEffects( const std::string& filename );
+        DP_FX_XML_API virtual bool loadEffects( const std::string& filename, dp::util::FileFinder const& fileFinder );
         DP_FX_XML_API virtual bool save( const EffectDataSharedPtr& effectData, const std::string& filename );
 
         DP_FX_XML_API virtual bool getShaderSnippets( const dp::fx::ShaderPipelineConfiguration & configuration
@@ -201,18 +201,18 @@ namespace dp
         };
 
       private:
-        void parseLibrary( TiXmlElement * root );
+        void parseLibrary( TiXmlElement * root, dp::util::FileFinder const& fileFinder );
         void parseEnum( TiXmlElement * element );
-        void parseLightEffect( TiXmlElement * effect);
-        void parseDomainSpec( TiXmlElement * effect);
-        void parseEffect( TiXmlElement * effect );
-        TechniqueSharedPtr parseTechnique( TiXmlElement *techique, dp::fx::Domain domain );
-        ParameterGroupSpecSharedPtr parseParameterGroup( TiXmlElement * pg );
-        void parseParameter( TiXmlElement * param, std::vector<ParameterSpec> & psc );
-        void parseInclude( TiXmlElement * effect );
+        void parseLightEffect( TiXmlElement * effect, dp::util::FileFinder const& fileFinder );
+        void parseDomainSpec( TiXmlElement * effect, dp::util::FileFinder const& fileFinder );
+        void parseEffect( TiXmlElement * effect, dp::util::FileFinder const& fileFinder );
+        TechniqueSharedPtr parseTechnique( TiXmlElement *techique, dp::fx::Domain domain, dp::util::FileFinder const& fileFinder );
+        ParameterGroupSpecSharedPtr parseParameterGroup( TiXmlElement * pg, dp::util::FileFinder const& fileFinder );
+        void parseParameter( TiXmlElement * param, std::vector<ParameterSpec> & psc, dp::util::FileFinder const& fileFinder );
+        void parseInclude( TiXmlElement * effect, dp::util::FileFinder const& fileFinder );
 
         /** \brief Parse sources within GLSL/CUDA tag **/
-        SnippetSharedPtr parseSources( TiXmlElement * effect );
+        SnippetSharedPtr parseSources( TiXmlElement * effect, dp::util::FileFinder const& fileFinder );
 
         dp::fx::ParameterGroupDataSharedPtr parseParameterGroupData( TiXmlElement * pg );
         void parseParameterData( TiXmlElement * param, const dp::fx::ParameterGroupDataPrivateSharedPtr& pgd );
@@ -224,7 +224,6 @@ namespace dp
         EffectElementType getTypeFromElement(TiXmlElement *element);
         unsigned int getParameterTypeFromGLSLType(const std::string &glslType);
 
-        SnippetSharedPtr getSourceSnippet( std::string const & filename );
         SnippetSharedPtr getParameterSnippet( std::string const & inout, std::string const & type, TiXmlElement *element );
 
       private:
@@ -232,14 +231,12 @@ namespace dp
         typedef std::map<std::string, DomainDataSharedPtr> DomainDatas;
         DomainSpecs m_domainSpecs;
         DomainDatas m_domainDatas;
- 
+
         // Explicitly chosen name to reduce confusion with two other typedefs named ParameterGroupDatas.
         typedef std::map<std::string, ParameterGroupDataSharedPtr> ParameterGroupDataLookup;
         ParameterGroupDataLookup m_parameterGroupDataLookup;
 
         std::set<std::string> m_loadedFiles;
-
-        dp::util::FileFinder  m_fileFinder;
 
         std::map<std::string, unsigned int> m_mapGLSLtoPT;
         std::map<unsigned int, std::string> m_mapPTtoGLSL;

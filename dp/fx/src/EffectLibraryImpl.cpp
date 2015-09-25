@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -121,14 +121,17 @@ namespace dp
         return false;
       }
 
-      std::string extension = dp::util::getFileExtension( file );
+      dp::util::FileFinder localFileFinder( fileFinder );
+      localFileFinder.addSearchPath( dp::util::getFilePath( file ) );
+
+      std::string extension = dp::util::getFileExtension( filename );
 
       EffectLoaders::iterator it = m_effectLoaders.find( extension );
       if ( it != m_effectLoaders.end() )
       {
         m_currentFile.push( file );
         dp::util::convertPath( m_currentFile.top() );
-        bool success = it->second->loadEffects( m_currentFile.top() );
+        bool success = it->second->loadEffects( m_currentFile.top(), localFileFinder );
         m_currentFile.pop();
         m_loadedFiles.insert( filename );
 
@@ -195,7 +198,7 @@ namespace dp
       ParameterGroupSpecs::const_iterator it = m_parameterGroupSpecs.find( pgsName );
       if ( it != m_parameterGroupSpecs.end() )
       {
-        return it->second;          
+        return it->second;
       }
       else
       {

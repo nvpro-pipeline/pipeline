@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -99,7 +99,7 @@ namespace dp
 
       void Technique::addDomainSnippet( dp::fx::Domain domain, std::string const & signature, dp::fx::SnippetSharedPtr const & snippet )
       {
-        if ( m_domainSignatures.find( domain ) != m_domainSignatures.end() 
+        if ( m_domainSignatures.find( domain ) != m_domainSignatures.end()
           && m_domainSignatures[domain].find( signature ) != m_domainSignatures[domain].end() )
         {
           throw std::runtime_error( std::string( "signature " + signature + " has already been added to the domain" ) );
@@ -148,7 +148,7 @@ namespace dp
           return it->second;
         }
         // The DomainSpec's technique doesn't match the queried one.
-        // Return nullptr so that it's going to be ignored. 
+        // Return nullptr so that it's going to be ignored.
         return TechniqueSharedPtr::null;
       }
 
@@ -185,7 +185,7 @@ namespace dp
         for ( std::vector<dp::fx::ParameterGroupDataSharedPtr>::const_iterator it = parameterGroupDatas.begin(); it != parameterGroupDatas.end(); ++it )
         {
           dp::fx::ParameterGroupSpecSharedPtr parameterGroupSpec = (*it)->getParameterGroupSpec();
-          
+
           DomainSpec::ParameterGroupSpecsContainer::const_iterator itParameterGroupSpec = std::find( parameterGroupSpecs.begin(), parameterGroupSpecs.end(), parameterGroupSpec );
           if ( itParameterGroupSpec == parameterGroupSpecs.end() )
           {
@@ -361,7 +361,7 @@ namespace dp
         m_mapGLSLtoPT.insert(std::make_pair("samplerCubeShadow",      PT_SAMPLER_PTR | PT_SAMPLER_CUBE_SHADOW));
         m_mapGLSLtoPT.insert(std::make_pair("samplerCubeArrayShadow", PT_SAMPLER_PTR | PT_SAMPLER_CUBE_ARRAY_SHADOW));
         // m_mapGLSLtoPT.insert(std::make_pair("RiXInternal?", PT_NATIVE));
-            
+
         // These are invented variable types and not valid GLSL variables
 
         // These are used to support OptiX rtBuffer<format>, rtBuffer<format, 2>, rtBuffer<format, 3>.
@@ -369,7 +369,7 @@ namespace dp
         //m_mapGLSLtoPT.insert(std::make_pair("buffer1D", PT_BUFFER_PTR | PT_BUFFER_1D));
         //m_mapGLSLtoPT.insert(std::make_pair("buffer2D", PT_BUFFER_PTR | PT_BUFFER_2D));
         //m_mapGLSLtoPT.insert(std::make_pair("buffer3D", PT_BUFFER_PTR | PT_BUFFER_3D));
-        // These are added to be able to handle smaller data types than int 
+        // These are added to be able to handle smaller data types than int
         // inside EffectSpecs parameter groups on scene graph side.
         // Code generation will cast them to the next bigger supported format in GLSL.
         m_mapGLSLtoPT.insert(std::make_pair("enum", static_cast<unsigned int>(PT_ENUM)));
@@ -403,17 +403,13 @@ namespace dp
         {
           m_mapPTtoGLSL.insert( make_pair(it->second, it->first) );
         }
-
-        // some files still reside in dpfx
-        m_fileFinder.addSearchPath( dp::home() + "/media/dpfx" );
-        m_fileFinder.addSearchPath( dp::home() + "/media/textures" );
       }
 
       EffectLoader::~EffectLoader()
       {
       }
 
-      bool EffectLoader::loadEffects(const string &inputFilename )
+      bool EffectLoader::loadEffects(const string &inputFilename, dp::util::FileFinder const& fileFinder )
       {
         // Make sure Windows partition letters are always the same case.
         std::string filename = inputFilename;
@@ -425,9 +421,11 @@ namespace dp
 
         if ( m_loadedFiles.find( filename ) == m_loadedFiles.end() )
         {
+          dp::util::FileFinder localFileFinder( fileFinder );
+
           // This search path is going to be used to find the files referenced inside the XML effects description.
           std::string dir = dp::util::getFilePath( filename );
-          bool addedSearchPath = m_fileFinder.addSearchPath( dir );
+          localFileFinder.addSearchPath( dir );
 
           std::unique_ptr<TiXmlDocument> doc(new TiXmlDocument(filename.c_str()));
           if ( !doc )
@@ -449,12 +447,7 @@ namespace dp
           }
 
           m_loadedFiles.insert( filename );
-          parseLibrary( root );
-
-          if ( addedSearchPath )
-          {
-            m_fileFinder.removeSearchPath( dir );
-          }
+          parseLibrary( root, localFileFinder );
         }
 
         return true;
@@ -470,7 +463,7 @@ namespace dp
         dp::fx::xml::EffectSpecSharedPtr const& effectSpec = dp::fx::EffectLibrary::instance()->getEffectSpec( configuration.getName() ).inplaceCast<dp::fx::xml::EffectSpec>();
 
         // All other domains have only one set of code snippets per technique and ignore the signature.
-        
+
         dp::fx::Domain signatureDomain = DOMAIN_FRAGMENT;
         std::string signature;
 
@@ -542,10 +535,10 @@ namespace dp
         if (value == "include")            return EET_INCLUDE;
         if (value == "PipelineSpec")       return EET_PIPELINE_SPEC;
         if (value == "PipelineData")       return EET_PIPELINE_DATA;
-      
+
         return EET_UNKNOWN;
       }
-    
+
       unsigned int EffectLoader::getParameterTypeFromGLSLType( const string &glslType )
       {
         std::map<string, unsigned int>::const_iterator it = m_mapGLSLtoPT.find(glslType);
@@ -555,16 +548,6 @@ namespace dp
         }
         DP_ASSERT( !"EffectLoader::getParameterTypeFromGLSLType(): Type not found." );
         return PT_UNDEFINED; // Return something which indicates an error and isn't going to work further down.
-      }
-
-      SnippetSharedPtr EffectLoader::getSourceSnippet( string const & filename )
-      {
-        std::string name = m_fileFinder.find( filename );
-        if ( name.empty() )
-        {
-          throw std::runtime_error( std::string("EffectLoader::loadSource(): File " + filename + "not found." ) );
-        }
-        return( std::make_shared<FileSnippet>( name ) );
       }
 
       SnippetSharedPtr EffectLoader::getParameterSnippet( string const & inout, string const & type, TiXmlElement *element )
@@ -582,7 +565,7 @@ namespace dp
         return( std::make_shared<StringSnippet>( oss.str() ) );
       }
 
-      void EffectLoader::parseLibrary( TiXmlElement * root )
+      void EffectLoader::parseLibrary( TiXmlElement * root, dp::util::FileFinder const& fileFinder )
       {
         TiXmlHandle xmlHandle = root->FirstChildElement();
         TiXmlElement *element = xmlHandle.Element();
@@ -595,16 +578,16 @@ namespace dp
               parseEnum( element );
               break;
             case EET_EFFECT :
-              parseEffect( element );
+              parseEffect( element, fileFinder );
               break;
             case EET_PARAMETER_GROUP :
-              parseParameterGroup( element );
+              parseParameterGroup( element, fileFinder );
               break;
             case EET_PARAMETER_GROUP_DATA :
               parseParameterGroupData( element );
               break;
             case EET_INCLUDE:
-              parseInclude( element );
+              parseInclude( element, fileFinder );
               break;
             case EET_PIPELINE_SPEC:
               parsePipelineSpec( element );
@@ -642,7 +625,7 @@ namespace dp
         m_mapGLSLtoPT[type] = PT_ENUM;
       }
 
-      void EffectLoader::parseLightEffect( TiXmlElement * effect)
+      void EffectLoader::parseLightEffect( TiXmlElement * effect, dp::util::FileFinder const& fileFinder )
       {
         DP_ASSERT( effect->Attribute( "id" ) );
         string id = effect->Attribute( "id" );
@@ -661,7 +644,7 @@ namespace dp
           {
           case EET_PARAMETER_GROUP:
             {
-              ParameterGroupSpecSharedPtr pgs = parseParameterGroup( element );
+              ParameterGroupSpecSharedPtr pgs = parseParameterGroup( element, fileFinder );
               DP_ASSERT( find( pgsc.begin(), pgsc.end(), pgs ) == pgsc.end() );
               pgsc.push_back( pgs );
             }
@@ -686,14 +669,14 @@ namespace dp
         }
       }
 
-      void EffectLoader::parseDomainSpec( TiXmlElement * effect )
+      void EffectLoader::parseDomainSpec( TiXmlElement * effect, dp::util::FileFinder const& fileFinder )
       {
         DP_ASSERT( effect->Attribute( "id" ) );
         DP_ASSERT( effect->Attribute( "domain" ) );
 
         std::string id           = effect->Attribute( "id" );
         std::string domainString = effect->Attribute( "domain" );
-        
+
         dp::fx::Domain domain = getDomainFromString( domainString );
 
         DomainSpecs::const_iterator it = m_domainSpecs.find( id );
@@ -722,14 +705,14 @@ namespace dp
           {
           case EET_PARAMETER_GROUP:
             {
-              ParameterGroupSpecSharedPtr pgs = parseParameterGroup( element );
+              ParameterGroupSpecSharedPtr pgs = parseParameterGroup( element, fileFinder );
               DP_ASSERT( find( pgsc.begin(), pgsc.end(), pgs ) == pgsc.end() );
               pgsc.push_back( pgs );
             }
             break;
           case EET_TECHNIQUE:
             {
-              TechniqueSharedPtr technique = parseTechnique( element, domain );
+              TechniqueSharedPtr technique = parseTechnique( element, domain, fileFinder );
               techniques[technique->getType()] = technique;
             }
             break;
@@ -743,7 +726,7 @@ namespace dp
         // register DomainSpec
         DomainSpecSharedPtr domainSpec = DomainSpec::create( id, domain, pgsc, isTransparent, techniques );
         m_domainSpecs[id] = domainSpec;
-        
+
         // register DomainData
         std::vector<dp::fx::ParameterGroupDataSharedPtr> parameterGroupDatas;
         DomainSpec::ParameterGroupSpecsContainer const & parameterGroupSpecs = domainSpec->getParameterGroups();
@@ -754,7 +737,7 @@ namespace dp
         m_domainDatas[id] = DomainData::create( domainSpec, id, parameterGroupDatas, false );
       }
 
-      void EffectLoader::parseEffect( TiXmlElement * effect )
+      void EffectLoader::parseEffect( TiXmlElement * effect, dp::util::FileFinder const& fileFinder )
       {
         if ( !effect->Attribute( "id" ) )
         {
@@ -768,15 +751,15 @@ namespace dp
         std::string domain = effect->Attribute( "domain" );
         if ( domain == "light" ) // Invented domain "light shader" to special case this.
         {
-          parseLightEffect( effect );
+          parseLightEffect( effect, fileFinder );
         }
         else
         {
-          parseDomainSpec( effect );
+          parseDomainSpec( effect, fileFinder );
         }
       }
 
-      TechniqueSharedPtr EffectLoader::parseTechnique( TiXmlElement *technique, dp::fx::Domain domain )
+      TechniqueSharedPtr EffectLoader::parseTechnique( TiXmlElement *technique, dp::fx::Domain domain, dp::util::FileFinder const& fileFinder )
       {
         char const * type = technique->Attribute( "type" );
         if ( type )
@@ -796,7 +779,7 @@ namespace dp
                 char const * signature = element->Attribute( "signature" );
                 if ( signature )
                 {
-                  SnippetSharedPtr snippet = parseSources(element);
+                  SnippetSharedPtr snippet = parseSources( element, fileFinder );
                   newTechnique->addDomainSnippet( domain, signature, snippet );
                 }
                 else
@@ -805,7 +788,7 @@ namespace dp
                 }
               }
               break;
-         
+
             default:
               throw std::runtime_error( std::string("Expected glsl or cuda tag. Found invalid tag ") + element->Value() );
               break;
@@ -821,7 +804,7 @@ namespace dp
         return TechniqueSharedPtr();
       }
 
-      ParameterGroupSpecSharedPtr EffectLoader::parseParameterGroup( TiXmlElement * pg )
+      ParameterGroupSpecSharedPtr EffectLoader::parseParameterGroup( TiXmlElement * pg, dp::util::FileFinder const& fileFinder )
       {
         if ( pg->Attribute( "ref" ) )
         {
@@ -844,7 +827,7 @@ namespace dp
             switch( getTypeFromElement( element ) )
             {
               case EET_PARAMETER :
-                parseParameter( element, psc );
+                parseParameter( element, psc, fileFinder );
                 break;
               default :
                 DP_ASSERT( !"Unknown element type in ParameterGroup" );
@@ -864,7 +847,7 @@ namespace dp
         }
       }
 
-      void EffectLoader::parseParameter( TiXmlElement * param, vector<ParameterSpec> & psc )
+      void EffectLoader::parseParameter( TiXmlElement * param, vector<ParameterSpec> & psc, dp::util::FileFinder const& fileFinder )
       {
         DP_ASSERT( param->Attribute( "type" ) );
         string type = param->Attribute( "type" );
@@ -891,7 +874,7 @@ namespace dp
         else if ( ( ( typeId & PT_POINTER_TYPE_MASK ) == PT_SAMPLER_PTR ) && !value.empty() )
         {
           DP_ASSERT( arraySize == 0 );
-          std::string fileName = m_fileFinder.findRecursive( value );
+          std::string fileName = fileFinder.findRecursive( value );
           psc.push_back( ParameterSpec( name, typeId, semantic, arraySize, fileName.empty() ? value : fileName, annotation ) );
         }
         else
@@ -900,7 +883,7 @@ namespace dp
         }
       }
 
-      void EffectLoader::parseInclude( TiXmlElement* include )
+      void EffectLoader::parseInclude( TiXmlElement* include, dp::util::FileFinder const& fileFinder )
       {
         const char* file = include->Attribute("file");
         if ( !file )
@@ -910,11 +893,11 @@ namespace dp
         }
         else
         {
-          getEffectLibrary()->loadEffects( file, m_fileFinder );
+          getEffectLibrary()->loadEffects( file, fileFinder );
         }
       }
 
-      SnippetSharedPtr EffectLoader::parseSources( TiXmlElement * effect )
+      SnippetSharedPtr EffectLoader::parseSources( TiXmlElement * effect, dp::util::FileFinder const& fileFinder )
       {
         TiXmlHandle xmlHandle = effect->FirstChildElement();
         TiXmlElement *element = xmlHandle.Element();
@@ -929,7 +912,7 @@ namespace dp
                 if ( element->Attribute( "file" ) )
                 {
                   char const *filename = element->Attribute( "file" );
-                  std::string name = m_fileFinder.find( filename );
+                  std::string name = fileFinder.find( filename );
                   if ( !name.empty() )
                   {
                     snippets.push_back( std::make_shared<FileSnippet>( name ) );
@@ -1144,8 +1127,8 @@ namespace dp
             case EET_PARAMETER_GROUP_DATA:
               {
                 const ParameterGroupDataSharedPtr& parameterGroupData = parseParameterGroupData( element ); // This handles newly defined and referenced programParameterGroupData
-                DP_ASSERT( parameterGroupData ); 
-  
+                DP_ASSERT( parameterGroupData );
+
                 // Find the ParameterGroupSpec name the ParameterGroupData should be written to.
                 const ParameterGroupSpecSharedPtr& pgs = parameterGroupData->getParameterGroupSpec();
                 dp::fx::EffectSpec::iterator ites = effectSpec->findParameterGroupSpec( pgs->getName() );
@@ -1179,7 +1162,7 @@ namespace dp
         EffectSpecSharedPtr effectSpec = dp::fx::EffectLibrary::instance()->getEffectSpec( configuration.getName() ).staticCast<dp::fx::xml::EffectSpec>();
         EffectSpec::DomainSpecs const & domainSpecs = effectSpec->getDomainSpecs();
 
-        for ( EffectSpec::DomainSpecs::const_iterator it = domainSpecs.begin(); it != domainSpecs.end(); ++it ) 
+        for ( EffectSpec::DomainSpecs::const_iterator it = domainSpecs.begin(); it != domainSpecs.end(); ++it )
         {
           DP_ASSERT( it->first != DOMAIN_PIPELINE );
 
@@ -1287,7 +1270,7 @@ namespace dp
             unsigned int type = itPs->first.getType();
             if ( isParameterEnum( itPs->first ) )
             {
-              elementParameter->SetAttribute( "value", 
+              elementParameter->SetAttribute( "value",
                                               dp::fx::getStringFromValue( itPs->first.getEnumSpec(), itPs->first.getArraySize(),
                                                                           reinterpret_cast<const dp::fx::EnumSpec::StorageType*>(parameterGroupData->getParameter( itPs ) ) ).c_str() );
             }

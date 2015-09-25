@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2015
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -24,6 +24,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+#include <dp/DP.h>
 #include <dp/fx/EffectLibrary.h>
 #include <dp/util/PlugIn.h>
 #include <dp/util/File.h>
@@ -50,9 +51,11 @@ namespace dp
         // load standard effects required for the scenegraph
         bool success = true;
 
-        success &= dp::fx::EffectLibrary::instance()->loadEffects( "standard_lights.xml" );
-        success &= dp::fx::EffectLibrary::instance()->loadEffects( "standard_material.xml" );
-        success &= dp::fx::EffectLibrary::instance()->loadEffects( "collada.xml" );
+        dp::util::FileFinder fileFinder( dp::home() + "/media/dpfx" );
+
+        success &= dp::fx::EffectLibrary::instance()->loadEffects( dp::home() + "/media/effects/xml/standard_lights.xml", fileFinder );
+        success &= dp::fx::EffectLibrary::instance()->loadEffects( dp::home() + "/media/effects/xml/standard_material.xml", fileFinder );
+        success &= dp::fx::EffectLibrary::instance()->loadEffects( dp::home() + "/media/effects/xml/collada.xml", fileFinder );
         DP_ASSERT(success && "EffectLibrary::loadLibrary failed.");
 
         return success;
