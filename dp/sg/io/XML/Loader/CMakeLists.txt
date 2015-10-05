@@ -45,6 +45,10 @@ if (TINYXML_FOUND)
     ${TINYXML_LIBRARIES}
   )
 
+  if (WIN32)
+    set_target_properties( XMLLoader PROPERTIES LINK_FLAGS_DEBUG "/NODEFAULTLIB:msvcrt" )
+  endif(WIN32)
+
   set_target_properties( XMLLoader PROPERTIES SUFFIX ".nxm" FOLDER "Loaders")
 else()
   message("TinyXML not found, disabling XMLLoader")

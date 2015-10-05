@@ -42,6 +42,10 @@ if (TINYXML_FOUND)
     target_link_libraries(MaterialExchanger dl)
   endif()
 
+  if (WIN32)
+    set_target_properties( MaterialExchanger PROPERTIES LINK_FLAGS_DEBUG "/NODEFAULTLIB:msvcrt" )
+  endif(WIN32)
+
   set_target_properties( MaterialExchanger PROPERTIES FOLDER "Apps")
 else()
   message("TinyXML not found, disabling MaterialExchanger")
