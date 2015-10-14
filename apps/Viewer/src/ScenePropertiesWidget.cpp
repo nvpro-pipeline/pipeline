@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2009-2010
+// Copyright (c) 2009-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -217,26 +217,16 @@ void ScenePropertiesWidget::adjustRangesClicked( bool checked )
     {
       if ( ( newMin != min ) || ( newMax != max ) )
       {
-        int layoutCount = layout->count();
-        for ( int i=0 ; i<layoutCount ; i++ )
-        {
-          QLayoutItem * item = layout->itemAt( i );
-          DP_ASSERT( item->layout() && dynamic_cast<QHBoxLayout*>(item->layout()) );
-          QHBoxLayout * labledSliderLayout = static_cast<QHBoxLayout*>(item->layout());
+        float currentValue = getRealValue( slider );
+        slider->setProperty( "Min", newMin );
+        slider->setProperty( "Max", newMax );
+        setRealValue( slider, currentValue );
 
-          DP_ASSERT( labledSliderLayout->count() == 2 );
-          item = labledSliderLayout->itemAt( 1 );
-          DP_ASSERT( item->widget() && dynamic_cast<QSlider*>(item->widget()) );
-
-          QSlider * slider = static_cast<QSlider*>(item->widget());
-          DP_ASSERT( slider->property( "Min" ).toFloat() == min );
-          DP_ASSERT( slider->property( "Max" ).toFloat() == max );
-
-          float currentValue = getRealValue( slider );
-          slider->setProperty( "Min", newMin );
-          slider->setProperty( "Max", newMax );
-          setRealValue( slider, currentValue );
-        }
+        DP_ASSERT( labledSliderLayout->itemAt( 0 ) && dynamic_cast<QLabel*>(labledSliderLayout->itemAt( 0 )->widget()) );
+        QLabel * label = static_cast<QLabel*>(labledSliderLayout->itemAt( 0 )->widget());
+        int fieldWidth = label->property( "FieldWidth" ).toInt();
+        int precision = label->property( "Precision" ).toInt();
+        label->setText( QString( "%1" ).arg( getRealValue( slider ), fieldWidth, 'f', precision ) );
       }
     }
     else
@@ -478,7 +468,6 @@ void ScenePropertiesWidget::updateEdit( QLayout * layout, float value, dp::util:
   }
   else if ( isRanged( pid, "softRange", min, max ) )
   {
-    DP_ASSERT( ( min <= value ) && ( value <= max ) );
     DP_ASSERT( layout->itemAt( 0 ) && dynamic_cast<QHBoxLayout*>(layout->itemAt( 0 )->layout()) );
     updateLabledSlider( static_cast<QHBoxLayout*>(layout->itemAt( 0 )->layout()), value );
   }
@@ -714,7 +703,7 @@ void ScenePropertiesWidget::updateEdit( QWidget * widget, int value, dp::util::P
 
 QWidget * ScenePropertiesWidget::createEdit( unsigned int value, dp::util::PropertyId pid, bool enabled )
 {
-  QString text = QString( "0x%1" ).arg( value, 8, 16, (const QChar &)'0' ); 
+  QString text = QString( "0x%1" ).arg( value, 8, 16, (const QChar &)'0' );
   if ( enabled )
   {
     if ( ! m_hexValidator )
@@ -740,7 +729,7 @@ QWidget * ScenePropertiesWidget::createEdit( unsigned int value, dp::util::Prope
 
 void ScenePropertiesWidget::updateEdit( QWidget * widget, unsigned int value )
 {
-  QString text = QString( "0x%1" ).arg( value, 8, 16, (const QChar &)'0' ); 
+  QString text = QString( "0x%1" ).arg( value, 8, 16, (const QChar &)'0' );
   if ( dynamic_cast<QLineEdit*>(widget) )
   {
     DP_ASSERT( !"never passed this path" );
