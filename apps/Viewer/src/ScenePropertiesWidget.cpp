@@ -60,6 +60,12 @@ void setRealValue( QSlider * slider, float value )
   slider->setValue( slider->maximum() * ( value - min ) / ( max - min ) );
 }
 
+bool isHiddenProperty( dp::util::PropertyId pid )
+{
+  std::string annotation = pid->getAnnotation();
+  return( annotation.find( "_anno_hidden" ) != std::string::npos );
+}
+
 std::string getAnnotation( dp::util::PropertyId pid, const std::string & name )
 {
   std::string annotation = pid->getAnnotation();
@@ -77,7 +83,7 @@ std::string getAnnotation( dp::util::PropertyId pid, const std::string & name )
 
 std::string getDisplayName( dp::util::PropertyId pid, const std::string & propertyName )
 {
-  std::string displayName = getAnnotation( pid, "displayName" );
+  std::string displayName = getAnnotation( pid, "_anno_displayName" );
   return( displayName.empty() ? propertyName : displayName );
 }
 
@@ -421,11 +427,11 @@ QLayout * ScenePropertiesWidget::createEdit( float value, dp::util::PropertyId p
 {
   DP_ASSERT( enabled );
   float min, max;
-  if ( isRanged( pid, "hardRange", min, max ) )
+  if ( isRanged( pid, "_anno_hardRange", min, max ) )
   {
     return( createLabledSlider( pid, value, min, max ) );
   }
-  else if ( isRanged( pid, "softRange", min, max ) )
+  else if ( isRanged( pid, "_anno_softRange", min, max ) )
   {
     QHBoxLayout * labledSlider = createLabledSlider( pid, value, min, max );
 
@@ -460,13 +466,13 @@ void ScenePropertiesWidget::updateEdit( QLayout * layout, float value, dp::util:
 {
   DP_ASSERT( layout );
   float min, max;
-  if ( isRanged( pid, "hardRange", min, max ) )
+  if ( isRanged( pid, "_anno_hardRange", min, max ) )
   {
     DP_ASSERT( dynamic_cast<QHBoxLayout*>(layout) );
     DP_ASSERT( ( min <= value ) && ( value <= max ) );
     updateLabledSlider( static_cast<QHBoxLayout*>(layout), value );
   }
-  else if ( isRanged( pid, "softRange", min, max ) )
+  else if ( isRanged( pid, "_anno_softRange", min, max ) )
   {
     DP_ASSERT( layout->itemAt( 0 ) && dynamic_cast<QHBoxLayout*>(layout->itemAt( 0 )->layout()) );
     updateLabledSlider( static_cast<QHBoxLayout*>(layout->itemAt( 0 )->layout()), value );
@@ -483,7 +489,7 @@ template<unsigned int N>
 QLayout * ScenePropertiesWidget::createEdit( const dp::math::Vecnt<N,float> & value, dp::util::PropertyId pid, bool enabled )
 {
   float min, max;
-  if ( isRanged( pid, "hardRange", min, max ) )
+  if ( isRanged( pid, "_anno_hardRange", min, max ) )
   {
     DP_ASSERT( enabled );
     QVBoxLayout * sliderLayout = new QVBoxLayout();
@@ -494,7 +500,7 @@ QLayout * ScenePropertiesWidget::createEdit( const dp::math::Vecnt<N,float> & va
     sliderLayout->setProperty( "dp::util::PropertyId", QVariant::fromValue( static_cast<void *>( pid ) ) );
     return( sliderLayout );
   }
-  else if ( isRanged( pid, "softRange", min, max ) )
+  else if ( isRanged( pid, "_anno_softRange", min, max ) )
   {
     DP_ASSERT( enabled );
     QPushButton * adjustRangesButton = new QPushButton( "[.]" );
@@ -575,7 +581,7 @@ template<unsigned int N>
 void ScenePropertiesWidget::updateEdit( QLayout * layout, const dp::math::Vecnt<N,float> & value, dp::util::PropertyId pid )
 {
   float min, max;
-  if ( isRanged( pid, "hardRange", min, max ) )
+  if ( isRanged( pid, "_anno_hardRange", min, max ) )
   {
     DP_ASSERT( !"never passed this path" );
     for ( unsigned int i=0 ; i<N ; i++ )
@@ -584,7 +590,7 @@ void ScenePropertiesWidget::updateEdit( QLayout * layout, const dp::math::Vecnt<
       updateLabledSlider( static_cast<QHBoxLayout*>(layout->itemAt( i )->layout() ), value[i] );
     }
   }
-  else if ( isRanged( pid, "softRange", min, max ) )
+  else if ( isRanged( pid, "_anno_softRange", min, max ) )
   {
     DP_ASSERT( layout->itemAt( 0 ) && dynamic_cast<QVBoxLayout*>(layout->itemAt( 0 )->layout()) );
     QLayout * sliderLayout = static_cast<QVBoxLayout*>(layout->itemAt( 0 )->layout());
@@ -650,7 +656,7 @@ QWidget * ScenePropertiesWidget::createEdit( int value, dp::util::PropertyId pid
     connect( comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(enumIndexChanged(int)) );
     return( comboBox );
   }
-  else if ( isRanged( pid, "hardRange", min, max ) )
+  else if ( isRanged( pid, "_anno_hardRange", min, max ) )
   {
     DP_ASSERT( min < max );
     DP_ASSERT( ( min <= value ) && ( value <= max ) );
@@ -686,7 +692,7 @@ void ScenePropertiesWidget::updateEdit( QWidget * widget, int value, dp::util::P
     QComboBox * comboBox = static_cast<QComboBox*>(widget);
     comboBox->setCurrentIndex( value );
   }
-  else if ( isRanged( pid, "hardRange", min, max ) )
+  else if ( isRanged( pid, "_anno_hardRange", min, max ) )
   {
     DP_ASSERT( ( min <= value ) && ( value <= max ) );
     DP_ASSERT( dynamic_cast<QComboBox*>(widget) );
@@ -902,9 +908,9 @@ void ScenePropertiesWidget::displayItem( dp::sg::core::ObjectSharedPtr const & o
     for ( unsigned int i=0 ; i<propertyCount ; i++ )
     {
       dp::util::PropertyId pid = m_object->getProperty( i );
-      if ( getAnnotation( pid, "Hidden" ).empty() )   // filter out properties marked with Annotation "Hidden"
+      if ( !isHiddenProperty( pid ) )      // filter out properties marked with Annotation "_anno_hidden"
       {
-        groupedPids[getAnnotation( pid, "InGroup" )].push_back( pid );
+        groupedPids[getAnnotation( pid, "_anno_inGroup" )].push_back( pid );
       }
     }
     QVBoxLayout * layout = new QVBoxLayout();
@@ -915,7 +921,7 @@ void ScenePropertiesWidget::displayItem( dp::sg::core::ObjectSharedPtr const & o
       {
         dp::util::PropertyId pid = git->second[i];
         QLabel * label = new QLabel( getDisplayName( pid, m_object->getPropertyName( pid ) ).c_str() );
-        std::string description = getAnnotation( pid, "Description" );
+        std::string description = getAnnotation( pid, "_anno_description" );
         if ( !description.empty() )
         {
           label->setStatusTip( description.c_str() );
