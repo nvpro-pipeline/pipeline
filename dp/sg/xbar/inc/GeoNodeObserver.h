@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2013
+// Copyright (c) 2010-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -22,7 +22,6 @@
 // OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
 
 #pragma once
 
@@ -59,14 +58,16 @@ namespace dp
           m_dirtyGeoNodes.erase( index );
         }
 
-        void popDirtyGeoNodes( ObjectTreeIndexSet & currentSet ) const 
+        void popDirtyGeoNodes( ObjectTreeIndexSet & currentSet ) const
         {
           currentSet = m_dirtyGeoNodes;
-          m_dirtyGeoNodes.clear(); 
+          m_dirtyGeoNodes.clear();
         }
 
       protected:
-        GeoNodeObserver( SceneTreeSharedPtr const& sceneTree ) : Observer<ObjectTreeIndex>( sceneTree )
+        GeoNodeObserver(SceneTreeSharedPtr const & sceneTree)
+          : Observer<ObjectTreeIndex>()
+          , m_sceneTree(sceneTree)
         {
         }
         //TODO if the bounding volume has changed
@@ -75,6 +76,7 @@ namespace dp
 
       private:
         mutable ObjectTreeIndexSet m_dirtyGeoNodes;
+        SceneTreeSharedPtr m_sceneTree;
       };
 
     } // namespace xbar

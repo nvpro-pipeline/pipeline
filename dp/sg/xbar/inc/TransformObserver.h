@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2015
+// Copyright (c) 2010-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -35,9 +35,10 @@ namespace dp
   {
     namespace xbar
     {
-      DEFINE_PTR_TYPES( TransformObserver );
+      DEFINE_PTR_TYPES(TransformObserver);
+      DEFINE_PTR_TYPES(TransformTree);
 
-      class TransformObserver : public Observer<ObjectTreeIndex>
+      class TransformObserver : public Observer<TransformIndex>
       {
       public:
         DEFINE_PTR_TYPES( DirtyPayload );
@@ -45,18 +46,14 @@ namespace dp
         class DirtyPayload : public Payload
         {
         public:
-          static DirtyPayloadSharedPtr create( ObjectTreeIndex index )
+          static DirtyPayloadSharedPtr create( TransformIndex index )
           {
             return( std::shared_ptr<DirtyPayload>( new DirtyPayload( index ) ) );
           }
 
-        public:
-          bool m_dirty;
-
         protected:
-          DirtyPayload( ObjectTreeIndex index )
+          DirtyPayload( TransformIndex index )
             : Payload( index )
-            , m_dirty( false )
           {
           }
         };
@@ -67,33 +64,24 @@ namespace dp
         virtual ~TransformObserver();
 
       public:
-        static TransformObserverSharedPtr create( SceneTreeSharedPtr const& sceneTree )
+        static TransformObserverSharedPtr create(dp::util::BitArray & dirtyTransforms)
         {
-          return( std::shared_ptr<TransformObserver>( new TransformObserver(sceneTree) ) );
+          return(std::shared_ptr<TransformObserver>(new TransformObserver(dirtyTransforms)));
         }
 
-        void attach( dp::sg::core::TransformSharedPtr const & t, ObjectTreeIndex index );
-
-        const DirtyPayloads& getDirtyPayloads( ) const 
-        {
-          return m_dirtyPayloads;
-        }
-
-        void clearDirtyPayloads()
-        {
-          m_dirtyPayloads.clear();
-        }
+        void attach( dp::sg::core::TransformSharedPtr const & t, TransformIndex index );
 
       protected:
-        TransformObserver( SceneTreeSharedPtr const& sceneTree ) : Observer<ObjectTreeIndex>( sceneTree )
+        TransformObserver(dp::util::BitArray & dirtyTransforms)
+          : Observer<TransformIndex>()
+          , m_dirtyTransforms(dirtyTransforms)
         {
         }
 
-        void onNotify( const dp::util::Event &event, dp::util::Payload * payload );
-        virtual void onDetach( ObjectTreeIndex index );
+        void onNotify(dp::util::Event const & event, dp::util::Payload * payload);
 
       private:
-        mutable std::vector<DirtyPayload*> m_dirtyPayloads;
+        dp::util::BitArray & m_dirtyTransforms;
       };
 
     } // namespace xbar

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2015
+// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -78,7 +78,7 @@ namespace dp
 
         // Create node and fill with information
         ObjectTreeNode node;
-        node.m_object         = o.getWeakPtr();
+        node.m_object         = o;
         node.m_clipPlaneGroup = m_clipPlaneGroups.back();
 
         // add node to tree
@@ -88,7 +88,7 @@ namespace dp
         if( !m_objectParentSiblingStack.empty() )
         {
           m_objectParentSiblingStack.top().second = index;
-        } 
+        }
 
         return index;
       }
@@ -103,54 +103,6 @@ namespace dp
         ObjectTree &ot = m_sceneTree->getObjectTree();
         ObjectTreeNode &otn = m_sceneTree->getObjectTreeNode(index);
         ObjectTreeNode &otnParent = m_sceneTree->getObjectTreeNode(otn.m_parentIndex);
-
-        // handle Transform nodes
-        if (group.isPtrTo<dp::sg::core::Transform>() || group.isPtrTo <dp::sg::core::Billboard>())
-        {
-          if (group.isPtrTo<dp::sg::core::Billboard>())
-          {
-            otn.m_isBillboard = true;
-          }
-          otn.m_isTransform = true;
-          otn.m_transformLevel = otnParent.m_transformLevel + 1;
-          otn.m_transform = m_sceneTree->allocateTransform();
-          dp::sg::xbar::SceneTree::TransformEntry te;
-          if (group.isPtrTo<dp::sg::core::Transform>()) {
-            te.local = group.inplaceCast<dp::sg::core::Transform>()->getMatrix();
-          }
-          else
-          {
-            te.local = dp::math::cIdentity44f;
-          }
-          m_sceneTree->m_transforms.push_back(te);
-
-          if (m_sceneTree->m_transformLevels.size() < (otn.m_transformLevel + 1)) {
-            m_sceneTree->m_transformLevels.resize(otn.m_transformLevel + 1);
-          }
-
-          // add entry to list of transforms to work through
-          if (group.isPtrTo<dp::sg::core::Billboard>())
-          {
-            dp::sg::xbar::SceneTree::BillboardListEntry ble;
-            ble.parent = otnParent.m_transform;
-            ble.transform = otn.m_transform;
-            ble.billboard = group.inplaceCast<dp::sg::core::Billboard>();
-            m_sceneTree->m_transformLevels[otn.m_transformLevel].billboardListEntries.push_back(ble);
-          }
-          else
-          {
-            dp::sg::xbar::SceneTree::TransformListEntry tle;
-            tle.parent = otnParent.m_transform;
-            tle.transform = otn.m_transform;
-            m_sceneTree->m_transformLevels[otn.m_transformLevel].transformListEntries.push_back(tle);
-          }
-        }
-
-        // if the parent objectNode is a transform set it as parent
-        // otherwise copy the transform information as parent
-        if (otnParent.m_isTransform) {
-          otn.m_transformParent = otn.m_parentIndex;
-        }
       }
 
       void GeneratorState::pushObject( LODSharedPtr const& lod )
@@ -180,12 +132,6 @@ namespace dp
       {
         // only insert the node, don't alter parent information (node is a leaf)
         ObjectTreeIndex index = insertNode( geoNode );
-
-        ObjectTreeNode &otn = m_sceneTree->getObjectTreeNode(index);
-        ObjectTreeNode &otnParent = m_sceneTree->getObjectTreeNode(otn.m_parentIndex);
-        otn.m_transform = otnParent.m_transform;
-        otn.m_transformLevel = otnParent.m_transformLevel;
-
         m_sceneTree->addGeoNode( index );
 
         return index;

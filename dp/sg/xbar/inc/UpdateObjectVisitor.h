@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2015
+// Copyright (c) 2010-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -24,6 +24,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+
 #pragma once
 
 #include <dp/sg/xbar/SceneTree.h>
@@ -39,7 +40,7 @@ namespace dp
       class UpdateObjectVisitor
       {
       public:
-        UpdateObjectVisitor( ObjectTree& tree, SceneTree *sceneTree ) 
+        UpdateObjectVisitor( ObjectTree& tree, SceneTree *sceneTree )
           : m_objectTree(tree)
           , m_sceneTree( sceneTree )
         {
@@ -103,7 +104,7 @@ namespace dp
             current.m_worldMask = newMask;
             if ( current.m_isDrawable )
             {
-              m_sceneTree->notify( SceneTree::EventObject( index, current, SceneTree::EventObject::TraversalMaskChanged ) );
+              m_sceneTree->notify( SceneTree::Event( index, current, SceneTree::Event::TraversalMaskChanged ) );
             }
           }
 
@@ -112,7 +113,7 @@ namespace dp
             current.m_worldActive = newActive;
             if ( current.m_isDrawable )
             {
-              m_sceneTree->notify( SceneTree::EventObject( index, current, SceneTree::EventObject::ActiveChanged ) );
+              m_sceneTree->notify( SceneTree::Event( index, current, SceneTree::Event::ActiveChanged ) );
             }
           }
 

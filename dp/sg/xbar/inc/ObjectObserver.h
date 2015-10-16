@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2013
+// Copyright (c) 2010-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -60,14 +60,16 @@ namespace dp
         void attach( dp::sg::core::ObjectSharedPtr const& obj, ObjectTreeIndex index );
         virtual void onDetach( ObjectTreeIndex index );
 
-        void popNewCacheData( NewCacheData & currentData ) const 
+        void popNewCacheData( NewCacheData & currentData ) const
         {
           currentData = m_newCacheData;
           m_newCacheData.clear();
         }
 
       protected:
-        ObjectObserver( SceneTreeSharedPtr const& sceneTree ) : Observer<ObjectTreeIndex>( sceneTree )
+        ObjectObserver(SceneTreeSharedPtr const & sceneTree)
+          : Observer<ObjectTreeIndex>()
+          , m_sceneTree(sceneTree)
         {
         }
         void onNotify( const dp::util::Event &event, dp::util::Payload * payload );
@@ -76,6 +78,7 @@ namespace dp
 
       private:
         mutable NewCacheData m_newCacheData;
+        SceneTreeSharedPtr m_sceneTree;
       };
 
     } // namespace xbar

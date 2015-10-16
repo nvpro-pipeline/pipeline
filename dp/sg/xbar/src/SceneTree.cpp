@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2015
+// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -76,7 +76,6 @@ namespace dp
         , m_rootNode( scene->getRootNode() )
         , m_dirty( false )
         , m_switchObserver( SwitchObserver::create() )
-        , m_firstTransformUpdate(true)
       {
       }
 
@@ -95,21 +94,14 @@ namespace dp
       void SceneTree::init()
       {
         m_objectObserver = ObjectObserver::create( shared_from_this() );
-        m_transformObserver = TransformObserver::create( shared_from_this() );
         m_sceneObserver = SceneObserver::create( shared_from_this() );
 
         // push a sentinel root group in the vector to avoid special cases for the real root-node later on
         ObjectTreeNode objectTreeSentinel;
-        objectTreeSentinel.m_transform = allocateTransform();
-        objectTreeSentinel.m_transformLevel = -1;
+        objectTreeSentinel.m_transform = m_transformTree.getSentinel();
         objectTreeSentinel.m_transformParent = -1;
         objectTreeSentinel.m_clipPlaneGroup = ClipPlaneGroup::create();
         m_objectTreeSentinel = m_objectTree.insertNode( objectTreeSentinel, ~0, ~0 );
-
-        TransformEntry te;
-        te.local = cIdentity44f;
-        te.world = cIdentity44f;
-        m_transforms.push_back(te);
 
         SceneTreeGenerator rlg( this->shared_from_this() );
         rlg.setCurrentObjectTreeData( m_objectTreeSentinel, ~0 );
@@ -174,62 +166,11 @@ namespace dp
 
       void SceneTree::updateTransformTree(dp::sg::core::CameraSharedPtr const& camera)
       {
-        dp::util::BitArray dirty(m_transforms.size());
-        dirty.clear();
-        TransformObserver::DirtyPayloads const & dirtyPayloads = m_transformObserver->getDirtyPayloads();
-        for (TransformObserver::DirtyPayloads::const_iterator it = dirtyPayloads.begin(); it != dirtyPayloads.end(); ++it)
-        {
-          ObjectTreeIndex index = (*it)->m_index;
-          ObjectTreeNode const& otn = getObjectTreeNode(index);
-          m_transforms[otn.m_transform].local = otn.m_object.getSharedPtr().inplaceCast<dp::sg::core::Transform>()->getMatrix();
-          dirty.enableBit(otn.m_transform);
-          // TODO make efficient dirty
-          (*it)->m_dirty = false;
-        }
-        m_transformObserver->clearDirtyPayloads();
-
-        int level = 0;
-        m_changedTransforms.clear();
-
-        for (TransformLevel const &transformLevel : m_transformLevels)
-        {
-          // update billboards
-          for (BillboardListEntry const &billboardEntry : transformLevel.billboardListEntries)
-          {
-            dirty.enableBit(billboardEntry.transform);
-
-            dp::math::Mat44f parentMatrix = m_transforms[billboardEntry.parent].world;
-            parentMatrix.invert();
-            dp::math::Trafo t = billboardEntry.billboard->getTrafo(camera, parentMatrix);
-            m_transforms[billboardEntry.transform].local = t.getMatrix(); 
-
-            m_transforms[billboardEntry.transform].world = m_transforms[billboardEntry.transform].local * m_transforms[billboardEntry.parent].world;
-            m_changedTransforms.push_back(billboardEntry.transform);
-            notifyTransformUpdated(billboardEntry.transform, m_transforms[billboardEntry.transform]);
-          }
-
-          // update transforms
-          for (TransformListEntry const &transformEntry : transformLevel.transformListEntries)
-          {
-            if (dirty.getBit(transformEntry.parent) || dirty.getBit(transformEntry.transform))
-            {
-              dirty.enableBit(transformEntry.transform);
-              m_transforms[transformEntry.transform].world = m_transforms[transformEntry.transform].local * m_transforms[transformEntry.parent].world;
-              m_changedTransforms.push_back(transformEntry.transform);
-              notifyTransformUpdated(transformEntry.transform, m_transforms[transformEntry.transform]);
-            }
-          }
-        }
-
-        if (m_firstTransformUpdate) {
-          m_changedTransforms.push_back(0);
-          notifyTransformUpdated(0, m_transforms[0]);
-          m_firstTransformUpdate = false;
-        }
+        m_transformTree.compute(camera);
       }
 
       void SceneTree::updateObjectTree(dp::sg::core::CameraSharedPtr const& camera, float lodRangeScale)
-      {   
+      {
         //
         // first step: update node-local information
         //
@@ -281,7 +222,7 @@ namespace dp
 
               childIndex = childNode.m_nextSibling;
               ++i;
-            }  
+            }
           }
         }
 
@@ -296,7 +237,7 @@ namespace dp
             ObjectTreeIndex index = it->first;
             const ObjectTreeNode& node = m_objectTree[ index ];
 
-            const Mat44f modelToWorld = getTransformMatrix(node.m_transform);
+            Mat44f const & modelToWorld = m_transformTree.getWorldMatrix(node.m_transform);
             const Mat44f modelToView = modelToWorld * worldToView;
             ObjectTreeIndex activeIndex = it->second->getLODToUse( modelToView, lodRangeScale );
 
@@ -318,17 +259,17 @@ namespace dp
 
               childIndex = childNode.m_nextSibling;
               ++i;
-            }  
+            }
           }
         }
 
         //
         // second step: update resulting node-world information
-        // 
+        //
 
         UpdateObjectVisitor objectVisitor( m_objectTree, this );
         PreOrderTreeTraverser<ObjectTree, UpdateObjectVisitor> objectTraverser;
-        
+
         objectTraverser.processDirtyList( m_objectTree, objectVisitor, ObjectTreeNode::DEFAULT_DIRTY );
         m_objectTree.m_dirtyObjects.clear();
       }
@@ -339,11 +280,21 @@ namespace dp
         ObjectTreeIndex index = m_objectTree.insertNode( node, parentIndex, siblingIndex );
 
         // observe object
-        m_objectObserver->attach( node.m_object.getSharedPtr(), index );
+        m_objectObserver->attach( node.m_object, index );
 
-        if (node.m_object.getSharedPtr().isPtrTo<dp::sg::core::Transform>())
+        ObjectTreeNode const & parentNode = m_objectTree[parentIndex];
+        ObjectTreeNode & newNode = m_objectTree[index];
+        if (node.m_object.isPtrTo<dp::sg::core::Transform>())
         {
-          m_transformObserver->attach(node.m_object.getSharedPtr().inplaceCast<dp::sg::core::Transform>(), index);
+          newNode.m_transformParent = parentNode.m_transform;
+          newNode.m_transform = m_transformTree.addTransform(parentNode.m_transform, node.m_object.inplaceCast<dp::sg::core::Transform>());
+          newNode.m_isTransform = true;
+        }
+        else if(node.m_object.isPtrTo<dp::sg::core::Billboard>())
+        {
+          newNode.m_transformParent = parentNode.m_transform;
+          newNode.m_transform = m_transformTree.addBillboard(parentNode.m_transform, node.m_object.inplaceCast<dp::sg::core::Billboard>());
+          newNode.m_isBillboard = true;
         }
 
         return index;
@@ -368,7 +319,7 @@ namespace dp
       {
         // attach observer
         m_objectTree[index].m_isDrawable = true;
-        notify( EventObject( index, m_objectTree[index], EventObject::Added ) );
+        notify( Event( index, m_objectTree[index], Event::Added ) );
       }
 
       void SceneTree::addLightSource( ObjectTreeIndex index )
@@ -390,20 +341,20 @@ namespace dp
         m_objectIndexStack[end] = index;
         ++end;
 
-        while( begin != end ) 
+        while( begin != end )
         {
           ObjectTreeIndex currentIndex = m_objectIndexStack[begin];
           ++begin;
           ObjectTreeNode& current = m_objectTree[currentIndex];
 
-          if ( m_objectTree[currentIndex].m_object.getSharedPtr().isPtrTo<dp::sg::core::LightSource>() )
+          if ( m_objectTree[currentIndex].m_object.isPtrTo<dp::sg::core::LightSource>() )
           {
             DP_VERIFY( m_lightSources.erase( currentIndex ) == 1 );
           }
 
           if ( m_objectTree[currentIndex].m_isDrawable )
           {
-            notify( EventObject( currentIndex, m_objectTree[currentIndex], EventObject::Removed) );
+            notify( Event( currentIndex, m_objectTree[currentIndex], Event::Removed) );
             m_objectTree[index].m_isDrawable = false;
           }
 
@@ -431,41 +382,13 @@ namespace dp
           const ObjectTreeNode& curParent = m_objectTree[current.m_parentIndex];
 
           // only remove the topmost transforms below or at index (so transforms are only removed once)
-          if(current.m_isTransform)
+          if (current.m_isTransform)
           {
-            if (current.m_isBillboard)
-            {
-              // remove from billboard list
-              BillboardListEntries &billboardEntries = m_transformLevels[current.m_transformLevel].billboardListEntries;
-              for (size_t index = 0; index < billboardEntries.size(); ++index)
-              {
-                if (billboardEntries[index].transform == current.m_transform)
-                {
-                  billboardEntries[index] = billboardEntries.back();
-                  billboardEntries.pop_back();
-                  break;
-                }
-              }
-            }
-            else
-            {
-              // remove from transform list
-              TransformListEntries &transformEntries = m_transformLevels[current.m_transformLevel].transformListEntries;
-              for (size_t index = 0; index < transformEntries.size(); ++index)
-              {
-                if (transformEntries[index].transform == current.m_transform)
-                {
-                  transformEntries[index] = transformEntries.back();
-                  transformEntries.pop_back();
-                  break;
-                }
-              }
-            }
-
-            freeTransform(current.m_transform);
-            if (!current.m_isBillboard) {
-              m_transformObserver->detach(currentIndex);
-            }
+            m_transformTree.removeTransform(current.m_transform);
+          }
+          else if (current.m_isBillboard)
+          {
+            m_transformTree.removeBillboard(current.m_transform);
           }
 
           current.m_object.reset();
@@ -494,33 +417,11 @@ namespace dp
         return m_objectTree[index];
       }
 
-      void SceneTree::notifyTransformUpdated(TransformIndex index, dp::sg::xbar::SceneTree::TransformEntry const& node)
-      {
-        notify( EventTransform( index, node ) );
-      }
-
       void SceneTree::onRootNodeChanged()
       {
         replaceSubTree( m_scene->getRootNode(), m_objectTreeRootNode );
         m_rootNode = m_scene->getRootNode();
       }
-
-      TransformIndex SceneTree::allocateTransform()
-      {
-        TransformIndex firstFree = checked_cast<TransformIndex>(m_transformFreeVector.countLeadingZeroes());
-        if (firstFree == m_transformFreeVector.getSize()) {
-          m_transformFreeVector.resize(m_transformFreeVector.getSize() + 65536, true); // add space for 65536 new bits
-        }
-        DP_ASSERT(firstFree != m_transformFreeVector.getSize());
-        m_transformFreeVector.disableBit(firstFree);
-        return firstFree;
-      }
-
-      void SceneTree::freeTransform(TransformIndex transformIndex) {
-        DP_ASSERT(transformIndex < m_transformFreeVector.getSize());
-        m_transformFreeVector.enableBit(transformIndex);
-      }
-
 
     } // namespace xbar
   } // namespace sg

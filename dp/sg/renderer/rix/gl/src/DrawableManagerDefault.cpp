@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2015
+// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -377,7 +377,7 @@ namespace dp
             }
           }
 
-          namespace 
+          namespace
           {
             struct SortInfo
             {
@@ -407,7 +407,7 @@ namespace dp
                 info.gi = instance.m_geometryInstance.get();
 
                 Vec4f center = instance.m_boundingBoxLower + 0.5 * instance.m_boundingBoxExtent;
-                center = center * getSceneTree()->getTransformEntry(instance.m_transformIndex).world;
+                center = center * getSceneTree()->getTransformTree().getWorldMatrix(instance.m_transformIndex);
                 Vec3f distance = Vec3f(center) - cameraPosition;
                 info.squaredDistance = lengthSquared(distance);
                 sortInfo.push_back( info );

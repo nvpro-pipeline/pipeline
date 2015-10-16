@@ -89,7 +89,7 @@ public:
   int getExitCode() const;
 
   virtual void paint();
- 
+
 protected:
     virtual void onSceneRendererChanged( const dp::sg::ui::SceneRendererSharedPtr &sceneRenderer );
 
@@ -520,10 +520,11 @@ int runApp( options::variables_map const& opts )
   }
 
   dp::sg::renderer::rix::gl::SceneRendererSharedPtr renderer = dp::sg::renderer::rix::gl::SceneRenderer::create
-  ( 
+  (
       opts["renderengine"].as<std::string>().c_str()
     , getShaderManager( opts["shadermanager"].as<std::string>() )
     , cullingMode
+    //, dp::sg::renderer::rix::gl::TM_NONE
   );
   renderer->setCullingEnabled( opts["culling"].as<bool>() );
 
@@ -709,7 +710,7 @@ int runApp( options::variables_map const& opts )
 
   // Keep only once reference to the renderer in the widget. This is necessary since the OpenGL resources
   // used by the renderer must be deleted before the window gets destroyed.
-  renderer.reset(); 
+  renderer.reset();
 
   glutMainLoop();
 
@@ -724,7 +725,7 @@ int main(int argc, char *argv[])
     // initialize GLUT, set window size and display mode, create the main window
     glutInit( &argc, argv );
     glutSetOption( GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_CONTINUE_EXECUTION );
-  
+
     options::options_description od("Usage: GLUTMinimal");
     od.add_options()
       ( "autoclipplanes", options::value<bool>()->default_value(true), "enable/disable autoclipplane")
@@ -763,7 +764,7 @@ int main(int argc, char *argv[])
     {
       options::variables_map opts;
       options::store( options::parse_command_line( argc, argv, od ), opts );
-    
+
       if ( dp::util::fileExists( "GLUTMinimal.cfg" ) )
       {
         options::store( options::parse_config_file<char>( "GLUTMinimal.cfg", od), opts);

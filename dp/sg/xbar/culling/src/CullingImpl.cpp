@@ -126,7 +126,7 @@ namespace dp
         void CullingImpl::cull( ResultSharedPtr const & result, dp::math::Mat44f const & world2ViewProjection )
         {
           ResultImplSharedPtr const & resultImpl = result.staticCast<ResultImpl>();
-          dp::sg::xbar::SceneTree::Transforms const & transforms = m_sceneTree->getTransforms();
+          dp::sg::xbar::TransformTree::Transforms const & transforms = m_sceneTree->getTransformTree().getTransforms();
           if (!transforms.empty())
           {
             m_culling->groupSetMatrices(m_cullingGroup, &transforms[0].world, transforms.size(), sizeof(transforms[0]));
@@ -148,7 +148,7 @@ namespace dp
 
         dp::math::Box3f CullingImpl::getBoundingBox()
         {
-          dp::sg::xbar::SceneTree::Transforms const & transforms = m_sceneTree->getTransforms();
+          dp::sg::xbar::TransformTree::Transforms const & transforms = m_sceneTree->getTransformTree().getTransforms();
           if (!transforms.empty())
           {
             m_culling->groupSetMatrices(m_cullingGroup, &transforms[0].world, transforms.size(), sizeof(transforms[0]));
@@ -158,7 +158,7 @@ namespace dp
 
         void CullingImpl::updateBoundingBox( ObjectTreeIndex objectTreeIndex )
         {
-          dp::sg::core::GeoNodeSharedPtr geoNode = m_sceneTree->getObjectTreeNode( objectTreeIndex ).m_object.getSharedPtr().staticCast<dp::sg::core::GeoNode>();
+          dp::sg::core::GeoNodeSharedPtr geoNode = m_sceneTree->getObjectTreeNode( objectTreeIndex ).m_object.staticCast<dp::sg::core::GeoNode>();
           m_culling->objectSetBoundingBox( m_objects[objectTreeIndex], geoNode->getBoundingBox() );
         }
 
@@ -184,51 +184,50 @@ namespace dp
 
         void CullingImpl::onNotify( dp::util::Event const & event, dp::util::Payload * payload )
         {
-          SceneTree::Event const& eventSceneTree = static_cast<SceneTree::Event const&>( event );
-          switch ( eventSceneTree.getType() )
+          SceneTree::Event const & eventObject = static_cast<SceneTree::Event const&>(event);
+          ObjectTreeIndex index = eventObject.getIndex();
+          ObjectTreeNode const &node = eventObject.getNode();
+
+          switch (eventObject.getType())
           {
-          case SceneTree::Event::Object:
-            {
-              // get objects from event
-              SceneTree::EventObject const& eventObject = static_cast<SceneTree::EventObject const&>( eventSceneTree );
-              ObjectTreeIndex index = eventObject.getIndex();
-              ObjectTreeNode const &node = eventObject.getNode();
-
-              switch ( eventObject.getSubType() )
-              {
-              case SceneTree::EventObject::Added:
-                addObject( index );
-                break;
-
-              case SceneTree::EventObject::Removed:
-                DP_ASSERT( m_objects[eventObject.getIndex()] && "culling object for the given object has already been destroyed" );
-                m_culling->groupRemoveObject( m_cullingGroup, m_objects[index] );
-                m_objects[index].reset();
-                break;
-
-              case SceneTree::EventObject::Changed:
-                DP_ASSERT( m_objects[eventObject.getIndex()]  && "no culling object available for the given index" );
-                updateBoundingBox( index );
-                // TODO update bounding box!
-                break;
-
-              default:
-                break;
-              }
-            }
+          case SceneTree::Event::Added:
+            addObject(index);
             break;
 
-          case dp::sg::xbar::SceneTree::Event::Transform:
-            // transform have changed. Notify culling about the change.
-            m_culling->groupMatrixChanged( m_cullingGroup, static_cast<dp::sg::xbar::SceneTree::EventTransform const&>( event ).getIndex() );
+          case SceneTree::Event::Removed:
+            DP_ASSERT( m_objects[eventObject.getIndex()] && "culling object for the given object has already been destroyed" );
+            m_culling->groupRemoveObject( m_cullingGroup, m_objects[index] );
+            m_objects[index].reset();
             break;
 
+          case SceneTree::Event::Changed:
+            DP_ASSERT( m_objects[eventObject.getIndex()]  && "no culling object available for the given index" );
+            updateBoundingBox( index );
+            // TODO update bounding box!
+            break;
+
+          default:
+            break;
           }
         }
 
         void CullingImpl::onDestroyed( dp::util::Subject const & subject, dp::util::Payload * payload )
         {
           throw std::logic_error("Unexpected event.");
+        }
+
+        /************************************************************************/
+        /* CullingImpl::TransformObserver                                       */
+        /************************************************************************/
+
+        void CullingImpl::TransformObserver::onNotify(dp::util::Event const & event, dp::util::Payload * payload)
+        {
+          // transform have changed. Notify culling about the change.
+          m_cullingImpl.m_culling->groupMatrixChanged(m_cullingImpl.m_cullingGroup, static_cast<dp::sg::xbar::TransformTree::EventTransform const&>(event).getIndex());
+        }
+
+        void CullingImpl::TransformObserver::onDestroyed(dp::util::Subject const & subject, dp::util::Payload * payload)
+        {
         }
 
       } // namespace culling

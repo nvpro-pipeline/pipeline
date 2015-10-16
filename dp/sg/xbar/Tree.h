@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2015
+// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -165,7 +165,6 @@ namespace dp
           // Use default transform linking
           // Values will be replaced in case of nodes with transforms.
           newNode.m_transform = parentNode.m_transform;
-          newNode.m_transformLevel = parentNode.m_transformLevel;
           newNode.m_transformParent = parentNode.m_transformParent;
         }
 

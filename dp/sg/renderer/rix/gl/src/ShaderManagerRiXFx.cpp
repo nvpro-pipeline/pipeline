@@ -120,7 +120,7 @@ namespace dp
             // keep same size as transform tree for a 1-1 mapping of transforms
             if ( m_transformGroupDatas.size() <= transformIndex )
             {
-              m_transformGroupDatas.resize( m_sceneTree->getTransforms().size());
+              m_transformGroupDatas.resize( m_sceneTree->getTransformTree().getTransforms().size());
             }
             DP_ASSERT( transformIndex < m_transformGroupDatas.size() && "passed invalid transform index");
 
@@ -146,18 +146,16 @@ namespace dp
           {
             dp::rix::core::Renderer *renderer = m_resourceManager->getRenderer();
 
-            const std::vector<TransformIndex>& transforms = m_sceneTree->getChangedTransforms();
-            std::vector<TransformIndex>::const_iterator it2 = transforms.begin();
-            while ( it2 != transforms.end() )
+            TransformTree::Transforms const & transforms = m_sceneTree->getTransformTree().getTransforms();
+            dp::util::BitArray const & dirtyWorldMatrices = m_sceneTree->getTransformTree().getDirtyWorldMatrices();
+            dirtyWorldMatrices.traverseBits([&](size_t index)
             {
-              // update only used transforms
-              if ( ( *it2 < m_transformGroupDatas.size() ) && m_transformGroupDatas[*it2] )
+              if ((index < m_transformGroupDatas.size()) && m_transformGroupDatas[index])
               {
-                dp::math::Mat44f const & worldMatrix = m_sceneTree->getTransformEntry(*it2).world;
-                updateTransformNode(m_rixFxManager, m_transformGroupDatas[*it2], worldMatrix);
+                dp::math::Mat44f const & worldMatrix = transforms[index].world;
+                updateTransformNode(m_rixFxManager, m_transformGroupDatas[index], worldMatrix);
               }
-              ++it2;
-            }
+            } );
           }
 
           /************************************************************************/

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2015
+// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -65,48 +65,40 @@ namespace dp
 
       void SceneTreeObserver::onNotify( dp::util::Event const & event, dp::util::Payload * payload )
       {
-        SceneTree::Event const& eventSceneTree = static_cast<SceneTree::Event const&>( event );
-        switch ( eventSceneTree.getType() )
+        SceneTree::Event const& eventObject = static_cast<SceneTree::Event const&>(event);
+        ObjectTreeNode const &node = eventObject.getNode();
+        dp::sg::core::GeoNodeSharedPtr geoNode = node.m_object.staticCast<dp::sg::core::GeoNode>();
+
+        if ( m_drawableManager->m_dis.size() != m_drawableManager->m_sceneTree->getObjectTree().size() )
         {
-        case SceneTree::Event::Object:
-          {
-            SceneTree::EventObject const& eventObject = static_cast<SceneTree::EventObject const&>( eventSceneTree );
-            ObjectTreeNode const &node = eventObject.getNode();
-            dp::sg::core::GeoNodeSharedPtr geoNode = node.m_object.getSharedPtr().staticCast<dp::sg::core::GeoNode>();
+          m_drawableManager->m_dis.resize( m_drawableManager->m_sceneTree->getObjectTree().size() );
+        }
 
-            if ( m_drawableManager->m_dis.size() != m_drawableManager->m_sceneTree->getObjectTree().size() )
-            {
-              m_drawableManager->m_dis.resize( m_drawableManager->m_sceneTree->getObjectTree().size() );
-            }
+        switch ( eventObject.getType() )
+        {
+        case SceneTree::Event::Added:
+          DP_ASSERT( !m_drawableManager->m_dis[eventObject.getIndex()] );
 
-            switch ( eventObject.getSubType() )
-            {
-            case SceneTree::EventObject::Added:
-              DP_ASSERT( !m_drawableManager->m_dis[eventObject.getIndex()] );
-
-              // TODO there're two locations which execute this code, unify with as function
-              m_drawableManager->m_dis[eventObject.getIndex()] = m_drawableManager->addDrawableInstance( geoNode.getWeakPtr(), eventObject.getIndex() ); // TODO, don't pass geonode?
-              m_drawableManager->setDrawableInstanceActive( m_drawableManager->m_dis[eventObject.getIndex()], node.m_worldActive );
-              m_drawableManager->m_geoNodeObserver->attach( geoNode, eventObject.getIndex() );
-              break;
-            case SceneTree::EventObject::Removed:
-              DP_ASSERT( m_drawableManager->m_dis[eventObject.getIndex()] );
-              m_drawableManager->m_geoNodeObserver->detach( eventObject.getIndex() );
-              m_drawableManager->removeDrawableInstance( m_drawableManager->m_dis[eventObject.getIndex()] );
-              m_drawableManager->m_dis[eventObject.getIndex()].reset();
-              break;
-            case SceneTree::EventObject::Changed:
-              DP_ASSERT(!"removed");
-            case SceneTree::EventObject::ActiveChanged:
-              DP_ASSERT( m_drawableManager->m_dis[eventObject.getIndex()] );
-              m_drawableManager->setDrawableInstanceActive( m_drawableManager->m_dis[eventObject.getIndex()], node.m_worldActive );
-              break;
-            case SceneTree::EventObject::TraversalMaskChanged:
-              DP_ASSERT( m_drawableManager->m_dis[eventObject.getIndex()] );
-              m_drawableManager->setDrawableInstanceTraversalMask( m_drawableManager->m_dis[eventObject.getIndex()], node.m_worldMask );
-              break;
-            }
-          }
+          // TODO there're two locations which execute this code, unify with as function
+          m_drawableManager->m_dis[eventObject.getIndex()] = m_drawableManager->addDrawableInstance( geoNode.getWeakPtr(), eventObject.getIndex() ); // TODO, don't pass geonode?
+          m_drawableManager->setDrawableInstanceActive( m_drawableManager->m_dis[eventObject.getIndex()], node.m_worldActive );
+          m_drawableManager->m_geoNodeObserver->attach( geoNode, eventObject.getIndex() );
+          break;
+        case SceneTree::Event::Removed:
+          DP_ASSERT( m_drawableManager->m_dis[eventObject.getIndex()] );
+          m_drawableManager->m_geoNodeObserver->detach( eventObject.getIndex() );
+          m_drawableManager->removeDrawableInstance( m_drawableManager->m_dis[eventObject.getIndex()] );
+          m_drawableManager->m_dis[eventObject.getIndex()].reset();
+          break;
+        case SceneTree::Event::Changed:
+          DP_ASSERT(!"removed");
+        case SceneTree::Event::ActiveChanged:
+          DP_ASSERT( m_drawableManager->m_dis[eventObject.getIndex()] );
+          m_drawableManager->setDrawableInstanceActive( m_drawableManager->m_dis[eventObject.getIndex()], node.m_worldActive );
+          break;
+        case SceneTree::Event::TraversalMaskChanged:
+          DP_ASSERT( m_drawableManager->m_dis[eventObject.getIndex()] );
+          m_drawableManager->setDrawableInstanceTraversalMask( m_drawableManager->m_dis[eventObject.getIndex()], node.m_worldMask );
           break;
         }
       }
@@ -172,7 +164,7 @@ namespace dp
             if ( m_objectTree[index].m_isDrawable )
             {
               ObjectTreeNode const &node = m_objectTree[index];
-              dp::sg::core::GeoNodeSharedPtr geoNode = node.m_object.getSharedPtr().staticCast<dp::sg::core::GeoNode>();
+              dp::sg::core::GeoNodeSharedPtr geoNode = node.m_object.staticCast<dp::sg::core::GeoNode>();
 
               m_drawableManager->m_dis[index] = m_drawableManager->addDrawableInstance( geoNode.getWeakPtr(), index );
               m_drawableManager->setDrawableInstanceActive( m_drawableManager->m_dis[index], node.m_worldActive );
@@ -264,7 +256,7 @@ namespace dp
           DP_ASSERT( m_dis[index] );
           // Remove/Add to change GeometryInstance
           removeDrawableInstance( m_dis[index] );
-          m_dis[index] = addDrawableInstance( node.m_object.getSharedPtr().staticCast<dp::sg::core::GeoNode>().getWeakPtr(), index );    // TODO, don't pass geonode?
+          m_dis[index] = addDrawableInstance( node.m_object.staticCast<dp::sg::core::GeoNode>().getWeakPtr(), index );    // TODO, don't pass geonode?
           setDrawableInstanceActive( m_dis[index], node.m_worldActive );
           break;
         }

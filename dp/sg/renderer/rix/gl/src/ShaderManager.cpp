@@ -302,13 +302,13 @@ namespace dp
             // copy scene lights
             dp::sg::xbar::SceneTreeSharedPtr sceneTree = m_sceneTree.getSharedPtr();
             DP_ASSERT( sceneTree );
-            dp::sg::xbar::SceneTree::Transforms const & transforms = sceneTree->getTransforms();
+            dp::sg::xbar::TransformTree::Transforms const & transforms = sceneTree->getTransformTree().getTransforms();
             std::set< ObjectTreeIndex > const & lightSources = sceneTree->getLightSources();
             for ( std::set< ObjectTreeIndex >::const_iterator itLight = lightSources.begin(); itLight != lightSources.end() && lightId < MAXLIGHTS; ++itLight )
             {
               ObjectTreeNode& otn = sceneTree->getObjectTreeNode(*itLight);
 
-              dp::sg::core::LightSourceSharedPtr ls = otn.m_object.getSharedPtr().staticCast<dp::sg::core::LightSource>();
+              dp::sg::core::LightSourceSharedPtr ls = otn.m_object.staticCast<dp::sg::core::LightSource>();
 
               ShaderLight &light = lightState.lights[lightId];
 

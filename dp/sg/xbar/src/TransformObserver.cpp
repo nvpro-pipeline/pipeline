@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2015
+// Copyright (c) 2010-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -43,9 +43,6 @@ namespace dp
 
         DirtyPayloadSharedPtr payload( DirtyPayload::create( index ) );
         Observer<ObjectTreeIndex>::attach( t, payload );
-
-        payload->m_dirty = true;
-        m_dirtyPayloads.push_back( payload.operator->() );    // Big Hack !!
       }
 
       void TransformObserver::onNotify( const dp::util::Event &event, dp::util::Payload *payload )
@@ -58,29 +55,11 @@ namespace dp
 
             if( propertyEvent.getPropertyId() == dp::sg::core::Transform::PID_Matrix )
             {
-              DirtyPayload* p = static_cast< DirtyPayload* >( payload );
-
-              if ( !p->m_dirty )
-              {
-                p->m_dirty = true;
-                m_dirtyPayloads.push_back(p);
-              }
+              DirtyPayload* p = static_cast< DirtyPayload* >(payload);
+              m_dirtyTransforms.enableBit(p->m_index);
             }
           }
           break;
-        }
-      }
-
-      void TransformObserver::onDetach(ObjectTreeIndex index )
-      {
-        for ( DirtyPayloads::iterator it = m_dirtyPayloads.begin(); it != m_dirtyPayloads.end(); ++it )
-        {
-          if ( (*it)->m_index == index )
-          {
-            *it = m_dirtyPayloads.back();
-            m_dirtyPayloads.pop_back();
-            break;
-          }
         }
       }
 

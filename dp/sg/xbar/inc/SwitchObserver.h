@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2013
+// Copyright (c) 2010-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -82,11 +82,14 @@ namespace dp
         }
 
       protected:
-        SwitchObserver() : Observer<ObjectTreeIndex>( dp::sg::xbar::SceneTreeSharedPtr::null )
+        SwitchObserver()
+          : Observer<ObjectTreeIndex>()
           , m_changed(false)
-        {}
-        void onNotify( const dp::util::Event &event, dp::util::Payload * payload );
-        virtual void onDetach( ObjectTreeIndex index );
+        {
+        }
+
+        void onNotify(dp::util::Event const & event, dp::util::Payload * payload);
+        virtual void onDetach(ObjectTreeIndex index);
 
       private:
         mutable bool               m_changed;

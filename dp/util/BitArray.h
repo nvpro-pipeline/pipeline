@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012-2015
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -116,7 +116,7 @@ namespace dp
           if ( bits & 0x20 ) visitor( index + 5 );
           if ( bits & 0x40 ) visitor( index + 6 );
           if ( bits & 0x80 ) visitor( index + 7 );
-        } 
+        }
         bits >>= 8;
         index += 8;
       }
@@ -186,10 +186,10 @@ namespace dp
 
 
       /** \brief call Visitor( size_t index ) on all bits which are set. **/
-      template <typename Visitor> void traverseBits( Visitor visitor );
+      template <typename Visitor> void traverseBits( Visitor visitor ) const;
 
       DP_UTIL_API size_t countLeadingZeroes() const;
-      
+
     private:
       /** \brief Determine the element / bit for the given index **/
       void determineBitPosition( size_t index, size_t& element, size_t& bit ) const;
@@ -290,7 +290,7 @@ namespace dp
 
     /** \brief call Visitor( size_t index ) on all bits which are set. **/
     template <typename Visitor>
-    inline void BitArray::traverseBits( Visitor visitor )
+    inline void BitArray::traverseBits( Visitor visitor ) const
     {
       bitTraverse(m_bits.get(), determineNumberOfElements(), visitor );
     }

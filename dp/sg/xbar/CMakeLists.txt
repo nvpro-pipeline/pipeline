@@ -7,7 +7,7 @@ include_directories(
 
 #definitions
 add_definitions(
-  -DDP_SG_XBAR_EXPORTS 
+  -DDP_SG_XBAR_EXPORTS
 )
 
 #sources
@@ -21,12 +21,14 @@ set(XBAR_SOURCES
   src/SceneTreeGenerator.cpp
   src/SwitchObserver.cpp
   src/TransformObserver.cpp
+  src/TransformTree.cpp
 )
 
 set(XBAR_PUBLIC_HEADERS
   DrawableManager.h
   ObjectTree.h
   SceneTree.h
+  TransformTree.h
   Tree.h
   TreeResourceGroup.h
   xbar.h

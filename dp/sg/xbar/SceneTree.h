@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2015
+// Copyright (c) 2010-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -32,6 +32,7 @@
 #include <dp/sg/core/CoreTypes.h>
 #include <dp/sg/core/ClipPlane.h>
 #include <dp/sg/ui/RendererOptions.h>
+#include <dp/sg/xbar/TransformTree.h>
 
 #include <vector>
 #include <stack>
@@ -60,42 +61,15 @@ namespace dp
 
       /*===========================================================================*/
       class SceneTree : public dp::util::Subject, public std::enable_shared_from_this<SceneTree>
-      { 
+      {
       protected:
         SceneTree(const dp::sg::core::SceneSharedPtr & scene );
 
       public:
-        struct TransformEntry {
-          dp::math::Mat44f local;
-          dp::math::Mat44f world;
-        };
-
-        typedef std::vector<TransformEntry> Transforms;
-
         class Event : public dp::util::Event
         {
         public:
           enum Type
-          {
-              Transform
-            , Object
-          };
-
-          Event( Type type )
-            : m_type( type)
-          {
-          }
-
-          Type getType() const { return m_type; }
-
-        private:
-          Type m_type;
-        };
-
-        class EventObject : public Event
-        {
-        public:
-          enum SubType
           {
               Added
             , Removed
@@ -104,43 +78,23 @@ namespace dp
             , TraversalMaskChanged
           };
 
-          EventObject( ObjectTreeIndex index, ObjectTreeNode const& node, SubType subType )
-            : Event( Event::Object )
-            , m_subType( subType )
+          Event(ObjectTreeIndex index, ObjectTreeNode const& node, Type subType)
+            : m_type( subType )
             , m_index( index )
             , m_node( node )
           {
           }
 
 
-          SubType getSubType() const { return m_subType; }
+          Type getType() const { return m_type; }
           ObjectTreeIndex getIndex() const { return m_index; }
           ObjectTreeNode const & getNode() const { return m_node; }
 
         protected:
-          SubType               m_subType;
+          Type               m_type;
           ObjectTreeIndex       m_index;
           ObjectTreeNode const& m_node;
 
-        };
-
-        /** \brief EventTransform used to notify about changed within transforms **/
-        class EventTransform : public Event
-        {
-        public:
-          EventTransform(TransformIndex index, dp::sg::xbar::SceneTree::TransformEntry const& node)
-            : Event( Event::Transform )
-            , m_index( index )
-            , m_node ( node )
-          {
-          }
-
-          TransformIndex getIndex() const { return m_index; }
-          dp::sg::xbar::SceneTree::TransformEntry const& getNode() const { return m_node; }
-
-        private:
-          TransformIndex                                   m_index;
-          dp::sg::xbar::SceneTree::TransformEntry const & m_node;
         };
 
       public:
@@ -160,14 +114,11 @@ namespace dp
         //! Add all renderer options required by this renderer to the given rendererOptions object.
         DP_SG_XBAR_API void addRendererOptions( const dp::sg::ui::RendererOptionsSharedPtr& rendererOptions );
 
-        //! Transform Tree access function
-        const dp::math::Mat44f& getTransformMatrix( TransformIndex index ) const { return m_transforms[index].world; }
-        
         // TODO reimplement support? Not required due to two sided rendering...
         //bool isMirrorTransform( TransformIndex index ) const { return m_transformTree.operator[](index).m_worldBits & TransformTreeNode::ISMIRRORTRANSFORM; }
         bool isMirrorTransform(TransformIndex index) const { assert(!"not implemented");/*return m_transformTree.operator[](index).m_worldBits & TransformTreeNode::ISMIRRORTRANSFORM;*/ }
 
-        DP_SG_XBAR_API void update(dp::sg::core::CameraSharedPtr const& camera, float lodScaleRange); 
+        DP_SG_XBAR_API void update(dp::sg::core::CameraSharedPtr const& camera, float lodScaleRange);
 
         //! Add a new object to the Tree
         DP_SG_XBAR_API ObjectTreeIndex addObject( const ObjectTreeNode & node, ObjectTreeIndex parentIndex, ObjectTreeIndex siblingIndex );
@@ -184,15 +135,10 @@ namespace dp
         DP_SG_XBAR_API void removeObjectTreeIndex( ObjectTreeIndex index );
 
         DP_SG_XBAR_API ObjectTree& getObjectTree();
-
-        dp::sg::xbar::SceneTree::TransformEntry const& getTransformEntry(TransformIndex index) const { return m_transforms[index]; }
         DP_SG_XBAR_API ObjectTreeNode& getObjectTreeNode( ObjectTreeIndex index );
 
-        DP_SG_XBAR_API const std::set< ObjectTreeIndex >& getLightSources() const { return m_lightSources; }
-
-        Transforms const & getTransforms() { return m_transforms; }
-        const std::vector<TransformIndex>& getChangedTransforms() const { return m_changedTransforms; }
-        const std::vector<TransformIndex>& getChangedObjects() const { return m_changedObjects; }
+        const std::set< ObjectTreeIndex >& getLightSources() const { return m_lightSources; }
+        TransformTree const & getTransformTree() const { return m_transformTree; }
 
       protected:
         // remove a transform from the transform array
@@ -204,7 +150,6 @@ namespace dp
 
       private:
         void init();
-        void notifyTransformUpdated(TransformIndex index, dp::sg::xbar::SceneTree::TransformEntry const & node);
 
         friend class UpdateTransformVisitor;
         friend class UpdateObjectVisitor;
@@ -219,7 +164,6 @@ namespace dp
         bool m_dirty;
 
         //TODO check switchobserver for shared switches!
-        TransformObserverSharedPtr m_transformObserver;
         ObjectObserverSharedPtr    m_objectObserver;
         SwitchObserverSharedPtr    m_switchObserver;
         SceneObserverSharedPtr     m_sceneObserver;
@@ -230,42 +174,9 @@ namespace dp
         ObjectTreeIndex                          m_objectTreeRootNode;
         std::vector< ObjectTreeIndex >           m_objectIndexStack;    // temp variable
 
-        // Transforms
-        std::vector< TransformIndex >            m_changedTransforms;
-        std::vector< ObjectTreeIndex >           m_changedObjects;
-        bool                                     m_firstTransformUpdate;
-
         std::set< ObjectTreeIndex >              m_lightSources;
 
-        // Transform related functions
-        TransformIndex allocateTransform();
-        void freeTransform(TransformIndex transformIndex);
-
-        dp::util::BitArray m_transformFreeVector; // free if bit is true, occupied otherwise
-
-        Transforms m_transforms;
-
-        struct TransformListEntry {
-          unsigned int parent;    // index to parent transform in transform array
-          unsigned int transform; // index to transform in transform array
-        };
-
-        struct BillboardListEntry {
-          unsigned int parent;    // index to parent transform in transform array
-          unsigned int transform; // index to transform in transform array
-          dp::sg::core::BillboardSharedPtr billboard; // billboard to use for computation
-        };
-
-        typedef std::vector<TransformListEntry> TransformListEntries;
-        typedef std::vector<BillboardListEntry> BillboardListEntries;
-
-        struct TransformLevel {
-          TransformListEntries transformListEntries;
-          BillboardListEntries billboardListEntries;
-        };
-
-        typedef std::vector<TransformLevel> TransformLevels;
-        TransformLevels m_transformLevels;
+        TransformTree m_transformTree;
       };
 
       /*===========================================================================*/

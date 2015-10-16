@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2013
+// Copyright (c) 2013-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -94,6 +94,20 @@ namespace dp
 
           private:
             ObjectTreeIndex m_objectTreeIndex;
+          };
+
+          class TransformObserver : public dp::util::Observer
+          {
+          public:
+            TransformObserver(CullingImpl const & cullingImpl)
+              : m_cullingImpl(cullingImpl)
+            {
+            }
+
+            virtual void onNotify(dp::util::Event const & event, dp::util::Payload * payload);
+            virtual void onDestroyed(dp::util::Subject const & subject, dp::util::Payload * payload);
+          private:
+            CullingImpl const & m_cullingImpl;
           };
 
           std::unique_ptr<dp::culling::Manager>  m_culling;

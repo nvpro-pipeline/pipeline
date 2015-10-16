@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2015
+// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -97,7 +97,7 @@ namespace dp
               {
               }
             };
-            
+
             /** \brief Payload for handle **/
             DEFINE_PTR_TYPES( Payload );
             class Payload : public dp::util::Payload
@@ -225,7 +225,7 @@ namespace dp
               DrawableManagerDefault* m_drawableManager;
             };
 
-            void onTransformChanged( dp::sg::xbar::SceneTree::EventTransform const& event );
+            void onTransformChanged( dp::sg::xbar::TransformTree::EventTransform const& event );
             void detachEffectDataObserver();
             virtual void onSceneTreeChanged();
 
@@ -242,7 +242,7 @@ namespace dp
             dp::rix::core::RenderGroupSharedHandle  m_renderGroups[RGL_COUNT][RGP_COUNT];
             ShaderManagerRenderGroupSharedPtr       m_renderGroupInstances[RGL_COUNT][RGP_COUNT];
 
-            std::vector<DefaultHandleDataSharedPtr>                   m_transparentDIs; 
+            std::vector<DefaultHandleDataSharedPtr>                   m_transparentDIs;
             std::vector<dp::rix::core::GeometryInstanceSharedHandle>  m_depthSortedTransparentGIs;
 
             boost::scoped_ptr<ShaderManager>        m_shaderManager;

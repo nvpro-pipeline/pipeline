@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2015
+// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -76,12 +76,11 @@ namespace dp
         {
         }
 
-        dp::sg::core::ObjectWeakPtr m_object;         // the node's object in the tree
+        dp::sg::core::ObjectSharedPtr m_object;         // the node's object in the tree
 
         // new transform hierarchy
         TransformIndex              m_transform;       // id in transform array
         ObjectTreeIndex             m_transformParent; // object index of parent in transform hierarchy
-        unsigned int                m_transformLevel;  // level in transform hierarchy
 
         unsigned int                m_localHints;     // the hints the corresponding node/primitive provides
         unsigned int                m_worldHints;     // the resulting hints for this node
@@ -93,7 +92,7 @@ namespace dp
         bool                        m_isDrawable;
         bool                        m_isTransform;    // object is any kind of transform
         bool                        m_isBillboard;    // object is billboard
-                                    
+
         SmartClipPlaneGroup         m_clipPlaneGroup;
       };
 
