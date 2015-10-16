@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2015
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -67,8 +67,6 @@ namespace dp
 
       Transform::Transform( void )
       : m_jointCount(0)
-      , m_changeCount(0)
-      , m_changeThreshold(3)
       {
         m_objectCode = OC_TRANSFORM;
       }
@@ -77,8 +75,6 @@ namespace dp
       : Group(rhs)
       , m_trafo(rhs.m_trafo)
       , m_jointCount(0)
-      , m_changeCount(0)
-      , m_changeThreshold(3)
       {
         m_objectCode = OC_TRANSFORM;
       }
@@ -93,7 +89,10 @@ namespace dp
         if ( m_trafo != trafo )
         {
           m_trafo = trafo;
-          evalChange();
+          // TODO Is it really necessary to send Object::Event here?
+          // For now it's only required for the bounding box hierarchy
+          // in the SceneGraph
+          notify( Object::Event( this ) );
           notify( PropertyEvent( this, PID_Center ) );
           notify( PropertyEvent( this, PID_Orientation ) );
           notify( PropertyEvent( this, PID_ScaleOrientation ) );
@@ -108,7 +107,7 @@ namespace dp
         if ( m_trafo.getCenter() != value )
         {
           m_trafo.setCenter( value );
-          evalChange();
+          notify( Object::Event( this ) );
           notify( PropertyEvent( this, PID_Center ) );
           notify( PropertyEvent( this, PID_Matrix ) );
         }
@@ -119,7 +118,7 @@ namespace dp
         if ( m_trafo.getOrientation() != value )
         {
           m_trafo.setOrientation( value );
-          evalChange();
+          notify( Object::Event( this ) );
           notify( PropertyEvent( this, PID_Orientation ) );
           notify( PropertyEvent( this, PID_Matrix ) );
         }
@@ -130,7 +129,7 @@ namespace dp
         if (m_trafo.getScaleOrientation() != value)
         {
           m_trafo.setScaleOrientation( value );
-          evalChange();
+          notify( Object::Event( this ) );
           notify( PropertyEvent( this, PID_ScaleOrientation ) );
           notify( PropertyEvent( this, PID_Matrix ) );
         }
@@ -141,7 +140,7 @@ namespace dp
         if (m_trafo.getScaling() != value)
         {
           m_trafo.setScaling( value );
-          evalChange();
+          notify( Object::Event( this ) );
           notify( PropertyEvent( this, PID_Scaling ) );
           notify( PropertyEvent( this, PID_Matrix ) );
         }
@@ -152,7 +151,7 @@ namespace dp
         if (m_trafo.getTranslation() != value)
         {
           m_trafo.setTranslation( value );
-          evalChange();
+          notify( Object::Event( this ) );
           notify( PropertyEvent( this, PID_Translation ) );
           notify( PropertyEvent( this, PID_Matrix ) );
         }
@@ -163,7 +162,7 @@ namespace dp
         if ( m_trafo.getMatrix() != value )
         {
           m_trafo.setMatrix( value );
-          evalChange();
+          notify( Object::Event( this ) );
           notify( PropertyEvent( this, PID_Matrix ) );
         }
       }
@@ -172,10 +171,10 @@ namespace dp
       {
         Box3f bbox = Group::calculateBoundingBox();
         //
-        // never transform an empty bounding box! 
+        // never transform an empty bounding box!
         // the result would be undefined!
         //
-        if ( isValid(bbox) ) 
+        if ( isValid(bbox) )
         {
           Mat44f mat(getTrafo().getMatrix());
 
@@ -205,7 +204,7 @@ namespace dp
       {
         Sphere3f sphere = Group::calculateBoundingSphere();
         //
-        // never transform an invalid bounding sphere! 
+        // never transform an invalid bounding sphere!
         // the result would be undefined!
         //
         if ( isValid(sphere) )
@@ -222,7 +221,7 @@ namespace dp
         {
           Group::operator=(rhs);
           m_trafo = rhs.m_trafo;
-          evalChange();
+          notify(Object::Event(this));
           notify( PropertyEvent( this, PID_Center ) );
           notify( PropertyEvent( this, PID_Orientation ) );
           notify( PropertyEvent( this, PID_ScaleOrientation ) );
@@ -266,28 +265,6 @@ namespace dp
         if ( m_jointCount == 0 )
         {
           removeHints( DP_SG_HINT_ALWAYS_VISIBLE );  // a non-Joint can be culled again
-        }
-      }
-
-      void Transform::evalChange()
-      {
-        // This function only gets called if the transform actually changed
-        // and that means the bounding volume incarnation changes.
-        notify( Object::Event( this ) );
-
-        // FIXME not required for new renderer
-        if ( !getHints(DP_SG_HINT_DYNAMIC) ) // already flagged dynamic?
-        {
-          m_changeCount++;
-          if ( m_changeCount <= m_changeThreshold )
-          {
-            if (m_changeCount == m_changeThreshold)
-            {
-              // change count just exceeding the threshold
-              // --> flag the transform dynamic
-              addHints(DP_SG_HINT_DYNAMIC);
-            }
-          }
         }
       }
 

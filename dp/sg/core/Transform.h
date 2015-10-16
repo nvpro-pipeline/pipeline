@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2011
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -41,7 +41,7 @@ namespace dp
     namespace core
     {
 
-      /*! \brief Transform node. 
+      /*! \brief Transform node.
        *  \par Namespace: dp::sg::core
        *  \remarks A Transform is a special Group node. In addition to the children held by a
        *  Transform like a Group, it contains a transformation that is appended to the current
@@ -87,8 +87,8 @@ namespace dp
            *  transformation.
            *  \sa Group, dp::math::Trafo */
           DP_SG_CORE_API Transform & operator=(const Transform & rhs);
-      
-          /*! \brief Test for equivalence with an other Transform. 
+
+          /*! \brief Test for equivalence with an other Transform.
            *  \param p A reference to the constant Transform to test for equivalence with.
            *  \param ignoreNames Optional parameter to ignore the names of the objects; default is \c true.
            *  \param deepCompare Optional parameter to perform a deep comparsion; default is \c false.
@@ -101,7 +101,7 @@ namespace dp
           REFLECTION_INFO_API( DP_SG_CORE_API, Transform );
 
         protected:
-          /*! \brief Default-constructs a Transform. 
+          /*! \brief Default-constructs a Transform.
            */
           DP_SG_CORE_API Transform(void);
 
@@ -146,13 +146,8 @@ namespace dp
           DP_SG_CORE_API virtual void feedHashGenerator( dp::util::HashGenerator & hg ) const;
 
         private:
-          void evalChange();
-
-        private:
           dp::math::Trafo m_trafo;
           unsigned int    m_jointCount;
-          unsigned int    m_changeCount;
-          unsigned int    m_changeThreshold;
 
         public:
           // Property framework
@@ -164,7 +159,7 @@ namespace dp
               DP_SG_CORE_API DECLARE_STATIC_PROPERTY( Translation );
               DP_SG_CORE_API DECLARE_STATIC_PROPERTY( Matrix );
               DP_SG_CORE_API DECLARE_STATIC_PROPERTY( Inverse );
-          END_DECLARE_STATIC_PROPERTIES      
+          END_DECLARE_STATIC_PROPERTIES
 
           const dp::math::Vec3f&  getCenter( void ) const           { return getTrafo().getCenter(); }
           const dp::math::Quatf&  getOrientation( void ) const      { return getTrafo().getOrientation(); }
