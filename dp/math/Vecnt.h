@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -201,9 +201,9 @@ namespace dp
     };
 
 
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // non-member functions
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     /*! \brief Determine the bounding box of a number of points.
      *  \param points A vector to the points.
@@ -454,9 +454,9 @@ namespace dp
     template<unsigned int n, typename T>
       Vecnt<n,T> orthonormalize( const Vecnt<n,T> & v0, const Vecnt<n,T> & v1 );
 
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // non-member functions, specialized for n == 1
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     /*! \brief Set the values of a two-component vector.
      *  \param v A reference to the vector to set with \a x.
@@ -464,9 +464,9 @@ namespace dp
     template<typename T>
       Vecnt<1,T> & setVec( Vecnt<1,T> & v, T x );
 
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // non-member functions, specialized for n == 2
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     /*! \brief Set the values of a two-component vector.
      *  \param v A reference to the vector to set with \a x and \a y.
@@ -475,9 +475,9 @@ namespace dp
     template<typename T>
       Vecnt<2,T> & setVec( Vecnt<2,T> & v, T x, T y );
 
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // non-member functions, specialized for n == 3
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     /*! \brief Determine if two vectors are collinear.
      *  \param v0 A constant reference to the first vector.
@@ -522,9 +522,9 @@ namespace dp
                         , T creaseAngle, std::vector<Vecnt<3,T> > &normals );
 
 
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // non-member functions, specialized for n == 4
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     /*! \brief Set the values of a four-component vector.
      *  \param v A reference to the vector to set with \a x, \a y, \a z, and \a w.
@@ -536,9 +536,9 @@ namespace dp
       Vecnt<4,T> & setVec( Vecnt<4,T> & v, T x, T y, T z, T w );
 
 
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Convenience type definitions
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     typedef Vecnt<1,float>  Vec1f;
     typedef Vecnt<1,double> Vec1d;
     typedef Vecnt<2,float>  Vec2f;
@@ -557,9 +557,9 @@ namespace dp
     typedef Vecnt<4,unsigned int> Vec4ui;
 
 
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // inlined member functions
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     template<unsigned int n, typename T>
     inline Vecnt<n,T>::Vecnt()
@@ -699,9 +699,9 @@ namespace dp
     }
 
 
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // inlined non-member functions
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     template<unsigned int n, typename T>
     inline void boundingBox( const Vecnt<n,T> * points, size_t numberOfPoints, Vecnt<n,T> & min, Vecnt<n,T> & max )
@@ -840,20 +840,39 @@ namespace dp
     template<unsigned int n, typename T>
     inline bool  operator==( const Vecnt<n,T> & v0, const Vecnt<n,T> & v1 )
     {
-      return( areSimilar( v0, v1, std::numeric_limits<T>::epsilon() ) );
-    }
-
-    template<unsigned int n>
-    inline bool operator==( const Vecnt<n,bool> & v0, const Vecnt<n,bool> & v1 )
-    {
-      for ( unsigned int i=0 ; i<n ; i++ )
+      for (unsigned int i = 0; i < n; i++)
       {
-        if ( v0[i] != v1[i] )
+        if (v0[i] != v1[i])
         {
-          return( false );
+          return(false);
         }
       }
-      return( true );
+      return(true);
+    }
+
+    template<typename T>
+    inline bool  operator==(const Vecnt<1, T> & v0, const Vecnt<1, T> & v1)
+    {
+      return (v0[0] == v1[0]);
+    }
+
+    template<typename T>
+    inline bool  operator==(const Vecnt<2, T> & v0, const Vecnt<2, T> & v1)
+    {
+      return (v0[0] == v1[0]) && (v0[1] == v1[1]);
+    }
+
+
+    template<typename T>
+    inline bool  operator==(const Vecnt<3, T> & v0, const Vecnt<3, T> & v1)
+    {
+      return (v0[0] == v1[0]) && (v0[1] == v1[1]) && (v0[2] == v1[2]);
+    }
+
+    template<typename T>
+    inline bool  operator==(const Vecnt<4, T> & v0, const Vecnt<3, T> & v1)
+    {
+      return (v0[0] == v1[0]) && (v0[1] == v1[1]) && (v0[2] == v1[2]) && (v0[3] == v1[3]);
     }
 
     template<unsigned int n, typename T>
@@ -1014,9 +1033,9 @@ namespace dp
       return( vr );
     }
 
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // inlined non-member functions, specialized for n == 1
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     template<typename T>
     inline Vecnt<1,T> & setVec( Vecnt<1,T> & v, T x )
@@ -1026,9 +1045,9 @@ namespace dp
     }
 
 
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // inlined non-member functions, specialized for n == 2
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     template<typename T>
     inline Vecnt<2,T> & setVec( Vecnt<2,T> & v, T x, T y )
@@ -1039,9 +1058,9 @@ namespace dp
     }
 
 
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // inlined non-member functions, specialized for n == 3
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     template<typename T>
     inline Vecnt<3,T> operator^( const Vecnt<3,T> &v0, const Vecnt<3,T> &v1 )
@@ -1185,9 +1204,9 @@ namespace dp
     }
 
 
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // inlined non-member functions, specialized for n == 4
-    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+    // - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     template<typename T>
     inline Vecnt<4,T> & setVec( Vecnt<4,T> & v, T x, T y, T z, T w )
