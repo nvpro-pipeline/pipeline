@@ -70,6 +70,7 @@ class QtMinimalWidget : public dp::sg::ui::qt5::SceniXQGLSceneRendererWidget
     void paintGL();
     void screenshot();
 
+    virtual void onRenderTargetChanged( const dp::gl::RenderTargetSharedPtr &oldTarget, const dp::gl::RenderTargetSharedPtr &newTarget );
     virtual void resizeEvent( QResizeEvent *event );
 
   protected:
@@ -242,6 +243,12 @@ void QtMinimalWidget::setSceneName( std::string const& name )
 void QtMinimalWidget::setShowFrameRate( bool showFPS )
 {
   m_showFPS = showFPS;
+}
+
+void QtMinimalWidget::onRenderTargetChanged( const dp::gl::RenderTargetSharedPtr &oldTarget, const dp::gl::RenderTargetSharedPtr &newTarget )
+{
+  dp::sg::renderer::rix::gl::SceneRendererSharedPtr sr = getSceneRenderer().dynamicCast<dp::sg::renderer::rix::gl::SceneRenderer>();
+  setSceneRenderer( dp::sg::renderer::rix::gl::SceneRenderer::create( sr->getRenderEngine().c_str(), sr->getShaderManager(), sr->getCullingMode(), sr->getTransparencyMode(), newTarget ) );
 }
 
 void QtMinimalWidget::resizeEvent( QResizeEvent *re )
@@ -658,7 +665,7 @@ int runApp( int argc, char *argv[], options::variables_map const& opts )
 
   // Keep only once reference to the renderer in the widget. This is necessary since the OpenGL resources
   // used by the renderer must be deleted before the window gets destroyed.
-  renderer.reset(); 
+  renderer.reset();
 
   int result = app.exec();
 

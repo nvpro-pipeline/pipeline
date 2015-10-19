@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2009-2010
+// Copyright (c) 2009-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -79,7 +79,7 @@ ViewerRendererWidget::ViewerRendererWidget( QWidget *parent, SceniXQGLWidget *sh
   , m_frameCount(0)
   , m_oitDepth( 8 )
 {
-  // set to allow D&D  
+  // set to allow D&D
   // MMM - need finer control here because we would accept color drops as well
   setAcceptDrops( true );
   setFocusPolicy( Qt::StrongFocus ); // TAB or click for keyboard focus
@@ -113,7 +113,7 @@ ViewerRendererWidget::setIsViewport( bool isViewport )
   m_isViewport = isViewport;
 }
 
-void 
+void
 ViewerRendererWidget::setRendererType( RendererType type )
 {
   if( type != m_rendererType )
@@ -136,7 +136,7 @@ ViewerRendererWidget::setRendererType( RendererType type )
         addRasterizeActions();
         Viewer * viewer = GetApp();
         dp::sg::renderer::rix::gl::SceneRendererSharedPtr ssrgl =
-          dp::sg::renderer::rix::gl::SceneRenderer::create( viewer->getRenderEngine().c_str(), 
+          dp::sg::renderer::rix::gl::SceneRenderer::create( viewer->getRenderEngine().c_str(),
                                                             viewer->getShaderManagerType(),
                                                             viewer->getCullingMode(),
                                                             viewer->getTransparencyMode() );
@@ -150,12 +150,12 @@ ViewerRendererWidget::setRendererType( RendererType type )
         DP_ASSERT( !"Invalid RendererType" );
         break;
     }
-    
+
     present();
   }
 }
 
-ViewerRendererWidget::RendererType 
+ViewerRendererWidget::RendererType
 ViewerRendererWidget::getRendererType() const
 {
   return m_rendererType;
@@ -196,7 +196,7 @@ ViewerRendererWidget::addDefaultActions()
     }
     m_contextMenuEntries.push_back( renderEngineMenu );
   }
-  
+
   // The Viewports get all actions, the preview widget only the render engine toggle.
   if ( !m_isViewport )
   {
@@ -256,7 +256,7 @@ ViewerRendererWidget::addRaytraceActions()
 }
 
 ViewerRendererWidget::~ViewerRendererWidget()
-{ 
+{
   // make render context current before destruction
   getRenderContext()->makeCurrent();
 
@@ -412,7 +412,7 @@ void ViewerRendererWidget::mousePressEvent ( QMouseEvent * mouseEvent )
   if (!mouseEvent->isAccepted() )
   {
     // Exactly Shift+LMB to prevent inadvertent selections during vertigo (Shift+Control+LMB+MMB)
-    if( mouseEvent->button()    == Qt::LeftButton && 
+    if( mouseEvent->button()    == Qt::LeftButton &&
         mouseEvent->modifiers() == Qt::ShiftModifier )
     {
       selectObject( mouseEvent );
@@ -437,7 +437,7 @@ bool ViewerRendererWidget::isOptionSupported( const std::string & option )
   return( m_viewState->getRendererOptions()->hasProperty( option ) );
 }
 
-QAction * 
+QAction *
 ViewerRendererWidget::findAction( const QString & name )
 {
   for( int i = 0; i < actions().size(); i ++ )
@@ -477,7 +477,7 @@ void ViewerRendererWidget::highlightGeoNode( const dp::sg::core::GeoNodeSharedPt
   m_highlightedObject = geoNode;
   m_selectedGeoNodes.insert( geoNode );
 
-  // set to selected 
+  // set to selected
   geoNode->setTraversalMask( 0x02 );
 
   enableHighlighting( true );
@@ -592,7 +592,7 @@ void ViewerRendererWidget::currentItemChanged( dp::sg::core::ObjectSharedPtr cur
   }
   if ( current.isPtrTo<GeoNode>() )
   {
-    // set to selected 
+    // set to selected
     m_selectedGeoNodes.insert( current.staticCast<GeoNode>() );
     current.staticCast<GeoNode>()->setTraversalMask( 0x02 );
     enableHighlighting( true );
@@ -601,7 +601,7 @@ void ViewerRendererWidget::currentItemChanged( dp::sg::core::ObjectSharedPtr cur
   present();
 }
 
-bool 
+bool
 ViewerRendererWidget::intersectObject( const dp::sg::core::NodeSharedPtr & baseSearch,
                                        unsigned int screenX, unsigned int screenY,
                                        dp::sg::algorithm::Intersection & result )
@@ -640,7 +640,7 @@ bool
 ViewerRendererWidget::menuConstraintsSatisfied( QObject * object )
 {
   // check constraints of all context menu options here..
-  
+
   if( object->objectName() == "actionMoveSelectedObject" )
   {
     // Not all objects can be manipulated
@@ -660,7 +660,7 @@ bool ViewerRendererWidget::actionCheck( QAction * action )
   return( true );
 }
 
-void 
+void
 ViewerRendererWidget::contextMenuEvent( QContextMenuEvent * event )
 {
   // ignore "reason" for the moment
@@ -808,7 +808,7 @@ void ViewerRendererWidget::addSpotLight()
   DP_ASSERT( pgd );
   moveSpotLightToCamera( pgd, m_viewState->getCamera().staticCast<PerspectiveCamera>() );
   GroupSharedPtr group = makeRootGroup( m_viewState->getScene() );
-  
+
   // NOTE: Nothing can be read/write locked during executecommand
   ExecuteCommand( new CommandAddObject( group, spotLight ) );
 }
@@ -914,7 +914,7 @@ void ViewerRendererWidget::restartUpdate()
   update();
 }
 
-void 
+void
 ViewerRendererWidget::enableHighlighting( bool onOff )
 {
   m_sceneRendererPipeline->enableHighlighting( onOff );
@@ -1383,7 +1383,7 @@ void ViewerRendererWidget::setManipulatorType( ManipulatorType mt  )
         }
 
         // set speed so that it is possible to traverse the database in 10 seconds
-        manip->setSpeed( sceneRadius / 5.f ); 
+        manip->setSpeed( sceneRadius / 5.f );
 
         m_currentManipulator = manip;
         setContinuousUpdate( true );
@@ -1408,7 +1408,7 @@ void ViewerRendererWidget::setManipulatorType( ManipulatorType mt  )
         }
 
         // set speed so that it is possible to traverse the database in 20 seconds
-        manip->setSpeed( sceneRadius / 10.f ); 
+        manip->setSpeed( sceneRadius / 10.f );
 
         m_currentManipulator = manip;
         setContinuousUpdate( true );
@@ -1438,7 +1438,7 @@ void ViewerRendererWidget::onRenderTargetChanged( const dp::gl::RenderTargetShar
     case RENDERER_RASTERIZE_XBAR :
       {
         Viewer * viewer = GetApp();
-        setSceneRenderer( dp::sg::renderer::rix::gl::SceneRenderer::create( viewer->getRenderEngine().c_str(), viewer->getShaderManagerType(), viewer->getCullingMode() ) );
+        setSceneRenderer( dp::sg::renderer::rix::gl::SceneRenderer::create( viewer->getRenderEngine().c_str(), viewer->getShaderManagerType(), viewer->getCullingMode(), viewer->getTransparencyMode(), newTarget ) );
       }
       break;
     default :
