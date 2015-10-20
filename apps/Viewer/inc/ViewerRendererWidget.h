@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2009-2010
+// Copyright (c) 2009-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -63,7 +63,7 @@ public:
   };
 
   enum ManipulatorType
-  { 
+  {
     MANIPULATOR_NONE        = ~0,
     MANIPULATOR_TRACKBALL   = 0,
     MANIPULATOR_CYLINDRICAL = 1,
@@ -182,7 +182,7 @@ public slots:
   void triggeredViewportFormatStereo( bool checked );
 
   void setEnvironmentEnabledChanged();
-  void updateEnvironment(); // gets called on an environmentChanged signal and propagates 
+  void updateEnvironment(); // gets called on an environmentChanged signal and propagates
 
 protected slots:
   void moveSelectedObject();
@@ -196,6 +196,7 @@ private:
   void addDirectedLight();
   void addPointLight();
   void addSpotLight();
+  dp::sg::ui::SceneRendererSharedPtr createSceneRenderer( dp::gl::RenderTargetSharedPtr const& renderTarget );
 
 protected:
   dp::sg::ui::ViewStateSharedPtr m_defaultViewState;
@@ -205,7 +206,7 @@ protected:
   ManipulatorType m_manipulatorType;
 
   SceneRendererPipelineSharedPtr m_sceneRendererPipeline;
-  
+ 
   std::set< dp::sg::core::GeoNodeSharedPtr > m_selectedGeoNodes;
 
   bool m_restartAccumulation;

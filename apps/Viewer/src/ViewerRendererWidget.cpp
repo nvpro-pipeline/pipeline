@@ -134,15 +134,7 @@ ViewerRendererWidget::setRendererType( RendererType type )
       case RENDERER_RASTERIZE_XBAR:
       {
         addRasterizeActions();
-        Viewer * viewer = GetApp();
-        dp::sg::renderer::rix::gl::SceneRendererSharedPtr ssrgl =
-          dp::sg::renderer::rix::gl::SceneRenderer::create( viewer->getRenderEngine().c_str(),
-                                                            viewer->getShaderManagerType(),
-                                                            viewer->getCullingMode(),
-                                                            viewer->getTransparencyMode() );
-        ssrgl->setEnvironmentSampler( GetApp()->getEnvironmentSampler() );
-        ssrgl->setDepthPass( GetApp()->getPreferences()->getDepthPass() );
-        setSceneRenderer( ssrgl );
+        setSceneRenderer( createSceneRenderer( getRenderTarget() ) );
       }
       break;
 
@@ -813,6 +805,16 @@ void ViewerRendererWidget::addSpotLight()
   ExecuteCommand( new CommandAddObject( group, spotLight ) );
 }
 
+dp::sg::ui::SceneRendererSharedPtr ViewerRendererWidget::createSceneRenderer( dp::gl::RenderTargetSharedPtr const& renderTarget )
+{
+  Viewer * viewer = GetApp();
+  dp::sg::renderer::rix::gl::SceneRendererSharedPtr sr = dp::sg::renderer::rix::gl::SceneRenderer::create( viewer->getRenderEngine().c_str(), viewer->getShaderManagerType(), viewer->getCullingMode(), viewer->getTransparencyMode(), renderTarget );
+  sr->setEnvironmentSampler( viewer->getEnvironmentSampler() );
+  sr->setEnvironmentRenderingEnabled( viewer->getPreferences()->getEnvironmentEnabled() );
+  sr->setDepthPass( viewer->getPreferences()->getDepthPass() );
+  return( sr );
+}
+
 static void nameCamera( CameraSharedPtr camWP, const std::string & baseName, unsigned int index )
 {
   std::ostringstream ss;
@@ -1436,10 +1438,8 @@ void ViewerRendererWidget::onRenderTargetChanged( const dp::gl::RenderTargetShar
   switch( getRendererType() )
   {
     case RENDERER_RASTERIZE_XBAR :
-      {
-        Viewer * viewer = GetApp();
-        setSceneRenderer( dp::sg::renderer::rix::gl::SceneRenderer::create( viewer->getRenderEngine().c_str(), viewer->getShaderManagerType(), viewer->getCullingMode(), viewer->getTransparencyMode(), newTarget ) );
-      }
+      setSceneRenderer( createSceneRenderer( newTarget ) );
+      //getSceneRenderer()->setRenderTarget( newTarget );   // TODO: just setting the render target should work (with non-bindless, at least)
       break;
     default :
       DP_ASSERT( !"ViewerRendererWidget::onRenderTargetChanged: unknown renderType" );

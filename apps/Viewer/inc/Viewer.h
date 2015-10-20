@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2009-2010
+// Copyright (c) 2009-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -97,10 +97,9 @@ class Viewer : public QApplication
     void sceneTreeChanged();
 
   private slots:
+    void onApplicationStateChanged( Qt::ApplicationState state );
     void setEnvironmentEnabledChanged();
     void setEnvironmentTextureName( const QString & name );
-    void runStartupFile();
-    void runStartupScript();
 
   private:
     void parseCommandLine( int & argc, char ** argv );
@@ -139,7 +138,7 @@ inline Viewer * GetApp()
 
 inline dp::sg::ui::qt5::SceniXQGLWidget * Viewer::getGlobalShareGLWidget() const
 {
-  return m_globalShareGLWidget; 
+  return m_globalShareGLWidget;
 }
 
 inline const QString & Viewer::getDisplayedSceneName() const

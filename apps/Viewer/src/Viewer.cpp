@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2009-2015
+// Copyright (c) 2009-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -34,6 +34,7 @@
 #include <boost/assign/list_of.hpp>
 #include <boost/program_options.hpp>
 
+#include <dp/DP.h>
 #include <dp/fx/EffectLibrary.h>
 #include <dp/sg/algorithm/IndexTraverser.h>
 #include <dp/sg/algorithm/StatisticsTraverser.h>
@@ -46,7 +47,7 @@
 static QScriptValue LogMethod(QScriptContext *context, QScriptEngine *engine)
 {
   QString result;
-  for (int i = 0; i < context->argumentCount(); ++i) 
+  for (int i = 0; i < context->argumentCount(); ++i)
   {
     if (i > 0)
     {
@@ -126,7 +127,7 @@ void Viewer::parseCommandLine( int & argc, char ** argv )
     {
       std::cout << od << std::endl;
     }
-     
+
     m_tonemapperEnabled = opts["tonemapper"].as<bool>();
     m_backdropEnabled = opts["backdrop"].as<bool>();  // Force to false when --raytracing true to not do it twice since the miss program renders the environment anyway.
     m_cullingMode = determineCullingMode( opts["cullingengine"].as<std::string>() );
@@ -179,9 +180,9 @@ Viewer::Viewer( int & argc, char ** argv )
   // add script system
   // DAR FIXME: The ScriptSystem generates memory leak reports on program exit!
   m_scriptSystem = new ScriptSystem();
-  m_scriptSystem->addFunction( "log", LogMethod ); 
+  m_scriptSystem->addFunction( "log", LogMethod );
   // print is more common in javascript - but assign to the same function
-  m_scriptSystem->addFunction( "print", LogMethod ); 
+  m_scriptSystem->addFunction( "print", LogMethod );
 
   connect( m_preferences, SIGNAL(environmentEnabledChanged()), this, SLOT(setEnvironmentEnabledChanged()) );
   connect( m_preferences, SIGNAL(environmentTextureNameChanged(const QString&)), this, SLOT(setEnvironmentTextureName(const QString&)) );
@@ -193,6 +194,28 @@ Viewer::Viewer( int & argc, char ** argv )
   m_environmentSampler->setMagFilterMode( dp::sg::core::TFM_MAG_LINEAR );
   m_environmentSampler->setMinFilterMode( dp::sg::core::TFM_MIN_LINEAR_MIPMAP_LINEAR );
   m_environmentSampler->setWrapModes( dp::sg::core::TWM_REPEAT, dp::sg::core::TWM_CLAMP_TO_EDGE, dp::sg::core::TWM_CLAMP_TO_EDGE );
+
+  connect( this, SIGNAL(applicationStateChanged(Qt::ApplicationState)), this, SLOT(onApplicationStateChanged(Qt::ApplicationState)) );
+
+  dp::fx::EffectLibrary::instance()->loadEffects( "viewerEffects.xml", dp::util::FileFinder( dp::home() + "/apps/Viewer/res" ) );
+}
+
+void Viewer::onApplicationStateChanged( Qt::ApplicationState state )
+{
+  if ( state == Qt::ApplicationActive )
+  {
+    disconnect( SIGNAL(applicationStateChanged(Qt::ApplicationState)), this, SLOT(onApplicationStateChanged(Qt::ApplicationState)) );
+
+    // run any startup script or load startup file, if they have specified one
+    if( !m_runScript.isEmpty() )
+    {
+      m_scriptSystem->executeFile( m_runScript, "commandLineScript" );
+    }
+    else if ( !m_startupFile.isEmpty() )
+    {
+      m_mainWindow->loadFile( m_startupFile, false );
+    }
+  }
 }
 
 void Viewer::setEnvironmentEnabledChanged()
@@ -301,17 +324,6 @@ bool Viewer::saveScene( const QString & fileName ) const
   return false;
 }
 
-void Viewer::runStartupFile()
-{
-  m_mainWindow->loadFile( m_startupFile, false );
-}
-
-void
-Viewer::runStartupScript()
-{
-  m_scriptSystem->executeFile( m_runScript, "commandLineScript" );
-}
-
 void
 Viewer::startup()
 {
@@ -327,21 +339,9 @@ Viewer::startup()
 
   // need to do this after main window has been created
   QScriptValue topLevel = m_scriptSystem->addObject( VIEWER_APPLICATION_NAME, this );
-  m_scriptSystem->addSubObject( topLevel, "mainWindow", m_mainWindow ); 
-  m_scriptSystem->addSubObject( topLevel, "preferences", m_preferences ); 
-  m_scriptSystem->addSubObject( topLevel, "timer", &m_scriptTimer ); 
-
-  // run any startup script, if they have specified one
-  if( !m_runScript.isEmpty() )
-  {
-    // must run startup script after app::exec() has been called, or some things don't
-    // work as expected..
-    QTimer::singleShot( 10, this, SLOT(runStartupScript()) );
-  }
-  else if ( !m_startupFile.isEmpty() )
-  {
-    QTimer::singleShot( 10, this, SLOT(runStartupFile()) );
-  }
+  m_scriptSystem->addSubObject( topLevel, "mainWindow", m_mainWindow );
+  m_scriptSystem->addSubObject( topLevel, "preferences", m_preferences );
+  m_scriptSystem->addSubObject( topLevel, "timer", &m_scriptTimer );
 }
 
 Viewer::~Viewer()
@@ -353,7 +353,7 @@ Viewer::~Viewer()
 
   delete m_scriptSystem;
   m_scriptSystem = 0;
-  
+
   // note that this should not be executed before deleting the main window since latter operation does change the active GL context.
   if ( m_globalShareGLWidget->getRenderContext() ) // When pixelformat selection failed there is no context.
   {

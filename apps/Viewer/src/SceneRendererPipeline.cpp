@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2015
+// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -81,8 +81,6 @@ bool SceneRendererPipeline::init(const dp::gl::RenderContextSharedPtr &renderCon
                                  const dp::gl::RenderTargetSharedPtr  &renderTarget)
 {
   m_renderTarget = renderTarget;
-
-  dp::fx::EffectLibrary::instance()->loadEffects( "viewerEffects.xml", dp::util::FileFinder( dp::home() + "/apps/Viewer/res" ) );
 
   DP_ASSERT( m_sceneRenderer );
   m_sceneRenderer->setRenderTarget( renderTarget );
