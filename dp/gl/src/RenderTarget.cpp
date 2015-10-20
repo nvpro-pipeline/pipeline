@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010
+// Copyright (c) 2010-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -39,6 +39,7 @@ namespace dp
      , m_height(0)
      , m_x(0)
      , m_y(0)
+     , m_clearMask(0)
      , m_clearDepth(1.0)
      , m_clearStencil(0)
      , m_current(false)

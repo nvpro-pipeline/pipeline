@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010
+// Copyright (c) 2010-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -38,13 +38,14 @@ namespace dp
      , m_swapBuffersEnabled(false)
      , m_stereoEnabled( glContext->getFormat().isStereo() )
      , m_stereoTarget( glContext->getFormat().isStereo() ? LEFT_AND_RIGHT : LEFT )
+     , m_clearMaskGL(0)
      , m_clearColorR(0.0f)
      , m_clearColorG(0.0f)
      , m_clearColorB(0.0f)
      , m_clearColorA(0.0f)
     {
       TmpCurrent tmpCurrent(this);
-      
+
       //sync the viewport size
       GLint viewport[4];
       glGetIntegerv( GL_VIEWPORT, viewport );
