@@ -52,22 +52,19 @@ namespace dp
 
         typedef std::vector<Transform> Transforms;
 
-        /** \brief EventTransform used to notify about changed within transforms **/
+        /** \brief EventTransform is being used to notify changes of the world matrices **/
         class EventTransform : public dp::util::Event
         {
         public:
-          EventTransform(TransformIndex index, dp::sg::xbar::TransformTree::Transform const & transform)
-            : m_index(index)
-            , m_transform(transform)
+          EventTransform(dp::util::BitArray const & changedWorldMatrices)
+            : m_changedWorldMatrices(changedWorldMatrices)
           {
           }
 
-          TransformIndex getIndex() const { return m_index; }
-          dp::sg::xbar::TransformTree::Transform const& getTransform() const { return m_transform; }
+          dp::util::BitArray const & getChangedWorldMatrices() const { return m_changedWorldMatrices; }
 
         private:
-          TransformIndex                                 m_index;
-          dp::sg::xbar::TransformTree::Transform const & m_transform;
+          dp::util::BitArray const & m_changedWorldMatrices;
         };
 
         TransformTree();
@@ -84,7 +81,6 @@ namespace dp
 
         dp::math::Mat44f const & getWorldMatrix(TransformIndex transformIndex) const { return m_transforms[transformIndex].world; }
         Transforms const & getTransforms() const { return m_transforms; }
-        dp::util::BitArray const & getDirtyWorldMatrices() const { return m_dirtyWorldMatrices; }
 
         //! \brief Get index of the virtual root node
         TransformIndex getSentinel() const { return 0; }
@@ -92,8 +88,6 @@ namespace dp
       private:
         //! \brief Resize data structures to new size
         void resizeDataStructures(size_t newSize);
-
-        void notifyTransformUpdated(TransformIndex index, dp::sg::xbar::TransformTree::Transform const & transform);
 
         TransformIndex allocateIndex();
         void freeIndex(TransformIndex transformIndex);

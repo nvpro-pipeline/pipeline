@@ -182,11 +182,6 @@ namespace dp
         m_transformInfos.resize(newSize);
       }
 
-      void TransformTree::notifyTransformUpdated(TransformIndex index, dp::sg::xbar::TransformTree::Transform const & transform)
-      {
-        notify(EventTransform(index, transform));
-      }
-
       void TransformTree::compute(dp::sg::core::CameraSharedPtr const & camera)
       {
         m_dirtyWorldMatrices.clear();
@@ -213,7 +208,6 @@ namespace dp
 
             m_transforms[billboardEntry.transform].world = m_transforms[billboardEntry.transform].local * m_transforms[billboardEntry.parent].world;
             m_dirtyWorldMatrices.enableBit(billboardEntry.transform);
-            notifyTransformUpdated(billboardEntry.transform, m_transforms[billboardEntry.transform]);
           }
 
           // update transforms
@@ -223,10 +217,11 @@ namespace dp
             {
               m_transforms[transformEntry.transform].world = m_transforms[transformEntry.transform].local * m_transforms[transformEntry.parent].world;
               m_dirtyWorldMatrices.enableBit(transformEntry.transform);
-              notifyTransformUpdated(transformEntry.transform, m_transforms[transformEntry.transform]);
             }
           }
         }
+
+        notify(EventTransform(m_dirtyWorldMatrices));
 
         m_dirtyTransforms.clear();
       }

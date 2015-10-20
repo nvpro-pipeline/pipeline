@@ -56,7 +56,7 @@ namespace dp
           /************************************************************************/
           /* ShaderManagerTransformsRiXFx                                         */
           /************************************************************************/
-          class ShaderManagerTransformsRiXFx
+          class ShaderManagerTransformsRiXFx : public dp::util::Observer
           {
           public:
             ShaderManagerTransformsRiXFx( dp::sg::xbar::SceneTreeSharedPtr const& sceneTree, const ResourceManagerSharedPtr& resourceManager, dp::rix::fx::ManagerSharedPtr m_rixFxManager );
@@ -65,6 +65,9 @@ namespace dp
             virtual void updateTransforms();
             virtual dp::rix::fx::GroupDataSharedHandle getGroupData(dp::sg::xbar::TransformIndex);
             virtual dp::fx::EffectSpecSharedPtr getSystemSpec() { return m_effectSpecMatrices; }
+
+            virtual void onNotify( dp::util::Event const & event, dp::util::Payload * payload);
+            virtual void onDestroyed(dp::util::Subject const & subject, dp::util::Payload * payload);
 
           protected:
             dp::fx::EffectSpecSharedPtr             m_transformEffectSpec;
@@ -81,6 +84,9 @@ namespace dp
 
             dp::fx::ParameterGroupSpec::iterator  m_itWorldMatrix;
             dp::fx::ParameterGroupSpec::iterator  m_itWorldMatrixIT;
+
+            dp::util::BitArray m_dirtyWorldMatrices; // world matrices which have been changed since the last update call
+            dp::util::BitArray m_usedTransforms;     // transforms which are being used by the renderer
 
           private:
             void updateTransformNode(const dp::rix::fx::ManagerSharedPtr& manager, const dp::rix::fx::GroupDataSharedHandle& groupHandle, dp::math::Mat44f const & matrix);
@@ -107,10 +113,27 @@ namespace dp
             dp::fx::EffectSpec::ParameterGroupSpecsContainer groupSpecs;
             groupSpecs.push_back(m_groupSpecWorldMatrices);
             m_effectSpecMatrices = dp::fx::EffectSpec::create( "sys_matrices", dp::fx::EffectSpec::EST_UNKNOWN, groupSpecs);
+
+            m_sceneTree->getTransformTree().attach(this);
           }
 
           ShaderManagerTransformsRiXFx::~ShaderManagerTransformsRiXFx()
           {
+            m_sceneTree->getTransformTree().detach(this);
+          }
+
+          void ShaderManagerTransformsRiXFx::onNotify(dp::util::Event const & event, dp::util::Payload * payload)
+          {
+            dp::sg::xbar::TransformTree::EventTransform const & eventTransform = static_cast<dp::sg::xbar::TransformTree::EventTransform const &>(event);
+            dp::util::BitArray changedTransforms = eventTransform.getChangedWorldMatrices();
+            changedTransforms.resize(m_dirtyWorldMatrices.getSize(), false);
+            changedTransforms &= m_usedTransforms; // Remove the unused transforms from the bitmask. They don't need an update.
+            m_dirtyWorldMatrices |= changedTransforms;
+          }
+
+          void ShaderManagerTransformsRiXFx::onDestroyed(dp::util::Subject const & subject, dp::util::Payload * payload)
+          {
+            DP_ASSERT(!"Should not happen!");
           }
 
           dp::rix::fx::GroupDataSharedHandle ShaderManagerTransformsRiXFx::getGroupData(dp::sg::xbar::TransformIndex transformIndex)
@@ -121,12 +144,16 @@ namespace dp
             if ( m_transformGroupDatas.size() <= transformIndex )
             {
               m_transformGroupDatas.resize( m_sceneTree->getTransformTree().getTransforms().size());
+              m_dirtyWorldMatrices.resize(m_transformGroupDatas.size());
+              m_usedTransforms.resize(m_transformGroupDatas.size());
             }
             DP_ASSERT( transformIndex < m_transformGroupDatas.size() && "passed invalid transform index");
 
             if ( !m_transformGroupDatas[transformIndex] )
             {
               m_transformGroupDatas[transformIndex] = m_rixFxManager->groupDataCreate( m_groupSpecWorldMatrices );
+              m_dirtyWorldMatrices.enableBit(transformIndex);
+              m_usedTransforms.enableBit(transformIndex);
             }
 
             return m_transformGroupDatas[transformIndex];
@@ -147,15 +174,12 @@ namespace dp
             dp::rix::core::Renderer *renderer = m_resourceManager->getRenderer();
 
             TransformTree::Transforms const & transforms = m_sceneTree->getTransformTree().getTransforms();
-            dp::util::BitArray const & dirtyWorldMatrices = m_sceneTree->getTransformTree().getDirtyWorldMatrices();
-            dirtyWorldMatrices.traverseBits([&](size_t index)
+            m_dirtyWorldMatrices.traverseBits([&] (size_t index)
             {
-              if ((index < m_transformGroupDatas.size()) && m_transformGroupDatas[index])
-              {
-                dp::math::Mat44f const & worldMatrix = transforms[index].world;
-                updateTransformNode(m_rixFxManager, m_transformGroupDatas[index], worldMatrix);
-              }
+              dp::math::Mat44f const & worldMatrix = transforms[index].world;
+              updateTransformNode(m_rixFxManager, m_transformGroupDatas[index], worldMatrix);
             } );
+            m_dirtyWorldMatrices.clear();
           }
 
           /************************************************************************/

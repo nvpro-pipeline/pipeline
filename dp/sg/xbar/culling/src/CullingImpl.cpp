@@ -222,8 +222,11 @@ namespace dp
 
         void CullingImpl::TransformObserver::onNotify(dp::util::Event const & event, dp::util::Payload * payload)
         {
-          // transform have changed. Notify culling about the change.
-          m_cullingImpl.m_culling->groupMatrixChanged(m_cullingImpl.m_cullingGroup, static_cast<dp::sg::xbar::TransformTree::EventTransform const&>(event).getIndex());
+          dp::sg::xbar::TransformTree::EventTransform const & eventTransform = static_cast<dp::sg::xbar::TransformTree::EventTransform const&>(event);
+          eventTransform.getChangedWorldMatrices().traverseBits([&](size_t index)
+          {
+            m_cullingImpl.m_culling->groupMatrixChanged(m_cullingImpl.m_cullingGroup, index);
+          } );
         }
 
         void CullingImpl::TransformObserver::onDestroyed(dp::util::Subject const & subject, dp::util::Payload * payload)

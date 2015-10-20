@@ -138,7 +138,7 @@ namespace dp
         DP_SG_XBAR_API ObjectTreeNode& getObjectTreeNode( ObjectTreeIndex index );
 
         const std::set< ObjectTreeIndex >& getLightSources() const { return m_lightSources; }
-        TransformTree const & getTransformTree() const { return m_transformTree; }
+        TransformTree & getTransformTree() { return m_transformTree; }
 
       protected:
         // remove a transform from the transform array
