@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -52,9 +52,9 @@ public:
   bool init(const dp::gl::RenderContextSharedPtr &renderContext, const dp::gl::RenderTargetSharedPtr &renderTarget);
 
   void setSceneRenderer(const dp::sg::ui::SceneRendererSharedPtr &sceneRenderer);
-  dp::sg::ui::SceneRendererSharedPtr getSceneRenderer() const; 
+  dp::sg::ui::SceneRendererSharedPtr getSceneRenderer() const;
   void enableHighlighting(bool onOff);
-  
+
   void updateEnvironment();
 
   void setTransparencyMode( dp::sg::renderer::rix::gl::TransparencyMode mode );
@@ -72,6 +72,9 @@ public:
 
   virtual void setCullingMode( dp::culling::Mode mode );
   virtual dp::culling::Mode getCullingMode( ) const;
+
+  virtual void setEnvironmentRenderingEnabled( bool enabled );
+  virtual bool getEnvironmentRenderingEnabled() const;
 
   virtual void setShaderManager( dp::fx::Manager shaderManager );
   virtual dp::fx::Manager getShaderManager() const;
@@ -104,7 +107,7 @@ private:
   void initTonemapper();
 
 private:
-  dp::sg::ui::SceneRendererSharedPtr                m_sceneRenderer; // The renderer for the main image on the framebuffer (rasterizer or ray tracer).  
+  dp::sg::ui::SceneRendererSharedPtr                m_sceneRenderer; // The renderer for the main image on the framebuffer (rasterizer or ray tracer).
   MonoViewStateProviderSharedPtr                    m_monoViewStateProvider;
 
   dp::gl::RenderTargetSharedPtr                     m_renderTarget;             // The render target passed into init.

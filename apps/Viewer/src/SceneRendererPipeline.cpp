@@ -48,15 +48,15 @@ SceneRendererPipelineSharedPtr SceneRendererPipeline::create()
   return( std::shared_ptr<SceneRendererPipeline>( new SceneRendererPipeline() ) );
 }
 
-// This does nothing except for providing the setSceneRenderer() override which 
+// This does nothing except for providing the setSceneRenderer() override which
 // allows to set the scene renderer before any OpenGL resources have been allocated.
 SceneRendererPipeline::SceneRendererPipeline()
 : m_highlighting( false )
-, m_tonemapperEnabled( false ) 
+, m_tonemapperEnabled( false )
 , m_tonemapperValuesChanged( false )
 {
   m_monoViewStateProvider = MonoViewStateProvider::create();
-  
+
   // Tonemapper GUI neutral defaults:
   m_tonemapperValues.gamma          = 1.0f;
   m_tonemapperValues.whitePoint     = 1.0f;
@@ -92,7 +92,7 @@ bool SceneRendererPipeline::init(const dp::gl::RenderContextSharedPtr &renderCon
 
   // Set the defaults for the render pass.
   // This clear color actually doesn't take effect when using a SceneRenderer. The scene background color has precedence.
-  m_highlightFBO->setClearColor(0.0f, 0.0f, 0.0f, 0.0f); 
+  m_highlightFBO->setClearColor(0.0f, 0.0f, 0.0f, 0.0f);
   m_highlightFBO->setClearDepth(1.0);
   m_highlightFBO->setClearStencil(0);
 
@@ -220,7 +220,7 @@ void SceneRendererPipeline::doRenderTonemap(dp::sg::ui::ViewStateSharedPtr const
   }
 
   // No need to clear anything. This tonemapping pass just copies pixels and ignores depth.
-  renderTargetGL->setClearMask( 0 ); 
+  renderTargetGL->setClearMask( 0 );
   m_tonemapper->render();
   renderTargetGL->setClearMask( clearMask );
 }
@@ -244,7 +244,7 @@ void SceneRendererPipeline::doRenderHighlight(dp::sg::ui::ViewStateSharedPtr con
 
   // If an object is highlighted, render the highlighted object into the stencil buffer of the FBO.
 
-  // Setup the proper stencil state. 
+  // Setup the proper stencil state.
   // Write a 1 for every rendered fragment into the stencil buffer
   glStencilFunc(GL_NEVER, 1, ~0);
   glStencilOp(GL_REPLACE, GL_KEEP, GL_KEEP);
@@ -258,7 +258,7 @@ void SceneRendererPipeline::doRenderHighlight(dp::sg::ui::ViewStateSharedPtr con
   // A SceneRenderer always uses the scene background color to clear. Temporarily change it to black here.
   dp::math::Vec4f backgroundColor = viewState->getScene()->getBackColor();
   viewState->getScene()->setBackColor( dp::math::Vec4f(0.0f, 0.0f, 0.0f, 0.0f) );
- 
+
   m_sceneRendererHighlight->render(viewState, m_highlightFBO);
 
   viewState->getScene()->setBackColor(backgroundColor);
@@ -280,9 +280,9 @@ void SceneRendererPipeline::doRenderHighlight(dp::sg::ui::ViewStateSharedPtr con
   // Render the outline around the highlighted object onto the main renderTarget (framebuffer).
   dp::gl::RenderTargetSharedPtr const & renderTargetGL = renderTarget.inplaceCast<dp::gl::RenderTarget>();
   dp::gl::TargetBufferMask clearMask = renderTargetGL->getClearMask();
-  
+
   // keep the following render call from clearing the previous rendered content
-  renderTargetGL->setClearMask( 0 ); 
+  renderTargetGL->setClearMask( 0 );
   m_rendererHighlight->render();
   // restore the clear mask
   renderTargetGL->setClearMask( clearMask );
@@ -315,7 +315,7 @@ void SceneRendererPipeline::setSceneRenderer(const dp::sg::ui::SceneRendererShar
   }
 }
 
-dp::sg::ui::SceneRendererSharedPtr SceneRendererPipeline::getSceneRenderer() const 
+dp::sg::ui::SceneRendererSharedPtr SceneRendererPipeline::getSceneRenderer() const
 {
   return m_sceneRenderer;
 }
@@ -372,6 +372,18 @@ dp::culling::Mode SceneRendererPipeline::getCullingMode( ) const
   return( m_sceneRenderer->getCullingMode() );
 }
 
+void SceneRendererPipeline::setEnvironmentRenderingEnabled( bool enabled )
+{
+  DP_ASSERT( m_sceneRenderer );
+  m_sceneRenderer->setEnvironmentRenderingEnabled( enabled );
+}
+
+bool SceneRendererPipeline::getEnvironmentRenderingEnabled() const
+{
+  DP_ASSERT( m_sceneRenderer );
+  return( m_sceneRenderer->getEnvironmentRenderingEnabled() );
+}
+
 void SceneRendererPipeline::setShaderManager( dp::fx::Manager manager )
 {
   DP_ASSERT( m_sceneRenderer );
@@ -415,7 +427,6 @@ void SceneRendererPipeline::setTonemapperEnabled( bool enabled )
       initTonemapper();
       setTonemapperValues( getTonemapperValues() );
     }
-    initBackdrop();
   }
 }
 
@@ -454,7 +465,7 @@ void SceneRendererPipeline::initTonemapper()
 
   // Set the defaults for the render pass.
   // This clear color actually doesn't take effect when using a SceneRenderer. The scene background color has precedence.
-  m_tonemapFBO->setClearColor(0.0f, 0.0f, 0.0f, 0.0f); 
+  m_tonemapFBO->setClearColor(0.0f, 0.0f, 0.0f, 0.0f);
   m_tonemapFBO->setClearDepth(1.0);
   m_tonemapFBO->setClearStencil(0);
 

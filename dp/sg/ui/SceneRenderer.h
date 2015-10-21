@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2011
+// Copyright (c) 2010-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -42,14 +42,14 @@ namespace dp
       /** \brief SceneRenderer is the base class for all Renderers which visualize a scene. On a stereo
                  dp::ui::RenderTarget stereo rendering is turned on automatically. SceniX supports a default implementation
                  of dp::sg::ui::SceneRenderer::StereoViewStateProvider which supports dp::sg::core::PerspectiveCamera. For other
-                 cameras it is possible to specify the camera matrices for the left and right eye by implementing 
+                 cameras it is possible to specify the camera matrices for the left and right eye by implementing
                  a custom dp::sg::ui::SceneRenderer::StereoViewStateProvider.
       **/
       class SceneRenderer : public dp::sg::ui::Renderer
       {
       public:
         /** \brief This class generates an dp::sg::ui::ViewState for the left and right eye based on a
-                   monoscopic dp::sg::ui::ViewState. 
+                   monoscopic dp::sg::ui::ViewState.
         **/
         DEFINE_PTR_TYPES( StereoViewStateProvider );
         class StereoViewStateProvider
@@ -86,13 +86,13 @@ namespace dp
         /*! \brief Set the TraversalMask Override to be used with this SceneRenderer.
          *  \param mask The mask to be used.
          *  \remarks This method provides a way to set the traversal mask override for this SceneRenderer.
-         *  \note \li The dp::sg::ui::ViewState's TraversalMask is used in conjuction with the OverrideTraversalMask and every scene graph node's 
-         *  TraversalMask to determine whether nodes (and therefore possibly their entire subgraph) are rendered.  
-         *  The scene renderer's override traversal mask is OR'd with the node's traversal mask and that result is ANDed with 
+         *  \note \li The dp::sg::ui::ViewState's TraversalMask is used in conjuction with the OverrideTraversalMask and every scene graph node's
+         *  TraversalMask to determine whether nodes (and therefore possibly their entire subgraph) are rendered.
+         *  The scene renderer's override traversal mask is OR'd with the node's traversal mask and that result is ANDed with
          *  the dp::sg::ui::ViewState's traversal mask. If the result is nonzero then the node is traversed/rendered, otherwise it is ignored.  IE:
          *  If ( ( (SceneRenderer::TraversalMaskOverride | Object::TraversalMask) & dp::sg::ui::ViewState::TraversalMask ) != 0 ) is true the node is
          *  rendered.
-         *  \li Setting the dp::sg::ui::ViewState's TraversalMask to 0 will cause no nodes to be traversed.  Setting the dp::sg::ui::ViewState's TraversalMask 
+         *  \li Setting the dp::sg::ui::ViewState's TraversalMask to 0 will cause no nodes to be traversed.  Setting the dp::sg::ui::ViewState's TraversalMask
          *  to ~0 and the TraversalMaskOverride to ~0 will cause all nodes to be traversed regardless of the Object::TraversalMask.
          *  \li The default traversal mask override is 0 so that it does not affect traversal/rendering.
          *  \sa getTraversalMaskOverride, dp::sg::ui::ViewState::setTraversalMask, Object::setTraversalMask */
@@ -109,15 +109,15 @@ namespace dp
         DP_SG_UI_API void setStereoViewStateProvider( StereoViewStateProviderSharedPtr const& viewStateProvider );
         DP_SG_UI_API StereoViewStateProviderSharedPtr const& getStereoViewStateProvider() const;
 
-        DP_SG_UI_API void setEnvironmentRenderingEnabled( bool enabled );
-        DP_SG_UI_API bool getEnvironmentRenderingEnabled() const;
+        DP_SG_UI_API virtual void setEnvironmentRenderingEnabled( bool enabled );
+        DP_SG_UI_API virtual bool getEnvironmentRenderingEnabled() const;
 
         DP_SG_UI_API void setEnvironmentSampler( const dp::sg::core::SamplerSharedPtr & sampler );
         DP_SG_UI_API const dp::sg::core::SamplerSharedPtr & getEnvironmentSampler() const;
 
         DP_SG_UI_API virtual std::map<dp::fx::Domain,std::string> getShaderSources( const dp::sg::core::GeoNodeSharedPtr & geoNode, bool depthPass ) const = 0;
 
-        /** \brief Render one frame with the given dp::sg::ui::ViewState and renderTarget. 
+        /** \brief Render one frame with the given dp::sg::ui::ViewState and renderTarget.
             \param viewState dp::sg::ui::ViewState to use to render the frame.
             \param renderTarget If renderTarget is valid it temporarily overrides the default set by Renderer::setRenderTarget.
         **/
