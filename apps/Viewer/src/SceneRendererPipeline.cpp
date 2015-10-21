@@ -468,6 +468,7 @@ void SceneRendererPipeline::initTonemapper()
   m_tonemapFBO->setClearColor(0.0f, 0.0f, 0.0f, 0.0f);
   m_tonemapFBO->setClearDepth(1.0);
   m_tonemapFBO->setClearStencil(0);
+  m_tonemapFBO->setClearMask(dp::gl::TBM_COLOR_BUFFER | dp::gl::TBM_DEPTH_BUFFER);
 
   // Make the OpenGL context on the renderContext current. It's needed for the create() operations.
   dp::gl::RenderContextStack rcglstack;
