@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012-2014
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -24,7 +24,6 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#include <boost/assign/list_of.hpp>
 #include <dp/sg/core/CoreTypes.h>
 #include <dp/sg/core/Sampler.h>
 #include <dp/sg/core/Sampler.h>
@@ -286,7 +285,7 @@ namespace dp
         hg.update( reinterpret_cast<const unsigned char *>( &m_wrapMode[0] ), 3 * sizeof( TextureWrapMode ) );
         hg.update( reinterpret_cast<const unsigned char *>( &m_compareMode ), sizeof( TextureCompareMode ) );
       }
-      
+
       void Sampler::releaseMipmapCount()
       {
         if ( m_texture && requiresMipmaps( m_minFilterMode) )
@@ -335,33 +334,37 @@ namespace dp
   {
     template <> const std::string EnumReflection<dp::sg::core::TextureMagFilterMode>::name = "TextureMagFilterMode";
 
-    template <> const std::map<unsigned int,std::string> EnumReflection<dp::sg::core::TextureMagFilterMode>::values = boost::assign::map_list_of
-      ( dp::sg::core::TFM_MAG_NEAREST, "nearest" )
-      ( dp::sg::core::TFM_MAG_LINEAR,  "linear" );
-
+    template <> const std::map<unsigned int,std::string> EnumReflection<dp::sg::core::TextureMagFilterMode>::values =
+    {
+      { dp::sg::core::TFM_MAG_NEAREST, "nearest"  },
+      { dp::sg::core::TFM_MAG_LINEAR,  "linear"   }
+    };
 
     template <> const std::string EnumReflection<dp::sg::core::TextureMinFilterMode>::name = "TextureMinFilterMode";
 
-    template <> const std::map<unsigned int,std::string> EnumReflection<dp::sg::core::TextureMinFilterMode>::values = boost::assign::map_list_of
-      ( dp::sg::core::TFM_MIN_NEAREST,                "nearest" )
-      ( dp::sg::core::TFM_MIN_LINEAR,                 "linear" )
-      ( dp::sg::core::TFM_MIN_LINEAR_MIPMAP_LINEAR,   "linear_mipmap_linear" )
-      ( dp::sg::core::TFM_MIN_NEAREST_MIPMAP_NEAREST, "nearest_mipmap_nearest" )
-      ( dp::sg::core::TFM_MIN_NEAREST_MIPMAP_LINEAR,  "nearest_mipmap_linear" )
-      ( dp::sg::core::TFM_MIN_LINEAR_MIPMAP_NEAREST,  "linear_mipmap_nearest" );
-
+    template <> const std::map<unsigned int,std::string> EnumReflection<dp::sg::core::TextureMinFilterMode>::values =
+    {
+      { dp::sg::core::TFM_MIN_NEAREST,                "nearest"                 },
+      { dp::sg::core::TFM_MIN_LINEAR,                 "linear"                  },
+      { dp::sg::core::TFM_MIN_LINEAR_MIPMAP_LINEAR,   "linear_mipmap_linear"    },
+      { dp::sg::core::TFM_MIN_NEAREST_MIPMAP_NEAREST, "nearest_mipmap_nearest"  },
+      { dp::sg::core::TFM_MIN_NEAREST_MIPMAP_LINEAR,  "nearest_mipmap_linear"   },
+      { dp::sg::core::TFM_MIN_LINEAR_MIPMAP_NEAREST,  "linear_mipmap_nearest"   }
+    };
 
     template <> const std::string EnumReflection<dp::sg::core::TextureWrapMode>::name = "TextureWrapMode";
 
-    template <> const std::map<unsigned int,std::string> EnumReflection<dp::sg::core::TextureWrapMode>::values = boost::assign::map_list_of
-      ( dp::sg::core::TWM_REPEAT,                 "repeat" )
-      ( dp::sg::core::TWM_CLAMP,                  "clamp" )
-      ( dp::sg::core::TWM_MIRROR_REPEAT,          "mirror_repeat" )
-      ( dp::sg::core::TWM_CLAMP_TO_EDGE,          "clamp_to_edge" )
-      ( dp::sg::core::TWM_CLAMP_TO_BORDER,        "clamp_to_border" )
-      ( dp::sg::core::TWM_MIRROR_CLAMP,           "mirror_clamp" )
-      ( dp::sg::core::TWM_MIRROR_CLAMP_TO_EDGE,   "mirror_clamp_to_edge" )
-      ( dp::sg::core::TWM_MIRROR_CLAMP_TO_BORDER, "mirror_clamp_to_border" );
+    template <> const std::map<unsigned int,std::string> EnumReflection<dp::sg::core::TextureWrapMode>::values =
+    {
+      { dp::sg::core::TWM_REPEAT,                 "repeat"                  },
+      { dp::sg::core::TWM_CLAMP,                  "clamp"                   },
+      { dp::sg::core::TWM_MIRROR_REPEAT,          "mirror_repeat"           },
+      { dp::sg::core::TWM_CLAMP_TO_EDGE,          "clamp_to_edge"           },
+      { dp::sg::core::TWM_CLAMP_TO_BORDER,        "clamp_to_border"         },
+      { dp::sg::core::TWM_MIRROR_CLAMP,           "mirror_clamp"            },
+      { dp::sg::core::TWM_MIRROR_CLAMP_TO_EDGE,   "mirror_clamp_to_edge"    },
+      { dp::sg::core::TWM_MIRROR_CLAMP_TO_BORDER, "mirror_clamp_to_border"  }
+    };
 
   } // namespace util
 } // namespace dp

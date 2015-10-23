@@ -24,7 +24,6 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#include <boost/assign/list_of.hpp>
 #include <dp/sg/core/Billboard.h>
 #include <dp/sg/core/Camera.h>
 
@@ -237,10 +236,12 @@ namespace dp
 
     template <> const std::string EnumReflection<dp::sg::core::Billboard::Alignment>::name = "BillboardAlignment";
 
-    template <> const std::map<unsigned int,std::string> EnumReflection<dp::sg::core::Billboard::Alignment>::values = boost::assign::map_list_of
-      ( dp::sg::core::Billboard::BA_AXIS,   "axis" )
-      ( dp::sg::core::Billboard::BA_VIEWER, "viewer" )
-      ( dp::sg::core::Billboard::BA_SCREEN, "screen" );
+    template <> const std::map<unsigned int,std::string> EnumReflection<dp::sg::core::Billboard::Alignment>::values =
+    {
+      { dp::sg::core::Billboard::BA_AXIS,   "axis"    },
+      { dp::sg::core::Billboard::BA_VIEWER, "viewer"  },
+      { dp::sg::core::Billboard::BA_SCREEN, "screen"  }
+    };
 
   } //namespace util
 } // namespace dp

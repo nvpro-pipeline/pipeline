@@ -30,7 +30,6 @@
 
 #include <fstream>
 
-#include <boost/assign/list_of.hpp>
 #include <boost/program_options.hpp>
 #include <boost/tokenizer.hpp>
 
@@ -272,11 +271,13 @@ void combineVertexAttributes( dp::sg::ui::ViewStateSharedPtr const& viewState )
 
 dp::culling::Mode getCullingMode( std::string const& name )
 {
-  static const std::map<std::string,dp::culling::Mode> cullingModes = boost::assign::map_list_of
-    ( "cpu", dp::culling::MODE_CPU )
-    ( "gl_compute", dp::culling::MODE_OPENGL_COMPUTE )
-    ( "cuda", dp::culling::MODE_CUDA )
-    ( "auto", dp::culling::MODE_AUTO );
+  static const std::map<std::string,dp::culling::Mode> cullingModes =
+  {
+    { "cpu",        dp::culling::MODE_CPU             },
+    { "gl_compute", dp::culling::MODE_OPENGL_COMPUTE  },
+    { "cuda",       dp::culling::MODE_CUDA            },
+    { "auto",       dp::culling::MODE_AUTO            }
+  };
 
   dp::culling::Mode mode = dp::culling::MODE_AUTO;
   std::map<std::string,dp::culling::Mode>::const_iterator it = cullingModes.find( name );
@@ -294,12 +295,14 @@ dp::culling::Mode getCullingMode( std::string const& name )
 
 dp::fx::Manager getShaderManager( std::string const& name )
 {
-  static const std::map<std::string,dp::fx::Manager> shaderManagers = boost::assign::map_list_of
-    ( "rix:ubo140",             dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX )
-    ( "rixfx:uniform",          dp::fx::MANAGER_UNIFORM )
-    ( "rixfx:shaderbufferload", dp::fx::MANAGER_SHADERBUFFER )
-    ( "rixfx:ubo140",           dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX_FX )
-    ( "rixfx:ssbo140",          dp::fx::MANAGER_SHADER_STORAGE_BUFFER_OBJECT );
+  static const std::map<std::string,dp::fx::Manager> shaderManagers =
+  {
+    { "rix:ubo140",             dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX     },
+    { "rixfx:uniform",          dp::fx::MANAGER_UNIFORM                       },
+    { "rixfx:shaderbufferload", dp::fx::MANAGER_SHADERBUFFER                  },
+    { "rixfx:ubo140",           dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX_FX  },
+    { "rixfx:ssbo140",          dp::fx::MANAGER_SHADER_STORAGE_BUFFER_OBJECT  }
+  };
 
   dp::fx::Manager manager = dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX;
   std::map<std::string,dp::fx::Manager>::const_iterator it = shaderManagers.find( name );
@@ -317,10 +320,12 @@ dp::fx::Manager getShaderManager( std::string const& name )
 
 dp::sg::core::TextureCoordType getTextureCoordType( std::string const& name )
 {
-  static const std::map<std::string,dp::sg::core::TextureCoordType> textureCoordTypes = boost::assign::map_list_of
-    ( "cylindrical",  dp::sg::core::TCT_CYLINDRICAL )
-    ( "planar",       dp::sg::core::TCT_PLANAR )
-    ( "spherical",    dp::sg::core::TCT_SPHERICAL );
+  static const std::map<std::string,dp::sg::core::TextureCoordType> textureCoordTypes =
+  {
+    { "cylindrical",  dp::sg::core::TCT_CYLINDRICAL },
+    { "planar",       dp::sg::core::TCT_PLANAR      },
+    { "spherical",    dp::sg::core::TCT_SPHERICAL   }
+  };
 
   dp::sg::core::TextureCoordType tct = dp::sg::core::TCT_PLANAR;
   std::map<std::string,dp::sg::core::TextureCoordType>::const_iterator it = textureCoordTypes.find( name );
@@ -338,12 +343,14 @@ dp::sg::core::TextureCoordType getTextureCoordType( std::string const& name )
 
 dp::sg::renderer::rix::gl::TransparencyMode getTransparencyMode( std::string const& name )
 {
-  static const std::map<std::string,dp::sg::renderer::rix::gl::TransparencyMode> transparencyModes = boost::assign::map_list_of
-    ( "none", dp::sg::renderer::rix::gl::TM_NONE )
-    ( "OITAll", dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_ALL )
-    ( "OITClosestArray", dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_CLOSEST_ARRAY )
-    ( "OITClosestList", dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_CLOSEST_LIST )
-    ( "SB", dp::sg::renderer::rix::gl::TM_SORTED_BLENDED );
+  static const std::map<std::string,dp::sg::renderer::rix::gl::TransparencyMode> transparencyModes =
+  {
+    { "none",             dp::sg::renderer::rix::gl::TM_NONE                            },
+    { "OITAll",           dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_ALL           },
+    { "OITClosestArray",  dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_CLOSEST_ARRAY },
+    { "OITClosestList",   dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_CLOSEST_LIST  },
+    { "SB",               dp::sg::renderer::rix::gl::TM_SORTED_BLENDED                  }
+  };
 
   dp::sg::renderer::rix::gl::TransparencyMode mode = dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_CLOSEST_LIST;
   std::map<std::string,dp::sg::renderer::rix::gl::TransparencyMode>::const_iterator it = transparencyModes.find( name );

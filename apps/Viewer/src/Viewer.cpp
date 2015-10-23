@@ -31,7 +31,6 @@
 
 #include <QPixmap>
 
-#include <boost/assign/list_of.hpp>
 #include <boost/program_options.hpp>
 
 #include <dp/DP.h>
@@ -64,11 +63,13 @@ static QScriptValue LogMethod(QScriptContext *context, QScriptEngine *engine)
 
 dp::culling::Mode determineCullingMode( std::string const & name )
 {
-  static std::map<std::string, dp::culling::Mode> cullingEngines = boost::assign::map_list_of
-    ( "auto",       dp::culling::MODE_AUTO )
-    ( "cpu",        dp::culling::MODE_CPU )
-    ( "cuda",       dp::culling::MODE_CUDA )
-    ( "gl_compute", dp::culling::MODE_OPENGL_COMPUTE );
+  static std::map<std::string, dp::culling::Mode> cullingEngines =
+  {
+    { "auto",       dp::culling::MODE_AUTO            },
+    { "cpu",        dp::culling::MODE_CPU             },
+    { "cuda",       dp::culling::MODE_CUDA            },
+    { "gl_compute", dp::culling::MODE_OPENGL_COMPUTE  },
+  };
 
   std::map<std::string, dp::culling::Mode>::const_iterator it = cullingEngines.find( name );
   DP_ASSERT( it != cullingEngines.end() );
@@ -77,12 +78,14 @@ dp::culling::Mode determineCullingMode( std::string const & name )
 
 dp::fx::Manager determineShaderManagerType( std::string const& name )
 {
-  static std::map<std::string, dp::fx::Manager> shaderManager = boost::assign::map_list_of
-    ( "rixfx:uniform",          dp::fx::MANAGER_UNIFORM )
-    ( "rixfx:shaderbufferload", dp::fx::MANAGER_SHADERBUFFER )
-    ( "rix:ubo140",             dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX )
-    ( "rixfx:ubo140",           dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX_FX )
-    ( "rixfx:ssbo140",          dp::fx::MANAGER_SHADER_STORAGE_BUFFER_OBJECT );
+  static std::map<std::string, dp::fx::Manager> shaderManager =
+  {
+    { "rixfx:uniform",          dp::fx::MANAGER_UNIFORM                       },
+    { "rixfx:shaderbufferload", dp::fx::MANAGER_SHADERBUFFER                  },
+    { "rix:ubo140",             dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX     },
+    { "rixfx:ubo140",           dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX_FX  },
+    { "rixfx:ssbo140",          dp::fx::MANAGER_SHADER_STORAGE_BUFFER_OBJECT  }
+  };
 
   std::map<std::string, dp::fx::Manager>::const_iterator it = shaderManager.find( name );
   DP_ASSERT( it != shaderManager.end() );
@@ -91,11 +94,13 @@ dp::fx::Manager determineShaderManagerType( std::string const& name )
 
 dp::sg::renderer::rix::gl::TransparencyMode determineTransparencyMode( std::string const & name )
 {
-  static std::map<std::string,dp::sg::renderer::rix::gl::TransparencyMode> transparencyModes = boost::assign::map_list_of
-    ( "None", dp::sg::renderer::rix::gl::TM_NONE )
-    ( "OITAll", dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_ALL )
-    ( "OITClosestList",  dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_CLOSEST_LIST )
-    ( "SB", dp::sg::renderer::rix::gl::TM_SORTED_BLENDED );
+  static std::map<std::string,dp::sg::renderer::rix::gl::TransparencyMode> transparencyModes =
+  {
+    { "None",             dp::sg::renderer::rix::gl::TM_NONE                            },
+    { "OITAll",           dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_ALL           },
+    { "OITClosestList",   dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_CLOSEST_LIST  },
+    { "SB",               dp::sg::renderer::rix::gl::TM_SORTED_BLENDED                  }
+  };
 
   std::map<std::string,dp::sg::renderer::rix::gl::TransparencyMode>::const_iterator it = transparencyModes.find( name );
   DP_ASSERT( it != transparencyModes.end() );

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2015
+// Copyright (c) 2010-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -31,7 +31,6 @@
 #include <dp/sg/core/Primitive.h>
 #include <dp/sg/core/EffectData.h>
 #include <dp/sg/core/IndexSet.h>
-#include <boost/assign/list_of.hpp>
 
 using namespace dp::math;
 
@@ -342,13 +341,13 @@ namespace dp
 
           unsigned int elementOffset = getElementOffset();
           unsigned int elementCount  = getElementCount();
-     
+
           Buffer::DataReadLock reader( m_indexSet->getBuffer() );
 
           switch( m_indexSet->getIndexDataType() )
           {
             case dp::DT_UNSIGNED_INT_32:
-              m_cachedNumberOfPrimitiveRestarts = scanForPrimitiveRestart<unsigned int>( reader.getPtr<unsigned int>(), 
+              m_cachedNumberOfPrimitiveRestarts = scanForPrimitiveRestart<unsigned int>( reader.getPtr<unsigned int>(),
                                                                                          elementOffset, elementCount, prIndex );
               break;
 
@@ -389,7 +388,7 @@ namespace dp
         switch( getPrimitiveType() )
         {
           case PRIMITIVE_TRIANGLE_STRIP_ADJACENCY:
-            m_cachedNumberOfPrimitives = numberOfPrimitiveRestarts + 1; 
+            m_cachedNumberOfPrimitives = numberOfPrimitiveRestarts + 1;
             // for N primitives, we need 2n + 4 indices.
             m_cachedNumberOfFaces = (correctedCount - 4 * m_cachedNumberOfPrimitives) / 2;
             break;
@@ -518,7 +517,7 @@ namespace dp
 
         if( isIndexed() )
         {
-          // The general purpose IndexSet::ConstIterator is slow since each indexed access is a virtual function call. 
+          // The general purpose IndexSet::ConstIterator is slow since each indexed access is a virtual function call.
           // Instead use a templated version of the algorithm which is operation directly on the buffer of the IndexSet to gain speed.
           const IndexSetSharedPtr &indexSet = getIndexSet();
           unsigned int prIdx = indexSet->getPrimitiveRestartIndex();
@@ -569,7 +568,7 @@ namespace dp
 
         Buffer::ConstIterator<Vec3f>::Type points = m_vertexAttributeSet->getVertices();
 
-        // now determine min radius 
+        // now determine min radius
         float minRadius = 0.f;
         if( isIndexed() )
         {
@@ -628,15 +627,15 @@ namespace dp
       {
         if ( (m_elementOffset != offset) || (m_elementCount != count) )
         {
-    #ifndef NDEBUG
+#ifndef NDEBUG
           unsigned int maxCount = getMaxElementCount();
           DP_ASSERT( offset <= maxCount );
           if (count != ~0)
           {
             DP_ASSERT( offset + count <= maxCount );
           }
-    #endif
-      
+#endif
+
           // Original user values. m_elementCount == ~0 is allowed.
           m_elementOffset = offset;
           m_elementCount  = count;
@@ -1383,7 +1382,7 @@ namespace dp
           // put tangents and binormals into right slots
           m_vertexAttributeSet->setVertexData( tg, 3, dp::DT_FLOAT_32, &tangents[0], 0, m_vertexAttributeSet->getNumberOfVertices() );
           m_vertexAttributeSet->setVertexData( bn, 3, dp::DT_FLOAT_32, &binormals[0], 0, m_vertexAttributeSet->getNumberOfVertices() );
-          // enable 
+          // enable
           m_vertexAttributeSet->setEnabled( tg, true );
           m_vertexAttributeSet->setEnabled( bn, true );
         }
@@ -1391,22 +1390,24 @@ namespace dp
 
       PrimitiveType primitiveNameToType( std::string const& name )
       {
-        static const std::map<std::string, PrimitiveType> primitiveTypes = boost::assign::map_list_of
-          ( "Points",                 PRIMITIVE_POINTS )
-          ( "LineStrip",              PRIMITIVE_LINE_STRIP )
-          ( "LineLoop",               PRIMITIVE_LINE_LOOP )
-          ( "Lines",                  PRIMITIVE_LINES )
-          ( "TriangleStrip",          PRIMITIVE_TRIANGLE_STRIP )
-          ( "TriangleFan",            PRIMITIVE_TRIANGLE_FAN )
-          ( "Triangles",              PRIMITIVE_TRIANGLES )
-          ( "QuadStrip",              PRIMITIVE_QUAD_STRIP )
-          ( "Quads",                  PRIMITIVE_QUADS )
-          ( "Polygon",                PRIMITIVE_POLYGON )
-          ( "TrianglesAdjacency",     PRIMITIVE_TRIANGLES_ADJACENCY )
-          ( "TriangleStripAdjacency", PRIMITIVE_TRIANGLE_STRIP_ADJACENCY )
-          ( "LinesAdjacency",         PRIMITIVE_LINES_ADJACENCY )
-          ( "LineStripAdjacency",     PRIMITIVE_LINE_STRIP_ADJACENCY )
-          ( "Patches",                PRIMITIVE_PATCHES );
+        static const std::map<std::string, PrimitiveType> primitiveTypes =
+        {
+          { "Points",                 PRIMITIVE_POINTS                    },
+          { "LineStrip",              PRIMITIVE_LINE_STRIP                },
+          { "LineLoop",               PRIMITIVE_LINE_LOOP                 },
+          { "Lines",                  PRIMITIVE_LINES                     },
+          { "TriangleStrip",          PRIMITIVE_TRIANGLE_STRIP            },
+          { "TriangleFan",            PRIMITIVE_TRIANGLE_FAN              },
+          { "Triangles",              PRIMITIVE_TRIANGLES                 },
+          { "QuadStrip",              PRIMITIVE_QUAD_STRIP                },
+          { "Quads",                  PRIMITIVE_QUADS                     },
+          { "Polygon",                PRIMITIVE_POLYGON                   },
+          { "TrianglesAdjacency",     PRIMITIVE_TRIANGLES_ADJACENCY       },
+          { "TriangleStripAdjacency", PRIMITIVE_TRIANGLE_STRIP_ADJACENCY  },
+          { "LinesAdjacency",         PRIMITIVE_LINES_ADJACENCY           },
+          { "LineStripAdjacency",     PRIMITIVE_LINE_STRIP_ADJACENCY      },
+          { "Patches",                PRIMITIVE_PATCHES                   }
+        };
 
           std::map<std::string,PrimitiveType>::const_iterator it = primitiveTypes.find( name );
           DP_ASSERT( it != primitiveTypes.end() );
@@ -1440,12 +1441,14 @@ namespace dp
 
       PatchesType patchesNameToType( std::string const& name )
       {
-        static const std::map<std::string, PatchesType> patchesTypes = boost::assign::map_list_of
-          ( "NoPatches",            PATCHES_NO_PATCHES )
-          ( "PNTriangles",          PATCHES_PN_TRIANGLES )
-          ( "PNQuads",              PATCHES_PN_QUADS )
-          ( "CubicBezierTriangles", PATCHES_CUBIC_BEZIER_TRIANGLES )
-          ( "CubicBezierQuads",     PATCHES_CUBIC_BEZIER_QUADS );
+        static const std::map<std::string, PatchesType> patchesTypes =
+        {
+          { "NoPatches",            PATCHES_NO_PATCHES              },
+          { "PNTriangles",          PATCHES_PN_TRIANGLES            },
+          { "PNQuads",              PATCHES_PN_QUADS                },
+          { "CubicBezierTriangles", PATCHES_CUBIC_BEZIER_TRIANGLES  },
+          { "CubicBezierQuads",     PATCHES_CUBIC_BEZIER_QUADS      }
+        };
 
           std::map<std::string,PatchesType>::const_iterator it = patchesTypes.find( name );
           DP_ASSERT( it != patchesTypes.end() );
