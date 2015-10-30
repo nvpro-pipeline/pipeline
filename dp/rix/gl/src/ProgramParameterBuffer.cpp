@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012-2015
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -50,7 +50,7 @@ namespace dp
       {
       }
 
-      template<unsigned int n, typename T> 
+      template<unsigned int n, typename T>
       void ParameterntBuffer<n, T>::update(const void * /*data*/ )
       {
         DP_ASSERT( !"not supported");
@@ -102,20 +102,20 @@ namespace dp
       {
       }
 
-      template<unsigned int n, typename T, typename SourceType> 
+      template<unsigned int n, typename T, typename SourceType>
       void ParameterntBufferConversion<n, T, SourceType>::update(const void * /*data*/)
       {
         DP_ASSERT( !"not supported");
       }
 
-      template<unsigned int n, typename T, typename SourceType> 
+      template<unsigned int n, typename T, typename SourceType>
       void ParameterntBufferConversion<n, T, SourceType>::copy( const void* containerData, void* destination ) const
       {
         UniformConversion<SourceType, T, n>::convert(reinterpret_cast<char*>(destination) + m_offsetBuffer
                                                     , reinterpret_cast<const char*>(containerData) + m_offset, m_arraySize );
       }
 
-      template<unsigned int n, typename T, typename SourceType> 
+      template<unsigned int n, typename T, typename SourceType>
       void ParameterntBufferConversion<n, T, SourceType>::doUpdateConverted( void const * /*convertedData*/ ) const
       {
         DP_ASSERT( !"not supported");
@@ -133,19 +133,19 @@ namespace dp
       {
       }
 
-      template<unsigned int n, unsigned int m, typename T> 
+      template<unsigned int n, unsigned int m, typename T>
       void ParameternmtBuffer<n, m, T>::update(const void * /*data*/)
       {
         DP_ASSERT( !"not supported");
       }
 
-      template<unsigned int n, unsigned int m, typename T> 
+      template<unsigned int n, unsigned int m, typename T>
       void ParameternmtBuffer<n, m, T>::copy( const void* containerData, void* destination ) const
       {
         memcpy( reinterpret_cast<char*>(destination) + m_offsetBuffer, reinterpret_cast<const char*>(containerData) + m_offset, getConvertedSize() );
       }
 
-      template<unsigned int n, unsigned int m, typename T> 
+      template<unsigned int n, unsigned int m, typename T>
       void ParameternmtBuffer<n, m, T>::doUpdateConverted( void const * /*convertedData*/ ) const
       {
         DP_ASSERT( !"not supported");
@@ -165,45 +165,45 @@ namespace dp
       template class ParameterntBuffer<3, double>;
       template class ParameterntBuffer<4, double>;
 
-      template class ParameterntBufferConversion<1, dp::Int32, dp::Int8>;
-      template class ParameterntBufferConversion<2, dp::Int32, dp::Int8>;
-      template class ParameterntBufferConversion<3, dp::Int32, dp::Int8>;
-      template class ParameterntBufferConversion<4, dp::Int32, dp::Int8>;
+      template class ParameterntBufferConversion<1, int32_t, int8_t>;
+      template class ParameterntBufferConversion<2, int32_t, int8_t>;
+      template class ParameterntBufferConversion<3, int32_t, int8_t>;
+      template class ParameterntBufferConversion<4, int32_t, int8_t>;
 
-      template class ParameterntBufferConversion<1, dp::Int32, dp::Int16>;
-      template class ParameterntBufferConversion<2, dp::Int32, dp::Int16>;
-      template class ParameterntBufferConversion<3, dp::Int32, dp::Int16>;
-      template class ParameterntBufferConversion<4, dp::Int32, dp::Int16>;
+      template class ParameterntBufferConversion<1, int32_t, int16_t>;
+      template class ParameterntBufferConversion<2, int32_t, int16_t>;
+      template class ParameterntBufferConversion<3, int32_t, int16_t>;
+      template class ParameterntBufferConversion<4, int32_t, int16_t>;
 
-      template class ParameterntBuffer<1, dp::Int32>;
-      template class ParameterntBuffer<2, dp::Int32>;
-      template class ParameterntBuffer<3, dp::Int32>;
-      template class ParameterntBuffer<4, dp::Int32>;
+      template class ParameterntBuffer<1, int32_t>;
+      template class ParameterntBuffer<2, int32_t>;
+      template class ParameterntBuffer<3, int32_t>;
+      template class ParameterntBuffer<4, int32_t>;
 
-      template class ParameterntBuffer<1, dp::Int64>;
-      template class ParameterntBuffer<2, dp::Int64>;
-      template class ParameterntBuffer<3, dp::Int64>;
-      template class ParameterntBuffer<4, dp::Int64>;
+      template class ParameterntBuffer<1, int64_t>;
+      template class ParameterntBuffer<2, int64_t>;
+      template class ParameterntBuffer<3, int64_t>;
+      template class ParameterntBuffer<4, int64_t>;
 
-      template class ParameterntBufferConversion<1, dp::Uint32, dp::Uint8>;
-      template class ParameterntBufferConversion<2, dp::Uint32, dp::Uint8>;
-      template class ParameterntBufferConversion<3, dp::Uint32, dp::Uint8>;
-      template class ParameterntBufferConversion<4, dp::Uint32, dp::Uint8>;
+      template class ParameterntBufferConversion<1, uint32_t, uint8_t>;
+      template class ParameterntBufferConversion<2, uint32_t, uint8_t>;
+      template class ParameterntBufferConversion<3, uint32_t, uint8_t>;
+      template class ParameterntBufferConversion<4, uint32_t, uint8_t>;
 
-      template class ParameterntBufferConversion<1, dp::Uint32, dp::Uint16>;
-      template class ParameterntBufferConversion<2, dp::Uint32, dp::Uint16>;
-      template class ParameterntBufferConversion<3, dp::Uint32, dp::Uint16>;
-      template class ParameterntBufferConversion<4, dp::Uint32, dp::Uint16>;
+      template class ParameterntBufferConversion<1, uint32_t, uint16_t>;
+      template class ParameterntBufferConversion<2, uint32_t, uint16_t>;
+      template class ParameterntBufferConversion<3, uint32_t, uint16_t>;
+      template class ParameterntBufferConversion<4, uint32_t, uint16_t>;
 
-      template class ParameterntBuffer<1, dp::Uint32>;
-      template class ParameterntBuffer<2, dp::Uint32>;
-      template class ParameterntBuffer<3, dp::Uint32>;
-      template class ParameterntBuffer<4, dp::Uint32>;
+      template class ParameterntBuffer<1, uint32_t>;
+      template class ParameterntBuffer<2, uint32_t>;
+      template class ParameterntBuffer<3, uint32_t>;
+      template class ParameterntBuffer<4, uint32_t>;
 
-      template class ParameterntBuffer<1, dp::Uint64>;
-      template class ParameterntBuffer<2, dp::Uint64>;
-      template class ParameterntBuffer<3, dp::Uint64>;
-      template class ParameterntBuffer<4, dp::Uint64>;
+      template class ParameterntBuffer<1, uint64_t>;
+      template class ParameterntBuffer<2, uint64_t>;
+      template class ParameterntBuffer<3, uint64_t>;
+      template class ParameterntBuffer<4, uint64_t>;
 
       template class ParameternmtBuffer<2, 2, float>;
       template class ParameternmtBuffer<2, 3, float>;

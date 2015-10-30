@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -81,40 +81,40 @@ namespace dp
           switch( type & PT_SCALAR_TYPE_MASK )
           {
           case PT_BOOL:
-            convert( count, inputStream, static_cast<dp::Bool*>(value) );
+            convert( count, inputStream, static_cast<bool*>(value) );
             break;
           case PT_ENUM:
             DP_ASSERT( false );    // enums are handled by a separate function!
             break;
           case PT_INT8:
-            convert( count, inputStream, static_cast<dp::Int8*>(value) );
+            convert( count, inputStream, static_cast<int8_t*>(value) );
             break;
           case PT_UINT8:
-            convert( count, inputStream, static_cast<dp::Uint8*>(value) );
+            convert( count, inputStream, static_cast<uint8_t*>(value) );
             break;
           case PT_INT16:
-            convert( count, inputStream, static_cast<dp::Int16*>(value) );
+            convert( count, inputStream, static_cast<int16_t*>(value) );
             break;
           case PT_UINT16:
-            convert( count, inputStream, static_cast<dp::Uint16*>(value) );
+            convert( count, inputStream, static_cast<uint16_t*>(value) );
             break;
           case PT_FLOAT32:
             convert( count, inputStream, static_cast<dp::Float32*>(value) );
             break;
           case PT_INT32:
-            convert( count, inputStream, static_cast<dp::Int32*>(value) );
+            convert( count, inputStream, static_cast<int32_t*>(value) );
             break;
           case PT_UINT32:
-            convert( count, inputStream, static_cast<dp::Uint32*>(value) );
+            convert( count, inputStream, static_cast<uint32_t*>(value) );
             break;
           case PT_FLOAT64:
             convert( count, inputStream, static_cast<dp::Float64*>(value) );
             break;
           case PT_INT64:
-            convert( count, inputStream, static_cast<dp::Int64*>(value) );
+            convert( count, inputStream, static_cast<int64_t*>(value) );
             break;
           case PT_UINT64:
-            convert( count, inputStream, static_cast<dp::Uint64*>(value) );
+            convert( count, inputStream, static_cast<uint64_t*>(value) );
             break;
           }
         }
@@ -173,40 +173,40 @@ namespace dp
           switch( type & PT_SCALAR_TYPE_MASK )
           {
           case PT_BOOL:
-            convert( count, reinterpret_cast<dp::Bool const*>(value), outputStream );
+            convert( count, reinterpret_cast<bool const*>(value), outputStream );
             break;
           case PT_ENUM:
             DP_ASSERT( false );    // enums are handled by a separate function!
             break;
           case PT_INT8:
-            convert( count, reinterpret_cast<dp::Int8 const*>(value), outputStream );
+            convert( count, reinterpret_cast<int8_t const*>(value), outputStream );
             break;
           case PT_UINT8:
-            convert( count, reinterpret_cast<dp::Uint8 const*>(value), outputStream );
+            convert( count, reinterpret_cast<uint8_t const*>(value), outputStream );
             break;
           case PT_INT16:
-            convert( count, reinterpret_cast<dp::Int16 const*>(value), outputStream );
+            convert( count, reinterpret_cast<int16_t const*>(value), outputStream );
             break;
           case PT_UINT16:
-            convert( count, reinterpret_cast<dp::Uint16 const*>(value), outputStream );
+            convert( count, reinterpret_cast<uint16_t const*>(value), outputStream );
             break;
           case PT_FLOAT32:
             convert( count, reinterpret_cast<dp::Float32 const*>(value), outputStream );
             break;
           case PT_INT32:
-            convert( count, reinterpret_cast<dp::Int32 const*>(value), outputStream );
+            convert( count, reinterpret_cast<int32_t const*>(value), outputStream );
             break;
           case PT_UINT32:
-            convert( count, reinterpret_cast<dp::Uint32 const*>(value), outputStream );
+            convert( count, reinterpret_cast<uint32_t const*>(value), outputStream );
             break;
           case PT_FLOAT64:
             convert( count, reinterpret_cast<dp::Float64 const*>(value), outputStream );
             break;
           case PT_INT64:
-            convert( count, reinterpret_cast<dp::Int64 const*>(value), outputStream );
+            convert( count, reinterpret_cast<int64_t const*>(value), outputStream );
             break;
           case PT_UINT64:
-            convert( count, reinterpret_cast<dp::Uint64 const*>(value), outputStream );
+            convert( count, reinterpret_cast<uint64_t const*>(value), outputStream );
             break;
           }
         }
@@ -237,7 +237,7 @@ namespace dp
       {
         std::ostringstream outputStream;
         unsigned int count = std::max( (unsigned int)1, arraySize );
-        
+
         outputStream << enumSpec->getValueName( valueArray[0] );
         for ( size_t index = 1; index < count; ++index )
         {

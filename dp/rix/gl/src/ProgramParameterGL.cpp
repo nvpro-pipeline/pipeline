@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012-2015
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -53,73 +53,73 @@ namespace dp
       void setVertexAttribute( unsigned int attribute, const void *data ); // GENERAL CASE NOT SUPPORTED
 
       // glVertexAttribI{1,2,3,4}bv
-      template<> void setVertexAttribute<1, Int8>(unsigned int attributeIndex, const void *data )
+      template<> void setVertexAttribute<1, int8_t>(unsigned int attributeIndex, const void *data )
       {
-        Int8 tmp[4];
-        tmp[0] = (((const Int8*)data)[0]);
+        int8_t tmp[4];
+        tmp[0] = (((const int8_t*)data)[0]);
         glVertexAttribI4bv( attributeIndex, tmp );
       }
-      template<> void setVertexAttribute<2, Int8>(unsigned int attributeIndex, const void *data )
+      template<> void setVertexAttribute<2, int8_t>(unsigned int attributeIndex, const void *data )
       {
-        Int8 tmp[4];
-        tmp[0] = ((const Int8*)data)[0];
-        tmp[1] = ((const Int8*)data)[1];
+        int8_t tmp[4];
+        tmp[0] = ((const int8_t*)data)[0];
+        tmp[1] = ((const int8_t*)data)[1];
         glVertexAttribI4bv( attributeIndex, tmp );
       }
 
-      template<> void setVertexAttribute<3, Int8>(unsigned int attributeIndex, const void *data )
+      template<> void setVertexAttribute<3, int8_t>(unsigned int attributeIndex, const void *data )
       {
-        Int8 tmp[4];
-        tmp[0] = ((const Int8*)data)[0];
-        tmp[1] = ((const Int8*)data)[1];
-        tmp[2] = ((const Int8*)data)[2];
+        int8_t tmp[4];
+        tmp[0] = ((const int8_t*)data)[0];
+        tmp[1] = ((const int8_t*)data)[1];
+        tmp[2] = ((const int8_t*)data)[2];
         glVertexAttribI4bv( attributeIndex, tmp);
       }
 
-      template<> void setVertexAttribute<4, Int8>(unsigned int attributeIndex, const void *data )
+      template<> void setVertexAttribute<4, int8_t>(unsigned int attributeIndex, const void *data )
       {
-        glVertexAttribI4bv( attributeIndex, static_cast< const Int8* >(data) );
+        glVertexAttribI4bv( attributeIndex, static_cast< const int8_t* >(data) );
       }
 
       // glVertexAttribI{1,2,3,4}sv
-      template<> void setVertexAttribute<1, Int16>(unsigned int attributeIndex, const void *data )
+      template<> void setVertexAttribute<1, int16_t>(unsigned int attributeIndex, const void *data )
       {
-        Int16 tmp[4];
-        tmp[0] = ((const Int16*)data)[0];
+        int16_t tmp[4];
+        tmp[0] = ((const int16_t*)data)[0];
         glVertexAttribI4sv( attributeIndex, tmp );
       }
 
-      template<> void setVertexAttribute<2, Int16>(unsigned int attributeIndex, const void *data )
+      template<> void setVertexAttribute<2, int16_t>(unsigned int attributeIndex, const void *data )
       {
-        Int16 tmp[4];
-        tmp[0] = ((const Int16*)data)[0];
-        tmp[1] = ((const Int16*)data)[1];
+        int16_t tmp[4];
+        tmp[0] = ((const int16_t*)data)[0];
+        tmp[1] = ((const int16_t*)data)[1];
         glVertexAttribI4sv( attributeIndex, tmp );
       }
 
-      template<> void setVertexAttribute<3, Int16>(unsigned int attributeIndex, const void *data )
+      template<> void setVertexAttribute<3, int16_t>(unsigned int attributeIndex, const void *data )
       {
-        Int16 tmp[4];
-        tmp[0] = ((const Int16*)data)[0];
-        tmp[1] = ((const Int16*)data)[1];
-        tmp[2] = ((const Int16*)data)[2];
+        int16_t tmp[4];
+        tmp[0] = ((const int16_t*)data)[0];
+        tmp[1] = ((const int16_t*)data)[1];
+        tmp[2] = ((const int16_t*)data)[2];
         glVertexAttribI4sv( attributeIndex, tmp );
       }
 
-      template<> void setVertexAttribute<4, Int16>(unsigned int attributeIndex, const void *data )
+      template<> void setVertexAttribute<4, int16_t>(unsigned int attributeIndex, const void *data )
       {
-        glVertexAttribI4sv( attributeIndex, static_cast< const Int16* >(data) );
+        glVertexAttribI4sv( attributeIndex, static_cast< const int16_t* >(data) );
       }
 
       // glVertexAttrib{1,2,3,4}iv
-      template<> void setVertexAttribute<1, Int32>(unsigned int attributeIndex, const void *data )
+      template<> void setVertexAttribute<1, int32_t>(unsigned int attributeIndex, const void *data )
       {
         GLint tmp[4];
         tmp[0] = ((const GLint*)data)[0];
         glVertexAttribI4iv( attributeIndex, tmp );
       }
 
-      template<> void setVertexAttribute<2, Int32>(unsigned int attributeIndex, const void *data )
+      template<> void setVertexAttribute<2, int32_t>(unsigned int attributeIndex, const void *data )
       {
         GLint tmp[4];
         tmp[0] = ((const GLint*)data)[0];
@@ -127,7 +127,7 @@ namespace dp
         glVertexAttribI4iv( attributeIndex, tmp );
       }
 
-      template<> void setVertexAttribute<3, Int32>(unsigned int attributeIndex, const void *data )
+      template<> void setVertexAttribute<3, int32_t>(unsigned int attributeIndex, const void *data )
       {
         GLint tmp[4];
         tmp[0] = ((const GLint*)data)[0];
@@ -136,98 +136,98 @@ namespace dp
         glVertexAttribI4iv( attributeIndex, tmp );
       }
 
-      template<> void setVertexAttribute<4, Int32>(unsigned int attributeIndex, const void *data )
+      template<> void setVertexAttribute<4, int32_t>(unsigned int attributeIndex, const void *data )
       {
         glVertexAttribI4iv( attributeIndex, static_cast<const GLint *>( data ));
       }
 
       // glVertexAttrib{1,2,3,4}Liv
-      template<> void setVertexAttribute<1, Int64>(unsigned int attributeIndex, const void *data )
+      template<> void setVertexAttribute<1, int64_t>(unsigned int attributeIndex, const void *data )
       {
-        glVertexAttribL1i64NV( attributeIndex, *static_cast<const Int64 *>( data ));
+        glVertexAttribL1i64NV( attributeIndex, *static_cast<const int64_t *>( data ));
       }
 
-      template<> void setVertexAttribute<2, Int64>(unsigned int attributeIndex, const void *data )
+      template<> void setVertexAttribute<2, int64_t>(unsigned int attributeIndex, const void *data )
       {
-        glVertexAttribL2i64vNV( attributeIndex, static_cast<const Int64 *>( data ));
+        glVertexAttribL2i64vNV( attributeIndex, static_cast<const int64_t *>( data ));
       }
 
-      template<> void setVertexAttribute<3, Int64>(unsigned int attributeIndex, const void *data )
+      template<> void setVertexAttribute<3, int64_t>(unsigned int attributeIndex, const void *data )
       {
-        glVertexAttribL3i64vNV( attributeIndex, static_cast<const Int64 *>( data ));
+        glVertexAttribL3i64vNV( attributeIndex, static_cast<const int64_t *>( data ));
       }
 
-      template<> void setVertexAttribute<4, Int64>(unsigned int attributeIndex, const void *data )
+      template<> void setVertexAttribute<4, int64_t>(unsigned int attributeIndex, const void *data )
       {
-        glVertexAttribL4i64vNV( attributeIndex, static_cast<const Int64 *>( data ));
+        glVertexAttribL4i64vNV( attributeIndex, static_cast<const int64_t *>( data ));
       }
 
       // glVertexAttrib{1,2,3,4}ubv
-      template<> void setVertexAttribute<1, Uint8>(unsigned int attributeIndex, const void *data )
+      template<> void setVertexAttribute<1, uint8_t>(unsigned int attributeIndex, const void *data )
       {
-        Uint8 tmp[4];
-        tmp[0] = ((const Uint8*)data)[0];
+        uint8_t tmp[4];
+        tmp[0] = ((const uint8_t*)data)[0];
         glVertexAttrib4ubv( attributeIndex, tmp );
       }
-      template<> void setVertexAttribute<2, Uint8>(unsigned int attributeIndex, const void *data )
+      template<> void setVertexAttribute<2, uint8_t>(unsigned int attributeIndex, const void *data )
       {
-        Uint8 tmp[4];
-        tmp[0] = ((const Uint8*)data)[0];
-        tmp[1] = ((const Uint8*)data)[1];
+        uint8_t tmp[4];
+        tmp[0] = ((const uint8_t*)data)[0];
+        tmp[1] = ((const uint8_t*)data)[1];
         glVertexAttrib4ubv( attributeIndex, tmp );
       }
 
-      template<> void setVertexAttribute<3, Uint8>(unsigned int attributeIndex, const void *data )
+      template<> void setVertexAttribute<3, uint8_t>(unsigned int attributeIndex, const void *data )
       {
-        Uint8 tmp[4];
-        tmp[0] = ((const Uint8*)data)[0];
-        tmp[1] = ((const Uint8*)data)[1];
-        tmp[2] = ((const Uint8*)data)[2];
+        uint8_t tmp[4];
+        tmp[0] = ((const uint8_t*)data)[0];
+        tmp[1] = ((const uint8_t*)data)[1];
+        tmp[2] = ((const uint8_t*)data)[2];
         glVertexAttrib4ubv( attributeIndex, tmp );
       }
-      template<> void setVertexAttribute<4, Uint8>(unsigned int attributeIndex, const void *data )
+      template<> void setVertexAttribute<4, uint8_t>(unsigned int attributeIndex, const void *data )
       {
-        glVertexAttrib4ubv( attributeIndex, static_cast< const Uint8* >(data) );
+        glVertexAttrib4ubv( attributeIndex, static_cast< const uint8_t* >(data) );
       }
 
       // glVertexAttrib{1,2,3,4}usb
-      template<> void setVertexAttribute<1, Uint16>(unsigned int attributeIndex, const void *data )
+      template<> void setVertexAttribute<1, uint16_t>(unsigned int attributeIndex, const void *data )
       {
-        Uint16 tmp[4];
-        tmp[0] = ((const Uint16*)data)[0];
+        uint16_t tmp[4];
+        tmp[0] = ((const uint16_t*)data)[0];
         glVertexAttribI4usv( attributeIndex, tmp );
       }
 
-      template<> void setVertexAttribute<2, Uint16>(unsigned int attributeIndex, const void *data )
+      template<> void setVertexAttribute<2, uint16_t>(unsigned int attributeIndex, const void *data )
       {
-        Uint16 tmp[4];
-        tmp[0] = ((const Uint16*)data)[0];
-        tmp[1] = ((const Uint16*)data)[1];
+        uint16_t tmp[4];
+        tmp[0] = ((const uint16_t*)data)[0];
+        tmp[1] = ((const uint16_t*)data)[1];
         glVertexAttribI4usv( attributeIndex, tmp );
       }
 
-      template<> void setVertexAttribute<3, Uint16>(unsigned int attributeIndex, const void *data )
+      template<> void setVertexAttribute<3, uint16_t>(unsigned int attributeIndex, const void *data )
       {
-        Uint16 tmp[4];
-        tmp[0] = (((const Uint16*)data)[0]);
-        tmp[1] = (((const Uint16*)data)[1]);
-        tmp[2] = (((const Uint16*)data)[2]);
+        uint16_t tmp[4];
+        tmp[0] = (((const uint16_t*)data)[0]);
+        tmp[1] = (((const uint16_t*)data)[1]);
+        tmp[2] = (((const uint16_t*)data)[2]);
         glVertexAttribI4usv( attributeIndex, tmp );
       }
 
-      template<> void setVertexAttribute<4, Uint16>(unsigned int attributeIndex, const void *data )
+      template<> void setVertexAttribute<4, uint16_t>(unsigned int attributeIndex, const void *data )
       {
-        glVertexAttribI4usv( attributeIndex, static_cast<const Uint16*>( data ));
+        glVertexAttribI4usv( attributeIndex, static_cast<const uint16_t*>( data ));
       }
 
       // glVertexAttrib{1,2,3,4}uiv
-      template<> void setVertexAttribute<1, Uint32>(unsigned int attributeIndex, const void *data )
+      template<> void setVertexAttribute<1, uint32_t>(unsigned int attributeIndex, const void *data )
       {
         GLuint tmp[4];
         tmp[0] = (((const GLuint*)data)[0]);
         glVertexAttribI4uiv( attributeIndex, tmp );
       }
-      template<> void setVertexAttribute<2, Uint32>(unsigned int attributeIndex, const void *data )
+      template<> void setVertexAttribute<2, uint32_t>(unsigned int attributeIndex, const void *data )
       {
         GLuint tmp[4];
         tmp[0] = (((const GLuint*)data)[0]);
@@ -235,7 +235,7 @@ namespace dp
         glVertexAttribI4uiv( attributeIndex, tmp );
       }
 
-      template<> void setVertexAttribute<3, Uint32>(unsigned int attributeIndex, const void *data )
+      template<> void setVertexAttribute<3, uint32_t>(unsigned int attributeIndex, const void *data )
       {
         GLuint tmp[4];
         tmp[0] = (((const GLuint*)data)[0]);
@@ -244,27 +244,27 @@ namespace dp
         glVertexAttribI4uiv( attributeIndex, tmp );
       }
 
-      template<> void setVertexAttribute<4, Uint32>(unsigned int attributeIndex, const void *data )
+      template<> void setVertexAttribute<4, uint32_t>(unsigned int attributeIndex, const void *data )
       {
         glVertexAttribI4uiv( attributeIndex, static_cast<const GLuint*>( data ));
       }
 
       // glVertexAttrib{1,2,3,4}Luiv
-      template<> void setVertexAttribute<1, Uint64>(unsigned int attributeIndex, const void *data )
+      template<> void setVertexAttribute<1, uint64_t>(unsigned int attributeIndex, const void *data )
       {
         glVertexAttribL1ui64NV( attributeIndex, *static_cast<const GLuint64 *>( data ));
       }
 
-      template<> void setVertexAttribute<2, Uint64>(unsigned int attributeIndex, const void *data )
+      template<> void setVertexAttribute<2, uint64_t>(unsigned int attributeIndex, const void *data )
       {
         glVertexAttribL2ui64vNV( attributeIndex, static_cast<const GLuint64 *>( data ));
       }
 
-      template<> void setVertexAttribute<3, Uint64>(unsigned int attributeIndex, const void *data )
+      template<> void setVertexAttribute<3, uint64_t>(unsigned int attributeIndex, const void *data )
       {
         glVertexAttribL3ui64vNV( attributeIndex, static_cast<const GLuint64 *>( data ));
       }
-      template<> void setVertexAttribute<4, Uint64>(unsigned int attributeIndex, const void *data )
+      template<> void setVertexAttribute<4, uint64_t>(unsigned int attributeIndex, const void *data )
       {
         glVertexAttribL4ui64vNV( attributeIndex, static_cast<const GLuint64 *>( data ));
       }
@@ -279,20 +279,20 @@ namespace dp
       {
       }
 
-      template<unsigned int n, typename T> 
+      template<unsigned int n, typename T>
       void AttributeParameternt<n, T>::update(const void *data)
       {
         const void* offsetData = static_cast<const char *>(data) + m_offset;
         setVertexAttribute<n, T>( m_attributeIndex, offsetData );
       }
 
-      template<unsigned int n, typename T> 
+      template<unsigned int n, typename T>
       void AttributeParameternt<n, T>::copy( const void* containerData, void* destination ) const
       {
         memcpy(destination, reinterpret_cast<const char*>(containerData) + m_offset, getConvertedSize() );
       }
 
-      template<unsigned int n, typename T> 
+      template<unsigned int n, typename T>
       void AttributeParameternt<n, T>::doUpdateConverted( void const* convertedData ) const
       {
         const void* offsetData = static_cast<const char *>(convertedData);
@@ -329,45 +329,45 @@ namespace dp
         glVertexAttribL1ui64NV( m_attribute, ptr );
       }
 
-      template class AttributeParameternt<1,Int8>;
-      template class AttributeParameternt<2,Int8>;
-      template class AttributeParameternt<3,Int8>;
-      template class AttributeParameternt<4,Int8>;
+      template class AttributeParameternt<1,int8_t>;
+      template class AttributeParameternt<2,int8_t>;
+      template class AttributeParameternt<3,int8_t>;
+      template class AttributeParameternt<4,int8_t>;
 
-      template class AttributeParameternt<1,Int16>;
-      template class AttributeParameternt<2,Int16>;
-      template class AttributeParameternt<3,Int16>;
-      template class AttributeParameternt<4,Int16>;
+      template class AttributeParameternt<1,int16_t>;
+      template class AttributeParameternt<2,int16_t>;
+      template class AttributeParameternt<3,int16_t>;
+      template class AttributeParameternt<4,int16_t>;
 
-      template class AttributeParameternt<1,Int32>;
-      template class AttributeParameternt<2,Int32>;
-      template class AttributeParameternt<3,Int32>;
-      template class AttributeParameternt<4,Int32>;
+      template class AttributeParameternt<1,int32_t>;
+      template class AttributeParameternt<2,int32_t>;
+      template class AttributeParameternt<3,int32_t>;
+      template class AttributeParameternt<4,int32_t>;
 
-      template class AttributeParameternt<1,Int64>;
-      template class AttributeParameternt<2,Int64>;
-      template class AttributeParameternt<3,Int64>;
-      template class AttributeParameternt<4,Int64>;
+      template class AttributeParameternt<1,int64_t>;
+      template class AttributeParameternt<2,int64_t>;
+      template class AttributeParameternt<3,int64_t>;
+      template class AttributeParameternt<4,int64_t>;
 
-      template class AttributeParameternt<1,Uint8>;
-      template class AttributeParameternt<2,Uint8>;
-      template class AttributeParameternt<3,Uint8>;
-      template class AttributeParameternt<4,Uint8>;
+      template class AttributeParameternt<1,uint8_t>;
+      template class AttributeParameternt<2,uint8_t>;
+      template class AttributeParameternt<3,uint8_t>;
+      template class AttributeParameternt<4,uint8_t>;
 
-      template class AttributeParameternt<1,Uint16>;
-      template class AttributeParameternt<2,Uint16>;
-      template class AttributeParameternt<3,Uint16>;
-      template class AttributeParameternt<4,Uint16>;
+      template class AttributeParameternt<1,uint16_t>;
+      template class AttributeParameternt<2,uint16_t>;
+      template class AttributeParameternt<3,uint16_t>;
+      template class AttributeParameternt<4,uint16_t>;
 
-      template class AttributeParameternt<1,Uint32>;
-      template class AttributeParameternt<2,Uint32>;
-      template class AttributeParameternt<3,Uint32>;
-      template class AttributeParameternt<4,Uint32>;
+      template class AttributeParameternt<1,uint32_t>;
+      template class AttributeParameternt<2,uint32_t>;
+      template class AttributeParameternt<3,uint32_t>;
+      template class AttributeParameternt<4,uint32_t>;
 
-      template class AttributeParameternt<1,Uint64>;
-      template class AttributeParameternt<2,Uint64>;
-      template class AttributeParameternt<3,Uint64>;
-      template class AttributeParameternt<4,Uint64>;
+      template class AttributeParameternt<1,uint64_t>;
+      template class AttributeParameternt<2,uint64_t>;
+      template class AttributeParameternt<3,uint64_t>;
+      template class AttributeParameternt<4,uint64_t>;
 #endif
 
     } // namespace gl

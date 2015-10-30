@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012-2013
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -323,7 +323,7 @@ namespace dp
           dp::math::sse::Vec4f y( (modelView[1] * extent[1] ) * projection );
           dp::math::sse::Vec4f z( (modelView[2] * extent[2] ) * projection );
           v += x; determineCullFlagsSSE( v, cfa); // v + x
-          if ( cfa ) 
+          if ( cfa )
           {
             v += y; determineCullFlagsSSE( v, cfa); // v + x + y
             if ( cfa )
@@ -473,7 +473,7 @@ namespace dp
         std::vector<OBB> const &obbs = groupImpl->getOBBs();
 
         // TODO this is an allocation which is potential slow. Keep memory allocated per group?
-        DP_STATIC_ASSERT( sizeof( dp::util::BitArray::BitStorageType) % sizeof(dp::Uint32) == 0 );
+        DP_STATIC_ASSERT( sizeof( dp::util::BitArray::BitStorageType) % sizeof(uint32_t) == 0 );
         dp::util::BitArray visible( groupImpl->getObjectCount() );
 
         char const* basePtr = reinterpret_cast<char const*>(groupImpl->getMatrices());
@@ -514,7 +514,7 @@ namespace dp
           }
         }
 
-        result.staticCast<ResultBitSet>()->updateChanged( reinterpret_cast<dp::Uint32 const*>( visible.getBits() ) );
+        result.staticCast<ResultBitSet>()->updateChanged( reinterpret_cast<uint32_t const*>( visible.getBits() ) );
       }
 
     } // namespace cpu

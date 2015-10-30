@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2013-2015
+// Copyright (c) 2013-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -42,7 +42,7 @@ namespace dp
         , m_ubo( buffer->getGLId() )
         , m_uboBinding( GLint(bindingIndex) )
         , m_uboBlockSize( bindingLength )
-        , m_cacheData( new dp::Uint8[bindingLength] )
+        , m_cacheData( new uint8_t[bindingLength] )
         , m_bufferUpdater(new dp::gl::BufferUpdater(buffer, batchedUpdates))
       {
       }
@@ -53,7 +53,7 @@ namespace dp
       }
 
       void ParameterRendererBufferRange::render( void const* cache )
-      { 
+      {
         GLsizeiptr const offset = reinterpret_cast<GLintptr>(cache);
         bindBufferRange( m_target, m_uboBinding, m_ubo, offset, m_uboBlockSize );
       }

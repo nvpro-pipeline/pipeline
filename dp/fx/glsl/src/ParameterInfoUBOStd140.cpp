@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -92,7 +92,7 @@ namespace dp
                 *(dstType + index) = *(srcType + index);
               }
               tmpDst += dstStride;
-            }  
+            }
           }
         }
 
@@ -223,42 +223,42 @@ namespace dp
           case PT_FLOAT32 | PT_VECTOR2   : return( std::make_shared<ParameterInfoVectorConversion<dp::Float32, dp::Float32, 2, 2>>( offset, arraySize ) );
           case PT_FLOAT32 | PT_VECTOR3   : return( std::make_shared<ParameterInfoVectorConversion<dp::Float32, dp::Float32, 3, 4>>( offset, arraySize ) );
           case PT_FLOAT32 | PT_VECTOR4   : return( std::make_shared<ParameterInfoVectorConversion<dp::Float32, dp::Float32, 4, 4>>( offset, arraySize ) );
-          case PT_INT8                   : return( std::make_shared<ParameterInfoVectorConversion<dp::Int8   , dp::Int32  , 1, 1>>( offset, arraySize ) );
-          case PT_INT8 | PT_VECTOR2      : return( std::make_shared<ParameterInfoVectorConversion<dp::Int8   , dp::Int32  , 2, 2>>( offset, arraySize ) );
-          case PT_INT8 | PT_VECTOR3      : return( std::make_shared<ParameterInfoVectorConversion<dp::Int8   , dp::Int32  , 3, 4>>( offset, arraySize ) );
-          case PT_INT8 | PT_VECTOR4      : return( std::make_shared<ParameterInfoVectorConversion<dp::Int8   , dp::Int32  , 4, 4>>( offset, arraySize ) );
-          case PT_INT16                  : return( std::make_shared<ParameterInfoVectorConversion<dp::Int16  , dp::Int32  , 1, 1>>( offset, arraySize ) );
-          case PT_INT16 | PT_VECTOR2     : return( std::make_shared<ParameterInfoVectorConversion<dp::Int16  , dp::Int32  , 2, 2>>( offset, arraySize ) );
-          case PT_INT16 | PT_VECTOR3     : return( std::make_shared<ParameterInfoVectorConversion<dp::Int16  , dp::Int32  , 3, 4>>( offset, arraySize ) );
-          case PT_INT16 | PT_VECTOR4     : return( std::make_shared<ParameterInfoVectorConversion<dp::Int16  , dp::Int32  , 4, 4>>( offset, arraySize ) );
-          case PT_INT32                  : return( std::make_shared<ParameterInfoVectorConversion<dp::Int32  , dp::Int32  , 1, 1>>( offset, arraySize ) );
-          case PT_INT32 | PT_VECTOR2     : return( std::make_shared<ParameterInfoVectorConversion<dp::Int32  , dp::Int32  , 2, 2>>( offset, arraySize ) );
-          case PT_INT32 | PT_VECTOR3     : return( std::make_shared<ParameterInfoVectorConversion<dp::Int32  , dp::Int32  , 3, 4>>( offset, arraySize ) );
-          case PT_INT32 | PT_VECTOR4     : return( std::make_shared<ParameterInfoVectorConversion<dp::Int32  , dp::Int32  , 4, 4>>( offset, arraySize ) );
-          case PT_INT64                  : return( std::make_shared<ParameterInfoVectorConversion<dp::Int64  , dp::Int64  , 1, 1>>( offset, arraySize ) );
-          case PT_INT64 | PT_VECTOR2     : return( std::make_shared<ParameterInfoVectorConversion<dp::Int64  , dp::Int64  , 2, 2>>( offset, arraySize ) );
-          case PT_INT64 | PT_VECTOR3     : return( std::make_shared<ParameterInfoVectorConversion<dp::Int64  , dp::Int64  , 3, 4>>( offset, arraySize ) );
-          case PT_INT64 | PT_VECTOR4     : return( std::make_shared<ParameterInfoVectorConversion<dp::Int64  , dp::Int64  , 4, 4>>( offset, arraySize ) );
-          case PT_UINT8                  : return( std::make_shared<ParameterInfoVectorConversion<dp::Uint8  , dp::Uint32 , 1, 1>>( offset, arraySize ) );
-          case PT_UINT8 | PT_VECTOR2     : return( std::make_shared<ParameterInfoVectorConversion<dp::Uint8  , dp::Uint32 , 2, 2>>( offset, arraySize ) );
-          case PT_UINT8 | PT_VECTOR3     : return( std::make_shared<ParameterInfoVectorConversion<dp::Uint8  , dp::Uint32 , 3, 4>>( offset, arraySize ) );
-          case PT_UINT8 | PT_VECTOR4     : return( std::make_shared<ParameterInfoVectorConversion<dp::Uint8  , dp::Uint32 , 4, 4>>( offset, arraySize ) );
-          case PT_UINT16                 : return( std::make_shared<ParameterInfoVectorConversion<dp::Uint16 , dp::Uint32 , 1, 1>>( offset, arraySize ) );
-          case PT_UINT16 | PT_VECTOR2    : return( std::make_shared<ParameterInfoVectorConversion<dp::Uint16 , dp::Uint32 , 2, 2>>( offset, arraySize ) );
-          case PT_UINT16 | PT_VECTOR3    : return( std::make_shared<ParameterInfoVectorConversion<dp::Uint16 , dp::Uint32 , 3, 4>>( offset, arraySize ) );
-          case PT_UINT16 | PT_VECTOR4    : return( std::make_shared<ParameterInfoVectorConversion<dp::Uint16 , dp::Uint32 , 4, 4>>( offset, arraySize ) );
-          case PT_UINT32                 : return( std::make_shared<ParameterInfoVectorConversion<dp::Uint32 , dp::Uint32 , 1, 1>>( offset, arraySize ) );
-          case PT_UINT32 | PT_VECTOR2    : return( std::make_shared<ParameterInfoVectorConversion<dp::Uint32 , dp::Uint32 , 2, 2>>( offset, arraySize ) );
-          case PT_UINT32 | PT_VECTOR3    : return( std::make_shared<ParameterInfoVectorConversion<dp::Uint32 , dp::Uint32 , 3, 4>>( offset, arraySize ) );
-          case PT_UINT32 | PT_VECTOR4    : return( std::make_shared<ParameterInfoVectorConversion<dp::Uint32 , dp::Uint32 , 4, 4>>( offset, arraySize ) );
-          case PT_UINT64                 : return( std::make_shared<ParameterInfoVectorConversion<dp::Uint64 , dp::Uint64 , 1, 1>>( offset, arraySize ) );
-          case PT_UINT64 | PT_VECTOR2    : return( std::make_shared<ParameterInfoVectorConversion<dp::Uint64 , dp::Uint64 , 2, 2>>( offset, arraySize ) );
-          case PT_UINT64 | PT_VECTOR3    : return( std::make_shared<ParameterInfoVectorConversion<dp::Uint64 , dp::Uint64 , 3, 4>>( offset, arraySize ) );
-          case PT_UINT64 | PT_VECTOR4    : return( std::make_shared<ParameterInfoVectorConversion<dp::Uint64 , dp::Uint64 , 4, 4>>( offset, arraySize ) );
-          case PT_BOOL                   : return( std::make_shared<ParameterInfoVectorConversion<dp::Bool   , dp::Uint32 , 1, 1>>( offset, arraySize ) );
-          case PT_BOOL | PT_VECTOR2      : return( std::make_shared<ParameterInfoVectorConversion<dp::Bool   , dp::Uint32 , 2, 2>>( offset, arraySize ) );
-          case PT_BOOL | PT_VECTOR3      : return( std::make_shared<ParameterInfoVectorConversion<dp::Bool   , dp::Uint32 , 3, 4>>( offset, arraySize ) );
-          case PT_BOOL | PT_VECTOR4      : return( std::make_shared<ParameterInfoVectorConversion<dp::Bool   , dp::Uint32 , 4, 4>>( offset, arraySize ) );
+          case PT_INT8                   : return( std::make_shared<ParameterInfoVectorConversion<int8_t     , int32_t    , 1, 1>>( offset, arraySize ) );
+          case PT_INT8 | PT_VECTOR2      : return( std::make_shared<ParameterInfoVectorConversion<int8_t     , int32_t    , 2, 2>>( offset, arraySize ) );
+          case PT_INT8 | PT_VECTOR3      : return( std::make_shared<ParameterInfoVectorConversion<int8_t     , int32_t    , 3, 4>>( offset, arraySize ) );
+          case PT_INT8 | PT_VECTOR4      : return( std::make_shared<ParameterInfoVectorConversion<int8_t     , int32_t    , 4, 4>>( offset, arraySize ) );
+          case PT_INT16                  : return( std::make_shared<ParameterInfoVectorConversion<int16_t    , int32_t    , 1, 1>>( offset, arraySize ) );
+          case PT_INT16 | PT_VECTOR2     : return( std::make_shared<ParameterInfoVectorConversion<int16_t    , int32_t    , 2, 2>>( offset, arraySize ) );
+          case PT_INT16 | PT_VECTOR3     : return( std::make_shared<ParameterInfoVectorConversion<int16_t    , int32_t    , 3, 4>>( offset, arraySize ) );
+          case PT_INT16 | PT_VECTOR4     : return( std::make_shared<ParameterInfoVectorConversion<int16_t    , int32_t    , 4, 4>>( offset, arraySize ) );
+          case PT_INT32                  : return( std::make_shared<ParameterInfoVectorConversion<int32_t    , int32_t    , 1, 1>>( offset, arraySize ) );
+          case PT_INT32 | PT_VECTOR2     : return( std::make_shared<ParameterInfoVectorConversion<int32_t    , int32_t    , 2, 2>>( offset, arraySize ) );
+          case PT_INT32 | PT_VECTOR3     : return( std::make_shared<ParameterInfoVectorConversion<int32_t    , int32_t    , 3, 4>>( offset, arraySize ) );
+          case PT_INT32 | PT_VECTOR4     : return( std::make_shared<ParameterInfoVectorConversion<int32_t    , int32_t    , 4, 4>>( offset, arraySize ) );
+          case PT_INT64                  : return( std::make_shared<ParameterInfoVectorConversion<int64_t    , int64_t    , 1, 1>>( offset, arraySize ) );
+          case PT_INT64 | PT_VECTOR2     : return( std::make_shared<ParameterInfoVectorConversion<int64_t    , int64_t    , 2, 2>>( offset, arraySize ) );
+          case PT_INT64 | PT_VECTOR3     : return( std::make_shared<ParameterInfoVectorConversion<int64_t    , int64_t    , 3, 4>>( offset, arraySize ) );
+          case PT_INT64 | PT_VECTOR4     : return( std::make_shared<ParameterInfoVectorConversion<int64_t    , int64_t    , 4, 4>>( offset, arraySize ) );
+          case PT_UINT8                  : return( std::make_shared<ParameterInfoVectorConversion<uint8_t    , uint32_t   , 1, 1>>( offset, arraySize ) );
+          case PT_UINT8 | PT_VECTOR2     : return( std::make_shared<ParameterInfoVectorConversion<uint8_t    , uint32_t   , 2, 2>>( offset, arraySize ) );
+          case PT_UINT8 | PT_VECTOR3     : return( std::make_shared<ParameterInfoVectorConversion<uint8_t    , uint32_t   , 3, 4>>( offset, arraySize ) );
+          case PT_UINT8 | PT_VECTOR4     : return( std::make_shared<ParameterInfoVectorConversion<uint8_t    , uint32_t   , 4, 4>>( offset, arraySize ) );
+          case PT_UINT16                 : return( std::make_shared<ParameterInfoVectorConversion<uint16_t   , uint32_t   , 1, 1>>( offset, arraySize ) );
+          case PT_UINT16 | PT_VECTOR2    : return( std::make_shared<ParameterInfoVectorConversion<uint16_t   , uint32_t   , 2, 2>>( offset, arraySize ) );
+          case PT_UINT16 | PT_VECTOR3    : return( std::make_shared<ParameterInfoVectorConversion<uint16_t   , uint32_t   , 3, 4>>( offset, arraySize ) );
+          case PT_UINT16 | PT_VECTOR4    : return( std::make_shared<ParameterInfoVectorConversion<uint16_t   , uint32_t   , 4, 4>>( offset, arraySize ) );
+          case PT_UINT32                 : return( std::make_shared<ParameterInfoVectorConversion<uint32_t   , uint32_t   , 1, 1>>( offset, arraySize ) );
+          case PT_UINT32 | PT_VECTOR2    : return( std::make_shared<ParameterInfoVectorConversion<uint32_t   , uint32_t   , 2, 2>>( offset, arraySize ) );
+          case PT_UINT32 | PT_VECTOR3    : return( std::make_shared<ParameterInfoVectorConversion<uint32_t   , uint32_t   , 3, 4>>( offset, arraySize ) );
+          case PT_UINT32 | PT_VECTOR4    : return( std::make_shared<ParameterInfoVectorConversion<uint32_t   , uint32_t   , 4, 4>>( offset, arraySize ) );
+          case PT_UINT64                 : return( std::make_shared<ParameterInfoVectorConversion<uint64_t   , uint64_t   , 1, 1>>( offset, arraySize ) );
+          case PT_UINT64 | PT_VECTOR2    : return( std::make_shared<ParameterInfoVectorConversion<uint64_t   , uint64_t   , 2, 2>>( offset, arraySize ) );
+          case PT_UINT64 | PT_VECTOR3    : return( std::make_shared<ParameterInfoVectorConversion<uint64_t   , uint64_t   , 3, 4>>( offset, arraySize ) );
+          case PT_UINT64 | PT_VECTOR4    : return( std::make_shared<ParameterInfoVectorConversion<uint64_t   , uint64_t   , 4, 4>>( offset, arraySize ) );
+          case PT_BOOL                   : return( std::make_shared<ParameterInfoVectorConversion<bool       , uint32_t   , 1, 1>>( offset, arraySize ) );
+          case PT_BOOL | PT_VECTOR2      : return( std::make_shared<ParameterInfoVectorConversion<bool       , uint32_t   , 2, 2>>( offset, arraySize ) );
+          case PT_BOOL | PT_VECTOR3      : return( std::make_shared<ParameterInfoVectorConversion<bool       , uint32_t   , 3, 4>>( offset, arraySize ) );
+          case PT_BOOL | PT_VECTOR4      : return( std::make_shared<ParameterInfoVectorConversion<bool       , uint32_t   , 4, 4>>( offset, arraySize ) );
           case PT_FLOAT32 | PT_MATRIX2x2 : return( std::make_shared<ParameterInfoMatrixConversion<dp::Float32, dp::Float32, 2, 2, 2>>( offset, arraySize ) );
           case PT_FLOAT32 | PT_MATRIX2x3 : return( std::make_shared<ParameterInfoMatrixConversion<dp::Float32, dp::Float32, 3, 4, 2>>( offset, arraySize ) );
           case PT_FLOAT32 | PT_MATRIX2x4 : return( std::make_shared<ParameterInfoMatrixConversion<dp::Float32, dp::Float32, 4, 4, 2>>( offset, arraySize ) );

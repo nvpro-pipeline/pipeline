@@ -58,7 +58,7 @@ namespace dp
 
 
 #if (defined(DP_ARCH_X86) || defined(DP_ARCH_X86_64)) && defined(_MSC_VER)
-    template <typename Visitor> inline void bitTraverse( dp::Uint32 bits, Visitor& visitor )
+    template <typename Visitor> inline void bitTraverse( uint32_t bits, Visitor& visitor )
     {
       unsigned long localIndex;
       while ( _BitScanForward( &localIndex, bits ) )
@@ -68,34 +68,34 @@ namespace dp
       }
     }
 
-    template <typename Visitor> inline void bitTraverse( dp::Uint64 bits, Visitor& visitor )
+    template <typename Visitor> inline void bitTraverse( uint64_t bits, Visitor& visitor )
     {
       unsigned long localIndex;
       while ( _BitScanForward64( &localIndex, bits ) )
       {
         visitor( localIndex );
-        bits ^= dp::Uint64(1) << localIndex; // clear the current bit so that the next one is being found by the bitscan
+        bits ^= uint64_t(1) << localIndex; // clear the current bit so that the next one is being found by the bitscan
       }
     }
 
-    inline size_t ctz(dp::Uint64 bits)
+    inline size_t ctz(uint64_t bits)
     {
       unsigned long localIndex;
       return _BitScanForward64(&localIndex,bits) ? localIndex : 64;
     }
 
-    inline size_t ctz(dp::Uint32 bits)
+    inline size_t ctz(uint32_t bits)
     {
       unsigned long localIndex;
       return _BitScanForward(&localIndex,bits) ? localIndex : 32;
     }
 #else
-    inline size_t ctz(dp::Uint64 bits)
+    inline size_t ctz(uint64_t bits)
     {
       return (bits != 0) ? __builtin_ctzl(bits) : 64;
     }
 
-    inline size_t ctz(dp::Uint32 bits)
+    inline size_t ctz(uint32_t bits)
     {
       return (bits != 0) ? __builtin_ctz(bits) : 32;
     }

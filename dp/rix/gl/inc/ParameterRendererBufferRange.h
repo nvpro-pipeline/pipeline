@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2013-2015
+// Copyright (c) 2013-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -41,7 +41,7 @@ namespace dp
       /************************************************************************/
       /* ParameterRendererBufferRange                                         */
       /************************************************************************/
-      
+
       class ParameterRendererBufferRange : public ParameterRendererStreamBuffer
       {
       public:
@@ -61,7 +61,7 @@ namespace dp
         GLuint                                  m_ubo;
         GLint                                   m_uboBinding;
         GLsizeiptr                              m_uboBlockSize;
-        std::unique_ptr<dp::Uint8[]>            m_cacheData;
+        std::unique_ptr<uint8_t[]>              m_cacheData;
         std::unique_ptr<dp::gl::BufferUpdater>  m_bufferUpdater;
       };
 

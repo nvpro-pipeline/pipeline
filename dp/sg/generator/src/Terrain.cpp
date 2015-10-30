@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2013
+// Copyright (c) 2013-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -91,7 +91,7 @@ namespace dp
       {
         std::vector<dp::math::Vec3f> vertices;
         Clamped2DArrayAccessor<HeightType> cpa( heightMap->getWidth(), heightMap->getHeight(), reinterpret_cast<HeightType const*>(heightMap->getLayerData(0,0))) ;
-        
+
         vertices.reserve( heightMap->getHeight() * heightMap->getWidth() );
         for ( int y = 0; y < int( heightMap->getHeight() ) ; ++y )
         {
@@ -110,21 +110,21 @@ namespace dp
         switch( heightMap->getDataType() )
         {
         case dp::DT_UNSIGNED_INT_8:
-          return generateTerrainVertices<dp::Uint8>( heightMap, resolution, offset );
+          return generateTerrainVertices<uint8_t>( heightMap, resolution, offset );
         case dp::DT_UNSIGNED_INT_16:
-          return generateTerrainVertices<dp::Uint16>( heightMap, resolution, offset );
+          return generateTerrainVertices<uint16_t>( heightMap, resolution, offset );
         case dp::DT_UNSIGNED_INT_32:
-          return generateTerrainVertices<dp::Uint32>( heightMap, resolution, offset );
+          return generateTerrainVertices<uint32_t>( heightMap, resolution, offset );
         case dp::DT_INT_8:
-          return generateTerrainVertices<dp::Int8>( heightMap, resolution, offset );
+          return generateTerrainVertices<int8_t>( heightMap, resolution, offset );
         case dp::DT_INT_16:
-          return generateTerrainVertices<dp::Int16>( heightMap, resolution, offset );
+          return generateTerrainVertices<int16_t>( heightMap, resolution, offset );
         case dp::DT_INT_32:
-          return generateTerrainVertices<dp::Int32>( heightMap, resolution, offset );
+          return generateTerrainVertices<int32_t>( heightMap, resolution, offset );
         case dp::DT_FLOAT_32:
-          return generateTerrainVertices<dp::Int32>( heightMap, resolution, offset );
+          return generateTerrainVertices<int32_t>( heightMap, resolution, offset );
         case dp::DT_FLOAT_64:
-          return generateTerrainVertices<dp::Int64>( heightMap, resolution, offset );
+          return generateTerrainVertices<int64_t>( heightMap, resolution, offset );
         default:
           DP_ASSERT( !"Unknown heightmap format" );
         }
@@ -194,12 +194,12 @@ namespace dp
           {
             for ( int x = 0; x < int( heightMap->getWidth() - 1 ) ; ++x )
             {
-              dp::Uint32 base = dp::checked_cast<dp::Uint32>(y * heightMap->getWidth() + x);
-              indices.push_back( dp::math::Vec3ui( base, base + 1, base + dp::Uint32(heightMap->getWidth()) + 1 ) );
-              indices.push_back( dp::math::Vec3ui( base + dp::Uint32(heightMap->getWidth()) + 1, base + dp::Uint32(heightMap->getWidth()), base ) );
+              uint32_t base = dp::checked_cast<uint32_t>(y * heightMap->getWidth() + x);
+              indices.push_back( dp::math::Vec3ui( base, base + 1, base + uint32_t(heightMap->getWidth()) + 1 ) );
+              indices.push_back( dp::math::Vec3ui( base + uint32_t(heightMap->getWidth()) + 1, base + uint32_t(heightMap->getWidth()), base ) );
             }
           }
-          indexSet->setData( &indices[0], dp::Uint32(indices.size() * 3) );
+          indexSet->setData( &indices[0], uint32_t(indices.size() * 3) );
         }
 
         primitive->setIndexSet(indexSet);
@@ -209,7 +209,7 @@ namespace dp
 
         dp::sg::core::EffectDataSharedPtr effectData = dp::sg::core::createStandardMaterialData();
 
-        // attach colorMap if loading it 
+        // attach colorMap if loading it
         if ( colorMap )
         {
           dp::sg::core::SamplerSharedPtr sampler = dp::sg::core::Sampler::create( colorMap );
@@ -276,7 +276,7 @@ namespace dp
           break;
         }
 
-        float height; // scale due to the int->[0...1] float conversion 
+        float height; // scale due to the int->[0...1] float conversion
         switch ( heightMap->getType() )
         {
         case dp::sg::core::Image::IMG_UNSIGNED_BYTE:
@@ -311,7 +311,7 @@ namespace dp
         dp::sg::core::VertexAttribute va;
         dp::sg::core::BufferHostSharedPtr buffer = dp::sg::core::BufferHost::create();
         buffer->setSize(1); // currently it's necessary to have at least one byte in the buffer for other parts of the pipeline.
-          
+
         va.setData( 3, dp::DT_FLOAT_32, buffer, 0, 0, (unsigned int)(verticesPerTexel * numRects) );
         dp::sg::core::VertexAttributeSetSharedPtr vertexAttributeset = dp::sg::core::VertexAttributeSet::create();
         vertexAttributeset->setVertexAttribute(dp::sg::core::VertexAttributeSet::DP_SG_POSITION, va);
@@ -337,7 +337,7 @@ namespace dp
         // setup GeoNode
         setPrimitive(primitive);
 
-        // attach colorMap if loading it 
+        // attach colorMap if loading it
         if ( colorMap )
         {
           dp::sg::core::SamplerSharedPtr sampler = dp::sg::core::Sampler::create( colorMap );

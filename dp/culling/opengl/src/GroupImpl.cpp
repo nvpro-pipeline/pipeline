@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -36,10 +36,10 @@ namespace
   {
     // TODO pack matrix into 4th component of extent!
     //dp::math::Mat44f matrix;
-    dp::Uint32      matrix;
-    dp::Uint32      pad0;
-    dp::Uint32      pad1;
-    dp::Uint32      pad2;
+    uint32_t        matrix;
+    uint32_t        pad0;
+    uint32_t        pad1;
+    uint32_t        pad2;
     dp::math::Vec4f lowerLeft;
     dp::math::Vec4f extent;
   };
@@ -94,7 +94,7 @@ namespace dp
           {
             const ObjectBitSetSharedPtr& objectImpl = getObject( index );
             ShaderObject &object = inputs[index];
-            object.matrix = static_cast<dp::Uint32>(objectImpl->getTransformIndex());
+            object.matrix = static_cast<uint32_t>(objectImpl->getTransformIndex());
             object.lowerLeft = objectImpl->getLowerLeft();
             object.extent = objectImpl->getExtent();
           }

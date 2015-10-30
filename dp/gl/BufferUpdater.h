@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2015
+// Copyright (c) 2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -71,7 +71,7 @@ namespace dp
 
       /** \brief Add an update to the update queue.
           \param offset Offset inside the buffer where to put the data
-          \param size   Number of bytes to update. 
+          \param size   Number of bytes to update.
           \param data   A pointer to the data for the update
 
           \remarks If offset or size are not a multiple of 16 an exception will be thrown.
@@ -85,13 +85,13 @@ namespace dp
     private:
       /** \brief There's one UpdateInfo for each updateSize **/
       struct UpdateInfo {
-        std::vector<char>   data;
-        std::vector<Uint32> offsets;
-        Uint32              offsetMask; // value with all offsets or'ed.
+        std::vector<char>     data;
+        std::vector<uint32_t> offsets;
+        uint32_t              offsetMask; // value with all offsets or'ed.
       };
 
       bool                              m_batchedUpdates; // Use shader to do batched updates on GPU
-      std::map<Uint32, UpdateInfo>      m_updateInfos;          // One updateInfo per update size
+      std::map<uint32_t, UpdateInfo>    m_updateInfos;          // One updateInfo per update size
       dp::gl::BufferSharedPtr           m_buffer;               // Buffer to update
       dp::gl::BufferSharedPtr           m_bufferData;           // Buffer with data to update
       dp::gl::BufferSharedPtr           m_bufferChunkOffsets;   // Buffer with offsets of the chunks to update

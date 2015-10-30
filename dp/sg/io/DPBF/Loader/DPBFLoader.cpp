@@ -4869,8 +4869,8 @@ ParameterGroupDataSharedPtr DPBFLoader::loadLineAttribute_nbf_54(uint_t offset)
   DP_ASSERT(laPtr->objectCode==NBF_LINE_ATTRIBUTE);
 
   ParameterGroupDataSharedPtr materialData = getMaterialParameterGroup( "standardMaterialParameters" );
-  DP_VERIFY( materialData->setParameter( "lineStippleFactor", dp::checked_cast<dp::Uint16>(laPtr->stippleFactor) ) );
-  DP_VERIFY( materialData->setParameter( "lineStipplePattern", dp::checked_cast<dp::Uint16>(laPtr->stipplePattern) ) );
+  DP_VERIFY( materialData->setParameter( "lineStippleFactor", dp::checked_cast<uint16_t>(laPtr->stippleFactor) ) );
+  DP_VERIFY( materialData->setParameter( "lineStipplePattern", dp::checked_cast<uint16_t>(laPtr->stipplePattern) ) );
 
   ParameterGroupDataSharedPtr geometryData = getMaterialParameterGroup( "standardGeometryParameters" );
   DP_VERIFY( geometryData->setParameter( "lineWidth", laPtr->width ) );

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2005
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -41,7 +41,7 @@ namespace dp
       namespace manipulator
       {
 
-        static const dp::Uint32 AREAOFPEACE = 1;
+        static const uint32_t AREAOFPEACE = 1;
 
         WalkCameraManipulator::WalkCameraManipulator( const dp::math::Vec2f & sensitivity )
         : Manipulator()
@@ -62,7 +62,7 @@ namespace dp
         {
           m_deltaT = dt;
 
-          // walk, translate and tilt can be combined at 
+          // walk, translate and tilt can be combined at
           // the same time in this manipulator
           bool retval = false;
 
@@ -98,7 +98,7 @@ namespace dp
             // now, set the new camera position
             getViewState()->getCamera()->setPosition( m_currentPosition );
           }
-  
+
           return retval;
         }
 
@@ -137,7 +137,7 @@ namespace dp
             // get "closest" point
             m_currentPosition = intr.getIsp();
 
-            // place 2 meters above ground - should be scalable  
+            // place 2 meters above ground - should be scalable
             m_currentPosition += ( m_cameraHeightAboveTerrain * m_upVector );
 
             return true;
@@ -153,7 +153,7 @@ namespace dp
           if (camera)
           {
             // The walk direction is not the viewing direction of the camera.
-            // It is always parallel to the walking plane 
+            // It is always parallel to the walking plane
             Vec3f side = camera->getDirection()^m_upVector;
             Vec3f walkdir = m_upVector^side;
             walkdir.normalize();
@@ -163,13 +163,13 @@ namespace dp
             // redraw required
             return true;
           }
-   
+
           // no redraw required
           return false;
         }
 
         // note: the WalkCameraManipulatorHIDSync does not exercise this method..
-        bool WalkCameraManipulator::translate() 
+        bool WalkCameraManipulator::translate()
         {
           CameraSharedPtr camera = getViewState()->getCamera();
           if (camera)
@@ -183,7 +183,7 @@ namespace dp
 
               Vec3f side = camera->getDirection()^m_upVector;
               side.normalize();
-      
+
               DP_ASSERT(isNormalized(m_upVector));
 
               m_currentPosition += (stepX * side + stepY * m_upVector);
@@ -197,7 +197,7 @@ namespace dp
           return false;
         }
 
-        bool WalkCameraManipulator::strafe( bool right ) 
+        bool WalkCameraManipulator::strafe( bool right )
         {
           CameraSharedPtr camera = getViewState()->getCamera();
           if (camera)
@@ -207,7 +207,7 @@ namespace dp
             dir.normalize();
 
             dir *= m_speed * m_deltaT;
-      
+
             if( !right )
             {
               dir = -dir;
@@ -255,7 +255,7 @@ namespace dp
             CameraSharedPtr camera = getViewState()->getCamera();
             if (camera)
             {
-              // store the vector parallel to the walking plane 
+              // store the vector parallel to the walking plane
               Vec3f side = camera->getDirection()^m_upVector;
               m_saveCameraDirection = m_upVector^side;
               m_saveCameraDirection.normalize();

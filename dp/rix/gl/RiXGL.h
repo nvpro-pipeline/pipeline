@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2015
+// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -90,7 +90,7 @@ namespace dp
 
       struct SamplerStateDataGL : public dp::rix::core::SamplerStateData
       {
-        SamplerStateDataGL( unsigned int minFilterModeGL, unsigned int magFilterMode, unsigned int wrapMode, 
+        SamplerStateDataGL( unsigned int minFilterModeGL, unsigned int magFilterMode, unsigned int wrapMode,
                             unsigned int compareModeGL, unsigned int compareFuncGL )
           : dp::rix::core::SamplerStateData( dp::rix::core::SSDT_NATIVE )
         {
@@ -130,7 +130,7 @@ namespace dp
         unsigned int m_magFilterModeGL;
         unsigned int m_wrapSModeGL;
         unsigned int m_wrapTModeGL;
-        unsigned int m_wrapRModeGL;    
+        unsigned int m_wrapRModeGL;
 
         float        m_minLOD;
         float        m_maxLOD;
@@ -159,9 +159,9 @@ namespace dp
       };
 
       /** \brief Texture Data struct to pass in the GL id of a previously generated texture. Sets m_type to TDT_NATIVE.
-       **/ 
+       **/
       struct TextureDataGLTexture : public dp::rix::core::TextureData
-      {      
+      {
         /** \brief Provide a texture id as source for the texture data
             \param id The GL id of the previously generated and prepared texture
          **/
@@ -175,7 +175,7 @@ namespace dp
 
       enum UsageHint
       {
-        UH_STREAM_DRAW, 
+        UH_STREAM_DRAW,
         UH_STREAM_READ,
         UH_STREAM_COPY,
         UH_STATIC_DRAW,
@@ -226,9 +226,9 @@ namespace dp
       {
       };
 
-      struct BufferStoredReferenceGL : public dp::rix::core::BufferStoredReference 
+      struct BufferStoredReferenceGL : public dp::rix::core::BufferStoredReference
       {
-        dp::Uint64  address;
+        uint64_t  address;
       };
 
       class RiXGL : public dp::rix::core::Renderer

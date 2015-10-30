@@ -18,7 +18,7 @@ add_definitions(
 
 #sources
 
-set( SOURCES 
+set( SOURCES
   src/BufferGL.cpp
   src/ContainerGL.cpp
   src/GeometryDescriptionGL.cpp
@@ -121,6 +121,7 @@ set(HEADERS
   inc/TextureGL3D.h
   inc/TextureGLCubeMap.h
   inc/TextureGLCubeMapArray.h
+  inc/UniformUpdate.h
   inc/VertexAttributesGL.h
   inc/VertexCacheGL.h
   inc/VertexDataGL.h

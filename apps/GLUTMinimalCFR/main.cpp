@@ -81,7 +81,7 @@ public:
 
   /** \brief Exit after the given number of frames + 1. Use getExitCode() to retrieve the framerate.
   **/
-  void setNumberOfFrames( dp::Uint32 numberOfFrames );
+  void setNumberOfFrames( uint32_t numberOfFrames );
 
   /** \brief Exit after the given duration. Use getExitCode() to retrieve the framerate.
   **/
@@ -92,7 +92,7 @@ public:
   int getExitCode() const;
 
   virtual void paint();
- 
+
 protected:
     virtual void onSceneRendererChanged( const dp::sg::ui::SceneRendererSharedPtr &sceneRenderer );
 
@@ -109,8 +109,8 @@ private:
   };
 
   // benchmark
-  dp::Uint32          m_renderedFrames;
-  dp::Uint32          m_benchmarkFrames;
+  uint32_t            m_renderedFrames;
+  uint32_t            m_benchmarkFrames;
   dp::util::Timer     m_benchmarkTimer;
   dp::util::Timer     m_benchmarkProgressTimer;
   int                 m_exitCode;
@@ -160,7 +160,7 @@ GLUTMinimalCFR::~GLUTMinimalCFR()
   file.close();
 }
 
-void GLUTMinimalCFR::setNumberOfFrames( dp::Uint32 numberOfFrames )
+void GLUTMinimalCFR::setNumberOfFrames( uint32_t numberOfFrames )
 {
   m_benchmarkFrames = numberOfFrames;
   if( numberOfFrames != ~0 )
@@ -435,7 +435,7 @@ void GLUTMinimalCFR::onSceneRendererChanged( const dp::sg::ui::SceneRendererShar
 
 //
 // global variables
-// 
+//
 
 // the scene's viewstate
 dp::sg::ui::ViewStateSharedPtr g_viewState;
@@ -574,7 +574,7 @@ int runApp( options::variables_map const& opts )
   }
 
   CFRPipelineSharedPtr renderer = CFRPipeline::create
-  ( 
+  (
       opts["renderengine"].as<std::string>().c_str()
     , getShaderManager( opts["shadermanager"].as<std::string>() )
     , cullingMode
@@ -681,13 +681,13 @@ int runApp( options::variables_map const& opts )
     w.setNumberOfFrames( opts["frames"].as<int>() );
   }
   w.setDuration( opts["duration"].as<double>() );
-  
+
   w.setWindowSize( 1280, 720 );
   //w.show();
 
   // Keep only once reference to the renderer in the widget. This is necessary since the OpenGL resources
   // used by the renderer must be deleted before the window gets destroyed.
-  renderer.reset(); 
+  renderer.reset();
 
   g_viewState->getCamera()->setPosition(dp::math::Vec3f(0.0f, 0.0f, 5.0f));
   setLights();
@@ -702,7 +702,7 @@ int main(int argc, char *argv[])
   // initialize GLUT, set window size and display mode, create the main window
   glutInit( &argc, argv );
   glutSetOption( GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_CONTINUE_EXECUTION );
-  
+
   options::options_description od("Usage: GLUTMinimal");
   od.add_options()
     ( "filename", options::value<std::string>()->default_value("cubes"), "file to load" )

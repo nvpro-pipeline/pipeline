@@ -36,7 +36,7 @@ namespace dp
   {
     namespace xbar
     {
-      typedef dp::Uint32 ObjectTreeIndex;
+      typedef uint32_t ObjectTreeIndex;
 
       template< class NodeClass, class IndexClass >
       class TreeBaseClass
@@ -299,8 +299,8 @@ namespace dp
         }
 
       public:
-        typedef dp::Uint32 NodeIndex;
-        typedef dp::Uint32 DirtyBits;
+        typedef uint32_t NodeIndex;
+        typedef uint32_t DirtyBits;
 
         NodeIndex m_parentIndex; // index of this node's parent
         NodeIndex m_nextSibling; // index of this node's next sibling (for child iteration)

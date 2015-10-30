@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2015
+// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -41,16 +41,6 @@ namespace dp
     {
       using namespace dp::rix::core;
 
-      using dp::Int8;
-      using dp::Int16;
-      using dp::Int32;
-      using dp::Int64;
-
-      using dp::Uint8;
-      using dp::Uint16;
-      using dp::Uint32;
-      using dp::Uint64;
-
       size_t getSizeOfComponent( ContainerParameterType parameterType )
       {
         switch ( parameterType )
@@ -65,55 +55,55 @@ namespace dp
         case CPT_INT2_8:
         case CPT_INT3_8:
         case CPT_INT4_8:
-          return sizeof(Int8);
+          return sizeof(int8_t);
 
         case CPT_INT_16:
         case CPT_INT2_16:
         case CPT_INT3_16:
         case CPT_INT4_16:
-          return sizeof(Int16);
+          return sizeof(int16_t);
 
         case CPT_INT_32:
         case CPT_INT2_32:
         case CPT_INT3_32:
         case CPT_INT4_32:
-          return sizeof(Int32);
+          return sizeof(int32_t);
 
         case CPT_INT_64:
         case CPT_INT2_64:
         case CPT_INT3_64:
         case CPT_INT4_64:
-          return sizeof(Int64);
+          return sizeof(int64_t);
 
         case CPT_UINT_8:
         case CPT_UINT2_8:
         case CPT_UINT3_8:
         case CPT_UINT4_8:
-          return sizeof(Uint8);
+          return sizeof(uint8_t);
 
         case CPT_UINT_16:
         case CPT_UINT2_16:
         case CPT_UINT3_16:
         case CPT_UINT4_16:
-          return sizeof(Uint16);
+          return sizeof(uint16_t);
 
         case CPT_UINT_32:
         case CPT_UINT2_32:
         case CPT_UINT3_32:
         case CPT_UINT4_32:
-          return sizeof(Uint32);
+          return sizeof(uint32_t);
 
         case CPT_UINT_64:
         case CPT_UINT2_64:
         case CPT_UINT3_64:
         case CPT_UINT4_64:
-          return sizeof(Uint64);
+          return sizeof(uint64_t);
 
         case CPT_BOOL:
         case CPT_BOOL2:
         case CPT_BOOL3:
         case CPT_BOOL4:
-          return sizeof(Uint8);
+          return sizeof(uint8_t);
 
         case CPT_MAT2X2:
         case CPT_MAT2X3:
@@ -165,85 +155,85 @@ namespace dp
           return sizeof(float) * 4;
 
         case CPT_INT_8:
-          return sizeof(Int8);
+          return sizeof(int8_t);
         case CPT_INT2_8:
-          return sizeof(Int8) * 2;
+          return sizeof(int8_t) * 2;
         case CPT_INT3_8:
-          return sizeof(Int8) * 3;
+          return sizeof(int8_t) * 3;
         case CPT_INT4_8:
-          return sizeof(Int8) * 4;
+          return sizeof(int8_t) * 4;
 
         case CPT_INT_16:
-          return sizeof(Int16);
+          return sizeof(int16_t);
         case CPT_INT2_16:
-          return sizeof(Int16) * 2;
+          return sizeof(int16_t) * 2;
         case CPT_INT3_16:
-          return sizeof(Int16) * 3;
+          return sizeof(int16_t) * 3;
         case CPT_INT4_16:
-          return sizeof(Int16) * 4;
+          return sizeof(int16_t) * 4;
 
         case CPT_INT_32:
-          return sizeof(Int32);
+          return sizeof(int32_t);
         case CPT_INT2_32:
-          return sizeof(Int32) * 2;
+          return sizeof(int32_t) * 2;
         case CPT_INT3_32:
-          return sizeof(Int32) * 3;
+          return sizeof(int32_t) * 3;
         case CPT_INT4_32:
-          return sizeof(Int32) * 4;
+          return sizeof(int32_t) * 4;
 
         case CPT_INT_64:
-          return sizeof(Int64);
+          return sizeof(int64_t);
         case CPT_INT2_64:
-          return sizeof(Int64) * 2;
+          return sizeof(int64_t) * 2;
         case CPT_INT3_64:
-          return sizeof(Int64) * 3;
+          return sizeof(int64_t) * 3;
         case CPT_INT4_64:
-          return sizeof(Int64) * 4;
+          return sizeof(int64_t) * 4;
 
         case CPT_UINT_8:
-          return sizeof(Uint8);
+          return sizeof(uint8_t);
         case CPT_UINT2_8:
-          return sizeof(Uint8) * 2;
+          return sizeof(uint8_t) * 2;
         case CPT_UINT3_8:
-          return sizeof(Uint8) * 3;
+          return sizeof(uint8_t) * 3;
         case CPT_UINT4_8:
-          return sizeof(Uint8) * 4;
+          return sizeof(uint8_t) * 4;
 
         case CPT_UINT_16:
-          return sizeof(Uint16);
+          return sizeof(uint16_t);
         case CPT_UINT2_16:
-          return sizeof(Uint16) * 2;
+          return sizeof(uint16_t) * 2;
         case CPT_UINT3_16:
-          return sizeof(Uint16) * 3;
+          return sizeof(uint16_t) * 3;
         case CPT_UINT4_16:
-          return sizeof(Uint16) * 4;
+          return sizeof(uint16_t) * 4;
 
         case CPT_UINT_32:
-          return sizeof(Uint32);
+          return sizeof(uint32_t);
         case CPT_UINT2_32:
-          return sizeof(Uint32) * 2;
+          return sizeof(uint32_t) * 2;
         case CPT_UINT3_32:
-          return sizeof(Uint32) * 3;
+          return sizeof(uint32_t) * 3;
         case CPT_UINT4_32:
-          return sizeof(Uint32) * 4;
+          return sizeof(uint32_t) * 4;
 
         case CPT_UINT_64:
-          return sizeof(Uint64);
+          return sizeof(uint64_t);
         case CPT_UINT2_64:
-          return sizeof(Uint64) * 2;
+          return sizeof(uint64_t) * 2;
         case CPT_UINT3_64:
-          return sizeof(Uint64) * 3;
+          return sizeof(uint64_t) * 3;
         case CPT_UINT4_64:
-          return sizeof(Uint64) * 4;
+          return sizeof(uint64_t) * 4;
 
         case CPT_BOOL:
-          return sizeof(Uint8);
+          return sizeof(uint8_t);
         case CPT_BOOL2:
-          return sizeof(Uint8) * 2;
+          return sizeof(uint8_t) * 2;
         case CPT_BOOL3:
-          return sizeof(Uint8) * 3;
+          return sizeof(uint8_t) * 3;
         case CPT_BOOL4:
-          return sizeof(Uint8) * 4;
+          return sizeof(uint8_t) * 4;
 
         case CPT_MAT2X2:
           return sizeof(float) * 4;
@@ -304,7 +294,7 @@ namespace dp
           pi.m_offset    = m_size;
           pi.m_arraySize = parameters[i].m_arraySize;
 
-          // TODO: move all size types from unsigned int to size_t? 
+          // TODO: move all size types from unsigned int to size_t?
           // CK: why? hardly likely we have single arrays/types above 4 gb, keeps thing tight in cache
           pi.m_elementSize  = (unsigned int)getSizeOf( pi.m_type );
           pi.m_componentSize = (unsigned int)getSizeOfComponent( pi.m_type );
@@ -326,7 +316,7 @@ namespace dp
         if ( m_size )
         {
           m_data = malloc( m_size );
-          // must be initialized with 0 so that pointer references can 
+          // must be initialized with 0 so that pointer references can
           // be detected properly
           memset( m_data, 0, m_size );
           DP_ASSERT( m_data );

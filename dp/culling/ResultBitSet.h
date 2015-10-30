@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -46,7 +46,7 @@ namespace dp
       /** \brief Update the group of changed objects.
           \param visibility is a bitmask where the visibility for object i is specified in bit i
       **/
-      DP_CULLING_API void updateChanged( dp::Uint32 const* visibility );
+      DP_CULLING_API void updateChanged( uint32_t const* visibility );
 
       DP_CULLING_API virtual void onNotify( dp::util::Event const& event, dp::util::Payload* payload );
       DP_CULLING_API virtual void onDestroyed( dp::util::Subject const& subject, dp::util::Payload* payload );

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -81,37 +81,37 @@ namespace dp
       }
 
       // glUniform{1,2,3,4}iv
-      template<> inline void setUniform<1, dp::Int32>(int uniformLocation, unsigned int arraySize, const void *data )
+      template<> inline void setUniform<1, int32_t>(int uniformLocation, unsigned int arraySize, const void *data )
       {
         glUniform1iv( uniformLocation, arraySize, static_cast<const int *>( data ));
       }
-      template<> inline void setUniform<2, dp::Int32>(int uniformLocation, unsigned int arraySize, const void *data )
+      template<> inline void setUniform<2, int32_t>(int uniformLocation, unsigned int arraySize, const void *data )
       {
         glUniform2iv( uniformLocation, arraySize, static_cast<const int *>( data ));
       }
-      template<> inline void setUniform<3, dp::Int32>(int uniformLocation, unsigned int arraySize, const void *data )
+      template<> inline void setUniform<3, int32_t>(int uniformLocation, unsigned int arraySize, const void *data )
       {
         glUniform3iv( uniformLocation, arraySize, static_cast<const int *>( data ));
       }
-      template<> inline void setUniform<4, dp::Int32>(int uniformLocation, unsigned int arraySize, const void *data )
+      template<> inline void setUniform<4, int32_t>(int uniformLocation, unsigned int arraySize, const void *data )
       {
         glUniform4iv( uniformLocation, arraySize, static_cast<const int *>( data ));
       }
 
       // glUniform{1,2,3,4}uiv
-      template<> inline void setUniform<1, dp::Uint32>(int uniformLocation, unsigned int arraySize, const void *data )
+      template<> inline void setUniform<1, uint32_t>(int uniformLocation, unsigned int arraySize, const void *data )
       {
         glUniform1uiv( uniformLocation, arraySize, static_cast<const unsigned int *>( data ));
       }
-      template<> inline void setUniform<2, dp::Uint32>(int uniformLocation, unsigned int arraySize, const void *data )
+      template<> inline void setUniform<2, uint32_t>(int uniformLocation, unsigned int arraySize, const void *data )
       {
         glUniform2uiv( uniformLocation, arraySize, static_cast<const unsigned int *>( data ));
       }
-      template<> inline void setUniform<3, dp::Uint32>(int uniformLocation, unsigned int arraySize, const void *data )
+      template<> inline void setUniform<3, uint32_t>(int uniformLocation, unsigned int arraySize, const void *data )
       {
         glUniform3uiv( uniformLocation, arraySize, static_cast<const unsigned int *>( data ));
       }
-      template<> inline void setUniform<4, dp::Uint32>(int uniformLocation, unsigned int arraySize, const void *data )
+      template<> inline void setUniform<4, uint32_t>(int uniformLocation, unsigned int arraySize, const void *data )
       {
         glUniform4uiv( uniformLocation, arraySize, static_cast<const unsigned int *>( data ));
       }

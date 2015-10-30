@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2011
+// Copyright (c) 2010-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -37,14 +37,14 @@ namespace dp
 {
   namespace gl
   {
-    typedef dp::Uint32 TargetBufferMask;
+    typedef uint32_t TargetBufferMask;
 
     static const TargetBufferMask TBM_COLOR_BUFFER   = BIT0;
     static const TargetBufferMask TBM_DEPTH_BUFFER   = BIT30;
     static const TargetBufferMask TBM_STENCIL_BUFFER = BIT31;
 
     /** \brief RenderTarget is the base class for OpenGL based RenderTargets like dp::gl::RenderTargetFB
-               and dp::gl::RenderTargetFBO. It contains basic OpenGL functionality like OpenGL context 
+               and dp::gl::RenderTargetFBO. It contains basic OpenGL functionality like OpenGL context
                managment, framebuffer grabbing and clearing the background.
     **/
     class RenderTarget : public dp::ui::RenderTarget

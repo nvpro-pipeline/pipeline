@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2015
+// Copyright (c) 2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -39,7 +39,7 @@ namespace dp
 #define OUTPUT_BINDING 1
 #define CHUNK_OFFSET_BINDING 2
 #define LOCAL_SIZE_X 32
-    
+
 
     static const char* copyShader =
       "uniform int numChunks;\n"
@@ -104,13 +104,13 @@ namespace dp
 
       if (m_batchedUpdates)
       {
-        UpdateInfo &info = m_updateInfos[dp::checked_cast<dp::Uint32>(size)];
+        UpdateInfo &info = m_updateInfos[dp::checked_cast<uint32_t>(size)];
 
         size_t dataOffset = info.data.size();
         info.data.resize(dataOffset + size);
         memcpy(info.data.data() + dataOffset, data, size);
 
-        dp::Uint32 offset32 = dp::checked_cast<dp::Uint32>(offset);
+        uint32_t offset32 = dp::checked_cast<uint32_t>(offset);
         info.offsets.push_back(offset32);
         info.offsetMask |= offset32;
       }
@@ -138,14 +138,14 @@ namespace dp
         dp::gl::ProgramInstanceSharedPtr program;
 
         // determine if it's possible to use the shader to scatter data on the GPU side.
-        dp::Uint32 alignmentMask = it->first | it->second.offsetMask;
+        uint32_t alignmentMask = it->first | it->second.offsetMask;
         if (!(alignmentMask & 15))
         {
           program = m_programUpdate16;
           alignment = 16;
         }
 
-        
+
         if (!(alignmentMask & 7))
         {
           program = m_programUpdate8;
@@ -159,7 +159,7 @@ namespace dp
         else
         {
           // cannot use shader if alignment requirements are not fulfilled.
-          useShader = false;  
+          useShader = false;
         }
 
         // use shader to scatter updates on the GPU

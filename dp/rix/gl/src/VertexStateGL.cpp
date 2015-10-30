@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2015
+// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -98,7 +98,7 @@ namespace dp
         VertexFormat newFormat;
         memset( &newFormat, 0, sizeof( newFormat ) );
 
-        dp::Int8 streamMap[RIX_GL_MAX_ATTRIBUTES];
+        int8_t streamMap[RIX_GL_MAX_ATTRIBUTES];
         memset( streamMap, -1, RIX_GL_MAX_ATTRIBUTES );
         int numStreams = 0;
 

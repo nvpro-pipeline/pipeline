@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2014
+// Copyright (c) 2014-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -94,10 +94,10 @@ namespace dp
                             {
                                 dp::sg::core::VertexAttribute const & va = vertexAttributeSet->getVertexAttribute(index);
 
-                                dp::rix::core::VertexFormatInfo vfi( index, 
-                                    va.getVertexDataType(), 
+                                dp::rix::core::VertexFormatInfo vfi( index,
+                                    va.getVertexDataType(),
                                     va.getVertexDataSize(),
-                                    false, 
+                                    false,
                                     0, // reducing to a single stream always!
                                     offset, // offset, fill in later
                                     0 // stride, fill in later
@@ -113,7 +113,7 @@ namespace dp
                             unsigned int stride = offset;
                             size_t numberOfVertices = vertexAttributeSet->getNumberOfVertexData(sourceAttributes.front());
 
-                            std::vector<dp::Uint8> vertices(numberOfVertices * stride);
+                            std::vector<uint8_t> vertices(numberOfVertices * stride);
                             for (size_t index = 0;index < sourceAttributes.size();++index) {
                                 dp::sg::core::VertexAttribute const & va = vertexAttributeSet->getVertexAttribute(sourceAttributes[index]);
 
@@ -121,7 +121,7 @@ namespace dp
 
                                 dp::sg::core::BufferSharedPtr const & buffer = vertexAttributeSet->getVertexBuffer(sourceAttributes[index]);
                                 dp::sg::core::Buffer::DataReadLock drl(buffer);
-                                dp::util::stridedMemcpy(vertices.data(), vertexInfos[index].m_offset, vertexInfos[index].m_stride, 
+                                dp::util::stridedMemcpy(vertices.data(), vertexInfos[index].m_offset, vertexInfos[index].m_stride,
                                     drl.getPtr(), va.getVertexDataOffsetInBytes(), va.getVertexDataStrideInBytes(), va.getVertexDataBytes(),
                                     numberOfVertices);
                             }

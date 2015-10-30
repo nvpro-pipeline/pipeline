@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -97,45 +97,45 @@ namespace dp
       typedef ParameterntBuffer<3, double> ParameterBufferDouble3;
       typedef ParameterntBuffer<4, double> ParameterBufferDouble4;
 
-      typedef ParameterntBufferConversion<1, dp::Int32, dp::Int8> ParameterBufferInt_8;
-      typedef ParameterntBufferConversion<2, dp::Int32, dp::Int8> ParameterBufferInt2_8;
-      typedef ParameterntBufferConversion<3, dp::Int32, dp::Int8> ParameterBufferInt3_8;
-      typedef ParameterntBufferConversion<4, dp::Int32, dp::Int8> ParameterBufferInt4_8;
+      typedef ParameterntBufferConversion<1, int32_t, int8_t> ParameterBufferInt_8;
+      typedef ParameterntBufferConversion<2, int32_t, int8_t> ParameterBufferInt2_8;
+      typedef ParameterntBufferConversion<3, int32_t, int8_t> ParameterBufferInt3_8;
+      typedef ParameterntBufferConversion<4, int32_t, int8_t> ParameterBufferInt4_8;
 
-      typedef ParameterntBufferConversion<1, dp::Int32, dp::Int16> ParameterBufferInt_16;
-      typedef ParameterntBufferConversion<2, dp::Int32, dp::Int16> ParameterBufferInt2_16;
-      typedef ParameterntBufferConversion<3, dp::Int32, dp::Int16> ParameterBufferInt3_16;
-      typedef ParameterntBufferConversion<4, dp::Int32, dp::Int16> ParameterBufferInt4_16;
+      typedef ParameterntBufferConversion<1, int32_t, int16_t> ParameterBufferInt_16;
+      typedef ParameterntBufferConversion<2, int32_t, int16_t> ParameterBufferInt2_16;
+      typedef ParameterntBufferConversion<3, int32_t, int16_t> ParameterBufferInt3_16;
+      typedef ParameterntBufferConversion<4, int32_t, int16_t> ParameterBufferInt4_16;
 
-      typedef ParameterntBuffer<1, dp::Int32> ParameterBufferInt_32;
-      typedef ParameterntBuffer<2, dp::Int32> ParameterBufferInt2_32;
-      typedef ParameterntBuffer<3, dp::Int32> ParameterBufferInt3_32;
-      typedef ParameterntBuffer<4, dp::Int32> ParameterBufferInt4_32;
+      typedef ParameterntBuffer<1, int32_t> ParameterBufferInt_32;
+      typedef ParameterntBuffer<2, int32_t> ParameterBufferInt2_32;
+      typedef ParameterntBuffer<3, int32_t> ParameterBufferInt3_32;
+      typedef ParameterntBuffer<4, int32_t> ParameterBufferInt4_32;
 
-      typedef ParameterntBuffer<1, dp::Int64> ParameterBufferInt_64;
-      typedef ParameterntBuffer<2, dp::Int64> ParameterBufferInt2_64;
-      typedef ParameterntBuffer<3, dp::Int64> ParameterBufferInt3_64;
-      typedef ParameterntBuffer<4, dp::Int64> ParameterBufferInt4_64;
+      typedef ParameterntBuffer<1, int64_t> ParameterBufferInt_64;
+      typedef ParameterntBuffer<2, int64_t> ParameterBufferInt2_64;
+      typedef ParameterntBuffer<3, int64_t> ParameterBufferInt3_64;
+      typedef ParameterntBuffer<4, int64_t> ParameterBufferInt4_64;
 
-      typedef ParameterntBufferConversion<1, dp::Uint32, dp::Uint8> ParameterBufferUint_8;
-      typedef ParameterntBufferConversion<2, dp::Uint32, dp::Uint8> ParameterBufferUint2_8;
-      typedef ParameterntBufferConversion<3, dp::Uint32, dp::Uint8> ParameterBufferUint3_8;
-      typedef ParameterntBufferConversion<4, dp::Uint32, dp::Uint8> ParameterBufferUint4_8;
+      typedef ParameterntBufferConversion<1, uint32_t, uint8_t> ParameterBufferUint_8;
+      typedef ParameterntBufferConversion<2, uint32_t, uint8_t> ParameterBufferUint2_8;
+      typedef ParameterntBufferConversion<3, uint32_t, uint8_t> ParameterBufferUint3_8;
+      typedef ParameterntBufferConversion<4, uint32_t, uint8_t> ParameterBufferUint4_8;
 
-      typedef ParameterntBufferConversion<1, dp::Uint32, dp::Uint16> ParameterBufferUint_16;
-      typedef ParameterntBufferConversion<2, dp::Uint32, dp::Uint16> ParameterBufferUint2_16;
-      typedef ParameterntBufferConversion<3, dp::Uint32, dp::Uint16> ParameterBufferUint3_16;
-      typedef ParameterntBufferConversion<4, dp::Uint32, dp::Uint16> ParameterBufferUint4_16;
+      typedef ParameterntBufferConversion<1, uint32_t, uint16_t> ParameterBufferUint_16;
+      typedef ParameterntBufferConversion<2, uint32_t, uint16_t> ParameterBufferUint2_16;
+      typedef ParameterntBufferConversion<3, uint32_t, uint16_t> ParameterBufferUint3_16;
+      typedef ParameterntBufferConversion<4, uint32_t, uint16_t> ParameterBufferUint4_16;
 
-      typedef ParameterntBuffer<1, dp::Uint32> ParameterBufferUint_32;
-      typedef ParameterntBuffer<2, dp::Uint32> ParameterBufferUint2_32;
-      typedef ParameterntBuffer<3, dp::Uint32> ParameterBufferUint3_32;
-      typedef ParameterntBuffer<4, dp::Uint32> ParameterBufferUint4_32;
+      typedef ParameterntBuffer<1, uint32_t> ParameterBufferUint_32;
+      typedef ParameterntBuffer<2, uint32_t> ParameterBufferUint2_32;
+      typedef ParameterntBuffer<3, uint32_t> ParameterBufferUint3_32;
+      typedef ParameterntBuffer<4, uint32_t> ParameterBufferUint4_32;
 
-      typedef ParameterntBuffer<1, dp::Uint64> ParameterBufferUint_64;
-      typedef ParameterntBuffer<2, dp::Uint64> ParameterBufferUint2_64;
-      typedef ParameterntBuffer<3, dp::Uint64> ParameterBufferUint3_64;
-      typedef ParameterntBuffer<4, dp::Uint64> ParameterBufferUint4_64;
+      typedef ParameterntBuffer<1, uint64_t> ParameterBufferUint_64;
+      typedef ParameterntBuffer<2, uint64_t> ParameterBufferUint2_64;
+      typedef ParameterntBuffer<3, uint64_t> ParameterBufferUint3_64;
+      typedef ParameterntBuffer<4, uint64_t> ParameterBufferUint4_64;
 
       typedef ParameternmtBuffer<2, 2, float> ParameterBufferFloat2x2;
       typedef ParameternmtBuffer<2, 3, float> ParameterBufferFloat2x3;

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2014-2015
+// Copyright (c) 2014-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -43,7 +43,7 @@ namespace dp
         , m_bindingIndex(GLint(bindingIndex))
         , m_baseAddress(0)
         , m_bindingLength(bindingLength)
-        , m_cacheData(new dp::Uint8[m_bindingLength])
+        , m_cacheData(new uint8_t[m_bindingLength])
         , m_bufferUpdater(new dp::gl::BufferUpdater(buffer, batchedUpdates))
       {
       }
@@ -56,7 +56,7 @@ namespace dp
       }
 
       void ParameterRendererBufferAddressRange::render( void const* cache )
-      { 
+      {
         GLsizeiptr const offset = reinterpret_cast<GLintptr>(cache);
         glBufferAddressRangeNV(m_target, m_bindingIndex,  m_baseAddress + offset, m_bindingLength);
       }

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2012
+// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -53,7 +53,7 @@ namespace dp
         DP_SG_XBAR_API DrawableManager( );
         DP_SG_XBAR_API virtual ~DrawableManager();
 
-        // A handle cannot be a simple unsigned int. It needs to be able to store more 
+        // A handle cannot be a simple unsigned int. It needs to be able to store more
         // information like which rendergroup(s) the geonode belongs to. Of course having
         // an indirection would be possible too.
         class HandleData
@@ -75,7 +75,7 @@ namespace dp
         DP_SG_XBAR_API virtual const dp::sg::core::SamplerSharedPtr & getEnvironmentSampler() const = 0;
 
         DP_SG_XBAR_API virtual std::map<dp::fx::Domain,std::string> getShaderSources( const dp::sg::core::GeoNodeSharedPtr & geoNode, bool depthPass ) const = 0;
-  
+
         DP_SG_XBAR_API void setSceneTree( SceneTreeSharedPtr const & sceneTree );
         SceneTreeSharedPtr const & getSceneTree() const { return m_sceneTree; }
 
@@ -86,7 +86,7 @@ namespace dp
         DP_SG_XBAR_API void update();
 
         /** \brief Initialize handles for existing objects in SceneTree during construction. Call from constructor.**/
-        void initializeHandles(); 
+        void initializeHandles();
 
         /** \brief Get handle for given ObjectTreeIndex **/
         Handle const & getDrawableInstance( ObjectTreeIndex objectTreeIndex );
@@ -95,7 +95,7 @@ namespace dp
         DP_SG_XBAR_API virtual void removeDrawableInstance( Handle handle ) = 0;
         DP_SG_XBAR_API virtual void updateDrawableInstance( Handle handle ) = 0;
         DP_SG_XBAR_API virtual void setDrawableInstanceActive( Handle handle, bool visible ) = 0;
-        DP_SG_XBAR_API virtual void setDrawableInstanceTraversalMask( Handle handle, dp::Uint32 traversalMask ) = 0;
+        DP_SG_XBAR_API virtual void setDrawableInstanceTraversalMask( Handle handle, uint32_t traversalMask ) = 0;
 
       private:
         /** \brief Detach from current SceneTree. Called from setSceneTree. Calls removeDrawableInstance for all Drawables **/
@@ -116,12 +116,12 @@ namespace dp
         std::vector<Handle> m_dis;
       };
 
-      inline DrawableManager::Handle const & DrawableManager::getDrawableInstance( ObjectTreeIndex objectTreeIndex ) 
+      inline DrawableManager::Handle const & DrawableManager::getDrawableInstance( ObjectTreeIndex objectTreeIndex )
       {
         DP_ASSERT(objectTreeIndex < m_dis.size());
         return m_dis[objectTreeIndex];
       }
-      
+
 
     } // namespace xbar
   } // namespace sg

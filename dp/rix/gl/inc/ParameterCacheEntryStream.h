@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2013-2014
+// Copyright (c) 2013-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -49,10 +49,10 @@ namespace dp
         ParameterCacheEntryStream( size_t cacheOffset, size_t containerOffset, size_t arraySize, size_t size );
 
       protected:
-        dp::Uint32  m_arraySize;
-        size_t      m_cacheOffset;
-        size_t      m_containerOffset;
-        size_t      m_size;
+        uint32_t  m_arraySize;
+        size_t    m_cacheOffset;
+        size_t    m_containerOffset;
+        size_t    m_size;
       };
 
       typedef std::vector<ParameterCacheEntryStreamSharedPtr> ParameterCacheEntryStreams;

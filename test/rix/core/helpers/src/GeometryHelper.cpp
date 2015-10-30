@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -69,9 +69,9 @@ namespace dp
             m_rix->bufferSetSize( vbuffers[curAttr], meshIn->m_attributes[curAttr].m_data.size() * sizeof(float) );
             m_rix->bufferUpdateData( vbuffers[curAttr], 0, &meshIn->m_attributes[curAttr].m_data[0], meshIn->m_attributes[curAttr].m_data.size() * sizeof(float) );
 
-            dp::Uint8 streamId = dp::checked_cast<dp::Uint8>( vfis.size() );
+            uint8_t streamId = dp::checked_cast<uint8_t>( vfis.size() );
 
-            vfis.push_back( VertexFormatInfo( i, dp::DT_FLOAT_32, meshIn->m_attributes[curAttr].m_dimensionality, false, 
+            vfis.push_back( VertexFormatInfo( i, dp::DT_FLOAT_32, meshIn->m_attributes[curAttr].m_dimensionality, false,
                                               streamId, 0, meshIn->m_attributes[curAttr].m_dimensionality * sizeof(float)) );
 
             m_rix->vertexDataSet( vertexData, streamId, vbuffers[curAttr], 0, meshIn->m_attributes[curAttr].m_data.size() / meshIn->m_attributes[curAttr].m_dimensionality );

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -85,27 +85,27 @@ static const char* shader =
 "\n"
 "  if ( p.x <= -p.w )\n"
 "  {\n"
-"    cf |= 0x01;\n" 
+"    cf |= 0x01;\n"
 "  }\n"
 "  else if ( p.w <= p.x )\n"
 "  {\n"
-"    cf |= 0x02;\n" 
+"    cf |= 0x02;\n"
 "  }\n"
 "  if ( p.y <= -p.w )\n"
 "  {\n"
-"    cf |= 0x04;\n" 
+"    cf |= 0x04;\n"
 "  }\n"
 "  else if ( p.w <= p.y )\n"
 "  {\n"
-"    cf |= 0x08;\n" 
+"    cf |= 0x08;\n"
 "  }\n"
 "  if ( p.z <= -p.w )\n"
 "  {\n"
-"    cf |= 0x10;\n" 
+"    cf |= 0x10;\n"
 "  }\n"
 "  else if ( p.w <= p.z )\n"
 "  {\n"
-"    cf |= 0x20;\n" 
+"    cf |= 0x20;\n"
 "  }\n"
 "  cfo = cfo | cf;\n"
 "  cfa = cfa & cf;\n"
@@ -242,7 +242,7 @@ namespace dp
         glDispatchCompute( static_cast<GLuint>(numberOfWorkingGroups), 1, 1 );
         glMemoryBarrier( GL_BUFFER_UPDATE_BARRIER_BIT ); // TODO This is way too slow to use, but correct.
         glMemoryBarrier( GL_SHADER_STORAGE_BARRIER_BIT );
-        dp::gl::MappedBuffer<dp::Uint32> visibleShader( groupImpl->getOutputBuffer(), GL_MAP_READ_BIT );
+        dp::gl::MappedBuffer<uint32_t> visibleShader( groupImpl->getOutputBuffer(), GL_MAP_READ_BIT );
         result.staticCast<ResultBitSet>()->updateChanged( visibleShader );
       }
 

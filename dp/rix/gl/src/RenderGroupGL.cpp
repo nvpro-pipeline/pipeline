@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2015
+// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -42,7 +42,7 @@ namespace dp
 
       void RenderGroupGL::Cache::addGeometryInstance( GeometryInstanceGLHandle gi )
       {
-        gi->m_payload.m_position = dp::checked_cast<dp::Uint32>(m_geometryInstances.size());
+        gi->m_payload.m_position = dp::checked_cast<uint32_t>(m_geometryInstances.size());
         gi->m_payload.m_gi = gi;
 
         gi->m_renderGroup = m_renderGroup;
@@ -60,7 +60,7 @@ namespace dp
       {
         gi->detach( m_renderGroup, &gi->m_payload );
 
-        dp::Uint32 pos = gi->m_payload.m_position;
+        uint32_t pos = gi->m_payload.m_position;
         m_dirty = true;
 
         // replace gi with the one at the back to avoid moving gis

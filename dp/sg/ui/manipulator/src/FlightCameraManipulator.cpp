@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2005
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -40,7 +40,7 @@ namespace dp
       namespace manipulator
       {
 
-        static const dp::Uint32 AREAOFPEACE = 1;
+        static const uint32_t AREAOFPEACE = 1;
 
         FlightCameraManipulator::FlightCameraManipulator( const dp::math::Vec2f & sensitivity )
         : Manipulator()
@@ -65,7 +65,7 @@ namespace dp
             result = fly();
           }
 
-          return result; 
+          return result;
         }
 
         void FlightCameraManipulator::reset()
@@ -75,19 +75,19 @@ namespace dp
 
         bool FlightCameraManipulator::fly()
         {
-          // Since this is more or less a slow helicopter flight we only 
+          // Since this is more or less a slow helicopter flight we only
           // rotate around the world axis.
 
           CameraSharedPtr const& camera = getViewState()->getCamera();
 
           if (camera && fabs( m_speed ) > 0.f )
           {
-            // left / right 
+            // left / right
             float deltaX = getRenderTarget()->getWidth() * 0.5f - getLastX();
             if ( fabs(deltaX) > AREAOFPEACE )
             {
               // so we start at 0
-              (deltaX < 0.f) ? deltaX += AREAOFPEACE : deltaX -= AREAOFPEACE; 
+              (deltaX < 0.f) ? deltaX += AREAOFPEACE : deltaX -= AREAOFPEACE;
 
               float alpha = m_deltaT * m_sensitivity[0] * deltaX;
               camera->rotate(m_upVector, degToRad(alpha), false);
@@ -103,7 +103,7 @@ namespace dp
               // determine the horizontal axis
               Vec3f side = camera->getDirection() ^ camera->getUpVector();
               side.normalize();
-      
+
               float alpha = m_deltaT * m_sensitivity[1] * deltaY;
               camera->rotate(side, degToRad(alpha), false);
             }

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2015
+// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -54,16 +54,6 @@ namespace dp
     {
       using namespace dp::rix::core;
 
-      using dp::Int8;
-      using dp::Int16;
-      using dp::Int32;
-      using dp::Int64;
-
-      using dp::Uint8;
-      using dp::Uint16;
-      using dp::Uint32;
-      using dp::Uint64;
-
       ProgramGL::ProgramGL( const ProgramDescription& descr )
       {
         DP_ASSERT( descr.m_shader.m_type == PST_CODE );
@@ -81,7 +71,7 @@ namespace dp
         }
       }
 
-      ProgramGL::ProgramGL() 
+      ProgramGL::ProgramGL()
       {
       }
 

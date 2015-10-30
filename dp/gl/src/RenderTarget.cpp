@@ -238,7 +238,7 @@ namespace dp
     }
 #endif
 
-    std::vector<dp::Uint8> RenderTarget::getImagePixels( GLenum mode, dp::PixelFormat pixelFormat, dp::DataType pixelDataType )
+    std::vector<uint8_t> RenderTarget::getImagePixels( GLenum mode, dp::PixelFormat pixelFormat, dp::DataType pixelDataType )
     {
       // FIXME use C++ object for current/noncurrent for exception safety
       makeCurrent();
@@ -344,7 +344,7 @@ namespace dp
       }
 
       size_t imageSizeInBytes = m_width * m_height * components * bytesPerComponent;
-      std::vector<dp::Uint8> output(imageSizeInBytes);
+      std::vector<uint8_t> output(imageSizeInBytes);
 
       if ( imageSizeInBytes )
       {
@@ -373,7 +373,7 @@ namespace dp
       makeCurrent();
 
       dp::util::ImageSharedPtr image = dp::util::Image::create();
-      std::vector<dp::Uint8> pixels = getImagePixels( mode, pixelFormat, pixelDataType );
+      std::vector<uint8_t> pixels = getImagePixels( mode, pixelFormat, pixelDataType );
       if ( !pixels.empty() )
       {
         image->setSingleLayerData( m_width, m_height, pixelFormat, pixelDataType, &pixels[0] );

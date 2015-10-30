@@ -155,7 +155,7 @@ namespace dp
               bool                          m_isVisible;
               bool                          m_isActive;
               bool                          m_isTraversalActive;
-              dp::Uint32                    m_activeTraversalMask;
+              uint32_t                      m_activeTraversalMask;
               dp::sg::xbar::ObjectTreeIndex m_objectTreeIndex;
               DefaultHandleDataSharedPtr    m_handle;
 
@@ -185,7 +185,7 @@ namespace dp
             virtual void removeDrawableInstance( Handle handle );
             virtual void updateDrawableInstance( Handle handle );
             virtual void setDrawableInstanceActive( Handle handle, bool visible );
-            virtual void setDrawableInstanceTraversalMask( Handle handle, dp::Uint32 traversalMask );
+            virtual void setDrawableInstanceTraversalMask( Handle handle, uint32_t traversalMask );
 
             virtual void setEnvironmentSampler( const dp::sg::core::SamplerSharedPtr & sampler );
             virtual const dp::sg::core::SamplerSharedPtr & getEnvironmentSampler() const;

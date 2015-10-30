@@ -78,7 +78,7 @@ public:
 
   /** \brief Exit after the given number of frames + 1. Use getExitCode() to retrieve the framerate.
   **/
-  void setNumberOfFrames( dp::Uint32 numberOfFrames );
+  void setNumberOfFrames( uint32_t numberOfFrames );
 
   /** \brief Exit after the given duration. Use getExitCode() to retrieve the framerate.
   **/
@@ -106,8 +106,8 @@ private:
   };
 
   // benchmark
-  dp::Uint32      m_renderedFrames;
-  dp::Uint32      m_benchmarkFrames;
+  uint32_t        m_renderedFrames;
+  uint32_t        m_benchmarkFrames;
   dp::util::Timer m_benchmarkTimer;
   dp::util::Timer m_benchmarkProgressTimer;
   int             m_exitCode;
@@ -140,7 +140,7 @@ GLUTMinimal::~GLUTMinimal()
   setManipulator( 0 );
 }
 
-void GLUTMinimal::setNumberOfFrames( dp::Uint32 numberOfFrames )
+void GLUTMinimal::setNumberOfFrames( uint32_t numberOfFrames )
 {
   m_benchmarkFrames = numberOfFrames;
   if( numberOfFrames != ~0 )

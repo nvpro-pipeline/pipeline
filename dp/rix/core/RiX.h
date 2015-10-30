@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2012
+// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -31,6 +31,7 @@
 #include <dp/rix/core/HandledObject.h>
 #include <cassert>
 #include <stddef.h>
+#include <stdint.h>
 
 namespace dp
 {
@@ -424,7 +425,7 @@ namespace dp
         TextureDataType m_type;
       };
 
-      /** \brief Texture Data struct to pass references to previously constructed Buffers. Sets m_type to TDT_BUFFER. 
+      /** \brief Texture Data struct to pass references to previously constructed Buffers. Sets m_type to TDT_BUFFER.
           \remarks This struct can only be used in conjunction with TT_BUFFER texture types.
        **/
       struct TextureDataBuffer : public TextureData
@@ -445,7 +446,7 @@ namespace dp
             \param data          Pointer to pixel data
             \param pixelFormat   The format of a pixel in data
             \param pixelDataType The data type of a pixel in data
-            \remarks This convenience constructor uses the intermediate pointer m_pData to construct the void** m_data, so 
+            \remarks This convenience constructor uses the intermediate pointer m_pData to construct the void** m_data, so
             only a void* has to be passed into the struct
         **/
         RIX_CORE_API TextureDataPtr( void const * data, dp::PixelFormat pixelFormat, dp::DataType pixelDataType );
@@ -596,7 +597,7 @@ namespace dp
 
       struct ContainerDataRaw : public ContainerData
       {
-        ContainerDataRaw( size_t offset, const void *data, size_t size ) 
+        ContainerDataRaw( size_t offset, const void *data, size_t size )
           : ContainerData( CDT_RAW )
           , m_offset( offset )
           , m_data( data )
@@ -630,7 +631,7 @@ namespace dp
           : ContainerData( CDT_SAMPLER )
           , m_samplerHandle( sampler )
         {}
-    
+
         SamplerSharedHandle m_samplerHandle;
       };
 
@@ -644,7 +645,7 @@ namespace dp
           , m_layer( layer )
           , m_access( access )
         {}
-          
+
         TextureSharedHandle m_textureHandle;
         int                 m_level;
         bool                m_layered;
@@ -704,8 +705,8 @@ namespace dp
         }
 
         /* \brief attributeIndex attribute location in shader
-        */ 
-        VertexFormatInfo( dp::Uint8 attributeIndex, dp::DataType dataType, dp::Uint8 numberOfComponents, bool normalized, dp::Uint8 streamId, size_t offset, size_t stride )
+        */
+        VertexFormatInfo( uint8_t attributeIndex, dp::DataType dataType, uint8_t numberOfComponents, bool normalized, uint8_t streamId, size_t offset, size_t stride )
           : m_attributeIndex( attributeIndex )
           , m_numComponents( numberOfComponents )
           , m_streamId( streamId )
@@ -716,9 +717,9 @@ namespace dp
         {
         }
 
-        dp::Uint8     m_attributeIndex;
-        dp::Uint8     m_numComponents;
-        dp::Uint8     m_streamId;
+        uint8_t       m_attributeIndex;
+        uint8_t       m_numComponents;
+        uint8_t       m_streamId;
         bool          m_normalized;
         dp::DataType  m_dataType;
         size_t        m_offset;
@@ -743,7 +744,7 @@ namespace dp
         size_t            m_numVertexFormatInfos;
       };
 
-      class RenderOptions // Per render call data. 
+      class RenderOptions // Per render call data.
       {
       public:
         RenderOptions()
@@ -765,7 +766,7 @@ namespace dp
       };
 
 
-      // Helper Functions 
+      // Helper Functions
       RIX_CORE_API size_t getSizeOf( dp::DataType dataType );
 
       class Renderer
