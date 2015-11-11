@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -61,8 +61,8 @@ namespace dp
             virtual void addSystemContainers( ShaderManagerInstanceSharedPtr const & shaderObject );
             virtual void addSystemContainers( ShaderManagerRenderGroupSharedPtr const & renderGroup );
 
-            virtual void updateEnvironment( ResourceSamplerSharedPtr environmentSampler );
             virtual void updateFragmentParameter( std::string const & name, dp::rix::core::ContainerDataRaw const & data );
+            virtual void updateFragmentParameter( std::string const & name, dp::rix::core::ContainerDataSampler const& data );
 
             /*********************************/
             /* Global SceniX Specific values */
@@ -84,9 +84,7 @@ namespace dp
             dp::rix::fx::GroupDataSharedHandle    m_groupDataCamera;
 
           private:
-            dp::rix::core::ContainerDescriptorSharedHandle m_descriptorEnvironment;
             dp::rix::core::ContainerDescriptorSharedHandle m_descriptorFragment;
-            dp::rix::core::ContainerSharedHandle           m_containerEnvironment;
             dp::rix::core::ContainerSharedHandle           m_containerFragment;
             dp::fx::EffectSpecSharedPtr                    m_fragmentSystemSpec;
 

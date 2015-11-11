@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2015
+// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -103,6 +103,7 @@ namespace dp
             TransparencyManagerSharedPtr const & getTransparencyManager() const;
 
             virtual void updateFragmentParameter( std::string const & name, dp::rix::core::ContainerDataRaw const & data ) = 0;
+            virtual void updateFragmentParameter( std::string const & name, dp::rix::core::ContainerDataSampler const & data ) = 0;
             void update( dp::sg::ui::ViewStateSharedPtr const& vs );
 
             virtual void updateTransforms() = 0;
@@ -119,7 +120,6 @@ namespace dp
             virtual std::map<dp::fx::Domain,std::string> getShaderSources( const dp::sg::core::GeoNodeSharedPtr & geoNode, bool depthPass ) const = 0;
 
           protected:
-            virtual void updateEnvironment( ResourceSamplerSharedPtr environmentSampler ) = 0;
             virtual void updateLights( dp::sg::ui::ViewStateSharedPtr const& vs ) = 0;
             virtual void updateCameraState( dp::math::Mat44f const & worldToProj, dp::math::Mat44f const & viewToWorld ) = 0;
 
@@ -140,7 +140,6 @@ namespace dp
             dp::rix::core::ProgramHandle m_programFixedFunction; // TODO does this belong to ResourceEffectSpec somehow?
 
           private:
-            bool                            m_environmentNeedsUpdate;
             dp::sg::core::SamplerSharedPtr  m_environmentSampler;
             ResourceSamplerSharedPtr        m_environmentResourceSampler;
             TransparencyManagerSharedPtr    m_transparencyManager;

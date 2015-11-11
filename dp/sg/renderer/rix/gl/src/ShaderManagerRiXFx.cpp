@@ -264,22 +264,17 @@ namespace dp
             // create a GroupData for the Camera
             m_groupDataCamera = m_rixFxManager->groupDataCreate( groupSpecCamera );
 
-            // create environment description
-            dp::rix::core::ProgramParameter programParametersEnvironment[] =
-            {
-              dp::rix::core::ProgramParameter( "sys_EnvironmentSampler",        dp::rix::core::CPT_SAMPLER ),
-              dp::rix::core::ProgramParameter( "sys_EnvironmentSamplerEnabled", dp::rix::core::CPT_BOOL)
-            };
-            m_descriptorEnvironment = m_renderer->containerDescriptorCreate( dp::rix::core::ProgramParameterDescriptorCommon( programParametersEnvironment, sizeof dp::util::array(programParametersEnvironment) ) );
-            m_containerEnvironment  = m_renderer->containerCreate( m_descriptorEnvironment );
-
             std::vector<dp::rix::core::ProgramParameter> programParametersFragment;
-            programParametersFragment.push_back( dp::rix::core::ProgramParameter( "sys_ViewportSize", dp::rix::core::CPT_UINT2_32 ) );
+            programParametersFragment.push_back( dp::rix::core::ProgramParameter( "sys_EnvironmentSampler",        dp::rix::core::CPT_SAMPLER ) );
+            programParametersFragment.push_back( dp::rix::core::ProgramParameter( "sys_EnvironmentSamplerEnabled", dp::rix::core::CPT_BOOL ) );
+            programParametersFragment.push_back( dp::rix::core::ProgramParameter( "sys_ViewportSize",              dp::rix::core::CPT_UINT2_32 ) );
             getTransparencyManager()->addFragmentParameters( programParametersFragment );
             m_descriptorFragment = m_renderer->containerDescriptorCreate( dp::rix::core::ProgramParameterDescriptorCommon( programParametersFragment.data(), programParametersFragment.size() ) );
             m_containerFragment = m_renderer->containerCreate( m_descriptorFragment );
 
             std::vector<dp::fx::ParameterSpec> fragmentSpecs;
+            fragmentSpecs.push_back( ParameterSpec( "sys_EnvironmentSampler", PT_SAMPLER_PTR | PT_SAMPLER_2D, dp::util::SEMANTIC_VALUE ) );
+            fragmentSpecs.push_back( ParameterSpec( "sys_EnvironmentSamplerEnabled", PT_BOOL, dp::util::SEMANTIC_VALUE ) );
             fragmentSpecs.push_back( ParameterSpec( "sys_ViewportSize", PT_VECTOR2 | PT_UINT32, dp::util::SEMANTIC_VALUE ) );
             getTransparencyManager()->addFragmentParameterSpecs( fragmentSpecs );
             dp::fx::ParameterGroupSpecSharedPtr fragmentGroupSpec = dp::fx::ParameterGroupSpec::create( "sys_FragmentParameters", fragmentSpecs );
@@ -306,17 +301,16 @@ namespace dp
             updateTransforms();
           }
 
-          void ShaderManagerRiXFx::updateEnvironment( ResourceSamplerSharedPtr environmentSampler )
+          void ShaderManagerRiXFx::updateFragmentParameter( std::string const & name, dp::rix::core::ContainerDataRaw const & data )
           {
-            dp::rix::core::ContainerEntry entry = m_renderer->containerDescriptorGetEntry( m_descriptorEnvironment, "sys_EnvironmentSampler" );
-            m_renderer->containerSetData( m_containerEnvironment, entry, dp::rix::core::ContainerDataSampler( environmentSampler ? environmentSampler->m_samplerHandle : nullptr ) );
-
-            unsigned char enabled = ( environmentSampler && environmentSampler->m_resourceTexture && environmentSampler->m_resourceTexture->m_textureHandle );
-            entry = m_renderer->containerDescriptorGetEntry( m_descriptorEnvironment, "sys_EnvironmentSamplerEnabled" );
-            m_renderer->containerSetData( m_containerEnvironment, entry, dp::rix::core::ContainerDataRaw( 0, &enabled, sizeof(enabled) ) );
+            dp::rix::core::ContainerEntry entry = m_renderer->containerDescriptorGetEntry( m_descriptorFragment, name.c_str() );
+            if ( entry != ~0 )
+            {
+              m_renderer->containerSetData( m_containerFragment, entry, data );
+            }
           }
 
-          void ShaderManagerRiXFx::updateFragmentParameter( std::string const & name, dp::rix::core::ContainerDataRaw const & data )
+          void ShaderManagerRiXFx::updateFragmentParameter( std::string const &name, dp::rix::core::ContainerDataSampler const & data )
           {
             dp::rix::core::ContainerEntry entry = m_renderer->containerDescriptorGetEntry( m_descriptorFragment, name.c_str() );
             if ( entry != ~0 )
@@ -353,7 +347,6 @@ namespace dp
             ShaderManagerRiXFxRenderGroupSharedPtr o = renderGroup.staticCast<ShaderManagerRiXFxRenderGroup>();
 
             m_rixFxManager->instanceUseGroupData( o->instance.get(), m_groupDataCamera.get() );
-            m_renderer->renderGroupUseContainer( renderGroup->renderGroup, m_containerEnvironment );
             m_renderer->renderGroupUseContainer( renderGroup->renderGroup, m_containerFragment );
             m_renderer->renderGroupUseContainer( renderGroup->renderGroup, m_shaderManagerLights.getLightInformation().m_container );
           }

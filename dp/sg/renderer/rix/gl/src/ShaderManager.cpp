@@ -82,7 +82,6 @@ namespace dp
           ShaderManager::ShaderManager( SceneTreeSharedPtr const& sceneTree, const ResourceManagerSharedPtr& resourceManager, TransparencyManagerSharedPtr const & transparencyManager )
             : m_sceneTree( sceneTree.getWeakPtr() )
             , m_resourceManager( resourceManager )
-            , m_environmentNeedsUpdate( false )
             , m_environmentSampler( nullptr )
             , m_transparencyManager( transparencyManager )
           {
@@ -96,9 +95,11 @@ namespace dp
             if ( m_environmentSampler != sampler )
             {
               m_environmentSampler = sampler;
-              m_environmentResourceSampler = sampler ? ResourceSampler::get( sampler, m_resourceManager ) : ResourceSamplerSharedPtr::null;
 
-              m_environmentNeedsUpdate = true;
+              m_environmentResourceSampler = sampler ? ResourceSampler::get( sampler, m_resourceManager ) : ResourceSamplerSharedPtr::null;
+              updateFragmentParameter( "sys_EnvironmentSampler", dp::rix::core::ContainerDataSampler( m_environmentResourceSampler ? m_environmentResourceSampler->m_samplerHandle : nullptr ) );
+              bool enabled = !!m_environmentResourceSampler;
+              updateFragmentParameter( "sys_EnvironmentSamplerEnabled", dp::rix::core::ContainerDataRaw( 0, &enabled, sizeof(bool) ) );
             }
           }
 
@@ -133,11 +134,6 @@ namespace dp
 
           void ShaderManager::update( dp::sg::ui::ViewStateSharedPtr const& viewState )
           {
-            if ( m_environmentNeedsUpdate )
-            {
-              updateEnvironment( m_environmentResourceSampler );
-              m_environmentNeedsUpdate = false;
-            }
             updateLights( viewState);
             dp::sg::core::CameraSharedPtr const& camera = viewState->getCamera();
             updateCameraState( camera->getWorldToViewMatrix() * camera->getProjection(), camera->getViewToWorldMatrix() );
