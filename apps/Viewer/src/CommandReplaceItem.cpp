@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2013
+// Copyright (c) 2013-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -29,6 +29,8 @@
 #include <dp/sg/core/Camera.h>
 #include <dp/sg/core/GeoNode.h>
 #include <dp/sg/core/Group.h>
+#include <dp/sg/core/ParameterGroupData.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/core/Scene.h>
 
 using namespace dp::sg::core;
@@ -65,10 +67,10 @@ bool CommandReplaceItem::doReplace( SceneTreeItem * oldChild, SceneTreeItem * ne
   switch( m_parent->getObject()->getObjectCode() )
   {
     case OC_GEONODE :
-      DP_ASSERT( m_parent->getObject().staticCast<GeoNode>()->getMaterialEffect() == oldChild->getObject().staticCast<EffectData>() );
-      if ( newChild->getObject().isPtrTo<EffectData>() )
+      DP_ASSERT( m_parent->getObject().staticCast<GeoNode>()->getMaterialPipeline() == oldChild->getObject().staticCast<dp::sg::core::PipelineData>() );
+      if ( newChild->getObject().isPtrTo<dp::sg::core::PipelineData>() )
       {
-        m_parent->getObject().staticCast<GeoNode>()->setMaterialEffect( newChild->getObject().staticCast<EffectData>() );
+        m_parent->getObject().staticCast<GeoNode>()->setMaterialPipeline( newChild->getObject().staticCast<dp::sg::core::PipelineData>() );
       }
       else
       {
@@ -108,11 +110,6 @@ bool CommandReplaceItem::doReplace( SceneTreeItem * oldChild, SceneTreeItem * ne
         m_parent->getObject().staticCast<Primitive>()->setVertexAttributeSet( newChild->getObject().staticCast<VertexAttributeSet>() );
       }
       break;
-    case OC_EFFECT_DATA :
-      DP_ASSERT( newChild->getObject().isPtrTo<ParameterGroupData>() );
-      DP_ASSERT( newChild->getObject().staticCast<ParameterGroupData>()->getParameterGroupSpec() == oldChild->getObject().staticCast<ParameterGroupData>()->getParameterGroupSpec() );
-      m_parent->getObject().staticCast<EffectData>()->setParameterGroupData( newChild->getObject().staticCast<ParameterGroupData>() );
-      break;
     case OC_PARAMETER_GROUP_DATA :
       DP_ASSERT( newChild->getObject()->getObjectCode() == OC_SAMPLER );
       {
@@ -129,6 +126,11 @@ bool CommandReplaceItem::doReplace( SceneTreeItem * oldChild, SceneTreeItem * ne
     case OC_MATRIXCAMERA :
       DP_ASSERT( m_newChild->getObject()->getObjectCode() == OC_LIGHT_SOURCE );
       m_parent->getObject().staticCast<Camera>()->replaceHeadLight( newChild->getObject().staticCast<LightSource>(), oldChild->getObject().staticCast<LightSource>() );
+      break;
+    case OC_PIPELINE_DATA :
+      DP_ASSERT( newChild->getObject().isPtrTo<ParameterGroupData>() );
+      DP_ASSERT( newChild->getObject().staticCast<ParameterGroupData>()->getParameterGroupSpec() == oldChild->getObject().staticCast<ParameterGroupData>()->getParameterGroupSpec() );
+      m_parent->getObject().staticCast<dp::sg::core::PipelineData>()->setParameterGroupData( newChild->getObject().staticCast<ParameterGroupData>() );
       break;
     case OC_SCENE :
       if ( m_newChild->getObject().isPtrTo<Camera>() )

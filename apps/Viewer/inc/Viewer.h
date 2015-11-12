@@ -74,8 +74,8 @@ class Viewer : public QApplication
     bool isBackdropEnabled() const;
     void setTonemapperEnabled( bool enabled );
     bool isTonemapperEnabled() const;
-    const dp::sg::core::EffectDataSharedPtr & getEffectData( const std::string & effectName );
-    bool holdsEffectData( const dp::sg::core::EffectDataSharedPtr & effectData );
+    const dp::sg::core::PipelineDataSharedPtr & getPipelineData( const std::string & pipelineName );
+    bool holdsPipelineData( const dp::sg::core::PipelineDataSharedPtr & pipelineData );
     dp::sg::renderer::rix::gl::TransparencyMode getTransparencyMode() const;
     dp::sg::core::SceneSharedPtr getScene() const;
     dp::sg::ui::ViewStateSharedPtr const& getViewState() const;
@@ -105,14 +105,14 @@ class Viewer : public QApplication
     void parseCommandLine( int & argc, char ** argv );
 
   private:
-    typedef std::map<std::string,dp::sg::core::EffectDataSharedPtr> EffectDataMap;
+    typedef std::map<std::string,dp::sg::core::PipelineDataSharedPtr> PipelineDataMap;
 
   private:
     bool                                          m_backdropEnabled;
     bool                                          m_tonemapperEnabled;
     dp::culling::Mode                             m_cullingMode;
     QString                                       m_displayedSceneName;
-    EffectDataMap                                 m_effectDataLibrary;
+    PipelineDataMap                               m_pipelineDataLibrary;
     dp::sg::core::SamplerSharedPtr                m_environmentSampler;
     dp::sg::ui::qt5::SceniXQGLWidget            * m_globalShareGLWidget; // Used to share a GL context among all renderers.
     MainWindow                                  * m_mainWindow;

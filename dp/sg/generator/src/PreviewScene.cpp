@@ -29,6 +29,7 @@
 #include <dp/sg/core/GeoNode.h>
 #include <dp/sg/core/LightSource.h>
 #include <dp/sg/core/Node.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/core/Scene.h>
 #include <dp/sg/core/Transform.h>
 
@@ -2147,7 +2148,7 @@ PreviewScene::PreviewScene()
     m_geoNodeHandle[i] = GeoNode::create();
     m_geoNodeHandle[i]->setPrimitive( m_primitive[i] );
     m_geoNodeHandle[i]->setName( names[i] );
-    setEffectData( i, materials[i] );
+    setPipelineData( i, materials[i] );
   }
 
   m_transformHandle = Transform::create();
@@ -2178,13 +2179,13 @@ PreviewScene::~PreviewScene()
 {
 }
 
-void PreviewScene::setEffectData( size_t index, const std::string& effectData )
+void PreviewScene::setPipelineData( size_t index, const std::string& effectData )
 {
-  DP_ASSERT( index < sizeof dp::util::array( m_effectHandle ) );
+  DP_ASSERT( index < sizeof dp::util::array( m_pipelineData ) );
 
   dp::fx::EffectDataSharedPtr fxEffectData = dp::fx::EffectLibrary::instance()->getEffectData( effectData );
   DP_ASSERT( fxEffectData );
 
-  m_effectHandle[index] = EffectData::create( fxEffectData );
-  m_geoNodeHandle[index]->setMaterialEffect( m_effectHandle[index] );
+  m_pipelineData[index] = dp::sg::core::PipelineData::create( fxEffectData );
+  m_geoNodeHandle[index]->setMaterialPipeline( m_pipelineData[index] );
 }

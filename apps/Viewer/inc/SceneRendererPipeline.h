@@ -125,5 +125,5 @@ private:
   bool             m_tonemapperValuesChanged;
 
   // Derived tonemapper data in the shader:
-  dp::sg::core::EffectDataSharedPtr m_tonemapperData;
+  dp::sg::core::PipelineDataSharedPtr m_tonemapperData;
 };

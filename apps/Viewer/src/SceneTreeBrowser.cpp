@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2013
+// Copyright (c) 2013-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -37,7 +37,10 @@
 #include "SceneTreeBrowser.h"
 #include "SceneTreeItem.h"
 #include "Viewer.h"
+#include <dp/fx/ParameterGroupSpec.h>
 #include <dp/sg/core/GeoNode.h>
+#include <dp/sg/core/ParameterGroupData.h>
+#include <dp/sg/core/PipelineData.h>
 
 using namespace dp::math;
 using namespace dp::sg::core;
@@ -168,16 +171,6 @@ void SceneTreeBrowser::contextMenuEvent( QContextMenuEvent * event )
         }
         break;
 
-      case OC_EFFECT_DATA :
-        {
-          QAction * saveAction = menu.addAction( "&Save EffectData ..." );
-          connect( saveAction, SIGNAL(triggered()), this, SLOT(triggeredSaveEffectData()) );
-
-          QAction * replaceAction = menu.addAction( "&Replace by Clone" );
-          connect( replaceAction, SIGNAL(triggered()), this, SLOT(triggeredReplaceByClone()) );
-        }
-        break;
-
       case OC_PARAMETER_GROUP_DATA :
         {
           ParameterGroupDataSharedPtr const& parameterGroupData = currentItem->getObject().staticCast<ParameterGroupData>();
@@ -207,6 +200,16 @@ void SceneTreeBrowser::contextMenuEvent( QContextMenuEvent * event )
             subMenu->actions()[i]->setData( i );
           }
           connect( subMenu, SIGNAL(triggered(QAction*)), this, SLOT(triggeredAddHeadlightMenu(QAction*)) );
+        }
+        break;
+
+      case OC_PIPELINE_DATA :
+        {
+          QAction * saveAction = menu.addAction( "&Save EffectData ..." );
+          connect( saveAction, SIGNAL(triggered()), this, SLOT(triggeredSaveEffectData()) );
+
+          QAction * replaceAction = menu.addAction( "&Replace by Clone" );
+          connect( replaceAction, SIGNAL(triggered()), this, SLOT(triggeredReplaceByClone()) );
         }
         break;
     }
@@ -255,11 +258,11 @@ void SceneTreeBrowser::itemExpanded( QTreeWidgetItem * item )
 void SceneTreeBrowser::itemPressed( QTreeWidgetItem * item, int column )
 {
   DP_ASSERT( dynamic_cast<SceneTreeItem*>(item) );
-  if ( ( QApplication::mouseButtons() & Qt::LeftButton ) && ( static_cast<SceneTreeItem*>(item)->getObject()->getObjectCode() == OC_EFFECT_DATA ) )
+  if ( ( QApplication::mouseButtons() & Qt::LeftButton ) && ( static_cast<SceneTreeItem*>(item)->getObject()->getObjectCode() == OC_PIPELINE_DATA ) )
   {
     // start drag'n'drop on EffectData
     // We don't set the EffectData as the MimeData, but the GeoNode, as both the material of the GeoNode and the geometry of the Primitive need to be copied!
-    dp::fx::EffectSpec::Type type = static_cast<SceneTreeItem*>(item)->getObject().staticCast<EffectData>()->getEffectSpec()->getType();
+    dp::fx::EffectSpec::Type type = static_cast<SceneTreeItem*>(item)->getObject().staticCast<dp::sg::core::PipelineData>()->getEffectSpec()->getType();
     if ( type == dp::fx::EffectSpec::EST_PIPELINE )
     {
       DP_ASSERT( item->parent() );
@@ -374,14 +377,14 @@ void SceneTreeBrowser::triggeredReplaceByClone()
 void SceneTreeBrowser::triggeredSaveEffectData()
 {
   DP_ASSERT( dynamic_cast<SceneTreeItem*>(m_tree->currentItem()) && dynamic_cast<SceneTreeItem*>(m_tree->currentItem())->getObject() );
-  DP_ASSERT( static_cast<SceneTreeItem*>(m_tree->currentItem())->getObject().isPtrTo<EffectData>() );
+  DP_ASSERT( static_cast<SceneTreeItem*>(m_tree->currentItem())->getObject().isPtrTo<dp::sg::core::PipelineData>() );
 
-  EffectDataSharedPtr const& effectData = static_cast<SceneTreeItem*>(m_tree->currentItem())->getObject().staticCast<EffectData>();
-  std::string effectName = effectData->getEffectSpec()->getName();
-  QString fileName = QFileDialog::getSaveFileName( this, tr( "Save EffectData" ), QString( effectName.c_str() ) + QString( ".xml" ), tr( "XML (*.xml)" ) );
+  dp::sg::core::PipelineDataSharedPtr const& pipelineData = static_cast<SceneTreeItem*>(m_tree->currentItem())->getObject().staticCast<dp::sg::core::PipelineData>();
+  std::string pipelineName = pipelineData->getEffectSpec()->getName();
+  QString fileName = QFileDialog::getSaveFileName( this, tr( "Save PipelineData" ), QString( pipelineName.c_str() ) + QString( ".xml" ), tr( "XML (*.xml)" ) );
   if ( !fileName.isEmpty() )
   {
-    effectData->save( fileName.toStdString() );
+    pipelineData->save( fileName.toStdString() );
   }
 }
 
@@ -428,7 +431,7 @@ void SceneTreeBrowser::triggeredShowShaderPipeline()
     layout->addWidget( buttonBox );
 
     QDialog * dialog = new QDialog( this );
-    dialog->setWindowTitle( QString( "Shader Pipeline: " ) + QString( geoNode->getMaterialEffect()->getEffectSpec()->getName().c_str() ) );
+    dialog->setWindowTitle( QString( "Shader Pipeline: " ) + QString( geoNode->getMaterialPipeline()->getEffectSpec()->getName().c_str() ) );
     dialog->setLayout( layout );
 
     connect( buttonBox, SIGNAL(rejected()), dialog, SLOT(reject()) );

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2011
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -92,7 +92,7 @@ class DisplayNormalsTraverser : public dp::sg::algorithm::ExclusiveTraverser
 
   private:
     std::map<dp::sg::core::VertexAttributeSetSharedPtr,std::set<unsigned int> >                         m_indices;
-    dp::sg::core::EffectDataSharedPtr                                                                   m_material;
+    dp::sg::core::PipelineDataSharedPtr                                                                 m_material;
     float                                                                                               m_normalLength;
     std::stack<std::vector<std::pair<dp::sg::core::GeoNodeSharedPtr,dp::sg::core::GeoNodeSharedPtr> > > m_normalsGeoNodes;
     std::stack<std::vector<dp::sg::core::GroupSharedPtr> >                                              m_normalsGroups;

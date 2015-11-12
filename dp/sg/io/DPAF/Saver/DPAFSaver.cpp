@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2015
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -33,13 +33,13 @@
 #endif
 #include <dp/sg/core/Billboard.h>
 #include <dp/sg/core/ClipPlane.h>
-#include <dp/sg/core/EffectData.h>
 #include <dp/sg/core/GeoNode.h>
 #include <dp/sg/core/LightSource.h>
 #include <dp/sg/core/LOD.h>
 #include <dp/sg/core/MatrixCamera.h>
 #include <dp/sg/core/ParallelCamera.h>
 #include <dp/sg/core/PerspectiveCamera.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/core/Primitive.h>
 #include <dp/sg/core/Sampler.h>
 #include <dp/sg/core/Scene.h>
@@ -981,9 +981,9 @@ void  DPAFSaveTraverser::handleGeoNode( const GeoNode *p )
       }
       fprintf( m_fh, "GeoNode\t%s\n{\n", name.c_str() );
       nodeData( p );
-      if ( p->getMaterialEffect() )
+      if ( p->getMaterialPipeline() )
       {
-        fprintf( m_fh, "\tmaterialEffect\t%s\n", m_objectNames[p->getMaterialEffect()].c_str() );
+        fprintf( m_fh, "\tmaterialPipeline\t%s\n", m_objectNames[p->getMaterialPipeline()].c_str() );
       }
       if ( p->getPrimitive() )
       {
@@ -1365,14 +1365,14 @@ void  DPAFSaveTraverser::handleVertexAttributeSet( const VertexAttributeSet *p )
   }
 }
 
-void DPAFSaveTraverser::handleEffectData( const EffectData * p )
+void DPAFSaveTraverser::handlePipelineData( const dp::sg::core::PipelineData * p )
 {
   if ( isFirstTime( p ) )
   {
     const dp::fx::EffectSpecSharedPtr & es = p->getEffectSpec();
     m_effectSpecName = es->getName();
 
-    SharedTraverser::handleEffectData( p );
+    SharedTraverser::handlePipelineData( p );
 
     string name( getObjectName( p ) );
     if ( p->isDataShared() && ( m_sharedData.find( p->getDataID() ) != m_sharedData.end() ) )
@@ -2290,9 +2290,9 @@ void  DPAFSaveTraverser::lightSourceData( const LightSource *p )
   objectData( p );
   fprintfBool(m_fh, "\tenabled\t", p->isEnabled() );
   fprintfBool( m_fh, "\tshadowCasting\t", p->isShadowCasting() );
-  if ( p->getLightEffect() )
+  if ( p->getLightPipeline() )
   {
-    fprintf( m_fh, "\tlightEffect\t%s\n", m_objectNames[p->getLightEffect()].c_str() );
+    fprintf( m_fh, "\tlightPipeline\t%s\n", m_objectNames[p->getLightPipeline()].c_str() );
   }
 }
 

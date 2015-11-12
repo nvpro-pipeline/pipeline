@@ -27,10 +27,10 @@
 #include <dp/sg/generator/MeshGenerator.h>
 
 #include <dp/math/math.h>
-#include <dp/sg/core/EffectData.h>
 #include <dp/sg/core/GeoNode.h>
 #include <dp/sg/core/LOD.h>
 #include <dp/sg/core/Node.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/core/Sampler.h>
 #include <dp/sg/core/Switch.h>
 #include <dp/sg/core/TextureHost.h>
@@ -1682,7 +1682,7 @@ namespace dp
 
       // ===========================================================================
 
-      EffectDataSharedPtr createTexture()
+      dp::sg::core::PipelineDataSharedPtr createTexture()
       {
         vector<Vec4f> tex;
         tex.resize(64);
@@ -1712,15 +1712,15 @@ namespace dp
 
         ParameterGroupDataSharedPtr texture = createStandardTextureParameterData( sampler );
 
-        EffectDataSharedPtr effectData = EffectData::create( getStandardMaterialSpec() );
-        DP_VERIFY( effectData->setParameterGroupData( texture ) );
+        dp::sg::core::PipelineDataSharedPtr pipelineData = dp::sg::core::PipelineData::create( getStandardMaterialSpec() );
+        DP_VERIFY( pipelineData->setParameterGroupData( texture ) );
 
-        return( effectData );
+        return( pipelineData );
       }
 
       // ===========================================================================
 
-      EffectDataSharedPtr createAlphaTexture( unsigned int n /* =64 */ )
+      dp::sg::core::PipelineDataSharedPtr createAlphaTexture( unsigned int n /* =64 */ )
       {
         vector<Vec4f> tex;
         tex.resize(n*n);
@@ -1755,10 +1755,10 @@ namespace dp
 
         ParameterGroupDataSharedPtr texture = createStandardTextureParameterData( sampler );
 
-        EffectDataSharedPtr effectData = EffectData::create( getStandardMaterialSpec() );
-        DP_VERIFY( effectData->setParameterGroupData( texture ) );
+        dp::sg::core::PipelineDataSharedPtr pipelineData = dp::sg::core::PipelineData::create( getStandardMaterialSpec() );
+        DP_VERIFY( pipelineData->setParameterGroupData( texture ) );
 
-        return( effectData );
+        return( pipelineData );
       }
 
       // ===========================================================================
@@ -1774,11 +1774,11 @@ namespace dp
 
       // ===========================================================================
 
-      GeoNodeSharedPtr createGeoNode( const PrimitiveSharedPtr &primitive, const EffectDataSharedPtr & materialEffect )
+      GeoNodeSharedPtr createGeoNode( const PrimitiveSharedPtr &primitive, const dp::sg::core::PipelineDataSharedPtr & materialEffect )
       {
         //Create a GeoNode combining EffectData and Primitive
         GeoNodeSharedPtr geoNode = GeoNode::create();
-        geoNode->setMaterialEffect( materialEffect );
+        geoNode->setMaterialPipeline( materialEffect );
         geoNode->setPrimitive( primitive );
 
         return geoNode;

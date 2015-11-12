@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2012
+// Copyright (c) 2010-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -30,7 +30,6 @@
 #include <dp/sg/ui/Renderer.h>
 #include <dp/gl/RenderTarget.h>
 #include <dp/gl/Texture.h>
-#include <dp/sg/core/EffectData.h>
 
 namespace dp
 {
@@ -46,21 +45,21 @@ namespace dp
 
           /*! \brief Renderer to draw a "Full Screen" (ie: viewport-filling) quad, using a supplied pair of geometry effect and material effect.
            *  \par Namespace: nvgl
-           *  \remarks Many rendering effects in modern applications require a Viewport-filling quad to realize certain screen-space 
+           *  \remarks Many rendering effects in modern applications require a Viewport-filling quad to realize certain screen-space
            *  or compositing effects.  This class will render this type of quad, using the supplied effects.  Additionally, applications may
            *  supply per vertex data as texture coordinates to be used by the effects while rendering.\n
            *  This class also provides several helper methods to "present" (render) a texture in a full screen quad.
-           *  
+           *
            *  \note Draws a viewport filling quad on Z = 0, with the following characteristics:
            *  \code
            *         Vertex Coords                 Texture Coords (units 0 and 1)
-           *  
+           *
            *     (-1,1) 3-------2 (1,1)          0:(0,1)   3-------2 0:(1,1)
            *            |       |                1:(x,y+h) |       | 1:(x+w,y+h)
            *            |       |                          |       |
            *    (-1,-1) 0-------1 (1,-1)         0:(0,0)   0-------1 0:(1,0)
            *                                     1:(x,y)             1:(x+w,y)
-           *  
+           *
            *                                      Where: X,Y,W,H are either Viewport Parameters or
            *                                             X,Y=0 and W,H are output RenderTarget dimensions
            *  \endcode
@@ -98,7 +97,7 @@ namespace dp
            *
            *  void main(void)
            *  {
-           *     // Note, vertices are already appropriately transformed.  Typically it will not be necessary to 
+           *     // Note, vertices are already appropriately transformed.  Typically it will not be necessary to
            *     // further transform them.  However, any TEXCOORDS that are used should be passed to the fragment program.
            *     gl_Position = attrPosition;
            *  }
@@ -123,19 +122,19 @@ namespace dp
            *
            *  \endcode
            *
-           *  \sa dp::sg::core::EffectSpec, dp::sg::core::EffectData, dp::sg::ui::Renderer */
+           *  \sa dp::sg::core::EffectSpec, dp::sg::core::PipelineData, dp::sg::ui::Renderer */
           class FSQRenderer : public dp::sg::ui::Renderer
           {
             public:
               DP_SG_RDR_RIX_GL_API static FSQRendererSharedPtr create( const dp::gl::RenderTargetSharedPtr &renderTarget = dp::gl::RenderTargetSharedPtr::null );
               DP_SG_RDR_RIX_GL_API virtual ~FSQRenderer(void);
 
-              DP_SG_RDR_RIX_GL_API virtual void setEffect( const dp::sg::core::EffectDataSharedPtr & effect ) = 0;
-              DP_SG_RDR_RIX_GL_API virtual const dp::sg::core::EffectDataSharedPtr & getEffect() const = 0;
+              DP_SG_RDR_RIX_GL_API virtual void setPipeline( const dp::sg::core::PipelineDataSharedPtr & pipeline ) = 0;
+              DP_SG_RDR_RIX_GL_API virtual const dp::sg::core::PipelineDataSharedPtr & getPipeline() const = 0;
 
               /*! \brief Add or remove texture coordinate attributes.
                *  \remarks Adds or removes texture coordinate attributes from this FSQ.
-               *  \param unit The texture attribute identifier on which to modify the texcoords.  If adding texcoords, they will be available 
+               *  \param unit The texture attribute identifier on which to modify the texcoords.  If adding texcoords, they will be available
                *  as TEXCOORDunit, where unit can range from 2 to 7, as TEXCOORD0 and TEXCOORD1 are used internally by the FSQ.
                *  \param coords A vector of Vec4f's to use as the data.  Note the ordering of the vertex data, as described above.  If this vector
                *  is empty, any texcoords assigned to this texcoord unit are removed.
@@ -163,7 +162,7 @@ namespace dp
                *  \remarks This is a convenience function to render the given dp::gl::Texture2D in a viewport-filling quad.
                *  \param tex2d The dp::gl::Texture2D resource.
                *  \param target The RenderTarget to fill with the texture.
-               *  \param callRTBeginEnd Whether to wrap the Quad rendering with target->beginRendering() and target->endRendering().  In some 
+               *  \param callRTBeginEnd Whether to wrap the Quad rendering with target->beginRendering() and target->endRendering().  In some
                *  cases the RenderTarget may be current and calling begin/endRendering may be either unnecessary or detremental.
                **/
               DP_SG_RDR_RIX_GL_API static void presentTexture2D( const dp::gl::Texture2DSharedPtr &tex2d, const dp::gl::RenderTargetSharedPtr &target, bool callRTBeginEnd = true );
@@ -172,7 +171,7 @@ namespace dp
                *  \remarks This is a convenience function to render the given dp::gl::TextureRectangle in a viewport-filling quad.
                *  \param tex2d The dp::gl::TextureRectangle resource.
                *  \param target The RenderTarget to fill with the texture.
-               *  \param callRTBeginEnd Whether to wrap the Quad rendering with target->beginRendering() and target->endRendering().  In some 
+               *  \param callRTBeginEnd Whether to wrap the Quad rendering with target->beginRendering() and target->endRendering().  In some
                *  cases the RenderTarget may be current and calling begin/endRendering may be either unnecessary or detremental.
                **/
               DP_SG_RDR_RIX_GL_API static void presentTextureRectangle( const dp::gl::TextureRectangleSharedPtr &tex2d, const dp::gl::RenderTargetSharedPtr &target, bool callRTBeginEnd = true );

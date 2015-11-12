@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2015
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -34,13 +34,13 @@
 #include <dp/sg/core/Billboard.h>
 #include <dp/sg/core/BufferHost.h>
 #include <dp/sg/core/ClipPlane.h>
-#include <dp/sg/core/EffectData.h>
 #include <dp/sg/core/GeoNode.h>
 #include <dp/sg/core/LightSource.h>
 #include <dp/sg/core/LOD.h>
 #include <dp/sg/core/MatrixCamera.h>
 #include <dp/sg/core/ParallelCamera.h>
 #include <dp/sg/core/PerspectiveCamera.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/core/Primitive.h>
 #include <dp/sg/core/Sampler.h>
 #include <dp/sg/core/Scene.h>
@@ -129,7 +129,6 @@ void  DPAFLoader::cleanup( void )
 {
   m_billboards.clear();
   m_buffers.clear();
-  m_effectData.clear();
   m_geoNodes.clear();
   m_groups.clear();
   m_indexSets.clear();
@@ -140,6 +139,7 @@ void  DPAFLoader::cleanup( void )
   m_parallelCameras.clear();
   m_parameterGroupData.clear();
   m_perspectiveCameras.clear();
+  m_pipelineData.clear();
   m_primitives.clear();
   m_quadMeshes.clear();
   m_samplers.clear();
@@ -163,7 +163,6 @@ void DPAFLoader::assertClean()
 {
   DP_ASSERT( m_billboards.empty() );
   DP_ASSERT( m_buffers.empty() );
-  DP_ASSERT( m_effectData.empty() );
   DP_ASSERT( m_geoNodes.empty() );
   DP_ASSERT( m_groups.empty() );
   DP_ASSERT( m_indexSets.empty() );
@@ -174,6 +173,7 @@ void DPAFLoader::assertClean()
   DP_ASSERT( m_parallelCameras.empty() );
   DP_ASSERT( m_parameterGroupData.empty() );
   DP_ASSERT( m_perspectiveCameras.empty() );
+  DP_ASSERT( m_pipelineData.empty() );
   DP_ASSERT( m_primitives.empty() );
   DP_ASSERT( m_quadMeshes.empty() );
   DP_ASSERT( m_samplers.empty() );
@@ -278,10 +278,6 @@ SceneSharedPtr DPAFLoader::import( const string &filename, dp::sg::ui::ViewState
         {
           m_buffers[name] = readBuffer(); // buffer is not an Object. storeNamedObject cannot be used.
         }
-        else if ( token == "EffectData" )
-        {
-          storeNamedObject(name, m_effectData, readEffectData( objName.c_str() ));
-        }
         else if ( token == "GeoNode" )
         {
           storeNamedObject(name, m_geoNodes, readGeoNode( objName.c_str() ));
@@ -313,6 +309,10 @@ SceneSharedPtr DPAFLoader::import( const string &filename, dp::sg::ui::ViewState
         else if ( token == "ParameterGroupData" )
         {
           storeNamedObject(name, m_parameterGroupData, readParameterGroupData( objName.c_str() ));
+        }
+        else if ( token == "PipelineData" )
+        {
+          storeNamedObject(name, m_pipelineData, readPipelineData( objName.c_str() ));
         }
         else if ( token == "PerspectiveCamera" )
         {
@@ -939,97 +939,6 @@ Billboard::Alignment DPAFLoader::readAlignment()
   return( ba );
 }
 
-EffectDataSharedPtr DPAFLoader::readEffectData( const char * name )
-{
-  EffectDataSharedPtr effectData;
-  string token = getNextToken();
-  if ( token == "{" )
-  {
-    string annotation;
-    unsigned int hints = 0;
-    std::string effectSpecName;
-    unsigned int notifyChangeBits = 0;
-    vector<ParameterGroupDataSharedPtr> parameterGroupData;
-    bool transparent = false;
-
-    token = getNextToken();
-    while ( token != "}" )
-    {
-      if ( !readObjectToken( token, annotation, hints ) )
-      {
-        if ( token == "effectFile" )
-        {
-          std::string effectFile = readName( getNextToken() );
-          DP_VERIFY( dp::fx::EffectLibrary::instance()->loadEffects( effectFile ) );
-        }
-        else if ( token == "effectSpec" )
-        {
-          effectSpecName = readName( getNextToken() );
-        }
-        else if ( token == "notifyChangeBits" )
-        {
-          notifyChangeBits = readScalar<unsigned int>( getNextToken() );
-        }
-        else if ( token == "parameterGroupData" )
-        {
-          token = getNextToken();
-          DP_ASSERT( token == "[" );
-          token = getNextToken();
-          while ( token != "]" )
-          {
-            string name = readName( token );
-            DP_ASSERT( name != "options" );   // "options" should not be encountered any more
-            if ( m_parameterGroupData.find( name ) != m_parameterGroupData.end() )
-            {
-              parameterGroupData.push_back( m_parameterGroupData[name] );
-            }
-            token = getNextToken();
-          }
-        }
-        else if ( token == "transparent" )
-        {
-          transparent = readBool( getNextToken() );
-        }
-        else
-        {
-          onUnknownToken( "EffectData", token );
-        }
-      }
-      token = getNextToken();
-    }
-
-    DP_ASSERT( !effectSpecName.empty() );
-    dp::fx::EffectSpecSharedPtr effectSpec = dp::fx::EffectLibrary::instance()->getEffectSpec( effectSpecName );
-
-    DP_ASSERT( effectSpec );
-    effectData = EffectData::create( effectSpec );
-    effectData->setName( name );
-    if ( !annotation.empty() )
-    {
-      effectData->setAnnotation( annotation );
-    }
-    if ( hints )
-    {
-      effectData->setHints( hints );
-    }
-    for ( size_t i=0 ; i<parameterGroupData.size() ; i++ )
-    {
-      DP_VERIFY( effectData->setParameterGroupData( parameterGroupData[i] ) );
-    }
-    effectData->setTransparent( transparent );
-  }
-  else if ( m_effectData.find( token ) != m_effectData.end() )
-  {
-    effectData = m_effectData[token].clone();
-    effectData->setName( name );
-  }
-  else
-  {
-    onUndefinedToken( "EffectData", token );
-  }
-  return( effectData );
-}
-
 void DPAFLoader::readEnumArray( const string & t, vector<int> & values, const dp::fx::ParameterSpec & ps )
 {
   const dp::fx::EnumSpecSharedPtr & enumSpec = ps.getEnumSpec();
@@ -1106,18 +1015,18 @@ GeoNodeSharedPtr DPAFLoader::readGeoNode( const char *name )
             onUndefinedToken( "GeoNode.drawables", name );
           }
         }
-        else if ( token == "materialEffect" )
+        else if ( token == "materialPipeline" )
         {
           token = getNextToken();
           string name = readName( token );
 
-          if ( m_effectData.find( name ) != m_effectData.end() )
+          if ( m_pipelineData.find( name ) != m_pipelineData.end() )
           {
-            geoNode->setMaterialEffect( m_effectData[name] );
+            geoNode->setMaterialPipeline( m_pipelineData[name] );
           }
           else if( name != "NULL" )
           {
-            onUndefinedToken( "GeoNode.materialEffect", name );
+            onUndefinedToken( "GeoNode.materialPipeline", name );
           }
         }
         else
@@ -1286,9 +1195,9 @@ bool  DPAFLoader::readLightSourceToken( LightSourceSharedPtr const& light, const
   else if ( token == "lightEffect" )
   {
     string name = readName( getNextToken() );
-    if ( m_effectData.find( name ) != m_effectData.end() )
+    if ( m_pipelineData.find( name ) != m_pipelineData.end() )
     {
-      light->setLightEffect( m_effectData[name] );
+      light->setLightPipeline( m_pipelineData[name] );
     }
     else
     {
@@ -1304,6 +1213,97 @@ bool  DPAFLoader::readLightSourceToken( LightSourceSharedPtr const& light, const
     b = readNodeToken( light, token );
   }
   return( b );
+}
+
+dp::sg::core::PipelineDataSharedPtr DPAFLoader::readPipelineData( const char * name )
+{
+  dp::sg::core::PipelineDataSharedPtr pipelineData;
+  string token = getNextToken();
+  if ( token == "{" )
+  {
+    string annotation;
+    unsigned int hints = 0;
+    std::string effectSpecName;
+    unsigned int notifyChangeBits = 0;
+    vector<ParameterGroupDataSharedPtr> parameterGroupData;
+    bool transparent = false;
+
+    token = getNextToken();
+    while ( token != "}" )
+    {
+      if ( !readObjectToken( token, annotation, hints ) )
+      {
+        if ( token == "effectFile" )
+        {
+          std::string effectFile = readName( getNextToken() );
+          DP_VERIFY( dp::fx::EffectLibrary::instance()->loadEffects( effectFile ) );
+        }
+        else if ( token == "effectSpec" )
+        {
+          effectSpecName = readName( getNextToken() );
+        }
+        else if ( token == "notifyChangeBits" )
+        {
+          notifyChangeBits = readScalar<unsigned int>( getNextToken() );
+        }
+        else if ( token == "parameterGroupData" )
+        {
+          token = getNextToken();
+          DP_ASSERT( token == "[" );
+          token = getNextToken();
+          while ( token != "]" )
+          {
+            string name = readName( token );
+            DP_ASSERT( name != "options" );   // "options" should not be encountered any more
+            if ( m_parameterGroupData.find( name ) != m_parameterGroupData.end() )
+            {
+              parameterGroupData.push_back( m_parameterGroupData[name] );
+            }
+            token = getNextToken();
+          }
+        }
+        else if ( token == "transparent" )
+        {
+          transparent = readBool( getNextToken() );
+        }
+        else
+        {
+          onUnknownToken( "EffectData", token );
+        }
+      }
+      token = getNextToken();
+    }
+
+    DP_ASSERT( !effectSpecName.empty() );
+    dp::fx::EffectSpecSharedPtr effectSpec = dp::fx::EffectLibrary::instance()->getEffectSpec( effectSpecName );
+
+    DP_ASSERT( effectSpec );
+    pipelineData = dp::sg::core::PipelineData::create( effectSpec );
+    pipelineData->setName( name );
+    if ( !annotation.empty() )
+    {
+      pipelineData->setAnnotation( annotation );
+    }
+    if ( hints )
+    {
+      pipelineData->setHints( hints );
+    }
+    for ( size_t i=0 ; i<parameterGroupData.size() ; i++ )
+    {
+      DP_VERIFY( pipelineData->setParameterGroupData( parameterGroupData[i] ) );
+    }
+    pipelineData->setTransparent( transparent );
+  }
+  else if ( m_pipelineData.find( token ) != m_pipelineData.end() )
+  {
+    pipelineData = m_pipelineData[token].clone();
+    pipelineData->setName( name );
+  }
+  else
+  {
+    onUndefinedToken( "EffectData", token );
+  }
+  return( pipelineData );
 }
 
 Image::PixelFormat DPAFLoader::readPixelFormat()

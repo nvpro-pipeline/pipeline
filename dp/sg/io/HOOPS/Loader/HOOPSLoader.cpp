@@ -32,13 +32,13 @@
 #include <dp/sg/io/PlugInterfaceID.h> // definition of UPITID_VERSION, UPITID_SCENE_LOADER, and UPITID_SCENE_SAVER
 
 #include <dp/Exception.h>
-#include <dp/sg/core/EffectData.h>
 #include <dp/sg/core/GeoNode.h>
 #include <dp/sg/core/Group.h>
+#include <dp/sg/core/PipelineData.h>
+#include <dp/sg/core/Primitive.h>
 #include <dp/sg/core/Scene.h>
 #include <dp/sg/core/Transform.h>
 #include <dp/sg/core/VertexAttributeSet.h>
-#include <dp/sg/core/Primitive.h>
 #include <dp/util/File.h>
 #include <dp/util/Locale.h>
 #include <dp/util/Timer.h>
@@ -412,7 +412,7 @@ A3DStatus HOOPSLoader::adaptBrepModels( const A3DEntity * pEntity, A3DEntity ** 
 }
 
 GeoNodeSharedPtr createGeoNode( PrimitiveType pt, const vector<Vec3f> & vertices, const vector<Vec3f> & normals, const vector<Vec2f> & textures
-                              , const vector<unsigned int> & indices, const string & name, unsigned int hints, const EffectDataSharedPtr & materialEffect )
+                              , const vector<unsigned int> & indices, const string & name, unsigned int hints, dp::sg::core::PipelineDataSharedPtr const& materialPipeline )
 {
   // create VAS
   VertexAttributeSetSharedPtr vertexAttributeSet = VertexAttributeSet::create();
@@ -442,7 +442,7 @@ GeoNodeSharedPtr createGeoNode( PrimitiveType pt, const vector<Vec3f> & vertices
   geoNode->setName( name );
   geoNode->setHints( hints );
   geoNode->setPrimitive( primitive );
-  geoNode->setMaterialEffect( materialEffect );
+  geoNode->setMaterialPipeline( materialPipeline );
 
   return( geoNode );
 }
@@ -740,9 +740,9 @@ A3DStatus HOOPSLoader::parseTess3D( const A3DRiRepresentationItem * pRepItem, co
       IndexData<2>  two;
       IndexData<3>  three;
     }                   IndexData;
-    typedef map<EffectDataSharedPtr,IndexData>  EffectIndicesMap;
+    typedef map<dp::sg::core::PipelineDataSharedPtr,IndexData>  PipelineIndicesMap;
 
-    EffectIndicesMap effectIndicesMap;
+    PipelineIndicesMap pipelineIndicesMap;
 
     // extract the faces
     for ( A3DUns32 ui=0 ; ui<t3d.m_uiFaceTessSize ; ui++ )
@@ -751,7 +751,7 @@ A3DStatus HOOPSLoader::parseTess3D( const A3DRiRepresentationItem * pRepItem, co
       A3DUns32 flags = tfd.m_usUsedEntitiesFlags;
 
       CascadedAttributes ca( pRepItem, tess, t3d, ui, parentCA );
-      EffectDataSharedPtr effectData = createMaterialEffect( ca.getAttributes() );
+      dp::sg::core::PipelineDataSharedPtr pipelineData = createMaterialPipeline( ca.getAttributes() );
 
       //
       // NOTE: Data can be one or more of the following, represented in this order according to the docs.
@@ -766,26 +766,26 @@ A3DStatus HOOPSLoader::parseTess3D( const A3DRiRepresentationItem * pRepItem, co
       //Simple triangle.
       if ( flags & kA3DTessFaceDataTriangle )
       {
-        gatherFromTriangles( tbd, t3d, tfd, sizeIndex, startOffset, effectIndicesMap[effectData].two );
+        gatherFromTriangles( tbd, t3d, tfd, sizeIndex, startOffset, pipelineIndicesMap[pipelineData].two );
       }
 
       //Triangle fan.
       if ( flags & kA3DTessFaceDataTriangleFan )
       {
-        gatherFromFans( tbd, t3d, tfd, sizeIndex, startOffset, effectIndicesMap[effectData].two, false );
+        gatherFromFans( tbd, t3d, tfd, sizeIndex, startOffset, pipelineIndicesMap[pipelineData].two, false );
       }
 
       //Triangle strip.
       if ( flags & kA3DTessFaceDataTriangleStripe )
       {
-        gatherFromStrips( tbd, t3d, tfd, sizeIndex, startOffset, effectIndicesMap[effectData].two, false );
+        gatherFromStrips( tbd, t3d, tfd, sizeIndex, startOffset, pipelineIndicesMap[pipelineData].two, false );
       }
 
       //Simple triangle with one normal.
       if ( flags & kA3DTessFaceDataTriangleOneNormal )
       {
         // don't care about kA3DTessFaceDataNormalSingle here !!
-        gatherFromTrianglesOneNormal( tbd, t3d, tfd, sizeIndex, startOffset, effectIndicesMap[effectData].two );
+        gatherFromTrianglesOneNormal( tbd, t3d, tfd, sizeIndex, startOffset, pipelineIndicesMap[pipelineData].two );
       }
 
       //Triangle fan with one normal and other characteristics depending on kA3DTessFaceDataNormalSingle.
@@ -794,11 +794,11 @@ A3DStatus HOOPSLoader::parseTess3D( const A3DRiRepresentationItem * pRepItem, co
         if( flags & kA3DTessFaceDataNormalSingle )
         {
           DP_ASSERT( !"never passed this path" );
-          gatherFromFans( tbd, t3d, tfd, sizeIndex, startOffset, effectIndicesMap[effectData].two, true );
+          gatherFromFans( tbd, t3d, tfd, sizeIndex, startOffset, pipelineIndicesMap[pipelineData].two, true );
         }
         else
         {
-          gatherFromFans( tbd, t3d, tfd, sizeIndex, startOffset, effectIndicesMap[effectData].two, false );
+          gatherFromFans( tbd, t3d, tfd, sizeIndex, startOffset, pipelineIndicesMap[pipelineData].two, false );
         }
       }
 
@@ -808,11 +808,11 @@ A3DStatus HOOPSLoader::parseTess3D( const A3DRiRepresentationItem * pRepItem, co
         if( flags & kA3DTessFaceDataNormalSingle )
         {
           DP_ASSERT( !"never passed this path" );
-          gatherFromStrips( tbd, t3d, tfd, sizeIndex, startOffset, effectIndicesMap[effectData].two, true );
+          gatherFromStrips( tbd, t3d, tfd, sizeIndex, startOffset, pipelineIndicesMap[pipelineData].two, true );
         }
         else
         {
-          gatherFromStrips( tbd, t3d, tfd, sizeIndex, startOffset, effectIndicesMap[effectData].two, false );
+          gatherFromStrips( tbd, t3d, tfd, sizeIndex, startOffset, pipelineIndicesMap[pipelineData].two, false );
         }
       }
 
@@ -823,7 +823,7 @@ A3DStatus HOOPSLoader::parseTess3D( const A3DRiRepresentationItem * pRepItem, co
       {
         if ( tfd.m_uiTextureCoordIndexesSize == 1 )
         {
-          gatherFromTriangles( tbd, t3d, tfd, sizeIndex, startOffset, effectIndicesMap[effectData].three );
+          gatherFromTriangles( tbd, t3d, tfd, sizeIndex, startOffset, pipelineIndicesMap[pipelineData].three );
         }
         else
         {
@@ -839,7 +839,7 @@ A3DStatus HOOPSLoader::parseTess3D( const A3DRiRepresentationItem * pRepItem, co
         DP_ASSERT( !"never passed this path" );
         if ( tfd.m_uiTextureCoordIndexesSize == 1 )
         {
-          gatherFromFans( tbd, t3d, tfd, sizeIndex, startOffset, effectIndicesMap[effectData].three, false );
+          gatherFromFans( tbd, t3d, tfd, sizeIndex, startOffset, pipelineIndicesMap[pipelineData].three, false );
         }
         else
         {
@@ -854,7 +854,7 @@ A3DStatus HOOPSLoader::parseTess3D( const A3DRiRepresentationItem * pRepItem, co
         DP_ASSERT( !"never passed this path" );
         if ( tfd.m_uiTextureCoordIndexesSize == 1 )
         {
-          gatherFromStrips( tbd, t3d, tfd, sizeIndex, startOffset, effectIndicesMap[effectData].two, false );
+          gatherFromStrips( tbd, t3d, tfd, sizeIndex, startOffset, pipelineIndicesMap[pipelineData].two, false );
         }
         else
         {
@@ -873,11 +873,11 @@ A3DStatus HOOPSLoader::parseTess3D( const A3DRiRepresentationItem * pRepItem, co
         {
           if( flags & kA3DTessFaceDataNormalSingle )
           {
-            gatherFromTrianglesOneNormal( tbd, t3d, tfd, sizeIndex, startOffset, effectIndicesMap[effectData].three );
+            gatherFromTrianglesOneNormal( tbd, t3d, tfd, sizeIndex, startOffset, pipelineIndicesMap[pipelineData].three );
           }
           else
           {
-            gatherFromTriangles( tbd, t3d, tfd, sizeIndex, startOffset, effectIndicesMap[effectData].three );
+            gatherFromTriangles( tbd, t3d, tfd, sizeIndex, startOffset, pipelineIndicesMap[pipelineData].three );
           }
         }
         else
@@ -895,11 +895,11 @@ A3DStatus HOOPSLoader::parseTess3D( const A3DRiRepresentationItem * pRepItem, co
         {
           if( flags & kA3DTessFaceDataNormalSingle )
           {
-            gatherFromFans( tbd, t3d, tfd, sizeIndex, startOffset, effectIndicesMap[effectData].three, true );
+            gatherFromFans( tbd, t3d, tfd, sizeIndex, startOffset, pipelineIndicesMap[pipelineData].three, true );
           }
           else
           {
-            gatherFromFans( tbd, t3d, tfd, sizeIndex, startOffset, effectIndicesMap[effectData].three, false );
+            gatherFromFans( tbd, t3d, tfd, sizeIndex, startOffset, pipelineIndicesMap[pipelineData].three, false );
           }
         }
         else
@@ -925,11 +925,11 @@ A3DStatus HOOPSLoader::parseTess3D( const A3DRiRepresentationItem * pRepItem, co
           if( flags & kA3DTessFaceDataNormalSingle )
           {
             DP_ASSERT( !"never passed this path" );
-            gatherFromStrips( tbd, t3d, tfd, sizeIndex, startOffset, effectIndicesMap[effectData].three, true );
+            gatherFromStrips( tbd, t3d, tfd, sizeIndex, startOffset, pipelineIndicesMap[pipelineData].three, true );
           }
           else
           {
-            gatherFromStrips( tbd, t3d, tfd, sizeIndex, startOffset, effectIndicesMap[effectData].three, false );
+            gatherFromStrips( tbd, t3d, tfd, sizeIndex, startOffset, pipelineIndicesMap[pipelineData].three, false );
           }
         }
         else
@@ -948,11 +948,11 @@ A3DStatus HOOPSLoader::parseTess3D( const A3DRiRepresentationItem * pRepItem, co
 
       if ( tfd.m_uiSizesWiresSize )
       {
-        gatherFromLineStrips( tbd, t3d, tfd, effectIndicesMap[effectData].one );
+        gatherFromLineStrips( tbd, t3d, tfd, pipelineIndicesMap[pipelineData].one );
       }
     }
 
-    for ( EffectIndicesMap::iterator eimit = effectIndicesMap.begin(); eimit != effectIndicesMap.end() ; ++eimit )
+    for ( PipelineIndicesMap::iterator pimit = pipelineIndicesMap.begin(); pimit != pipelineIndicesMap.end() ; ++pimit )
     {
       unsigned int hints = 0;
       if( ((bd.behavior & kA3DGraphicsShow) != kA3DGraphicsShow ) ||
@@ -967,50 +967,50 @@ A3DStatus HOOPSLoader::parseTess3D( const A3DRiRepresentationItem * pRepItem, co
       }
 
       GroupSharedPtr const& g = getCurrentGroup();
-      if ( ! eimit->second.one.newIndices.empty() )
+      if ( ! pimit->second.one.newIndices.empty() )
       {
-        eimit->second.one.newIndices.pop_back();   // pop back last ~0
-        DP_ASSERT( !eimit->second.one.newIndices.empty() );
+        pimit->second.one.newIndices.pop_back();   // pop back last ~0
+        DP_ASSERT( !pimit->second.one.newIndices.empty() );
 
         A3DDouble * verts  = tbd.m_pdCoords;
-        vector<Vec3f> vertices( eimit->second.one.indexMap.size() );
-        for ( IndexMap<1>::const_iterator it = eimit->second.one.indexMap.begin() ; it != eimit->second.one.indexMap.end() ; ++it )
+        vector<Vec3f> vertices( pimit->second.one.indexMap.size() );
+        for ( IndexMap<1>::const_iterator it = pimit->second.one.indexMap.begin() ; it != pimit->second.one.indexMap.end() ; ++it )
         {
           const Vecnt<1,unsigned int> & idx = it->first;
           vertices[it->second] = Vec3f( (float)verts[idx[0]+0], (float)verts[idx[0]+1], (float)verts[idx[0]+2] );
         }
 
         vector<Vec3f> normals;
-        g->addChild( createGeoNode( PRIMITIVE_LINE_STRIP, vertices, vector<Vec3f>(), vector<Vec2f>(), eimit->second.one.newIndices, bd.name, hints, eimit->first ) );
+        g->addChild( createGeoNode( PRIMITIVE_LINE_STRIP, vertices, vector<Vec3f>(), vector<Vec2f>(), pimit->second.one.newIndices, bd.name, hints, pimit->first ) );
       }
 
-      if ( ! eimit->second.two.newIndices.empty() )
+      if ( ! pimit->second.two.newIndices.empty() )
       {
         A3DDouble * verts = tbd.m_pdCoords;
         A3DDouble * norms = t3d.m_pdNormals;
-        size_t n = eimit->second.two.indexMap.size();
+        size_t n = pimit->second.two.indexMap.size();
         vector<Vec3f> normals( n );
         vector<Vec3f> vertices( n );
-        for ( IndexMap<2>::const_iterator it = eimit->second.two.indexMap.begin() ; it != eimit->second.two.indexMap.end() ; ++it )
+        for ( IndexMap<2>::const_iterator it = pimit->second.two.indexMap.begin() ; it != pimit->second.two.indexMap.end() ; ++it )
         {
           const Vecnt<2,unsigned int> & idx = it->first;
           normals[it->second] = Vec3f( (float)norms[idx[0]+0], (float)norms[idx[0]+1], (float)norms[idx[0]+2] );
           vertices[it->second] = Vec3f( (float)verts[idx[1]+0], (float)verts[idx[1]+1], (float)verts[idx[1]+2] );
         }
 
-        g->addChild( createGeoNode( PRIMITIVE_TRIANGLES, vertices, normals, vector<Vec2f>(), eimit->second.two.newIndices, bd.name, hints, eimit->first ) );
+        g->addChild( createGeoNode( PRIMITIVE_TRIANGLES, vertices, normals, vector<Vec2f>(), pimit->second.two.newIndices, bd.name, hints, pimit->first ) );
       }
 
-      if ( ! eimit->second.three.newIndices.empty() )
+      if ( ! pimit->second.three.newIndices.empty() )
       {
         A3DDouble * verts = tbd.m_pdCoords;
         A3DDouble * norms = t3d.m_pdNormals;
         A3DDouble * texts = t3d.m_pdTextureCoords;
-        size_t n = eimit->second.three.indexMap.size();
+        size_t n = pimit->second.three.indexMap.size();
         vector<Vec3f> normals( n );
         vector<Vec3f> vertices( n );
         vector<Vec2f> textures( n );
-        for ( IndexMap<3>::const_iterator it = eimit->second.three.indexMap.begin() ; it != eimit->second.three.indexMap.end() ; ++it )
+        for ( IndexMap<3>::const_iterator it = pimit->second.three.indexMap.begin() ; it != pimit->second.three.indexMap.end() ; ++it )
         {
           const Vecnt<3,unsigned int> & idx = it->first;
           normals[it->second] = Vec3f( (float)norms[idx[0]+0], (float)norms[idx[0]+1], (float)norms[idx[0]+2] );
@@ -1018,7 +1018,7 @@ A3DStatus HOOPSLoader::parseTess3D( const A3DRiRepresentationItem * pRepItem, co
           vertices[it->second] = Vec3f( (float)verts[idx[2]+0], (float)verts[idx[2]+1], (float)verts[idx[2]+2] );
         }
 
-        g->addChild( createGeoNode( PRIMITIVE_TRIANGLES, vertices, normals, textures, eimit->second.three.newIndices, bd.name, hints, eimit->first ) );
+        g->addChild( createGeoNode( PRIMITIVE_TRIANGLES, vertices, normals, textures, pimit->second.three.newIndices, bd.name, hints, pimit->first ) );
       }
     }
   }
@@ -1050,7 +1050,7 @@ A3DStatus HOOPSLoader::parseTess3DWire( const A3DRiRepresentationItem * pRepItem
   CascadedAttributes ca( pRepItem, parentCA );
 
   Vec3f color;
-  EffectDataSharedPtr pmg = createLineEffect( ca.getAttributes(), color );
+  dp::sg::core::PipelineDataSharedPtr pmg = createLinePipeline( ca.getAttributes(), color );
 
   A3DUns32  * indices = t3wd.m_puiSizesWires;
   unsigned int wIndex = 0;
@@ -1123,7 +1123,7 @@ A3DStatus HOOPSLoader::parseTess3DWire( const A3DRiRepresentationItem * pRepItem
       geoNodeSP->setName( baseData.name );
       geoNodeSP->setHints( hints );
       geoNodeSP->setPrimitive( primSP );
-      geoNodeSP->setMaterialEffect( pmg );
+      geoNodeSP->setMaterialPipeline( pmg );
 
       // add it to the current Group
       getCurrentGroup()->addChild( geoNodeSP );
@@ -1161,7 +1161,7 @@ A3DStatus HOOPSLoader::parseTess3DWire( const A3DRiRepresentationItem * pRepItem
     geoNodeSP->setName( baseData.name );
     geoNodeSP->setHints( hints );
     geoNodeSP->setPrimitive( primSP );
-    geoNodeSP->setMaterialEffect( pmg );
+    geoNodeSP->setMaterialPipeline( pmg );
     if ( assembly )
     {
       geoNodeSP->addHints( Object::DP_SG_HINT_ASSEMBLY );
@@ -1956,28 +1956,28 @@ dp::sg::core::ParameterGroupDataSharedPtr HOOPSLoader::createGeometryParameterGr
   return( parameterGroupData );
 }
 
-EffectDataSharedPtr HOOPSLoader::createMaterialEffect( const A3DMiscCascadedAttributes * pAttr )
+dp::sg::core::PipelineDataSharedPtr HOOPSLoader::createMaterialPipeline( const A3DMiscCascadedAttributes * pAttr )
 {
   CascadedAttributesData cad( pAttr );
   const A3DGraphStyleData & style = cad.getStyle();
 
   DP_ASSERT( !style.m_bVPicture && ( style.m_uiLinePatternIndex < m_linePatterns.size() ) );
 
-  EffectDataSharedPtr materialEffect;
+  dp::sg::core::PipelineDataSharedPtr materialPipeline;
   GraphStyleMap::const_iterator it = m_materialEffects.find( style );
   if ( it != m_materialEffects.end() )
   {
-    materialEffect = it->second;
+    materialPipeline = it->second;
   }
   else
   {
     std::ostringstream oss;
     oss << "Material" << m_materialCounter++;
 
-    materialEffect = createStandardMaterialData();
-    materialEffect->setName( oss.str() );
+    materialPipeline = createStandardMaterialData();
+    materialPipeline->setName( oss.str() );
 
-    const ParameterGroupDataSharedPtr & parameterGroupData = materialEffect->findParameterGroupData( string( "standardMaterialParameters" ) );
+    const ParameterGroupDataSharedPtr & parameterGroupData = materialPipeline->findParameterGroupData( string( "standardMaterialParameters" ) );
     DP_ASSERT( parameterGroupData );
     DP_VERIFY( parameterGroupData->setParameter( "lineStipplePattern", m_linePatterns[style.m_uiLinePatternIndex] ) );
 
@@ -2091,23 +2091,23 @@ EffectDataSharedPtr HOOPSLoader::createMaterialEffect( const A3DMiscCascadedAttr
       float v = 1.0f - float( style.m_ucTransparency ) / 255.0f;
       DP_VERIFY( parameterGroupData->setParameter( "frontOpacity", v ) );
       DP_VERIFY( parameterGroupData->setParameter( "backOpacity", v ) );
-      materialEffect->setTransparent( true );
+      materialPipeline->setTransparent( true );
     }
 
-    materialEffect->setParameterGroupData( createGeometryParameterGroupData( pAttr ) );
+    materialPipeline->setParameterGroupData( createGeometryParameterGroupData( pAttr ) );
 
-    m_materialEffects[style] = materialEffect;
+    m_materialEffects[style] = materialPipeline;
   }
 
-  return( materialEffect );
+  return( materialPipeline );
 }
 
-EffectDataSharedPtr HOOPSLoader::createLineEffect( const A3DMiscCascadedAttributes * pAttr, Vec3f & color )
+dp::sg::core::PipelineDataSharedPtr HOOPSLoader::createLinePipeline( const A3DMiscCascadedAttributes * pAttr, Vec3f & color )
 {
-  EffectDataSharedPtr materialEffect = createMaterialEffect( pAttr );
+  dp::sg::core::PipelineDataSharedPtr materialPipeline = createMaterialPipeline( pAttr );
 
   // get the line color
-  const ParameterGroupDataSharedPtr & parameterGroupData = materialEffect->findParameterGroupData( string( "standardMaterialParameters" ) );
+  const ParameterGroupDataSharedPtr & parameterGroupData = materialPipeline->findParameterGroupData( string( "standardMaterialParameters" ) );
   DP_ASSERT( parameterGroupData );
   {
     const dp::fx::ParameterGroupSpecSharedPtr & pgs = parameterGroupData->getParameterGroupSpec();
@@ -2124,5 +2124,5 @@ EffectDataSharedPtr HOOPSLoader::createLineEffect( const A3DMiscCascadedAttribut
   }
 #endif
 
-  return( materialEffect );
+  return( materialPipeline );
 }

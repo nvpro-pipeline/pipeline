@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2013
+// Copyright (c) 2013-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -25,9 +25,11 @@
 
 
 #include "SceneTreeItem.h"
+#include <dp/fx/EffectSpec.h>
 #include <dp/sg/core/GeoNode.h>
 #include <dp/sg/core/Object.h>
 #include <dp/sg/core/LightSource.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/core/Primitive.h>
 #include <dp/sg/core/Scene.h>
 
@@ -131,8 +133,8 @@ SceneTreeItem::SceneTreeItem( ObjectSharedPtr const & object )
     case OC_BILLBOARD :
     case OC_CLIPPLANE :
     case OC_INDEX_SET :
-    case OC_EFFECT_DATA :
     case OC_PARAMETER_GROUP_DATA :
+    case OC_PIPELINE_DATA :
     case OC_SAMPLER :
       pixmap.load( ":/images/DefaultNode.png" );
       break;
@@ -156,9 +158,9 @@ void SceneTreeItem::expandItem()
       case OC_GEONODE :
         {
           GeoNodeSharedPtr const& gn = m_object.staticCast<GeoNode>();
-          if ( gn->getMaterialEffect() )
+          if ( gn->getMaterialPipeline() )
           {
-            addChild( new SceneTreeItem( gn->getMaterialEffect() ) );
+            addChild( new SceneTreeItem( gn->getMaterialPipeline() ) );
           }
           if ( gn->getPrimitive() )
           {
@@ -182,9 +184,9 @@ void SceneTreeItem::expandItem()
       case OC_LIGHT_SOURCE :
         {
           LightSourceSharedPtr const& ls = m_object.staticCast<LightSource>();
-          if ( ls->getLightEffect() )
+          if ( ls->getLightPipeline() )
           {
-            addChild( new SceneTreeItem( ls->getLightEffect() ) );
+            addChild( new SceneTreeItem( ls->getLightPipeline() ) );
           }
         }
         break;
@@ -212,19 +214,6 @@ void SceneTreeItem::expandItem()
           }
         }
         break;
-      case OC_EFFECT_DATA :
-        {
-          EffectDataSharedPtr const& ed = m_object.staticCast<EffectData>();
-          dp::fx::EffectSpecSharedPtr const & es = ed->getEffectSpec();
-          for ( dp::fx::EffectSpec::iterator it = es->beginParameterGroupSpecs() ; it != es->endParameterGroupSpecs() ; ++it )
-          {
-            if ( ed->getParameterGroupData( it ) )
-            {
-              addChild( new SceneTreeItem( ed->getParameterGroupData( it ) ) );
-            }
-          }
-        }
-        break;
       case OC_PARAMETER_GROUP_DATA :
         {
           ParameterGroupDataSharedPtr const& pgd = m_object.staticCast<ParameterGroupData>();
@@ -235,6 +224,19 @@ void SceneTreeItem::expandItem()
               && ( it->first.getAnnotation().find( "Hidden" ) == std::string::npos ) )
             {
               addChild( new SceneTreeItem( pgd->getParameter<SamplerSharedPtr>( it ) ) );
+            }
+          }
+        }
+        break;
+      case OC_PIPELINE_DATA :
+        {
+          dp::sg::core::PipelineDataSharedPtr const& pd = m_object.staticCast<dp::sg::core::PipelineData>();
+          dp::fx::EffectSpecSharedPtr const & es = pd->getEffectSpec();
+          for ( dp::fx::EffectSpec::iterator it = es->beginParameterGroupSpecs() ; it != es->endParameterGroupSpecs() ; ++it )
+          {
+            if ( pd->getParameterGroupData( it ) )
+            {
+              addChild( new SceneTreeItem( pd->getParameterGroupData( it ) ) );
             }
           }
         }
@@ -280,7 +282,7 @@ void SceneTreeItem::setChildIndicatorPolicy()
       DP_ASSERT( m_object.isPtrTo<GeoNode>() );
       {
         GeoNodeSharedPtr const& gn = m_object.staticCast<GeoNode>();
-        showIndicator = ( gn->getMaterialEffect() || gn->getPrimitive() );
+        showIndicator = ( gn->getMaterialPipeline() || gn->getPrimitive() );
       }
       break;
     case OC_GROUP :
@@ -296,7 +298,7 @@ void SceneTreeItem::setChildIndicatorPolicy()
       break;
     case OC_LIGHT_SOURCE :
       DP_ASSERT( m_object.isPtrTo<LightSource>() );
-      showIndicator = !!m_object.staticCast<LightSource>()->getLightEffect();
+      showIndicator = !!m_object.staticCast<LightSource>()->getLightPipeline();
       break;
     case OC_PERSPECTIVECAMERA :
     case OC_PARALLELCAMERA :
@@ -311,10 +313,6 @@ void SceneTreeItem::setChildIndicatorPolicy()
         showIndicator = ( p->getIndexSet() || p->getVertexAttributeSet() );
       }
       break;
-    case OC_EFFECT_DATA :
-      DP_ASSERT( m_object.isPtrTo<EffectData>() );
-      showIndicator = !!m_object.staticCast<EffectData>()->getNumberOfParameterGroupData();
-      break;
     case OC_PARAMETER_GROUP_DATA :
       DP_ASSERT( m_object.isPtrTo<ParameterGroupData>() );
       {
@@ -326,6 +324,10 @@ void SceneTreeItem::setChildIndicatorPolicy()
                       &&  ( it->first.getAnnotation().find( "Hidden" ) == std::string::npos );
         }
       }
+      break;
+    case OC_PIPELINE_DATA :
+      DP_ASSERT( m_object.isPtrTo<dp::sg::core::PipelineData>() );
+      showIndicator = !!m_object.staticCast<dp::sg::core::PipelineData>()->getNumberOfParameterGroupData();
       break;
     case OC_SCENE :
       DP_ASSERT( m_object.isPtrTo<Scene>() );
@@ -363,9 +365,9 @@ void SceneTreeItem::update()
       case OC_GEONODE :
         {
           GeoNodeSharedPtr const& gn = m_object.staticCast<GeoNode>();
-          if ( gn->getMaterialEffect() )
+          if ( gn->getMaterialPipeline() )
           {
-            objects.insert( gn->getMaterialEffect() );
+            objects.insert( gn->getMaterialPipeline() );
           }
           if ( gn->getPrimitive() )
           {
@@ -389,9 +391,9 @@ void SceneTreeItem::update()
       case OC_LIGHT_SOURCE :
         {
           LightSourceSharedPtr const& ls = m_object.staticCast<LightSource>();
-          if ( ls->getLightEffect() )
+          if ( ls->getLightPipeline() )
           {
-            objects.insert( ls->getLightEffect() );
+            objects.insert( ls->getLightPipeline() );
           }
         }
         break;
@@ -419,19 +421,6 @@ void SceneTreeItem::update()
           }
         }
         break;
-      case OC_EFFECT_DATA :
-        {
-          EffectDataSharedPtr const& ed = m_object.staticCast<EffectData>();
-          dp::fx::EffectSpecSharedPtr const & es = ed->getEffectSpec();
-          for ( dp::fx::EffectSpec::iterator it = es->beginParameterGroupSpecs() ; it != es->endParameterGroupSpecs() ; ++it )
-          {
-            if ( ed->getParameterGroupData( it ) )
-            {
-              objects.insert( ed->getParameterGroupData( it ) );
-            }
-          }
-        }
-        break;
       case OC_PARAMETER_GROUP_DATA :
         {
           ParameterGroupDataSharedPtr const& pgd = m_object.staticCast<ParameterGroupData>();
@@ -441,6 +430,19 @@ void SceneTreeItem::update()
             if ( ( it->first.getType() & dp::fx::PT_POINTER_TYPE_MASK ) == dp::fx::PT_SAMPLER_PTR )
             {
               objects.insert( pgd->getParameter<SamplerSharedPtr>( it ) );
+            }
+          }
+        }
+        break;
+      case OC_PIPELINE_DATA :
+        {
+          dp::sg::core::PipelineDataSharedPtr const& pd = m_object.staticCast<dp::sg::core::PipelineData>();
+          dp::fx::EffectSpecSharedPtr const & es = pd->getEffectSpec();
+          for ( dp::fx::EffectSpec::iterator it = es->beginParameterGroupSpecs() ; it != es->endParameterGroupSpecs() ; ++it )
+          {
+            if ( pd->getParameterGroupData( it ) )
+            {
+              objects.insert( pd->getParameterGroupData( it ) );
             }
           }
         }

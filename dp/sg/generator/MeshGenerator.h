@@ -126,16 +126,16 @@ namespace dp
       DP_SG_GENERATOR_API dp::sg::core::PrimitiveSharedPtr createTessellatedBox( unsigned int subdiv );
 
       //! Generate a texture of size 8x8 with a colored checker pattern
-      DP_SG_GENERATOR_API dp::sg::core::EffectDataSharedPtr createTexture();
+      DP_SG_GENERATOR_API dp::sg::core::PipelineDataSharedPtr createTexture();
 
       //! Generate a texture of size n x n with grey and alpha values
-      DP_SG_GENERATOR_API dp::sg::core::EffectDataSharedPtr createAlphaTexture( unsigned int n=64 );
+      DP_SG_GENERATOR_API dp::sg::core::PipelineDataSharedPtr createAlphaTexture( unsigned int n=64 );
 
       //! Generate a GeoNode from a shape \a drawable
       DP_SG_GENERATOR_API dp::sg::core::GeoNodeSharedPtr createGeoNode( const dp::sg::core::PrimitiveSharedPtr &drawable );
 
       //! Generate a GeoNode from a shape \a drawable and a material effect \a materialEffect
-      DP_SG_GENERATOR_API dp::sg::core::GeoNodeSharedPtr createGeoNode( const dp::sg::core::PrimitiveSharedPtr &drawable, const dp::sg::core::EffectDataSharedPtr & materialEffect );
+      DP_SG_GENERATOR_API dp::sg::core::GeoNodeSharedPtr createGeoNode( const dp::sg::core::PrimitiveSharedPtr &drawable, const dp::sg::core::PipelineDataSharedPtr & materialPipeline );
 
       //! Generate a transformation for a node \a node with a translation vector \a translation as well as an orientation vector \a orientation
       DP_SG_GENERATOR_API dp::sg::core::TransformSharedPtr createTransform( const dp::sg::core::NodeSharedPtr &node,

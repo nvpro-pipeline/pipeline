@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2015
+// Copyright (c) 2010-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -29,6 +29,7 @@
 #include <dp/sg/gl/TextureGL.h>
 #include <dp/gl/RenderTarget.h>
 #include <dp/rix/gl/RiXGL.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/core/Primitive.h>
 #include <dp/sg/core/TextureHost.h>
 #include <dp/sg/core/Primitive.h>
@@ -59,7 +60,7 @@ namespace dp
             // this turns a zero-based dp::sg::core::TextureTarget into its corresponding GL target
             static const GLenum cTexTarget[] = { GL_TEXTURE_1D, GL_TEXTURE_2D, GL_TEXTURE_3D,
             GL_TEXTURE_CUBE_MAP, GL_TEXTURE_1D_ARRAY_EXT,
-            GL_TEXTURE_2D_ARRAY_EXT, GL_TEXTURE_RECTANGLE_ARB }; 
+            GL_TEXTURE_2D_ARRAY_EXT, GL_TEXTURE_RECTANGLE_ARB };
 
           void RendererFSQImpl::setTexCoord1( const dp::gl::RenderTargetSharedPtr & target )
           {
@@ -87,10 +88,10 @@ namespace dp
 
           RendererFSQImpl::RendererFSQImpl( const dp::gl::RenderTargetSharedPtr &target )
             : FSQRenderer( target )
-            , m_effectsValid(false)
+            , m_pipelinesValid(false)
             , m_rendererGLLib(nullptr)
             , m_renderer(nullptr)
-          {  
+          {
             m_vertexAttributeSet = VertexAttributeSet::create();
             {
               static Vec3f vertices[4] = { Vec3f( -1.0f, -1.0f, 0.0f ), Vec3f( 1.0f, -1.0f, 0.0f ), Vec3f( 1.0f, 1.0f, 0.0f ), Vec3f( -1.0f, 1.0f, 0.0f ) };
@@ -108,7 +109,7 @@ namespace dp
              m_rendererGLLib = DynamicLibrary::createFromFile( "RiXGL.rdr" );
 #else
             m_rendererGLLib = DynamicLibrary::createFromFile( "libRiXGL.rdr" );
-#endif            
+#endif
             DP_ASSERT( m_rendererGLLib );
 
             dp::rix::core::PFNCREATERENDERER createRenderer = (dp::rix::core::PFNCREATERENDERER)m_rendererGLLib->getSymbol( "createRenderer" );
@@ -179,14 +180,14 @@ namespace dp
               m_rixFxManager = dp::rix::fx::Manager::create( MANAGER_UNIFORM, m_renderer );
               DP_ASSERT( m_rixFxManager );
 
-              m_resourceEffectData = ResourceEffectDataRiXFx::get( m_effect, m_rixFxManager, m_resourceManager );
+              m_resourceEffectData = ResourceEffectDataRiXFx::get( m_pipelineData, m_rixFxManager, m_resourceManager );
               DP_ASSERT( m_resourceEffectData );
 
               m_instance = m_rixFxManager->instanceCreate( m_geometryInstance.get() );
               DP_ASSERT( m_instance );
             }
 
-            if ( !m_effectsValid )
+            if ( !m_pipelinesValid )
             {
               dp::fx::EffectSpecSharedPtr es = dp::fx::EffectSpec::create( "sys_matrices", dp::fx::EffectSpec::EST_SYSTEM, EffectSpec::ParameterGroupSpecsContainer() );
               dp::fx::EffectSpecSharedPtr ec = dp::fx::EffectSpec::create( "sys_camera", dp::fx::EffectSpec::EST_SYSTEM, EffectSpec::ParameterGroupSpecsContainer() );
@@ -195,10 +196,10 @@ namespace dp
               s["sys_camera"] = dp::rix::fx::Manager::EffectSpecInfo( ec, true );
               s["sys_Fragment"] = dp::rix::fx::Manager::EffectSpecInfo( dp::fx::EffectSpec::create( "sys_Fragment", dp::fx::EffectSpec::EST_SYSTEM, EffectSpec::ParameterGroupSpecsContainer() ), true );
 
-              dp::rix::fx::ProgramSharedHandle program = m_rixFxManager->programCreate( m_effect->getEffectSpec()
+              dp::rix::fx::ProgramSharedHandle program = m_rixFxManager->programCreate( m_pipelineData->getEffectSpec()
                                                                                      , s
                                                                                      //, dp::rix::fx::Manager::SystemSpecs()
-                                                                                     , "forward", nullptr, 0 ); 
+                                                                                     , "forward", nullptr, 0 );
               m_rixFxManager->instanceSetProgram( m_instance.get(), program.get() );
 
               std::vector<dp::rix::fx::GroupDataSharedHandle> groupDatas;
@@ -210,7 +211,7 @@ namespace dp
               {
                 m_rixFxManager->instanceUseGroupData( m_instance.get(), groupDatas[i].get() );
               }
-              m_effectsValid = true;
+              m_pipelinesValid = true;
             }
 
             if ( !m_renderGroup )
@@ -237,7 +238,7 @@ namespace dp
           //
           // Quad is drawn as shown in render()
           //
-          // coords is expected to be a vector of Vec4f with at least four or zero elements, 
+          // coords is expected to be a vector of Vec4f with at least four or zero elements,
           // latter indicating to not send attributes from this texcoord unit.
           //
           void RendererFSQImpl::setTexCoords( unsigned int unit, const std::vector<Vec4f> &coords )
@@ -256,37 +257,37 @@ namespace dp
 
           bool RendererFSQImpl::setSamplerByName( const std::string & samplerName, const SamplerSharedPtr & sampler )
           {
-            DP_ASSERT( m_effect );
-            const EffectSpecSharedPtr & es = m_effect->getEffectSpec();
+            DP_ASSERT( m_pipelineData );
+            const EffectSpecSharedPtr & es = m_pipelineData->getEffectSpec();
             for ( EffectSpec::iterator it = es->beginParameterGroupSpecs() ; it != es->endParameterGroupSpecs() ; ++it )
             {
               ParameterGroupSpec::iterator pit = (*it)->findParameterSpec( samplerName );
               if ( pit != (*it)->endParameterSpecs() )
               {
-                if ( ! m_effect->getParameterGroupData( it ) )
+                if ( ! m_pipelineData->getParameterGroupData( it ) )
                 {
-                  m_effect->setParameterGroupData( it, dp::sg::core::ParameterGroupData::create( *it ) );
+                  m_pipelineData->setParameterGroupData( it, dp::sg::core::ParameterGroupData::create( *it ) );
                 }
-                DP_ASSERT( m_effect->getParameterGroupData( it ) );
-                m_effect->getParameterGroupData( it )->setParameter<SamplerSharedPtr>( samplerName, sampler );
+                DP_ASSERT( m_pipelineData->getParameterGroupData( it ) );
+                m_pipelineData->getParameterGroupData( it )->setParameter<SamplerSharedPtr>( samplerName, sampler );
                 return( true );
               }
             }
             return( false );
           }
 
-          void RendererFSQImpl::setEffect( const dp::sg::core::EffectDataSharedPtr & effect )
+          void RendererFSQImpl::setPipeline( const dp::sg::core::PipelineDataSharedPtr & pipeline )
           {
-            if ( m_effect != effect )
+            if ( m_pipelineData != pipeline )
             {
-              m_effect = effect;
-              m_effectsValid = false;
+              m_pipelineData = pipeline;
+              m_pipelinesValid = false;
             }
           }
 
-          const dp::sg::core::EffectDataSharedPtr & RendererFSQImpl::getEffect() const
+          const dp::sg::core::PipelineDataSharedPtr & RendererFSQImpl::getPipeline() const
           {
-            return( m_effect );
+            return( m_pipelineData );
           }
 
         } // namespace gl

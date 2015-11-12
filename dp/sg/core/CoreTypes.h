@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2007
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -77,7 +77,6 @@ namespace dp
       DEFINE_PTR_TYPES( BufferHost );
       DEFINE_PTR_TYPES( Camera );
       DEFINE_PTR_TYPES( ClipPlane );
-      DEFINE_PTR_TYPES( EffectData );
       DEFINE_PTR_TYPES( FrustumCamera );
       DEFINE_PTR_TYPES( GeoNode );
       DEFINE_PTR_TYPES( Group );
@@ -92,6 +91,7 @@ namespace dp
       DEFINE_PTR_TYPES( ParameterGroupData );
       DEFINE_PTR_TYPES( Path );
       DEFINE_PTR_TYPES( PerspectiveCamera );
+      DEFINE_PTR_TYPES( PipelineData );
       DEFINE_PTR_TYPES( Primitive );
       DEFINE_PTR_TYPES( Sampler );
       DEFINE_PTR_TYPES( Scene );
@@ -133,8 +133,8 @@ namespace dp
     SHARED_OBJECT_TRAITS( dp::sg::core::Primitive,           dp::sg::core::Object );
     SHARED_OBJECT_TRAITS( dp::sg::core::VertexAttributeSet,  dp::sg::core::Object );
     SHARED_OBJECT_TRAITS( dp::sg::core::IndexSet,            dp::sg::core::Object );
-    SHARED_OBJECT_TRAITS( dp::sg::core::EffectData,          dp::sg::core::Object );
     SHARED_OBJECT_TRAITS( dp::sg::core::ParameterGroupData,  dp::sg::core::Object );
+    SHARED_OBJECT_TRAITS( dp::sg::core::PipelineData,        dp::sg::core::Object );
     SHARED_OBJECT_TRAITS( dp::sg::core::Scene,               dp::sg::core::Object );
     SHARED_OBJECT_TRAITS( dp::sg::core::Buffer,              dp::sg::core::HandledObject );
     SHARED_OBJECT_TRAITS( dp::sg::core::BufferHost,          dp::sg::core::Buffer );

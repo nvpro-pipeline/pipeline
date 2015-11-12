@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2005
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -137,8 +137,8 @@ class DPAFSaveTraverser : public dp::sg::algorithm::SharedTraverser
     /** If the \c VertexAttributeSet \a p is encountered on saving the first time, it is saved. */
     virtual void handleVertexAttributeSet( const dp::sg::core::VertexAttributeSet *p );
 
-    virtual void handleEffectData( const dp::sg::core::EffectData * p );
     virtual void handleParameterGroupData( const dp::sg::core::ParameterGroupData * p );
+    virtual void handlePipelineData( const dp::sg::core::PipelineData * p );
     virtual void handleSampler( const dp::sg::core::Sampler * p );
 
 private:

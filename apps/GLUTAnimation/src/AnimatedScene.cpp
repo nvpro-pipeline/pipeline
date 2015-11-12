@@ -26,9 +26,9 @@
 
 #include <AnimatedScene.h>
 #include <dp/DP.h>
-#include <dp/sg/core/EffectData.h>
 #include <dp/sg/core/GeoNode.h>
 #include <dp/sg/core/Group.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/core/Scene.h>
 #include <dp/sg/core/Primitive.h>
 #include <dp/sg/core/Transform.h>
@@ -131,10 +131,10 @@ AnimatedScene::AnimatedScene( const dp::math::Vec2f& gridSize, const dp::math::V
   dp::fx::EffectLibrary::instance()->loadEffects( dp::home() + "/media/effects/xml/standard_material.xml", fileFinder );
   dp::fx::EffectLibrary::instance()->loadEffects( dp::home() + "/media/effects/xml/thinglass.xml", fileFinder );
 
-  m_carpaint = dp::sg::core::EffectData::create( dp::fx::EffectLibrary::instance()->getEffectData("carpaint") );
-  m_phong = dp::sg::core::EffectData::create( dp::fx::EffectLibrary::instance()->getEffectData("phong") );
-  m_standard_material = dp::sg::core::EffectData::create( dp::fx::EffectLibrary::instance()->getEffectData("standardMaterial") );
-  m_thinglass = dp::sg::core::EffectData::create( dp::fx::EffectLibrary::instance()->getEffectData("thinglass") );
+  m_carpaint          = dp::sg::core::PipelineData::create( dp::fx::EffectLibrary::instance()->getEffectData("carpaint") );
+  m_phong             = dp::sg::core::PipelineData::create( dp::fx::EffectLibrary::instance()->getEffectData("phong") );
+  m_standard_material = dp::sg::core::PipelineData::create( dp::fx::EffectLibrary::instance()->getEffectData("standardMaterial") );
+  m_thinglass         = dp::sg::core::PipelineData::create( dp::fx::EffectLibrary::instance()->getEffectData("thinglass") );
 
   m_animationTime = std::shared_ptr<AnimationTime>(new AnimationTime());
 
@@ -161,7 +161,7 @@ dp::sg::core::PrimitiveSharedPtr AnimatedScene::createPrimitive( size_t x, size_
   return m_primitive;
 }
 
-void AnimatedScene::linkAnimationColor2(AnimatorColorSharedPtr const & animation, dp::sg::core::EffectDataSharedPtr const & effect, char const *group, char const *parameter)
+void AnimatedScene::linkAnimationColor2(AnimatorColorSharedPtr const & animation, dp::sg::core::PipelineDataSharedPtr const & effect, char const *group, char const *parameter)
 {
   m_linkManager.link(m_animationTime, AnimationTime::PID_Time, animation, AnimatorColor::PID_Time);
 
@@ -182,15 +182,15 @@ void AnimatedScene::linkAnimationColor2(AnimatorColorSharedPtr const & animation
   }
 }
 
-dp::sg::core::EffectDataSharedPtr AnimatedScene::createMaterial( size_t x, size_t y )
+dp::sg::core::PipelineDataSharedPtr AnimatedScene::createMaterial( size_t x, size_t y )
 {
-  dp::sg::core::EffectDataSharedPtr effect;
+  dp::sg::core::PipelineDataSharedPtr effect;
   size_t index = (y * m_objectCount[0]) + x;
   switch (index % 5)
   {
   case 0:
     {
-      effect = dp::sg::core::EffectData::create( m_effectSpec );
+      effect = dp::sg::core::PipelineData::create( m_effectSpec );
 
       dp::sg::core::ParameterGroupDataSharedPtr parameterGroupDataSharedPtr = dp::sg::core::ParameterGroupData::create( *m_itColors );
       effect->setParameterGroupData( parameterGroupDataSharedPtr );
@@ -245,7 +245,7 @@ void AnimatedScene::createGrid()
       m_materials[index] = createMaterial( x, y );
       m_geoNodes[index] = dp::sg::core::GeoNode::create();
       {
-        m_geoNodes[index]->setMaterialEffect( m_materials[index] );
+        m_geoNodes[index]->setMaterialPipeline( m_materials[index] );
         m_geoNodes[index]->setPrimitive( m_primitives[index] );
       }
       m_transforms[index] = createTransform( x, y );

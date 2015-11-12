@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2013-2015
+// Copyright (c) 2013-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -29,6 +29,7 @@
 #include <dp/fx/EffectLibrary.h>
 #include <dp/sg/algorithm/Replace.h>
 #include <dp/sg/algorithm/Search.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/io/IO.h>
 #include <dp/sg/ui/ViewState.h>
 #include <dp/util/File.h>
@@ -121,7 +122,7 @@ int main( int argc, char *argv[] )
     return( -1 );
   }
 
-  dp::sg::algorithm::ReplacementMapEffectData replacementMap;
+  dp::sg::algorithm::ReplacementMapPipelineData replacementMap;
   for ( TiXmlElement * element = rootElement->FirstChildElement() ; element ; element = element->NextSiblingElement() )
   {
     DP_ASSERT( element->Attribute( "from" ) && element->Attribute( "to" ) );
@@ -135,10 +136,10 @@ int main( int argc, char *argv[] )
       return( -1 );
     }
     DP_ASSERT( replacementMap.find( from ) == replacementMap.end() );
-    replacementMap[from] = dp::sg::core::EffectData::create( effectData );
+    replacementMap[from] = dp::sg::core::PipelineData::create( effectData );
   }
 
-  dp::sg::algorithm::replaceEffectDatas( scene, replacementMap );
+  dp::sg::algorithm::replacePipelineData( scene, replacementMap );
 
   std::string saveName = dp::util::getFilePath( sceneFile ) + "/" + dp::util::getFileStem( sceneFile ) + "X.dpbf";
 

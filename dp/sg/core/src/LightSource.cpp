@@ -23,7 +23,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/core/LightSource.h>
 
 using namespace dp::math;
@@ -74,33 +74,33 @@ namespace dp
       {
         m_objectCode = OC_LIGHT_SOURCE;
 
-        if ( rhs.m_lightEffect )
+        if ( rhs.m_lightPipeline )
         {
-          m_lightEffect = rhs.m_lightEffect.clone();
-          m_lightEffect->attach( this );
+          m_lightPipeline = rhs.m_lightPipeline.clone();
+          m_lightPipeline->attach( this );
         }
       }
 
       LightSource::~LightSource()
       {
-        if ( m_lightEffect )
+        if ( m_lightPipeline )
         {
-          m_lightEffect->detach( this );
+          m_lightPipeline->detach( this );
         }
       }
 
-      void LightSource::setLightEffect( const EffectDataSharedPtr & effect )
+      void LightSource::setLightPipeline( const PipelineDataSharedPtr & effect )
       {
-        if ( m_lightEffect != effect )
+        if ( m_lightPipeline != effect )
         {
-          if ( m_lightEffect )
+          if ( m_lightPipeline )
           {
-            m_lightEffect->detach( this );
+            m_lightPipeline->detach( this );
           }
-          m_lightEffect = effect;
-          if ( m_lightEffect )
+          m_lightPipeline = effect;
+          if ( m_lightPipeline )
           {
-            m_lightEffect->attach( this );
+            m_lightPipeline->attach( this );
           }
           notify( Event(this ) );
         }
@@ -113,15 +113,15 @@ namespace dp
         {
           Node::operator=(rhs);
 
-          if ( m_lightEffect )
+          if ( m_lightPipeline )
           {
-            m_lightEffect->detach( this );
-            m_lightEffect.reset();
+            m_lightPipeline->detach( this );
+            m_lightPipeline.reset();
           }
-          if ( rhs.m_lightEffect )
+          if ( rhs.m_lightPipeline )
           {
-            m_lightEffect = rhs.m_lightEffect.clone();
-            m_lightEffect->attach( this );
+            m_lightPipeline = rhs.m_lightPipeline.clone();
+            m_lightPipeline->attach( this );
           }
 
           m_shadowCasting = rhs.m_shadowCasting;
@@ -146,21 +146,21 @@ namespace dp
         {
           LightSourceSharedPtr const& ls = object.staticCast<LightSource>();
 
-          equi =    ( m_shadowCasting == ls->m_shadowCasting )
-                &&  ( m_enabled       == ls->m_enabled       )
-                &&  ( !!m_lightEffect == !!ls->m_lightEffect );
+          equi =    ( m_shadowCasting   == ls->m_shadowCasting )
+                &&  ( m_enabled         == ls->m_enabled       )
+                &&  ( !!m_lightPipeline == !!ls->m_lightPipeline );
           if ( equi )
           {
             if ( deepCompare )
             {
-              if ( equi && m_lightEffect )
+              if ( equi && m_lightPipeline )
               {
-                equi = m_lightEffect->isEquivalent( ls->m_lightEffect, ignoreNames, true );
+                equi = m_lightPipeline->isEquivalent( ls->m_lightPipeline, ignoreNames, true );
               }
             }
             else
             {
-               equi = ( m_lightEffect == ls->m_lightEffect );
+               equi = ( m_lightPipeline == ls->m_lightPipeline );
             }
           }
         }
@@ -172,9 +172,9 @@ namespace dp
         Node::feedHashGenerator( hg );
         hg.update( reinterpret_cast<const unsigned char *>(&m_shadowCasting), sizeof(m_shadowCasting) );
         hg.update( reinterpret_cast<const unsigned char *>(&m_enabled), sizeof(m_enabled) );
-        if ( m_lightEffect )
+        if ( m_lightPipeline )
         {
-          hg.update( m_lightEffect );
+          hg.update( m_lightPipeline );
         }
       }
 
@@ -185,35 +185,34 @@ namespace dp
         Vec3f dir = direction;
         dir.normalize();
 
-        EffectDataSharedPtr lightEffect = createStandardDirectedLightData( dir, ambient, diffuse, specular );
+        dp::sg::core::PipelineDataSharedPtr lightPipeline = createStandardDirectedLightData( dir, ambient, diffuse, specular );
         LightSourceSharedPtr lightSource = LightSource::create();
-        lightSource->setLightEffect( lightEffect );
+        lightSource->setLightPipeline( lightPipeline );
         return( lightSource );
       }
 
       bool isStandardDirectedLight( const LightSourceSharedPtr & lightSource )
       {
-        EffectDataSharedPtr lightEffect = lightSource->getLightEffect();
-        DP_ASSERT( lightEffect );
-        return( !!lightEffect->findParameterGroupData( std::string( "standardDirectedLightParameters" ) ) );
+        dp::sg::core::PipelineDataSharedPtr lightPipeline = lightSource->getLightPipeline();
+        DP_ASSERT( lightPipeline );
+        return( !!lightPipeline->findParameterGroupData( std::string( "standardDirectedLightParameters" ) ) );
       }
 
       LightSourceSharedPtr createStandardPointLight( const Vec3f & position, const Vec3f & ambient
                                                    , const Vec3f & diffuse, const Vec3f & specular
                                                    , const std::array<float,3> & attenuations )
       {
-        EffectDataSharedPtr lightEffect = createStandardPointLightData( position, ambient, diffuse, specular
-                                                                      , attenuations );
+        dp::sg::core::PipelineDataSharedPtr lightPipeline = createStandardPointLightData( position, ambient, diffuse, specular, attenuations );
         LightSourceSharedPtr lightSource = LightSource::create();
-        lightSource->setLightEffect( lightEffect );
+        lightSource->setLightPipeline( lightPipeline );
         return( lightSource );
       }
 
       bool isStandardPointLight( const LightSourceSharedPtr & lightSource )
       {
-        EffectDataSharedPtr lightEffect = lightSource->getLightEffect();
-        DP_ASSERT( lightEffect );
-        return( !!lightEffect->findParameterGroupData( std::string( "standardPointLightParameters" ) ) );
+        dp::sg::core::PipelineDataSharedPtr lightPipeline = lightSource->getLightPipeline();
+        DP_ASSERT( lightPipeline );
+        return( !!lightPipeline->findParameterGroupData( std::string( "standardPointLightParameters" ) ) );
       }
 
       LightSourceSharedPtr createStandardSpotLight( const Vec3f & position, const Vec3f & direction
@@ -224,18 +223,17 @@ namespace dp
         Vec3f dir = direction;
         dir.normalize();
 
-        EffectDataSharedPtr lightEffect = createStandardSpotLightData( position, dir, ambient, diffuse, specular
-                                                                     , attenuations, exponent, cutoff );
+        dp::sg::core::PipelineDataSharedPtr lightPipeline = createStandardSpotLightData( position, dir, ambient, diffuse, specular, attenuations, exponent, cutoff );
         LightSourceSharedPtr lightSource = LightSource::create();
-        lightSource->setLightEffect( lightEffect );
+        lightSource->setLightPipeline( lightPipeline );
         return( lightSource );
       }
 
       bool isStandardSpotLight( const LightSourceSharedPtr & lightSource )
       {
-        EffectDataSharedPtr lightEffect = lightSource->getLightEffect();
-        DP_ASSERT( lightEffect );
-        return( !!lightEffect->findParameterGroupData( std::string( "standardSpotLightParameters" ) ) );
+        dp::sg::core::PipelineDataSharedPtr lightPipeline = lightSource->getLightPipeline();
+        DP_ASSERT( lightPipeline );
+        return( !!lightPipeline->findParameterGroupData( std::string( "standardSpotLightParameters" ) ) );
       }
 
     } // namespace core

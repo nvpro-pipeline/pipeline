@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012-2015
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -47,18 +47,17 @@ namespace dp
 
       /*! \brief 64-bit save DataID.
         * \remarks
-        * The DataID is used to uniquely identify an Object's embedded data. 
+        * The DataID is used to uniquely identify an Object's embedded data.
         * \sa Object::getDataID
         */
       typedef unsigned long long DataID;
 
-      /*! \brief Object Codes for DPSg Object Type Identification 
+      /*! \brief Object Codes for DPSg Object Type Identification
         */
       enum ObjectCode
       {
           OC_BILLBOARD            //!< Billboard
         , OC_CLIPPLANE            //!< ClipPlane
-        , OC_EFFECT_DATA          //!< EffectData
         , OC_GEONODE              //!< GeoNode
         , OC_GROUP                //!< Group
         , OC_INDEX_SET            //!< IndexSet
@@ -69,12 +68,13 @@ namespace dp
         , OC_PARAMETER_GROUP_DATA //!< ParameterGroupData
         , OC_PERSPECTIVECAMERA    //!< PerspectiveCamera
         , OC_PRIMITIVE            //!< Generic Primitive
+        , OC_PIPELINE_DATA        //!< PipelineData
         , OC_SAMPLER              //!< Sampler
         , OC_SCENE                //!< Scene
         , OC_SWITCH               //!< Switch
         , OC_TRANSFORM            //!< Transform
         , OC_VERTEX_ATTRIBUTE_SET //!< VertexAttributeSet
-        
+
         , OC_INVALID              //!< invalid object code
       };
 
@@ -111,15 +111,15 @@ namespace dp
           DP_SG_HINT_VISIBILITY_MASK = DP_SG_HINT_ALWAYS_VISIBLE | DP_SG_HINT_ALWAYS_INVISIBLE,
 
           /*! \brief Flags the Object not to cast shadows
-           * \remarks Shadow algorithms can consider this hint for optimized 
+           * \remarks Shadow algorithms can consider this hint for optimized
            * strategy.
-           * The built-in shaders will ignore intersections 
+           * The built-in shaders will ignore intersections
            * with geometry with this hint set. */
           DP_SG_HINT_NO_SHADOW_CASTER                  = BIT2,
- 
+
           /*! \brief Flags the Object not to receive shadows
-           * \remarks Shadow algorithms can consider this hint for optimized 
-           * strategy. 
+           * \remarks Shadow algorithms can consider this hint for optimized
+           * strategy.
            * By default, this hint is not set. */
           DP_SG_HINT_NO_SHADOW_RECEIVER                = BIT3,
 
@@ -131,13 +131,13 @@ namespace dp
 
           /*! \brief Flags the Object as frequently altering
            * \remarks The processing framework considers dynamic-flagged objects
-           * different from ordinary non-dynamic Objects to yield optimized render 
+           * different from ordinary non-dynamic Objects to yield optimized render
            * performance. By default, an Object is not flagged dynamic. */
           DP_SG_HINT_DYNAMIC                           = BIT5,
 
           /*! \brief Flags the Object as not being considered for clipping
-           * \remarks During rendering, active clip planes have no effect on Objects 
-           * that have the DP_SG_HINT_DONT_CLIP bit set. This hint only applies to 
+           * \remarks During rendering, active clip planes have no effect on Objects
+           * that have the DP_SG_HINT_DONT_CLIP bit set. This hint only applies to
            * Node-derived Objects. */
           DP_SG_HINT_DONT_CLIP                         = BIT6,
 
@@ -154,8 +154,8 @@ namespace dp
           // bounding volume state
           DP_SG_BOUNDING_BOX                   = DP_SG_HINT_LAST_HINT          << 1,
           DP_SG_BOUNDING_SPHERE                = DP_SG_BOUNDING_BOX             << 1,
-      
-          DP_SG_BOUNDING_VOLUMES               = DP_SG_BOUNDING_BOX | 
+
+          DP_SG_BOUNDING_VOLUMES               = DP_SG_BOUNDING_BOX |
                                                 DP_SG_BOUNDING_SPHERE,
 
           // hash key state
@@ -165,7 +165,7 @@ namespace dp
         class Event;
 
       public:
-        /*! \brief Destructs an Object. 
+        /*! \brief Destructs an Object.
           */
         DP_SG_CORE_API virtual ~Object();
 
@@ -173,25 +173,25 @@ namespace dp
           * \return
           * The function returns the object code enum for this object.
           * \remarks
-          * The object code, which is unique per object type, is used for fast object type 
-          * identification at runtime. A dp::sg::algorithm::Traverser, for example, uses the object code to 
-          * fast lookup the handler function for a particular object type. 
+          * The object code, which is unique per object type, is used for fast object type
+          * identification at runtime. A dp::sg::algorithm::Traverser, for example, uses the object code to
+          * fast lookup the handler function for a particular object type.
           * \n\n
-          * Object-derived classes must override the protected member 
+          * Object-derived classes must override the protected member
           * \link Object::m_objectCode m_objectCode \endlink, with the correct value for the
           * respective type. It is recommended to do this at instantiation time of the customized object.
           * \sa \ref Object::getHigherLevelObjectCode
           */
         ObjectCode getObjectCode() const;
 
-        /*! \brief Assigns new content from another Object. 
+        /*! \brief Assigns new content from another Object.
           * \param
           * rhs Reference to an Object from which to assign the new content.
           * \return
           * A reference to this object.
           * \remarks
           * The assignment operator unreferences the old content before assigning the new content. The new
-          * content will be a deep-copy of the content of right-hand-sided object. 
+          * content will be a deep-copy of the content of right-hand-sided object.
           */
         DP_SG_CORE_API Object & operator=(const Object & rhs);
 
@@ -199,44 +199,44 @@ namespace dp
           * \param
           * oc %Object code for which to retrieve the associated higher-level object code.
           * \return
-          * The default implementation returns OC_INVALID, which causes the traverser framework to 
+          * The default implementation returns OC_INVALID, which causes the traverser framework to
           * immediately proceed without handling the object when it comes across an unknown object code.
           * \remarks
-          * This function will be called from the object traverser framework if the object code \a oc 
-          * is unknown. This would be the case if for a custom object a certain traverser did not 
+          * This function will be called from the object traverser framework if the object code \a oc
+          * is unknown. This would be the case if for a custom object a certain traverser did not
           * register an appropriate handler function.
           * \n\n
-          * The framework expects this function to return a higher-level object code in terms of a 
-          * custom object hierarchy. The function will be repeatedly called with the returned 
-          * higher-level object code, until either a known object code or OC_INVALID will be returned. 
-          * That is - by repeatedly calling this function, the traverser framework moves up the custom 
-          * object hierarchy to find an object for which a handler function was registered. If the 
-          * traverser framework recognizes a known object code, it calls the appropriate handler 
-          * function and proceeds. If OC_INVALID was returned, the traverser framework proceeds without 
+          * The framework expects this function to return a higher-level object code in terms of a
+          * custom object hierarchy. The function will be repeatedly called with the returned
+          * higher-level object code, until either a known object code or OC_INVALID will be returned.
+          * That is - by repeatedly calling this function, the traverser framework moves up the custom
+          * object hierarchy to find an object for which a handler function was registered. If the
+          * traverser framework recognizes a known object code, it calls the appropriate handler
+          * function and proceeds. If OC_INVALID was returned, the traverser framework proceeds without
           * handling the object.
           * \n\n
-          * The runtime behavior is undefined if the function returns an object code of an object that 
+          * The runtime behavior is undefined if the function returns an object code of an object that
           * is not part of the object hierarchy of the primary object!
           * \n\n
-          * The framework might end up in a deadlock if the function never returns either OC_INVALID or 
+          * The framework might end up in a deadlock if the function never returns either OC_INVALID or
           * an object code of a concrete object known by the traverser!
           * \sa Object::getObjectCode
           */
-        DP_SG_CORE_API virtual ObjectCode getHigherLevelObjectCode(ObjectCode oc) const; 
+        DP_SG_CORE_API virtual ObjectCode getHigherLevelObjectCode(ObjectCode oc) const;
 
         /*! \brief Returns whether this object shares its embedded data with other objects.
           * \return
-          * The function should return \c true if the object shares its embedded data with other 
+          * The function should return \c true if the object shares its embedded data with other
           * objects. Otherwise, the function should return \c false.
           * \n\n
           * The default implementation always returns \c false.
           * \remarks
-          * For Object-derived classes that are capable of sharing their embedded data with other 
+          * For Object-derived classes that are capable of sharing their embedded data with other
           * objects, it is recommended to override this function. For all other objects, the default
           * implementation will be sufficient.
           * \n\n
-          * An object, capable of data sharing, shares its data with another object if it was either 
-          * instantiated as a copy of the other object, or if its content was re-assigned to by the 
+          * An object, capable of data sharing, shares its data with another object if it was either
+          * instantiated as a copy of the other object, or if its content was re-assigned to by the
           * content of the other object using the appropriate assignment operator.
           * \n\n
           * Only a few classes of the SceniX core implement data sharing. These mainly are classes where
@@ -255,48 +255,48 @@ namespace dp
           * data. Two objects that share the same data always have the same DataID.
           * \n\n
           * Identifying objects that share their data with other objects is useful for saving objects
-          * to a file and later reloading it without losing the data sharing. 
+          * to a file and later reloading it without losing the data sharing.
           * \sa Object::isDataShared
           */
         DP_SG_CORE_API virtual DataID getDataID() const;
 
         /*! \brief Specifies the name for an object.
           * \param
-          * name Reference to a STL sting holding the name to specify. 
+          * name Reference to a STL sting holding the name to specify.
           * \remarks
           * A previously specified name gets lost when specifying a new name using this function.
           * \n\n
-          * Use Object::getName to retrieve the actual name of an Object.  
+          * Use Object::getName to retrieve the actual name of an Object.
           */
         DP_SG_CORE_API void setName(const std::string& name);
 
         /*! \brief Returns the name of the object.
           * \return
           * A reference to a STL string holding the name of the object. The function returns a reference
-          * to an empty string if no name was previously specified for the object. 
+          * to an empty string if no name was previously specified for the object.
           * \remarks
-          * The function retrieves the object's name previously specified through Object::setName. 
+          * The function retrieves the object's name previously specified through Object::setName.
           */
         DP_SG_CORE_API const std::string& getName() const;
 
         /*! \brief Lets you append an annotation to this Object.
          *  \param anno Annotation to append to this Object.
          *  \remarks
-         *  The function lets you append an optional annotation. 
+         *  The function lets you append an optional annotation.
          *  A previously appended annotation gets lost.
          *  \sa Object::getAnnotation
          */
         DP_SG_CORE_API void setAnnotation(const std::string& anno);
 
-        /*! \brief Retrieves the Object's annotation. 
+        /*! \brief Retrieves the Object's annotation.
          *  \return
-         *  The function returns the annotation as last specified through setAnnotation. 
+         *  The function returns the annotation as last specified through setAnnotation.
          *  If no annotation was specified before, the function returns an empty string.
          *  \sa Object::setAnnotation
          */
         DP_SG_CORE_API const std::string& getAnnotation() const;
 
-        /*! \brief Tests whether this object is equivalent to another object.  
+        /*! \brief Tests whether this object is equivalent to another object.
           * \param
           * object Pointer to the object to test for equivalence with this object.
           * \param
@@ -305,28 +305,28 @@ namespace dp
           * deepCompare The function performs a deep-compare if this is \c true.
           * Otherwise the function only performs a shallow compare.
           * \return
-          * The function returns \c true if the object pointed to by \a object is detected to be 
+          * The function returns \c true if the object pointed to by \a object is detected to be
           * equivalent to this object. Otherwise the function returns \c false.
           * \remarks
-          * The test will be performed considering the optional control parameters ignoreNames and deepCompare. 
+          * The test will be performed considering the optional control parameters ignoreNames and deepCompare.
           * If you omit these two, the function ignores object names
           * and performs a shallow compare only.
           */
         DP_SG_CORE_API virtual bool isEquivalent( ObjectSharedPtr const& object, bool ignoreNames = true, bool deepCompare = false ) const;
 
         /*! \brief Attaches arbitrary user data to the object.
-         * \param 
+         * \param
          * userData Specifies the address of the arbitrary user data.
          * \remarks
          * Use setUserData to store the address to arbitrary user data with the object.
-         * The object does not interpret the data, nor does it take over responsibility 
-         * for managing the memory occupied by the data behind \a userData. It just keeps 
-         * the address to the user data until the address will be overwritten by a 
+         * The object does not interpret the data, nor does it take over responsibility
+         * for managing the memory occupied by the data behind \a userData. It just keeps
+         * the address to the user data until the address will be overwritten by a
          * subsequent call to setUserData.
          * \n\n
-         * User data will not be considered for storing to a file! 
+         * User data will not be considered for storing to a file!
          * \n\n
-         * Use getUserData to get back the address to the user data that was last specified 
+         * Use getUserData to get back the address to the user data that was last specified
          * through setUserData.
          * \sa getUserData
          */
@@ -334,14 +334,14 @@ namespace dp
 
         /*! \brief Returns a pointer to the attached arbitrary user data.
          * \return
-         * The function returns the pointer to the arbitrary user data that was last 
+         * The function returns the pointer to the arbitrary user data that was last
          * specified by a call to setUserData.
          * \sa setUserData
          */
-        DP_SG_CORE_API const void* getUserData() const; 
-    
+        DP_SG_CORE_API const void* getUserData() const;
+
         /*! \brief Get the hints that are set for the object.
-         * \return 
+         * \return
          * The function returns the hints for the object.
          * \sa setHints
          */
@@ -349,7 +349,7 @@ namespace dp
 
         /*! \brief Get the hints that are set for the object, filtered by \a mask.
          * \param mask The mask the hints are filtered against.
-         * \returm 
+         * \returm
          * The function returns the hints for the object, filtered by \a mask.
          */
         unsigned int getHints( unsigned int mask ) const;
@@ -373,7 +373,7 @@ namespace dp
          * \param mask The mask the hints are filtered against.
          * \return The hints that are set in the hierarchy below and including the object, filtered by \a mask
          * \remarks The getHints functions work locally on the object, whereas this function determines the hints set
-         * for the object and the objects below it, should the object be parent of a set of objects. 
+         * for the object and the objects below it, should the object be parent of a set of objects.
          */
         unsigned int getContainedHints( unsigned int mask ) const;
 
@@ -452,7 +452,7 @@ namespace dp
         /*! \brief Per-object type identifier.
           * \remarks
           * Concrete derived objects must initialize this object code with an identifier,
-          * which must be a unique per-object type. It is recommended to do this at object 
+          * which must be a unique per-object type. It is recommended to do this at object
           * instantiation.
           * \n\n
           * These object codes can be used for fast object type identification at runtime.

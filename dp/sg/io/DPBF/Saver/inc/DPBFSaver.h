@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2010
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -206,29 +206,29 @@ class DPBFSaveTraverser : public dp::sg::algorithm::SharedTraverser
      *  \sa calculatingStorageRequirements, pseudoAlloc */
     virtual void handleVertexAttributeSet( const dp::sg::core::VertexAttributeSet *vas );
 
-    virtual void handleEffectData( const dp::sg::core::EffectData * p );
     virtual void handleParameterGroupData( const dp::sg::core::ParameterGroupData * p );
+    virtual void handlePipelineData( const dp::sg::core::PipelineData * p );
     virtual void handleSampler( const dp::sg::core::Sampler * p );
 
 
   private:
-    struct Mapping     
+    struct Mapping
     {
       Mapping();
       ubyte_t       * basePtr;
-      unsigned int    size;    // needed with linux's unmap call only  
+      unsigned int    size;    // needed with linux's unmap call only
       int             refCnt;  // reflects if the view is in use or not
     };
 
     //! An auxiliary helper template class which provides exception safe mapping and unmapping of file offsets.
-    /** The purpose of this template class is to turn a mapped offset into an exception safe auto object, 
+    /** The purpose of this template class is to turn a mapped offset into an exception safe auto object,
     * that is - the mapped offset automatically gets unmapped if the object runs out of scope. */
     template<typename T>
     class Offset_AutoPtr
     {
       public:
         //! Maps the specified file offset into process memory.
-        /** This constructor is called on instantiation. 
+        /** This constructor is called on instantiation.
         * It maps \a count objects of type T at file offset \a offset into process memory. */
         Offset_AutoPtr( DPBFSaveTraverser * svr, uint_t& fileOffset, unsigned int count=1 );
 
@@ -237,25 +237,25 @@ class DPBFSaveTraverser : public dp::sg::algorithm::SharedTraverser
         * Use the alloc() member function, to initialize the pointer later. */
         Offset_AutoPtr( DPBFSaveTraverser * svr );
 
-        //! Unmaps the bytes, that have been mapped at instantiation, from process memory. 
+        //! Unmaps the bytes, that have been mapped at instantiation, from process memory.
         ~Offset_AutoPtr();
 
-        //! Provides pointer-like access to the dumb pointer. 
+        //! Provides pointer-like access to the dumb pointer.
         T* operator->();
 
-        //! De-references the dumb pointer. 
+        //! De-references the dumb pointer.
         T& operator*();
 
-        //! Implicit conversion to const T*. 
+        //! Implicit conversion to const T*.
         operator T*();
 
         //! Allocate the pointer object
         /** This function can be used to create the mapping later,
-        * when using the constructor that does not allocate any space yet. */    
+        * when using the constructor that does not allocate any space yet. */
         void alloc( uint_t& fileOffset, unsigned int count=1 );
 
       private:
-        T * m_ptr;    
+        T * m_ptr;
         DPBFSaveTraverser * m_svr;
     };
 
@@ -289,12 +289,12 @@ class DPBFSaveTraverser : public dp::sg::algorithm::SharedTraverser
     void writeTexImage(const std::string& file, dp::sg::core::TextureHostSharedPtr const& img, texImage_t * nbfImg);
     void writeVertexAttributeSet(const dp::sg::core::VertexAttributeSet * VASPtr, NBFVertexAttributeSet * nbfVASPtr, uint_t objCode);
 
-    // shared objects processing 
+    // shared objects processing
     bool processSharedObject(const dp::sg::core::Object * obj, uint_t objCode);
 
-    // map cnt * sizeof(Type) bytes from the mapped file 
+    // map cnt * sizeof(Type) bytes from the mapped file
     template <typename Type>
-    uint_t alloc(Type *& objPtr, unsigned int cnt=1); 
+    uint_t alloc(Type *& objPtr, unsigned int cnt=1);
 
     // pseudo allocation routines for calculation of storage requirements
     void pseudoAllocIndexSet(const dp::sg::core::IndexSet* p);
@@ -302,13 +302,13 @@ class DPBFSaveTraverser : public dp::sg::algorithm::SharedTraverser
     void pseudoAllocNode(const dp::sg::core::Node* p);
     void pseudoAllocGroup(const dp::sg::core::Group * p);
     void pseudoAllocLightSource(const dp::sg::core::LightSource * p);
-    void pseudoAllocPrimitive(const dp::sg::core::Primitive * p); 
+    void pseudoAllocPrimitive(const dp::sg::core::Primitive * p);
     void pseudoAllocFrustumCamera( const dp::sg::core::FrustumCamera * p );
     void pseudoAllocCamera(const dp::sg::core::Camera * p);
     void pseudoAllocTransform( const dp::sg::core::Transform * p );
     void pseudoAllocTexImage(const std::string& file, const dp::sg::core::TextureHost * img);
     void pseudoAllocVertexAttributeSet( const dp::sg::core::VertexAttributeSet * vas );
-  
+
     ubyte_t * mapOffset( uint_t offset, unsigned int numBytes );
     void unmapOffset( ubyte_t * offsetPtr );
 
@@ -370,7 +370,7 @@ public :
   virtual ~DPBFSaver();
 
   //! Realization of the pure virtual interface function of a SceneSaver.
-  /** Saves the \a scene and the \a viewState to \a filename. 
+  /** Saves the \a scene and the \a viewState to \a filename.
     * The \a viewState may be NULL. */
   bool save( dp::sg::core::SceneSharedPtr   const& scene     //!<  scene to save
            , dp::sg::ui::ViewStateSharedPtr const& viewState //!<  view state to save
@@ -449,12 +449,11 @@ template<typename T>
 inline void DPBFSaveTraverser::Offset_AutoPtr<T>::alloc( uint_t& fileOffset, unsigned int count )
 {
   DP_ASSERT(m_ptr == NULL);
-  DP_ASSERT(count != 0xCCCCCCCC);  // check for passing uninitialized variables
 
   if ( count )
   {
-    fileOffset = m_svr->alloc((void *&)m_ptr, count*sizeof(T));      
-  }    
+    fileOffset = m_svr->alloc((void *&)m_ptr, count*sizeof(T));
+  }
 }
 
 inline ubyte_t * DPBFSaveTraverser::mapOffset( uint_t offset, unsigned int numBytes )

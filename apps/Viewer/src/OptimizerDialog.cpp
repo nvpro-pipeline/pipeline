@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -242,7 +242,7 @@ void OptimizerDialog::accept()
   {
     if ( m_unifyEffectDataButton->isChecked() )
     {
-      unifyFlags |= dp::sg::algorithm::UnifyTraverser::UT_EFFECT_DATA;
+      unifyFlags |= dp::sg::algorithm::UnifyTraverser::UT_PIPELINE_DATA;
     }
     if ( m_unifyGeoNodesButton->isChecked() )
     {

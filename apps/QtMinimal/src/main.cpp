@@ -36,6 +36,8 @@
 #include <dp/fx/EffectLibrary.h>
 #include <dp/sg/algorithm/Replace.h>
 #include <dp/sg/core/PerspectiveCamera.h>
+#include <dp/sg/core/PipelineData.h>
+#include <dp/sg/core/Sampler.h>
 #include <dp/sg/core/TextureFile.h>
 #include <dp/sg/algorithm/Optimize.h>
 #include <dp/sg/algorithm/Search.h>
@@ -468,18 +470,18 @@ int runApp( int argc, char *argv[], options::variables_map const& opts )
         std::cerr << "invalid replacement token: " << *it << std::endl;
       }
     }
-    dp::sg::algorithm::replaceEffectDatas( viewState->getScene(), replacements );
+    dp::sg::algorithm::replacePipelineData( viewState->getScene(), replacements );
   }
   else if ( !opts["replaceAll"].empty() )
   {
-    dp::sg::core::EffectDataSharedPtr replacement = dp::sg::core::EffectData::create( dp::fx::EffectLibrary::instance()->getEffectData( opts["replaceAll"].as<std::string>() ) );
+    dp::sg::core::PipelineDataSharedPtr replacement = dp::sg::core::PipelineData::create( dp::fx::EffectLibrary::instance()->getEffectData( opts["replaceAll"].as<std::string>() ) );
     DP_ASSERT( replacement );
 
     DP_ASSERT( viewState && viewState->getScene() && viewState->getScene()->getRootNode() );
     const std::vector<dp::sg::core::ObjectSharedPtr> vp = dp::sg::algorithm::searchClass( viewState->getScene()->getRootNode(), "class dp::sg::core::GeoNode", true );
     for ( size_t i=0 ; i<vp.size() ; i++ )
     {
-      vp[i].inplaceCast<dp::sg::core::GeoNode>()->setMaterialEffect( replacement );
+      vp[i].inplaceCast<dp::sg::core::GeoNode>()->setMaterialPipeline( replacement );
     }
   }
 

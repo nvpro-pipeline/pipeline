@@ -28,8 +28,8 @@
 #include <dp/DP.h>
 #include <dp/math/Vecnt.h>
 #include <dp/sg/core/CoreTypes.h>
-#include <dp/sg/core/EffectData.h>
 #include <dp/sg/core/FrustumCamera.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/fx/EffectLibrary.h>
 #include <dp/sg/gl/TextureGL.h>
 #include "SceneRendererPipeline.h"
@@ -136,11 +136,11 @@ bool SceneRendererPipeline::init(const dp::gl::RenderContextSharedPtr &renderCon
 
   // Create a full screen quad renderer for the stencil buffer to color attachment migration.
   m_rendererStencilToColor = dp::sg::renderer::rix::gl::FSQRenderer::create(m_highlightFBO);
-  m_rendererStencilToColor->setEffect( dp::sg::core::EffectData::create( EffectLibrary::instance()->getEffectSpec( std::string("stencilToColor") ) ) );
+  m_rendererStencilToColor->setPipeline( dp::sg::core::PipelineData::create( EffectLibrary::instance()->getEffectSpec( std::string("stencilToColor") ) ) );
 
   // Create a full screen quad renderer for the final texture to framebuffer operation rendering the highlight outline.
   m_rendererHighlight = dp::sg::renderer::rix::gl::FSQRenderer::create(renderTarget);
-  m_rendererHighlight->setEffect( dp::sg::core::EffectData::create( EffectLibrary::instance()->getEffectSpec( std::string("highlight") ) ) );
+  m_rendererHighlight->setPipeline( dp::sg::core::PipelineData::create( EffectLibrary::instance()->getEffectSpec( std::string("highlight") ) ) );
 
   // m_rendererHighlight uses the previously rendered texture rectangle as input for the shader.
   const dp::gl::RenderTargetFBO::SharedAttachment &attachment = m_highlightFBO->getAttachment(dp::gl::RenderTargetFBO::COLOR_ATTACHMENT0);
@@ -486,8 +486,8 @@ void SceneRendererPipeline::initTonemapper()
   rcglstack.pop();
 
   m_tonemapper = dp::sg::renderer::rix::gl::FSQRenderer::create( m_renderTarget );
-  m_tonemapperData = dp::sg::core::EffectData::create( dp::fx::EffectLibrary::instance()->getEffectData("tonemapper") );
-  m_tonemapper->setEffect( m_tonemapperData );
+  m_tonemapperData = dp::sg::core::PipelineData::create( dp::fx::EffectLibrary::instance()->getEffectData("tonemapper") );
+  m_tonemapper->setPipeline( m_tonemapperData );
 
   const dp::gl::RenderTargetFBO::SharedAttachment &attachmentTonemap = m_tonemapFBO->getAttachment(dp::gl::RenderTargetFBO::COLOR_ATTACHMENT0);
   const dp::gl::RenderTargetFBO::SharedAttachmentTexture &texAttTonemap = attachmentTonemap.dynamicCast<dp::gl::RenderTargetFBO::AttachmentTexture>();

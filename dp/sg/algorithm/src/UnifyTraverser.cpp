@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2015
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -25,11 +25,11 @@
 
 
 #include <dp/sg/core/Billboard.h>
-#include <dp/sg/core/EffectData.h>
 #include <dp/sg/core/GeoNode.h>
 #include <dp/sg/core/LightSource.h>
 #include <dp/sg/core/LOD.h>
 #include <dp/sg/core/ParameterGroupData.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/core/Sampler.h>
 #include <dp/sg/core/Switch.h>
 #include <dp/sg/core/Transform.h>
@@ -150,17 +150,17 @@ namespace dp
 
       void UnifyTraverser::doApply( const NodeSharedPtr & root )
       {
-        DP_ASSERT(   m_effectData.empty() && m_geoNodes.empty() && m_groups.empty() && m_indexSets.empty()
+        DP_ASSERT(   m_pipelineData.empty() && m_geoNodes.empty() && m_groups.empty() && m_indexSets.empty()
                     && m_LODs.empty() && m_parameterGroupData.empty() && m_primitives.empty() && m_samplers.empty()
                     && m_textures.empty() && m_vertexAttributeSets.empty() );
 
         OptimizeTraverser::doApply( root );
 
-        m_effectData.clear();
         m_geoNodes.clear();
         m_groups.clear();
         m_indexSets.clear();
         m_parameterGroupData.clear();
+        m_pipelineData.clear();
         m_primitives.clear();
         m_LODs.clear();
         m_objects.clear();
@@ -179,13 +179,39 @@ namespace dp
         }
       }
 
-      void UnifyTraverser::handleEffectData( EffectData * p )
+      void UnifyTraverser::handleGeoNode( GeoNode *p )
       {
         pair<set<const void *>::iterator,bool> pitb = m_objects.insert( p );
         if ( pitb.second )
         {
-          OptimizeTraverser::handleEffectData( p );
-          if ( optimizationAllowed( p->getSharedPtr<EffectData>() ) && ( m_unifyTargets & UT_PARAMETER_GROUP_DATA ) )
+          OptimizeTraverser::handleGeoNode( p );
+
+          if ( optimizationAllowed( p->getSharedPtr<GeoNode>() ) )
+          {
+            if ( ( m_unifyTargets & UT_PIPELINE_DATA ) && p->getMaterialPipeline() )
+            {
+              const dp::sg::core::PipelineDataSharedPtr & replacement = unifyPipelineData( p->getMaterialPipeline() );
+              if ( replacement )
+              {
+                p->setMaterialPipeline( replacement );
+              }
+            }
+            if ( ( m_unifyTargets & UT_PRIMITIVE ) && m_replacementPrimitive )
+            {
+              p->setPrimitive( m_replacementPrimitive );
+              m_replacementPrimitive.reset();
+            }
+          }
+        }
+      }
+
+      void UnifyTraverser::handlePipelineData( dp::sg::core::PipelineData * p )
+      {
+        pair<set<const void *>::iterator,bool> pitb = m_objects.insert( p );
+        if ( pitb.second )
+        {
+          OptimizeTraverser::handlePipelineData( p );
+          if ( optimizationAllowed( p->getSharedPtr<dp::sg::core::PipelineData>() ) && ( m_unifyTargets & UT_PARAMETER_GROUP_DATA ) )
           {
             const dp::fx::EffectSpecSharedPtr & es = p->getEffectSpec();
             for ( dp::fx::EffectSpec::iterator it = es->beginParameterGroupSpecs() ; it != es->endParameterGroupSpecs() ; ++it )
@@ -229,47 +255,21 @@ namespace dp
         }
       }
 
-      void UnifyTraverser::handleGeoNode( GeoNode *p )
+      dp::sg::core::PipelineDataSharedPtr const& UnifyTraverser::unifyPipelineData( dp::sg::core::PipelineDataSharedPtr const& pipelineData )
       {
-        pair<set<const void *>::iterator,bool> pitb = m_objects.insert( p );
-        if ( pitb.second )
-        {
-          OptimizeTraverser::handleGeoNode( p );
-
-          if ( optimizationAllowed( p->getSharedPtr<GeoNode>() ) )
-          {
-            if ( ( m_unifyTargets & UT_EFFECT_DATA ) && p->getMaterialEffect() )
-            {
-              const EffectDataSharedPtr & replacement = unifyEffectData( p->getMaterialEffect() );
-              if ( replacement )
-              {
-                p->setMaterialEffect( replacement );
-              }
-            }
-            if ( ( m_unifyTargets & UT_PRIMITIVE ) && m_replacementPrimitive )
-            {
-              p->setPrimitive( m_replacementPrimitive );
-              m_replacementPrimitive.reset();
-            }
-          }
-        }
-      }
-
-      const EffectDataSharedPtr & UnifyTraverser::unifyEffectData( const EffectDataSharedPtr & effectData )
-      {
-        DP_ASSERT( ( m_unifyTargets & UT_EFFECT_DATA ) && effectData );
-        typedef multimap<HashKey,EffectDataSharedPtr>::const_iterator I;
+        DP_ASSERT( ( m_unifyTargets & UT_PIPELINE_DATA ) && pipelineData );
+        typedef multimap<HashKey,dp::sg::core::PipelineDataSharedPtr>::const_iterator I;
         I it;
         HashKey hashKey;
         bool found = false;
         {
-          hashKey = effectData->getHashKey();
+          hashKey = pipelineData->getHashKey();
 
-          pair<I,I> itp = m_effectData.equal_range( hashKey );
+          pair<I,I> itp = m_pipelineData.equal_range( hashKey );
           for ( it = itp.first ; it != itp.second ; ++it )
           {
-            if (    ( effectData == it->second )
-                ||  ( effectData->isEquivalent( it->second, getIgnoreNames(), false ) ) )
+            if (    ( pipelineData == it->second )
+                ||  ( pipelineData->isEquivalent( it->second, getIgnoreNames(), false ) ) )
             {
               found = true;
               break;
@@ -282,8 +282,8 @@ namespace dp
         }
         else
         {
-          m_effectData.insert( make_pair( hashKey, effectData ) );
-          return( EffectDataSharedPtr::null );
+          m_pipelineData.insert( make_pair( hashKey, pipelineData ) );
+          return( dp::sg::core::PipelineDataSharedPtr::null );
         }
       }
 
@@ -303,12 +303,12 @@ namespace dp
         if ( pitb.second )
         {
           OptimizeTraverser::handleLightSource( p );
-          if ( optimizationAllowed( p->getSharedPtr<LightSource>() ) && ( m_unifyTargets & UT_EFFECT_DATA ) && p->getLightEffect() )
+          if ( optimizationAllowed( p->getSharedPtr<LightSource>() ) && ( m_unifyTargets & UT_PIPELINE_DATA ) && p->getLightPipeline() )
           {
-            const EffectDataSharedPtr & replacement = unifyEffectData( p->getLightEffect() );
+            const dp::sg::core::PipelineDataSharedPtr & replacement = unifyPipelineData( p->getLightPipeline() );
             if ( replacement )
             {
-              p->setLightEffect( replacement );
+              p->setLightPipeline( replacement );
             }
           }
         }
@@ -415,7 +415,7 @@ namespace dp
             {
               unifyVertexAttributeSet( p );
             }
-            if ( m_unifyTargets & UT_PRIMITIVE ) 
+            if ( m_unifyTargets & UT_PRIMITIVE )
             {
               checkPrimitive( m_primitives[p->getPrimitiveType()], p );
             }
@@ -506,10 +506,10 @@ namespace dp
               {
                 unsigned int type = p->getTypeOfVertexData(i);
                 if (  type != dp::DT_UNKNOWN // no data is ok!
-                   && type != dp::DT_FLOAT_32 )  
+                   && type != dp::DT_FLOAT_32 )
                 {
                   DP_ASSERT( !"This algorithm currently only works for float-typed vertex data!" );
-                  return; 
+                  return;
                 }
               }
               // ***************************************************************

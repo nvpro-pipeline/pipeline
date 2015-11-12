@@ -115,7 +115,7 @@ namespace dp
 
             virtual ShaderManagerRenderGroupSharedPtr registerRenderGroup( dp::rix::core::RenderGroupSharedHandle const & renderGroup ) = 0;
 
-            const dp::sg::core::EffectDataSharedPtr& getDefaultEffectData() const { return m_defaultEffectData; }
+            const dp::sg::core::PipelineDataSharedPtr& getDefaultPipelineData() const { return m_defaultPipelineData; }
 
             virtual std::map<dp::fx::Domain,std::string> getShaderSources( const dp::sg::core::GeoNodeSharedPtr & geoNode, bool depthPass ) const = 0;
 
@@ -126,7 +126,7 @@ namespace dp
             virtual void addSystemContainers( ShaderManagerInstanceSharedPtr const & shaderObject ) = 0;
             virtual void addSystemContainers( ShaderManagerRenderGroupSharedPtr const & renderGroup ) = 0;
 
-            virtual ShaderManagerInstanceSharedPtr registerGeometryInstance( const dp::sg::core::EffectDataSharedPtr &effectData,
+            virtual ShaderManagerInstanceSharedPtr registerGeometryInstance( const dp::sg::core::PipelineDataSharedPtr &pipelineData,
                                                                              dp::sg::xbar::ObjectTreeIndex objectTreeIndex,
                                                                              dp::rix::core::GeometryInstanceSharedHandle &geometryInstance,
                                                                              RenderPassType rpt );
@@ -135,7 +135,7 @@ namespace dp
             dp::rix::core::Renderer* m_renderer;
             ResourceManagerSharedPtr m_resourceManager;
 
-            dp::sg::core::EffectDataSharedPtr m_defaultEffectData;
+            dp::sg::core::PipelineDataSharedPtr m_defaultPipelineData;
 
             dp::rix::core::ProgramHandle m_programFixedFunction; // TODO does this belong to ResourceEffectSpec somehow?
 

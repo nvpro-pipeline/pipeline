@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -26,7 +26,7 @@
 
 #include <dp/sg/algorithm/Replace.h>
 #include <dp/sg/algorithm/Traverser.h>
-#include <dp/sg/core/EffectData.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/core/Scene.h>
 #include <dp/fx/EffectLibrary.h>
 
@@ -46,7 +46,7 @@ namespace dp
         class ReplaceTraverser : public ExclusiveTraverser
         {
         public:
-          static void replace( NodeSharedPtr const& node, ReplacementMapEffectData const& replacements );
+          static void replace( NodeSharedPtr const& node, ReplacementMapPipelineData const& replacements );
 
         protected:
           void handleGeoNode( GeoNode * geoNode );
@@ -54,17 +54,17 @@ namespace dp
         private:
           std::set<dp::sg::core::GeoNode*>  m_geoNodes;
 
-          ReplaceTraverser( ReplacementMapEffectData const& replacements );
+          ReplaceTraverser( ReplacementMapPipelineData const& replacements );
 
-          ReplacementMapEffectData const& m_replacements;
+          ReplacementMapPipelineData const& m_replacements;
         };
 
-        ReplaceTraverser::ReplaceTraverser( ReplacementMapEffectData const& replacements )
+        ReplaceTraverser::ReplaceTraverser( ReplacementMapPipelineData const& replacements )
           : m_replacements( replacements )
         {
         }
 
-        void ReplaceTraverser::replace( NodeSharedPtr const& node, ReplacementMapEffectData const& replacements )
+        void ReplaceTraverser::replace( NodeSharedPtr const& node, ReplacementMapPipelineData const& replacements )
         {
           ReplaceTraverser traverser( replacements );
           traverser.apply( node );
@@ -75,42 +75,42 @@ namespace dp
           // handle each GeoNode only once to avoid cyclic swaps
           if ( m_geoNodes.insert( geoNode ).second == true )
           {
-            EffectDataSharedPtr effect = geoNode->getMaterialEffect();
-            std::string effectName = effect ? effect->getName() : "";
-            ReplacementMapEffectData::const_iterator it = m_replacements.find( effectName );
+            dp::sg::core::PipelineDataSharedPtr const& pipelineData = geoNode->getMaterialPipeline();
+            std::string pipelineName = pipelineData ? pipelineData->getName() : "";
+            ReplacementMapPipelineData::const_iterator it = m_replacements.find( pipelineName );
             if ( it != m_replacements.end() )
             {
-              geoNode->setMaterialEffect( it->second );
+              geoNode->setMaterialPipeline( it->second );
             }
           }
         }
 
       } // namespace
 
-      void replaceEffectDatas( NodeSharedPtr const& node, ReplacementMapEffectData const& replacements )
+      void replacePipelineData( NodeSharedPtr const& node, ReplacementMapPipelineData const& replacements )
       {
         ReplaceTraverser::replace( node, replacements );
       }
 
-      void replaceEffectDatas( NodeSharedPtr const& node, ReplacementMapNames const& replacements )
+      void replacePipelineData( NodeSharedPtr const& node, ReplacementMapNames const& replacements )
       {
-        ReplacementMapEffectData newReplacements;
+        ReplacementMapPipelineData newReplacements;
         for ( ReplacementMapNames::const_iterator it = replacements.begin(); it != replacements.end(); ++it )
         {
-          newReplacements[it->first] = EffectData::create( dp::fx::EffectLibrary::instance()->getEffectData( it->second ) );
+          newReplacements[it->first] = dp::sg::core::PipelineData::create( dp::fx::EffectLibrary::instance()->getEffectData( it->second ) );
           DP_ASSERT( newReplacements[it->first])
         }
         ReplaceTraverser::replace( node, newReplacements );
       }
 
-      void replaceEffectDatas( SceneSharedPtr const& scene, ReplacementMapEffectData const& replacements )
+      void replacePipelineData( SceneSharedPtr const& scene, ReplacementMapPipelineData const& replacements )
       {
         ReplaceTraverser::replace( scene->getRootNode(), replacements );
       }
 
-      void replaceEffectDatas( SceneSharedPtr const& scene, ReplacementMapNames const& replacements )
+      void replacePipelineData( SceneSharedPtr const& scene, ReplacementMapNames const& replacements )
       {
-        replaceEffectDatas( scene->getRootNode(), replacements );
+        replacePipelineData( scene->getRootNode(), replacements );
       }
 
 

@@ -28,7 +28,7 @@
 #include <GL/freeglut.h>
 
 #include <dp/sg/core/PerspectiveCamera.h>
-#include <dp/sg/core/EffectData.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/core/TextureFile.h>
 
 #include <dp/sg/io/IO.h>
@@ -554,11 +554,11 @@ int runApp( options::variables_map const& opts )
         std::cerr << "invalid replacement token: " << *it << std::endl;
       }
     }
-    dp::sg::algorithm::replaceEffectDatas( viewState->getScene(), replacements );
+    dp::sg::algorithm::replacePipelineData( viewState->getScene(), replacements );
   }
   else if ( !opts["replaceAll"].empty() )
   {
-    dp::sg::core::EffectDataSharedPtr replacement = dp::sg::core::EffectData::create( dp::fx::EffectLibrary::instance()->getEffectData( opts["replaceAll"].as<std::string>() ) );
+    dp::sg::core::PipelineDataSharedPtr replacement = dp::sg::core::PipelineData::create( dp::fx::EffectLibrary::instance()->getEffectData( opts["replaceAll"].as<std::string>() ) );
     DP_ASSERT( replacement );
 
     dp::sg::algorithm::SearchTraverser searchTraverser;
@@ -568,7 +568,7 @@ int runApp( options::variables_map const& opts )
     const std::vector<dp::sg::core::ObjectSharedPtr> &vp = searchTraverser.getResults();
     for ( size_t i=0 ; i<vp.size() ; i++ )
     {
-      vp[i].inplaceCast<dp::sg::core::GeoNode>()->setMaterialEffect( replacement );
+      vp[i].inplaceCast<dp::sg::core::GeoNode>()->setMaterialPipeline( replacement );
     }
   }
 

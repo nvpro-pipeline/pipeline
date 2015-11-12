@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2011
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -39,8 +39,8 @@ namespace dp
 
       /*! \brief Traverser to search for a tree object by class type or by name.
         * You want to apply a SearchTraverser on a scene or a certain node to search for tree objects by name or by class type.
-        * If you search for objects by class type you can configure the SearchTraverser to search for an explicit class type or 
-        * for objects that have the specified class typ as base class. 
+        * If you search for objects by class type you can configure the SearchTraverser to search for an explicit class type or
+        * for objects that have the specified class typ as base class.
         */
       class SearchTraverser : public SharedTraverser
       {
@@ -54,9 +54,9 @@ namespace dp
 
           /*! \brief Returns paths for all objects found.
            * \return The function returns for each object found during traversal the full path from the starting node
-           * down to the found object. If you're only interested in the found objects itself, you should consider to 
-           * use getResults instead. 
-           * \sa getResults 
+           * down to the found object. If you're only interested in the found objects itself, you should consider to
+           * use getResults instead.
+           * \sa getResults
            */
           DP_SG_ALGORITHM_API std::vector<dp::sg::core::PathSharedPtr> const& getPaths();
 
@@ -66,21 +66,21 @@ namespace dp
           DP_SG_ALGORITHM_API const std::vector<dp::sg::core::ObjectSharedPtr> & getResults();
 
           /*! \brief Sets a class name as serach criterion.
-           * \param name Specifies the class name to use as search criterion. 
-           * \remarks The class name needs to be fully qualified, like "class dp::sg::core::LightSource", 
-           * for a subsequent search to work as expected. Just using "LightSource" in this case would 
+           * \param name Specifies the class name to use as search criterion.
+           * \remarks The class name needs to be fully qualified, like "class dp::sg::core::LightSource",
+           * for a subsequent search to work as expected. Just using "LightSource" in this case would
            * not give the expected results. By default the class name is set to an empty string, which
            * would not yield any usable results if you intend to search objects by class name.
            * Also by default the search does only consider objects of the explicit class type specified
            * by the class name. With setBaseClassSearch you can configure the search to also consider
-           * objects of types derived from the class specified by class name. If you, in addition to a 
-           * class name, also specified an object name as search criterion, only objects that match both, 
-           * the class name and the object name will be returned as search results. 
+           * objects of types derived from the class specified by class name. If you, in addition to a
+           * class name, also specified an object name as search criterion, only objects that match both,
+           * the class name and the object name will be returned as search results.
            * \sa setObjectName, setBaseClassSearch */
           DP_SG_ALGORITHM_API void setClassName( const std::string& name );
 
           /*! \brief Returns the class name set as search criterion.
-           * \return The function retuns the class name last set using setClassName or an empty string 
+           * \return The function retuns the class name last set using setClassName or an empty string
            * if no class name was specified as search criterion before.
            * \sa setClassName
            */
@@ -92,14 +92,14 @@ namespace dp
            * compared to the corresponding search candidate's object name assigned to it by means of
            * the Object::setName member function. If you, in addition to an object name, also specified
            * a class name as search criterion, only objects that match both, the class name and the object name
-           * will be returned as search results. 
-           * \sa Object::setName, setClassName 
+           * will be returned as search results.
+           * \sa Object::setName, setClassName
            */
           DP_SG_ALGORITHM_API void setObjectName(const std::string& objectName);
 
           /*! \brief Returns the object name set as search criterion.
-           * \return The function retuns the object name last set using setObjectName or an empty string 
-           * if no object name was specified as search criterion before. 
+           * \return The function retuns the object name last set using setObjectName or an empty string
+           * if no object name was specified as search criterion before.
            * \sa setObjectName
            */
           DP_SG_ALGORITHM_API const std::string& getObjectName() const;
@@ -112,7 +112,7 @@ namespace dp
           DP_SG_ALGORITHM_API void setObjectPointer( dp::sg::core::ObjectSharedPtr const& ptr );
 
           /*! \brief Returns the object to search for.
-           * \return The function returns the object last set using setObjectPtr. 
+           * \return The function returns the object last set using setObjectPtr.
            */
           DP_SG_ALGORITHM_API dp::sg::core::ObjectWeakPtr getObjectPointer() const;
 
@@ -151,8 +151,6 @@ namespace dp
             const dp::sg::core::Billboard * p //!< Points to the currently visited Billboard object.
             );
 
-          DP_SG_ALGORITHM_API void handleEffectData( const dp::sg::core::EffectData * p );
-
           //! Routine to handle a \link dp::sg::core::GeoNode GeoNode \endlink while traversing the scene graph.
           DP_SG_ALGORITHM_API virtual void handleGeoNode(
             const dp::sg::core::GeoNode * p //!< Points to the currently visited GeoNode object.
@@ -170,18 +168,20 @@ namespace dp
 
           DP_SG_ALGORITHM_API virtual void handleParameterGroupData( const dp::sg::core::ParameterGroupData * p );
 
+          DP_SG_ALGORITHM_API void handlePipelineData( const dp::sg::core::PipelineData * p );
+
           DP_SG_ALGORITHM_API virtual void handleSampler( const dp::sg::core::Sampler * p );
 
           //! Routine to handle a \link dp::sg::core::Switch Switch \endlink node while traversing the scene graph.
           DP_SG_ALGORITHM_API virtual void handleSwitch(
             const dp::sg::core::Switch * p //!< Points to the currently visited Switch object.
           );
-                                          
+
           //! Routine to handle a \link dp::sg::core::Transform Transform \endlink node while traversing the scene graph.
           DP_SG_ALGORITHM_API virtual void handleTransform(
             const dp::sg::core::Transform * p //!< Points to the currently visited Transform object.
           );
-      
+
           DP_SG_ALGORITHM_API virtual void handleLightSource( const dp::sg::core::LightSource * p );
 
           //! Routine to handle a \link dp::sg::core::Primitives Primitives \endlink object while traversing the scene graph.

@@ -32,6 +32,7 @@
 #include <dp/sg/core/LightSource.h>
 #include <dp/sg/core/LOD.h>
 #include <dp/sg/core/PerspectiveCamera.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/core/Sampler.h>
 #include <dp/sg/core/Scene.h>
 #include <dp/sg/core/TextureHost.h>
@@ -1864,17 +1865,17 @@ void  WRLLoader::interpretVRMLTree( void )
   m_scene->setRootNode( m_rootNode );
 }
 
-EffectDataSharedPtr WRLLoader::interpretAppearance( AppearanceSharedPtr const& pAppearance )
+dp::sg::core::PipelineDataSharedPtr WRLLoader::interpretAppearance( AppearanceSharedPtr const& pAppearance )
 {
-  if ( ! pAppearance->materialEffect )
+  if ( ! pAppearance->materialPipeline )
   {
-    pAppearance->materialEffect = dp::sg::core::EffectData::create( getStandardMaterialSpec() );
-    pAppearance->materialEffect->setName( pAppearance->getName() );
+    pAppearance->materialPipeline = dp::sg::core::PipelineData::create( getStandardMaterialSpec() );
+    pAppearance->materialPipeline->setName( pAppearance->getName() );
 
     if ( pAppearance->material )
     {
       DP_ASSERT( pAppearance->material.isPtrTo<vrml::Material>() );
-      DP_VERIFY( pAppearance->materialEffect->setParameterGroupData( interpretMaterial( pAppearance->material.staticCast<vrml::Material>() ) ) );
+      DP_VERIFY( pAppearance->materialPipeline->setParameterGroupData( interpretMaterial( pAppearance->material.staticCast<vrml::Material>() ) ) );
     }
 
     ParameterGroupDataSharedPtr textureData;
@@ -1889,7 +1890,7 @@ EffectDataSharedPtr WRLLoader::interpretAppearance( AppearanceSharedPtr const& p
           DP_ASSERT( pAppearance->textureTransform.isPtrTo<TextureTransform>() );
           interpretTextureTransform( pAppearance->textureTransform.staticCast<TextureTransform>(), textureData );
         }
-        DP_VERIFY( pAppearance->materialEffect->setParameterGroupData( textureData ) );
+        DP_VERIFY( pAppearance->materialPipeline->setParameterGroupData( textureData ) );
       }
     }
 
@@ -1910,10 +1911,10 @@ EffectDataSharedPtr WRLLoader::interpretAppearance( AppearanceSharedPtr const& p
         }
       }
     }
-    pAppearance->materialEffect->setTransparent( transparent );
+    pAppearance->materialPipeline->setTransparent( transparent );
   }
 
-  return( pAppearance->materialEffect );
+  return( pAppearance->materialPipeline );
 }
 
 void  WRLLoader::interpretBackground( BackgroundSharedPtr const& pBackground )
@@ -3466,13 +3467,13 @@ NodeSharedPtr WRLLoader::interpretShape( vrml::ShapeSharedPtr const& pShape )
 {
   if ( ! pShape->pNode )
   {
-    EffectDataSharedPtr materialEffect;
+    dp::sg::core::PipelineDataSharedPtr materialPipeline;
     vector<PrimitiveSharedPtr> primitives;
 
     if ( pShape->appearance )
     {
       DP_ASSERT( pShape->appearance.isPtrTo<Appearance>() );
-      materialEffect = interpretAppearance( pShape->appearance.staticCast<Appearance>() );
+      materialPipeline = interpretAppearance( pShape->appearance.staticCast<Appearance>() );
     }
     if ( pShape->geometry )
     {
@@ -3482,9 +3483,9 @@ NodeSharedPtr WRLLoader::interpretShape( vrml::ShapeSharedPtr const& pShape )
                        , pShape->appearance && pShape->appearance.staticCast<Appearance>()->texture );
     }
 
-    if ( materialEffect && pShape->geometry )
+    if ( materialPipeline && pShape->geometry )
     {
-      const ParameterGroupDataSharedPtr & pgd = materialEffect->findParameterGroupData( string( "standardTextureParameters" ) );
+      const ParameterGroupDataSharedPtr & pgd = materialPipeline->findParameterGroupData( string( "standardTextureParameters" ) );
       if ( pgd )
       {
         if ( pShape->geometry.isPtrTo<IndexedFaceSet>() )
@@ -3519,7 +3520,7 @@ NodeSharedPtr WRLLoader::interpretShape( vrml::ShapeSharedPtr const& pShape )
       {
         GeoNodeSharedPtr geoNode = GeoNode::create();
         geoNode->setName( pShape->getName() );
-        geoNode->setMaterialEffect( materialEffect );
+        geoNode->setMaterialPipeline( materialPipeline );
         geoNode->setPrimitive( primitives[0] );
         pShape->pNode = geoNode;
       }
@@ -3530,7 +3531,7 @@ NodeSharedPtr WRLLoader::interpretShape( vrml::ShapeSharedPtr const& pShape )
         for ( size_t i=0 ; i<primitives.size(); i++ )
         {
           GeoNodeSharedPtr geoNode = GeoNode::create();
-          geoNode->setMaterialEffect( materialEffect );
+          geoNode->setMaterialPipeline( materialPipeline );
           geoNode->setPrimitive( primitives[i] );
           group->addChild( geoNode );
         }

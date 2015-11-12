@@ -27,6 +27,7 @@
 #include "CameraAnimator.h"
 #include <dp/sg/core/FrustumCamera.h>
 #include <dp/sg/core/PerspectiveCamera.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/core/Scene.h>
 
 CameraAnimator::CameraAnimator( QObject * parent )
@@ -152,12 +153,12 @@ void CameraAnimator::initCameraMoveToLight( dp::sg::core::LightSourceSharedPtr c
 
   dp::sg::core::LightSourceSharedPtr lsh( targetLight->getSharedPtr<dp::sg::core::LightSource>() );
   {
-    DP_ASSERT( lsh->getLightEffect() );
-    dp::sg::core::EffectDataSharedPtr const& le = lsh->getLightEffect();
-    const dp::fx::EffectSpecSharedPtr & es = le->getEffectSpec();
+    DP_ASSERT( lsh->getLightPipeline() );
+    dp::sg::core::PipelineDataSharedPtr const& lp = lsh->getLightPipeline();
+    const dp::fx::EffectSpecSharedPtr & es = lp->getEffectSpec();
     for ( dp::fx::EffectSpec::iterator it = es->beginParameterGroupSpecs() ; it != es->endParameterGroupSpecs() ; ++it )
     {
-      const dp::sg::core::ParameterGroupDataSharedPtr & parameterGroupData = le->getParameterGroupData( it );
+      const dp::sg::core::ParameterGroupDataSharedPtr & parameterGroupData = lp->getParameterGroupData( it );
       if ( parameterGroupData )
       {
         std::string name = (*it)->getName();

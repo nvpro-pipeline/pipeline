@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2009-2015
+// Copyright (c) 2009-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -40,9 +40,9 @@ public:
   DP_SG_GENERATOR_API GeoSphereScene();
   DP_SG_GENERATOR_API virtual ~GeoSphereScene();
 
-  dp::sg::core::SceneSharedPtr       m_sceneHandle;
-  dp::sg::core::PrimitiveSharedPtr   m_primitive;
-  dp::sg::core::EffectDataSharedPtr  m_effectHandle;
-  dp::sg::core::TransformSharedPtr   m_transformHandle;
-  dp::sg::core::GeoNodeSharedPtr     m_geoNodeHandle;
+  dp::sg::core::SceneSharedPtr        m_sceneHandle;
+  dp::sg::core::PrimitiveSharedPtr    m_primitive;
+  dp::sg::core::PipelineDataSharedPtr m_pipelineData;
+  dp::sg::core::TransformSharedPtr    m_transformHandle;
+  dp::sg::core::GeoNodeSharedPtr      m_geoNodeHandle;
 };

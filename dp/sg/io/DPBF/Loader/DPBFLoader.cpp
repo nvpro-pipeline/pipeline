@@ -31,7 +31,6 @@
 #include <dp/fx/EffectLibrary.h>
 #include <dp/sg/core/Billboard.h>
 #include <dp/sg/core/ClipPlane.h>
-#include <dp/sg/core/EffectData.h>
 #include <dp/sg/core/FrustumCamera.h>
 #include <dp/sg/core/GeoNode.h>
 #include <dp/sg/core/LightSource.h>
@@ -1573,7 +1572,7 @@ struct NBFSamplerState_nbf_54 : public NBFObject
 DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFSamplerState_nbf_54,8);
 
 //! The NBFEffectData_nbf_55 structure represents a set of ParameterGroupDatas
-/** The object code for an NBFEffectData_nbf_55 is NBF_EFFECT_DATA. */
+/** The object code for an NBFEffectData_nbf_55 is NBF_PIPELINE_DATA. */
 struct NBFEffectData_nbf_55 : public NBFObject
 {
   str_t       effectSpecName;       //!< Specifies the name of the corresponding EffectSpec
@@ -1888,7 +1887,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadAnimatedTransform = &DPBFLoader::loadAnimatedTransform_nbf_f;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard_nbf_11;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera_nbf_44;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadFaceAttribute  = &DPBFLoader::loadFaceAttribute_nbf_b;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode_nbf_4e;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup_nbf_11;
@@ -1910,7 +1909,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadAnimatedTransform = &DPBFLoader::loadAnimatedTransform_nbf_f;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard_nbf_11;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera_nbf_44;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData     = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadFaceAttribute  = &DPBFLoader::loadFaceAttribute_nbf_b;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode_nbf_4e;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup_nbf_11;
@@ -1934,7 +1933,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadAnimatedTransform = &DPBFLoader::loadAnimatedTransform_nbf_f;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard_nbf_11;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera_nbf_44;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadFaceAttribute  = &DPBFLoader::loadFaceAttribute_nbf_54;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode_nbf_4e;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup_nbf_11;
@@ -1956,7 +1955,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadAnimatedTransform = &DPBFLoader::loadAnimatedTransform_nbf_f;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard_nbf_11;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera_nbf_44;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadFaceAttribute  = &DPBFLoader::loadFaceAttribute_nbf_54;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode_nbf_4e;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup_nbf_11;
@@ -1978,7 +1977,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadAnimatedTransform = &DPBFLoader::loadAnimatedTransform_nbf_11;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard_nbf_11;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera_nbf_44;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadFaceAttribute  = &DPBFLoader::loadFaceAttribute_nbf_54;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode_nbf_4e;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup_nbf_11;
@@ -2000,7 +1999,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadAnimatedTransform = &DPBFLoader::loadAnimatedTransform_nbf_11;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard_nbf_11;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera_nbf_44;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadFaceAttribute  = &DPBFLoader::loadFaceAttribute_nbf_54;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode_nbf_4e;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup_nbf_11;
@@ -2022,7 +2021,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadAnimatedTransform = &DPBFLoader::loadAnimatedTransform_nbf_12;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard_nbf_12;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera_nbf_44;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadFaceAttribute  = &DPBFLoader::loadFaceAttribute_nbf_54;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode_nbf_4e;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup_nbf_12;
@@ -2044,7 +2043,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadAnimatedTransform = &DPBFLoader::loadAnimatedTransform_nbf_12;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard_nbf_12;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera_nbf_44;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadFaceAttribute  = &DPBFLoader::loadFaceAttribute_nbf_54;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode_nbf_4e;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup_nbf_12;
@@ -2066,7 +2065,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadAnimatedTransform = &DPBFLoader::loadAnimatedTransform_nbf_54;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera_nbf_44;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadFaceAttribute  = &DPBFLoader::loadFaceAttribute_nbf_54;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode_nbf_4e;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup;
@@ -2088,7 +2087,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadAnimatedTransform = &DPBFLoader::loadAnimatedTransform_nbf_54;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera_nbf_44;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadFaceAttribute  = &DPBFLoader::loadFaceAttribute_nbf_54;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode_nbf_4e;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup;
@@ -2110,7 +2109,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadAnimatedTransform = &DPBFLoader::loadAnimatedTransform_nbf_54;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera_nbf_44;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadFaceAttribute  = &DPBFLoader::loadFaceAttribute_nbf_54;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode_nbf_4e;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup;
@@ -2132,7 +2131,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadAnimatedTransform = &DPBFLoader::loadAnimatedTransform_nbf_54;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera_nbf_44;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadFaceAttribute  = &DPBFLoader::loadFaceAttribute_nbf_54;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode_nbf_4e;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup;
@@ -2154,7 +2153,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadAnimatedTransform = &DPBFLoader::loadAnimatedTransform_nbf_54;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera_nbf_44;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadFaceAttribute  = &DPBFLoader::loadFaceAttribute_nbf_54;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode_nbf_4e;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup;
@@ -2176,7 +2175,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadAnimatedTransform = &DPBFLoader::loadAnimatedTransform_nbf_54;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera_nbf_44;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadFaceAttribute  = &DPBFLoader::loadFaceAttribute_nbf_54;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode_nbf_4e;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup;
@@ -2198,7 +2197,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadAnimatedTransform = &DPBFLoader::loadAnimatedTransform_nbf_54;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera_nbf_44;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadFaceAttribute  = &DPBFLoader::loadFaceAttribute_nbf_54;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode_nbf_4e;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup;
@@ -2220,7 +2219,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadAnimatedTransform = &DPBFLoader::loadAnimatedTransform_nbf_54;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera_nbf_44;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadFaceAttribute  = &DPBFLoader::loadFaceAttribute_nbf_54;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode_nbf_4e;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup;
@@ -2242,7 +2241,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadAnimatedTransform = &DPBFLoader::loadAnimatedTransform_nbf_54;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera_nbf_44;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadFaceAttribute  = &DPBFLoader::loadFaceAttribute_nbf_54;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode_nbf_4e;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup;
@@ -2264,7 +2263,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadAnimatedTransform = &DPBFLoader::loadAnimatedTransform_nbf_54;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera_nbf_44;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadFaceAttribute  = &DPBFLoader::loadFaceAttribute_nbf_54;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode_nbf_4e;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup;
@@ -2286,7 +2285,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadAnimatedTransform = &DPBFLoader::loadAnimatedTransform_nbf_54;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera_nbf_44;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadFaceAttribute  = &DPBFLoader::loadFaceAttribute_nbf_54;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode_nbf_4e;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup;
@@ -2309,7 +2308,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadAnimatedTransform = &DPBFLoader::loadAnimatedTransform_nbf_54;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera_nbf_44;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadFaceAttribute  = &DPBFLoader::loadFaceAttribute_nbf_54;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode_nbf_4e;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup;
@@ -2331,7 +2330,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadAnimatedTransform = &DPBFLoader::loadAnimatedTransform_nbf_54;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera_nbf_44;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadFaceAttribute  = &DPBFLoader::loadFaceAttribute_nbf_54;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode_nbf_4e;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup;
@@ -2353,7 +2352,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadAnimatedTransform = &DPBFLoader::loadAnimatedTransform_nbf_54;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera_nbf_44;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadFaceAttribute  = &DPBFLoader::loadFaceAttribute_nbf_54;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode_nbf_4e;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup;
@@ -2375,7 +2374,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadAnimatedTransform = &DPBFLoader::loadAnimatedTransform_nbf_54;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera_nbf_44;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadFaceAttribute  = &DPBFLoader::loadFaceAttribute_nbf_54;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode_nbf_4e;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup;
@@ -2397,7 +2396,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadAnimatedTransform = &DPBFLoader::loadAnimatedTransform_nbf_54;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera_nbf_44;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadFaceAttribute  = &DPBFLoader::loadFaceAttribute_nbf_54;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode_nbf_4e;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup;
@@ -2419,7 +2418,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadAnimatedTransform = &DPBFLoader::loadAnimatedTransform_nbf_54;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera_nbf_44;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadFaceAttribute  = &DPBFLoader::loadFaceAttribute_nbf_54;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode_nbf_4e;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup;
@@ -2443,7 +2442,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadAnimatedTransform = &DPBFLoader::loadAnimatedTransform_nbf_54;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera_nbf_44;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadFaceAttribute  = &DPBFLoader::loadFaceAttribute_nbf_54;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode_nbf_4e;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup;
@@ -2472,7 +2471,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadAnimatedTransform = &DPBFLoader::loadAnimatedTransform_nbf_54;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera_nbf_4c;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadFaceAttribute  = &DPBFLoader::loadFaceAttribute_nbf_54;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode_nbf_4e;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup;
@@ -2502,7 +2501,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadAnimatedTransform = &DPBFLoader::loadAnimatedTransform_nbf_54;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera_nbf_4c;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadFaceAttribute  = &DPBFLoader::loadFaceAttribute_nbf_54;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode_nbf_4e;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup;
@@ -2529,7 +2528,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadAnimatedTransform = &DPBFLoader::loadAnimatedTransform_nbf_54;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera_nbf_4c;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadFaceAttribute  = &DPBFLoader::loadFaceAttribute_nbf_54;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode_nbf_4e;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup;
@@ -2556,7 +2555,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadAnimatedTransform = &DPBFLoader::loadAnimatedTransform_nbf_54;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadFaceAttribute  = &DPBFLoader::loadFaceAttribute_nbf_54;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode_nbf_4e;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup;
@@ -2584,7 +2583,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadAnimatedTransform = &DPBFLoader::loadAnimatedTransform_nbf_54;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadFaceAttribute  = &DPBFLoader::loadFaceAttribute_nbf_54;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode_nbf_4e;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup;
@@ -2612,7 +2611,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadAnimatedTransform = &DPBFLoader::loadAnimatedTransform_nbf_54;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadFaceAttribute  = &DPBFLoader::loadFaceAttribute_nbf_54;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode_nbf_51;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup;
@@ -2640,7 +2639,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadAnimatedTransform = &DPBFLoader::loadAnimatedTransform_nbf_54;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadFaceAttribute  = &DPBFLoader::loadFaceAttribute_nbf_54;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode_nbf_51;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup;
@@ -2668,7 +2667,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadAnimatedTransform = &DPBFLoader::loadAnimatedTransform_nbf_54;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadFaceAttribute  = &DPBFLoader::loadFaceAttribute_nbf_54;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode_nbf_51;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup;
@@ -2696,7 +2695,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadAnimatedTransform = &DPBFLoader::loadAnimatedTransform_nbf_54;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadFaceAttribute  = &DPBFLoader::loadFaceAttribute_nbf_54;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup;
@@ -2724,7 +2723,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadAnimatedTransform = &DPBFLoader::loadAnimatedTransform_nbf_54;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadFaceAttribute  = &DPBFLoader::loadFaceAttribute_nbf_54;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup;
@@ -2752,7 +2751,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadAnimatedTransform = &DPBFLoader::loadAnimatedTransform_nbf_54;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadFaceAttribute  = &DPBFLoader::loadFaceAttribute_nbf_54;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup;
@@ -2779,7 +2778,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadTextureHost    = &DPBFLoader::loadTextureHost;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData_nbf_55;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData_nbf_55;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup;
                 m_pfnLoadLightSource    = &DPBFLoader::loadLightSource;
@@ -2803,7 +2802,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
                 m_pfnLoadTextureHost    = &DPBFLoader::loadTextureHost;
                 m_pfnLoadBillboard      = &DPBFLoader::loadBillboard;
                 m_pfnLoadCamera         = &DPBFLoader::loadCamera;
-                m_pfnLoadEffectData     = &DPBFLoader::loadEffectData;
+                m_pfnLoadPipelineData   = &DPBFLoader::loadPipelineData;
                 m_pfnLoadGeoNode        = &DPBFLoader::loadGeoNode;
                 m_pfnLoadGroup          = &DPBFLoader::loadGroup;
                 m_pfnLoadLightSource    = &DPBFLoader::loadLightSource;
@@ -2882,9 +2881,9 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
     m_offsetObjectMap.clear();
     m_sharedObjectsMap.clear();
     m_textureImages.clear();
-    m_stateSetToEffect.clear();
-    m_materialToMaterialEffect.clear();
-    m_materialEffect.reset();
+    m_stateSetToPipeline.clear();
+    m_materialToPipelineData.clear();
+    m_pipelineData.reset();
     m_fileFinder.clear();
 
     // pass on caught exception to next handler
@@ -2894,9 +2893,9 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
   m_offsetObjectMap.clear();
   m_sharedObjectsMap.clear();
   m_textureImages.clear();
-  m_stateSetToEffect.clear();
-  m_materialToMaterialEffect.clear();
-  DP_ASSERT( !m_materialEffect );
+  m_stateSetToPipeline.clear();
+  m_materialToPipelineData.clear();
+  DP_ASSERT( !m_pipelineData );
   m_fileFinder.clear();
 
   return scene;
@@ -3674,9 +3673,9 @@ NodeSharedPtr DPBFLoader::loadGeoNode(uint_t offset)
   {
     (this->*m_pfnLoadStateSet)(nodePtr->stateSet);
   }
-  if ( nodePtr->materialEffect )
+  if ( nodePtr->materialPipeline )
   {
-    nodeHdl->setMaterialEffect( (this->*m_pfnLoadEffectData)( nodePtr->materialEffect ) );
+    nodeHdl->setMaterialPipeline( (this->*m_pfnLoadPipelineData)( nodePtr->materialPipeline ) );
   }
   if ( nodePtr->primitive )
   {
@@ -3703,10 +3702,10 @@ NodeSharedPtr DPBFLoader::loadGeoNode_nbf_51(uint_t offset)
   if ( nodePtr->stateSet )
   {
     (this->*m_pfnLoadStateSet)(nodePtr->stateSet);
-    map<uint_t,EffectDataSharedPtr>::const_iterator it = m_stateSetToEffect.find( nodePtr->stateSet );
-    if ( it != m_stateSetToEffect.end() && it->second )
+    map<uint_t,dp::sg::core::PipelineDataSharedPtr>::const_iterator it = m_stateSetToPipeline.find( nodePtr->stateSet );
+    if ( it != m_stateSetToPipeline.end() && it->second )
     {
-      nodeHdl->setMaterialEffect( it->second );
+      nodeHdl->setMaterialPipeline( it->second );
     }
   }
   if ( nodePtr->primitive )
@@ -3737,11 +3736,11 @@ NodeSharedPtr DPBFLoader::loadGeoNode_nbf_4e(uint_t offset)
 
     for ( unsigned int i=0; i<nodePtr->numStateSets; ++i )
     {
-      map<uint_t,EffectDataSharedPtr>::const_iterator it = m_stateSetToEffect.end();
+      map<uint_t,dp::sg::core::PipelineDataSharedPtr>::const_iterator it = m_stateSetToPipeline.end();
       if ( geoSets[i].stateSet )
       {
         (this->*m_pfnLoadStateSet)( geoSets[i].stateSet );
-        it = m_stateSetToEffect.find( geoSets[i].stateSet );
+        it = m_stateSetToPipeline.find( geoSets[i].stateSet );
       }
       Offset_AutoPtr<uint_t> primitives(m_fm, callback(), geoSets[i].primitives, geoSets[i].numPrimitives);
       for ( unsigned int j=0; j<geoSets[i].numPrimitives; ++j )
@@ -3749,9 +3748,9 @@ NodeSharedPtr DPBFLoader::loadGeoNode_nbf_4e(uint_t offset)
         GeoNodeSharedPtr geoNode = GeoNode::create();
         if ( geoSets[i].stateSet )
         {
-          if ( it != m_stateSetToEffect.end() && it->second )
+          if ( it != m_stateSetToPipeline.end() && it->second )
           {
-            geoNode->setMaterialEffect( it->second );
+            geoNode->setMaterialPipeline( it->second );
           }
         }
         if ( primitives[j] )
@@ -3773,10 +3772,10 @@ NodeSharedPtr DPBFLoader::loadGeoNode_nbf_4e(uint_t offset)
       if ( geoSets[i].stateSet )
       {
         (this->*m_pfnLoadStateSet)( geoSets[i].stateSet );
-        map<uint_t,EffectDataSharedPtr>::const_iterator it = m_stateSetToEffect.find( geoSets[i].stateSet );
-        if ( it != m_stateSetToEffect.end() && it->second )
+        map<uint_t,dp::sg::core::PipelineDataSharedPtr>::const_iterator it = m_stateSetToPipeline.find( geoSets[i].stateSet );
+        if ( it != m_stateSetToPipeline.end() && it->second )
         {
-          geoNode->setMaterialEffect( it->second );
+          geoNode->setMaterialPipeline( it->second );
         }
       }
       if ( geoSets[i].primitive )
@@ -4285,7 +4284,7 @@ LightSourceSharedPtr DPBFLoader::loadLightSource(uint_t offset)
       lightSource->setEnabled( !!lightPtr->enabled );
       if ( lightPtr->lightEffect )
       {
-        lightSource->setLightEffect( (this->*m_pfnLoadEffectData)( lightPtr->lightEffect ) );
+        lightSource->setLightPipeline( (this->*m_pfnLoadPipelineData)( lightPtr->lightEffect ) );
       }
 
       mapObject( offset, lightSource );
@@ -4743,10 +4742,10 @@ void DPBFLoader::loadStateAttribute_nbf_54(uint_t offset)
   }
   else
   {
-    std::map<uint_t,dp::sg::core::EffectDataSharedPtr>::const_iterator it = m_materialToMaterialEffect.find( offset );
-    if ( it != m_materialToMaterialEffect.end() )
+    std::map<uint_t,dp::sg::core::PipelineDataSharedPtr>::const_iterator it = m_materialToPipelineData.find( offset );
+    if ( it != m_materialToPipelineData.end() )
     {
-      m_materialEffect = it->second;
+      m_pipelineData = it->second;
     }
   }
 }
@@ -4770,7 +4769,7 @@ ParameterGroupDataSharedPtr DPBFLoader::loadAlphaTestAttribute_nbf_54(uint_t off
   return( materialData );
 }
 
-EffectDataSharedPtr DPBFLoader::loadBlendAttribute_nbf_54(uint_t offset)
+dp::sg::core::PipelineDataSharedPtr DPBFLoader::loadBlendAttribute_nbf_54(uint_t offset)
 {
   // this should have been caught by upper layers
   DP_ASSERT(m_offsetObjectMap.find(offset)==m_offsetObjectMap.end());
@@ -4803,9 +4802,9 @@ EffectDataSharedPtr DPBFLoader::loadBlendAttribute_nbf_54(uint_t offset)
                   ||  ( src == BF_ONE_MINUS_DESTINATION_ALPHA )
                   ||  ( src == BF_SOURCE_ALPHA_SATURATE )
                   ||  ( src != BF_ZERO );
-  getMaterialEffect()->setTransparent( transparent );
+  getMaterialPipeline()->setTransparent( transparent );
 
-  return( m_materialEffect );
+  return( m_pipelineData );
 }
 
 ParameterGroupDataSharedPtr DPBFLoader::loadFaceAttribute_nbf_54(uint_t offset)
@@ -4897,7 +4896,7 @@ ParameterGroupDataSharedPtr DPBFLoader::getMaterialParameterGroup( const string 
 {
   ParameterGroupDataSharedPtr pgd;
   {
-    EffectDataSharedPtr const& me = getMaterialEffect();
+    dp::sg::core::PipelineDataSharedPtr const& me = getMaterialPipeline();
     pgd = me->findParameterGroupData( name );
     if ( !pgd )
     {
@@ -4947,10 +4946,10 @@ ParameterGroupDataSharedPtr DPBFLoader::loadMaterial_nbf_54(uint_t offset)
                     ||  ( matPtr->backOpacityColor[0] != 1.0f )
                     ||  ( matPtr->backOpacityColor[1] != 1.0f )
                     ||  ( matPtr->backOpacityColor[2] != 1.0f );
-  getMaterialEffect()->setTransparent( transparent );
+  getMaterialPipeline()->setTransparent( transparent );
 
   mapObject( offset, materialData );
-  m_materialToMaterialEffect[offset] = m_materialEffect;
+  m_materialToPipelineData[offset] = m_pipelineData;
   return( materialData );
 }
 
@@ -4985,10 +4984,10 @@ ParameterGroupDataSharedPtr DPBFLoader::loadMaterial_nbf_40(uint_t offset)
   DP_VERIFY( materialData->setParameter( "backSpecularExponent", matPtr->backSpecularExponent ) );
 
   bool transparent = ( matPtr->frontOpacity != 1.0f ) || ( matPtr->backOpacity != 1.0f );
-  getMaterialEffect()->setTransparent( transparent );
+  getMaterialPipeline()->setTransparent( transparent );
 
   mapObject( offset, materialData );
-  m_materialToMaterialEffect[offset] = m_materialEffect;
+  m_materialToPipelineData[offset] = m_pipelineData;
   return( materialData );
 }
 
@@ -5019,10 +5018,10 @@ ParameterGroupDataSharedPtr DPBFLoader::loadMaterial_nbf_3f(uint_t offset)
   DP_VERIFY( materialData->setParameter( "backSpecularExponent", matPtr->backSpecularExponent ) );
 
   bool transparent = ( matPtr->frontOpacity != 1.0f ) || ( matPtr->backOpacity != 1.0f );
-  getMaterialEffect()->setTransparent( transparent );
+  getMaterialPipeline()->setTransparent( transparent );
 
   mapObject( offset, materialData );
-  m_materialToMaterialEffect[offset] = m_materialEffect;
+  m_materialToPipelineData[offset] = m_pipelineData;
   return( materialData );
 }
 
@@ -5053,10 +5052,10 @@ ParameterGroupDataSharedPtr DPBFLoader::loadMaterial_nbf_a(uint_t offset)
   DP_VERIFY( materialData->setParameter( "backSpecularExponent", matPtr->specularExponent ) );
 
   bool transparent = ( matPtr->opacity != 1.0f );
-  getMaterialEffect()->setTransparent( transparent );
+  getMaterialPipeline()->setTransparent( transparent );
 
   mapObject( offset, materialData );
-  m_materialToMaterialEffect[offset] = m_materialEffect;
+  m_materialToPipelineData[offset] = m_pipelineData;
   return( materialData );
 }
 
@@ -5075,7 +5074,7 @@ ParameterGroupDataSharedPtr DPBFLoader::loadPointAttribute_nbf_54(uint_t offset)
   return( geometryData );
 }
 
-EffectDataSharedPtr DPBFLoader::loadTextureAttribute_nbf_54(uint_t offset)
+dp::sg::core::PipelineDataSharedPtr DPBFLoader::loadTextureAttribute_nbf_54(uint_t offset)
 {
   // this should have been caught by upper layers
   DP_ASSERT(m_offsetObjectMap.find(offset)==m_offsetObjectMap.end());
@@ -5084,7 +5083,7 @@ EffectDataSharedPtr DPBFLoader::loadTextureAttribute_nbf_54(uint_t offset)
   // undefined behavior if called for other objects!
   DP_ASSERT(texPtr->objectCode==NBF_TEXTURE_ATTRIBUTE);
 
-  EffectDataSharedPtr textures = EffectData::create( getStandardMaterialSpec() );
+  dp::sg::core::PipelineDataSharedPtr textures = dp::sg::core::PipelineData::create( getStandardMaterialSpec() );
   readObject( textures, texPtr );
 
   Offset_AutoPtr<texBinding_t_nbf_54> bindings(m_fm, callback(), texPtr->bindings, texPtr->numBindings);
@@ -5303,7 +5302,7 @@ void DPBFLoader::loadStateSet_nbf_54(uint_t offset)
     // undefined behavior if called for other objects!
     DP_ASSERT(ssPtr->objectCode==NBF_STATE_SET);
 
-    DP_ASSERT( !m_materialEffect );
+    DP_ASSERT( !m_pipelineData );
 
     Offset_AutoPtr<uint_t> attribOffs(m_fm, callback(), ssPtr->stateAttribs, ssPtr->numStateAttribs);
     for ( unsigned int i=0; i<ssPtr->numStateAttribs; ++i )
@@ -5311,11 +5310,11 @@ void DPBFLoader::loadStateSet_nbf_54(uint_t offset)
       loadStateAttribute_nbf_54(attribOffs[i]);
     }
 
-    if ( m_materialEffect )
+    if ( m_pipelineData )
     {
-      DP_ASSERT( !m_materialEffect || ( m_materialEffect->getNumberOfParameterGroupData() != 0 ) );
-      m_stateSetToEffect[offset] = m_materialEffect;
-      m_materialEffect.reset();
+      DP_ASSERT( !m_pipelineData || ( m_pipelineData->getNumberOfParameterGroupData() != 0 ) );
+      m_stateSetToPipeline[offset] = m_pipelineData;
+      m_pipelineData.reset();
     }
   }
 }
@@ -5328,7 +5327,7 @@ void DPBFLoader::loadStateSet_nbf_4f(uint_t offset)
     // undefined behavior if called for other objects!
     DP_ASSERT(ssPtr->objectCode==NBF_STATE_SET);
 
-    DP_ASSERT( !m_materialEffect );
+    DP_ASSERT( !m_pipelineData );
 
     // StateSet specific
     Offset_AutoPtr<keyVariant_t> kvOffs(m_fm, callback(), ssPtr->keyStateVariantPairs, ssPtr->numStateVariants);
@@ -5336,11 +5335,11 @@ void DPBFLoader::loadStateSet_nbf_4f(uint_t offset)
     // ignore all but the very first variant !!!
     loadStateVariant_nbf_4f( kvOffs[0].variant );
 
-    if ( m_materialEffect )
+    if ( m_pipelineData )
     {
-      DP_ASSERT( !m_materialEffect || ( m_materialEffect->getNumberOfParameterGroupData() != 0 ) );
-      m_stateSetToEffect[offset] = m_materialEffect;
-      m_materialEffect.reset();
+      DP_ASSERT( !m_pipelineData || ( m_pipelineData->getNumberOfParameterGroupData() != 0 ) );
+      m_stateSetToPipeline[offset] = m_pipelineData;
+      m_pipelineData.reset();
     }
   }
 }
@@ -5353,7 +5352,7 @@ void DPBFLoader::loadStateSet_nbf_10(uint_t offset)
     // undefined behavior if called for other objects!
     DP_ASSERT(ssPtr->objectCode==NBF_STATE_SET);
 
-    DP_ASSERT( !m_materialEffect );
+    DP_ASSERT( !m_pipelineData );
 
     // StateSet specific
     Offset_AutoPtr<keyVariant_t> kvOffs(m_fm, callback(), ssPtr->keyStateVariantPairs, ssPtr->numStateVariants);
@@ -5362,11 +5361,11 @@ void DPBFLoader::loadStateSet_nbf_10(uint_t offset)
 
     loadStateVariant_nbf_4f( kvOffs[0].variant );
 
-    if ( m_materialEffect )
+    if ( m_pipelineData )
     {
-      DP_ASSERT( !m_materialEffect || ( m_materialEffect->getNumberOfParameterGroupData() != 0 ) );
-      m_stateSetToEffect[offset] = m_materialEffect;
-      m_materialEffect.reset();
+      DP_ASSERT( !m_pipelineData || ( m_pipelineData->getNumberOfParameterGroupData() != 0 ) );
+      m_stateSetToPipeline[offset] = m_pipelineData;
+      m_pipelineData.reset();
     }
   }
 }
@@ -6115,21 +6114,21 @@ VertexAttributeSetSharedPtr DPBFLoader::loadVertexAttributeSet_nbf_38( uint_t va
   return m_offsetObjectMap[vasOffset].staticCast<VertexAttributeSet>();
 }
 
-EffectDataSharedPtr DPBFLoader::loadEffectData( uint_t offset )
+dp::sg::core::PipelineDataSharedPtr DPBFLoader::loadPipelineData( uint_t offset )
 {
   map<uint_t,ObjectSharedPtr>::const_iterator objIt = m_offsetObjectMap.find( offset );
   if ( objIt == m_offsetObjectMap.end() )
   {
-    EffectDataSharedPtr effectData;
-    Offset_AutoPtr<NBFEffectData> edPtr( m_fm, callback(), offset );
+    dp::sg::core::PipelineDataSharedPtr effectData;
+    Offset_AutoPtr<NBFPipelineData> edPtr( m_fm, callback(), offset );
     // undefined behavior if called for other objects!
-    DP_ASSERT( edPtr->objectCode == NBF_EFFECT_DATA );
+    DP_ASSERT( edPtr->objectCode == NBF_PIPELINE_DATA );
 
     DP_VERIFY( dp::fx::EffectLibrary::instance()->loadEffects( mapString( edPtr->effectFileName ), m_fileFinder ) );
     m_currentEffectSpec = dp::fx::EffectLibrary::instance()->getEffectSpec( mapString( edPtr->effectSpecName ) );
     if ( m_currentEffectSpec )
     {
-      effectData = EffectData::create( m_currentEffectSpec );
+      effectData = dp::sg::core::PipelineData::create( m_currentEffectSpec );
       readObject( effectData, edPtr );
 
       unsigned int numParameterGroupSpecs = m_currentEffectSpec->getNumberOfParameterGroupSpecs();
@@ -6160,23 +6159,23 @@ EffectDataSharedPtr DPBFLoader::loadEffectData( uint_t offset )
     }
     return( effectData );
   }
-  return( objIt->second.staticCast<EffectData>() );
+  return( objIt->second.staticCast<dp::sg::core::PipelineData>() );
 }
 
-EffectDataSharedPtr DPBFLoader::loadEffectData_nbf_55( uint_t offset )
+dp::sg::core::PipelineDataSharedPtr DPBFLoader::loadPipelineData_nbf_55( uint_t offset )
 {
   map<uint_t,ObjectSharedPtr>::const_iterator objIt = m_offsetObjectMap.find( offset );
   if ( objIt == m_offsetObjectMap.end() )
   {
-    EffectDataSharedPtr effectData;
+    dp::sg::core::PipelineDataSharedPtr effectData;
     Offset_AutoPtr<NBFEffectData_nbf_55> edPtr( m_fm, callback(), offset );
     // undefined behavior if called for other objects!
-    DP_ASSERT( edPtr->objectCode == NBF_EFFECT_DATA );
+    DP_ASSERT( edPtr->objectCode == NBF_PIPELINE_DATA );
 
     m_currentEffectSpec = dp::fx::EffectLibrary::instance()->getEffectSpec( mapString( edPtr->effectSpecName ) );
     if ( m_currentEffectSpec )
     {
-      effectData = EffectData::create( m_currentEffectSpec );
+      effectData = dp::sg::core::PipelineData::create( m_currentEffectSpec );
       readObject( effectData, edPtr );
 
       unsigned int numParameterGroupSpecs = m_currentEffectSpec->getNumberOfParameterGroupSpecs();
@@ -6207,7 +6206,7 @@ EffectDataSharedPtr DPBFLoader::loadEffectData_nbf_55( uint_t offset )
     }
     return( effectData );
   }
-  return( objIt->second.staticCast<EffectData>() );
+  return( objIt->second.staticCast<dp::sg::core::PipelineData>() );
 }
 
 ParameterGroupDataSharedPtr DPBFLoader::loadParameterGroupData( uint_t offset )

@@ -28,8 +28,8 @@
 #include <dp/util/Image.h>
 #include <dp/sg/io/IO.h>
 #include <dp/sg/core/BufferHost.h>
-#include <dp/sg/core/EffectData.h>
 #include <dp/sg/core/GeoNode.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/core/Primitive.h>
 #include <dp/sg/core/VertexAttributeSet.h>
 #include <dp/sg/core/IndexSet.h>
@@ -207,7 +207,7 @@ namespace dp
 
         geoNode->setPrimitive(primitive);
 
-        dp::sg::core::EffectDataSharedPtr effectData = dp::sg::core::createStandardMaterialData();
+        dp::sg::core::PipelineDataSharedPtr pipelineData = dp::sg::core::createStandardMaterialData();
 
         // attach colorMap if loading it
         if ( colorMap )
@@ -217,10 +217,10 @@ namespace dp
           sampler->setMagFilterMode( dp::sg::core::TFM_MAG_LINEAR );
           sampler->setMinFilterMode( dp::sg::core::TFM_MIN_LINEAR );
 
-          effectData->setParameterGroupData( dp::sg::core::createStandardTextureParameterData( sampler ) );
+          pipelineData->setParameterGroupData( dp::sg::core::createStandardTextureParameterData( sampler ) );
         }
 
-        geoNode->setMaterialEffect( effectData );
+        geoNode->setMaterialPipeline( pipelineData );
 
         return geoNode;
       }
@@ -327,9 +327,9 @@ namespace dp
         sampler->setMinFilterMode( dp::sg::core::TFM_MIN_LINEAR );
         sampler->setTexture( heightMap );
 
-        dp::sg::core::EffectDataSharedPtr effect = dp::sg::core::EffectData::create( dp::fx::EffectLibrary::instance()->getEffectData(effectName) );
+        dp::sg::core::PipelineDataSharedPtr pipelineData = dp::sg::core::PipelineData::create( dp::fx::EffectLibrary::instance()->getEffectData(effectName) );
 
-        dp::sg::core::ParameterGroupDataSharedPtr pgd = effect->findParameterGroupData( std::string("terrain_parameters") );
+        dp::sg::core::ParameterGroupDataSharedPtr pgd = pipelineData->findParameterGroupData( std::string("terrain_parameters") );
         pgd->setParameter( "heightMap", sampler );
         pgd->setParameter( "resolution", realResolution );
         pgd->setParameter( "offset", offset );
@@ -345,10 +345,10 @@ namespace dp
           sampler->setMagFilterMode( dp::sg::core::TFM_MAG_LINEAR );
           sampler->setMinFilterMode( dp::sg::core::TFM_MIN_LINEAR );
 
-          effect->setParameterGroupData( dp::sg::core::createStandardTextureParameterData( sampler ) );
+          pipelineData->setParameterGroupData( dp::sg::core::createStandardTextureParameterData( sampler ) );
         }
 
-        setMaterialEffect( effect );
+        setMaterialPipeline( pipelineData );
 
       }
 

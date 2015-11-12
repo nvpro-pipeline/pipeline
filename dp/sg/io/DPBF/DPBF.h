@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2015
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -287,7 +287,7 @@ enum
 , NBF_RTBUFFER_ATTRIBUTE                      //!< Obsolete
 , NBF_RTFX_SCENE_ATTRIBUTE                    //!< Obsolete
 , NBF_RTFX_PROGRAM                            //!< Obsolete
-, NBF_EFFECT_DATA                             //!< Identifies an NBFEffectData object.
+, NBF_PIPELINE_DATA                           //!< Identifies an NBFPipelineData object.
 , NBF_PARAMETER_GROUP_DATA                    //!< Identifies an NBFParameterGroup object.
 , NBF_SAMPLER                                 //!< Identifies an NBFSampler object.
 , NBF_SAMPLER_STATE                           //!< Identifies an NBFSamplerState object.
@@ -569,7 +569,7 @@ DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFNode,8);   //!< Compile-time assert on size 
 /** The object code for a NBFGeoNode is NBF_GEO_NODE. */
 struct NBFGeoNode : public NBFNode
 {
-  uint_t      materialEffect;     //!< Specifies the file offset to the corresponding NBFEffectData object
+  uint_t      materialPipeline;   //!< Specifies the file offset to the corresponding NBFPipelineData object
   uint_t      primitive;          //!< Specifies the file offset to the corresponding NBFPrimitive object. 
   uint_t      stateSet;           //!< Obsolete
   PADDING(4);        //!< Padding bits to ensure the size of NBFGeoNode is a multiple of 8, regardless of packing.    
@@ -643,14 +643,14 @@ struct NBFLightSource : public NBFNode
   ubyte_t     castShadow;         //!< flag that determines if this light source creates shadows.
   ubyte_t     enabled;            //!< flag to indicate enabled state.
   PADDING(2);        //!< Padding bits to ensure the offset of the next struct member is on a 4-byte boundary.
-  uint_t      lightEffect;        //!< Specifies the file offset to an optional NBFEffectData
+  uint_t      lightEffect;        //!< Specifies the file offset to an optional NBFPipelineData
   PADDING(4);        //!< Padding bits to ensure the offset of the next struct member is on a 4-byte boundary.
 };
 DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFLightSource,8);    //!< Compile-time assert on size of structure
 
-//! The NBFEffectData structure represents a set of ParameterGroupDatas
-/** The object code for an NBFEffectData is NBF_EFFECT_DATA. */
-struct NBFEffectData : public NBFObject
+//! The NBFPipelineData structure represents a set of ParameterGroupDatas
+/** The object code for an NBFPipelineData is NBF_PIPELINE_DATA. */
+struct NBFPipelineData : public NBFObject
 {
   str_t       effectFileName;       //!< Specifies the (potentially relative) file with the EffectSpec
   str_t       effectSpecName;       //!< Specifies the name of the corresponding EffectSpec
@@ -658,7 +658,7 @@ struct NBFEffectData : public NBFObject
   ubyte_t     transparent;          //!< Specifies if this EffectData is to be handled as transparent
   PADDING(3);        //!< Padding bits to ensure the offset of the next struct member is on a 4-byte boundary.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFEffectData,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFPipelineData,8);   //!< Compile-time assert on size of structure
 
 struct NBFParameterGroupData : public NBFObject
 {

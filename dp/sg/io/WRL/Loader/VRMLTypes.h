@@ -1,4 +1,4 @@
- // Copyright NVIDIA Corporation 2002-2005
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -32,7 +32,7 @@
 #include <dp/sg/core/Object.h>
 
 namespace vrml
-{  
+{
 
   //  it's not neccessary to document all these helper classes !
 #if ! defined( DOXYGEN_IGNORE )
@@ -45,7 +45,7 @@ namespace vrml
       static ObjectSharedPtr create();
       virtual ~Object() {}
       virtual const std::string & getType() const;
-      const std::string& getName() const { return name; } 
+      const std::string& getName() const { return name; }
       void setName(const std::string& n) { name = n; }
 
     protected:
@@ -55,7 +55,7 @@ namespace vrml
       std::string name;
   };
 
-  template<typename T> 
+  template<typename T>
   inline bool isTypeOf( Object *p )
   {
     return( dynamic_cast<T *>( p ) != NULL );
@@ -255,7 +255,7 @@ namespace vrml
       SFNode  texture;
       SFNode  textureTransform;
 
-      dp::sg::core::EffectDataSharedPtr materialEffect;
+      dp::sg::core::PipelineDataSharedPtr materialPipeline;
   };
 
   DEFINE_PTR_TYPES( AudioClip );

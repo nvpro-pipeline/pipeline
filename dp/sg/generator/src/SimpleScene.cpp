@@ -29,6 +29,7 @@
 #include <dp/sg/core/GeoNode.h>
 #include <dp/sg/core/LightSource.h>
 #include <dp/sg/core/Node.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/core/Scene.h>
 #include <dp/sg/core/Transform.h>
 
@@ -95,7 +96,7 @@ namespace dp
           m_geoNodeHandle[i] = GeoNode::create();
           m_geoNodeHandle[i]->setPrimitive( m_primitive );
           m_geoNodeHandle[i]->setName( names[i] );
-          setEffectData( i, materials[i] );
+          setPipelineData( i, materials[i] );
         }
 
         // Create four transforms. Cube coordinates are in the range [-1, 1], set them 3 units apart.
@@ -126,15 +127,15 @@ namespace dp
       {
       }
 
-      void SimpleScene::setEffectData( size_t index, const std::string& effectData )
+      void SimpleScene::setPipelineData( size_t index, const std::string& pipelineName )
       {
-        DP_ASSERT( index < sizeof dp::util::array( m_effectHandle ) );
+        DP_ASSERT( index < sizeof dp::util::array( m_pipelineData ) );
 
-        dp::fx::EffectDataSharedPtr fxEffectData = dp::fx::EffectLibrary::instance()->getEffectData( effectData );
+        dp::fx::EffectDataSharedPtr fxEffectData = dp::fx::EffectLibrary::instance()->getEffectData( pipelineName );
         DP_ASSERT( fxEffectData );
 
-        m_effectHandle[index] = EffectData::create( fxEffectData );
-        m_geoNodeHandle[index]->setMaterialEffect( m_effectHandle[index] );
+        m_pipelineData[index] = dp::sg::core::PipelineData::create( fxEffectData );
+        m_geoNodeHandle[index]->setMaterialPipeline( m_pipelineData[index] );
       }
 
     } // namespace generator

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2009-2015
+// Copyright (c) 2009-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -40,11 +40,11 @@ public:
   DP_SG_GENERATOR_API PreviewScene();
   DP_SG_GENERATOR_API virtual ~PreviewScene();
 
-  DP_SG_GENERATOR_API void setEffectData( size_t index, const std::string& effectData );
+  DP_SG_GENERATOR_API void setPipelineData( size_t index, const std::string& effectData );
 
-  dp::sg::core::SceneSharedPtr       m_sceneHandle;
-  dp::sg::core::PrimitiveSharedPtr   m_primitive[5];       // the drawable attached to the transforms
-  dp::sg::core::EffectDataSharedPtr  m_effectHandle[5];    // one new material for each cube
-  dp::sg::core::TransformSharedPtr   m_transformHandle;
-  dp::sg::core::GeoNodeSharedPtr     m_geoNodeHandle[5];   // one geonode for each cube
+  dp::sg::core::SceneSharedPtr        m_sceneHandle;
+  dp::sg::core::PrimitiveSharedPtr    m_primitive[5];       // the drawable attached to the transforms
+  dp::sg::core::PipelineDataSharedPtr m_pipelineData[5];    // one new material for each cube
+  dp::sg::core::TransformSharedPtr    m_transformHandle;
+  dp::sg::core::GeoNodeSharedPtr      m_geoNodeHandle[5];   // one geonode for each cube
 };

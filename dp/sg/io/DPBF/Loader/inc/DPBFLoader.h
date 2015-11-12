@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2015
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -26,6 +26,7 @@
 
 #pragma once
 
+#include <dp/sg/core/PipelineData.h>
 #include <dp/util/FileFinder.h>
 #include <dp/util/FileMapping.h>
 #include <dp/sg/io/PlugInterface.h>
@@ -256,7 +257,7 @@ private:
   // state attribs
   void loadStateAttribute_nbf_54(uint_t offset);
   dp::sg::core::ParameterGroupDataSharedPtr loadAlphaTestAttribute_nbf_54(uint_t offset);
-  dp::sg::core::EffectDataSharedPtr loadBlendAttribute_nbf_54(uint_t offset);
+  dp::sg::core::PipelineDataSharedPtr loadBlendAttribute_nbf_54(uint_t offset);
   dp::sg::core::ParameterGroupDataSharedPtr loadFaceAttribute_nbf_54(uint_t offset);
   dp::sg::core::ParameterGroupDataSharedPtr loadFaceAttribute_nbf_b(uint_t offset);
   dp::sg::core::ParameterGroupDataSharedPtr loadLightingAttribute_nbf_54(uint_t offset);
@@ -266,7 +267,7 @@ private:
   dp::sg::core::ParameterGroupDataSharedPtr loadMaterial_nbf_3f(uint_t offset);
   dp::sg::core::ParameterGroupDataSharedPtr loadMaterial_nbf_a(uint_t offset);
   dp::sg::core::ParameterGroupDataSharedPtr loadPointAttribute_nbf_54(uint_t offset);
-  dp::sg::core::EffectDataSharedPtr loadTextureAttribute_nbf_54(uint_t offset);
+  dp::sg::core::PipelineDataSharedPtr loadTextureAttribute_nbf_54(uint_t offset);
   dp::sg::core::ParameterGroupDataSharedPtr loadTextureAttributeItem_nbf_54(uint_t offset);
   dp::sg::core::ParameterGroupDataSharedPtr loadTextureAttributeItem_nbf_4b(uint_t offset);
   dp::sg::core::ParameterGroupDataSharedPtr loadTextureAttributeItem_nbf_36(uint_t offset);
@@ -300,8 +301,8 @@ private:
   dp::sg::core::VertexAttributeSetSharedPtr loadVertexAttributeSet_nbf_3a( uint_t vasOffset);
   dp::sg::core::VertexAttributeSetSharedPtr loadVertexAttributeSet_nbf_38( uint_t vasOffset);
 
-  dp::sg::core::EffectDataSharedPtr loadEffectData( uint_t offset );
-  dp::sg::core::EffectDataSharedPtr loadEffectData_nbf_55( uint_t offset );
+  dp::sg::core::PipelineDataSharedPtr loadPipelineData( uint_t offset );
+  dp::sg::core::PipelineDataSharedPtr loadPipelineData_nbf_55( uint_t offset );
   dp::sg::core::ParameterGroupDataSharedPtr loadParameterGroupData( uint_t offset );
 
   // shared object handling
@@ -347,7 +348,7 @@ private:
   std::string mapString(const sstr_t& str); // overload for small strings
 
   dp::sg::core::ParameterGroupDataSharedPtr getMaterialParameterGroup( const std::string & name );
-  dp::sg::core::EffectDataSharedPtr getMaterialEffect();
+  dp::sg::core::PipelineDataSharedPtr getMaterialPipeline();
 
 private:
   dp::DataType convertDataType( unsigned int dataType );
@@ -364,51 +365,51 @@ private:
   bool m_autoClipPlanes_nbf_4c;   // used for carrying auto clip plane state from older cameras to current ViewState
 
   // call some load routines via function pointers to preserve downward compatibility
-  dp::sg::core::TransformSharedPtr (DPBFLoader::*m_pfnLoadAnimatedTransform)(uint_t); // ... load AnimatedTransform
-  dp::sg::core::BillboardSharedPtr  (DPBFLoader::*m_pfnLoadBillboard)(uint_t);     // ... load Billboard
-  dp::sg::core::CameraSharedPtr     (DPBFLoader::*m_pfnLoadCamera)(uint_t);        // ... load Camera
-  dp::sg::core::EffectDataSharedPtr (DPBFLoader::*m_pfnLoadEffectData)(uint_t); // ... load EffectData
+  dp::sg::core::TransformSharedPtr          (DPBFLoader::*m_pfnLoadAnimatedTransform)(uint_t); // ... load AnimatedTransform
+  dp::sg::core::BillboardSharedPtr          (DPBFLoader::*m_pfnLoadBillboard)(uint_t);     // ... load Billboard
+  dp::sg::core::CameraSharedPtr             (DPBFLoader::*m_pfnLoadCamera)(uint_t);        // ... load Camera
   dp::sg::core::ParameterGroupDataSharedPtr (DPBFLoader::*m_pfnLoadFaceAttribute)(uint_t); // ... load FaceAttribute
-  dp::sg::core::NodeSharedPtr       (DPBFLoader::*m_pfnLoadGeoNode)(uint_t); // ... load GeoNode
-  dp::sg::core::GroupSharedPtr      (DPBFLoader::*m_pfnLoadGroup)(uint_t); // ... load Group
-  dp::sg::core::LightSourceSharedPtr  (DPBFLoader::*m_pfnLoadLightSource)(uint_t);   // ... load LightSource
-  dp::sg::core::LODSharedPtr        (DPBFLoader::*m_pfnLoadLOD)(uint_t);           // ... load LOD
+  dp::sg::core::NodeSharedPtr               (DPBFLoader::*m_pfnLoadGeoNode)(uint_t); // ... load GeoNode
+  dp::sg::core::GroupSharedPtr              (DPBFLoader::*m_pfnLoadGroup)(uint_t); // ... load Group
+  dp::sg::core::LightSourceSharedPtr        (DPBFLoader::*m_pfnLoadLightSource)(uint_t);   // ... load LightSource
+  dp::sg::core::LODSharedPtr                (DPBFLoader::*m_pfnLoadLOD)(uint_t);           // ... load LOD
   dp::sg::core::ParameterGroupDataSharedPtr (DPBFLoader::*m_pfnLoadMaterial)(uint_t);      // ... load Material
-  dp::sg::core::PrimitiveSharedPtr  (DPBFLoader::*m_pfnLoadPrimitive)(uint_t);     // ... load Primitive
-  dp::sg::core::SamplerSharedPtr    (DPBFLoader::*m_pfnLoadSampler)(uint_t offset);  // ... load Sampler
-  dp::sg::core::SceneSharedPtr      (DPBFLoader::*m_pfnLoadScene)(uint_t);         // ... load Scene
-  dp::sg::core::SwitchSharedPtr     (DPBFLoader::*m_pfnLoadSwitch)(uint_t);        // ... load Switch
-  void                      (DPBFLoader::*m_pfnLoadStateSet)(uint_t);      // ... load StateSet
+  dp::sg::core::PipelineDataSharedPtr       (DPBFLoader::*m_pfnLoadPipelineData)(uint_t); // ... load PipelineData
+  dp::sg::core::PrimitiveSharedPtr          (DPBFLoader::*m_pfnLoadPrimitive)(uint_t);     // ... load Primitive
+  dp::sg::core::SamplerSharedPtr            (DPBFLoader::*m_pfnLoadSampler)(uint_t offset);  // ... load Sampler
+  dp::sg::core::SceneSharedPtr              (DPBFLoader::*m_pfnLoadScene)(uint_t);         // ... load Scene
+  dp::sg::core::SwitchSharedPtr             (DPBFLoader::*m_pfnLoadSwitch)(uint_t);        // ... load Switch
+  void                                      (DPBFLoader::*m_pfnLoadStateSet)(uint_t);      // ... load StateSet
   dp::sg::core::ParameterGroupDataSharedPtr (DPBFLoader::*m_pfnLoadTextureAttributeItem)(uint_t); // ... load TextureAttributeItem
-  dp::sg::core::TransformSharedPtr  (DPBFLoader::*m_pfnLoadTransform)(uint_t);     // ... load Transform
+  dp::sg::core::TransformSharedPtr          (DPBFLoader::*m_pfnLoadTransform)(uint_t);     // ... load Transform
   dp::sg::core::VertexAttributeSetSharedPtr (DPBFLoader::*m_pfnLoadVertexAttributeSet)(uint_t); // ... load VertexAttributeSet
-  dp::sg::ui::ViewStateSharedPtr    (DPBFLoader::*m_pfnLoadViewState)(uint_t);   //..load ViewState
+  dp::sg::ui::ViewStateSharedPtr            (DPBFLoader::*m_pfnLoadViewState)(uint_t);   //..load ViewState
 
-  dp::sg::core::PrimitiveSharedPtr  (DPBFLoader::*m_pfnLoadQuadPatches)   (uint_t offset);
-  dp::sg::core::PrimitiveSharedPtr  (DPBFLoader::*m_pfnLoadQuadPatches4x4)(uint_t offset);
-  dp::sg::core::PrimitiveSharedPtr  (DPBFLoader::*m_pfnLoadRectPatches)   (uint_t offset);
-  dp::sg::core::PrimitiveSharedPtr  (DPBFLoader::*m_pfnLoadTriPatches)    (uint_t offset);
-  dp::sg::core::PrimitiveSharedPtr  (DPBFLoader::*m_pfnLoadTriPatches4)   (uint_t offset);
+  dp::sg::core::PrimitiveSharedPtr          (DPBFLoader::*m_pfnLoadQuadPatches)   (uint_t offset);
+  dp::sg::core::PrimitiveSharedPtr          (DPBFLoader::*m_pfnLoadQuadPatches4x4)(uint_t offset);
+  dp::sg::core::PrimitiveSharedPtr          (DPBFLoader::*m_pfnLoadRectPatches)   (uint_t offset);
+  dp::sg::core::PrimitiveSharedPtr          (DPBFLoader::*m_pfnLoadTriPatches)    (uint_t offset);
+  dp::sg::core::PrimitiveSharedPtr          (DPBFLoader::*m_pfnLoadTriPatches4)   (uint_t offset);
 
-  dp::sg::core::TextureHostSharedPtr (DPBFLoader::*m_pfnLoadTextureHost)    (uint_t offset, std::string& file);
+  dp::sg::core::TextureHostSharedPtr        (DPBFLoader::*m_pfnLoadTextureHost)    (uint_t offset, std::string& file);
 
   std::map<std::string,dp::sg::core::TextureHostWeakPtr> m_textureImages;  // collection of currently loaded TextureHosts
 
   std::map<dp::sg::core::LightSourceSharedPtr,dp::sg::core::GroupSharedPtr> m_lightSourceToGroup;   // for m_nbfMajor < 0x51: stores light source to referencing group
 
-  std::map<uint_t,dp::sg::core::EffectDataSharedPtr> m_stateSetToEffect;
-  std::map<uint_t,dp::sg::core::EffectDataSharedPtr> m_materialToMaterialEffect;
-  dp::sg::core::EffectDataSharedPtr m_materialEffect;
+  std::map<uint_t,dp::sg::core::PipelineDataSharedPtr> m_stateSetToPipeline;
+  std::map<uint_t,dp::sg::core::PipelineDataSharedPtr> m_materialToPipelineData;
+  dp::sg::core::PipelineDataSharedPtr m_pipelineData;
   dp::fx::EffectSpecSharedPtr   m_currentEffectSpec;
 };
 
-inline dp::sg::core::EffectDataSharedPtr DPBFLoader::getMaterialEffect()
+inline dp::sg::core::PipelineDataSharedPtr DPBFLoader::getMaterialPipeline()
 {
-  if ( ! m_materialEffect )
+  if ( ! m_pipelineData )
   {
-    m_materialEffect = dp::sg::core::EffectData::create( dp::sg::core::getStandardMaterialSpec() );
+    m_pipelineData = dp::sg::core::PipelineData::create( dp::sg::core::getStandardMaterialSpec() );
   }
-  return( m_materialEffect );
+  return( m_pipelineData );
 }
 
 inline ubyte_t * DPBFLoader::mapOffset( uint_t offset, unsigned int numBytes )

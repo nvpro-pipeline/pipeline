@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2015
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -25,10 +25,10 @@
 
 
 #include <dp/sg/core/Object.h>
-#include <dp/sg/core/EffectData.h>
 #include <dp/sg/core/GeoNode.h>
 #include <dp/sg/core/Group.h>
 #include <dp/sg/core/LOD.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/core/Switch.h>
 #include <dp/sg/core/Transform.h>
 #include <dp/util/HashGeneratorMurMur.h>
@@ -66,7 +66,7 @@ namespace dp
       }
 
       Object::Object(const Object& rhs)
-     : m_objectCode(rhs.m_objectCode) // copy object code 
+     : m_objectCode(rhs.m_objectCode) // copy object code
       , m_hashKey(rhs.m_hashKey)
       , m_name(nullptr) // proper pointer initialization
       , m_annotation(nullptr) // dito
@@ -81,12 +81,12 @@ namespace dp
 
         if (rhs.m_name)
         { // this copy inherits name from rhs
-          m_name = new std::string(*rhs.m_name); 
+          m_name = new std::string(*rhs.m_name);
         }
 
         if (rhs.m_annotation)
         { // this copy inherits name from rhs
-          m_annotation = new std::string(*rhs.m_annotation); 
+          m_annotation = new std::string(*rhs.m_annotation);
         }
       }
 
@@ -161,7 +161,7 @@ namespace dp
           // concrete objects should have a valid object code - assert this
           DP_ASSERT(m_objectCode != OC_INVALID);
           DP_ASSERT(m_objectCode == rhs.m_objectCode);
-      
+
           // copy mutable data
           m_flags = rhs.m_flags;
           m_hashKey = rhs.m_hashKey;
@@ -172,8 +172,8 @@ namespace dp
             m_name = nullptr;
           }
           if (rhs.m_name)
-          { 
-            m_name = new std::string(*rhs.m_name); 
+          {
+            m_name = new std::string(*rhs.m_name);
           }
 
           if (m_annotation)
@@ -325,7 +325,7 @@ namespace dp
                 changedState |= DP_SG_BOUNDING_VOLUMES;
               }
 #if !defined(NDEBUG)
-              else if ( (propertyId != dp::sg::core::EffectData::PID_Transparent)
+              else if ( (propertyId != dp::sg::core::PipelineData::PID_Transparent)
                     &&  (propertyId != dp::sg::core::Object::PID_Name)
                     &&  (propertyId != dp::sg::core::Object::PID_TraversalMask)
                     &&  (propertyId != dp::sg::core::Object::PID_Hints))
@@ -370,8 +370,8 @@ namespace dp
           case OC_VERTEX_ATTRIBUTE_SET:  return("VertexAttributeSet");
           case OC_PRIMITIVE:             return("Primitive");
           case OC_INDEX_SET:             return("IndexSet");
-          case OC_EFFECT_DATA:           return("EffectData");
           case OC_PARAMETER_GROUP_DATA:  return("ParameterGroupData");
+          case OC_PIPELINE_DATA:         return("PipelineData");
           case OC_SAMPLER:               return("Sampler");
           case OC_PARALLELCAMERA:        return("ParallelCamera");
           case OC_PERSPECTIVECAMERA:     return("PerspectiveCamera");

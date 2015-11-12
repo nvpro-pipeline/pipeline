@@ -39,6 +39,7 @@
 #include <dp/sg/core/LightSource.h>
 #include <dp/sg/algorithm/SearchTraverser.h>
 #include <dp/sg/core/PerspectiveCamera.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/ui/ViewState.h>
 #include <dp/sg/renderer/rix/gl/SceneRenderer.h>
 #include <dp/sg/renderer/rix/gl/TransparencyManagerOITClosestArray.h>
@@ -508,7 +509,7 @@ void ViewerRendererWidget::dropEvent( QDropEvent * event )
     const dp::fx::EffectSpecSharedPtr & materialEffectSpec = dp::fx::EffectLibrary::instance()->getEffectSpec( effectName );
     if ( materialEffectSpec )
     {
-      ExecuteCommand( new CommandReplaceEffect( *m_selectedGeoNodes.begin(), GetApp()->getEffectData( effectName ) ) );
+      ExecuteCommand( new CommandReplacePipeline( *m_selectedGeoNodes.begin(), GetApp()->getPipelineData( effectName ) ) );
     }
   }
   else if ( mimeData->hasFormat( "EffectData" ) )
@@ -521,7 +522,7 @@ void ViewerRendererWidget::dropEvent( QDropEvent * event )
 
     if ( *m_selectedGeoNodes.begin() != geoNode )
     {
-      ExecuteCommand( new CommandReplaceEffect( *m_selectedGeoNodes.begin(), geoNode->getMaterialEffect() ) );
+      ExecuteCommand( new CommandReplacePipeline( *m_selectedGeoNodes.begin(), geoNode->getMaterialPipeline() ) );
 
       dehighlightAll();
       present();
@@ -768,7 +769,7 @@ void ViewerRendererWidget::addDirectedLight()
   LightSourceSharedPtr directedLight = createStandardDirectedLight( Vec3f( 0.0f, 0.0f, -1.0f ), Vec3f( 1.0f, 1.0f, 1.0f ) );
   nameLight( directedLight, "SVDirectedLight", s_dlightCount++ );
 
-  const ParameterGroupDataSharedPtr & pgd = directedLight->getLightEffect()->findParameterGroupData( std::string( "standardDirectedLightParameters" ) );
+  const ParameterGroupDataSharedPtr & pgd = directedLight->getLightPipeline()->findParameterGroupData( std::string( "standardDirectedLightParameters" ) );
   DP_ASSERT( pgd );
   moveDirectedLightToCamera( pgd, m_viewState->getCamera().staticCast<PerspectiveCamera>() );
   GroupSharedPtr group = makeRootGroup( m_viewState->getScene() );
@@ -782,7 +783,7 @@ void ViewerRendererWidget::addPointLight()
   LightSourceSharedPtr pointLight = createStandardPointLight( Vec3f( 0.0f, 0.0f, 0.0f ), Vec3f( 1.0f, 1.0f, 1.0f ) );
   nameLight( pointLight, "SVPointLight", s_plightCount++ );
 
-  const ParameterGroupDataSharedPtr & pgd = pointLight->getLightEffect()->findParameterGroupData( std::string( "standardPointLightParameters" ) );
+  const ParameterGroupDataSharedPtr & pgd = pointLight->getLightPipeline()->findParameterGroupData( std::string( "standardPointLightParameters" ) );
   DP_ASSERT( pgd );
   movePointLightToCamera( pgd, m_viewState->getCamera().staticCast<PerspectiveCamera>() );
   GroupSharedPtr group = makeRootGroup( m_viewState->getScene() );
@@ -796,7 +797,7 @@ void ViewerRendererWidget::addSpotLight()
   LightSourceSharedPtr spotLight = createStandardSpotLight( Vec3f( 0.0f, 0.0f, 0.0f ), Vec3f( 0.0f, 0.0f, -1.0f ), Vec3f( 1.0f, 1.0f, 1.0f ) );
   nameLight( spotLight, "SVSpotLight", s_slightCount++ );
 
-  const ParameterGroupDataSharedPtr & pgd = spotLight->getLightEffect()->findParameterGroupData( std::string( "standardSpotLightParameters" ) );
+  const ParameterGroupDataSharedPtr & pgd = spotLight->getLightPipeline()->findParameterGroupData( std::string( "standardSpotLightParameters" ) );
   DP_ASSERT( pgd );
   moveSpotLightToCamera( pgd, m_viewState->getCamera().staticCast<PerspectiveCamera>() );
   GroupSharedPtr group = makeRootGroup( m_viewState->getScene() );
@@ -860,11 +861,11 @@ void ViewerRendererWidget::moveSelectedObject()
   {
     case OC_LIGHT_SOURCE:
     {
-      EffectDataSharedPtr const& le = m_highlightedObject.staticCast<LightSource>()->getLightEffect();
-      const dp::fx::EffectSpecSharedPtr & es = le->getEffectSpec();
+      dp::sg::core::PipelineDataSharedPtr const& lp = m_highlightedObject.staticCast<LightSource>()->getLightPipeline();
+      const dp::fx::EffectSpecSharedPtr & es = lp->getEffectSpec();
       for ( dp::fx::EffectSpec::iterator it = es->beginParameterGroupSpecs() ; it != es->endParameterGroupSpecs() ; ++it )
       {
-        const dp::sg::core::ParameterGroupDataSharedPtr & parameterGroupData = le->getParameterGroupData( it );
+        const dp::sg::core::ParameterGroupDataSharedPtr & parameterGroupData = lp->getParameterGroupData( it );
         if ( parameterGroupData )
         {
           string name = (*it)->getName();

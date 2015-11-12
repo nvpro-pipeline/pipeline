@@ -30,7 +30,6 @@
 #include <dp/fx/ParameterGroupSpec.h>
 #include <dp/fx/ParameterGroupData.h>
 #include <dp/sg/core/Object.h>
-#include <dp/sg/core/EffectData.h>
 #include <dp/sg/core/Sampler.h>
 #include <dp/util/Observer.h>
 

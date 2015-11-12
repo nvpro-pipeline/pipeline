@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2014-2015
+// Copyright (c) 2014-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -28,7 +28,6 @@
 #include <GL/freeglut.h>
 
 #include <dp/sg/core/PerspectiveCamera.h>
-#include <dp/sg/core/EffectData.h>
 #include <dp/sg/core/TextureFile.h>
 
 #include <dp/sg/io/IO.h>

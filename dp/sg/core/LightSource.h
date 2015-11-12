@@ -30,7 +30,6 @@
 #include <dp/sg/core/Config.h> // commonly used stuff
 #include <dp/math/Trafo.h>
 #include <dp/util/HashGenerator.h>
-#include <dp/sg/core/EffectData.h>
 #include <dp/sg/core/Node.h>
 
 namespace dp
@@ -57,9 +56,9 @@ namespace dp
           DP_SG_CORE_API virtual ~LightSource();
 
         public:
-          const EffectDataSharedPtr & getLightEffect() const;
+          const PipelineDataSharedPtr & getLightPipeline() const;
 
-          DP_SG_CORE_API void setLightEffect( const EffectDataSharedPtr & effect );
+          DP_SG_CORE_API void setLightPipeline( const PipelineDataSharedPtr & pipelineData );
 
           /*! \brief Query if this LightSource is enabled.
            *  \return \c true, if this LightSource is enabled, otherwise \c false.
@@ -136,9 +135,9 @@ namespace dp
           DP_SG_CORE_API virtual void feedHashGenerator( dp::util::HashGenerator & hg ) const;
 
         private:
-          EffectDataSharedPtr     m_lightEffect;
-          bool                    m_shadowCasting;
-          bool                    m_enabled;
+          PipelineDataSharedPtr m_lightPipeline;
+          bool                  m_shadowCasting;
+          bool                  m_enabled;
       };
 
       /*! Generate a directed light with the direction \a direction, the ambient color \a ambientColor, the diffuse
@@ -195,9 +194,9 @@ namespace dp
         }
       }
 
-      inline const EffectDataSharedPtr & LightSource::getLightEffect() const
+      inline const PipelineDataSharedPtr & LightSource::getLightPipeline() const
       {
-        return( m_lightEffect );
+        return( m_lightPipeline );
       }
 
     } // namespace core

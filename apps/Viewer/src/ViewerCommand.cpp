@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2009-2010
+// Copyright (c) 2009-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -29,6 +29,7 @@
 
 #include <dp/sg/core/GeoNode.h>
 #include <dp/sg/core/ParameterGroupData.h>
+#include <dp/sg/core/PipelineData.h>
 
 using namespace dp::sg::core;
 
@@ -39,18 +40,18 @@ ViewerCommand::ViewerCommand( unsigned int updateFlags, bool parameterCommand, i
 {
 }
 
-ViewerCommand::~ViewerCommand() 
+ViewerCommand::~ViewerCommand()
 {
 }
 
-int ViewerCommand::id() const 
-{ 
-  return (m_id >= -1) ? m_id : -m_id; 
+int ViewerCommand::id() const
+{
+  return (m_id >= -1) ? m_id : -m_id;
 }
 
-bool ViewerCommand::isParameterCommand() const 
-{ 
-  return m_parameterCommand; 
+bool ViewerCommand::isParameterCommand() const
+{
+  return m_parameterCommand;
 }
 
 void ViewerCommand::undo()
@@ -72,7 +73,7 @@ void ViewerCommand::redo()
 void ViewerCommand::update()
 {
   if( m_updateFlags & UPDATE_MATERIAL )
-  { 
+  {
     GetApp()->emitMaterialChanged();
   }
 
@@ -82,17 +83,17 @@ void ViewerCommand::update()
   }
 }
 
-CommandReplaceEffect::CommandReplaceEffect( const dp::sg::core::GeoNodeSharedPtr & geoNode, const dp::sg::core::EffectDataSharedPtr & newEffect )
+CommandReplacePipeline::CommandReplacePipeline( const dp::sg::core::GeoNodeSharedPtr & geoNode, const dp::sg::core::PipelineDataSharedPtr & newPipeline )
   : ViewerCommand( ViewerCommand::UPDATE_ITEMMODELS | ViewerCommand::UPDATE_MATERIAL )
   , m_geoNode( geoNode )
-  , m_newEffect( newEffect )
+  , m_newPipeline( newPipeline )
 {
-  m_oldEffect = m_geoNode->getMaterialEffect();
+  m_oldPipeline = m_geoNode->getMaterialPipeline();
 
   // special handling for enum "scatter_mode": set transparent flag in EffectData
   // when the EffectSpec says, it's transparent, it might in fact be opaque, if there is a parameter "scatter_mode" with value "scatter_reflect".
   {
-    const dp::fx::EffectSpecSharedPtr & es = m_newEffect->getEffectSpec();
+    const dp::fx::EffectSpecSharedPtr & es = m_newPipeline->getEffectSpec();
 
     if ( es->getTransparent() )
     {
@@ -108,9 +109,9 @@ CommandReplaceEffect::CommandReplaceEffect( const dp::sg::core::GeoNodeSharedPtr
                     && ( pgsit->first.getEnumSpec()->getValueName( 1 ) == "scatter_transmit" )
                     && ( pgsit->first.getEnumSpec()->getValueName( 2 ) == "scatter_reflect_transmit" ) );
             found = true;
-            if ( 0 == m_newEffect->getParameterGroupData( esit )->getParameter<int>( pgsit ) )   // is it opaque ?
+            if ( 0 == m_newPipeline->getParameterGroupData( esit )->getParameter<int>( pgsit ) )   // is it opaque ?
             {
-              m_newEffect->setTransparent( false );
+              m_newPipeline->setTransparent( false );
               break;
             }
           }
@@ -119,26 +120,26 @@ CommandReplaceEffect::CommandReplaceEffect( const dp::sg::core::GeoNodeSharedPtr
     }
   }
 
-  setText( "Replace " + QString( m_oldEffect ? m_oldEffect->getName().c_str() : "NULL" )
-         + " with "   + QString( m_newEffect->getName().c_str() ) );
+  setText( "Replace " + QString( m_oldPipeline ? m_oldPipeline->getName().c_str() : "NULL" )
+         + " with "   + QString( m_newPipeline->getName().c_str() ) );
 }
 
-CommandReplaceEffect::~CommandReplaceEffect()
+CommandReplacePipeline::~CommandReplacePipeline()
 {
   // nothing for now
 }
 
-bool CommandReplaceEffect::doUndo()
+bool CommandReplacePipeline::doUndo()
 {
-  m_geoNode->setMaterialEffect( m_oldEffect );
+  m_geoNode->setMaterialPipeline( m_oldPipeline );
 
   GetApp()->emitSceneTreeChanged();
   return true;
 }
 
-bool CommandReplaceEffect::doRedo()
+bool CommandReplacePipeline::doRedo()
 {
-  m_geoNode->setMaterialEffect( m_newEffect );
+  m_geoNode->setMaterialPipeline( m_newPipeline );
 
   GetApp()->emitSceneTreeChanged();
   return true;

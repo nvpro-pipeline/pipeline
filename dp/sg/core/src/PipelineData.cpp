@@ -23,8 +23,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
-#include <dp/sg/core/EffectData.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/core/TextureFile.h>
 #include <dp/fx/EffectLibrary.h>
 
@@ -89,13 +88,13 @@ namespace
   class EffectDataLocal : public dp::fx::EffectData
   {
     public:
-      static EffectDataLocalSharedPtr create( dp::sg::core::EffectData const* effectData )
+      static EffectDataLocalSharedPtr create( dp::sg::core::PipelineData const* effectData )
       {
         return( std::shared_ptr<EffectDataLocal>( new EffectDataLocal( effectData ) ) );
       }
 
     protected:
-      EffectDataLocal( const dp::sg::core::EffectData * effectData )
+      EffectDataLocal( const dp::sg::core::PipelineData * effectData )
         : dp::fx::EffectData( effectData->getEffectSpec(), effectData->getName() )
       {
         int i = 0;
@@ -116,43 +115,43 @@ namespace dp
     namespace core
     {
 
-      DEFINE_STATIC_PROPERTY( EffectData, Transparent);
-      BEGIN_REFLECTION_INFO ( EffectData )
-        DERIVE_STATIC_PROPERTIES( EffectData, Object );
-        INIT_STATIC_PROPERTY_RW( EffectData, Transparent, bool, SEMANTIC_VALUE, value, value );
+      DEFINE_STATIC_PROPERTY( PipelineData, Transparent);
+      BEGIN_REFLECTION_INFO ( PipelineData )
+        DERIVE_STATIC_PROPERTIES( PipelineData, Object );
+        INIT_STATIC_PROPERTY_RW( PipelineData, Transparent, bool, SEMANTIC_VALUE, value, value );
       END_REFLECTION_INFO
 
-      EffectDataSharedPtr EffectData::create( const EffectSpecSharedPtr & effectSpec )
+      PipelineDataSharedPtr PipelineData::create( const EffectSpecSharedPtr & effectSpec )
       {
-        return( std::shared_ptr<EffectData>( new EffectData( effectSpec ) ) );
+        return( std::shared_ptr<PipelineData>( new PipelineData( effectSpec ) ) );
       }
 
-      EffectDataSharedPtr EffectData::create( const dp::fx::EffectDataSharedPtr& effectData )
+      PipelineDataSharedPtr PipelineData::create( const dp::fx::EffectDataSharedPtr& effectData )
       {
-        return( std::shared_ptr<EffectData>( effectData ? new EffectData( effectData ) : nullptr ) );
+        return( std::shared_ptr<PipelineData>( effectData ? new PipelineData( effectData ) : nullptr ) );
       }
 
-      HandledObjectSharedPtr EffectData::clone() const
+      HandledObjectSharedPtr PipelineData::clone() const
       {
-        return( std::shared_ptr<EffectData>( new EffectData( *this ) ) );
+        return( std::shared_ptr<PipelineData>( new PipelineData( *this ) ) );
       }
 
-      EffectData::EffectData( const EffectSpecSharedPtr& effectSpec )
+      PipelineData::PipelineData( const EffectSpecSharedPtr& effectSpec )
         : m_effectSpec( effectSpec )
         , m_transparent( effectSpec->getTransparent() )
       {
         DP_ASSERT( m_effectSpec );
 
-        m_objectCode = OC_EFFECT_DATA;
+        m_objectCode = OC_PIPELINE_DATA;
         m_parameterGroupData.reset( new ParameterGroupDataSharedPtr[effectSpec->getNumberOfParameterGroupSpecs()] );
       }
 
-      EffectData::EffectData( const dp::fx::EffectDataSharedPtr& effectData )
+      PipelineData::PipelineData( const dp::fx::EffectDataSharedPtr& effectData )
         : m_effectSpec( effectData->getEffectSpec() )
         , m_transparent( effectData->getTransparent() )
       {
         DP_ASSERT( m_effectSpec );
-        m_objectCode = OC_EFFECT_DATA;
+        m_objectCode = OC_PIPELINE_DATA;
 
         setName( effectData->getName() );
         m_parameterGroupData.reset( new ParameterGroupDataSharedPtr[m_effectSpec->getNumberOfParameterGroupSpecs()] );
@@ -165,13 +164,13 @@ namespace dp
         }
       }
 
-      EffectData::EffectData( const EffectData &rhs )
+      PipelineData::PipelineData( const PipelineData &rhs )
         : Object( rhs )
         , m_effectSpec( rhs.m_effectSpec )
         , m_parameterGroupData( new ParameterGroupDataSharedPtr[rhs.m_effectSpec->getNumberOfParameterGroupSpecs()] )
         , m_transparent( rhs.m_transparent )
       {
-        m_objectCode = OC_EFFECT_DATA;
+        m_objectCode = OC_PIPELINE_DATA;
         unsigned int nopgs = rhs.m_effectSpec->getNumberOfParameterGroupSpecs();
         for ( unsigned int i=0 ; i<nopgs ; i++ )
         {
@@ -187,12 +186,12 @@ namespace dp
         }
       }
 
-      EffectData::~EffectData()
+      PipelineData::~PipelineData()
       {
         clearParameterGroupData();
       }
 
-      void EffectData::setParameterGroupData( EffectSpec::iterator const& it, const ParameterGroupDataSharedPtr & pgd )
+      void PipelineData::setParameterGroupData( EffectSpec::iterator const& it, const ParameterGroupDataSharedPtr & pgd )
       {
         DP_ASSERT( it != m_effectSpec->endParameterGroupSpecs() );
         DP_ASSERT( !pgd || ( *it == pgd->getParameterGroupSpec() ) );
@@ -211,7 +210,7 @@ namespace dp
         }
       }
 
-      bool EffectData::setParameterGroupData( const ParameterGroupDataSharedPtr & pgd )
+      bool PipelineData::setParameterGroupData( const ParameterGroupDataSharedPtr & pgd )
       {
         const ParameterGroupSpecSharedPtr & pgs = pgd->getParameterGroupSpec();
         EffectSpec::iterator it = m_effectSpec->findParameterGroupSpec( pgs );
@@ -223,7 +222,7 @@ namespace dp
         return( false );
       }
 
-      unsigned int EffectData::getNumberOfParameterGroupData() const
+      unsigned int PipelineData::getNumberOfParameterGroupData() const
       {
         unsigned int count = 0;
         unsigned int n = m_effectSpec->getNumberOfParameterGroupSpecs();
@@ -237,7 +236,7 @@ namespace dp
         return( count );
       }
 
-      const ParameterGroupDataSharedPtr & EffectData::findParameterGroupData( const ParameterGroupSpecSharedPtr & spec ) const
+      const ParameterGroupDataSharedPtr & PipelineData::findParameterGroupData( const ParameterGroupSpecSharedPtr & spec ) const
       {
         EffectSpec::iterator it = m_effectSpec->findParameterGroupSpec( spec );
         if ( it != m_effectSpec->endParameterGroupSpecs() )
@@ -247,7 +246,7 @@ namespace dp
         return( ParameterGroupDataSharedPtr::null );
       }
 
-      const ParameterGroupDataSharedPtr & EffectData::findParameterGroupData( const std::string & name ) const
+      const ParameterGroupDataSharedPtr & PipelineData::findParameterGroupData( const std::string & name ) const
       {
         EffectSpec::iterator it = m_effectSpec->findParameterGroupSpec( name );
         if ( it != m_effectSpec->endParameterGroupSpecs() )
@@ -257,7 +256,7 @@ namespace dp
         return( ParameterGroupDataSharedPtr::null );
       }
 
-      EffectData & EffectData::operator=( const EffectData & rhs )
+      PipelineData & PipelineData::operator=( const PipelineData & rhs )
       {
         if ( this != &rhs )
         {
@@ -278,17 +277,17 @@ namespace dp
         return( *this );
       }
 
-      bool EffectData::isEquivalent( ObjectSharedPtr const& object, bool ignoreNames, bool deepCompare ) const
+      bool PipelineData::isEquivalent( ObjectSharedPtr const& object, bool ignoreNames, bool deepCompare ) const
       {
         if ( object == this )
         {
           return( true );
         }
 
-        bool equi = object.isPtrTo<EffectData>() && Object::isEquivalent( object, ignoreNames, deepCompare );
+        bool equi = object.isPtrTo<PipelineData>() && Object::isEquivalent( object, ignoreNames, deepCompare );
         if ( equi )
         {
-          EffectDataSharedPtr const& ed = object.staticCast<EffectData>();
+          PipelineDataSharedPtr const& ed = object.staticCast<PipelineData>();
 
           equi = ( m_effectSpec->getNumberOfParameterGroupSpecs() == ed->m_effectSpec->getNumberOfParameterGroupSpecs() );
           if ( equi )
@@ -317,7 +316,7 @@ namespace dp
         return( equi );
       }
 
-      void EffectData::feedHashGenerator( util::HashGenerator & hg ) const
+      void PipelineData::feedHashGenerator( util::HashGenerator & hg ) const
       {
         Object::feedHashGenerator( hg );
         hg.update( m_effectSpec );
@@ -331,7 +330,7 @@ namespace dp
         }
       }
 
-      void EffectData::clearParameterGroupData()
+      void PipelineData::clearParameterGroupData()
       {
         unsigned int nopgs = m_effectSpec->getNumberOfParameterGroupSpecs();
         for ( unsigned int i=0 ; i<nopgs ; i++ )
@@ -345,7 +344,7 @@ namespace dp
         notify( Event(this) );
       }
 
-      void EffectData::setTransparent( bool transparent )
+      void PipelineData::setTransparent( bool transparent )
       {
         if ( m_transparent != transparent )
         {
@@ -354,12 +353,12 @@ namespace dp
         }
       }
 
-      bool EffectData::getTransparent() const
+      bool PipelineData::getTransparent() const
       {
         return( m_transparent );
       }
 
-      bool EffectData::save( const std::string & filename ) const
+      bool PipelineData::save( const std::string & filename ) const
       {
         EffectDataLocalSharedPtr edl = EffectDataLocal::create( this );
         return( EffectLibrary::instance()->save( edl.inplaceCast<dp::fx::EffectData>(), filename ) );
@@ -400,20 +399,20 @@ namespace dp
         return( es );
       }
 
-      EffectDataSharedPtr createStandardGeometryData()
+      PipelineDataSharedPtr createStandardGeometryData()
       {
         const EffectSpecSharedPtr & standardSpec = getStandardGeometrySpec();
         DP_ASSERT( standardSpec );
         EffectSpec::iterator groupSpecIt = standardSpec->findParameterGroupSpec( std::string( "standardGeometryParameters" ) );
         DP_ASSERT( groupSpecIt != standardSpec->endParameterGroupSpecs() );
 
-        EffectDataSharedPtr effectData = EffectData::create( standardSpec );
+        PipelineDataSharedPtr effectData = PipelineData::create( standardSpec );
         effectData->setParameterGroupData( groupSpecIt, ParameterGroupData::create( *groupSpecIt ) );
 
         return( effectData );
       }
 
-      EffectDataSharedPtr createStandardDirectedLightData( const Vec3f & direction, const Vec3f & ambient
+      PipelineDataSharedPtr createStandardDirectedLightData( const Vec3f & direction, const Vec3f & ambient
                                                          , const Vec3f & diffuse, const Vec3f & specular )
       {
         const EffectSpecSharedPtr & standardSpec = getStandardDirectedLightSpec();
@@ -427,13 +426,13 @@ namespace dp
         DP_VERIFY( groupData->setParameter( "specular", specular ) );
         DP_VERIFY( groupData->setParameter( "direction", direction ) );
 
-        EffectDataSharedPtr effectData = EffectData::create( standardSpec );
+        PipelineDataSharedPtr effectData = PipelineData::create( standardSpec );
         effectData->setParameterGroupData( groupSpecIt, groupData );
 
         return( effectData );
       }
 
-      EffectDataSharedPtr createStandardPointLightData( const Vec3f & position, const Vec3f & ambient
+      PipelineDataSharedPtr createStandardPointLightData( const Vec3f & position, const Vec3f & ambient
                                                       , const Vec3f & diffuse, const Vec3f & specular
                                                       , const std::array<float,3> & attenuations )
       {
@@ -449,13 +448,13 @@ namespace dp
         DP_VERIFY( groupData->setParameter( "position", position ) );
         DP_VERIFY(( groupData->setParameterArray<float,3>( "attenuations", attenuations ) ));
 
-        EffectDataSharedPtr effectData = EffectData::create( standardSpec );
+        PipelineDataSharedPtr effectData = PipelineData::create( standardSpec );
         effectData->setParameterGroupData( groupSpecIt, groupData );
 
         return( effectData );
       }
 
-      EffectDataSharedPtr createStandardSpotLightData( const Vec3f & position, const Vec3f & direction
+      PipelineDataSharedPtr createStandardSpotLightData( const Vec3f & position, const Vec3f & direction
                                                      , const Vec3f & ambient, const Vec3f & diffuse
                                                      , const Vec3f & specular
                                                      , const std::array<float,3> & attenuations
@@ -476,13 +475,13 @@ namespace dp
         DP_VERIFY( groupData->setParameter( "exponent", exponent ) );
         DP_VERIFY( groupData->setParameter( "cutoff", cutoff ) );
 
-        EffectDataSharedPtr effectData = EffectData::create( standardSpec );
+        PipelineDataSharedPtr effectData = PipelineData::create( standardSpec );
         effectData->setParameterGroupData( groupSpecIt, groupData );
 
         return( effectData );
       }
 
-      EffectDataSharedPtr createStandardMaterialData( const Vec3f & ambientColor, const Vec3f & diffuseColor
+      PipelineDataSharedPtr createStandardMaterialData( const Vec3f & ambientColor, const Vec3f & diffuseColor
                                                     , const Vec3f & specularColor, const float specularExponent
                                                     , const Vec3f & emissiveColor, const float opacity
                                                     , const float reflectivity, const float indexOfRefraction )
@@ -513,7 +512,7 @@ namespace dp
 
         DP_VERIFY( materialData->setParameter( "unlitColor", Vec4f( diffuseColor, opacity ) ) );
 
-        EffectDataSharedPtr effectData = EffectData::create( standardSpec );
+        PipelineDataSharedPtr effectData = PipelineData::create( standardSpec );
         {
           effectData->setParameterGroupData( materialSpecIt, materialData );
           effectData->setTransparent( opacity < 1.0f );

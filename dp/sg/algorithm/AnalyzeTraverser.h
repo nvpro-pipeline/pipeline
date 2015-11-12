@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2007
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -317,8 +317,6 @@ namespace dp
            *  \sa dp::sg::core::Billboard, EmptyResult, EquivalenceResult */
           DP_SG_ALGORITHM_API virtual void handleBillboard( const dp::sg::core::Billboard * p );
 
-          DP_SG_ALGORITHM_API virtual void handleEffectData( const dp::sg::core::EffectData * p );
-
           /*! \brief Analyze a dp::sg::core::GeoNode.
            *  \param p A pointer to the read-locked dp::sg::core::GeoNode to analyze.
            *  \remarks A dp::sg::core::GeoNode is tested for emptiness (no geometries) and for equivalence
@@ -347,6 +345,8 @@ namespace dp
           DP_SG_ALGORITHM_API virtual void handleLOD( const dp::sg::core::LOD * p );
 
           DP_SG_ALGORITHM_API virtual void handleParameterGroupData( const dp::sg::core::ParameterGroupData * p );
+
+          DP_SG_ALGORITHM_API virtual void handlePipelineData( const dp::sg::core::PipelineData * p );
 
           DP_SG_ALGORITHM_API virtual void handleSampler( const dp::sg::core::Sampler * p );
 
@@ -451,5 +451,5 @@ namespace dp
   } // namespace sp
 } // namespace dp
 
-  //! Output an analysis summary. 
+  //! Output an analysis summary.
 DP_SG_ALGORITHM_API std::ostream& operator<<( std::ostream& os, const dp::sg::algorithm::AnalyzeTraverser& obj );

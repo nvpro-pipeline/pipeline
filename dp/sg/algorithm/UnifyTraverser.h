@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2011
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -64,19 +64,19 @@ namespace dp
         public:
           enum
           {
-            UT_EFFECT_DATA            = BIT0,   //!< UnifyTarget dp::sg::core::EffectData: unify identical EffectData objects into one.
-            UT_GEONODE                = BIT1,   //!< UnifyTarget dp::sg::core::GeoNode: unify identical GeoNode objects into one.
-            UT_GROUP                  = BIT2,   //!< UnifyTarget dp::sg::core::Group: unify identical Group objects into one.
-            UT_INDEX_SET              = BIT3,   //!< UnifyTarget dp::sg::core::IndexSet: unify identical IndexSet objects into one.
-            UT_LOD                    = BIT4,   //!< UnifyTarget dp::sg::core::LOD: unify identical LOD objects into one.
-            UT_PARAMETER_GROUP_DATA   = BIT5,   //!< UnifyTarget dp::sg::core::ParameterGroupData: unify identical ParameterGroupData objects into one.
+            UT_GEONODE                = BIT0,   //!< UnifyTarget dp::sg::core::GeoNode: unify identical GeoNode objects into one.
+            UT_GROUP                  = BIT1,   //!< UnifyTarget dp::sg::core::Group: unify identical Group objects into one.
+            UT_INDEX_SET              = BIT2,   //!< UnifyTarget dp::sg::core::IndexSet: unify identical IndexSet objects into one.
+            UT_LOD                    = BIT3,   //!< UnifyTarget dp::sg::core::LOD: unify identical LOD objects into one.
+            UT_PARAMETER_GROUP_DATA   = BIT4,   //!< UnifyTarget dp::sg::core::ParameterGroupData: unify identical ParameterGroupData objects into one.
+            UT_PIPELINE_DATA          = BIT5,   //!< UnifyTarget dp::sg::core::PipelineData: unify identical EffectData objects into one.
             UT_PRIMITIVE              = BIT6,   //!< UnifyTarget dp::sg::core::Primitive: unify identical Primitive objects into one.
             UT_SAMPLER                = BIT7,   //!< UnifyTarget dp::sg::core::Sampler: unify identical Sampler objects into one.
             UT_TEXTURE                = BIT8,  //!< UnifyTarget dp::sg::core::Texture: unify identical Texture objects into one.
             UT_TRAFO_ANIMATION        = BIT9,  //!< UnifyTarget dp::sg::core::Animation<dp::math::Trafo>: unify identical Animations on Trafo into one.
             UT_VERTEX_ATTRIBUTE_SET   = BIT10,  //!< UnifyTarget dp::sg::core::VertexAttributeSet: unify identical VertexAttributeSet objects into one.
             UT_VERTICES               = BIT11,  //!< UnifyTarget Vertices: unify identical Vertices (with an epsilon) into one.
-            UT_ALL_TARGETS_MASK       = ( UT_EFFECT_DATA | UT_GEONODE | UT_GROUP | UT_INDEX_SET | UT_LOD | UT_PARAMETER_GROUP_DATA | UT_PRIMITIVE
+            UT_ALL_TARGETS_MASK       = ( UT_GEONODE | UT_GROUP | UT_INDEX_SET | UT_LOD | UT_PARAMETER_GROUP_DATA | UT_PIPELINE_DATA | UT_PRIMITIVE
                                         | UT_SAMPLER | UT_TEXTURE | UT_TRAFO_ANIMATION | UT_VERTEX_ATTRIBUTE_SET | UT_VERTICES )
           } UnifyTarget;                        //!< Enum to specify the object types to unify.
 
@@ -165,20 +165,20 @@ namespace dp
 
           DP_SG_ALGORITHM_API virtual void handleLightSource( dp::sg::core::LightSource * p );
 
-          DP_SG_ALGORITHM_API virtual void handleEffectData( dp::sg::core::EffectData * p );
-
           DP_SG_ALGORITHM_API virtual void handleParameterGroupData( dp::sg::core::ParameterGroupData * p );
+
+          DP_SG_ALGORITHM_API virtual void handlePipelineData( dp::sg::core::PipelineData * p );
 
           DP_SG_ALGORITHM_API virtual void handleSampler( dp::sg::core::Sampler * p );
 
         private:
           void checkPrimitive( std::multimap<dp::util::HashKey,dp::sg::core::PrimitiveSharedPtr> & v, dp::sg::core::Primitive * p );
           void unifyChildren( dp::sg::core::Group *p );
-          const dp::sg::core::EffectDataSharedPtr & unifyEffectData( const dp::sg::core::EffectDataSharedPtr & effectData );
           void unifyGeoNodes( dp::sg::core::Group *p );
           void unifyGroups( dp::sg::core::Group *p );
           void unifyIndexSets( dp::sg::core::Primitive *p );
           void unifyLODs( dp::sg::core::Group *p );
+          const dp::sg::core::PipelineDataSharedPtr & unifyPipelineData( const dp::sg::core::PipelineDataSharedPtr & pipelineData );
           void unifyStateSet( dp::sg::core::GeoNode *p );
           void unifyVertexAttributeSet( dp::sg::core::Primitive *p );
 
@@ -200,7 +200,6 @@ namespace dp
           typedef std::map<dp::sg::core::VertexAttributeSetSharedPtr,VASReplacement> VASReplacementMap;
 
         private:
-          std::multimap<dp::util::HashKey,dp::sg::core::EffectDataSharedPtr>          m_effectData;
           float                                                                       m_epsilon;
           std::multimap<dp::util::HashKey,dp::sg::core::GeoNodeSharedPtr>             m_geoNodes;
           std::multimap<dp::util::HashKey,dp::sg::core::GroupSharedPtr>               m_groups;
@@ -208,6 +207,7 @@ namespace dp
           std::vector<dp::sg::core::LODSharedPtr>                                     m_LODs;
           std::set<const void *>                                                      m_objects;      //!< A set of pointers to hold all objects already encountered.
           std::multimap<dp::util::HashKey,dp::sg::core::ParameterGroupDataSharedPtr>  m_parameterGroupData;
+          std::multimap<dp::util::HashKey,dp::sg::core::PipelineDataSharedPtr>        m_pipelineData;
           std::map<dp::sg::core::PrimitiveType,std::multimap<dp::util::HashKey,dp::sg::core::PrimitiveSharedPtr> >  m_primitives;
           dp::sg::core::PrimitiveSharedPtr                                            m_replacementPrimitive;
           std::multimap<dp::util::HashKey,dp::sg::core::SamplerSharedPtr>             m_samplers;
@@ -249,5 +249,3 @@ namespace dp
     } // namespace algorithm
   } // namespace sg
 } // namespace dp
-
-

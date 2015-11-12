@@ -67,7 +67,7 @@ namespace dp
             /*********************************/
             /* Global SceniX Specific values */
             /*********************************/
-            ShaderManagerInstanceSharedPtr registerGeometryInstance( const dp::sg::core::EffectDataSharedPtr &effectData
+            ShaderManagerInstanceSharedPtr registerGeometryInstance( const dp::sg::core::PipelineDataSharedPtr &pipelineData
                                                                    , dp::sg::xbar::ObjectTreeIndex objectTreeIndex
                                                                    , dp::rix::core::GeometryInstanceSharedHandle &geometryInstance
                                                                    , RenderPassType rpt );

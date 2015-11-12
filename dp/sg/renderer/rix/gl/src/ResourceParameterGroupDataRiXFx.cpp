@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -25,7 +25,6 @@
 
 
 #include <dp/sg/renderer/rix/gl/inc/ResourceParameterGroupDataRiXFx.h>
-#include <dp/sg/core/EffectData.h>
 
 namespace dp
 {
@@ -87,7 +86,7 @@ namespace dp
               for (dp::fx::ParameterGroupSpec::iterator itps = groupSpec->beginParameterSpecs(); itps != itEnd; ++itps)
               {
                 const dp::fx::ParameterSpec& spec = (*itps).first;
-                if ( spec.getType() & dp::fx::PT_SAMPLER_TYPE_MASK ) 
+                if ( spec.getType() & dp::fx::PT_SAMPLER_TYPE_MASK )
                 {
                   const dp::sg::core::SamplerSharedPtr& sampler = m_parameterGroupData->getParameter<dp::sg::core::SamplerSharedPtr>( itps );
                   DP_ASSERT( sampler ); // There must be a sampler with texture here or the renderer might fail validation with uninitialized sampler variables.
@@ -98,7 +97,7 @@ namespace dp
                 }
                 else
                 {
-                  // DAR HACK How to handle PT_BUFFER? 
+                  // DAR HACK How to handle PT_BUFFER?
                   // DESIGN! This is the place where the data expansion would need to happen.
                   m_rixFx->groupDataSetValue( m_groupData, itps, dp::rix::core::ContainerDataRaw(0, m_parameterGroupData->getParameter(itps), spec.getSizeInByte()) );
                 }
@@ -115,7 +114,7 @@ namespace dp
             const dp::sg::core::ParameterGroupData::Event& parameterEvent = static_cast<const dp::sg::core::ParameterGroupData::Event&>(event);
             const dp::fx::ParameterSpec& spec = parameterEvent.getParameter()->first;
             // support quick update for scalar types.
-            if ( spec.getType() & dp::fx::PT_SCALAR_TYPE_MASK ) 
+            if ( spec.getType() & dp::fx::PT_SCALAR_TYPE_MASK )
             {
               m_rixFx->groupDataSetValue( m_groupData, parameterEvent.getParameter()
                                         , dp::rix::core::ContainerDataRaw(0, m_parameterGroupData->getParameter(parameterEvent.getParameter()), spec.getSizeInByte()) );

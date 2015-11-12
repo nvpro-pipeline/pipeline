@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2015
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -32,13 +32,13 @@
 #include <dp/util/PlugInCallback.h>
 #include <dp/sg/core/Billboard.h>
 #include <dp/sg/core/ClipPlane.h>
-#include <dp/sg/core/EffectData.h>
 #include <dp/sg/core/GeoNode.h>
 #include <dp/sg/core/LightSource.h>
 #include <dp/sg/core/LOD.h>
 #include <dp/sg/core/MatrixCamera.h>
 #include <dp/sg/core/ParallelCamera.h>
 #include <dp/sg/core/PerspectiveCamera.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/core/Primitive.h>
 #include <dp/sg/core/Sampler.h>
 #include <dp/sg/core/Scene.h>
@@ -231,16 +231,16 @@ uint_t DPBFSaveTraverser::alloc(void *& objPtr, unsigned int numBytes)
   DP_ASSERT(!calculatingStorageRequirements());
 
   // this function requires a valid file mapping
-  DP_ASSERT( m_fm && m_fm->isValid() ); 
-  
+  DP_ASSERT( m_fm && m_fm->isValid() );
+
   // wrong calculated storage requirements if this fires!
   // this happens if pseudoAlloc calls do not match their real alloc counterparts.
-  // this might be critical if we are near a page boundary. note that the file mapping 
-  // always enlarges the mapping size to a multiple of the systems page size. 
+  // this might be critical if we are near a page boundary. note that the file mapping
+  // always enlarges the mapping size to a multiple of the systems page size.
   DP_ASSERT(m_fileOffset+numBytes<=m_preCalculatedFileSize);
-  
+
   // object size cannot be zero, see Offset_AutoPtr
-  DP_ASSERT(numBytes);  
+  DP_ASSERT(numBytes);
 
   // always allocate a multiple of 4 bytes to keep offsets 4-byte aligned
   numBytes = (numBytes+3)&~3;
@@ -259,12 +259,12 @@ uint_t DPBFSaveTraverser::alloc(void *& objPtr, unsigned int numBytes)
   // advance the file offset by numBytes for next alloc
   unsigned int offset = m_fileOffset;
   m_fileOffset += numBytes;
-  
+
   // initialize object to zero
   memset(objPtr, 0, numBytes);
 #if !defined (NDEBUG) && defined(_WIN64)
   // must not exceed 32 bits for offsets!
-  DP_ASSERT(!(offset & mask64<-1,0>::mask)); 
+  DP_ASSERT(!(offset & mask64<-1,0>::mask));
 #endif
   return offset;
 }
@@ -306,7 +306,7 @@ void DPBFSaveTraverser::doApply( const NodeSharedPtr & root )
     // Therefore, allocate the header before traversing the tree!
     alloc( (void*&)nbfHdr, sizeof(NBFHeader) );
     DP_ASSERT(nbfHdr);
-  } 
+  }
   else
   {
     pseudoAlloc(sizeof(NBFHeader));
@@ -342,11 +342,11 @@ void DPBFSaveTraverser::doApply( const NodeSharedPtr & root )
     SYSTEMTIME sysTime;
     GetSystemTime(&sysTime);
 
-    nbfHdr->dayLastModified     = (ubyte_t)(sysTime.wDay & 0x00FF);    
-    nbfHdr->monthLastModified   = (ubyte_t)(sysTime.wMonth & 0x00FF);  
+    nbfHdr->dayLastModified     = (ubyte_t)(sysTime.wDay & 0x00FF);
+    nbfHdr->monthLastModified   = (ubyte_t)(sysTime.wMonth & 0x00FF);
     nbfHdr->yearLastModified[0] = (ubyte_t)((sysTime.wYear>>8) & 0x00FF);
     nbfHdr->yearLastModified[1] = (ubyte_t)(sysTime.wYear & 0x00FF);
-    nbfHdr->secondLastModified  = (ubyte_t)(sysTime.wSecond & 0x00FF); 
+    nbfHdr->secondLastModified  = (ubyte_t)(sysTime.wSecond & 0x00FF);
     nbfHdr->minuteLastModified  = (ubyte_t)(sysTime.wMinute & 0x00FF);
     nbfHdr->hourLastModified    = (ubyte_t)(sysTime.wHour & 0x00FF);
 #elif defined(LINUX)
@@ -354,13 +354,13 @@ void DPBFSaveTraverser::doApply( const NodeSharedPtr & root )
     struct tm brokenDownTime;
     memcpy(&brokenDownTime, localtime(&calenderTime), sizeof(brokenDownTime));
     // need to convert year: // tm.tm_year means 'years since 1900'
-    short tm_year = (short)((brokenDownTime.tm_year+1900) & 0x0000FFFF); 
+    short tm_year = (short)((brokenDownTime.tm_year+1900) & 0x0000FFFF);
 
-    nbfHdr->dayLastModified     = (ubyte_t)(brokenDownTime.tm_mday & 0x000000FF);    
+    nbfHdr->dayLastModified     = (ubyte_t)(brokenDownTime.tm_mday & 0x000000FF);
     nbfHdr->monthLastModified   = (ubyte_t)(brokenDownTime.tm_mon & 0x000000FF);
     nbfHdr->yearLastModified[0] = (ubyte_t)((tm_year>>8) & 0x00FF);
     nbfHdr->yearLastModified[1] = (ubyte_t)(tm_year & 0x00FF);
-    nbfHdr->secondLastModified  = (ubyte_t)(brokenDownTime.tm_sec & 0x000000FF); 
+    nbfHdr->secondLastModified  = (ubyte_t)(brokenDownTime.tm_sec & 0x000000FF);
     nbfHdr->minuteLastModified  = (ubyte_t)(brokenDownTime.tm_min & 0x000000FF);
     nbfHdr->hourLastModified    = (ubyte_t)(brokenDownTime.tm_hour & 0x000000FF);
 #endif
@@ -413,20 +413,20 @@ uint_t DPBFSaveTraverser::handleScene( SceneSharedPtr const& scene )
       }
     }
   }
-  else 
+  else
   {
     // allocate scene object and write its offset
-    Offset_AutoPtr<NBFScene> scenePtr(this, sceneOffs);        
+    Offset_AutoPtr<NBFScene> scenePtr(this, sceneOffs);
 
     // write the scene data
 
     assign(scenePtr->ambientColor, scene->getAmbientColor());
     assign(scenePtr->backColor, scene->getBackColor());
 
-    // ... texture image        
+    // ... texture image
     if ( scene->getBackImage() )
     {
-      Offset_AutoPtr<texImage_t> img(this, scenePtr->backImg);         
+      Offset_AutoPtr<texImage_t> img(this, scenePtr->backImg);
       TextureHostSharedPtr const& texImg = scene->getBackImage();
       string file(texImg->getFileName());
       writeTexImage( file, texImg, img );
@@ -434,11 +434,11 @@ uint_t DPBFSaveTraverser::handleScene( SceneSharedPtr const& scene )
 
     // scene cameras
     if ( scene->getNumberOfCameras() )
-    {       
+    {
       // allocate slot where to write camera offsets below
       scenePtr->numCameras = scene->getNumberOfCameras();
       Offset_AutoPtr<uint_t> camOffs(this, scenePtr->cameras, scenePtr->numCameras);
-       
+
       // now walk the cameras in scene
       unsigned int i = 0;
       for ( Scene::CameraIterator sci = scene->beginCameras() ; sci != scene->endCameras() ; ++sci, ++i )
@@ -447,7 +447,7 @@ uint_t DPBFSaveTraverser::handleScene( SceneSharedPtr const& scene )
         camOffs[i] = m_objectOffsetMap[*sci];
       }
     }
-    
+
     scenePtr->numObjectLinks = dp::checked_cast<uint_t>( m_links.size() );
     if ( m_links.size() )
     {
@@ -486,8 +486,8 @@ uint_t DPBFSaveTraverser::handleViewState( dp::sg::ui::ViewStateSharedPtr const&
       pseudoAlloc(sizeof(NBFViewState));
     }
     else
-    {      
-      Offset_AutoPtr<NBFViewState> viewStatePtr(this, vsOffs);       
+    {
+      Offset_AutoPtr<NBFViewState> viewStatePtr(this, vsOffs);
       // write view state specific data
       // ... camera
       DP_ASSERT( !viewState->getCamera() || m_objectOffsetMap.find(viewState->getCamera())!=m_objectOffsetMap.end() );
@@ -540,8 +540,8 @@ void DPBFSaveTraverser::handlePerspectiveCamera(const PerspectiveCamera *p)
     }
     else
     {
-      // allocate camera object and write offset of this camera object      
-      Offset_AutoPtr<NBFFrustumCamera> camPtr(this, m_objectOffsetMap[ph]);       
+      // allocate camera object and write offset of this camera object
+      Offset_AutoPtr<NBFFrustumCamera> camPtr(this, m_objectOffsetMap[ph]);
       writeFrustumCamera( p, camPtr, NBF_PERSPECTIVE_CAMERA );
     }
   }
@@ -557,13 +557,13 @@ void DPBFSaveTraverser::handleMatrixCamera(const MatrixCamera *p)
     if ( calculatingStorageRequirements() )
     {
       m_objectOffsetMap[ph] = pseudoAlloc(sizeof(NBFMatrixCamera));
-      pseudoAllocCamera(p); // a MatrixCamera is a Camera 
+      pseudoAllocCamera(p); // a MatrixCamera is a Camera
     }
     else
     {
-      // allocate camera object and write offset of this camera object      
-      Offset_AutoPtr<NBFMatrixCamera> camPtr(this, m_objectOffsetMap[ph]);       
-      writeCamera(p, camPtr, NBF_MATRIX_CAMERA); // a MatrixCamera is a Camera 
+      // allocate camera object and write offset of this camera object
+      Offset_AutoPtr<NBFMatrixCamera> camPtr(this, m_objectOffsetMap[ph]);
+      writeCamera(p, camPtr, NBF_MATRIX_CAMERA); // a MatrixCamera is a Camera
       assign( camPtr->projection, p->getProjection() );
       assign( camPtr->inverseProjection, p->getInverseProjection() );
     }
@@ -587,71 +587,12 @@ void DPBFSaveTraverser::handleBillboard(const Billboard *p)
     else
     {
       // allocate billboard object and write its offset
-      Offset_AutoPtr<NBFBillboard> billboardPtr(this, m_objectOffsetMap[ph]);      
+      Offset_AutoPtr<NBFBillboard> billboardPtr(this, m_objectOffsetMap[ph]);
       writeGroup(p, billboardPtr, NBF_BILLBOARD); // a Billboard is a Group
 
       // write transform data
       assign(billboardPtr->rotationAxis, p->getRotationAxis());
       billboardPtr->alignment = p->getAlignment();
-    }
-  }
-}
-
-void DPBFSaveTraverser::handleEffectData( const EffectData * p )
-{
-  ObjectSharedPtr ph = p->getSharedPtr<Object>();
-  if ( m_objectOffsetMap.find(ph) == m_objectOffsetMap.end() )
-  {
-    SharedTraverser::handleEffectData( p );         // walk the EffectData's parameter groups invoking the base implementation
-
-    const dp::fx::EffectSpecSharedPtr & es = p->getEffectSpec();
-    std::string effectFile = dp::util::makePathRelative( dp::fx::EffectLibrary::instance()->getEffectFile( es->getName() ), m_basePaths );
-
-    if ( calculatingStorageRequirements() )
-    {
-      m_objectOffsetMap[ph] = pseudoAlloc(sizeof(NBFEffectData));
-      pseudoAllocObject(p); // an EffectData is an Object
-      DP_ASSERT( ! es->getName().empty() );
-      pseudoAlloc(2*sizeof(str_t));
-      pseudoAlloc(dp::checked_cast<unsigned int>(effectFile.length()+1)*sizeof(char));
-      pseudoAlloc(dp::checked_cast<unsigned int>(es->getName().length()+1)*sizeof(char));
-      pseudoAlloc((es->getNumberOfParameterGroupSpecs())*sizeof(uint_t)); // ParameterGroupData offsets
-    }
-    else
-    {
-      Offset_AutoPtr<NBFEffectData> edPtr(this, m_objectOffsetMap[ph]);
-      writeObject(p, edPtr, NBF_EFFECT_DATA); // an EffectData is an Object
-
-      // allocate str_t object to hold the EffectSpec filename
-      DP_ASSERT( !effectFile.empty() );
-      edPtr->effectFileName.numChars = dp::checked_cast<uint_t>( effectFile.length() );
-      Offset_AutoPtr<char> fileChars( this, edPtr->effectFileName.chars, edPtr->effectFileName.numChars + 1 );
-      strncpy( fileChars, effectFile.c_str(), edPtr->effectFileName.numChars + 1 );
-
-      // allocate str_t object to hold the EffectSpec name 
-      DP_ASSERT( ! es->getName().empty() );
-      const string & name = es->getName();
-      edPtr->effectSpecName.numChars = dp::checked_cast<uint_t>( name.length() );
-      Offset_AutoPtr<char> chars( this, edPtr->effectSpecName.chars, edPtr->effectSpecName.numChars + 1 );
-      strncpy( chars, name.c_str(), edPtr->effectSpecName.numChars + 1 );
-
-      // allocate space to hold the offsets of all ParameterGroupData
-      Offset_AutoPtr<uint_t> pgds( this, edPtr->parameterGroupData, es->getNumberOfParameterGroupSpecs() );
-      unsigned int i = 0;
-      for ( dp::fx::EffectSpec::iterator it = es->beginParameterGroupSpecs() ; it != es->endParameterGroupSpecs() ; ++it )
-      {
-        const ParameterGroupDataSharedPtr & pgd = p->getParameterGroupData( it );
-        if ( pgd )
-        {
-          DP_ASSERT( m_objectOffsetMap.find( pgd ) != m_objectOffsetMap.end() );
-          pgds[i++] = m_objectOffsetMap[pgd];
-        }
-        else
-        {
-          pgds[i++] = 0;
-        }
-      }
-      edPtr->transparent = p->getTransparent();
     }
   }
 }
@@ -678,7 +619,7 @@ void DPBFSaveTraverser::handleParameterGroupData( const ParameterGroupData * p )
       Offset_AutoPtr<NBFParameterGroupData> pgdPtr(this, m_objectOffsetMap[ph]);
       writeObject(p, pgdPtr, NBF_PARAMETER_GROUP_DATA); // a ParameterGroupData is an Object
 
-      // allocate str_t object to hold the EffectSpec name 
+      // allocate str_t object to hold the EffectSpec name
       DP_ASSERT( ! pgs->getName().empty() );
       const string & name = pgs->getName();
       pgdPtr->parameterGroupSpecName.numChars = dp::checked_cast<uint_t>( name.length() );
@@ -710,6 +651,65 @@ void DPBFSaveTraverser::handleParameterGroupData( const ParameterGroupData * p )
           }
         }
       }
+    }
+  }
+}
+
+void DPBFSaveTraverser::handlePipelineData( const dp::sg::core::PipelineData * p )
+{
+  ObjectSharedPtr ph = p->getSharedPtr<Object>();
+  if ( m_objectOffsetMap.find(ph) == m_objectOffsetMap.end() )
+  {
+    SharedTraverser::handlePipelineData( p );         // walk the PipelineData's parameter groups invoking the base implementation
+
+    const dp::fx::EffectSpecSharedPtr & es = p->getEffectSpec();
+    std::string effectFile = dp::util::makePathRelative( dp::fx::EffectLibrary::instance()->getEffectFile( es->getName() ), m_basePaths );
+
+    if ( calculatingStorageRequirements() )
+    {
+      m_objectOffsetMap[ph] = pseudoAlloc(sizeof(NBFPipelineData));
+      pseudoAllocObject(p); // an EffectData is an Object
+      DP_ASSERT( ! es->getName().empty() );
+      pseudoAlloc(2*sizeof(str_t));
+      pseudoAlloc(dp::checked_cast<unsigned int>(effectFile.length()+1)*sizeof(char));
+      pseudoAlloc(dp::checked_cast<unsigned int>(es->getName().length()+1)*sizeof(char));
+      pseudoAlloc((es->getNumberOfParameterGroupSpecs())*sizeof(uint_t)); // ParameterGroupData offsets
+    }
+    else
+    {
+      Offset_AutoPtr<NBFPipelineData> pdPtr(this, m_objectOffsetMap[ph]);
+      writeObject(p, pdPtr, NBF_PIPELINE_DATA); // an EffectData is an Object
+
+      // allocate str_t object to hold the EffectSpec filename
+      DP_ASSERT( !effectFile.empty() );
+      pdPtr->effectFileName.numChars = dp::checked_cast<uint_t>( effectFile.length() );
+      Offset_AutoPtr<char> fileChars( this, pdPtr->effectFileName.chars, pdPtr->effectFileName.numChars + 1 );
+      strncpy( fileChars, effectFile.c_str(), pdPtr->effectFileName.numChars + 1 );
+
+      // allocate str_t object to hold the EffectSpec name
+      DP_ASSERT( ! es->getName().empty() );
+      const string & name = es->getName();
+      pdPtr->effectSpecName.numChars = dp::checked_cast<uint_t>( name.length() );
+      Offset_AutoPtr<char> chars( this, pdPtr->effectSpecName.chars, pdPtr->effectSpecName.numChars + 1 );
+      strncpy( chars, name.c_str(), pdPtr->effectSpecName.numChars + 1 );
+
+      // allocate space to hold the offsets of all ParameterGroupData
+      Offset_AutoPtr<uint_t> pgds( this, pdPtr->parameterGroupData, es->getNumberOfParameterGroupSpecs() );
+      unsigned int i = 0;
+      for ( dp::fx::EffectSpec::iterator it = es->beginParameterGroupSpecs() ; it != es->endParameterGroupSpecs() ; ++it )
+      {
+        const ParameterGroupDataSharedPtr & pgd = p->getParameterGroupData( it );
+        if ( pgd )
+        {
+          DP_ASSERT( m_objectOffsetMap.find( pgd ) != m_objectOffsetMap.end() );
+          pgds[i++] = m_objectOffsetMap[pgd];
+        }
+        else
+        {
+          pgds[i++] = 0;
+        }
+      }
+      pdPtr->transparent = p->getTransparent();
     }
   }
 }
@@ -750,7 +750,7 @@ void DPBFSaveTraverser::handleSampler( const Sampler * p )
       Offset_AutoPtr<NBFSampler> samplerPtr(this, m_objectOffsetMap[ph]);
       writeObject(p, samplerPtr, NBF_SAMPLER); // a Sampler is an Object
 
-      // ... texture image        
+      // ... texture image
       const TextureSharedPtr & texture = p->getTexture();
       if ( texture && texture.isPtrTo<TextureHost>() )
       {
@@ -788,11 +788,11 @@ void DPBFSaveTraverser::handleGeoNode(const GeoNode *p)
     else
     {
       // allocate node object and write its offset
-      Offset_AutoPtr<NBFGeoNode> nodePtr(this, m_objectOffsetMap[ph]);      
+      Offset_AutoPtr<NBFGeoNode> nodePtr(this, m_objectOffsetMap[ph]);
       writeNode(p, nodePtr, NBF_GEO_NODE); // a GeoNode is a Node
 
-      // GeoNode specific data    
-      nodePtr->materialEffect = p->getMaterialEffect() ? m_objectOffsetMap[p->getMaterialEffect()] : 0;
+      // GeoNode specific data
+      nodePtr->materialPipeline = p->getMaterialPipeline() ? m_objectOffsetMap[p->getMaterialPipeline()] : 0;
       nodePtr->primitive = p->getPrimitive() ? m_objectOffsetMap[p->getPrimitive()] : 0;
       nodePtr->stateSet = 0;
     }
@@ -814,8 +814,8 @@ void DPBFSaveTraverser::handleGroup(const Group *p)
     }
     else
     {
-      // allocate group object and write its offset      
-      Offset_AutoPtr<NBFGroup> groupPtr(this, m_objectOffsetMap[ph]);       
+      // allocate group object and write its offset
+      Offset_AutoPtr<NBFGroup> groupPtr(this, m_objectOffsetMap[ph]);
       writeGroup(p, groupPtr, NBF_GROUP); // a Group is a Group
     }
   }
@@ -836,8 +836,8 @@ void DPBFSaveTraverser::handleTransform(const Transform *p)
     }
     else
     {
-      // allocate transform object and write its offset      
-      Offset_AutoPtr<NBFTransform> trafoPtr(this, m_objectOffsetMap[ph]);       
+      // allocate transform object and write its offset
+      Offset_AutoPtr<NBFTransform> trafoPtr(this, m_objectOffsetMap[ph]);
       writeGroup(p, trafoPtr, NBF_TRANSFORM); // a Transform is a Group
 
       // write transform data
@@ -851,7 +851,7 @@ void DPBFSaveTraverser::handleLOD(const LOD *p)
   ObjectSharedPtr ph = p->getSharedPtr<Object>();
   if ( m_objectOffsetMap.find(ph) == m_objectOffsetMap.end() )
   {
-    // NOTE: the base implementation traverses only active childs of a LOD node, and Hence, 
+    // NOTE: the base implementation traverses only active childs of a LOD node, and Hence,
     // we need to manually traverse all childs here.
     for ( Group::ChildrenConstIterator gcci = p->beginChildren() ; gcci != p->endChildren() ; ++gcci )
     {
@@ -867,17 +867,17 @@ void DPBFSaveTraverser::handleLOD(const LOD *p)
     }
     else
     {
-      // allocate LOD object and write its offset      
-      Offset_AutoPtr<NBFLOD> lodPtr(this, m_objectOffsetMap[ph]);      
+      // allocate LOD object and write its offset
+      Offset_AutoPtr<NBFLOD> lodPtr(this, m_objectOffsetMap[ph]);
       writeGroup(p, lodPtr, NBF_LOD); // a LOD is a Group
 
       // LOD specific data
       assign(lodPtr->center, p->getCenter());
-      // ranges      
+      // ranges
       lodPtr->numRanges = p->getNumberOfRanges();
       if ( lodPtr->numRanges )
       {
-        Offset_AutoPtr<float> ranges(this, lodPtr->ranges, lodPtr->numRanges);   
+        Offset_AutoPtr<float> ranges(this, lodPtr->ranges, lodPtr->numRanges);
         memcpy(ranges, p->getRanges(), lodPtr->numRanges*sizeof(float));
       }
     }
@@ -889,7 +889,7 @@ void DPBFSaveTraverser::handleSwitch(const Switch *p)
   ObjectSharedPtr ph = p->getSharedPtr<Object>();
   if ( m_objectOffsetMap.find(ph) == m_objectOffsetMap.end() )
   {
-    // NOTE: the base implementation traverses only active childs of a Switch, and Hence, 
+    // NOTE: the base implementation traverses only active childs of a Switch, and Hence,
     // we need to manually traverse all childs here.
     for ( Group::ChildrenConstIterator gcci = p->beginChildren() ; gcci != p->endChildren() ; ++gcci )
     {
@@ -911,18 +911,18 @@ void DPBFSaveTraverser::handleSwitch(const Switch *p)
       }
     }
     else
-    {      
+    {
       Offset_AutoPtr<NBFSwitch> switchPtr(this, m_objectOffsetMap[ph]);
       writeGroup(p, switchPtr, NBF_SWITCH); // a Switch is a Group
 
       // write Switch specific ...
       switchPtr->activeMaskKey = p->getActiveMaskKey();
-      
+
       // allocate memory for all attached switch masks
       DP_ASSERT( p->getNumberOfMasks() <= UINT_MAX );
       switchPtr->numMasks = p->getNumberOfMasks();
       DP_ASSERT(switchPtr->numMasks); // there should be at least a default mask
-      Offset_AutoPtr<switchMask_t> masks(this, switchPtr->masks, switchPtr->numMasks);       
+      Offset_AutoPtr<switchMask_t> masks(this, switchPtr->masks, switchPtr->numMasks);
 
       // write all the masks
       unsigned int i = 0; // zero-based index into masks array
@@ -937,7 +937,7 @@ void DPBFSaveTraverser::handleSwitch(const Switch *p)
         masks[i].children = 0; // just give it a defined offset
 
         // allocate only if children are available in the mask
-        if ( masks[i].numChildren ) 
+        if ( masks[i].numChildren )
         {
           // allocate and write indices referring to active children.
           Offset_AutoPtr<uint_t> children(this, masks[i].children, masks[i].numChildren);
@@ -963,7 +963,7 @@ void DPBFSaveTraverser::handleLightSource( const LightSource * p )
     }
     else
     {
-      // allocate light object and write its offset      
+      // allocate light object and write its offset
       Offset_AutoPtr<NBFLightSource> lightPtr( this, m_objectOffsetMap[ph] );
       writeLightSource( p, lightPtr, NBF_LIGHT_SOURCE);
     }
@@ -1018,7 +1018,7 @@ void DPBFSaveTraverser::handlePrimitive( const Primitive *p )
       if ( !processSharedObject(p, NBF_PRIMITIVE) )
       {
         // allocate object and write its offset
-        Offset_AutoPtr<NBFPrimitive> pPtr(this, m_objectOffsetMap[ph]);        
+        Offset_AutoPtr<NBFPrimitive> pPtr(this, m_objectOffsetMap[ph]);
         writePrimitive( p, pPtr, NBF_PRIMITIVE );
       }
     }
@@ -1072,8 +1072,8 @@ void DPBFSaveTraverser::handleVertexAttributeSet( const VertexAttributeSet *p )
       // VertexAttributeSets can share data
       if ( !processSharedObject(p, NBF_VERTEX_ATTRIBUTE_SET) )
       {
-        // allocate VertexAttributeSet object and write its offset      
-        Offset_AutoPtr<NBFVertexAttributeSet> vasPtr(this, m_objectOffsetMap[ph]);       
+        // allocate VertexAttributeSet object and write its offset
+        Offset_AutoPtr<NBFVertexAttributeSet> vasPtr(this, m_objectOffsetMap[ph]);
         writeVertexAttributeSet(p, vasPtr, NBF_VERTEX_ATTRIBUTE_SET); // a VertexAttributeSet is a VertexAttributeSet
       }
     }
@@ -1084,7 +1084,7 @@ bool DPBFSaveTraverser::processSharedObject(const Object * obj, uint_t objCode)
 {
   DP_ASSERT(!calculatingStorageRequirements());
 
-  if (  obj->isDataShared() 
+  if (  obj->isDataShared()
      && (m_objectDataIDOffsetMap.find(obj->getDataID()) != m_objectDataIDOffsetMap.end())
      )
   { // current object is shared _AND_ the corresponding source object is already registered
@@ -1096,10 +1096,10 @@ bool DPBFSaveTraverser::processSharedObject(const Object * obj, uint_t objCode)
     // write object data
     writeObject(obj, objPtr, objCode);
     objPtr->sourceObject = m_objectDataIDOffsetMap[objPtr->objectDataID];
-    
+
     return true; // finally processed
   }
-  
+
   // assign not finally processed
   return false;
 }
@@ -1115,13 +1115,13 @@ void DPBFSaveTraverser::writeObject(const Object* objPtr, NBFObject * nbfObjPtr,
 
   if ( !objPtr->getName().empty() )
   {
-    // allocate str_t object to hold the name 
+    // allocate str_t object to hold the name
     //
     const string& name = objPtr->getName();
     Offset_AutoPtr<str_t> nameStr(this, nbfObjPtr->objectName);
     // allocate memory for the actual string
     nameStr->numChars = dp::checked_cast<uint_t>(name.length()); // without terminating 0!
-    Offset_AutoPtr<char> chars(this, nameStr->chars, nameStr->numChars+1);    
+    Offset_AutoPtr<char> chars(this, nameStr->chars, nameStr->numChars+1);
     strncpy(chars, name.c_str(), nameStr->numChars+1); // copy string, including terminating 0!
   }
 
@@ -1133,7 +1133,7 @@ void DPBFSaveTraverser::writeObject(const Object* objPtr, NBFObject * nbfObjPtr,
     Offset_AutoPtr<str_t> annoStr(this, nbfObjPtr->objectAnno);
     // allocate memory for the actual string
     annoStr->numChars = dp::checked_cast<uint_t>(anno.length()); // without terminating 0!
-    Offset_AutoPtr<char> chars(this, annoStr->chars, annoStr->numChars+1);    
+    Offset_AutoPtr<char> chars(this, annoStr->chars, annoStr->numChars+1);
     strncpy(chars, anno.c_str(), annoStr->numChars+1); // copy string, including terminating 0!
   }
 
@@ -1153,7 +1153,7 @@ void DPBFSaveTraverser::writeGroup(const Group * grpPtr, NBFGroup * nbfGrpPtr, u
   // allocate slot where to write offsets to children below
   nbfGrpPtr->numChildren = grpPtr->getNumberOfChildren();
   Offset_AutoPtr<uint_t> childOffs(this, nbfGrpPtr->children, nbfGrpPtr->numChildren);
-   
+
   // write the offsets now
   unsigned int i=0;
   for ( Group::ChildrenConstIterator gcci = grpPtr->beginChildren() ; gcci != grpPtr->endChildren() ; ++gcci, ++i )
@@ -1218,10 +1218,10 @@ void DPBFSaveTraverser::writeLightSource(const LightSource* lightSrcPtr, NBFLigh
   nbfLightSrcPtr->enabled = lightSrcPtr->isEnabled();
   // write animation offset only if animation is available
   nbfLightSrcPtr->animation = 0;
-  if ( lightSrcPtr->getLightEffect() )
+  if ( lightSrcPtr->getLightPipeline() )
   {
-    DP_ASSERT(m_objectOffsetMap.find(lightSrcPtr->getLightEffect())!=m_objectOffsetMap.end());
-    nbfLightSrcPtr->lightEffect = m_objectOffsetMap[lightSrcPtr->getLightEffect()];
+    DP_ASSERT(m_objectOffsetMap.find(lightSrcPtr->getLightPipeline())!=m_objectOffsetMap.end());
+    nbfLightSrcPtr->lightEffect = m_objectOffsetMap[lightSrcPtr->getLightPipeline()];
   }
 }
 
@@ -1246,12 +1246,12 @@ void DPBFSaveTraverser::writeCamera(const Camera * camPtr, NBFCamera * nbfCamPtr
   assign(nbfCamPtr->position, camPtr->getPosition());
   assign(nbfCamPtr->direction, camPtr->getDirection());
   nbfCamPtr->focusDist = camPtr->getFocusDistance();
-  
+
   if ( camPtr->getNumberOfHeadLights() )
-  {    
+  {
     // allocate slot where to write headlight offsets below
     nbfCamPtr->numHeadLights = camPtr->getNumberOfHeadLights();
-    Offset_AutoPtr<uint_t> lightOffs(this, nbfCamPtr->headLights, nbfCamPtr->numHeadLights);     
+    Offset_AutoPtr<uint_t> lightOffs(this, nbfCamPtr->headLights, nbfCamPtr->numHeadLights);
     // walk the headlights and write offset for each
     unsigned int i=0;
     for ( Camera::HeadLightConstIterator hlci = camPtr->beginHeadLights() ; hlci != camPtr->endHeadLights() ; ++hlci, ++i )
@@ -1266,10 +1266,10 @@ template<typename DPFaceType, typename NBFFaceType>
 void DPBFSaveTraverser::writeIndices(const DPFaceType * faces, NBFFaceType* nbfFaces)
 {
   DP_ASSERT(!calculatingStorageRequirements());
-  DP_ASSERT(faces->hasIndices());  
+  DP_ASSERT(faces->hasIndices());
   // allocate space to write face data to
   nbfFaces->numIndices = faces->getNumberOfIndices();
-  Offset_AutoPtr<uint_t> indices(this, nbfFaces->indices, nbfFaces->numIndices);   
+  Offset_AutoPtr<uint_t> indices(this, nbfFaces->indices, nbfFaces->numIndices);
   // copy face data
   memcpy( indices, &faces->getIndices()[0], nbfFaces->numIndices * sizeof(uint_t) );
 }
@@ -1280,7 +1280,7 @@ void DPBFSaveTraverser::writeTexImage( const string& file, TextureHostSharedPtr 
   DP_ASSERT(!calculatingStorageRequirements());
 
   if ( !file.empty() )
-  {    
+  {
     nbfImg->file.numChars = dp::checked_cast<uint_t>(file.length());
     Offset_AutoPtr<char> chars(this, nbfImg->file.chars, nbfImg->file.numChars+1);
     strcpy(chars, file.c_str());
@@ -1290,12 +1290,12 @@ void DPBFSaveTraverser::writeTexImage( const string& file, TextureHostSharedPtr 
   {
     nbfImg->flags = img->getCreationFlags();
     nbfImg->target = (uint_t)(img->getTextureTarget());
-    
+
     // NOTE: write dimension/format specs and raw pixels only if no filename was provided
     // BUT: never store image streams!
     if ( file.empty() && !img->isImageStream() )
     {
-      // no filename specified, write raw pixel data instead 
+      // no filename specified, write raw pixel data instead
       nbfImg->width = img->getWidth();
       nbfImg->height = img->getHeight();
       nbfImg->depth  = img->getDepth();
@@ -1307,7 +1307,7 @@ void DPBFSaveTraverser::writeTexImage( const string& file, TextureHostSharedPtr 
       if ( img->getPixels() )
       {
         Offset_AutoPtr<ubyte_t> pixels(this, nbfImg->pixels, nbytes);
-         
+
         Buffer::DataReadLock buffer(img->getPixels());
         memcpy(pixels, buffer.getPtr(), nbytes);
       }
@@ -1330,7 +1330,7 @@ void DPBFSaveTraverser::pseudoAllocObject(const Object* p)
   //
   DP_ASSERT( p->getName().length() <= UINT_MAX );
   DP_ASSERT( p->getAnnotation().length() <= UINT_MAX );
-  
+
   if ( !p->getName().empty() )
   {
     pseudoAlloc(sizeof(str_t));
@@ -1352,7 +1352,7 @@ void DPBFSaveTraverser::pseudoAllocNode(const Node* p)
 void DPBFSaveTraverser::pseudoAllocGroup(const Group * p)
 {
   DP_ASSERT(calculatingStorageRequirements());
-  pseudoAllocNode(p); // a Group is a Node 
+  pseudoAllocNode(p); // a Group is a Node
   pseudoAlloc(  p->getNumberOfChildren()   * sizeof(uint_t)
               + p->getNumberOfClipPlanes() * sizeof(plane_t) );
 }

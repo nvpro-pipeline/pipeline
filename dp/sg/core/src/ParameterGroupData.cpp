@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2015
+// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -26,8 +26,8 @@
 
 #include <dp/fx/EffectLibrary.h>
 #include <dp/sg/core/CoreTypes.h>
-#include <dp/sg/core/EffectData.h>
 #include <dp/sg/core/ParameterGroupData.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/core/Sampler.h>
 #include <dp/sg/core/TextureFile.h>
 #include <dp/sg/core/TextureHost.h>
@@ -624,12 +624,12 @@ namespace dp
               // If the sampler has no default initialization, find out their type and assign a matching default texture.
               // DAR FIXME Support for "sampler" in standardMaterialEffect standardTextureParameters for now.
               // 2x2 RGBA8 red, green, blue, yellow default texture.
-              static const unsigned char texel[] = 
+              static const unsigned char texel[] =
               {
-                0xFF, 0x00, 0x00, 0xFF, 
-                0x00, 0xFF, 0x00, 0xFF, 
-                0x00, 0x00, 0xFF, 0xFF, 
-                0xFF, 0xFF, 0x00, 0xFF 
+                0xFF, 0x00, 0x00, 0xFF,
+                0x00, 0xFF, 0x00, 0xFF,
+                0x00, 0x00, 0xFF, 0xFF,
+                0xFF, 0xFF, 0x00, 0xFF
               };
               TextureHostSharedPtr textureHost = TextureHost::create();
               DP_ASSERT( textureHost );
@@ -689,7 +689,7 @@ namespace dp
                   DP_ASSERT( false );
                 }
               }
-              else 
+              else
               {
                 equi = ( memcmp( getParameter( it ), pgd->getParameter( it ), it->first.getSizeInByte() ) == 0 );
               }

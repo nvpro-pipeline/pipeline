@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2005
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -134,7 +134,6 @@ class DPAFLoader : public dp::sg::io::SceneLoader
     void                                              readChildren( dp::sg::core::GroupSharedPtr const& group );
     bool                                              readFrustumCameraToken( dp::sg::core::FrustumCameraSharedPtr const& camera, std::string & token );
     dp::DataType                                      readType( const char *token = NULL );
-    dp::sg::core::EffectDataSharedPtr                 readEffectData( const char * name );
     void                                              readEnumArray( const std::string & token, std::vector<int> & values, const dp::fx::ParameterSpec & ps );
     template<unsigned int m, unsigned int n> dp::math::Matmnt<m,n,char> readEnumMatrix( const std::string & t, const dp::fx::ParameterSpec & ps );
     template<unsigned int n> dp::math::Vecnt<n,char>  readEnumVector( const std::string & token, const dp::fx::ParameterSpec & ps );
@@ -168,6 +167,7 @@ class DPAFLoader : public dp::sg::io::SceneLoader
     dp::sg::core::PatchesOrdering                     readPatchesOrdering();
     dp::sg::core::PatchesSpacing                      readPatchesSpacing();
     dp::sg::core::PerspectiveCameraSharedPtr          readPerspectiveCamera( const char *name );
+    dp::sg::core::PipelineDataSharedPtr               readPipelineData( const char * name );
     dp::sg::core::Image::PixelFormat                  readPixelFormat();
     dp::sg::core::Image::PixelDataType                readPixelType();
     unsigned char                                   * readPixels( unsigned int nov, dp::sg::core::Image::PixelDataType pt );
@@ -210,7 +210,6 @@ class DPAFLoader : public dp::sg::io::SceneLoader
     dp::math::Vec3f                                                 m_cameraUpVector;
     std::string                                                     m_currentLine;
     std::string                                                     m_currentString;
-    std::map<std::string,dp::sg::core::EffectDataSharedPtr>         m_effectData;
     dp::util::FileFinder                                            m_fileFinder;
     std::map<std::string,dp::sg::core::GeoNodeSharedPtr>            m_geoNodes;
     std::map<std::string,dp::sg::core::GroupSharedPtr>              m_groups;
@@ -224,6 +223,7 @@ class DPAFLoader : public dp::sg::io::SceneLoader
     std::map<std::string,dp::sg::core::ParallelCameraSharedPtr>     m_parallelCameras;
     std::map<std::string,dp::sg::core::ParameterGroupDataSharedPtr> m_parameterGroupData;
     std::map<std::string,dp::sg::core::PerspectiveCameraSharedPtr>  m_perspectiveCameras;
+    std::map<std::string,dp::sg::core::PipelineDataSharedPtr>       m_pipelineData;
     std::map<std::string,dp::sg::core::PrimitiveSharedPtr>          m_primitives;
     std::map<std::string,dp::sg::core::PrimitiveSharedPtr>          m_quadMeshes;
     std::map<std::string,dp::sg::core::SamplerSharedPtr>            m_samplers;

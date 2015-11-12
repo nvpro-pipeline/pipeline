@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2005
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -26,13 +26,14 @@
 
 #include "DisplayNormalsTraverser.h"
 #include <dp/sg/core/LOD.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/core/Switch.h>
 #include <dp/sg/core/Transform.h>
 #include <dp/sg/core/Scene.h>
 
 DisplayNormalsTraverser::DisplayNormalsTraverser()
 : m_normalLength(10.0f)
-{ 
+{
   m_trafo.setMatrix(dp::math::cIdentity44f);
 
   m_material = dp::sg::core::createStandardMaterialData();
@@ -290,7 +291,7 @@ void DisplayNormalsTraverser::handleGeoNode( dp::sg::core::GeoNode *p )
 
         dp::sg::core::GeoNodeSharedPtr newGeoNode = dp::sg::core::GeoNode::create();
         newGeoNode->setName( NORMALS_NAME );
-        newGeoNode->setMaterialEffect( m_material );
+        newGeoNode->setMaterialPipeline( m_material );
         newGeoNode->setPrimitive( normals );
 
         m_normalsGeoNodes.top().push_back( std::make_pair( p->getSharedPtr<dp::sg::core::GeoNode>(), newGeoNode ) );

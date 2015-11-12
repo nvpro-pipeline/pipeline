@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2011
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -25,7 +25,6 @@
 
 
 #include <dp/sg/core/Billboard.h>
-#include <dp/sg/core/EffectData.h>
 #include <dp/sg/core/GeoNode.h>
 #include <dp/sg/core/LightSource.h>
 #include <dp/sg/core/LOD.h>
@@ -33,6 +32,7 @@
 #include <dp/sg/core/ParallelCamera.h>
 #include <dp/sg/core/Path.h>
 #include <dp/sg/core/PerspectiveCamera.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/core/Sampler.h>
 #include <dp/sg/core/Scene.h>
 #include <dp/sg/core/Switch.h>
@@ -130,24 +130,6 @@ namespace dp
         m_currentPath->pop();
       }
 
-      void SearchTraverser::handleEffectData( const EffectData * p )
-      {
-        m_currentPath->push( p->getSharedPtr<Object>() );
-        if ( ! m_objectPointer )
-        {
-          if ( searchObject( p, "class dp::sg::core::EffectData" ) )
-          {
-            search( static_cast<Object const*>(p) );
-          }
-        }
-        else if ( m_objectPointer == p->getSharedPtr<Object>() )
-        {
-          addItem(p);
-        }
-        SharedTraverser::handleEffectData( p );
-        m_currentPath->pop();
-      }
-
       void SearchTraverser::handleGeoNode( const GeoNode * p )
       {
         m_currentPath->push( p->getSharedPtr<Object>() );
@@ -217,6 +199,24 @@ namespace dp
         m_currentPath->pop();
       }
 
+      void SearchTraverser::handlePipelineData( const dp::sg::core::PipelineData * p )
+      {
+        m_currentPath->push( p->getSharedPtr<Object>() );
+        if ( ! m_objectPointer )
+        {
+          if ( searchObject( p, "class dp::sg::core::PipelineData" ) )
+          {
+            search( static_cast<Object const*>(p) );
+          }
+        }
+        else if ( m_objectPointer == p->getSharedPtr<Object>() )
+        {
+          addItem(p);
+        }
+        SharedTraverser::handlePipelineData( p );
+        m_currentPath->pop();
+      }
+
       void SearchTraverser::handleSampler( const Sampler * p )
       {
         m_currentPath->push( p->getSharedPtr<Object>() );
@@ -252,7 +252,7 @@ namespace dp
         SharedTraverser::handleGroup( p );    // traverse the Switch like a Group to search through all children
         m_currentPath->pop();
       }
-                                    
+
       void SearchTraverser::handleTransform( const Transform * p )
       {
         m_currentPath->push( p->getSharedPtr<Object>() );
@@ -444,7 +444,7 @@ namespace dp
         }
       }
 
-      /* 
+      /*
       Checks whether the node being traversed is the required node.
       Returns true/false depending upon whether base class needs to be searched or not.
       */
@@ -467,7 +467,7 @@ namespace dp
             }
             return false;                       //no need to search for base class
           }
-          else 
+          else
           {
             return m_searchBaseClass;           //search base class only if m_searchBaseClass is true
           }
@@ -479,7 +479,7 @@ namespace dp
             addItem(p);
             return false;
           }
-          else 
+          else
           {
             return m_searchBaseClass;
           }

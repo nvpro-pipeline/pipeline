@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 20012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -30,7 +30,6 @@
 #include <dp/sg/renderer/rix/gl/inc/ResourceManager.h>
 #include <dp/sg/renderer/rix/gl/inc/ResourceEffectSpecRiXFx.h>
 #include <dp/sg/renderer/rix/gl/inc/ResourceParameterGroupDataRiXFx.h>
-#include <dp/sg/core/EffectData.h>
 #include <dp/rix/fx/Manager.h>
 
 namespace dp
@@ -53,7 +52,7 @@ namespace dp
             typedef std::vector<dp::rix::fx::GroupDataSharedHandle> GroupDatas;
 
             /** \brief Fetch resource for the given object/resourceManager. If no resource exists it'll be created **/
-            static ResourceEffectDataRiXFxSharedPtr get( const dp::sg::core::EffectDataSharedPtr &effectData, const dp::rix::fx::ManagerSharedPtr& rixFx, const ResourceManagerSharedPtr& resourceManager );
+            static ResourceEffectDataRiXFxSharedPtr get( const dp::sg::core::PipelineDataSharedPtr &effectData, const dp::rix::fx::ManagerSharedPtr& rixFx, const ResourceManagerSharedPtr& resourceManager );
             virtual ~ResourceEffectDataRiXFx();
 
             virtual const dp::sg::core::HandledObjectSharedPtr& getHandledObject() const;
@@ -61,12 +60,12 @@ namespace dp
 
             ResourceEffectDataRiXFx::GroupDatas getGroupDatas() const;
           protected:
-            ResourceEffectDataRiXFx( const dp::sg::core::EffectDataSharedPtr &effectData, const dp::rix::fx::ManagerSharedPtr& rixFx, const ResourceManagerSharedPtr& resourceManager );
+            ResourceEffectDataRiXFx( const dp::sg::core::PipelineDataSharedPtr &pipelineData, const dp::rix::fx::ManagerSharedPtr& rixFx, const ResourceManagerSharedPtr& resourceManager );
 
             std::vector<ResourceParameterGroupDataRiXFxSharedPtr> m_resourceParameterGroupDataRiXFxs;
             ResourceEffectSpecRiXFxSharedPtr                      m_resourceEffectSpec;
             dp::rix::fx::ManagerSharedPtr                         m_rixFx;
-            dp::sg::core::EffectDataSharedPtr                     m_effectData;
+            dp::sg::core::PipelineDataSharedPtr                   m_pipelineData;
           };
 
         } // namespace gl

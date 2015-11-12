@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2015
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -33,7 +33,6 @@
 
 // additional dependencies
 #include <dp/sg/core/VertexAttributeSet.h>
-#include <dp/sg/core/EffectData.h>
 #include <dp/sg/core/Primitive.h>
 #include <dp/sg/core/ConstIterator.h>
 #include <vector>
@@ -83,10 +82,10 @@ namespace dp
             GeoNode const* m_geoNode;
             Type           m_type;
           };
-  
+
         public:
-          const EffectDataSharedPtr & getMaterialEffect() const;
-          DP_SG_CORE_API void setMaterialEffect( const EffectDataSharedPtr & materialEffect );
+          const PipelineDataSharedPtr & getMaterialPipeline() const;
+          DP_SG_CORE_API void setMaterialPipeline( const PipelineDataSharedPtr & materialPipeline );
 
           /*! \brief Get the Primitive of this GeoNode
             *  \return The Primitive of this GeoNode.
@@ -99,40 +98,40 @@ namespace dp
           DP_SG_CORE_API void setPrimitive( const PrimitiveSharedPtr & primitive );
 
 
-          /*! \brief Generates vertex normals 
-            *  \param overwrite An optional flag to indicate whether or not to overwrite existing vertex normals. 
+          /*! \brief Generates vertex normals
+            *  \param overwrite An optional flag to indicate whether or not to overwrite existing vertex normals.
             *  \return \c true, if normals could be generated, otherwise \c false.
             *  The default is to overwrite existing vertex normals. */
           DP_SG_CORE_API bool generateNormals( bool overwrite = true );
 
           /*! \brief Generates tangents and binormals for all geometries contained in the indicated GeoNode
-            *  \param tc Addresses the vertex attribute to hold the input texture coordinates used to calculate the tangent space. 
-            *  By default, input coordinates are taken from the VertexAttributeSet::DP_SG_TEXCOORD0. 
-            *  \param tg Addresses the vertex attribute where to output the calculated tangents. 
-            *  By default tangents are written to VertexAttributeSet::DP_SG_TANGENT, 
-            *  which is aligned to the TANGENT binding semantic used by Cg for varying vertex shader input. 
-            *  \param bn Addresses the vertex attribute to output the calculated binormals. 
-            *  By default binormals are written to VertexAttributeSet::DP_SG_BINORMAL, 
-            *  which is aligned to the BINORMAL binding semantic used by Cg for varying vertex shader input. 
+            *  \param tc Addresses the vertex attribute to hold the input texture coordinates used to calculate the tangent space.
+            *  By default, input coordinates are taken from the VertexAttributeSet::DP_SG_TEXCOORD0.
+            *  \param tg Addresses the vertex attribute where to output the calculated tangents.
+            *  By default tangents are written to VertexAttributeSet::DP_SG_TANGENT,
+            *  which is aligned to the TANGENT binding semantic used by Cg for varying vertex shader input.
+            *  \param bn Addresses the vertex attribute to output the calculated binormals.
+            *  By default binormals are written to VertexAttributeSet::DP_SG_BINORMAL,
+            *  which is aligned to the BINORMAL binding semantic used by Cg for varying vertex shader input.
             *  \param overwrite An optional flag to indicate whether or not to overwrite existing vertex data in the output vertex
             *  attributes \a tg, and \a bn. The default is to overwrite existing vertex data.
             *  \remarks The function iterates through all geometries contained in the indicated GeoNode, and calculates
-            *  tangents and binormals from the specified input 2D texture coordinates and vertex normals, 
+            *  tangents and binormals from the specified input 2D texture coordinates and vertex normals,
             *  which are required to be defined already for the contained geometries. The calculated tangents
-            *  and binormals are written to the specified output vertex attributes. If the specified output vertex 
-            *  attributes already contain data, this data gets lost, if the \a overwrite flag is set. 
+            *  and binormals are written to the specified output vertex attributes. If the specified output vertex
+            *  attributes already contain data, this data gets lost, if the \a overwrite flag is set.
             *  If the \a overwrite flag is not set, tangents and binormals are only written to the indicated output
-            *  vertex attributes, if these are empty at the time of calling. */  
+            *  vertex attributes, if these are empty at the time of calling. */
           DP_SG_CORE_API void generateTangentSpace( unsigned int tc = VertexAttributeSet::DP_SG_TEXCOORD0
                                             , unsigned int tg = VertexAttributeSet::DP_SG_TANGENT
                                             , unsigned int bn = VertexAttributeSet::DP_SG_BINORMAL
                                             , bool overwrite = true );
 
-          /*! \brief Generates 2D texture coordinates 
-            *  \param type Desired texture coordinate type. Accepted are TCT_CYLINDRICAL, TCT_PLANAR, and TCT_SPHERICAL. 
-            *  \param texcoords Addresses the vertex attribute where to output the generated texture coords. 
+          /*! \brief Generates 2D texture coordinates
+            *  \param type Desired texture coordinate type. Accepted are TCT_CYLINDRICAL, TCT_PLANAR, and TCT_SPHERICAL.
+            *  \param texcoords Addresses the vertex attribute where to output the generated texture coords.
             *  VertexAttributeSet::DP_SG_TEXCOORD0 - VertexAttributeSet::DP_SG_TEXCOORD7 are allowed identifiers.
-            *  By default texture coords are written to VertexAttributeSet::DP_SG_TEXCOORD0, 
+            *  By default texture coords are written to VertexAttributeSet::DP_SG_TEXCOORD0,
             *  \param overwrite An optional flag indicating whether or not to overwrite existing vertex data in the output
             *  vertex attribute \a tc. The default is to overwrite existing vertex data. */
           DP_SG_CORE_API void generateTexCoords( TextureCoordType type
@@ -172,7 +171,7 @@ namespace dp
           /*! \brief Constructs a GeoNode as a copy of another GeoNode.
             */
           DP_SG_CORE_API GeoNode( const GeoNode& rhs );
- 
+
           /*! \brief Interface to calculate the bounding box of this GeoNode.
             *  \return The bounding box of this GeoNode
             *  \remarks This function is called by the framework to determine the
@@ -193,17 +192,17 @@ namespace dp
           DP_SG_CORE_API virtual void feedHashGenerator( dp::util::HashGenerator & hg ) const;
 
         private:
-          EffectDataSharedPtr m_materialEffect;
-          PrimitiveSharedPtr  m_primitive;
+          PipelineDataSharedPtr m_pipelineData;
+          PrimitiveSharedPtr    m_primitive;
       };
 
-      // - - - - - - - - - - - - - - - - - - - - - - - - - 
+      // - - - - - - - - - - - - - - - - - - - - - - - - -
       // inlines
-      // - - - - - - - - - - - - - - - - - - - - - - - - - 
+      // - - - - - - - - - - - - - - - - - - - - - - - - -
 
-      inline const EffectDataSharedPtr & GeoNode::getMaterialEffect() const
+      inline const PipelineDataSharedPtr & GeoNode::getMaterialPipeline() const
       {
-        return( m_materialEffect );
+        return( m_pipelineData );
       }
 
       inline const PrimitiveSharedPtr & GeoNode::getPrimitive() const

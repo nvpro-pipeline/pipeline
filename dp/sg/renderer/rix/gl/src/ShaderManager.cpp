@@ -30,9 +30,9 @@
 #include <dp/fx/EffectLibrary.h>
 
 #include <dp/sg/core/Camera.h>
-#include <dp/sg/core/EffectData.h>
 #include <dp/sg/core/GeoNode.h>
 #include <dp/sg/core/LightSource.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/core/Scene.h>
 #include <dp/sg/ui/ViewState.h>
 #include <dp/util/Array.h>
@@ -86,7 +86,7 @@ namespace dp
             , m_transparencyManager( transparencyManager )
           {
             m_renderer = resourceManager->getRenderer();
-            m_defaultEffectData = dp::sg::core::createStandardMaterialData();
+            m_defaultPipelineData = dp::sg::core::createStandardMaterialData();
             m_transparencyManager->setShaderManager( this );
           }
 
@@ -118,12 +118,12 @@ namespace dp
                                                                                   dp::rix::core::GeometryInstanceSharedHandle &geometryInstance,
                                                                                   RenderPassType rpt )
           {
-            const dp::sg::core::EffectDataSharedPtr& effectData = geoNode->getMaterialEffect() ? geoNode->getMaterialEffect() : m_defaultEffectData;
+            const dp::sg::core::PipelineDataSharedPtr& pipelineData = geoNode->getMaterialPipeline() ? geoNode->getMaterialPipeline() : m_defaultPipelineData;
 
-            return registerGeometryInstance( effectData, objectTreeIndex, geometryInstance, rpt );
+            return registerGeometryInstance( pipelineData, objectTreeIndex, geometryInstance, rpt );
           }
 
-          ShaderManagerInstanceSharedPtr ShaderManager::registerGeometryInstance( const dp::sg::core::EffectDataSharedPtr &effectData,
+          ShaderManagerInstanceSharedPtr ShaderManager::registerGeometryInstance( const dp::sg::core::PipelineDataSharedPtr &pipelineData,
                                                                                   dp::sg::xbar::ObjectTreeIndex objectTreeIndex,
                                                                                   dp::rix::core::GeometryInstanceSharedHandle &geometryInstance,
                                                                                   RenderPassType rpt )
@@ -169,8 +169,8 @@ namespace dp
             bool copied = false;
             if( ls->isEnabled() )
             {
-              DP_ASSERT( ls->getLightEffect() );
-              dp::sg::core::EffectDataSharedPtr const& le = ls->getLightEffect();
+              DP_ASSERT( ls->getLightPipeline() );
+              dp::sg::core::PipelineDataSharedPtr const& le = ls->getLightPipeline();
               const EffectSpecSharedPtr & es = le->getEffectSpec();
               for ( EffectSpec::iterator it = es->beginParameterGroupSpecs() ; it != es->endParameterGroupSpecs() ; ++it )
               {

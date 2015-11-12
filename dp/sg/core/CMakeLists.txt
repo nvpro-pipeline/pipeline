@@ -42,7 +42,6 @@ set(CORE_SOURCES
   src/BufferHost.cpp
   src/Camera.cpp
   src/ClipPlane.cpp
-  src/EffectData.cpp
   src/FrustumCamera.cpp
   src/GeoNode.cpp
   src/Group.cpp
@@ -57,6 +56,7 @@ set(CORE_SOURCES
   src/ParameterGroupData.cpp
   src/Path.cpp
   src/PerspectiveCamera.cpp
+  src/PipelineData.cpp
   src/Primitive.cpp
   src/Sampler.cpp
   src/Scene.cpp
@@ -79,7 +79,6 @@ set(CORE_PUBLIC_HEADERS
   Config.h
   ConstIterator.h
   CoreTypes.h
-  EffectData.h
   Event.h
   FrustumCamera.h
   GeoNode.h
@@ -95,6 +94,7 @@ set(CORE_PUBLIC_HEADERS
   ParameterGroupData.h
   Path.h
   PerspectiveCamera.h
+  PipelineData.h
   Primitive.h
   Sampler.h
   Scene.h

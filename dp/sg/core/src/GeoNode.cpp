@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2015
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -24,8 +24,8 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#include <dp/sg/core/EffectData.h>
 #include <dp/sg/core/GeoNode.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/core/Primitive.h>
 
 namespace dp
@@ -51,7 +51,7 @@ namespace dp
 
       GeoNode::GeoNode()
       {
-        m_objectCode = OC_GEONODE; 
+        m_objectCode = OC_GEONODE;
       }
 
       GeoNode::GeoNode( const GeoNode& rhs )
@@ -59,10 +59,10 @@ namespace dp
       {
         m_objectCode = OC_GEONODE;
 
-        if ( rhs.m_materialEffect )
+        if ( rhs.m_pipelineData )
         {
-          m_materialEffect = rhs.m_materialEffect.clone();
-          m_materialEffect->attach( this );
+          m_pipelineData = rhs.m_pipelineData.clone();
+          m_pipelineData->attach( this );
         }
         if ( rhs.m_primitive )
         {
@@ -73,9 +73,9 @@ namespace dp
 
       GeoNode::~GeoNode(void)
       {
-        if ( m_materialEffect )
+        if ( m_pipelineData )
         {
-          m_materialEffect->detach( this );
+          m_pipelineData->detach( this );
         }
         if ( m_primitive )
         {
@@ -83,20 +83,20 @@ namespace dp
         }
       }
 
-      void GeoNode::setMaterialEffect( const EffectDataSharedPtr & materialEffect )
+      void GeoNode::setMaterialPipeline( const PipelineDataSharedPtr & materialPipeline )
       {
-        DP_ASSERT( !materialEffect || ( materialEffect->getEffectSpec()->getType() == fx::EffectSpec::EST_PIPELINE ) );
+        DP_ASSERT( !materialPipeline || ( materialPipeline->getEffectSpec()->getType() == fx::EffectSpec::EST_PIPELINE ) );
 
-        if ( m_materialEffect != materialEffect )
+        if ( m_pipelineData != materialPipeline )
         {
-          if ( m_materialEffect )
+          if ( m_pipelineData )
           {
-            m_materialEffect->detach( this );
+            m_pipelineData->detach( this );
           }
-          m_materialEffect = materialEffect;
-          if ( m_materialEffect )
+          m_pipelineData = materialPipeline;
+          if ( m_pipelineData )
           {
-            m_materialEffect->attach( this );
+            m_pipelineData->attach( this );
           }
 
           notify( Event( this, Event::EFFECT_DATA_CHANGED ) );
@@ -138,16 +138,16 @@ namespace dp
         {
           Node::operator=(rhs);
           unsigned int dirtyBits = 0;
-          if ( m_materialEffect != rhs.m_materialEffect )
+          if ( m_pipelineData != rhs.m_pipelineData )
           {
-            if ( m_materialEffect )
+            if ( m_pipelineData )
             {
-              m_materialEffect->detach( this );
+              m_pipelineData->detach( this );
             }
-            m_materialEffect = rhs.m_materialEffect.clone();
-            if ( m_materialEffect )
+            m_pipelineData = rhs.m_pipelineData.clone();
+            if ( m_pipelineData )
             {
-              m_materialEffect->attach( this );
+              m_pipelineData->attach( this );
             }
             notify( Event( this, Event::EFFECT_DATA_CHANGED ) );
           }
@@ -181,10 +181,10 @@ namespace dp
           GeoNodeSharedPtr const& gn = object.staticCast<GeoNode>();
           if ( deepCompare )
           {
-            equi = ( !!m_materialEffect == !!gn->m_materialEffect ) && ( !!m_primitive == !!gn->m_primitive );
-            if ( equi && m_materialEffect )
+            equi = ( !!m_pipelineData == !!gn->m_pipelineData ) && ( !!m_primitive == !!gn->m_primitive );
+            if ( equi && m_pipelineData )
             {
-              equi = m_materialEffect->isEquivalent( gn->m_materialEffect, ignoreNames, true );
+              equi = m_pipelineData->isEquivalent( gn->m_pipelineData, ignoreNames, true );
             }
             if ( equi && m_primitive )
             {
@@ -193,7 +193,7 @@ namespace dp
           }
           else
           {
-            equi = ( m_materialEffect == gn->m_materialEffect ) && ( m_primitive == gn->m_primitive );
+            equi = ( m_pipelineData == gn->m_pipelineData ) && ( m_primitive == gn->m_primitive );
           }
         }
         return( equi );
@@ -202,9 +202,9 @@ namespace dp
       void GeoNode::feedHashGenerator( util::HashGenerator & hg ) const
       {
         Node::feedHashGenerator( hg );
-        if ( m_materialEffect )
+        if ( m_pipelineData )
         {
-          hg.update( m_materialEffect );
+          hg.update( m_pipelineData );
         }
         if ( m_primitive )
         {

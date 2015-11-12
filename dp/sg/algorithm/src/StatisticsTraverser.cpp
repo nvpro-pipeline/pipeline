@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2005
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -25,8 +25,8 @@
 
 
 #include <dp/math/Trafo.h>
-#include <dp/sg/core/EffectData.h>
 #include <dp/sg/core/GeoNode.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/core/Primitive.h>
 #include <dp/sg/core/Sampler.h>
 #include <dp/sg/core/Switch.h>
@@ -41,7 +41,7 @@ using std::pair;
 using std::map;
 
 template <class T1, class T2>
-std::string toString( const T1& name, const T2& value, 
+std::string toString( const T1& name, const T2& value,
   size_t depth=4, size_t nameWidth=20, size_t valueWidth=10 )
 {
   std::stringstream ss;
@@ -57,7 +57,7 @@ std::string toString( const T1& name, const T2& value,
 }
 
 template <class T1, class T2, class T3>
-std::string histogramToString( const T1& name, const std::map<T2,T3>& histogram ) 
+std::string histogramToString( const T1& name, const std::map<T2,T3>& histogram )
 {
   std::string s;
   s += toString(name, "");
@@ -312,23 +312,6 @@ namespace dp
       }
     }
 
-    void  StatisticsTraverser::handleEffectData( const EffectData *p )
-    {
-      if ( m_statistics->m_statEffectData.firstEncounter( p, !!m_instanceCount ) )
-      {
-        statObject( (const Object *)p, m_statistics->m_statEffectData );
-        m_statistics->m_statEffectData.m_effectSpecTypeHistogram[p->getEffectSpec()->getType()]++;
-        m_statistics->m_statEffectData.m_parameterGroupDataSizeHistogram[p->getNumberOfParameterGroupData()]++;
-        SharedTraverser::handleEffectData( p );
-      }
-      else
-      {
-        m_instanceCount++;
-        SharedTraverser::handleEffectData( p );
-        m_instanceCount--;
-      }
-    }
-
     void  StatisticsTraverser::handleIndexSet( const IndexSet * p )
     {
       if ( m_statistics->m_statIndexSet.firstEncounter( p, !!m_instanceCount ) )
@@ -455,6 +438,23 @@ namespace dp
       }
     }
 
+    void  StatisticsTraverser::handlePipelineData( const dp::sg::core::PipelineData *p )
+    {
+      if ( m_statistics->m_statPipelineData.firstEncounter( p, !!m_instanceCount ) )
+      {
+        statObject( (const Object *)p, m_statistics->m_statPipelineData );
+        m_statistics->m_statPipelineData.m_effectSpecTypeHistogram[p->getEffectSpec()->getType()]++;
+        m_statistics->m_statPipelineData.m_parameterGroupDataSizeHistogram[p->getNumberOfParameterGroupData()]++;
+        SharedTraverser::handlePipelineData( p );
+      }
+      else
+      {
+        m_instanceCount++;
+        SharedTraverser::handlePipelineData( p );
+        m_instanceCount--;
+      }
+    }
+
     void  StatisticsTraverser::handlePrimitive( const Primitive *p )
     {
       if ( m_statistics->m_statPrimitives.firstEncounter( p, !!m_instanceCount ) )
@@ -537,7 +537,7 @@ namespace dp
     }
 
 
-      std::ostream& operator<<( std::ostream& os, const StatisticsBase& obj ) 
+      std::ostream& operator<<( std::ostream& os, const StatisticsBase& obj )
       {
         os << toString("Count", obj.m_count);
         os << toString("Referenced", obj.m_referenced);
@@ -640,7 +640,7 @@ namespace dp
         os << toString("Line Strips Adjacency", obj.m_lineStripAdjacencyPrimitives);
         os << toString("Patches", obj.m_patchesPrimitives);
 
-        os << toString("Total Faces", obj.m_faces); 
+        os << toString("Total Faces", obj.m_faces);
         os << toString("Total Line Segments", obj.m_lineSegments);
         os << toString("Total Points", obj.m_points );
         return os;
@@ -689,11 +689,6 @@ namespace dp
           os << "\nBillboard\n";
           os << obj.getStatistics()->m_statBillboard;
         }
-        if ( obj.getStatistics()->m_statEffectData.m_count != 0 )
-        {
-          os << "\nEffectData\n";
-          os << obj.getStatistics()->m_statEffectData;
-        }
         if ( obj.getStatistics()->m_statGeoNode.m_count != 0 )
         {
           os << "\nGeoNode\n";
@@ -728,6 +723,11 @@ namespace dp
         {
           os << "\nParameterGroupData\n";
           os << obj.getStatistics()->m_statParameterGroupData;
+        }
+        if ( obj.getStatistics()->m_statPipelineData.m_count != 0 )
+        {
+          os << "\nPipelineData\n";
+          os << obj.getStatistics()->m_statPipelineData;
         }
         if ( obj.getStatistics()->m_statPerspectiveCamera.m_count != 0 )
         {

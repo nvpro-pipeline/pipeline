@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2009-2010
+// Copyright (c) 2009-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -61,20 +61,20 @@ class ViewerCommand : public QUndoCommand
     int m_id;
 };
 
-class CommandReplaceEffect : public ViewerCommand
+class CommandReplacePipeline : public ViewerCommand
 {
   public:
-    CommandReplaceEffect( const dp::sg::core::GeoNodeSharedPtr & geoNode, const dp::sg::core::EffectDataSharedPtr & newEffect );
-    ~CommandReplaceEffect();
+    CommandReplacePipeline( const dp::sg::core::GeoNodeSharedPtr & geoNode, const dp::sg::core::PipelineDataSharedPtr & newEffect );
+    ~CommandReplacePipeline();
 
   protected:
     virtual bool doUndo();
     virtual bool doRedo();
 
   private:
-    dp::sg::core::GeoNodeSharedPtr    m_geoNode;
-    dp::sg::core::EffectDataSharedPtr m_newEffect;
-    dp::sg::core::EffectDataSharedPtr m_oldEffect;
+    dp::sg::core::GeoNodeSharedPtr      m_geoNode;
+    dp::sg::core::PipelineDataSharedPtr m_newPipeline;
+    dp::sg::core::PipelineDataSharedPtr m_oldPipeline;
 };
 
 class CommandGenerateTangentSpace : public ViewerCommand

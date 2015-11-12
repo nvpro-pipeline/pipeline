@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2015
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -34,6 +34,7 @@
 #include <dp/sg/core/LOD.h>
 #include <dp/sg/core/Transform.h>
 #include <dp/sg/algorithm/CombineTraverser.h>
+#include <dp/util/HashGeneratorMurMur.h>
 
 using namespace dp::math;
 using namespace dp::util;
@@ -97,8 +98,8 @@ namespace dp
       static bool needsPrimitiveRestartIndex( PrimitiveType type )
       {
         return(   type == PRIMITIVE_LINE_STRIP
-               || type == PRIMITIVE_LINE_LOOP 
-               || type == PRIMITIVE_TRIANGLE_STRIP 
+               || type == PRIMITIVE_LINE_LOOP
+               || type == PRIMITIVE_TRIANGLE_STRIP
                || type == PRIMITIVE_TRIANGLE_FAN
                || type == PRIMITIVE_QUAD_STRIP
                || type == PRIMITIVE_POLYGON
@@ -203,7 +204,7 @@ namespace dp
       bool CombineTraverser::areCombinable( GeoNodeSharedPtr const& p0, GeoNodeSharedPtr const& p1, bool ignoreNames )
       {
         bool combinable =   areCombinable( ObjectSharedPtr( p0 ), ObjectSharedPtr( p1 ), ignoreNames )
-                        &&  ( p0->getMaterialEffect() == p1->getMaterialEffect() )
+                        &&  ( p0->getMaterialPipeline() == p1->getMaterialPipeline() )
                         &&  ( !!p0->getPrimitive() == !!p1->getPrimitive() )
                         &&  (   !p0->getPrimitive()
                             ||  ( p0->getPrimitive()->getObjectCode() ==  p1->getPrimitive()->getObjectCode() ) );
@@ -405,7 +406,7 @@ namespace dp
             LODSharedPtr const& lod = gci->staticCast<LOD>();
             if( optimizationAllowed( lod ) )
             {
-              unsigned int j = 0; 
+              unsigned int j = 0;
               for ( /**/ ; j<lods.size() ; j++ )
               {
                 if ( areCombinable( lod, lods[j][0], getIgnoreNames() ) )
@@ -446,7 +447,7 @@ namespace dp
               LODSharedPtr const& lod = lods[i][0];
               Group::ChildrenIterator gcciLOD = lod->beginChildren();
               Group::ChildrenIterator gciNewLOD = newLOD->beginChildren();
-              for ( 
+              for (
                   ; ( gcciLOD != lod->endChildren() ) && ( gciNewLOD != newLOD->endChildren() )
                   ; ++gcciLOD, ++gciNewLOD )
               {
@@ -710,7 +711,7 @@ namespace dp
         {
           if ( p->getNumberOfVertexData( i ) )
           {
-            Buffer::DataReadLock oldData = p->getVertexData(i); 
+            Buffer::DataReadLock oldData = p->getVertexData(i);
             if ( oldData.getPtr() )
             {
               unsigned int size = p->getSizeOfVertexData(i);

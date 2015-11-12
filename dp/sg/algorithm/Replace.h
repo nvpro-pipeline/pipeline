@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -38,34 +38,34 @@ namespace dp
   {
     namespace algorithm
     {
-      typedef std::map<std::string, dp::sg::core::EffectDataSharedPtr> ReplacementMapEffectData;
-      typedef std::map<std::string, std::string>               ReplacementMapNames;
+      typedef std::map<std::string, dp::sg::core::PipelineDataSharedPtr>  ReplacementMapPipelineData;
+      typedef std::map<std::string, std::string>                          ReplacementMapNames;
 
-      /** \brief Replace EffectData objects attached to dp::sg::core::Primitive and dp::sg::core::GeoNode
-          \param scene The scene which EffectDatas should be replaced
-          \param replacements A map specifying replacements for a set of EffectData names.
+      /** \brief Replace PipelineData objects attached to dp::sg::core::Primitive and dp::sg::core::GeoNode
+          \param scene The scene which PipelineData should be replaced
+          \param replacements A map specifying replacements for a set of PipelineData names.
       **/
-      DP_SG_ALGORITHM_API void replaceEffectDatas( dp::sg::core::SceneSharedPtr const& scene, ReplacementMapEffectData const& replacements );
+      DP_SG_ALGORITHM_API void replacePipelineData( dp::sg::core::SceneSharedPtr const& scene, ReplacementMapPipelineData const& replacements );
 
-      /** \brief Replace EffectData objects attached to dp::sg::core::Primitive and dp::sg::core::GeoNode.
-          \param root The scene which EffectDatas should be replaced
-          \param replacements A map specifying replacements or a set of EffectData names. 
-                 The replacements will be fetched using EffectLibrary::getEffectData( name );
+      /** \brief Replace PipelineData objects attached to dp::sg::core::Primitive and dp::sg::core::GeoNode.
+          \param root The scene which PipelineData should be replaced
+          \param replacements A map specifying replacements or a set of PipelineData names.
+                 The replacements will be fetched using EffectLibrary::getPipelineData( name );
       **/
-      DP_SG_ALGORITHM_API void replaceEffectDatas( dp::sg::core::SceneSharedPtr const& scene, ReplacementMapNames const& replacements );
+      DP_SG_ALGORITHM_API void replacePipelineData( dp::sg::core::SceneSharedPtr const& scene, ReplacementMapNames const& replacements );
 
-      /** \brief Replace EffectData objects attached to dp::sg::core::Primitive and dp::sg::core::GeoNode
-          \param scene The root node of a Tree which EffectDatas should be replaced
-          \param replacements A map specifying replacements for a set of EffectData names.
+      /** \brief Replace PipelineData objects attached to dp::sg::core::Primitive and dp::sg::core::GeoNode
+          \param scene The root node of a Tree which PipelineData should be replaced
+          \param replacements A map specifying replacements for a set of PipelineData names.
       **/
-      DP_SG_ALGORITHM_API void replaceEffectDatas( dp::sg::core::NodeSharedPtr const& root, ReplacementMapEffectData const& replacements );
+      DP_SG_ALGORITHM_API void replacePipelineData( dp::sg::core::NodeSharedPtr const& root, ReplacementMapPipelineData const& replacements );
 
-      /** \brief Replace EffectData objects attached to dp::sg::core::Primitive and dp::sg::core::GeoNode.
-          \param root The root node of a TreeS which EffectDatas should be replaced
-          \param replacements A map specifying replacements or a set of EffectData names. 
-                 The replacements will be fetched using EffectLibrary::getEffectData( name );
+      /** \brief Replace PipelineData objects attached to dp::sg::core::Primitive and dp::sg::core::GeoNode.
+          \param root The root node of a TreeS which PipelineData should be replaced
+          \param replacements A map specifying replacements or a set of PipelineData names.
+                 The replacements will be fetched using EffectLibrary::getPipelineData( name );
       **/
-      DP_SG_ALGORITHM_API void replaceEffectDatas( dp::sg::core::NodeSharedPtr const& root, ReplacementMapNames const& replacements );
+      DP_SG_ALGORITHM_API void replacePipelineData( dp::sg::core::NodeSharedPtr const& root, ReplacementMapNames const& replacements );
 
 
     } // namespace algorithm

@@ -31,10 +31,9 @@
 #include <dp/culling/opengl/Manager.h>
 
 #include <dp/sg/core/Camera.h>
-#include <dp/sg/core/EffectData.h>
 #include <dp/sg/core/GeoNode.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/core/Primitive.h>
-#include <dp/sg/core/EffectData.h>
 #include <dp/sg/ui/ViewState.h>
 
 #include <dp/gl/RenderContext.h>
@@ -91,7 +90,6 @@ namespace dp
             , m_activeTraversalMask(~0)
             , m_objectTreeIndex( ~0 )
             , m_handle( nullptr )
-            , m_currentEffectSurface( nullptr )
             , m_effectDataAttached( false )
           {
             m_payload = Payload::create();
@@ -180,7 +178,7 @@ namespace dp
 
             if( di.m_effectDataAttached )
             {
-              di.m_currentEffectSurface->detach( m_effectDataObserver.get(), di.m_payload.operator->() );   // Big Hack !!
+              di.m_currentPipelineData->detach( m_effectDataObserver.get(), di.m_payload.operator->() );   // Big Hack !!
               di.m_effectDataAttached = false;
             }
 
@@ -235,7 +233,7 @@ namespace dp
                 renderer->geometryInstanceSetGeometry( di.m_geometryInstanceDepthPass, di.m_resourcePrimitive->m_geometryHandle );
               }
 
-              const dp::sg::core::EffectDataSharedPtr &effectDataSurface = geoNode->getMaterialEffect() ? geoNode->getMaterialEffect() : m_shaderManager->getDefaultEffectData();
+              const dp::sg::core::PipelineDataSharedPtr &effectDataSurface = geoNode->getMaterialPipeline() ? geoNode->getMaterialPipeline() : m_shaderManager->getDefaultPipelineData();
               {
                 // update transparency
                 bool newTransparent = effectDataSurface->getTransparent();
@@ -256,19 +254,19 @@ namespace dp
 
               DP_ASSERT( effectDataSurface );
               ShaderManagerInstanceSharedPtr shaderObjectDepthPass = di.m_smartShaderObjectDepthPass;
-              if ( di.m_currentEffectSurface != effectDataSurface )
+              if ( di.m_currentPipelineData != effectDataSurface )
               {
                 if ( di.m_effectDataAttached )
                 {
-                  di.m_currentEffectSurface->detach( m_effectDataObserver.get(), di.m_payload.operator->() );   // Big Hack !!
+                  di.m_currentPipelineData->detach( m_effectDataObserver.get(), di.m_payload.operator->() );   // Big Hack !!
                 }
 
-                di.m_currentEffectSurface = effectDataSurface;
+                di.m_currentPipelineData = effectDataSurface;
 
                 di.m_smartShaderObject = m_shaderManager->registerGeometryInstance(geoNode, di.m_objectTreeIndex, di.m_geometryInstance );
                 di.m_smartShaderObjectDepthPass = m_shaderManager->registerGeometryInstance(geoNode, di.m_objectTreeIndex, di.m_geometryInstanceDepthPass, RPT_DEPTH );
 
-                di.m_currentEffectSurface->attach( m_effectDataObserver.get(), di.m_payload.operator->() );   // Big Hack !!
+                di.m_currentPipelineData->attach( m_effectDataObserver.get(), di.m_payload.operator->() );   // Big Hack !!
                 di.m_effectDataAttached = true;
               }
 
@@ -314,7 +312,7 @@ namespace dp
                 di.m_currentRenderGroup = nullptr;
                 di.m_smartShaderObject = ShaderManagerInstanceSharedPtr::null;
                 di.m_smartShaderObjectDepthPass = ShaderManagerInstanceSharedPtr::null;
-                di.m_currentEffectSurface.reset();
+                di.m_currentPipelineData.reset();
               }
             }
           }
@@ -516,7 +514,7 @@ namespace dp
             {
               if ( it->m_effectDataAttached )
               {
-                it->m_currentEffectSurface->detach( m_effectDataObserver.get(), it->m_payload.operator->() );   // Big Hack !!
+                it->m_currentPipelineData->detach( m_effectDataObserver.get(), it->m_payload.operator->() );   // Big Hack !!
                 it->m_effectDataAttached = false;
               }
             }

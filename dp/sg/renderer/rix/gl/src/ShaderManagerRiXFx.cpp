@@ -29,8 +29,8 @@
 #include <dp/sg/renderer/rix/gl/inc/ShaderManagerRiXFx.h>
 #include <dp/sg/core/LightSource.h>
 #include <dp/sg/core/Camera.h>
-#include <dp/sg/core/EffectData.h>
 #include <dp/sg/core/GeoNode.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/ui/ViewState.h>
 #include <dp/fx/EffectSpec.h>
 #include <dp/fx/EffectLibrary.h>
@@ -357,16 +357,16 @@ namespace dp
           }
 
           ShaderManagerInstanceSharedPtr ShaderManagerRiXFx::registerGeometryInstance(
-            const dp::sg::core::EffectDataSharedPtr &effectData,
+            const dp::sg::core::PipelineDataSharedPtr &pipelineData,
             dp::sg::xbar::ObjectTreeIndex objectTreeIndex,
             dp::rix::core::GeometryInstanceSharedHandle &geometryInstance,
             RenderPassType rpt )
           {
-            ResourceEffectDataRiXFxSharedPtr resourceEffectData = ResourceEffectDataRiXFx::get( effectData, m_rixFxManager, m_resourceManager );
+            ResourceEffectDataRiXFxSharedPtr resourceEffectData = ResourceEffectDataRiXFx::get( pipelineData, m_rixFxManager, m_resourceManager );
             if ( resourceEffectData )
             {
               // use the EffectSpecs to determine potential transparency
-              dp::fx::EffectSpecSharedPtr const & effectSpec = effectData->getEffectSpec();
+              dp::fx::EffectSpecSharedPtr const & effectSpec = pipelineData->getEffectSpec();
 
               dp::rix::fx::SourceFragments const& sf = m_additionalCodeSnippets[effectSpec->getTransparent()][rpt==RPT_DEPTH];
               dp::rix::fx::ProgramSharedHandle program = m_rixFxManager->programCreate( effectSpec, m_systemSpecs
@@ -399,17 +399,17 @@ namespace dp
             }
 
             // no supported effect, use the default one.
-            DP_ASSERT( effectData != m_defaultEffectData );
-            return registerGeometryInstance( m_defaultEffectData, objectTreeIndex, geometryInstance, rpt );
+            DP_ASSERT( pipelineData != m_defaultPipelineData );
+            return registerGeometryInstance( m_defaultPipelineData, objectTreeIndex, geometryInstance, rpt );
           }
 
           std::map<dp::fx::Domain,std::string> ShaderManagerRiXFx::getShaderSources( const dp::sg::core::GeoNodeSharedPtr & geoNode, bool depthPass ) const
           {
             DP_ASSERT( m_rixFxManager );
-            const dp::sg::core::EffectDataSharedPtr & effectData = geoNode->getMaterialEffect() ? geoNode->getMaterialEffect() : m_defaultEffectData;
+            const dp::sg::core::PipelineDataSharedPtr & pipelineData = geoNode->getMaterialPipeline() ? geoNode->getMaterialPipeline() : m_defaultPipelineData;
 
             // use the EffectSpecs to determine potential transparency
-            dp::fx::EffectSpecSharedPtr const & effectSpec = effectData->getEffectSpec();
+            dp::fx::EffectSpecSharedPtr const & effectSpec = pipelineData->getEffectSpec();
 
             return( m_rixFxManager->getShaderSources( effectSpec, depthPass, m_systemSpecs, m_additionalCodeSnippets[effectSpec->getTransparent()][depthPass] ) );
           }

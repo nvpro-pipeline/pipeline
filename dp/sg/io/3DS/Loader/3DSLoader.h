@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2015
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -101,7 +101,7 @@ typedef struct MatGroupData
 
 DEFINE_PTR_TYPES( ThreeDSLoader );
 
-// Note 'ThreeDSLoader' instead of '3DSLoader' because legal 
+// Note 'ThreeDSLoader' instead of '3DSLoader' because legal
 // C++ class names cannot start with numbers
 class ThreeDSLoader : public dp::sg::io::SceneLoader
 {
@@ -132,10 +132,10 @@ private:
 
   // given all the necessary data, set up and add a PerspectiveCamera to the scene
   void configureCamera( dp::sg::core::GroupSharedPtr const& parent, Lib3dsNode *n, dp::math::Vec3f &piv, bool hasTarget, Lib3dsFile *data );
-  
+
   // given all the necessary data, add a spotlight target or camera target to the scene
   void configureTarget( dp::sg::core::GroupSharedPtr const& parent, Lib3dsNode *n, dp::math::Vec3f &piv, bool isCamera, Lib3dsFile *data );
-  
+
   // given all the necessary data, add a PointLight to the scene
   void configurePointlight( dp::sg::core::GroupSharedPtr const& parent, Lib3dsNode *n, dp::math::Vec3f &piv, Lib3dsFile *data );
 
@@ -149,17 +149,17 @@ private:
   bool constructGeometry( dp::sg::core::GroupSharedPtr const& group, char *name, Lib3dsFile * data );
 
   // parse and load all materials in the scene
-  void constructMaterials( std::vector< dp::sg::core::EffectDataSharedPtr > & materials, Lib3dsFile *data );
+  void constructMaterials( std::vector< dp::sg::core::PipelineDataSharedPtr > & materials, Lib3dsFile *data );
 
   // parse and load a texture from the 3ds data structure
   dp::sg::core::ParameterGroupDataSharedPtr createTexture( Lib3dsTextureMap &texture, dp::util::FileFinder const& fileFinder, const std::string & filename, bool isEnvMap );
-  
+
   // lineraly interpolate between two vectors as a function of the current frame between a left and right frame
   void vecInterp(dp::math::Vec3f &target, dp::math::Vec3f &lData, dp::math::Vec3f &rData, int leftFrame, int rightFrame, int currFrame);
-  
+
 #if defined(KEEP_ANIMATION)
   // add the animation data to the AnimatedTransform based on the various 3ds tracks
-  void constructAnimation( dp::sg::core::AnimatedTransform *anim, dp::math::Vec3f &parentPivot, dp::math::Vec3f &pivot, 
+  void constructAnimation( dp::sg::core::AnimatedTransform *anim, dp::math::Vec3f &parentPivot, dp::math::Vec3f &pivot,
                            Lib3dsTrack *pTrack, Lib3dsTrack *rTrack, Lib3dsTrack *sTrack, Lib3dsTrack *rollTrack, int flags);
 #endif
 
@@ -178,7 +178,7 @@ private:
   dp::sg::core::GroupSharedPtr m_topLevel;
 
   // a list of materialEffects and geometryEffects
-  std::vector< dp::sg::core::EffectDataSharedPtr > m_materials;
+  std::vector< dp::sg::core::PipelineDataSharedPtr > m_materials;
 
   vector < bool > m_hasTexture;
   vector < bool > m_isWire;
@@ -191,7 +191,7 @@ private:
   std::map<std::string, dp::sg::core::TransformSharedPtr> m_spotLocationList;
   std::map<std::string, dp::sg::core::TransformSharedPtr> m_camTargetList;
   std::map<std::string, dp::sg::core::TransformSharedPtr> m_spotTargetList;
-  
+
   int m_numMaterials;
   int m_numFrames;
 };

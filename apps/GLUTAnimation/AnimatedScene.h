@@ -129,12 +129,12 @@ public:
 
 protected:
   AnimatedScene( const dp::math::Vec2f& gridSize, const dp::math::Vec2i& objectCount );
-  void linkAnimationColor2(AnimatorColorSharedPtr const & animation, dp::sg::core::EffectDataSharedPtr const & effect, char const *group, char const *parameter);
+  void linkAnimationColor2(AnimatorColorSharedPtr const & animation, dp::sg::core::PipelineDataSharedPtr const & effect, char const *group, char const *parameter);
 
   void setColor( const dp::math::Vec3f& color, size_t x, size_t y );
   void createGrid();
   dp::sg::core::PrimitiveSharedPtr createPrimitive( size_t x, size_t y );
-  dp::sg::core::EffectDataSharedPtr createMaterial( size_t x, size_t y );
+  dp::sg::core::PipelineDataSharedPtr createMaterial( size_t x, size_t y );
   dp::sg::core::TransformSharedPtr createTransform( size_t x, size_t y );
 
   dp::math::Vec2f m_gridSize;
@@ -152,11 +152,11 @@ protected:
   // for updating colors;
   dp::fx::EffectSpec::iterator         m_itColors;
 
-  typedef std::vector< dp::sg::core::PrimitiveSharedPtr >  Primitives;
-  typedef std::vector< dp::sg::core::EffectDataSharedPtr > Materials;
-  typedef std::vector< dp::sg::core::TransformSharedPtr >  Transforms;
-  typedef std::vector< dp::sg::core::GeoNodeSharedPtr>     GeoNodes;
-  typedef std::vector< AnimatorSharedPtr >                 Animators;
+  typedef std::vector<dp::sg::core::PrimitiveSharedPtr>     Primitives;
+  typedef std::vector<dp::sg::core::PipelineDataSharedPtr>  Materials;
+  typedef std::vector<dp::sg::core::TransformSharedPtr>     Transforms;
+  typedef std::vector<dp::sg::core::GeoNodeSharedPtr>       GeoNodes;
+  typedef std::vector<AnimatorSharedPtr>                    Animators;
 
   Primitives m_primitives;
   Materials  m_materials;
@@ -165,8 +165,8 @@ protected:
   Animators  m_animators;
 
   // effect templates for cloning to ensure that TextureFile
-  dp::sg::core::EffectDataSharedPtr m_carpaint;
-  dp::sg::core::EffectDataSharedPtr m_phong;
-  dp::sg::core::EffectDataSharedPtr m_standard_material;
-  dp::sg::core::EffectDataSharedPtr m_thinglass;
+  dp::sg::core::PipelineDataSharedPtr m_carpaint;
+  dp::sg::core::PipelineDataSharedPtr m_phong;
+  dp::sg::core::PipelineDataSharedPtr m_standard_material;
+  dp::sg::core::PipelineDataSharedPtr m_thinglass;
 };

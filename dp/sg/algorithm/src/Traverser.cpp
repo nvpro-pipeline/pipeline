@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2010
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -47,7 +47,7 @@
 // primitives
 #include <dp/sg/core/Primitive.h>
 // states
-#include <dp/sg/core/EffectData.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/core/Sampler.h>
 
 using namespace dp::math;
@@ -156,7 +156,7 @@ namespace dp
       void Traverser::apply( const SceneSharedPtr & scene )
       {
         DP_ASSERT(scene);
-  
+
         apply(scene->getRootNode());
       }
 
@@ -203,33 +203,15 @@ namespace dp
 
       void Traverser::traverseGeoNode(const GeoNode * gnode)
       {
-        if ( gnode->getMaterialEffect() )
+        if ( gnode->getMaterialPipeline() )
         {
-          traverseObject( gnode->getMaterialEffect() );
+          traverseObject( gnode->getMaterialPipeline() );
         }
         if ( gnode->getPrimitive() )
         {
           traverseObject( gnode->getPrimitive() );
         }
         postTraverseObject( gnode );
-      }
-
-      void Traverser::traverseEffectData( const EffectData * ed )
-      {
-        m_currentTextureUnit = 0;
-        const dp::fx::EffectSpecSharedPtr & es = ed->getEffectSpec();
-        for ( dp::fx::EffectSpec::iterator it = es->beginParameterGroupSpecs() ; it != es->endParameterGroupSpecs() ; ++it )
-        {
-          const ParameterGroupDataSharedPtr & parameterGroupData = ed->getParameterGroupData( it );
-          if ( parameterGroupData )
-          {
-            traverseObject( parameterGroupData );
-            if ( (*it)->getName() == "standardTextureParameters" )
-            {
-              m_currentTextureUnit++;
-            }
-          }
-        }
       }
 
       void Traverser::traverseParameterGroupData( const ParameterGroupData * pgd )
@@ -243,6 +225,24 @@ namespace dp
             if ( sampler )
             {
               traverseObject( sampler );
+            }
+          }
+        }
+      }
+
+      void Traverser::traversePipelineData( const dp::sg::core::PipelineData * p )
+      {
+        m_currentTextureUnit = 0;
+        const dp::fx::EffectSpecSharedPtr & es = p->getEffectSpec();
+        for ( dp::fx::EffectSpec::iterator it = es->beginParameterGroupSpecs() ; it != es->endParameterGroupSpecs() ; ++it )
+        {
+          const ParameterGroupDataSharedPtr & parameterGroupData = p->getParameterGroupData( it );
+          if ( parameterGroupData )
+          {
+            traverseObject( parameterGroupData );
+            if ( (*it)->getName() == "standardTextureParameters" )
+            {
+              m_currentTextureUnit++;
             }
           }
         }
@@ -267,15 +267,15 @@ namespace dp
             oc = object->getHigherLevelObjectCode(oc);
             if ( OC_INVALID==oc )
             { // proceed immediately without handling the object
-              return oc; 
+              return oc;
             }
           }
           while ( !m_mftbl.testEntry(oc) );
-    
+
           // found an appropriate handler if we get here
-    
+
           // don't loop again for this object - register the handler
-          m_mftbl.addEntry(orgOC, m_mftbl[oc]);   
+          m_mftbl.addEntry(orgOC, m_mftbl[oc]);
         }
         return oc;
       }
@@ -307,8 +307,8 @@ namespace dp
         addObjectHandler(OC_PRIMITIVE, &SharedTraverser::handlePrimitive);
 
         // ... single state attribs
-        addObjectHandler(OC_EFFECT_DATA, &SharedTraverser::handleEffectData);
         addObjectHandler(OC_PARAMETER_GROUP_DATA, &SharedTraverser::handleParameterGroupData);
+        addObjectHandler(OC_PIPELINE_DATA, &SharedTraverser::handlePipelineData);
         addObjectHandler(OC_SAMPLER, &SharedTraverser::handleSampler);
 
         addObjectHandler(OC_INDEX_SET, &SharedTraverser::handleIndexSet);
@@ -387,14 +387,14 @@ namespace dp
         traversePrimitive(primitive);
       }
 
-      void SharedTraverser::handleEffectData( const EffectData * ed )
-      {
-        traverseEffectData( ed );
-      }
-
       void SharedTraverser::handleParameterGroupData( const ParameterGroupData * pgd )
       {
         traverseParameterGroupData( pgd );
+      }
+
+      void SharedTraverser::handlePipelineData( const dp::sg::core::PipelineData * pd )
+      {
+        traversePipelineData( pd );
       }
 
       void SharedTraverser::handleSampler( const Sampler * p )
@@ -427,9 +427,9 @@ namespace dp
 
       void SharedTraverser::traverseLightSource(const LightSource * light)
       {
-        if ( light->getLightEffect() )
+        if ( light->getLightPipeline() )
         {
-          traverseObject( light->getLightEffect() );
+          traverseObject( light->getLightPipeline() );
         }
         postTraverseObject( light );
       }
@@ -475,8 +475,8 @@ namespace dp
         addObjectHandler(OC_PRIMITIVE, &ExclusiveTraverser::handlePrimitive);
 
         // ... single state attribs
-        addObjectHandler(OC_EFFECT_DATA, &ExclusiveTraverser::handleEffectData);
         addObjectHandler(OC_PARAMETER_GROUP_DATA, &ExclusiveTraverser::handleParameterGroupData);
+        addObjectHandler(OC_PIPELINE_DATA, &ExclusiveTraverser::handlePipelineData);
         addObjectHandler(OC_SAMPLER, &ExclusiveTraverser::handleSampler);
 
         addObjectHandler(OC_INDEX_SET, &ExclusiveTraverser::handleIndexSet);
@@ -561,14 +561,14 @@ namespace dp
         traversePrimitive(primitive);
       }
 
-      void ExclusiveTraverser::handleEffectData( EffectData * ed )
-      {
-        traverseEffectData( ed );
-      }
-
       void ExclusiveTraverser::handleParameterGroupData( ParameterGroupData * pgd )
       {
         traverseParameterGroupData( pgd );
+      }
+
+      void ExclusiveTraverser::handlePipelineData( dp::sg::core::PipelineData * p )
+      {
+        traversePipelineData( p );
       }
 
       void ExclusiveTraverser::handleSampler( Sampler * p )
@@ -600,9 +600,9 @@ namespace dp
 
       void ExclusiveTraverser::traverseLightSource(LightSource * light)
       {
-        if ( light->getLightEffect() )
+        if ( light->getLightPipeline() )
         {
-          traverseObject( light->getLightEffect() );
+          traverseObject( light->getLightPipeline() );
         }
         postTraverseObject( light );
       }

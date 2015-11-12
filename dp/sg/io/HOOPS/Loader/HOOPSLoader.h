@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010
+// Copyright (c) 2010-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -143,8 +143,8 @@ private:
   bool getStyle( A3DUns32 style, A3DGraphStyleData & result );
   bool getRGBColor( A3DUns32 index, dp::math::Vec3f & result );
   dp::sg::core::ParameterGroupDataSharedPtr createGeometryParameterGroupData( const A3DMiscCascadedAttributes * pAttr );
-  dp::sg::core::EffectDataSharedPtr createMaterialEffect( const A3DMiscCascadedAttributes * pAttr );
-  dp::sg::core::EffectDataSharedPtr createLineEffect( const A3DMiscCascadedAttributes * pAttr, dp::math::Vec3f & color );
+  dp::sg::core::PipelineDataSharedPtr createMaterialPipeline( const A3DMiscCascadedAttributes * pAttr );
+  dp::sg::core::PipelineDataSharedPtr createLinePipeline( const A3DMiscCascadedAttributes * pAttr, dp::math::Vec3f & color );
 
   void reportError( const std::string & context, A3DStatus err );
   void reportUnsupported( const std::string & context );
@@ -158,7 +158,7 @@ private:
         return( memcmp( &a, &b, sizeof(A3DGraphStyleData) ) < 0 );
       }
   };
-  typedef std::map<A3DGraphStyleData,dp::sg::core::EffectDataSharedPtr,GraphStyleDataCompare>  GraphStyleMap;
+  typedef std::map<A3DGraphStyleData,dp::sg::core::PipelineDataSharedPtr,GraphStyleDataCompare>  GraphStyleMap;
   typedef std::map<A3DGraphStyleData,dp::sg::core::ParameterGroupDataSharedPtr,GraphStyleDataCompare>  GraphStyleGeometryMap;
 
   typedef std::pair<const A3DAsmProductOccurrence*,A3DGraphStyleData>   POGraphStylePair;

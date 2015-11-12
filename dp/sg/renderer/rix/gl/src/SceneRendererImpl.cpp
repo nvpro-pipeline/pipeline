@@ -26,6 +26,7 @@
 
 #include <dp/DP.h>
 #include <dp/fx/EffectLibrary.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/renderer/rix/gl/TransparencyManagerNone.h>
 #include <dp/sg/renderer/rix/gl/TransparencyManagerOITAll.h>
 #include <dp/sg/renderer/rix/gl/TransparencyManagerOITClosestArray.h>
@@ -216,7 +217,7 @@ namespace dp
           {
             m_depthPass = depthPass;
           }
-  
+
           void SceneRendererImpl::doRender( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget )
           {
             if ( m_rendererInitialized )
@@ -426,7 +427,7 @@ namespace dp
             if ( getEnvironmentRenderingEnabled() )
             {
               m_environmentRenderer = dp::sg::renderer::rix::gl::FSQRenderer::create( glRenderTarget );
-              m_environmentRenderer->setEffect( dp::sg::core::EffectData::create( dp::fx::EffectLibrary::instance()->getEffectSpec( std::string("environmentBackdrop") ) ) );
+              m_environmentRenderer->setPipeline( dp::sg::core::PipelineData::create( dp::fx::EffectLibrary::instance()->getEffectSpec( std::string("environmentBackdrop") ) ) );
               m_environmentRenderer->setSamplerByName( "environment", getEnvironmentSampler() );
               glRenderTarget->setClearMask( glRenderTarget->getClearMask() & ~dp::gl::TBM_COLOR_BUFFER );
             }

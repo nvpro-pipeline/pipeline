@@ -146,7 +146,7 @@ namespace dp
 
               // TODO MTA it would be more efficient to have an weakptr here. this will increase complexity
               // in the observer since the effect data could die before the instance.
-              dp::sg::core::EffectDataSharedPtr           m_currentEffectSurface;
+              dp::sg::core::PipelineDataSharedPtr          m_currentPipelineData;
 
               ResourcePrimitiveSharedPtr                  m_resourcePrimitive;
               ShaderManagerInstanceSharedPtr              m_smartShaderObject;

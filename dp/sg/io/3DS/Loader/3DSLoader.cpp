@@ -49,6 +49,7 @@
 #include <dp/sg/core/IndexSet.h>
 #include <dp/sg/core/LightSource.h>
 #include <dp/sg/core/PerspectiveCamera.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/core/Sampler.h>
 #include <dp/sg/core/TextureHost.h>
 #include <dp/sg/core/Transform.h>
@@ -1806,7 +1807,7 @@ ThreeDSLoader::constructGeometry(GroupSharedPtr const& group, char *name, Lib3ds
       GeoNodeSharedPtr geoNode = GeoNode::create();
       if ( mat != m_numMaterials )
       {
-        geoNode->setMaterialEffect( m_materials[mat] );
+        geoNode->setMaterialPipeline( m_materials[mat] );
       }
       geoNode->setPrimitive( primitive );
 
@@ -1874,7 +1875,7 @@ ThreeDSLoader::postProcessCamerasAndLights()
 }
 
 void
-ThreeDSLoader::constructMaterials( std::vector<dp::sg::core::EffectDataSharedPtr> & materials, Lib3dsFile *data )
+ThreeDSLoader::constructMaterials( std::vector<dp::sg::core::PipelineDataSharedPtr> & materials, Lib3dsFile *data )
 {
   m_wirePresent = false;
 
@@ -1907,12 +1908,12 @@ ThreeDSLoader::constructMaterials( std::vector<dp::sg::core::EffectDataSharedPtr
     }
 
     // create the material effect
-    materials[i] = EffectData::create( getStandardMaterialSpec() );
+    materials[i] = dp::sg::core::PipelineData::create( getStandardMaterialSpec() );
     {
-      EffectDataSharedPtr const& me = materials[i];
-      me->setName( m->name );
+      dp::sg::core::PipelineDataSharedPtr const& mp = materials[i];
+      mp->setName( m->name );
 
-      const dp::fx::EffectSpecSharedPtr & es = me->getEffectSpec();
+      const dp::fx::EffectSpecSharedPtr & es = mp->getEffectSpec();
       dp::fx::EffectSpec::iterator pgsit = es->findParameterGroupSpec( string( "standardMaterialParameters" ) );
       DP_ASSERT( pgsit != es->endParameterGroupSpecs() );
       ParameterGroupDataSharedPtr materialParameters = ParameterGroupData::create( *pgsit );
@@ -1959,13 +1960,13 @@ ThreeDSLoader::constructMaterials( std::vector<dp::sg::core::EffectDataSharedPtr
         }
         DP_VERIFY( materialParameters->setParameter<bool>( "twoSidedLighting", m->two_sided != 0 ) );
       }
-      me->setParameterGroupData( pgsit, materialParameters );
+      mp->setParameterGroupData( pgsit, materialParameters );
 
-      me->setTransparent( 0.0f < m->transparency );
+      mp->setTransparent( 0.0f < m->transparency );
 
       if ( diffuseTexture || reflMap )
       {
-        const dp::fx::EffectSpecSharedPtr & es = me->getEffectSpec();
+        const dp::fx::EffectSpecSharedPtr & es = mp->getEffectSpec();
         dp::fx::EffectSpec::iterator pgsit = es->findParameterGroupSpec( string( "standardTextureParameters" ) );
         DP_ASSERT( pgsit != es->endParameterGroupSpecs() );
 
@@ -1983,7 +1984,7 @@ ThreeDSLoader::constructMaterials( std::vector<dp::sg::core::EffectDataSharedPtr
           ParameterGroupDataSharedPtr textureParameters = createTexture( m->texture1_map, m_fileFinder, texName, false );
           if ( textureParameters )
           {
-            me->setParameterGroupData( pgsit, textureParameters );
+            mp->setParameterGroupData( pgsit, textureParameters );
           }
           else
           {
@@ -1997,7 +1998,7 @@ ThreeDSLoader::constructMaterials( std::vector<dp::sg::core::EffectDataSharedPtr
           ParameterGroupDataSharedPtr textureParameters = createTexture( m->reflection_map, m_fileFinder, reflectName, true );
           if ( textureParameters )
           {
-            me->setParameterGroupData( pgsit, textureParameters );
+            mp->setParameterGroupData( pgsit, textureParameters );
           }
           else
           {

@@ -28,7 +28,6 @@
 #include <GL/freeglut.h>
 
 #include <dp/sg/core/PerspectiveCamera.h>
-#include <dp/sg/core/EffectData.h>
 
 #include <dp/sg/io/IO.h>
 
@@ -604,7 +603,7 @@ int runApp( options::variables_map const& opts )
         std::cerr << "invalid replacement token: " << *it << std::endl;
       }
     }
-    dp::sg::algorithm::replaceEffectDatas( viewStateHandle->getScene(), replacements );
+    dp::sg::algorithm::replacePipelineData( viewStateHandle->getScene(), replacements );
   }
 
   if ( !opts["statistics"].empty() )

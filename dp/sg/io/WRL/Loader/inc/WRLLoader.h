@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2015
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -43,7 +43,7 @@
 # define WRLLOADER_API __declspec(dllimport)
 # endif
 #else
-# define WRLLOADER_API 
+# define WRLLOADER_API
 #endif
 
 #if defined(LINUX)
@@ -68,7 +68,7 @@ WRLLOADER_API void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids
  *  are mapped to SceniX objects. Unsupported VRML Nodes are just ignored.\n
  *  The following VRML Nodes are supported:
  *  - Appearance\n
- *    An Appearance Node is translated into an dp::sg::core::EffectData, holding a "standardMaterialParameters" and
+ *    An Appearance Node is translated into an dp::sg::core::PipelineData, holding a "standardMaterialParameters" and
  *    maybe a "standardTextureParameters". If the opacityof the Appearence Node is less than one, or if the
  *    Texture holds a texture with alpha channel, the transparent hint is set on that EffectData.
  *  - Background\n
@@ -152,12 +152,12 @@ WRLLOADER_API void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids
  *    children. The LOD::center is set as the center in the dp::sg::core::LOD. If LOD::range is not empty,
  *    those values are used as the ranges in dp::sg::core::LOD. Otherwise some default ranges are created.
  *  - Material\n
- *    A Material Node is translated into an dp::sg::core::EffectData holding an dp::sg::core::ParameterGroupData named
+ *    A Material Node is translated into an dp::sg::core::PipelineData holding an dp::sg::core::ParameterGroupData named
  *    "standardMaterialParameters". The Material::ambientIntensity times the Material::diffuseColor is set as the
  *    ambient color of the EffectData. The Material::diffuseColor, Material::emissiveColor, and
  *    Material::specularColor are set as the diffuse color, emissive color, and specular color, respectively, of
- *    the dp::sg::core::EffectData. The Material::shininess is multiplied by 128 and set as the specular exponent of the
- *    dp::sg::core::EffectData. One minus Material::transparency is set as the opacity of the dp::sg::core::EffectData.
+ *    the dp::sg::core::PipelineData. The Material::shininess is multiplied by 128 and set as the specular exponent of the
+ *    dp::sg::core::PipelineData. One minus Material::transparency is set as the opacity of the dp::sg::core::PipelineData.
  *  - Normal\n
  *    A Normal Node is translated into the normals of a dp::sg::core::VertexAttributeSet.
  *  - NormalInterpolator\n
@@ -268,8 +268,8 @@ class WRLLoader : public dp::sg::io::SceneLoader
     void setStepsPerUnit( unsigned int stepsPerUnit );
 
     //! Realization of the pure virtual interface function of a SceneLoader.
-    /** Loads a VRML file given by \a filename. It looks for this file and 
-      * possibly referenced other files like textures or effects at the given 
+    /** Loads a VRML file given by \a filename. It looks for this file and
+      * possibly referenced other files like textures or effects at the given
       * path first, then at the current location and finally it searches
       * through the \a searchPaths.
       * \returns  A pointer to the loaded scene. */
@@ -297,7 +297,7 @@ class WRLLoader : public dp::sg::io::SceneLoader
     vrml::SFNode                                getNode( const std::string &nodeName, std::string &token );
     void                                        ignoreBlock( const std::string &open, const std::string &close, std::string &token );
     dp::sg::core::SceneSharedPtr                import( const std::string &filename );
-    dp::sg::core::EffectDataSharedPtr           interpretAppearance( vrml::AppearanceSharedPtr const& pAppearance );
+    dp::sg::core::PipelineDataSharedPtr         interpretAppearance( vrml::AppearanceSharedPtr const& pAppearance );
     void                                        interpretChildren( vrml::MFNode &children, dp::sg::core::GroupSharedPtr const& pGroup );
     void                                        interpretBackground( vrml::BackgroundSharedPtr const& pBackground );
     dp::sg::core::BillboardSharedPtr            interpretBillboard( vrml::BillboardSharedPtr const& pVRMLBillboard );
@@ -456,7 +456,7 @@ class WRLLoader : public dp::sg::io::SceneLoader
     // Circular and rectangular subdivision limits. The creation functions attempt to subdivide with square sized quads.
     // Minimum, standard at radius 1.0, and maximum subdivisions for a full circle of a sphere, cylinder, cone tessellation depending on their radii and heights.
     // Minimum, standard at size 1.0, and maximum subdivisions for a Box depending on its size.
-    // These six values can be defined by the user via the environment variable DP_WRL_SUBDIVISIONS. 
+    // These six values can be defined by the user via the environment variable DP_WRL_SUBDIVISIONS.
     // Defaults are DP_WRL_SUBDIVISIONS = 12 36 90  2 4 8
     int                                                       m_subdivisions[6];
 };

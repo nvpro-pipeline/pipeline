@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2013
+// Copyright (c) 2013-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -29,6 +29,7 @@
 #include <dp/sg/core/Camera.h>
 #include <dp/sg/core/GeoNode.h>
 #include <dp/sg/core/Group.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/core/Scene.h>
 
 QString makeText( bool add, dp::sg::core::ObjectSharedPtr const& parent, dp::sg::core::ObjectSharedPtr const& child );
@@ -131,9 +132,9 @@ bool add( dp::sg::core::ObjectSharedPtr const& parent, dp::sg::core::ObjectShare
   switch( parent->getObjectCode() )
   {
     case dp::sg::core::OC_GEONODE :
-      if ( child.isPtrTo<dp::sg::core::EffectData>() )
+      if ( child.isPtrTo<dp::sg::core::PipelineData>() )
       {
-        parent.staticCast<dp::sg::core::GeoNode>()->setMaterialEffect( child.staticCast<dp::sg::core::EffectData>() );
+        parent.staticCast<dp::sg::core::GeoNode>()->setMaterialPipeline( child.staticCast<dp::sg::core::PipelineData>() );
       }
       else
       {
@@ -167,10 +168,6 @@ bool add( dp::sg::core::ObjectSharedPtr const& parent, dp::sg::core::ObjectShare
         parent.staticCast<dp::sg::core::Primitive>()->setVertexAttributeSet( child.staticCast<dp::sg::core::VertexAttributeSet>() );
       }
       break;
-    case dp::sg::core::OC_EFFECT_DATA :
-      DP_ASSERT( child.isPtrTo<dp::sg::core::ParameterGroupData>() );
-      parent.staticCast<dp::sg::core::EffectData>()->setParameterGroupData( child.staticCast<dp::sg::core::ParameterGroupData>() );
-      break;
     case dp::sg::core::OC_PARAMETER_GROUP_DATA :
       DP_ASSERT( child->getObjectCode() == dp::sg::core::OC_SAMPLER );
       {
@@ -186,6 +183,10 @@ bool add( dp::sg::core::ObjectSharedPtr const& parent, dp::sg::core::ObjectShare
     case dp::sg::core::OC_MATRIXCAMERA :
       DP_ASSERT( child->getObjectCode() == dp::sg::core::OC_LIGHT_SOURCE );
       parent.staticCast<dp::sg::core::Camera>()->addHeadLight( child.staticCast<dp::sg::core::LightSource>() );
+      break;
+    case dp::sg::core::OC_PIPELINE_DATA :
+      DP_ASSERT( child.isPtrTo<dp::sg::core::ParameterGroupData>() );
+      parent.staticCast<dp::sg::core::PipelineData>()->setParameterGroupData( child.staticCast<dp::sg::core::ParameterGroupData>() );
       break;
     case dp::sg::core::OC_SCENE :
       if ( child.isPtrTo<dp::sg::core::Camera>() )
@@ -213,9 +214,9 @@ bool remove( dp::sg::core::ObjectSharedPtr const& parent, dp::sg::core::ObjectSh
   switch( parent->getObjectCode() )
   {
     case dp::sg::core::OC_GEONODE :
-      if ( child.isPtrTo<dp::sg::core::EffectData>() )
+      if ( child.isPtrTo<dp::sg::core::PipelineData>() )
       {
-        parent.staticCast<dp::sg::core::GeoNode>()->setMaterialEffect( dp::sg::core::EffectDataSharedPtr() );
+        parent.staticCast<dp::sg::core::GeoNode>()->setMaterialPipeline( dp::sg::core::PipelineDataSharedPtr() );
       }
       else
       {
@@ -249,16 +250,6 @@ bool remove( dp::sg::core::ObjectSharedPtr const& parent, dp::sg::core::ObjectSh
         parent.staticCast<dp::sg::core::Primitive>()->setVertexAttributeSet( dp::sg::core::VertexAttributeSetSharedPtr() );
       }
       break;
-    case dp::sg::core::OC_EFFECT_DATA :
-      DP_ASSERT( child.isPtrTo<dp::sg::core::ParameterGroupData>() );
-      {
-        dp::sg::core::ParameterGroupDataSharedPtr const& pgd = child.staticCast<dp::sg::core::ParameterGroupData>();
-        dp::sg::core::EffectDataSharedPtr const& ed = parent.staticCast<dp::sg::core::EffectData>();
-        dp::fx::EffectSpecSharedPtr const & es = ed->getEffectSpec();
-        DP_ASSERT( es->findParameterGroupSpec( pgd->getParameterGroupSpec() ) != es->endParameterGroupSpecs() );
-        parent.staticCast<dp::sg::core::EffectData>()->setParameterGroupData( es->findParameterGroupSpec( pgd->getParameterGroupSpec() ), dp::sg::core::ParameterGroupDataSharedPtr() );
-      }
-      break;
     case dp::sg::core::OC_PARAMETER_GROUP_DATA :
       DP_ASSERT( child->getObjectCode() == dp::sg::core::OC_SAMPLER );
       {
@@ -274,6 +265,16 @@ bool remove( dp::sg::core::ObjectSharedPtr const& parent, dp::sg::core::ObjectSh
     case dp::sg::core::OC_MATRIXCAMERA :
       DP_ASSERT( child->getObjectCode() == dp::sg::core::OC_LIGHT_SOURCE );
       parent.staticCast<dp::sg::core::Camera>()->removeHeadLight( child.staticCast<dp::sg::core::LightSource>() );
+      break;
+    case dp::sg::core::OC_PIPELINE_DATA :
+      DP_ASSERT( child.isPtrTo<dp::sg::core::ParameterGroupData>() );
+      {
+        dp::sg::core::ParameterGroupDataSharedPtr const& pgd = child.staticCast<dp::sg::core::ParameterGroupData>();
+        dp::sg::core::PipelineDataSharedPtr const& pd = parent.staticCast<dp::sg::core::PipelineData>();
+        dp::fx::EffectSpecSharedPtr const & es = pd->getEffectSpec();
+        DP_ASSERT( es->findParameterGroupSpec( pgd->getParameterGroupSpec() ) != es->endParameterGroupSpecs() );
+        parent.staticCast<dp::sg::core::PipelineData>()->setParameterGroupData( es->findParameterGroupSpec( pgd->getParameterGroupSpec() ), dp::sg::core::ParameterGroupDataSharedPtr() );
+      }
       break;
     case dp::sg::core::OC_SCENE :
       if ( child.isPtrTo<dp::sg::core::Camera>() )

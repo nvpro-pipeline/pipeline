@@ -28,7 +28,6 @@
 #include <GL/freeglut.h>
 
 #include <dp/sg/core/PerspectiveCamera.h>
-#include <dp/sg/core/EffectData.h>
 
 #include <dp/sg/io/IO.h>
 

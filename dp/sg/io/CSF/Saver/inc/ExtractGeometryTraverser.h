@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2012
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -30,7 +30,6 @@
 #include <dp/math/Trafo.h>
 #include <dp/sg/algorithm/Traverser.h>
 #include <dp/sg/algorithm/TransformStack.h>
-#include <dp/sg/core/EffectData.h>
 #include <dp/sg/core/Primitive.h>
 #include <dp/sg/io/CSF/Saver/inc/CSFSGWrapper.h>
 
@@ -51,8 +50,8 @@ class ExtractGeometryTraverser : public dp::sg::algorithm::SharedTraverser
     std::vector<CSFSGMaterial>& getMaterials();
     std::vector<CSFSGGeometry>& getGeometries();
 
-    typedef std::map <const dp::sg::core::EffectDataSharedPtr,int>  CSFSGMaterialHashMap;
-    typedef std::pair<const dp::sg::core::EffectDataSharedPtr,int>  CSFSGMaterialHashPair;
+    typedef std::map <const dp::sg::core::PipelineDataSharedPtr,int>  CSFSGMaterialHashMap;
+    typedef std::pair<const dp::sg::core::PipelineDataSharedPtr,int>  CSFSGMaterialHashPair;
 
     typedef std::pair<int,int>                                                CSFSGGeometryHashEntry;
     typedef std::pair<const dp::sg::core::Primitive*,CSFSGGeometryHashEntry>  CSFSGGeometryHashPair;
@@ -94,7 +93,7 @@ class ExtractGeometryTraverser : public dp::sg::algorithm::SharedTraverser
 
     CSFSGMaterialHashMap m_materialMap;
     CSFSGGeometryHashMap m_geometryMap;
-    
+
     int  m_materialIDX;
     int  m_objectIDX;
 
@@ -104,5 +103,5 @@ class ExtractGeometryTraverser : public dp::sg::algorithm::SharedTraverser
 
 
     std::string   m_annotation;
-    
+
 };

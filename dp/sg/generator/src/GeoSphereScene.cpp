@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2013
+// Copyright (c) 2013-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -29,6 +29,7 @@
 #include <dp/sg/core/GeoNode.h>
 #include <dp/sg/core/LightSource.h>
 #include <dp/sg/core/Node.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/core/Scene.h>
 #include <dp/sg/core/Transform.h>
 
@@ -59,17 +60,17 @@ typedef std::map<TriangleEdge, unsigned int> MapTriangleEdgeToIndex;
 // (this affects the effective hole size)
 #define THICKNESS_HALF    0.025f
 
-static void doSubdivision( const std::vector<unsigned int>& indicesIn, 
+static void doSubdivision( const std::vector<unsigned int>& indicesIn,
                            std::vector<unsigned int>& indicesOut, std::vector<Vec3f>& vertices )
 {
   MapTriangleEdgeToIndex edgeToIndex;
-  
+
   unsigned int nextIndex    = dp::checked_cast<unsigned int>( vertices.size() );
   unsigned int numTriangles = dp::checked_cast<unsigned int>( indicesIn.size() ) / 3;
-  
+
   indicesOut.clear();
 
-  for ( unsigned int i = 0; i < numTriangles; ++i ) 
+  for ( unsigned int i = 0; i < numTriangles; ++i )
   {
     unsigned int idx[3]; // Original triangle indices.
     unsigned int abc[3]; // Newly generated indices on the edges.
@@ -77,7 +78,7 @@ static void doSubdivision( const std::vector<unsigned int>& indicesIn,
     idx[0] = indicesIn[i * 3    ];
     idx[1] = indicesIn[i * 3 + 1];
     idx[2] = indicesIn[i * 3 + 2];
-    
+
     for ( unsigned int j = 0; j < 3; ++j )
     {
       unsigned int k = (j + 1) % 3;
@@ -135,7 +136,7 @@ void doHole( const Vec3f& center, float radius,
 
   unsigned int numTriangles = dp::checked_cast<unsigned int>( indicesIn.size() ) / 3;
 
-  for ( unsigned int i = 0; i < numTriangles; ++i ) 
+  for ( unsigned int i = 0; i < numTriangles; ++i )
   {
     unsigned int idx[3]; // Original triangle indices.
     unsigned int abc[3]; // Zero to three indices which are inside the radius.
@@ -143,7 +144,7 @@ void doHole( const Vec3f& center, float radius,
     idx[0] = indicesIn[i * 3    ];
     idx[1] = indicesIn[i * 3 + 1];
     idx[2] = indicesIn[i * 3 + 2];
-    
+
     unsigned int mask = 0;
     unsigned int count = 0; // Count the vertices which are visible.
     for ( unsigned int j = 0; j < 3; ++j )
@@ -179,24 +180,24 @@ void doHole( const Vec3f& center, float radius,
       // Remember the hole's edge segments. (This is actually the complete unordered line strip!)
       unsigned int m = min( abc[0], abc[1] );
       unsigned int n = max( abc[0], abc[1] );
-      
+
       TriangleEdge edge(m, n);
 
       holeEdges.insert( edge );
     }
   }
-  
+
   // See if circleEdges contain all edges. That is the case if the circleIndices.size() == circleEdges.size(),
   // because then each vertex must be start point of one edge. That simplifies generating the rim a lot.
   DP_ASSERT( holeIndices.size() == holeEdges.size() );
 
-  // Here the set holeIndices contains all indices of vertices 
+  // Here the set holeIndices contains all indices of vertices
   // which need to be pushed outside to lie on the circle radius.
-  for ( std::set<unsigned int>::const_iterator it = holeIndices.begin(); it != holeIndices.end(); ++it ) 
+  for ( std::set<unsigned int>::const_iterator it = holeIndices.begin(); it != holeIndices.end(); ++it )
   {
     Vec3f v = vertices[*it];
     Vec3f dir = v - center;
-    float d = dp::math::length( dir ); 
+    float d = dp::math::length( dir );
     normalize( dir );
     v =  v + dir * (radius - d);
     normalize( v );
@@ -218,7 +219,7 @@ void doRim( const Vec3f& center, float radius,
   {
     unsigned int k = *it; // The index on the outer shell.
     mapHoleIndexToLongitudeIndex[k] = iv++; // To find the longitude vertices in the rim array.
-    
+
     // Generate a right handed orthonormal basis with the normal as x-axis, the y-axis on the plane spanned by v and center.
     Vec3f v = vertices[k];
     Vec3f xAxis = v; // This is normalized.
@@ -268,7 +269,7 @@ void doRim( const Vec3f& center, float radius,
     // Find the indices on the longitudinal rings.
     std::map<unsigned int, unsigned int>::const_iterator itj = mapHoleIndexToLongitudeIndex.find( j );
     std::map<unsigned int, unsigned int>::const_iterator itk = mapHoleIndexToLongitudeIndex.find( k );
-    
+
     for ( unsigned int i = 0; i < NUM_LATITUDES; ++i )
     {
       unsigned int m = rim[i][itj->second];
@@ -305,7 +306,7 @@ static PrimitiveSharedPtr createGeoSphereObject()
 
   // Setup vertices. Initial vertex pool, subdivision level zero.
   static const Vec3f verticesBase[12] =
-  { 
+  {
     Vec3f(   -X, 0.0f,    Z ),
     Vec3f(    X, 0.0f,    Z ),
     Vec3f(   -X, 0.0f,   -Z ),
@@ -320,7 +321,7 @@ static PrimitiveSharedPtr createGeoSphereObject()
     Vec3f(   -Z,   -X, 0.0f )
   };
 
-  // Setup triangles 
+  // Setup triangles
   static const unsigned int triangles[20 * 3] =
   {
      0,  1,  4, //  0
@@ -366,7 +367,7 @@ static PrimitiveSharedPtr createGeoSphereObject()
 
   // Indices are completely regenerated each time.
   // New vertices are appended to the input vertices.
-  for (unsigned int subdivisions = 0; subdivisions < NUM_SUBDIVISIONS; ++subdivisions ) 
+  for (unsigned int subdivisions = 0; subdivisions < NUM_SUBDIVISIONS; ++subdivisions )
   {
     doSubdivision( indices[src], indices[dst], vertices );
     src ^= 1;
@@ -382,7 +383,7 @@ static PrimitiveSharedPtr createGeoSphereObject()
   float radius = HOLE_RADIUS_SCALE * acos( verticesBase[0] * verticesBase[1] );
   for ( unsigned int i = 0; i < 12; ++i )
   {
-    doHole( verticesBase[i], radius, 
+    doHole( verticesBase[i], radius,
             indices[src], vertices,
             indices[dst], holeIndices[i], holeEdges[i] ); // Output.
     src ^= 1;
@@ -395,10 +396,10 @@ static PrimitiveSharedPtr createGeoSphereObject()
   for ( unsigned int i = 0; i < countVertices; ++i )
   {
     Vec3f v = vertices[i];
-    normals.push_back( -v ); 
+    normals.push_back( -v );
     vertices.push_back( v * (1.0f - THICKNESS_HALF - THICKNESS_HALF) );
   }
-  
+
   // Now add the inner shell triangles.
   size_t countTriangles = indices[src].size() / 3;
   for ( size_t i = 0; i < countTriangles; ++i )
@@ -416,7 +417,7 @@ static PrimitiveSharedPtr createGeoSphereObject()
   // Build the rims.
   for ( unsigned int i = 0; i < 12; ++i )
   {
-    doRim( verticesBase[i], radius, 
+    doRim( verticesBase[i], radius,
            holeIndices[i], holeEdges[i], countVertices,
            indices[src], vertices, normals );
   }
@@ -428,11 +429,11 @@ static PrimitiveSharedPtr createGeoSphereObject()
   std::map<unsigned int, unsigned int> remapper;
   indices[dst].clear();
   unsigned int k = 0; // New index.
-  for ( size_t i = 0; i < indices[src].size(); ++i ) 
+  for ( size_t i = 0; i < indices[src].size(); ++i )
   {
     unsigned int j = indices[src][i]; // Old index.
     std::map<unsigned int, unsigned int>::const_iterator it = remapper.find( j );
-    if ( it == remapper.end() ) 
+    if ( it == remapper.end() )
     {
       // remap j to k
       verticesFinal.push_back( vertices[j] ); // This is the kth vertex now.
@@ -467,25 +468,25 @@ static PrimitiveSharedPtr createGeoSphereObject()
 
 
 GeoSphereScene::GeoSphereScene()
-{  
+{
   m_primitive = createGeoSphereObject();
-  
+
   dp::fx::EffectLibrary::instance()->loadEffects( "PreviewScene.xml");
 
   dp::fx::EffectDataSharedPtr phongEffectData = dp::fx::EffectLibrary::instance()->getEffectData( "phong_red" );
   DP_ASSERT( phongEffectData );
 
-  m_effectHandle = EffectData::create( phongEffectData );
+  m_pipelineData = dp::sg::core::PipelineData::create( phongEffectData );
 
   m_geoNodeHandle = GeoNode::create();
   m_geoNodeHandle->setPrimitive( m_primitive );
   m_geoNodeHandle->setName( "GeoSphere");
-  m_geoNodeHandle->setMaterialEffect( m_effectHandle );
+  m_geoNodeHandle->setMaterialPipeline( m_pipelineData );
 
   // Create a Transform
   m_transformHandle = Transform::create();
   Trafo trafo;
-  //trafo.setOrientation( Quatf( Vec3f(0.0f, 0.0f, 1.0f), -PI_QUARTER * 0.65f ) * 
+  //trafo.setOrientation( Quatf( Vec3f(0.0f, 0.0f, 1.0f), -PI_QUARTER * 0.65f ) *
   //                      Quatf( Vec3f(0.0f, 1.0f, 0.0f), -PI_QUARTER ) );
   m_transformHandle->setTrafo( trafo );
   m_transformHandle->addChild( m_geoNodeHandle );

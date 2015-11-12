@@ -26,7 +26,6 @@
 
 #include <dp/gl/RenderTargetFBO.h>
 #include <dp/math/Vecnt.h>
-#include <dp/sg/core/EffectData.h>
 #include <dp/sg/core/CoreTypes.h>
 #include <dp/fx/EffectLibrary.h>
 #include <dp/sg/gl/TextureGL.h>

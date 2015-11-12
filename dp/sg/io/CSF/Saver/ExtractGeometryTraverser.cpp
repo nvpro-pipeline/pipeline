@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2012
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -25,9 +25,9 @@
 
 
 #include <dp/sg/core/Billboard.h>
-#include <dp/sg/core/EffectData.h>
 #include <dp/sg/core/LOD.h>
 #include <dp/sg/core/ParameterGroupData.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/core/Primitive.h>
 #include <dp/sg/core/Sampler.h>
 #include <dp/sg/core/TextureFile.h>
@@ -46,7 +46,7 @@ using namespace dp::sg::core;
 
 ExtractGeometryTraverser::ExtractGeometryTraverser()
 {
-  // construct a material to extract defaults 
+  // construct a material to extract defaults
   const EffectSpecSharedPtr & standardSpec = getStandardMaterialSpec();
   EffectSpec::iterator groupSpecIt = standardSpec->findParameterGroupSpec( string( "standardMaterialParameters" ) );
   DP_ASSERT( groupSpecIt != standardSpec->endParameterGroupSpecs() );
@@ -60,7 +60,7 @@ ExtractGeometryTraverser::ExtractGeometryTraverser()
   m_materials.push_back(csfsgmaterial);
   m_materialIDX = 0;
 
-  m_materialMap.insert(CSFSGMaterialHashPair(dp::sg::core::EffectDataSharedPtr::null,m_materialIDX));
+  m_materialMap.insert(CSFSGMaterialHashPair(dp::sg::core::PipelineDataSharedPtr::null,m_materialIDX));
 
   CSFSGNode csfsgroot;
   csfsgroot.geometryIDX = -1;
@@ -83,7 +83,7 @@ void ExtractGeometryTraverser::handleLOD( const LOD *p )
 {
   if( p->getNumberOfRanges() )
   {
-    // we only traverse the highest LOD 
+    // we only traverse the highest LOD
     traverseObject( *p->beginChildren() );
   }
   else
@@ -117,10 +117,10 @@ bool ExtractGeometryTraverser::preTraverseTransform( const Trafo *p )
   int nodeIDX = makeIDX( m_nodes.size() );
 
   m_nodes.push_back(node);
-  
+
   if(m_parentStack.size() != 0 && m_nodes.size() != 0)
   {
-    m_nodes[m_parentStack.top()].children.push_back( nodeIDX ); 
+    m_nodes[m_parentStack.top()].children.push_back( nodeIDX );
   }
 
   m_parentStack.push( nodeIDX );
@@ -137,13 +137,13 @@ void  ExtractGeometryTraverser::postTraverseTransform( const Trafo *p )
 
 void  ExtractGeometryTraverser::handleGeoNode( const GeoNode * p )
 {
-  if ( p->getMaterialEffect() )
+  if ( p->getMaterialPipeline() )
   {
-    dp::sg::core::EffectDataSharedPtr const& ed = p->getMaterialEffect();
-    const dp::sg::core::ParameterGroupDataSharedPtr & smp = ed->findParameterGroupData( string( "standardMaterialParameters" ) );
+    dp::sg::core::PipelineDataSharedPtr const& mp = p->getMaterialPipeline();
+    const dp::sg::core::ParameterGroupDataSharedPtr & smp = mp->findParameterGroupData( string( "standardMaterialParameters" ) );
     if ( smp )
     {
-      CSFSGMaterialHashMap::const_iterator itSearch = m_materialMap.find(ed);
+      CSFSGMaterialHashMap::const_iterator itSearch = m_materialMap.find(mp);
       if ( itSearch == m_materialMap.end() )
       {
         ParameterGroupSpecSharedPtr pgs = smp->getParameterGroupSpec();
@@ -155,7 +155,7 @@ void  ExtractGeometryTraverser::handleGeoNode( const GeoNode * p )
 
         m_materialIDX = makeIDX( m_materials.size() );
 
-        m_materialMap.insert(CSFSGMaterialHashPair(ed,m_materialIDX));
+        m_materialMap.insert(CSFSGMaterialHashPair(mp,m_materialIDX));
         m_materials.push_back(material);
       }
       else{
@@ -347,7 +347,7 @@ int ExtractGeometryTraverser::addPrimitive(int geometryIDX, const Primitive* p)
             i++;
             startIdx = i; // set startIdx at next index in list
 
-            // increment one more so that i will start at startIdx + 2, after 
+            // increment one more so that i will start at startIdx + 2, after
             // loop increment
             i++;
             continue;

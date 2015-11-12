@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2007
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -25,9 +25,9 @@
 
 
 #include <dp/sg/core/Billboard.h>
-#include <dp/sg/core/EffectData.h>
 #include <dp/sg/core/LOD.h>
 #include <dp/sg/core/ParameterGroupData.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/core/Primitive.h>
 #include <dp/sg/core/Sampler.h>
 #include <dp/sg/core/Switch.h>
@@ -47,7 +47,7 @@ ExtractGeometryTraverser::ExtractGeometryTraverser()
 {
   m_transformStack.setWorldToView( cIdentity44f, cIdentity44f );
 
-  // construct a material to extract defaults 
+  // construct a material to extract defaults
   const dp::fx::EffectSpecSharedPtr & standardSpec = getStandardMaterialSpec();
  dp::fx:: EffectSpec::iterator groupSpecIt = standardSpec->findParameterGroupSpec( string( "standardMaterialParameters" ) );
   DP_ASSERT( groupSpecIt != standardSpec->endParameterGroupSpecs() );
@@ -82,7 +82,7 @@ void ExtractGeometryTraverser::handleLOD( const LOD *p )
 {
   if( p->getNumberOfRanges() )
   {
-    // we only traverse the highest LOD 
+    // we only traverse the highest LOD
     traverseObject( *p->beginChildren() );
   }
   else
@@ -105,7 +105,7 @@ void ExtractGeometryTraverser::handleTransform( const Transform *p )
     //  call the (overloadable) postTraverse() between stack adjustment and traversal
     postTraverseTransform( &trafo );
   }
-  
+
   // pop off view matrices after proceeding
   m_transformStack.popModelToWorld();
 }
@@ -121,9 +121,9 @@ void  ExtractGeometryTraverser::postTraverseTransform( const Trafo *p )
 
 void  ExtractGeometryTraverser::handleGeoNode( const GeoNode * p )
 {
-  if ( p->getMaterialEffect() )
+  if ( p->getMaterialPipeline() )
   {
-    EffectDataSharedPtr const& ed = p->getMaterialEffect();
+    dp::sg::core::PipelineDataSharedPtr const& ed = p->getMaterialPipeline();
     const ParameterGroupDataSharedPtr & smp = ed->findParameterGroupData( string( "standardMaterialParameters" ) );
     if ( smp )
     {
@@ -170,7 +170,7 @@ ExtractGeometryTraverser::traversePrimitive( const Primitive * p )
   VertexAttributeSetSharedPtr const& vas = p->getVertexAttributeSet();
 
   Buffer::ConstIterator<Vec3f>::Type vertices = vas->getVertices();
-    
+
   vector<unsigned int> indices;
 
   unsigned int offset = p->getElementOffset();
@@ -342,7 +342,7 @@ ExtractGeometryTraverser::traversePrimitive( const Primitive * p )
             i++;
             startIdx = i; // set startIdx at next index in list
 
-            // increment one more so that i will start at startIdx + 2, after 
+            // increment one more so that i will start at startIdx + 2, after
             // loop increment
             i++;
             continue;

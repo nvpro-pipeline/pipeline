@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2015
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -29,10 +29,10 @@
 
 #include <dp/sg/core/Billboard.h>
 #include <dp/sg/core/ClipPlane.h>
-#include <dp/sg/core/EffectData.h>
 #include <dp/sg/core/FrustumCamera.h>
 #include <dp/sg/core/GeoNode.h>
 #include <dp/sg/core/LOD.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/core/Primitive.h>
 #include <dp/sg/core/Switch.h>
 #include <dp/sg/core/Transform.h>
@@ -87,7 +87,7 @@ namespace dp
       void RayIntersectTraverser::setRay( const Vec3f &origin, const Vec3f &dir)
       {
         DP_ASSERT(isNormalized(dir));
-    
+
         m_rayOrigin = origin;
         m_rayDir    = dir;
 
@@ -167,11 +167,11 @@ namespace dp
         m_curPath->pop();
       }
 
-      static float getLineWidth( const dp::sg::core::EffectDataSharedPtr & effectData )
+      static float getLineWidth( const dp::sg::core::PipelineDataSharedPtr & pipelineData )
       {
-        if ( effectData )
+        if ( pipelineData )
         {
-          const ParameterGroupDataSharedPtr & parameterGroupData = effectData->findParameterGroupData( string( "standardGeometryParameters" ) );
+          const ParameterGroupDataSharedPtr & parameterGroupData = pipelineData->findParameterGroupData( string( "standardGeometryParameters" ) );
           if ( parameterGroupData )
           {
             return( parameterGroupData->getParameter<float>( parameterGroupData->getParameterGroupSpec()->findParameterSpec( "lineWidth" ) ) );
@@ -180,11 +180,11 @@ namespace dp
         return( 1.0f );
       }
 
-      static float getPointSize( const dp::sg::core::EffectDataSharedPtr & effectData )
+      static float getPointSize( const dp::sg::core::PipelineDataSharedPtr & pipelineData )
       {
-        if ( effectData )
+        if ( pipelineData )
         {
-          const ParameterGroupDataSharedPtr & parameterGroupData = effectData->findParameterGroupData( string( "standardGeometryParameters" ) );
+          const ParameterGroupDataSharedPtr & parameterGroupData = pipelineData->findParameterGroupData( string( "standardGeometryParameters" ) );
           if ( parameterGroupData )
           {
             return( parameterGroupData->getParameter<float>( parameterGroupData->getParameterGroupSpec()->findParameterSpec( "pointSize" ) ) );
@@ -204,8 +204,8 @@ namespace dp
 
         if ( continueTraversal(hints, bs) )
         {
-          m_currentLineWidth = getLineWidth( p->getMaterialEffect() );
-          m_currentPointSize = getPointSize( p->getMaterialEffect() );
+          m_currentLineWidth = getLineWidth( p->getMaterialPipeline() );
+          m_currentPointSize = getPointSize( p->getMaterialPipeline() );
           SharedModelViewTraverser::handleGeoNode( p );
         }
 
@@ -261,7 +261,7 @@ namespace dp
 
         int hints = m_currentHints.back() | p->getHints();
         m_currentHints.push_back(hints);
-  
+
         if ( continueTraversal(hints, bs) )
         {
           SharedModelViewTraverser::handleSwitch(p);
@@ -293,8 +293,8 @@ namespace dp
 
       inline bool RayIntersectTraverser::continueTraversal(unsigned int hints, const Sphere3f& bs)
       {
-        return !(hints & Object::DP_SG_HINT_ALWAYS_INVISIBLE) && 
-                isValid( bs ) && checkIntersection( bs ) && 
+        return !(hints & Object::DP_SG_HINT_ALWAYS_INVISIBLE) &&
+                isValid( bs ) && checkIntersection( bs ) &&
                 ( (hints & GeoNode::DP_SG_HINT_DONT_CLIP) || checkClipPlanes( bs ) );
       }
 
@@ -372,7 +372,7 @@ namespace dp
 
       bool RayIntersectTraverser::checkIntersection( const Sphere3f &sphere )
       {
-        // see ray / sphere intersection (optimized solution) 
+        // see ray / sphere intersection (optimized solution)
         // p.299, Tomas Möller, Eric Haines "Real-Time Rendering"
 
         Vec3f l = Vec3f( Vec4f( sphere.getCenter(), 1.0f ) * m_transformStack.getModelToWorld() ) - m_rayOrigin;
@@ -516,14 +516,14 @@ namespace dp
             }
           }
         }
-  
-        if ( ok ) 
+
+        if ( ok )
         {
           Vec3f misp = getModelIntersection( dist );
-    
+
           isp  = getWorldIntersection( misp ); // Return the intersection point in world space.
           dist = distance(m_rayOrigin, isp);   // Return the intersection distance in world space.
-    
+
           ok = !isClipped( isp, misp );
         }
 
@@ -628,7 +628,7 @@ namespace dp
           }
         }
 
-        if ( ok ) 
+        if ( ok )
         {
           Vec3f misp = getModelIntersection( dist );
 
@@ -652,7 +652,7 @@ namespace dp
 
           isp  = getWorldIntersection( misp );  // Return the intersection point in world space.
           dist = distance(m_rayOrigin, isp);    // Return the intersection distance in world space.
-    
+
           return !isClipped( isp, misp );
         }
         return false;
@@ -684,7 +684,7 @@ namespace dp
 
         // if determinant is near zero, ray lies in plane of triangle
         double det = e1 * p;
-  
+
         if ( fabs(det) < DBL_EPSILON )
         {
           return false;
@@ -727,13 +727,13 @@ namespace dp
 
         isp  = getWorldIntersection( misp ); // Return the intersection point in world space.
         dist = distance(m_rayOrigin, isp);   // Return the intersection distance in world space.
-  
+
         return !isClipped( isp, misp );
       }
 
       void RayIntersectTraverser::storeIntersection( const Primitive * p
                                                    , const Vec3f & isp
-                                                   , float dist 
+                                                   , float dist
                                                    , unsigned int primitiveIndex
                                                    , const vector<unsigned int> & vertexIndices )
       {
@@ -758,7 +758,7 @@ namespace dp
         const Vec3f & v0 = vertices[i0];
         const Vec3f & v1 = vertices[i1];
 
-        Vec3f isp; 
+        Vec3f isp;
         float dist;
         if ( intersectLine( v0, v1, m_currentLineWidth, isp, dist ) )
         {
@@ -779,8 +779,8 @@ namespace dp
         const Vec3f & v3 = vertices[i3];
 
         Vec3f isp;
-        float dist; 
-        if (  intersectTriangle( v0, v1, v2, isp, dist ) 
+        float dist;
+        if (  intersectTriangle( v0, v1, v2, isp, dist )
            || intersectTriangle( v2, v3, v0, isp, dist ) )
         {
           vector<unsigned int> vertIndices;
@@ -788,7 +788,7 @@ namespace dp
           vertIndices.push_back(i1);
           vertIndices.push_back(i2);
           vertIndices.push_back(i3);
-    
+
           // Assuming planar quads, otherwise the returned distance might not actually be the nearest one.
           storeIntersection( p, isp, dist, pi, vertIndices );
         }
@@ -915,7 +915,7 @@ namespace dp
               i++;
               startIdx = i; // set startidx at next index in list
 
-              // increment one more so that i will start at startIdx + 2, after 
+              // increment one more so that i will start at startIdx + 2, after
               // loop increment
               i++;
               ++j;  // index of the next tri fan
@@ -1044,7 +1044,7 @@ namespace dp
         {
           vector<unsigned int> vertIndices;
           vertIndices.push_back(idx);
-    
+
           storeIntersection( p
                            , isp
                            , dist
@@ -1199,7 +1199,7 @@ namespace dp
             case PRIMITIVE_LINE_STRIP_ADJACENCY:
             case PRIMITIVE_LINES_ADJACENCY:
             case PRIMITIVE_TRIANGLES_ADJACENCY:
-              // TODO: ADD support for ME 
+              // TODO: ADD support for ME
               break;
 
             case PRIMITIVE_PATCHES:

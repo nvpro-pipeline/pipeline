@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2005
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -34,6 +34,7 @@
 #include <iostream>
 #include <iomanip>
 #include <sstream>
+#include <dp/fx/EffectSpec.h>
 #include <dp/math/Trafo.h>
 #include <dp/sg/core/Camera.h>
 #include <dp/sg/core/Object.h>
@@ -113,9 +114,9 @@ namespace dp
       class StatPrimitive : public StatObject
       {
         public:
-          StatPrimitive() 
-            : m_indexed(0), m_arrays(0), m_patches(0), m_lineStripAdj(0) , m_linesAdj(0) , m_lineSegments(0), m_triStripAdj(0) 
-            , m_trisAdj(0) , m_polygons(0) , m_lineLoops(0) , m_quads(0) , m_quadStrips(0) , m_tris(0) , m_triStrips(0) 
+          StatPrimitive()
+            : m_indexed(0), m_arrays(0), m_patches(0), m_lineStripAdj(0) , m_linesAdj(0) , m_lineSegments(0), m_triStripAdj(0)
+            , m_trisAdj(0) , m_polygons(0) , m_lineLoops(0) , m_quads(0) , m_quadStrips(0) , m_tris(0) , m_triStrips(0)
             , m_triFans(0) , m_lines(0) , m_lineStrips(0) , m_points(0) , m_faces(0)
             , m_pointsPrimitives(0), m_lineStripPrimitives(0), m_linesPrimitives(0), m_lineLoopPrimitives(0), m_linesAdjacencyPrimitives(0)
             , m_lineStripAdjacencyPrimitives(0), m_triangleStripPrimitives(0), m_triangleFanPrimitives(0), m_trianglesPrimitives(0)
@@ -174,7 +175,7 @@ namespace dp
               m_numberOfTextures[i] = 0;
             }
           }
-  
+
         public:
           unsigned int  m_numberOfVertices;           //!< Counts the number of vertices.
           unsigned int  m_numberOfNormaled;           //!< Counts the number of VertexAttributeSet objects with normals.
@@ -252,7 +253,7 @@ namespace dp
       {
         public:
           StatTexture() : m_numImages(0), m_sumOfSizes(0) {}
-  
+
         public:
           unsigned int                m_numImages;    //!< Counts the number of images.
           std::map<int,unsigned int>  m_widths;       //!< Counts the number of Texture objects per width.
@@ -281,7 +282,6 @@ namespace dp
       {
         public:
           StatBillboard           m_statBillboard;                    //!< Statistics for Billboard objects.
-          StatEffectData          m_statEffectData;                   //!< Statistics for EffectData objects.
           StatGeoNode             m_statGeoNode;                      //!< Statistics for GeoNode objects.
           StatGroup               m_statGroup;                        //!< Statistics for Group objects.
           StatIndexSet            m_statIndexSet;                     //!< Statistics for IndexSet objects.
@@ -290,6 +290,7 @@ namespace dp
           StatParallelCamera      m_statParallelCamera;               //!< Statistics for ParallelCamera objects.
           StatParameterGroupData  m_statParameterGroupData;           //!< Statistics for ParameterGroupData objects.
           StatPerspectiveCamera   m_statPerspectiveCamera;            //!< Statistics for PerspectiveCamera objects.
+          StatEffectData          m_statPipelineData;                 //!< Statistics for PipelineData objects.
           StatPrimitive           m_statPrimitives;                   //!< Statistics for Primitives objects.
           StatPrimitive           m_statPrimitiveInstances;           //!< Statistics for Primitive instances.
           StatSampler             m_statSampler;                      //!< Statistics for Sampler objects.
@@ -299,40 +300,40 @@ namespace dp
           StatVertexAttributeSet  m_statVertexAttributeSet;           //!< Statistics for VertexAttributeSet objects.
           StatVertexAttributeSet  m_statVertexAttributeSetInstances;  //!< Statistics for VertexAttributeSet instances.
       };
-  
+
       //! Traverser to record some statistics of a scene.
       class StatisticsTraverser : public SharedTraverser
       {
         public:
           //! Constructor
           DP_SG_ALGORITHM_API StatisticsTraverser(void);
-  
+
           //! Destructor
           DP_SG_ALGORITHM_API virtual ~StatisticsTraverser(void);
 
           //! Get a constant pointer to the statistics results.
           DP_SG_ALGORITHM_API const Statistics  * getStatistics( void ) const;
-  
+
           //! Record statistics of a Camera.
           /** Just records the statistics of an Object object.  */
           DP_SG_ALGORITHM_API void  statCamera( const dp::sg::core::Camera *p, StatCamera &stats );
-  
+
           //! Record statistics of a FrustumCamera.
           /** Just records the statistics of an Object object.  */
           DP_SG_ALGORITHM_API void  statFrustumCamera( const dp::sg::core::FrustumCamera *p, StatFrustumCamera &stats );
-  
+
           //! Record statistics of a Group.
           /** Records the number of children and traverses them. Then the statistics of a Node are recorded.  */
           DP_SG_ALGORITHM_API void  statGroup( const dp::sg::core::Group *p, StatGroup &stats );
-  
+
           //! Record statistics of a LightSource.
           /** Just records the statistics of a Node.  */
           DP_SG_ALGORITHM_API void  statLightSource( const dp::sg::core::LightSource *p, StatLightSource &stats );
-  
+
           //! Record statistics of a Node.
           /** Just records the statistics of an Object. */
           DP_SG_ALGORITHM_API void  statNode( const dp::sg::core::Node *p, StatNode &stats );
-  
+
           //! Record statistics of an Object.
           /** Does nothing. */
           DP_SG_ALGORITHM_API void  statObject( const dp::sg::core::Object *p, StatObject &stats );
@@ -340,7 +341,7 @@ namespace dp
           //! Record statistics of a Primitive.
           /** Records the statistics of the VertexAttributeSet. Then the statistics of an Object are recorded. */
           DP_SG_ALGORITHM_API void  statPrimitive( const dp::sg::core::Primitive *p, StatPrimitive &stats );
-  
+
           //! Record statistics of a Transform.
           /** Just records the statistics of a Group. */
           DP_SG_ALGORITHM_API void statTransform( const dp::sg::core::Transform *p, StatTransform &stats );
@@ -365,19 +366,17 @@ namespace dp
           DP_SG_ALGORITHM_API virtual void  handleBillboard( const dp::sg::core::Billboard *p     //!<  Billboard to handle
                                        );
 
-          DP_SG_ALGORITHM_API virtual void handleEffectData( const dp::sg::core::EffectData * p );
-  
           //! Handle a GeoNode object.
           /** The number of GeoNode objects and the total number of geometries are count. After having traversed the geometries,
             * the statistics of a Node is recorded. */
           DP_SG_ALGORITHM_API virtual void  handleGeoNode( const dp::sg::core::GeoNode *p            //!<  GeoNode to handle
                                             );
-  
+
           //! Handle a Group object.
           /** The number of Group objects are count. */
           DP_SG_ALGORITHM_API virtual void  handleGroup( const dp::sg::core::Group *p                 //!<  Group to handle
                                    );
-  
+
           //! Handle an IndexSet object.
           /** A histogram  */
           DP_SG_ALGORITHM_API virtual void handleIndexSet( const dp::sg::core::IndexSet * p );
@@ -386,12 +385,12 @@ namespace dp
           /** The number of LOD objects is counted. Then the statistics of a Group is recorded.  */
           DP_SG_ALGORITHM_API virtual void  handleLOD( const dp::sg::core::LOD *p                //!<  LOD to save
                                  );
-  
+
           //! Handle a MatrixCamera object.
           /** The number of MatrixCamera objects is counted. Then the statistics of a Camera is recoreded.  */
           DP_SG_ALGORITHM_API virtual void  handleMatrixCamera( const dp::sg::core::MatrixCamera *p   //!<  MatrixCamera to handle
                                             );
-  
+
           //! Handle a ParallelCamera object.
           /** The number of ParallelCamera objects is counted. Then the statistics of a Camera is recoreded.  */
           DP_SG_ALGORITHM_API virtual void  handleParallelCamera( const dp::sg::core::ParallelCamera *p     //!<  ParallelCamera to handle
@@ -403,7 +402,9 @@ namespace dp
           /** The number of PerspectiveCamera objects is counted. Then the statistics of a Camera is recoreded.  */
           DP_SG_ALGORITHM_API virtual void  handlePerspectiveCamera( const dp::sg::core::PerspectiveCamera *p   //!<  PerspectiveCamera to handle
                                             );
-  
+
+          DP_SG_ALGORITHM_API virtual void handlePipelineData( const dp::sg::core::PipelineData * p );
+
           //! Handle a Primitive object.
           /** The number of Primitive objects are counted. */
           DP_SG_ALGORITHM_API virtual void  handlePrimitive( const dp::sg::core::Primitive *p               //!<  Primitive to handle
@@ -415,22 +416,22 @@ namespace dp
           /** The number of Switch objects is count. Then the statistics of a Group is recoreded. */
           DP_SG_ALGORITHM_API virtual void  handleSwitch( const dp::sg::core::Switch *p             //!<  Switch to handle
                                             );
-  
+
           //! Handle a Transform object.
           /** The number of Transform objects are count. Then the statistics of a Group is recorded.  */
           DP_SG_ALGORITHM_API virtual void  handleTransform( const dp::sg::core::Transform *p          //!<  Transform to handle
                                             );
-  
+
           DP_SG_ALGORITHM_API virtual void  handleVertexAttributeSet( const dp::sg::core::VertexAttributeSet *vas );
 
         private:
           unsigned int  m_instanceCount;
           Statistics  * m_statistics;
       };
- 
-      //! Output a statistics summary. 
+
+      //! Output a statistics summary.
       DP_SG_ALGORITHM_API std::ostream& operator<<( std::ostream& os, const StatisticsTraverser& obj );
-  
+
       inline const Statistics * StatisticsTraverser::getStatistics( void ) const
       {
         return( m_statistics );

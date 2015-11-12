@@ -1,4 +1,4 @@
- // Copyright NVIDIA Corporation 2002-2005
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -28,9 +28,9 @@
 #include <sstream>
 #include <vector>
 #include <dp/sg/core/Billboard.h>
-#include <dp/sg/core/EffectData.h>
 #include <dp/sg/core/GeoNode.h>
 #include <dp/sg/core/LOD.h>
+#include <dp/sg/core/PipelineData.h>
 #include <dp/sg/core/Sampler.h>
 #include <dp/sg/core/Switch.h>
 #include <dp/sg/core/Transform.h>
@@ -440,17 +440,6 @@ namespace dp
         }
       }
 
-      void AnalyzeTraverser::handleEffectData( const EffectData * p )
-      {
-        if ( isToBeHandled( p ) )
-        {
-          m_countMap[p->getObjectCode()]++;
-          analyzeEquivalentEffectSpec( p->getEffectSpec() );
-          analyzeEquivalent( p );
-          SharedTraverser::handleEffectData( p );
-        }
-      }
-
       void AnalyzeTraverser::handleGeoNode( const GeoNode * p )
       {
         if ( isToBeHandled( p ) )
@@ -509,6 +498,17 @@ namespace dp
           analyzeEquivalentParameterGroupSpec( p->getParameterGroupSpec() );
           analyzeEquivalent( p );
           SharedTraverser::handleParameterGroupData( p );
+        }
+      }
+
+      void AnalyzeTraverser::handlePipelineData( const dp::sg::core::PipelineData * p )
+      {
+        if ( isToBeHandled( p ) )
+        {
+          m_countMap[p->getObjectCode()]++;
+          analyzeEquivalentEffectSpec( p->getEffectSpec() );
+          analyzeEquivalent( p );
+          SharedTraverser::handlePipelineData( p );
         }
       }
 

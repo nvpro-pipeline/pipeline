@@ -38,6 +38,8 @@
 #include <dp/sg/algorithm/IndexTraverser.h>
 #include <dp/sg/algorithm/StatisticsTraverser.h>
 #include <dp/sg/core/PerspectiveCamera.h>
+#include <dp/sg/core/PipelineData.h>
+#include <dp/sg/core/Sampler.h>
 #include <dp/sg/core/TextureFile.h>
 #include <dp/sg/io/IO.h>
 
@@ -467,34 +469,34 @@ void Viewer::outputStatistics()
   }
 }
 
-const dp::sg::core::EffectDataSharedPtr & Viewer::getEffectData( const std::string & effectName )
+const dp::sg::core::PipelineDataSharedPtr & Viewer::getPipelineData( const std::string & pipelineName )
 {
-  EffectDataMap::const_iterator it = m_effectDataLibrary.find( effectName );
-  if ( it == m_effectDataLibrary.end() )
+  PipelineDataMap::const_iterator it = m_pipelineDataLibrary.find( pipelineName );
+  if ( it == m_pipelineDataLibrary.end() )
   {
-    it = m_effectDataLibrary.insert( make_pair( effectName, dp::sg::core::EffectData::create( dp::fx::EffectLibrary::instance()->getEffectData( effectName ) ) ) ).first;
+    it = m_pipelineDataLibrary.insert( make_pair( pipelineName, dp::sg::core::PipelineData::create( dp::fx::EffectLibrary::instance()->getEffectData( pipelineName ) ) ) ).first;
   }
   return( it->second );
 }
 
-class IsEffectData
+class IsPipelineData
 {
   public:
-    IsEffectData( const dp::sg::core::EffectDataSharedPtr & effectData )
-      : m_effectData( effectData )
+    IsPipelineData( const dp::sg::core::PipelineDataSharedPtr & pipelineData )
+      : m_pipelineData( pipelineData )
     {
     }
 
-    bool operator()( const std::pair<std::string,dp::sg::core::EffectDataSharedPtr> & data )
+    bool operator()( const std::pair<std::string,dp::sg::core::PipelineDataSharedPtr> & data )
     {
-      return( m_effectData == data.second );
+      return( m_pipelineData == data.second );
     }
 
   private:
-    const dp::sg::core::EffectDataSharedPtr & m_effectData;
+    const dp::sg::core::PipelineDataSharedPtr & m_pipelineData;
 };
 
-bool Viewer::holdsEffectData( const dp::sg::core::EffectDataSharedPtr & effectData )
+bool Viewer::holdsPipelineData( const dp::sg::core::PipelineDataSharedPtr & pipelineData )
 {
-  return( std::find_if( m_effectDataLibrary.cbegin(), m_effectDataLibrary.cend(), IsEffectData( effectData ) ) != m_effectDataLibrary.cend() );
+  return( std::find_if( m_pipelineDataLibrary.cbegin(), m_pipelineDataLibrary.cend(), IsPipelineData( pipelineData ) ) != m_pipelineDataLibrary.cend() );
 }

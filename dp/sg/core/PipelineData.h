@@ -40,32 +40,31 @@ namespace dp
     namespace core
     {
 
-      // The complete set of data of an Effect
-      // This is the base of MaterialEffect, LightEffect, GeometryEffect,...
-      class EffectData : public Object
+      // The complete set of data of a shader pipeline
+      class PipelineData : public Object
       {
         public:
-          /*! \brief create an EffectData
-           *  \param effectSpec The dp::fx::EffectSpec specifying the layout of the EffectData. */
-          DP_SG_CORE_API static EffectDataSharedPtr create( const dp::fx::EffectSpecSharedPtr & effectSpec );
+          /*! \brief create an PipelineData
+           *  \param effectSpec The dp::fx::EffectSpec specifying the layout of the PipelineData. */
+          DP_SG_CORE_API static PipelineDataSharedPtr create( const dp::fx::EffectSpecSharedPtr & effectSpec );
 
-          /*! \brief create an EffectData
-           *  \param effectData The dp::fx::EffectData specifying the layout and values of the newly created EffectData. */
-          DP_SG_CORE_API static EffectDataSharedPtr create( const dp::fx::EffectDataSharedPtr & effectData);
+          /*! \brief create an PipelineData
+           *  \param effectData The dp::fx::PipelineData specifying the layout and values of the newly created PipelineData. */
+          DP_SG_CORE_API static PipelineDataSharedPtr create( const dp::fx::EffectDataSharedPtr & effectData);
 
           DP_SG_CORE_API virtual HandledObjectSharedPtr clone() const;
 
-          DP_SG_CORE_API virtual ~EffectData();
+          DP_SG_CORE_API virtual ~PipelineData();
 
         public:
-          /*! \brief Get the dp::fx::EffectSpec of this EffectData
-           *  \returns A constant reference to the dp::fx::EffectSpec of this EffectData. */
+          /*! \brief Get the dp::fx::EffectSpec of this PipelineData
+           *  \returns A constant reference to the dp::fx::EffectSpec of this PipelineData. */
           DP_SG_CORE_API const dp::fx::EffectSpecSharedPtr & getEffectSpec() const;
 
           /*! \brief Get the ParameterGroupData corresponding to an iterator on an EffectSpec.
            *  \param it The iterator on an EffectSpec specifying the ParameterGroupData to get.
            *  \return A constant reference to the ParameterGroupData corresponding the iterator \a it on an EffectSpec.
-           *  \note If this EffectData does not hold a ParameterGroupData corresponding to the iterator \a it, an empty dummy ParameterGroupData is returned.
+           *  \note If this PipelineData does not hold a ParameterGroupData corresponding to the iterator \a it, an empty dummy ParameterGroupData is returned.
            *  \sa setParameterGroupData, getNumberOfParameterGroupData, findParameterGroupData, clearParameterGroupData */
           const ParameterGroupDataSharedPtr & getParameterGroupData( dp::fx::EffectSpec::iterator const& it ) const;
 
@@ -84,23 +83,23 @@ namespace dp
            *  \sa getParameterGroupData, getNumberOfParameterGroupData, findParameterGroupData, clearParameterGroupData */
           DP_SG_CORE_API bool setParameterGroupData( const ParameterGroupDataSharedPtr & pgd );
 
-          /*! \brief Get the number of ParameterGroupData contained in this EffectData
-           *  \returns The number of ParameterGroupData contained in this EffectData. */
+          /*! \brief Get the number of ParameterGroupData contained in this PipelineData
+           *  \returns The number of ParameterGroupData contained in this PipelineData. */
           DP_SG_CORE_API unsigned int getNumberOfParameterGroupData() const;
 
-          /*! \brief Find the element in this EffectData for the specified ParameterGroupSpec.
+          /*! \brief Find the element in this PipelineData for the specified ParameterGroupSpec.
            *  \param spec A constant reference to a dp::fx::ParameterGroupSpecSharedPtr, that specifies the ParameterGroupData to find.
-           *  \return The ParameterGroupData in this EffectData corresponding to the ParameterGroupSpec \a spec.
+           *  \return The ParameterGroupData in this PipelineData corresponding to the ParameterGroupSpec \a spec.
            *  \note If there is no ParameterGroupData corresponding the ParameterGroupSpec \a spec, an empty ParameterGroupData is returned. */
           DP_SG_CORE_API const ParameterGroupDataSharedPtr & findParameterGroupData( const dp::fx::ParameterGroupSpecSharedPtr & spec ) const;
 
-          /*! \brief Find the element in this EffectData for the specified name of the ParameterGroupSpec.
+          /*! \brief Find the element in this PipelineData for the specified name of the ParameterGroupSpec.
            *  \param specName The name of the ParameterGroupSpec that specifies the ParameterGroupData to find.
-           *  \return The ParameterGroupData in this EffectData corresponding to the name \a specName.
+           *  \return The ParameterGroupData in this PipelineData corresponding to the name \a specName.
            *  \note If there is no ParameterGroupData corresponding the name \a specName, an empty ParameterGroupData is returned. */
           DP_SG_CORE_API const ParameterGroupDataSharedPtr & findParameterGroupData( const std::string & specName ) const;
 
-          /*! \brief Remove all elements from this EffectData. */
+          /*! \brief Remove all elements from this PipelineData. */
           DP_SG_CORE_API void clearParameterGroupData();
 
           DP_SG_CORE_API bool getTransparent() const;
@@ -110,16 +109,16 @@ namespace dp
 
           DP_SG_CORE_API bool save( const std::string & filename ) const;
 
-          REFLECTION_INFO_API( DP_SG_CORE_API, EffectData );
+          REFLECTION_INFO_API( DP_SG_CORE_API, PipelineData );
           BEGIN_DECLARE_STATIC_PROPERTIES
               DP_SG_CORE_API DECLARE_STATIC_PROPERTY( Transparent );
           END_DECLARE_STATIC_PROPERTIES
 
         protected:
-          DP_SG_CORE_API EffectData( const dp::fx::EffectSpecSharedPtr& effectSpec );
-          DP_SG_CORE_API EffectData( const dp::fx::EffectDataSharedPtr& effectData );
-          DP_SG_CORE_API EffectData( const EffectData& rhs );
-          DP_SG_CORE_API EffectData & operator=( const EffectData & rhs );
+          DP_SG_CORE_API PipelineData( const dp::fx::EffectSpecSharedPtr& effectSpec );
+          DP_SG_CORE_API PipelineData( const dp::fx::EffectDataSharedPtr& effectData );
+          DP_SG_CORE_API PipelineData( const PipelineData& rhs );
+          DP_SG_CORE_API PipelineData & operator=( const PipelineData & rhs );
           DP_SG_CORE_API virtual void feedHashGenerator( dp::util::HashGenerator & hg ) const;
 
         private:
@@ -136,17 +135,17 @@ namespace dp
       DP_SG_CORE_API const dp::fx::EffectSpecSharedPtr& getStandardSpotLightSpec();
       DP_SG_CORE_API const dp::fx::EffectSpecSharedPtr& getStandardMaterialSpec();
 
-      DP_SG_CORE_API EffectDataSharedPtr createStandardGeometryData();
-      DP_SG_CORE_API EffectDataSharedPtr createStandardDirectedLightData( const dp::math::Vec3f & direction = dp::math::Vec3f( 0.0f, 0.0f, -1.0f )
+      DP_SG_CORE_API PipelineDataSharedPtr createStandardGeometryData();
+      DP_SG_CORE_API PipelineDataSharedPtr createStandardDirectedLightData( const dp::math::Vec3f & direction = dp::math::Vec3f( 0.0f, 0.0f, -1.0f )
                                                                         , const dp::math::Vec3f & ambient = dp::math::Vec3f( 0.0f, 0.0f, 0.0f )
                                                                         , const dp::math::Vec3f & diffuse = dp::math::Vec3f( 1.0f, 1.0f, 1.0f )
                                                                         , const dp::math::Vec3f & specular = dp::math::Vec3f( 1.0f, 1.0f, 1.0f ) );
-      DP_SG_CORE_API EffectDataSharedPtr createStandardPointLightData( const dp::math::Vec3f & position = dp::math::Vec3f( 0.0f, 0.0f, 1.0f )
+      DP_SG_CORE_API PipelineDataSharedPtr createStandardPointLightData( const dp::math::Vec3f & position = dp::math::Vec3f( 0.0f, 0.0f, 1.0f )
                                                                      , const dp::math::Vec3f & ambient = dp::math::Vec3f( 0.0f, 0.0f, 0.0f )
                                                                      , const dp::math::Vec3f & diffuse = dp::math::Vec3f( 1.0f, 1.0f, 1.0f )
                                                                      , const dp::math::Vec3f & specular = dp::math::Vec3f( 1.0f, 1.0f, 1.0f )
                                                                      , const std::array<float, 3> & attenuations = { 1.0f, 0.0f, 0.0f } );
-      DP_SG_CORE_API EffectDataSharedPtr createStandardSpotLightData( const dp::math::Vec3f & position = dp::math::Vec3f( 0.0f, 0.0f, 1.0f )
+      DP_SG_CORE_API PipelineDataSharedPtr createStandardSpotLightData( const dp::math::Vec3f & position = dp::math::Vec3f( 0.0f, 0.0f, 1.0f )
                                                                     , const dp::math::Vec3f & direction = dp::math::Vec3f( 0.0f, 0.0f, -1.0f )
                                                                     , const dp::math::Vec3f & ambient = dp::math::Vec3f( 0.0f, 0.0f, 0.0f )
                                                                     , const dp::math::Vec3f & diffuse = dp::math::Vec3f( 1.0f, 1.0f, 1.0f )
@@ -154,7 +153,7 @@ namespace dp
                                                                     , const std::array<float, 3> & attenuations = { 1.0f, 0.0f, 0.0f }
                                                                     , float exponent = 0.0f
                                                                     , float cutoff = 45.0f );
-      DP_SG_CORE_API EffectDataSharedPtr createStandardMaterialData( const dp::math::Vec3f & ambientColor = dp::math::Vec3f( 0.2f, 0.2f, 0.2f )
+      DP_SG_CORE_API PipelineDataSharedPtr createStandardMaterialData( const dp::math::Vec3f & ambientColor = dp::math::Vec3f( 0.2f, 0.2f, 0.2f )
                                                                    , const dp::math::Vec3f & diffuseColor = dp::math::Vec3f( 0.8f, 0.8f, 0.8f )
                                                                    , const dp::math::Vec3f & specularColor = dp::math::Vec3f( 0.0f, 0.0f, 0.0f )
                                                                    , const float specularExponent = 1.0f
@@ -164,12 +163,12 @@ namespace dp
                                                                    , const float indexOfRefraction = 1.0f );
 
 
-      inline const dp::fx::EffectSpecSharedPtr & EffectData::getEffectSpec() const
+      inline const dp::fx::EffectSpecSharedPtr & PipelineData::getEffectSpec() const
       {
         return( m_effectSpec );
       }
 
-      inline const ParameterGroupDataSharedPtr & EffectData::getParameterGroupData( dp::fx::EffectSpec::iterator const& it ) const
+      inline const ParameterGroupDataSharedPtr & PipelineData::getParameterGroupData( dp::fx::EffectSpec::iterator const& it ) const
       {
         DP_ASSERT( it != m_effectSpec->endParameterGroupSpecs() );
         return( m_parameterGroupData[ std::distance( m_effectSpec->beginParameterGroupSpecs(), it ) ] );

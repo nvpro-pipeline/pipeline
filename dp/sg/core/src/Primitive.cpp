@@ -29,7 +29,6 @@
 #include <limits>
 
 #include <dp/sg/core/Primitive.h>
-#include <dp/sg/core/EffectData.h>
 #include <dp/sg/core/IndexSet.h>
 
 using namespace dp::math;

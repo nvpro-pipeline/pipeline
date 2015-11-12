@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -27,6 +27,7 @@
 #include <dp/sg/renderer/rix/gl/inc/ResourceEffectDataRiXFx.h>
 
 #include <dp/sg/core/CoreTypes.h>
+#include <dp/sg/core/PipelineData.h>
 
 namespace dp
 {
@@ -40,27 +41,27 @@ namespace dp
         {
 
           // TODO make implementation global? should it be possible to have two implementations active at the same time? What happens if implementation gets changed and resources are still alive?
-          ResourceEffectDataRiXFxSharedPtr ResourceEffectDataRiXFx::get( const dp::sg::core::EffectDataSharedPtr &effectData, const dp::rix::fx::ManagerSharedPtr& rixFx, const ResourceManagerSharedPtr& resourceManager )
+          ResourceEffectDataRiXFxSharedPtr ResourceEffectDataRiXFx::get( const dp::sg::core::PipelineDataSharedPtr &pipelineData, const dp::rix::fx::ManagerSharedPtr& rixFx, const ResourceManagerSharedPtr& resourceManager )
           {
-            assert( effectData );
+            assert( pipelineData );
             assert( !!resourceManager );
 
-            ResourceEffectDataRiXFxSharedPtr resourceEffectData = resourceManager->getResource<ResourceEffectDataRiXFx>( reinterpret_cast<size_t>(effectData.operator->()) );   // Big Hack !!
+            ResourceEffectDataRiXFxSharedPtr resourceEffectData = resourceManager->getResource<ResourceEffectDataRiXFx>( reinterpret_cast<size_t>(pipelineData.operator->()) );   // Big Hack !!
             if ( !resourceEffectData )
             {
-              resourceEffectData = std::shared_ptr<ResourceEffectDataRiXFx>( new ResourceEffectDataRiXFx( effectData, rixFx, resourceManager ) );
+              resourceEffectData = std::shared_ptr<ResourceEffectDataRiXFx>( new ResourceEffectDataRiXFx( pipelineData, rixFx, resourceManager ) );
               resourceEffectData->update();
             }
 
             return resourceEffectData;
           }
 
-          ResourceEffectDataRiXFx::ResourceEffectDataRiXFx( const dp::sg::core::EffectDataSharedPtr &effectData, const dp::rix::fx::ManagerSharedPtr& rixFx, const ResourceManagerSharedPtr& resourceManager )
-            : ResourceManager::Resource( reinterpret_cast<size_t>( effectData.operator->() ), resourceManager )   // Big Hack !!
+          ResourceEffectDataRiXFx::ResourceEffectDataRiXFx( const dp::sg::core::PipelineDataSharedPtr &pipelineData, const dp::rix::fx::ManagerSharedPtr& rixFx, const ResourceManagerSharedPtr& resourceManager )
+            : ResourceManager::Resource( reinterpret_cast<size_t>( pipelineData.operator->() ), resourceManager )   // Big Hack !!
             , m_rixFx( rixFx )
-            , m_effectData( effectData )
+            , m_pipelineData( pipelineData )
           {
-            DP_ASSERT( effectData );
+            DP_ASSERT( pipelineData );
 
             resourceManager->subscribe( this );
           }
@@ -75,13 +76,13 @@ namespace dp
 
           void ResourceEffectDataRiXFx::update( )
           {
-            const dp::fx::EffectSpecSharedPtr& effectSpec = m_effectData->getEffectSpec();
+            const dp::fx::EffectSpecSharedPtr& effectSpec = m_pipelineData->getEffectSpec();
             m_resourceEffectSpec = ResourceEffectSpecRiXFx::get( effectSpec, m_rixFx, m_resourceManager );
 
             std::vector<ResourceParameterGroupDataRiXFxSharedPtr> newResourceParameterGroupDataRiXFxs;
             for ( dp::fx::EffectSpec::iterator it = effectSpec->beginParameterGroupSpecs(); it != effectSpec->endParameterGroupSpecs(); ++it )
             {
-              dp::sg::core::ParameterGroupDataSharedPtr const& parameterGroupData = m_effectData->getParameterGroupData(it);
+              dp::sg::core::ParameterGroupDataSharedPtr const& parameterGroupData = m_pipelineData->getParameterGroupData(it);
 
               if ( parameterGroupData )
               {
@@ -115,7 +116,7 @@ namespace dp
 
           const dp::sg::core::HandledObjectSharedPtr& ResourceEffectDataRiXFx::getHandledObject() const
           {
-            return m_effectData.inplaceCast<dp::sg::core::HandledObject>();
+            return m_pipelineData.inplaceCast<dp::sg::core::HandledObject>();
           }
 
         } // namespace gl
