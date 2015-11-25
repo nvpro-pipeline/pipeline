@@ -89,7 +89,7 @@ struct str_t
                                   //!< not including the terminating null character.
   uint_t      chars;              //!< Specifies the file offset to the string characters.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(str_t,4);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(str_t) % 4 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The sstr_t structure specifies how a small string is stored in a .DPBF file.
 /** \note A small string is limited to 65535 characters, including the terminating 0 */
@@ -109,7 +109,7 @@ struct vertexAttrib_t
   uint_t      numVData;           //!< Specifies the number of vertex data stored at offset \a vdata.
   uint_t      vdata;              //!< Specifies the file offset to the raw vertex data
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(vertexAttrib_t,4);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(vertexAttrib_t) % 4 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The texCoordSet_t structure specifies how a texture coordinate set is stored in a .DPBF file.
 /** Texture coordinate sets, in this context, need to be considered in conjunction with NBFVertexAttributeSet objects. */
@@ -120,7 +120,7 @@ struct texCoordSet_t
                                   //!< Texture coordinates can be either one, two, three, or four dimensional.
   uint_t      texCoords;          //!< Specifies the file offset to the contained texture coordinates. 
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(texCoordSet_t,4);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(texCoordSet_t) % 4 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The indexList_t structure specifies how an index set is stored in a .DPBF file.
 /** Index sets, in this context, need to be considered in conjunction with NBFStrippedPrimitiveSet objects. */
@@ -130,7 +130,7 @@ struct indexList_t
   uint_t      indices;            //!< Specifies the file offset to the indices. As specified by the DPBF format,
                                   //!< a index is a 32-bit unsigned integer value.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(indexList_t,4);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(indexList_t) % 4 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The meshSet_t structure specifies how an mesh set is stored in a .DPBF file.
 /** Mesh sets, in this context, need to be considered in conjunction with NBFMeshedPrimitiveSet objects. */
@@ -141,7 +141,7 @@ struct meshSet_t
   uint_t      indices;            //!< Specifies the file offset to the indices. As specified by the NBF format,
   //!< a index is a 32-bit unsigned integer value.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(meshSet_t,4);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(meshSet_t) % 4 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The texImage_t structure specifies how a texture image is stored in a .DPBF file.
 /** Texture images are considered in conjunction with NBFParameterGroupData objects. */
@@ -159,7 +159,7 @@ struct texImage_t
   uint_t      dataType;           //!< Specifies the type of the pixel data.
   uint_t      pixels;             //!< Specifies the file offset to the raw pixel data.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(texImage_t,4);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(texImage_t) % 4 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The trafo_t structure specifies how a transformation is stored in a .DPBF file.
 struct trafo_t
@@ -170,7 +170,7 @@ struct trafo_t
   float3_t    center;             //!< Specifies the center of rotation of the transformation.
   float4_t    scaleOrientation;   //!< Specifies the scale orientational part of the transformation.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(trafo_t,4);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(trafo_t) % 4 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The plane_t structure specifies how a clipping plane is stored in an .DPBF file.
 struct plane_t
@@ -179,7 +179,7 @@ struct plane_t
   float3_t    normal;             //!< Specifies the normal of the plane
   float       offset;             //!< Specifies the offset of the plane
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(plane_t,4);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(plane_t) % 4 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The switchMask_t structure specifies how a SwitchMask is stored in a .DPBF file.
 struct switchMask_t
@@ -188,7 +188,7 @@ struct switchMask_t
   uint_t        numChildren;      //!< Specifies the number of active children stored with this mask
   uint_t        children;         //!< Specifies the file offset to the zero-based indexes referencing the active children
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(switchMask_t,4);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(switchMask_t) % 4 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! Unique DPBF Object Codes
 /** Each concrete NBFObject type is assigned to a unique DPBF object code. 
@@ -339,7 +339,7 @@ struct NBFHeader
   uint_t      viewState;          //!< Specifies the file offset to an optional NBFViewState object. 
                                   //!< An offset of 0 indicates that no NBFViewState object is available in this file. 
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFHeader,4);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFHeader) % 4 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFScene structure represents a scene in the context of computer graphics.
 /** A valid NBF file always contains one - and only one - NBFScene object. 
@@ -360,7 +360,7 @@ struct NBFScene
   uint_t      numAttributes;            //!< Specifies the number of attributes in the scene
   uint_t      attributes;               //!< Specifies the file offset to the scenes's attributes
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFScene,4);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFScene) % 4 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFViewState represents an optional view state used to render the scene.
 /** The file offset to an optional NBFViewState object is specified within the NBFHeader structure. */
@@ -377,7 +377,7 @@ struct NBFViewState
   float       stereoEyeDistance;    //!< Specifies the stereo eye distance used if the view is in stereo mode.
   float       targetDistance;       //!< Specifies the target distance to the projection plane.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFViewState,4);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFViewState) % 4 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFObject structure represents general object data. 
 struct NBFObject
@@ -402,7 +402,7 @@ struct NBFObject
 // we need to ensure the size of NBFObject is fixed - that is, independent of whatever
 // the compilers actual packing value might be! We achieve this by making the size of 
 // NBFObject a multiple of 8 bytes (see compile time assert below).  
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFObject,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFObject) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFCamera represents a camera.
 /** A NBFCamera serves as base class only.\n
@@ -419,7 +419,7 @@ struct NBFCamera : public NBFObject
   float3_t    direction;        //!< Specifies the normalized direction for the camera to look along.
   float       focusDist;        //!< Specifies the distance to the projection plane.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFCamera,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFCamera) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 /*! \brief The NBFFrustumCamera structure is the base of the NBFParalleleCamera and the NBFPerspectiveCamera. */
 struct NBFFrustumCamera : public NBFCamera
@@ -433,7 +433,7 @@ struct NBFFrustumCamera : public NBFCamera
                                 //!< of the vector specifies the width, and the y-component of the vector specifies the height.
   PADDING(4);        //!< Padding bits to ensure the size of NBFCamera is a multiple of 8, regardless of packing.    
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFFrustumCamera,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFFrustumCamera) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFParallelCamera represents a parallel camera.
 /** A NBFParallelCamera is a concrete camera type. 
@@ -441,7 +441,7 @@ DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFFrustumCamera,8);   //!< Compile-time assert
 struct NBFParallelCamera : public NBFFrustumCamera
 {
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFParallelCamera,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFParallelCamera) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFPerspectiveCamera represents a perspective camera.
 /** A NBFPerspectiveCamera is a concrete camera type. 
@@ -449,7 +449,7 @@ DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFParallelCamera,8);   //!< Compile-time asser
 struct NBFPerspectiveCamera : public NBFFrustumCamera
 {
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFPerspectiveCamera,8);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFPerspectiveCamera) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 /*! \brief The NBFMatrixCamera structure represents a general matrix camera.
  *  \remarks The object code for a NBFMatrixCamera is NBF_MATRIX_CAMERA. */
@@ -458,7 +458,7 @@ struct NBFMatrixCamera : public NBFCamera
   float44_t   projection;         //!< Specifies the projection matrix
   float44_t   inverseProjection;  //!< Specifies the inverse projection matrix
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFMatrixCamera,8);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFMatrixCamera) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFVertexAttributeSet structure represents a set of vertex attributes.
 /** A NBFVertexAttributeSet maintains a full set of geometry
@@ -469,7 +469,7 @@ struct NBFVertexAttributeSet : public NBFObject
   uint_t      normalizeEnableFlags;   //!< Specifies for which of the 16 vertex attributes normalization is enabled.
   vertexAttrib_t  vattribs[16];       //!< Specifies the 16 vertex attributes.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFVertexAttributeSet,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFVertexAttributeSet) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 /*! \brief The NBFSkin structure represents a set of skin information for a vertex attribute.
  *  \remarks An NBFSkin derives from NBFObject, and holds the bindShapeMatrix, the number
@@ -489,7 +489,7 @@ struct NBFSkin : public NBFObject
   uint_t      joints;             //!< Specifies the file offset to the joints.
   uint_t      bindPose;           //!< Specifies the file offset to the bind pose vertex attribute set.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFSkin,8);
+DP_STATIC_ASSERT( ( sizeof(NBFSkin) % 8 ) == 0 );
 
 //! The NBFPrimitiveSet structure represents a geometry with an NBFVertexAttributeSet.
 /** A NBFPrimitiveSet holds the offset to an NBFVertexAttributeSet. */
@@ -498,7 +498,7 @@ struct NBFPrimitiveSet : public NBFObject
   uint_t      vertexAttributeSet; //!< Specifies the file offset to the vertex attribute set.
   uint_t      skin;               //!< Specifies the file offset to the skin (from version 0x3e on!)
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFPrimitiveSet,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFPrimitiveSet) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFPrimitive structure represents a geometry with an NBFVertexAttributeSet, and possibly an index set
 /** A NBFPrimitive holds the offset to an NBFVertexAttributeSet, and possibly an index set */
@@ -518,7 +518,7 @@ struct NBFPrimitive : public NBFObject
   ubyte_t     patchesType;        //!< Specifies the patches type, if this Primitive is a patch
   PADDING(4);                     //!< Padding bits to ensure the size of NBFPrimitive is a multiple of 8, regardless of packing.    
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFPrimitive,8);   // Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFPrimitive) % 8 ) == 0 );   // Compile-time assert on size of structure
 
 //! The NBFIndependentPrimitiveSet structure represents a set of independent primitives.
 /** A NBFIndependentPrimitiveSet is an abstract topology class derived from NBFPrimitiveSet.
@@ -528,7 +528,7 @@ struct NBFIndependentPrimitiveSet : public NBFPrimitiveSet
   uint_t      numIndices;         //!< Specifies the number of contained indices
   uint_t      indices;            //!< Specifies the file offset to the Independent objects.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFIndependentPrimitiveSet,8);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFIndependentPrimitiveSet) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFMeshedPrimitiveSet structure represents a mesh set.
 /** A NBFMeshedPrimitiveSet is an abstract topology class derived from NBFPrimitiveSet. 
@@ -539,7 +539,7 @@ struct NBFMeshedPrimitiveSet : public NBFPrimitiveSet
   uint_t      meshes;             //!< Specifies the file offset to the meshes. 
   //!< Strips are stored as indexList_t objects.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFMeshedPrimitiveSet,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFMeshedPrimitiveSet) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFStrippedPrimitiveSet structure represents a strip set.
 /** A NBFStrippedPrimitiveSet is an abstract topology class derived from NBFPrimitiveSet. 
@@ -550,7 +550,7 @@ struct NBFStrippedPrimitiveSet : public NBFPrimitiveSet
   uint_t      strips;             //!< Specifies the file offset to the strips. 
                                   //!< Strips are stored as indexList_t objects.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFStrippedPrimitiveSet,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFStrippedPrimitiveSet) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFNode structure represents a general node.
 /** A NBFNode serves as base class only. Concrete object codes valid for a NBFNode are
@@ -563,7 +563,7 @@ struct NBFNode : public NBFObject
   PADDING(6);                     //!< Padding bits to ensure the size of NBFStateAttribute is a multiple of 4, regardless of packing.
   PADDING(2);                     //!< Two more padding for backwards compat
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFNode,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFNode) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFGeoNode structure represents a geometry node.
 /** The object code for a NBFGeoNode is NBF_GEO_NODE. */
@@ -574,7 +574,7 @@ struct NBFGeoNode : public NBFNode
   uint_t      stateSet;           //!< Obsolete
   PADDING(4);        //!< Padding bits to ensure the size of NBFGeoNode is a multiple of 8, regardless of packing.    
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFGeoNode,8);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFGeoNode) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFGroup structure represents a group node.
 /** A NBFGroup serves as base class only. Concrete object codes valid for a NBFGroup are
@@ -590,7 +590,7 @@ struct NBFGroup : public NBFNode
   uint_t      numLightSource;     //!< Specifies the number of light sources.
   uint_t      lightSources;       //!< Specifies the fie offset to the offsets to the light sources.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFGroup,8);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFGroup) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFLOD structure represents a 'Level Of Detail' group node.
 /** The object code for a NBFLOD is NBF_LOD. */
@@ -602,7 +602,7 @@ struct NBFLOD : public NBFGroup
                                   //!< Ranges are stored as 32-bit floating point numbers.
   PADDING(4);        //!< Padding bits to ensure the size of NBFLOD is a multiple of 8, regardless of packing.    
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFLOD,8);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFLOD) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFSwitch structure represents a switch group node.
 /** The object code for a NBFSwitch is NBF_SWITCH. */
@@ -613,7 +613,7 @@ struct NBFSwitch : public NBFGroup
   uint_t      masks;              //!< Specifies the file offset to the masks stored as switchMask_t objects
   PADDING(4);        //!< Padding bits to ensure the size of NBFSwitch is a multiple of 8, regardless of packing.    
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFSwitch,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFSwitch) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFBillboard structure represents a billboard group node.
 /** The object code for a NBFBillboard is NBF_BILLBOARD. */
@@ -623,7 +623,7 @@ struct NBFBillboard: public NBFGroup
   ubyte_t   alignment;            //!< Specifies the alignment (axis, viewer, or screen aligned)
   PADDING(3);        //!< Padding bits to ensure the size of NBFBillboard is a multiple of 8, regardless of packing.    
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFBillboard,8);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFBillboard) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFTransform structure represents a transform group node.
 /** The object code for a NBFTransform is NBF_TRANSFORM. */
@@ -632,7 +632,7 @@ struct NBFTransform : public NBFGroup
   trafo_t             trafo;      //!< Specifies the transformation of the NBFTransform.
   PADDING(4);        //!< Padding bits to ensure the size of NBFTransform is a multiple of 8, regardless of packing.    
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFTransform,8);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFTransform) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFLightSource structure represents a light source node.
 /** A NBFLightSource serves as base class only. Concrete object codes valid for 
@@ -646,7 +646,7 @@ struct NBFLightSource : public NBFNode
   uint_t      lightEffect;        //!< Specifies the file offset to an optional NBFPipelineData
   PADDING(4);        //!< Padding bits to ensure the offset of the next struct member is on a 4-byte boundary.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFLightSource,8);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFLightSource) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFPipelineData structure represents a set of ParameterGroupDatas
 /** The object code for an NBFPipelineData is NBF_PIPELINE_DATA. */
@@ -658,7 +658,7 @@ struct NBFPipelineData : public NBFObject
   ubyte_t     transparent;          //!< Specifies if this EffectData is to be handled as transparent
   PADDING(3);        //!< Padding bits to ensure the offset of the next struct member is on a 4-byte boundary.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFPipelineData,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFPipelineData) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 struct NBFParameterGroupData : public NBFObject
 {
@@ -666,7 +666,7 @@ struct NBFParameterGroupData : public NBFObject
   uint_t      numData;
   uint_t      data;                 //!< Specifies the file offset to the data
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFParameterGroupData,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFParameterGroupData) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 /*! \brief The NBFLink structure represents a link between two objects using a callback. */
 struct NBFLink
@@ -675,7 +675,7 @@ struct NBFLink
   uint_t  subject;                  //!< Specifies the offset of the subject
   uint_t  observer;                 //!< Specifies the offset of the observer
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFLink,4);               //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFLink) % 4 ) == 0 );               //!< Compile-time assert on size of structure
 
 /*! The NBFIndexSet structure specifies how indices are stored in a .DPBF file
  *  \remarks The object code for a NBFIndexSet is NBF_INDEX_SET. */
@@ -686,7 +686,7 @@ struct NBFIndexSet : public NBFObject
   uint_t      numberOfIndices;        //!< Number of indices in buffer
   uint_t      idata;                  //!< the index data
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFIndexSet,8);
+DP_STATIC_ASSERT( ( sizeof(NBFIndexSet) % 8 ) == 0 );
 
 struct NBFSampler : public NBFObject
 {
@@ -703,7 +703,7 @@ struct NBFSampler : public NBFObject
   uint_t      compareMode;          //!> Specifies the compare mode parameter for a texture. Valid values are TCM_NONE and TCM_R_TO_TEXTURE.
   PADDING(4);                       //!< Padding bits ensure offset of next elements is on a 4-byte boundary, regardless of packing
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFSampler,8);
+DP_STATIC_ASSERT( ( sizeof(NBFSampler) % 8 ) == 0 );
 
 #pragma pack(pop)
 

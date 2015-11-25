@@ -31,7 +31,7 @@
 namespace dp
 {
   typedef int (*UserAssertCallback)( const char * message );
-    
+
   DP_API UserAssertCallback setUserAssertCallback( UserAssertCallback callback );
   DP_API void assertionFailed(const char * expr, const char * file, unsigned int line); 
 }
@@ -63,26 +63,4 @@ namespace dp
 #endif
 
 // compile time assert
-template <bool> class DPCompileTimeAssert;
-template<> class DPCompileTimeAssert<true> {};
-template <int> struct DPStaticAssertTest {};
-#define DP_STATIC_ASSERT(exp) DP_STATIC_ASSERT_MSG(exp,__LINE__)
-#define DP_STATIC_ASSERT_MSG(exp, ln) DP_STATIC_ASSERT_MSGi(exp, ln)
-#define DP_STATIC_ASSERT_MSGi(exp, ln) \
-  typedef DPStaticAssertTest< sizeof(DPCompileTimeAssert<static_cast<bool>(exp )>)> error_at_line_##ln##_Unexpected_size
-
-#define DP_STATIC_ASSERT_BYTESIZE(type,size) DP_STATIC_ASSERT_BYTESIZEi(type,size, __LINE__)
-#define DP_STATIC_ASSERT_BYTESIZEi(type,size,ln) DP_STATIC_ASSERT_BYTESIZEii(type,size,ln)
-#define DP_STATIC_ASSERT_BYTESIZEii(type,size,ln) \
-  static DPCompileTimeAssert<sizeof(type)==size> error_at_line_##ln##__##type##_has_unexpected_size
-
-#define DP_STATIC_ASSERT_MODULO_BYTESIZE(type,size) DP_STATIC_ASSERT_MODULO_BYTESIZEi(type,size, __LINE__)
-#define DP_STATIC_ASSERT_MODULO_BYTESIZEi(type,size,ln) DP_STATIC_ASSERT_MODULO_BYTESIZEii(type,size,ln)
-#define DP_STATIC_ASSERT_MODULO_BYTESIZEii(type,size,ln) \
-  static DPCompileTimeAssert<sizeof(type)%size==0> error_at_line_##ln##__##type##_has_unexpected_size
-
-#define DP_STATIC_ASSERT_SAME(lhs,rhs) DP_STATIC_ASSERT_SAMEi(lhs,rhs, __LINE__)
-#define DP_STATIC_ASSERT_SAMEi(lhs,rhs,ln) DP_STATIC_ASSERT_SAMEii(lhs,rhs,ln)
-#define DP_STATIC_ASSERT_SAMEii(lhs,rhs,ln) \
-  static DPCompileTimeAssert<lhs==rhs> error_at_line_##ln##__##lhs##_and_##rhs##_differ
-
+#define DP_STATIC_ASSERT(exp)   static_assert(exp, #exp);

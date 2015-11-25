@@ -37,8 +37,7 @@ namespace dp
   {
 
     // if sizeof( unsigned int ) is not 4 then this code wont work!!
-    // NOTE that the CTASSERT_BYTESIZE macro cant accept 'unsigned int' so we just pass 'int'
-    DP_STATIC_ASSERT_BYTESIZE( int, 4 );
+    DP_STATIC_ASSERT( sizeof(unsigned int) == 4 );
 
     // initialization constants
     #define MD5_INIT_STATE_0 0x67452301

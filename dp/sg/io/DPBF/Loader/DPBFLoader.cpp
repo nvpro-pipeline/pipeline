@@ -86,43 +86,43 @@ struct NBFPatchesBase_nbf_47 : public NBFIndependentPrimitiveSet
   uint_t    verticesPerPatch;
   PADDING(4);                    //!< Padding bits ensure offset of next elements is on a 4-byte boundary, regardless of packing
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFPatchesBase_nbf_47,8);
+DP_STATIC_ASSERT( ( sizeof(NBFPatchesBase_nbf_47) % 8 ) == 0 );
 
 struct NBFPatches_nbf_47 : public NBFPatchesBase_nbf_47
 {
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFPatches_nbf_47,8);
+DP_STATIC_ASSERT( ( sizeof(NBFPatches_nbf_47) % 8 ) == 0 );
 
 struct NBFQuadPatches_nbf_47 : public NBFPatchesBase_nbf_47
 {
   uint_t  size;
   PADDING(4);                       //!< Padding bits ensure offset of next elements is on a 4-byte boundary, regardless of packing
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFQuadPatches_nbf_47,8);
+DP_STATIC_ASSERT( ( sizeof(NBFQuadPatches_nbf_47) % 8 ) == 0 );
 
 struct NBFQuadPatches4x4_nbf_47 : public NBFPatchesBase_nbf_47
 {
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFQuadPatches4x4_nbf_47,8);
+DP_STATIC_ASSERT( ( sizeof(NBFQuadPatches4x4_nbf_47) % 8 ) == 0 );
 
 struct NBFRectPatches_nbf_47 : public NBFPatchesBase_nbf_47
 {
   uint_t  width;
   uint_t  height;
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFRectPatches_nbf_47,8);
+DP_STATIC_ASSERT( ( sizeof(NBFRectPatches_nbf_47) % 8 ) == 0 );
 
 struct NBFTriPatches_nbf_47 : public NBFPatchesBase_nbf_47
 {
   uint_t  size;
   PADDING(4);                       //!< Padding bits ensure offset of next elements is on a 4-byte boundary, regardless of packing
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFTriPatches_nbf_47,8);
+DP_STATIC_ASSERT( ( sizeof(NBFTriPatches_nbf_47) % 8 ) == 0 );
 
 struct NBFTriPatches4_nbf_47 : public NBFPatchesBase_nbf_47
 {
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFTriPatches4_nbf_47,8);
+DP_STATIC_ASSERT( ( sizeof(NBFTriPatches4_nbf_47) % 8 ) == 0 );
 
 
 struct NBFMaterial_nbf_a : public NBFObject
@@ -134,7 +134,7 @@ struct NBFMaterial_nbf_a : public NBFObject
   float3_t    specularColor;     //!< Specifies the specular part of the front material color.
   float       specularExponent;  //!< Specifies the specular exponent of the front material color.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFMaterial_nbf_a,8);
+DP_STATIC_ASSERT( ( sizeof(NBFMaterial_nbf_a) % 8 ) == 0 );
 
 struct NBFScene_nbf_b
 {
@@ -146,7 +146,7 @@ struct NBFScene_nbf_b
   uint_t      numberOfAnimationFrames;  //!< For animated scenes, this specifies the number of animation frames.
   uint_t      root;                     //!< Specifies the file offset to the scene's root node, which always is of a NBFNode derived type.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFScene_nbf_b,4);
+DP_STATIC_ASSERT( ( sizeof(NBFScene_nbf_b) % 4 ) == 0 );
 
 struct NBFScene_nbf_31
 {
@@ -159,7 +159,7 @@ struct NBFScene_nbf_31
   uint_t      numberOfAnimationFrames;  //!< For animated scenes, this specifies the number of animation frames.
   uint_t      root;                     //!< Specifies the file offset to the scene's root node, which always is of a NBFNode derived type.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFScene_nbf_31,4);
+DP_STATIC_ASSERT( ( sizeof(NBFScene_nbf_31) % 4 ) == 0 );
 
 //! The NBFScene structure represents a scene in the context of computer graphics.
 /** A valid NBF file always contains one - and only one - NBFScene object. 
@@ -175,7 +175,7 @@ struct NBFScene_nbf_37
   uint_t      numberOfAnimationFrames;  //!< For animated scenes, this specifies the number of animation frames.
   uint_t      root;                     //!< Specifies the file offset to the scene's root node, which always is of a NBFNode derived type.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFScene_nbf_37,4);
+DP_STATIC_ASSERT( ( sizeof(NBFScene_nbf_37) % 4 ) == 0 );
 
 //! The NBFScene_nbf_3e structure represents a scene in the context of computer graphics.
 /** A valid NBF file always contains one - and only one - NBFScene_nbf_3e object. 
@@ -192,7 +192,7 @@ struct NBFScene_nbf_3e
   uint_t      numberOfAnimationFrames;  //!< For animated scenes, this specifies the number of animation frames.
   uint_t      root;                     //!< Specifies the file offset to the scene's root node, which always is of a NBFNode derived type.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFScene_nbf_3e,4);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFScene_nbf_3e) % 4 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFScene_nbf_41 structure represents a scene in the context of computer graphics.
 /** A valid NBF file always contains one - and only one - NBFScene_nbf_41 object. 
@@ -211,7 +211,7 @@ struct NBFScene_nbf_41
   uint_t      numObjectLinks;           //!< Specifies the number of objects links in the scene
   uint_t      objectLinks;              //!< Specifies the file offset to the scenes's object links
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFScene_nbf_41,4);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFScene_nbf_41) % 4 ) == 0 );    //!< Compile-time assert on size of structure
 
 struct NBFFaceAttribute_nbf_b : public NBFObject
 {
@@ -226,14 +226,14 @@ struct NBFFaceAttribute_nbf_b : public NBFObject
   ubyte_t     twoSidedLighting;     //!< Specifies if two-sided lighting should be enabled for rendering.
   PADDING(7);                       //!< Padding bits to ensure the size of NBFFaceAttribute_nbf_8 is a multiple of 8, regardless of packing.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFFaceAttribute_nbf_b,8);
+DP_STATIC_ASSERT( ( sizeof(NBFFaceAttribute_nbf_b) % 8 ) == 0 );
 
 struct geometrySet_t_nbf_d 
 {
   uint_t      primitive;        //!< Specifies the file offset to the NBFPrimitive object. 
   uint_t      stateSet;         //!< Specifies the file offset to the corresponding NBFStateSet object.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(geometrySet_t_nbf_d,4);
+DP_STATIC_ASSERT( ( sizeof(geometrySet_t_nbf_d) % 4 ) == 0 );
 
 struct trafo_t_nbf_f
 {
@@ -242,7 +242,7 @@ struct trafo_t_nbf_f
   float3_t    translation;        //!< Specifies the translational part of the transformation.
   float3_t    center;             //!< Specifies the center of rotation of the transformation.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(trafo_t_nbf_f,4);   //!< test size of struct
+DP_STATIC_ASSERT( ( sizeof(trafo_t_nbf_f) % 4 ) == 0 );   //!< test size of struct
 
 struct NBFTextureAttributeItem_nbf_e : public NBFObject
 {
@@ -266,7 +266,7 @@ struct NBFTextureAttributeItem_nbf_e : public NBFObject
   float4_t      texGenPlane[2][4];  //!< Specifies the texture coordinate generation planes
   PADDING(4); //!< Padding bits to ensure the size of NBFTextureAttributeItem is a multiple of 8, regardless of packing.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFTextureAttributeItem_nbf_e,8);
+DP_STATIC_ASSERT( ( sizeof(NBFTextureAttributeItem_nbf_e) % 8 ) == 0 );
 
 struct NBFTextureAttributeItem_nbf_f : public NBFObject
 {
@@ -286,7 +286,7 @@ struct NBFTextureAttributeItem_nbf_f : public NBFObject
   uint_t        texGenMode[4];      //!< Specifies the texture coordinate generation modes
   float4_t      texGenPlane[2][4];  //!< Specifies the texture coordinate generation planes
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFTextureAttributeItem_nbf_f,8);   //!< test size of struct
+DP_STATIC_ASSERT( ( sizeof(NBFTextureAttributeItem_nbf_f) % 8 ) == 0 );   //!< test size of struct
 
 struct NBFTextureAttributeItem_nbf_12 : public NBFObject
 {
@@ -306,7 +306,7 @@ struct NBFTextureAttributeItem_nbf_12 : public NBFObject
   uint_t        texGenMode[4];      //!< Specifies the texture coordinate generation modes
   float4_t      texGenPlane[2][4];  //!< Specifies the texture coordinate generation planes
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFTextureAttributeItem_nbf_12,8);   //!< test size of struct
+DP_STATIC_ASSERT( ( sizeof(NBFTextureAttributeItem_nbf_12) % 8 ) == 0 );   //!< test size of struct
 
 struct NBFTextureAttributeItem_nbf_20 : public NBFObject
 {
@@ -327,7 +327,7 @@ struct NBFTextureAttributeItem_nbf_20 : public NBFObject
   uint_t        texGenMode[4];      //!< Specifies the texture coordinate generation modes
   float4_t      texGenPlane[2][4];  //!< Specifies the texture coordinate generation planes
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFTextureAttributeItem_nbf_20,8);
+DP_STATIC_ASSERT( ( sizeof(NBFTextureAttributeItem_nbf_20) % 8 ) == 0 );
 
 struct NBFTextureAttributeItem_nbf_36 : public NBFObject
 {
@@ -350,7 +350,7 @@ struct NBFTextureAttributeItem_nbf_36 : public NBFObject
   float4_t      texGenPlane[2][4];  //!< Specifies the texture coordinate generation planes
   PADDING(4);   //!< Padding bits to ensure the size of NBFTextureAttributeItem is a multiple of 8, regardless of packing.        
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFTextureAttributeItem_nbf_36,8);
+DP_STATIC_ASSERT( ( sizeof(NBFTextureAttributeItem_nbf_36) % 8 ) == 0 );
 
 struct NBFTextureAttributeItem_nbf_4b : public NBFObject
 {
@@ -373,7 +373,7 @@ struct NBFTextureAttributeItem_nbf_4b : public NBFObject
   uint_t        texGenMode[4];      //!< Specifies the texture coordinate generation modes
   float4_t      texGenPlane[2][4];  //!< Specifies the texture coordinate generation planes
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFTextureAttributeItem_nbf_4b,8);
+DP_STATIC_ASSERT( ( sizeof(NBFTextureAttributeItem_nbf_4b) % 8 ) == 0 );
 
 struct NBFGroup_nbf_11 : public NBFNode
 {
@@ -381,14 +381,14 @@ struct NBFGroup_nbf_11 : public NBFNode
   uint_t      children;           //!< Specifies the file offset to the offsets to the maintained children.
   //!< NBFGroup's children always are of NBFNode-derived types.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFGroup_nbf_11,8);
+DP_STATIC_ASSERT( ( sizeof(NBFGroup_nbf_11) % 8 ) == 0 );
 
 struct NBFTransform_nbf_f : public NBFGroup_nbf_11
 {
   trafo_t_nbf_f trafo;  //!< Specifies the transformation.
   PADDING(4);        //!< Padding bits to ensure the size of NBFTransform is a multiple of 8, regardless of packing.    
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFTransform_nbf_f,8);   //!< test size of struct
+DP_STATIC_ASSERT( ( sizeof(NBFTransform_nbf_f) % 8 ) == 0 );   //!< test size of struct
 
 struct NBFAnimatedTransform_nbf_f : public NBFTransform_nbf_f
 {
@@ -396,7 +396,7 @@ struct NBFAnimatedTransform_nbf_f : public NBFTransform_nbf_f
   //!< to be applied to the transform group node.
   PADDING(4);        //!< Padding bits to ensure the size of NBFAnimatedTransform_nbf_f is a multiple of 8, regardless of packing.    
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFAnimatedTransform_nbf_f,8);   //!< test size of struct
+DP_STATIC_ASSERT( ( sizeof(NBFAnimatedTransform_nbf_f) % 8 ) == 0 );   //!< test size of struct
 
 //! The keyVariant_t structure specifies how a pair of a VariantKey and a StateVariant is stored in a .DPBF file.
 struct keyVariant_t
@@ -404,14 +404,14 @@ struct keyVariant_t
   uint_t      key;                //!< Specifies the key of this pair
   uint_t      variant;            //!< Specifies the offset to an NBFStateVariant in the .DPBF file.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(keyVariant_t,4);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(keyVariant_t) % 4 ) == 0 );    //!< Compile-time assert on size of structure
 
 struct NBFStateSet_nbf_10 : public NBFObject
 {
   uint_t numStateVariants;        //!< Specifies the number of contained pairs of VariantKey and StateVariant.
   uint_t keyStateVariantPairs;    //!< Specifies the file offset to the offsets to the keyVariant_t objects
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFStateSet_nbf_10,8);   //!< test size of struct
+DP_STATIC_ASSERT( ( sizeof(NBFStateSet_nbf_10) % 8 ) == 0 );   //!< test size of struct
 
 struct NBFBillboard_nbf_11: public NBFGroup_nbf_11
 {
@@ -419,7 +419,7 @@ struct NBFBillboard_nbf_11: public NBFGroup_nbf_11
   ubyte_t   viewerAligned;
   PADDING(3);        //!< Padding bits to ensure the size of NBFBillboard is a multiple of 8, regardless of packing.    
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFBillboard_nbf_11,8);
+DP_STATIC_ASSERT( ( sizeof(NBFBillboard_nbf_11) % 8 ) == 0 );
 
 struct NBFLOD_nbf_11 : public NBFGroup_nbf_11
 {
@@ -429,7 +429,7 @@ struct NBFLOD_nbf_11 : public NBFGroup_nbf_11
   //!< Ranges are stored as 32-bit floating point numbers.
   PADDING(4);        //!< Padding bits to ensure the size of NBFLOD is a multiple of 8, regardless of packing.    
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFLOD_nbf_11,8);
+DP_STATIC_ASSERT( ( sizeof(NBFLOD_nbf_11) % 8 ) == 0 );
 
 struct NBFSwitch_nbf_11 : public NBFGroup_nbf_11
 {
@@ -437,14 +437,14 @@ struct NBFSwitch_nbf_11 : public NBFGroup_nbf_11
   uint_t      activeChildren;     //!< Specifies the offset to indices to the active children.
   //!< Indices are stored as 32-bit unsigned integers.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFSwitch_nbf_11,8);
+DP_STATIC_ASSERT( ( sizeof(NBFSwitch_nbf_11) % 8 ) == 0 );
 
 struct NBFTransform_nbf_11 : public NBFGroup_nbf_11
 {
   trafo_t             trafo;
   PADDING(4);        //!< Padding bits to ensure the size of NBFTransform is a multiple of 8, regardless of packing.    
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFTransform_nbf_11,8);
+DP_STATIC_ASSERT( ( sizeof(NBFTransform_nbf_11) % 8 ) == 0 );
 
 struct NBFAnimatedTransform_nbf_11 : public NBFTransform_nbf_11
 {
@@ -452,7 +452,7 @@ struct NBFAnimatedTransform_nbf_11 : public NBFTransform_nbf_11
   //!< to be applied to the transform group node.
   PADDING(4);        //!< Padding bits to ensure the size of NBFAnimatedTransform_nbf_11 is a multiple of 8, regardless of packing.    
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFAnimatedTransform_nbf_11,8);
+DP_STATIC_ASSERT( ( sizeof(NBFAnimatedTransform_nbf_11) % 8 ) == 0 );
 
 struct NBFLightSource_nbf_12 : public NBFNode
 {
@@ -465,14 +465,14 @@ struct NBFLightSource_nbf_12 : public NBFNode
   uint_t      animation;          //!< Specifies the file offset to an optional NBFTrafoAnimation_nbf_3d object
   //!< to be applied to the light transform (orientation and translation).
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFLightSource_nbf_12,8);
+DP_STATIC_ASSERT( ( sizeof(NBFLightSource_nbf_12) % 8 ) == 0 );
 
 struct NBFDirectedLight_nbf_12 : public NBFLightSource_nbf_12
 {
   float3_t direction; //!< Specifies the direction of the light source.
   PADDING(4);
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFDirectedLight_nbf_12,8);
+DP_STATIC_ASSERT( ( sizeof(NBFDirectedLight_nbf_12) % 8 ) == 0 );
 
 struct NBFPointLight_nbf_12 : public NBFLightSource_nbf_12
 {
@@ -482,7 +482,7 @@ struct NBFPointLight_nbf_12 : public NBFLightSource_nbf_12
   //!< the y-component of the vector specifies the linear term of the attenuation, and
   //!< the z-component of the vector specifies the quadratic term of the attenuation.
 };                        
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFPointLight_nbf_12,8);
+DP_STATIC_ASSERT( ( sizeof(NBFPointLight_nbf_12) % 8 ) == 0 );
 
 struct NBFSpotLight_nbf_12 : public NBFLightSource_nbf_12
 {
@@ -497,7 +497,7 @@ struct NBFSpotLight_nbf_12 : public NBFLightSource_nbf_12
   float    falloffExponent; //!< Controls the intensity distribution inside the cone, the light is mitted to.
   PADDING(4);               //!< Padding bits to ensure the size of NBFSpotLight is a multiple of 8, regardless of packing.    
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFSpotLight_nbf_12,8);
+DP_STATIC_ASSERT( ( sizeof(NBFSpotLight_nbf_12) % 8 ) == 0 );
 
 struct NBFGroup_nbf_12 : public NBFNode
 {
@@ -507,7 +507,7 @@ struct NBFGroup_nbf_12 : public NBFNode
   uint_t      numClipPlanes;      //!< Specifies the number of clipping planes.
   uint_t      clipPlanes;         //!< Specifies the file offset to the clipping planes
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFGroup_nbf_12,8);
+DP_STATIC_ASSERT( ( sizeof(NBFGroup_nbf_12) % 8 ) == 0 );
 
 struct NBFLOD_nbf_12 : public NBFGroup_nbf_12
 {
@@ -517,7 +517,7 @@ struct NBFLOD_nbf_12 : public NBFGroup_nbf_12
   //!< Ranges are stored as 32-bit floating point numbers.
   PADDING(4);        //!< Padding bits to ensure the size of NBFLOD is a multiple of 8, regardless of packing.    
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFLOD_nbf_12,8);
+DP_STATIC_ASSERT( ( sizeof(NBFLOD_nbf_12) % 8 ) == 0 );
 
 struct NBFSwitch_nbf_12 : public NBFGroup_nbf_12
 {
@@ -525,7 +525,7 @@ struct NBFSwitch_nbf_12 : public NBFGroup_nbf_12
   uint_t      activeChildren;     //!< Specifies the offset to indices to the active children.
   //!< Indices are stored as 32-bit unsigned integers.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFSwitch_nbf_12,8);
+DP_STATIC_ASSERT( ( sizeof(NBFSwitch_nbf_12) % 8 ) == 0 );
 
 struct NBFSwitch_nbf_30 : public NBFGroup
 {
@@ -533,7 +533,7 @@ struct NBFSwitch_nbf_30 : public NBFGroup
   uint_t      activeChildren;     //!< Specifies the offset to indices to the active children.
   //!< Indices are stored as 32-bit unsigned integers.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFSwitch_nbf_30,8);
+DP_STATIC_ASSERT( ( sizeof(NBFSwitch_nbf_30) % 8 ) == 0 );
 
 struct NBFBillboard_nbf_12 : public NBFGroup_nbf_12
 {
@@ -541,14 +541,14 @@ struct NBFBillboard_nbf_12 : public NBFGroup_nbf_12
   ubyte_t   viewerAligned;
   PADDING(3);        //!< Padding bits to ensure the size of NBFBillboard is a multiple of 8, regardless of packing.    
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFBillboard_nbf_12,8);
+DP_STATIC_ASSERT( ( sizeof(NBFBillboard_nbf_12) % 8 ) == 0 );
 
 struct NBFTransform_nbf_12 : public NBFGroup_nbf_12
 {
   trafo_t             trafo;
   PADDING(4);        //!< Padding bits to ensure the size of NBFTransform is a multiple of 8, regardless of packing.    
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFTransform_nbf_12,8);
+DP_STATIC_ASSERT( ( sizeof(NBFTransform_nbf_12) % 8 ) == 0 );
 
 struct NBFAnimatedTransform_nbf_12 : public NBFTransform_nbf_12
 {
@@ -556,7 +556,7 @@ struct NBFAnimatedTransform_nbf_12 : public NBFTransform_nbf_12
   //!< to be applied to the transform group node.
   PADDING(4);        //!< Padding bits to ensure the size of NBFAnimatedTransform_nbf_12 is a multiple of 8, regardless of packing.    
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFAnimatedTransform_nbf_12,8);
+DP_STATIC_ASSERT( ( sizeof(NBFAnimatedTransform_nbf_12) % 8 ) == 0 );
 
 struct NBFVertexAttributeSet_nbf_38 : public NBFObject
 {
@@ -581,7 +581,7 @@ struct NBFVertexAttributeSet_nbf_38 : public NBFObject
   uint_t      fogCoords;          //!< Specifies the file offset to the fog coordinates. Fog coordinates always are one 
   //!< dimensional, and are stored as 32-bit floating point values.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFVertexAttributeSet_nbf_38,8);
+DP_STATIC_ASSERT( ( sizeof(NBFVertexAttributeSet_nbf_38) % 8 ) == 0 );
 
 struct NBFViewState_nbf_39
 {
@@ -597,7 +597,7 @@ struct NBFViewState_nbf_39
   float       stereoEyeDistance;    //!< Specifies the stereo eye distance used if the view is in stereo mode.
   float       targetDistance;       //!< Specifies the target distance to the projection plane.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFViewState_nbf_39,4);
+DP_STATIC_ASSERT( ( sizeof(NBFViewState_nbf_39) % 4 ) == 0 );
 
 /** A NBFAnimatedIndependents_nbf_3a is an abstract topology class derived from NBFIndependentPrimitiveSet. 
 * The object code for a NBFAnimatedIndependents_nbf_3a is NBF_ANIMATED_QUADS and NBF_ANIMATED_TRIANGLES. */
@@ -607,7 +607,7 @@ struct NBFAnimatedIndependents_nbf_3a : public NBFIndependentPrimitiveSet
                                   //!< to be applied to the independent faces.
   PADDING(4);        //!< Padding bits to ensure the size of NBFAnimatedIndependents_nbf_3a is a multiple of 8, regardless of packing.    
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFAnimatedIndependents_nbf_3a,8);
+DP_STATIC_ASSERT( ( sizeof(NBFAnimatedIndependents_nbf_3a) % 8 ) == 0 );
 
 //! The NBFVNVectorAnimation_nbf_3a represents an animation that will be applied to VNVector objects.
 /** A NBFVNVectorAnimation_nbf_3a serves as base class only and needs to be considered in conjunction 
@@ -632,7 +632,7 @@ struct NBFVNVectorAnimation_nbf_3a : public NBFObject
                                   //!< the corresponding animation type, which is either NBFFramedAnimation_nbf_a or
                                   //!< NBFInterpolatedAnimation_nbf_3a.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFVNVectorAnimation_nbf_3a,8);
+DP_STATIC_ASSERT( ( sizeof(NBFVNVectorAnimation_nbf_3a) % 8 ) == 0 );
 
 //! The NBFFramedAnimation_nbf_3c structure represents a framed animation.
 /** A NBFFramedAnimation_nbf_3c serves as base class only and needs to be considered in conjunction
@@ -651,7 +651,7 @@ struct NBFFramedAnimation_nbf_3c
                                   //!< VertexAttribute sets stored with a NBFVertexAttributeAnimation_nbf_3d.
   PADDING(4);         //!< Padding bits to ensure the size of NBFFramedAnimation_nbf_3c is a multiple of 8, regardless of packing.    
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFFramedAnimation_nbf_3c,4);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFFramedAnimation_nbf_3c) % 4 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFIndexAnimation_nbf_3d represents an animation that will be applied to uint_t objects.
 /** A NBFIndexAnimation_nbf_3d serves as base class only and needs to be considered in conjunction with
@@ -665,7 +665,7 @@ struct NBFIndexAnimation_nbf_3d : public NBFObject
                                    //!< type, which is NBFFramedAnimationDescription.
   PADDING(4);        //!< Padding bits to ensure the size of NBFIndexAnimation_nbf_3d is a multiple of 8, regardless of packing.    
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFIndexAnimation_nbf_3d,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFIndexAnimation_nbf_3d) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFFramedIndexAnimation_nbf_3c structure represents a framed animation that will be applied to uint_t objects.
 /** A NBFFramedIndexAnimation_nbf_3c is a concrete animation type. It publicly inherits from NBFIndexAnimation_nbf_3d and
@@ -674,7 +674,7 @@ struct NBFFramedIndexAnimation_nbf_3c : public NBFIndexAnimation_nbf_3d
                                       , public NBFFramedAnimation_nbf_3c
 {
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFFramedIndexAnimation_nbf_3c,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFFramedIndexAnimation_nbf_3c) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFTrafoAnimation_nbf_3d represents an animation that will be applied to trafo_t objects.
 /** A NBFTrafoAnimation_nbf_3d serves as base class only and needs to be considered in conjunction
@@ -689,7 +689,7 @@ struct NBFTrafoAnimation_nbf_3d : public NBFObject
   //!< type, which is either NBFFramedAnimationDescription or NBFKeyFramedAnimationDescription.
   PADDING(4);        //!< Padding bits to ensure the size of NBFTrafoAnimation_nbf_3d is a multiple of 8, regardless of packing.    
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFTrafoAnimation_nbf_3d,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFTrafoAnimation_nbf_3d) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFFramedTrafoAnimation_nbf_3c structure represents a framed animation that will be applied to trafo_t objects.
 /** A NBFFramedTrafoAnimation_nbf_3c is a concrete animation type. It publicly inherits from NBFTrafoAnimation_nbf_3d and
@@ -698,7 +698,7 @@ struct NBFFramedTrafoAnimation_nbf_3c : public NBFTrafoAnimation_nbf_3d
                                       , public NBFFramedAnimation_nbf_3c
 {
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFFramedTrafoAnimation_nbf_3c,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFFramedTrafoAnimation_nbf_3c) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFVertexAttributeAnimation_nbf_3d represents an animation that will be applied to vertexAttrib_t objects.
 /** A NBFVertexAttributeAnimation_nbf_3d serves as base class only and needs to be considered in conjunction
@@ -713,7 +713,7 @@ struct NBFVertexAttributeAnimation_nbf_3d : public NBFObject
                                   //!< type, which is either NBFFramedAnimationDescription or NBFKeyFramedAnimationDescription.
   PADDING(4);        //!< Padding bits to ensure the size of NBFVertexAttributeAnimation_nbf_3d is a multiple of 8, regardless of packing.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFVertexAttributeAnimation_nbf_3d,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFVertexAttributeAnimation_nbf_3d) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFFramedVertexAttributeAnimation_nbf_3c structure represents a framed animation that will be applied to vertexAttrib_t objects.
 /** A NBFFramedVertexAttributeAnimation_nbf_3c is a concrete animation type. It publicly inherits from NBFVertexAttributeAnimation_nbf_3d and
@@ -722,7 +722,7 @@ struct NBFFramedVertexAttributeAnimation_nbf_3c : public NBFVertexAttributeAnima
                                                 , public NBFFramedAnimation_nbf_3c
 {
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFFramedVertexAttributeAnimation_nbf_3c,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFFramedVertexAttributeAnimation_nbf_3c) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFInterpolatedAnimation_nbf_3c structure represents a interpolated animation.
 /** A NBFInterpolatedAnimation_nbf_3c serves as base class only and needs to be considered in conjunction
@@ -737,7 +737,7 @@ struct NBFInterpolatedAnimation_nbf_3c
   uint_t      keys;               //!< Specifies the file offset to the key frames. As specified in the NBF format,
   //!< a key is a 32-bit unsigned integer value.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFInterpolatedAnimation_nbf_3c,4);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFInterpolatedAnimation_nbf_3c) % 4 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFInterpolatedTrafoAnimation_nbf_3c structure represents a interpolated animation that will be applied to trafo_t objects.
 /** A NBFInterpolatedTrafoAnimation_nbf_3c is a concrete animation type. It publicly inherits from NBFTrafoAnimation_nbf_3d and
@@ -748,7 +748,7 @@ struct NBFInterpolatedTrafoAnimation_nbf_3c : public NBFTrafoAnimation_nbf_3d
                                             , public NBFInterpolatedAnimation_nbf_3c
 {
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFInterpolatedTrafoAnimation_nbf_3c,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFInterpolatedTrafoAnimation_nbf_3c) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFInterpolatedVertexAttributeAnimation_nbf_3c structure represents a interpolated animation that will be applied to vertexAttrib_t objects.
 /** A NBFInterpolatedVertexAttributeAnimation_nbf_3c is a concrete animation type. It publicly inherits from NBFVertexAttributeAnimation_nbf_3d and
@@ -759,7 +759,7 @@ struct NBFInterpolatedVertexAttributeAnimation_nbf_3c : public NBFVertexAttribut
                                                       , public NBFInterpolatedAnimation_nbf_3c
 {
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFInterpolatedVertexAttributeAnimation_nbf_3c,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFInterpolatedVertexAttributeAnimation_nbf_3c) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFFramedVNVectorAnimation_nbf_3a structure represents a framed animation that will be applied to VNVector objects.
 /** A NBFFramedVNVectorAnimation_nbf_3a is a concrete animation type. It publicly inherits from NBFVNVectorAnimation and
@@ -768,7 +768,7 @@ struct NBFFramedVNVectorAnimation_nbf_3a : public NBFVNVectorAnimation_nbf_3a
                                          , public NBFFramedAnimation_nbf_3c
 {
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFFramedVNVectorAnimation_nbf_3a,8);
+DP_STATIC_ASSERT( ( sizeof(NBFFramedVNVectorAnimation_nbf_3a) % 8 ) == 0 );
 
 //! The NBFInterpolatedVNVectorAnimation_nbf_3a structure represents a interpolated animation that will be applied to VNVector objects.
 /** A NBFInterpolatedVNVectorAnimation_nbf_3a is a concrete animation type. It publicly inherits from NBFVNVectorAnimation and
@@ -779,7 +779,7 @@ struct NBFInterpolatedVNVectorAnimation_nbf_3a : public NBFVNVectorAnimation_nbf
                                                , public NBFInterpolatedAnimation_nbf_3c
 {
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFInterpolatedVNVectorAnimation_nbf_3a,8);
+DP_STATIC_ASSERT( ( sizeof(NBFInterpolatedVNVectorAnimation_nbf_3a) % 8 ) == 0 );
 
 struct NBFNode_3d_04 : public NBFObject
 {
@@ -788,8 +788,8 @@ struct NBFNode_3d_04 : public NBFObject
   ubyte_t     systemHints;        //!< Specifies the system hints on this Node.
   ubyte_t     userHints;          //!< Specifies the user hints on this Node.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFNode_3d_04,8);   //!< Compile-time assert on size of structure
-DP_STATIC_ASSERT_BYTESIZE( NBFNode_3d_04, sizeof( NBFNode ) ); //!< Make sure both structs are the same size, or big air!
+DP_STATIC_ASSERT( ( sizeof(NBFNode_3d_04) % 8 ) == 0 );   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( sizeof(NBFNode_3d_04) == sizeof(NBFNode) );
 
 //! The NBFObject structure represents general object data. 
 struct NBFObject_3d_04
@@ -810,8 +810,8 @@ struct NBFObject_3d_04
                                   //!< A 0-offset implies no annotation. An annotation is stored as a str_t object.
   PADDING(2);                     //!< Padding bits to keep compatibility to earlier versions.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFObject_3d_04,8);   //!< Compile-time assert on size of structure
-DP_STATIC_ASSERT_BYTESIZE( NBFObject_3d_04, sizeof( NBFObject ) ); //!< Make sure both structs are the same size, or big air!
+DP_STATIC_ASSERT( ( sizeof(NBFObject_3d_04) % 8 ) == 0 );   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( sizeof(NBFObject_3d_04) == sizeof(NBFObject) );
 
 //! The NBFAnimation_nbf_3d structure represents the common anchor of all animation structures.
 /** A NBFAnimation_nbf_3d serves as a base class only and needs to be considered in conjunction with either
@@ -824,7 +824,7 @@ struct NBFAnimation_nbf_3d
   bool    swinging;               //!< Specifies to run the Animation looping or swinging (ping-pong).
   PADDING(6);        //!< Padding bits to ensure the size of NBFAnimation_nbf_3d is a multiple of 8, regardless of packing.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFAnimation_nbf_3d,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFAnimation_nbf_3d) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFFramedAnimation_nbf_3d structure represents a framed animation.
 /** A NBFFramedAnimation_nbf_3d serves as base class only and needs to be considered in conjunction
@@ -843,7 +843,7 @@ struct NBFFramedAnimation_nbf_3d : public NBFAnimation_nbf_3d
   //!< VertexAttribute sets stored with a NBFVertexAttributeAnimation_nbf_3d.
   PADDING(4);         //!< Padding bits to ensure the size of NBFFramedAnimation_nbf_3d is a multiple of 8, regardless of packing.    
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFFramedAnimation_nbf_3d,4);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFFramedAnimation_nbf_3d) % 4 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFInterpolatedAnimation_nbf_3d structure represents a interpolated animation.
 /** A NBFInterpolatedAnimation_nbf_3d serves as base class only and needs to be considered in conjunction
@@ -858,7 +858,7 @@ struct NBFInterpolatedAnimation_nbf_3d : public NBFAnimation_nbf_3d
   uint_t      keys;               //!< Specifies the file offset to the key frames. As specified in the NBF format,
   //!< a key is a 32-bit unsigned integer value.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFInterpolatedAnimation_nbf_3d,4);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFInterpolatedAnimation_nbf_3d) % 4 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFFramedIndexAnimation_nbf_3d structure represents a framed animation that will be applied to uint_t objects.
 /** A NBFFramedIndexAnimation_nbf_3d is a concrete animation type. It publicly inherits from NBFIndexAnimation_nbf_3d and
@@ -867,7 +867,7 @@ struct NBFFramedIndexAnimation_nbf_3d : public NBFIndexAnimation_nbf_3d
                                       , public NBFFramedAnimation_nbf_3d
 {
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFFramedIndexAnimation_nbf_3d,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFFramedIndexAnimation_nbf_3d) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFFramedTrafoAnimation_nbf_3d structure represents a framed animation that will be applied to trafo_t objects.
 /** A NBFFramedTrafoAnimation_nbf_3d is a concrete animation type. It publicly inherits from NBFTrafoAnimation_nbf_3d and
@@ -876,7 +876,7 @@ struct NBFFramedTrafoAnimation_nbf_3d : public NBFTrafoAnimation_nbf_3d
                                       , public NBFFramedAnimation_nbf_3d
 {
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFFramedTrafoAnimation_nbf_3d,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFFramedTrafoAnimation_nbf_3d) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFFramedVertexAttributeAnimation_nbf_3c structure represents a framed animation that will be applied to vertexAttrib_t objects.
 /** A NBFFramedVertexAttributeAnimation_nbf_3c is a concrete animation type. It publicly inherits from NBFVertexAttributeAnimation_nbf_3d and
@@ -885,7 +885,7 @@ struct NBFFramedVertexAttributeAnimation_nbf_3d : public NBFVertexAttributeAnima
                                                 , public NBFFramedAnimation_nbf_3d
 {
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFFramedVertexAttributeAnimation_nbf_3d,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFFramedVertexAttributeAnimation_nbf_3d) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFInterpolatedTrafoAnimation_nbf_3d structure represents a interpolated animation that will be applied to trafo_t objects.
 /** A NBFInterpolatedTrafoAnimation_nbf_3d is a concrete animation type. It publicly inherits from NBFTrafoAnimation_nbf_3d and
@@ -896,7 +896,7 @@ struct NBFInterpolatedTrafoAnimation_nbf_3d : public NBFTrafoAnimation_nbf_3d
                                             , public NBFInterpolatedAnimation_nbf_3d
 {
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFInterpolatedTrafoAnimation_nbf_3d,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFInterpolatedTrafoAnimation_nbf_3d) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFInterpolatedVertexAttributeAnimation_nbf_3d structure represents a interpolated animation that will be applied to vertexAttrib_t objects.
 /** A NBFInterpolatedVertexAttributeAnimation_nbf_3d is a concrete animation type. It publicly inherits from NBFVertexAttributeAnimation_nbf_3d and
@@ -907,7 +907,7 @@ struct NBFInterpolatedVertexAttributeAnimation_nbf_3d : public NBFVertexAttribut
                                                       , public NBFInterpolatedAnimation_nbf_3d
 {
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFInterpolatedVertexAttributeAnimation_nbf_3d,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFInterpolatedVertexAttributeAnimation_nbf_3d) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFMaterial_nbf_3f structure represents a material.
 /** The object code for a NBFMaterial_nbf_3f is NBF_MATERIAL. */
@@ -926,7 +926,7 @@ struct NBFMaterial_nbf_3f : public NBFObject
   float3_t    backSpecularColor;      //!< Specifies the specular part of the back material color.
   float       backSpecularExponent;   //!< Specifies the specular exponent of the back material color.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFMaterial_nbf_3f,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFMaterial_nbf_3f) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFMaterial_nbf_40 structure represents a material.
 /** The object code for a NBFMaterial_nbf_40 is NBF_MATERIAL. */
@@ -953,7 +953,7 @@ struct NBFMaterial_nbf_40 : public NBFObject
   float       backSpecularExponent;   //!< Specifies the specular exponent of the back material color.
   float3_t    backTransparentColor;   //!< Specifies the transparent color of the back material.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFMaterial_nbf_40,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFMaterial_nbf_40) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 struct NBFCamera_nbf_44 : public NBFObject
 {
@@ -974,17 +974,17 @@ struct NBFCamera_nbf_44 : public NBFObject
                                 //!< of the viewing window.
   PADDING(4);        //!< Padding bits to ensure the size of NBFCamera is a multiple of 8, regardless of packing.    
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFCamera_nbf_44,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFCamera_nbf_44) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 struct NBFParallelCamera_nbf_44 : public NBFCamera_nbf_44
 {
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFParallelCamera_nbf_44,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFParallelCamera_nbf_44) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 struct NBFPerspectiveCamera_nbf_44 : public NBFCamera_nbf_44
 {
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFPerspectiveCamera_nbf_44,8);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFPerspectiveCamera_nbf_44) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The texImage_t structure specifies how a texture image is stored in a .DPBF file.
 /** Texture images are considered in conjunction with NBFTextureAttributeItem objects. */
@@ -1001,7 +1001,7 @@ struct texImage_nbf_4b_t
   uint_t      dataType;           //!< Specifies the type of the pixel data.
   uint_t      pixels;             //!< Specifies the file offset to the raw pixel data.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(texImage_nbf_4b_t,4);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(texImage_nbf_4b_t) % 4 ) == 0 );    //!< Compile-time assert on size of structure
 
 struct NBFFrustumCamera_nbf_4c : public NBFCamera
 {
@@ -1015,7 +1015,7 @@ struct NBFFrustumCamera_nbf_4c : public NBFCamera
                                 //!< of the vector specifies the width, and the y-component of the vector specifies the height.
   PADDING(4);        //!< Padding bits to ensure the size of NBFCamera is a multiple of 8, regardless of packing.    
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFFrustumCamera_nbf_4c,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFFrustumCamera_nbf_4c) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFParallelCamera_nbf_4c represents a parallel camera.
 /** A NBFParallelCamera_nbf_4c is a concrete camera type. 
@@ -1023,7 +1023,7 @@ DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFFrustumCamera_nbf_4c,8);   //!< Compile-time
 struct NBFParallelCamera_nbf_4c : public NBFFrustumCamera_nbf_4c
 {
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFParallelCamera_nbf_4c,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFParallelCamera_nbf_4c) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFPerspectiveCamera_nbf_4c represents a perspective camera.
 /** A NBFPerspectiveCamera_nbf_4c is a concrete camera type. 
@@ -1031,7 +1031,7 @@ DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFParallelCamera_nbf_4c,8);   //!< Compile-tim
 struct NBFPerspectiveCamera_nbf_4c : public NBFFrustumCamera_nbf_4c
 {
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFPerspectiveCamera_nbf_4c,8);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFPerspectiveCamera_nbf_4c) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The indexSet_t structure specifies how primitive indices are stored in a .DPBF file
 /** Objects of type indexSet_t are always considered in conjunction with NBFPrimitive_nbf_4d objects. */
@@ -1042,7 +1042,7 @@ struct indexSet_t
   uint_t      numberOfIndices;        //!< Number of indices in buffer
   uint_t      idata;                  //!< the index data
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(indexSet_t,4);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(indexSet_t) % 4 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFPrimitive_nbf_4d structure represents a geometry with an NBFVertexAttributeSet, and possibly an index set
 /** A NBFPrimitive_nbf_4d holds the offset to an NBFVertexAttributeSet, and possibly an index set */
@@ -1058,14 +1058,14 @@ struct NBFPrimitive_nbf_4d : public NBFObject
   indexSet_t  indexSet;           //!< Specifies the index set, if any
   uint_t      skin;               //!< Specifies the file offset to the skin
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFPrimitive_nbf_4d,8);   // Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFPrimitive_nbf_4d) % 8 ) == 0 );   // Compile-time assert on size of structure
 
 /*! \brief The NBFPatchesBase_nbf_4d structure is the base of all patches structures. */
 struct NBFPatchesBase_nbf_4d : public NBFPrimitive_nbf_4d
 {
   // nothing required here any more
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFPatchesBase_nbf_4d,8);        //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFPatchesBase_nbf_4d) % 8 ) == 0 );        //!< Compile-time assert on size of structure
 
 /*! \brief The NBFQuadPatches_nbf_4d structure represents a general quad patches object.
  *  \remarks The object code for a NBFQuadPatches_nbf_4d is NBF_QUAD_PATCHES. */ 
@@ -1074,14 +1074,14 @@ struct NBFQuadPatches_nbf_4d : public NBFPatchesBase_nbf_4d
   uint_t  size;                     //!< Specifies the size of the quad patches. Each patch is specified by size^2 vertices
   PADDING(4);                       //!< Padding bits ensure offset of next elements is on a 4-byte boundary, regardless of packing
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFQuadPatches_nbf_4d,8);        //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFQuadPatches_nbf_4d) % 8 ) == 0 );        //!< Compile-time assert on size of structure
 
 /*! \brief The NBFQuadPatches4x4_nbf_4d structure represents a 4x4 quad patches object.
  *  \remarks The object code for a NBFQuadPatches4x4_nbf_4d is NBF_QUAD_PATCHES_4X4. */
 struct NBFQuadPatches4x4_nbf_4d : public NBFPatchesBase_nbf_4d
 {
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFQuadPatches4x4_nbf_4d,8);     // Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFQuadPatches4x4_nbf_4d) % 8 ) == 0 );     // Compile-time assert on size of structure
 
 /*! \brief The NBFRectPatches_nbf_4d structure represents a general rectangular patches object.
  *  \remarks The object code for a NBFRectPatches_nbf_4d is NBF_RECT_PATCHES. */
@@ -1090,7 +1090,7 @@ struct NBFRectPatches_nbf_4d : public NBFPatchesBase_nbf_4d
   uint_t  width;                  //!< Specifies the width of the patches. Each patch is specified by with*height vertices.
   uint_t  height;                 //!< Specifies the height of the patches. Each patch is specified by width*height vertices.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFRectPatches_nbf_4d,8);      //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFRectPatches_nbf_4d) % 8 ) == 0 );      //!< Compile-time assert on size of structure
 
 /*! \brief The NBFRectPatches_nbf_4d structure represents a general triangular patches object.
  *  \remarks The object code for a NBFRectPatches_nbf_4d is NBF_TRI_PATCHES. */
@@ -1099,14 +1099,14 @@ struct NBFTriPatches_nbf_4d : public NBFPatchesBase_nbf_4d
   uint_t  size;                     //!< Specifies the size of the patches. Each patch is specified by 1+2+...+size vertices
   PADDING(4);                       //!< Padding bits ensure offset of next elements is on a 4-byte boundary, regardless of packing
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFTriPatches_nbf_4d,8);     //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFTriPatches_nbf_4d) % 8 ) == 0 );     //!< Compile-time assert on size of structure
 
 /*! \brief The NBFTriPatches4_nbf_4d structure represents a 4-vertices-per-edge triangular patches object.
  *  \remarks The object code for a NBFTriPatches4_nbf_4d is NBF_TRI_PATCHES_4. */
 struct NBFTriPatches4_nbf_4d : public NBFPatchesBase_nbf_4d
 {
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFTriPatches4_nbf_4d,8);      // Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFTriPatches4_nbf_4d) % 8 ) == 0 );      // Compile-time assert on size of structure
 
 //! The geometrySet_t structure specifies how a geometry set is stored in a .DPBF file.
 /** Geometry sets, in this context, need to be considered in conjunction with NBFGeoNode_nbf_4e objects. */
@@ -1116,7 +1116,7 @@ struct geometrySet_t
   uint_t      numPrimitives;      //!< Specifies the number of this geometry's NBFPrimitive objects.
   uint_t      primitives;         //!< Specifies the file offset to the offsets to the NBFPrimitive objects. 
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(geometrySet_t,4);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(geometrySet_t) % 4 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFGeoNode_nbf_4e structure represents a geometry node.
 /** The object code for a NBFGeoNode_nbf_4e is NBF_GEO_NODE. */
@@ -1125,7 +1125,7 @@ struct NBFGeoNode_nbf_4e : public NBFNode
   uint_t      numStateSets;       //!< Specifies the number of contained StateSets.
   uint_t      geometrySets;       //!< Specifies the file offset to the geometry sets. Geometry sets are stored as geometrySet_t objects.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFGeoNode_nbf_4e,8);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFGeoNode_nbf_4e) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFStatePass_nbf_4f structure represents a set of heterogeneous NBFStateAttributes.
 /** The object code for a NBFStatePass_nbf_4f is NBF_STATE_PASS. */
@@ -1134,7 +1134,7 @@ struct NBFStatePass_nbf_4f : public NBFObject
   uint_t      numStateAttribs;    //!< Specifies the number of contained state attributes.
   uint_t      stateAttribs;       //!< Specifies the file offset to the offsets to the NBFStateAttribute objects
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFStatePass_nbf_4f,8);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFStatePass_nbf_4f) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFStateSet_nbf_4f structure represents a set of pairs of VariantKeys and StateVariant_nbf_4f.
 /** The object code for a NBFStateSet_nbf_4f is NBF_STATE_SET. */
@@ -1145,7 +1145,7 @@ struct NBFStateSet_nbf_4f : public NBFObject
   uint_t keyStateVariantPairs;    //!< Specifies the file offset to the offsets to the keyVariant_t objects
   PADDING(4);               //!< Padding bits to ensure the size of NBFStateSet is a multiple of 8, regardless of packing.    
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFStateSet_nbf_4f,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFStateSet_nbf_4f) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFStateVariant_nbf_4f structure represents a set of StatePasses_nbf_4f
 /** The object code for a NBFStateVariant_nbf_4f is NBF_STATE_VARIANT. */
@@ -1154,7 +1154,7 @@ struct NBFStateVariant_nbf_4f : public NBFObject
   uint_t      numStatePasses;     //!< Specifies the number of contained state passes.
   uint_t      statePasses;        //!< Specifies the file offset to the offsets to the NBFStatePass objects
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFStateVariant_nbf_4f,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFStateVariant_nbf_4f) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFLightSource_nbf_50 structure represents a light source node.
 /** A NBFLightSource_nbf_50 serves as base class only. Concrete object codes valid for 
@@ -1171,7 +1171,7 @@ struct NBFLightSource_nbf_50 : public NBFObject
   uint_t      animation;          //!< Specifies the file offset to an optional NBFTrafoAnimation object
                                   //!< to be applied to the light transform (orientation and translation).
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFLightSource_nbf_50,8);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFLightSource_nbf_50) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 // The NBFDirectedLight_nbf_50 structure represents a directed light source.
 /** The object code for a NBFDirectedLight_nbf_50 is NBF_DIRECTED_LIGHT. */
@@ -1180,7 +1180,7 @@ struct NBFDirectedLight_nbf_50 : public NBFLightSource_nbf_50
   float3_t direction; //!< Specifies the direction of the light source.
   PADDING(4);         //!< Padding bits to ensure the offset of the next struct member is on a 4-byte boundary.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFDirectedLight_nbf_50,8);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFDirectedLight_nbf_50) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 // The NBFPointLight_nbf_50 structure represents a point light source.
 /** The object code for a NBFPointLight_nbf_50 is NBF_POINT_LIGHT. */
@@ -1192,7 +1192,7 @@ struct NBFPointLight_nbf_50 : public NBFLightSource_nbf_50
                         //!< the y-component of the vector specifies the linear term of the attenuation, and
                         //!< the z-component of the vector specifies the quadratic term of the attenuation.
 };                        
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFPointLight_nbf_50,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFPointLight_nbf_50) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 // The NBFSpotLight_nbf_50 structure represents a spot light.
 /** The object code for a NBFSpotLight_nbf_50 is NBF_SPOT_LIGHT. */
@@ -1209,14 +1209,14 @@ struct NBFSpotLight_nbf_50 : public NBFLightSource_nbf_50
   float    falloffExponent; //!< Controls the intensity distribution inside the cone, the light is mitted to.
   PADDING(4);               //!< Padding bits to ensure the size of NBFSpotLight is a multiple of 8, regardless of packing.    
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFSpotLight_nbf_50,8);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFSpotLight_nbf_50) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 struct NBFGeoNode_nbf_51 : public NBFNode
 {
   uint_t      stateSet;           //!< Specifies the file offset to the corresponding NBFStateSet object.
   uint_t      primitive;          //!< Specifies the file offset to the corresponding NBFPrimitive objects. 
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFGeoNode_nbf_51,8);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFGeoNode_nbf_51) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 struct NBFLightSource_nbf_52 : public NBFNode
 {
@@ -1230,14 +1230,14 @@ struct NBFLightSource_nbf_52 : public NBFNode
   uint_t      animation;          //!< Specifies the file offset to an optional NBFTrafoAnimation object
                                   //!< to be applied to the light transform (orientation and translation).
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFLightSource_nbf_52,8);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFLightSource_nbf_52) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 struct NBFDirectedLight_nbf_52 : public NBFLightSource_nbf_52
 {
   float3_t direction; //!< Specifies the direction of the light source.
   PADDING(4);         //!< Padding bits to ensure the offset of the next struct member is on a 4-byte boundary.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFDirectedLight_nbf_52,8);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFDirectedLight_nbf_52) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 struct NBFPointLight_nbf_52 : public NBFLightSource_nbf_52
 {
@@ -1247,7 +1247,7 @@ struct NBFPointLight_nbf_52 : public NBFLightSource_nbf_52
                         //!< the y-component of the vector specifies the linear term of the attenuation, and
                         //!< the z-component of the vector specifies the quadratic term of the attenuation.
 };                        
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFPointLight_nbf_52,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFPointLight_nbf_52) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 struct NBFSpotLight_nbf_52 : public NBFLightSource_nbf_52
 {
@@ -1262,7 +1262,7 @@ struct NBFSpotLight_nbf_52 : public NBFLightSource_nbf_52
   float    falloffExponent; //!< Controls the intensity distribution inside the cone, the light is mitted to.
   PADDING(4);               //!< Padding bits to ensure the size of NBFSpotLight is a multiple of 8, regardless of packing.    
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFSpotLight_nbf_52,8);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFSpotLight_nbf_52) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFLightSource_nbf_53 structure represents a light source node.
 /** A NBFLightSource_nbf_53 serves as base class only. Concrete object codes valid for 
@@ -1281,7 +1281,7 @@ struct NBFLightSource_nbf_53 : public NBFNode
   uint_t      lightEffect;        //!< Specifies the file offset to an optional NBFEffectDatat
   PADDING(4);        //!< Padding bits to ensure the offset of the next struct member is on a 4-byte boundary.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFLightSource_nbf_53,8);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFLightSource_nbf_53) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 // The NBFDirectedLight_nbf_53 structure represents a directed light source.
 /** The object code for a NBFDirectedLight_nbf_53 is NBF_DIRECTED_LIGHT. */
@@ -1290,7 +1290,7 @@ struct NBFDirectedLight_nbf_53 : public NBFLightSource_nbf_53
   float3_t direction; //!< Specifies the direction of the light source.
   PADDING(4);         //!< Padding bits to ensure the offset of the next struct member is on a 4-byte boundary.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFDirectedLight_nbf_53,8);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFDirectedLight_nbf_53) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 // The NBFPointLight_nbf_53 structure represents a point light source.
 /** The object code for a NBFPointLight_nbf_53 is NBF_POINT_LIGHT. */
@@ -1302,7 +1302,7 @@ struct NBFPointLight_nbf_53 : public NBFLightSource_nbf_53
                         //!< the y-component of the vector specifies the linear term of the attenuation, and
                         //!< the z-component of the vector specifies the quadratic term of the attenuation.
 };                        
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFPointLight_nbf_53,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFPointLight_nbf_53) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 // The NBFSpotLight_nbf_53 structure represents a spot light.
 /** The object code for a NBFSpotLight_nbf_53 is NBF_SPOT_LIGHT. */
@@ -1319,7 +1319,7 @@ struct NBFSpotLight_nbf_53 : public NBFLightSource_nbf_53
   float    falloffExponent; //!< Controls the intensity distribution inside the cone, the light is mitted to.
   PADDING(4);               //!< Padding bits to ensure the size of NBFSpotLight is a multiple of 8, regardless of packing.    
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFSpotLight_nbf_53,8);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFSpotLight_nbf_53) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFStateAttribute_nbf_54 structure represents a state attribute.
 /** A NBFStateAttribute_nbf_54 serves a base class only. Concrete object codes valid for a NBFStateAttribute_nbf_54
@@ -1327,7 +1327,7 @@ DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFSpotLight_nbf_53,8);    //!< Compile-time as
 struct NBFStateAttribute_nbf_54 : public NBFObject
 {
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFStateAttribute_nbf_54,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFStateAttribute_nbf_54) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFMaterial_nbf_54 structure represents a material.
 /** The object code for a NBFMaterial_nbf_54 is NBF_MATERIAL. */
@@ -1350,7 +1350,7 @@ struct NBFMaterial_nbf_54 : public NBFStateAttribute_nbf_54
   float3_t    backSpecularColor;      //!< Specifies the specular part of the back material color.
   float       backSpecularExponent;   //!< Specifies the specular exponent of the back material color.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFMaterial_nbf_54,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFMaterial_nbf_54) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The texBinding_t_nbf_54 structure specifies how a texture binding is stored in a .DPBF file.
 /** Texture bindings, in this context, need to be considered in conjunction with 
@@ -1360,7 +1360,7 @@ struct texBinding_t_nbf_54
   uint_t      texUnit;            //!< Specifies the texture unit where the actual NBFTextureAttributeItem_nbf_54 object is bound to.
   uint_t      texAttribItem;      //!< Specifies the file offset to the corresponding NBFTextureAttributeItem_nbf_54 object.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(texBinding_t_nbf_54,4);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(texBinding_t_nbf_54) % 4 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFTextureAttributeItem_nbf_54 structure represents a single texture object.
 /** The object code for a NBFTextureAttributeItem_nbf_54 is NBF_TEXTURE_ATTRIBUTE_ITEM. 
@@ -1387,7 +1387,7 @@ struct NBFTextureAttributeItem_nbf_54 : public NBFObject
   float4_t      texGenPlane[2][4];  //!< Specifies the texture coordinate generation planes
   PADDING(4);                       //!< Padding bits ensure offset of next elements is on a 4-byte boundary, regardless of packing
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFTextureAttributeItem_nbf_54,8);   // Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFTextureAttributeItem_nbf_54) % 8 ) == 0 );   // Compile-time assert on size of structure
 
 //! The NBFTextureAttribute_nbf_54 structure represents a texture attribute.
 /** The object code for a NBFTextureAttribute_nbf_54 is NBF_TEXTURE_ATTRIBUTE. */
@@ -1397,7 +1397,7 @@ struct NBFTextureAttribute_nbf_54 : public NBFStateAttribute_nbf_54
   uint_t      bindings;           //!< Specifies the file offset to the texture bindings. Texture bindings in
                                   //!< the NBF format are stored as texBinding_t objects.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFTextureAttribute_nbf_54,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFTextureAttribute_nbf_54) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFAlphaTestAttribute_nbf_54 structure represents an alpha test state attribute in the NBF format.
 /** The object code for a NBFAlphaTestAttribute_nbf_54 is NBF_ALPHA_TEST_ATTRIBUTE. */
@@ -1408,7 +1408,7 @@ struct NBFAlphaTestAttribute_nbf_54 : public NBFStateAttribute_nbf_54
   PADDING(2); //!< Padding bits to ensure offset of threshold member is on a 4-byte boundary, regardless of packing
   float       threshold; //!< Specifies the threshold value
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFAlphaTestAttribute_nbf_54,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFAlphaTestAttribute_nbf_54) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFBlendAttribute_nbf_54 structure represents a blend function.
 /** The object code for a NBFBlendAttribute_nbf_54 is NBF_BLEND_ATTRIBUTE. */
@@ -1418,7 +1418,7 @@ struct NBFBlendAttribute_nbf_54 : public NBFStateAttribute_nbf_54
   ubyte_t     destinationFunction;  //!< Specifies the destination blending function
   PADDING(6);                       //!< Padding bits to ensure size of NBFBlendAttribute_nbf_54 is a multiple of 8
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFBlendAttribute_nbf_54,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFBlendAttribute_nbf_54) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFFaceAttribute_nbf_54 structure represents a render mode.
 /** The object code for a NBFFaceAttribute_nbf_54 is NBF_FACE_ATTRIBUTE. */
@@ -1436,7 +1436,7 @@ struct NBFFaceAttribute_nbf_54 : public NBFStateAttribute_nbf_54
   ubyte_t     backFaceMode;         //!< Specifies the face mode (points/lines/faces) for back faces.
   ubyte_t     faceWindingCCW;       //!< Specifies if the face winding is counter clock wise
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFFaceAttribute_nbf_54,8);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFFaceAttribute_nbf_54) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFLightingAttribute_nbf_54 structure represents a render mode.
 /** The object code for a NBFLightingAttribute_nbf_54 is NBF_LIGHTING_ATTRIBUTE. */
@@ -1445,7 +1445,7 @@ struct NBFLightingAttribute_nbf_54 : public NBFStateAttribute_nbf_54
   ubyte_t     enabled;    //!< Specifies if lighting is enabled or disabled.
   PADDING(3);             //!< Padding bits ensure offset of next elements is on a 4-byte boundary, regardless of packing
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFLightingAttribute_nbf_54,4);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFLightingAttribute_nbf_54) % 4 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFLineAttribute_nbf_54 structure represents a render mode.
 /** The object code for a NBFLineAttribute_nbf_54 is NBF_LINE_ATTRIBUTE. */
@@ -1457,7 +1457,7 @@ struct NBFLineAttribute_nbf_54 : public NBFStateAttribute_nbf_54
   uint_t      stipplePattern;       //!< Specifies the stipple pattern
   float       width;                //!< Specifies the line width
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFLineAttribute_nbf_54,8);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFLineAttribute_nbf_54) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFPointAttribute_nbf_54 structure represents a render mode.
 /** The object code for a NBFPointAttribute_nbf_54 is NBF_POINT_ATTRIBUTE. */
@@ -1467,7 +1467,7 @@ struct NBFPointAttribute_nbf_54 : public NBFStateAttribute_nbf_54
   PADDING(3);                       //!< Padding bits ensure offset of next elements is on a 4-byte boundary, regardless of packing
   float       size;                 //!< Specifies the point size
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFPointAttribute_nbf_54,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFPointAttribute_nbf_54) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 /*! \brief The NBFUnlitColorAttribute_nbf_54 structure represents the color for unlit objects.
  *  \remarks The object code for a NBFUnlitColorAttribute_nbf_54 is NBF_UNLIT_COLOR_ATTRIBUTE. */
@@ -1475,7 +1475,7 @@ struct NBFUnlitColorAttribute_nbf_54 : public NBFStateAttribute_nbf_54
 {
   float4_t      color;              //!< Specifies the color for unlit objects
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFUnlitColorAttribute_nbf_54,8);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFUnlitColorAttribute_nbf_54) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFAnimatedTransform_nbf_54 structure represents an animated transform group node.
 /** The object code for a NBFAnimatedTransform_nbf_54 is NBF_ANIMATED_TRANSFORM. */
@@ -1485,7 +1485,7 @@ struct NBFAnimatedTransform_nbf_54 : public NBFTransform
                                   //!< to be applied to the transform group node.
   PADDING(4);        //!< Padding bits to ensure the size of NBFAnimatedTransform_nbf_54 is a multiple of 8, regardless of packing.    
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFAnimatedTransform_nbf_54,8);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFAnimatedTransform_nbf_54) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 /*! \brief The NBFAnimatedVertexAttributeSet_nbf_54 structure represents a set of animated vertex attributes.
  *  \remarks A NBFAnimatedVertexAttributeSet_nbf_54 derives from NBFVertexAttributeSet, and holds up to 16
@@ -1500,7 +1500,7 @@ struct NBFAnimatedVertexAttributeSet_nbf_54 : public NBFVertexAttributeSet
                                   //!< normalized after interpolation
   PADDING(4);                     //!< Padding bits to ensure the size of NBFAnimatedVertexAttributeSet_nbf_54 is a multiple of 8, regardless of packing.    
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFAnimatedVertexAttributeSet_nbf_54,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFAnimatedVertexAttributeSet_nbf_54) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFFlipbookAnimation_nbf_54 structure represents an animated group node.
 /** The object code for a NBFFlipbookAnimation_nbf_54 is NBF_FLIPBOOK_ANIMATION. */
@@ -1510,7 +1510,7 @@ struct NBFFlipbookAnimation_nbf_54 : public NBFGroup
                                   //!< to be applied to the transform group node.
   PADDING(4);        //!< Padding bits to ensure the size of NBFFlipbookAnimation_nbf_54 is a multiple of 8, regardless of packing.    
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFFlipbookAnimation_nbf_54,8);    //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFFlipbookAnimation_nbf_54) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFSkinnedTriangles_nbf_54 structure represents skin animated triangles.
 /** A NBFSkinnedTriangles_nbf_54 is a concrete topology class derived from NBFIndependentPrimitiveSet. 
@@ -1520,7 +1520,7 @@ struct NBFSkinnedTriangles_nbf_54 : public NBFIndependentPrimitiveSet
   uint_t      numSkins;           //!< Specifies the number of contained skins
   uint_t      skins;              //!< Specifies the file offset to the corresponding skin_t objects.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFSkinnedTriangles_nbf_54,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFSkinnedTriangles_nbf_54) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFStateSet_nbf_54 structure represents a set of StateAttributes
 /** The object code for a NBFStateSet_nbf_54 is NBF_STATE_SET. */
@@ -1529,7 +1529,7 @@ struct NBFStateSet_nbf_54 : public NBFObject
   uint_t      numStateAttribs;    //!< Specifies the number of contained state attributes.
   uint_t      stateAttribs;       //!< Specifies the file offset to the offsets to the NBFStateAttribute objects
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFStateSet_nbf_54,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFStateSet_nbf_54) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! An NBFRTFxBase_nbf_54 is a common base for both RTFx and RTFxSceneAttribute
 struct NBFRTFxBase_nbf_54
@@ -1538,7 +1538,7 @@ struct NBFRTFxBase_nbf_54
   uint_t  parameters;             //!< Specifies the file offset of the parameters.
   //  NOTE: no need to store the textures! They're resolved by the associated RTFxProgram!
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFRTFxBase_nbf_54,4);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFRTFxBase_nbf_54) % 4 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFRTFx_nbf_54 structure represents an effect attribute.
 /** The object code for a NBFRTFx_nbf_54 is NBF_RTFX. */
@@ -1547,14 +1547,14 @@ struct NBFRTFx_nbf_54 : public NBFStateAttribute_nbf_54, public NBFRTFxBase_nbf_
   uint_t  program;                //!< Specifies the file offset of the RTFxProgram.
   PADDING(4);                     //!< Padding bits to ensure the size of NBFRTFx is a multiple of 8, regardless of packing.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFRTFx_nbf_54,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFRTFx_nbf_54) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 struct NBFSampler_nbf_54 : public NBFObject
 {
   uint_t      samplerState;         //!< Specifies the offset of the SamplerState
   uint_t      texture;              //!< Specifies the offset of the Texture
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFSampler_nbf_54,8);
+DP_STATIC_ASSERT( ( sizeof(NBFSampler_nbf_54) % 8 ) == 0 );
 
 struct NBFSamplerState_nbf_54 : public NBFObject
 {
@@ -1569,7 +1569,7 @@ struct NBFSamplerState_nbf_54 : public NBFObject
   uint_t      texWrapR;             //!< Specifies the wrap parameter for texture coordinate r.
   uint_t      compareMode;          //!> Specifies the compare mode parameter for a texture. Valid values are TCM_NONE and TCM_R_TO_TEXTURE.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFSamplerState_nbf_54,8);
+DP_STATIC_ASSERT( ( sizeof(NBFSamplerState_nbf_54) % 8 ) == 0 );
 
 //! The NBFEffectData_nbf_55 structure represents a set of ParameterGroupDatas
 /** The object code for an NBFEffectData_nbf_55 is NBF_PIPELINE_DATA. */
@@ -1580,14 +1580,14 @@ struct NBFEffectData_nbf_55 : public NBFObject
   ubyte_t     transparent;          //!< Specifies if this EffectData is to be handled as transparent
   PADDING(3);        //!< Padding bits to ensure the offset of the next struct member is on a 4-byte boundary.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFEffectData_nbf_55,8);   //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFEffectData_nbf_55) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 /*! \brief The NBFPatchesBase structure is the base of all patches structures. */
 struct NBFPatchesBase : public NBFPrimitive
 {
   // nothing required here any more
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFPatchesBase,8);        //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFPatchesBase) % 8 ) == 0 );        //!< Compile-time assert on size of structure
 
 /*! \brief The NBFQuadPatches structure represents a general quad patches object.
  *  \remarks The object code for a NBFQuadPatches is NBF_QUAD_PATCHES. */ 
@@ -1596,14 +1596,14 @@ struct NBFQuadPatches : public NBFPatchesBase
   uint_t  size;                     //!< Specifies the size of the quad patches. Each patch is specified by size^2 vertices
   PADDING(4);                       //!< Padding bits ensure offset of next elements is on a 4-byte boundary, regardless of packing
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFQuadPatches,8);        //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFQuadPatches) % 8 ) == 0 );        //!< Compile-time assert on size of structure
 
 /*! \brief The NBFQuadPatches4x4 structure represents a 4x4 quad patches object.
  *  \remarks The object code for a NBFQuadPatches4x4 is NBF_QUAD_PATCHES_4X4. */
 struct NBFQuadPatches4x4 : public NBFPatchesBase
 {
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFQuadPatches4x4,8);     // Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFQuadPatches4x4) % 8 ) == 0 );     // Compile-time assert on size of structure
 
 /*! \brief The NBFRectPatches structure represents a general rectangular patches object.
  *  \remarks The object code for a NBFRectPatches is NBF_RECT_PATCHES. */
@@ -1612,7 +1612,7 @@ struct NBFRectPatches : public NBFPatchesBase
   uint_t  width;                  //!< Specifies the width of the patches. Each patch is specified by with*height vertices.
   uint_t  height;                 //!< Specifies the height of the patches. Each patch is specified by width*height vertices.
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFRectPatches,8);      //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFRectPatches) % 8 ) == 0 );      //!< Compile-time assert on size of structure
 
 /*! \brief The NBFRectPatches structure represents a general triangular patches object.
  *  \remarks The object code for a NBFRectPatches is NBF_TRI_PATCHES. */
@@ -1621,14 +1621,14 @@ struct NBFTriPatches : public NBFPatchesBase
   uint_t  size;                     //!< Specifies the size of the patches. Each patch is specified by 1+2+...+size vertices
   PADDING(4);                       //!< Padding bits ensure offset of next elements is on a 4-byte boundary, regardless of packing
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFTriPatches,8);     //!< Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFTriPatches) % 8 ) == 0 );     //!< Compile-time assert on size of structure
 
 /*! \brief The NBFTriPatches4 structure represents a 4-vertices-per-edge triangular patches object.
  *  \remarks The object code for a NBFTriPatches4 is NBF_TRI_PATCHES_4. */
 struct NBFTriPatches4 : public NBFPatchesBase
 {
 };
-DP_STATIC_ASSERT_MODULO_BYTESIZE(NBFTriPatches4,8);      // Compile-time assert on size of structure
+DP_STATIC_ASSERT( ( sizeof(NBFTriPatches4) % 8 ) == 0 );      // Compile-time assert on size of structure
 
 #pragma pack(pop)
 
