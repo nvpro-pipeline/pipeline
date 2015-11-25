@@ -33,6 +33,7 @@ if(Qt5Widgets_FOUND AND TARGET DPSgUIQt5)
   add_definitions(
     ${GLEW_DEFINITIONS}
     "-D_CRT_SECURE_NO_WARNINGS"
+    "-D_SCL_SECURE_NO_WARNINGS"
   )
 
   # this one is for the UI files that were generated
