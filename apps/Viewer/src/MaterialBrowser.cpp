@@ -93,7 +93,9 @@ void MaterialBrowser::catalogItemExpanded( QTreeWidgetItem * item )
     else
     {
       std::string fp = filePath.toStdString();
-      dp::fx::EffectLibrary::instance()->loadEffects( fp, dp::util::FileFinder( GetApp()->getPreferences()->getSearchPathsAsStdVector() ) );
+      dp::util::FileFinder fileFinder( GetApp()->getPreferences()->getMaterialCatalogPath().toStdString() );
+      fileFinder.addSearchPaths( GetApp()->getPreferences()->getSearchPathsAsStdVector() );
+      dp::fx::EffectLibrary::instance()->loadEffects( fp, fileFinder );
 
       std::vector<std::string> materialNames;
       dp::fx::EffectLibrary::instance()->getEffectNames( fp, dp::fx::EffectSpec::EST_PIPELINE, materialNames );

@@ -121,9 +121,6 @@ namespace dp
         return false;
       }
 
-      dp::util::FileFinder localFileFinder( fileFinder );
-      localFileFinder.addSearchPath( dp::util::getFilePath( file ) );
-
       std::string extension = dp::util::getFileExtension( filename );
 
       EffectLoaders::iterator it = m_effectLoaders.find( extension );
@@ -131,7 +128,7 @@ namespace dp
       {
         m_currentFile.push( file );
         dp::util::convertPath( m_currentFile.top() );
-        bool success = it->second->loadEffects( m_currentFile.top(), localFileFinder );
+        bool success = it->second->loadEffects( m_currentFile.top(), fileFinder );
         m_currentFile.pop();
         m_loadedFiles.insert( filename );
 

@@ -583,7 +583,6 @@ void ScenePropertiesWidget::updateEdit( QLayout * layout, const dp::math::Vecnt<
   float min, max;
   if ( isRanged( pid, "_anno_hardRange", min, max ) )
   {
-    DP_ASSERT( !"never passed this path" );
     for ( unsigned int i=0 ; i<N ; i++ )
     {
       DP_ASSERT( layout->itemAt( i ) && dynamic_cast<QHBoxLayout*>(layout->itemAt( i )->layout()) );
