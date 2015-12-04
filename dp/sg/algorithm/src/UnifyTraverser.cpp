@@ -504,9 +504,9 @@ namespace dp
               // ***************************************************************
               for ( unsigned int i=0 ; i<VertexAttributeSet::DP_SG_VERTEX_ATTRIB_COUNT ; i++ )
               {
-                unsigned int type = p->getTypeOfVertexData(i);
-                if (  type != dp::DT_UNKNOWN // no data is ok!
-                   && type != dp::DT_FLOAT_32 )
+                dp::DataType type = p->getTypeOfVertexData(i);
+                if (  type != dp::DataType::UNKNOWN // no data is ok!
+                   && type != dp::DataType::FLOAT_32 )
                 {
                   DP_ASSERT( !"This algorithm currently only works for float-typed vertex data!" );
                   return;
@@ -599,7 +599,7 @@ namespace dp
                         vad[dim*k+l] = valuesOut[k][j+l];
                       }
                     }
-                    newVAS->setVertexData( i, dim, dp::DT_FLOAT_32, &vad[0], 0, dp::checked_cast<unsigned int>(vad.size()/dim) );
+                    newVAS->setVertexData( i, dim, dp::DataType::FLOAT_32, &vad[0], 0, dp::checked_cast<unsigned int>(vad.size()/dim) );
 
                     // inherit enable states from source attrib
                     // normalize-enable state only meaningful for generic aliases!

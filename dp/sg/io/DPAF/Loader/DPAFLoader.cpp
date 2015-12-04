@@ -2388,17 +2388,17 @@ IndexSetSharedPtr DPAFLoader::readIndexSet( const char * name )
         {
           switch( iset->getIndexDataType() )
           {
-            case dp::DT_UNSIGNED_INT_32:
+            case dp::DataType::UNSIGNED_INT_32:
               *((unsigned int *)bufPtr) = readScalar<unsigned int>( token );
               bufPtr += sizeof( unsigned int );
               break;
 
-            case dp::DT_UNSIGNED_INT_16:
+            case dp::DataType::UNSIGNED_INT_16:
               *((unsigned short *)bufPtr) = readScalar<unsigned short>( token );
               bufPtr += sizeof( unsigned short );
               break;
 
-            case dp::DT_UNSIGNED_INT_8:
+            case dp::DataType::UNSIGNED_INT_8:
               *bufPtr++ = readScalar<unsigned char>( token );
               break;
           }
@@ -2973,26 +2973,26 @@ void DPAFLoader::readVertexData( unsigned int type, unsigned char * vdata, strin
   {
     switch ( type )
     {
-      case dp::DT_INT_8:
-      case dp::DT_UNSIGNED_INT_8:
+      case dp::DataType::INT_8:
+      case dp::DataType::UNSIGNED_INT_8:
         *vdata = (unsigned char)atoi(token.c_str()); 
         vdata++;
         break;
-      case dp::DT_INT_16:
-      case dp::DT_UNSIGNED_INT_16:
+      case dp::DataType::INT_16:
+      case dp::DataType::UNSIGNED_INT_16:
         *(unsigned short*)vdata = (unsigned short)atoi(token.c_str()); 
         vdata += sizeof(unsigned short); 
         break;
-      case dp::DT_INT_32:
-      case dp::DT_UNSIGNED_INT_32:
+      case dp::DataType::INT_32:
+      case dp::DataType::UNSIGNED_INT_32:
         *(unsigned int*)vdata = static_cast<unsigned int>(atoi(token.c_str()));
         vdata += sizeof(unsigned int); 
         break;
-      case dp::DT_FLOAT_32:
+      case dp::DataType::FLOAT_32:
         *(float*)vdata = _atof(token.c_str()); 
         vdata += sizeof(float); 
         break;
-      case dp::DT_FLOAT_64:
+      case dp::DataType::FLOAT_64:
         *(double*)vdata = atof(token.c_str()); 
         vdata += sizeof(double); 
         break;

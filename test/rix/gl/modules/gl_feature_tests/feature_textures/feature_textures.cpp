@@ -294,8 +294,8 @@ void Feature_textures::createScene()
   // 0: position, stream 0
   // 8: texture coordinate 0, stream 1
   VertexFormatInfo   vertexInfos[] = {
-    VertexFormatInfo( 0, dp::DT_FLOAT_32, coordsPerVertex, false, 0, 0, coordsPerVertex*sizeof(float)),
-    VertexFormatInfo( 8, dp::DT_FLOAT_32, texCoordsPerVertex, false, 1, 0, texCoordsPerVertex*sizeof(float)),
+    VertexFormatInfo( 0, dp::DataType::FLOAT_32, coordsPerVertex, false, 0, 0, coordsPerVertex*sizeof(float)),
+    VertexFormatInfo( 8, dp::DataType::FLOAT_32, texCoordsPerVertex, false, 1, 0, texCoordsPerVertex*sizeof(float)),
   };
   VertexFormatDescription vertexFormatDescription( vertexInfos, sizeof dp::util::array(vertexInfos) );
   VertexFormatSharedHandle vertexFormat = m_rix->vertexFormatCreate( vertexFormatDescription );
@@ -317,19 +317,19 @@ void Feature_textures::createScene()
   m_vertexContainerW2V = m_rix->containerCreate( m_containerDescriptorWorld2View );
 
   InternalTextureFormat itf = ITF_RGBA8;
-  TextureDescription textureDescription1D     ( TT_1D,           itf, dp::PF_RGBA, dp::DT_UNSIGNED_INT_8, texWidth );
-  TextureDescription textureDescription2D     ( TT_2D,           itf, dp::PF_RGBA, dp::DT_UNSIGNED_INT_8, texWidth, texHeight );
-  TextureDescription textureDescription3D     ( TT_3D,           itf, dp::PF_RGBA, dp::DT_UNSIGNED_INT_8, texWidth, texHeight, texDepth );
-  TextureDescription textureDescription1DArray( TT_1D_ARRAY,     itf, dp::PF_RGBA, dp::DT_UNSIGNED_INT_8, texWidth, 0        , 0,        tex1DArraySize );
-  TextureDescription textureDescription2DArray( TT_2D_ARRAY,     itf, dp::PF_RGBA, dp::DT_UNSIGNED_INT_8, texWidth, texHeight, 0,        tex2DArraySize );
-  TextureDescription textureDescription2DRect ( TT_2D_RECTANGLE, itf, dp::PF_RGBA, dp::DT_UNSIGNED_INT_8, std::min<size_t>(texWidth, 5), std::min<size_t>(texHeight, 7) );
+  TextureDescription textureDescription1D     ( TT_1D,           itf, dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_8, texWidth );
+  TextureDescription textureDescription2D     ( TT_2D,           itf, dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_8, texWidth, texHeight );
+  TextureDescription textureDescription3D     ( TT_3D,           itf, dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_8, texWidth, texHeight, texDepth );
+  TextureDescription textureDescription1DArray( TT_1D_ARRAY,     itf, dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_8, texWidth, 0        , 0,        tex1DArraySize );
+  TextureDescription textureDescription2DArray( TT_2D_ARRAY,     itf, dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_8, texWidth, texHeight, 0,        tex2DArraySize );
+  TextureDescription textureDescription2DRect ( TT_2D_RECTANGLE, itf, dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_8, std::min<size_t>(texWidth, 5), std::min<size_t>(texHeight, 7) );
 
   // just pass in texture data
-  TextureDataPtr textureData( tex, dp::PF_RGBA, dp::DT_UNSIGNED_INT_8 );
+  TextureDataPtr textureData( tex, dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_8 );
 
   // use a vector of pointers into texture data
-  TextureDataPtr textureData1DArray( tex1DArray, 0, tex1DArraySize, dp::PF_RGBA, dp::DT_UNSIGNED_INT_8 );
-  TextureDataPtr textureData2DArray( tex2DArray, 0, tex2DArraySize, dp::PF_RGBA, dp::DT_UNSIGNED_INT_8 );
+  TextureDataPtr textureData1DArray( tex1DArray, 0, tex1DArraySize, dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_8 );
+  TextureDataPtr textureData2DArray( tex2DArray, 0, tex2DArraySize, dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_8 );
 
   TextureSharedHandle texture1D      = m_rix->textureCreate( textureDescription1D );
   TextureSharedHandle texture2D      = m_rix->textureCreate( textureDescription2D );
@@ -424,11 +424,11 @@ void Feature_textures::createScene()
     m_rix->bufferUpdateData( indexBuffer, 0, indexSetQuad, indexSetQuadSize*sizeof(unsigned int) );
 
     IndicesSharedHandle indices = m_rix->indicesCreate();
-    m_rix->indicesSetData( indices, dp::DT_UNSIGNED_INT_32, indexBuffer, 0, indexSetQuadSize );
+    m_rix->indicesSetData( indices, dp::DataType::UNSIGNED_INT_32, indexBuffer, 0, indexSetQuadSize );
 
     // geometry
     GeometryDescriptionSharedHandle geometryDescription = m_rix->geometryDescriptionCreate();
-    m_rix->geometryDescriptionSet( geometryDescription, GPT_TRIANGLES );
+    m_rix->geometryDescriptionSet( geometryDescription, GeometryPrimitiveType::TRIANGLES );
 
     GeometrySharedHandle geometry = m_rix->geometryCreate();
     m_rix->geometrySetData( geometry, geometryDescription, m_vertexAttributes, indices );
@@ -517,11 +517,11 @@ void Feature_textures::generateGI
   m_rix->bufferUpdateData( indexBuffer, 0, indexSet, indexBufferSize );
 
   IndicesSharedHandle indices = m_rix->indicesCreate();
-  m_rix->indicesSetData( indices, dp::DT_UNSIGNED_INT_32, indexBuffer, 0, indexSetSize );
+  m_rix->indicesSetData( indices, dp::DataType::UNSIGNED_INT_32, indexBuffer, 0, indexSetSize );
 
   // geometry
   GeometryDescriptionSharedHandle geometryDescription = m_rix->geometryDescriptionCreate();
-  m_rix->geometryDescriptionSet( geometryDescription, GPT_TRIANGLES );
+  m_rix->geometryDescriptionSet( geometryDescription, GeometryPrimitiveType::TRIANGLES );
 
   GeometrySharedHandle geometry = m_rix->geometryCreate();
   m_rix->geometrySetData( geometry, geometryDescription, m_vertexAttributes, indices );

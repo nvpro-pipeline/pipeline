@@ -179,7 +179,7 @@ void Feature_texture_native::createScene()
   m_rix->containerSetData( vertexContainer, containerEntryModel2world, ContainerDataRaw( 0, trafo.getMatrix().getPtr(), 16*sizeof(float) ) );
 
   // prepare & set texture
-  TextureDescription textureDescription( TT_2D, ITF_RGBA32F, dp::PF_RGBA, dp::DT_FLOAT_32, tex2DWidth, tex2DHeight );
+  TextureDescription textureDescription( TT_2D, ITF_RGBA32F, dp::PixelFormat::RGBA, dp::DataType::FLOAT_32, tex2DWidth, tex2DHeight );
 
   TextureSharedHandle texture = m_rix->textureCreate( textureDescription );
 

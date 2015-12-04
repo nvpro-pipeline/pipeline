@@ -66,22 +66,22 @@ namespace dp
             switch ( pixelFormat )
             {
             case dp::sg::core::Image::IMG_RGB:
-              return dp::PF_RGB;
+              return dp::PixelFormat::RGB;
             case dp::sg::core::Image::IMG_RGBA:
-              return dp::PF_RGBA;
+              return dp::PixelFormat::RGBA;
             case dp::sg::core::Image::IMG_BGR:
-              return dp::PF_BGR;
+              return dp::PixelFormat::BGR;
             case dp::sg::core::Image::IMG_BGRA:
-              return dp::PF_BGRA;
+              return dp::PixelFormat::BGRA;
             case dp::sg::core::Image::IMG_LUMINANCE:
-              return dp::PF_LUMINANCE;
+              return dp::PixelFormat::LUMINANCE;
             case dp::sg::core::Image::IMG_ALPHA:
-              return dp::PF_ALPHA;
+              return dp::PixelFormat::ALPHA;
             case dp::sg::core::Image::IMG_LUMINANCE_ALPHA:
-              return dp::PF_LUMINANCE_ALPHA;
+              return dp::PixelFormat::LUMINANCE_ALPHA;
             default:
               DP_ASSERT( !"unknown pixel format, assuming IMG_RGB");
-              return dp::PF_RGB;
+              return dp::PixelFormat::RGB;
             }
           }
 

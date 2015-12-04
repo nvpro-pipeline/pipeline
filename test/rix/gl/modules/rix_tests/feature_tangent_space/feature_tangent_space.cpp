@@ -403,10 +403,10 @@ void Feature_tangent_space::createScene()
 
   dp::rix::util::TextureObjectDataSharedPtr noiseTexture = dp::rix::util::createNoiseTexture( math::Vec2ui(256, 256), 10.0f, 20.0f );
   dp::rix::util::TextureObjectDataSharedPtr normalTexture = dp::rix::util::convertHeightMapToNormalMap( noiseTexture, 0.014f );
-  TextureSharedHandle noiseNormalMap = dp::rix::util::generateTexture( m_rix, normalTexture, dp::PF_RGBA, dp::DT_UNSIGNED_INT_32, ITF_RGBA8 );
+  TextureSharedHandle noiseNormalMap = dp::rix::util::generateTexture( m_rix, normalTexture, dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_32, ITF_RGBA8 );
 
   dp::rix::util::TextureObjectDataSharedPtr pyramidNormalTexture = dp::rix::util::createPyramidNormalMap( math::Vec2ui(256, 256), math::Vec2ui(16, 16), 0.03125f );
-  TextureSharedHandle pyramidNormalMap = dp::rix::util::generateTexture( m_rix, pyramidNormalTexture, dp::PF_RGBA, dp::DT_UNSIGNED_INT_32, ITF_RGBA8 );
+  TextureSharedHandle pyramidNormalMap = dp::rix::util::generateTexture( m_rix, pyramidNormalTexture, dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_32, ITF_RGBA8 );
 
   rix::core::SamplerSharedHandle samplerNoiseNormalMap = m_rix->samplerCreate();
   m_rix->samplerSetTexture( samplerNoiseNormalMap, noiseNormalMap );

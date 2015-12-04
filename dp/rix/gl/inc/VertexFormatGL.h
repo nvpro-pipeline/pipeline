@@ -48,7 +48,7 @@ namespace dp
           Format()
             : m_enabled(false)
             , m_streamId( 0 )
-            , m_dataType( dp::DT_UNSIGNED_INT_8 )
+            , m_dataType( dp::DataType::UNSIGNED_INT_8 )
             , m_numComponents( 0 )
             , m_normalized( false )
             , m_offset( 0 )

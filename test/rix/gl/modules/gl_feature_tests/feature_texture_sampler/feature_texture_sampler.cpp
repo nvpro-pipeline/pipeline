@@ -153,10 +153,10 @@ void Feature_texture_sampler::createScene()
 
 
   // prepare & set texture
-  TextureDescription textureDescription( TT_2D, ITF_RGBA32F, dp::PF_RGBA, dp::DT_FLOAT_32, tex2DWidth, tex2DHeight, 0, 0, true );
+  TextureDescription textureDescription( TT_2D, ITF_RGBA32F, dp::PixelFormat::RGBA, dp::DataType::FLOAT_32, tex2DWidth, tex2DHeight, 0, 0, true );
   m_textureHandle = m_rix->textureCreate( textureDescription );
 
-  TextureDataPtr textureDataPtr( tex2D, dp::PF_RGBA, dp::DT_FLOAT_32 );
+  TextureDataPtr textureDataPtr( tex2D, dp::PixelFormat::RGBA, dp::DataType::FLOAT_32 );
   m_rix->textureSetData( m_textureHandle, textureDataPtr );
 
   RenderGroupSharedHandle renderGroup = m_rix->renderGroupCreate();

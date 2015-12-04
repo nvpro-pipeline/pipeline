@@ -190,7 +190,7 @@ namespace dp
       template <unsigned int dim>
       GeometryDataSharedPtr createPoint( const math::Vecnt<dim,float>& v0 )
       {
-        GeometryDataSharedPtr meshOut = new GeometryData(GPT_POINTS);
+        GeometryDataSharedPtr meshOut = new GeometryData(GeometryPrimitiveType::POINTS);
 
         AttributeFeed positions(meshOut, ATTRIB_POSITION, ATTRIB_POSITION, dim, 1);
         positions.add( v0 );
@@ -203,7 +203,7 @@ namespace dp
       template <unsigned int dim>
       GeometryDataSharedPtr createPoints( const std::vector< math::Vecnt<dim,float> >& v, bool indexed = false )
       {
-        GeometryDataSharedPtr meshOut = new GeometryData(GPT_POINTS);
+        GeometryDataSharedPtr meshOut = new GeometryData(GeometryPrimitiveType::POINTS);
 
         AttributeFeed positions(meshOut, ATTRIB_POSITION, ATTRIB_POSITION, dim, v.size() );
         for( typename std::vector< math::Vecnt<dim,float> >::const_iterator it = v.begin(); it != v.end(); ++it )

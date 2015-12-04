@@ -180,7 +180,7 @@ void Feature_texture_buffer::createScene()
     m_rix->containerSetData( vertexContainer, containerEntryModel2world, ContainerDataRaw( 0, trafo.getMatrix().getPtr(), 16*sizeof(float) ) );
 
     // prepare & set texture
-    TextureDescription textureDescription( TT_BUFFER, ITF_RGBA32F, dp::PF_RGBA, dp::DT_FLOAT_32 );
+    TextureDescription textureDescription( TT_BUFFER, ITF_RGBA32F, dp::PixelFormat::RGBA, dp::DataType::FLOAT_32 );
 
     BufferSharedHandle textureBuffer = m_rix->bufferCreate();
     m_rix->bufferSetSize( textureBuffer, tex1DSize );

@@ -134,7 +134,7 @@ void Feature_rix_api::createScene()
   m_rix->bufferUpdateData( vertexCoordBuffer, 0, vertexCoords, vertexCoordBufferSize );
 
   VertexFormatInfo   vertexInfos[] = {
-    VertexFormatInfo( 0, dp::DT_FLOAT_32, coordsPerVertex, false, 0, 0, coordsPerVertex*sizeof(float)),
+    VertexFormatInfo( 0, dp::DataType::FLOAT_32, coordsPerVertex, false, 0, 0, coordsPerVertex*sizeof(float)),
   };
   VertexFormatDescription vertexFormatDescription( vertexInfos, sizeof dp::util::array(vertexInfos) );
   VertexFormatSharedHandle vertexFormat = m_rix->vertexFormatCreate( vertexFormatDescription );
@@ -154,13 +154,13 @@ void Feature_rix_api::createScene()
   m_rix->bufferUpdateData( indexBuffer, 0, indexSet, indexBufferSize );
 
   IndicesSharedHandle indices = m_rix->indicesCreate();
-  m_rix->indicesSetData( indices, dp::DT_UNSIGNED_INT_8, indexBuffer, 0, indexSetSize );
+  m_rix->indicesSetData( indices, dp::DataType::UNSIGNED_INT_8, indexBuffer, 0, indexSetSize );
 
 
   // Geometry
 
   GeometryDescriptionSharedHandle geometryDescription = m_rix->geometryDescriptionCreate();
-  m_rix->geometryDescriptionSet( geometryDescription, GPT_TRIANGLES );
+  m_rix->geometryDescriptionSet( geometryDescription, GeometryPrimitiveType::TRIANGLES );
 
   GeometrySharedHandle geometry = m_rix->geometryCreate();
   m_rix->geometrySetData( geometry, geometryDescription, vertexAttributes, indices );

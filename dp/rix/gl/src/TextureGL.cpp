@@ -134,8 +134,8 @@ namespace dp
             DP_ASSERT( dynamic_cast<const dp::rix::core::TextureDataPtr*>(&textureData) );
             const TextureDataPtr& dataPtr = static_cast<const TextureDataPtr&>(textureData);
 
-            DP_ASSERT( dataPtr.m_pixelFormat < dp::PF_NUM_PIXELFORMATS );
-            DP_ASSERT( dataPtr.m_pixelDataType < dp::DT_NUM_DATATYPES );
+            DP_ASSERT( dataPtr.m_pixelFormat < dp::PixelFormat::NUM_PIXELFORMATS );
+            DP_ASSERT( dataPtr.m_pixelDataType < dp::DataType::NUM_DATATYPES );
             DP_ASSERT( (!m_hasMipmaps && dataPtr.m_numMipMapLevels == 0) || m_hasMipmaps );
 
             GLenum glFormat   = getGLPixelFormat( dataPtr.m_pixelFormat, m_texture->getInternalFormat() );

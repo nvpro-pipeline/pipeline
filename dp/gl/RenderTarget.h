@@ -117,8 +117,8 @@ namespace dp
           \param pixelDataType DataType to use for each pixel component.
           \return A TextureHostSharedPtr containing a texture with the content of the surface.
       */
-      DP_GL_API virtual dp::util::ImageSharedPtr getImage( dp::PixelFormat pixelFormat = dp::PF_BGRA
-                                                         , dp::DataType pixelDataType = dp::DT_UNSIGNED_INT_8
+      DP_GL_API virtual dp::util::ImageSharedPtr getImage( dp::PixelFormat pixelFormat = dp::PixelFormat::BGRA
+                                                         , dp::DataType pixelDataType = dp::DataType::UNSIGNED_INT_8
                                                          , unsigned int index = 0 );
 
       /** \brief Grab a screenshot of the specified color buffer.
@@ -128,8 +128,8 @@ namespace dp
           \return A TextureHostSharedPtr containing a texture with the content of the surface.
       **/
       DP_GL_API virtual dp::util::ImageSharedPtr getTargetAsImage(GLenum mode
-                                                                 , dp::PixelFormat pixelFormat = dp::PF_BGRA
-                                                                 , dp::DataType pixelDataType = dp::DT_UNSIGNED_INT_8 );
+                                                                 , dp::PixelFormat pixelFormat = dp::PixelFormat::BGRA
+                                                                 , dp::DataType pixelDataType = dp::DataType::UNSIGNED_INT_8 );
 
       DP_GL_API virtual bool isValid();
 

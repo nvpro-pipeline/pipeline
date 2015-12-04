@@ -329,8 +329,8 @@ namespace dp
       DP_GL_API virtual ~RenderTargetFBO();
  
       DP_GL_API virtual dp::util::ImageSharedPtr getImage( 
-        dp::PixelFormat pixelFormat = dp::PF_BGRA, 
-        dp::DataType pixelDataType = dp::DT_UNSIGNED_INT_8,
+        dp::PixelFormat pixelFormat = dp::PixelFormat::BGRA, 
+        dp::DataType pixelDataType = dp::DataType::UNSIGNED_INT_8,
         unsigned int index = 0 );
 
       DP_GL_API virtual bool isValid();

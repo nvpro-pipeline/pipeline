@@ -48,24 +48,24 @@ namespace dp
             switch( scenixDataType )
             {
             case dp::sg::core::Image::IMG_BYTE:
-              return dp::DT_INT_8;
+              return dp::DataType::INT_8;
             case dp::sg::core::Image::IMG_UNSIGNED_BYTE:
-              return dp::DT_UNSIGNED_INT_8;
+              return dp::DataType::UNSIGNED_INT_8;
             case dp::sg::core::Image::IMG_SHORT:
-              return dp::DT_INT_16;
+              return dp::DataType::INT_16;
             case dp::sg::core::Image::IMG_UNSIGNED_SHORT:
-              return dp::DT_UNSIGNED_INT_16;
+              return dp::DataType::UNSIGNED_INT_16;
             case dp::sg::core::Image::IMG_INT:
-              return dp::DT_INT_32;
+              return dp::DataType::INT_32;
             case dp::sg::core::Image::IMG_UNSIGNED_INT:
-              return dp::DT_UNSIGNED_INT_32;
+              return dp::DataType::UNSIGNED_INT_32;
             case dp::sg::core::Image::IMG_FLOAT16:
-              return dp::DT_FLOAT_16;
+              return dp::DataType::FLOAT_16;
             case dp::sg::core::Image::IMG_FLOAT32:
-              return dp::DT_FLOAT_32;
+              return dp::DataType::FLOAT_32;
             default:
               DP_ASSERT( false && "unknown datatype");
-              return dp::DT_UNKNOWN;
+              return dp::DataType::UNKNOWN;
             }
           }
 

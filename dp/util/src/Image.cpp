@@ -57,8 +57,8 @@ namespace dp
     Image::Image()
       : m_width(0)
       , m_height(0)
-      , m_pixelFormat(PF_UNKNOWN)
-      , m_dataType(DT_UNKNOWN)
+      , m_pixelFormat(PixelFormat::UNKNOWN)
+      , m_dataType(DataType::UNKNOWN)
       , m_bpp(0)
       , m_totalSize(0)
       , m_mipmapLevels(0)
@@ -264,26 +264,26 @@ namespace dp
       switch( ildt )
       {
       case IL_UNSIGNED_BYTE:
-        return DT_UNSIGNED_INT_8;
+        return DataType::UNSIGNED_INT_8;
       case IL_UNSIGNED_SHORT:
-        return DT_UNSIGNED_INT_16;
+        return DataType::UNSIGNED_INT_16;
       case IL_UNSIGNED_INT:
-        return DT_UNSIGNED_INT_32;
+        return DataType::UNSIGNED_INT_32;
       case IL_BYTE:
-        return DT_INT_8;
+        return DataType::INT_8;
       case IL_SHORT:
-        return DT_INT_16;
+        return DataType::INT_16;
       case IL_INT:
-        return DT_INT_32;
+        return DataType::INT_32;
       case IL_HALF:
-        return DT_FLOAT_16;
+        return DataType::FLOAT_16;
       case IL_FLOAT:
-        return DT_FLOAT_32;
+        return DataType::FLOAT_32;
       case IL_DOUBLE:
-        return DT_FLOAT_64;
+        return DataType::FLOAT_64;
       default:
         DP_ASSERT(!"Unsupported");
-        return DT_UNKNOWN;
+        return DataType::UNKNOWN;
       }
     }
 
@@ -291,23 +291,23 @@ namespace dp
     {
       switch( dpdt )
       {
-      case DT_UNSIGNED_INT_8:
+      case DataType::UNSIGNED_INT_8:
         return IL_UNSIGNED_BYTE;
-      case DT_UNSIGNED_INT_16:
+      case DataType::UNSIGNED_INT_16:
         return IL_UNSIGNED_SHORT;
-      case DT_UNSIGNED_INT_32:
+      case DataType::UNSIGNED_INT_32:
         return IL_UNSIGNED_INT;
-      case DT_INT_8:
+      case DataType::INT_8:
         return IL_BYTE;
-      case DT_INT_16:
+      case DataType::INT_16:
         return IL_SHORT;
-      case DT_INT_32:
+      case DataType::INT_32:
         return IL_INT;
-      case DT_FLOAT_16:
+      case DataType::FLOAT_16:
         return IL_HALF;
-      case DT_FLOAT_32:
+      case DataType::FLOAT_32:
         return IL_FLOAT;
-      case DT_FLOAT_64:
+      case DataType::FLOAT_64:
         return IL_DOUBLE;
       default:
         DP_ASSERT(!"Unsupported");
@@ -320,24 +320,24 @@ namespace dp
       switch( ilpf )
       {
       case IL_RGB:
-        return PF_RGB;
+        return PixelFormat::RGB;
       case IL_RGBA:
-        return PF_RGBA;
+        return PixelFormat::RGBA;
       case IL_BGR:
-        return PF_BGR;
+        return PixelFormat::BGR;
       case IL_BGRA:
-        return PF_BGRA;
+        return PixelFormat::BGRA;
       case IL_COLOUR_INDEX:
-        return PF_LUMINANCE;
+        return PixelFormat::LUMINANCE;
       case IL_LUMINANCE:
-        return PF_LUMINANCE;
+        return PixelFormat::LUMINANCE;
       case IL_ALPHA:
-        return PF_ALPHA;
+        return PixelFormat::ALPHA;
       case IL_LUMINANCE_ALPHA:
-        return PF_LUMINANCE_ALPHA;
+        return PixelFormat::LUMINANCE_ALPHA;
       default:
         DP_ASSERT(!"Unsupported");
-        return PF_UNKNOWN;
+        return PixelFormat::UNKNOWN;
       }
     }
 
@@ -345,25 +345,25 @@ namespace dp
     {
       switch( ilpf )
       {
-      case PF_RGB:
+      case PixelFormat::RGB:
         return IL_RGB;
-      case PF_RGBA:
+      case PixelFormat::RGBA:
         return IL_RGBA;
-      case PF_BGR:
+      case PixelFormat::BGR:
         return IL_BGR;
-      case PF_BGRA:
+      case PixelFormat::BGRA:
         return IL_BGRA;
-      case PF_R:
+      case PixelFormat::R:
         return IL_COLOR_INDEX;
-      case PF_RG:
+      case PixelFormat::RG:
         return IL_LUMINANCE_ALPHA;
-      case PF_LUMINANCE:
+      case PixelFormat::LUMINANCE:
         return IL_LUMINANCE;
-      case PF_ALPHA:
+      case PixelFormat::ALPHA:
         return IL_ALPHA;
-      case PF_LUMINANCE_ALPHA:
+      case PixelFormat::LUMINANCE_ALPHA:
         return IL_LUMINANCE_ALPHA;
-      case PF_STENCIL_INDEX:
+      case PixelFormat::STENCIL_INDEX:
         return IL_COLOR_INDEX;
       default:
         DP_ASSERT(!"Unsupported");

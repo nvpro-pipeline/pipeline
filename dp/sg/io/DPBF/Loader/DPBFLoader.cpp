@@ -1639,26 +1639,26 @@ inline dp::DataType DPBFLoader::convertDataType( unsigned int dataType )
     switch (dataType)
     {
     case 0: // was DP_BYTE
-      return dp::DT_INT_8;
+      return dp::DataType::INT_8;
     case 1:
-      return dp::DT_UNSIGNED_INT_8; // was DP_UNSIGNED_BYTE
+      return dp::DataType::UNSIGNED_INT_8; // was DP_UNSIGNED_BYTE
     case 2:
-      return dp::DT_INT_16; // was DP_SHORT
+      return dp::DataType::INT_16; // was DP_SHORT
     case 3:
-      return dp::DT_UNSIGNED_INT_16; // was DP_UNSIGNED_SHORT
+      return dp::DataType::UNSIGNED_INT_16; // was DP_UNSIGNED_SHORT
     case 4:
-      return dp::DT_INT_32; // was DP_INT
+      return dp::DataType::INT_32; // was DP_INT
     case 5:
-      return dp::DT_UNSIGNED_INT_32; // was DP_UNSIGNED_INT
+      return dp::DataType::UNSIGNED_INT_32; // was DP_UNSIGNED_INT
     case 6:
-      return dp::DT_FLOAT_32; // was DP_FLOAT
+      return dp::DataType::FLOAT_32; // was DP_FLOAT
     case 7:
-      return dp::DT_FLOAT_64; // was DP_DOUBLE
+      return dp::DataType::FLOAT_64; // was DP_DOUBLE
     case ~0:
-      return dp::DT_UNKNOWN;
+      return dp::DataType::UNKNOWN;
     }
     DP_ASSERT( !"unsupported datatype");
-    return dp::DT_UNKNOWN;
+    return dp::DataType::UNKNOWN;
   }
   else
   {
@@ -6079,7 +6079,7 @@ VertexAttributeSetSharedPtr DPBFLoader::loadVertexAttributeSet_nbf_38( uint_t va
           if ( tcSets[i].numTexCoords )
           {
             Offset_AutoPtr<float> coords(m_fm, callback(), tcSets[i].texCoords, tcSets[i].numTexCoords * tcSets[i].coordDim);
-            cvas->setVertexData( VertexAttributeSet::DP_SG_TEXCOORD0+i, tcSets[i].coordDim, dp::DT_FLOAT_32, coords, 0, tcSets[i].numTexCoords );
+            cvas->setVertexData( VertexAttributeSet::DP_SG_TEXCOORD0+i, tcSets[i].coordDim, dp::DataType::FLOAT_32, coords, 0, tcSets[i].numTexCoords );
             cvas->setEnabled(VertexAttributeSet::DP_SG_TEXCOORD0+i, true); // generic API require explicit enable
           }
         }
@@ -6089,7 +6089,7 @@ VertexAttributeSetSharedPtr DPBFLoader::loadVertexAttributeSet_nbf_38( uint_t va
       if ( vasPtr->numColors )
       {
         Offset_AutoPtr<float> colors(m_fm, callback(), vasPtr->colors, vasPtr->numColors * vasPtr->colorDim);
-        cvas->setVertexData( VertexAttributeSet::DP_SG_COLOR, vasPtr->colorDim, dp::DT_FLOAT_32, colors, 0, vasPtr->numColors );
+        cvas->setVertexData( VertexAttributeSet::DP_SG_COLOR, vasPtr->colorDim, dp::DataType::FLOAT_32, colors, 0, vasPtr->numColors );
         cvas->setEnabled(VertexAttributeSet::DP_SG_COLOR, true);
       }
 
@@ -6097,7 +6097,7 @@ VertexAttributeSetSharedPtr DPBFLoader::loadVertexAttributeSet_nbf_38( uint_t va
       if ( vasPtr->numSecondaryColors )
       {
         Offset_AutoPtr<float> colors(m_fm, callback(), vasPtr->secondaryColors, vasPtr->numSecondaryColors * vasPtr->secondaryColorDim);
-        cvas->setVertexData( VertexAttributeSet::DP_SG_SECONDARY_COLOR, vasPtr->secondaryColorDim, dp::DT_FLOAT_32, colors, 0, vasPtr->numSecondaryColors );
+        cvas->setVertexData( VertexAttributeSet::DP_SG_SECONDARY_COLOR, vasPtr->secondaryColorDim, dp::DataType::FLOAT_32, colors, 0, vasPtr->numSecondaryColors );
         cvas->setEnabled(VertexAttributeSet::DP_SG_SECONDARY_COLOR, true); // generic API require explicit enable
       }
 

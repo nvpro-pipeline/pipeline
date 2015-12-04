@@ -50,7 +50,7 @@ namespace dp
       }
 
       IndexSet::IndexSet()
-      : m_dataType( dp::DT_UNSIGNED_INT_32 )
+      : m_dataType( dp::DataType::UNSIGNED_INT_32 )
       , m_primitiveRestartIndex(~0)
       , m_numberOfIndices(0)
       {
@@ -102,7 +102,7 @@ namespace dp
 
       void IndexSet::setIndexDataType( dp::DataType type )
       {
-        DP_ASSERT( (type == dp::DT_UNSIGNED_INT_32) || (type == dp::DT_UNSIGNED_INT_16) || (type == dp::DT_UNSIGNED_INT_8) );
+        DP_ASSERT( (type == dp::DataType::UNSIGNED_INT_32) || (type == dp::DataType::UNSIGNED_INT_16) || (type == dp::DataType::UNSIGNED_INT_8) );
         if ( m_dataType != type )
         {
           m_dataType = type;
@@ -151,17 +151,17 @@ namespace dp
 
       void IndexSet::setData( const unsigned int   * indices, unsigned int count, unsigned int primitiveRestartIndex )
       {
-        setData( indices, count, dp::DT_UNSIGNED_INT_32, primitiveRestartIndex );
+        setData( indices, count, dp::DataType::UNSIGNED_INT_32, primitiveRestartIndex );
       }
 
       void IndexSet::setData( const unsigned short * indices, unsigned int count, unsigned int primitiveRestartIndex )
       {
-        setData( indices, count, dp::DT_UNSIGNED_INT_16, primitiveRestartIndex );
+        setData( indices, count, dp::DataType::UNSIGNED_INT_16, primitiveRestartIndex );
       }
 
       void IndexSet::setData( const unsigned char  * indices, unsigned int count, unsigned int primitiveRestartIndex )
       {
-        setData( indices, count, dp::DT_UNSIGNED_INT_8, primitiveRestartIndex );
+        setData( indices, count, dp::DataType::UNSIGNED_INT_8, primitiveRestartIndex );
       }
 
       bool IndexSet::getData( void * destination ) const
@@ -172,7 +172,7 @@ namespace dp
 
         if( m_buffer )
         {
-          size_t sizeInBytes = ( m_dataType == dp::DT_UNSIGNED_INT_32 ? 4 : m_dataType == dp::DT_UNSIGNED_INT_16 ? 2 : 1 ) * getNumberOfIndices();
+          size_t sizeInBytes = ( m_dataType == dp::DataType::UNSIGNED_INT_32 ? 4 : m_dataType == dp::DataType::UNSIGNED_INT_16 ? 2 : 1 ) * getNumberOfIndices();
 
           m_buffer->getData( 0, sizeInBytes, destination );
           result = true;

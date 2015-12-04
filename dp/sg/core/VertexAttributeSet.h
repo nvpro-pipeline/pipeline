@@ -131,8 +131,8 @@ namespace dp
            *  DP_SG_ATTR15 are allowed indices.
            * \param size Specifies the number of coordinates per vertex; must be 1, 2, 3, or 4.
            * \param type Specifies the data type of each coordinate in the input data array. 
-           *  In general, symbolic constants dp::DT_INT_8, dp::DT_UNSIGNED_INT_8, dp::DT_INT_16, dp::DT_UNSIGNED_INT_16,
-           *  dp::DT_INT_32, dp::DT_UNSIGNED_INT_32, dp::DT_FLOAT_32, and dp::DT_FLOAT_64 are accepted.
+           *  In general, symbolic constants dp::DataType::INT_8, dp::DataType::UNSIGNED_INT_8, dp::DataType::INT_16, dp::DataType::UNSIGNED_INT_16,
+           *  dp::DataType::INT_32, dp::DataType::UNSIGNED_INT_32, dp::DataType::FLOAT_32, and dp::DataType::FLOAT_64 are accepted.
            * \param count Specifies the number of vertex data to copy.
            * \remarks
            *  This function reserves data in the attribute slot \a attrib. If there already is data in
@@ -147,8 +147,8 @@ namespace dp
            *  DP_SG_ATTR15 are allowed indices.
            * \param size Specifies the number of coordinates per vertex; must be 1, 2, 3, or 4.
            * \param type Specifies the data type of each coordinate in the input data array. 
-           *  In general, symbolic constants dp::DT_INT_8, dp::DT_UNSIGNED_INT_8, dp::DT_INT_16, dp::DT_UNSIGNED_INT_16,
-           *  dp::DT_INT_32, dp::DT_UNSIGNED_INT_32, dp::DT_FLOAT_32, and dp::DT_FLOAT_64 are accepted.
+           *  In general, symbolic constants dp::DataType::INT_8, dp::DataType::UNSIGNED_INT_8, dp::DataType::INT_16, dp::DataType::UNSIGNED_INT_16,
+           *  dp::DataType::INT_32, dp::DataType::UNSIGNED_INT_32, dp::DataType::FLOAT_32, and dp::DataType::FLOAT_64 are accepted.
            * \param data Specifies the start address of the input data array.
            * \param strideInBytes Specifies the stride between two elements in data. A stride of 0 assumes packed data.
            * \param count Specifies the number of vertex data to copy.
@@ -182,34 +182,34 @@ namespace dp
            <TR BGCOLOR="#ffffff">
            <TD>DP_SG_POSITION</TD>  
            <TD>3</TD>
-           <TD>dp::DT_FLOAT_32</TD>
+           <TD>dp::DataType::FLOAT_32</TD>
            </TR>
            <TR BGCOLOR="#ffffff">
            <TD>DP_SG_NORMAL</TD>  
            <TD>3</TD>
-           <TD>dp::DT_FLOAT_32</TD>
+           <TD>dp::DataType::FLOAT_32</TD>
            </TR>
            <TR BGCOLOR="#ffffff">
            <TD>DP_SG_COLOR</TD>  
            <TD>3, 4</TD>
-           <TD>dp::DT_INT_8, dp::DT_UNSIGNED_INT_8, dp::DT_INT_16, dp::DT_UNSIGNED_INT_16, 
-               dp::DT_INT_32, dp::DT_UNSIGNED_INT_32, dp::DT_FLOAT_32, dp::DT_FLOAT_64 </TD>
+           <TD>dp::DataType::INT_8, dp::DataType::UNSIGNED_INT_8, dp::DataType::INT_16, dp::DataType::UNSIGNED_INT_16, 
+               dp::DataType::INT_32, dp::DataType::UNSIGNED_INT_32, dp::DataType::FLOAT_32, dp::DataType::FLOAT_64 </TD>
            </TR>
            <TR BGCOLOR="#ffffff">
            <TD>DP_SG_SECONDARY_COLOR</TD>  
            <TD>3</TD>
-           <TD>dp::DT_INT_8, dp::DT_UNSIGNED_INT_8, dp::DT_INT_16, dp::DT_UNSIGNED_INT_16, 
-           dp::DT_INT_32, dp::DT_UNSIGNED_INT_32, dp::DT_FLOAT_32, dp::DT_FLOAT_64 </TD>
+           <TD>dp::DataType::INT_8, dp::DataType::UNSIGNED_INT_8, dp::DataType::INT_16, dp::DataType::UNSIGNED_INT_16, 
+           dp::DataType::INT_32, dp::DataType::UNSIGNED_INT_32, dp::DataType::FLOAT_32, dp::DataType::FLOAT_64 </TD>
            </TR>
            <TR BGCOLOR="#ffffff">
            <TD>DP_SG_FOG_COORD</TD>  
            <TD>1</TD>
-           <TD>dp::DT_FLOAT_32, dp::DT_FLOAT_64</TD>
+           <TD>dp::DataType::FLOAT_32, dp::DataType::FLOAT_64</TD>
            </TR>
            <TR BGCOLOR="#ffffff">
            <TD>DP_SG_TEXCOORD[0-7]</TD>  
            <TD>1, 2, 3, 4</TD>
-           <TD>dp::DT_INT_16, dp::DT_INT_32, dp::DT_FLOAT_32, dp::DT_FLOAT_64</TD>
+           <TD>dp::DataType::INT_16, dp::DataType::INT_32, dp::DataType::FLOAT_32, dp::DataType::FLOAT_64</TD>
            </TR>
            </TABLE>
            </TD>
@@ -233,8 +233,8 @@ namespace dp
            *  to the array of vertex data.
            * \param size Specifies the number of coordinates per vertex; must be 1, 2, 3, or 4.
            * \param type Specifies the data type of each coordinate in the input data array. 
-           *  In general, symbolic constants dp::DT_INT_8, dp::DT_UNSIGNED_INT_8, dp::DT_INT_16, dp::DT_UNSIGNED_INT_16,
-           *  dp::DT_INT_32, dp::DT_UNSIGNED_INT_32, dp::DT_FLOAT_32, and dp::DT_FLOAT_64 are accepted.
+           *  In general, symbolic constants dp::DataType::INT_8, dp::DataType::UNSIGNED_INT_8, dp::DataType::INT_16, dp::DataType::UNSIGNED_INT_16,
+           *  dp::DataType::INT_32, dp::DataType::UNSIGNED_INT_32, dp::DataType::FLOAT_32, and dp::DataType::FLOAT_64 are accepted.
            * \param data Specifies the start address of the input data array.
            * \param strideInBytes Specifies the stride between two elements in data. A stride of 0 assumes packed data.
            * \param count Specifies the number of vertex data to copy.
@@ -253,8 +253,8 @@ namespace dp
            *  DP_SG_ATTR15 are allowed indices.
            * \param size Specifies the number of coordinates per vertex; must be 1, 2, 3, or 4.
            * \param type Specifies the data type of each coordinate in the input data array. 
-           *  In general, symbolic constants dp::DT_INT_8, dp::DT_UNSIGNED_INT_8, dp::DT_INT_16, dp::DT_UNSIGNED_INT_16,
-           *  dp::DT_INT_32, dp::DT_UNSIGNED_INT_32, dp::DT_FLOAT_32, and dp::DT_FLOAT_64 are accepted.
+           *  In general, symbolic constants dp::DataType::INT_8, dp::DataType::UNSIGNED_INT_8, dp::DataType::INT_16, dp::DataType::UNSIGNED_INT_16,
+           *  dp::DataType::INT_32, dp::DataType::UNSIGNED_INT_32, dp::DataType::FLOAT_32, and dp::DataType::FLOAT_64 are accepted.
            * \param buffer The buffer containing the vertex attribute data.
            * \param offset The offset into the buffer, marking the start of the vertex attribute data.
            * \param strideInBytes The stride between two consecutive vertex attribute data, in bytes.
@@ -279,8 +279,8 @@ namespace dp
            * the input vertex data to overwrite the previously specified vertex data.
            * \param size Specifies the number of coordinates per vertex; must be 1, 2, 3, or 4.
            * \param type Specifies the data type of each coordinate in the input data array. 
-           *  In general, symbolic constants dp::DT_INT_8, dp::DT_UNSIGNED_INT_8, dp::DT_INT_16, dp::DT_UNSIGNED_INT_16,
-           *  dp::DT_INT_32, dp::DT_UNSIGNED_INT_32, dp::DT_FLOAT_32, and dp::DT_FLOAT_64 are accepted.
+           *  In general, symbolic constants dp::DataType::INT_8, dp::DataType::UNSIGNED_INT_8, dp::DataType::INT_16, dp::DataType::UNSIGNED_INT_16,
+           *  dp::DataType::INT_32, dp::DataType::UNSIGNED_INT_32, dp::DataType::FLOAT_32, and dp::DataType::FLOAT_64 are accepted.
            * \param data Specifies the start address of the input data array.
            * \param stride Stride between two elements in data. Use 0 for packed data.
            * \param count Specifies the number of vertex data to copy.
@@ -356,7 +356,7 @@ namespace dp
            * \param attrib Indicates the vertex attribute to query. 
            * \return The function returns a symbolic constant indicating the type of each coordinate in the 
            * vertex array stored for the specified vertex attribute. If no vertex data was specified for this
-           * vertex attribute before, the function returns dp::DT_UNKNOWN.
+           * vertex attribute before, the function returns dp::DataType::UNKNOWN.
            * \remarks
            * The function returns the per-coordinate type specifier that was used with a corresponding call
            * to setVertexData. Use getSizeOfVertexData to query the number of coordinates for each vertex stored.
@@ -562,7 +562,7 @@ namespace dp
           /*! \brief Returns the type of each color component.
            * \return The function returns a symbolic constant representing the type of each component 
            * of the currently stored colors. */
-          DP_SG_CORE_API unsigned int getTypeOfColors() const;
+          DP_SG_CORE_API dp::DataType getTypeOfColors() const;
 
           /*! \brief Sets secondary colors for this VertexAttributeSet.
            * \param colors Specifies the input color array.
@@ -607,7 +607,7 @@ namespace dp
           /*! \brief Returns the type of each secondary color component.
           * \return The function returns a symbolic constant representing the type of each component 
           * of the currently stored secondary colors. */
-          DP_SG_CORE_API unsigned int getTypeOfSecondaryColors() const;
+          DP_SG_CORE_API dp::DataType getTypeOfSecondaryColors() const;
 
           /*! \brief Sets fog coordinates for this VertexAttributeSet.
            * \param coords Specifies the input coordinate array.
@@ -653,7 +653,7 @@ namespace dp
           /*! \brief Returns the type of the fog coordinates.
            * \return The function returns a symbolic constant representing the type of the currently stored 
            * fog coordinates. */
-          DP_SG_CORE_API unsigned int getTypeOfFogCoords() const;
+          DP_SG_CORE_API dp::DataType getTypeOfFogCoords() const;
 
           /*! \brief Sets a texture coordinate array.
            * \param unit Specifies the texture unit for which to specify the texture coordinate array.
@@ -709,7 +709,7 @@ namespace dp
            * \param unit Specifies the texture unit to query. 
            * \return The function returns a symbolic constant representing the type of each coordinate
            * in an element of the texture coordinate array currently assigned to the indicated texture unit. */
-          DP_SG_CORE_API unsigned int getTypeOfTexCoords(unsigned int unit) const;
+          DP_SG_CORE_API dp::DataType getTypeOfTexCoords(unsigned int unit) const;
 
           /*! \brief Update a given VertexAttribute
            *  \param attrib Indicates the vertex attribute whose data is to be exchanged with
@@ -907,19 +907,19 @@ namespace dp
 
       inline void VertexAttributeSet::setVertices( const dp::math::Vec3f * vertices, unsigned int count, bool enable )
       {
-        setVertexData( DP_SG_POSITION, 3, dp::DT_FLOAT_32, &vertices[0], 0, count, enable );
+        setVertexData( DP_SG_POSITION, 3, dp::DataType::FLOAT_32, &vertices[0], 0, count, enable );
       }
 
       inline void VertexAttributeSet::setVertices( unsigned int pos, const dp::math::Vec3f * vertices, unsigned int count, bool enable )
       {
-        setVertexData( DP_SG_POSITION, pos, 3, dp::DT_FLOAT_32, &vertices[0], 0, count, enable );
+        setVertexData( DP_SG_POSITION, pos, 3, dp::DataType::FLOAT_32, &vertices[0], 0, count, enable );
       }
 
       inline Buffer::ConstIterator<dp::math::Vec3f>::Type VertexAttributeSet::getVertices() const
       {
         // debug checks on current limitations
         DP_ASSERT( getSizeOfVertexData(DP_SG_POSITION) == 3 );  
-        DP_ASSERT( getTypeOfVertexData(DP_SG_POSITION) == dp::DT_FLOAT_32 );
+        DP_ASSERT( getTypeOfVertexData(DP_SG_POSITION) == dp::DataType::FLOAT_32 );
 
         return getVertexData<dp::math::Vec3f>(DP_SG_POSITION);
       }
@@ -944,18 +944,18 @@ namespace dp
 
       //inline void VertexAttributeSet::setVertexWeights( const float * weights, unsigned int count, bool enable )
       //{
-      //  setVertexData( DP_VERTEX_WEIGHT, 1, dp::DT_FLOAT_32, weights, count, enable );
+      //  setVertexData( DP_VERTEX_WEIGHT, 1, dp::DataType::FLOAT_32, weights, count, enable );
       //}
 
       //inline void VertexAttributeSet::setVertexWeights( unsigned int pos, const float * weights, unsigned int count, bool enable )
       //{
-      //  setVertexData( DP_VERTEX_WEIGHT, pos, 1, dp::DT_FLOAT_32, weights, count, enable );
+      //  setVertexData( DP_VERTEX_WEIGHT, pos, 1, dp::DataType::FLOAT_32, weights, count, enable );
       //}
 
       //inline const void * VertexAttributeSet::getVertexWeights() const
       // {
       //  return( (     ( getSizeOfVertexData(DP_VERTEX_WEIGHT) == 1 )
-      //            &&  ( getTypeOfVertexData(DP_VERTEX_WEIGHT) == dp::DT_FLOAT_32 ) )
+      //            &&  ( getTypeOfVertexData(DP_VERTEX_WEIGHT) == dp::DataType::FLOAT_32 ) )
       //          ? (const dp::math::Vec3f*)getVertexData(DP_VERTEX_WEIGHT)
       //          : NULL );
       //}
@@ -967,19 +967,19 @@ namespace dp
 
       inline void VertexAttributeSet::setNormals( const dp::math::Vec3f * normals, unsigned int count, bool enable )
       {
-        setVertexData( DP_SG_NORMAL, 3, dp::DT_FLOAT_32, normals, 0, count, enable );
+        setVertexData( DP_SG_NORMAL, 3, dp::DataType::FLOAT_32, normals, 0, count, enable );
       }
 
       inline void VertexAttributeSet::setNormals( unsigned int pos, const dp::math::Vec3f * normals, unsigned int count, bool enable )
       {
-        setVertexData( DP_SG_NORMAL, pos, 3, dp::DT_FLOAT_32, normals, 0, count, enable );
+        setVertexData( DP_SG_NORMAL, pos, 3, dp::DataType::FLOAT_32, normals, 0, count, enable );
       }
 
       inline Buffer::ConstIterator<dp::math::Vec3f>::Type VertexAttributeSet::getNormals() const
       {
         // debug checks on current limitations
         DP_ASSERT( getSizeOfVertexData(DP_SG_NORMAL) == 3 );  
-        DP_ASSERT( getTypeOfVertexData(DP_SG_NORMAL) == dp::DT_FLOAT_32 );
+        DP_ASSERT( getTypeOfVertexData(DP_SG_NORMAL) == dp::DataType::FLOAT_32 );
 
         return getVertexData<dp::math::Vec3f>(DP_SG_NORMAL);
       }
@@ -1017,7 +1017,7 @@ namespace dp
         return getSizeOfVertexData(DP_SG_COLOR);
       }
 
-      inline unsigned int VertexAttributeSet::getTypeOfColors() const
+      inline dp::DataType VertexAttributeSet::getTypeOfColors() const
       {
         return getTypeOfVertexData(DP_SG_COLOR);
       }
@@ -1045,7 +1045,7 @@ namespace dp
         return getNumberOfVertexData(DP_SG_SECONDARY_COLOR);
       }
 
-      inline unsigned int VertexAttributeSet::getTypeOfSecondaryColors() const
+      inline dp::DataType VertexAttributeSet::getTypeOfSecondaryColors() const
       {
         return getTypeOfVertexData(DP_SG_SECONDARY_COLOR);
       }
@@ -1072,7 +1072,7 @@ namespace dp
         return getNumberOfVertexData(DP_SG_FOG_COORD);
       }
 
-      inline unsigned int VertexAttributeSet::getTypeOfFogCoords() const
+      inline dp::DataType VertexAttributeSet::getTypeOfFogCoords() const
       {
         return getTypeOfVertexData(DP_SG_FOG_COORD);
       }
@@ -1110,7 +1110,7 @@ namespace dp
         return getSizeOfVertexData(DP_SG_TEXCOORD0+unit);
       }
 
-      inline unsigned int VertexAttributeSet::getTypeOfTexCoords(unsigned int unit) const
+      inline dp::DataType VertexAttributeSet::getTypeOfTexCoords(unsigned int unit) const
       {
         DP_ASSERT(unit<8);
         return getTypeOfVertexData(DP_SG_TEXCOORD0+unit);

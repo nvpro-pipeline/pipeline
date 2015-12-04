@@ -54,23 +54,23 @@ namespace dp
       {
         switch ( dataType )
         {
-        case dp::DT_UNSIGNED_INT_8:
+        case dp::DataType::UNSIGNED_INT_8:
           return GL_UNSIGNED_BYTE;
-        case dp::DT_UNSIGNED_INT_16:
+        case dp::DataType::UNSIGNED_INT_16:
           return GL_UNSIGNED_SHORT;
-        case dp::DT_UNSIGNED_INT_32:
+        case dp::DataType::UNSIGNED_INT_32:
           return GL_UNSIGNED_INT;
-        case dp::DT_INT_8:
+        case dp::DataType::INT_8:
           return GL_BYTE;
-        case dp::DT_INT_16:
+        case dp::DataType::INT_16:
           return GL_SHORT;
-        case dp::DT_INT_32:
+        case dp::DataType::INT_32:
           return GL_INT;
-        case dp::DT_FLOAT_16:
+        case dp::DataType::FLOAT_16:
           return GL_HALF_FLOAT;
-        case dp::DT_FLOAT_32:
+        case dp::DataType::FLOAT_32:
           return GL_FLOAT;
-        case dp::DT_FLOAT_64:
+        case dp::DataType::FLOAT_64:
           return GL_DOUBLE;
         default:
           DP_ASSERT( !"Unknwon RiX DataType" );
@@ -82,18 +82,18 @@ namespace dp
       {
         switch( dataType )
         {
-          case GL_UNSIGNED_BYTE   : return( dp::DT_UNSIGNED_INT_8 );
-          case GL_UNSIGNED_SHORT  : return( dp::DT_UNSIGNED_INT_16 );
-          case GL_UNSIGNED_INT    : return( dp::DT_UNSIGNED_INT_32 );
-          case GL_BYTE            : return( dp::DT_UNSIGNED_INT_8 );
-          case GL_SHORT           : return( dp::DT_INT_16 );
-          case GL_INT             : return( dp::DT_INT_32 );
-          case GL_HALF_FLOAT      : return( dp::DT_FLOAT_16 );
-          case GL_FLOAT           : return( dp::DT_FLOAT_32 );
-          case GL_DOUBLE          : return( dp::DT_FLOAT_64 );
+          case GL_UNSIGNED_BYTE   : return( dp::DataType::UNSIGNED_INT_8 );
+          case GL_UNSIGNED_SHORT  : return( dp::DataType::UNSIGNED_INT_16 );
+          case GL_UNSIGNED_INT    : return( dp::DataType::UNSIGNED_INT_32 );
+          case GL_BYTE            : return( dp::DataType::UNSIGNED_INT_8 );
+          case GL_SHORT           : return( dp::DataType::INT_16 );
+          case GL_INT             : return( dp::DataType::INT_32 );
+          case GL_HALF_FLOAT      : return( dp::DataType::FLOAT_16 );
+          case GL_FLOAT           : return( dp::DataType::FLOAT_32 );
+          case GL_DOUBLE          : return( dp::DataType::FLOAT_64 );
           default :
               DP_ASSERT( !"Unknown GL Data Type!" );
-              return( dp::DT_UNKNOWN );
+              return( dp::DataType::UNKNOWN );
         }
       }
 
@@ -128,27 +128,27 @@ namespace dp
         case GL_RGBA32UI:
           switch ( pixelFormat )
           {
-          case dp::PF_R:
+          case dp::PixelFormat::R:
             return GL_RED_INTEGER;
-          case dp::PF_RG:
+          case dp::PixelFormat::RG:
             return GL_RG_INTEGER;
-          case dp::PF_RGB:
+          case dp::PixelFormat::RGB:
             return GL_RGB_INTEGER;
-          case dp::PF_RGBA:
+          case dp::PixelFormat::RGBA:
             return GL_RGBA_INTEGER;
-          case dp::PF_BGR:
+          case dp::PixelFormat::BGR:
             return GL_BGR_INTEGER;
-          case dp::PF_BGRA:
+          case dp::PixelFormat::BGRA:
             return GL_BGRA_INTEGER;
-          case dp::PF_LUMINANCE:
+          case dp::PixelFormat::LUMINANCE:
             return GL_LUMINANCE_INTEGER_EXT;
-          case dp::PF_ALPHA:
+          case dp::PixelFormat::ALPHA:
             return GL_ALPHA_INTEGER;
-          case dp::PF_LUMINANCE_ALPHA:
+          case dp::PixelFormat::LUMINANCE_ALPHA:
             return GL_LUMINANCE_ALPHA_INTEGER_EXT;
             // TODO
             /*
-            case dp::util::PF_NATIVE:
+            case dp::util::PixelFormat::NATIVE:
             {
             DP_ASSERT( dynamic_cast<const *>(&) );
             const &  = static_cast<const &>();
@@ -163,31 +163,31 @@ namespace dp
         default:
           switch ( pixelFormat )
           {
-          case dp::PF_R:
+          case dp::PixelFormat::R:
             return GL_RED;
-          case dp::PF_RG:
+          case dp::PixelFormat::RG:
             return GL_RG;
-          case dp::PF_RGB:
+          case dp::PixelFormat::RGB:
             return GL_RGB;
-          case dp::PF_RGBA:
+          case dp::PixelFormat::RGBA:
             return GL_RGBA;
-          case dp::PF_BGR:
+          case dp::PixelFormat::BGR:
             return GL_BGR;
-          case dp::PF_BGRA:
+          case dp::PixelFormat::BGRA:
             return GL_BGRA;
-          case dp::PF_LUMINANCE:
+          case dp::PixelFormat::LUMINANCE:
             return GL_LUMINANCE;
-          case dp::PF_ALPHA:
+          case dp::PixelFormat::ALPHA:
             return GL_ALPHA;
-          case dp::PF_LUMINANCE_ALPHA:
+          case dp::PixelFormat::LUMINANCE_ALPHA:
             return GL_LUMINANCE_ALPHA;
-          case dp::PF_DEPTH_COMPONENT:
+          case dp::PixelFormat::DEPTH_COMPONENT:
             return GL_DEPTH_COMPONENT;
-          case dp::PF_DEPTH_STENCIL:
+          case dp::PixelFormat::DEPTH_STENCIL:
             return GL_DEPTH_STENCIL;
             // TODO
             /*
-            case dp::util::PF_NATIVE:
+            case dp::util::PixelFormat::NATIVE:
             {
             DP_ASSERT( dynamic_cast<const *>(&) );
             const &  = static_cast<const &>();
@@ -205,20 +205,20 @@ namespace dp
       {
         switch( pixelFormat )
         {
-          case GL_RED             : return( dp::PF_R );
-          case GL_RG              : return( dp::PF_RG );
-          case GL_RGB             : return( dp::PF_RGB );
-          case GL_RGBA            : return( dp::PF_RGBA );
-          case GL_BGR             : return( dp::PF_BGR );
-          case GL_BGRA            : return( dp::PF_BGRA );
-          case GL_LUMINANCE       : return( dp::PF_LUMINANCE );
-          case GL_ALPHA           : return( dp::PF_ALPHA );
-          case GL_LUMINANCE_ALPHA : return( dp::PF_LUMINANCE_ALPHA );
-          case GL_DEPTH_COMPONENT : return( dp::PF_DEPTH_COMPONENT );
-          case GL_DEPTH_STENCIL   : return( dp::PF_DEPTH_STENCIL );
+          case GL_RED             : return( dp::PixelFormat::R );
+          case GL_RG              : return( dp::PixelFormat::RG );
+          case GL_RGB             : return( dp::PixelFormat::RGB );
+          case GL_RGBA            : return( dp::PixelFormat::RGBA );
+          case GL_BGR             : return( dp::PixelFormat::BGR );
+          case GL_BGRA            : return( dp::PixelFormat::BGRA );
+          case GL_LUMINANCE       : return( dp::PixelFormat::LUMINANCE );
+          case GL_ALPHA           : return( dp::PixelFormat::ALPHA );
+          case GL_LUMINANCE_ALPHA : return( dp::PixelFormat::LUMINANCE_ALPHA );
+          case GL_DEPTH_COMPONENT : return( dp::PixelFormat::DEPTH_COMPONENT );
+          case GL_DEPTH_STENCIL   : return( dp::PixelFormat::DEPTH_STENCIL );
           default :
             DP_ASSERT( !"Unknown GL Pixel Format!" );
-            return( dp::PF_UNKNOWN );
+            return( dp::PixelFormat::UNKNOWN );
         }
       }
 
@@ -344,31 +344,31 @@ namespace dp
       {
         switch ( primitiveType )
         {
-        case GPT_POINTS:
+        case GeometryPrimitiveType::POINTS:
           return GL_POINTS;
-        case GPT_LINE_STRIP:
+        case GeometryPrimitiveType::LINE_STRIP:
           return GL_LINE_STRIP;
-        case GPT_LINE_LOOP:
+        case GeometryPrimitiveType::LINE_LOOP:
           return GL_LINE_LOOP;
-        case GPT_LINES:
+        case GeometryPrimitiveType::LINES:
           return GL_LINES;
-        case GPT_TRIANGLE_STRIP:
+        case GeometryPrimitiveType::TRIANGLE_STRIP:
           return GL_TRIANGLE_STRIP;
-        case GPT_TRIANGLE_FAN:
+        case GeometryPrimitiveType::TRIANGLE_FAN:
           return GL_TRIANGLE_FAN;
-        case GPT_TRIANGLES:
+        case GeometryPrimitiveType::TRIANGLES:
           return GL_TRIANGLES;
-        case GPT_QUAD_STRIP:
+        case GeometryPrimitiveType::QUAD_STRIP:
           return GL_QUAD_STRIP;
-        case GPT_QUADS:
+        case GeometryPrimitiveType::QUADS:
           return GL_QUADS;
-        case GPT_POLYGON:
+        case GeometryPrimitiveType::POLYGON:
           return GL_POLYGON;
-        case GPT_PATCHES:
+        case GeometryPrimitiveType::PATCHES:
           return GL_PATCHES;
           // TODO
           /*
-        case GPT_NATIVE:
+        case GeometryPrimitiveType::NATIVE:
           {
             DP_ASSERT( dynamic_cast<const *>(&) );
             const &  = static_cast<const &>();

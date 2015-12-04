@@ -50,8 +50,8 @@ namespace dp
                  will be created.
           \return A TextureHost with the content of the color buffer.
       **/
-      DP_GL_API virtual dp::util::ImageSharedPtr getImage( dp::PixelFormat pixelFormat = dp::PF_BGRA
-        , dp::DataType pixelDataType = dp::DT_UNSIGNED_INT_8, unsigned int index = 0 );
+      DP_GL_API virtual dp::util::ImageSharedPtr getImage( dp::PixelFormat pixelFormat = dp::PixelFormat::BGRA
+        , dp::DataType pixelDataType = dp::DataType::UNSIGNED_INT_8, unsigned int index = 0 );
 
       /** \brief Set the background color for glClear calls
           \param r red value

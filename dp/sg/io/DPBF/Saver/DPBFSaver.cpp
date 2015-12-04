@@ -1044,7 +1044,7 @@ void DPBFSaveTraverser::handleIndexSet( const IndexSet * p )
         Offset_AutoPtr<NBFIndexSet> isPtr(this, m_objectOffsetMap[ph]);
         writeObject( p, isPtr, NBF_INDEX_SET );
 
-        isPtr->dataType              = p->getIndexDataType();
+        isPtr->dataType              = (uint_t)p->getIndexDataType();
         isPtr->primitiveRestartIndex = p->getPrimitiveRestartIndex();
         isPtr->numberOfIndices       = p->getNumberOfIndices();
 
@@ -1189,7 +1189,7 @@ void DPBFSaveTraverser::writeVertexAttributeSet(const VertexAttributeSet * vasPt
       nbfVASPtr->enableFlags |= ((!!vasPtr->isEnabled(i+16))<<(i+16)) | ((!!vasPtr->isEnabled(i))<<i);
       nbfVASPtr->normalizeEnableFlags |= ((!!vasPtr->isNormalizeEnabled(i+16))<<(i+16));
       nbfVASPtr->vattribs[i].size = vasPtr->getSizeOfVertexData(i);
-      nbfVASPtr->vattribs[i].type = vasPtr->getTypeOfVertexData(i);
+      nbfVASPtr->vattribs[i].type = (uint_t)vasPtr->getTypeOfVertexData(i);
       nbfVASPtr->vattribs[i].numVData = vasPtr->getNumberOfVertexData(i);
       uint_t sizeOfVertex = static_cast<unsigned int>(nbfVASPtr->vattribs[i].size * dp::getSizeOf(static_cast<dp::DataType>(nbfVASPtr->vattribs[i].type) ));
       unsigned int numBytes = nbfVASPtr->vattribs[i].numVData * sizeOfVertex;

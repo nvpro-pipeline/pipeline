@@ -458,13 +458,13 @@ void Feature_FBO_native::createScene()
 
   SamplerStateDataCommon samplerStateDataCommon( SSFM_NEAREST, SSFM_NEAREST );
   SamplerStateSharedHandle samplerStateHandle = m_rix->samplerStateCreate(samplerStateDataCommon);
-  TextureSharedHandle diffuseMap = dp::rix::util::generateTexture( m_rix, dp::rix::util::createTextureGradient( Vec2ui(128, 128), Vec4f(1.0, 0.0f, 0.0f, 1.0), Vec4f(0.0, 1.0f, 0.0f, 1.0), Vec4f(0.0, 0.0f, 1.0f, 1.0) ), dp::PF_RGBA, dp::DT_UNSIGNED_INT_32, ITF_RGBA8 );
+  TextureSharedHandle diffuseMap = dp::rix::util::generateTexture( m_rix, dp::rix::util::createTextureGradient( Vec2ui(128, 128), Vec4f(1.0, 0.0f, 0.0f, 1.0), Vec4f(0.0, 1.0f, 0.0f, 1.0), Vec4f(0.0, 0.0f, 1.0f, 1.0) ), dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_32, ITF_RGBA8 );
 
   //Allocate a native gl texture
 
   TextureSharedHandle textureFBO;
   {
-    TextureDescription textureDescription( TT_2D, ITF_RGBA32F, dp::PF_RGBA, dp::DT_FLOAT_32, m_width, m_height );
+    TextureDescription textureDescription( TT_2D, ITF_RGBA32F, dp::PixelFormat::RGBA, dp::DataType::FLOAT_32, m_width, m_height );
     textureFBO = m_rix->textureCreate( textureDescription );
 
     m_colorTexture = dp::gl::Texture2D::create( GL_RGBA16, GL_RGBA, GL_UNSIGNED_SHORT, m_width, m_height );

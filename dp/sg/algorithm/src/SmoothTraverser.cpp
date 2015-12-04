@@ -269,13 +269,13 @@ namespace dp
           {
             switch( p->getIndexSet()->getIndexDataType() )
             {
-              case dp::DT_UNSIGNED_INT_8 :
+              case dp::DataType::UNSIGNED_INT_8 :
                 deIndexPrimitiveT<unsigned char>( p );
                 break;
-              case dp::DT_UNSIGNED_INT_16 :
+              case dp::DataType::UNSIGNED_INT_16 :
                 deIndexPrimitiveT<unsigned short>( p );
                 break;
-              case dp::DT_UNSIGNED_INT_32 :
+              case dp::DataType::UNSIGNED_INT_32 :
                 deIndexPrimitiveT<unsigned int>( p );
                 break;
               default :

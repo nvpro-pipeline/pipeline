@@ -109,8 +109,8 @@ namespace dp
           \remarks If a RenderTarget cannot support this operation it returns a null object.
       **/
       DP_UI_API virtual dp::util::ImageSharedPtr getImage(
-            dp::PixelFormat pixelFormat = dp::PF_BGRA,
-            dp::DataType pixelDataType = dp::DT_UNSIGNED_INT_8,
+            dp::PixelFormat pixelFormat = dp::PixelFormat::BGRA,
+            dp::DataType pixelDataType = dp::DataType::UNSIGNED_INT_8,
             unsigned int index = 0) = 0;
   #endif
 

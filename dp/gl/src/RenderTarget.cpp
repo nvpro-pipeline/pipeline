@@ -130,39 +130,39 @@ namespace dp
       GLenum format = ~0;
       switch (pixelFormat)
       {
-      case dp::PixelFormat::PF_RGB:
+      case dp::PixelFormat::RGB:
         format = GL_RGB;
         components = 3;
       break;
-      case dp::PixelFormat::PF_RGBA:
+      case dp::PixelFormat::RGBA:
         format = GL_RGBA;
         components = 4;
       break;
-      case dp::PixelFormat::PF_BGR:
+      case dp::PixelFormat::BGR:
         format = GL_BGR;
         components = 3;
       break;
-      case dp::PixelFormat::PF_BGRA:
+      case dp::PixelFormat::BGRA:
         format = GL_BGRA;
         components = 4;
       break;
-      case dp::PixelFormat::PF_LUMINANCE:
+      case dp::PixelFormat::LUMINANCE:
         format = GL_LUMINANCE;
         components = 1;
       break;
-      case dp::PixelFormat::PF_ALPHA:
+      case dp::PixelFormat::ALPHA:
         format = GL_ALPHA;
         components = 1;
       break;
-      case dp::PixelFormat::PF_LUMINANCE_ALPHA:
+      case dp::PixelFormat::LUMINANCE_ALPHA:
         format = GL_LUMINANCE_ALPHA;
         components = 2;
       break;
-      case dp::PixelFormat::PF_DEPTH_COMPONENT:
+      case dp::PixelFormat::DEPTH_COMPONENT:
         format = GL_DEPTH_COMPONENT;
         components = 1;
       break;
-      case dp::PixelFormat::PF_DEPTH_STENCIL:
+      case dp::PixelFormat::DEPTH_STENCIL:
         format = GL_DEPTH24_STENCIL8;
         components = 1;
       break;
@@ -260,43 +260,43 @@ namespace dp
       GLenum format = ~0;
       switch (pixelFormat)
       {
-      case dp::PF_RGB:
+      case dp::PixelFormat::RGB:
         format = GL_RGB;
         components = 3;
         break;
-      case dp::PF_RGBA:
+      case dp::PixelFormat::RGBA:
         format = GL_RGBA;
         components = 4;
         break;
-      case dp::PF_BGR:
+      case dp::PixelFormat::BGR:
         format = GL_BGR;
         components = 3;
         break;
-      case dp::PF_BGRA:
+      case dp::PixelFormat::BGRA:
         format = GL_BGRA;
         components = 4;
         break;
-      case dp::PF_LUMINANCE:
+      case dp::PixelFormat::LUMINANCE:
         format = GL_LUMINANCE;
         components = 1;
         break;
-      case dp::PF_ALPHA:
+      case dp::PixelFormat::ALPHA:
         format = GL_ALPHA;
         components = 1;
         break;
-      case dp::PF_LUMINANCE_ALPHA:
+      case dp::PixelFormat::LUMINANCE_ALPHA:
         format = GL_LUMINANCE_ALPHA;
         components = 2;
         break;
-      case dp::PF_DEPTH_COMPONENT:
+      case dp::PixelFormat::DEPTH_COMPONENT:
         format = GL_DEPTH_COMPONENT;
         components = 1;
         break;
-      case dp::PF_DEPTH_STENCIL:
+      case dp::PixelFormat::DEPTH_STENCIL:
         format = GL_DEPTH_STENCIL;
         components = 1;
         break;
-      case dp::PF_STENCIL_INDEX:
+      case dp::PixelFormat::STENCIL_INDEX:
         format = GL_STENCIL_INDEX;
         components = 1;
         break;
@@ -307,35 +307,35 @@ namespace dp
       GLenum dataType = ~0;
       switch (pixelDataType)
       {
-      case dp::DT_INT_8:
+      case dp::DataType::INT_8:
         dataType = GL_BYTE;
         bytesPerComponent = 1;
         break;
-      case dp::DT_UNSIGNED_INT_8:
+      case dp::DataType::UNSIGNED_INT_8:
         dataType = GL_UNSIGNED_BYTE;
         bytesPerComponent = 1;
         break;
-      case dp::DT_INT_16:
+      case dp::DataType::INT_16:
         dataType = GL_SHORT;
         bytesPerComponent = 2;
         break;
-      case dp::DT_UNSIGNED_INT_16:
+      case dp::DataType::UNSIGNED_INT_16:
         dataType = GL_UNSIGNED_SHORT;
         bytesPerComponent = 2;
         break;
-      case dp::DT_INT_32:
+      case dp::DataType::INT_32:
         dataType = GL_INT;
         bytesPerComponent = 4;
         break;
-      case dp::DT_UNSIGNED_INT_32:
+      case dp::DataType::UNSIGNED_INT_32:
         dataType = GL_UNSIGNED_INT;
         bytesPerComponent = 4;
         break;
-      case dp::DT_FLOAT_32:
+      case dp::DataType::FLOAT_32:
         dataType = GL_FLOAT;
         bytesPerComponent = 4;
         break;
-      case dp::DT_FLOAT_16:
+      case dp::DataType::FLOAT_16:
         dataType = GL_HALF_FLOAT;
         bytesPerComponent = 2;
         break;

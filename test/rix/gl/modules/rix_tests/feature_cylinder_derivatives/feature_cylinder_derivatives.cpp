@@ -355,7 +355,7 @@ void Feature_cylinder_derivatives::createScene()
 
   SamplerStateDataCommon samplerStateDataCommon( SSFM_NEAREST, SSFM_NEAREST );
   SamplerStateSharedHandle samplerStateHandle = m_rix->samplerStateCreate(samplerStateDataCommon);
-  TextureSharedHandle diffuseMap = dp::rix::util::generateTexture( m_rix, dp::rix::util::createTextureGradient( Vec2ui(128, 128), Vec4f(1.0, 0.0f, 0.0f, 1.0), Vec4f(0.0, 1.0f, 0.0f, 1.0), Vec4f(0.0, 0.0f, 1.0f, 1.0) ), dp::PF_RGBA, dp::DT_UNSIGNED_INT_32, ITF_RGBA8 );
+  TextureSharedHandle diffuseMap = dp::rix::util::generateTexture( m_rix, dp::rix::util::createTextureGradient( Vec2ui(128, 128), Vec4f(1.0, 0.0f, 0.0f, 1.0), Vec4f(0.0, 1.0f, 0.0f, 1.0), Vec4f(0.0, 0.0f, 1.0f, 1.0) ), dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_32, ITF_RGBA8 );
 
   rix::core::SamplerSharedHandle samplerDiffuseMap = m_rix->samplerCreate();
   m_rix->samplerSetTexture( samplerDiffuseMap, diffuseMap );

@@ -802,13 +802,13 @@ void writeVector( FILE * fh, const char * prefix, const Vecnt<n,T> & v )
   fprintf( fh, ")\n" );
 }
 
-void  fprintfArray( FILE *fh, unsigned int type, unsigned int size, unsigned int count, Buffer::DataReadLock lock, unsigned int stride, const char *prefix )
+void  fprintfArray( FILE *fh, dp::DataType type, unsigned int size, unsigned int count, Buffer::DataReadLock lock, unsigned int stride, const char *prefix )
 {
   const void *vdata = lock.getPtr();
   switch ( type )
   {
-  case dp::DT_INT_8:
-  case dp::DT_UNSIGNED_INT_8:
+  case dp::DataType::INT_8:
+  case dp::DataType::UNSIGNED_INT_8:
     switch( size )
     {
     case 1: fprintfInt1Array(fh, prefix, count, (const unsigned char*)vdata, stride); break;
@@ -817,8 +817,8 @@ void  fprintfArray( FILE *fh, unsigned int type, unsigned int size, unsigned int
     case 4: fprintfInt4Array(fh, prefix, count, (const unsigned char*)vdata, stride); break;
     }
     break;
-  case dp::DT_INT_16:
-  case dp::DT_UNSIGNED_INT_16:
+  case dp::DataType::INT_16:
+  case dp::DataType::UNSIGNED_INT_16:
     switch( size )
     {
     case 1: fprintfInt1Array(fh, prefix, count, (const unsigned short*)vdata, stride); break;
@@ -827,8 +827,8 @@ void  fprintfArray( FILE *fh, unsigned int type, unsigned int size, unsigned int
     case 4: fprintfInt4Array(fh, prefix, count, (const unsigned short*)vdata, stride); break;
     }
     break;
-  case dp::DT_INT_32:
-  case dp::DT_UNSIGNED_INT_32:
+  case dp::DataType::INT_32:
+  case dp::DataType::UNSIGNED_INT_32:
     switch( size )
     {
     case 1: fprintfInt1Array(fh, prefix, count, (const unsigned int*)vdata, stride); break;
@@ -837,7 +837,7 @@ void  fprintfArray( FILE *fh, unsigned int type, unsigned int size, unsigned int
     case 4: fprintfInt4Array(fh, prefix, count, (const unsigned int*)vdata, stride); break;
     }
     break;
-  case dp::DT_FLOAT_32:
+  case dp::DataType::FLOAT_32:
     switch( size )
     {
     case 1: fprintfFloat1Array(fh, prefix, count, (const float*)vdata, stride); break;
@@ -846,7 +846,7 @@ void  fprintfArray( FILE *fh, unsigned int type, unsigned int size, unsigned int
     case 4: fprintfFloat4Array(fh, prefix, count, (const float*)vdata, stride); break;
     }
     break;
-  case dp::DT_FLOAT_64:
+  case dp::DataType::FLOAT_64:
     switch( size )
     {
     case 1: fprintfFloat1Array(fh, prefix, count, (const double*)vdata, stride); break;
@@ -1306,13 +1306,13 @@ void DPAFSaveTraverser::handleIndexSet( const IndexSet * p )
       Buffer::DataReadLock reader( p->getBuffer() );
       switch( p->getIndexDataType() )
       {
-        case dp::DT_UNSIGNED_INT_32:
+        case dp::DataType::UNSIGNED_INT_32:
           fprintfIndexData( m_fh, reader.getPtr<unsigned int>(), p->getNumberOfIndices() );
           break;
-        case dp::DT_UNSIGNED_INT_16:
+        case dp::DataType::UNSIGNED_INT_16:
           fprintfIndexData( m_fh, reader.getPtr<unsigned short>(), p->getNumberOfIndices() );
           break;
-        case dp::DT_UNSIGNED_INT_8:
+        case dp::DataType::UNSIGNED_INT_8:
           fprintfIndexData( m_fh, reader.getPtr<unsigned char>(), p->getNumberOfIndices() );
           break;
         default:
@@ -2399,7 +2399,7 @@ void DPAFSaveTraverser::buffer( BufferSharedPtr const& p )
     std::ostringstream name;
     name << "buffer_" << m_nameCount++;
     fprintf( m_fh, "Buffer %s\n{\n\ttype host\n\tdata", name.str().c_str() );
-    fprintfArray( m_fh, dp::DT_UNSIGNED_INT_8, 1, dp::checked_cast<unsigned int>(p->getSize()), Buffer::DataReadLock( p ), 1, "\t\t" );
+    fprintfArray( m_fh, dp::DataType::UNSIGNED_INT_8, 1, dp::checked_cast<unsigned int>(p->getSize()), Buffer::DataReadLock( p ), 1, "\t\t" );
     fprintf( m_fh, "}\n\n" );
     m_storedBuffers.insert( std::make_pair( p, name.str() ) );
   }

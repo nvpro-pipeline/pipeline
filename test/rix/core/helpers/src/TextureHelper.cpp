@@ -87,7 +87,7 @@ namespace dp
 
       dp::util::ImageSharedPtr getEyeZFromDepthBuffer( const dp::util::ImageSharedPtr& depthBuffer, float nearPlane, float farPlane )
       {
-        DP_ASSERT( depthBuffer->getDataType() == dp::DT_FLOAT_32 );
+        DP_ASSERT( depthBuffer->getDataType() == dp::DataType::FLOAT_32 );
         DP_ASSERT( getComponentCount( depthBuffer->getPixelFormat() ) == 1 );
 
         size_t width = depthBuffer->getWidth();
@@ -103,7 +103,7 @@ namespace dp
 
         convertPixelData( depthPixels, visualPixels, calculateEyeZ, &nearFarPlanes );
 
-        return dp::util::Image::create(width, height, dp::PF_RGB, dp::DT_INT_8, (const void* const* )&visualPixels[0][0] );
+        return dp::util::Image::create(width, height, dp::PixelFormat::RGB, dp::DataType::INT_8, (const void* const* )&visualPixels[0][0] );
       }
       
       void alphaToColors( const math::Vecnt<1, unsigned char>& alphaIn
@@ -118,7 +118,7 @@ namespace dp
       dp::util::ImageSharedPtr getGrayscaleFromAlphaImage( const dp::util::ImageSharedPtr& alphaImage )
       {
         DP_ASSERT( getComponentCount( alphaImage->getPixelFormat() ) == 1 );
-        DP_ASSERT( alphaImage->getDataType() == dp::DT_UNSIGNED_INT_8 );
+        DP_ASSERT( alphaImage->getDataType() == dp::DataType::UNSIGNED_INT_8 );
 
         size_t width = alphaImage->getWidth();
         size_t height = alphaImage->getHeight();
@@ -131,7 +131,7 @@ namespace dp
 
         convertPixelData( alphaPixels, colorPixels, alphaToColors, nullptr );
 
-        return dp::util::Image::create(width, height, dp::PF_RGB, dp::DT_UNSIGNED_INT_8, (const void* const* )&colorPixels[0][0] );
+        return dp::util::Image::create(width, height, dp::PixelFormat::RGB, dp::DataType::UNSIGNED_INT_8, (const void* const* )&colorPixels[0][0] );
       }
       
       void alphaToColorsRange( const math::Vecnt<1, float>& alphaIn
@@ -149,7 +149,7 @@ namespace dp
       dp::util::ImageSharedPtr getGrayscaleFromAlphaImageFloatRange( const dp::util::ImageSharedPtr& alphaImage, float from, float to )
       {
         DP_ASSERT( getComponentCount( alphaImage->getPixelFormat() ) == 1 );
-        DP_ASSERT( alphaImage->getDataType() == dp::DT_FLOAT_32 );
+        DP_ASSERT( alphaImage->getDataType() == dp::DataType::FLOAT_32 );
 
         size_t width = alphaImage->getWidth();
         size_t height = alphaImage->getHeight();
@@ -164,13 +164,13 @@ namespace dp
 
         convertPixelData( alphaPixels, colorPixels, alphaToColorsRange, &range );
 
-        return dp::util::Image::create(width, height, dp::PF_RGB, dp::DT_INT_8, (const void* const* )&colorPixels[0][0] );
+        return dp::util::Image::create(width, height, dp::PixelFormat::RGB, dp::DataType::INT_8, (const void* const* )&colorPixels[0][0] );
       }
 
       TextureSharedHandle generateTexture( dp::rix::core::Renderer* rix 
                                          , dp::rix::util::TextureObjectDataSharedPtr data
-                                         , dp::PixelFormat pixelFormat /*= PF_RGBA */
-                                         , dp::DataType dataType /*= DT_FLOAT_32 */
+                                         , dp::PixelFormat pixelFormat /*= PixelFormat::RGBA */
+                                         , dp::DataType dataType /*= DataType::FLOAT_32 */
                                          , InternalTextureFormat internalFormat /*= ITF_RGBA8*/
                                          , bool generateMipmaps /*= false*/)
       {
@@ -179,28 +179,28 @@ namespace dp
 
         switch( dataType )
         {
-        case dp::DT_UNSIGNED_INT_8:
+        case dp::DataType::UNSIGNED_INT_8:
           setTextureData<unsigned char>(rix, textureHandle, pixelFormat, dataType, data);
           break;
-        case dp::DT_UNSIGNED_INT_16:
+        case dp::DataType::UNSIGNED_INT_16:
           setTextureData<unsigned short>(rix, textureHandle, pixelFormat, dataType, data);
           break;
-        case dp::DT_UNSIGNED_INT_32:
+        case dp::DataType::UNSIGNED_INT_32:
           setTextureData<unsigned int>(rix, textureHandle, pixelFormat, dataType, data);
           break;
-        case dp::DT_INT_8:
+        case dp::DataType::INT_8:
           setTextureData<char>(rix, textureHandle, pixelFormat, dataType, data);
           break;
-        case dp::DT_INT_16:
+        case dp::DataType::INT_16:
           setTextureData<short>(rix, textureHandle, pixelFormat, dataType, data);
           break;
-        case dp::DT_INT_32:
+        case dp::DataType::INT_32:
           setTextureData<int>(rix, textureHandle, pixelFormat, dataType, data);
           break;
-        case dp::DT_FLOAT_32:
+        case dp::DataType::FLOAT_32:
           setTextureData<float>(rix, textureHandle, pixelFormat, dataType, data);
           break;
-        case dp::DT_FLOAT_64:
+        case dp::DataType::FLOAT_64:
           setTextureData<double>(rix, textureHandle, pixelFormat, dataType, data);
           break;
         default:

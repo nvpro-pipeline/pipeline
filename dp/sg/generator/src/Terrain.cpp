@@ -106,24 +106,24 @@ namespace dp
       std::vector<dp::math::Vec3f> generateTerrainVertices( dp::util::ImageSharedPtr const & heightMap
                                                           , dp::math::Vec3f const & resolution, dp::math::Vec3f const & offset )
       {
-        DP_ASSERT( heightMap->getPixelFormat() == dp::PF_LUMINANCE );
+        DP_ASSERT( heightMap->getPixelFormat() == dp::PixelFormat::LUMINANCE );
         switch( heightMap->getDataType() )
         {
-        case dp::DT_UNSIGNED_INT_8:
+        case dp::DataType::UNSIGNED_INT_8:
           return generateTerrainVertices<uint8_t>( heightMap, resolution, offset );
-        case dp::DT_UNSIGNED_INT_16:
+        case dp::DataType::UNSIGNED_INT_16:
           return generateTerrainVertices<uint16_t>( heightMap, resolution, offset );
-        case dp::DT_UNSIGNED_INT_32:
+        case dp::DataType::UNSIGNED_INT_32:
           return generateTerrainVertices<uint32_t>( heightMap, resolution, offset );
-        case dp::DT_INT_8:
+        case dp::DataType::INT_8:
           return generateTerrainVertices<int8_t>( heightMap, resolution, offset );
-        case dp::DT_INT_16:
+        case dp::DataType::INT_16:
           return generateTerrainVertices<int16_t>( heightMap, resolution, offset );
-        case dp::DT_INT_32:
+        case dp::DataType::INT_32:
           return generateTerrainVertices<int32_t>( heightMap, resolution, offset );
-        case dp::DT_FLOAT_32:
+        case dp::DataType::FLOAT_32:
           return generateTerrainVertices<int32_t>( heightMap, resolution, offset );
-        case dp::DT_FLOAT_64:
+        case dp::DataType::FLOAT_64:
           return generateTerrainVertices<int64_t>( heightMap, resolution, offset );
         default:
           DP_ASSERT( !"Unknown heightmap format" );
@@ -312,7 +312,7 @@ namespace dp
         dp::sg::core::BufferHostSharedPtr buffer = dp::sg::core::BufferHost::create();
         buffer->setSize(1); // currently it's necessary to have at least one byte in the buffer for other parts of the pipeline.
 
-        va.setData( 3, dp::DT_FLOAT_32, buffer, 0, 0, (unsigned int)(verticesPerTexel * numRects) );
+        va.setData( 3, dp::DataType::FLOAT_32, buffer, 0, 0, (unsigned int)(verticesPerTexel * numRects) );
         dp::sg::core::VertexAttributeSetSharedPtr vertexAttributeset = dp::sg::core::VertexAttributeSet::create();
         vertexAttributeset->setVertexAttribute(dp::sg::core::VertexAttributeSet::DP_SG_POSITION, va);
 

@@ -105,7 +105,7 @@ namespace dp
       class StatIndexSet : public StatObject
       {
         public:
-          std::map<unsigned int, unsigned int> m_dataTypes;
+          std::map<dp::DataType, unsigned int> m_dataTypes;
           std::map<unsigned int, unsigned int> m_primitiveRestartIndices;
           std::map<unsigned int, unsigned int> m_numberOfIndices;
       };

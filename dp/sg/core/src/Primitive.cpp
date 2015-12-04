@@ -345,17 +345,17 @@ namespace dp
 
           switch( m_indexSet->getIndexDataType() )
           {
-            case dp::DT_UNSIGNED_INT_32:
+            case dp::DataType::UNSIGNED_INT_32:
               m_cachedNumberOfPrimitiveRestarts = scanForPrimitiveRestart<unsigned int>( reader.getPtr<unsigned int>(),
                                                                                          elementOffset, elementCount, prIndex );
               break;
 
-            case dp::DT_UNSIGNED_INT_16:
+            case dp::DataType::UNSIGNED_INT_16:
               m_cachedNumberOfPrimitiveRestarts = scanForPrimitiveRestart<unsigned short>( reader.getPtr<unsigned short>(),
                                                                                            elementOffset, elementCount, prIndex );
               break;
 
-            case dp::DT_UNSIGNED_INT_8:
+            case dp::DataType::UNSIGNED_INT_8:
               m_cachedNumberOfPrimitiveRestarts = scanForPrimitiveRestart<unsigned char>( reader.getPtr<unsigned char>(),
                                                                                           elementOffset, elementCount, prIndex );
               break;
@@ -522,22 +522,22 @@ namespace dp
           unsigned int prIdx = indexSet->getPrimitiveRestartIndex();
           switch (indexSet->getIndexDataType() )
           {
-          case dp::DT_UNSIGNED_INT_32:
+          case dp::DataType::UNSIGNED_INT_32:
             bbox = getBoundingBoxForIndices<unsigned int>( indexSet, offset, count, prIdx, points );
             break;
-          case dp::DT_INT_32:
+          case dp::DataType::INT_32:
             bbox = getBoundingBoxForIndices<int>( indexSet, offset, count, prIdx, points );
             break;
-          case dp::DT_UNSIGNED_INT_16:
+          case dp::DataType::UNSIGNED_INT_16:
             bbox = getBoundingBoxForIndices<unsigned short>( indexSet, offset, count, prIdx, points );
             break;
-          case dp::DT_INT_16:
+          case dp::DataType::INT_16:
             bbox = getBoundingBoxForIndices<short>( indexSet, offset, count, prIdx, points );
             break;
-          case dp::DT_UNSIGNED_INT_8:
+          case dp::DataType::UNSIGNED_INT_8:
             bbox = getBoundingBoxForIndices<unsigned char>( indexSet, offset, count, prIdx, points );
             break;
-          case dp::DT_INT_8:
+          case dp::DataType::INT_8:
             bbox = getBoundingBoxForIndices<char>( indexSet, offset, count, prIdx, points );
             break;
           default:
@@ -1269,7 +1269,7 @@ namespace dp
         DP_ASSERT( m_vertexAttributeSet->getNumberOfNormals() );
         DP_ASSERT( m_vertexAttributeSet->getNumberOfVertexData( tc ) );
         DP_ASSERT( m_vertexAttributeSet->getSizeOfVertexData( tc ) >= 2 );
-        DP_ASSERT( m_vertexAttributeSet->getTypeOfVertexData( tc ) == dp::DT_FLOAT_32 );
+        DP_ASSERT( m_vertexAttributeSet->getTypeOfVertexData( tc ) == dp::DataType::FLOAT_32 );
         DP_ASSERT(   ( m_vertexAttributeSet->getNumberOfVertices() == m_vertexAttributeSet->getNumberOfNormals() )
                  &&  ( m_vertexAttributeSet->getNumberOfVertices() == m_vertexAttributeSet->getNumberOfVertexData(tc) ) );
 
@@ -1379,8 +1379,8 @@ namespace dp
           }
 
           // put tangents and binormals into right slots
-          m_vertexAttributeSet->setVertexData( tg, 3, dp::DT_FLOAT_32, &tangents[0], 0, m_vertexAttributeSet->getNumberOfVertices() );
-          m_vertexAttributeSet->setVertexData( bn, 3, dp::DT_FLOAT_32, &binormals[0], 0, m_vertexAttributeSet->getNumberOfVertices() );
+          m_vertexAttributeSet->setVertexData( tg, 3, dp::DataType::FLOAT_32, &tangents[0], 0, m_vertexAttributeSet->getNumberOfVertices() );
+          m_vertexAttributeSet->setVertexData( bn, 3, dp::DataType::FLOAT_32, &binormals[0], 0, m_vertexAttributeSet->getNumberOfVertices() );
           // enable
           m_vertexAttributeSet->setEnabled( tg, true );
           m_vertexAttributeSet->setEnabled( bn, true );

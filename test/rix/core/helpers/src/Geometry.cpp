@@ -122,7 +122,7 @@ namespace dp
                                       , Vec2f t2 /*= math::Vec2f(0.0f, 1.0f)*/ )
       {
 
-        GeometryDataSharedPtr meshOut = GeometryData::create(GPT_TRIANGLE_STRIP);
+        GeometryDataSharedPtr meshOut = GeometryData::create(GeometryPrimitiveType::TRIANGLE_STRIP);
 
         AttributeFeed positions(meshOut, ATTRIB_POSITION, attrMask, 3, 4);
         AttributeFeed texCoords(meshOut, ATTRIB_TEXCOORD0, attrMask, 2, 4);
@@ -171,7 +171,7 @@ namespace dp
                                              , Vec2f t2 /*= math::Vec2f(0.0f, 1.0f)*/ )
       {
 
-        GeometryDataSharedPtr meshOut = GeometryData::create(GPT_TRIANGLE_STRIP);
+        GeometryDataSharedPtr meshOut = GeometryData::create(GeometryPrimitiveType::TRIANGLE_STRIP);
 
         AttributeFeed positions(meshOut, ATTRIB_POSITION, attrMask, 3, 4);
         AttributeFeed texCoords(meshOut, ATTRIB_TEXCOORD0, attrMask, 2, 4);
@@ -227,7 +227,7 @@ namespace dp
                                           , Vec2f t2 /*math::Vec2f(0.0f, 1.0f)*/ )
       {
 
-        GeometryDataSharedPtr meshOut = GeometryData::create(GPT_TRIANGLES);
+        GeometryDataSharedPtr meshOut = GeometryData::create(GeometryPrimitiveType::TRIANGLES);
 
         AttributeFeed positions(meshOut, ATTRIB_POSITION, attrMask, 3, 3);
         AttributeFeed texCoord(meshOut, ATTRIB_TEXCOORD0, attrMask, 2, 3);
@@ -284,7 +284,7 @@ namespace dp
       {
         const int numVerts = 24;
 
-        GeometryDataSharedPtr meshOut = GeometryData::create(GPT_TRIANGLES);
+        GeometryDataSharedPtr meshOut = GeometryData::create(GeometryPrimitiveType::TRIANGLES);
 
         AttributeFeed positions(meshOut, ATTRIB_POSITION, attrMask, 3, numVerts);
         AttributeFeed texCoords(meshOut, ATTRIB_TEXCOORD0, attrMask, 2, numVerts);
@@ -474,7 +474,7 @@ namespace dp
         DP_ASSERT(longitudeEnd < 2.0f * PI);
         DP_ASSERT(!(longitudeEnd < 0.0f));
 
-        GeometryDataSharedPtr meshOut = GeometryData::create(GPT_TRIANGLES);
+        GeometryDataSharedPtr meshOut = GeometryData::create(GeometryPrimitiveType::TRIANGLES);
 
         bool bLongEndSplit = longitudeEnd > 0.0f;
         bool bTube = innerRadius > 0.0f;
@@ -708,7 +708,7 @@ namespace dp
         DP_ASSERT(latitudeBegin < PI);
         DP_ASSERT(latitudeBegin < latitudeEnd);
 
-        GeometryDataSharedPtr meshOut = GeometryData::create(GPT_TRIANGLES);
+        GeometryDataSharedPtr meshOut = GeometryData::create(GeometryPrimitiveType::TRIANGLES);
 
         bool bLongEndSplit = longitudeEnd > 0.0f;
         bool bLatEndSplit = latitudeEnd < PI;

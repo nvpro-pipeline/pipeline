@@ -42,7 +42,7 @@ namespace dp
       /*! \brief Class to hold the data of one vertex attribute.
        *  \remarks A VertexAttribute holds \c VertexDataCount elements, each one with \c VertexDataSize
        *  components or coordinates, each one in turn of type \c VertexDataType. For a set of
-       *  normals for example, \c VertexDataSize is three and the \c VertexDataType is dp::DT_FLOAT_32.
+       *  normals for example, \c VertexDataSize is three and the \c VertexDataType is dp::DataType::FLOAT_32.
        *  \sa VertexAttributeSet */
       class VertexAttribute
       {
@@ -72,8 +72,8 @@ namespace dp
           /*! \brief Reserves space for data in this VerexAttribute.
            *  \param size Specifies the number of coordinates per vertex; must be 1, 2, 3, or 4.
            *  \param type Specifies the data type of each coordinate in the input data array. In general,
-           *  sympbolic constants dp::DT_INT_8, dp::DT_UNSIGNED_INT_8, dp::DT_INT_16, dp::DT_UNSIGNED_INT_16,
-           *  dp::DT_INT_32, dp::DT_UNSIGNED_INT_32, dp::DT_FLOAT_32, and dp::DT_FLOAT_64 are accepted.
+           *  sympbolic constants dp::DataType::INT_8, dp::DataType::UNSIGNED_INT_8, dp::DataType::INT_16, dp::DataType::UNSIGNED_INT_16,
+           *  dp::DataType::INT_32, dp::DataType::UNSIGNED_INT_32, dp::DataType::FLOAT_32, and dp::DataType::FLOAT_64 are accepted.
            *  \param count Specifies the number of vertex data to copy to reserve space for.
            *  \remarks If no buffer has been allocated before a new buffer will be allocated. If the buffer size
            *  is less than the given size the buffer will be resized accordingly. Otherwise the size of the buffer
@@ -85,8 +85,8 @@ namespace dp
           /*! \brief Copies data into this VertexAttribute.
            *  \param size Specifies the number of coordinates per vertex; must be 1, 2, 3, or 4.
            *  \param type Specifies the data type of each coordinate in the input data array. In general,
-           *  sympbolic constants dp::DT_INT_8, dp::DT_UNSIGNED_INT_8, dp::DT_INT_16, dp::DT_UNSIGNED_INT_16,
-           *  dp::DT_INT_32, dp::DT_UNSIGNED_INT_32, dp::DT_FLOAT_32, and dp::DT_FLOAT_64 are accepted.
+           *  sympbolic constants dp::DataType::INT_8, dp::DataType::UNSIGNED_INT_8, dp::DataType::INT_16, dp::DataType::UNSIGNED_INT_16,
+           *  dp::DataType::INT_32, dp::DataType::UNSIGNED_INT_32, dp::DataType::FLOAT_32, and dp::DataType::FLOAT_64 are accepted.
            *  \param data Specifies the start address of the input data array.
            *  \param strideInBytes Specifies the stride between two elements in data. A stride of 0 assumes packed data.
            *  \param count Specifies the number of vertex data to copy.
@@ -103,8 +103,8 @@ namespace dp
            *  appended to the array of vertex data.
            *  \param size Specifies the number of coordinates per vertex; must be 1, 2, 3, or 4.
            *  \param type Specifies the data type of each coordinate in the input data array. In general,
-           *  symbolic constants dp::DT_INT_8, dp::DT_UNSIGNED_INT_8, dp::DT_INT_16, dp::DT_UNSIGNED_INT_16,
-           *  dp::DT_INT_32, dp::DT_UNSIGNED_INT_32, dp::DT_FLOAT_32, and dp::DT_FLOAT_64 are accepted.
+           *  symbolic constants dp::DataType::INT_8, dp::DataType::UNSIGNED_INT_8, dp::DataType::INT_16, dp::DataType::UNSIGNED_INT_16,
+           *  dp::DataType::INT_32, dp::DataType::UNSIGNED_INT_32, dp::DataType::FLOAT_32, and dp::DataType::FLOAT_64 are accepted.
            *  \param data Specifies the start address of the input data array.
            *  \param strideInBytes Specifies the stride between two elements in data. A stride of 0 assumes packed data.
            *  \param count Specifies the number of vertex data to copy.
@@ -121,8 +121,8 @@ namespace dp
           /*! \brief Sets the buffer of this vertex attribute
            *  \param size Specifies the number of coordinates per vertex; must be 1, 2, 3, or 4.
            *  \param type Specifies the data type of each coordinate in the input data array. In general,
-           *  sympbolic constants dp::DT_INT_8, dp::DT_UNSIGNED_INT_8, dp::DT_INT_16, dp::DT_UNSIGNED_INT_16,
-           *  dp::DT_INT_32, dp::DT_UNSIGNED_INT_32, dp::DT_FLOAT_32, and dp::DT_FLOAT_64 are accepted.
+           *  sympbolic constants dp::DataType::INT_8, dp::DataType::UNSIGNED_INT_8, dp::DataType::INT_16, dp::DataType::UNSIGNED_INT_16,
+           *  dp::DataType::INT_32, dp::DataType::UNSIGNED_INT_32, dp::DataType::FLOAT_32, and dp::DataType::FLOAT_64 are accepted.
            *  \param buffer Specifies the buffer to use for this VertexAttribute.
            *  \param offset Offset of the first element in the buffer in bytes
            *  \param strideInBytes stride between two vertex elements in the buffer.
@@ -202,7 +202,7 @@ namespace dp
           /*! \brief Get the type identifier of the coordinates of the vertex data elements.
            *  \return The function returns a symbolic constant indicating the type of each coordinate of
            *  the vertex data elements. If no vertex data was specified, the function returns
-           *  dp::DT_UNKNOWN.
+           *  dp::DataType::UNKNOWN.
            *  \remarks The function returns the type specifier that was used with a corresponding call
            *  to setData. Use getVertexDataSize to query the number of coordinates for each vertex data.
            *  You can use the dp::getSizeOf convenient function to determine the size in bytes of the

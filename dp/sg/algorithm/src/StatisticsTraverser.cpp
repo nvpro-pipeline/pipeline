@@ -40,9 +40,55 @@ using namespace dp::sg::core;
 using std::pair;
 using std::map;
 
+std::basic_ostream<char,std::char_traits<char>> & operator<<( std::basic_ostream<char,std::char_traits<char>> & ss, dp::DataType const dt )
+{
+  switch( dt )
+  {
+    case dp::DataType::UNSIGNED_INT_8 :
+      ss << "UNSIGNED_INT_8";
+      break;
+    case dp::DataType::UNSIGNED_INT_16 :
+      ss << "UNSIGNED_INT_16";
+      break;
+    case dp::DataType::UNSIGNED_INT_32 :
+      ss << "UNSIGNED_INT_32";
+      break;
+    case dp::DataType::UNSIGNED_INT_64 :
+      ss << "UNSIGNED_INT_64";
+      break;
+    case dp::DataType::INT_8 :
+      ss << "INT_8";
+      break;
+    case dp::DataType::INT_16 :
+      ss << "INT_16";
+      break;
+    case dp::DataType::INT_32 :
+      ss << "INT_32";
+      break;
+    case dp::DataType::INT_64 :
+      ss << "INT_64";
+      break;
+    case dp::DataType::FLOAT_16 :
+      ss << "FLOAT_16";
+      break;
+    case dp::DataType::FLOAT_32 :
+      ss << "FLOAT_32";
+      break;
+    case dp::DataType::FLOAT_64 :
+      ss << "FLOAT_64";
+      break;
+    case dp::DataType::UNKNOWN :
+      ss << "unknown";
+      break;
+    case dp::DataType::NUM_DATATYPES :
+    default :
+      DP_ASSERT( false );
+  }
+  return( ss );
+}
+
 template <class T1, class T2>
-std::string toString( const T1& name, const T2& value,
-  size_t depth=4, size_t nameWidth=20, size_t valueWidth=10 )
+std::string toString( const T1& name, const T2& value, size_t depth=4, size_t nameWidth=20, size_t valueWidth=10 )
 {
   std::stringstream ss;
   ss.setf(std::ios::adjustfield, std::ios::left);

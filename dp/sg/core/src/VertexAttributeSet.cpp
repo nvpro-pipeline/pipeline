@@ -123,7 +123,7 @@ namespace dp
                                                 , dp::DataType type, unsigned int count )
       {
         DP_ASSERT( ( DP_SG_POSITION <= attrib ) && ( attrib <= DP_SG_ATTR15 ) );
-        DP_ASSERT( ( dp::DT_INT_8 <= type ) && ( type <= dp::DT_NUM_DATATYPES ) );
+        DP_ASSERT( ( dp::DataType::INT_8 <= type ) && ( type <= dp::DataType::NUM_DATATYPES ) );
 
         // we alias generic and conventional vertex attributes, that is - 
         // pairs of generic and conventional vertex attributes are sharing the same storage
@@ -154,7 +154,7 @@ namespace dp
                                             , bool enable )
       {
         DP_ASSERT( ( DP_SG_POSITION <= attrib ) && ( attrib <= DP_SG_ATTR15 ) );
-        DP_ASSERT( ( dp::DT_INT_8 <= type ) && ( type <= dp::DT_NUM_DATATYPES ) );
+        DP_ASSERT( ( dp::DataType::INT_8 <= type ) && ( type <= dp::DataType::NUM_DATATYPES ) );
         DP_ASSERT( data );
 
         // we alias generic and conventional vertex attributes, that is - 
@@ -187,7 +187,7 @@ namespace dp
                                             , unsigned int count, bool enable )
       {
         DP_ASSERT( ( DP_SG_POSITION <= attrib ) && ( attrib <= DP_SG_ATTR15 ) );
-        DP_ASSERT( ( dp::DT_INT_8 <= type ) && ( type <= dp::DT_NUM_DATATYPES ) );
+        DP_ASSERT( ( dp::DataType::INT_8 <= type ) && ( type <= dp::DataType::NUM_DATATYPES ) );
         DP_ASSERT( data );
 
         // we alias generic and conventional vertex attributes, that is - 
@@ -228,7 +228,7 @@ namespace dp
                                              , bool enable )
       {
         DP_ASSERT( ( DP_SG_POSITION <= attrib ) && ( attrib <= DP_SG_ATTR15 ) );
-        DP_ASSERT( ( dp::DT_INT_8 <= type ) && ( type <= dp::DT_NUM_DATATYPES ) );
+        DP_ASSERT( ( dp::DataType::INT_8 <= type ) && ( type <= dp::DataType::NUM_DATATYPES ) );
         DP_ASSERT( buffer );
 
         // we alias generic and conventional vertex attributes, that is - 
@@ -266,7 +266,7 @@ namespace dp
       {
         DP_ASSERT( ( DP_SG_POSITION <= attrib ) && ( attrib <= DP_SG_ATTR15 ) );
         DP_ASSERT( from );
-        DP_ASSERT( ( dp::DT_INT_8 <= type ) && ( type <= dp::DT_NUM_DATATYPES ) );
+        DP_ASSERT( ( dp::DataType::INT_8 <= type ) && ( type <= dp::DataType::NUM_DATATYPES ) );
         DP_ASSERT( data );
   
         // we alias generic and conventional vertex attributes, that is - 
@@ -389,7 +389,7 @@ namespace dp
       {
         DP_ASSERT( ( DP_SG_POSITION <= attrib ) && ( attrib <= DP_SG_ATTR15 ) ); // undefined behavior on invalid attrib
         AttributeContainer::const_iterator it = m_vattribs.find( attrib );
-        return( ( it == m_vattribs.end() ) ? dp::DT_UNKNOWN : it->second.getVertexDataType() );
+        return( ( it == m_vattribs.end() ) ? dp::DataType::UNKNOWN : it->second.getVertexDataType() );
       }
 
       unsigned int VertexAttributeSet::getNumberOfVertexData(unsigned int attrib) const
@@ -720,7 +720,7 @@ namespace dp
                 size_t vertexDataCount = thisit->second.getVertexDataCount();
                 size_t vertexDataBytes = thisit->second.getVertexDataBytes();
 
-                if ( type != dp::DT_UNKNOWN )
+                if ( type != dp::DataType::UNKNOWN )
                 {
                   if ( isIntegerType(type) )
                   {
@@ -737,7 +737,7 @@ namespace dp
                   else
                   {
                     unsigned int numComps = thisit->second.getVertexDataCount() * thisit->second.getVertexDataSize();
-                    if ( type == dp::DT_FLOAT_32 )
+                    if ( type == dp::DataType::FLOAT_32 )
                     {
                       Buffer::ConstIterator<float>::Type lhsData = getVertexData<float>(thisit->first);
                       Buffer::ConstIterator<float>::Type rhsData = vas->getVertexData<float>(thisit->first);
@@ -756,7 +756,7 @@ namespace dp
                     }
                     else
                     {
-                      DP_ASSERT(type==dp::DT_FLOAT_64);
+                      DP_ASSERT(type==dp::DataType::FLOAT_64);
                       Buffer::ConstIterator<double>::Type lhsData = getVertexData<double>(thisit->first);
                       Buffer::ConstIterator<double>::Type rhsData = vas->getVertexData<double>(thisit->first);
 

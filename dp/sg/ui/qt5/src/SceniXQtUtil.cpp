@@ -351,28 +351,28 @@ namespace dp
           // convert to RGBA
           switch ( image->getPixelFormat( ) )
           {
-          case dp::PF_BGR:
+          case dp::PixelFormat::BGR:
             switch (image->getDataType())
             {
-            case dp::DT_UNSIGNED_INT_8:
+            case dp::DataType::UNSIGNED_INT_8:
               convertBGRToRGBA( &tmpData[0], (char*)srcData, numPixels, UnsignedIntegerToUnsignedChar<unsigned char>() );
               break;
-            case dp::DT_UNSIGNED_INT_16:
+            case dp::DataType::UNSIGNED_INT_16:
               convertBGRToRGBA( &tmpData[0], (char *)srcData, numPixels, UnsignedIntegerToUnsignedChar<unsigned short>() );
               break;
-            case dp::DT_UNSIGNED_INT_32:
+            case dp::DataType::UNSIGNED_INT_32:
               convertBGRToRGBA( &tmpData[0], (char *)srcData, numPixels, UnsignedIntegerToUnsignedChar<unsigned int>() );
               break;
-            case dp::DT_INT_8:
+            case dp::DataType::INT_8:
               convertBGRToRGBA( &tmpData[0], (char*)srcData, numPixels, IntegerToUnsignedChar<char>() );
               break;
-            case dp::DT_INT_16:
+            case dp::DataType::INT_16:
               convertBGRToRGBA( &tmpData[0], (char *)srcData, numPixels, IntegerToUnsignedChar<short>() );
               break;
-            case dp::DT_INT_32:
+            case dp::DataType::INT_32:
               convertBGRToRGBA( &tmpData[0], (char *)srcData, numPixels, IntegerToUnsignedChar<int>() );
               break;
-            case dp::DT_FLOAT_32:
+            case dp::DataType::FLOAT_32:
               {
                 const float *src = static_cast<const float *>(srcData);
                 float max = *std::max_element( src, src + 3 * numPixels );
@@ -383,28 +383,28 @@ namespace dp
               supported = false;
             }
             break;
-          case dp::PF_RGB:
+          case dp::PixelFormat::RGB:
             switch (image->getDataType())
             {
-            case dp::DT_UNSIGNED_INT_8:
+            case dp::DataType::UNSIGNED_INT_8:
               convertRGBToRGBA( &tmpData[0], (char *)srcData, numPixels, UnsignedIntegerToUnsignedChar<unsigned char>() );
               break;
-            case dp::DT_UNSIGNED_INT_16:
+            case dp::DataType::UNSIGNED_INT_16:
               convertRGBToRGBA( &tmpData[0], (char *)srcData, numPixels, UnsignedIntegerToUnsignedChar<unsigned short>() );
               break;
-            case dp::DT_UNSIGNED_INT_32:
+            case dp::DataType::UNSIGNED_INT_32:
               convertRGBToRGBA( &tmpData[0], (char *)srcData, numPixels, UnsignedIntegerToUnsignedChar<unsigned int>() );
               break;
-            case dp::DT_INT_8:
+            case dp::DataType::INT_8:
               convertRGBToRGBA( &tmpData[0], (char *)srcData, numPixels, IntegerToUnsignedChar<char>() );
               break;
-            case dp::DT_INT_16:
+            case dp::DataType::INT_16:
               convertRGBToRGBA( &tmpData[0], (char *)srcData, numPixels, IntegerToUnsignedChar<short>() );
               break;
-            case dp::DT_INT_32:
+            case dp::DataType::INT_32:
               convertRGBToRGBA( &tmpData[0], (char *)srcData, numPixels, IntegerToUnsignedChar<int>() );
               break;
-            case dp::DT_FLOAT_32:
+            case dp::DataType::FLOAT_32:
               {
                 const float *src = static_cast<const float *>(srcData);
                 float max = *std::max_element( src, src + 3 * numPixels );
@@ -415,28 +415,28 @@ namespace dp
               supported = false;
             }
             break;
-          case dp::PF_RGBA:
+          case dp::PixelFormat::RGBA:
             switch (image->getDataType())
             {
-            case dp::DT_UNSIGNED_INT_8:
+            case dp::DataType::UNSIGNED_INT_8:
               convertRGBAToRGBA( &tmpData[0], (char *)srcData, numPixels, UnsignedIntegerToUnsignedChar<unsigned char>() );
               break;
-            case dp::DT_UNSIGNED_INT_16:
+            case dp::DataType::UNSIGNED_INT_16:
               convertRGBAToRGBA( &tmpData[0], (char *)srcData, numPixels, UnsignedIntegerToUnsignedChar<unsigned short>() );
               break;
-            case dp::DT_UNSIGNED_INT_32:
+            case dp::DataType::UNSIGNED_INT_32:
               convertRGBAToRGBA( &tmpData[0], (char *)srcData, numPixels, UnsignedIntegerToUnsignedChar<unsigned int>() );
               break;
-            case dp::DT_INT_8:
+            case dp::DataType::INT_8:
               convertRGBAToRGBA( &tmpData[0], (char *)srcData, numPixels, IntegerToUnsignedChar<char>() );
               break;
-            case dp::DT_INT_16:
+            case dp::DataType::INT_16:
               convertRGBAToRGBA( &tmpData[0], (char *)srcData, numPixels, IntegerToUnsignedChar<short>() );
               break;
-            case dp::DT_INT_32:
+            case dp::DataType::INT_32:
               convertRGBAToRGBA( &tmpData[0], (char *)srcData, numPixels, IntegerToUnsignedChar<int>() );
               break;
-            case dp::DT_FLOAT_32:
+            case dp::DataType::FLOAT_32:
               {
                 const float *src = static_cast<const float *>(srcData);
                 float max = *std::max_element( src, src + 4 * numPixels );
@@ -447,28 +447,28 @@ namespace dp
               supported = false;
             }
             break;
-          case dp::PF_BGRA:
+          case dp::PixelFormat::BGRA:
             switch (image->getDataType())
             {
-            case dp::DT_UNSIGNED_INT_8:
+            case dp::DataType::UNSIGNED_INT_8:
               convertBGRAToRGBA( &tmpData[0], (char *)srcData, numPixels, UnsignedIntegerToUnsignedChar<unsigned char>() );
               break;
-            case dp::DT_UNSIGNED_INT_16:
+            case dp::DataType::UNSIGNED_INT_16:
               convertBGRAToRGBA( &tmpData[0], (char *)srcData, numPixels, UnsignedIntegerToUnsignedChar<unsigned short>() );
               break;
-            case dp::DT_UNSIGNED_INT_32:
+            case dp::DataType::UNSIGNED_INT_32:
               convertBGRAToRGBA( &tmpData[0], (char *)srcData, numPixels, UnsignedIntegerToUnsignedChar<unsigned int>() );
               break;
-            case dp::DT_INT_8:
+            case dp::DataType::INT_8:
               convertBGRAToRGBA( &tmpData[0], (char *)srcData, numPixels, IntegerToUnsignedChar<char>() );
               break;
-            case dp::DT_INT_16:
+            case dp::DataType::INT_16:
               convertBGRAToRGBA( &tmpData[0], (char *)srcData, numPixels, IntegerToUnsignedChar<short>() );
               break;
-            case dp::DT_INT_32:
+            case dp::DataType::INT_32:
               convertBGRAToRGBA( &tmpData[0], (char *)srcData, numPixels, IntegerToUnsignedChar<int>() );
               break;
-            case dp::DT_FLOAT_32:
+            case dp::DataType::FLOAT_32:
               {
                 const float *src = static_cast<const float *>(srcData);
                 float max = *std::max_element( src, src + 4 * numPixels );

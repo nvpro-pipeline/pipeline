@@ -2801,7 +2801,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
           gatherPerVertex<Vec3f>( vertices, pCoordinate->set_point->keyValue, pIndexedFaceSet->coordIndex
                                 , numberOfVertices, i*pointCount, startIndices, pIndexedFaceSet->ccw );
           VertexAttribute va;
-          va.setData( 3, dp::DT_FLOAT_32, &vertices[0], 0, dp::checked_cast<unsigned int>(vertices.size()) );
+          va.setData( 3, dp::DataType::FLOAT_32, &vertices[0], 0, dp::checked_cast<unsigned int>(vertices.size()) );
           liadva->addKey( pCoordinate->set_point->steps[i], va );
         }
       }
@@ -2837,7 +2837,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
               gatherPerVertex<Vec3f>( normals, pNormal->set_vector->keyValue, pIndexedFaceSet->coordIndex
                                     , numberOfVertices, i*normalCount, startIndices, pIndexedFaceSet->ccw );
               VertexAttribute va;
-              va.setData( 3, dp::DT_FLOAT_32, &normals[0], 0, dp::checked_cast<unsigned int>(normals.size()) );
+              va.setData( 3, dp::DataType::FLOAT_32, &normals[0], 0, dp::checked_cast<unsigned int>(normals.size()) );
               liadva->addKey( pNormal->set_vector->steps[i], va );
             }
           }
@@ -2848,7 +2848,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
               gatherPerVertex<Vec3f>( normals, pNormal->set_vector->keyValue, pIndexedFaceSet->normalIndex
                                     , numberOfVertices, i*normalCount, startIndices, pIndexedFaceSet->ccw );
               VertexAttribute va;
-              va.setData( 3, dp::DT_FLOAT_32, &normals[0], 0, dp::checked_cast<unsigned int>(normals.size()) );
+              va.setData( 3, dp::DataType::FLOAT_32, &normals[0], 0, dp::checked_cast<unsigned int>(normals.size()) );
               liadva->addKey( pNormal->set_vector->steps[i], va );
             }
           }
@@ -2862,7 +2862,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
               gatherVec3fPerFace( normals, pNormal->set_vector->keyValue, pIndexedFaceSet->coordIndex
                                 , numberOfVertices, i*normalCount, startIndices, faceIndices );
               VertexAttribute va;
-              va.setData( 3, dp::DT_FLOAT_32, &normals[0], 0, dp::checked_cast<unsigned int>(normals.size()) );
+              va.setData( 3, dp::DataType::FLOAT_32, &normals[0], 0, dp::checked_cast<unsigned int>(normals.size()) );
               liadva->addKey( pNormal->set_vector->steps[i], va );
             }
           }
@@ -2874,7 +2874,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
                                        , pIndexedFaceSet->normalIndex, numberOfVertices
                                        , i*normalCount, startIndices, faceIndices );
               VertexAttribute va;
-              va.setData( 3, dp::DT_FLOAT_32, &normals[0], 0, dp::checked_cast<unsigned int>(normals.size()) );
+              va.setData( 3, dp::DataType::FLOAT_32, &normals[0], 0, dp::checked_cast<unsigned int>(normals.size()) );
               liadva->addKey( pNormal->set_vector->steps[i], va );
             }
           }
@@ -2912,7 +2912,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
               gatherPerVertex<Vec3f>( colors, pColor->set_color->keyValue, pIndexedFaceSet->coordIndex
                                     , numberOfVertices, i*colorCount, startIndices, pIndexedFaceSet->ccw );
               VertexAttribute va;
-              va.setData( 3, dp::DT_FLOAT_32, &colors[0], 0, dp::checked_cast<unsigned int>(colors.size()) );
+              va.setData( 3, dp::DataType::FLOAT_32, &colors[0], 0, dp::checked_cast<unsigned int>(colors.size()) );
               liadva->addKey( pColor->set_color->steps[i], va );
             }
           }
@@ -2923,7 +2923,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
               gatherPerVertex<Vec3f>( colors, pColor->set_color->keyValue, pIndexedFaceSet->colorIndex
                                     , numberOfVertices, i*colorCount, startIndices, pIndexedFaceSet->ccw );
               VertexAttribute va;
-              va.setData( 3, dp::DT_FLOAT_32, &colors[0], 0, dp::checked_cast<unsigned int>(colors.size()) );
+              va.setData( 3, dp::DataType::FLOAT_32, &colors[0], 0, dp::checked_cast<unsigned int>(colors.size()) );
               liadva->addKey( pColor->set_color->steps[i], va );
             }
           }
@@ -2937,7 +2937,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
               gatherVec3fPerFace( colors, pColor->set_color->keyValue, pIndexedFaceSet->coordIndex
                                 , numberOfVertices, i*colorCount, startIndices, faceIndices );
               VertexAttribute va;
-              va.setData( 3, dp::DT_FLOAT_32, &colors[0], 0, dp::checked_cast<unsigned int>(colors.size()) );
+              va.setData( 3, dp::DataType::FLOAT_32, &colors[0], 0, dp::checked_cast<unsigned int>(colors.size()) );
               liadva->addKey( pColor->set_color->steps[i], va );
             }
           }
@@ -2949,7 +2949,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
                                        , pIndexedFaceSet->colorIndex, numberOfVertices
                                        , i*colorCount, startIndices, faceIndices );
               VertexAttribute va;
-              va.setData( 3, dp::DT_FLOAT_32, &colors[0], 0, dp::checked_cast<unsigned int>(colors.size()) );
+              va.setData( 3, dp::DataType::FLOAT_32, &colors[0], 0, dp::checked_cast<unsigned int>(colors.size()) );
               liadva->addKey( pColor->set_color->steps[i], va );
             }
           }

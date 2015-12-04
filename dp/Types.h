@@ -172,62 +172,44 @@ namespace dp
     return theCaster(in);
   }
 
-  enum DataType
-  {
-      DT_UNSIGNED_INT_8
-    , DT_UNSIGNED_INT_16
-    , DT_UNSIGNED_INT_32
-    , DT_UNSIGNED_INT_64
-    , DT_INT_8
-    , DT_INT_16
-    , DT_INT_32
-    , DT_INT_64
-    , DT_FLOAT_16
-    , DT_FLOAT_32
-    , DT_FLOAT_64
-    , DT_NUM_DATATYPES
-    , DT_UNKNOWN
-  };
 
-  enum PixelFormat
+  enum class DataType
   {
-      PF_R
-    , PF_RG
-    , PF_RGB
-    , PF_RGBA
-    , PF_BGR
-    , PF_BGRA
-    , PF_LUMINANCE
-    , PF_ALPHA
-    , PF_LUMINANCE_ALPHA
-    , PF_DEPTH_COMPONENT
-    , PF_DEPTH_STENCIL
-    , PF_STENCIL_INDEX
-    , PF_NATIVE
-    , PF_NUM_PIXELFORMATS
-    , PF_UNKNOWN
+      UNSIGNED_INT_8
+    , UNSIGNED_INT_16
+    , UNSIGNED_INT_32
+    , UNSIGNED_INT_64
+    , INT_8
+    , INT_16
+    , INT_32
+    , INT_64
+    , FLOAT_16
+    , FLOAT_32
+    , FLOAT_64
+    , NUM_DATATYPES
+    , UNKNOWN
   };
 
   inline size_t getSizeOf( DataType dataType )
   {
     switch( dataType )
     {
-    case DT_INT_8:
-    case DT_UNSIGNED_INT_8:
+    case DataType::INT_8:
+    case DataType::UNSIGNED_INT_8:
       return 1;
-    case DT_INT_16:
-    case DT_UNSIGNED_INT_16:
-    case DT_FLOAT_16:
+    case DataType::INT_16:
+    case DataType::UNSIGNED_INT_16:
+    case DataType::FLOAT_16:
       return 2;
-    case DT_INT_32:
-    case DT_UNSIGNED_INT_32:
-    case DT_FLOAT_32:
+    case DataType::INT_32:
+    case DataType::UNSIGNED_INT_32:
+    case DataType::FLOAT_32:
       return 4;
-    case DT_INT_64:
-    case DT_UNSIGNED_INT_64:
-    case DT_FLOAT_64:
+    case DataType::INT_64:
+    case DataType::UNSIGNED_INT_64:
+    case DataType::FLOAT_64:
       return 8;
-    case DT_UNKNOWN:
+    case DataType::UNKNOWN:
       return 0;
     default:
       DP_ASSERT( !"unsupported type" );
@@ -235,28 +217,68 @@ namespace dp
     }
   }
 
+  template <typename T> struct Type2EnumType        { static DataType const type = DataType::UNKNOWN; };
+  template <> struct Type2EnumType<char>            { static DataType const type = DataType::INT_8; };
+  template <> struct Type2EnumType<unsigned char>   { static DataType const type = DataType::UNSIGNED_INT_8; };
+  template <> struct Type2EnumType<short>           { static DataType const type = DataType::INT_16; };
+  template <> struct Type2EnumType<unsigned short>  { static DataType const type = DataType::UNSIGNED_INT_16; };
+  template <> struct Type2EnumType<int>             { static DataType const type = DataType::INT_32; };
+  template <> struct Type2EnumType<unsigned int>    { static DataType const type = DataType::UNSIGNED_INT_32; };
+  template <> struct Type2EnumType<float>           { static DataType const type = DataType::FLOAT_32; };
+  template <> struct Type2EnumType<double>          { static DataType const type = DataType::FLOAT_64; };
+
+  inline bool isIntegerType(DataType type)
+  {
+    return !(type == DataType::FLOAT_16 || type == DataType::FLOAT_32 || type == DataType::FLOAT_64);
+  }
+
+  inline bool isFloatingPointType(DataType type)
+  {
+    return !isIntegerType(type);
+  }
+
+
+  enum class PixelFormat
+  {
+      R
+    , RG
+    , RGB
+    , RGBA
+    , BGR
+    , BGRA
+    , LUMINANCE
+    , ALPHA
+    , LUMINANCE_ALPHA
+    , DEPTH_COMPONENT
+    , DEPTH_STENCIL
+    , STENCIL_INDEX
+    , NATIVE
+    , NUM_PIXELFORMATS
+    , UNKNOWN
+  };
+
   inline unsigned char getComponentCount( PixelFormat pixelFormat)
   {
     switch( pixelFormat )
     {
-    case PF_R:
-    case PF_LUMINANCE:
-    case PF_ALPHA:
-    case PF_DEPTH_COMPONENT:
-    case PF_STENCIL_INDEX:
+    case PixelFormat::R:
+    case PixelFormat::LUMINANCE:
+    case PixelFormat::ALPHA:
+    case PixelFormat::DEPTH_COMPONENT:
+    case PixelFormat::STENCIL_INDEX:
       return 1;
-    case PF_RG:
-    case PF_LUMINANCE_ALPHA:
+    case PixelFormat::RG:
+    case PixelFormat::LUMINANCE_ALPHA:
       return 2;
-    case PF_RGB:
-    case PF_BGR:
+    case PixelFormat::RGB:
+    case PixelFormat::BGR:
       return 3;
-    case PF_RGBA:
-    case PF_BGRA:
+    case PixelFormat::RGBA:
+    case PixelFormat::BGRA:
       return 4;
       // TODO
       /*
-      case PF_NATIVE:
+      case PixelFormat::NATIVE:
       return ;
       */
     default:
@@ -265,41 +287,22 @@ namespace dp
     }
   }
 
-  template <typename T> struct Type2EnumType        { static DataType const type = DT_UNKNOWN; };
-  template <> struct Type2EnumType<char>            { static DataType const type = DT_INT_8; };
-  template <> struct Type2EnumType<unsigned char>   { static DataType const type = DT_UNSIGNED_INT_8; };
-  template <> struct Type2EnumType<short>           { static DataType const type = DT_INT_16; };
-  template <> struct Type2EnumType<unsigned short>  { static DataType const type = DT_UNSIGNED_INT_16; };
-  template <> struct Type2EnumType<int>             { static DataType const type = DT_INT_32; };
-  template <> struct Type2EnumType<unsigned int>    { static DataType const type = DT_UNSIGNED_INT_32; };
-  template <> struct Type2EnumType<float>           { static DataType const type = DT_FLOAT_32; };
-  template <> struct Type2EnumType<double>          { static DataType const type = DT_FLOAT_64; };
-
-  inline bool isIntegerType(DataType type)
-  {
-    return !(type == DT_FLOAT_16 || type == DT_FLOAT_32 || type == DT_FLOAT_64);
-  }
-
-  inline bool isFloatingPointType(DataType type)
-  {
-    return !isIntegerType(type);
-  }
 
   enum GeometryPrimitiveType
   {
-      GPT_POINTS
-    , GPT_LINE_STRIP
-    , GPT_LINE_LOOP
-    , GPT_LINES
-    , GPT_TRIANGLE_STRIP
-    , GPT_TRIANGLE_FAN
-    , GPT_TRIANGLES
-    , GPT_QUAD_STRIP
-    , GPT_QUADS
-    , GPT_POLYGON
-    , GPT_PATCHES
-    , GPT_NATIVE
-    , GPT_NUM_PRIMITIVETYPES
+      POINTS
+    , LINE_STRIP
+    , LINE_LOOP
+    , LINES
+    , TRIANGLE_STRIP
+    , TRIANGLE_FAN
+    , TRIANGLES
+    , QUAD_STRIP
+    , QUADS
+    , POLYGON
+    , PATCHES
+    , NATIVE
+    , NUM_PRIMITIVES
   };
 
 } // namespace dp

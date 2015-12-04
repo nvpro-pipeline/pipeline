@@ -43,7 +43,7 @@ namespace dp
       IndicesGL::IndicesGL()
         : m_markedForUpload( false )
         , m_bufferGLSize( 0 )
-        , m_dataType( dp::DT_UNSIGNED_INT_8 )
+        , m_dataType( dp::DataType::UNSIGNED_INT_8 )
         , m_bufferHandle( nullptr )
         , m_offset( 0 )
         , m_count( 0 )

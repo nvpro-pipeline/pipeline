@@ -264,14 +264,14 @@ namespace dp
               {
                 switch ( gi->getGeometry()->getGeometryDescription()->getPrimitiveType() )
                 {
-                case GPT_TRIANGLES:
+                case GeometryPrimitiveType::TRIANGLES:
                   //drawEntry = &triangles;
                   addArrayIndirectCommand(gi, triangles);
                   break;
-                case GPT_LINES:
+                case GeometryPrimitiveType::LINES:
                   addArrayIndirectCommand(gi, lines);
                   break;
-                case GPT_LINE_STRIP:
+                case GeometryPrimitiveType::LINE_STRIP:
                   addArrayIndirectCommand(gi, linesStrips);
                   break;
                 default:

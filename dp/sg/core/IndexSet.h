@@ -73,12 +73,12 @@ namespace dp
           DP_SG_CORE_API void setData( const unsigned int   * indices, unsigned int count, unsigned int primitiveRestartIndex = ~0 );
           DP_SG_CORE_API void setData( const unsigned short * indices, unsigned int count, unsigned int primitiveRestartIndex = ~0 );
           DP_SG_CORE_API void setData( const unsigned char  * indices, unsigned int count, unsigned int primitiveRestartIndex = ~0 );
-          DP_SG_CORE_API void setData( const void * indices, unsigned int count, dp::DataType type = dp::DT_UNSIGNED_INT_32, unsigned int primitiveRestartIndex = ~0 );
+          DP_SG_CORE_API void setData( const void * indices, unsigned int count, dp::DataType type = dp::DataType::UNSIGNED_INT_32, unsigned int primitiveRestartIndex = ~0 );
 
           /*! \brief set the buffer object to use for this IndexSet
            *  \param buffer The buffer to assign to this IndexSet.
            *  \param count The number of indices packed in the buffer.
-           *  \param type Specifies the data type of each index in the buffer.  Valid values are  dp::DT_UNSIGNED_INT_8, dp::DT_UNSIGNED_INT_16, or dp::DT_UNSIGNED_INT_32.
+           *  \param type Specifies the data type of each index in the buffer.  Valid values are  dp::DataType::UNSIGNED_INT_8, dp::DataType::UNSIGNED_INT_16, or dp::DataType::UNSIGNED_INT_32.
            *  \param primitiveRestartIndex The primitiveRestartIndex - see setPrimitiveRestartIndex for info.
            *  \remarks Copies \a count elements from \a indices into this IndexSet, and sets the data type, primitive restart index, and number of
            *  indices.
@@ -87,7 +87,7 @@ namespace dp
            *  \sa setData
            */
           DP_SG_CORE_API void setBuffer( const BufferSharedPtr &buffer, unsigned int count,
-                                                                  dp::DataType type = dp::DT_UNSIGNED_INT_32,
+                                                                  dp::DataType type = dp::DataType::UNSIGNED_INT_32,
                                                                   unsigned int primitiveRestartIndex = ~0 );
 
           /*! \brief Get the buffer attached to this IndexSet 
@@ -127,9 +127,9 @@ namespace dp
           DP_SG_CORE_API unsigned int getPrimitiveRestartIndex() const;
 
           /* Set index data type
-           *  \param type Specifies the data type of each index in the input data array.  Valid values are  dp::DT_UNSIGNED_INT_8, 
-           *  dp::DT_UNSIGNED_INT_16, or dp::DT_UNSIGNED_INT_32.
-           *  \note The default format is dp::DT_UNSIGNED_INT_32
+           *  \param type Specifies the data type of each index in the input data array.  Valid values are  dp::DataType::UNSIGNED_INT_8, 
+           *  dp::DataType::UNSIGNED_INT_16, or dp::DataType::UNSIGNED_INT_32.
+           *  \note The default format is dp::DataType::UNSIGNED_INT_32
            *  \sa setPrimitiveRestartIndex, getPrimitiveRestartIndex
            */
           DP_SG_CORE_API void setIndexDataType( dp::DataType type );
@@ -303,11 +303,11 @@ namespace dp
       {
         switch( m_type )
         {
-          case dp::DT_UNSIGNED_INT_32:
+          case dp::DataType::UNSIGNED_INT_32:
             return dp::checked_cast<T>( *reinterpret_cast<const unsigned int *>(m_basePtr) );
-          case dp::DT_UNSIGNED_INT_16:
+          case dp::DataType::UNSIGNED_INT_16:
             return dp::checked_cast<T>( *reinterpret_cast<const unsigned short *>(m_basePtr) );
-          case dp::DT_UNSIGNED_INT_8:
+          case dp::DataType::UNSIGNED_INT_8:
             return dp::checked_cast<T>( *reinterpret_cast<const unsigned char *>(m_basePtr) );
           default:
             DP_ASSERT(0);
@@ -320,11 +320,11 @@ namespace dp
       {
         switch( m_type )
         {
-          case dp::DT_UNSIGNED_INT_32:
+          case dp::DataType::UNSIGNED_INT_32:
             return dp::checked_cast<T>( reinterpret_cast<const unsigned int *>(m_basePtr)[index] );
-          case dp::DT_UNSIGNED_INT_16:
+          case dp::DataType::UNSIGNED_INT_16:
             return dp::checked_cast<T>( reinterpret_cast<const unsigned short *>(m_basePtr)[index] );
-          case dp::DT_UNSIGNED_INT_8:
+          case dp::DataType::UNSIGNED_INT_8:
             return dp::checked_cast<T>( reinterpret_cast<const unsigned char *>(m_basePtr)[index] );
           default:
             DP_ASSERT(0);

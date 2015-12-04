@@ -40,7 +40,7 @@ namespace dp
       {
       public:
         GeometryDescriptionGL()
-          : m_primitiveType( GPT_TRIANGLES )
+          : m_primitiveType( GeometryPrimitiveType::TRIANGLES )
           , m_primitiveRestartIndex( ~0 )
           , m_baseVertex( 0 )
         {

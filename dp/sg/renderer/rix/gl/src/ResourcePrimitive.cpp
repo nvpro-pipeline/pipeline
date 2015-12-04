@@ -218,37 +218,37 @@ namespace dp
             switch (m_primitive->getPrimitiveType())
             {
             case dp::sg::core::PRIMITIVE_POINTS:
-                primitiveType = dp::GPT_POINTS;
+                primitiveType = dp::GeometryPrimitiveType::POINTS;
             break;
             case dp::sg::core::PRIMITIVE_LINE_STRIP:
-                primitiveType = dp::GPT_LINE_STRIP;
+                primitiveType = dp::GeometryPrimitiveType::LINE_STRIP;
                 break;
             case dp::sg::core::PRIMITIVE_LINE_LOOP:
-                primitiveType = dp::GPT_LINE_LOOP;
+                primitiveType = dp::GeometryPrimitiveType::LINE_LOOP;
                 break;
             case dp::sg::core::PRIMITIVE_LINES:
-                primitiveType = dp::GPT_LINES;
+                primitiveType = dp::GeometryPrimitiveType::LINES;
                 break;
             case dp::sg::core::PRIMITIVE_TRIANGLE_STRIP:
-                primitiveType = dp::GPT_TRIANGLE_STRIP;
+                primitiveType = dp::GeometryPrimitiveType::TRIANGLE_STRIP;
                 break;
             case dp::sg::core::PRIMITIVE_TRIANGLE_FAN:
-                primitiveType = dp::GPT_TRIANGLE_FAN;
+                primitiveType = dp::GeometryPrimitiveType::TRIANGLE_FAN;
                 break;
             case dp::sg::core::PRIMITIVE_TRIANGLES:
-                primitiveType = dp::GPT_TRIANGLES;
+                primitiveType = dp::GeometryPrimitiveType::TRIANGLES;
                 break;
             case dp::sg::core::PRIMITIVE_QUAD_STRIP:
-                primitiveType = dp::GPT_QUAD_STRIP;
+                primitiveType = dp::GeometryPrimitiveType::QUAD_STRIP;
                 break;
             case dp::sg::core::PRIMITIVE_QUADS:
-                primitiveType = dp::GPT_QUADS;
+                primitiveType = dp::GeometryPrimitiveType::QUADS;
                 break;
             case dp::sg::core::PRIMITIVE_POLYGON:
-                primitiveType = dp::GPT_POLYGON;
+                primitiveType = dp::GeometryPrimitiveType::POLYGON;
                 break;
             case dp::sg::core::PRIMITIVE_PATCHES:
-                primitiveType = dp::GPT_PATCHES;
+                primitiveType = dp::GeometryPrimitiveType::PATCHES;
                 break;
             default:
               assert( 0 && "unknown primitive type" );
