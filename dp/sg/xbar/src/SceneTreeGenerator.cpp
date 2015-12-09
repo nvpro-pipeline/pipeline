@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2012
+// Copyright (c) 2010-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -80,10 +80,10 @@ namespace dp
         {
           switch ( p->getObjectCode() )
           {
-          case OC_LOD:
+          case ObjectCode::LOD:
             m_generatorState->pushObject( p->getSharedPtr<LOD>() );
             break;
-          case OC_SWITCH:
+          case ObjectCode::SWITCH:
             m_generatorState->pushObject( p->getSharedPtr<Switch>() );
             break;
           default:
@@ -130,13 +130,13 @@ namespace dp
       }
 
       void SceneTreeGenerator::handleSwitch( const dp::sg::core::Switch *p )
-      {  
+      {
         if( preTraverseGroup(p) )
         {
           // TODO: API to switch Switch collecting completely off?
           bool collectAllChildren = true;
 
-          // Either collect all children or only the active ones. If the switch is not 
+          // Either collect all children or only the active ones. If the switch is not
           // flagged dynamic, the RL will be rebuilt on a switch mask change
           Group::ChildrenConstIterator gcci = p->beginChildren();
           for ( unsigned int i=0 ; gcci != p->endChildren() ; ++gcci, ++i )

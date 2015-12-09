@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2011
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -100,11 +100,11 @@ namespace dp
           }
           else if ( m_eliminateTargets & ET_GROUP_SINGLE_CHILD )
           {
-            eliminateSingleChildChildren( p, OC_GROUP );
+            eliminateSingleChildChildren( p, ObjectCode::GROUP );
           }
           if ( m_eliminateTargets & ET_LOD )
           {
-            eliminateSingleChildChildren( p, OC_LOD );
+            eliminateSingleChildChildren( p, ObjectCode::LOD );
           }
         }
       }
@@ -121,11 +121,11 @@ namespace dp
           }
           else if ( m_eliminateTargets & ET_GROUP_SINGLE_CHILD )
           {
-            eliminateSingleChildChildren( p, OC_GROUP );
+            eliminateSingleChildChildren( p, ObjectCode::GROUP );
           }
           if ( m_eliminateTargets & ET_LOD )
           {
-            eliminateSingleChildChildren( p, OC_LOD );
+            eliminateSingleChildChildren( p, ObjectCode::LOD );
           }
         }
       }
@@ -138,11 +138,11 @@ namespace dp
           OptimizeTraverser::handleLOD( p );
           if ( m_eliminateTargets & ( ET_GROUP | ET_GROUP_SINGLE_CHILD ) )
           {
-            eliminateSingleChildChildren( dynamic_cast<Group *>( p ), OC_GROUP );
+            eliminateSingleChildChildren( dynamic_cast<Group *>( p ), ObjectCode::GROUP );
           }
           if ( m_eliminateTargets & ET_LOD )
           {
-            eliminateSingleChildChildren( p, OC_LOD );
+            eliminateSingleChildChildren( p, ObjectCode::LOD );
           }
         }
       }
@@ -186,11 +186,11 @@ namespace dp
           OptimizeTraverser::handleSwitch( p );
           if ( m_eliminateTargets & ( ET_GROUP | ET_GROUP_SINGLE_CHILD ) )
           {
-            eliminateSingleChildChildren( dynamic_cast<Group *>( p ), OC_GROUP );
+            eliminateSingleChildChildren( dynamic_cast<Group *>( p ), ObjectCode::GROUP );
           }
           if ( m_eliminateTargets & ET_LOD )
           {
-            eliminateSingleChildChildren( p, OC_LOD );
+            eliminateSingleChildChildren( p, ObjectCode::LOD );
           }
         }
       }
@@ -207,11 +207,11 @@ namespace dp
           }
           else if ( m_eliminateTargets & ET_GROUP_SINGLE_CHILD )
           {
-            eliminateSingleChildChildren( p, OC_GROUP );
+            eliminateSingleChildChildren( p, ObjectCode::GROUP );
           }
           if ( m_eliminateTargets & ET_LOD )
           {
-            eliminateSingleChildChildren( p, OC_LOD );
+            eliminateSingleChildChildren( p, ObjectCode::LOD );
           }
         }
       }
@@ -238,7 +238,7 @@ namespace dp
             GroupSharedPtr const& group = gci->staticCast<Group>();
             if (    ( getIgnoreNames() || group->getName().empty() )        // only unnamed or if names are to be ignored
                 &&  optimizationAllowed( group )                            // only if optimization is allowed
-                &&  (   (   ( group->getObjectCode() == OC_GROUP )          // replace a Group (and only a Group)
+                &&  (   (   ( group->getObjectCode() == ObjectCode::GROUP )          // replace a Group (and only a Group)
                         &&  ( group->getNumberOfClipPlanes() == 0 ))        // - without clip planes
                     ||  (   ( group->getNumberOfChildren() == 0 )           // or remove a group derived without children
                         &&   !isJoint  )                                    // - if it's not a joint
@@ -280,7 +280,7 @@ namespace dp
         }
       }
 
-      void EliminateTraverser::eliminateSingleChildChildren( Group *p, unsigned int objectCode )
+      void EliminateTraverser::eliminateSingleChildChildren( Group *p, dp::sg::core::ObjectCode objectCode )
       {
         vector<GroupSharedPtr> groups;
 
@@ -295,7 +295,7 @@ namespace dp
           {
             GroupSharedPtr const& group = gci->staticCast<Group>();
             if ( group->getObjectCode() == objectCode )
-            {      
+            {
               if ( isOneChildCandidate( group ) )
               {
                 groups.push_back( group );

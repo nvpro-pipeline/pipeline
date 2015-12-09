@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012-2015
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -82,17 +82,17 @@ namespace dp
         dp::fx::Manager getShaderManager( std::string const& name )
         {
           std::map<std::string, dp::fx::Manager> shaderManager;
-          shaderManager["rixfx:uniform"] = dp::fx::MANAGER_UNIFORM;
-          shaderManager["rixfx:shaderbufferload"] = dp::fx::MANAGER_SHADERBUFFER;
-          shaderManager["rixfx:ubo140"] = dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX_FX;
-          shaderManager["rixfx:ssbo140"] = dp::fx::MANAGER_SHADER_STORAGE_BUFFER_OBJECT;
+          shaderManager["rixfx:uniform"] = dp::fx::Manager::UNIFORM;
+          shaderManager["rixfx:shaderbufferload"] = dp::fx::Manager::SHADERBUFFER;
+          shaderManager["rixfx:ubo140"] = dp::fx::Manager::UNIFORM_BUFFER_OBJECT_RIX_FX;
+          shaderManager["rixfx:ssbo140"] = dp::fx::Manager::SHADER_STORAGE_BUFFER_OBJECT;
           if ( shaderManager.find(name) != shaderManager.end() )
           {
             return shaderManager[name];
           }
           else
           {
-            return dp::fx::MANAGER_UNIFORM;
+            return dp::fx::Manager::UNIFORM;
           }
         }
 
@@ -127,19 +127,19 @@ namespace dp
           bool disableCulling = false;
 
           // Create the renderer as specified
-          dp::culling::Mode cullingMode = dp::culling::MODE_AUTO;
+          dp::culling::Mode cullingMode = dp::culling::Mode::AUTO;
 
           if ( cullingEngine == "cpu" )
           {
-            cullingMode = dp::culling::MODE_CPU;
+            cullingMode = dp::culling::Mode::CPU;
           }
           else if ( cullingEngine == "gl_compute" )
           {
-            cullingMode = dp::culling::MODE_OPENGL_COMPUTE;
+            cullingMode = dp::culling::Mode::OPENGL_COMPUTE;
           }
           else if ( cullingEngine == "cuda" )
           {
-            cullingMode = dp::culling::MODE_CUDA;
+            cullingMode = dp::culling::Mode::CUDA;
           }
           else if ( cullingEngine == "none" )
           {
@@ -209,11 +209,11 @@ namespace dp
         }
 
         dp::ui::RenderTargetSharedPtr SgRdrBackend::createDisplay( int width, int height, bool visible )
-        {            
+        {
           glutInitDisplayMode( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH | GLUT_ALPHA | GLUT_BORDERLESS );
           glutInitWindowSize( width, height );
           glutInitWindowPosition(0, 0);
-            
+
           m_windowId = glutCreateWindow( "DPT" );
 
           glewInit();

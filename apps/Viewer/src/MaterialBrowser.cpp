@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2013
+// Copyright (c) 2013-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -98,7 +98,7 @@ void MaterialBrowser::catalogItemExpanded( QTreeWidgetItem * item )
       dp::fx::EffectLibrary::instance()->loadEffects( fp, fileFinder );
 
       std::vector<std::string> materialNames;
-      dp::fx::EffectLibrary::instance()->getEffectNames( fp, dp::fx::EffectSpec::EST_PIPELINE, materialNames );
+      dp::fx::EffectLibrary::instance()->getEffectNames( fp, dp::fx::EffectSpec::Type::PIPELINE, materialNames );
       for ( std::vector<std::string>::const_iterator it = materialNames.begin() ; it != materialNames.end() ; ++it )
       {
         QTreeWidgetItem * childItem = new QTreeWidgetItem();

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -38,14 +38,14 @@ class CFRPipeline : public dp::sg::ui::SceneRenderer
 {
 protected:
   CFRPipeline( const char* renderEngine = 0,
-               dp::fx::Manager shaderManagerType = dp::fx::MANAGER_SHADERBUFFER,
-               dp::culling::Mode cullingMode = dp::culling::MODE_AUTO,
+               dp::fx::Manager shaderManagerType = dp::fx::Manager::SHADERBUFFER,
+               dp::culling::Mode cullingMode = dp::culling::Mode::AUTO,
                const dp::gl::RenderTargetSharedPtr &renderTarget = dp::gl::RenderTargetSharedPtr() );
 
 public:
   static CFRPipelineSharedPtr create( const char* renderEngine = 0,
-                                      dp::fx::Manager shaderManagerType = dp::fx::MANAGER_SHADERBUFFER,
-                                      dp::culling::Mode cullingMode = dp::culling::MODE_AUTO,
+                                      dp::fx::Manager shaderManagerType = dp::fx::Manager::SHADERBUFFER,
+                                      dp::culling::Mode cullingMode = dp::culling::Mode::AUTO,
                                       const dp::gl::RenderTargetSharedPtr &renderTarget = dp::gl::RenderTargetSharedPtr() );
   ~CFRPipeline();
 

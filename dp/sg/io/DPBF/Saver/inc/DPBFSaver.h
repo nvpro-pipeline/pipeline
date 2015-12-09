@@ -271,26 +271,26 @@ class DPBFSaveTraverser : public dp::sg::algorithm::SharedTraverser
 
     // write routines for non-concrete types
     // ... write tasks similar for all Objects
-    void writeObject(const dp::sg::core::Object* objPtr, NBFObject * nbfObjPtr, uint_t objCode);
+    void writeObject(const dp::sg::core::Object* objPtr, NBFObject * nbfObjPtr, DPBFCode objCode);
     // ... write task similar for Nodes
-    void writeNode(const dp::sg::core::Node* nodePtr, NBFNode * nbfNodePtr, uint_t objCode);
+    void writeNode(const dp::sg::core::Node* nodePtr, NBFNode * nbfNodePtr, DPBFCode objCode);
     // ... write task similar for Groups
-    void writeGroup(const dp::sg::core::Group * grpPtr, NBFGroup * nbfGrpPtr, uint_t objCode);
+    void writeGroup(const dp::sg::core::Group * grpPtr, NBFGroup * nbfGrpPtr, DPBFCode objCode);
     // ... write task similar for LightSources
-    void writeLightSource(const dp::sg::core::LightSource* lightSrcPtr, NBFLightSource * nbfLightSrcPtr, uint_t objCode);
+    void writeLightSource(const dp::sg::core::LightSource* lightSrcPtr, NBFLightSource * nbfLightSrcPtr, DPBFCode objCode);
     // ... write task similar for Cameras
-    void writeCamera(const dp::sg::core::Camera * camPtr, NBFCamera * nbfCamPtr, uint_t objCode);
-    void writeFrustumCamera( const dp::sg::core::FrustumCamera * camPtr, NBFFrustumCamera * nbfCampPtr, uint_t objCode );
+    void writeCamera(const dp::sg::core::Camera * camPtr, NBFCamera * nbfCamPtr, DPBFCode objCode);
+    void writeFrustumCamera( const dp::sg::core::FrustumCamera * camPtr, NBFFrustumCamera * nbfCampPtr, DPBFCode objCode );
     // .. write faces
     template<typename DPFaceType, typename NBFFaceType>
     void writeIndices(const DPFaceType * faces, NBFFaceType * nbfFaces);
-    void writePrimitive( const dp::sg::core::Primitive * primitive, NBFPrimitive * nbfPrimitive, uint_t objCode );
+    void writePrimitive( const dp::sg::core::Primitive * primitive, NBFPrimitive * nbfPrimitive, DPBFCode objCode );
     // .. write a single texture image
     void writeTexImage(const std::string& file, dp::sg::core::TextureHostSharedPtr const& img, texImage_t * nbfImg);
-    void writeVertexAttributeSet(const dp::sg::core::VertexAttributeSet * VASPtr, NBFVertexAttributeSet * nbfVASPtr, uint_t objCode);
+    void writeVertexAttributeSet(const dp::sg::core::VertexAttributeSet * VASPtr, NBFVertexAttributeSet * nbfVASPtr, DPBFCode objCode);
 
     // shared objects processing
-    bool processSharedObject(const dp::sg::core::Object * obj, uint_t objCode);
+    bool processSharedObject(const dp::sg::core::Object * obj, DPBFCode objCode);
 
     // map cnt * sizeof(Type) bytes from the mapped file
     template <typename Type>

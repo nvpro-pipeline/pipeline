@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2015
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -98,7 +98,7 @@ namespace dp
 
       Switch::Switch()
       {
-        m_objectCode = OC_SWITCH;
+        m_objectCode = ObjectCode::SWITCH;
 
         init();
       }
@@ -108,7 +108,7 @@ namespace dp
       , m_masks(rhs.m_masks)
       , m_activeMaskKey(rhs.m_activeMaskKey)
       {
-        m_objectCode = OC_SWITCH;
+        m_objectCode = ObjectCode::SWITCH;
 
         // set active mask after init
         // do not add default mask, as it will already be there
@@ -171,7 +171,7 @@ namespace dp
                      , activeMask.end()
                      , inserter(actives, actives.begin())
                      , bind2nd(IncrementGreaterEqual(), index) );
-        
+
             activeMask.swap(actives);
             if( iter->first == getActiveMaskKey() )
             {
@@ -219,7 +219,7 @@ namespace dp
           postActivateChild(index);
         }
       }
-        
+
       void Switch::setInactive( unsigned int index )
       {
         //  if the index previously was active, invalidate the caches
@@ -346,14 +346,14 @@ namespace dp
         return( equi );
       }
 
-      void 
+      void
       Switch::setActiveMaskKey( MaskKey k )
       {
         map<MaskKey,SwitchMask>::iterator iter = m_masks.find( k );
         SwitchMask & aMask = activeMask();
 
         // make sure we found it!!
-        if( iter != m_masks.end() && 
+        if( iter != m_masks.end() &&
             k != m_activeMaskKey )
         {
           SwitchMask & newActiveMask = (*iter).second;
@@ -398,20 +398,20 @@ namespace dp
         }
       }
 
-      void 
+      void
       Switch::addMask( MaskKey key, const SwitchMask & sm )
       {
       #if !defined(NDEBUG)
-        if ( m_masks.find(key)!=m_masks.end() ) 
+        if ( m_masks.find(key)!=m_masks.end() )
         {
     #if 0
           DP_TRACE_OUT_F(("replacing switch mask %X", key))
     #endif
         }
       #endif
-        // insert it 
+        // insert it
         m_masks[ key ] = sm;
-    
+
         if ( key == m_activeMaskKey )
         {
           //TODO: should this only notify if the mask really changed? expensive to test.
@@ -423,7 +423,7 @@ namespace dp
         }
       }
 
-      bool 
+      bool
       Switch::removeMask( MaskKey key )
       {
         // you may not remove the default mask
@@ -459,21 +459,21 @@ namespace dp
       }
 
 
-      unsigned int Switch::getNumberOfMasks() const 
-      { 
-        return( dp::checked_cast<unsigned int>(m_masks.size()) ); 
+      unsigned int Switch::getNumberOfMasks() const
+      {
+        return( dp::checked_cast<unsigned int>(m_masks.size()) );
       }
 
-      Switch::MaskIterator 
-      Switch::getFirstMaskIterator() const 
-      { 
-        return m_masks.begin(); 
+      Switch::MaskIterator
+      Switch::getFirstMaskIterator() const
+      {
+        return m_masks.begin();
       }
 
-      Switch::MaskIterator 
-      Switch::getLastMaskIterator() const 
-      { 
-        return m_masks.end(); 
+      Switch::MaskIterator
+      Switch::getLastMaskIterator() const
+      {
+        return m_masks.end();
       }
 
       Switch::MaskIterator
@@ -484,28 +484,28 @@ namespace dp
         return it;
       }
 
-      Switch::MaskIterator 
-      Switch::getNextMaskIterator(Switch::MaskIterator it) const 
+      Switch::MaskIterator
+      Switch::getNextMaskIterator(Switch::MaskIterator it) const
       {
         return ++it;
       }
 
-      Switch::MaskKey 
-      Switch::getMaskKey(Switch::MaskIterator it) const 
-      { 
-        return it->first; 
+      Switch::MaskKey
+      Switch::getMaskKey(Switch::MaskIterator it) const
+      {
+        return it->first;
       }
 
       const Switch::SwitchMask &
-      Switch::getSwitchMask(Switch::MaskIterator it) const 
-      { 
-        return it->second; 
+      Switch::getSwitchMask(Switch::MaskIterator it) const
+      {
+        return it->second;
       }
 
-      Switch::MaskKey 
-      Switch::getActiveMaskKey() const 
-      { 
-        return m_activeMaskKey; 
+      Switch::MaskKey
+      Switch::getActiveMaskKey() const
+      {
+        return m_activeMaskKey;
       }
 
       void Switch::feedHashGenerator( util::HashGenerator & hg ) const

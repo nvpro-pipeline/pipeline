@@ -531,7 +531,7 @@ namespace dp
         TransformMap transforms;
         for ( Group::ChildrenIterator gci = p->beginChildren() ; gci != p->endChildren() ; ++gci )
         {
-          if ( ((*gci)->getObjectCode() == OC_TRANSFORM) && optimizationAllowed( *gci ) )
+          if ( ((*gci)->getObjectCode() == ObjectCode::TRANSFORM) && optimizationAllowed( *gci ) )
           {
             //  gather Transforms in compatible bins
             TransformSharedPtr const& transform = gci->staticCast<Transform>();

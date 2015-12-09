@@ -263,10 +263,10 @@ namespace dp
             typedef void (T::*PMFN) ();         //!< pointer to member function type
           public:
             explicit MemFunTbl(size_t size);    //!< reserve 'size' table entries, to avoid frequend allocations
-            PMFN operator[](size_t i) const;    //!< read-only access the function pointer stored at index i; behavior is undefined for invalid indices
+            PMFN operator[](dp::sg::core::ObjectCode oc) const; //!< read-only access the function pointer stored at index oc; behavior is undefined for invalid indices
             template <typename U>
-            void addEntry(size_t i, U pmfn); //!< register function pointer pmfn at index i; former entry at i will by overridden
-            bool testEntry(size_t i) const;     //!< test if entry at i is valid
+            void addEntry(dp::sg::core::ObjectCode oc, U pmfn); //!< register function pointer pmfn at index oc; former entry at oc will by overridden
+            bool testEntry(dp::sg::core::ObjectCode oc) const;  //!< test if entry at oc is valid
           private:
             std::vector<PMFN> m_ftbl;           //!< simply use a plain vector as function table
           };
@@ -280,7 +280,7 @@ namespace dp
           dp::sg::core::CameraSharedPtr   m_camera;
 
         private:
-          DP_SG_ALGORITHM_API unsigned int     getObjectTraversalCode( const dp::sg::core::Object * object );  // NOTE: used inline, therefore needs to be exported via DP_SG_ALGORITHM_API
+          DP_SG_ALGORITHM_API dp::sg::core::ObjectCode getObjectTraversalCode( const dp::sg::core::Object * object );  // NOTE: used inline, therefore needs to be exported via DP_SG_ALGORITHM_API
 
           // traverse overrides for Group derived (have only read-only access to objects)
           DP_SG_ALGORITHM_API void traverse( const dp::sg::core::Group * );
@@ -302,27 +302,27 @@ namespace dp
       }
 
       template<typename T>
-      bool Traverser::MemFunTbl<T>::testEntry(size_t i) const
+      bool Traverser::MemFunTbl<T>::testEntry(dp::sg::core::ObjectCode oc) const
       { // test if entry at i is a valid entry
-        return (i < m_ftbl.size()) && !!m_ftbl[i];
+        return (static_cast<size_t>(oc) < m_ftbl.size()) && !!m_ftbl[static_cast<size_t>(oc)];
       }
 
       template<typename T>
-      typename Traverser::MemFunTbl<T>::PMFN Traverser::MemFunTbl<T>::operator[](size_t i) const
-      { // read-only access to function pointer stored at index i
-        DP_ASSERT(testEntry(i)); // undefined behavior for invalid entries
-        return m_ftbl[i];
+      typename Traverser::MemFunTbl<T>::PMFN Traverser::MemFunTbl<T>::operator[](dp::sg::core::ObjectCode oc) const
+      { // read-only access to function pointer stored at index oc
+        DP_ASSERT(testEntry(oc)); // undefined behavior for invalid entries
+        return m_ftbl[static_cast<size_t>(oc)];
       }
 
       template<typename T>
       template<typename U>
-      void Traverser::MemFunTbl<T>::addEntry(size_t i, U pmfn)
+      void Traverser::MemFunTbl<T>::addEntry(dp::sg::core::ObjectCode oc, U pmfn)
       { // register function pointer
-        if ( m_ftbl.size() <= i )
+        if ( m_ftbl.size() <= static_cast<size_t>(oc) )
         { // add 32 table entries
-          m_ftbl.resize(i+0x20, NULL);
+          m_ftbl.resize(static_cast<size_t>(oc)+0x20, NULL);
         }
-        m_ftbl[i]=*(PMFN*)&pmfn;
+        m_ftbl[static_cast<size_t>(oc)]=*(PMFN*)&pmfn;
       }
 
       /************************************************************************/
@@ -398,7 +398,7 @@ namespace dp
            *    );
            *  \endcode */
           template <typename T, typename U>
-          void addObjectHandler( unsigned int objectCode, void (T::*handler)(const U*) );
+          void addObjectHandler( dp::sg::core::ObjectCode objectCode, void (T::*handler)(const U*) );
 
           /*! \brief Template function to add a handler routine for a new class derived from Object.
            *  \param objectCode Object code to identify an object type at run-time.
@@ -429,7 +429,7 @@ namespace dp
            *    );
            *  \endcode */
           template <typename T, typename U, typename V>
-          void addObjectHandler( unsigned int objectCode, void (T::*handler)(const U*, V) );
+          void addObjectHandler( dp::sg::core::ObjectCode objectCode, void (T::*handler)(const U*, V) );
 
           /*! \brief Override of the traversal initiating interface.
            *  \param root The Node to start traversal at.
@@ -688,7 +688,7 @@ namespace dp
            *    );
            *  \endcode */
           template <typename T, typename U>
-          void addObjectHandler( unsigned int objectCode, void (T::*handler)(U*) );
+          void addObjectHandler( dp::sg::core::ObjectCode objectCode, void (T::*handler)(U*) );
 
           /*! \brief Template function to add a handler routine for a new class derived from Object.
            *  \param objectCode Object code to identify an object type at run-time.
@@ -719,7 +719,7 @@ namespace dp
            *    );
            *  \endcode */
           template <typename T, typename U, typename V>
-          void addObjectHandler( unsigned int objectCode, void (T::*handler)(U*, V) );
+          void addObjectHandler( dp::sg::core::ObjectCode objectCode, void (T::*handler)(U*, V) );
 
           /*! \brief Override of the traversal initiating interface.
            *  \param root The Node to start traversal at.
@@ -965,8 +965,8 @@ namespace dp
 
       inline void Traverser::traverseLockedObject(const dp::sg::core::Object * obj)
       {
-        unsigned int oc = getObjectTraversalCode( obj );
-        if ( (dp::sg::core::OC_INVALID != oc) &&
+        dp::sg::core::ObjectCode oc = getObjectTraversalCode( obj );
+        if ( (dp::sg::core::ObjectCode::INVALID != oc) &&
              (( obj->getTraversalMask() | getTraversalMaskOverride() ) & getTraversalMask())
            )
         {
@@ -980,14 +980,14 @@ namespace dp
       }
 
       template <typename T, typename U>
-      inline void SharedTraverser::addObjectHandler(unsigned int objectCode, void (T::*handler)(const U*))
+      inline void SharedTraverser::addObjectHandler(dp::sg::core::ObjectCode objectCode, void (T::*handler)(const U*))
       {
         DP_STATIC_ASSERT(( boost::is_base_of<SharedTraverser,T>::value ));
         m_mftbl.addEntry(objectCode, handler);
       }
 
       template <typename T, typename U, typename V>
-      inline void SharedTraverser::addObjectHandler(unsigned int objectCode, void (T::*handler)(const U*, V))
+      inline void SharedTraverser::addObjectHandler(dp::sg::core::ObjectCode objectCode, void (T::*handler)(const U*, V))
       {
         DP_STATIC_ASSERT(( boost::is_base_of<SharedTraverser,T>::value ));
         m_mftbl.addEntry(objectCode, handler);
@@ -999,14 +999,14 @@ namespace dp
       }
 
       template <typename T, typename U>
-      inline void ExclusiveTraverser::addObjectHandler(unsigned int objectCode, void (T::*handler)(U*))
+      inline void ExclusiveTraverser::addObjectHandler(dp::sg::core::ObjectCode objectCode, void (T::*handler)(U*))
       {
         DP_STATIC_ASSERT(( boost::is_base_of<ExclusiveTraverser,T>::value ));
         m_mftbl.addEntry(objectCode, handler);
       }
 
       template <typename T, typename U, typename V>
-      inline void ExclusiveTraverser::addObjectHandler(unsigned int objectCode, void (T::*handler)(U*, V))
+      inline void ExclusiveTraverser::addObjectHandler(dp::sg::core::ObjectCode objectCode, void (T::*handler)(U*, V))
       {
         DP_STATIC_ASSERT(( boost::is_base_of<ExclusiveTraverser,T>::value ));
         m_mftbl.addEntry(objectCode, handler);

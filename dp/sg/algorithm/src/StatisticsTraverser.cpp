@@ -582,7 +582,6 @@ namespace dp
       statVertexAttributeSet( p, m_statistics->m_statVertexAttributeSetInstances );
     }
 
-
       std::ostream& operator<<( std::ostream& os, const StatisticsBase& obj )
       {
         os << toString("Count", obj.m_count);

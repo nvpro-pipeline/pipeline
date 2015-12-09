@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2011
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -55,7 +55,7 @@ namespace dp
       , m_numberOfIndices(0)
       {
         m_bufferObserver.setIndexSet( this );
-        m_objectCode = OC_INDEX_SET;
+        m_objectCode = ObjectCode::INDEX_SET;
       }
 
       IndexSet::IndexSet(const IndexSet& rhs)
@@ -65,7 +65,7 @@ namespace dp
       , m_buffer(rhs.m_buffer)
       {
         m_bufferObserver.setIndexSet( this );
-        m_objectCode = OC_INDEX_SET;
+        m_objectCode = ObjectCode::INDEX_SET;
         if ( m_buffer )
         {
           m_buffer->attach( &m_bufferObserver );

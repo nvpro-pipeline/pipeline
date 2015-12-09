@@ -521,7 +521,7 @@ void DPBFSaveTraverser::handleParallelCamera(const ParallelCamera *p)
     {
       // allocate camera object and write offset of this camera object
       Offset_AutoPtr<NBFFrustumCamera> camPtr(this, m_objectOffsetMap[ph]);
-      writeFrustumCamera( p, camPtr, NBF_PARALLEL_CAMERA );
+      writeFrustumCamera( p, camPtr, DPBFCode::PARALLEL_CAMERA );
     }
   }
 }
@@ -542,7 +542,7 @@ void DPBFSaveTraverser::handlePerspectiveCamera(const PerspectiveCamera *p)
     {
       // allocate camera object and write offset of this camera object
       Offset_AutoPtr<NBFFrustumCamera> camPtr(this, m_objectOffsetMap[ph]);
-      writeFrustumCamera( p, camPtr, NBF_PERSPECTIVE_CAMERA );
+      writeFrustumCamera( p, camPtr, DPBFCode::PERSPECTIVE_CAMERA );
     }
   }
 }
@@ -563,7 +563,7 @@ void DPBFSaveTraverser::handleMatrixCamera(const MatrixCamera *p)
     {
       // allocate camera object and write offset of this camera object
       Offset_AutoPtr<NBFMatrixCamera> camPtr(this, m_objectOffsetMap[ph]);
-      writeCamera(p, camPtr, NBF_MATRIX_CAMERA); // a MatrixCamera is a Camera
+      writeCamera(p, camPtr, DPBFCode::MATRIX_CAMERA); // a MatrixCamera is a Camera
       assign( camPtr->projection, p->getProjection() );
       assign( camPtr->inverseProjection, p->getInverseProjection() );
     }
@@ -588,11 +588,11 @@ void DPBFSaveTraverser::handleBillboard(const Billboard *p)
     {
       // allocate billboard object and write its offset
       Offset_AutoPtr<NBFBillboard> billboardPtr(this, m_objectOffsetMap[ph]);
-      writeGroup(p, billboardPtr, NBF_BILLBOARD); // a Billboard is a Group
+      writeGroup(p, billboardPtr, DPBFCode::BILLBOARD); // a Billboard is a Group
 
       // write transform data
       assign(billboardPtr->rotationAxis, p->getRotationAxis());
-      billboardPtr->alignment = p->getAlignment();
+      billboardPtr->alignment = dp::checked_cast<ubyte_t>(p->getAlignment());
     }
   }
 }
@@ -617,7 +617,7 @@ void DPBFSaveTraverser::handleParameterGroupData( const ParameterGroupData * p )
     else
     {
       Offset_AutoPtr<NBFParameterGroupData> pgdPtr(this, m_objectOffsetMap[ph]);
-      writeObject(p, pgdPtr, NBF_PARAMETER_GROUP_DATA); // a ParameterGroupData is an Object
+      writeObject(p, pgdPtr, DPBFCode::PARAMETER_GROUP_DATA); // a ParameterGroupData is an Object
 
       // allocate str_t object to hold the EffectSpec name
       DP_ASSERT( ! pgs->getName().empty() );
@@ -678,7 +678,7 @@ void DPBFSaveTraverser::handlePipelineData( const dp::sg::core::PipelineData * p
     else
     {
       Offset_AutoPtr<NBFPipelineData> pdPtr(this, m_objectOffsetMap[ph]);
-      writeObject(p, pdPtr, NBF_PIPELINE_DATA); // an EffectData is an Object
+      writeObject(p, pdPtr, DPBFCode::PIPELINE_DATA); // an EffectData is an Object
 
       // allocate str_t object to hold the EffectSpec filename
       DP_ASSERT( !effectFile.empty() );
@@ -748,7 +748,7 @@ void DPBFSaveTraverser::handleSampler( const Sampler * p )
     {
       // allocate sampler object and write its offset
       Offset_AutoPtr<NBFSampler> samplerPtr(this, m_objectOffsetMap[ph]);
-      writeObject(p, samplerPtr, NBF_SAMPLER); // a Sampler is an Object
+      writeObject(p, samplerPtr, DPBFCode::SAMPLER); // a Sampler is an Object
 
       // ... texture image
       const TextureSharedPtr & texture = p->getTexture();
@@ -789,7 +789,7 @@ void DPBFSaveTraverser::handleGeoNode(const GeoNode *p)
     {
       // allocate node object and write its offset
       Offset_AutoPtr<NBFGeoNode> nodePtr(this, m_objectOffsetMap[ph]);
-      writeNode(p, nodePtr, NBF_GEO_NODE); // a GeoNode is a Node
+      writeNode(p, nodePtr, DPBFCode::GEO_NODE); // a GeoNode is a Node
 
       // GeoNode specific data
       nodePtr->materialPipeline = p->getMaterialPipeline() ? m_objectOffsetMap[p->getMaterialPipeline()] : 0;
@@ -816,7 +816,7 @@ void DPBFSaveTraverser::handleGroup(const Group *p)
     {
       // allocate group object and write its offset
       Offset_AutoPtr<NBFGroup> groupPtr(this, m_objectOffsetMap[ph]);
-      writeGroup(p, groupPtr, NBF_GROUP); // a Group is a Group
+      writeGroup(p, groupPtr, DPBFCode::GROUP); // a Group is a Group
     }
   }
 }
@@ -838,7 +838,7 @@ void DPBFSaveTraverser::handleTransform(const Transform *p)
     {
       // allocate transform object and write its offset
       Offset_AutoPtr<NBFTransform> trafoPtr(this, m_objectOffsetMap[ph]);
-      writeGroup(p, trafoPtr, NBF_TRANSFORM); // a Transform is a Group
+      writeGroup(p, trafoPtr, DPBFCode::TRANSFORM); // a Transform is a Group
 
       // write transform data
       assign( trafoPtr->trafo, p->getTrafo() );
@@ -869,7 +869,7 @@ void DPBFSaveTraverser::handleLOD(const LOD *p)
     {
       // allocate LOD object and write its offset
       Offset_AutoPtr<NBFLOD> lodPtr(this, m_objectOffsetMap[ph]);
-      writeGroup(p, lodPtr, NBF_LOD); // a LOD is a Group
+      writeGroup(p, lodPtr, DPBFCode::LOD); // a LOD is a Group
 
       // LOD specific data
       assign(lodPtr->center, p->getCenter());
@@ -913,7 +913,7 @@ void DPBFSaveTraverser::handleSwitch(const Switch *p)
     else
     {
       Offset_AutoPtr<NBFSwitch> switchPtr(this, m_objectOffsetMap[ph]);
-      writeGroup(p, switchPtr, NBF_SWITCH); // a Switch is a Group
+      writeGroup(p, switchPtr, DPBFCode::SWITCH); // a Switch is a Group
 
       // write Switch specific ...
       switchPtr->activeMaskKey = p->getActiveMaskKey();
@@ -965,7 +965,7 @@ void DPBFSaveTraverser::handleLightSource( const LightSource * p )
     {
       // allocate light object and write its offset
       Offset_AutoPtr<NBFLightSource> lightPtr( this, m_objectOffsetMap[ph] );
-      writeLightSource( p, lightPtr, NBF_LIGHT_SOURCE);
+      writeLightSource( p, lightPtr, DPBFCode::LIGHT_SOURCE);
     }
   }
 }
@@ -977,7 +977,7 @@ void DPBFSaveTraverser::pseudoAllocPrimitive( const Primitive * p )
   pseudoAllocObject(p); // a Primitive is an Object
 }
 
-void DPBFSaveTraverser::writePrimitive(const Primitive * prim, NBFPrimitive * nbfPrim, uint_t objCode )
+void DPBFSaveTraverser::writePrimitive(const Primitive * prim, NBFPrimitive * nbfPrim, DPBFCode objCode )
 {
   DP_ASSERT(!calculatingStorageRequirements());
 
@@ -1015,11 +1015,11 @@ void DPBFSaveTraverser::handlePrimitive( const Primitive *p )
     }
     else
     {
-      if ( !processSharedObject(p, NBF_PRIMITIVE) )
+      if ( !processSharedObject(p, DPBFCode::PRIMITIVE) )
       {
         // allocate object and write its offset
         Offset_AutoPtr<NBFPrimitive> pPtr(this, m_objectOffsetMap[ph]);
-        writePrimitive( p, pPtr, NBF_PRIMITIVE );
+        writePrimitive( p, pPtr, DPBFCode::PRIMITIVE );
       }
     }
   }
@@ -1038,11 +1038,11 @@ void DPBFSaveTraverser::handleIndexSet( const IndexSet * p )
     else
     {
       // IndexSets can share data
-      if ( !processSharedObject(p, NBF_INDEX_SET) )
+      if ( !processSharedObject(p, DPBFCode::INDEX_SET) )
       {
         // allocate IndexSet object and write its offset
         Offset_AutoPtr<NBFIndexSet> isPtr(this, m_objectOffsetMap[ph]);
-        writeObject( p, isPtr, NBF_INDEX_SET );
+        writeObject( p, isPtr, DPBFCode::INDEX_SET );
 
         isPtr->dataType              = (uint_t)p->getIndexDataType();
         isPtr->primitiveRestartIndex = p->getPrimitiveRestartIndex();
@@ -1070,17 +1070,17 @@ void DPBFSaveTraverser::handleVertexAttributeSet( const VertexAttributeSet *p )
     else
     {
       // VertexAttributeSets can share data
-      if ( !processSharedObject(p, NBF_VERTEX_ATTRIBUTE_SET) )
+      if ( !processSharedObject(p, DPBFCode::VERTEX_ATTRIBUTE_SET) )
       {
         // allocate VertexAttributeSet object and write its offset
         Offset_AutoPtr<NBFVertexAttributeSet> vasPtr(this, m_objectOffsetMap[ph]);
-        writeVertexAttributeSet(p, vasPtr, NBF_VERTEX_ATTRIBUTE_SET); // a VertexAttributeSet is a VertexAttributeSet
+        writeVertexAttributeSet(p, vasPtr, DPBFCode::VERTEX_ATTRIBUTE_SET); // a VertexAttributeSet is a VertexAttributeSet
       }
     }
   }
 }
 
-bool DPBFSaveTraverser::processSharedObject(const Object * obj, uint_t objCode)
+bool DPBFSaveTraverser::processSharedObject(const Object * obj, DPBFCode objCode)
 {
   DP_ASSERT(!calculatingStorageRequirements());
 
@@ -1104,7 +1104,7 @@ bool DPBFSaveTraverser::processSharedObject(const Object * obj, uint_t objCode)
   return false;
 }
 
-void DPBFSaveTraverser::writeObject(const Object* objPtr, NBFObject * nbfObjPtr, uint_t objCode)
+void DPBFSaveTraverser::writeObject(const Object* objPtr, NBFObject * nbfObjPtr, DPBFCode objCode)
 {
   nbfObjPtr->objectCode = objCode;
   nbfObjPtr->isShared = objPtr->isDataShared();
@@ -1139,13 +1139,13 @@ void DPBFSaveTraverser::writeObject(const Object* objPtr, NBFObject * nbfObjPtr,
 
 }
 
-void DPBFSaveTraverser::writeNode(const Node * nodePtr, NBFNode * nbfNodePtr, uint_t objCode)
+void DPBFSaveTraverser::writeNode(const Node * nodePtr, NBFNode * nbfNodePtr, DPBFCode objCode)
 {
   DP_ASSERT(!calculatingStorageRequirements());
   writeObject(nodePtr, nbfNodePtr, objCode); // a Node is an Object
 }
 
-void DPBFSaveTraverser::writeGroup(const Group * grpPtr, NBFGroup * nbfGrpPtr, uint_t objCode)
+void DPBFSaveTraverser::writeGroup(const Group * grpPtr, NBFGroup * nbfGrpPtr, DPBFCode objCode)
 {
   DP_ASSERT(!calculatingStorageRequirements());
   writeNode(grpPtr, nbfGrpPtr, objCode); // a Group is a Node
@@ -1176,7 +1176,7 @@ void DPBFSaveTraverser::writeGroup(const Group * grpPtr, NBFGroup * nbfGrpPtr, u
 
 }
 
-void DPBFSaveTraverser::writeVertexAttributeSet(const VertexAttributeSet * vasPtr, NBFVertexAttributeSet * nbfVASPtr, uint_t objCode)
+void DPBFSaveTraverser::writeVertexAttributeSet(const VertexAttributeSet * vasPtr, NBFVertexAttributeSet * nbfVASPtr, DPBFCode objCode)
 {
   DP_ASSERT(!calculatingStorageRequirements());
 
@@ -1210,7 +1210,7 @@ void DPBFSaveTraverser::writeVertexAttributeSet(const VertexAttributeSet * vasPt
   }
 }
 
-void DPBFSaveTraverser::writeLightSource(const LightSource* lightSrcPtr, NBFLightSource * nbfLightSrcPtr, uint_t objCode)
+void DPBFSaveTraverser::writeLightSource(const LightSource* lightSrcPtr, NBFLightSource * nbfLightSrcPtr, DPBFCode objCode)
 {
   DP_ASSERT(!calculatingStorageRequirements());
   writeNode(lightSrcPtr, nbfLightSrcPtr, objCode);    // a LightSource is a Node
@@ -1225,7 +1225,7 @@ void DPBFSaveTraverser::writeLightSource(const LightSource* lightSrcPtr, NBFLigh
   }
 }
 
-void DPBFSaveTraverser::writeFrustumCamera( const FrustumCamera * camPtr, NBFFrustumCamera * nbfCamPtr, uint_t objCode )
+void DPBFSaveTraverser::writeFrustumCamera( const FrustumCamera * camPtr, NBFFrustumCamera * nbfCamPtr, DPBFCode objCode )
 {
   DP_ASSERT(!calculatingStorageRequirements());
   writeCamera( camPtr, nbfCamPtr, objCode );
@@ -1236,7 +1236,7 @@ void DPBFSaveTraverser::writeFrustumCamera( const FrustumCamera * camPtr, NBFFru
   assign(nbfCamPtr->windowSize, camPtr->getWindowSize());
 }
 
-void DPBFSaveTraverser::writeCamera(const Camera * camPtr, NBFCamera * nbfCamPtr, uint_t objCode)
+void DPBFSaveTraverser::writeCamera(const Camera * camPtr, NBFCamera * nbfCamPtr, DPBFCode objCode)
 {
   DP_ASSERT(!calculatingStorageRequirements());
   writeObject(camPtr, nbfCamPtr, objCode); // a Camera is an Object

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2015
+// Copyright (c) 2010-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -86,7 +86,7 @@ namespace dp
         case dp::util::Event::DP_SG_CORE:
           {
             dp::sg::core::Event const& coreEvent = static_cast<dp::sg::core::Event const&>(event);
-            if ( coreEvent.getType() == dp::sg::core::Event::GROUP )
+            if ( coreEvent.getType() == dp::sg::core::Event::Type::GROUP )
             {
               dp::sg::core::Group::Event const& groupEvent = static_cast<dp::sg::core::Group::Event const&>(coreEvent);
               DP_ASSERT( dynamic_cast<Payload*>(payload) );
@@ -94,16 +94,16 @@ namespace dp
 
               switch ( groupEvent.getType() )
               {
-              case dp::sg::core::Group::Event::POST_CHILD_ADD:
+              case dp::sg::core::Group::Event::Type::POST_CHILD_ADD:
                 onPostAddChild( groupEvent.getGroup(), groupEvent.getChild(), groupEvent.getIndex(), groupPayload );
                 break;
-              case dp::sg::core::Group::Event::PRE_CHILD_REMOVE:
+              case dp::sg::core::Group::Event::Type::PRE_CHILD_REMOVE:
                 onPreRemoveChild( groupEvent.getGroup(), groupEvent.getChild(), groupEvent.getIndex(), groupPayload );
                 break;
-              case dp::sg::core::Group::Event::POST_GROUP_EXCHANGED:
+              case dp::sg::core::Group::Event::Type::POST_GROUP_EXCHANGED:
                 m_sceneTree->replaceSubTree( groupEvent.getGroup(), groupPayload->m_index );
                 break;
-              case dp::sg::core::Group::Event::CLIP_PLANES_CHANGED:
+              case dp::sg::core::Group::Event::Type::CLIP_PLANES_CHANGED:
                 DP_ASSERT( !"clipplanes not supported" );
                 break;
               }
@@ -123,7 +123,7 @@ namespace dp
         ObjectTreeIndex childIndex = tree[objectIndex].m_firstChild;
 
         bool handleAsGroup = true;
-        if ( group->getObjectCode() == dp::sg::core::OC_SWITCH )
+        if ( group->getObjectCode() == dp::sg::core::ObjectCode::SWITCH )
         {
           DP_ASSERT( group.dynamicCast<dp::sg::core::Switch>() );
           handleAsGroup = !!group.inplaceCast<dp::sg::core::Switch>()->getHints( dp::sg::core::Object::DP_SG_HINT_DYNAMIC );
@@ -141,7 +141,7 @@ namespace dp
         }
         else
         {
-          DP_ASSERT( group->getObjectCode() == dp::sg::core::OC_SWITCH );
+          DP_ASSERT( group->getObjectCode() == dp::sg::core::ObjectCode::SWITCH );
           DP_ASSERT( group.dynamicCast<dp::sg::core::Switch>() );
           dp::sg::core::SwitchSharedPtr const& s = group.inplaceCast<dp::sg::core::Switch>();
           if ( ! s->isActive( index ) )
@@ -170,7 +170,7 @@ namespace dp
 
         // find the left sibling and the left transform of our new child
         ObjectTree& tree = m_sceneTree->getObjectTree();
-        ObjectTreeIndex leftSibling = tree[objectIndex].m_firstChild; 
+        ObjectTreeIndex leftSibling = tree[objectIndex].m_firstChild;
         ObjectTreeIndex currentLeftSibling = ~0;
 
         while ( index > 0 )
@@ -180,7 +180,7 @@ namespace dp
           --index;
         }
 
-        // leftSibling advanced one step too far. 
+        // leftSibling advanced one step too far.
         leftSibling = currentLeftSibling;
 
         m_sceneTree->addSubTree(child, objectIndex, leftSibling);

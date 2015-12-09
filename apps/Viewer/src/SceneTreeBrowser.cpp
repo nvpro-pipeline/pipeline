@@ -139,14 +139,14 @@ void SceneTreeBrowser::contextMenuEvent( QContextMenuEvent * event )
     dp::sg::core::ObjectCode objectCode = currentItem->getObject()->getObjectCode();
     switch( objectCode )
     {
-      case OC_GEONODE :
+      case ObjectCode::GEO_NODE :
         {
           QAction * pipelineAction = menu.addAction( "&Show shader pipeline ..." );
           connect( pipelineAction, SIGNAL(triggered()), this, SLOT(triggeredShowShaderPipeline()) );
         }
         break;
 
-      case OC_PRIMITIVE :
+      case ObjectCode::PRIMITIVE :
         {
           VertexAttributeSetSharedPtr const& vas = currentItem->getObject().staticCast<Primitive>()->getVertexAttributeSet();
           if ( !vas->getVertexAttribute( VertexAttributeSet::DP_SG_TEXCOORD0 ).getBuffer() )
@@ -171,7 +171,7 @@ void SceneTreeBrowser::contextMenuEvent( QContextMenuEvent * event )
         }
         break;
 
-      case OC_PARAMETER_GROUP_DATA :
+      case ObjectCode::PARAMETER_GROUP_DATA :
         {
           ParameterGroupDataSharedPtr const& parameterGroupData = currentItem->getObject().staticCast<ParameterGroupData>();
           std::vector<dp::fx::ParameterGroupSpec::iterator> samplerParameters = getEmptySamplerParameters( parameterGroupData );
@@ -187,9 +187,9 @@ void SceneTreeBrowser::contextMenuEvent( QContextMenuEvent * event )
         }
         break;
 
-      case OC_PARALLELCAMERA :
-      case OC_PERSPECTIVECAMERA :
-      case OC_MATRIXCAMERA :
+      case ObjectCode::PARALLEL_CAMERA :
+      case ObjectCode::PERSPECTIVE_CAMERA :
+      case ObjectCode::MATRIX_CAMERA :
         {
           QMenu * subMenu = menu.addMenu( "&Add Headlight" );
           subMenu->addAction( "&Directed Light" );
@@ -203,7 +203,7 @@ void SceneTreeBrowser::contextMenuEvent( QContextMenuEvent * event )
         }
         break;
 
-      case OC_PIPELINE_DATA :
+      case ObjectCode::PIPELINE_DATA :
         {
           QAction * saveAction = menu.addAction( "&Save EffectData ..." );
           connect( saveAction, SIGNAL(triggered()), this, SLOT(triggeredSaveEffectData()) );
@@ -214,7 +214,7 @@ void SceneTreeBrowser::contextMenuEvent( QContextMenuEvent * event )
         break;
     }
 
-    if ( objectCode != OC_SCENE )
+    if ( objectCode != ObjectCode::SCENE )
     {
       if ( ! menu.isEmpty() )
       {
@@ -258,12 +258,12 @@ void SceneTreeBrowser::itemExpanded( QTreeWidgetItem * item )
 void SceneTreeBrowser::itemPressed( QTreeWidgetItem * item, int column )
 {
   DP_ASSERT( dynamic_cast<SceneTreeItem*>(item) );
-  if ( ( QApplication::mouseButtons() & Qt::LeftButton ) && ( static_cast<SceneTreeItem*>(item)->getObject()->getObjectCode() == OC_PIPELINE_DATA ) )
+  if ( ( QApplication::mouseButtons() & Qt::LeftButton ) && ( static_cast<SceneTreeItem*>(item)->getObject()->getObjectCode() == ObjectCode::PIPELINE_DATA ) )
   {
     // start drag'n'drop on EffectData
     // We don't set the EffectData as the MimeData, but the GeoNode, as both the material of the GeoNode and the geometry of the Primitive need to be copied!
     dp::fx::EffectSpec::Type type = static_cast<SceneTreeItem*>(item)->getObject().staticCast<dp::sg::core::PipelineData>()->getEffectSpec()->getType();
-    if ( type == dp::fx::EffectSpec::EST_PIPELINE )
+    if ( type == dp::fx::EffectSpec::Type::PIPELINE )
     {
       DP_ASSERT( item->parent() );
       item = item->parent();
@@ -354,11 +354,11 @@ const char * domainCodeToName( dp::fx::Domain domain )
 {
   switch( domain )
   {
-    case dp::fx::DOMAIN_VERTEX                  : return( "Vertex Shader" );
-    case dp::fx::DOMAIN_FRAGMENT                : return( "Fragment Shader" );
-    case dp::fx::DOMAIN_GEOMETRY                : return( "Geometry Shader" );
-    case dp::fx::DOMAIN_TESSELLATION_CONTROL    : return( "Tessellation Control Shader" );
-    case dp::fx::DOMAIN_TESSELLATION_EVALUATION : return( "Tessellation Evaluation Shader" );
+    case dp::fx::Domain::VERTEX                  : return( "Vertex Shader" );
+    case dp::fx::Domain::FRAGMENT                : return( "Fragment Shader" );
+    case dp::fx::Domain::GEOMETRY                : return( "Geometry Shader" );
+    case dp::fx::Domain::TESSELLATION_CONTROL    : return( "Tessellation Control Shader" );
+    case dp::fx::Domain::TESSELLATION_EVALUATION : return( "Tessellation Evaluation Shader" );
     default :
       DP_ASSERT( false );
       return( "Unknown Shader" );

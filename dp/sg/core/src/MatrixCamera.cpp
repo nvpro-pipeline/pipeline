@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -137,7 +137,7 @@ namespace dp
           Vec result;
 
           __m128 vvec = vec.sse;
-    
+
           result.sse = mat.sse[3];
           result.sse = _mm_add_ps( result.sse, _mm_mul_ps( mat.sse[0], _mm_shuffle_ps( vvec, vvec, _MM_SHUFFLE(0,0,0,0) ) ) );
           result.sse = _mm_add_ps( result.sse, _mm_mul_ps( mat.sse[1], _mm_shuffle_ps( vvec, vvec, _MM_SHUFFLE(1,1,1,1) ) ) );
@@ -160,7 +160,7 @@ namespace dp
 
       MatrixCamera::MatrixCamera(void)
       {
-        m_objectCode = OC_MATRIXCAMERA;
+        m_objectCode = ObjectCode::MATRIX_CAMERA;
       }
 
       MatrixCamera::MatrixCamera( const MatrixCamera &rhs )
@@ -168,7 +168,7 @@ namespace dp
       , m_projection(cIdentity44f)
       , m_inverse(cIdentity44f)
       {
-        m_objectCode = OC_MATRIXCAMERA;
+        m_objectCode = ObjectCode::MATRIX_CAMERA;
       }
 
       MatrixCamera::~MatrixCamera(void)
@@ -328,7 +328,7 @@ namespace dp
         Vec y = _mm_mul_ps( mat.sse[1], r2.sse );
         Vec z = _mm_mul_ps( mat.sse[2], r2.sse );
 
-        updateCullCode( vector, cfo, cfa ); 
+        updateCullCode( vector, cfo, cfa );
         vector += x;
         updateCullCode( vector, cfo, cfa );
         vector += y;
@@ -373,8 +373,8 @@ namespace dp
           determineCullFlags( vectors[i], cfo, cfa );
         }
       #endif
-  
-        return( !cfo ? CC_IN : cfa ? CC_OUT : CC_PART );
+
+        return( !cfo ? CullCode::INSIDE : cfa ? CullCode::OUTSIDE : CullCode::PARTIAL );
       }
 
       void MatrixCamera::feedHashGenerator( util::HashGenerator & hg ) const

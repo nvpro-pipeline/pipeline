@@ -286,7 +286,7 @@ namespace dp
         if ( m_denormalizedNormalsVAS.first )
         {
           DenormalizedNormalsResult * dnr = new DenormalizedNormalsResult;
-          dnr->objectCode = OC_VERTEX_ATTRIBUTE_SET;
+          dnr->objectCode = ObjectCode::VERTEX_ATTRIBUTE_SET;
           dnr->objectCount = m_countMap.find( dnr->objectCode )->second;
 
           dnr->denormalizedNormalsCount = m_denormalizedNormalsVAS.first;
@@ -327,9 +327,9 @@ namespace dp
         if ( m_identityCount )
         {
           IdentityResult * ir = new IdentityResult;
-          ir->objectCode  = OC_TRANSFORM;
-          DP_ASSERT( m_countMap.find( OC_TRANSFORM ) != m_countMap.end() );
-          ir->objectCount = m_countMap.find( OC_TRANSFORM )->second;
+          ir->objectCode  = ObjectCode::TRANSFORM;
+          DP_ASSERT( m_countMap.find( ObjectCode::TRANSFORM ) != m_countMap.end() );
+          ir->objectCount = m_countMap.find( ObjectCode::TRANSFORM )->second;
 
           ir->identityCount = m_identityCount;
           results.push_back( ir );
@@ -351,7 +351,7 @@ namespace dp
         if ( m_nullNormalsVAS.first )
         {
           NullNormalsResult * nnr = new NullNormalsResult;
-          nnr->objectCode = OC_VERTEX_ATTRIBUTE_SET;
+          nnr->objectCode = ObjectCode::VERTEX_ATTRIBUTE_SET;
           nnr->objectCount = m_countMap.find( nnr->objectCode )->second;
 
           nnr->nullNormalsCount = m_nullNormalsVAS.first;
@@ -362,8 +362,8 @@ namespace dp
         if ( m_redundantIndexSets )
         {
           RedundantIndexSetResult * risr = new RedundantIndexSetResult;
-          risr->objectCode = OC_PRIMITIVE;
-          risr->objectCount = m_countMap.find( OC_PRIMITIVE )->second;
+          risr->objectCode = ObjectCode::PRIMITIVE;
+          risr->objectCount = m_countMap.find( ObjectCode::PRIMITIVE )->second;
           risr->redundantIndexSetCount = m_redundantIndexSets;
           results.push_back( risr );
         }
@@ -371,8 +371,8 @@ namespace dp
         if ( m_redundantLODs )
         {
           RedundantLODRangesResult * rlodrr = new RedundantLODRangesResult;
-          rlodrr->objectCode  = OC_LOD;
-          rlodrr->objectCount = m_countMap.find( OC_LOD )->second;
+          rlodrr->objectCode  = ObjectCode::LOD;
+          rlodrr->objectCount = m_countMap.find( ObjectCode::LOD )->second;
 
           rlodrr->lodRanges           = m_lodRanges;
           rlodrr->redundantLODs       = m_redundantLODs;
@@ -567,7 +567,7 @@ namespace dp
       {
         if ( isToBeHandled( p ) )
         {
-          m_countMap[OC_PRIMITIVE]++;
+          m_countMap[ObjectCode::PRIMITIVE]++;
           analyzeEmpty( p, p->getElementCount() );
           analyzeEquivalent( p );
           analyzeRedundantIndexSet( p->getIndexSet(), p->getElementOffset(), p->getElementCount() );
@@ -647,24 +647,24 @@ namespace dp
         {
           if ( ! it->second.empty() )
           {
-            m_combinableInfo[OC_GEONODE].first++;
-            m_combinableInfo[OC_GEONODE].second += dp::checked_cast<unsigned int>(it->second.size());
+            m_combinableInfo[ObjectCode::GEO_NODE].first++;
+            m_combinableInfo[ObjectCode::GEO_NODE].second += dp::checked_cast<unsigned int>(it->second.size());
           }
         }
         for ( map<LODSharedPtr,vector<LODSharedPtr> >::const_iterator it = lods.begin() ; it != lods.end() ; ++it )
         {
           if ( ! it->second.empty() )
           {
-            m_combinableInfo[OC_LOD].first++;
-            m_combinableInfo[OC_LOD].second += dp::checked_cast<unsigned int>(it->second.size());
+            m_combinableInfo[ObjectCode::LOD].first++;
+            m_combinableInfo[ObjectCode::LOD].second += dp::checked_cast<unsigned int>(it->second.size());
           }
         }
         for ( map<TransformSharedPtr,vector<TransformSharedPtr> >::const_iterator it = transforms.begin() ; it != transforms.end() ; ++it )
         {
           if ( ! it->second.empty() )
           {
-            m_combinableInfo[OC_TRANSFORM].first++;
-            m_combinableInfo[OC_TRANSFORM].second += dp::checked_cast<unsigned int>(it->second.size());
+            m_combinableInfo[ObjectCode::TRANSFORM].first++;
+            m_combinableInfo[ObjectCode::TRANSFORM].second += dp::checked_cast<unsigned int>(it->second.size());
           }
         }
       }

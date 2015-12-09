@@ -540,13 +540,13 @@ void  fprintfAlignment( FILE *fh, const char *prefix, Billboard::Alignment ba )
   fprintf( fh, "%s", prefix );
   switch( ba )
   {
-  case Billboard::BA_AXIS :
+  case Billboard::Alignment::AXIS :
     fprintf( fh, "AXIS\n" );
     break;
-  case Billboard::BA_SCREEN :
+  case Billboard::Alignment::SCREEN :
     fprintf( fh, "SCREEN\n" );
     break;
-  case Billboard::BA_VIEWER :
+  case Billboard::Alignment::VIEWER :
     fprintf( fh, "VIEWER\n" );
     break;
   default :

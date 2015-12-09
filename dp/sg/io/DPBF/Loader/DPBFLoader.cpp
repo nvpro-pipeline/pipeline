@@ -127,7 +127,7 @@ DP_STATIC_ASSERT( ( sizeof(NBFTriPatches4_nbf_47) % 8 ) == 0 );
 
 struct NBFMaterial_nbf_a : public NBFObject
 {
-  float3_t    ambientColor;      //!< Specifies the ambient part of the front material color. 
+  float3_t    ambientColor;      //!< Specifies the ambient part of the front material color.
   float3_t    diffuseColor;      //!< Specifies the diffuse part of the front material color.
   float3_t    emissiveColor;     //!< Specifies the emissive part of the front material color.
   float       opacity;           //!< Specifies the opacity of the front material.
@@ -141,7 +141,7 @@ struct NBFScene_nbf_b
   float3_t    backColor;                //!< Specifies the scene's RGB background color used with rendering.
   uint_t      numCameras;               //!< Specifies the number of the scene's NBFCamera objects.
   uint_t      cameras;                  //!< Specifies the file offset to the offsets of the scene's NBFCamera objects.
-  uint_t      numCameraAnimations;      //!< Specifies the number of the scene's NBFTrafoAnimation_nbf_3d objects (camera animations). 
+  uint_t      numCameraAnimations;      //!< Specifies the number of the scene's NBFTrafoAnimation_nbf_3d objects (camera animations).
   uint_t      cameraAnimations;         //!< Specifies the offset to the offsets of the scene's NBFTrafoAnimation_nbf_3d objects (camera animations).
   uint_t      numberOfAnimationFrames;  //!< For animated scenes, this specifies the number of animation frames.
   uint_t      root;                     //!< Specifies the file offset to the scene's root node, which always is of a NBFNode derived type.
@@ -154,7 +154,7 @@ struct NBFScene_nbf_31
   float3_t    backColor;                //!< Specifies the scene's RGB background color used with rendering.
   uint_t      numCameras;               //!< Specifies the number of the scene's NBFCamera objects.
   uint_t      cameras;                  //!< Specifies the file offset to the offsets of the scene's NBFCamera objects.
-  uint_t      numCameraAnimations;      //!< Specifies the number of the scene's NBFTrafoAnimation_nbf_3d objects (camera animations). 
+  uint_t      numCameraAnimations;      //!< Specifies the number of the scene's NBFTrafoAnimation_nbf_3d objects (camera animations).
   uint_t      cameraAnimations;         //!< Specifies the offset to the offsets of the scene's NBFTrafoAnimation_nbf_3d objects (camera animations).
   uint_t      numberOfAnimationFrames;  //!< For animated scenes, this specifies the number of animation frames.
   uint_t      root;                     //!< Specifies the file offset to the scene's root node, which always is of a NBFNode derived type.
@@ -162,7 +162,7 @@ struct NBFScene_nbf_31
 DP_STATIC_ASSERT( ( sizeof(NBFScene_nbf_31) % 4 ) == 0 );
 
 //! The NBFScene structure represents a scene in the context of computer graphics.
-/** A valid NBF file always contains one - and only one - NBFScene object. 
+/** A valid NBF file always contains one - and only one - NBFScene object.
 * The file offset to this NBFScene object is specified within the NBFHeader structure. */
 struct NBFScene_nbf_37
 {
@@ -170,7 +170,7 @@ struct NBFScene_nbf_37
   float4_t    backColor;                //!< Specifies the scene's RGBA background color used with rendering.
   uint_t      numCameras;               //!< Specifies the number of the scene's NBFCamera objects.
   uint_t      cameras;                  //!< Specifies the file offset to the offsets of the scene's NBFCamera objects.
-  uint_t      numCameraAnimations;      //!< Specifies the number of the scene's NBFTrafoAnimation_nbf_3d objects (camera animations). 
+  uint_t      numCameraAnimations;      //!< Specifies the number of the scene's NBFTrafoAnimation_nbf_3d objects (camera animations).
   uint_t      cameraAnimations;         //!< Specifies the offset to the offsets of the scene's NBFTrafoAnimation_nbf_3d objects (camera animations).
   uint_t      numberOfAnimationFrames;  //!< For animated scenes, this specifies the number of animation frames.
   uint_t      root;                     //!< Specifies the file offset to the scene's root node, which always is of a NBFNode derived type.
@@ -178,7 +178,7 @@ struct NBFScene_nbf_37
 DP_STATIC_ASSERT( ( sizeof(NBFScene_nbf_37) % 4 ) == 0 );
 
 //! The NBFScene_nbf_3e structure represents a scene in the context of computer graphics.
-/** A valid NBF file always contains one - and only one - NBFScene_nbf_3e object. 
+/** A valid NBF file always contains one - and only one - NBFScene_nbf_3e object.
 * The file offset to this NBFScene_nbf_3e object is specified within the NBFHeader structure. */
 struct NBFScene_nbf_3e
 {
@@ -187,7 +187,7 @@ struct NBFScene_nbf_3e
   uint_t      backImg;                  //!< Specifies the file offset to the back image object
   uint_t      numCameras;               //!< Specifies the number of the scene's NBFCamera objects.
   uint_t      cameras;                  //!< Specifies the file offset to the offsets of the scene's NBFCamera objects.
-  uint_t      numCameraAnimations;      //!< Specifies the number of the scene's NBFTrafoAnimation objects (camera animations). 
+  uint_t      numCameraAnimations;      //!< Specifies the number of the scene's NBFTrafoAnimation objects (camera animations).
   uint_t      cameraAnimations;         //!< Specifies the offset to the offsets of the scene's NBFTrafoAnimation objects (camera animations).
   uint_t      numberOfAnimationFrames;  //!< For animated scenes, this specifies the number of animation frames.
   uint_t      root;                     //!< Specifies the file offset to the scene's root node, which always is of a NBFNode derived type.
@@ -195,7 +195,7 @@ struct NBFScene_nbf_3e
 DP_STATIC_ASSERT( ( sizeof(NBFScene_nbf_3e) % 4 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFScene_nbf_41 structure represents a scene in the context of computer graphics.
-/** A valid NBF file always contains one - and only one - NBFScene_nbf_41 object. 
+/** A valid NBF file always contains one - and only one - NBFScene_nbf_41 object.
 * The file offset to this NBFScene_nbf_41 object is specified within the NBFHeader structure. */
 struct NBFScene_nbf_41
 {
@@ -204,7 +204,7 @@ struct NBFScene_nbf_41
   uint_t      backImg;                  //!< Specifies the file offset to the back image object
   uint_t      numCameras;               //!< Specifies the number of the scene's NBFCamera objects.
   uint_t      cameras;                  //!< Specifies the file offset to the offsets of the scene's NBFCamera objects.
-  uint_t      numCameraAnimations;      //!< Specifies the number of the scene's NBFTrafoAnimation objects (camera animations). 
+  uint_t      numCameraAnimations;      //!< Specifies the number of the scene's NBFTrafoAnimation objects (camera animations).
   uint_t      cameraAnimations;         //!< Specifies the offset to the offsets of the scene's NBFTrafoAnimation objects (camera animations).
   uint_t      numberOfAnimationFrames;  //!< For animated scenes, this specifies the number of animation frames.
   uint_t      root;                     //!< Specifies the file offset to the scene's root node, which always is of a NBFNode derived type.
@@ -228,9 +228,9 @@ struct NBFFaceAttribute_nbf_b : public NBFObject
 };
 DP_STATIC_ASSERT( ( sizeof(NBFFaceAttribute_nbf_b) % 8 ) == 0 );
 
-struct geometrySet_t_nbf_d 
+struct geometrySet_t_nbf_d
 {
-  uint_t      primitive;        //!< Specifies the file offset to the NBFPrimitive object. 
+  uint_t      primitive;        //!< Specifies the file offset to the NBFPrimitive object.
   uint_t      stateSet;         //!< Specifies the file offset to the corresponding NBFStateSet object.
 };
 DP_STATIC_ASSERT( ( sizeof(geometrySet_t_nbf_d) % 4 ) == 0 );
@@ -248,14 +248,14 @@ struct NBFTextureAttributeItem_nbf_e : public NBFObject
 {
   uint_t        texImg;             //!< Specifies the file offset to the texture image object
   uint_t        texType;            //!< Specifies the texture type. Valid types are TT_AMBIENT, TT_BUMP, TT_DIFFUSE,
-                                    //!< TT_DISPLACEMENT, TT_FILTER, TT_OPACITY, TT_REFLECTION, TT_REFRACTION, 
-                                    //!< TT_SELF_ILLUM, TT_SHININESS, TT_SHINING_STRENGTH, and TT_SPECULAR. 
-  uint_t        texEnvMode;         //!< Specifies the texture environment mode for the actual texture object. 
+                                    //!< TT_DISPLACEMENT, TT_FILTER, TT_OPACITY, TT_REFLECTION, TT_REFRACTION,
+                                    //!< TT_SELF_ILLUM, TT_SHININESS, TT_SHINING_STRENGTH, and TT_SPECULAR.
+  uint_t        texEnvMode;         //!< Specifies the texture environment mode for the actual texture object.
                                     //!< Valid modes are TEM_REPLACE, TEM_MODULATE, TEM_DECAL, TEM_BLEND, and TEM_ADD.
-  uint_t        texWrapS;           //!< Specifies the wrap parameter for texture coordinate s. 
+  uint_t        texWrapS;           //!< Specifies the wrap parameter for texture coordinate s.
   uint_t        texWrapT;           //!< Specifies the wrap parameter for texture coordinate t.
   uint_t        texWrapR;           //!< Specifies the wrap parameter for texture coordinate r.
-  uint_t        minFilter;          //!< Specifies the filter used with minimizing. 
+  uint_t        minFilter;          //!< Specifies the filter used with minimizing.
                                     //!< //!< Valid values are TFM_MIN_NEAREST, TFM_MIN_LINEAR, TFM_MIN_LINEAR_MIPMAP_LINEAR,
                                     //!< TFM_MIN_NEAREST_MIPMAP_NEAREST, TFM_MIN_NEAREST_MIPMAP_LINEAR, TFM_MIN_LINEAR_MIPMAP_NEAREST.
   uint_t        magFilter;          //!< Specifies the filter used with magnifying.
@@ -271,12 +271,12 @@ DP_STATIC_ASSERT( ( sizeof(NBFTextureAttributeItem_nbf_e) % 8 ) == 0 );
 struct NBFTextureAttributeItem_nbf_f : public NBFObject
 {
   uint_t        texImg;             //!< Specifies the file offset to the texture image object
-  uint_t        texEnvMode;         //!< Specifies the texture environment mode for the actual texture object. 
+  uint_t        texEnvMode;         //!< Specifies the texture environment mode for the actual texture object.
   //!< Valid modes are TEM_REPLACE, TEM_MODULATE, TEM_DECAL, TEM_BLEND, and TEM_ADD.
-  uint_t        texWrapS;           //!< Specifies the wrap parameter for texture coordinate s. 
+  uint_t        texWrapS;           //!< Specifies the wrap parameter for texture coordinate s.
   uint_t        texWrapT;           //!< Specifies the wrap parameter for texture coordinate t.
   uint_t        texWrapR;           //!< Specifies the wrap parameter for texture coordinate r.
-  uint_t        minFilter;          //!< Specifies the filter used with minimizing. 
+  uint_t        minFilter;          //!< Specifies the filter used with minimizing.
                                     //!< Valid values are TFM_MIN_NEAREST, TFM_MIN_LINEAR, TFM_MIN_LINEAR_MIPMAP_LINEAR,
                                     //!< TFM_MIN_NEAREST_MIPMAP_NEAREST, TFM_MIN_NEAREST_MIPMAP_LINEAR, TFM_MIN_LINEAR_MIPMAP_NEAREST.
   uint_t        magFilter;          //!< Specifies the filter used with magnifying.
@@ -291,12 +291,12 @@ DP_STATIC_ASSERT( ( sizeof(NBFTextureAttributeItem_nbf_f) % 8 ) == 0 );   //!< t
 struct NBFTextureAttributeItem_nbf_12 : public NBFObject
 {
   uint_t        texImg;             //!< Specifies the file offset to the texture image object
-  uint_t        texEnvMode;         //!< Specifies the texture environment mode for the actual texture object. 
+  uint_t        texEnvMode;         //!< Specifies the texture environment mode for the actual texture object.
   //!< Valid modes are TEM_REPLACE, TEM_MODULATE, TEM_DECAL, TEM_BLEND, and TEM_ADD.
-  uint_t        texWrapS;           //!< Specifies the wrap parameter for texture coordinate s. 
+  uint_t        texWrapS;           //!< Specifies the wrap parameter for texture coordinate s.
   uint_t        texWrapT;           //!< Specifies the wrap parameter for texture coordinate t.
   uint_t        texWrapR;           //!< Specifies the wrap parameter for texture coordinate r.
-  uint_t        minFilter;          //!< Specifies the filter used with minimizing. 
+  uint_t        minFilter;          //!< Specifies the filter used with minimizing.
                                     //!< Valid values are TFM_MIN_NEAREST, TFM_MIN_LINEAR, TFM_MIN_LINEAR_MIPMAP_LINEAR,
                                     //!< TFM_MIN_NEAREST_MIPMAP_NEAREST, TFM_MIN_NEAREST_MIPMAP_LINEAR, TFM_MIN_LINEAR_MIPMAP_NEAREST.
   uint_t        magFilter;          //!< Specifies the filter used with magnifying.
@@ -312,12 +312,12 @@ struct NBFTextureAttributeItem_nbf_20 : public NBFObject
 {
   uint_t        texImg;             //!< Specifies the file offset to the texture image object
   float4_t      texEnvColor;        //!< Specifies the texture environment color.
-  uint_t        texEnvMode;         //!< Specifies the texture environment mode for the actual texture object. 
+  uint_t        texEnvMode;         //!< Specifies the texture environment mode for the actual texture object.
                                     //!< Valid modes are TEM_REPLACE, TEM_MODULATE, TEM_DECAL, TEM_BLEND, and TEM_ADD.
-  uint_t        texWrapS;           //!< Specifies the wrap parameter for texture coordinate s. 
+  uint_t        texWrapS;           //!< Specifies the wrap parameter for texture coordinate s.
   uint_t        texWrapT;           //!< Specifies the wrap parameter for texture coordinate t.
   uint_t        texWrapR;           //!< Specifies the wrap parameter for texture coordinate r.
-  uint_t        minFilter;          //!< Specifies the filter used with minimizing. 
+  uint_t        minFilter;          //!< Specifies the filter used with minimizing.
                                     //!< Valid values are TFM_MIN_NEAREST, TFM_MIN_LINEAR, TFM_MIN_LINEAR_MIPMAP_LINEAR,
                                     //!< TFM_MIN_NEAREST_MIPMAP_NEAREST, TFM_MIN_NEAREST_MIPMAP_LINEAR, TFM_MIN_LINEAR_MIPMAP_NEAREST.
   uint_t        magFilter;          //!< Specifies the filter used with magnifying.
@@ -333,13 +333,13 @@ struct NBFTextureAttributeItem_nbf_36 : public NBFObject
 {
   uint_t        texImg;             //!< Specifies the file offset to the texture image object
   float4_t      texEnvColor;        //!< Specifies the texture environment color.
-  uint_t        texEnvMode;         //!< Specifies the texture environment mode for the actual texture object. 
+  uint_t        texEnvMode;         //!< Specifies the texture environment mode for the actual texture object.
   //!< Valid modes are TEM_REPLACE, TEM_MODULATE, TEM_DECAL, TEM_BLEND, and TEM_ADD.
-  uint_t        texEnvScale;        //!< Specifies the texture environment scale used with rasterization 
-  uint_t        texWrapS;           //!< Specifies the wrap parameter for texture coordinate s. 
+  uint_t        texEnvScale;        //!< Specifies the texture environment scale used with rasterization
+  uint_t        texWrapS;           //!< Specifies the wrap parameter for texture coordinate s.
   uint_t        texWrapT;           //!< Specifies the wrap parameter for texture coordinate t.
   uint_t        texWrapR;           //!< Specifies the wrap parameter for texture coordinate r.
-  uint_t        minFilter;          //!< Specifies the filter used with minimizing. 
+  uint_t        minFilter;          //!< Specifies the filter used with minimizing.
                                     //!< Valid values are TFM_MIN_NEAREST, TFM_MIN_LINEAR, TFM_MIN_LINEAR_MIPMAP_LINEAR,
                                     //!< TFM_MIN_NEAREST_MIPMAP_NEAREST, TFM_MIN_NEAREST_MIPMAP_LINEAR, TFM_MIN_LINEAR_MIPMAP_NEAREST.
   uint_t        magFilter;          //!< Specifies the filter used with magnifying.
@@ -348,7 +348,7 @@ struct NBFTextureAttributeItem_nbf_36 : public NBFObject
   trafo_t       trafo;              //!< Specifies the texture transformation
   uint_t        texGenMode[4];      //!< Specifies the texture coordinate generation modes
   float4_t      texGenPlane[2][4];  //!< Specifies the texture coordinate generation planes
-  PADDING(4);   //!< Padding bits to ensure the size of NBFTextureAttributeItem is a multiple of 8, regardless of packing.        
+  PADDING(4);   //!< Padding bits to ensure the size of NBFTextureAttributeItem is a multiple of 8, regardless of packing.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFTextureAttributeItem_nbf_36) % 8 ) == 0 );
 
@@ -357,13 +357,13 @@ struct NBFTextureAttributeItem_nbf_4b : public NBFObject
   uint_t        texImg;             //!< Specifies the file offset to the texture image object
   uint_t        texTarget;          //!< Specifies the texture target
   float4_t      texEnvColor;        //!< Specifies the texture environment color.
-  uint_t        texEnvMode;         //!< Specifies the texture environment mode for the actual texture object. 
+  uint_t        texEnvMode;         //!< Specifies the texture environment mode for the actual texture object.
   //!< Valid modes are TEM_REPLACE, TEM_MODULATE, TEM_DECAL, TEM_BLEND, and TEM_ADD.
-  uint_t        texEnvScale;        //!< Specifies the texture environment scale used with rasterization 
-  uint_t        texWrapS;           //!< Specifies the wrap parameter for texture coordinate s. 
+  uint_t        texEnvScale;        //!< Specifies the texture environment scale used with rasterization
+  uint_t        texWrapS;           //!< Specifies the wrap parameter for texture coordinate s.
   uint_t        texWrapT;           //!< Specifies the wrap parameter for texture coordinate t.
   uint_t        texWrapR;           //!< Specifies the wrap parameter for texture coordinate r.
-  uint_t        minFilter;          //!< Specifies the filter used with minimizing. 
+  uint_t        minFilter;          //!< Specifies the filter used with minimizing.
                                     //!< Valid values are TFM_MIN_NEAREST, TFM_MIN_LINEAR, TFM_MIN_LINEAR_MIPMAP_LINEAR,
                                     //!< TFM_MIN_NEAREST_MIPMAP_NEAREST, TFM_MIN_NEAREST_MIPMAP_LINEAR, TFM_MIN_LINEAR_MIPMAP_NEAREST.
   uint_t        magFilter;          //!< Specifies the filter used with magnifying.
@@ -386,7 +386,7 @@ DP_STATIC_ASSERT( ( sizeof(NBFGroup_nbf_11) % 8 ) == 0 );
 struct NBFTransform_nbf_f : public NBFGroup_nbf_11
 {
   trafo_t_nbf_f trafo;  //!< Specifies the transformation.
-  PADDING(4);        //!< Padding bits to ensure the size of NBFTransform is a multiple of 8, regardless of packing.    
+  PADDING(4);        //!< Padding bits to ensure the size of NBFTransform is a multiple of 8, regardless of packing.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFTransform_nbf_f) % 8 ) == 0 );   //!< test size of struct
 
@@ -394,7 +394,7 @@ struct NBFAnimatedTransform_nbf_f : public NBFTransform_nbf_f
 {
   uint_t      animation;          //!< Specifies the file offset to the NBFTrafoAnimation_nbf_3d object
   //!< to be applied to the transform group node.
-  PADDING(4);        //!< Padding bits to ensure the size of NBFAnimatedTransform_nbf_f is a multiple of 8, regardless of packing.    
+  PADDING(4);        //!< Padding bits to ensure the size of NBFAnimatedTransform_nbf_f is a multiple of 8, regardless of packing.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFAnimatedTransform_nbf_f) % 8 ) == 0 );   //!< test size of struct
 
@@ -417,7 +417,7 @@ struct NBFBillboard_nbf_11: public NBFGroup_nbf_11
 {
   float3_t  rotationAxis;
   ubyte_t   viewerAligned;
-  PADDING(3);        //!< Padding bits to ensure the size of NBFBillboard is a multiple of 8, regardless of packing.    
+  PADDING(3);        //!< Padding bits to ensure the size of NBFBillboard is a multiple of 8, regardless of packing.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFBillboard_nbf_11) % 8 ) == 0 );
 
@@ -425,9 +425,9 @@ struct NBFLOD_nbf_11 : public NBFGroup_nbf_11
 {
   float3_t    center;             //!< Specifies the center point used for distance calculations.
   uint_t      numRanges;          //!< Specifies the number of contained ranges.
-  uint_t      ranges;             //!< Specifies the file offset to the ranges. 
+  uint_t      ranges;             //!< Specifies the file offset to the ranges.
   //!< Ranges are stored as 32-bit floating point numbers.
-  PADDING(4);        //!< Padding bits to ensure the size of NBFLOD is a multiple of 8, regardless of packing.    
+  PADDING(4);        //!< Padding bits to ensure the size of NBFLOD is a multiple of 8, regardless of packing.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFLOD_nbf_11) % 8 ) == 0 );
 
@@ -442,7 +442,7 @@ DP_STATIC_ASSERT( ( sizeof(NBFSwitch_nbf_11) % 8 ) == 0 );
 struct NBFTransform_nbf_11 : public NBFGroup_nbf_11
 {
   trafo_t             trafo;
-  PADDING(4);        //!< Padding bits to ensure the size of NBFTransform is a multiple of 8, regardless of packing.    
+  PADDING(4);        //!< Padding bits to ensure the size of NBFTransform is a multiple of 8, regardless of packing.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFTransform_nbf_11) % 8 ) == 0 );
 
@@ -450,7 +450,7 @@ struct NBFAnimatedTransform_nbf_11 : public NBFTransform_nbf_11
 {
   uint_t      animation;          //!< Specifies the file offset to the NBFTrafoAnimation_nbf_3d object
   //!< to be applied to the transform group node.
-  PADDING(4);        //!< Padding bits to ensure the size of NBFAnimatedTransform_nbf_11 is a multiple of 8, regardless of packing.    
+  PADDING(4);        //!< Padding bits to ensure the size of NBFAnimatedTransform_nbf_11 is a multiple of 8, regardless of packing.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFAnimatedTransform_nbf_11) % 8 ) == 0 );
 
@@ -481,7 +481,7 @@ struct NBFPointLight_nbf_12 : public NBFLightSource_nbf_12
   //!< The x-component of the vector specifies the constant term of the attenuation,
   //!< the y-component of the vector specifies the linear term of the attenuation, and
   //!< the z-component of the vector specifies the quadratic term of the attenuation.
-};                        
+};
 DP_STATIC_ASSERT( ( sizeof(NBFPointLight_nbf_12) % 8 ) == 0 );
 
 struct NBFSpotLight_nbf_12 : public NBFLightSource_nbf_12
@@ -495,7 +495,7 @@ struct NBFSpotLight_nbf_12 : public NBFLightSource_nbf_12
   float    cutoffAngle;     //!< Specifies the angle between the axis of the cone, the light is emitted to, and
   //!< a ray along the edge of the cone.
   float    falloffExponent; //!< Controls the intensity distribution inside the cone, the light is mitted to.
-  PADDING(4);               //!< Padding bits to ensure the size of NBFSpotLight is a multiple of 8, regardless of packing.    
+  PADDING(4);               //!< Padding bits to ensure the size of NBFSpotLight is a multiple of 8, regardless of packing.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFSpotLight_nbf_12) % 8 ) == 0 );
 
@@ -513,9 +513,9 @@ struct NBFLOD_nbf_12 : public NBFGroup_nbf_12
 {
   float3_t    center;             //!< Specifies the center point used for distance calculations.
   uint_t      numRanges;          //!< Specifies the number of contained ranges.
-  uint_t      ranges;             //!< Specifies the file offset to the ranges. 
+  uint_t      ranges;             //!< Specifies the file offset to the ranges.
   //!< Ranges are stored as 32-bit floating point numbers.
-  PADDING(4);        //!< Padding bits to ensure the size of NBFLOD is a multiple of 8, regardless of packing.    
+  PADDING(4);        //!< Padding bits to ensure the size of NBFLOD is a multiple of 8, regardless of packing.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFLOD_nbf_12) % 8 ) == 0 );
 
@@ -539,14 +539,14 @@ struct NBFBillboard_nbf_12 : public NBFGroup_nbf_12
 {
   float3_t  rotationAxis;
   ubyte_t   viewerAligned;
-  PADDING(3);        //!< Padding bits to ensure the size of NBFBillboard is a multiple of 8, regardless of packing.    
+  PADDING(3);        //!< Padding bits to ensure the size of NBFBillboard is a multiple of 8, regardless of packing.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFBillboard_nbf_12) % 8 ) == 0 );
 
 struct NBFTransform_nbf_12 : public NBFGroup_nbf_12
 {
   trafo_t             trafo;
-  PADDING(4);        //!< Padding bits to ensure the size of NBFTransform is a multiple of 8, regardless of packing.    
+  PADDING(4);        //!< Padding bits to ensure the size of NBFTransform is a multiple of 8, regardless of packing.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFTransform_nbf_12) % 8 ) == 0 );
 
@@ -554,77 +554,77 @@ struct NBFAnimatedTransform_nbf_12 : public NBFTransform_nbf_12
 {
   uint_t      animation;          //!< Specifies the file offset to the NBFTrafoAnimation_nbf_3d object
   //!< to be applied to the transform group node.
-  PADDING(4);        //!< Padding bits to ensure the size of NBFAnimatedTransform_nbf_12 is a multiple of 8, regardless of packing.    
+  PADDING(4);        //!< Padding bits to ensure the size of NBFAnimatedTransform_nbf_12 is a multiple of 8, regardless of packing.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFAnimatedTransform_nbf_12) % 8 ) == 0 );
 
 struct NBFVertexAttributeSet_nbf_38 : public NBFObject
 {
-  uint_t      numVertices;        //!< Specifies the number of contained vertices. 
+  uint_t      numVertices;        //!< Specifies the number of contained vertices.
   uint_t      vertices;           //!< Specifies the file offset to the vertices. Vertices are stored as float3_t.
   uint_t      numNormals;         //!< Specifies the number of contained normals.
   uint_t      normals;            //!< Specifies the file offset to the normals. Normals are stored as float3_t.
   uint_t      numTexCoordsSets;   //!< Specifies the number of contained texture coordinate sets.
-  uint_t      texCoordsSets;      //!< Specifies the file offset to the texture coordinate sets. 
+  uint_t      texCoordsSets;      //!< Specifies the file offset to the texture coordinate sets.
   //!< Texture coordinate sets are stored using the texCoordSet_t type.
   uint_t      numColors;          //!< Specifies the number of contained primary colors.
   uint_t      colorDim;           //!< Specifies the dimension, in terms of float, used for the primary colors.
-  //!< Colors can be either three or four dimensional. 
+  //!< Colors can be either three or four dimensional.
   uint_t      colors;             //!< Specifies the file offset to the primary colors. In conformity to the color's dimension,
   //!< colors are stored as float3_t or float4_t respectively.
   uint_t      numSecondaryColors; //!< Specifies the number of contained secondary colors.
   uint_t      secondaryColorDim;  //!< Specifies the dimension, in terms of float, used for the secondary colors.
-  //!< Colors can be either three or four dimensional. 
+  //!< Colors can be either three or four dimensional.
   uint_t      secondaryColors;    //!< Specifies the file offset to the secondary colors. In conformity to the color's dimension,
   //!< colors are stored as float3_t or float4_t respectively.
   uint_t      numFogCoords;       //!< Specifies the number of contained fog coordinates.
-  uint_t      fogCoords;          //!< Specifies the file offset to the fog coordinates. Fog coordinates always are one 
+  uint_t      fogCoords;          //!< Specifies the file offset to the fog coordinates. Fog coordinates always are one
   //!< dimensional, and are stored as 32-bit floating point values.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFVertexAttributeSet_nbf_38) % 8 ) == 0 );
 
 struct NBFViewState_nbf_39
 {
-  uint_t      objectCode;           //!< Specifies the object code of the actual object. The object code is unique per object type! 
+  uint_t      objectCode;           //!< Specifies the object code of the actual object. The object code is unique per object type!
   uint_t      camera;               //!< Specifies the offset to the NBFCamera object to be used for viewing.
   ubyte_t     isJitter;             //!< Indicates whether the view is in jitter mode.
   ubyte_t     isStereo;             //!< Indicates whether the view is in stereo mode.
   ubyte_t     isStereoAutomatic;    //!< Indicates whether eye distance is automatically adjusted in stereo mode.
   PADDING(1);                       //!< Padding bits to ensure offset of jitters is on a 4-byte boundary, regardless of packing.
-  uint_t      numJitters;           //!< Specifies the number of jitter values available.  
-  uint_t      jitters;              //!< Specifies the offset to the float2_t jitter values used with jitter mode on. 
+  uint_t      numJitters;           //!< Specifies the number of jitter values available.
+  uint_t      jitters;              //!< Specifies the offset to the float2_t jitter values used with jitter mode on.
   float       stereoAutomaticFactor;//!< Specifies the automatic eye distance adjustment factor in stereo mode.
   float       stereoEyeDistance;    //!< Specifies the stereo eye distance used if the view is in stereo mode.
   float       targetDistance;       //!< Specifies the target distance to the projection plane.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFViewState_nbf_39) % 4 ) == 0 );
 
-/** A NBFAnimatedIndependents_nbf_3a is an abstract topology class derived from NBFIndependentPrimitiveSet. 
-* The object code for a NBFAnimatedIndependents_nbf_3a is NBF_ANIMATED_QUADS and NBF_ANIMATED_TRIANGLES. */
+/** A NBFAnimatedIndependents_nbf_3a is an abstract topology class derived from NBFIndependentPrimitiveSet.
+* The object code for a NBFAnimatedIndependents_nbf_3a is DPBFCode::ANIMATED_QUADS and DPBFCode::ANIMATED_TRIANGLES. */
 struct NBFAnimatedIndependents_nbf_3a : public NBFIndependentPrimitiveSet
 {
-  uint_t      animation;          //!< Specifies the file offset to the NBFVNVectorAnimation object 
+  uint_t      animation;          //!< Specifies the file offset to the NBFVNVectorAnimation object
                                   //!< to be applied to the independent faces.
-  PADDING(4);        //!< Padding bits to ensure the size of NBFAnimatedIndependents_nbf_3a is a multiple of 8, regardless of packing.    
+  PADDING(4);        //!< Padding bits to ensure the size of NBFAnimatedIndependents_nbf_3a is a multiple of 8, regardless of packing.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFAnimatedIndependents_nbf_3a) % 8 ) == 0 );
 
 //! The NBFVNVectorAnimation_nbf_3a represents an animation that will be applied to VNVector objects.
-/** A NBFVNVectorAnimation_nbf_3a serves as base class only and needs to be considered in conjunction 
+/** A NBFVNVectorAnimation_nbf_3a serves as base class only and needs to be considered in conjunction
 * with either NBFFramedAnimation_nbf_a or NBFInterpolatedAnimation_nbf_3a.\n
-* Concrete object codes valid for a NBFVNVectorAnimation_nbf_3a are NBF_FRAMED_VNVECTOR_ANIMATION, 
-* and NBF_LINEAR_INTERPOLATED_VNVECTOR_ANIMATION. Further concrete object codes valid for
+* Concrete object codes valid for a NBFVNVectorAnimation_nbf_3a are DPBFCode::FRAMED_VNVECTOR_ANIMATION,
+* and DPBFCode::LINEAR_INTERPOLATED_VNVECTOR_ANIMATION. Further concrete object codes valid for
 * NBFVNVectorAnimation_nbf_3a objects are subject to future extensions of the NBF format. */
 struct NBFVNVectorAnimation_nbf_3a : public NBFObject
 {
-  uint_t      numVertices;        //!< Specifies the number of vertices per vertex set. Each vertex set of 
+  uint_t      numVertices;        //!< Specifies the number of vertices per vertex set. Each vertex set of
                                   //!< the actual animation is specified to have the same count of vertices.
-  uint_t      vertexSets;         //!< Specifies the file offset to the pre-transformed vertex sets for this animation. 
+  uint_t      vertexSets;         //!< Specifies the file offset to the pre-transformed vertex sets for this animation.
                                   //!< The vertex sets are stored adjoined to each other in contiguous memory.\n
                                   //!< The actual number of vertex sets, as well as normal sets, is specified by
                                   //!< the corresponding animation type, which is either NBFFramedAnimation_nbf_a or
                                   //!< NBFInterpolatedAnimation_nbf_3a.
-  uint_t      numNormals;         //!< Specifies the number of normals per normal set. Each normal set of 
+  uint_t      numNormals;         //!< Specifies the number of normals per normal set. Each normal set of
                                   //!< the actual animation is specified to have the same count of normals.
   uint_t      normalSets;         //!< Specifies the file offset to the pre-transformed normal sets for this animation.
                                   //!< The normal sets are stored adjoined to each other in contiguous memory.\n
@@ -637,39 +637,39 @@ DP_STATIC_ASSERT( ( sizeof(NBFVNVectorAnimation_nbf_3a) % 8 ) == 0 );
 //! The NBFFramedAnimation_nbf_3c structure represents a framed animation.
 /** A NBFFramedAnimation_nbf_3c serves as base class only and needs to be considered in conjunction
   * with either NBFIndexAnimation_nbf_3d, NBFTrafoAnimation_nbf_3d or NBFVertexAttributeAnimation_nbf_3d.\n
-  * Concrete object codes valid for a NBFFramedAnimation_nbf_3c are NBF_FRAMED_INDEX_ANIMATION_DESCRIPTION,
-  * NBF_FRAMED_TRAFO_ANIMATION_DESCRIPTION, and NBF_FRAMED_VERTEX_ATTRIBUTE_ANIMATION_DESCRIPTION. Further concrete object
+  * Concrete object codes valid for a NBFFramedAnimation_nbf_3c are DPBFCode::FRAMED_INDEX_ANIMATION_DESCRIPTION,
+  * DPBFCode::FRAMED_TRAFO_ANIMATION_DESCRIPTION, and DPBFCode::FRAMED_VERTEX_ATTRIBUTE_ANIMATION_DESCRIPTION. Further concrete object
   * codes valid for NBFFramedAnimation_nbf_3c objects are subject to future extensions of the NBF format. */
 struct NBFFramedAnimation_nbf_3c
 {
-  uint_t      numSteps;           //!< Specifies the number of animation steps.\n 
+  uint_t      numSteps;           //!< Specifies the number of animation steps.\n
                                   //!< In conjunction with a NBFIndexAnimation_nbf_3d, this corresponds to the number of
                                   //!< uint_t objects stored with a NBFTrafoAnimation_nbf_3d.\n
                                   //!< In conjunction with a NBFTrafoAnimation_nbf_3d, this corresponds to the number of
                                   //!< trafo_t objects stored with a NBFTrafoAnimation_nbf_3d.\n
                                   //!< In conjunction with a NBFVertexAttributeAnimation_nbf_3d, this corresponds to the number of
                                   //!< VertexAttribute sets stored with a NBFVertexAttributeAnimation_nbf_3d.
-  PADDING(4);         //!< Padding bits to ensure the size of NBFFramedAnimation_nbf_3c is a multiple of 8, regardless of packing.    
+  PADDING(4);         //!< Padding bits to ensure the size of NBFFramedAnimation_nbf_3c is a multiple of 8, regardless of packing.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFFramedAnimation_nbf_3c) % 4 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFIndexAnimation_nbf_3d represents an animation that will be applied to uint_t objects.
 /** A NBFIndexAnimation_nbf_3d serves as base class only and needs to be considered in conjunction with
   * NBFFramedAnimationDescription.\n
-  * Valid object code for a NBFIndexAnimation_nbf_3d is NBF_FRAMED_INDEX_ANIMATION_DESCRIPTION. Further concrete object
+  * Valid object code for a NBFIndexAnimation_nbf_3d is DPBFCode::FRAMED_INDEX_ANIMATION_DESCRIPTION. Further concrete object
   * codes valid for NBFIndexAnimation_nbf_3d objects are subject to future extensions of the NBF format. */
 struct NBFIndexAnimation_nbf_3d : public NBFObject
 {
   uint_t      indices;             //!< Specifies the file offset to the uint_t objects the animation will be applied to.
                                    //!< The actual number of uint_t objects is specified by the corresponding animation
                                    //!< type, which is NBFFramedAnimationDescription.
-  PADDING(4);        //!< Padding bits to ensure the size of NBFIndexAnimation_nbf_3d is a multiple of 8, regardless of packing.    
+  PADDING(4);        //!< Padding bits to ensure the size of NBFIndexAnimation_nbf_3d is a multiple of 8, regardless of packing.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFIndexAnimation_nbf_3d) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFFramedIndexAnimation_nbf_3c structure represents a framed animation that will be applied to uint_t objects.
 /** A NBFFramedIndexAnimation_nbf_3c is a concrete animation type. It publicly inherits from NBFIndexAnimation_nbf_3d and
-  * NBFFramedAnimation_nbf_3c. The object code for a NBFFramedIndexAnimation_nbf_3c is NBF_FRAMED_INDEX_ANIMATION_DESCRIPTION. */ 
+  * NBFFramedAnimation_nbf_3c. The object code for a NBFFramedIndexAnimation_nbf_3c is DPBFCode::FRAMED_INDEX_ANIMATION_DESCRIPTION. */
 struct NBFFramedIndexAnimation_nbf_3c : public NBFIndexAnimation_nbf_3d
                                       , public NBFFramedAnimation_nbf_3c
 {
@@ -679,21 +679,21 @@ DP_STATIC_ASSERT( ( sizeof(NBFFramedIndexAnimation_nbf_3c) % 8 ) == 0 );   //!< 
 //! The NBFTrafoAnimation_nbf_3d represents an animation that will be applied to trafo_t objects.
 /** A NBFTrafoAnimation_nbf_3d serves as base class only and needs to be considered in conjunction
 * with either NBFFramedAnimationDescription or NBFKeyFramedAnimationDescription.\n
-* Valid object codes for a NBFTrafoAnimation_nbf_3d are NBF_FRAMED_TRAFO_ANIMATION_DESCRIPTION, 
-* and NBF_LINEAR_INTERPOLATED_TRAFO_ANIMATION_DESCRIPTION. Further concrete object codes valid for
+* Valid object codes for a NBFTrafoAnimation_nbf_3d are DPBFCode::FRAMED_TRAFO_ANIMATION_DESCRIPTION,
+* and DPBFCode::LINEAR_INTERPOLATED_TRAFO_ANIMATION_DESCRIPTION. Further concrete object codes valid for
 * NBFTrafoAnimation_nbf_3d objects are subject to future extensions of the NBF format. */
 struct NBFTrafoAnimation_nbf_3d : public NBFObject
 {
   uint_t      trafos;             //!< Specifies the file offset to the trafo_t objects the animation will be applied to.
   //!< The actual number of trafo_t objects is specified by the corresponding animation
   //!< type, which is either NBFFramedAnimationDescription or NBFKeyFramedAnimationDescription.
-  PADDING(4);        //!< Padding bits to ensure the size of NBFTrafoAnimation_nbf_3d is a multiple of 8, regardless of packing.    
+  PADDING(4);        //!< Padding bits to ensure the size of NBFTrafoAnimation_nbf_3d is a multiple of 8, regardless of packing.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFTrafoAnimation_nbf_3d) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFFramedTrafoAnimation_nbf_3c structure represents a framed animation that will be applied to trafo_t objects.
 /** A NBFFramedTrafoAnimation_nbf_3c is a concrete animation type. It publicly inherits from NBFTrafoAnimation_nbf_3d and
-  * NBFFramedAnimation_nbf_3c. The object code for a NBFFramedTrafoAnimation_nbf_3c is NBF_FRAMED_TRAFO_ANIMATION_DESCRIPTION. */ 
+  * NBFFramedAnimation_nbf_3c. The object code for a NBFFramedTrafoAnimation_nbf_3c is DPBFCode::FRAMED_TRAFO_ANIMATION_DESCRIPTION. */
 struct NBFFramedTrafoAnimation_nbf_3c : public NBFTrafoAnimation_nbf_3d
                                       , public NBFFramedAnimation_nbf_3c
 {
@@ -703,8 +703,8 @@ DP_STATIC_ASSERT( ( sizeof(NBFFramedTrafoAnimation_nbf_3c) % 8 ) == 0 );   //!< 
 //! The NBFVertexAttributeAnimation_nbf_3d represents an animation that will be applied to vertexAttrib_t objects.
 /** A NBFVertexAttributeAnimation_nbf_3d serves as base class only and needs to be considered in conjunction
   * with either NBFFramedAnimationDescription or NBFKeyFramedAnimationDescription.\n
-  * Valid object codes for a NBFVertexAttributeAnimation_nbf_3d are NBF_FRAMED_VERTEX_ATTRIBUTE_ANIMATION_DESCRIPTION, 
-  * and NBF_LINEAR_INTERPOLATED_VERTEX_ATTRIBUTE_ANIMATION_DESCRIPTION. Further concrete object codes valid for
+  * Valid object codes for a NBFVertexAttributeAnimation_nbf_3d are DPBFCode::FRAMED_VERTEX_ATTRIBUTE_ANIMATION_DESCRIPTION,
+  * and DPBFCode::LINEAR_INTERPOLATED_VERTEX_ATTRIBUTE_ANIMATION_DESCRIPTION. Further concrete object codes valid for
   * NBFVertexAttributeAnimation_nbf_3d objects are subject to future extensions of the NBF format. */
 struct NBFVertexAttributeAnimation_nbf_3d : public NBFObject
 {
@@ -717,7 +717,7 @@ DP_STATIC_ASSERT( ( sizeof(NBFVertexAttributeAnimation_nbf_3d) % 8 ) == 0 );   /
 
 //! The NBFFramedVertexAttributeAnimation_nbf_3c structure represents a framed animation that will be applied to vertexAttrib_t objects.
 /** A NBFFramedVertexAttributeAnimation_nbf_3c is a concrete animation type. It publicly inherits from NBFVertexAttributeAnimation_nbf_3d and
-* NBFFramedAnimation_nbf_3c. The object code for a NBFFramedVertexAttributeAnimation_nbf_3c is NBF_FRAMED_VERTEX_ATTRIBUTE_ANIMATION_DESCRIPTION. */ 
+* NBFFramedAnimation_nbf_3c. The object code for a NBFFramedVertexAttributeAnimation_nbf_3c is DPBFCode::FRAMED_VERTEX_ATTRIBUTE_ANIMATION_DESCRIPTION. */
 struct NBFFramedVertexAttributeAnimation_nbf_3c : public NBFVertexAttributeAnimation_nbf_3d
                                                 , public NBFFramedAnimation_nbf_3c
 {
@@ -728,7 +728,7 @@ DP_STATIC_ASSERT( ( sizeof(NBFFramedVertexAttributeAnimation_nbf_3c) % 8 ) == 0 
 /** A NBFInterpolatedAnimation_nbf_3c serves as base class only and needs to be considered in conjunction
   * with either NBFTrafoAnimation_nbf_3d or NBFVertexAttributeAnimation_nbf_3d.\n
   * Concrete object codes valid for a NBFInterpolatedAnimation_nbf_3c are
-  * NBF_LINEAR_INTERPOLATED_TRAFO_ANIMATION_DESCRIPTION and NBF_LINEAR_INTERPOLATED_VERTEX_ATTRIBUTE_ANIMATION_DESCRIPTION.
+  * DPBFCode::LINEAR_INTERPOLATED_TRAFO_ANIMATION_DESCRIPTION and DPBFCode::LINEAR_INTERPOLATED_VERTEX_ATTRIBUTE_ANIMATION_DESCRIPTION.
   * Further concrete object codes valid for NBFInterpolatedAnimation_nbf_3c objects are subject to future
   * extensions of the NBF format. */
 struct NBFInterpolatedAnimation_nbf_3c
@@ -741,8 +741,8 @@ DP_STATIC_ASSERT( ( sizeof(NBFInterpolatedAnimation_nbf_3c) % 4 ) == 0 );    //!
 
 //! The NBFInterpolatedTrafoAnimation_nbf_3c structure represents a interpolated animation that will be applied to trafo_t objects.
 /** A NBFInterpolatedTrafoAnimation_nbf_3c is a concrete animation type. It publicly inherits from NBFTrafoAnimation_nbf_3d and
-  * NBFInterpolatedAnimation_nbf_3c.\n 
-  * The object code valid for a NBFInterpolatedTrafoAnimation_nbf_3c is NBF_LINEAR_INTERPOLATED_TRAFO_ANIMATION_DESCRIPTION. Further object codes
+  * NBFInterpolatedAnimation_nbf_3c.\n
+  * The object code valid for a NBFInterpolatedTrafoAnimation_nbf_3c is DPBFCode::LINEAR_INTERPOLATED_TRAFO_ANIMATION_DESCRIPTION. Further object codes
   * valid for NBFInterpolatedTrafoAnimation_nbf_3c objects are subject to future extensions of the NBF format. */
 struct NBFInterpolatedTrafoAnimation_nbf_3c : public NBFTrafoAnimation_nbf_3d
                                             , public NBFInterpolatedAnimation_nbf_3c
@@ -752,8 +752,8 @@ DP_STATIC_ASSERT( ( sizeof(NBFInterpolatedTrafoAnimation_nbf_3c) % 8 ) == 0 );  
 
 //! The NBFInterpolatedVertexAttributeAnimation_nbf_3c structure represents a interpolated animation that will be applied to vertexAttrib_t objects.
 /** A NBFInterpolatedVertexAttributeAnimation_nbf_3c is a concrete animation type. It publicly inherits from NBFVertexAttributeAnimation_nbf_3d and
-  * NBFInterpolatedAnimation_nbf_3c.\n 
-  * The object code valid for a NBFInterpolatedVertexAttributeAnimation_nbf_3c is NBF_LINEAR_INTERPOLATED_VERTEX_ATTRIBUTE_ANIMATION_DESCRIPTION. Further object codes
+  * NBFInterpolatedAnimation_nbf_3c.\n
+  * The object code valid for a NBFInterpolatedVertexAttributeAnimation_nbf_3c is DPBFCode::LINEAR_INTERPOLATED_VERTEX_ATTRIBUTE_ANIMATION_DESCRIPTION. Further object codes
   * valid for NBFInterpolatedVertexAttributeAnimation_nbf_3c objects are subject to future extensions of the NBF format. */
 struct NBFInterpolatedVertexAttributeAnimation_nbf_3c : public NBFVertexAttributeAnimation_nbf_3d
                                                       , public NBFInterpolatedAnimation_nbf_3c
@@ -763,7 +763,7 @@ DP_STATIC_ASSERT( ( sizeof(NBFInterpolatedVertexAttributeAnimation_nbf_3c) % 8 )
 
 //! The NBFFramedVNVectorAnimation_nbf_3a structure represents a framed animation that will be applied to VNVector objects.
 /** A NBFFramedVNVectorAnimation_nbf_3a is a concrete animation type. It publicly inherits from NBFVNVectorAnimation and
-* NBFFramedAnimation_nbf_3a. The object code for a NBFFramedVNVectorAnimation_nbf_3a is NBF_FRAMED_VNVECTOR_ANIMATION. */ 
+* NBFFramedAnimation_nbf_3a. The object code for a NBFFramedVNVectorAnimation_nbf_3a is DPBFCode::FRAMED_VNVECTOR_ANIMATION. */
 struct NBFFramedVNVectorAnimation_nbf_3a : public NBFVNVectorAnimation_nbf_3a
                                          , public NBFFramedAnimation_nbf_3c
 {
@@ -772,8 +772,8 @@ DP_STATIC_ASSERT( ( sizeof(NBFFramedVNVectorAnimation_nbf_3a) % 8 ) == 0 );
 
 //! The NBFInterpolatedVNVectorAnimation_nbf_3a structure represents a interpolated animation that will be applied to VNVector objects.
 /** A NBFInterpolatedVNVectorAnimation_nbf_3a is a concrete animation type. It publicly inherits from NBFVNVectorAnimation and
-* NBFInterpolatedAnimation_nbf_3a.\n 
-* The object code valid for a NBFInterpolatedVNVectorAnimation_nbf_3a is NBF_LINEAR_INTERPOLATED_VNVECTOR_ANIMATION. Further object codes
+* NBFInterpolatedAnimation_nbf_3a.\n
+* The object code valid for a NBFInterpolatedVNVectorAnimation_nbf_3a is DPBFCode::LINEAR_INTERPOLATED_VNVECTOR_ANIMATION. Further object codes
 * valid for NBFInterpolatedVNVectorAnimation_nbf_3a objects are subject to future extensions of the NBF format. */
 struct NBFInterpolatedVNVectorAnimation_nbf_3a : public NBFVNVectorAnimation_nbf_3a
                                                , public NBFInterpolatedAnimation_nbf_3c
@@ -791,17 +791,17 @@ struct NBFNode_3d_04 : public NBFObject
 DP_STATIC_ASSERT( ( sizeof(NBFNode_3d_04) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 DP_STATIC_ASSERT( sizeof(NBFNode_3d_04) == sizeof(NBFNode) );
 
-//! The NBFObject structure represents general object data. 
+//! The NBFObject structure represents general object data.
 struct NBFObject_3d_04
 {
-  uint_t      objectCode;         //!< Specifies the object code of the actual object. The object code is unique per object type! 
+  uint_t      objectCode;         //!< Specifies the object code of the actual object. The object code is unique per object type!
   ubyte_t     isShared;           //!< Indicates whether the data of the actual object is shared among different objects.
                                   //!< A value of 1 indicates that this object's data is shared, whereas a value of 0 indicates
                                   //!< that this object's data is not shared.
   PADDING(3);                     //!< pad so everything is 32 bit aligned
 
   uint64_t    objectDataID;       //!< A unique 64-bit value to identify shared object data while loading.
-  uint_t      sourceObject;       //!< Specifies the file offset to the source object in case of data sharing. 
+  uint_t      sourceObject;       //!< Specifies the file offset to the source object in case of data sharing.
                                   //!< A file offset of 0 always indicates that no source object is available for the actual object.
   uint_t       objectName;        //!< Specifies the offset to an optional name. A 0-offset implies no name.
                                   //!< The name is stored as a str_t object.
@@ -829,19 +829,19 @@ DP_STATIC_ASSERT( ( sizeof(NBFAnimation_nbf_3d) % 8 ) == 0 );   //!< Compile-tim
 //! The NBFFramedAnimation_nbf_3d structure represents a framed animation.
 /** A NBFFramedAnimation_nbf_3d serves as base class only and needs to be considered in conjunction
 * with either NBFIndexAnimation_nbf_3d, NBFTrafoAnimation_nbf_3d or NBFVertexAttributeAnimation_nbf_3d.\n
-* Concrete object codes valid for a NBFFramedAnimation_nbf_3d are NBF_FRAMED_INDEX_ANIMATION_DESCRIPTION,
-* NBF_FRAMED_TRAFO_ANIMATION_DESCRIPTION, and NBF_FRAMED_VERTEX_ATTRIBUTE_ANIMATION_DESCRIPTION. Further concrete object
+* Concrete object codes valid for a NBFFramedAnimation_nbf_3d are DPBFCode::FRAMED_INDEX_ANIMATION_DESCRIPTION,
+* DPBFCode::FRAMED_TRAFO_ANIMATION_DESCRIPTION, and DPBFCode::FRAMED_VERTEX_ATTRIBUTE_ANIMATION_DESCRIPTION. Further concrete object
 * codes valid for NBFFramedAnimation_nbf_3d objects are subject to future extensions of the NBF format. */
 struct NBFFramedAnimation_nbf_3d : public NBFAnimation_nbf_3d
 {
-  uint_t      numSteps;           //!< Specifies the number of animation steps.\n 
+  uint_t      numSteps;           //!< Specifies the number of animation steps.\n
   //!< In conjunction with a NBFIndexAnimation_nbf_3d, this corresponds to the number of
   //!< uint_t objects stored with a NBFTrafoAnimation_nbf_3d.\n
   //!< In conjunction with a NBFTrafoAnimation_nbf_3d, this corresponds to the number of
   //!< trafo_t objects stored with a NBFTrafoAnimation_nbf_3d.\n
   //!< In conjunction with a NBFVertexAttributeAnimation_nbf_3d, this corresponds to the number of
   //!< VertexAttribute sets stored with a NBFVertexAttributeAnimation_nbf_3d.
-  PADDING(4);         //!< Padding bits to ensure the size of NBFFramedAnimation_nbf_3d is a multiple of 8, regardless of packing.    
+  PADDING(4);         //!< Padding bits to ensure the size of NBFFramedAnimation_nbf_3d is a multiple of 8, regardless of packing.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFFramedAnimation_nbf_3d) % 4 ) == 0 );    //!< Compile-time assert on size of structure
 
@@ -849,7 +849,7 @@ DP_STATIC_ASSERT( ( sizeof(NBFFramedAnimation_nbf_3d) % 4 ) == 0 );    //!< Comp
 /** A NBFInterpolatedAnimation_nbf_3d serves as base class only and needs to be considered in conjunction
 * with either NBFTrafoAnimation_nbf_3d or NBFVertexAttributeAnimation_nbf_3d.\n
 * Concrete object codes valid for a NBFInterpolatedAnimation_nbf_3d are
-* NBF_LINEAR_INTERPOLATED_TRAFO_ANIMATION_DESCRIPTION and NBF_LINEAR_INTERPOLATED_VERTEX_ATTRIBUTE_ANIMATION_DESCRIPTION.
+* DPBFCode::LINEAR_INTERPOLATED_TRAFO_ANIMATION_DESCRIPTION and DPBFCode::LINEAR_INTERPOLATED_VERTEX_ATTRIBUTE_ANIMATION_DESCRIPTION.
 * Further concrete object codes valid for NBFInterpolatedAnimation_nbf_3d objects are subject to future
 * extensions of the NBF format. */
 struct NBFInterpolatedAnimation_nbf_3d : public NBFAnimation_nbf_3d
@@ -862,7 +862,7 @@ DP_STATIC_ASSERT( ( sizeof(NBFInterpolatedAnimation_nbf_3d) % 4 ) == 0 );    //!
 
 //! The NBFFramedIndexAnimation_nbf_3d structure represents a framed animation that will be applied to uint_t objects.
 /** A NBFFramedIndexAnimation_nbf_3d is a concrete animation type. It publicly inherits from NBFIndexAnimation_nbf_3d and
-* NBFFramedAnimation_nbf_3d. The object code for a NBFFramedIndexAnimation_nbf_3d is NBF_FRAMED_INDEX_ANIMATION_DESCRIPTION. */ 
+* NBFFramedAnimation_nbf_3d. The object code for a NBFFramedIndexAnimation_nbf_3d is DPBFCode::FRAMED_INDEX_ANIMATION_DESCRIPTION. */
 struct NBFFramedIndexAnimation_nbf_3d : public NBFIndexAnimation_nbf_3d
                                       , public NBFFramedAnimation_nbf_3d
 {
@@ -871,7 +871,7 @@ DP_STATIC_ASSERT( ( sizeof(NBFFramedIndexAnimation_nbf_3d) % 8 ) == 0 );   //!< 
 
 //! The NBFFramedTrafoAnimation_nbf_3d structure represents a framed animation that will be applied to trafo_t objects.
 /** A NBFFramedTrafoAnimation_nbf_3d is a concrete animation type. It publicly inherits from NBFTrafoAnimation_nbf_3d and
-* NBFFramedAnimation_nbf_3d. The object code for a NBFFramedTrafoAnimation_nbf_3d is NBF_FRAMED_TRAFO_ANIMATION_DESCRIPTION. */ 
+* NBFFramedAnimation_nbf_3d. The object code for a NBFFramedTrafoAnimation_nbf_3d is DPBFCode::FRAMED_TRAFO_ANIMATION_DESCRIPTION. */
 struct NBFFramedTrafoAnimation_nbf_3d : public NBFTrafoAnimation_nbf_3d
                                       , public NBFFramedAnimation_nbf_3d
 {
@@ -880,7 +880,7 @@ DP_STATIC_ASSERT( ( sizeof(NBFFramedTrafoAnimation_nbf_3d) % 8 ) == 0 );   //!< 
 
 //! The NBFFramedVertexAttributeAnimation_nbf_3c structure represents a framed animation that will be applied to vertexAttrib_t objects.
 /** A NBFFramedVertexAttributeAnimation_nbf_3c is a concrete animation type. It publicly inherits from NBFVertexAttributeAnimation_nbf_3d and
-* NBFFramedAnimation_nbf_3d. The object code for a NBFFramedVertexAttributeAnimation_nbf_3c is NBF_FRAMED_VERTEX_ATTRIBUTE_ANIMATION_DESCRIPTION. */ 
+* NBFFramedAnimation_nbf_3d. The object code for a NBFFramedVertexAttributeAnimation_nbf_3c is DPBFCode::FRAMED_VERTEX_ATTRIBUTE_ANIMATION_DESCRIPTION. */
 struct NBFFramedVertexAttributeAnimation_nbf_3d : public NBFVertexAttributeAnimation_nbf_3d
                                                 , public NBFFramedAnimation_nbf_3d
 {
@@ -889,8 +889,8 @@ DP_STATIC_ASSERT( ( sizeof(NBFFramedVertexAttributeAnimation_nbf_3d) % 8 ) == 0 
 
 //! The NBFInterpolatedTrafoAnimation_nbf_3d structure represents a interpolated animation that will be applied to trafo_t objects.
 /** A NBFInterpolatedTrafoAnimation_nbf_3d is a concrete animation type. It publicly inherits from NBFTrafoAnimation_nbf_3d and
-* NBFInterpolatedAnimation_nbf_3d.\n 
-* The object code valid for a NBFInterpolatedTrafoAnimation_nbf_3d is NBF_LINEAR_INTERPOLATED_TRAFO_ANIMATION_DESCRIPTION. Further object codes
+* NBFInterpolatedAnimation_nbf_3d.\n
+* The object code valid for a NBFInterpolatedTrafoAnimation_nbf_3d is DPBFCode::LINEAR_INTERPOLATED_TRAFO_ANIMATION_DESCRIPTION. Further object codes
 * valid for NBFInterpolatedTrafoAnimation_nbf_3d objects are subject to future extensions of the NBF format. */
 struct NBFInterpolatedTrafoAnimation_nbf_3d : public NBFTrafoAnimation_nbf_3d
                                             , public NBFInterpolatedAnimation_nbf_3d
@@ -900,8 +900,8 @@ DP_STATIC_ASSERT( ( sizeof(NBFInterpolatedTrafoAnimation_nbf_3d) % 8 ) == 0 );  
 
 //! The NBFInterpolatedVertexAttributeAnimation_nbf_3d structure represents a interpolated animation that will be applied to vertexAttrib_t objects.
 /** A NBFInterpolatedVertexAttributeAnimation_nbf_3d is a concrete animation type. It publicly inherits from NBFVertexAttributeAnimation_nbf_3d and
-* NBFInterpolatedAnimation_nbf_3d.\n 
-* The object code valid for a NBFInterpolatedVertexAttributeAnimation_nbf_3d is NBF_LINEAR_INTERPOLATED_VERTEX_ATTRIBUTE_ANIMATION_DESCRIPTION. Further object codes
+* NBFInterpolatedAnimation_nbf_3d.\n
+* The object code valid for a NBFInterpolatedVertexAttributeAnimation_nbf_3d is DPBFCode::LINEAR_INTERPOLATED_VERTEX_ATTRIBUTE_ANIMATION_DESCRIPTION. Further object codes
 * valid for NBFInterpolatedVertexAttributeAnimation_nbf_3d objects are subject to future extensions of the NBF format. */
 struct NBFInterpolatedVertexAttributeAnimation_nbf_3d : public NBFVertexAttributeAnimation_nbf_3d
                                                       , public NBFInterpolatedAnimation_nbf_3d
@@ -910,16 +910,16 @@ struct NBFInterpolatedVertexAttributeAnimation_nbf_3d : public NBFVertexAttribut
 DP_STATIC_ASSERT( ( sizeof(NBFInterpolatedVertexAttributeAnimation_nbf_3d) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFMaterial_nbf_3f structure represents a material.
-/** The object code for a NBFMaterial_nbf_3f is NBF_MATERIAL. */
+/** The object code for a NBFMaterial_nbf_3f is DPBFCode::MATERIAL. */
 struct NBFMaterial_nbf_3f : public NBFObject
 {
-  float3_t    frontAmbientColor;      //!< Specifies the ambient part of the front material color. 
+  float3_t    frontAmbientColor;      //!< Specifies the ambient part of the front material color.
   float3_t    frontDiffuseColor;      //!< Specifies the diffuse part of the front material color.
   float3_t    frontEmissiveColor;     //!< Specifies the emissive part of the front material color.
   float       frontOpacity;           //!< Specifies the opacity of the front material.
   float3_t    frontSpecularColor;     //!< Specifies the specular part of the front material color.
   float       frontSpecularExponent;  //!< Specifies the specular exponent of the front material color.
-  float3_t    backAmbientColor;       //!< Specifies the ambient part of the back material color. 
+  float3_t    backAmbientColor;       //!< Specifies the ambient part of the back material color.
   float3_t    backDiffuseColor;       //!< Specifies the diffuse part of the back material color.
   float3_t    backEmissiveColor;      //!< Specifies the emissive part of the back material color.
   float       backOpacity;            //!< Specifies the opacity of the back material.
@@ -929,10 +929,10 @@ struct NBFMaterial_nbf_3f : public NBFObject
 DP_STATIC_ASSERT( ( sizeof(NBFMaterial_nbf_3f) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFMaterial_nbf_40 structure represents a material.
-/** The object code for a NBFMaterial_nbf_40 is NBF_MATERIAL. */
+/** The object code for a NBFMaterial_nbf_40 is DPBFCode::MATERIAL. */
 struct NBFMaterial_nbf_40 : public NBFObject
 {
-  float3_t    frontAmbientColor;      //!< Specifies the ambient part of the front material color. 
+  float3_t    frontAmbientColor;      //!< Specifies the ambient part of the front material color.
   float3_t    frontDiffuseColor;      //!< Specifies the diffuse part of the front material color.
   float3_t    frontEmissiveColor;     //!< Specifies the emissive part of the front material color.
   float       frontIndexOfRefraction; //!< Specifies the index of refraction of the front material.
@@ -942,7 +942,7 @@ struct NBFMaterial_nbf_40 : public NBFObject
   float3_t    frontSpecularColor;     //!< Specifies the specular part of the front material color.
   float       frontSpecularExponent;  //!< Specifies the specular exponent of the front material color.
   float3_t    frontTransparentColor;  //!< Specifies the transparent color of the front material.
-  float3_t    backAmbientColor;       //!< Specifies the ambient part of the back material color. 
+  float3_t    backAmbientColor;       //!< Specifies the ambient part of the back material color.
   float3_t    backDiffuseColor;       //!< Specifies the diffuse part of the back material color.
   float3_t    backEmissiveColor;      //!< Specifies the emissive part of the back material color.
   float       backIndexOfRefraction;  //!< Specifies the index of refraction of the back material.
@@ -959,7 +959,7 @@ struct NBFCamera_nbf_44 : public NBFObject
 {
   uint_t      numHeadLights;    //!< Specifies the number of headlights attached.
   uint_t      headLights;       //!< Specifies the file offset to the offsets to the attached headlight objects.
-                                //!< Headlights are of type NBFLightSource. 
+                                //!< Headlights are of type NBFLightSource.
   float3_t    upVector;         //!< Specifies the camera's normalized up vector.
   float3_t    position;         //!< Specifies the actual position of camera in world space.
   float3_t    direction;        //!< Specifies the normalized direction for the camera to look along.
@@ -968,11 +968,11 @@ struct NBFCamera_nbf_44 : public NBFObject
   float       focusDist;        //!< Specifies the distance to the projection plane.
   ubyte_t     isAutoClipPlanes; //!< Indicates if automatic generation of clipping planes is enabled.
   PADDING(3);      //!< Padding bits to ensure offset of windowSize is on a 4-byte boundary, regardless of packing
-  float2_t    windowSize;       //!< Specifies the world-relative size of the viewing window. Whereas the x-component of 
+  float2_t    windowSize;       //!< Specifies the world-relative size of the viewing window. Whereas the x-component of
                                 //!< of the vector specifies the width, and the y-component of the vector specifies the height.
-  float2_t    windowOffset;     //!< Specifies the world-relative offset from the viewing reference point to the center 
+  float2_t    windowOffset;     //!< Specifies the world-relative offset from the viewing reference point to the center
                                 //!< of the viewing window.
-  PADDING(4);        //!< Padding bits to ensure the size of NBFCamera is a multiple of 8, regardless of packing.    
+  PADDING(4);        //!< Padding bits to ensure the size of NBFCamera is a multiple of 8, regardless of packing.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFCamera_nbf_44) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
@@ -997,7 +997,7 @@ struct texImage_nbf_4b_t
   uint_t      height;             //!< Specifies the height of the texture in pixels.
   uint_t      depth;              //!< Specifies the depth of the texture in pixels.
   PADDING(12);                     //!< Padding bits to ensure offset of scene is on a 4-byte boundary, regardless of packing.
-  uint_t      pixelFormat;        //!< Specifies the format of the pixel data. 
+  uint_t      pixelFormat;        //!< Specifies the format of the pixel data.
   uint_t      dataType;           //!< Specifies the type of the pixel data.
   uint_t      pixels;             //!< Specifies the file offset to the raw pixel data.
 };
@@ -1009,25 +1009,25 @@ struct NBFFrustumCamera_nbf_4c : public NBFCamera
   ubyte_t     isAutoClipPlanes; //!< Indicates if automatic generation of clipping planes is enabled.
   PADDING(3);      //!< Padding bits to ensure offset of windowSize is on a 4-byte boundary, regardless of packing
   float       nearDist;         //!< Specifies the distance from the actual camera position to the near clipping plane.
-  float2_t    windowOffset;     //!< Specifies the world-relative offset from the viewing reference point to the center 
+  float2_t    windowOffset;     //!< Specifies the world-relative offset from the viewing reference point to the center
                                 //!< of the viewing window.
-  float2_t    windowSize;       //!< Specifies the world-relative size of the viewing window. Whereas the x-component of 
+  float2_t    windowSize;       //!< Specifies the world-relative size of the viewing window. Whereas the x-component of
                                 //!< of the vector specifies the width, and the y-component of the vector specifies the height.
-  PADDING(4);        //!< Padding bits to ensure the size of NBFCamera is a multiple of 8, regardless of packing.    
+  PADDING(4);        //!< Padding bits to ensure the size of NBFCamera is a multiple of 8, regardless of packing.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFFrustumCamera_nbf_4c) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFParallelCamera_nbf_4c represents a parallel camera.
-/** A NBFParallelCamera_nbf_4c is a concrete camera type. 
-  * The object code for a NBFParallelCamera_nbf_4c is NBF_PARALLEL_CAMERA. */
+/** A NBFParallelCamera_nbf_4c is a concrete camera type.
+  * The object code for a NBFParallelCamera_nbf_4c is DPBFCode::PARALLEL_CAMERA. */
 struct NBFParallelCamera_nbf_4c : public NBFFrustumCamera_nbf_4c
 {
 };
 DP_STATIC_ASSERT( ( sizeof(NBFParallelCamera_nbf_4c) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFPerspectiveCamera_nbf_4c represents a perspective camera.
-/** A NBFPerspectiveCamera_nbf_4c is a concrete camera type. 
-  * The object code for a NBFPerspectiveCamera_nbf_4c is NBF_PERSPECTIVE_CAMERA. */
+/** A NBFPerspectiveCamera_nbf_4c is a concrete camera type.
+  * The object code for a NBFPerspectiveCamera_nbf_4c is DPBFCode::PERSPECTIVE_CAMERA. */
 struct NBFPerspectiveCamera_nbf_4c : public NBFFrustumCamera_nbf_4c
 {
 };
@@ -1068,7 +1068,7 @@ struct NBFPatchesBase_nbf_4d : public NBFPrimitive_nbf_4d
 DP_STATIC_ASSERT( ( sizeof(NBFPatchesBase_nbf_4d) % 8 ) == 0 );        //!< Compile-time assert on size of structure
 
 /*! \brief The NBFQuadPatches_nbf_4d structure represents a general quad patches object.
- *  \remarks The object code for a NBFQuadPatches_nbf_4d is NBF_QUAD_PATCHES. */ 
+ *  \remarks The object code for a NBFQuadPatches_nbf_4d is DPBFCode::QUAD_PATCHES. */
 struct NBFQuadPatches_nbf_4d : public NBFPatchesBase_nbf_4d
 {
   uint_t  size;                     //!< Specifies the size of the quad patches. Each patch is specified by size^2 vertices
@@ -1077,14 +1077,14 @@ struct NBFQuadPatches_nbf_4d : public NBFPatchesBase_nbf_4d
 DP_STATIC_ASSERT( ( sizeof(NBFQuadPatches_nbf_4d) % 8 ) == 0 );        //!< Compile-time assert on size of structure
 
 /*! \brief The NBFQuadPatches4x4_nbf_4d structure represents a 4x4 quad patches object.
- *  \remarks The object code for a NBFQuadPatches4x4_nbf_4d is NBF_QUAD_PATCHES_4X4. */
+ *  \remarks The object code for a NBFQuadPatches4x4_nbf_4d is DPBFCode::QUAD_PATCHES_4X4. */
 struct NBFQuadPatches4x4_nbf_4d : public NBFPatchesBase_nbf_4d
 {
 };
 DP_STATIC_ASSERT( ( sizeof(NBFQuadPatches4x4_nbf_4d) % 8 ) == 0 );     // Compile-time assert on size of structure
 
 /*! \brief The NBFRectPatches_nbf_4d structure represents a general rectangular patches object.
- *  \remarks The object code for a NBFRectPatches_nbf_4d is NBF_RECT_PATCHES. */
+ *  \remarks The object code for a NBFRectPatches_nbf_4d is DPBFCode::RECT_PATCHES. */
 struct NBFRectPatches_nbf_4d : public NBFPatchesBase_nbf_4d
 {
   uint_t  width;                  //!< Specifies the width of the patches. Each patch is specified by with*height vertices.
@@ -1093,7 +1093,7 @@ struct NBFRectPatches_nbf_4d : public NBFPatchesBase_nbf_4d
 DP_STATIC_ASSERT( ( sizeof(NBFRectPatches_nbf_4d) % 8 ) == 0 );      //!< Compile-time assert on size of structure
 
 /*! \brief The NBFRectPatches_nbf_4d structure represents a general triangular patches object.
- *  \remarks The object code for a NBFRectPatches_nbf_4d is NBF_TRI_PATCHES. */
+ *  \remarks The object code for a NBFRectPatches_nbf_4d is DPBFCode::TRI_PATCHES. */
 struct NBFTriPatches_nbf_4d : public NBFPatchesBase_nbf_4d
 {
   uint_t  size;                     //!< Specifies the size of the patches. Each patch is specified by 1+2+...+size vertices
@@ -1102,7 +1102,7 @@ struct NBFTriPatches_nbf_4d : public NBFPatchesBase_nbf_4d
 DP_STATIC_ASSERT( ( sizeof(NBFTriPatches_nbf_4d) % 8 ) == 0 );     //!< Compile-time assert on size of structure
 
 /*! \brief The NBFTriPatches4_nbf_4d structure represents a 4-vertices-per-edge triangular patches object.
- *  \remarks The object code for a NBFTriPatches4_nbf_4d is NBF_TRI_PATCHES_4. */
+ *  \remarks The object code for a NBFTriPatches4_nbf_4d is DPBFCode::TRI_PATCHES_4. */
 struct NBFTriPatches4_nbf_4d : public NBFPatchesBase_nbf_4d
 {
 };
@@ -1114,12 +1114,12 @@ struct geometrySet_t
 {
   uint_t      stateSet;           //!< Specifies the file offset to the corresponding NBFStateSet object.
   uint_t      numPrimitives;      //!< Specifies the number of this geometry's NBFPrimitive objects.
-  uint_t      primitives;         //!< Specifies the file offset to the offsets to the NBFPrimitive objects. 
+  uint_t      primitives;         //!< Specifies the file offset to the offsets to the NBFPrimitive objects.
 };
 DP_STATIC_ASSERT( ( sizeof(geometrySet_t) % 4 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFGeoNode_nbf_4e structure represents a geometry node.
-/** The object code for a NBFGeoNode_nbf_4e is NBF_GEO_NODE. */
+/** The object code for a NBFGeoNode_nbf_4e is DPBFCode::GEO_NODE. */
 struct NBFGeoNode_nbf_4e : public NBFNode
 {
   uint_t      numStateSets;       //!< Specifies the number of contained StateSets.
@@ -1128,7 +1128,7 @@ struct NBFGeoNode_nbf_4e : public NBFNode
 DP_STATIC_ASSERT( ( sizeof(NBFGeoNode_nbf_4e) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFStatePass_nbf_4f structure represents a set of heterogeneous NBFStateAttributes.
-/** The object code for a NBFStatePass_nbf_4f is NBF_STATE_PASS. */
+/** The object code for a NBFStatePass_nbf_4f is DPBFCode::STATE_PASS. */
 struct NBFStatePass_nbf_4f : public NBFObject
 {
   uint_t      numStateAttribs;    //!< Specifies the number of contained state attributes.
@@ -1137,18 +1137,18 @@ struct NBFStatePass_nbf_4f : public NBFObject
 DP_STATIC_ASSERT( ( sizeof(NBFStatePass_nbf_4f) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFStateSet_nbf_4f structure represents a set of pairs of VariantKeys and StateVariant_nbf_4f.
-/** The object code for a NBFStateSet_nbf_4f is NBF_STATE_SET. */
+/** The object code for a NBFStateSet_nbf_4f is DPBFCode::STATE_SET. */
 struct NBFStateSet_nbf_4f : public NBFObject
 {
   uint_t activeKey;               //!< Specifies the currently active VariantKey
   uint_t numStateVariants;        //!< Specifies the number of contained pairs of VariantKey and StateVariant.
   uint_t keyStateVariantPairs;    //!< Specifies the file offset to the offsets to the keyVariant_t objects
-  PADDING(4);               //!< Padding bits to ensure the size of NBFStateSet is a multiple of 8, regardless of packing.    
+  PADDING(4);               //!< Padding bits to ensure the size of NBFStateSet is a multiple of 8, regardless of packing.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFStateSet_nbf_4f) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFStateVariant_nbf_4f structure represents a set of StatePasses_nbf_4f
-/** The object code for a NBFStateVariant_nbf_4f is NBF_STATE_VARIANT. */
+/** The object code for a NBFStateVariant_nbf_4f is DPBFCode::STATE_VARIANT. */
 struct NBFStateVariant_nbf_4f : public NBFObject
 {
   uint_t      numStatePasses;     //!< Specifies the number of contained state passes.
@@ -1157,8 +1157,8 @@ struct NBFStateVariant_nbf_4f : public NBFObject
 DP_STATIC_ASSERT( ( sizeof(NBFStateVariant_nbf_4f) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFLightSource_nbf_50 structure represents a light source node.
-/** A NBFLightSource_nbf_50 serves as base class only. Concrete object codes valid for 
-  * a NBFLightSource_nbf_50 are NBF_DIRECTED_LIGHT, NBF_POINT_LIGHT, and NBF_SPOT_LIGHT. */
+/** A NBFLightSource_nbf_50 serves as base class only. Concrete object codes valid for
+  * a NBFLightSource_nbf_50 are DPBFCode::DIRECTED_LIGHT, DPBFCode::POINT_LIGHT, and DPBFCode::SPOT_LIGHT. */
 struct NBFLightSource_nbf_50 : public NBFObject
 {
   float       intensity;          //!< Specifies the light intensity.
@@ -1174,7 +1174,7 @@ struct NBFLightSource_nbf_50 : public NBFObject
 DP_STATIC_ASSERT( ( sizeof(NBFLightSource_nbf_50) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 // The NBFDirectedLight_nbf_50 structure represents a directed light source.
-/** The object code for a NBFDirectedLight_nbf_50 is NBF_DIRECTED_LIGHT. */
+/** The object code for a NBFDirectedLight_nbf_50 is DPBFCode::DIRECTED_LIGHT. */
 struct NBFDirectedLight_nbf_50 : public NBFLightSource_nbf_50
 {
   float3_t direction; //!< Specifies the direction of the light source.
@@ -1183,7 +1183,7 @@ struct NBFDirectedLight_nbf_50 : public NBFLightSource_nbf_50
 DP_STATIC_ASSERT( ( sizeof(NBFDirectedLight_nbf_50) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 // The NBFPointLight_nbf_50 structure represents a point light source.
-/** The object code for a NBFPointLight_nbf_50 is NBF_POINT_LIGHT. */
+/** The object code for a NBFPointLight_nbf_50 is DPBFCode::POINT_LIGHT. */
 struct NBFPointLight_nbf_50 : public NBFLightSource_nbf_50
 {
   float3_t position;    //!< Specifies the position of the light source.
@@ -1191,11 +1191,11 @@ struct NBFPointLight_nbf_50 : public NBFLightSource_nbf_50
                         //!< The x-component of the vector specifies the constant term of the attenuation,
                         //!< the y-component of the vector specifies the linear term of the attenuation, and
                         //!< the z-component of the vector specifies the quadratic term of the attenuation.
-};                        
+};
 DP_STATIC_ASSERT( ( sizeof(NBFPointLight_nbf_50) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 // The NBFSpotLight_nbf_50 structure represents a spot light.
-/** The object code for a NBFSpotLight_nbf_50 is NBF_SPOT_LIGHT. */
+/** The object code for a NBFSpotLight_nbf_50 is DPBFCode::SPOT_LIGHT. */
 struct NBFSpotLight_nbf_50 : public NBFLightSource_nbf_50
 {
   float3_t position;        //!< Specifies the position of the light source.
@@ -1207,14 +1207,14 @@ struct NBFSpotLight_nbf_50 : public NBFLightSource_nbf_50
   float    cutoffAngle;     //!< Specifies the angle between the axis of the cone, the light is emitted to, and
                             //!< a ray along the edge of the cone.
   float    falloffExponent; //!< Controls the intensity distribution inside the cone, the light is mitted to.
-  PADDING(4);               //!< Padding bits to ensure the size of NBFSpotLight is a multiple of 8, regardless of packing.    
+  PADDING(4);               //!< Padding bits to ensure the size of NBFSpotLight is a multiple of 8, regardless of packing.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFSpotLight_nbf_50) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 struct NBFGeoNode_nbf_51 : public NBFNode
 {
   uint_t      stateSet;           //!< Specifies the file offset to the corresponding NBFStateSet object.
-  uint_t      primitive;          //!< Specifies the file offset to the corresponding NBFPrimitive objects. 
+  uint_t      primitive;          //!< Specifies the file offset to the corresponding NBFPrimitive objects.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFGeoNode_nbf_51) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
@@ -1246,7 +1246,7 @@ struct NBFPointLight_nbf_52 : public NBFLightSource_nbf_52
                         //!< The x-component of the vector specifies the constant term of the attenuation,
                         //!< the y-component of the vector specifies the linear term of the attenuation, and
                         //!< the z-component of the vector specifies the quadratic term of the attenuation.
-};                        
+};
 DP_STATIC_ASSERT( ( sizeof(NBFPointLight_nbf_52) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 struct NBFSpotLight_nbf_52 : public NBFLightSource_nbf_52
@@ -1260,13 +1260,13 @@ struct NBFSpotLight_nbf_52 : public NBFLightSource_nbf_52
   float    cutoffAngle;     //!< Specifies the angle between the axis of the cone, the light is emitted to, and
                             //!< a ray along the edge of the cone.
   float    falloffExponent; //!< Controls the intensity distribution inside the cone, the light is mitted to.
-  PADDING(4);               //!< Padding bits to ensure the size of NBFSpotLight is a multiple of 8, regardless of packing.    
+  PADDING(4);               //!< Padding bits to ensure the size of NBFSpotLight is a multiple of 8, regardless of packing.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFSpotLight_nbf_52) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFLightSource_nbf_53 structure represents a light source node.
-/** A NBFLightSource_nbf_53 serves as base class only. Concrete object codes valid for 
-  * a NBFLightSource_nbf_53 are NBF_DIRECTED_LIGHT, NBF_POINT_LIGHT, and NBF_SPOT_LIGHT. */
+/** A NBFLightSource_nbf_53 serves as base class only. Concrete object codes valid for
+  * a NBFLightSource_nbf_53 are DPBFCode::DIRECTED_LIGHT, DPBFCode::POINT_LIGHT, and DPBFCode::SPOT_LIGHT. */
 struct NBFLightSource_nbf_53 : public NBFNode
 {
   float       intensity;          //!< Specifies the light intensity.
@@ -1284,7 +1284,7 @@ struct NBFLightSource_nbf_53 : public NBFNode
 DP_STATIC_ASSERT( ( sizeof(NBFLightSource_nbf_53) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 // The NBFDirectedLight_nbf_53 structure represents a directed light source.
-/** The object code for a NBFDirectedLight_nbf_53 is NBF_DIRECTED_LIGHT. */
+/** The object code for a NBFDirectedLight_nbf_53 is DPBFCode::DIRECTED_LIGHT. */
 struct NBFDirectedLight_nbf_53 : public NBFLightSource_nbf_53
 {
   float3_t direction; //!< Specifies the direction of the light source.
@@ -1293,7 +1293,7 @@ struct NBFDirectedLight_nbf_53 : public NBFLightSource_nbf_53
 DP_STATIC_ASSERT( ( sizeof(NBFDirectedLight_nbf_53) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 // The NBFPointLight_nbf_53 structure represents a point light source.
-/** The object code for a NBFPointLight_nbf_53 is NBF_POINT_LIGHT. */
+/** The object code for a NBFPointLight_nbf_53 is DPBFCode::POINT_LIGHT. */
 struct NBFPointLight_nbf_53 : public NBFLightSource_nbf_53
 {
   float3_t position;    //!< Specifies the position of the light source.
@@ -1301,11 +1301,11 @@ struct NBFPointLight_nbf_53 : public NBFLightSource_nbf_53
                         //!< The x-component of the vector specifies the constant term of the attenuation,
                         //!< the y-component of the vector specifies the linear term of the attenuation, and
                         //!< the z-component of the vector specifies the quadratic term of the attenuation.
-};                        
+};
 DP_STATIC_ASSERT( ( sizeof(NBFPointLight_nbf_53) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 // The NBFSpotLight_nbf_53 structure represents a spot light.
-/** The object code for a NBFSpotLight_nbf_53 is NBF_SPOT_LIGHT. */
+/** The object code for a NBFSpotLight_nbf_53 is DPBFCode::SPOT_LIGHT. */
 struct NBFSpotLight_nbf_53 : public NBFLightSource_nbf_53
 {
   float3_t position;        //!< Specifies the position of the light source.
@@ -1317,23 +1317,23 @@ struct NBFSpotLight_nbf_53 : public NBFLightSource_nbf_53
   float    cutoffAngle;     //!< Specifies the angle between the axis of the cone, the light is emitted to, and
                             //!< a ray along the edge of the cone.
   float    falloffExponent; //!< Controls the intensity distribution inside the cone, the light is mitted to.
-  PADDING(4);               //!< Padding bits to ensure the size of NBFSpotLight is a multiple of 8, regardless of packing.    
+  PADDING(4);               //!< Padding bits to ensure the size of NBFSpotLight is a multiple of 8, regardless of packing.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFSpotLight_nbf_53) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFStateAttribute_nbf_54 structure represents a state attribute.
 /** A NBFStateAttribute_nbf_54 serves a base class only. Concrete object codes valid for a NBFStateAttribute_nbf_54
-  * are NBF_BLEND_ATTRIBUTE, NBF_CGFX, NBF_RTFX, NBF_MATERIAL, NBF_FACE_ATTRIBUTE, and NBF_TEXTURE_ATTRIBUTE. */
+  * are DPBFCode::BLEND_ATTRIBUTE, DPBFCode::CGFX, DPBFCode::RTFX, DPBFCode::MATERIAL, DPBFCode::FACE_ATTRIBUTE, and DPBFCode::TEXTURE_ATTRIBUTE. */
 struct NBFStateAttribute_nbf_54 : public NBFObject
 {
 };
 DP_STATIC_ASSERT( ( sizeof(NBFStateAttribute_nbf_54) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFMaterial_nbf_54 structure represents a material.
-/** The object code for a NBFMaterial_nbf_54 is NBF_MATERIAL. */
+/** The object code for a NBFMaterial_nbf_54 is DPBFCode::MATERIAL. */
 struct NBFMaterial_nbf_54 : public NBFStateAttribute_nbf_54
 {
-  float3_t    frontAmbientColor;      //!< Specifies the ambient part of the front material color. 
+  float3_t    frontAmbientColor;      //!< Specifies the ambient part of the front material color.
   float3_t    frontDiffuseColor;      //!< Specifies the diffuse part of the front material color.
   float3_t    frontEmissiveColor;     //!< Specifies the emissive part of the front material color.
   float       frontIndexOfRefraction; //!< Specifies the index of refraction of the front material.
@@ -1341,7 +1341,7 @@ struct NBFMaterial_nbf_54 : public NBFStateAttribute_nbf_54
   float3_t    frontReflectivityColor; //!< Specifies the reflectivity per color channel of the front material.
   float3_t    frontSpecularColor;     //!< Specifies the specular part of the front material color.
   float       frontSpecularExponent;  //!< Specifies the specular exponent of the front material color.
-  float3_t    backAmbientColor;       //!< Specifies the ambient part of the back material color. 
+  float3_t    backAmbientColor;       //!< Specifies the ambient part of the back material color.
   float3_t    backDiffuseColor;       //!< Specifies the diffuse part of the back material color.
   float3_t    backEmissiveColor;      //!< Specifies the emissive part of the back material color.
   float       backIndexOfRefraction;  //!< Specifies the index of refraction of the back material.
@@ -1353,7 +1353,7 @@ struct NBFMaterial_nbf_54 : public NBFStateAttribute_nbf_54
 DP_STATIC_ASSERT( ( sizeof(NBFMaterial_nbf_54) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The texBinding_t_nbf_54 structure specifies how a texture binding is stored in a .DPBF file.
-/** Texture bindings, in this context, need to be considered in conjunction with 
+/** Texture bindings, in this context, need to be considered in conjunction with
   * NBFTextureAttribute_nbf_54 and NBFTextureAttributeItem_nbf_54 objects. */
 struct texBinding_t_nbf_54
 {
@@ -1363,20 +1363,20 @@ struct texBinding_t_nbf_54
 DP_STATIC_ASSERT( ( sizeof(texBinding_t_nbf_54) % 4 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFTextureAttributeItem_nbf_54 structure represents a single texture object.
-/** The object code for a NBFTextureAttributeItem_nbf_54 is NBF_TEXTURE_ATTRIBUTE_ITEM. 
-  * A NBFTextureAttributeItem_nbf_54 needs to be consider in conjunction with a NBFTextureAttribute_nbf_54, 
+/** The object code for a NBFTextureAttributeItem_nbf_54 is DPBFCode::TEXTURE_ATTRIBUTE_ITEM.
+  * A NBFTextureAttributeItem_nbf_54 needs to be consider in conjunction with a NBFTextureAttribute_nbf_54,
   * which specifies the binding of texture objects. */
 struct NBFTextureAttributeItem_nbf_54 : public NBFObject
 {
   uint_t        texImg;             //!< Specifies the file offset to the texture image object
   float4_t      texEnvColor;        //!< Specifies the texture environment color.
-  uint_t        texEnvMode;         //!< Specifies the texture environment mode for the actual texture object. 
+  uint_t        texEnvMode;         //!< Specifies the texture environment mode for the actual texture object.
                                     //!< Valid modes are TEM_REPLACE, TEM_MODULATE, TEM_DECAL, TEM_BLEND, and TEM_ADD.
-  uint_t        texEnvScale;        //!< Specifies the texture environment scale used with rasterization 
-  uint_t        texWrapS;           //!< Specifies the wrap parameter for texture coordinate s. 
+  uint_t        texEnvScale;        //!< Specifies the texture environment scale used with rasterization
+  uint_t        texWrapS;           //!< Specifies the wrap parameter for texture coordinate s.
   uint_t        texWrapT;           //!< Specifies the wrap parameter for texture coordinate t.
   uint_t        texWrapR;           //!< Specifies the wrap parameter for texture coordinate r.
-  uint_t        minFilter;          //!< Specifies the filter used with minimizing. 
+  uint_t        minFilter;          //!< Specifies the filter used with minimizing.
                                     //!< Valid values are TFM_MIN_NEAREST, TFM_MIN_LINEAR, TFM_MIN_LINEAR_MIPMAP_LINEAR,
                                     //!< TFM_MIN_NEAREST_MIPMAP_NEAREST, TFM_MIN_NEAREST_MIPMAP_LINEAR, TFM_MIN_LINEAR_MIPMAP_NEAREST.
   uint_t        magFilter;          //!< Specifies the filter used with magnifying.
@@ -1390,7 +1390,7 @@ struct NBFTextureAttributeItem_nbf_54 : public NBFObject
 DP_STATIC_ASSERT( ( sizeof(NBFTextureAttributeItem_nbf_54) % 8 ) == 0 );   // Compile-time assert on size of structure
 
 //! The NBFTextureAttribute_nbf_54 structure represents a texture attribute.
-/** The object code for a NBFTextureAttribute_nbf_54 is NBF_TEXTURE_ATTRIBUTE. */
+/** The object code for a NBFTextureAttribute_nbf_54 is DPBFCode::TEXTURE_ATTRIBUTE. */
 struct NBFTextureAttribute_nbf_54 : public NBFStateAttribute_nbf_54
 {
   uint_t      numBindings;        //!< Specifies the number of contained texture bindings.
@@ -1400,18 +1400,18 @@ struct NBFTextureAttribute_nbf_54 : public NBFStateAttribute_nbf_54
 DP_STATIC_ASSERT( ( sizeof(NBFTextureAttribute_nbf_54) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFAlphaTestAttribute_nbf_54 structure represents an alpha test state attribute in the NBF format.
-/** The object code for a NBFAlphaTestAttribute_nbf_54 is NBF_ALPHA_TEST_ATTRIBUTE. */
+/** The object code for a NBFAlphaTestAttribute_nbf_54 is DPBFCode::ALPHA_TEST_ATTRIBUTE. */
 struct NBFAlphaTestAttribute_nbf_54 : public NBFStateAttribute_nbf_54
 {
   ubyte_t     alphaFunction; //!< Specifies the alpha function
-  ubyte_t     enabledMSAlpha; //!< Specifies whether enabled during msalpha 
+  ubyte_t     enabledMSAlpha; //!< Specifies whether enabled during msalpha
   PADDING(2); //!< Padding bits to ensure offset of threshold member is on a 4-byte boundary, regardless of packing
   float       threshold; //!< Specifies the threshold value
 };
 DP_STATIC_ASSERT( ( sizeof(NBFAlphaTestAttribute_nbf_54) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFBlendAttribute_nbf_54 structure represents a blend function.
-/** The object code for a NBFBlendAttribute_nbf_54 is NBF_BLEND_ATTRIBUTE. */
+/** The object code for a NBFBlendAttribute_nbf_54 is DPBFCode::BLEND_ATTRIBUTE. */
 struct NBFBlendAttribute_nbf_54 : public NBFStateAttribute_nbf_54
 {
   ubyte_t     sourceFunction;       //!< Specifies the source blending function
@@ -1421,7 +1421,7 @@ struct NBFBlendAttribute_nbf_54 : public NBFStateAttribute_nbf_54
 DP_STATIC_ASSERT( ( sizeof(NBFBlendAttribute_nbf_54) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFFaceAttribute_nbf_54 structure represents a render mode.
-/** The object code for a NBFFaceAttribute_nbf_54 is NBF_FACE_ATTRIBUTE. */
+/** The object code for a NBFFaceAttribute_nbf_54 is DPBFCode::FACE_ATTRIBUTE. */
 struct NBFFaceAttribute_nbf_54 : public NBFStateAttribute_nbf_54
 {
   ubyte_t     cullMode;             //!< Specifies the face culling mode.
@@ -1439,7 +1439,7 @@ struct NBFFaceAttribute_nbf_54 : public NBFStateAttribute_nbf_54
 DP_STATIC_ASSERT( ( sizeof(NBFFaceAttribute_nbf_54) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFLightingAttribute_nbf_54 structure represents a render mode.
-/** The object code for a NBFLightingAttribute_nbf_54 is NBF_LIGHTING_ATTRIBUTE. */
+/** The object code for a NBFLightingAttribute_nbf_54 is DPBFCode::LIGHTING_ATTRIBUTE. */
 struct NBFLightingAttribute_nbf_54 : public NBFStateAttribute_nbf_54
 {
   ubyte_t     enabled;    //!< Specifies if lighting is enabled or disabled.
@@ -1448,7 +1448,7 @@ struct NBFLightingAttribute_nbf_54 : public NBFStateAttribute_nbf_54
 DP_STATIC_ASSERT( ( sizeof(NBFLightingAttribute_nbf_54) % 4 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFLineAttribute_nbf_54 structure represents a render mode.
-/** The object code for a NBFLineAttribute_nbf_54 is NBF_LINE_ATTRIBUTE. */
+/** The object code for a NBFLineAttribute_nbf_54 is DPBFCode::LINE_ATTRIBUTE. */
 struct NBFLineAttribute_nbf_54 : public NBFStateAttribute_nbf_54
 {
   ubyte_t     antiAliasing;         //!< Specifies if the lines are anti aliased.
@@ -1460,7 +1460,7 @@ struct NBFLineAttribute_nbf_54 : public NBFStateAttribute_nbf_54
 DP_STATIC_ASSERT( ( sizeof(NBFLineAttribute_nbf_54) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFPointAttribute_nbf_54 structure represents a render mode.
-/** The object code for a NBFPointAttribute_nbf_54 is NBF_POINT_ATTRIBUTE. */
+/** The object code for a NBFPointAttribute_nbf_54 is DPBFCode::POINT_ATTRIBUTE. */
 struct NBFPointAttribute_nbf_54 : public NBFStateAttribute_nbf_54
 {
   ubyte_t     antiAliasing;         //!< Specifies if the points are anti aliased.
@@ -1470,7 +1470,7 @@ struct NBFPointAttribute_nbf_54 : public NBFStateAttribute_nbf_54
 DP_STATIC_ASSERT( ( sizeof(NBFPointAttribute_nbf_54) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 /*! \brief The NBFUnlitColorAttribute_nbf_54 structure represents the color for unlit objects.
- *  \remarks The object code for a NBFUnlitColorAttribute_nbf_54 is NBF_UNLIT_COLOR_ATTRIBUTE. */
+ *  \remarks The object code for a NBFUnlitColorAttribute_nbf_54 is DPBFCode::UNLIT_COLOR_ATTRIBUTE. */
 struct NBFUnlitColorAttribute_nbf_54 : public NBFStateAttribute_nbf_54
 {
   float4_t      color;              //!< Specifies the color for unlit objects
@@ -1478,12 +1478,12 @@ struct NBFUnlitColorAttribute_nbf_54 : public NBFStateAttribute_nbf_54
 DP_STATIC_ASSERT( ( sizeof(NBFUnlitColorAttribute_nbf_54) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFAnimatedTransform_nbf_54 structure represents an animated transform group node.
-/** The object code for a NBFAnimatedTransform_nbf_54 is NBF_ANIMATED_TRANSFORM. */
+/** The object code for a NBFAnimatedTransform_nbf_54 is DPBFCode::ANIMATED_TRANSFORM. */
 struct NBFAnimatedTransform_nbf_54 : public NBFTransform
 {
   uint_t      animation;          //!< Specifies the file offset to the NBFTrafoAnimation object
                                   //!< to be applied to the transform group node.
-  PADDING(4);        //!< Padding bits to ensure the size of NBFAnimatedTransform_nbf_54 is a multiple of 8, regardless of packing.    
+  PADDING(4);        //!< Padding bits to ensure the size of NBFAnimatedTransform_nbf_54 is a multiple of 8, regardless of packing.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFAnimatedTransform_nbf_54) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
@@ -1498,23 +1498,23 @@ struct NBFAnimatedVertexAttributeSet_nbf_54 : public NBFVertexAttributeSet
                                   //!< offset for each vertex attribute.
   uint_t      normalizeFlags;     //!< Flags that determine if a vertex attribute has to be
                                   //!< normalized after interpolation
-  PADDING(4);                     //!< Padding bits to ensure the size of NBFAnimatedVertexAttributeSet_nbf_54 is a multiple of 8, regardless of packing.    
+  PADDING(4);                     //!< Padding bits to ensure the size of NBFAnimatedVertexAttributeSet_nbf_54 is a multiple of 8, regardless of packing.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFAnimatedVertexAttributeSet_nbf_54) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFFlipbookAnimation_nbf_54 structure represents an animated group node.
-/** The object code for a NBFFlipbookAnimation_nbf_54 is NBF_FLIPBOOK_ANIMATION. */
+/** The object code for a NBFFlipbookAnimation_nbf_54 is DPBFCode::FLIPBOOK_ANIMATION. */
 struct NBFFlipbookAnimation_nbf_54 : public NBFGroup
 {
   uint_t      animation;          //!< Specifies the file offset to the NBFIndexAnimation object
                                   //!< to be applied to the transform group node.
-  PADDING(4);        //!< Padding bits to ensure the size of NBFFlipbookAnimation_nbf_54 is a multiple of 8, regardless of packing.    
+  PADDING(4);        //!< Padding bits to ensure the size of NBFFlipbookAnimation_nbf_54 is a multiple of 8, regardless of packing.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFFlipbookAnimation_nbf_54) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFSkinnedTriangles_nbf_54 structure represents skin animated triangles.
-/** A NBFSkinnedTriangles_nbf_54 is a concrete topology class derived from NBFIndependentPrimitiveSet. 
-* The object code for a NBFSkinnedTriangles_nbf_54 is NBF_SKINNED_TRIANGLES. */
+/** A NBFSkinnedTriangles_nbf_54 is a concrete topology class derived from NBFIndependentPrimitiveSet.
+* The object code for a NBFSkinnedTriangles_nbf_54 is DPBFCode::SKINNED_TRIANGLES. */
 struct NBFSkinnedTriangles_nbf_54 : public NBFIndependentPrimitiveSet
 {
   uint_t      numSkins;           //!< Specifies the number of contained skins
@@ -1523,7 +1523,7 @@ struct NBFSkinnedTriangles_nbf_54 : public NBFIndependentPrimitiveSet
 DP_STATIC_ASSERT( ( sizeof(NBFSkinnedTriangles_nbf_54) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFStateSet_nbf_54 structure represents a set of StateAttributes
-/** The object code for a NBFStateSet_nbf_54 is NBF_STATE_SET. */
+/** The object code for a NBFStateSet_nbf_54 is DPBFCode::STATE_SET. */
 struct NBFStateSet_nbf_54 : public NBFObject
 {
   uint_t      numStateAttribs;    //!< Specifies the number of contained state attributes.
@@ -1541,7 +1541,7 @@ struct NBFRTFxBase_nbf_54
 DP_STATIC_ASSERT( ( sizeof(NBFRTFxBase_nbf_54) % 4 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFRTFx_nbf_54 structure represents an effect attribute.
-/** The object code for a NBFRTFx_nbf_54 is NBF_RTFX. */
+/** The object code for a NBFRTFx_nbf_54 is DPBFCode::RTFX. */
 struct NBFRTFx_nbf_54 : public NBFStateAttribute_nbf_54, public NBFRTFxBase_nbf_54
 {
   uint_t  program;                //!< Specifies the file offset of the RTFxProgram.
@@ -1561,10 +1561,10 @@ struct NBFSamplerState_nbf_54 : public NBFObject
   float4_t    borderColor;          //!< Speicifies the texture border RGBA color
   uint_t      magFilter;            //!< Specifies the filter used with magnifying.
                                     //!< Valid values are TFM_MAG_NEAREST, and TFM_MAG_LINEAR.
-  uint_t      minFilter;            //!< Specifies the filter used with minimizing. 
+  uint_t      minFilter;            //!< Specifies the filter used with minimizing.
                                     //!< //!< Valid values are TFM_MIN_NEAREST, TFM_MIN_LINEAR, TFM_MIN_LINEAR_MIPMAP_LINEAR,
                                     //!< TFM_MIN_NEAREST_MIPMAP_NEAREST, TFM_MIN_NEAREST_MIPMAP_LINEAR, TFM_MIN_LINEAR_MIPMAP_NEAREST.
-  uint_t      texWrapS;             //!< Specifies the wrap parameter for texture coordinate s. 
+  uint_t      texWrapS;             //!< Specifies the wrap parameter for texture coordinate s.
   uint_t      texWrapT;             //!< Specifies the wrap parameter for texture coordinate t.
   uint_t      texWrapR;             //!< Specifies the wrap parameter for texture coordinate r.
   uint_t      compareMode;          //!> Specifies the compare mode parameter for a texture. Valid values are TCM_NONE and TCM_R_TO_TEXTURE.
@@ -1572,7 +1572,7 @@ struct NBFSamplerState_nbf_54 : public NBFObject
 DP_STATIC_ASSERT( ( sizeof(NBFSamplerState_nbf_54) % 8 ) == 0 );
 
 //! The NBFEffectData_nbf_55 structure represents a set of ParameterGroupDatas
-/** The object code for an NBFEffectData_nbf_55 is NBF_PIPELINE_DATA. */
+/** The object code for an NBFEffectData_nbf_55 is DPBFCode::PIPELINE_DATA. */
 struct NBFEffectData_nbf_55 : public NBFObject
 {
   str_t       effectSpecName;       //!< Specifies the name of the corresponding EffectSpec
@@ -1590,7 +1590,7 @@ struct NBFPatchesBase : public NBFPrimitive
 DP_STATIC_ASSERT( ( sizeof(NBFPatchesBase) % 8 ) == 0 );        //!< Compile-time assert on size of structure
 
 /*! \brief The NBFQuadPatches structure represents a general quad patches object.
- *  \remarks The object code for a NBFQuadPatches is NBF_QUAD_PATCHES. */ 
+ *  \remarks The object code for a NBFQuadPatches is DPBFCode::QUAD_PATCHES. */
 struct NBFQuadPatches : public NBFPatchesBase
 {
   uint_t  size;                     //!< Specifies the size of the quad patches. Each patch is specified by size^2 vertices
@@ -1599,14 +1599,14 @@ struct NBFQuadPatches : public NBFPatchesBase
 DP_STATIC_ASSERT( ( sizeof(NBFQuadPatches) % 8 ) == 0 );        //!< Compile-time assert on size of structure
 
 /*! \brief The NBFQuadPatches4x4 structure represents a 4x4 quad patches object.
- *  \remarks The object code for a NBFQuadPatches4x4 is NBF_QUAD_PATCHES_4X4. */
+ *  \remarks The object code for a NBFQuadPatches4x4 is DPBFCode::QUAD_PATCHES_4X4. */
 struct NBFQuadPatches4x4 : public NBFPatchesBase
 {
 };
 DP_STATIC_ASSERT( ( sizeof(NBFQuadPatches4x4) % 8 ) == 0 );     // Compile-time assert on size of structure
 
 /*! \brief The NBFRectPatches structure represents a general rectangular patches object.
- *  \remarks The object code for a NBFRectPatches is NBF_RECT_PATCHES. */
+ *  \remarks The object code for a NBFRectPatches is DPBFCode::RECT_PATCHES. */
 struct NBFRectPatches : public NBFPatchesBase
 {
   uint_t  width;                  //!< Specifies the width of the patches. Each patch is specified by with*height vertices.
@@ -1615,7 +1615,7 @@ struct NBFRectPatches : public NBFPatchesBase
 DP_STATIC_ASSERT( ( sizeof(NBFRectPatches) % 8 ) == 0 );      //!< Compile-time assert on size of structure
 
 /*! \brief The NBFRectPatches structure represents a general triangular patches object.
- *  \remarks The object code for a NBFRectPatches is NBF_TRI_PATCHES. */
+ *  \remarks The object code for a NBFRectPatches is DPBFCode::TRI_PATCHES. */
 struct NBFTriPatches : public NBFPatchesBase
 {
   uint_t  size;                     //!< Specifies the size of the patches. Each patch is specified by 1+2+...+size vertices
@@ -1624,7 +1624,7 @@ struct NBFTriPatches : public NBFPatchesBase
 DP_STATIC_ASSERT( ( sizeof(NBFTriPatches) % 8 ) == 0 );     //!< Compile-time assert on size of structure
 
 /*! \brief The NBFTriPatches4 structure represents a 4-vertices-per-edge triangular patches object.
- *  \remarks The object code for a NBFTriPatches4 is NBF_TRI_PATCHES_4. */
+ *  \remarks The object code for a NBFTriPatches4 is DPBFCode::TRI_PATCHES_4. */
 struct NBFTriPatches4 : public NBFPatchesBase
 {
 };
@@ -1694,19 +1694,19 @@ inline Vec4Type& assign(Vec4Type& lhs, const float4_t& rhs)
 
 inline Vec2f convert(const float2_t& from)
 { // use return value optimization here
-  return Vec2f(from[0], from[1]); 
+  return Vec2f(from[0], from[1]);
 }
 
 inline Vec3f convert(const float3_t& from)
 { // use return value optimization here
-  return Vec3f(from[0], from[1], from[2]); 
+  return Vec3f(from[0], from[1], from[2]);
 }
 
 // works for Vec4f and Quatf
 template <typename Vec4Type>
 inline Vec4Type convert(const float4_t& from)
 { // use return value optimization here
-  return Vec4Type(from[0], from[1], from[2], from[3]); 
+  return Vec4Type(from[0], from[1], from[2], from[3]);
 }
 
 inline Mat44f convert( const float44_t & from )
@@ -1842,8 +1842,8 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
   dp::util::Locale tl("C");
 
   SceneSharedPtr scene;
-  
-  // take a copy of the given search pathes, we might need them with looking up 
+
+  // take a copy of the given search pathes, we might need them with looking up
   // adherent files like texture image file or effect sources
   m_fileFinder = fileFinder;
   m_fileFinder.addSearchPath( dp::util::getFilePath( filename ) );
@@ -1860,7 +1860,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
         Offset_AutoPtr<NBFHeader> nbfHdr(m_fm, callback(), 0);
                                               //^ the NBF header always is at offset 0 for a valid NBF file!
         DP_ASSERT(nbfHdr);
-          
+
         if (  nbfHdr->signature[0] == '#'
           && nbfHdr->signature[1] == 'N'
           && nbfHdr->signature[2] == 'B'
@@ -2829,7 +2829,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
               viewState.reset();
               if ( nbfHdr->viewState)
               {
-                viewState = (this->*m_pfnLoadViewState)(nbfHdr->viewState); 
+                viewState = (this->*m_pfnLoadViewState)(nbfHdr->viewState);
               }
             }
 
@@ -2846,20 +2846,20 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
           }
           else
           {
-            // incompatible NBF file 
+            // incompatible NBF file
             // ... determine context
-            if ( nbfHdr->dpMajorVersion > DP_VER_MAJOR ) 
+            if ( nbfHdr->dpMajorVersion > DP_VER_MAJOR )
             {
               // incompatible DPBF version detected
               uint_t expected = (DP_VER_MAJOR<<16) | DP_VER_MINOR;
-              uint_t detected = (nbfHdr->dpMajorVersion<<16) | nbfHdr->dpMinorVersion; 
+              uint_t detected = (nbfHdr->dpMajorVersion<<16) | nbfHdr->dpMinorVersion;
               INVOKE_CALLBACK(onIncompatibleFile(filename, "DPBF", expected, detected));
             }
             else
             {
               // incompatible DPBF version detected
               uint_t expected = (DPBF_VER_MAJOR<<16) | DPBF_VER_MINOR;
-              uint_t detected = (nbfHdr->nbfMajorVersion<<16) | nbfHdr->nbfMinorVersion; 
+              uint_t detected = (nbfHdr->nbfMajorVersion<<16) | nbfHdr->nbfMinorVersion;
               INVOKE_CALLBACK(onIncompatibleFile(filename, "DPBF", expected, detected));
             }
           }
@@ -2889,7 +2889,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
     // pass on caught exception to next handler
     throw;
   }
-  
+
   m_offsetObjectMap.clear();
   m_sharedObjectsMap.clear();
   m_textureImages.clear();
@@ -2901,7 +2901,7 @@ SceneSharedPtr DPBFLoader::load(const string& filename, dp::util::FileFinder con
   return scene;
 }
 
-ObjectSharedPtr DPBFLoader::loadCustomObject(uint_t objectCode, uint_t offset)
+ObjectSharedPtr DPBFLoader::loadCustomObject(DPBFCode objectCode, uint_t offset)
 {
   return( ObjectSharedPtr() );
 }
@@ -2911,13 +2911,13 @@ SceneSharedPtr DPBFLoader::loadScene(uint_t offset)
   SceneSharedPtr scene = Scene::create();
   Offset_AutoPtr<NBFScene> scenePtr(m_fm, callback(), offset);
   {
-    // scene specific data  
+    // scene specific data
     scene->setAmbientColor((const Vec3f&)convert(scenePtr->ambientColor));
     scene->setBackColor(convert<Vec4f>(scenePtr->backColor));
 
     string file;
     scene->setBackImage( (this->*m_pfnLoadTextureHost)( scenePtr->backImg, file ) );
-   
+
     readSceneCameras(scene, scenePtr);
     readSceneRootNode(scene, scenePtr);
     readObjectLinks( scene, scenePtr );
@@ -2930,13 +2930,13 @@ SceneSharedPtr DPBFLoader::loadScene_nbf_41(uint_t offset)
   SceneSharedPtr scene = Scene::create();
   Offset_AutoPtr<NBFScene_nbf_41> scenePtr(m_fm, callback(), offset);
   {
-    // scene specific data  
+    // scene specific data
     scene->setAmbientColor((const Vec3f&)convert(scenePtr->ambientColor));
     scene->setBackColor(convert<Vec4f>(scenePtr->backColor));
 
     string file;
     scene->setBackImage( (this->*m_pfnLoadTextureHost)( scenePtr->backImg, file ) );
-   
+
     readSceneCameras(scene, scenePtr);
     readSceneRootNode(scene, scenePtr);
     readObjectLinks( scene, scenePtr );
@@ -2949,7 +2949,7 @@ SceneSharedPtr DPBFLoader::loadScene_nbf_3e(uint_t offset)
   SceneSharedPtr scene = Scene::create();
   Offset_AutoPtr<NBFScene_nbf_3e> scenePtr(m_fm, callback(), offset);
   {
-    // scene specific data  
+    // scene specific data
     scene->setAmbientColor((const Vec3f&)convert(scenePtr->ambientColor));
     scene->setBackColor(convert<Vec4f>(scenePtr->backColor));
 
@@ -2967,7 +2967,7 @@ SceneSharedPtr DPBFLoader::loadScene_nbf_37(uint_t offset)
   SceneSharedPtr scene = Scene::create();
   Offset_AutoPtr<NBFScene_nbf_37> scenePtr(m_fm, callback(), offset);
   {
-    // scene specific data  
+    // scene specific data
     scene->setAmbientColor((const Vec3f&)convert(scenePtr->ambientColor));
     scene->setBackColor(convert<Vec4f>(scenePtr->backColor));
 
@@ -2982,7 +2982,7 @@ SceneSharedPtr DPBFLoader::loadScene_nbf_31(uint_t offset)
   SceneSharedPtr scene = Scene::create();
   Offset_AutoPtr<NBFScene_nbf_31> scenePtr(m_fm, callback(), offset);
   {
-    // scene specific data  
+    // scene specific data
     scene->setAmbientColor((const Vec3f&)convert(scenePtr->ambientColor));
     scene->setBackColor(Vec4f(convert(scenePtr->backColor),1.0f));
 
@@ -2997,7 +2997,7 @@ SceneSharedPtr DPBFLoader::loadScene_nbf_b(uint_t offset)
   SceneSharedPtr scene = Scene::create();
   Offset_AutoPtr<NBFScene_nbf_b> scenePtr(m_fm, callback(), offset);
   {
-    // scene specific data  
+    // scene specific data
     // no ambient color here !!
     scene->setBackColor(Vec4f(convert(scenePtr->backColor),1.0f));
 
@@ -3020,7 +3020,7 @@ void DPBFLoader::readSceneCameras( SceneSharedPtr const& scene, const Offset_Aut
     for ( unsigned int i=0; i<nbfScene->numCameras; ++i )
     {
       CameraSharedPtr camera((this->*m_pfnLoadCamera)(camOffs[i]));
-      if ( camera ) 
+      if ( camera )
       {
         scene->addCamera(camera);
       }
@@ -3064,7 +3064,7 @@ dp::sg::ui::ViewStateSharedPtr DPBFLoader::loadViewState(uint_t offset)
       viewState->setCamera(camera);
     }
   }
-  
+
   // ... stereo
   viewState->setStereoAutomaticEyeDistanceAdjustment(!!vwstatePtr->isStereoAutomatic);
   viewState->setAutoClipPlanes(!!vwstatePtr->isAutoClipPlanes);
@@ -3102,7 +3102,7 @@ dp::sg::ui::ViewStateSharedPtr DPBFLoader::loadViewState_nbf_39(uint_t offset)
 {
   dp::sg::ui::ViewStateSharedPtr viewState = dp::sg::ui::ViewState::create();
   Offset_AutoPtr<NBFViewState_nbf_39> vwstatePtr(m_fm, callback(), offset);
- 
+
   if ( vwstatePtr->camera )
   {
     CameraSharedPtr camera((this->*m_pfnLoadCamera)(vwstatePtr->camera));
@@ -3129,17 +3129,17 @@ CameraSharedPtr DPBFLoader::loadCamera(uint_t offset)
     Camera * cam = NULL;
     Offset_AutoPtr<NBFCamera> camPtr(m_fm, callback(), offset);
 
-    // camera could be either a parallel camera or a perspective camera 
-    DP_ASSERT(   camPtr->objectCode==NBF_MATRIX_CAMERA
-                || camPtr->objectCode==NBF_PARALLEL_CAMERA
-                || camPtr->objectCode==NBF_PERSPECTIVE_CAMERA
-                || camPtr->objectCode>=NBF_CUSTOM_OBJECT );
+    // camera could be either a parallel camera or a perspective camera
+    DP_ASSERT(   camPtr->objectCode==DPBFCode::MATRIX_CAMERA
+              || camPtr->objectCode==DPBFCode::PARALLEL_CAMERA
+              || camPtr->objectCode==DPBFCode::PERSPECTIVE_CAMERA
+              || camPtr->objectCode>=DPBFCode::CUSTOM_OBJECT );
 
     switch ( camPtr->objectCode )
     {
-      case NBF_MATRIX_CAMERA      : DP_VERIFY(loadMatrixCamera(offset));      break;
-      case NBF_PARALLEL_CAMERA    : DP_VERIFY(loadParallelCamera(offset));    break;
-      case NBF_PERSPECTIVE_CAMERA : DP_VERIFY(loadPerspectiveCamera(offset)); break;
+      case DPBFCode::MATRIX_CAMERA      : DP_VERIFY(loadMatrixCamera(offset));      break;
+      case DPBFCode::PARALLEL_CAMERA    : DP_VERIFY(loadParallelCamera(offset));    break;
+      case DPBFCode::PERSPECTIVE_CAMERA : DP_VERIFY(loadPerspectiveCamera(offset)); break;
       // custom object handling
       default: mapObject(offset, loadCustomObject(camPtr->objectCode, offset));
     }
@@ -3156,17 +3156,17 @@ CameraSharedPtr DPBFLoader::loadCamera_nbf_4c(uint_t offset)
     Camera * cam = NULL;
     Offset_AutoPtr<NBFCamera> camPtr(m_fm, callback(), offset);
 
-    // camera could be either a parallel camera or a perspective camera 
-    DP_ASSERT(   camPtr->objectCode==NBF_MATRIX_CAMERA
-                || camPtr->objectCode==NBF_PARALLEL_CAMERA
-                || camPtr->objectCode==NBF_PERSPECTIVE_CAMERA
-                || camPtr->objectCode>=NBF_CUSTOM_OBJECT );
+    // camera could be either a parallel camera or a perspective camera
+    DP_ASSERT(   camPtr->objectCode==DPBFCode::MATRIX_CAMERA
+                || camPtr->objectCode==DPBFCode::PARALLEL_CAMERA
+                || camPtr->objectCode==DPBFCode::PERSPECTIVE_CAMERA
+                || camPtr->objectCode>=DPBFCode::CUSTOM_OBJECT );
 
     switch ( camPtr->objectCode )
     {
-      case NBF_MATRIX_CAMERA      : DP_VERIFY(loadMatrixCamera(offset));              break;
-      case NBF_PARALLEL_CAMERA    : DP_VERIFY(loadParallelCamera_nbf_4c(offset));     break;
-      case NBF_PERSPECTIVE_CAMERA : DP_VERIFY(loadPerspectiveCamera_nbf_4c(offset));  break;
+      case DPBFCode::MATRIX_CAMERA      : DP_VERIFY(loadMatrixCamera(offset));              break;
+      case DPBFCode::PARALLEL_CAMERA    : DP_VERIFY(loadParallelCamera_nbf_4c(offset));     break;
+      case DPBFCode::PERSPECTIVE_CAMERA : DP_VERIFY(loadPerspectiveCamera_nbf_4c(offset));  break;
       // custom object handling
       default: mapObject(offset, loadCustomObject(camPtr->objectCode, offset));
     }
@@ -3183,15 +3183,15 @@ CameraSharedPtr DPBFLoader::loadCamera_nbf_44(uint_t offset)
     Camera * cam = NULL;
     Offset_AutoPtr<NBFCamera_nbf_44> camPtr(m_fm, callback(), offset);
 
-    // camera could be either a parallel camera or a perspective camera 
-    DP_ASSERT(  camPtr->objectCode==NBF_PARALLEL_CAMERA
-               || camPtr->objectCode==NBF_PERSPECTIVE_CAMERA
-               || camPtr->objectCode>=NBF_CUSTOM_OBJECT );
+    // camera could be either a parallel camera or a perspective camera
+    DP_ASSERT(  camPtr->objectCode==DPBFCode::PARALLEL_CAMERA
+               || camPtr->objectCode==DPBFCode::PERSPECTIVE_CAMERA
+               || camPtr->objectCode>=DPBFCode::CUSTOM_OBJECT );
 
     switch ( camPtr->objectCode )
     {
-      case NBF_PARALLEL_CAMERA :    DP_VERIFY(loadParallelCamera_nbf_44(offset));    break;
-      case NBF_PERSPECTIVE_CAMERA : DP_VERIFY(loadPerspectiveCamera_nbf_44(offset)); break;
+      case DPBFCode::PARALLEL_CAMERA :    DP_VERIFY(loadParallelCamera_nbf_44(offset));    break;
+      case DPBFCode::PERSPECTIVE_CAMERA : DP_VERIFY(loadPerspectiveCamera_nbf_44(offset)); break;
       // custom object handling
       default: mapObject(offset, loadCustomObject(camPtr->objectCode, offset));
     }
@@ -3208,7 +3208,7 @@ MatrixCameraSharedPtr DPBFLoader::loadMatrixCamera(uint_t offset)
 
   Offset_AutoPtr<NBFMatrixCamera> camPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(camPtr->objectCode==NBF_MATRIX_CAMERA);
+  DP_ASSERT(camPtr->objectCode==DPBFCode::MATRIX_CAMERA);
 
   MatrixCameraSharedPtr camera = MatrixCamera::create();
   readCamera( camera, camPtr );
@@ -3225,7 +3225,7 @@ ParallelCameraSharedPtr DPBFLoader::loadParallelCamera(uint_t offset)
 
   Offset_AutoPtr<NBFParallelCamera> camPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(camPtr->objectCode==NBF_PARALLEL_CAMERA);
+  DP_ASSERT(camPtr->objectCode==DPBFCode::PARALLEL_CAMERA);
 
   ParallelCameraSharedPtr camera = ParallelCamera::create();
   readFrustumCamera( camera, offset );
@@ -3242,7 +3242,7 @@ ParallelCameraSharedPtr DPBFLoader::loadParallelCamera_nbf_4c(uint_t offset)
 
   Offset_AutoPtr<NBFParallelCamera_nbf_4c> camPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(camPtr->objectCode==NBF_PARALLEL_CAMERA);
+  DP_ASSERT(camPtr->objectCode==DPBFCode::PARALLEL_CAMERA);
 
   ParallelCameraSharedPtr camera = ParallelCamera::create();
   readFrustumCamera_nbf_4c( camera, offset );
@@ -3259,7 +3259,7 @@ ParallelCameraSharedPtr DPBFLoader::loadParallelCamera_nbf_44(uint_t offset)
 
   Offset_AutoPtr<NBFParallelCamera_nbf_44> camPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(camPtr->objectCode==NBF_PARALLEL_CAMERA);
+  DP_ASSERT(camPtr->objectCode==DPBFCode::PARALLEL_CAMERA);
 
   ParallelCameraSharedPtr camera = ParallelCamera::create();
   readCamera_nbf_44( camera, camPtr );
@@ -3276,7 +3276,7 @@ PerspectiveCameraSharedPtr DPBFLoader::loadPerspectiveCamera(uint_t offset)
 
   Offset_AutoPtr<NBFPerspectiveCamera> camPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(camPtr->objectCode==NBF_PERSPECTIVE_CAMERA);
+  DP_ASSERT(camPtr->objectCode==DPBFCode::PERSPECTIVE_CAMERA);
 
   PerspectiveCameraSharedPtr camera = PerspectiveCamera::create();
   readFrustumCamera( camera, offset );
@@ -3293,7 +3293,7 @@ PerspectiveCameraSharedPtr DPBFLoader::loadPerspectiveCamera_nbf_4c(uint_t offse
 
   Offset_AutoPtr<NBFPerspectiveCamera_nbf_4c> camPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(camPtr->objectCode==NBF_PERSPECTIVE_CAMERA);
+  DP_ASSERT(camPtr->objectCode==DPBFCode::PERSPECTIVE_CAMERA);
 
   PerspectiveCameraSharedPtr camera = PerspectiveCamera::create();
   readFrustumCamera_nbf_4c( camera, offset );
@@ -3310,7 +3310,7 @@ PerspectiveCameraSharedPtr DPBFLoader::loadPerspectiveCamera_nbf_44(uint_t offse
 
   Offset_AutoPtr<NBFPerspectiveCamera_nbf_44> camPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(camPtr->objectCode==NBF_PERSPECTIVE_CAMERA);
+  DP_ASSERT(camPtr->objectCode==DPBFCode::PERSPECTIVE_CAMERA);
 
   PerspectiveCameraSharedPtr camera = PerspectiveCamera::create();
   readCamera_nbf_44( camera, camPtr );
@@ -3326,52 +3326,52 @@ PrimitiveSharedPtr DPBFLoader::loadAnyPrimitive(uint_t offset)
   {
     Offset_AutoPtr<NBFPrimitive> drawablePtr(m_fm, callback(), offset);
 
-    DP_ASSERT(   drawablePtr->objectCode==NBF_TRIANGLES
-                || drawablePtr->objectCode==NBF_ANIMATED_TRIANGLES
-                || drawablePtr->objectCode==NBF_SKINNED_TRIANGLES
-                || drawablePtr->objectCode==NBF_TRISTRIPS
-                || drawablePtr->objectCode==NBF_QUADMESHES
-                || drawablePtr->objectCode==NBF_QUADS
-                || drawablePtr->objectCode==NBF_ANIMATED_QUADS
-                || drawablePtr->objectCode==NBF_QUADSTRIPS
-                || drawablePtr->objectCode==NBF_LINES
-                || drawablePtr->objectCode==NBF_LINESTRIPS
-                || drawablePtr->objectCode==NBF_TRIFANS
-                || drawablePtr->objectCode==NBF_POINTS
-                || drawablePtr->objectCode==NBF_PATCHES
-                || drawablePtr->objectCode==NBF_QUAD_PATCHES
-                || drawablePtr->objectCode==NBF_QUAD_PATCHES_4X4
-                || drawablePtr->objectCode==NBF_RECT_PATCHES
-                || drawablePtr->objectCode==NBF_TRI_PATCHES
-                || drawablePtr->objectCode==NBF_TRI_PATCHES_4
-                || drawablePtr->objectCode==NBF_PRIMITIVE
-                || drawablePtr->objectCode>=NBF_CUSTOM_OBJECT );
-   
+    DP_ASSERT(   drawablePtr->objectCode==DPBFCode::TRIANGLES
+              || drawablePtr->objectCode==DPBFCode::ANIMATED_TRIANGLES
+              || drawablePtr->objectCode==DPBFCode::SKINNED_TRIANGLES
+              || drawablePtr->objectCode==DPBFCode::TRISTRIPS
+              || drawablePtr->objectCode==DPBFCode::QUADMESHES
+              || drawablePtr->objectCode==DPBFCode::QUADS
+              || drawablePtr->objectCode==DPBFCode::ANIMATED_QUADS
+              || drawablePtr->objectCode==DPBFCode::QUADSTRIPS
+              || drawablePtr->objectCode==DPBFCode::LINES
+              || drawablePtr->objectCode==DPBFCode::LINESTRIPS
+              || drawablePtr->objectCode==DPBFCode::TRIFANS
+              || drawablePtr->objectCode==DPBFCode::POINTS
+              || drawablePtr->objectCode==DPBFCode::PATCHES
+              || drawablePtr->objectCode==DPBFCode::QUAD_PATCHES
+              || drawablePtr->objectCode==DPBFCode::QUAD_PATCHES_4X4
+              || drawablePtr->objectCode==DPBFCode::RECT_PATCHES
+              || drawablePtr->objectCode==DPBFCode::TRI_PATCHES
+              || drawablePtr->objectCode==DPBFCode::TRI_PATCHES_4
+              || drawablePtr->objectCode==DPBFCode::PRIMITIVE
+              || drawablePtr->objectCode>=DPBFCode::CUSTOM_OBJECT );
+
     switch ( drawablePtr->objectCode )
     {
-#define MK_PLIST(T) T,T##Handle   
-      case NBF_ANIMATED_QUADS:     DP_VERIFY(loadAnimatedIndependents_nbf_3a(offset)); break;
-      case NBF_ANIMATED_TRIANGLES: DP_VERIFY(loadAnimatedIndependents_nbf_3a(offset)); break;
-      case NBF_LINES:              DP_VERIFY(loadIndependents(offset));                break;
-      case NBF_LINESTRIPS:         DP_VERIFY(loadStrips(offset));                      break;
-      case NBF_QUADMESHES:         DP_VERIFY(loadMeshes(offset));                      break;
-      case NBF_QUADS:              DP_VERIFY(loadIndependents(offset));                break;
-      case NBF_QUADSTRIPS:         DP_VERIFY(loadStrips(offset));                      break;
-      case NBF_SKINNED_TRIANGLES:  DP_VERIFY(loadSkinnedTriangles(offset));            break;
-      case NBF_TRIANGLES:          DP_VERIFY(loadIndependents(offset));                break;
-      case NBF_TRISTRIPS:          DP_VERIFY(loadStrips(offset));                      break;
-      case NBF_TRIFANS:            DP_VERIFY(loadStrips(offset));                      break;
-      case NBF_POINTS:             DP_VERIFY(loadIndependents(offset));                break;
-      case NBF_PRIMITIVE:          DP_VERIFY((this->*m_pfnLoadPrimitive)(offset));     break;
+#define MK_PLIST(T) T,T##Handle
+      case DPBFCode::ANIMATED_QUADS:     DP_VERIFY(loadAnimatedIndependents_nbf_3a(offset)); break;
+      case DPBFCode::ANIMATED_TRIANGLES: DP_VERIFY(loadAnimatedIndependents_nbf_3a(offset)); break;
+      case DPBFCode::LINES:              DP_VERIFY(loadIndependents(offset));                break;
+      case DPBFCode::LINESTRIPS:         DP_VERIFY(loadStrips(offset));                      break;
+      case DPBFCode::QUADMESHES:         DP_VERIFY(loadMeshes(offset));                      break;
+      case DPBFCode::QUADS:              DP_VERIFY(loadIndependents(offset));                break;
+      case DPBFCode::QUADSTRIPS:         DP_VERIFY(loadStrips(offset));                      break;
+      case DPBFCode::SKINNED_TRIANGLES:  DP_VERIFY(loadSkinnedTriangles(offset));            break;
+      case DPBFCode::TRIANGLES:          DP_VERIFY(loadIndependents(offset));                break;
+      case DPBFCode::TRISTRIPS:          DP_VERIFY(loadStrips(offset));                      break;
+      case DPBFCode::TRIFANS:            DP_VERIFY(loadStrips(offset));                      break;
+      case DPBFCode::POINTS:             DP_VERIFY(loadIndependents(offset));                break;
+      case DPBFCode::PRIMITIVE:          DP_VERIFY((this->*m_pfnLoadPrimitive)(offset));     break;
 
-      // patches is only in m_nbfMajor < 0x48                             
-      case NBF_PATCHES:            DP_VERIFY( loadPatches_nbf_47(offset) );                  break;
+      // patches is only in m_nbfMajor < 0x48
+      case DPBFCode::PATCHES:            DP_VERIFY( loadPatches_nbf_47(offset) );                  break;
 
-      case NBF_QUAD_PATCHES:       DP_VERIFY( (this->*m_pfnLoadQuadPatches)(offset) );       break;
-      case NBF_QUAD_PATCHES_4X4:   DP_VERIFY( (this->*m_pfnLoadQuadPatches4x4)(offset) );    break;
-      case NBF_RECT_PATCHES:       DP_VERIFY( (this->*m_pfnLoadRectPatches)(offset) );       break;
-      case NBF_TRI_PATCHES:        DP_VERIFY( (this->*m_pfnLoadTriPatches)(offset) );        break;
-      case NBF_TRI_PATCHES_4:      DP_VERIFY( (this->*m_pfnLoadTriPatches4)(offset) );       break;
+      case DPBFCode::QUAD_PATCHES:       DP_VERIFY( (this->*m_pfnLoadQuadPatches)(offset) );       break;
+      case DPBFCode::QUAD_PATCHES_4X4:   DP_VERIFY( (this->*m_pfnLoadQuadPatches4x4)(offset) );    break;
+      case DPBFCode::RECT_PATCHES:       DP_VERIFY( (this->*m_pfnLoadRectPatches)(offset) );       break;
+      case DPBFCode::TRI_PATCHES:        DP_VERIFY( (this->*m_pfnLoadTriPatches)(offset) );        break;
+      case DPBFCode::TRI_PATCHES_4:      DP_VERIFY( (this->*m_pfnLoadTriPatches4)(offset) );       break;
 
 #undef MK_PLIST
       // custom object handling
@@ -3392,11 +3392,11 @@ PrimitiveSharedPtr DPBFLoader::loadSkinnedTriangles(uint_t offset)
   PrimitiveSharedPtr trianglesHdl;
   Offset_AutoPtr<NBFSkinnedTriangles_nbf_54> triPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(triPtr->objectCode==NBF_SKINNED_TRIANGLES);
+  DP_ASSERT(triPtr->objectCode==DPBFCode::SKINNED_TRIANGLES);
 
   // need to care about object sharing
   if ( !loadSharedObject<Primitive>(trianglesHdl, triPtr, PRIMITIVE_TRIANGLES) )
-  {    
+  {
     // NOTE: general object data were already written by loadSharedObject
     DP_ASSERT( trianglesHdl->getPrimitiveType() == PRIMITIVE_TRIANGLES );
     readIndependentPrimitiveSet( trianglesHdl, triPtr );
@@ -3413,12 +3413,12 @@ PrimitiveSharedPtr DPBFLoader::loadAnimatedIndependents_nbf_3a( uint_t offset )
   PrimitiveSharedPtr animatedHdl;
   Offset_AutoPtr<NBFAnimatedIndependents_nbf_3a> animatedPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(    animatedPtr->objectCode==NBF_ANIMATED_QUADS
-              ||  animatedPtr->objectCode==NBF_ANIMATED_TRIANGLES );
+  DP_ASSERT(    animatedPtr->objectCode==DPBFCode::ANIMATED_QUADS
+            ||  animatedPtr->objectCode==DPBFCode::ANIMATED_TRIANGLES );
 
   // need to care about object sharing
-  if ( !loadSharedObject<Primitive>( animatedHdl, animatedPtr, animatedPtr->objectCode == NBF_ANIMATED_QUADS ? PRIMITIVE_QUADS : PRIMITIVE_TRIANGLES ) )
-  {    
+  if ( !loadSharedObject<Primitive>( animatedHdl, animatedPtr, animatedPtr->objectCode == DPBFCode::ANIMATED_QUADS ? PRIMITIVE_QUADS : PRIMITIVE_TRIANGLES ) )
+  {
     // NOTE: general object data were already written by loadSharedObject
     readIndependentPrimitiveSet( animatedHdl, animatedPtr );
     DP_ASSERT( animatedHdl->getVertexAttributeSet() );
@@ -3435,24 +3435,24 @@ PrimitiveSharedPtr DPBFLoader::loadIndependents( uint_t offset )
   PrimitiveSharedPtr independentHdl;
   Offset_AutoPtr<NBFIndependentPrimitiveSet> indPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(  indPtr->objectCode==NBF_LINES
-             || indPtr->objectCode==NBF_QUADS
-             || indPtr->objectCode==NBF_POINTS
-             || indPtr->objectCode==NBF_TRIANGLES );
+  DP_ASSERT(  indPtr->objectCode==DPBFCode::LINES
+          ||  indPtr->objectCode==DPBFCode::QUADS
+          ||  indPtr->objectCode==DPBFCode::POINTS
+          ||  indPtr->objectCode==DPBFCode::TRIANGLES );
 
   PrimitiveType pt;
   switch( indPtr->objectCode )
   {
-    case NBF_LINES :
+    case DPBFCode::LINES :
       pt = PRIMITIVE_LINES;
       break;
-    case NBF_QUADS :
+    case DPBFCode::QUADS :
       pt = PRIMITIVE_QUADS;
       break;
-    case NBF_POINTS :
+    case DPBFCode::POINTS :
       pt = PRIMITIVE_POINTS;
       break;
-    case NBF_TRIANGLES :
+    case DPBFCode::TRIANGLES :
       pt = PRIMITIVE_TRIANGLES;
       break;
     default :
@@ -3462,7 +3462,7 @@ PrimitiveSharedPtr DPBFLoader::loadIndependents( uint_t offset )
 
   // need to care about object sharing
   if ( !loadSharedObject<Primitive>( independentHdl, indPtr, pt ) )
-  {    
+  {
     // NOTE: general object data were already written by loadSharedObject
     readIndependentPrimitiveSet( independentHdl, indPtr );
   }
@@ -3478,10 +3478,10 @@ PrimitiveSharedPtr DPBFLoader::loadMeshes(uint_t offset)
   PrimitiveSharedPtr meshesHdl;
   Offset_AutoPtr<NBFMeshedPrimitiveSet> meshesPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT( meshesPtr->objectCode==NBF_QUADMESHES );
+  DP_ASSERT( meshesPtr->objectCode==DPBFCode::QUADMESHES );
 
   if ( !loadSharedObject<Primitive>( meshesHdl, meshesPtr, PRIMITIVE_QUADS ) )
-  {    
+  {
     // NOTE: general object data have already been written by loadSharedObject
     readPrimitiveSet( meshesHdl, meshesPtr);
 
@@ -3520,24 +3520,24 @@ PrimitiveSharedPtr DPBFLoader::loadStrips(uint_t offset)
   PrimitiveSharedPtr stripsHdl;
   Offset_AutoPtr<NBFStrippedPrimitiveSet> stripsPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(  stripsPtr->objectCode==NBF_TRISTRIPS
-             || stripsPtr->objectCode==NBF_TRIFANS
-             || stripsPtr->objectCode==NBF_QUADSTRIPS
-             || stripsPtr->objectCode==NBF_LINESTRIPS );
+  DP_ASSERT(  stripsPtr->objectCode==DPBFCode::TRISTRIPS
+          ||  stripsPtr->objectCode==DPBFCode::TRIFANS
+          ||  stripsPtr->objectCode==DPBFCode::QUADSTRIPS
+          ||  stripsPtr->objectCode==DPBFCode::LINESTRIPS );
 
   PrimitiveType pt;
   switch( stripsPtr->objectCode )
   {
-    case NBF_TRISTRIPS :
+    case DPBFCode::TRISTRIPS :
       pt = PRIMITIVE_TRIANGLE_STRIP;
       break;
-    case NBF_TRIFANS :
+    case DPBFCode::TRIFANS :
       pt = PRIMITIVE_TRIANGLE_FAN;
       break;
-    case NBF_QUADSTRIPS :
+    case DPBFCode::QUADSTRIPS :
       pt = PRIMITIVE_QUAD_STRIP;
       break;
-    case NBF_LINESTRIPS :
+    case DPBFCode::LINESTRIPS :
       pt = PRIMITIVE_LINE_STRIP;
       break;
     default :
@@ -3546,7 +3546,7 @@ PrimitiveSharedPtr DPBFLoader::loadStrips(uint_t offset)
   }
 
   if ( !loadSharedObject<Primitive>( stripsHdl, stripsPtr, pt ) )
-  {    
+  {
     // NOTE: general object data have already been written by loadSharedObject
     readPrimitiveSet( stripsHdl, stripsPtr );
 
@@ -3576,37 +3576,37 @@ NodeSharedPtr DPBFLoader::loadNode(uint_t offset)
   {
     Offset_AutoPtr<NBFNode> nodePtr(m_fm, callback(), offset);
 
-    DP_ASSERT(   nodePtr->objectCode==NBF_GEO_NODE
-                || nodePtr->objectCode==NBF_GROUP
-                || nodePtr->objectCode==NBF_BILLBOARD
-                || nodePtr->objectCode==NBF_FLIPBOOK_ANIMATION
-                || nodePtr->objectCode==NBF_LOD
-                || nodePtr->objectCode==NBF_SWITCH
-                || nodePtr->objectCode==NBF_TRANSFORM
-                || nodePtr->objectCode==NBF_ANIMATED_TRANSFORM
-                || nodePtr->objectCode==NBF_VOLUME_NODE
-                || nodePtr->objectCode==NBF_DIRECTED_LIGHT
-                || nodePtr->objectCode==NBF_POINT_LIGHT
-                || nodePtr->objectCode==NBF_SPOT_LIGHT
-                || nodePtr->objectCode==NBF_LIGHT_SOURCE
-                || nodePtr->objectCode>=NBF_CUSTOM_OBJECT );
+    DP_ASSERT(   nodePtr->objectCode==DPBFCode::GEO_NODE
+              || nodePtr->objectCode==DPBFCode::GROUP
+              || nodePtr->objectCode==DPBFCode::BILLBOARD
+              || nodePtr->objectCode==DPBFCode::FLIPBOOK_ANIMATION
+              || nodePtr->objectCode==DPBFCode::LOD
+              || nodePtr->objectCode==DPBFCode::SWITCH
+              || nodePtr->objectCode==DPBFCode::TRANSFORM
+              || nodePtr->objectCode==DPBFCode::ANIMATED_TRANSFORM
+              || nodePtr->objectCode==DPBFCode::VOLUME_NODE
+              || nodePtr->objectCode==DPBFCode::DIRECTED_LIGHT
+              || nodePtr->objectCode==DPBFCode::POINT_LIGHT
+              || nodePtr->objectCode==DPBFCode::SPOT_LIGHT
+              || nodePtr->objectCode==DPBFCode::LIGHT_SOURCE
+              || nodePtr->objectCode>=DPBFCode::CUSTOM_OBJECT );
 
     // switch to concrete objects
     switch( nodePtr->objectCode )
     {
-      case NBF_GEO_NODE:           DP_VERIFY((this->*m_pfnLoadGeoNode)(offset));            break;
-      case NBF_GROUP:              DP_VERIFY((this->*m_pfnLoadGroup)(offset));              break;
-      case NBF_BILLBOARD:          DP_VERIFY((this->*m_pfnLoadBillboard)(offset));          break;
-      case NBF_FLIPBOOK_ANIMATION: DP_VERIFY(loadFlipbookAnimation(offset));                break;
-      case NBF_LOD:                DP_VERIFY((this->*m_pfnLoadLOD)(offset));                break;
-      case NBF_SWITCH:             DP_VERIFY((this->*m_pfnLoadSwitch)(offset));             break;
-      case NBF_TRANSFORM:          DP_VERIFY((this->*m_pfnLoadTransform)(offset));          break;
-      case NBF_ANIMATED_TRANSFORM: DP_VERIFY((this->*m_pfnLoadAnimatedTransform)(offset));  break;
-      case NBF_LIGHT_SOURCE:       // fall thru
-      case NBF_DIRECTED_LIGHT:     // fall thru
-      case NBF_POINT_LIGHT:        // fall thru
-      case NBF_SPOT_LIGHT:         DP_VERIFY((this->*m_pfnLoadLightSource)(offset));        break;
-      case NBF_VOLUME_NODE:        mapObject( offset, ObjectSharedPtr() );                  break;
+      case DPBFCode::GEO_NODE:           DP_VERIFY((this->*m_pfnLoadGeoNode)(offset));            break;
+      case DPBFCode::GROUP:              DP_VERIFY((this->*m_pfnLoadGroup)(offset));              break;
+      case DPBFCode::BILLBOARD:          DP_VERIFY((this->*m_pfnLoadBillboard)(offset));          break;
+      case DPBFCode::FLIPBOOK_ANIMATION: DP_VERIFY(loadFlipbookAnimation(offset));                break;
+      case DPBFCode::LOD:                DP_VERIFY((this->*m_pfnLoadLOD)(offset));                break;
+      case DPBFCode::SWITCH:             DP_VERIFY((this->*m_pfnLoadSwitch)(offset));             break;
+      case DPBFCode::TRANSFORM:          DP_VERIFY((this->*m_pfnLoadTransform)(offset));          break;
+      case DPBFCode::ANIMATED_TRANSFORM: DP_VERIFY((this->*m_pfnLoadAnimatedTransform)(offset));  break;
+      case DPBFCode::LIGHT_SOURCE:       // fall thru
+      case DPBFCode::DIRECTED_LIGHT:     // fall thru
+      case DPBFCode::POINT_LIGHT:        // fall thru
+      case DPBFCode::SPOT_LIGHT:         DP_VERIFY((this->*m_pfnLoadLightSource)(offset));        break;
+      case DPBFCode::VOLUME_NODE:        mapObject( offset, ObjectSharedPtr() );                  break;
       // custom object handling
       default: mapObject(offset, loadCustomObject(nodePtr->objectCode, offset));
     }
@@ -3622,31 +3622,31 @@ ObjectSharedPtr DPBFLoader::loadNode_nbf_12(uint_t offset)
   {
     Offset_AutoPtr<NBFNode> nodePtr(m_fm, callback(), offset);
 
-    DP_ASSERT(   nodePtr->objectCode==NBF_GEO_NODE
-                || nodePtr->objectCode==NBF_GROUP
-                || nodePtr->objectCode==NBF_BILLBOARD
-                || nodePtr->objectCode==NBF_LOD
-                || nodePtr->objectCode==NBF_SWITCH
-                || nodePtr->objectCode==NBF_TRANSFORM
-                || nodePtr->objectCode==NBF_ANIMATED_TRANSFORM
-                || nodePtr->objectCode==NBF_DIRECTED_LIGHT
-                || nodePtr->objectCode==NBF_POINT_LIGHT
-                || nodePtr->objectCode==NBF_SPOT_LIGHT
-                || nodePtr->objectCode>=NBF_CUSTOM_OBJECT );
+    DP_ASSERT(   nodePtr->objectCode==DPBFCode::GEO_NODE
+              || nodePtr->objectCode==DPBFCode::GROUP
+              || nodePtr->objectCode==DPBFCode::BILLBOARD
+              || nodePtr->objectCode==DPBFCode::LOD
+              || nodePtr->objectCode==DPBFCode::SWITCH
+              || nodePtr->objectCode==DPBFCode::TRANSFORM
+              || nodePtr->objectCode==DPBFCode::ANIMATED_TRANSFORM
+              || nodePtr->objectCode==DPBFCode::DIRECTED_LIGHT
+              || nodePtr->objectCode==DPBFCode::POINT_LIGHT
+              || nodePtr->objectCode==DPBFCode::SPOT_LIGHT
+              || nodePtr->objectCode>=DPBFCode::CUSTOM_OBJECT );
 
     // switch to concrete objects
     switch( nodePtr->objectCode )
     {
-    case NBF_GEO_NODE:           DP_VERIFY((this->*m_pfnLoadGeoNode)(offset));            break;
-    case NBF_GROUP:              DP_VERIFY((this->*m_pfnLoadGroup)(offset));              break;
-    case NBF_BILLBOARD:          DP_VERIFY((this->*m_pfnLoadBillboard)(offset));          break;
-    case NBF_LOD:                DP_VERIFY((this->*m_pfnLoadLOD)(offset));                break;
-    case NBF_SWITCH:             DP_VERIFY((this->*m_pfnLoadSwitch)(offset));             break;
-    case NBF_TRANSFORM:          DP_VERIFY((this->*m_pfnLoadTransform)(offset));          break;
-    case NBF_ANIMATED_TRANSFORM: DP_VERIFY((this->*m_pfnLoadAnimatedTransform)(offset));  break;
-    case NBF_DIRECTED_LIGHT:     // fall thru     
-    case NBF_POINT_LIGHT:        // fall thru        
-    case NBF_SPOT_LIGHT:         DP_VERIFY((this->*m_pfnLoadLightSource)(offset));        break;
+    case DPBFCode::GEO_NODE:           DP_VERIFY((this->*m_pfnLoadGeoNode)(offset));            break;
+    case DPBFCode::GROUP:              DP_VERIFY((this->*m_pfnLoadGroup)(offset));              break;
+    case DPBFCode::BILLBOARD:          DP_VERIFY((this->*m_pfnLoadBillboard)(offset));          break;
+    case DPBFCode::LOD:                DP_VERIFY((this->*m_pfnLoadLOD)(offset));                break;
+    case DPBFCode::SWITCH:             DP_VERIFY((this->*m_pfnLoadSwitch)(offset));             break;
+    case DPBFCode::TRANSFORM:          DP_VERIFY((this->*m_pfnLoadTransform)(offset));          break;
+    case DPBFCode::ANIMATED_TRANSFORM: DP_VERIFY((this->*m_pfnLoadAnimatedTransform)(offset));  break;
+    case DPBFCode::DIRECTED_LIGHT:     // fall thru
+    case DPBFCode::POINT_LIGHT:        // fall thru
+    case DPBFCode::SPOT_LIGHT:         DP_VERIFY((this->*m_pfnLoadLightSource)(offset));        break;
       // custom object handling
     default: mapObject(offset, loadCustomObject(nodePtr->objectCode, offset));
     }
@@ -3663,7 +3663,7 @@ NodeSharedPtr DPBFLoader::loadGeoNode(uint_t offset)
 
   Offset_AutoPtr<NBFGeoNode> nodePtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(nodePtr->objectCode==NBF_GEO_NODE);
+  DP_ASSERT(nodePtr->objectCode==DPBFCode::GEO_NODE);
 
   GeoNodeSharedPtr nodeHdl(GeoNode::create());
   readObject( nodeHdl, nodePtr);
@@ -3693,7 +3693,7 @@ NodeSharedPtr DPBFLoader::loadGeoNode_nbf_51(uint_t offset)
 
   Offset_AutoPtr<NBFGeoNode_nbf_51> nodePtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(nodePtr->objectCode==NBF_GEO_NODE);
+  DP_ASSERT(nodePtr->objectCode==DPBFCode::GEO_NODE);
 
   GeoNodeSharedPtr nodeHdl(GeoNode::create());
   readObject( nodeHdl, nodePtr );
@@ -3724,7 +3724,7 @@ NodeSharedPtr DPBFLoader::loadGeoNode_nbf_4e(uint_t offset)
 
   Offset_AutoPtr<NBFGeoNode_nbf_4e> nodePtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(nodePtr->objectCode==NBF_GEO_NODE);
+  DP_ASSERT(nodePtr->objectCode==DPBFCode::GEO_NODE);
 
   GroupSharedPtr group = Group::create();
   readObject( group, nodePtr );
@@ -3805,7 +3805,7 @@ GroupSharedPtr DPBFLoader::loadGroup(uint_t offset)
 
   Offset_AutoPtr<NBFGroup> groupPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(groupPtr->objectCode==NBF_GROUP);
+  DP_ASSERT(groupPtr->objectCode==DPBFCode::GROUP);
 
   GroupSharedPtr groupHdl(Group::create());
   readObject( groupHdl, groupPtr );
@@ -3823,7 +3823,7 @@ GroupSharedPtr DPBFLoader::loadGroup_nbf_12(uint_t offset)
 
   Offset_AutoPtr<NBFGroup_nbf_12> groupPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(groupPtr->objectCode==NBF_GROUP);
+  DP_ASSERT(groupPtr->objectCode==DPBFCode::GROUP);
 
   GroupSharedPtr groupHdl(Group::create());
   readObject( groupHdl, groupPtr );
@@ -3841,7 +3841,7 @@ GroupSharedPtr DPBFLoader::loadGroup_nbf_11(uint_t offset)
 
   Offset_AutoPtr<NBFGroup_nbf_11> groupPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(groupPtr->objectCode==NBF_GROUP);
+  DP_ASSERT(groupPtr->objectCode==DPBFCode::GROUP);
 
   GroupSharedPtr groupHdl(Group::create());
   readObject( groupHdl, groupPtr );
@@ -3859,7 +3859,7 @@ BillboardSharedPtr DPBFLoader::loadBillboard(uint_t offset)
 
   Offset_AutoPtr<NBFBillboard> billboardPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(billboardPtr->objectCode==NBF_BILLBOARD);
+  DP_ASSERT(billboardPtr->objectCode==DPBFCode::BILLBOARD);
 
   BillboardSharedPtr billboardHdl(Billboard::create());
   readObject( billboardHdl, billboardPtr );
@@ -3881,7 +3881,7 @@ BillboardSharedPtr DPBFLoader::loadBillboard_nbf_12(uint_t offset)
 
   Offset_AutoPtr<NBFBillboard_nbf_12> billboardPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(billboardPtr->objectCode==NBF_BILLBOARD);
+  DP_ASSERT(billboardPtr->objectCode==DPBFCode::BILLBOARD);
 
   BillboardSharedPtr billboardHdl(Billboard::create());
   readObject( billboardHdl, billboardPtr );
@@ -3890,7 +3890,7 @@ BillboardSharedPtr DPBFLoader::loadBillboard_nbf_12(uint_t offset)
 
   // Billboard specific
   billboardHdl->setRotationAxis(convert(billboardPtr->rotationAxis));
-  billboardHdl->setAlignment( billboardPtr->viewerAligned ? Billboard::BA_VIEWER : Billboard::BA_AXIS );
+  billboardHdl->setAlignment( billboardPtr->viewerAligned ? Billboard::Alignment::VIEWER : Billboard::Alignment::AXIS );
 
   mapObject(offset, billboardHdl);
   return billboardHdl;
@@ -3903,7 +3903,7 @@ BillboardSharedPtr DPBFLoader::loadBillboard_nbf_11(uint_t offset)
 
   Offset_AutoPtr<NBFBillboard_nbf_11> billboardPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(billboardPtr->objectCode==NBF_BILLBOARD);
+  DP_ASSERT(billboardPtr->objectCode==DPBFCode::BILLBOARD);
 
   BillboardSharedPtr billboardHdl(Billboard::create());
   readObject( billboardHdl, billboardPtr );
@@ -3912,7 +3912,7 @@ BillboardSharedPtr DPBFLoader::loadBillboard_nbf_11(uint_t offset)
 
   // Billboard specific
   billboardHdl->setRotationAxis(convert(billboardPtr->rotationAxis));
-  billboardHdl->setAlignment( billboardPtr->viewerAligned ? Billboard::BA_VIEWER : Billboard::BA_AXIS );
+  billboardHdl->setAlignment( billboardPtr->viewerAligned ? Billboard::Alignment::VIEWER : Billboard::Alignment::AXIS );
 
   mapObject(offset, billboardHdl);
   return billboardHdl;
@@ -3925,7 +3925,7 @@ SwitchSharedPtr DPBFLoader::loadFlipbookAnimation(uint_t offset)
 
   Offset_AutoPtr<NBFFlipbookAnimation_nbf_54> animPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(animPtr->objectCode==NBF_FLIPBOOK_ANIMATION);
+  DP_ASSERT(animPtr->objectCode==DPBFCode::FLIPBOOK_ANIMATION);
 
   SwitchSharedPtr sharedSwitch(Switch::create());
   readObject( sharedSwitch, animPtr );
@@ -3944,7 +3944,7 @@ TransformSharedPtr DPBFLoader::loadTransform(uint_t offset)
 
   Offset_AutoPtr<NBFTransform> trafoPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(trafoPtr->objectCode==NBF_TRANSFORM);
+  DP_ASSERT(trafoPtr->objectCode==DPBFCode::TRANSFORM);
 
   TransformSharedPtr trafoHdl(Transform::create());
   readObject( trafoHdl, trafoPtr );
@@ -3964,7 +3964,7 @@ TransformSharedPtr DPBFLoader::loadTransform_nbf_12(uint_t offset)
 
   Offset_AutoPtr<NBFTransform_nbf_12> trafoPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(trafoPtr->objectCode==NBF_TRANSFORM);
+  DP_ASSERT(trafoPtr->objectCode==DPBFCode::TRANSFORM);
 
   TransformSharedPtr trafoHdl(Transform::create());
   readObject( trafoHdl, trafoPtr );
@@ -3984,7 +3984,7 @@ TransformSharedPtr DPBFLoader::loadTransform_nbf_11(uint_t offset)
 
   Offset_AutoPtr<NBFTransform_nbf_11> trafoPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(trafoPtr->objectCode==NBF_TRANSFORM);
+  DP_ASSERT(trafoPtr->objectCode==DPBFCode::TRANSFORM);
 
   TransformSharedPtr trafoHdl(Transform::create());
   readObject( trafoHdl, trafoPtr );
@@ -4004,7 +4004,7 @@ TransformSharedPtr DPBFLoader::loadTransform_nbf_f(uint_t offset)
 
   Offset_AutoPtr<NBFTransform_nbf_f> trafoPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(trafoPtr->objectCode==NBF_TRANSFORM);
+  DP_ASSERT(trafoPtr->objectCode==DPBFCode::TRANSFORM);
 
   TransformSharedPtr trafoHdl(Transform::create());
   readObject( trafoHdl, trafoPtr );
@@ -4024,7 +4024,7 @@ TransformSharedPtr DPBFLoader::loadAnimatedTransform_nbf_54(uint_t offset)
 
   Offset_AutoPtr<NBFAnimatedTransform_nbf_54> trafoPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(trafoPtr->objectCode==NBF_ANIMATED_TRANSFORM);
+  DP_ASSERT(trafoPtr->objectCode==DPBFCode::ANIMATED_TRANSFORM);
 
   TransformSharedPtr transform = Transform::create();
   readObject( transform, trafoPtr );
@@ -4043,7 +4043,7 @@ TransformSharedPtr DPBFLoader::loadAnimatedTransform_nbf_12(uint_t offset)
 
   Offset_AutoPtr<NBFAnimatedTransform_nbf_12> trafoPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(trafoPtr->objectCode==NBF_ANIMATED_TRANSFORM);
+  DP_ASSERT(trafoPtr->objectCode==DPBFCode::ANIMATED_TRANSFORM);
 
   TransformSharedPtr transform = Transform::create();
   readObject( transform, trafoPtr );
@@ -4062,7 +4062,7 @@ TransformSharedPtr DPBFLoader::loadAnimatedTransform_nbf_11(uint_t offset)
 
   Offset_AutoPtr<NBFAnimatedTransform_nbf_11> trafoPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(trafoPtr->objectCode==NBF_ANIMATED_TRANSFORM);
+  DP_ASSERT(trafoPtr->objectCode==DPBFCode::ANIMATED_TRANSFORM);
 
   TransformSharedPtr transform = Transform::create();
   readObject( transform, trafoPtr );
@@ -4081,7 +4081,7 @@ TransformSharedPtr DPBFLoader::loadAnimatedTransform_nbf_f(uint_t offset)
 
   Offset_AutoPtr<NBFAnimatedTransform_nbf_f> trafoPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(trafoPtr->objectCode==NBF_ANIMATED_TRANSFORM);
+  DP_ASSERT(trafoPtr->objectCode==DPBFCode::ANIMATED_TRANSFORM);
 
   TransformSharedPtr transform = Transform::create();
   readObject( transform, trafoPtr );
@@ -4100,7 +4100,7 @@ LODSharedPtr DPBFLoader::loadLOD(uint_t offset)
 
   Offset_AutoPtr<NBFLOD> lodPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(lodPtr->objectCode==NBF_LOD);
+  DP_ASSERT(lodPtr->objectCode==DPBFCode::LOD);
 
   LODSharedPtr lodHdl(LOD::create());
   readObject( lodHdl, lodPtr );
@@ -4123,7 +4123,7 @@ LODSharedPtr DPBFLoader::loadLOD_nbf_12(uint_t offset)
 
   Offset_AutoPtr<NBFLOD_nbf_12> lodPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(lodPtr->objectCode==NBF_LOD);
+  DP_ASSERT(lodPtr->objectCode==DPBFCode::LOD);
 
   LODSharedPtr lodHdl(LOD::create());
   readObject( lodHdl, lodPtr );
@@ -4146,7 +4146,7 @@ LODSharedPtr DPBFLoader::loadLOD_nbf_11(uint_t offset)
 
   Offset_AutoPtr<NBFLOD_nbf_11> lodPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(lodPtr->objectCode==NBF_LOD);
+  DP_ASSERT(lodPtr->objectCode==DPBFCode::LOD);
 
   LODSharedPtr lodHdl(LOD::create());
   readObject( lodHdl, lodPtr );
@@ -4169,7 +4169,7 @@ SwitchSharedPtr DPBFLoader::loadSwitch(uint_t offset)
 
   Offset_AutoPtr<NBFSwitch> swtchPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(swtchPtr->objectCode==NBF_SWITCH);
+  DP_ASSERT(swtchPtr->objectCode==DPBFCode::SWITCH);
 
   SwitchSharedPtr swtchHdl(Switch::create());
   readObject( swtchHdl, swtchPtr );
@@ -4198,7 +4198,7 @@ SwitchSharedPtr DPBFLoader::loadSwitch_nbf_30(uint_t offset)
 
   Offset_AutoPtr<NBFSwitch_nbf_30> swtchPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(swtchPtr->objectCode==NBF_SWITCH);
+  DP_ASSERT(swtchPtr->objectCode==DPBFCode::SWITCH);
 
   SwitchSharedPtr swtchHdl(Switch::create());
   readObject( swtchHdl, swtchPtr );
@@ -4223,7 +4223,7 @@ SwitchSharedPtr DPBFLoader::loadSwitch_nbf_12(uint_t offset)
 
   Offset_AutoPtr<NBFSwitch_nbf_12> swtchPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(swtchPtr->objectCode==NBF_SWITCH);
+  DP_ASSERT(swtchPtr->objectCode==DPBFCode::SWITCH);
 
   SwitchSharedPtr swtchHdl(Switch::create());
   readObject( swtchHdl, swtchPtr );
@@ -4248,7 +4248,7 @@ SwitchSharedPtr DPBFLoader::loadSwitch_nbf_11(uint_t offset)
 
   Offset_AutoPtr<NBFSwitch_nbf_11> swtchPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(swtchPtr->objectCode==NBF_SWITCH);
+  DP_ASSERT(swtchPtr->objectCode==DPBFCode::SWITCH);
 
   SwitchSharedPtr swtchHdl(Switch::create());
   readObject( swtchHdl, swtchPtr );
@@ -4272,10 +4272,10 @@ LightSourceSharedPtr DPBFLoader::loadLightSource(uint_t offset)
   {
     Offset_AutoPtr<NBFLightSource> lightPtr(m_fm, callback(), offset);
 
-    DP_ASSERT(  lightPtr->objectCode==NBF_LIGHT_SOURCE
-               || lightPtr->objectCode>=NBF_CUSTOM_OBJECT );
+    DP_ASSERT(  lightPtr->objectCode==DPBFCode::LIGHT_SOURCE
+             || lightPtr->objectCode>=DPBFCode::CUSTOM_OBJECT );
 
-    if ( lightPtr->objectCode == NBF_LIGHT_SOURCE )
+    if ( lightPtr->objectCode == DPBFCode::LIGHT_SOURCE )
     {
       LightSourceSharedPtr lightSource = LightSource::create();
       readObject( lightSource, lightPtr );
@@ -4306,16 +4306,16 @@ LightSourceSharedPtr DPBFLoader::loadLightSource_nbf_53(uint_t offset)
   {
     Offset_AutoPtr<NBFLightSource_nbf_53> lightPtr(m_fm, callback(), offset);
 
-    DP_ASSERT(  lightPtr->objectCode==NBF_DIRECTED_LIGHT
-               || lightPtr->objectCode==NBF_POINT_LIGHT
-               || lightPtr->objectCode==NBF_SPOT_LIGHT
-               || lightPtr->objectCode>=NBF_CUSTOM_OBJECT );
+    DP_ASSERT(  lightPtr->objectCode==DPBFCode::DIRECTED_LIGHT
+            ||  lightPtr->objectCode==DPBFCode::POINT_LIGHT
+            ||  lightPtr->objectCode==DPBFCode::SPOT_LIGHT
+            ||  lightPtr->objectCode>=DPBFCode::CUSTOM_OBJECT );
 
     switch ( lightPtr->objectCode )
     {
-      case NBF_DIRECTED_LIGHT: DP_VERIFY(loadDirectedLight_nbf_53(offset)); break;
-      case NBF_POINT_LIGHT:    DP_VERIFY(loadPointLight_nbf_53(offset));    break;
-      case NBF_SPOT_LIGHT:     DP_VERIFY(loadSpotLight_nbf_53(offset));     break;
+      case DPBFCode::DIRECTED_LIGHT: DP_VERIFY(loadDirectedLight_nbf_53(offset)); break;
+      case DPBFCode::POINT_LIGHT:    DP_VERIFY(loadPointLight_nbf_53(offset));    break;
+      case DPBFCode::SPOT_LIGHT:     DP_VERIFY(loadSpotLight_nbf_53(offset));     break;
       // custom object handling
       default: mapObject(offset, loadCustomObject(lightPtr->objectCode, offset));
     }
@@ -4331,16 +4331,16 @@ LightSourceSharedPtr DPBFLoader::loadLightSource_nbf_52(uint_t offset)
   {
     Offset_AutoPtr<NBFLightSource_nbf_52> lightPtr(m_fm, callback(), offset);
 
-    DP_ASSERT(  lightPtr->objectCode==NBF_DIRECTED_LIGHT
-               || lightPtr->objectCode==NBF_POINT_LIGHT 
-               || lightPtr->objectCode==NBF_SPOT_LIGHT 
-               || lightPtr->objectCode>=NBF_CUSTOM_OBJECT );
+    DP_ASSERT(  lightPtr->objectCode==DPBFCode::DIRECTED_LIGHT
+            ||  lightPtr->objectCode==DPBFCode::POINT_LIGHT
+            ||  lightPtr->objectCode==DPBFCode::SPOT_LIGHT
+            ||  lightPtr->objectCode>=DPBFCode::CUSTOM_OBJECT );
 
     switch ( lightPtr->objectCode )
     {
-      case NBF_DIRECTED_LIGHT: DP_VERIFY(loadDirectedLight_nbf_52(offset)); break;
-      case NBF_POINT_LIGHT:    DP_VERIFY(loadPointLight_nbf_52(offset));    break;
-      case NBF_SPOT_LIGHT:     DP_VERIFY(loadSpotLight_nbf_52(offset));     break;
+      case DPBFCode::DIRECTED_LIGHT: DP_VERIFY(loadDirectedLight_nbf_52(offset)); break;
+      case DPBFCode::POINT_LIGHT:    DP_VERIFY(loadPointLight_nbf_52(offset));    break;
+      case DPBFCode::SPOT_LIGHT:     DP_VERIFY(loadSpotLight_nbf_52(offset));     break;
       // custom object handling
       default: mapObject(offset, loadCustomObject(lightPtr->objectCode, offset));
     }
@@ -4356,16 +4356,16 @@ LightSourceSharedPtr DPBFLoader::loadLightSource_nbf_50(uint_t offset)
   {
     Offset_AutoPtr<NBFLightSource_nbf_50> lightPtr(m_fm, callback(), offset);
 
-    DP_ASSERT(  lightPtr->objectCode==NBF_DIRECTED_LIGHT
-               || lightPtr->objectCode==NBF_POINT_LIGHT 
-               || lightPtr->objectCode==NBF_SPOT_LIGHT 
-               || lightPtr->objectCode>=NBF_CUSTOM_OBJECT );
+    DP_ASSERT(  lightPtr->objectCode==DPBFCode::DIRECTED_LIGHT
+            ||  lightPtr->objectCode==DPBFCode::POINT_LIGHT
+            ||  lightPtr->objectCode==DPBFCode::SPOT_LIGHT
+            ||  lightPtr->objectCode>=DPBFCode::CUSTOM_OBJECT );
 
     switch ( lightPtr->objectCode )
     {
-      case NBF_DIRECTED_LIGHT: DP_VERIFY(loadDirectedLight_nbf_50(offset)); break;
-      case NBF_POINT_LIGHT:    DP_VERIFY(loadPointLight_nbf_50(offset));    break;
-      case NBF_SPOT_LIGHT:     DP_VERIFY(loadSpotLight_nbf_50(offset));     break;
+      case DPBFCode::DIRECTED_LIGHT: DP_VERIFY(loadDirectedLight_nbf_50(offset)); break;
+      case DPBFCode::POINT_LIGHT:    DP_VERIFY(loadPointLight_nbf_50(offset));    break;
+      case DPBFCode::SPOT_LIGHT:     DP_VERIFY(loadSpotLight_nbf_50(offset));     break;
       // custom object handling
       default: mapObject(offset, loadCustomObject(lightPtr->objectCode, offset));
     }
@@ -4381,16 +4381,16 @@ LightSourceSharedPtr DPBFLoader::loadLightSource_nbf_12(uint_t offset)
   {
     Offset_AutoPtr<NBFLightSource_nbf_12> lightPtr(m_fm, callback(), offset);
 
-    DP_ASSERT(  lightPtr->objectCode==NBF_DIRECTED_LIGHT
-               || lightPtr->objectCode==NBF_POINT_LIGHT 
-               || lightPtr->objectCode==NBF_SPOT_LIGHT 
-               || lightPtr->objectCode>=NBF_CUSTOM_OBJECT );
+    DP_ASSERT(  lightPtr->objectCode==DPBFCode::DIRECTED_LIGHT
+            ||  lightPtr->objectCode==DPBFCode::POINT_LIGHT
+            ||  lightPtr->objectCode==DPBFCode::SPOT_LIGHT
+            ||  lightPtr->objectCode>=DPBFCode::CUSTOM_OBJECT );
 
     switch ( lightPtr->objectCode )
     {
-      case NBF_DIRECTED_LIGHT: DP_VERIFY(loadDirectedLight_nbf_12(offset)); break;
-      case NBF_POINT_LIGHT:    DP_VERIFY(loadPointLight_nbf_12(offset));    break;
-      case NBF_SPOT_LIGHT:     DP_VERIFY(loadSpotLight_nbf_12(offset));     break;
+      case DPBFCode::DIRECTED_LIGHT: DP_VERIFY(loadDirectedLight_nbf_12(offset)); break;
+      case DPBFCode::POINT_LIGHT:    DP_VERIFY(loadPointLight_nbf_12(offset));    break;
+      case DPBFCode::SPOT_LIGHT:     DP_VERIFY(loadSpotLight_nbf_12(offset));     break;
         // custom object handling
       default: mapObject(offset, loadCustomObject(lightPtr->objectCode, offset));
     }
@@ -4407,7 +4407,7 @@ LightSourceSharedPtr DPBFLoader::loadDirectedLight_nbf_53(uint_t offset)
 
   Offset_AutoPtr<NBFDirectedLight_nbf_53> lightPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(lightPtr->objectCode==NBF_DIRECTED_LIGHT);
+  DP_ASSERT(lightPtr->objectCode==DPBFCode::DIRECTED_LIGHT);
 
   LightSourceSharedPtr directedLight = createStandardDirectedLight( convert( lightPtr->direction )
                                                                   , convert( lightPtr->ambientColor )
@@ -4428,7 +4428,7 @@ LightSourceSharedPtr DPBFLoader::loadDirectedLight_nbf_52(uint_t offset)
 
   Offset_AutoPtr<NBFDirectedLight_nbf_52> lightPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(lightPtr->objectCode==NBF_DIRECTED_LIGHT);
+  DP_ASSERT(lightPtr->objectCode==DPBFCode::DIRECTED_LIGHT);
 
   LightSourceSharedPtr directedLight = createStandardDirectedLight( convert( lightPtr->direction )
                                                                   , convert( lightPtr->ambientColor )
@@ -4449,7 +4449,7 @@ LightSourceSharedPtr DPBFLoader::loadDirectedLight_nbf_50(uint_t offset)
 
   Offset_AutoPtr<NBFDirectedLight_nbf_50> lightPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(lightPtr->objectCode==NBF_DIRECTED_LIGHT);
+  DP_ASSERT(lightPtr->objectCode==DPBFCode::DIRECTED_LIGHT);
 
   LightSourceSharedPtr directedLight = createStandardDirectedLight( convert( lightPtr->direction )
                                                                   , convert( lightPtr->ambientColor )
@@ -4469,7 +4469,7 @@ LightSourceSharedPtr DPBFLoader::loadDirectedLight_nbf_12(uint_t offset)
 
   Offset_AutoPtr<NBFDirectedLight_nbf_12> lightPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(lightPtr->objectCode==NBF_DIRECTED_LIGHT);
+  DP_ASSERT(lightPtr->objectCode==DPBFCode::DIRECTED_LIGHT);
 
   LightSourceSharedPtr directedLight = createStandardDirectedLight( convert( lightPtr->direction )
                                                                   , convert( lightPtr->ambientColor )
@@ -4490,7 +4490,7 @@ LightSourceSharedPtr DPBFLoader::loadPointLight_nbf_53(uint_t offset)
 
   Offset_AutoPtr<NBFPointLight_nbf_53> lightPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(lightPtr->objectCode==NBF_POINT_LIGHT);
+  DP_ASSERT(lightPtr->objectCode==DPBFCode::POINT_LIGHT);
 
   LightSourceSharedPtr pointLight = createStandardPointLight( convert( lightPtr->position )
                                                             , convert( lightPtr->ambientColor )
@@ -4512,7 +4512,7 @@ LightSourceSharedPtr DPBFLoader::loadPointLight_nbf_52(uint_t offset)
 
   Offset_AutoPtr<NBFPointLight_nbf_52> lightPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(lightPtr->objectCode==NBF_POINT_LIGHT);
+  DP_ASSERT(lightPtr->objectCode==DPBFCode::POINT_LIGHT);
 
   LightSourceSharedPtr pointLight = createStandardPointLight( convert( lightPtr->position )
                                                             , convert( lightPtr->ambientColor )
@@ -4534,7 +4534,7 @@ LightSourceSharedPtr DPBFLoader::loadPointLight_nbf_50(uint_t offset)
 
   Offset_AutoPtr<NBFPointLight_nbf_50> lightPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(lightPtr->objectCode==NBF_POINT_LIGHT);
+  DP_ASSERT(lightPtr->objectCode==DPBFCode::POINT_LIGHT);
 
   LightSourceSharedPtr pointLight = createStandardPointLight( convert( lightPtr->position )
                                                             , convert( lightPtr->ambientColor )
@@ -4555,7 +4555,7 @@ LightSourceSharedPtr DPBFLoader::loadPointLight_nbf_12(uint_t offset)
 
   Offset_AutoPtr<NBFPointLight_nbf_12> lightPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(lightPtr->objectCode==NBF_POINT_LIGHT);
+  DP_ASSERT(lightPtr->objectCode==DPBFCode::POINT_LIGHT);
 
   LightSourceSharedPtr pointLight = createStandardPointLight( convert( lightPtr->position )
                                                             , convert( lightPtr->ambientColor )
@@ -4576,7 +4576,7 @@ LightSourceSharedPtr DPBFLoader::loadSpotLight_nbf_53(uint_t offset)
 
   Offset_AutoPtr<NBFSpotLight_nbf_53> lightPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(lightPtr->objectCode==NBF_SPOT_LIGHT);
+  DP_ASSERT(lightPtr->objectCode==DPBFCode::SPOT_LIGHT);
 
   LightSourceSharedPtr spotLight = createStandardSpotLight( convert( lightPtr->position )
                                                           , convert( lightPtr->direction )
@@ -4601,7 +4601,7 @@ LightSourceSharedPtr DPBFLoader::loadSpotLight_nbf_52(uint_t offset)
 
   Offset_AutoPtr<NBFSpotLight_nbf_52> lightPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(lightPtr->objectCode==NBF_SPOT_LIGHT);
+  DP_ASSERT(lightPtr->objectCode==DPBFCode::SPOT_LIGHT);
 
   LightSourceSharedPtr spotLight = createStandardSpotLight( convert( lightPtr->position )
                                                           , convert( lightPtr->direction )
@@ -4626,7 +4626,7 @@ LightSourceSharedPtr DPBFLoader::loadSpotLight_nbf_50(uint_t offset)
 
   Offset_AutoPtr<NBFSpotLight_nbf_50> lightPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(lightPtr->objectCode==NBF_SPOT_LIGHT);
+  DP_ASSERT(lightPtr->objectCode==DPBFCode::SPOT_LIGHT);
 
   LightSourceSharedPtr spotLight = createStandardSpotLight( convert( lightPtr->position )
                                                           , convert( lightPtr->direction )
@@ -4650,7 +4650,7 @@ LightSourceSharedPtr DPBFLoader::loadSpotLight_nbf_12(uint_t offset)
 
   Offset_AutoPtr<NBFSpotLight_nbf_12> lightPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(lightPtr->objectCode==NBF_SPOT_LIGHT);
+  DP_ASSERT(lightPtr->objectCode==DPBFCode::SPOT_LIGHT);
 
   // very old files had the angle as degree, was changed to rad later on
   float cutoffAngle = lightPtr->cutoffAngle;
@@ -4703,38 +4703,38 @@ void DPBFLoader::loadStateAttribute_nbf_54(uint_t offset)
   {
     Offset_AutoPtr<NBFStateAttribute_nbf_54> attribPtr(m_fm, callback(), offset);
 
-    DP_ASSERT(   attribPtr->objectCode==NBF_ALPHA_TEST_ATTRIBUTE
-                || attribPtr->objectCode==NBF_BLEND_ATTRIBUTE
-                || attribPtr->objectCode==NBF_CGFX
-                || attribPtr->objectCode==NBF_DEPTH_ATTRIBUTE
-                || attribPtr->objectCode==NBF_FACE_ATTRIBUTE
-                || attribPtr->objectCode==NBF_LIGHTING_ATTRIBUTE
-                || attribPtr->objectCode==NBF_LINE_ATTRIBUTE
-                || attribPtr->objectCode==NBF_MATERIAL
-                || attribPtr->objectCode==NBF_POINT_ATTRIBUTE
-                || attribPtr->objectCode==NBF_RTBUFFER_ATTRIBUTE
-                || attribPtr->objectCode==NBF_RTFX
-                || attribPtr->objectCode==NBF_STENCIL_ATTRIBUTE
-                || attribPtr->objectCode==NBF_TEXTURE_ATTRIBUTE
-                || attribPtr->objectCode==NBF_UNLIT_COLOR_ATTRIBUTE
-                || attribPtr->objectCode>=NBF_CUSTOM_OBJECT );
+    DP_ASSERT(   attribPtr->objectCode==DPBFCode::ALPHA_TEST_ATTRIBUTE
+              || attribPtr->objectCode==DPBFCode::BLEND_ATTRIBUTE
+              || attribPtr->objectCode==DPBFCode::CGFX
+              || attribPtr->objectCode==DPBFCode::DEPTH_ATTRIBUTE
+              || attribPtr->objectCode==DPBFCode::FACE_ATTRIBUTE
+              || attribPtr->objectCode==DPBFCode::LIGHTING_ATTRIBUTE
+              || attribPtr->objectCode==DPBFCode::LINE_ATTRIBUTE
+              || attribPtr->objectCode==DPBFCode::MATERIAL
+              || attribPtr->objectCode==DPBFCode::POINT_ATTRIBUTE
+              || attribPtr->objectCode==DPBFCode::RTBUFFER_ATTRIBUTE
+              || attribPtr->objectCode==DPBFCode::RTFX
+              || attribPtr->objectCode==DPBFCode::STENCIL_ATTRIBUTE
+              || attribPtr->objectCode==DPBFCode::TEXTURE_ATTRIBUTE
+              || attribPtr->objectCode==DPBFCode::UNLIT_COLOR_ATTRIBUTE
+              || attribPtr->objectCode>=DPBFCode::CUSTOM_OBJECT );
 
     switch ( attribPtr->objectCode )
     {
-      case NBF_ALPHA_TEST_ATTRIBUTE:  DP_VERIFY(loadAlphaTestAttribute_nbf_54(offset));     break;
-      case NBF_BLEND_ATTRIBUTE:       DP_VERIFY(loadBlendAttribute_nbf_54(offset));         break;
-      case NBF_CGFX:                  break;  // ignore
-      case NBF_DEPTH_ATTRIBUTE:       break;  // ignore
-      case NBF_FACE_ATTRIBUTE:        DP_VERIFY((this->*m_pfnLoadFaceAttribute)(offset));   break;
-      case NBF_LIGHTING_ATTRIBUTE:    DP_VERIFY(loadLightingAttribute_nbf_54(offset));      break;
-      case NBF_LINE_ATTRIBUTE:        DP_VERIFY(loadLineAttribute_nbf_54(offset));          break;
-      case NBF_MATERIAL:              DP_VERIFY((this->*m_pfnLoadMaterial)(offset));        break;
-      case NBF_POINT_ATTRIBUTE:       DP_VERIFY(loadPointAttribute_nbf_54(offset));         break;
-      case NBF_RTBUFFER_ATTRIBUTE:    break; // ignore
-      case NBF_RTFX:                  break; // ignore
-      case NBF_STENCIL_ATTRIBUTE:     break; // ignore
-      case NBF_TEXTURE_ATTRIBUTE:     DP_VERIFY(loadTextureAttribute_nbf_54(offset));       break;
-      case NBF_UNLIT_COLOR_ATTRIBUTE: DP_VERIFY(loadUnlitColorAttribute_nbf_54(offset));    break;
+      case DPBFCode::ALPHA_TEST_ATTRIBUTE:  DP_VERIFY(loadAlphaTestAttribute_nbf_54(offset));     break;
+      case DPBFCode::BLEND_ATTRIBUTE:       DP_VERIFY(loadBlendAttribute_nbf_54(offset));         break;
+      case DPBFCode::CGFX:                  break;  // ignore
+      case DPBFCode::DEPTH_ATTRIBUTE:       break;  // ignore
+      case DPBFCode::FACE_ATTRIBUTE:        DP_VERIFY((this->*m_pfnLoadFaceAttribute)(offset));   break;
+      case DPBFCode::LIGHTING_ATTRIBUTE:    DP_VERIFY(loadLightingAttribute_nbf_54(offset));      break;
+      case DPBFCode::LINE_ATTRIBUTE:        DP_VERIFY(loadLineAttribute_nbf_54(offset));          break;
+      case DPBFCode::MATERIAL:              DP_VERIFY((this->*m_pfnLoadMaterial)(offset));        break;
+      case DPBFCode::POINT_ATTRIBUTE:       DP_VERIFY(loadPointAttribute_nbf_54(offset));         break;
+      case DPBFCode::RTBUFFER_ATTRIBUTE:    break; // ignore
+      case DPBFCode::RTFX:                  break; // ignore
+      case DPBFCode::STENCIL_ATTRIBUTE:     break; // ignore
+      case DPBFCode::TEXTURE_ATTRIBUTE:     DP_VERIFY(loadTextureAttribute_nbf_54(offset));       break;
+      case DPBFCode::UNLIT_COLOR_ATTRIBUTE: DP_VERIFY(loadUnlitColorAttribute_nbf_54(offset));    break;
       // custom object handling
       default: mapObject(offset, loadCustomObject(attribPtr->objectCode, offset));
     }
@@ -4757,7 +4757,7 @@ ParameterGroupDataSharedPtr DPBFLoader::loadAlphaTestAttribute_nbf_54(uint_t off
 
   Offset_AutoPtr<NBFAlphaTestAttribute_nbf_54> ataPtr(m_fm, callback(), offset);
   // undefined behaviour if called for other objects!
-  DP_ASSERT(ataPtr->objectCode==NBF_ALPHA_TEST_ATTRIBUTE);
+  DP_ASSERT(ataPtr->objectCode==DPBFCode::ALPHA_TEST_ATTRIBUTE);
 
   ParameterGroupDataSharedPtr materialData = getMaterialParameterGroup( "standardMaterialParameters" );
   readObject( materialData, ataPtr );
@@ -4776,32 +4776,32 @@ dp::sg::core::PipelineDataSharedPtr DPBFLoader::loadBlendAttribute_nbf_54(uint_t
 
   Offset_AutoPtr<NBFBlendAttribute_nbf_54> baPtr(m_fm, callback(), offset);
   // undefined behaviour if called for other objects!
-  DP_ASSERT(baPtr->objectCode==NBF_BLEND_ATTRIBUTE);
+  DP_ASSERT(baPtr->objectCode==DPBFCode::BLEND_ATTRIBUTE);
 
-  typedef enum
+  enum class BlendFunction
   {
-    BF_ZERO                           //!< (0,0,0,0); available for source and destination
-  , BF_ONE                            //!< (1,1,1,1); available for source and destination
-  , BF_DESTINATION_COLOR              //!< (Rd,Gd,Bd,Ad); available for source only
-  , BF_SOURCE_COLOR                   //!< (Rs,Gs,Bs,As); available for destination only
-  , BF_ONE_MINUS_DESTINATION_COLOR    //!< (1,1,1,1)-(Rd,Gd,Bd,Ad); available for source only
-  , BF_ONE_MINUS_SOURCE_COLOR         //!< (1,1,1,1)-(Rs,Gs,Bs,As); available for destination only
-  , BF_SOURCE_ALPHA                   //!< (As,As,As,As); available for source and destination
-  , BF_ONE_MINUS_SOURCE_ALPHA         //!< (1,1,1,1)-(As,As,As,As); available for source and destination
-  , BF_DESTINATION_ALPHA              //!< (Ad,Ad,Ad,Ad); available for source and destination
-  , BF_ONE_MINUS_DESTINATION_ALPHA    //!< (1,1,1,1)-(Ad,Ad,Ad,Ad); available for source and destination
-  , BF_SOURCE_ALPHA_SATURATE          //!< (f,f,f,1) with f=min(As,1-Ad); available for source only
-  } BlendFunction_nbf_54;
+    ZERO                           //!< (0,0,0,0); available for source and destination
+  , ONE                            //!< (1,1,1,1); available for source and destination
+  , DESTINATION_COLOR              //!< (Rd,Gd,Bd,Ad); available for source only
+  , SOURCE_COLOR                   //!< (Rs,Gs,Bs,As); available for destination only
+  , ONE_MINUS_DESTINATION_COLOR    //!< (1,1,1,1)-(Rd,Gd,Bd,Ad); available for source only
+  , ONE_MINUS_SOURCE_COLOR         //!< (1,1,1,1)-(Rs,Gs,Bs,As); available for destination only
+  , SOURCE_ALPHA                   //!< (As,As,As,As); available for source and destination
+  , ONE_MINUS_SOURCE_ALPHA         //!< (1,1,1,1)-(As,As,As,As); available for source and destination
+  , DESTINATION_ALPHA              //!< (Ad,Ad,Ad,Ad); available for source and destination
+  , ONE_MINUS_DESTINATION_ALPHA    //!< (1,1,1,1)-(Ad,Ad,Ad,Ad); available for source and destination
+  , SOURCE_ALPHA_SATURATE          //!< (f,f,f,1) with f=min(As,1-Ad); available for source only
+  };
 
-  BlendFunction_nbf_54 src = (BlendFunction_nbf_54)baPtr->sourceFunction;
-  BlendFunction_nbf_54 dst = (BlendFunction_nbf_54)baPtr->destinationFunction;
+  BlendFunction src = (BlendFunction)baPtr->sourceFunction;
+  BlendFunction dst = (BlendFunction)baPtr->destinationFunction;
 
-  bool transparent =  ( src == BF_DESTINATION_COLOR )
-                  ||  ( src == BF_ONE_MINUS_DESTINATION_COLOR )
-                  ||  ( src == BF_DESTINATION_ALPHA )
-                  ||  ( src == BF_ONE_MINUS_DESTINATION_ALPHA )
-                  ||  ( src == BF_SOURCE_ALPHA_SATURATE )
-                  ||  ( src != BF_ZERO );
+  bool transparent =  ( src == BlendFunction::DESTINATION_COLOR )
+                  ||  ( src == BlendFunction::ONE_MINUS_DESTINATION_COLOR )
+                  ||  ( src == BlendFunction::DESTINATION_ALPHA )
+                  ||  ( src == BlendFunction::ONE_MINUS_DESTINATION_ALPHA )
+                  ||  ( src == BlendFunction::SOURCE_ALPHA_SATURATE )
+                  ||  ( src != BlendFunction::ZERO );
   getMaterialPipeline()->setTransparent( transparent );
 
   return( m_pipelineData );
@@ -4814,7 +4814,7 @@ ParameterGroupDataSharedPtr DPBFLoader::loadFaceAttribute_nbf_54(uint_t offset)
 
   Offset_AutoPtr<NBFFaceAttribute_nbf_54> faPtr(m_fm, callback(), offset);
   // undefined behaviour if called for other objects!
-  DP_ASSERT(faPtr->objectCode==NBF_FACE_ATTRIBUTE);
+  DP_ASSERT(faPtr->objectCode==DPBFCode::FACE_ATTRIBUTE);
 
   if ( ( ( 0x4d < m_nbfMajor ) || ( ( 0x4d == m_nbfMajor ) && ( 0x00 < m_nbfMinor ) ) ) && faPtr->faceWindingCCW )
   {
@@ -4835,7 +4835,7 @@ ParameterGroupDataSharedPtr DPBFLoader::loadFaceAttribute_nbf_b(uint_t offset)
 
   Offset_AutoPtr<NBFFaceAttribute_nbf_b> faPtr(m_fm, callback(), offset);
   // undefined behaviour if called for other objects!
-  DP_ASSERT(faPtr->objectCode==NBF_FACE_ATTRIBUTE);
+  DP_ASSERT(faPtr->objectCode==DPBFCode::FACE_ATTRIBUTE);
 
   ParameterGroupDataSharedPtr materialData = getMaterialParameterGroup( "standardMaterialParameters" );
   DP_VERIFY( materialData->setParameter( "twoSidedLighting", !!faPtr->twoSidedLighting ) );
@@ -4850,7 +4850,7 @@ ParameterGroupDataSharedPtr DPBFLoader::loadLightingAttribute_nbf_54(uint_t offs
 
   Offset_AutoPtr<NBFLightingAttribute_nbf_54> laPtr(m_fm, callback(), offset);
   // undefined behaviour if called for other objects!
-  DP_ASSERT(laPtr->objectCode==NBF_LIGHTING_ATTRIBUTE);
+  DP_ASSERT(laPtr->objectCode==DPBFCode::LIGHTING_ATTRIBUTE);
 
   ParameterGroupDataSharedPtr materialData = getMaterialParameterGroup( "standardMaterialParameters" );
   DP_VERIFY( materialData->setParameter( "lightingEnabled", !!laPtr->enabled ) );
@@ -4865,7 +4865,7 @@ ParameterGroupDataSharedPtr DPBFLoader::loadLineAttribute_nbf_54(uint_t offset)
 
   Offset_AutoPtr<NBFLineAttribute_nbf_54> laPtr(m_fm, callback(), offset);
   // undefined behaviour if called for other objects!
-  DP_ASSERT(laPtr->objectCode==NBF_LINE_ATTRIBUTE);
+  DP_ASSERT(laPtr->objectCode==DPBFCode::LINE_ATTRIBUTE);
 
   ParameterGroupDataSharedPtr materialData = getMaterialParameterGroup( "standardMaterialParameters" );
   DP_VERIFY( materialData->setParameter( "lineStippleFactor", dp::checked_cast<uint16_t>(laPtr->stippleFactor) ) );
@@ -4884,7 +4884,7 @@ ParameterGroupDataSharedPtr DPBFLoader::loadUnlitColorAttribute_nbf_54(uint_t of
 
   Offset_AutoPtr<NBFUnlitColorAttribute_nbf_54> ucPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT( ucPtr->objectCode==NBF_UNLIT_COLOR_ATTRIBUTE);
+  DP_ASSERT( ucPtr->objectCode==DPBFCode::UNLIT_COLOR_ATTRIBUTE);
 
   ParameterGroupDataSharedPtr materialData = getMaterialParameterGroup( "standardMaterialParameters" );
   DP_VERIFY( materialData->setParameter( "unlitColor", convert<Vec4f>( ucPtr->color ) ) );
@@ -4917,7 +4917,7 @@ ParameterGroupDataSharedPtr DPBFLoader::loadMaterial_nbf_54(uint_t offset)
 
   Offset_AutoPtr<NBFMaterial_nbf_54> matPtr(m_fm, callback(), offset);
   // undefined behaviour if called for other objects!
-  DP_ASSERT(matPtr->objectCode==NBF_MATERIAL);
+  DP_ASSERT(matPtr->objectCode==DPBFCode::MATERIAL);
 
   ParameterGroupDataSharedPtr materialData = getMaterialParameterGroup( "standardMaterialParameters" );
   readObject( materialData, matPtr );
@@ -4960,7 +4960,7 @@ ParameterGroupDataSharedPtr DPBFLoader::loadMaterial_nbf_40(uint_t offset)
 
   Offset_AutoPtr<NBFMaterial_nbf_40> matPtr(m_fm, callback(), offset);
   // undefined behaviour if called for other objects!
-  DP_ASSERT(matPtr->objectCode==NBF_MATERIAL);
+  DP_ASSERT(matPtr->objectCode==DPBFCode::MATERIAL);
 
   ParameterGroupDataSharedPtr materialData = getMaterialParameterGroup( "standardMaterialParameters" );
   readObject( materialData, matPtr );
@@ -4998,7 +4998,7 @@ ParameterGroupDataSharedPtr DPBFLoader::loadMaterial_nbf_3f(uint_t offset)
 
   Offset_AutoPtr<NBFMaterial_nbf_3f> matPtr(m_fm, callback(), offset);
   // undefined behaviour if called for other objects!
-  DP_ASSERT(matPtr->objectCode==NBF_MATERIAL);
+  DP_ASSERT(matPtr->objectCode==DPBFCode::MATERIAL);
 
   ParameterGroupDataSharedPtr materialData = getMaterialParameterGroup( "standardMaterialParameters" );
   readObject( materialData, matPtr );
@@ -5032,7 +5032,7 @@ ParameterGroupDataSharedPtr DPBFLoader::loadMaterial_nbf_a(uint_t offset)
 
   Offset_AutoPtr<NBFMaterial_nbf_a> matPtr(m_fm, callback(), offset);
   // undefined behaviour if called for other objects!
-  DP_ASSERT(matPtr->objectCode==NBF_MATERIAL);
+  DP_ASSERT(matPtr->objectCode==DPBFCode::MATERIAL);
 
   ParameterGroupDataSharedPtr materialData = getMaterialParameterGroup( "standardMaterialParameters" );
   readObject( materialData, matPtr );
@@ -5066,7 +5066,7 @@ ParameterGroupDataSharedPtr DPBFLoader::loadPointAttribute_nbf_54(uint_t offset)
 
   Offset_AutoPtr<NBFPointAttribute_nbf_54> paPtr(m_fm, callback(), offset);
   // undefined behaviour if called for other objects!
-  DP_ASSERT(paPtr->objectCode==NBF_POINT_ATTRIBUTE);
+  DP_ASSERT(paPtr->objectCode==DPBFCode::POINT_ATTRIBUTE);
 
   ParameterGroupDataSharedPtr geometryData = getMaterialParameterGroup( "standardGeometryParameters" );
   DP_VERIFY( geometryData->setParameter( "pointSize", paPtr->size ) );
@@ -5081,7 +5081,7 @@ dp::sg::core::PipelineDataSharedPtr DPBFLoader::loadTextureAttribute_nbf_54(uint
 
   Offset_AutoPtr<NBFTextureAttribute_nbf_54> texPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(texPtr->objectCode==NBF_TEXTURE_ATTRIBUTE);
+  DP_ASSERT(texPtr->objectCode==DPBFCode::TEXTURE_ATTRIBUTE);
 
   dp::sg::core::PipelineDataSharedPtr textures = dp::sg::core::PipelineData::create( getStandardMaterialSpec() );
   readObject( textures, texPtr );
@@ -5191,7 +5191,7 @@ TextureHostSharedPtr DPBFLoader::loadTextureHost(uint_t offset, std::string& fil
   // 0-offset invalid for all but NBFHeaders!
   if ( !offset )
   {
-    // 0-offset is regular and means no TextureHost saved -> return NULL 
+    // 0-offset is regular and means no TextureHost saved -> return NULL
     return TextureHostSharedPtr::null;
   }
 
@@ -5247,7 +5247,7 @@ TextureHostSharedPtr DPBFLoader::loadTextureHost_nbf_4b(uint_t offset, std::stri
   // 0-offset invalid for all but NBFHeaders!
   if ( !offset )
   {
-    // 0-offset is regular and means no TextureHost saved -> return NULL 
+    // 0-offset is regular and means no TextureHost saved -> return NULL
     return TextureHostSharedPtr::null;
   }
 
@@ -5300,7 +5300,7 @@ void DPBFLoader::loadStateSet_nbf_54(uint_t offset)
   {
     Offset_AutoPtr<NBFStateSet_nbf_54> ssPtr(m_fm, callback(), offset);
     // undefined behavior if called for other objects!
-    DP_ASSERT(ssPtr->objectCode==NBF_STATE_SET);
+    DP_ASSERT(ssPtr->objectCode==DPBFCode::STATE_SET);
 
     DP_ASSERT( !m_pipelineData );
 
@@ -5325,7 +5325,7 @@ void DPBFLoader::loadStateSet_nbf_4f(uint_t offset)
   {
     Offset_AutoPtr<NBFStateSet_nbf_4f> ssPtr(m_fm, callback(), offset);
     // undefined behavior if called for other objects!
-    DP_ASSERT(ssPtr->objectCode==NBF_STATE_SET);
+    DP_ASSERT(ssPtr->objectCode==DPBFCode::STATE_SET);
 
     DP_ASSERT( !m_pipelineData );
 
@@ -5350,7 +5350,7 @@ void DPBFLoader::loadStateSet_nbf_10(uint_t offset)
   {
     Offset_AutoPtr<NBFStateSet_nbf_10> ssPtr(m_fm, callback(), offset);
     // undefined behavior if called for other objects!
-    DP_ASSERT(ssPtr->objectCode==NBF_STATE_SET);
+    DP_ASSERT(ssPtr->objectCode==DPBFCode::STATE_SET);
 
     DP_ASSERT( !m_pipelineData );
 
@@ -5374,7 +5374,7 @@ void DPBFLoader::loadStateVariant_nbf_4f(uint_t offset)
 {
   Offset_AutoPtr<NBFStateVariant_nbf_4f> svPtr(m_fm, callback(), offset);
   // undefined behavior if called for other objects!
-  DP_ASSERT(svPtr->objectCode==NBF_STATE_VARIANT);
+  DP_ASSERT(svPtr->objectCode==DPBFCode::STATE_VARIANT);
 
   // StateVariant specific
   Offset_AutoPtr<uint_t> passOffs(m_fm, callback(), svPtr->statePasses, svPtr->numStatePasses);
@@ -5383,7 +5383,7 @@ void DPBFLoader::loadStateVariant_nbf_4f(uint_t offset)
 
   Offset_AutoPtr<NBFStatePass_nbf_4f> spPtr(m_fm, callback(), passOffs[0]);
   // undefined behavior if called for other objects!
-  DP_ASSERT(spPtr->objectCode==NBF_STATE_PASS);
+  DP_ASSERT(spPtr->objectCode==DPBFCode::STATE_PASS);
 
   // StatePass specific
   Offset_AutoPtr<uint_t> attribOffs(m_fm, callback(), spPtr->stateAttribs, spPtr->numStateAttribs);
@@ -5409,8 +5409,8 @@ template <typename ObjectType, typename NBFObjectType>
 bool DPBFLoader::loadSharedObject( typename ObjectTraits<ObjectType>::SharedPtr & objHdl
                                 , Offset_AutoPtr<NBFObjectType>& objPtr, PrimitiveType pt )
 {
-  if (  objPtr->isShared 
-     && m_sharedObjectsMap.find(objPtr->objectDataID) != m_sharedObjectsMap.end() 
+  if (  objPtr->isShared
+     && m_sharedObjectsMap.find(objPtr->objectDataID) != m_sharedObjectsMap.end()
      )
   { // copy construct the object
     DP_ASSERT( m_sharedObjectsMap[objPtr->objectDataID].isPtrTo<ObjectType>() );
@@ -5426,7 +5426,7 @@ bool DPBFLoader::loadSharedObject( typename ObjectTraits<ObjectType>::SharedPtr 
   createObject<ObjectType>( objHdl, pt );
 
   // NOTE: we need to read in the general object data, e.g the name, before the pointer
-  // to the NBF object might be remapped! this is because objects do not share general 
+  // to the NBF object might be remapped! this is because objects do not share general
   // object data, even if they are shared!
   readObject( objHdl, objPtr);
 
@@ -5436,7 +5436,7 @@ bool DPBFLoader::loadSharedObject( typename ObjectTraits<ObjectType>::SharedPtr 
     m_sharedObjectsMap[objPtr->objectDataID] = objHdl;
 
     if ( objPtr->sourceObject )
-    { // need to remap current objectPtr to its source object, because objPtr currently 
+    { // need to remap current objectPtr to its source object, because objPtr currently
       // refers to the general object data only, not to type-specific data!
       objPtr.reset(objPtr->sourceObject);
     }
@@ -5446,11 +5446,11 @@ bool DPBFLoader::loadSharedObject( typename ObjectTraits<ObjectType>::SharedPtr 
 
 void DPBFLoader::readObject( ObjectSharedPtr const& dst, const NBFObject * src)
 {
-  if( m_nbfMajor > 0x3d 
+  if( m_nbfMajor > 0x3d
     || (m_nbfMajor == 0x3d && m_nbfMinor >= 0x05) )
   {
     // objectName and objectAnno members are offsets to str_t
-    if ( src->objectName ) 
+    if ( src->objectName )
     {
       Offset_AutoPtr<str_t> name(m_fm, callback(), src->objectName);
       if ( name->numChars  )
@@ -5474,25 +5474,25 @@ void DPBFLoader::readObject( ObjectSharedPtr const& dst, const NBFObject * src)
   else
   {
     // use legacy data structure
-    const NBFObject_3d_04 * _src = 
+    const NBFObject_3d_04 * _src =
                           reinterpret_cast< const NBFObject_3d_04 * >( src );
 
-    if (  m_nbfMajor < 0x3d 
-       || (m_nbfMajor==0x3d && m_nbfMinor < 0x02) ) 
+    if (  m_nbfMajor < 0x3d
+       || (m_nbfMajor==0x3d && m_nbfMinor < 0x02) )
     {
       // objectName was a str_t for all version < 61.2!
       // cast address of objectName to str_t* to get the offsets right!
       str_t * name = (str_t *)&_src->objectName;
       if ( name->numChars )
       {
-        dst->setName(mapString(*name)); // call mapString with *name, 
+        dst->setName(mapString(*name)); // call mapString with *name,
                                     // so the compiler finds the right overload
       }
     }
-    else if (  m_nbfMajor==0x3d 
+    else if (  m_nbfMajor==0x3d
          && (m_nbfMinor==0x02 || m_nbfMinor==0x03) )
     {
-      // name and annotation were stored as a sstr_t with 
+      // name and annotation were stored as a sstr_t with
       // intermediate versions 61.2 and 61.3
       //
       sstr_t * name = (sstr_t *)&_src->objectName;
@@ -5610,7 +5610,7 @@ PrimitiveSharedPtr DPBFLoader::loadPrimitive( uint_t offset )
     Offset_AutoPtr<NBFPrimitive> primPtr(m_fm, callback(), offset);
 
     PrimitiveSharedPtr primHdl;
-    if ( ( (PrimitiveType)primPtr->primitiveType == PRIMITIVE_PATCHES ) && 
+    if ( ( (PrimitiveType)primPtr->primitiveType == PRIMITIVE_PATCHES ) &&
          ( ( 0x54 < m_nbfMajor ) || ( ( m_nbfMajor == 0x54 ) && ( 0x02 < m_nbfMinor ) ) ) )
     {
       primHdl = Primitive::create( (PatchesType)primPtr->patchesType, (PatchesMode)primPtr->patchesMode );
@@ -5650,8 +5650,8 @@ PrimitiveSharedPtr DPBFLoader::loadPatches_nbf_47( uint_t offset )
   if ( m_offsetObjectMap.find(offset)==m_offsetObjectMap.end() )
   {
     Offset_AutoPtr<NBFPatches_nbf_47> patchesPtr(m_fm, callback(), offset);
-    DP_ASSERT(    patchesPtr->objectCode == NBF_PATCHES
-              ||  patchesPtr->objectCode >= NBF_CUSTOM_OBJECT );
+    DP_ASSERT(    patchesPtr->objectCode == DPBFCode::PATCHES
+              ||  patchesPtr->objectCode >= DPBFCode::CUSTOM_OBJECT );
 
     DP_ASSERT( patchesPtr->verticesPerPatch == 16 );
     PrimitiveSharedPtr patchesHdl = Primitive::create( PATCHES_CUBIC_BEZIER_QUADS, PATCHES_MODE_QUADS );
@@ -5669,8 +5669,8 @@ PrimitiveSharedPtr DPBFLoader::loadQuadPatches_nbf_47( uint_t offset )
   if ( m_offsetObjectMap.find(offset)==m_offsetObjectMap.end() )
   {
     Offset_AutoPtr<NBFQuadPatches_nbf_47> patchesPtr(m_fm, callback(), offset);
-    DP_ASSERT(    patchesPtr->objectCode == NBF_QUAD_PATCHES
-              ||  patchesPtr->objectCode >= NBF_CUSTOM_OBJECT );
+    DP_ASSERT(    patchesPtr->objectCode == DPBFCode::QUAD_PATCHES
+              ||  patchesPtr->objectCode >= DPBFCode::CUSTOM_OBJECT );
 
     DP_ASSERT( patchesPtr->size == 4 );
     PrimitiveSharedPtr primitive = Primitive::create( PATCHES_CUBIC_BEZIER_QUADS, PATCHES_MODE_QUADS );
@@ -5688,8 +5688,8 @@ PrimitiveSharedPtr DPBFLoader::loadQuadPatches4x4_nbf_47( uint_t offset )
   if ( m_offsetObjectMap.find(offset)==m_offsetObjectMap.end() )
   {
     Offset_AutoPtr<NBFQuadPatches4x4_nbf_47> patchesPtr(m_fm, callback(), offset);
-    DP_ASSERT(    patchesPtr->objectCode == NBF_QUAD_PATCHES_4X4
-              ||  patchesPtr->objectCode >= NBF_CUSTOM_OBJECT );
+    DP_ASSERT(    patchesPtr->objectCode == DPBFCode::QUAD_PATCHES_4X4
+              ||  patchesPtr->objectCode >= DPBFCode::CUSTOM_OBJECT );
 
     PrimitiveSharedPtr primitive = Primitive::create( PATCHES_CUBIC_BEZIER_QUADS, PATCHES_MODE_QUADS );
     readIndependentPrimitiveSet( primitive, patchesPtr );
@@ -5706,8 +5706,8 @@ PrimitiveSharedPtr DPBFLoader::loadRectPatches_nbf_47( uint_t offset )
   if ( m_offsetObjectMap.find(offset)==m_offsetObjectMap.end() )
   {
     Offset_AutoPtr<NBFRectPatches_nbf_47> patchesPtr(m_fm, callback(), offset);
-    DP_ASSERT(    patchesPtr->objectCode == NBF_RECT_PATCHES
-              ||  patchesPtr->objectCode >= NBF_CUSTOM_OBJECT );
+    DP_ASSERT(    patchesPtr->objectCode == DPBFCode::RECT_PATCHES
+              ||  patchesPtr->objectCode >= DPBFCode::CUSTOM_OBJECT );
 
     DP_ASSERT( ( patchesPtr->width == 4 ) && ( patchesPtr->height == 4 ) );
     PrimitiveSharedPtr primitive = Primitive::create( PATCHES_CUBIC_BEZIER_QUADS, PATCHES_MODE_QUADS );
@@ -5725,8 +5725,8 @@ PrimitiveSharedPtr DPBFLoader::loadTriPatches_nbf_47( uint_t offset )
   if ( m_offsetObjectMap.find(offset)==m_offsetObjectMap.end() )
   {
     Offset_AutoPtr<NBFTriPatches_nbf_47> patchesPtr(m_fm, callback(), offset);
-    DP_ASSERT(    patchesPtr->objectCode == NBF_TRI_PATCHES
-              ||  patchesPtr->objectCode >= NBF_CUSTOM_OBJECT );
+    DP_ASSERT(    patchesPtr->objectCode == DPBFCode::TRI_PATCHES
+              ||  patchesPtr->objectCode >= DPBFCode::CUSTOM_OBJECT );
 
     DP_ASSERT( patchesPtr->size == 4 );
     PrimitiveSharedPtr primitive = Primitive::create( PATCHES_CUBIC_BEZIER_TRIANGLES, PATCHES_MODE_TRIANGLES );
@@ -5744,8 +5744,8 @@ PrimitiveSharedPtr DPBFLoader::loadTriPatches4_nbf_47( uint_t offset )
   if ( m_offsetObjectMap.find(offset)==m_offsetObjectMap.end() )
   {
     Offset_AutoPtr<NBFTriPatches4_nbf_47> patchesPtr(m_fm, callback(), offset);
-    DP_ASSERT(    patchesPtr->objectCode == NBF_TRI_PATCHES_4
-              ||  patchesPtr->objectCode >= NBF_CUSTOM_OBJECT );
+    DP_ASSERT(    patchesPtr->objectCode == DPBFCode::TRI_PATCHES_4
+              ||  patchesPtr->objectCode >= DPBFCode::CUSTOM_OBJECT );
 
     PrimitiveSharedPtr primitive = Primitive::create( PATCHES_CUBIC_BEZIER_TRIANGLES, PATCHES_MODE_TRIANGLES );
     readIndependentPrimitiveSet( primitive, patchesPtr );
@@ -5754,14 +5754,14 @@ PrimitiveSharedPtr DPBFLoader::loadTriPatches4_nbf_47( uint_t offset )
   }
   return( m_offsetObjectMap[offset].staticCast<Primitive>() );
 }
-  
+
 PrimitiveSharedPtr DPBFLoader::loadQuadPatches( uint_t offset )
 {
   if ( m_offsetObjectMap.find(offset)==m_offsetObjectMap.end() )
   {
     Offset_AutoPtr<NBFQuadPatches> patchesPtr(m_fm, callback(), offset);
-    DP_ASSERT(    patchesPtr->objectCode == NBF_QUAD_PATCHES
-              ||  patchesPtr->objectCode >= NBF_CUSTOM_OBJECT );
+    DP_ASSERT(    patchesPtr->objectCode == DPBFCode::QUAD_PATCHES
+              ||  patchesPtr->objectCode >= DPBFCode::CUSTOM_OBJECT );
 
     DP_ASSERT( patchesPtr->size == 4 );
     PrimitiveSharedPtr primitive = Primitive::create( PATCHES_CUBIC_BEZIER_QUADS, PATCHES_MODE_QUADS );
@@ -5777,8 +5777,8 @@ PrimitiveSharedPtr DPBFLoader::loadQuadPatches_nbf_4d( uint_t offset )
   if ( m_offsetObjectMap.find(offset)==m_offsetObjectMap.end() )
   {
     Offset_AutoPtr<NBFQuadPatches_nbf_4d> patchesPtr(m_fm, callback(), offset);
-    DP_ASSERT(    patchesPtr->objectCode == NBF_QUAD_PATCHES
-              ||  patchesPtr->objectCode >= NBF_CUSTOM_OBJECT );
+    DP_ASSERT(    patchesPtr->objectCode == DPBFCode::QUAD_PATCHES
+              ||  patchesPtr->objectCode >= DPBFCode::CUSTOM_OBJECT );
 
     DP_ASSERT( patchesPtr->size == 4 );
     PrimitiveSharedPtr primitive = Primitive::create( PATCHES_CUBIC_BEZIER_QUADS, PATCHES_MODE_QUADS );
@@ -5794,8 +5794,8 @@ PrimitiveSharedPtr DPBFLoader::loadQuadPatches4x4( uint_t offset )
   if ( m_offsetObjectMap.find(offset)==m_offsetObjectMap.end() )
   {
     Offset_AutoPtr<NBFQuadPatches4x4> patchesPtr(m_fm, callback(), offset);
-    DP_ASSERT(    patchesPtr->objectCode == NBF_QUAD_PATCHES_4X4
-              ||  patchesPtr->objectCode >= NBF_CUSTOM_OBJECT );
+    DP_ASSERT(    patchesPtr->objectCode == DPBFCode::QUAD_PATCHES_4X4
+              ||  patchesPtr->objectCode >= DPBFCode::CUSTOM_OBJECT );
 
     PrimitiveSharedPtr primitive = Primitive::create( PATCHES_CUBIC_BEZIER_QUADS, PATCHES_MODE_QUADS );
     readPrimitive( primitive, patchesPtr );
@@ -5810,8 +5810,8 @@ PrimitiveSharedPtr DPBFLoader::loadQuadPatches4x4_nbf_4d( uint_t offset )
   if ( m_offsetObjectMap.find(offset)==m_offsetObjectMap.end() )
   {
     Offset_AutoPtr<NBFQuadPatches4x4_nbf_4d> patchesPtr(m_fm, callback(), offset);
-    DP_ASSERT(    patchesPtr->objectCode == NBF_QUAD_PATCHES_4X4
-              ||  patchesPtr->objectCode >= NBF_CUSTOM_OBJECT );
+    DP_ASSERT(    patchesPtr->objectCode == DPBFCode::QUAD_PATCHES_4X4
+              ||  patchesPtr->objectCode >= DPBFCode::CUSTOM_OBJECT );
 
     PrimitiveSharedPtr primitive = Primitive::create( PATCHES_CUBIC_BEZIER_QUADS, PATCHES_MODE_QUADS );
     readPrimitive_nbf_4d( primitive, patchesPtr );
@@ -5826,8 +5826,8 @@ PrimitiveSharedPtr DPBFLoader::loadRectPatches( uint_t offset )
   if ( m_offsetObjectMap.find(offset)==m_offsetObjectMap.end() )
   {
     Offset_AutoPtr<NBFRectPatches> patchesPtr(m_fm, callback(), offset);
-    DP_ASSERT(    patchesPtr->objectCode == NBF_RECT_PATCHES
-              ||  patchesPtr->objectCode >= NBF_CUSTOM_OBJECT );
+    DP_ASSERT(    patchesPtr->objectCode == DPBFCode::RECT_PATCHES
+              ||  patchesPtr->objectCode >= DPBFCode::CUSTOM_OBJECT );
 
     DP_ASSERT( ( patchesPtr->width == 4 ) && ( patchesPtr->height == 4 ) );
     PrimitiveSharedPtr primitive = Primitive::create( PATCHES_CUBIC_BEZIER_QUADS, PATCHES_MODE_QUADS );
@@ -5843,8 +5843,8 @@ PrimitiveSharedPtr DPBFLoader::loadRectPatches_nbf_4d( uint_t offset )
   if ( m_offsetObjectMap.find(offset)==m_offsetObjectMap.end() )
   {
     Offset_AutoPtr<NBFRectPatches_nbf_4d> patchesPtr(m_fm, callback(), offset);
-    DP_ASSERT(    patchesPtr->objectCode == NBF_RECT_PATCHES
-              ||  patchesPtr->objectCode >= NBF_CUSTOM_OBJECT );
+    DP_ASSERT(    patchesPtr->objectCode == DPBFCode::RECT_PATCHES
+              ||  patchesPtr->objectCode >= DPBFCode::CUSTOM_OBJECT );
 
     DP_ASSERT( ( patchesPtr->width == 4 ) && ( patchesPtr->height == 4 ) );
     PrimitiveSharedPtr primitive = Primitive::create( PATCHES_CUBIC_BEZIER_QUADS, PATCHES_MODE_QUADS );
@@ -5860,8 +5860,8 @@ PrimitiveSharedPtr DPBFLoader::loadTriPatches( uint_t offset )
   if ( m_offsetObjectMap.find(offset)==m_offsetObjectMap.end() )
   {
     Offset_AutoPtr<NBFTriPatches> patchesPtr(m_fm, callback(), offset);
-    DP_ASSERT(    patchesPtr->objectCode == NBF_TRI_PATCHES
-              ||  patchesPtr->objectCode >= NBF_CUSTOM_OBJECT );
+    DP_ASSERT(    patchesPtr->objectCode == DPBFCode::TRI_PATCHES
+              ||  patchesPtr->objectCode >= DPBFCode::CUSTOM_OBJECT );
 
     DP_ASSERT( patchesPtr->size == 4 );
     PrimitiveSharedPtr primitive = Primitive::create( PATCHES_CUBIC_BEZIER_TRIANGLES, PATCHES_MODE_TRIANGLES );
@@ -5877,8 +5877,8 @@ PrimitiveSharedPtr DPBFLoader::loadTriPatches_nbf_4d( uint_t offset )
   if ( m_offsetObjectMap.find(offset)==m_offsetObjectMap.end() )
   {
     Offset_AutoPtr<NBFTriPatches_nbf_4d> patchesPtr(m_fm, callback(), offset);
-    DP_ASSERT(    patchesPtr->objectCode == NBF_TRI_PATCHES
-              ||  patchesPtr->objectCode >= NBF_CUSTOM_OBJECT );
+    DP_ASSERT(    patchesPtr->objectCode == DPBFCode::TRI_PATCHES
+              ||  patchesPtr->objectCode >= DPBFCode::CUSTOM_OBJECT );
 
     DP_ASSERT( patchesPtr->size == 4 );
     PrimitiveSharedPtr primitive = Primitive::create( PATCHES_CUBIC_BEZIER_TRIANGLES, PATCHES_MODE_TRIANGLES );
@@ -5894,8 +5894,8 @@ PrimitiveSharedPtr DPBFLoader::loadTriPatches4( uint_t offset )
   if ( m_offsetObjectMap.find(offset)==m_offsetObjectMap.end() )
   {
     Offset_AutoPtr<NBFTriPatches4> patchesPtr(m_fm, callback(), offset);
-    DP_ASSERT(    patchesPtr->objectCode == NBF_TRI_PATCHES_4
-              ||  patchesPtr->objectCode >= NBF_CUSTOM_OBJECT );
+    DP_ASSERT(    patchesPtr->objectCode == DPBFCode::TRI_PATCHES_4
+              ||  patchesPtr->objectCode >= DPBFCode::CUSTOM_OBJECT );
 
     PrimitiveSharedPtr primitive = Primitive::create( PATCHES_CUBIC_BEZIER_TRIANGLES, PATCHES_MODE_TRIANGLES );
     readPrimitive( primitive, patchesPtr );
@@ -5910,8 +5910,8 @@ PrimitiveSharedPtr DPBFLoader::loadTriPatches4_nbf_4d( uint_t offset )
   if ( m_offsetObjectMap.find(offset)==m_offsetObjectMap.end() )
   {
     Offset_AutoPtr<NBFTriPatches4_nbf_4d> patchesPtr(m_fm, callback(), offset);
-    DP_ASSERT(    patchesPtr->objectCode == NBF_TRI_PATCHES_4
-              ||  patchesPtr->objectCode >= NBF_CUSTOM_OBJECT );
+    DP_ASSERT(    patchesPtr->objectCode == DPBFCode::TRI_PATCHES_4
+              ||  patchesPtr->objectCode >= DPBFCode::CUSTOM_OBJECT );
 
     PrimitiveSharedPtr primitive = Primitive::create( PATCHES_CUBIC_BEZIER_TRIANGLES, PATCHES_MODE_TRIANGLES );
     readPrimitive_nbf_4d( primitive, patchesPtr );
@@ -5932,7 +5932,7 @@ void DPBFLoader::readVertexAttributeSet( VertexAttributeSetSharedPtr const& dst,
       Offset_AutoPtr<byte_t> vdata( m_fm, callback(), src->vattribs[i].vdata,
         src->vattribs[i].numVData * sizeofVertex );
 
-      dst->setVertexData( i, src->vattribs[i].size, convertDataType(src->vattribs[i].type), 
+      dst->setVertexData( i, src->vattribs[i].size, convertDataType(src->vattribs[i].type),
         vdata, 0, src->vattribs[i].numVData );
 
       // set the normalize enable flag for the aliased generic attribute only
@@ -5951,7 +5951,7 @@ IndexSetSharedPtr DPBFLoader::loadIndexSet( uint_t offset )
   if ( m_offsetObjectMap.find( offset ) == m_offsetObjectMap.end() )
   {
     Offset_AutoPtr<NBFIndexSet> isPtr( m_fm, callback(), offset );
-    DP_ASSERT( isPtr->objectCode == NBF_INDEX_SET );
+    DP_ASSERT( isPtr->objectCode == DPBFCode::INDEX_SET );
 
     IndexSetSharedPtr iset;
     if ( !loadSharedObject<IndexSet>( iset, isPtr ) )
@@ -5971,7 +5971,7 @@ VertexAttributeSetSharedPtr DPBFLoader::loadVertexAttributeSet( uint_t vasOffset
   if ( m_offsetObjectMap.find(vasOffset)==m_offsetObjectMap.end() )
   {
     Offset_AutoPtr<NBFVertexAttributeSet> vasPtr(m_fm, callback(), vasOffset);
-    DP_ASSERT( vasPtr->objectCode == NBF_VERTEX_ATTRIBUTE_SET );
+    DP_ASSERT( vasPtr->objectCode == DPBFCode::VERTEX_ATTRIBUTE_SET );
 
     VertexAttributeSetSharedPtr vash;
     if ( !loadSharedObject<VertexAttributeSet>( vash, vasPtr ) )
@@ -5987,7 +5987,7 @@ VertexAttributeSetSharedPtr DPBFLoader::loadVertexAttributeSet_nbf_54( uint_t va
   {
     Offset_AutoPtr<NBFVertexAttributeSet> vasPtr(m_fm, callback(), vasOffset);
 
-    if ( vasPtr->objectCode == NBF_VERTEX_ATTRIBUTE_SET )
+    if ( vasPtr->objectCode == DPBFCode::VERTEX_ATTRIBUTE_SET )
     {
       VertexAttributeSetSharedPtr vash;
       if ( !loadSharedObject<VertexAttributeSet>( vash, vasPtr ) )
@@ -5996,7 +5996,7 @@ VertexAttributeSetSharedPtr DPBFLoader::loadVertexAttributeSet_nbf_54( uint_t va
     }
     else
     {
-      DP_ASSERT( vasPtr->objectCode == NBF_ANIMATED_VERTEX_ATTRIBUTE_SET );
+      DP_ASSERT( vasPtr->objectCode == DPBFCode::ANIMATED_VERTEX_ATTRIBUTE_SET );
       Offset_AutoPtr<NBFAnimatedVertexAttributeSet_nbf_54> avasPtr( m_fm, callback(), vasOffset );
 
       VertexAttributeSetSharedPtr vertexAttributeSet;
@@ -6014,7 +6014,7 @@ VertexAttributeSetSharedPtr DPBFLoader::loadVertexAttributeSet_nbf_3a( uint_t va
   {
     Offset_AutoPtr<NBFVertexAttributeSet> vasPtr(m_fm, callback(), vasOffset);
     // undefined behavior if called for other objects!
-    DP_ASSERT(vasPtr->objectCode==NBF_VERTEX_ATTRIBUTE_SET);
+    DP_ASSERT(vasPtr->objectCode==DPBFCode::VERTEX_ATTRIBUTE_SET);
     VertexAttributeSetSharedPtr hvas(VertexAttributeSet::create());
 
     // consider shared objects
@@ -6055,7 +6055,7 @@ VertexAttributeSetSharedPtr DPBFLoader::loadVertexAttributeSet_nbf_38( uint_t va
   {
     Offset_AutoPtr<NBFVertexAttributeSet_nbf_38> vasPtr(m_fm, callback(), vasOffset);
     // undefined behavior if called for other objects!
-    DP_ASSERT(vasPtr->objectCode==NBF_VERTEX_ATTRIBUTE_SET);
+    DP_ASSERT(vasPtr->objectCode==DPBFCode::VERTEX_ATTRIBUTE_SET);
 
     VertexAttributeSetSharedPtr cvas(VertexAttributeSet::create());
     {
@@ -6122,7 +6122,7 @@ dp::sg::core::PipelineDataSharedPtr DPBFLoader::loadPipelineData( uint_t offset 
     dp::sg::core::PipelineDataSharedPtr effectData;
     Offset_AutoPtr<NBFPipelineData> edPtr( m_fm, callback(), offset );
     // undefined behavior if called for other objects!
-    DP_ASSERT( edPtr->objectCode == NBF_PIPELINE_DATA );
+    DP_ASSERT( edPtr->objectCode == DPBFCode::PIPELINE_DATA );
 
     DP_VERIFY( dp::fx::EffectLibrary::instance()->loadEffects( mapString( edPtr->effectFileName ), m_fileFinder ) );
     m_currentEffectSpec = dp::fx::EffectLibrary::instance()->getEffectSpec( mapString( edPtr->effectSpecName ) );
@@ -6170,7 +6170,7 @@ dp::sg::core::PipelineDataSharedPtr DPBFLoader::loadPipelineData_nbf_55( uint_t 
     dp::sg::core::PipelineDataSharedPtr effectData;
     Offset_AutoPtr<NBFEffectData_nbf_55> edPtr( m_fm, callback(), offset );
     // undefined behavior if called for other objects!
-    DP_ASSERT( edPtr->objectCode == NBF_PIPELINE_DATA );
+    DP_ASSERT( edPtr->objectCode == DPBFCode::PIPELINE_DATA );
 
     m_currentEffectSpec = dp::fx::EffectLibrary::instance()->getEffectSpec( mapString( edPtr->effectSpecName ) );
     if ( m_currentEffectSpec )
@@ -6218,7 +6218,7 @@ ParameterGroupDataSharedPtr DPBFLoader::loadParameterGroupData( uint_t offset )
 
     Offset_AutoPtr<NBFParameterGroupData> pgdPtr( m_fm, callback(), offset );
     // undefined behavior if called for other objects!
-    DP_ASSERT( pgdPtr->objectCode == NBF_PARAMETER_GROUP_DATA );
+    DP_ASSERT( pgdPtr->objectCode == DPBFCode::PARAMETER_GROUP_DATA );
 
     DP_ASSERT( ( ( m_nbfMajor < 0x54 ) || ( m_nbfMajor == 0x54 ) && ( m_nbfMinor < 0x04 ) ) || ( mapString( pgdPtr->parameterGroupSpecName ) != "options" ) );
 
@@ -6273,7 +6273,7 @@ SamplerSharedPtr DPBFLoader::loadSampler( uint_t offset )
   {
     Offset_AutoPtr<NBFSampler> samplerPtr( m_fm, callback(), offset );
     // undefined behavior if called for other objects!
-    DP_ASSERT( samplerPtr->objectCode == NBF_SAMPLER );
+    DP_ASSERT( samplerPtr->objectCode == DPBFCode::SAMPLER );
 
     SamplerSharedPtr sampler = Sampler::create();
     readObject( sampler, samplerPtr );
@@ -6296,7 +6296,7 @@ SamplerSharedPtr DPBFLoader::loadSampler_nbf_54( uint_t offset )
   {
     Offset_AutoPtr<NBFSampler_nbf_54> samplerPtr( m_fm, callback(), offset );
     // undefined behavior if called for other objects!
-    DP_ASSERT( samplerPtr->objectCode == NBF_SAMPLER );
+    DP_ASSERT( samplerPtr->objectCode == DPBFCode::SAMPLER );
 
     SamplerSharedPtr sampler = Sampler::create();
     readObject( sampler, samplerPtr );
@@ -6304,7 +6304,7 @@ SamplerSharedPtr DPBFLoader::loadSampler_nbf_54( uint_t offset )
     {
       Offset_AutoPtr<NBFSamplerState_nbf_54> samplerStatePtr( m_fm, callback(), samplerPtr->samplerState );
       // undefined behavior if called for other objects!
-      DP_ASSERT( samplerStatePtr->objectCode == NBF_SAMPLER_STATE );
+      DP_ASSERT( samplerStatePtr->objectCode == DPBFCode::SAMPLER_STATE );
 
       sampler->setBorderColor(convert<Vec4f>(samplerStatePtr->borderColor));
       sampler->setMagFilterMode((TextureMagFilterMode)samplerStatePtr->magFilter);
@@ -6401,23 +6401,23 @@ void DPBFLoader::readGroup_nbf_11(GroupSharedPtr const& dst, const NBFGroup_nbf_
 
 void DPBFLoader::readNode( NodeSharedPtr const& dst, const NBFNode * src )
 {
-  // annotation has been elevated to NBFObject with v61.2 
-  if (  m_nbfMajor < 0x3d 
-     || (m_nbfMajor==0x3d && m_nbfMinor < 0x02) ) 
+  // annotation has been elevated to NBFObject with v61.2
+  if (  m_nbfMajor < 0x3d
+     || (m_nbfMajor==0x3d && m_nbfMinor < 0x02) )
   {
     if ( src->annotation.numChars )
     {
       dst->setAnnotation(mapString(src->annotation));
     }
   }
-  
+
   // node hints were moved to object in later versions - but the bit
   // values are the same as in these versions, so this code is OK
   uint_t version = (m_nbfMajor << 8) & 0xFF00 | m_nbfMinor & 0xFF;
 
   if( version > 0x1202 && version < 0x3d05 )
   {
-    const NBFNode_3d_04 * _src = 
+    const NBFNode_3d_04 * _src =
                         reinterpret_cast< const NBFNode_3d_04 * >( src );
     dst->setHints( (_src->userHints << 8) | _src->systemHints );
   }
@@ -6507,11 +6507,11 @@ void DPBFLoader::readCamera_nbf_44( FrustumCameraSharedPtr const& dst, const NBF
   m_autoClipPlanes_nbf_4c = !!src->isAutoClipPlanes;
 }
 
-template <typename NBFTAIType> 
+template <typename NBFTAIType>
 inline ParameterGroupDataSharedPtr DPBFLoader::readTexAttribItem_nbf_54(Offset_AutoPtr<NBFTAIType>& nbfTAI)
 {
   // undefined behavior if called for other objects!
-  DP_ASSERT(nbfTAI->objectCode==NBF_TEXTURE_ATTRIBUTE_ITEM);
+  DP_ASSERT(nbfTAI->objectCode==DPBFCode::TEXTURE_ATTRIBUTE_ITEM);
 
   ParameterGroupDataSharedPtr textureData = getMaterialParameterGroup( "standardTextureParameters" );
   readObject( textureData, nbfTAI );
@@ -6544,13 +6544,13 @@ TextureSharedPtr DPBFLoader::readTexture( uint_t offset )
   return( texture );
 }
 
-template <typename NBFTAIType> 
+template <typename NBFTAIType>
 TextureSharedPtr DPBFLoader::readTexture( const Offset_AutoPtr<NBFTAIType> & src )
 {
   return( readTexture( src->texImg ) );
 }
 
-template <> 
+template <>
 TextureSharedPtr DPBFLoader::readTexture( const Offset_AutoPtr<NBFTextureAttributeItem_nbf_4b> & src )
 {
   string file;
@@ -6567,7 +6567,7 @@ TextureSharedPtr DPBFLoader::readTexture( const Offset_AutoPtr<NBFTextureAttribu
   return( texture );
 }
 
-template <typename NBFTAIType> 
+template <typename NBFTAIType>
 void DPBFLoader::readTexEnv( ParameterGroupDataSharedPtr const& dst, const Offset_AutoPtr<NBFTAIType> & src )
 {
   DP_VERIFY( dst->setParameter<dp::fx::EnumSpec::StorageType>( "envMode", src->texEnvMode ) );
@@ -6596,7 +6596,7 @@ inline void DPBFLoader::readTexEnv( ParameterGroupDataSharedPtr const& dst, cons
   DP_VERIFY( dst->setParameter<char>( "envScale", src->texEnvScale ) );
 }
 
-template <typename NBFTAIType> 
+template <typename NBFTAIType>
 inline void DPBFLoader::readTexGenMode( ParameterGroupDataSharedPtr const& dst, const Offset_AutoPtr<NBFTAIType> & src )
 {
   for ( unsigned int i=0 ; i<4 ; i++ )
@@ -6606,7 +6606,7 @@ inline void DPBFLoader::readTexGenMode( ParameterGroupDataSharedPtr const& dst, 
   }
 }
 
-template <typename NBFTAIType> 
+template <typename NBFTAIType>
 inline void DPBFLoader::readTexMatrix( ParameterGroupDataSharedPtr const& dst, const Offset_AutoPtr<NBFTAIType> & src )
 {
   Trafo t;

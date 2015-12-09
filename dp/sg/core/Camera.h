@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2007
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -42,14 +42,14 @@ namespace dp
 
       /*! \brief Type to describe the cull code of an object.
        *  \par Namespace: dp::sg::core
-       *  \remarks With a CullCode, an object can be marked to be completely out (CC_OUT), completely
-       *  in (CC_IN) or partially in and out (CC_PART) with respect to a view volume. */
-      typedef enum
+       *  \remarks With a CullCode, an object can be marked to be completely out (CullCode::OUTSIDE), completely
+       *  in (CullCode::INSIDE) or partially in and out (CullCode::PARTIAL) with respect to a view volume. */
+      enum class CullCode
       {
-        CC_OUT,   //!< an object is completely outside
-        CC_IN,    //!< an object is completely inside
-        CC_PART   //!< an object is partially in and partially out
-      } CullCode;
+        OUTSIDE,  //!< an object is completely outside
+        INSIDE,   //!< an object is completely inside
+        PARTIAL   //!< an object is partially in and partially out
+      };
 
       /*! \brief Abstract base class for parallel and perspective cameras.
        *  \par Namespace: dp::sg::core
@@ -152,7 +152,7 @@ namespace dp
           *  \param up A reference to the constant up vector to set
           *  \remarks The up vector is the vector in world space that defines the up direction of the
           *  Camera. The default up vector is the y-axis (0.0,1.0,0.0). Setting the up vector changes
-          *  the orientation of the Camera and might also change the view direction. Setting the up vector 
+          *  the orientation of the Camera and might also change the view direction. Setting the up vector
           *  also increases the Incarnation of the Camera.
           *  \sa getUpVector, setDirection, setOrientation, setPosition */
         DP_SG_CORE_API void setUpVector( const dp::math::Vec3f & up );
@@ -411,14 +411,14 @@ namespace dp
         /*! \brief Convenience function to rotate around the z-axis of the Camera.
           *  \param angle  Angle in radians to rotate
           *  \remarks The Rotation around the y-axis of the Camera is also called Roll. With positive
-          *  \a angle the Camera rolls to the left; with negative \a angle it rolls to the right. 
+          *  \a angle the Camera rolls to the left; with negative \a angle it rolls to the right.
           *  \sa orbitZ, rotate */
         void rotateZ( float angle );
 
         /*! \brief Interface for determining the CullCode of a Sphere3f relative to the view volume.
           *  \param sphere A reference to the constant Sphere3f to determine the CullCode for.
-          *  \return CC_IN, if the Sphere3f \a sphere is completely inside the view volume; CC_OUT if
-          *  it is completely out of the view volume; otherwise CC_PART.
+          *  \return CullCode::INSIDE, if the Sphere3f \a sphere is completely inside the view volume; CullCode::OUTSIDE if
+          *  it is completely out of the view volume; otherwise CullCode::PARTIAL.
           *  \remarks Behavior is undefined if sphere is invalid. This can be checked using !dp::math::isValid() */
         DP_SG_CORE_API virtual CullCode determineCullCode( const dp::math::Sphere3f &sphere ) const = 0;
 
@@ -447,7 +447,7 @@ namespace dp
           *  \sa ParallelCamera, PerspectiveCamera */
         DP_SG_CORE_API Camera( const Camera& rhs );
 
-        /*! \brief Protected assignment operator 
+        /*! \brief Protected assignment operator
           *  \param rhs  Reference to the constant Camera to copy from
           *  \return A reference to the assigned Camera.
           *  \remarks Besides assigning the Camera as an Object, each head light is copied as well as
@@ -479,8 +479,8 @@ namespace dp
         mutable bool              m_worldToViewValid; //!< world to view matrix cache is valid
       };
 
-      inline dp::math::Vec3f Camera::getDirection( void ) const 
-      { 
+      inline dp::math::Vec3f Camera::getDirection( void ) const
+      {
         //  NOTE: normalizing shouldn't be necessary, but rounding errors do catch us!
         dp::math::Vec3f dir = dp::math::Vec3f( 0.0f, 0.0f, -1.0f ) * m_orientation;
         dir.normalize();
@@ -488,8 +488,8 @@ namespace dp
       }
 
       inline float Camera::getFocusDistance( void ) const
-      { 
-        return( m_focusDist ); 
+      {
+        return( m_focusDist );
       }
 
       inline unsigned int Camera::getNumberOfHeadLights( void ) const
@@ -502,12 +502,12 @@ namespace dp
         return( m_orientation );
       }
 
-      inline const dp::math::Vec3f & Camera::getPosition( void ) const 
-      { 
-        return( m_position ); 
+      inline const dp::math::Vec3f & Camera::getPosition( void ) const
+      {
+        return( m_position );
       }
 
-      inline dp::math::Vec3f Camera::getUpVector( void ) const 
+      inline dp::math::Vec3f Camera::getUpVector( void ) const
       {
         DP_ASSERT( isNormalized( m_orientation ) );
         //  NOTE: normalizing shouldn't be necessary, but rounding errors do catch us!
@@ -517,7 +517,7 @@ namespace dp
       }
 
       inline void Camera::moveX( float val )
-      { 
+      {
         move( dp::math::Vec3f( val, 0.f, 0.f ) );
       }
 
@@ -527,12 +527,12 @@ namespace dp
       }
 
       inline void  Camera::moveZ( float val )
-      { 
-        move( dp::math::Vec3f( 0.f, 0.f, val ) ); 
+      {
+        move( dp::math::Vec3f( 0.f, 0.f, val ) );
       }
 
       inline void  Camera::orbitX( float targetDistance, float rad )
-      { 
+      {
         orbit( dp::math::Vec3f( 1.f, 0.f, 0.f ), targetDistance, rad );
       }
 
@@ -542,23 +542,23 @@ namespace dp
       }
 
       inline void  Camera::orbitZ( float targetDistance, float rad )
-      { 
-        orbit( dp::math::Vec3f( 0.f, 0.f, 1.f ), targetDistance, rad ); 
+      {
+        orbit( dp::math::Vec3f( 0.f, 0.f, 1.f ), targetDistance, rad );
       }
 
       inline void  Camera::rotateX( float rad )
       {
-        rotate( dp::math::Vec3f(1.f, 0.f, 0.f), rad );  
+        rotate( dp::math::Vec3f(1.f, 0.f, 0.f), rad );
       }
 
       inline void  Camera::rotateY( float rad )
-      { 
-        rotate( dp::math::Vec3f(0.f, 1.f, 0.f), rad );  
+      {
+        rotate( dp::math::Vec3f(0.f, 1.f, 0.f), rad );
       }
 
       inline void  Camera::rotateZ( float rad )
       {
-        rotate( dp::math::Vec3f(0.f, 0.f, 1.f), rad ); 
+        rotate( dp::math::Vec3f(0.f, 0.f, 1.f), rad );
       }
 
       inline Camera::HeadLightConstIterator Camera::beginHeadLights() const

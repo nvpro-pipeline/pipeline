@@ -53,7 +53,7 @@ namespace dp
       END_REFLECTION_INFO
 
       Object::Object(void)
-     : m_objectCode(OC_INVALID)
+     : m_objectCode(ObjectCode::INVALID)
       , m_hashKey(0)
       , m_name(nullptr)
       , m_annotation(nullptr)
@@ -77,7 +77,7 @@ namespace dp
       , m_dirtyState(DP_SG_BOUNDING_VOLUMES | DP_SG_HASH_KEY)
       {
         // concrete objects should have a valid object code - assert this
-        DP_ASSERT(m_objectCode!=OC_INVALID);
+        DP_ASSERT(m_objectCode!=ObjectCode::INVALID);
 
         if (rhs.m_name)
         { // this copy inherits name from rhs
@@ -149,7 +149,7 @@ namespace dp
 
       ObjectCode Object::getHigherLevelObjectCode(ObjectCode) const
       {
-        return(OC_INVALID);
+        return(ObjectCode::INVALID);
       }
 
       Object & Object::operator=(const Object & rhs)
@@ -159,7 +159,7 @@ namespace dp
           HandledObject::operator=(rhs);
 
           // concrete objects should have a valid object code - assert this
-          DP_ASSERT(m_objectCode != OC_INVALID);
+          DP_ASSERT(m_objectCode != ObjectCode::INVALID);
           DP_ASSERT(m_objectCode == rhs.m_objectCode);
 
           // copy mutable data
@@ -254,15 +254,15 @@ namespace dp
               dp::sg::core::Event const& coreEvent = static_cast<dp::sg::core::Event const&>(event);
               switch(coreEvent.getType())
               {
-                case dp::sg::core::Event::GEONODE:
+                case dp::sg::core::Event::Type::GEO_NODE:
                   {
                     dp::sg::core::GeoNode::Event const& geoNodeEvent = static_cast<dp::sg::core::GeoNode::Event const&>(coreEvent);
                     switch(geoNodeEvent.getType())
                     {
-                      case dp::sg::core::GeoNode::Event::PRIMITIVE_CHANGED:
+                      case dp::sg::core::GeoNode::Event::Type::PRIMITIVE_CHANGED:
                         changedState |= DP_SG_BOUNDING_VOLUMES;
                         break;
-                      case dp::sg::core::GeoNode::Event::EFFECT_DATA_CHANGED:
+                      case dp::sg::core::GeoNode::Event::Type::EFFECT_DATA_CHANGED:
                         changedState |= DP_SG_HASH_KEY;
                         break;
                       default:
@@ -271,14 +271,14 @@ namespace dp
                     }
                   }
                   break;
-                case dp::sg::core::Event::GROUP:
+                case dp::sg::core::Event::Type::GROUP:
                   {
                     dp::sg::core::Group::Event const& groupEvent = static_cast<dp::sg::core::Group::Event const&>(coreEvent);
                     switch(groupEvent.getType())
                     {
-                      case dp::sg::core::Group::Event::POST_CHILD_ADD:
-                      case dp::sg::core::Group::Event::PRE_CHILD_REMOVE:
-                      case dp::sg::core::Group::Event::POST_GROUP_EXCHANGED:
+                      case dp::sg::core::Group::Event::Type::POST_CHILD_ADD:
+                      case dp::sg::core::Group::Event::Type::PRE_CHILD_REMOVE:
+                      case dp::sg::core::Group::Event::Type::POST_GROUP_EXCHANGED:
                       {
                         changedState |= DP_SG_BOUNDING_VOLUMES;
                         notify(dp::sg::core::Object::Event(this));
@@ -290,13 +290,13 @@ namespace dp
                     }
                   }
                   break;
-                case dp::sg::core::Event::OBJECT:
+                case dp::sg::core::Event::Type::OBJECT:
                 {
                   changedState |= DP_SG_BOUNDING_VOLUMES;
                   changedState |= static_cast<dp::sg::core::Object::Event const &>(coreEvent).getObject()->m_dirtyState;
                   break;
                 }
-                case dp::sg::core::Event::PARAMETER_GROUP_DATA:
+                case dp::sg::core::Event::Type::PARAMETER_GROUP_DATA:
                   break;
                 default:
                   DP_ASSERT(!"encountered unhandled core event type!");
@@ -357,28 +357,28 @@ namespace dp
       {
         switch(oc)
         {
-          case OC_INVALID:               return("Invalid");
-          case OC_SCENE:                 return("Scene");
-          case OC_GEONODE:               return("GeoNode");
-          case OC_GROUP:                 return("Group");
-          case OC_LOD:                   return("LOD");
-          case OC_SWITCH:                return("Switch");
-          case OC_TRANSFORM:             return("Transform");
-          case OC_BILLBOARD:             return("Billboard");
-          case OC_CLIPPLANE:             return("ClipPlane");
-          case OC_LIGHT_SOURCE:          return("LightSource");
-          case OC_VERTEX_ATTRIBUTE_SET:  return("VertexAttributeSet");
-          case OC_PRIMITIVE:             return("Primitive");
-          case OC_INDEX_SET:             return("IndexSet");
-          case OC_PARAMETER_GROUP_DATA:  return("ParameterGroupData");
-          case OC_PIPELINE_DATA:         return("PipelineData");
-          case OC_SAMPLER:               return("Sampler");
-          case OC_PARALLELCAMERA:        return("ParallelCamera");
-          case OC_PERSPECTIVECAMERA:     return("PerspectiveCamera");
-          case OC_MATRIXCAMERA:          return("MatrixCamera");
+          case ObjectCode::INVALID:               return("Invalid");
+          case ObjectCode::SCENE:                 return("Scene");
+          case ObjectCode::GEO_NODE:              return("GeoNode");
+          case ObjectCode::GROUP:                 return("Group");
+          case ObjectCode::LOD:                   return("LOD");
+          case ObjectCode::SWITCH:                return("Switch");
+          case ObjectCode::TRANSFORM:             return("Transform");
+          case ObjectCode::BILLBOARD:             return("Billboard");
+          case ObjectCode::CLIP_PLANE:            return("ClipPlane");
+          case ObjectCode::LIGHT_SOURCE:          return("LightSource");
+          case ObjectCode::VERTEX_ATTRIBUTE_SET:  return("VertexAttributeSet");
+          case ObjectCode::PRIMITIVE:             return("Primitive");
+          case ObjectCode::INDEX_SET:             return("IndexSet");
+          case ObjectCode::PARAMETER_GROUP_DATA:  return("ParameterGroupData");
+          case ObjectCode::PIPELINE_DATA:         return("PipelineData");
+          case ObjectCode::SAMPLER:               return("Sampler");
+          case ObjectCode::PARALLEL_CAMERA:       return("ParallelCamera");
+          case ObjectCode::PERSPECTIVE_CAMERA:    return("PerspectiveCamera");
+          case ObjectCode::MATRIX_CAMERA:         return("MatrixCamera");
           default:
             std::ostringstream oss;
-            oss << "Unknown objectCode: " << oc;
+            oss << "Unknown objectCode: " << static_cast<unsigned int>(oc);
             return(oss.str());
         }
       }

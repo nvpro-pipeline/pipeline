@@ -56,10 +56,10 @@ namespace dp
       }
 
       Billboard::Billboard( void )
-      : m_alignment(BA_AXIS)
+      : m_alignment(Alignment::AXIS)
       , m_rotationAxis(0.0f,1.0f,0.0f)
       {
-        m_objectCode = OC_BILLBOARD;
+        m_objectCode = ObjectCode::BILLBOARD;
       }
 
       Billboard::Billboard( const Billboard &rhs )
@@ -67,7 +67,7 @@ namespace dp
       , m_alignment(rhs.m_alignment)
       , m_rotationAxis(rhs.m_rotationAxis)
       {
-        m_objectCode = OC_BILLBOARD;
+        m_objectCode = ObjectCode::BILLBOARD;
       }
 
       Billboard::~Billboard( void )
@@ -80,13 +80,13 @@ namespace dp
 
         switch( m_alignment )
         {
-          case BA_AXIS :
+          case Alignment::AXIS :
             getTrafoAxisAligned( cam, worldToModel, trafo );
             break;
-          case BA_SCREEN :
+          case Alignment::SCREEN :
             getTrafoScreenAligned( cam, worldToModel, trafo );
             break;
-          case BA_VIEWER :
+          case Alignment::VIEWER :
             getTrafoViewerAligned( cam, worldToModel, trafo );
             break;
           default :
@@ -98,7 +98,7 @@ namespace dp
 
       void Billboard::getTrafoAxisAligned( CameraSharedPtr const& cam, Mat44f const& worldToModel, Trafo & trafo ) const
       {
-        DP_ASSERT( m_alignment == BA_AXIS );
+        DP_ASSERT( m_alignment == Alignment::AXIS );
 
         //  get the camera position relative to Billboard
         Vec4f viewerPosition = Vec4f( cam->getPosition(), 1.0f ) * worldToModel;
@@ -129,7 +129,7 @@ namespace dp
 
       void Billboard::getTrafoScreenAligned( CameraSharedPtr const& cam, Mat44f const& worldToModel, Trafo & trafo ) const
       {
-        DP_ASSERT( m_alignment == BA_SCREEN );
+        DP_ASSERT( m_alignment == Alignment::SCREEN );
 
         //  get the (negative) camera direction as the new z axis
         Vec3f newZAxis( Vec4f( -cam->getDirection(), 0.0f ) * worldToModel );
@@ -153,7 +153,7 @@ namespace dp
 
       void Billboard::getTrafoViewerAligned( CameraSharedPtr const& cam, Mat44f const& worldToModel, Trafo & trafo ) const
       {
-        DP_ASSERT( m_alignment == BA_VIEWER );
+        DP_ASSERT( m_alignment == Alignment::VIEWER );
 
         //  get the up vector of the camera as the rotation axis
         Vec3f upVector( Vec4f( cam->getUpVector(), 0.0f ) * worldToModel );
@@ -213,7 +213,7 @@ namespace dp
         {
           BillboardSharedPtr const& b = object.staticCast<Billboard>();
           equi = ( m_alignment == b->m_alignment )
-              && ( ( m_alignment != BA_AXIS ) || ( m_rotationAxis == b->m_rotationAxis ) );
+              && ( ( m_alignment != Alignment::AXIS ) || ( m_rotationAxis == b->m_rotationAxis ) );
         }
         return( equi );
       }
@@ -236,11 +236,11 @@ namespace dp
 
     template <> const std::string EnumReflection<dp::sg::core::Billboard::Alignment>::name = "BillboardAlignment";
 
-    template <> const std::map<unsigned int,std::string> EnumReflection<dp::sg::core::Billboard::Alignment>::values =
+    template <> const std::map<dp::sg::core::Billboard::Alignment,std::string> EnumReflection<dp::sg::core::Billboard::Alignment>::values =
     {
-      { dp::sg::core::Billboard::BA_AXIS,   "axis"    },
-      { dp::sg::core::Billboard::BA_VIEWER, "viewer"  },
-      { dp::sg::core::Billboard::BA_SCREEN, "screen"  }
+      { dp::sg::core::Billboard::Alignment::AXIS,   "axis"    },
+      { dp::sg::core::Billboard::Alignment::VIEWER, "viewer"  },
+      { dp::sg::core::Billboard::Alignment::SCREEN, "screen"  }
     };
 
   } //namespace util

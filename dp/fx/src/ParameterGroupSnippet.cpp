@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -55,22 +55,22 @@ namespace dp
 
       switch (configuration.manager)
       {
-      case MANAGER_SHADERBUFFER:
+      case Manager::SHADERBUFFER:
         ug.reset( new dp::fx::glsl::UniformGeneratorGLSLShaderBufferLoad() );
         break;
-      case MANAGER_UNIFORM:
+      case Manager::UNIFORM:
         ug.reset( new dp::fx::glsl::UniformGeneratorGLSLStandard() );
         break;
-      case MANAGER_UNIFORM_BUFFER_OBJECT_RIX_FX:
+      case Manager::UNIFORM_BUFFER_OBJECT_RIX_FX:
         ug.reset( new dp::fx::glsl::UniformGeneratorUBOStd140( true ) );
         break;
-      case MANAGER_UNIFORM_BUFFER_OBJECT_RIX:
+      case Manager::UNIFORM_BUFFER_OBJECT_RIX:
         ug.reset( new dp::fx::glsl::UniformGeneratorUBOStd140( false ) );
         break;
-      case MANAGER_SHADER_STORAGE_BUFFER_OBJECT:
+      case Manager::SHADER_STORAGE_BUFFER_OBJECT:
         ug.reset( new dp::fx::glsl::UniformGeneratorSSBOStd140(true) );
         break;
-      case MANAGER_SHADER_STORAGE_BUFFER_OBJECT_RIX:
+      case Manager::SHADER_STORAGE_BUFFER_OBJECT_RIX:
         ug.reset( new dp::fx::glsl::UniformGeneratorSSBOStd140(false) );
         break;
       default:

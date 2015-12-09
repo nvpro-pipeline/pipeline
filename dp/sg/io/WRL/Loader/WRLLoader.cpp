@@ -1938,11 +1938,11 @@ dp::sg::core::BillboardSharedPtr WRLLoader::interpretBillboard( vrml::BillboardS
     pBillboard->setName( pVRMLBillboard->getName() );
     if ( length( pVRMLBillboard->axisOfRotation ) < FLT_EPSILON )
     {
-      pBillboard->setAlignment( dp::sg::core::Billboard::BA_VIEWER );
+      pBillboard->setAlignment( dp::sg::core::Billboard::Alignment::VIEWER );
     }
     else
     {
-      pBillboard->setAlignment( dp::sg::core::Billboard::BA_AXIS );
+      pBillboard->setAlignment( dp::sg::core::Billboard::Alignment::AXIS );
       pVRMLBillboard->axisOfRotation.normalize();
       pBillboard->setRotationAxis( pVRMLBillboard->axisOfRotation );
     }

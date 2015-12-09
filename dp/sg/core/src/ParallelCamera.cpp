@@ -53,13 +53,13 @@ namespace dp
 
       ParallelCamera::ParallelCamera(void)
       {
-        m_objectCode = OC_PARALLELCAMERA;
+        m_objectCode = ObjectCode::PARALLEL_CAMERA;
       }
 
       ParallelCamera::ParallelCamera( const ParallelCamera &rhs )
       : FrustumCamera(rhs)
       {
-        m_objectCode = OC_PARALLELCAMERA;
+        m_objectCode = ObjectCode::PARALLEL_CAMERA;
       }
 
       ParallelCamera::~ParallelCamera(void)
@@ -184,7 +184,7 @@ namespace dp
             ||  (   sphere.getCenter()[1] - hb + sphere.getRadius() < 0.0f )
             ||  ( - sphere.getCenter()[1] + ht + sphere.getRadius() < 0.0f ) )
         {
-          cc = CC_OUT;
+          cc = CullCode::OUTSIDE;
         }
         else if (     ( 0.0f < - sphere.getCenter()[2] - getNearDistance() - sphere.getRadius() )
 
@@ -195,11 +195,11 @@ namespace dp
                   &&  ( 0.0f <   sphere.getCenter()[1] - hb - sphere.getRadius() )
                   &&  ( 0.0f < - sphere.getCenter()[1] + ht - sphere.getRadius() ) )
         {
-          cc = CC_IN;
+          cc = CullCode::INSIDE;
         }
         else
         {
-          cc = CC_PART;
+          cc = CullCode::PARTIAL;
         }
 
         return( cc );

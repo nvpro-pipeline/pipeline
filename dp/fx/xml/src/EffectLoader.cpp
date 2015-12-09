@@ -225,7 +225,7 @@ namespace dp
       }
 
       EffectSpec::EffectSpec( std::string const & name, DomainSpecs const & domainSpecs )
-        : dp::fx::EffectSpec( name, EST_PIPELINE, gatherParameterGroupSpecs( domainSpecs ), gatherTransparency( domainSpecs ) )
+        : dp::fx::EffectSpec( name, Type::PIPELINE, gatherParameterGroupSpecs( domainSpecs ), gatherTransparency( domainSpecs ) )
         , m_domainSpecs( domainSpecs )
       {
       }
@@ -279,11 +279,11 @@ namespace dp
       dp::fx::Domain getDomainFromString( std::string const & domain )
       {
         // OpenGL
-        if ( domain == "vertex" )                 return dp::fx::DOMAIN_VERTEX;
-        if ( domain == "fragment" )               return dp::fx::DOMAIN_FRAGMENT;
-        if ( domain == "geometry" )               return dp::fx::DOMAIN_GEOMETRY;
-        if ( domain == "tessellation_control" )   return dp::fx::DOMAIN_TESSELLATION_CONTROL;
-        if ( domain == "tessellation_evaluation") return dp::fx::DOMAIN_TESSELLATION_EVALUATION;
+        if ( domain == "vertex" )                 return dp::fx::Domain::VERTEX;
+        if ( domain == "fragment" )               return dp::fx::Domain::FRAGMENT;
+        if ( domain == "geometry" )               return dp::fx::Domain::GEOMETRY;
+        if ( domain == "tessellation_control" )   return dp::fx::Domain::TESSELLATION_CONTROL;
+        if ( domain == "tessellation_evaluation") return dp::fx::Domain::TESSELLATION_EVALUATION;
 
         throw std::runtime_error("unknown domain type: " + domain );
       }
@@ -464,15 +464,15 @@ namespace dp
 
         // All other domains have only one set of code snippets per technique and ignore the signature.
 
-        dp::fx::Domain signatureDomain = DOMAIN_FRAGMENT;
+        dp::fx::Domain signatureDomain = Domain::FRAGMENT;
         std::string signature;
 
         switch ( domain )
         {
-        case DOMAIN_VERTEX:
-        case DOMAIN_GEOMETRY:
-        case DOMAIN_TESSELLATION_CONTROL:
-        case DOMAIN_TESSELLATION_EVALUATION:
+        case Domain::VERTEX:
+        case Domain::GEOMETRY:
+        case Domain::TESSELLATION_CONTROL:
+        case Domain::TESSELLATION_EVALUATION:
           {
             // Geometry shaders need to be matched to the underlying domain. (See FIXME above.)
             DomainSpecSharedPtr const & signatureDomainSpec = effectSpec->getDomainSpec( signatureDomain );
@@ -487,7 +487,7 @@ namespace dp
             signature = signatureSnippets.begin()->first;
           }
           // Intentional fall through!
-        case DOMAIN_FRAGMENT:
+        case Domain::FRAGMENT:
           {
             DomainSpecSharedPtr const & domainSpec = effectSpec->getDomainSpec( domain );
             dp::fx::xml::TechniqueSharedPtr const & technique = domainSpec->getTechnique( configuration.getTechnique() );
@@ -518,25 +518,25 @@ namespace dp
       {
         if (!element)
         {
-          return EET_NONE;
+          return EffectElementType::NONE;
         }
 
         string value = element->Value();
 
         // DAR TODO Use a map.
-        if (value == "enum")               return EET_ENUM;
-        if (value == "effect")             return EET_EFFECT;
-        if (value == "parameterGroup")     return EET_PARAMETER_GROUP;
-        if (value == "parameter")          return EET_PARAMETER;
-        if (value == "parameterGroupData") return EET_PARAMETER_GROUP_DATA;
-        if (value == "technique")          return EET_TECHNIQUE;
-        if (value == "glsl")               return EET_GLSL;
-        if (value == "source")             return EET_SOURCE;
-        if (value == "include")            return EET_INCLUDE;
-        if (value == "PipelineSpec")       return EET_PIPELINE_SPEC;
-        if (value == "PipelineData")       return EET_PIPELINE_DATA;
+        if (value == "enum")               return EffectElementType::ENUM;
+        if (value == "effect")             return EffectElementType::EFFECT;
+        if (value == "parameterGroup")     return EffectElementType::PARAMETER_GROUP;
+        if (value == "parameter")          return EffectElementType::PARAMETER;
+        if (value == "parameterGroupData") return EffectElementType::PARAMETER_GROUP_DATA;
+        if (value == "technique")          return EffectElementType::TECHNIQUE;
+        if (value == "glsl")               return EffectElementType::GLSL;
+        if (value == "source")             return EffectElementType::SOURCE;
+        if (value == "include")            return EffectElementType::INCLUDE;
+        if (value == "PipelineSpec")       return EffectElementType::PIPELINE_SPEC;
+        if (value == "PipelineData")       return EffectElementType::PIPELINE_DATA;
 
-        return EET_UNKNOWN;
+        return EffectElementType::UNKNOWN;
       }
 
       unsigned int EffectLoader::getParameterTypeFromGLSLType( const string &glslType )
@@ -574,25 +574,25 @@ namespace dp
         {
           switch( getTypeFromElement( element ) )
           {
-            case EET_ENUM :
+            case EffectElementType::ENUM :
               parseEnum( element );
               break;
-            case EET_EFFECT :
+            case EffectElementType::EFFECT :
               parseEffect( element, fileFinder );
               break;
-            case EET_PARAMETER_GROUP :
+            case EffectElementType::PARAMETER_GROUP :
               parseParameterGroup( element, fileFinder );
               break;
-            case EET_PARAMETER_GROUP_DATA :
+            case EffectElementType::PARAMETER_GROUP_DATA :
               parseParameterGroupData( element );
               break;
-            case EET_INCLUDE:
+            case EffectElementType::INCLUDE:
               parseInclude( element, fileFinder );
               break;
-            case EET_PIPELINE_SPEC:
+            case EffectElementType::PIPELINE_SPEC:
               parsePipelineSpec( element );
               break;
-            case EET_PIPELINE_DATA:
+            case EffectElementType::PIPELINE_DATA:
               parsePipelineData( element );
               break;
             default :
@@ -642,7 +642,7 @@ namespace dp
           EffectElementType eet = getTypeFromElement( element );
           switch( eet )
           {
-          case EET_PARAMETER_GROUP:
+          case EffectElementType::PARAMETER_GROUP:
             {
               ParameterGroupSpecSharedPtr pgs = parseParameterGroup( element, fileFinder );
               DP_ASSERT( find( pgsc.begin(), pgsc.end(), pgs ) == pgsc.end() );
@@ -656,7 +656,7 @@ namespace dp
           element = element->NextSiblingElement();
         }
 
-        dp::fx::EffectSpecSharedPtr es = dp::fx::EffectSpec::create( id, dp::fx::EffectSpec::EST_LIGHT, pgsc, isTransparent );
+        dp::fx::EffectSpecSharedPtr es = dp::fx::EffectSpec::create( id, dp::fx::EffectSpec::Type::LIGHT, pgsc, isTransparent );
         dp::fx::EffectSpecSharedPtr registeredEffectSpec = getEffectLibrary()->registerSpec( es, this );
         if ( es == registeredEffectSpec )
         {
@@ -703,14 +703,14 @@ namespace dp
           EffectElementType eet = getTypeFromElement( element );
           switch( eet )
           {
-          case EET_PARAMETER_GROUP:
+          case EffectElementType::PARAMETER_GROUP:
             {
               ParameterGroupSpecSharedPtr pgs = parseParameterGroup( element, fileFinder );
               DP_ASSERT( find( pgsc.begin(), pgsc.end(), pgs ) == pgsc.end() );
               pgsc.push_back( pgs );
             }
             break;
-          case EET_TECHNIQUE:
+          case EffectElementType::TECHNIQUE:
             {
               TechniqueSharedPtr technique = parseTechnique( element, domain, fileFinder );
               techniques[technique->getType()] = technique;
@@ -774,7 +774,7 @@ namespace dp
             EffectElementType elementType = getTypeFromElement( element );
             switch ( elementType )
             {
-            case EET_GLSL:
+            case EffectElementType::GLSL:
               {
                 char const * signature = element->Attribute( "signature" );
                 if ( signature )
@@ -826,7 +826,7 @@ namespace dp
           {
             switch( getTypeFromElement( element ) )
             {
-              case EET_PARAMETER :
+              case EffectElementType::PARAMETER :
                 parseParameter( element, psc, fileFinder );
                 break;
               default :
@@ -907,7 +907,7 @@ namespace dp
         {
           switch ( getTypeFromElement( element ) )
           {
-            case EET_SOURCE:
+            case EffectElementType::SOURCE:
               {
                 if ( element->Attribute( "file" ) )
                 {
@@ -936,7 +936,7 @@ namespace dp
                 }
                 else
                 {
-                  DP_ASSERT( !"EffectLibrary::getShaderSource: unknown Attribute in EffectElementType EET_SOURCE" );
+                  DP_ASSERT( !"EffectLibrary::getShaderSource: unknown Attribute in EffectElementType EffectElementType::SOURCE" );
                 }
               }
               break;
@@ -979,7 +979,7 @@ namespace dp
           {
             switch( getTypeFromElement( element ) )
             {
-            case EET_PARAMETER :
+            case EffectElementType::PARAMETER :
               parseParameterData( element, parameterGroupData );
               break;
             default :
@@ -1124,7 +1124,7 @@ namespace dp
             EffectElementType eet = getTypeFromElement( element );
             switch( eet )
             {
-            case EET_PARAMETER_GROUP_DATA:
+            case EffectElementType::PARAMETER_GROUP_DATA:
               {
                 const ParameterGroupDataSharedPtr& parameterGroupData = parseParameterGroupData( element ); // This handles newly defined and referenced programParameterGroupData
                 DP_ASSERT( parameterGroupData );
@@ -1164,7 +1164,7 @@ namespace dp
 
         for ( EffectSpec::DomainSpecs::const_iterator it = domainSpecs.begin(); it != domainSpecs.end(); ++it )
         {
-          DP_ASSERT( it->first != DOMAIN_PIPELINE );
+          DP_ASSERT( it->first != Domain::PIPELINE );
 
           ShaderPipeline::Stage stage;
           stage.domain = it->first;
@@ -1176,15 +1176,15 @@ namespace dp
           {
             stage.source = std::make_shared<SnippetListSnippet>( snippets );
 
-            if ( stage.domain == DOMAIN_VERTEX
-              || stage.domain == DOMAIN_GEOMETRY
-              || stage.domain == DOMAIN_TESSELLATION_CONTROL
-              || stage.domain == DOMAIN_TESSELLATION_EVALUATION)
+            if ( stage.domain == Domain::VERTEX
+              || stage.domain == Domain::GEOMETRY
+              || stage.domain == Domain::TESSELLATION_CONTROL
+              || stage.domain == Domain::TESSELLATION_EVALUATION)
             {
               stage.systemSpecs.push_back( "sys_matrices" );
               stage.systemSpecs.push_back( "sys_camera" );
             }
-            else if ( stage.domain == DOMAIN_FRAGMENT )
+            else if ( stage.domain == Domain::FRAGMENT )
             {
               stage.systemSpecs.push_back( "sys_Fragment" );
             }
@@ -1204,11 +1204,11 @@ namespace dp
         {
             switch( it->second->getDomain() )
             {
-              case DOMAIN_VERTEX :
-              case DOMAIN_TESSELLATION_CONTROL :
-              case DOMAIN_TESSELLATION_EVALUATION :
-              case DOMAIN_GEOMETRY :
-              case DOMAIN_FRAGMENT :
+              case Domain::VERTEX :
+              case Domain::TESSELLATION_CONTROL :
+              case Domain::TESSELLATION_EVALUATION :
+              case Domain::GEOMETRY :
+              case Domain::FRAGMENT :
                 hasTechnique = !!it->second->getTechnique( techniqueName );
                 break;
               default :

@@ -183,21 +183,21 @@ namespace dp
         DP_FX_XML_API EffectLoader( EffectLibraryImpl * effectLibrary );
 
       private:
-        enum EffectElementType
+        enum class EffectElementType
         {
-          EET_NONE,
-          EET_ENUM,
-          EET_EFFECT,
-          EET_PARAMETER_GROUP,
-          EET_PARAMETER,
-          EET_PARAMETER_GROUP_DATA,
-          EET_TECHNIQUE,
-          EET_GLSL,
-          EET_SOURCE,
-          EET_INCLUDE,
-          EET_PIPELINE_SPEC,
-          EET_PIPELINE_DATA,
-          EET_UNKNOWN
+          NONE,
+          ENUM,
+          EFFECT,
+          PARAMETER_GROUP,
+          PARAMETER,
+          PARAMETER_GROUP_DATA,
+          TECHNIQUE,
+          GLSL,
+          SOURCE,
+          INCLUDE,
+          PIPELINE_SPEC,
+          PIPELINE_DATA,
+          UNKNOWN
         };
 
       private:

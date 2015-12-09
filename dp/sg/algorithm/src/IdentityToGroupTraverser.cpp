@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2005
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -56,7 +56,7 @@ namespace dp
       {
         OptimizeTraverser::postApply( root );
 
-        if ( m_scene && root->getObjectCode() == OC_TRANSFORM )
+        if ( m_scene && root->getObjectCode() == ObjectCode::TRANSFORM )
         {
           TransformSharedPtr const& th = root.staticCast<Transform>();
           m_scene->setRootNode( createGroupFromTransform( th ) );

@@ -177,8 +177,8 @@ namespace dp
 
             DrawableManagerDefault( const ResourceManagerSharedPtr & resourceManager
                                   , TransparencyManagerSharedPtr const & transparencyManager
-                                  , dp::fx::Manager shaderManagerType = dp::fx::MANAGER_SHADERBUFFER
-                                  , dp::culling::Mode cullingMode = dp::culling::MODE_AUTO );
+                                  , dp::fx::Manager shaderManagerType = dp::fx::Manager::SHADERBUFFER
+                                  , dp::culling::Mode cullingMode = dp::culling::Mode::AUTO );
             virtual ~DrawableManagerDefault();
 
             virtual Handle addDrawableInstance( dp::sg::core::GeoNodeWeakPtr geoNode, dp::sg::xbar::ObjectTreeIndex objectTreeIndex );

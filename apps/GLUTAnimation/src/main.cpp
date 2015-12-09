@@ -221,7 +221,7 @@ void showStatistics( dp::sg::ui::ViewStateSharedPtr const& viewState )
 int runApp( int argc, char *argv[], bool stereo, bool continuous, int frames, const char *renderEngine, dp::fx::Manager smt )
 {
   // Create SceneRenderer without transparency and culling. This application is an update benchmark, not an OIT benchmark
-  SceneRendererSharedPtr renderer = dp::sg::renderer::rix::gl::SceneRenderer::create(renderEngine, smt, dp::culling::MODE_CPU, dp::sg::renderer::rix::gl::TM_NONE);
+  SceneRendererSharedPtr renderer = dp::sg::renderer::rix::gl::SceneRenderer::create(renderEngine, smt, dp::culling::Mode::CPU, dp::sg::renderer::rix::gl::TM_NONE);
   renderer->setCullingEnabled(false);
 
   // Setup default OpenGL format descriptor
@@ -265,7 +265,7 @@ int main(int argc, char *argv[])
 
   bool stereo = false;
   bool continuous = true;
-  dp::fx::Manager smt = dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX;
+  dp::fx::Manager smt = dp::fx::Manager::UNIFORM_BUFFER_OBJECT_RIX;
   int frames = -1;
   const char *renderEngine = "Bindless";
 
@@ -296,11 +296,11 @@ int main(int argc, char *argv[])
     {
       ++arg;
       std::map<std::string, dp::fx::Manager> shaderManager;
-      shaderManager["rix:ubo140"] = dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX;
-      shaderManager["rixfx:uniform"] = dp::fx::MANAGER_UNIFORM;
-      shaderManager["rixfx:shaderbufferload"] = dp::fx::MANAGER_SHADERBUFFER;
-      shaderManager["rixfx:ubo140"] = dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX_FX;
-      shaderManager["rixfx:ssbo140"] = dp::fx::MANAGER_SHADER_STORAGE_BUFFER_OBJECT;
+      shaderManager["rix:ubo140"] = dp::fx::Manager::UNIFORM_BUFFER_OBJECT_RIX;
+      shaderManager["rixfx:uniform"] = dp::fx::Manager::UNIFORM;
+      shaderManager["rixfx:shaderbufferload"] = dp::fx::Manager::SHADERBUFFER;
+      shaderManager["rixfx:ubo140"] = dp::fx::Manager::UNIFORM_BUFFER_OBJECT_RIX_FX;
+      shaderManager["rixfx:ssbo140"] = dp::fx::Manager::SHADER_STORAGE_BUFFER_OBJECT;
       if ( shaderManager.find(argv[arg]) != shaderManager.end() )
       {
         smt = shaderManager[argv[arg]];

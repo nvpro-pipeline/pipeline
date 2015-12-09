@@ -112,7 +112,7 @@ namespace dp
             // create system effect specs
             dp::fx::EffectSpec::ParameterGroupSpecsContainer groupSpecs;
             groupSpecs.push_back(m_groupSpecWorldMatrices);
-            m_effectSpecMatrices = dp::fx::EffectSpec::create( "sys_matrices", dp::fx::EffectSpec::EST_UNKNOWN, groupSpecs);
+            m_effectSpecMatrices = dp::fx::EffectSpec::create( "sys_matrices", dp::fx::EffectSpec::Type::UNKNOWN, groupSpecs);
 
             m_sceneTree->getTransformTree().attach(this);
           }
@@ -258,7 +258,7 @@ namespace dp
             // generate EffectSpec for Camera and register as SystemSpec
             dp::fx::EffectSpec::ParameterGroupSpecsContainer groupSpecs;
             groupSpecs.push_back(groupSpecCamera);
-            m_effectSpecCamera = dp::fx::EffectSpec::create( "sys_camera", dp::fx::EffectSpec::EST_UNKNOWN, groupSpecs);
+            m_effectSpecCamera = dp::fx::EffectSpec::create( "sys_camera", dp::fx::EffectSpec::Type::UNKNOWN, groupSpecs);
             m_systemSpecs["sys_camera"] = dp::rix::fx::Manager::EffectSpecInfo( m_effectSpecCamera, true );
 
             // create a GroupData for the Camera
@@ -281,15 +281,15 @@ namespace dp
 
             dp::fx::EffectSpec::ParameterGroupSpecsContainer fragmentGroupSpecs;
             fragmentGroupSpecs.push_back( fragmentGroupSpec );
-            m_fragmentSystemSpec = dp::fx::EffectSpec::create( "sys_Fragment", dp::fx::EffectSpec::EST_SYSTEM, fragmentGroupSpecs );
+            m_fragmentSystemSpec = dp::fx::EffectSpec::create( "sys_Fragment", dp::fx::EffectSpec::Type::SYSTEM, fragmentGroupSpecs );
 
             m_systemSpecs["sys_Fragment"] = dp::rix::fx::Manager::EffectSpecInfo( m_fragmentSystemSpec, true );
 
             // get snippets for opaque|transparent and color|depth passes
-            getTransparencyManager()->addFragmentCodeSnippets( false, false, m_additionalCodeSnippets[RGL_OPAQUE][RGP_FORWARD][dp::fx::DOMAIN_FRAGMENT] );
-            getTransparencyManager()->addFragmentCodeSnippets( false, true,  m_additionalCodeSnippets[RGL_OPAQUE][RGP_DEPTH][dp::fx::DOMAIN_FRAGMENT] );
-            getTransparencyManager()->addFragmentCodeSnippets( true, false, m_additionalCodeSnippets[RGL_TRANSPARENT][RGP_FORWARD][dp::fx::DOMAIN_FRAGMENT] );
-            getTransparencyManager()->addFragmentCodeSnippets( true, true,  m_additionalCodeSnippets[RGL_TRANSPARENT][RGP_DEPTH][dp::fx::DOMAIN_FRAGMENT] );
+            getTransparencyManager()->addFragmentCodeSnippets( false, false, m_additionalCodeSnippets[RGL_OPAQUE][RGP_FORWARD][dp::fx::Domain::FRAGMENT] );
+            getTransparencyManager()->addFragmentCodeSnippets( false, true,  m_additionalCodeSnippets[RGL_OPAQUE][RGP_DEPTH][dp::fx::Domain::FRAGMENT] );
+            getTransparencyManager()->addFragmentCodeSnippets( true, false, m_additionalCodeSnippets[RGL_TRANSPARENT][RGP_FORWARD][dp::fx::Domain::FRAGMENT] );
+            getTransparencyManager()->addFragmentCodeSnippets( true, true,  m_additionalCodeSnippets[RGL_TRANSPARENT][RGP_DEPTH][dp::fx::Domain::FRAGMENT] );
           }
 
           void ShaderManagerRiXFx::updateCameraState( Mat44f const & worldToProj, Mat44f const & viewToWorld )

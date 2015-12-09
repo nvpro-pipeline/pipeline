@@ -128,7 +128,7 @@ GLUTMinimal::GLUTMinimal()
   , m_duration( 0.0 )
   , m_engineBindless( true )
   , m_attributeType( ATTRIBUTE_GENERIC )
-  , m_shaderManager( dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX )
+  , m_shaderManager( dp::fx::Manager::UNIFORM_BUFFER_OBJECT_RIX )
 {
   m_trackballHIDSync->setHID( this );
   m_trackballHIDSync->setRenderTarget( getRenderTarget() );
@@ -241,7 +241,7 @@ void GLUTMinimal::onHIDEvent( dp::util::PropertyId propertyId )
   {
     if ( getValue<bool>( propertyId ) )
     {
-      getSceneRenderer()->setCullingMode(dp::culling::MODE_CPU);
+      getSceneRenderer()->setCullingMode(dp::culling::Mode::CPU);
       std::cout << "culling: CPU" << std::endl;
     }
   }
@@ -249,7 +249,7 @@ void GLUTMinimal::onHIDEvent( dp::util::PropertyId propertyId )
   {
     if ( getValue<bool>( propertyId ) )
     {
-      getSceneRenderer()->setCullingMode(dp::culling::MODE_OPENGL_COMPUTE);
+      getSceneRenderer()->setCullingMode(dp::culling::Mode::OPENGL_COMPUTE);
       std::cout << "culling: GL_COMPUTE" << std::endl;
     }
   }
@@ -257,7 +257,7 @@ void GLUTMinimal::onHIDEvent( dp::util::PropertyId propertyId )
   {
     if ( getValue<bool>( propertyId ) )
     {
-      getSceneRenderer()->setCullingMode(dp::culling::MODE_CUDA);
+      getSceneRenderer()->setCullingMode(dp::culling::Mode::CUDA);
       std::cout << "culling: CUDA" << std::endl;
     }
   }
@@ -265,7 +265,7 @@ void GLUTMinimal::onHIDEvent( dp::util::PropertyId propertyId )
   {
     if ( getValue<bool>( propertyId ) )
     {
-      getSceneRenderer()->setCullingMode(dp::culling::MODE_AUTO);
+      getSceneRenderer()->setCullingMode(dp::culling::Mode::AUTO);
       std::cout << "culling: AUTO" << std::endl;
     }
   }
@@ -324,7 +324,7 @@ void GLUTMinimal::onHIDEvent( dp::util::PropertyId propertyId )
     if ( getValue<bool>( propertyId ) )
     {
       std::cout << "Setting shadermanager: " << "uniform" << std::endl;
-      m_shaderManager = dp::fx::MANAGER_UNIFORM;
+      m_shaderManager = dp::fx::Manager::UNIFORM;
     }
   }
   else if ( propertyId == PID_Key_F10 )
@@ -332,7 +332,7 @@ void GLUTMinimal::onHIDEvent( dp::util::PropertyId propertyId )
     if ( getValue<bool>( propertyId ) )
     {
       std::cout << "Setting shadermanager: " << "uniform buffer object rix" << std::endl;
-      m_shaderManager = dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX;
+      m_shaderManager = dp::fx::Manager::UNIFORM_BUFFER_OBJECT_RIX;
     }
   }
   else if ( propertyId == PID_Key_F11 )
@@ -340,7 +340,7 @@ void GLUTMinimal::onHIDEvent( dp::util::PropertyId propertyId )
     if ( getValue<bool>( propertyId ) )
     {
       std::cout << "Setting shadermanager: " << "shaderbufferload" << std::endl;
-      m_shaderManager = dp::fx::MANAGER_SHADERBUFFER;
+      m_shaderManager = dp::fx::Manager::SHADERBUFFER;
     }
   }
   else if ( propertyId == PID_Key_F12 )
@@ -348,7 +348,7 @@ void GLUTMinimal::onHIDEvent( dp::util::PropertyId propertyId )
     if ( getValue<bool>( propertyId ) )
     {
       std::cout << "Setting shadermanager: " << "shader storage buffer object" << std::endl;
-      m_shaderManager = dp::fx::MANAGER_SHADER_STORAGE_BUFFER_OBJECT;
+      m_shaderManager = dp::fx::Manager::SHADER_STORAGE_BUFFER_OBJECT;
     }
   }
   else if ( propertyId == PID_Key_P )
@@ -443,19 +443,19 @@ void showStatistics( dp::sg::ui::ViewStateSharedPtr const& viewState )
 dp::fx::Manager getShaderManager( std::string const& name )
 {
   std::map<std::string, dp::fx::Manager> shaderManager;
-  shaderManager["rix:ubo140"] = dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX;
-  shaderManager["rix:ssbo140"] = dp::fx::MANAGER_SHADER_STORAGE_BUFFER_OBJECT_RIX;
-  shaderManager["rixfx:uniform"] = dp::fx::MANAGER_UNIFORM;
-  shaderManager["rixfx:shaderbufferload"] = dp::fx::MANAGER_SHADERBUFFER;
-  shaderManager["rixfx:ubo140"] = dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX_FX;
-  shaderManager["rixfx:ssbo140"] = dp::fx::MANAGER_SHADER_STORAGE_BUFFER_OBJECT;
+  shaderManager["rix:ubo140"] = dp::fx::Manager::UNIFORM_BUFFER_OBJECT_RIX;
+  shaderManager["rix:ssbo140"] = dp::fx::Manager::SHADER_STORAGE_BUFFER_OBJECT_RIX;
+  shaderManager["rixfx:uniform"] = dp::fx::Manager::UNIFORM;
+  shaderManager["rixfx:shaderbufferload"] = dp::fx::Manager::SHADERBUFFER;
+  shaderManager["rixfx:ubo140"] = dp::fx::Manager::UNIFORM_BUFFER_OBJECT_RIX_FX;
+  shaderManager["rixfx:ssbo140"] = dp::fx::Manager::SHADER_STORAGE_BUFFER_OBJECT;
   if ( shaderManager.find(name) != shaderManager.end() )
   {
     return shaderManager[name];
   }
   else
   {
-    return dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX;
+    return dp::fx::Manager::UNIFORM_BUFFER_OBJECT_RIX;
   }
 }
 
@@ -500,18 +500,18 @@ int runApp( options::variables_map const& opts )
 {
   // Create renderer
   std::string cullingEngine = opts["cullingengine"].as<std::string>();
-  dp::culling::Mode cullingMode = dp::culling::MODE_AUTO;
+  dp::culling::Mode cullingMode = dp::culling::Mode::AUTO;
   if ( cullingEngine == "cpu" )
   {
-    cullingMode = dp::culling::MODE_CPU;
+    cullingMode = dp::culling::Mode::CPU;
   }
   else if ( cullingEngine == "gl_compute" )
   {
-    cullingMode = dp::culling::MODE_OPENGL_COMPUTE;
+    cullingMode = dp::culling::Mode::OPENGL_COMPUTE;
   }
   else if ( cullingEngine == "cuda" )
   {
-    cullingMode = dp::culling::MODE_CUDA;
+    cullingMode = dp::culling::Mode::CUDA;
   }
   else if ( cullingEngine != "auto" )
   {
@@ -615,7 +615,7 @@ int runApp( options::variables_map const& opts )
 
   {
     // Replace MatrixCamera by PerspectiveCamera to get all manipulator features
-    if ( viewState->getCamera()->getObjectCode() == dp::sg::core::OC_MATRIXCAMERA )
+    if ( viewState->getCamera()->getObjectCode() == dp::sg::core::ObjectCode::MATRIX_CAMERA )
     {
       dp::sg::core::PerspectiveCameraSharedPtr perspectiveCamera = dp::sg::core::PerspectiveCamera::create();
       perspectiveCamera->setOrientation(viewState->getCamera()->getOrientation());

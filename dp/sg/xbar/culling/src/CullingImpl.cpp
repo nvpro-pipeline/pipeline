@@ -51,10 +51,10 @@ namespace dp
         {
           switch ( cullingMode )
           {
-          case dp::culling::MODE_CPU:
+          case dp::culling::Mode::CPU:
             m_culling.reset(dp::culling::cpu::Manager::create());
             break;
-          case dp::culling::MODE_OPENGL_COMPUTE:
+          case dp::culling::Mode::OPENGL_COMPUTE:
             m_culling.reset(dp::culling::opengl::Manager::create());
             break;
           default:

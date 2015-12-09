@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -42,11 +42,11 @@ namespace dp
 
       switch ( configuration.manager )
       {
-      case MANAGER_SHADERBUFFER:
+      case Manager::SHADERBUFFER:
         result << "#extension GL_NV_shader_buffer_load : enable\n";
         break;
-      case MANAGER_SHADER_STORAGE_BUFFER_OBJECT:
-      case MANAGER_SHADER_STORAGE_BUFFER_OBJECT_RIX:
+      case Manager::SHADER_STORAGE_BUFFER_OBJECT:
+      case Manager::SHADER_STORAGE_BUFFER_OBJECT_RIX:
         result << "#extension GL_ARB_shader_storage_buffer_object : require\n";
         break;
       default:

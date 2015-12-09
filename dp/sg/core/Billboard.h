@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2005
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -55,11 +55,11 @@ namespace dp
 
         public:
           //! Enumeration type to describe the alignment of a Billboard.
-          enum Alignment
+          enum class Alignment
           {
-            BA_AXIS,    //!< Axis aligned Billboard: rotate around a specified axis.
-            BA_VIEWER,  //!< Viewer aligned Billboard: align the Billboard to always face the viewer.
-            BA_SCREEN   //!< Screen aligned Billboard: keep the Billboard aligned to the screen.
+            AXIS,    //!< Axis aligned Billboard: rotate around a specified axis.
+            VIEWER,  //!< Viewer aligned Billboard: align the Billboard to always face the viewer.
+            SCREEN   //!< Screen aligned Billboard: keep the Billboard aligned to the screen.
           };
 
         public:
@@ -86,7 +86,7 @@ namespace dp
            *  \remarks The rotation axis specifies which axis to use to perform the rotation. This
            *  axis is defined in the local coordinates of the Billboard. The default is the local
            *  y-axis, that is (0.0,1.0,0.0). The rotation axis is used only if the Billboard is not
-           *  to be screen aligned. 
+           *  to be screen aligned.
            *  \sa isViewerAligned, setRotationAxis */
           DP_SG_CORE_API const dp::math::Vec3f & getRotationAxis() const;
 
@@ -95,10 +95,10 @@ namespace dp
            *  \remarks The rotation axis specifies which axis to use to perform the rotation. This
            *  axis is defined in the local coordinates of the Billboard. The default is the local
            *  y-axis, that is (0.0,1.0,0.0). The rotation axis is used only if the Billboard is not
-           *  to be screen aligned. 
+           *  to be screen aligned.
            *  \sa getRotationAxis, setViewerAligned */
           DP_SG_CORE_API void setRotationAxis( const dp::math::Vec3f &axis );
-    
+
           /*! \brief Assignment operator
            *  \param rhs Reference to the constant Billboard to copy from
            *  \return A reference to the assigned Billboard
@@ -106,8 +106,8 @@ namespace dp
            *  rotation axis and the screen alignment flag are copied.
            *  \sa Group */
           DP_SG_CORE_API Billboard & operator=( const Billboard & rhs );
-      
-          /*! \brief Test for equivalence with another Billboard. 
+
+          /*! \brief Test for equivalence with another Billboard.
            *  \param p            Pointer to the constant Billboard to test for equivalence with
            *  \param ignoreNames  Optional parameter to ignore the names of the objects; default is \c
            *  true
@@ -129,8 +129,8 @@ namespace dp
           END_DECLARE_STATIC_PROPERTIES
 
         protected:
-          /*! \brief Default-constructs a Billboard. 
-           *  \remarks. The Billboard initially has the y-axis as rotation axis and is not screen 
+          /*! \brief Default-constructs a Billboard.
+           *  \remarks. The Billboard initially has the y-axis as rotation axis and is not screen
            *  aligned. */
           DP_SG_CORE_API Billboard();
 

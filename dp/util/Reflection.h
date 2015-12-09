@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2009-2011
+// Copyright (c) 2009-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -102,7 +102,7 @@ namespace dp
       DP_UTIL_API virtual unsigned int getEnumsCount() const = 0;   //!< Returns the number of enum values, if this an enum; otherwise returns 0
       DP_UTIL_API virtual std::string const & getEnumName( unsigned int idx ) const = 0;    //!< Returns the name of the enum value as a string
       DP_UTIL_API virtual void addRef() = 0;                //!< Increase the refcount of the property
-      DP_UTIL_API virtual void destroy() = 0;               //!< Decrease the refcount and destroy the property if necessary  
+      DP_UTIL_API virtual void destroy() = 0;               //!< Decrease the refcount and destroy the property if necessary
       DP_UTIL_API virtual Property *clone() const; //!< Clone a property. Most properties do not contain any data and can just be reused.
     };
 
@@ -123,7 +123,7 @@ namespace dp
 
   #endif
 
-    /* \brief Template trait to get the property value for a C++ datatype 
+    /* \brief Template trait to get the property value for a C++ datatype
        \remarks Usage: TypedPropertyEnum<DataType>::Type
     */
     template <typename T> struct TypedPropertyEnum;
@@ -227,7 +227,7 @@ namespace dp
     template <> struct TypedPropertyEnum<dp::math::Vec4i> {
       enum { type = Property::TYPE_INT4 };
     };
-  
+
     /*! \brief Specialization of the TypedPropertyEnum template for type dp::math::Trafo. */
     template <> struct TypedPropertyEnum<dp::math::Trafo> {
       enum { type = Property::TYPE_TRANSFORMATION };
@@ -303,7 +303,7 @@ namespace dp
         typedef ValueType value_type;       //!< Value type definition of the template parameter \a ValueType
         typedef ValueType parameter_type;   //!< Parameter type definition of the template parameter \a ValueType
     };
-  
+
     /*! \brief Partial specialization of the TypeTraits template for const reference types. */
     template <typename ValueType>
     struct TypeTraits<ValueType, const_reference>
@@ -499,7 +499,7 @@ namespace dp
     class TypedPropertyImpl : public TypedProperty<ValueType>
     {
     public:
-      TypedPropertyImpl() 
+      TypedPropertyImpl()
         : m_refCount(1)
       {}
       virtual ~TypedPropertyImpl() {}
@@ -570,9 +570,9 @@ namespace dp
       unsigned int m_refCount;
     };
 
-    /** \brief A property object holding a value directly. 
+    /** \brief A property object holding a value directly.
         \param ValueType The value type the Property should hold.
-     *  \remarks This property object should be hold only by a single owner unless different 
+     *  \remarks This property object should be hold only by a single owner unless different
      *           holders should hold the same property value.
      */
     template <typename ValueType>
@@ -684,8 +684,8 @@ namespace dp
     template<typename T>
     struct EnumReflection
     {
-      static const std::string                        name;
-      static const std::map<unsigned int,std::string> values;
+      static const std::string              name;
+      static const std::map<T,std::string>  values;
     };
 
     /** \brief A delegating property implementation with enum as int support. This class is used for all enum properties.
@@ -738,10 +738,10 @@ namespace dp
         return( dp::checked_cast<unsigned int>(EnumReflection<ValueType>::values.size()) );
       }
 
-      virtual std::string const & getEnumName( unsigned int idx ) const
+      virtual std::string const & getEnumName( ValueType idx ) const
       {
         static std::string emptyString;
-        std::map<unsigned int,std::string>::const_iterator it = EnumReflection<ValueType>::values.find( idx );
+        std::map<ValueType,std::string>::const_iterator it = EnumReflection<ValueType>::values.find( idx );
         return( ( it != EnumReflection<ValueType>::values.end() ) ? it->second : emptyString );
       }
 
@@ -988,7 +988,7 @@ namespace dp
       friend class Reflection;
     };
 
-    /** \brief This is the base class for all objects which support the Reflection/Property mechanism. It's basically a PropertyListChain which will get 
+    /** \brief This is the base class for all objects which support the Reflection/Property mechanism. It's basically a PropertyListChain which will get
     Base class for all objects with properties. Use this as base class for all objects which provide properties **/
     class Reflection : public dp::util::Subject
     {
@@ -1099,13 +1099,13 @@ namespace dp
       PropertyListChain* m_propertyLists; //!< List of PropertyLists for this Object
 
       /** Create read/write property **/
-      template <typename ValueType, typename GetType, typename SetType, typename ObjectType, 
-                typename TypeTraits<ValueType, GetType>::parameter_type(ObjectType::*get)() const, 
+      template <typename ValueType, typename GetType, typename SetType, typename ObjectType,
+                typename TypeTraits<ValueType, GetType>::parameter_type(ObjectType::*get)() const,
                 void(ObjectType::*set)(typename TypeTraits<ValueType, SetType>::parameter_type),
                 typename dp::util::Semantic semantic>
       static Property *makeProperty()
       {
-        return new TypedPropertyImpl<ValueType, ObjectType, 
+        return new TypedPropertyImpl<ValueType, ObjectType,
                                      FunctorGet<ValueType, typename TypeTraits<ValueType, GetType>::parameter_type, ObjectType, get>,
                                      FunctorSet<ValueType, typename TypeTraits<ValueType, SetType>::parameter_type, ObjectType, set>,
                                      semantic, true>;
@@ -1115,20 +1115,20 @@ namespace dp
       template <typename ValueType, typename ObjectType, ValueType ObjectType::*Member, bool readonly, typename dp::util::Semantic semantic>
       static Property *makePropertyMember()
       {
-        return new TypedPropertyImpl<ValueType, ObjectType, 
+        return new TypedPropertyImpl<ValueType, ObjectType,
                                      FunctorGetMember<ValueType, ObjectType, Member>,
                                      FunctorSetMember<ValueType, ObjectType, Member, readonly>,
                                      semantic, true>;
       }
 
       /** Create read/write enum property **/
-      template <typename ValueType, typename GetType, typename SetType, typename ObjectType, 
-                typename TypeTraits<ValueType, GetType>::parameter_type(ObjectType::*get)() const, 
+      template <typename ValueType, typename GetType, typename SetType, typename ObjectType,
+                typename TypeTraits<ValueType, GetType>::parameter_type(ObjectType::*get)() const,
                 void(ObjectType::*set)(typename TypeTraits<ValueType, SetType>::parameter_type),
                 typename dp::util::Semantic semantic>
       static Property *makeEnumProperty()
       {
-        return new TypedPropertyImplEnum<ValueType, ObjectType, 
+        return new TypedPropertyImplEnum<ValueType, ObjectType,
                                      FunctorGetEnum<ValueType, typename TypeTraits<ValueType, GetType>::parameter_type, ObjectType, get>,
                                      FunctorSetEnum<ValueType, typename TypeTraits<ValueType, SetType>::parameter_type, ObjectType, set>,
                                      semantic, true>;
@@ -1136,12 +1136,12 @@ namespace dp
 
 
       /** Create readonly property **/
-      template <typename ValueType, typename GetType, typename ObjectType, 
-                typename TypeTraits<ValueType, GetType>::parameter_type(ObjectType::*get)() const, 
+      template <typename ValueType, typename GetType, typename ObjectType,
+                typename TypeTraits<ValueType, GetType>::parameter_type(ObjectType::*get)() const,
                 typename dp::util::Semantic semantic>
       static Property *makeProperty()
       {
-        return new TypedPropertyImpl<ValueType, ObjectType, 
+        return new TypedPropertyImpl<ValueType, ObjectType,
                                      FunctorGet<ValueType, typename TypeTraits<ValueType, GetType>::parameter_type, ObjectType, get>,
                                      FunctorSetInvalid<ValueType, ObjectType>,
                                      semantic, true>;
@@ -1318,7 +1318,7 @@ namespace dp
 #define END_REFLECT_STATIC_PROPERTIES() }
 
 #define BEGIN_DECLARE_STATIC_PROPERTIES static void initStaticProperties(dp::util::ReflectionInfo &properties) {}
-#define END_DECLARE_STATIC_PROPERTIES 
+#define END_DECLARE_STATIC_PROPERTIES
 
 #define DECLARE_STATIC_PROPERTY(Name) static dp::util::PropertyId PID_##Name
 #define DEFINE_STATIC_PROPERTY( Klass, Name ) dp::util::PropertyId Klass::PID_##Name = nullptr;
@@ -1453,7 +1453,7 @@ public:
     INIT_REFLECTION( MyReflectedClass );
   }
   // usual class stuff
-  
+
   void setValue( int value );
   int getValue() const;
 
@@ -1478,7 +1478,7 @@ public:
   ADD_PROPERTY_RW     (Vec3fValue2, Vec3f,    SEMANTIC_VALUE,       const_reference,    value);
   ADD_PROPERTY_RO     (MaxSize,     Vec2f,    SEMANTIC_VALUE,       value);
   ADD_PROPERTY_RO_BOOL(Supported,   bool,     SEMANTIC_VALUE,       value);
-  
+
   END_REFLECT_STATIC_PROPERTIES()
 };
 

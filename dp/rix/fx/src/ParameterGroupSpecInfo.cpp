@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -51,7 +51,7 @@ namespace dp
         std::vector<dp::rix::core::ProgramParameter> programParameters;
         switch ( m_groupLayout->getManager() )
         {
-        case dp::fx::MANAGER_UNIFORM:
+        case dp::fx::Manager::UNIFORM:
           {
             for ( dp::fx::ParameterGroupSpec::iterator itps = parameterGroupSpec->beginParameterSpecs();
                   itps != parameterGroupSpec->endParameterSpecs();
@@ -79,9 +79,9 @@ namespace dp
 
           }
           break;
-        case dp::fx::MANAGER_SHADERBUFFER:
-        case dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX_FX:
-        case dp::fx::MANAGER_SHADER_STORAGE_BUFFER_OBJECT:
+        case dp::fx::Manager::SHADERBUFFER:
+        case dp::fx::Manager::UNIFORM_BUFFER_OBJECT_RIX_FX:
+        case dp::fx::Manager::SHADER_STORAGE_BUFFER_OBJECT:
           {
             size_t alignment = 16;
 
@@ -102,12 +102,12 @@ namespace dp
             }
             else
             {
-              if ( manager == dp::fx::MANAGER_SHADERBUFFER )
+              if ( manager == dp::fx::Manager::SHADERBUFFER )
               {
                 dp::rix::core::ContainerEntry entry = renderer->containerDescriptorGetEntry( m_descriptor, m_groupLayout->getGroupName().c_str() );
                 m_bufferManager = BufferManagerOffset::create( renderer, m_descriptor, entry, m_groupLayout->getBufferSize(), alignment, CHUNK_SIZE );
               }
-              else if ( manager == dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX_FX )
+              else if ( manager == dp::fx::Manager::UNIFORM_BUFFER_OBJECT_RIX_FX )
               {
 #if 0
                 // TODO no gl available here. where to get alignment?

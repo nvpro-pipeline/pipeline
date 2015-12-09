@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2015
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -57,7 +57,7 @@ namespace dp
       , m_isRangeLocked(false)
       , m_rangeLock(~0)
       {
-        m_objectCode = OC_LOD;
+        m_objectCode = ObjectCode::LOD;
       }
 
       LOD::LOD( const LOD &rhs )
@@ -67,7 +67,7 @@ namespace dp
       , m_isRangeLocked(rhs.m_isRangeLocked)
       , m_rangeLock(rhs.m_rangeLock)
       {
-        m_objectCode = OC_LOD;
+        m_objectCode = ObjectCode::LOD;
       }
 
       LOD::~LOD(void)
@@ -119,7 +119,7 @@ namespace dp
         return m_center;
       }
 
-      unsigned int LOD::getLODToUse(const Mat44f & modelViewMatrix, float scaleFactor) const 
+      unsigned int LOD::getLODToUse(const Mat44f & modelViewMatrix, float scaleFactor) const
       {
         unsigned int childLOD = ~0;
         unsigned int numKids  = getNumberOfChildren();
@@ -131,16 +131,16 @@ namespace dp
             Vec3f centerES(Vec4f( m_center, 1.0f ) * modelViewMatrix);
 
             // calculate the squared distance
-            // diff   = centerES - eyeES, eyeES = position of the camera 
+            // diff   = centerES - eyeES, eyeES = position of the camera
             // on eye space is always (0,0,0) => diff = centerES =>
             float distSQ = lengthSquared( centerES );
 
             // figure out which child to use:
-            for (childLOD = 0; childLOD < m_ranges.size() && childLOD < numKids-1; childLOD++) 
+            for (childLOD = 0; childLOD < m_ranges.size() && childLOD < numKids-1; childLOD++)
             {
               float rangeSQ = m_ranges[childLOD] * scaleFactor;
               rangeSQ *= rangeSQ;
-         
+
               if (distSQ < rangeSQ)
               {
                 break;
@@ -161,7 +161,7 @@ namespace dp
         if (&rhs != this)
         {
           Group::operator=(rhs);
-   
+
           m_center        = rhs.m_center;
           m_ranges        = rhs.m_ranges;
           m_isRangeLocked = rhs.m_isRangeLocked;

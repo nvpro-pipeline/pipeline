@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -91,12 +91,12 @@ namespace dp
     };
 
 
-    enum Mode
+    enum class Mode
     {
-        MODE_CPU
-      , MODE_OPENGL_COMPUTE
-      , MODE_CUDA
-      , MODE_AUTO // figure out which culling is best automatically
+        CPU
+      , OPENGL_COMPUTE
+      , CUDA
+      , AUTO // figure out which culling is best automatically
     };
 
     /** \brief This is the culling interface for all frustum culling methods in devtech platform.

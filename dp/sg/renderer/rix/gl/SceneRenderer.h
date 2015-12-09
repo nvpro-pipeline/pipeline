@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2011
+// Copyright (c) 2010-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -53,12 +53,12 @@ namespace dp
           /** \brief SceneRenderer is an OpenGL 3.0 based renderer. The OpenGL context used during the first render call
                     must not be changed for successive calls. It is necessary to remove all references to this object before
                     the attached OpenGL context gets destroyed. Deleting this object after destroying the corresponding OpenGL
-                    context will result in a crash during resource cleanup. OpenGL resources like VBOs, display lists and 
+                    context will result in a crash during resource cleanup. OpenGL resources like VBOs, display lists and
                     textures will be shared between multiple SceneRenderer objects if the corresponding OpenGL contexts
                     are being shared.
           **/
           class SceneRenderer : public dp::sg::ui::SceneRenderer
-          {    
+          {
           protected:
             DP_SG_RDR_RIX_GL_API SceneRenderer( const dp::gl::RenderTargetSharedPtr &renderTarget = dp::gl::RenderTargetSharedPtr() );
 
@@ -68,8 +68,8 @@ namespace dp
                 \return An instance of a SceneRenderer object.
             **/
             static DP_SG_RDR_RIX_GL_API SceneRendererSharedPtr create( const char *renderEngine = 0,
-                                                                       dp::fx::Manager shaderManagerType = dp::fx::MANAGER_SHADERBUFFER,
-                                                                       dp::culling::Mode cullingMode = dp::culling::MODE_AUTO,
+                                                                       dp::fx::Manager shaderManagerType = dp::fx::Manager::SHADERBUFFER,
+                                                                       dp::culling::Mode cullingMode = dp::culling::Mode::AUTO,
                                                                        TransparencyMode transparencyMode = TM_ORDER_INDEPENDENT_CLOSEST_LIST,
                                                                        const dp::gl::RenderTargetSharedPtr &renderTarget = dp::gl::RenderTargetSharedPtr() );
             DP_SG_RDR_RIX_GL_API virtual ~SceneRenderer();

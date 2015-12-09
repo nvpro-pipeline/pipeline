@@ -76,7 +76,7 @@ namespace dp
         , m_cachedNumberOfFaces( ~0 )
         , m_cachedNumberOfPrimitiveRestarts( ~0 )
       {
-        m_objectCode = OC_PRIMITIVE;
+        m_objectCode = ObjectCode::PRIMITIVE;
       }
 
       Primitive::Primitive(const Primitive& rhs)
@@ -84,7 +84,7 @@ namespace dp
       , m_boundingBox( rhs.m_boundingBox )
       , m_boundingSphere( rhs.m_boundingSphere )
       {
-        m_objectCode = OC_PRIMITIVE;
+        m_objectCode = ObjectCode::PRIMITIVE;
 
         if ( rhs.m_indexSet )
         {

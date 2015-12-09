@@ -67,10 +67,10 @@ dp::culling::Mode determineCullingMode( std::string const & name )
 {
   static std::map<std::string, dp::culling::Mode> cullingEngines =
   {
-    { "auto",       dp::culling::MODE_AUTO            },
-    { "cpu",        dp::culling::MODE_CPU             },
-    { "cuda",       dp::culling::MODE_CUDA            },
-    { "gl_compute", dp::culling::MODE_OPENGL_COMPUTE  },
+    { "auto",       dp::culling::Mode::AUTO            },
+    { "cpu",        dp::culling::Mode::CPU             },
+    { "cuda",       dp::culling::Mode::CUDA            },
+    { "gl_compute", dp::culling::Mode::OPENGL_COMPUTE  },
   };
 
   std::map<std::string, dp::culling::Mode>::const_iterator it = cullingEngines.find( name );
@@ -82,11 +82,11 @@ dp::fx::Manager determineShaderManagerType( std::string const& name )
 {
   static std::map<std::string, dp::fx::Manager> shaderManager =
   {
-    { "rixfx:uniform",          dp::fx::MANAGER_UNIFORM                       },
-    { "rixfx:shaderbufferload", dp::fx::MANAGER_SHADERBUFFER                  },
-    { "rix:ubo140",             dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX     },
-    { "rixfx:ubo140",           dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX_FX  },
-    { "rixfx:ssbo140",          dp::fx::MANAGER_SHADER_STORAGE_BUFFER_OBJECT  }
+    { "rixfx:uniform",          dp::fx::Manager::UNIFORM                       },
+    { "rixfx:shaderbufferload", dp::fx::Manager::SHADERBUFFER                  },
+    { "rix:ubo140",             dp::fx::Manager::UNIFORM_BUFFER_OBJECT_RIX     },
+    { "rixfx:ubo140",           dp::fx::Manager::UNIFORM_BUFFER_OBJECT_RIX_FX  },
+    { "rixfx:ssbo140",          dp::fx::Manager::SHADER_STORAGE_BUFFER_OBJECT  }
   };
 
   std::map<std::string, dp::fx::Manager>::const_iterator it = shaderManager.find( name );
@@ -168,7 +168,7 @@ Viewer::Viewer( int & argc, char ** argv )
 , m_sceneStateUndoStack(this)
 , m_width(0)
 , m_height(0)
-, m_cullingMode(dp::culling::MODE_AUTO)
+, m_cullingMode(dp::culling::Mode::AUTO)
 , m_renderEngine("Bindless")
 {
   processEvents();

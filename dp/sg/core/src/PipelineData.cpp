@@ -142,7 +142,7 @@ namespace dp
       {
         DP_ASSERT( m_effectSpec );
 
-        m_objectCode = OC_PIPELINE_DATA;
+        m_objectCode = ObjectCode::PIPELINE_DATA;
         m_parameterGroupData.reset( new ParameterGroupDataSharedPtr[effectSpec->getNumberOfParameterGroupSpecs()] );
       }
 
@@ -151,7 +151,7 @@ namespace dp
         , m_transparent( effectData->getTransparent() )
       {
         DP_ASSERT( m_effectSpec );
-        m_objectCode = OC_PIPELINE_DATA;
+        m_objectCode = ObjectCode::PIPELINE_DATA;
 
         setName( effectData->getName() );
         m_parameterGroupData.reset( new ParameterGroupDataSharedPtr[m_effectSpec->getNumberOfParameterGroupSpecs()] );
@@ -170,7 +170,7 @@ namespace dp
         , m_parameterGroupData( new ParameterGroupDataSharedPtr[rhs.m_effectSpec->getNumberOfParameterGroupSpecs()] )
         , m_transparent( rhs.m_transparent )
       {
-        m_objectCode = OC_PIPELINE_DATA;
+        m_objectCode = ObjectCode::PIPELINE_DATA;
         unsigned int nopgs = rhs.m_effectSpec->getNumberOfParameterGroupSpecs();
         for ( unsigned int i=0 ; i<nopgs ; i++ )
         {

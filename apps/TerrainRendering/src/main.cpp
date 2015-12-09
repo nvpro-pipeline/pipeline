@@ -113,7 +113,7 @@ TerrainRenderer::TerrainRenderer()
   , m_duration( 0.0 )
   , m_engineBindless( true )
   , m_attributeType( ATTRIBUTE_GENERIC )
-  , m_shaderManager( dp::fx::MANAGER_SHADERBUFFER )
+  , m_shaderManager( dp::fx::Manager::SHADERBUFFER )
 {
   m_trackballHIDSync->setHID( this );
   m_trackballHIDSync->setRenderTarget( getRenderTarget() );
@@ -239,18 +239,18 @@ void TerrainRenderer::onSceneRendererChanged( const dp::sg::ui::SceneRendererSha
 dp::fx::Manager getShaderManager( std::string const& name )
 {
   std::map<std::string, dp::fx::Manager> shaderManager;
-  shaderManager["rix:ubo140"] = dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX;
-  shaderManager["rixfx:uniform"] = dp::fx::MANAGER_UNIFORM;
-  shaderManager["rixfx:shaderbufferload"] = dp::fx::MANAGER_SHADERBUFFER;
-  shaderManager["rixfx:ubo140"] = dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX_FX;
-  shaderManager["rixfx:ssbo140"] = dp::fx::MANAGER_SHADER_STORAGE_BUFFER_OBJECT;
+  shaderManager["rix:ubo140"] = dp::fx::Manager::UNIFORM_BUFFER_OBJECT_RIX;
+  shaderManager["rixfx:uniform"] = dp::fx::Manager::UNIFORM;
+  shaderManager["rixfx:shaderbufferload"] = dp::fx::Manager::SHADERBUFFER;
+  shaderManager["rixfx:ubo140"] = dp::fx::Manager::UNIFORM_BUFFER_OBJECT_RIX_FX;
+  shaderManager["rixfx:ssbo140"] = dp::fx::Manager::SHADER_STORAGE_BUFFER_OBJECT;
   if ( shaderManager.find(name) != shaderManager.end() )
   {
     return shaderManager[name];
   }
   else
   {
-    return dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX;
+    return dp::fx::Manager::UNIFORM_BUFFER_OBJECT_RIX;
   }
 }
 

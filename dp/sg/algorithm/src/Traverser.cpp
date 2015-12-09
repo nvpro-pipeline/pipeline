@@ -68,7 +68,7 @@ namespace dp
       , m_root(NULL)
       , m_viewState(NULL)
       , m_camera(NULL)
-      , m_mftbl(OC_VERTEX_ATTRIBUTE_SET)
+      , m_mftbl(static_cast<size_t>(ObjectCode::VERTEX_ATTRIBUTE_SET))
       , m_currentAttrib(~0)
       , m_traversalMask(~0)        // traverse all masks
       , m_traversalMaskOverride(0) // do not modify object's traversal mask
@@ -253,10 +253,10 @@ namespace dp
         postTraverseObject( p );
       }
 
-      unsigned int Traverser::getObjectTraversalCode(const Object * object)
+      dp::sg::core::ObjectCode Traverser::getObjectTraversalCode(const Object * object)
       {
         dp::sg::core::ObjectCode oc = object->getObjectCode();
-        DP_ASSERT(oc!=OC_INVALID);
+        DP_ASSERT(oc!=ObjectCode::INVALID);
 
         if ( !m_mftbl.testEntry(oc) )
         {
@@ -265,7 +265,7 @@ namespace dp
           { // came across an unknown object
             // move up the object's hierarchy to find an appropriate handler
             oc = object->getHigherLevelObjectCode(oc);
-            if ( OC_INVALID==oc )
+            if ( ObjectCode::INVALID==oc )
             { // proceed immediately without handling the object
               return oc;
             }
@@ -286,33 +286,33 @@ namespace dp
 
       SharedTraverser::SharedTraverser()
       {
-        addObjectHandler(OC_PARALLELCAMERA, &SharedTraverser::handleParallelCamera);
-        addObjectHandler(OC_PERSPECTIVECAMERA, &SharedTraverser::handlePerspectiveCamera);
-        addObjectHandler(OC_MATRIXCAMERA, &SharedTraverser::handleMatrixCamera);
+        addObjectHandler(ObjectCode::PARALLEL_CAMERA, &SharedTraverser::handleParallelCamera);
+        addObjectHandler(ObjectCode::PERSPECTIVE_CAMERA, &SharedTraverser::handlePerspectiveCamera);
+        addObjectHandler(ObjectCode::MATRIX_CAMERA, &SharedTraverser::handleMatrixCamera);
 
         // Group-derived
-        addObjectHandler(OC_GROUP, &SharedTraverser::handleGroup);
-        addObjectHandler(OC_TRANSFORM, &SharedTraverser::handleTransform);
-        addObjectHandler(OC_LOD, &SharedTraverser::handleLOD);
-        addObjectHandler(OC_SWITCH, &SharedTraverser::handleSwitch);
-        addObjectHandler(OC_BILLBOARD, &SharedTraverser::handleBillboard);
+        addObjectHandler(ObjectCode::GROUP, &SharedTraverser::handleGroup);
+        addObjectHandler(ObjectCode::TRANSFORM, &SharedTraverser::handleTransform);
+        addObjectHandler(ObjectCode::LOD, &SharedTraverser::handleLOD);
+        addObjectHandler(ObjectCode::SWITCH, &SharedTraverser::handleSwitch);
+        addObjectHandler(ObjectCode::BILLBOARD, &SharedTraverser::handleBillboard);
 
         // LightSource
-        addObjectHandler(OC_LIGHT_SOURCE, &SharedTraverser::handleLightSource);
+        addObjectHandler(ObjectCode::LIGHT_SOURCE, &SharedTraverser::handleLightSource);
 
         // GeoNode
-        addObjectHandler(OC_GEONODE, &SharedTraverser::handleGeoNode);
+        addObjectHandler(ObjectCode::GEO_NODE, &SharedTraverser::handleGeoNode);
 
         // Primitive
-        addObjectHandler(OC_PRIMITIVE, &SharedTraverser::handlePrimitive);
+        addObjectHandler(ObjectCode::PRIMITIVE, &SharedTraverser::handlePrimitive);
 
         // ... single state attribs
-        addObjectHandler(OC_PARAMETER_GROUP_DATA, &SharedTraverser::handleParameterGroupData);
-        addObjectHandler(OC_PIPELINE_DATA, &SharedTraverser::handlePipelineData);
-        addObjectHandler(OC_SAMPLER, &SharedTraverser::handleSampler);
+        addObjectHandler(ObjectCode::PARAMETER_GROUP_DATA, &SharedTraverser::handleParameterGroupData);
+        addObjectHandler(ObjectCode::PIPELINE_DATA, &SharedTraverser::handlePipelineData);
+        addObjectHandler(ObjectCode::SAMPLER, &SharedTraverser::handleSampler);
 
-        addObjectHandler(OC_INDEX_SET, &SharedTraverser::handleIndexSet);
-        addObjectHandler(OC_VERTEX_ATTRIBUTE_SET, &SharedTraverser::handleVertexAttributeSet);
+        addObjectHandler(ObjectCode::INDEX_SET, &SharedTraverser::handleIndexSet);
+        addObjectHandler(ObjectCode::VERTEX_ATTRIBUTE_SET, &SharedTraverser::handleVertexAttributeSet);
       }
 
       SharedTraverser::~SharedTraverser()
@@ -454,33 +454,33 @@ namespace dp
       : m_treeModified(false)
       {
         // Camera-derived
-        addObjectHandler(OC_PARALLELCAMERA, &ExclusiveTraverser::handleParallelCamera);
-        addObjectHandler(OC_PERSPECTIVECAMERA, &ExclusiveTraverser::handlePerspectiveCamera);
-        addObjectHandler(OC_MATRIXCAMERA, &ExclusiveTraverser::handleMatrixCamera);
+        addObjectHandler(ObjectCode::PARALLEL_CAMERA, &ExclusiveTraverser::handleParallelCamera);
+        addObjectHandler(ObjectCode::PERSPECTIVE_CAMERA, &ExclusiveTraverser::handlePerspectiveCamera);
+        addObjectHandler(ObjectCode::MATRIX_CAMERA, &ExclusiveTraverser::handleMatrixCamera);
 
         // Group-derived
-        addObjectHandler(OC_GROUP, &ExclusiveTraverser::handleGroup);
-        addObjectHandler(OC_TRANSFORM, &ExclusiveTraverser::handleTransform);
-        addObjectHandler(OC_LOD, &ExclusiveTraverser::handleLOD);
-        addObjectHandler(OC_SWITCH, &ExclusiveTraverser::handleSwitch);
-        addObjectHandler(OC_BILLBOARD, &ExclusiveTraverser::handleBillboard);
+        addObjectHandler(ObjectCode::GROUP, &ExclusiveTraverser::handleGroup);
+        addObjectHandler(ObjectCode::TRANSFORM, &ExclusiveTraverser::handleTransform);
+        addObjectHandler(ObjectCode::LOD, &ExclusiveTraverser::handleLOD);
+        addObjectHandler(ObjectCode::SWITCH, &ExclusiveTraverser::handleSwitch);
+        addObjectHandler(ObjectCode::BILLBOARD, &ExclusiveTraverser::handleBillboard);
 
         // LightSource
-        addObjectHandler(OC_LIGHT_SOURCE, &ExclusiveTraverser::handleLightSource);
+        addObjectHandler(ObjectCode::LIGHT_SOURCE, &ExclusiveTraverser::handleLightSource);
 
         // GeoNode
-        addObjectHandler(OC_GEONODE, &ExclusiveTraverser::handleGeoNode);
+        addObjectHandler(ObjectCode::GEO_NODE, &ExclusiveTraverser::handleGeoNode);
 
         // Primitive
-        addObjectHandler(OC_PRIMITIVE, &ExclusiveTraverser::handlePrimitive);
+        addObjectHandler(ObjectCode::PRIMITIVE, &ExclusiveTraverser::handlePrimitive);
 
         // ... single state attribs
-        addObjectHandler(OC_PARAMETER_GROUP_DATA, &ExclusiveTraverser::handleParameterGroupData);
-        addObjectHandler(OC_PIPELINE_DATA, &ExclusiveTraverser::handlePipelineData);
-        addObjectHandler(OC_SAMPLER, &ExclusiveTraverser::handleSampler);
+        addObjectHandler(ObjectCode::PARAMETER_GROUP_DATA, &ExclusiveTraverser::handleParameterGroupData);
+        addObjectHandler(ObjectCode::PIPELINE_DATA, &ExclusiveTraverser::handlePipelineData);
+        addObjectHandler(ObjectCode::SAMPLER, &ExclusiveTraverser::handleSampler);
 
-        addObjectHandler(OC_INDEX_SET, &ExclusiveTraverser::handleIndexSet);
-        addObjectHandler(OC_VERTEX_ATTRIBUTE_SET, &ExclusiveTraverser::handleVertexAttributeSet);
+        addObjectHandler(ObjectCode::INDEX_SET, &ExclusiveTraverser::handleIndexSet);
+        addObjectHandler(ObjectCode::VERTEX_ATTRIBUTE_SET, &ExclusiveTraverser::handleVertexAttributeSet);
       }
 
       ExclusiveTraverser::~ExclusiveTraverser()

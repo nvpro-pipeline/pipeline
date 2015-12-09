@@ -882,7 +882,7 @@ void ScenePropertiesWidget::displayItem( dp::sg::core::ObjectSharedPtr const & o
   {
     title += QString( " - " ) + QString( object->getName().c_str() );
     title += QString( " (" ) + QString( dp::sg::core::objectCodeToName( object->getObjectCode() ).c_str() );
-    if ( object->getObjectCode() == dp::sg::core::OC_PRIMITIVE )
+    if ( object->getObjectCode() == dp::sg::core::ObjectCode::PRIMITIVE )
     {
       title += QString( " : " ) + QString( dp::sg::core::primitiveTypeToName( object.staticCast<dp::sg::core::Primitive>()->getPrimitiveType() ).c_str() );
     }

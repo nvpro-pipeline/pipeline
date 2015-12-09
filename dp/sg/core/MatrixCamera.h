@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -74,14 +74,14 @@ namespace dp
 
           /*! \brief Determine the CullCode of a Sphere3f relative to the view volume.
            *  \param sphere A reference to the constant Sphere3f to determine the CullCode for.
-           *  \return CC_IN, if the Sphere3f \a sphere is completely inside the view volume; CC_OUT
-           *  if it is completely out of the view volume; otherwise CC_PART. */
+           *  \return CullCode::INSIDE, if the Sphere3f \a sphere is completely inside the view volume; CullCode::OUTSIDE
+           *  if it is completely out of the view volume; otherwise CullCode::PARTIAL. */
           DP_SG_CORE_API virtual CullCode determineCullCode( const dp::math::Sphere3f &sphere ) const;
 
           REFLECTION_INFO_API( DP_SG_CORE_API, MatrixCamera );
 
         protected:
-          /*! \brief Default-constructs a MatrixCamera. 
+          /*! \brief Default-constructs a MatrixCamera.
            *  \remarks The MatrixCamera initially is positioned at (0.0,0.0,1.0), has the y-axis
            *  as up-vector and looks down the negative z-axis. */
           DP_SG_CORE_API MatrixCamera();

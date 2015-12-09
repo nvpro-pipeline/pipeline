@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -43,13 +43,13 @@ namespace dp
         typedef std::vector<ParameterGroupSpecSharedPtr>  ParameterGroupSpecsContainer;
         typedef ParameterGroupSpecsContainer::const_iterator iterator;
 
-        typedef enum
+        enum class Type
         {
-          EST_UNKNOWN,
-          EST_LIGHT,
-          EST_SYSTEM,
-          EST_PIPELINE
-        } Type;
+          UNKNOWN,
+          LIGHT,
+          SYSTEM,
+          PIPELINE
+        };
 
         typedef std::map<Type, EffectSpecSharedPtr> DomainEffectSpecs;
 
@@ -122,6 +122,28 @@ namespace dp
     inline dp::util::HashKey EffectSpec::getHashKey() const
     {
       return( m_hashKey );
+    }
+
+    inline std::ostream& operator<<( std::ostream& os, dp::fx::EffectSpec::Type const type )
+    {
+      switch( type )
+      {
+        case dp::fx::EffectSpec::Type::UNKNOWN :
+          os << "UNKNOWN";
+          break;
+        case dp::fx::EffectSpec::Type::LIGHT :
+          os << "LIGHT";
+          break;
+        case dp::fx::EffectSpec::Type::SYSTEM :
+          os << "SYTEMS";
+          break;
+        case dp::fx::EffectSpec::Type::PIPELINE :
+          os << "PIPELINE";
+          break;
+        default :
+          DP_ASSERT( false );
+      }
+      return os;
     }
 
   } // namespace fx

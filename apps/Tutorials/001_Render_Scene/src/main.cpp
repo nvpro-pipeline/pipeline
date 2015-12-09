@@ -87,7 +87,7 @@ int runApp()
   Tutorial w;
 
   // create a rix::gl based SceneRenderer using the VBO vertex technique and uniform buffer ojects for the parameters
-  dp::sg::renderer::rix::gl::SceneRendererSharedPtr renderer = dp::sg::renderer::rix::gl::SceneRenderer::create("VBO", dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX);
+  dp::sg::renderer::rix::gl::SceneRendererSharedPtr renderer = dp::sg::renderer::rix::gl::SceneRenderer::create("VBO", dp::fx::Manager::UNIFORM_BUFFER_OBJECT_RIX);
 
   // Use the SceneRenderer as rendering algorithm for the widget
   w.setSceneRenderer( renderer );

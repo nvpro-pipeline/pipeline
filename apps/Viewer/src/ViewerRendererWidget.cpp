@@ -848,7 +848,7 @@ void ViewerRendererWidget::addCamera()
 
 void ViewerRendererWidget::moveSelectedObject()
 {
-  unsigned int objectCode = m_highlightedObject->getObjectCode();
+  dp::sg::core::ObjectCode objectCode = m_highlightedObject->getObjectCode();
 
   bool modified = false;
 
@@ -859,7 +859,7 @@ void ViewerRendererWidget::moveSelectedObject()
 
   switch( objectCode )
   {
-    case OC_LIGHT_SOURCE:
+    case ObjectCode::LIGHT_SOURCE:
     {
       dp::sg::core::PipelineDataSharedPtr const& lp = m_highlightedObject.staticCast<LightSource>()->getLightPipeline();
       const dp::fx::EffectSpecSharedPtr & es = lp->getEffectSpec();
@@ -893,7 +893,7 @@ void ViewerRendererWidget::moveSelectedObject()
     }
     break;
 
-    case OC_PERSPECTIVECAMERA:
+    case ObjectCode::PERSPECTIVE_CAMERA:
     {
       PerspectiveCameraSharedPtr const& pc = m_highlightedObject.staticCast<PerspectiveCamera>();
       pc->setPosition( pcam->getPosition() );
@@ -1087,7 +1087,7 @@ void ViewerRendererWidget::aboutToShowCullingMenu()
   DP_ASSERT( actions.size() == 5 );
 
   bool enabled = m_sceneRendererPipeline->isCullingEnabled();
-  dp::culling::Mode mode = m_sceneRendererPipeline->getCullingMode();
+  int mode = static_cast<int>(m_sceneRendererPipeline->getCullingMode());
   for ( int i=0 ; i<4 ; i++ )
   {
     actions[i]->setChecked( enabled && ( i == mode ) );
@@ -1178,19 +1178,19 @@ void ViewerRendererWidget::triggeredCullingMenu( QAction * action )
       QString text = action->text();
       if ( text == "Auto" )
       {
-        mode = dp::culling::MODE_AUTO;
+        mode = dp::culling::Mode::AUTO;
       }
       else if ( text == "CPU" )
       {
-        mode = dp::culling::MODE_CPU;
+        mode = dp::culling::Mode::CPU;
       }
       else if ( text == "CUDA" )
       {
-        mode = dp::culling::MODE_CUDA;
+        mode = dp::culling::Mode::CUDA;
       }
       else if ( text == "OpenGL Compute" )
       {
-        mode = dp::culling::MODE_OPENGL_COMPUTE;
+        mode = dp::culling::Mode::OPENGL_COMPUTE;
       }
       else
       {

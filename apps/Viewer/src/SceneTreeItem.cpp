@@ -53,19 +53,19 @@ SceneTreeItem::SceneTreeItem( ObjectSharedPtr const & object )
   QPixmap pixmap( 16, 16 );
   switch( objectCode )
   {
-    case OC_GEONODE :
+    case ObjectCode::GEO_NODE :
       pixmap.load( ":/images/SubNode.png" );
       break;
-    case OC_GROUP :
+    case ObjectCode::GROUP :
       pixmap.load( ":/images/Group.png" );
       break;
-    case OC_LOD :
+    case ObjectCode::LOD :
       pixmap.load( ":/images/LevelOfDetail.png" );
       break;
-    case OC_TRANSFORM :
+    case ObjectCode::TRANSFORM :
       pixmap.load( ":/images/Transform.png" );
       break;
-    case OC_LIGHT_SOURCE :
+    case ObjectCode::LIGHT_SOURCE :
       DP_ASSERT( m_object.isPtrTo<LightSource>() );
       {
         LightSourceSharedPtr const& lightSource = m_object.staticCast<LightSource>();
@@ -84,10 +84,10 @@ SceneTreeItem::SceneTreeItem( ObjectSharedPtr const & object )
         }
       }
       break;
-    case OC_VERTEX_ATTRIBUTE_SET :
+    case ObjectCode::VERTEX_ATTRIBUTE_SET :
       pixmap.load( ":/images/Drawable.png" );
       break;
-    case OC_PRIMITIVE :
+    case ObjectCode::PRIMITIVE :
       DP_ASSERT( m_object.isPtrTo<Primitive>() );
       {
         PrimitiveSharedPtr const& p = m_object.staticCast<Primitive>();
@@ -117,29 +117,29 @@ SceneTreeItem::SceneTreeItem( ObjectSharedPtr const & object )
         }
       }
       break;
-    case OC_PARALLELCAMERA :
+    case ObjectCode::PARALLEL_CAMERA :
       pixmap.load( ":/images/ParallelCamera.png" );
       break;
-    case OC_PERSPECTIVECAMERA :
+    case ObjectCode::PERSPECTIVE_CAMERA :
       pixmap.load( ":/images/PerspectiveCamera.png" );
       break;
-    case OC_MATRIXCAMERA :
+    case ObjectCode::MATRIX_CAMERA :
       pixmap.load( ":/images/Camera.png" );
       break;
-    case OC_SCENE :
+    case ObjectCode::SCENE :
       pixmap.load( ":/images/MainNode.png" );
       break;
-    case OC_SWITCH :
-    case OC_BILLBOARD :
-    case OC_CLIPPLANE :
-    case OC_INDEX_SET :
-    case OC_PARAMETER_GROUP_DATA :
-    case OC_PIPELINE_DATA :
-    case OC_SAMPLER :
+    case ObjectCode::SWITCH :
+    case ObjectCode::BILLBOARD :
+    case ObjectCode::CLIP_PLANE :
+    case ObjectCode::INDEX_SET :
+    case ObjectCode::PARAMETER_GROUP_DATA :
+    case ObjectCode::PIPELINE_DATA :
+    case ObjectCode::SAMPLER :
       pixmap.load( ":/images/DefaultNode.png" );
       break;
     default :
-    case OC_INVALID :
+    case ObjectCode::INVALID :
       DP_ASSERT( false );
       break;
   }
@@ -155,7 +155,7 @@ void SceneTreeItem::expandItem()
   {
     switch( m_object->getObjectCode() )
     {
-      case OC_GEONODE :
+      case ObjectCode::GEO_NODE :
         {
           GeoNodeSharedPtr const& gn = m_object.staticCast<GeoNode>();
           if ( gn->getMaterialPipeline() )
@@ -168,11 +168,11 @@ void SceneTreeItem::expandItem()
           }
         }
         break;
-      case OC_GROUP :
-      case OC_LOD :
-      case OC_SWITCH :
-      case OC_TRANSFORM :
-      case OC_BILLBOARD :
+      case ObjectCode::GROUP :
+      case ObjectCode::LOD :
+      case ObjectCode::SWITCH :
+      case ObjectCode::TRANSFORM :
+      case ObjectCode::BILLBOARD :
         {
           GroupSharedPtr const& g = m_object.staticCast<Group>();
           for ( Group::ChildrenIterator it = g->beginChildren() ; it != g->endChildren() ; ++it )
@@ -181,7 +181,7 @@ void SceneTreeItem::expandItem()
           }
         }
         break;
-      case OC_LIGHT_SOURCE :
+      case ObjectCode::LIGHT_SOURCE :
         {
           LightSourceSharedPtr const& ls = m_object.staticCast<LightSource>();
           if ( ls->getLightPipeline() )
@@ -190,9 +190,9 @@ void SceneTreeItem::expandItem()
           }
         }
         break;
-      case OC_PARALLELCAMERA :
-      case OC_PERSPECTIVECAMERA :
-      case OC_MATRIXCAMERA :
+      case ObjectCode::PARALLEL_CAMERA :
+      case ObjectCode::PERSPECTIVE_CAMERA :
+      case ObjectCode::MATRIX_CAMERA :
         {
           CameraSharedPtr const& c = m_object.staticCast<Camera>();
           for ( Camera::HeadLightIterator it = c->beginHeadLights() ; it != c->endHeadLights() ; ++it )
@@ -201,7 +201,7 @@ void SceneTreeItem::expandItem()
           }
         }
         break;
-      case OC_PRIMITIVE :
+      case ObjectCode::PRIMITIVE :
         {
           PrimitiveSharedPtr const& p = m_object.staticCast<Primitive>();
           if ( p->getIndexSet() )
@@ -214,7 +214,7 @@ void SceneTreeItem::expandItem()
           }
         }
         break;
-      case OC_PARAMETER_GROUP_DATA :
+      case ObjectCode::PARAMETER_GROUP_DATA :
         {
           ParameterGroupDataSharedPtr const& pgd = m_object.staticCast<ParameterGroupData>();
           dp::fx::ParameterGroupSpecSharedPtr const & pgs = pgd->getParameterGroupSpec();
@@ -228,7 +228,7 @@ void SceneTreeItem::expandItem()
           }
         }
         break;
-      case OC_PIPELINE_DATA :
+      case ObjectCode::PIPELINE_DATA :
         {
           dp::sg::core::PipelineDataSharedPtr const& pd = m_object.staticCast<dp::sg::core::PipelineData>();
           dp::fx::EffectSpecSharedPtr const & es = pd->getEffectSpec();
@@ -241,7 +241,7 @@ void SceneTreeItem::expandItem()
           }
         }
         break;
-      case OC_SCENE :
+      case ObjectCode::SCENE :
         {
           SceneSharedPtr const& s = m_object.staticCast<Scene>();
           for ( Scene::CameraIterator it = s->beginCameras() ; it != s->endCameras() ; ++it )
@@ -254,11 +254,11 @@ void SceneTreeItem::expandItem()
           }
         }
         break;
-      case OC_INVALID :
-      case OC_CLIPPLANE :
-      case OC_VERTEX_ATTRIBUTE_SET :    // do we need to introduce OC_VERTEX_ATTRIBUTE, to continue display here?
-      case OC_INDEX_SET :
-      case OC_SAMPLER :
+      case ObjectCode::INVALID :
+      case ObjectCode::CLIP_PLANE :
+      case ObjectCode::VERTEX_ATTRIBUTE_SET :    // do we need to introduce OC_VERTEX_ATTRIBUTE, to continue display here?
+      case ObjectCode::INDEX_SET :
+      case ObjectCode::SAMPLER :
       default :
         DP_ASSERT( false );
         break;
@@ -273,47 +273,47 @@ ObjectSharedPtr const & SceneTreeItem::getObject() const
 
 void SceneTreeItem::setChildIndicatorPolicy()
 {
-  unsigned int objectCode = m_object->getObjectCode();
+  dp::sg::core::ObjectCode objectCode = m_object->getObjectCode();
 
   bool showIndicator = false;
   switch( objectCode )
   {
-    case OC_GEONODE :
+    case ObjectCode::GEO_NODE :
       DP_ASSERT( m_object.isPtrTo<GeoNode>() );
       {
         GeoNodeSharedPtr const& gn = m_object.staticCast<GeoNode>();
         showIndicator = ( gn->getMaterialPipeline() || gn->getPrimitive() );
       }
       break;
-    case OC_GROUP :
-    case OC_LOD :
-    case OC_SWITCH :
-    case OC_TRANSFORM :
-    case OC_BILLBOARD :
+    case ObjectCode::GROUP :
+    case ObjectCode::LOD :
+    case ObjectCode::SWITCH :
+    case ObjectCode::TRANSFORM :
+    case ObjectCode::BILLBOARD :
       DP_ASSERT( m_object.isPtrTo<Group>() );
       {
         GroupSharedPtr const& g = m_object.staticCast<Group>();
         showIndicator = ( g->getNumberOfChildren() || g->getNumberOfClipPlanes() );
       }
       break;
-    case OC_LIGHT_SOURCE :
+    case ObjectCode::LIGHT_SOURCE :
       DP_ASSERT( m_object.isPtrTo<LightSource>() );
       showIndicator = !!m_object.staticCast<LightSource>()->getLightPipeline();
       break;
-    case OC_PERSPECTIVECAMERA :
-    case OC_PARALLELCAMERA :
-    case OC_MATRIXCAMERA :
+    case ObjectCode::PERSPECTIVE_CAMERA :
+    case ObjectCode::PARALLEL_CAMERA :
+    case ObjectCode::MATRIX_CAMERA :
       DP_ASSERT( m_object.isPtrTo<Camera>() );
       showIndicator = ( 0 < m_object.staticCast<Camera>()->getNumberOfHeadLights() );
       break;
-    case OC_PRIMITIVE :
+    case ObjectCode::PRIMITIVE :
       DP_ASSERT( m_object.isPtrTo<Primitive>() );
       {
         PrimitiveSharedPtr const& p = m_object.staticCast<Primitive>();
         showIndicator = ( p->getIndexSet() || p->getVertexAttributeSet() );
       }
       break;
-    case OC_PARAMETER_GROUP_DATA :
+    case ObjectCode::PARAMETER_GROUP_DATA :
       DP_ASSERT( m_object.isPtrTo<ParameterGroupData>() );
       {
         ParameterGroupDataSharedPtr const& pgd = m_object.staticCast<ParameterGroupData>();
@@ -325,24 +325,24 @@ void SceneTreeItem::setChildIndicatorPolicy()
         }
       }
       break;
-    case OC_PIPELINE_DATA :
+    case ObjectCode::PIPELINE_DATA :
       DP_ASSERT( m_object.isPtrTo<dp::sg::core::PipelineData>() );
       showIndicator = !!m_object.staticCast<dp::sg::core::PipelineData>()->getNumberOfParameterGroupData();
       break;
-    case OC_SCENE :
+    case ObjectCode::SCENE :
       DP_ASSERT( m_object.isPtrTo<Scene>() );
       {
         SceneSharedPtr const& s = m_object.staticCast<Scene>();
         showIndicator = ( s->getNumberOfCameras() || s->getRootNode() );
       }
       break;
-    case OC_CLIPPLANE :
-    case OC_VERTEX_ATTRIBUTE_SET :    // do we need to introduce OC_VERTEX_ATTRIBUTE, to continue display here?
-    case OC_INDEX_SET :
-    case OC_SAMPLER :
+    case ObjectCode::CLIP_PLANE :
+    case ObjectCode::VERTEX_ATTRIBUTE_SET :    // do we need to introduce OC_VERTEX_ATTRIBUTE, to continue display here?
+    case ObjectCode::INDEX_SET :
+    case ObjectCode::SAMPLER :
       break;
     default :
-    case OC_INVALID :
+    case ObjectCode::INVALID :
       DP_ASSERT( false );
       break;
   }
@@ -362,7 +362,7 @@ void SceneTreeItem::update()
     std::set<dp::sg::core::ObjectSharedPtr> objects;
     switch( m_object->getObjectCode() )
     {
-      case OC_GEONODE :
+      case ObjectCode::GEO_NODE :
         {
           GeoNodeSharedPtr const& gn = m_object.staticCast<GeoNode>();
           if ( gn->getMaterialPipeline() )
@@ -375,11 +375,11 @@ void SceneTreeItem::update()
           }
         }
         break;
-      case OC_GROUP :
-      case OC_LOD :
-      case OC_SWITCH :
-      case OC_TRANSFORM :
-      case OC_BILLBOARD :
+      case ObjectCode::GROUP :
+      case ObjectCode::LOD :
+      case ObjectCode::SWITCH :
+      case ObjectCode::TRANSFORM :
+      case ObjectCode::BILLBOARD :
         {
           GroupSharedPtr const& g = m_object.staticCast<Group>();
           for ( Group::ChildrenIterator it = g->beginChildren() ; it != g->endChildren() ; ++it )
@@ -388,7 +388,7 @@ void SceneTreeItem::update()
           }
         }
         break;
-      case OC_LIGHT_SOURCE :
+      case ObjectCode::LIGHT_SOURCE :
         {
           LightSourceSharedPtr const& ls = m_object.staticCast<LightSource>();
           if ( ls->getLightPipeline() )
@@ -397,9 +397,9 @@ void SceneTreeItem::update()
           }
         }
         break;
-      case OC_PARALLELCAMERA :
-      case OC_PERSPECTIVECAMERA :
-      case OC_MATRIXCAMERA :
+      case ObjectCode::PARALLEL_CAMERA :
+      case ObjectCode::PERSPECTIVE_CAMERA :
+      case ObjectCode::MATRIX_CAMERA :
         {
           CameraSharedPtr const& c = m_object.staticCast<Camera>();
           for ( Camera::HeadLightIterator it = c->beginHeadLights() ; it != c->endHeadLights() ; ++it )
@@ -408,7 +408,7 @@ void SceneTreeItem::update()
           }
         }
         break;
-      case OC_PRIMITIVE :
+      case ObjectCode::PRIMITIVE :
         {
           PrimitiveSharedPtr const& p = m_object.staticCast<Primitive>();
           if ( p->getIndexSet() )
@@ -421,7 +421,7 @@ void SceneTreeItem::update()
           }
         }
         break;
-      case OC_PARAMETER_GROUP_DATA :
+      case ObjectCode::PARAMETER_GROUP_DATA :
         {
           ParameterGroupDataSharedPtr const& pgd = m_object.staticCast<ParameterGroupData>();
           dp::fx::ParameterGroupSpecSharedPtr const & pgs = pgd->getParameterGroupSpec();
@@ -434,7 +434,7 @@ void SceneTreeItem::update()
           }
         }
         break;
-      case OC_PIPELINE_DATA :
+      case ObjectCode::PIPELINE_DATA :
         {
           dp::sg::core::PipelineDataSharedPtr const& pd = m_object.staticCast<dp::sg::core::PipelineData>();
           dp::fx::EffectSpecSharedPtr const & es = pd->getEffectSpec();
@@ -447,7 +447,7 @@ void SceneTreeItem::update()
           }
         }
         break;
-      case OC_SCENE :
+      case ObjectCode::SCENE :
         {
           SceneSharedPtr const& s = m_object.staticCast<Scene>();
           for ( Scene::CameraIterator it = s->beginCameras() ; it != s->endCameras() ; ++it )
@@ -460,11 +460,11 @@ void SceneTreeItem::update()
           }
         }
         break;
-      case OC_INVALID:
-      case OC_CLIPPLANE :
-      case OC_VERTEX_ATTRIBUTE_SET :
-      case OC_INDEX_SET :
-      case OC_SAMPLER :
+      case ObjectCode::INVALID:
+      case ObjectCode::CLIP_PLANE :
+      case ObjectCode::VERTEX_ATTRIBUTE_SET :
+      case ObjectCode::INDEX_SET :
+      case ObjectCode::SAMPLER :
       default :
         DP_ASSERT( false );
         break;

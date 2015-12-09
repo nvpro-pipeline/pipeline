@@ -89,7 +89,7 @@ namespace dp
           {
           public:
             Event( const dp::fx::ParameterGroupSpec::iterator& parameter )
-              : dp::sg::core::Event( Event::PARAMETER_GROUP_DATA )
+              : dp::sg::core::Event( Event::Type::PARAMETER_GROUP_DATA )
               , m_parameter( parameter )
             {
             }

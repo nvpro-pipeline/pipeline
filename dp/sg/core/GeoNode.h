@@ -62,14 +62,14 @@ namespace dp
           class Event : public core::Event
           {
           public:
-            enum Type
+            enum class Type
             {
                 PRIMITIVE_CHANGED
               , EFFECT_DATA_CHANGED
             };
 
             Event( GeoNode const* geoNode, Type type)
-              : core::Event( core::Event::GEONODE )
+              : core::Event( core::Event::Type::GEO_NODE )
               , m_geoNode( geoNode )
               , m_type( type )
             {

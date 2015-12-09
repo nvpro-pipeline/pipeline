@@ -72,7 +72,7 @@ namespace dp
         , m_minFilterMode( TFM_MIN_LINEAR )
         , m_compareMode( TCM_NONE )
       {
-        m_objectCode = OC_SAMPLER;
+        m_objectCode = ObjectCode::SAMPLER;
 
         m_wrapMode[0] = TWM_REPEAT;
         m_wrapMode[1] = TWM_REPEAT;
@@ -334,7 +334,7 @@ namespace dp
   {
     template <> const std::string EnumReflection<dp::sg::core::TextureMagFilterMode>::name = "TextureMagFilterMode";
 
-    template <> const std::map<unsigned int,std::string> EnumReflection<dp::sg::core::TextureMagFilterMode>::values =
+    template <> const std::map<dp::sg::core::TextureMagFilterMode,std::string> EnumReflection<dp::sg::core::TextureMagFilterMode>::values =
     {
       { dp::sg::core::TFM_MAG_NEAREST, "nearest"  },
       { dp::sg::core::TFM_MAG_LINEAR,  "linear"   }
@@ -342,7 +342,7 @@ namespace dp
 
     template <> const std::string EnumReflection<dp::sg::core::TextureMinFilterMode>::name = "TextureMinFilterMode";
 
-    template <> const std::map<unsigned int,std::string> EnumReflection<dp::sg::core::TextureMinFilterMode>::values =
+    template <> const std::map<dp::sg::core::TextureMinFilterMode,std::string> EnumReflection<dp::sg::core::TextureMinFilterMode>::values =
     {
       { dp::sg::core::TFM_MIN_NEAREST,                "nearest"                 },
       { dp::sg::core::TFM_MIN_LINEAR,                 "linear"                  },
@@ -354,7 +354,7 @@ namespace dp
 
     template <> const std::string EnumReflection<dp::sg::core::TextureWrapMode>::name = "TextureWrapMode";
 
-    template <> const std::map<unsigned int,std::string> EnumReflection<dp::sg::core::TextureWrapMode>::values =
+    template <> const std::map<dp::sg::core::TextureWrapMode,std::string> EnumReflection<dp::sg::core::TextureWrapMode>::values =
     {
       { dp::sg::core::TWM_REPEAT,                 "repeat"                  },
       { dp::sg::core::TWM_CLAMP,                  "clamp"                   },

@@ -51,13 +51,13 @@ namespace dp
 
       GeoNode::GeoNode()
       {
-        m_objectCode = OC_GEONODE;
+        m_objectCode = ObjectCode::GEO_NODE;
       }
 
       GeoNode::GeoNode( const GeoNode& rhs )
       : Node(rhs) // copy the base class part
       {
-        m_objectCode = OC_GEONODE;
+        m_objectCode = ObjectCode::GEO_NODE;
 
         if ( rhs.m_pipelineData )
         {
@@ -85,7 +85,7 @@ namespace dp
 
       void GeoNode::setMaterialPipeline( const PipelineDataSharedPtr & materialPipeline )
       {
-        DP_ASSERT( !materialPipeline || ( materialPipeline->getEffectSpec()->getType() == fx::EffectSpec::EST_PIPELINE ) );
+        DP_ASSERT( !materialPipeline || ( materialPipeline->getEffectSpec()->getType() == fx::EffectSpec::Type::PIPELINE ) );
 
         if ( m_pipelineData != materialPipeline )
         {
@@ -99,7 +99,7 @@ namespace dp
             m_pipelineData->attach( this );
           }
 
-          notify( Event( this, Event::EFFECT_DATA_CHANGED ) );
+          notify( Event( this, Event::Type::EFFECT_DATA_CHANGED ) );
         }
       }
 
@@ -117,7 +117,7 @@ namespace dp
             m_primitive->attach( this );
           }
           // GeoNode-Change
-          notify( Event( this, Event::PRIMITIVE_CHANGED) );
+          notify( Event( this, Event::Type::PRIMITIVE_CHANGED) );
         }
       }
 
@@ -149,7 +149,7 @@ namespace dp
             {
               m_pipelineData->attach( this );
             }
-            notify( Event( this, Event::EFFECT_DATA_CHANGED ) );
+            notify( Event( this, Event::Type::EFFECT_DATA_CHANGED ) );
           }
           if ( m_primitive != rhs.m_primitive )
           {
@@ -162,7 +162,7 @@ namespace dp
             {
               m_primitive->attach( this );
             }
-            notify( Event( this, Event::PRIMITIVE_CHANGED) );
+            notify( Event( this, Event::Type::PRIMITIVE_CHANGED) );
           }
         }
         return *this;

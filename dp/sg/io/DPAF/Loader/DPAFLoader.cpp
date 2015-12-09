@@ -921,20 +921,20 @@ Billboard::Alignment DPAFLoader::readAlignment()
   string token( getNextToken() );
   if ( token == "AXIS" )
   {
-    ba = Billboard::BA_AXIS;
+    ba = Billboard::Alignment::AXIS;
   }
   else if ( token == "SCREEN" )
   {
-    ba = Billboard::BA_SCREEN;
+    ba = Billboard::Alignment::SCREEN;
   }
   else if ( token == "VIEWER" )
   {
-    ba = Billboard::BA_VIEWER;
+    ba = Billboard::Alignment::VIEWER;
   }
   else
   {
     onUnknownToken( "Billboard::Alignment", token );
-    ba = Billboard::BA_VIEWER;
+    ba = Billboard::Alignment::VIEWER;
   }
   return( ba );
 }

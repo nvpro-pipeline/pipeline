@@ -526,25 +526,25 @@ namespace dp
             {
               dp::culling::Mode cullingMode = m_cullingMode;
               // determine if OpenGL 4.3 is available
-              if ( m_cullingMode == dp::culling::MODE_AUTO )
+              if ( m_cullingMode == dp::culling::Mode::AUTO )
               {
-                cullingMode = dp::culling::MODE_CUDA;
+                cullingMode = dp::culling::Mode::CUDA;
               }
               m_cullingManager = dp::sg::xbar::culling::Culling::create( getSceneTree(), m_cullingMode );
               m_cullingResult = m_cullingManager->resultCreate();
 
               switch ( m_shaderManagerType )
               {
-              case dp::fx::MANAGER_UNIFORM:
-              case dp::fx::MANAGER_SHADERBUFFER:
-              case dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX:
-              case dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX_FX:
-              case dp::fx::MANAGER_SHADER_STORAGE_BUFFER_OBJECT:
-              case dp::fx::MANAGER_SHADER_STORAGE_BUFFER_OBJECT_RIX:
+              case dp::fx::Manager::UNIFORM:
+              case dp::fx::Manager::SHADERBUFFER:
+              case dp::fx::Manager::UNIFORM_BUFFER_OBJECT_RIX:
+              case dp::fx::Manager::UNIFORM_BUFFER_OBJECT_RIX_FX:
+              case dp::fx::Manager::SHADER_STORAGE_BUFFER_OBJECT:
+              case dp::fx::Manager::SHADER_STORAGE_BUFFER_OBJECT_RIX:
                 m_shaderManager.reset( new ShaderManagerRiXFx( getSceneTree(), m_shaderManagerType, m_resourceManager, m_transparencyManager ) );
                 break;
               default:
-                m_shaderManager.reset( new ShaderManagerRiXFx( getSceneTree(), dp::fx::MANAGER_UNIFORM, m_resourceManager, m_transparencyManager ) );
+                m_shaderManager.reset( new ShaderManagerRiXFx( getSceneTree(), dp::fx::Manager::UNIFORM, m_resourceManager, m_transparencyManager ) );
               }
 
               dp::rix::core::Renderer *renderer = m_resourceManager->getRenderer();

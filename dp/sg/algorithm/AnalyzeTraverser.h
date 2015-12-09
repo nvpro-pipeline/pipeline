@@ -240,7 +240,7 @@ namespace dp
             : AnalyzeResult()
             , unusedVerticesCount(0)
           {
-            objectCode = dp::sg::core::OC_VERTEX_ATTRIBUTE_SET;
+            objectCode = dp::sg::core::ObjectCode::VERTEX_ATTRIBUTE_SET;
           }
           virtual ~UnusedVerticesResult() {}
 
@@ -424,7 +424,7 @@ namespace dp
           void testVertexAttributeSet( const dp::sg::core::VertexAttributeSet * p );
 
         private:
-          std::map<unsigned int,unsigned int>                                       m_countMap;
+          std::map<dp::sg::core::ObjectCode,unsigned int>                           m_countMap;
           std::stack<std::vector<const dp::sg::core::GeoNode*> >                    m_combinableGeoNodes;
           std::map<dp::sg::core::ObjectCode,std::pair<unsigned int,unsigned int> >  m_combinableInfo;
           const dp::sg::core::LOD *                                                 m_currentLOD;

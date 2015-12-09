@@ -118,7 +118,7 @@ namespace dp
             m_renderer = (*createRenderer)( "vertex=VBO" );
             DP_ASSERT( m_renderer );
 
-            m_resourceManager = ResourceManager::create( m_renderer, dp::fx::MANAGER_UNIFORM );
+            m_resourceManager = ResourceManager::create( m_renderer, dp::fx::Manager::UNIFORM );
             DP_ASSERT( m_resourceManager );
           }
 
@@ -177,7 +177,7 @@ namespace dp
               DP_ASSERT( m_geometryInstance );
               m_renderer->geometryInstanceSetGeometry( m_geometryInstance, m_resourcePrimitive->m_geometryHandle );
 
-              m_rixFxManager = dp::rix::fx::Manager::create( MANAGER_UNIFORM, m_renderer );
+              m_rixFxManager = dp::rix::fx::Manager::create( dp::fx::Manager::UNIFORM, m_renderer );
               DP_ASSERT( m_rixFxManager );
 
               m_resourceEffectData = ResourceEffectDataRiXFx::get( m_pipelineData, m_rixFxManager, m_resourceManager );
@@ -189,12 +189,12 @@ namespace dp
 
             if ( !m_pipelinesValid )
             {
-              dp::fx::EffectSpecSharedPtr es = dp::fx::EffectSpec::create( "sys_matrices", dp::fx::EffectSpec::EST_SYSTEM, EffectSpec::ParameterGroupSpecsContainer() );
-              dp::fx::EffectSpecSharedPtr ec = dp::fx::EffectSpec::create( "sys_camera", dp::fx::EffectSpec::EST_SYSTEM, EffectSpec::ParameterGroupSpecsContainer() );
+              dp::fx::EffectSpecSharedPtr es = dp::fx::EffectSpec::create( "sys_matrices", dp::fx::EffectSpec::Type::SYSTEM, EffectSpec::ParameterGroupSpecsContainer() );
+              dp::fx::EffectSpecSharedPtr ec = dp::fx::EffectSpec::create( "sys_camera", dp::fx::EffectSpec::Type::SYSTEM, EffectSpec::ParameterGroupSpecsContainer() );
               dp::rix::fx::Manager::SystemSpecs s;
               s["sys_matrices"] = dp::rix::fx::Manager::EffectSpecInfo( es, false );
               s["sys_camera"] = dp::rix::fx::Manager::EffectSpecInfo( ec, true );
-              s["sys_Fragment"] = dp::rix::fx::Manager::EffectSpecInfo( dp::fx::EffectSpec::create( "sys_Fragment", dp::fx::EffectSpec::EST_SYSTEM, EffectSpec::ParameterGroupSpecsContainer() ), true );
+              s["sys_Fragment"] = dp::rix::fx::Manager::EffectSpecInfo( dp::fx::EffectSpec::create( "sys_Fragment", dp::fx::EffectSpec::Type::SYSTEM, EffectSpec::ParameterGroupSpecsContainer() ), true );
 
               dp::rix::fx::ProgramSharedHandle program = m_rixFxManager->programCreate( m_pipelineData->getEffectSpec()
                                                                                      , s

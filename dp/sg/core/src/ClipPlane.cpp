@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2011
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -53,7 +53,7 @@ namespace dp
       : m_plane(Vec3f(0.f, 0.f, 0.f), 0.f) // the default constructor of Plane3f does not perform any initialization!
       , m_enabled(true) // enabled by default
       {
-        m_objectCode = OC_CLIPPLANE;
+        m_objectCode = ObjectCode::CLIP_PLANE;
       }
 
       ClipPlane::ClipPlane(const ClipPlane& rhs)

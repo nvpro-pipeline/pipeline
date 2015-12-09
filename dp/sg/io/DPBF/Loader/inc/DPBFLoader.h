@@ -30,12 +30,12 @@
 #include <dp/util/FileFinder.h>
 #include <dp/util/FileMapping.h>
 #include <dp/sg/io/PlugInterface.h>
-#include <dp/sg/io/DPBF/DPBF.h> // dpbf structs 
+#include <dp/sg/io/DPBF/DPBF.h> // dpbf structs
 #include <map>
 #include <vector>
 #include <string>
 
-// storage-class defines 
+// storage-class defines
 #if defined(DP_OS_WINDOWS)
 # ifdef DPBFLOADER_EXPORTS
 #  define DPBFLOADER_API __declspec(dllexport)
@@ -80,7 +80,7 @@ public:
     * textures or effects at the given path first, then at the current location and finally it searches
     * through the \a searchPaths.
     * \returns  A pointer to the loaded scene. */
-  dp::sg::core::SceneSharedPtr load( 
+  dp::sg::core::SceneSharedPtr load(
     const std::string& filename            //!<  file to load
   , dp::util::FileFinder const& fileFinder    //!< file finder to search the filename
   , dp::sg::ui::ViewStateSharedPtr & viewState     /*!< If the function succeeded, this points to the optional
@@ -92,22 +92,22 @@ protected:
 
   //! Load a custom object identified by \a objectCode from the file offset specified by \a offset.
   /** This function is called from the loader's framework if a custom object was detected
-    * for the object stored at the particular file offset. 
+    * for the object stored at the particular file offset.
     *
-    * A custom implementation should first evaluate the passed object code. 
+    * A custom implementation should first evaluate the passed object code.
     * To map identified objects into memory, a custom implementation should call the member function
     * \link DPBFLoader::mapOffset mapOffset \endlink with the file offset and the correct byte size
-    * for the identified object as parameters. After that, the corresponding SceniX object can be initialized 
-    * from the mapped data. 
-    * \returns An ObjectSharedPtr specifying the loaded SceniX object. 
+    * for the identified object as parameters. After that, the corresponding SceniX object can be initialized
+    * from the mapped data.
+    * \returns An ObjectSharedPtr specifying the loaded SceniX object.
     * \note A custom implementation must not fall back on to the base implementation, as this simply returns
     * a null pointer. */
   virtual dp::sg::core::ObjectSharedPtr loadCustomObject(
-    uint_t objectCode //!< NBF object code identifying the custom object. 
+    DPBFCode objectCode //!< NBF object code identifying the custom object.
   , uint_t offset     //!< Specifies the file offset for the custom object.
   );
 
-  //! Maps \a numBytes bytes at file offset \a offset into process memory. 
+  //! Maps \a numBytes bytes at file offset \a offset into process memory.
   /** This function turns a given offset into a pointer and ensures that a minimum of \a numBytes bytes are mapped.
   * \returns A pointer to the mapped memory. */
   ubyte_t * mapOffset(
@@ -124,28 +124,28 @@ protected:
 private:
 
   //! An auxiliary helper template class which provides exception safe mapping and unmapping of file offsets.
-  /** The purpose of this template class is to turn a mapped offset into an exception safe auto object, 
+  /** The purpose of this template class is to turn a mapped offset into an exception safe auto object,
   * that is - the mapped offset automatically gets unmapped if the object runs out of scope. */
   template<typename T>
   class Offset_AutoPtr
   {
     public:
       //! Maps the specified file offset into process memory.
-      /** This constructor is called on instantiation. 
+      /** This constructor is called on instantiation.
       * It maps \a count objects of type T at file offset \a offset into process memory. */
       Offset_AutoPtr( dp::util::ReadMapping * fm, dp::util::PlugInCallbackSharedPtr const& pic, uint_t offset
                     , unsigned int count=1 );
 
-      //! Unmaps the bytes, that have been mapped at instantiation, from process memory. 
+      //! Unmaps the bytes, that have been mapped at instantiation, from process memory.
       ~Offset_AutoPtr();
 
-      //! Provides pointer-like access to the dumb pointer. 
+      //! Provides pointer-like access to the dumb pointer.
       T* operator->() const;
 
-      //! De-references the dumb pointer. 
+      //! De-references the dumb pointer.
       T& operator*() const;
 
-      //! Implicit conversion to const T*. 
+      //! Implicit conversion to const T*.
       operator const T*() const;
 
       //! Resets the object to map another file offset
@@ -162,7 +162,7 @@ private:
 
   dp::util::ReadMapping * m_fm;
 
-  // assign an object to an offset 
+  // assign an object to an offset
   void mapObject(uint_t offset, const dp::sg::core::ObjectSharedPtr & object );
   void remapObject(uint_t offset, const dp::sg::core::ObjectSharedPtr & object );
 

@@ -64,7 +64,7 @@ namespace dp
       , m_shadowCasting(true)
       , m_enabled(true)
       {
-        m_objectCode = OC_LIGHT_SOURCE;
+        m_objectCode = ObjectCode::LIGHT_SOURCE;
       }
 
       LightSource::LightSource(const LightSource& rhs)
@@ -72,7 +72,7 @@ namespace dp
       , m_shadowCasting( rhs.m_shadowCasting)
       , m_enabled(rhs.m_enabled)
       {
-        m_objectCode = OC_LIGHT_SOURCE;
+        m_objectCode = ObjectCode::LIGHT_SOURCE;
 
         if ( rhs.m_lightPipeline )
         {

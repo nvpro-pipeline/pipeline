@@ -68,7 +68,7 @@ typedef float                   float44_t[4][4];  //!< Specifies a 4x4-component
 const ubyte_t DPBF_VER_MAJOR  =  0x56; //!< DPBF major version number
 const ubyte_t DPBF_VER_MINOR  =  0x00; //!< DPBF version compatibility level
 const ubyte_t DPBF_VER_BUGFIX =  0x00; //!< DPBF version bugfix level
-  
+
 // constants specifying a certain byte order
 const ubyte_t DPBF_LITTLE_ENDIAN = 0x00; //!< Specifies little endian byte order
 const ubyte_t DPBF_BIG_ENDIAN    = 0x01; //!< Specifies big endian byte order
@@ -83,8 +83,8 @@ struct byteArray_t
 };
 
 //! The str_t structure specifies how a string is stored in a .DPBF file.
-struct str_t 
-{ 
+struct str_t
+{
   uint_t      numChars;           //!< Specifies the number of characters in the actual string,
                                   //!< not including the terminating null character.
   uint_t      chars;              //!< Specifies the file offset to the string characters.
@@ -113,12 +113,12 @@ DP_STATIC_ASSERT( ( sizeof(vertexAttrib_t) % 4 ) == 0 );    //!< Compile-time as
 
 //! The texCoordSet_t structure specifies how a texture coordinate set is stored in a .DPBF file.
 /** Texture coordinate sets, in this context, need to be considered in conjunction with NBFVertexAttributeSet objects. */
-struct texCoordSet_t 
+struct texCoordSet_t
 {
   uint_t      numTexCoords;       //!< Specifies the number of texture coordinates contained in the actual set.
   uint_t      coordDim;           //!< Specifies the dimension, in terms of float, of the contained texture coordinates.
                                   //!< Texture coordinates can be either one, two, three, or four dimensional.
-  uint_t      texCoords;          //!< Specifies the file offset to the contained texture coordinates. 
+  uint_t      texCoords;          //!< Specifies the file offset to the contained texture coordinates.
 };
 DP_STATIC_ASSERT( ( sizeof(texCoordSet_t) % 4 ) == 0 );   //!< Compile-time assert on size of structure
 
@@ -155,7 +155,7 @@ struct texImage_t
   uint_t      depth;              //!< Specifies the depth of the texture in pixels.
   uint_t      target;             //!< texture target.
   PADDING(8);                     //!< Padding bits to ensure offset of scene is on a 4-byte boundary, regardless of packing.
-  uint_t      pixelFormat;        //!< Specifies the format of the pixel data. 
+  uint_t      pixelFormat;        //!< Specifies the format of the pixel data.
   uint_t      dataType;           //!< Specifies the type of the pixel data.
   uint_t      pixels;             //!< Specifies the file offset to the raw pixel data.
 };
@@ -191,117 +191,117 @@ struct switchMask_t
 DP_STATIC_ASSERT( ( sizeof(switchMask_t) % 4 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! Unique DPBF Object Codes
-/** Each concrete NBFObject type is assigned to a unique DPBF object code. 
+/** Each concrete NBFObject type is assigned to a unique DPBF object code.
   * This code is a 32-bit unsigned integer value, stored at offset 0, of each concrete NBFObject.
-  * The purpose of the unique 'per-object' code is to provide a Load-Time Type Information (LTTI) 
-  * to resolve concrete NBFObjects while loading DPBF files. */   
-enum
+  * The purpose of the unique 'per-object' code is to provide a Load-Time Type Information (LTTI)
+  * to resolve concrete NBFObjects while loading DPBF files. */
+enum class DPBFCode
 {
-  // scene object 
-  NBF_UNKNOWN                     = 0x00000000  //!< Unknown, and hence, invalid object code.
+  // scene object
+  UNKNOWN                     = 0x00000000  //!< Unknown, and hence, invalid object code.
   // animation objects (0x100 - 0x1FF)
-, NBF_TRAFO_ANIMATION           = 0x00000100  //!< Obsolete
-, NBF_VNVECTOR_ANIMATION                      //!< Obsolete
-, NBF_VERTEX_ATTRIBUTE_ANIMATION              //!< Obsolete
-, NBF_INDEX_ANIMATION                         //!< Obsolete
+, TRAFO_ANIMATION           = 0x00000100  //!< Obsolete
+, VNVECTOR_ANIMATION                      //!< Obsolete
+, VERTEX_ATTRIBUTE_ANIMATION              //!< Obsolete
+, INDEX_ANIMATION                         //!< Obsolete
   // framed animation descriptions
-, NBF_FRAMED_ANIMATION          = 0x00000120
-, NBF_FRAMED_TRAFO_ANIMATION_DESCRIPTION      //!< Obsolete
-, NBF_FRAMED_VNVECTOR_ANIMATION               //!< Obsolete
-, NBF_FRAMED_VERTEX_ATTRIBUTE_ANIMATION_DESCRIPTION //!< Obsolete
-, NBF_FRAMED_INDEX_ANIMATION_DESCRIPTION      //!< Obsolete
+, FRAMED_ANIMATION          = 0x00000120
+, FRAMED_TRAFO_ANIMATION_DESCRIPTION      //!< Obsolete
+, FRAMED_VNVECTOR_ANIMATION               //!< Obsolete
+, FRAMED_VERTEX_ATTRIBUTE_ANIMATION_DESCRIPTION //!< Obsolete
+, FRAMED_INDEX_ANIMATION_DESCRIPTION      //!< Obsolete
   // interpolated animation descriptions
-, NBF_INTERPOLATED_ANIMATION    = 0x00000140
-, NBF_LINEAR_INTERPOLATED_TRAFO_ANIMATION_DESCRIPTION             //!< Obsolete
-, NBF_LINEAR_INTERPOLATED_VNVECTOR_ANIMATION                      //!< Obsolete
-, NBF_LINEAR_INTERPOLATED_VERTEX_ATTRIBUTE_ANIMATION_DESCRIPTION  //!< Obsolete
+, INTERPOLATED_ANIMATION    = 0x00000140
+, LINEAR_INTERPOLATED_TRAFO_ANIMATION_DESCRIPTION             //!< Obsolete
+, LINEAR_INTERPOLATED_VNVECTOR_ANIMATION                      //!< Obsolete
+, LINEAR_INTERPOLATED_VERTEX_ATTRIBUTE_ANIMATION_DESCRIPTION  //!< Obsolete
   // camera objects (0x200 - 0x2FF)
-, NBF_CAMERA                    = 0x00000200
-, NBF_MONO_CAMERA
-, NBF_JITTER_CAMERA
-, NBF_SIMPLE_CAMERA
-, NBF_PARALLEL_CAMERA                         //!< Identifies an NBFParallelCamera object.
-, NBF_PERSPECTIVE_CAMERA                      //!< Identifies an NBFPerspectiveCamera object.
-, NBF_STEREO_CAMERA  
-, NBF_MATRIX_CAMERA                           //!< Identifies an NBFMatrixCamera object.
-  // drawable objects (0x300 - 0x3FF) 
-, NBF_DRAWABLE                  = 0x00000300
-, NBF_VERTEX_ATTRIBUTE_SET                    //!< Identifies an NBFVertexAttributeSet object.
-, NBF_TRIANGLES                               //!< Obsolete
-, NBF_ANIMATED_TRIANGLES                      //!< Obsolete
-, NBF_SKINNED_TRIANGLES                       //!< Obsolete
-, NBF_TRISTRIPS                               //!< Obsolete
-, NBF_QUADS                                   //!< Obsolete
-, NBF_ANIMATED_QUADS                          //!< Obsolete
-, NBF_QUADSTRIPS                              //!< Obsolete
-, NBF_LINES                                   //!< Obsolete
-, NBF_LINESTRIPS                              //!< Obsolete
-, NBF_TRIFANS                                 //!< Obsolete
-, NBF_POINTS                                  //!< Obsolete
-, NBF_QUADMESHES                              //!< Obsolete
-, NBF_ANIMATED_VERTEX_ATTRIBUTE_SET           //!< Obsolete
-, NBF_SKIN                                    //!< Identifies an NBFSkin
-, NBF_PATCHES                                 //!< Obsolete
-, NBF_QUAD_PATCHES                            //!< Obsolete
-, NBF_QUAD_PATCHES_4X4                        //!< Obsolete
-, NBF_RECT_PATCHES                            //!< Obsolete
-, NBF_TRI_PATCHES                             //!< Obsolete
-, NBF_TRI_PATCHES_4                           //!< Obsolete
-, NBF_PRIMITIVE                               //!< Identifies an NBFPrimitive
-, NBF_INDEX_SET                               //!< Identifies an NBFIndexSet object.
+, CAMERA                    = 0x00000200
+, MONO_CAMERA
+, JITTER_CAMERA
+, SIMPLE_CAMERA
+, PARALLEL_CAMERA                         //!< Identifies an NBFParallelCamera object.
+, PERSPECTIVE_CAMERA                      //!< Identifies an NBFPerspectiveCamera object.
+, STEREO_CAMERA
+, MATRIX_CAMERA                           //!< Identifies an NBFMatrixCamera object.
+  // drawable objects (0x300 - 0x3FF)
+, DRAWABLE                  = 0x00000300
+, VERTEX_ATTRIBUTE_SET                    //!< Identifies an NBFVertexAttributeSet object.
+, TRIANGLES                               //!< Obsolete
+, ANIMATED_TRIANGLES                      //!< Obsolete
+, SKINNED_TRIANGLES                       //!< Obsolete
+, TRISTRIPS                               //!< Obsolete
+, QUADS                                   //!< Obsolete
+, ANIMATED_QUADS                          //!< Obsolete
+, QUADSTRIPS                              //!< Obsolete
+, LINES                                   //!< Obsolete
+, LINESTRIPS                              //!< Obsolete
+, TRIFANS                                 //!< Obsolete
+, POINTS                                  //!< Obsolete
+, QUADMESHES                              //!< Obsolete
+, ANIMATED_VERTEX_ATTRIBUTE_SET           //!< Obsolete
+, SKIN                                    //!< Identifies an NBFSkin
+, PATCHES                                 //!< Obsolete
+, QUAD_PATCHES                            //!< Obsolete
+, QUAD_PATCHES_4X4                        //!< Obsolete
+, RECT_PATCHES                            //!< Obsolete
+, TRI_PATCHES                             //!< Obsolete
+, TRI_PATCHES_4                           //!< Obsolete
+, PRIMITIVE                               //!< Identifies an NBFPrimitive
+, INDEX_SET                               //!< Identifies an NBFIndexSet object.
   // node objects (0x400 - 0x4FF)
-, NBF_NODE                      = 0x00000400
-, NBF_GEO_NODE                                //!< Identifies a NBFGeoNode object.
-, NBF_GROUP                                   //!< Identifies a NBFGroup object.
-, NBF_LOD                                     //!< Identifies a NBFLOD object.
-, NBF_SWITCH                                  //!< Identifies a NBFSwitch object.
-, NBF_TRANSFORM                               //!< Identifies a NBFTransform object.
-, NBF_ANIMATED_TRANSFORM                      //!< Obsolete
-, NBF_LIGHT_SOURCE                            //!< Identifies an NBFLightSource object.
-, NBF_DIRECTED_LIGHT                          //!< Identifies an NBFDirectedLight object.
-, NBF_POINT_LIGHT                             //!< Identifies an NBFPointLight object.
-, NBF_SPOT_LIGHT                              //!< Identifies an NBFSpotLight object.
-, NBF_BILLBOARD                               //!< Identifies an NBFBillboard object.
-, NBF_VOLUME_NODE                             //!< Identifies an NBFVolumeNode object.
-, NBF_FLIPBOOK_ANIMATION                      //!< Obsolete
+, NODE                      = 0x00000400
+, GEO_NODE                                //!< Identifies a NBFGeoNode object.
+, GROUP                                   //!< Identifies a NBFGroup object.
+, LOD                                     //!< Identifies a NBFLOD object.
+, SWITCH                                  //!< Identifies a NBFSwitch object.
+, TRANSFORM                               //!< Identifies a NBFTransform object.
+, ANIMATED_TRANSFORM                      //!< Obsolete
+, LIGHT_SOURCE                            //!< Identifies an NBFLightSource object.
+, DIRECTED_LIGHT                          //!< Identifies an NBFDirectedLight object.
+, POINT_LIGHT                             //!< Identifies an NBFPointLight object.
+, SPOT_LIGHT                              //!< Identifies an NBFSpotLight object.
+, BILLBOARD                               //!< Identifies an NBFBillboard object.
+, VOLUME_NODE                             //!< Identifies an NBFVolumeNode object.
+, FLIPBOOK_ANIMATION                      //!< Obsolete
   // state set objects (0x500 - 0x5FF)
-, NBF_STATE_SET                 = 0x00000500  //!< Identifies an NBFStateSet object.
-, NBF_STATE_VARIANT                           //!< Obsolete
-, NBF_STATE_PASS                              //!< Obsolete
+, STATE_SET                 = 0x00000500  //!< Identifies an NBFStateSet object.
+, STATE_VARIANT                           //!< Obsolete
+, STATE_PASS                              //!< Obsolete
   // state attribute objects (0x600 - 0x6FF)
-, NBF_STATE_ATTRIBUTE           = 0x00000600
-, NBF_CGFX                                    //!< Obsolete
-, NBF_MATERIAL                                //!< Obsolete
-, NBF_FACE_ATTRIBUTE                          //!< Obsolete
-, NBF_TEXTURE_ATTRIBUTE                       //!< Obsolete
-, NBF_TEXTURE_ATTRIBUTE_ITEM                  //!< Obsolete
-, NBF_LINE_ATTRIBUTE                          //!< Obsolete
-, NBF_POINT_ATTRIBUTE                         //!< Obsolete
-, NBF_BLEND_ATTRIBUTE                         //!< Obsolete
-, NBF_DEPTH_ATTRIBUTE                         //!< Obsolete
-, NBF_ALPHA_TEST_ATTRIBUTE                    //!< Obsolete
-, NBF_LIGHTING_ATTRIBUTE                      //!< Obsolete
-, NBF_UNLIT_COLOR_ATTRIBUTE                   //!< Obsolete
-, NBF_STENCIL_ATTRIBUTE                       //!< Obsolete
-, NBF_RTFX                                    //!< Obsolete
-, NBF_RTBUFFER_ATTRIBUTE                      //!< Obsolete
-, NBF_RTFX_SCENE_ATTRIBUTE                    //!< Obsolete
-, NBF_RTFX_PROGRAM                            //!< Obsolete
-, NBF_PIPELINE_DATA                           //!< Identifies an NBFPipelineData object.
-, NBF_PARAMETER_GROUP_DATA                    //!< Identifies an NBFParameterGroup object.
-, NBF_SAMPLER                                 //!< Identifies an NBFSampler object.
-, NBF_SAMPLER_STATE                           //!< Identifies an NBFSamplerState object.
+, STATE_ATTRIBUTE           = 0x00000600
+, CGFX                                    //!< Obsolete
+, MATERIAL                                //!< Obsolete
+, FACE_ATTRIBUTE                          //!< Obsolete
+, TEXTURE_ATTRIBUTE                       //!< Obsolete
+, TEXTURE_ATTRIBUTE_ITEM                  //!< Obsolete
+, LINE_ATTRIBUTE                          //!< Obsolete
+, POINT_ATTRIBUTE                         //!< Obsolete
+, BLEND_ATTRIBUTE                         //!< Obsolete
+, DEPTH_ATTRIBUTE                         //!< Obsolete
+, ALPHA_TEST_ATTRIBUTE                    //!< Obsolete
+, LIGHTING_ATTRIBUTE                      //!< Obsolete
+, UNLIT_COLOR_ATTRIBUTE                   //!< Obsolete
+, STENCIL_ATTRIBUTE                       //!< Obsolete
+, RTFX                                    //!< Obsolete
+, RTBUFFER_ATTRIBUTE                      //!< Obsolete
+, RTFX_SCENE_ATTRIBUTE                    //!< Obsolete
+, RTFX_PROGRAM                            //!< Obsolete
+, PIPELINE_DATA                           //!< Identifies an NBFPipelineData object.
+, PARAMETER_GROUP_DATA                    //!< Identifies an NBFParameterGroup object.
+, SAMPLER                                 //!< Identifies an NBFSampler object.
+, SAMPLER_STATE                           //!< Identifies an NBFSamplerState object.
   // custom objects (>=0x700)
-, NBF_CUSTOM_OBJECT             = 0x00000700  //!< Custom objects must not have codes lower than this.
+, CUSTOM_OBJECT             = 0x00000700  //!< Custom objects must not have codes lower than this.
 };
 
 //! The NBFHeader structure represents the NBF header format.
 /** The NBFHeader structure is the primary location where NBF specifics are stored.\n
   * For a valid NBF file, the NBFHeader structure is stored at file offset 0. Note that,
   * except for the NBFHeader object, a file offset of 0 indicates an invalid file offset!\n
-  * This structure mainly serves as validation and compatibility checks for verification 
-  * purposes. It also maintains the file offset to the contained NBFScene object, which  
-  * represents a scene in the context of computer graphics. */ 
+  * This structure mainly serves as validation and compatibility checks for verification
+  * purposes. It also maintains the file offset to the contained NBFScene object, which
+  * represents a scene in the context of computer graphics. */
 struct NBFHeader
 {
   // signature
@@ -310,22 +310,22 @@ struct NBFHeader
   ubyte_t     nbfMajorVersion;    //!< Specifies the major part of the NBF version used to save the file.
   ubyte_t     nbfMinorVersion;    //!< Specifies the minor part (compatibility level) of the NBF version used to save the file.
   ubyte_t     nbfBugfixLevel;     //!< Specifies the bugfix level of the NBF version used to save the file. This is optional
-                                  //!< information, as a bugfix level does not influence compatibility issues, and hence 
+                                  //!< information, as a bugfix level does not influence compatibility issues, and hence
                                   //!< must not be taken into account for compatibility checks.
   // SceniX version
   ubyte_t     dpMajorVersion;   //!< Specifies the major part of the pipeline version the content of this file is compatible to.
   ubyte_t     dpMinorVersion;   //!< Specifies the minor part of the pipeline version the content of this file is compatible to.
-  ubyte_t     dpBugfixLevel;    //!< Specifies the bugfix level of the pipeline version. This is optional information, as a 
-                                  //!< bugfix level does not influence compatibility issues, and hence must not be taken 
+  ubyte_t     dpBugfixLevel;    //!< Specifies the bugfix level of the pipeline version. This is optional information, as a
+                                  //!< bugfix level does not influence compatibility issues, and hence must not be taken
                                   //!< into account for compatibility checks.
-  // Reserved bytes 
+  // Reserved bytes
   ubyte_t     reserved[16];       //!< Reserved bytes for future extensions.
   // Date
   ubyte_t     dayLastModified;    //!< Specifies the day (1-31) of last modification.
   ubyte_t     monthLastModified;  //!< Specifies the month (1-12) of last modification.
   ubyte_t     yearLastModified[2]; //!< Specifies the year of last modification.
   // Time stamp
-  ubyte_t     secondLastModified; //!< Specifies the second (0-59) of last modification. 
+  ubyte_t     secondLastModified; //!< Specifies the second (0-59) of last modification.
   ubyte_t     minuteLastModified; //!< Specifies the minute (0-59) of last modification.
   ubyte_t     hourLastModified;   //!< Specifies the hour (0-23) of last modification.
   // endianess
@@ -336,13 +336,13 @@ struct NBFHeader
   // scene object
   uint_t      scene;              //!< Specifies the file offset to the contained NBFScene object.
   // optional view state
-  uint_t      viewState;          //!< Specifies the file offset to an optional NBFViewState object. 
-                                  //!< An offset of 0 indicates that no NBFViewState object is available in this file. 
+  uint_t      viewState;          //!< Specifies the file offset to an optional NBFViewState object.
+                                  //!< An offset of 0 indicates that no NBFViewState object is available in this file.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFHeader) % 4 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFScene structure represents a scene in the context of computer graphics.
-/** A valid NBF file always contains one - and only one - NBFScene object. 
+/** A valid NBF file always contains one - and only one - NBFScene object.
   * The file offset to this NBFScene object is specified within the NBFHeader structure. */
 struct NBFScene
 {
@@ -366,7 +366,7 @@ DP_STATIC_ASSERT( ( sizeof(NBFScene) % 4 ) == 0 );    //!< Compile-time assert o
 /** The file offset to an optional NBFViewState object is specified within the NBFHeader structure. */
 struct NBFViewState
 {
-  uint_t      objectCode;           //!< Specifies the object code of the actual object. The object code is unique per object type! 
+  uint_t      objectCode;           //!< Specifies the object code of the actual object. The object code is unique per object type!
   uint_t      camera;               //!< Specifies the offset to the NBFCamera object to be used for viewing.
   ubyte_t     isStereo;             //!< Indicates whether the view is in stereo mode.
   ubyte_t     isStereoAutomatic;    //!< Indicates whether eye distance is automatically adjusted in stereo mode.
@@ -379,10 +379,10 @@ struct NBFViewState
 };
 DP_STATIC_ASSERT( ( sizeof(NBFViewState) % 4 ) == 0 );    //!< Compile-time assert on size of structure
 
-//! The NBFObject structure represents general object data. 
+//! The NBFObject structure represents general object data.
 struct NBFObject
 {
-  uint_t      objectCode;         //!< Specifies the object code of the actual object. The object code is unique per object type! 
+  DPBFCode    objectCode;         //!< Specifies the object code of the actual object. The object code is unique per object type!
   ubyte_t     isShared;           //!< Indicates whether the data of the actual object is shared among different objects.
                                   //!< A value of 1 indicates that this object's data is shared, whereas a value of 0 indicates
                                   //!< that this object's data is not shared.
@@ -390,7 +390,7 @@ struct NBFObject
   PADDING(3);                     //!< Padding bits to keep compatibility to earlier versions.
 
   uint64_t    objectDataID;       //!< A unique 64-bit value to identify shared object data while loading.
-  uint_t      sourceObject;       //!< Specifies the file offset to the source object in case of data sharing. 
+  uint_t      sourceObject;       //!< Specifies the file offset to the source object in case of data sharing.
                                   //!< A file offset of 0 always indicates that no source object is available for the actual object.
   uint_t       objectName;        //!< Specifies the offset to an optional name. A 0-offset implies no name.
                                   //!< The name is stored as a str_t object.
@@ -398,22 +398,22 @@ struct NBFObject
                                   //!< A 0-offset implies no annotation. An annotation is stored as a str_t object.
   uint_t       hints;             //!< Hints vars for node, user, object
 };
-// NOTE: Because of the uint64_t member objectDataID above, which is 8-byte aligned, 
+// NOTE: Because of the uint64_t member objectDataID above, which is 8-byte aligned,
 // we need to ensure the size of NBFObject is fixed - that is, independent of whatever
-// the compilers actual packing value might be! We achieve this by making the size of 
-// NBFObject a multiple of 8 bytes (see compile time assert below).  
+// the compilers actual packing value might be! We achieve this by making the size of
+// NBFObject a multiple of 8 bytes (see compile time assert below).
 DP_STATIC_ASSERT( ( sizeof(NBFObject) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFCamera represents a camera.
 /** A NBFCamera serves as base class only.\n
-  * Concrete object codes valid for a NBFCamera are NBF_PARALLEL_CAMERA
-  * and NBF_PERSPECTIVE_CAMERA. Further object codes valid for a NBFCamera
+  * Concrete object codes valid for a NBFCamera are DPBFCode::PARALLEL_CAMERA
+  * and DPBFCode::PERSPECTIVE_CAMERA. Further object codes valid for a NBFCamera
   * are subject to future extensions for the NBF format. */
 struct NBFCamera : public NBFObject
 {
   uint_t      numHeadLights;    //!< Specifies the number of headlights attached.
   uint_t      headLights;       //!< Specifies the file offset to the offsets to the attached headlight objects.
-                                //!< Headlights are of type NBFLightSource. 
+                                //!< Headlights are of type NBFLightSource.
   float3_t    upVector;         //!< Specifies the camera's normalized up vector.
   float3_t    position;         //!< Specifies the actual position of camera in world space.
   float3_t    direction;        //!< Specifies the normalized direction for the camera to look along.
@@ -427,32 +427,32 @@ struct NBFFrustumCamera : public NBFCamera
   float       farDist;          //!< Specifies the distance from the actual camera position to the far clipping plane.
   PADDING(4);      //!< Padding bits to ensure offset of windowSize is on a 4-byte boundary, regardless of packing
   float       nearDist;         //!< Specifies the distance from the actual camera position to the near clipping plane.
-  float2_t    windowOffset;     //!< Specifies the world-relative offset from the viewing reference point to the center 
+  float2_t    windowOffset;     //!< Specifies the world-relative offset from the viewing reference point to the center
                                 //!< of the viewing window.
-  float2_t    windowSize;       //!< Specifies the world-relative size of the viewing window. Whereas the x-component of 
+  float2_t    windowSize;       //!< Specifies the world-relative size of the viewing window. Whereas the x-component of
                                 //!< of the vector specifies the width, and the y-component of the vector specifies the height.
-  PADDING(4);        //!< Padding bits to ensure the size of NBFCamera is a multiple of 8, regardless of packing.    
+  PADDING(4);        //!< Padding bits to ensure the size of NBFCamera is a multiple of 8, regardless of packing.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFFrustumCamera) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFParallelCamera represents a parallel camera.
-/** A NBFParallelCamera is a concrete camera type. 
-  * The object code for a NBFParallelCamera is NBF_PARALLEL_CAMERA. */
+/** A NBFParallelCamera is a concrete camera type.
+  * The object code for a NBFParallelCamera is DPBFCode::PARALLEL_CAMERA. */
 struct NBFParallelCamera : public NBFFrustumCamera
 {
 };
 DP_STATIC_ASSERT( ( sizeof(NBFParallelCamera) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFPerspectiveCamera represents a perspective camera.
-/** A NBFPerspectiveCamera is a concrete camera type. 
-  * The object code for a NBFPerspectiveCamera is NBF_PERSPECTIVE_CAMERA. */
+/** A NBFPerspectiveCamera is a concrete camera type.
+  * The object code for a NBFPerspectiveCamera is DPBFCode::PERSPECTIVE_CAMERA. */
 struct NBFPerspectiveCamera : public NBFFrustumCamera
 {
 };
 DP_STATIC_ASSERT( ( sizeof(NBFPerspectiveCamera) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 /*! \brief The NBFMatrixCamera structure represents a general matrix camera.
- *  \remarks The object code for a NBFMatrixCamera is NBF_MATRIX_CAMERA. */
+ *  \remarks The object code for a NBFMatrixCamera is DPBFCode::MATRIX_CAMERA. */
 struct NBFMatrixCamera : public NBFCamera
 {
   float44_t   projection;         //!< Specifies the projection matrix
@@ -508,7 +508,7 @@ struct NBFPrimitive : public NBFObject
   uint_t      elementOffset;      //!< Specifies the element offset
   uint_t      elementCount;       //!< Specifies the element count
   uint_t      instanceCount;      //!< Specified the instance count
-  PADDING(4);                     //!< Padding bits to ensure the size of NBFPrimitive is a multiple of 8, regardless of packing.    
+  PADDING(4);                     //!< Padding bits to ensure the size of NBFPrimitive is a multiple of 8, regardless of packing.
   uint_t      renderFlags;        //!< Specified the rendering flags
   uint_t      vertexAttributeSet; //!< Specifies the file offset to the vertex attribute set.
   uint_t      indexSet;           //!< Specifies the file offset to the index set
@@ -516,13 +516,13 @@ struct NBFPrimitive : public NBFObject
   ubyte_t     patchesOrdering;    //!< Specifies the patches ordering, if this Primitive is a patch
   ubyte_t     patchesSpacing;     //!< Specifies the patches spacing, if this Primitive is a patch
   ubyte_t     patchesType;        //!< Specifies the patches type, if this Primitive is a patch
-  PADDING(4);                     //!< Padding bits to ensure the size of NBFPrimitive is a multiple of 8, regardless of packing.    
+  PADDING(4);                     //!< Padding bits to ensure the size of NBFPrimitive is a multiple of 8, regardless of packing.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFPrimitive) % 8 ) == 0 );   // Compile-time assert on size of structure
 
 //! The NBFIndependentPrimitiveSet structure represents a set of independent primitives.
 /** A NBFIndependentPrimitiveSet is an abstract topology class derived from NBFPrimitiveSet.
-  * It is used with NBF_LINES, NBF_POINTS, NBF_QUADS, and NBF_TRIANGLES. */
+  * It is used with DPBFCode::LINES, DPBFCode::POINTS, DPBFCode::QUADS, and DPBFCode::TRIANGLES. */
 struct NBFIndependentPrimitiveSet : public NBFPrimitiveSet
 {
   uint_t      numIndices;         //!< Specifies the number of contained indices
@@ -531,31 +531,31 @@ struct NBFIndependentPrimitiveSet : public NBFPrimitiveSet
 DP_STATIC_ASSERT( ( sizeof(NBFIndependentPrimitiveSet) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFMeshedPrimitiveSet structure represents a mesh set.
-/** A NBFMeshedPrimitiveSet is an abstract topology class derived from NBFPrimitiveSet. 
-* Valid object codes for a NBFMeshedPrimitiveSet are NBF_QUADMESHES. */
+/** A NBFMeshedPrimitiveSet is an abstract topology class derived from NBFPrimitiveSet.
+* Valid object codes for a NBFMeshedPrimitiveSet are DPBFCode::QUADMESHES. */
 struct NBFMeshedPrimitiveSet : public NBFPrimitiveSet
 {
   uint_t      numMeshes;          //!< Specifies the number of meshes
-  uint_t      meshes;             //!< Specifies the file offset to the meshes. 
+  uint_t      meshes;             //!< Specifies the file offset to the meshes.
   //!< Strips are stored as indexList_t objects.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFMeshedPrimitiveSet) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFStrippedPrimitiveSet structure represents a strip set.
-/** A NBFStrippedPrimitiveSet is an abstract topology class derived from NBFPrimitiveSet. 
-  * Valid object codes for a NBFStrippedPrimitiveSet are NBF_TRIFANS, NBF_TRISTRIPS, and NBF_QUADSTRIPS. */
+/** A NBFStrippedPrimitiveSet is an abstract topology class derived from NBFPrimitiveSet.
+  * Valid object codes for a NBFStrippedPrimitiveSet are DPBFCode::TRIFANS, DPBFCode::TRISTRIPS, and DPBFCode::QUADSTRIPS. */
 struct NBFStrippedPrimitiveSet : public NBFPrimitiveSet
 {
   uint_t      numStrips;          //!< Specifies the number of strips
-  uint_t      strips;             //!< Specifies the file offset to the strips. 
+  uint_t      strips;             //!< Specifies the file offset to the strips.
                                   //!< Strips are stored as indexList_t objects.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFStrippedPrimitiveSet) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFNode structure represents a general node.
 /** A NBFNode serves as base class only. Concrete object codes valid for a NBFNode are
-  * NBF_GEO_NODE, NBF_LOD, NBF_SWITCH, NBF_TRANSFORM, NBF_ANIMATED_TRANSFORM,
-  * NBF_DIRECTED_LIGHT, NBF_POINT_LIGHT, NBF_SPOT_LIGHT, and NBF_VOLUME_NODE. Further concrete
+  * DPBFCode::GEO_NODE, DPBFCode::LOD, DPBFCode::SWITCH, DPBFCode::TRANSFORM, DPBFCode::ANIMATED_TRANSFORM,
+  * DPBFCode::DIRECTED_LIGHT, DPBFCode::POINT_LIGHT, DPBFCode::SPOT_LIGHT, and DPBFCode::VOLUME_NODE. Further concrete
   * object codes valid for a NBFNode are subject to future extensions of the NBF format. */
 struct NBFNode : public NBFObject
 {
@@ -566,19 +566,19 @@ struct NBFNode : public NBFObject
 DP_STATIC_ASSERT( ( sizeof(NBFNode) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFGeoNode structure represents a geometry node.
-/** The object code for a NBFGeoNode is NBF_GEO_NODE. */
+/** The object code for a NBFGeoNode is DPBFCode::GEO_NODE. */
 struct NBFGeoNode : public NBFNode
 {
   uint_t      materialPipeline;   //!< Specifies the file offset to the corresponding NBFPipelineData object
-  uint_t      primitive;          //!< Specifies the file offset to the corresponding NBFPrimitive object. 
+  uint_t      primitive;          //!< Specifies the file offset to the corresponding NBFPrimitive object.
   uint_t      stateSet;           //!< Obsolete
-  PADDING(4);        //!< Padding bits to ensure the size of NBFGeoNode is a multiple of 8, regardless of packing.    
+  PADDING(4);        //!< Padding bits to ensure the size of NBFGeoNode is a multiple of 8, regardless of packing.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFGeoNode) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFGroup structure represents a group node.
 /** A NBFGroup serves as base class only. Concrete object codes valid for a NBFGroup are
-  * NBF_LOD, NBF_SWITCH, NBF_TRANSFORM, and NBF_ANIMATED_TRANSFORM. Further concrete object
+  * DPBFCode::LOD, DPBFCode::SWITCH, DPBFCode::TRANSFORM, and DPBFCode::ANIMATED_TRANSFORM. Further concrete object
   * codes valid for a NBFGroup are subject to future extensions of the NBF format. */
 struct NBFGroup : public NBFNode
 {
@@ -593,50 +593,50 @@ struct NBFGroup : public NBFNode
 DP_STATIC_ASSERT( ( sizeof(NBFGroup) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFLOD structure represents a 'Level Of Detail' group node.
-/** The object code for a NBFLOD is NBF_LOD. */
+/** The object code for a NBFLOD is DPBFCode::LOD. */
 struct NBFLOD : public NBFGroup
 {
   float3_t    center;             //!< Specifies the center point used for distance calculations.
   uint_t      numRanges;          //!< Specifies the number of contained ranges.
-  uint_t      ranges;             //!< Specifies the file offset to the ranges. 
+  uint_t      ranges;             //!< Specifies the file offset to the ranges.
                                   //!< Ranges are stored as 32-bit floating point numbers.
-  PADDING(4);        //!< Padding bits to ensure the size of NBFLOD is a multiple of 8, regardless of packing.    
+  PADDING(4);        //!< Padding bits to ensure the size of NBFLOD is a multiple of 8, regardless of packing.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFLOD) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFSwitch structure represents a switch group node.
-/** The object code for a NBFSwitch is NBF_SWITCH. */
+/** The object code for a NBFSwitch is DPBFCode::SWITCH. */
 struct NBFSwitch : public NBFGroup
 {
   uint_t      activeMaskKey;      //!< Specifies the key of the active mask
   uint_t      numMasks;           //!< Specifies the number of masks stored at offset masks
   uint_t      masks;              //!< Specifies the file offset to the masks stored as switchMask_t objects
-  PADDING(4);        //!< Padding bits to ensure the size of NBFSwitch is a multiple of 8, regardless of packing.    
+  PADDING(4);        //!< Padding bits to ensure the size of NBFSwitch is a multiple of 8, regardless of packing.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFSwitch) % 8 ) == 0 );   //!< Compile-time assert on size of structure
 
 //! The NBFBillboard structure represents a billboard group node.
-/** The object code for a NBFBillboard is NBF_BILLBOARD. */
+/** The object code for a NBFBillboard is DPBFCode::BILLBOARD. */
 struct NBFBillboard: public NBFGroup
 {
   float3_t  rotationAxis;         //!< Specifies the axis to rotate the Billboard around
   ubyte_t   alignment;            //!< Specifies the alignment (axis, viewer, or screen aligned)
-  PADDING(3);        //!< Padding bits to ensure the size of NBFBillboard is a multiple of 8, regardless of packing.    
+  PADDING(3);        //!< Padding bits to ensure the size of NBFBillboard is a multiple of 8, regardless of packing.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFBillboard) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFTransform structure represents a transform group node.
-/** The object code for a NBFTransform is NBF_TRANSFORM. */
+/** The object code for a NBFTransform is DPBFCode::TRANSFORM. */
 struct NBFTransform : public NBFGroup
 {
   trafo_t             trafo;      //!< Specifies the transformation of the NBFTransform.
-  PADDING(4);        //!< Padding bits to ensure the size of NBFTransform is a multiple of 8, regardless of packing.    
+  PADDING(4);        //!< Padding bits to ensure the size of NBFTransform is a multiple of 8, regardless of packing.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFTransform) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFLightSource structure represents a light source node.
-/** A NBFLightSource serves as base class only. Concrete object codes valid for 
-  * a NBFLightSource are NBF_DIRECTED_LIGHT, NBF_POINT_LIGHT, and NBF_SPOT_LIGHT. */
+/** A NBFLightSource serves as base class only. Concrete object codes valid for
+  * a NBFLightSource are DPBFCode::DIRECTED_LIGHT, DPBFCode::POINT_LIGHT, and DPBFCode::SPOT_LIGHT. */
 struct NBFLightSource : public NBFNode
 {
   uint_t      animation;          //!< Obsolete
@@ -649,7 +649,7 @@ struct NBFLightSource : public NBFNode
 DP_STATIC_ASSERT( ( sizeof(NBFLightSource) % 8 ) == 0 );    //!< Compile-time assert on size of structure
 
 //! The NBFPipelineData structure represents a set of ParameterGroupDatas
-/** The object code for an NBFPipelineData is NBF_PIPELINE_DATA. */
+/** The object code for an NBFPipelineData is DPBFCode::PIPELINE_DATA. */
 struct NBFPipelineData : public NBFObject
 {
   str_t       effectFileName;       //!< Specifies the (potentially relative) file with the EffectSpec
@@ -678,7 +678,7 @@ struct NBFLink
 DP_STATIC_ASSERT( ( sizeof(NBFLink) % 4 ) == 0 );               //!< Compile-time assert on size of structure
 
 /*! The NBFIndexSet structure specifies how indices are stored in a .DPBF file
- *  \remarks The object code for a NBFIndexSet is NBF_INDEX_SET. */
+ *  \remarks The object code for a NBFIndexSet is DPBFCode::INDEX_SET. */
 struct NBFIndexSet : public NBFObject
 {
   uint_t      dataType;               //!< Data type
@@ -694,10 +694,10 @@ struct NBFSampler : public NBFObject
   float4_t    borderColor;          //!< Speicifies the texture border RGBA color
   uint_t      magFilter;            //!< Specifies the filter used with magnifying.
                                     //!< Valid values are TFM_MAG_NEAREST, and TFM_MAG_LINEAR.
-  uint_t      minFilter;            //!< Specifies the filter used with minimizing. 
+  uint_t      minFilter;            //!< Specifies the filter used with minimizing.
                                     //!< //!< Valid values are TFM_MIN_NEAREST, TFM_MIN_LINEAR, TFM_MIN_LINEAR_MIPMAP_LINEAR,
                                     //!< TFM_MIN_NEAREST_MIPMAP_NEAREST, TFM_MIN_NEAREST_MIPMAP_LINEAR, TFM_MIN_LINEAR_MIPMAP_NEAREST.
-  uint_t      texWrapS;             //!< Specifies the wrap parameter for texture coordinate s. 
+  uint_t      texWrapS;             //!< Specifies the wrap parameter for texture coordinate s.
   uint_t      texWrapT;             //!< Specifies the wrap parameter for texture coordinate t.
   uint_t      texWrapR;             //!< Specifies the wrap parameter for texture coordinate r.
   uint_t      compareMode;          //!> Specifies the compare mode parameter for a texture. Valid values are TCM_NONE and TCM_R_TO_TEXTURE.

@@ -455,7 +455,7 @@ namespace dp
       /************************************************************************/
       ParameterGroupData::ParameterGroupData( const dp::fx::ParameterGroupSpecSharedPtr& parameterGroupSpec)
       {
-        m_objectCode = OC_PARAMETER_GROUP_DATA;
+        m_objectCode = ObjectCode::PARAMETER_GROUP_DATA;
         //init ( parameterGroupSpec );
         initSpec( parameterGroupSpec );
         initData( dp::fx::EffectLibrary::instance()->getParameterGroupData( parameterGroupSpec->getName() ) );
@@ -463,7 +463,7 @@ namespace dp
 
       ParameterGroupData::ParameterGroupData( const dp::fx::ParameterGroupDataSharedPtr& fxParameterGroupData)
       {
-        m_objectCode = OC_PARAMETER_GROUP_DATA;
+        m_objectCode = ObjectCode::PARAMETER_GROUP_DATA;
         initSpec( fxParameterGroupData->getParameterGroupSpec() );
         initData( fxParameterGroupData );
       }
@@ -471,7 +471,7 @@ namespace dp
       ParameterGroupData::ParameterGroupData( const ParameterGroupData & rhs )
         : Object( rhs )
       {
-        m_objectCode = OC_PARAMETER_GROUP_DATA;
+        m_objectCode = ObjectCode::PARAMETER_GROUP_DATA;
         initSpec( rhs.getParameterGroupSpec() );
 
         // fill the data area with the values from rhs

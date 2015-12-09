@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2011
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -248,7 +248,7 @@ namespace dp
            *  \sa getNumberOfClipPlanes, getNumberOfActiveClipPlanes, beginClipPlanes, endClipPlanes, addClipPlane, removeClipPlane, clearClipPlanes */
           DP_SG_CORE_API ClipPlaneIterator findClipPlane( const ClipPlaneSharedPtr & plane );
 
-          /*! \brief Overrides Object::isEquivalent.  
+          /*! \brief Overrides Object::isEquivalent.
             * \param
             * p Pointer to the Object to test for equivalence with this Group object.
             * \param
@@ -259,14 +259,14 @@ namespace dp
             * The function returns \c true if the Object pointed to by \a p is detected to be equivalent
             * to this Group object.
             * \remarks
-            * The test will be performed considering the optional control parameters ignoreNames and deepCompare. 
+            * The test will be performed considering the optional control parameters ignoreNames and deepCompare.
             * If you omit these two, the function ignores the object names
             * and performs a shallow compare only.
             * \sa Object::isEquivalent
             */
           DP_SG_CORE_API virtual bool isEquivalent( ObjectSharedPtr const& object, bool ignoreNames, bool deepCompare ) const;
 
-          /*! \brief Assigns new content from another Group object. 
+          /*! \brief Assigns new content from another Group object.
             * \param
             * rhs Group object from which to assign the new content.
             * \return
@@ -287,7 +287,7 @@ namespace dp
 
           /*! \brief Constructs a Group as a copy of another Group.
             * \param
-            * rhs Group to serve as source for the newly constructed Group. 
+            * rhs Group to serve as source for the newly constructed Group.
             */
           DP_SG_CORE_API Group( const Group& rhs );
 
@@ -295,9 +295,9 @@ namespace dp
             * \param
             * position Zero-based position of the child that immediately will be removed from the Group.
             * \remarks
-            * It is recommended, for Group-derived classes that need to keep track of child nodes removal, 
-            * to override this function to perform necessary tasks immediately before a child node will be 
-            * removed from the Group.   
+            * It is recommended, for Group-derived classes that need to keep track of child nodes removal,
+            * to override this function to perform necessary tasks immediately before a child node will be
+            * removed from the Group.
             * \n\n
             * The function will be called with the zero-based index that references the child that
             * will be removed immediately after this call.
@@ -309,12 +309,12 @@ namespace dp
             * \param
             * position Zero-based position that previously referenced the removed child node.
             * \remarks
-            * It is recommended, for Group-derived classes that need to keep track of child nodes removal, 
-            * to override this notifier to perform necessary tasks immediately after a child node has been 
-            * removed from the Group.   
+            * It is recommended, for Group-derived classes that need to keep track of child nodes removal,
+            * to override this notifier to perform necessary tasks immediately after a child node has been
+            * removed from the Group.
             * \n\n
-            * The function will be called with the zero-based position that previously referenced the 
-            * removed child. Note that this position can no longer be used to reference the child node, 
+            * The function will be called with the zero-based position that previously referenced the
+            * removed child. Note that this position can no longer be used to reference the child node,
             * because the child node already has been removed from this Group.
             * \sa Group::preRemoveChild
             */
@@ -325,8 +325,8 @@ namespace dp
             * position Zero-based position where the child node will be added.
             * \remarks
             * It is recommended, for Group-derived classes that need to keep track of child nodes insertion,
-            * to override this notifier to perform necessary tasks immediately before a child node will be 
-            * added to the Group.   
+            * to override this notifier to perform necessary tasks immediately before a child node will be
+            * added to the Group.
             * \n\n
             * The function will be called with the zero-based position where the child node will be added.
             * Note that this position cannot yet be used to reference the child node, because the child
@@ -340,8 +340,8 @@ namespace dp
             * position Zero-based position where the child node was added.
             * \remarks
             * It is recommended, for Group-derived classes that need to keep track of child nodes insertion,
-            * to override this notifier to perform necessary tasks immediately after a child node has been 
-            * added to the Group.   
+            * to override this notifier to perform necessary tasks immediately after a child node has been
+            * added to the Group.
             * \n\n
             * The function will be called with the zero-based position where the child node has been added
             * immediately before this call.
@@ -353,25 +353,25 @@ namespace dp
            * \return
            * The function returns a dp::math::Box3f that represents the actual bounding box of this Group.
            * \remarks
-           * The function calculates the bounding box by accumulating the bounding boxes of all 
-           * available child nodes. 
+           * The function calculates the bounding box by accumulating the bounding boxes of all
+           * available child nodes.
            * \n\n
-           * For Group-derived classes to specialize bounding box calculation, it is recommended to 
-           * override this function. 
+           * For Group-derived classes to specialize bounding box calculation, it is recommended to
+           * override this function.
            * \sa dp::math::Box3f
            */
           DP_SG_CORE_API virtual dp::math::Box3f calculateBoundingBox() const;
 
           /*! \brief Called from the framework if re-calculation of the Group's bounding sphere is required.
             * \return
-            * The function returns a dp::math::Sphere3f that represents the actual bounding sphere of this 
+            * The function returns a dp::math::Sphere3f that represents the actual bounding sphere of this
             * Group.
             * \remarks
-            * The function calculates the bounding sphere by accumulating the bounding spheres of all 
-            * available child nodes. 
+            * The function calculates the bounding sphere by accumulating the bounding spheres of all
+            * available child nodes.
             * \n\n
-            * For Group-derived classes to specialize bounding sphere calculation, it is recommended to 
-            * override this function. 
+            * For Group-derived classes to specialize bounding sphere calculation, it is recommended to
+            * override this function.
             * \sa dp::math::Sphere3f
             */
           DP_SG_CORE_API virtual dp::math::Sphere3f calculateBoundingSphere() const;
@@ -379,7 +379,7 @@ namespace dp
           /*! \brief Determines Object hints contained in the hierarchy
            * \param hints
            * Specifies a but mask to indicate the Object hints for which containment should be determined.
-           * \return 
+           * \return
            * The function returns a bit field indicating all hints contained in the tree hierarchy
            * having this Group as root. The bit field returned is filtered by the input bit mask.
            * \remarks
@@ -388,7 +388,7 @@ namespace dp
            * \sa Object::determineHintsContainment
            */
           DP_SG_CORE_API virtual unsigned int determineHintsContainment( unsigned int hints ) const;
-      
+
           /*! \brief Feed the data of this object into the provied HashGenerator.
            *  \param hg The HashGenerator to update with the data of this object.
            *  \sa getHashKey */
@@ -417,7 +417,7 @@ namespace dp
       class Group::Event : public core::Event
       {
       public:
-        enum Type
+        enum class Type
         {
             POST_CHILD_ADD
           , PRE_CHILD_REMOVE
@@ -427,7 +427,7 @@ namespace dp
         };
 
         Event( GroupSharedPtr const& group, Type type, const NodeSharedPtr& child, unsigned int index = 0 )
-          : core::Event( core::Event::GROUP )
+          : core::Event( core::Event::Type::GROUP )
           , m_group( group )
           , m_child( child )
           , m_type( type )
@@ -436,7 +436,7 @@ namespace dp
         }
 
         Event( GroupSharedPtr const& group, Type type )
-          : core::Event( core::Event::GROUP )
+          : core::Event( core::Event::Type::GROUP )
           , m_group( group )
           , m_child( NodeSharedPtr::null )
           , m_index( ~0 )

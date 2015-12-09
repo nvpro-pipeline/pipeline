@@ -131,7 +131,7 @@ bool add( dp::sg::core::ObjectSharedPtr const& parent, dp::sg::core::ObjectShare
 {
   switch( parent->getObjectCode() )
   {
-    case dp::sg::core::OC_GEONODE :
+    case dp::sg::core::ObjectCode::GEO_NODE :
       if ( child.isPtrTo<dp::sg::core::PipelineData>() )
       {
         parent.staticCast<dp::sg::core::GeoNode>()->setMaterialPipeline( child.staticCast<dp::sg::core::PipelineData>() );
@@ -142,11 +142,11 @@ bool add( dp::sg::core::ObjectSharedPtr const& parent, dp::sg::core::ObjectShare
         parent.staticCast<dp::sg::core::GeoNode>()->setPrimitive( child.staticCast<dp::sg::core::Primitive>() );
       }
       break;
-    case dp::sg::core::OC_GROUP :
-    case dp::sg::core::OC_LOD :
-    case dp::sg::core::OC_SWITCH :
-    case dp::sg::core::OC_TRANSFORM :
-    case dp::sg::core::OC_BILLBOARD :
+    case dp::sg::core::ObjectCode::GROUP :
+    case dp::sg::core::ObjectCode::LOD :
+    case dp::sg::core::ObjectCode::SWITCH :
+    case dp::sg::core::ObjectCode::TRANSFORM :
+    case dp::sg::core::ObjectCode::BILLBOARD :
       if ( child.isPtrTo<dp::sg::core::Node>() )
       {
         parent.staticCast<dp::sg::core::Group>()->addChild( child.staticCast<dp::sg::core::Node>() );
@@ -157,7 +157,7 @@ bool add( dp::sg::core::ObjectSharedPtr const& parent, dp::sg::core::ObjectShare
         parent.staticCast<dp::sg::core::Group>()->addClipPlane( child.staticCast<dp::sg::core::ClipPlane>() );
       }
       break;
-    case dp::sg::core::OC_PRIMITIVE :
+    case dp::sg::core::ObjectCode::PRIMITIVE :
       if ( child.isPtrTo<dp::sg::core::IndexSet>() )
       {
         parent.staticCast<dp::sg::core::Primitive>()->setIndexSet( child.staticCast<dp::sg::core::IndexSet>() );
@@ -168,8 +168,8 @@ bool add( dp::sg::core::ObjectSharedPtr const& parent, dp::sg::core::ObjectShare
         parent.staticCast<dp::sg::core::Primitive>()->setVertexAttributeSet( child.staticCast<dp::sg::core::VertexAttributeSet>() );
       }
       break;
-    case dp::sg::core::OC_PARAMETER_GROUP_DATA :
-      DP_ASSERT( child->getObjectCode() == dp::sg::core::OC_SAMPLER );
+    case dp::sg::core::ObjectCode::PARAMETER_GROUP_DATA :
+      DP_ASSERT( child->getObjectCode() == dp::sg::core::ObjectCode::SAMPLER );
       {
         dp::sg::core::ParameterGroupDataSharedPtr const& pgd = parent.staticCast<dp::sg::core::ParameterGroupData>();
         const dp::fx::ParameterGroupSpecSharedPtr & pgs = pgd->getParameterGroupSpec();
@@ -178,17 +178,17 @@ bool add( dp::sg::core::ObjectSharedPtr const& parent, dp::sg::core::ObjectShare
         pgd->setParameter( it, child.staticCast<dp::sg::core::Sampler>() );
       }
       break;
-    case dp::sg::core::OC_PARALLELCAMERA :
-    case dp::sg::core::OC_PERSPECTIVECAMERA :
-    case dp::sg::core::OC_MATRIXCAMERA :
-      DP_ASSERT( child->getObjectCode() == dp::sg::core::OC_LIGHT_SOURCE );
+    case dp::sg::core::ObjectCode::PARALLEL_CAMERA :
+    case dp::sg::core::ObjectCode::PERSPECTIVE_CAMERA :
+    case dp::sg::core::ObjectCode::MATRIX_CAMERA :
+      DP_ASSERT( child->getObjectCode() == dp::sg::core::ObjectCode::LIGHT_SOURCE );
       parent.staticCast<dp::sg::core::Camera>()->addHeadLight( child.staticCast<dp::sg::core::LightSource>() );
       break;
-    case dp::sg::core::OC_PIPELINE_DATA :
+    case dp::sg::core::ObjectCode::PIPELINE_DATA :
       DP_ASSERT( child.isPtrTo<dp::sg::core::ParameterGroupData>() );
       parent.staticCast<dp::sg::core::PipelineData>()->setParameterGroupData( child.staticCast<dp::sg::core::ParameterGroupData>() );
       break;
-    case dp::sg::core::OC_SCENE :
+    case dp::sg::core::ObjectCode::SCENE :
       if ( child.isPtrTo<dp::sg::core::Camera>() )
       {
         parent.staticCast<dp::sg::core::Scene>()->addCamera( child.staticCast<dp::sg::core::Camera>() );
@@ -213,7 +213,7 @@ bool remove( dp::sg::core::ObjectSharedPtr const& parent, dp::sg::core::ObjectSh
 {
   switch( parent->getObjectCode() )
   {
-    case dp::sg::core::OC_GEONODE :
+    case dp::sg::core::ObjectCode::GEO_NODE :
       if ( child.isPtrTo<dp::sg::core::PipelineData>() )
       {
         parent.staticCast<dp::sg::core::GeoNode>()->setMaterialPipeline( dp::sg::core::PipelineDataSharedPtr() );
@@ -224,11 +224,11 @@ bool remove( dp::sg::core::ObjectSharedPtr const& parent, dp::sg::core::ObjectSh
         parent.staticCast<dp::sg::core::GeoNode>()->setPrimitive( dp::sg::core::PrimitiveSharedPtr() );
       }
       break;
-    case dp::sg::core::OC_GROUP :
-    case dp::sg::core::OC_LOD :
-    case dp::sg::core::OC_SWITCH :
-    case dp::sg::core::OC_TRANSFORM :
-    case dp::sg::core::OC_BILLBOARD :
+    case dp::sg::core::ObjectCode::GROUP :
+    case dp::sg::core::ObjectCode::LOD :
+    case dp::sg::core::ObjectCode::SWITCH :
+    case dp::sg::core::ObjectCode::TRANSFORM :
+    case dp::sg::core::ObjectCode::BILLBOARD :
       if ( child.isPtrTo<dp::sg::core::Node>() )
       {
         parent.staticCast<dp::sg::core::Group>()->removeChild( child.staticCast<dp::sg::core::Node>() );
@@ -239,7 +239,7 @@ bool remove( dp::sg::core::ObjectSharedPtr const& parent, dp::sg::core::ObjectSh
         parent.staticCast<dp::sg::core::Group>()->removeClipPlane( child.staticCast<dp::sg::core::ClipPlane>() );
       }
       break;
-    case dp::sg::core::OC_PRIMITIVE :
+    case dp::sg::core::ObjectCode::PRIMITIVE :
       if ( child.isPtrTo<dp::sg::core::IndexSet>() )
       {
         parent.staticCast<dp::sg::core::Primitive>()->setIndexSet( dp::sg::core::IndexSetSharedPtr() );
@@ -250,8 +250,8 @@ bool remove( dp::sg::core::ObjectSharedPtr const& parent, dp::sg::core::ObjectSh
         parent.staticCast<dp::sg::core::Primitive>()->setVertexAttributeSet( dp::sg::core::VertexAttributeSetSharedPtr() );
       }
       break;
-    case dp::sg::core::OC_PARAMETER_GROUP_DATA :
-      DP_ASSERT( child->getObjectCode() == dp::sg::core::OC_SAMPLER );
+    case dp::sg::core::ObjectCode::PARAMETER_GROUP_DATA :
+      DP_ASSERT( child->getObjectCode() == dp::sg::core::ObjectCode::SAMPLER );
       {
         dp::sg::core::ParameterGroupDataSharedPtr const& pgd = parent.staticCast<dp::sg::core::ParameterGroupData>();
         const dp::fx::ParameterGroupSpecSharedPtr & pgs = pgd->getParameterGroupSpec();
@@ -260,13 +260,13 @@ bool remove( dp::sg::core::ObjectSharedPtr const& parent, dp::sg::core::ObjectSh
         pgd->setParameter( it, dp::sg::core::SamplerSharedPtr() );
       }
       break;
-    case dp::sg::core::OC_PARALLELCAMERA :
-    case dp::sg::core::OC_PERSPECTIVECAMERA :
-    case dp::sg::core::OC_MATRIXCAMERA :
-      DP_ASSERT( child->getObjectCode() == dp::sg::core::OC_LIGHT_SOURCE );
+    case dp::sg::core::ObjectCode::PARALLEL_CAMERA :
+    case dp::sg::core::ObjectCode::PERSPECTIVE_CAMERA :
+    case dp::sg::core::ObjectCode::MATRIX_CAMERA :
+      DP_ASSERT( child->getObjectCode() == dp::sg::core::ObjectCode::LIGHT_SOURCE );
       parent.staticCast<dp::sg::core::Camera>()->removeHeadLight( child.staticCast<dp::sg::core::LightSource>() );
       break;
-    case dp::sg::core::OC_PIPELINE_DATA :
+    case dp::sg::core::ObjectCode::PIPELINE_DATA :
       DP_ASSERT( child.isPtrTo<dp::sg::core::ParameterGroupData>() );
       {
         dp::sg::core::ParameterGroupDataSharedPtr const& pgd = child.staticCast<dp::sg::core::ParameterGroupData>();
@@ -276,7 +276,7 @@ bool remove( dp::sg::core::ObjectSharedPtr const& parent, dp::sg::core::ObjectSh
         parent.staticCast<dp::sg::core::PipelineData>()->setParameterGroupData( es->findParameterGroupSpec( pgd->getParameterGroupSpec() ), dp::sg::core::ParameterGroupDataSharedPtr() );
       }
       break;
-    case dp::sg::core::OC_SCENE :
+    case dp::sg::core::ObjectCode::SCENE :
       if ( child.isPtrTo<dp::sg::core::Camera>() )
       {
         DP_VERIFY( parent.staticCast<dp::sg::core::Scene>()->removeCamera( child.staticCast<dp::sg::core::Camera>() ) );

@@ -66,7 +66,7 @@ bool CommandReplaceItem::doReplace( SceneTreeItem * oldChild, SceneTreeItem * ne
 {
   switch( m_parent->getObject()->getObjectCode() )
   {
-    case OC_GEONODE :
+    case ObjectCode::GEO_NODE :
       DP_ASSERT( m_parent->getObject().staticCast<GeoNode>()->getMaterialPipeline() == oldChild->getObject().staticCast<dp::sg::core::PipelineData>() );
       if ( newChild->getObject().isPtrTo<dp::sg::core::PipelineData>() )
       {
@@ -78,11 +78,11 @@ bool CommandReplaceItem::doReplace( SceneTreeItem * oldChild, SceneTreeItem * ne
         m_parent->getObject().staticCast<GeoNode>()->setPrimitive( newChild->getObject().staticCast<Primitive>() );
       }
       break;
-    case OC_GROUP :
-    case OC_LOD :
-    case OC_SWITCH :
-    case OC_TRANSFORM :
-    case OC_BILLBOARD :
+    case ObjectCode::GROUP :
+    case ObjectCode::LOD :
+    case ObjectCode::SWITCH :
+    case ObjectCode::TRANSFORM :
+    case ObjectCode::BILLBOARD :
       {
         GroupSharedPtr const& g = m_parent->getObject().staticCast<Group>();
         if ( newChild->getObject().isPtrTo<Node>() )
@@ -99,7 +99,7 @@ bool CommandReplaceItem::doReplace( SceneTreeItem * oldChild, SceneTreeItem * ne
         }
       }
       break;
-    case OC_PRIMITIVE :
+    case ObjectCode::PRIMITIVE :
       if ( newChild->getObject().isPtrTo<IndexSet>() )
       {
         m_parent->getObject().staticCast<Primitive>()->setIndexSet( newChild->getObject().staticCast<IndexSet>() );
@@ -110,8 +110,8 @@ bool CommandReplaceItem::doReplace( SceneTreeItem * oldChild, SceneTreeItem * ne
         m_parent->getObject().staticCast<Primitive>()->setVertexAttributeSet( newChild->getObject().staticCast<VertexAttributeSet>() );
       }
       break;
-    case OC_PARAMETER_GROUP_DATA :
-      DP_ASSERT( newChild->getObject()->getObjectCode() == OC_SAMPLER );
+    case ObjectCode::PARAMETER_GROUP_DATA :
+      DP_ASSERT( newChild->getObject()->getObjectCode() == ObjectCode::SAMPLER );
       {
         ParameterGroupDataSharedPtr const& pgd = m_parent->getObject().staticCast<ParameterGroupData>();
         const dp::fx::ParameterGroupSpecSharedPtr & pgs = pgd->getParameterGroupSpec();
@@ -121,18 +121,18 @@ bool CommandReplaceItem::doReplace( SceneTreeItem * oldChild, SceneTreeItem * ne
         pgd->setParameter( it, newChild->getObject().staticCast<Sampler>() );
       }
       break;
-    case OC_PARALLELCAMERA :
-    case OC_PERSPECTIVECAMERA :
-    case OC_MATRIXCAMERA :
-      DP_ASSERT( m_newChild->getObject()->getObjectCode() == OC_LIGHT_SOURCE );
+    case ObjectCode::PARALLEL_CAMERA :
+    case ObjectCode::PERSPECTIVE_CAMERA :
+    case ObjectCode::MATRIX_CAMERA :
+      DP_ASSERT( m_newChild->getObject()->getObjectCode() == ObjectCode::LIGHT_SOURCE );
       m_parent->getObject().staticCast<Camera>()->replaceHeadLight( newChild->getObject().staticCast<LightSource>(), oldChild->getObject().staticCast<LightSource>() );
       break;
-    case OC_PIPELINE_DATA :
+    case ObjectCode::PIPELINE_DATA :
       DP_ASSERT( newChild->getObject().isPtrTo<ParameterGroupData>() );
       DP_ASSERT( newChild->getObject().staticCast<ParameterGroupData>()->getParameterGroupSpec() == oldChild->getObject().staticCast<ParameterGroupData>()->getParameterGroupSpec() );
       m_parent->getObject().staticCast<dp::sg::core::PipelineData>()->setParameterGroupData( newChild->getObject().staticCast<ParameterGroupData>() );
       break;
-    case OC_SCENE :
+    case ObjectCode::SCENE :
       if ( m_newChild->getObject().isPtrTo<Camera>() )
       {
         SceneSharedPtr const& s = m_parent->getObject().staticCast<Scene>();

@@ -54,13 +54,13 @@ namespace dp
 
       PerspectiveCamera::PerspectiveCamera(void)
       {
-        m_objectCode = OC_PERSPECTIVECAMERA;
+        m_objectCode = ObjectCode::PERSPECTIVE_CAMERA;
       }
 
       PerspectiveCamera::PerspectiveCamera( const PerspectiveCamera &rhs )
       : FrustumCamera(rhs)
       {
-        m_objectCode = OC_PERSPECTIVECAMERA;
+        m_objectCode = ObjectCode::PERSPECTIVE_CAMERA;
       }
 
       PerspectiveCamera::~PerspectiveCamera(void)
@@ -256,18 +256,18 @@ namespace dp
             ||  ( cl + sphere.getRadius() < 0.0f ) || ( cr + sphere.getRadius() < 0.0f )
             ||  ( cb + sphere.getRadius() < 0.0f ) || ( ct + sphere.getRadius() < 0.0f ) )
         {
-          cc = CC_OUT;
+          cc = CullCode::OUTSIDE;
         }
         else if (     ( 0.0f < - sphere.getCenter()[2] - getNearDistance() - sphere.getRadius() )
                   &&  ( 0.0f <   sphere.getCenter()[2] + getFarDistance()  - sphere.getRadius() )
                   &&  ( 0.0f < cl - sphere.getRadius() ) && ( 0.0f < cr - sphere.getRadius() )
                   &&  ( 0.0f < cb - sphere.getRadius() ) && ( 0.0f < ct - sphere.getRadius() ) )
         {
-          cc = CC_IN;
+          cc = CullCode::INSIDE;
         }
         else
         {
-          cc = CC_PART;
+          cc = CullCode::PARTIAL;
         }
 
         return( cc );

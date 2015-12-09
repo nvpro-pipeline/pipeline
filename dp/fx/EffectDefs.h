@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -33,28 +33,28 @@ namespace dp
   namespace fx
   {
 
-    enum Domain
+    enum class Domain
     {
         // GLSL
-        DOMAIN_VERTEX
-      , DOMAIN_TESSELLATION_CONTROL
-      , DOMAIN_TESSELLATION_EVALUATION
-      , DOMAIN_GEOMETRY
-      , DOMAIN_FRAGMENT
+        VERTEX
+      , TESSELLATION_CONTROL
+      , TESSELLATION_EVALUATION
+      , GEOMETRY
+      , FRAGMENT
       // Generic
-      , DOMAIN_PIPELINE
+      , PIPELINE
     };
-    
-    enum Manager
+
+    enum class Manager
     {   // GLSL
-        MANAGER_UNIFORM
-      , MANAGER_UNIFORM_BUFFER_OBJECT_RIX
-      , MANAGER_UNIFORM_BUFFER_OBJECT_RIX_FX
-      , MANAGER_SHADER_STORAGE_BUFFER_OBJECT
-      , MANAGER_SHADER_STORAGE_BUFFER_OBJECT_RIX
-      , MANAGER_SHADERBUFFER
+        UNIFORM
+      , UNIFORM_BUFFER_OBJECT_RIX
+      , UNIFORM_BUFFER_OBJECT_RIX_FX
+      , SHADER_STORAGE_BUFFER_OBJECT
+      , SHADER_STORAGE_BUFFER_OBJECT_RIX
+      , SHADERBUFFER
         // Unknown
-      , MANAGER_UNKNOWN
+      , UNKNOWN
     };
 
 
@@ -62,11 +62,11 @@ namespace dp
     {
       switch ( domain )
       {
-      case DOMAIN_VERTEX:                  return "vertex";
-      case DOMAIN_FRAGMENT:                return "fragment";
-      case DOMAIN_GEOMETRY:                return "geometry";
-      case DOMAIN_TESSELLATION_CONTROL:    return "tessellation_control";
-      case DOMAIN_TESSELLATION_EVALUATION: return "tessellation_evaluation";
+      case Domain::VERTEX:                  return "vertex";
+      case Domain::FRAGMENT:                return "fragment";
+      case Domain::GEOMETRY:                return "geometry";
+      case Domain::TESSELLATION_CONTROL:    return "tessellation_control";
+      case Domain::TESSELLATION_EVALUATION: return "tessellation_evaluation";
       // DAR FIXME Do I need the invented "light" domain here?
       default:                             return "unknown";
       }

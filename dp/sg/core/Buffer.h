@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010
+// Copyright (c) 2010-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -44,7 +44,7 @@ namespace dp
       class ReadLockImpl;
       class WriteLockImpl;
 
-      /** \brief Interface for buffers used as storage for SceniX. 
+      /** \brief Interface for buffers used as storage for SceniX.
        *  \sa BufferHost, BufferGL
       **/
       class Buffer : public HandledObject
@@ -54,7 +54,7 @@ namespace dp
         {
         public:
           Event( Buffer const* buffer )
-            : core::Event( core::Event::BUFFER )
+            : core::Event( core::Event::Type::BUFFER )
             , m_buffer( buffer)
           {
           }
@@ -79,12 +79,12 @@ namespace dp
         **/
         DP_SG_CORE_API virtual void getData( size_t src_offset, size_t length, void* dst_data ) const;
         DP_SG_CORE_API virtual void getData( size_t src_offset, size_t length, const BufferSharedPtr &dst_buffer , size_t dst_offset ) const;
-    
+
 
         /** \brief Retrieve the size of the Buffer
          **/
         DP_SG_CORE_API virtual size_t getSize() const = 0;
-    
+
         /** \brief Resize the Buffer. Any data currently stored in this buffer will be lost.
          \  \param New size for the buffer
         **/
@@ -99,7 +99,7 @@ namespace dp
         **/
         DP_SG_CORE_API bool isManagedBySystem() const;
 
-        /** \brief Object to acquire a thread-safe read access to the buffer's data. 
+        /** \brief Object to acquire a thread-safe read access to the buffer's data.
          *  \sa WriteLock
         **/
         class DataReadLock {
@@ -113,7 +113,7 @@ namespace dp
           **/
           DataReadLock() {};
           DataReadLock( const BufferSharedPtr &buffer) : m_lock( ReadLockImpl::create( buffer ) ) {}
-          DataReadLock( const BufferSharedPtr &buffer, size_t offset, size_t length) 
+          DataReadLock( const BufferSharedPtr &buffer, size_t offset, size_t length)
                              : m_lock( ReadLockImpl::create( buffer , offset, length) ) {}
           DataReadLock( const DataReadLock &rhs ) { m_lock = rhs.m_lock; }
           DataReadLock &operator=( const DataReadLock &rhs ) { m_lock = rhs.m_lock; return *this;}
@@ -146,7 +146,7 @@ namespace dp
           ReadLockImplSharedPtr m_lock;
         };
 
-        /** \brief Object to acquire a thread-safe write, read or read-write access to the buffer's data. 
+        /** \brief Object to acquire a thread-safe write, read or read-write access to the buffer's data.
          *  \sa ReadLock
         **/
         class DataWriteLock {
@@ -157,7 +157,7 @@ namespace dp
               \param mapMode desired MapMode to the buffer.
               \param offset in bytes to start map from
               \param length in bytes for the mapped range
-              \note Mapping with \c MAP_WRITE must not be used to retrieve data, and when using \c MAP_READ 
+              \note Mapping with \c MAP_WRITE must not be used to retrieve data, and when using \c MAP_READ
               you must not write data. Both operations are legal on the C++ side as you get a non-const pointer
               when mapping, but are illegal for the system's integrity. Buffer implementations will have undefined behavior
               when you use the MapMode wrongly.
@@ -239,7 +239,7 @@ namespace dp
             \param mode desired MapMode to the buffer
             \param offset in bytes to start map from
             \param length in bytes for the mapped range
-            \note Mapping with \c MAP_WRITE must not be used to retrieve data, and when using \c MAP_READ 
+            \note Mapping with \c MAP_WRITE must not be used to retrieve data, and when using \c MAP_READ
             you must not write data. Both operations are legal on the C++ side as you get a non-const pointer
             when mapping, but are illegal for the system's integrity. Buffer implementations will have undefined behavior
             when you use the MapMode wrongly.
@@ -250,7 +250,7 @@ namespace dp
         DP_SG_CORE_API virtual const void *mapRead() const; // map entire range on const object
         DP_SG_CORE_API virtual const void *mapRead( size_t offset, size_t length ) const = 0; // map on const object
 
-  
+
         /** \Brief Unmap the previously mapped buffer
          *  \sa map
          **/
@@ -419,7 +419,7 @@ namespace dp
         m_ptr = m_buffer->lock( mapMode );
       }
 
-      inline Buffer::DataWriteLock::WriteLockImpl::WriteLockImpl( const BufferSharedPtr &buffer, Buffer::MapMode mapMode, 
+      inline Buffer::DataWriteLock::WriteLockImpl::WriteLockImpl( const BufferSharedPtr &buffer, Buffer::MapMode mapMode,
                                                               size_t offset, size_t length)
         : m_buffer( buffer )
         , m_ptr(0)

@@ -275,13 +275,13 @@ dp::culling::Mode getCullingMode( std::string const& name )
 {
   static const std::map<std::string,dp::culling::Mode> cullingModes =
   {
-    { "cpu",        dp::culling::MODE_CPU             },
-    { "gl_compute", dp::culling::MODE_OPENGL_COMPUTE  },
-    { "cuda",       dp::culling::MODE_CUDA            },
-    { "auto",       dp::culling::MODE_AUTO            }
+    { "cpu",        dp::culling::Mode::CPU             },
+    { "gl_compute", dp::culling::Mode::OPENGL_COMPUTE  },
+    { "cuda",       dp::culling::Mode::CUDA            },
+    { "auto",       dp::culling::Mode::AUTO            }
   };
 
-  dp::culling::Mode mode = dp::culling::MODE_AUTO;
+  dp::culling::Mode mode = dp::culling::Mode::AUTO;
   std::map<std::string,dp::culling::Mode>::const_iterator it = cullingModes.find( name );
   if ( it != cullingModes.end() )
   {
@@ -289,7 +289,7 @@ dp::culling::Mode getCullingMode( std::string const& name )
   }
   else
   {
-    std::cerr << "Unknown culling mode <" << name << ">. Using MODE_AUTO instead.\n";
+    std::cerr << "Unknown culling mode <" << name << ">. Using Mode::AUTO instead.\n";
     DP_ASSERT( !"Unknown culling mode" );
   }
   return( mode );
@@ -299,14 +299,14 @@ dp::fx::Manager getShaderManager( std::string const& name )
 {
   static const std::map<std::string,dp::fx::Manager> shaderManagers =
   {
-    { "rix:ubo140",             dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX     },
-    { "rixfx:uniform",          dp::fx::MANAGER_UNIFORM                       },
-    { "rixfx:shaderbufferload", dp::fx::MANAGER_SHADERBUFFER                  },
-    { "rixfx:ubo140",           dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX_FX  },
-    { "rixfx:ssbo140",          dp::fx::MANAGER_SHADER_STORAGE_BUFFER_OBJECT  }
+    { "rix:ubo140",             dp::fx::Manager::UNIFORM_BUFFER_OBJECT_RIX     },
+    { "rixfx:uniform",          dp::fx::Manager::UNIFORM                       },
+    { "rixfx:shaderbufferload", dp::fx::Manager::SHADERBUFFER                  },
+    { "rixfx:ubo140",           dp::fx::Manager::UNIFORM_BUFFER_OBJECT_RIX_FX  },
+    { "rixfx:ssbo140",          dp::fx::Manager::SHADER_STORAGE_BUFFER_OBJECT  }
   };
 
-  dp::fx::Manager manager = dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX;
+  dp::fx::Manager manager = dp::fx::Manager::UNIFORM_BUFFER_OBJECT_RIX;
   std::map<std::string,dp::fx::Manager>::const_iterator it = shaderManagers.find( name );
   if ( it != shaderManagers.end() )
   {
@@ -314,7 +314,7 @@ dp::fx::Manager getShaderManager( std::string const& name )
   }
   else
   {
-    std::cerr << "Unknown shader manager <" << name << ">. Using MANAGER_UNIFORM_BUFFER_OBJECT_RIX instead.\n";
+    std::cerr << "Unknown shader manager <" << name << ">. Using Manager::UNIFORM_BUFFER_OBJECT_RIX instead.\n";
     DP_ASSERT( !"Unknown shader manager" );
   }
   return( manager );
@@ -555,7 +555,7 @@ int runApp( int argc, char *argv[], options::variables_map const& opts )
 
   {
     // Replace MatrixCamera by PerspectiveCamera to get all manipulator features
-    if ( viewState->getCamera()->getObjectCode() == dp::sg::core::OC_MATRIXCAMERA )
+    if ( viewState->getCamera()->getObjectCode() == dp::sg::core::ObjectCode::MATRIX_CAMERA )
     {
       dp::sg::core::PerspectiveCameraSharedPtr perspectiveCamera = dp::sg::core::PerspectiveCamera::create();
       perspectiveCamera->setOrientation(viewState->getCamera()->getOrientation());

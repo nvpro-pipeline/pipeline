@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -39,12 +39,12 @@ namespace dp
       {
         switch (managerType)
         {
-        case dp::fx::MANAGER_UNIFORM:
-        case dp::fx::MANAGER_SHADERBUFFER:
-        case dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX:
-        case dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX_FX:
-        case dp::fx::MANAGER_SHADER_STORAGE_BUFFER_OBJECT:
-        case dp::fx::MANAGER_SHADER_STORAGE_BUFFER_OBJECT_RIX:
+        case dp::fx::Manager::UNIFORM:
+        case dp::fx::Manager::SHADERBUFFER:
+        case dp::fx::Manager::UNIFORM_BUFFER_OBJECT_RIX:
+        case dp::fx::Manager::UNIFORM_BUFFER_OBJECT_RIX_FX:
+        case dp::fx::Manager::SHADER_STORAGE_BUFFER_OBJECT:
+        case dp::fx::Manager::SHADER_STORAGE_BUFFER_OBJECT_RIX:
           return ManagerUniform::create( rdr, managerType );
         default:
           DP_ASSERT(0 && "unsupported manager");

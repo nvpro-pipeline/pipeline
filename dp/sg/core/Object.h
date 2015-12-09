@@ -54,28 +54,28 @@ namespace dp
 
       /*! \brief Object Codes for DPSg Object Type Identification
         */
-      enum ObjectCode
+      enum class ObjectCode
       {
-          OC_BILLBOARD            //!< Billboard
-        , OC_CLIPPLANE            //!< ClipPlane
-        , OC_GEONODE              //!< GeoNode
-        , OC_GROUP                //!< Group
-        , OC_INDEX_SET            //!< IndexSet
-        , OC_LIGHT_SOURCE         //!< LightSource
-        , OC_LOD                  //!< LOD
-        , OC_MATRIXCAMERA         //!< Matrix Camera
-        , OC_PARALLELCAMERA       //!< ParallelCamera
-        , OC_PARAMETER_GROUP_DATA //!< ParameterGroupData
-        , OC_PERSPECTIVECAMERA    //!< PerspectiveCamera
-        , OC_PRIMITIVE            //!< Generic Primitive
-        , OC_PIPELINE_DATA        //!< PipelineData
-        , OC_SAMPLER              //!< Sampler
-        , OC_SCENE                //!< Scene
-        , OC_SWITCH               //!< Switch
-        , OC_TRANSFORM            //!< Transform
-        , OC_VERTEX_ATTRIBUTE_SET //!< VertexAttributeSet
+          BILLBOARD            //!< Billboard
+        , CLIP_PLANE           //!< ClipPlane
+        , GEO_NODE             //!< GeoNode
+        , GROUP                //!< Group
+        , INDEX_SET            //!< IndexSet
+        , LIGHT_SOURCE         //!< LightSource
+        , LOD                  //!< LOD
+        , MATRIX_CAMERA        //!< Matrix Camera
+        , PARALLEL_CAMERA      //!< ParallelCamera
+        , PARAMETER_GROUP_DATA //!< ParameterGroupData
+        , PERSPECTIVE_CAMERA   //!< PerspectiveCamera
+        , PRIMITIVE            //!< Generic Primitive
+        , PIPELINE_DATA        //!< PipelineData
+        , SAMPLER              //!< Sampler
+        , SCENE                //!< Scene
+        , SWITCH               //!< Switch
+        , TRANSFORM            //!< Transform
+        , VERTEX_ATTRIBUTE_SET //!< VertexAttributeSet
 
-        , OC_INVALID              //!< invalid object code
+        , INVALID              //!< invalid object code
       };
 
       DP_SG_CORE_API std::string objectCodeToName( ObjectCode oc );
@@ -199,7 +199,7 @@ namespace dp
           * \param
           * oc %Object code for which to retrieve the associated higher-level object code.
           * \return
-          * The default implementation returns OC_INVALID, which causes the traverser framework to
+          * The default implementation returns ObjectCode::INVALID, which causes the traverser framework to
           * immediately proceed without handling the object when it comes across an unknown object code.
           * \remarks
           * This function will be called from the object traverser framework if the object code \a oc
@@ -208,17 +208,17 @@ namespace dp
           * \n\n
           * The framework expects this function to return a higher-level object code in terms of a
           * custom object hierarchy. The function will be repeatedly called with the returned
-          * higher-level object code, until either a known object code or OC_INVALID will be returned.
+          * higher-level object code, until either a known object code or ObjectCode::INVALID will be returned.
           * That is - by repeatedly calling this function, the traverser framework moves up the custom
           * object hierarchy to find an object for which a handler function was registered. If the
           * traverser framework recognizes a known object code, it calls the appropriate handler
-          * function and proceeds. If OC_INVALID was returned, the traverser framework proceeds without
+          * function and proceeds. If ObjectCode::INVALID was returned, the traverser framework proceeds without
           * handling the object.
           * \n\n
           * The runtime behavior is undefined if the function returns an object code of an object that
           * is not part of the object hierarchy of the primary object!
           * \n\n
-          * The framework might end up in a deadlock if the function never returns either OC_INVALID or
+          * The framework might end up in a deadlock if the function never returns either ObjectCode::INVALID or
           * an object code of a concrete object known by the traverser!
           * \sa Object::getObjectCode
           */
@@ -480,7 +480,7 @@ namespace dp
       {
       public:
         Event( Object const* object )
-          : core::Event( core::Event::OBJECT )
+          : core::Event( core::Event::Type::OBJECT )
           , m_object( object )
         {
         }

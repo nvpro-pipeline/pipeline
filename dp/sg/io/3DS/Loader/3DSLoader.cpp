@@ -376,7 +376,7 @@ ThreeDSLoader::buildTree(GroupSharedPtr const& parent, Lib3dsNode *n, Vec3f &piv
           anim->setName(mnode->instance_name);
 
           // construct the animation for this group
-          constructAnimation(anim,piv,thisPivot,pTrack,rTrack,sTrack,NULL,P_TRACK|R_TRACK|S_TRACK);
+          constructAnimation(anim,piv,thisPivot,pTrack,rTrack,sTrack,NULL,ThreeDSAnimFlags::P_TRACK|ThreeDSAnimFlags::R_TRACK|ThreeDSAnimFlags::S_TRACK);
 
           // add this transform as a child to the group above
           parent->addChild( hAnim );
@@ -424,7 +424,7 @@ ThreeDSLoader::buildTree(GroupSharedPtr const& parent, Lib3dsNode *n, Vec3f &piv
 
           // do the actual trafo construction for this animation
           constructAnimation(anim, piv, thisPivot,
-                             &mnode->pos_track,&mnode->rot_track,&mnode->scl_track,NULL,P_TRACK|R_TRACK|S_TRACK);
+                             &mnode->pos_track,&mnode->rot_track,&mnode->scl_track,NULL,ThreeDSAnimFlags::P_TRACK|ThreeDSAnimFlags::R_TRACK|ThreeDSAnimFlags::S_TRACK);
 
           // only add this GeoNode if it has geometric data (vertices, faces, etc)
           if(hadGeometry)
@@ -605,7 +605,7 @@ ThreeDSLoader::configureCamera( GroupSharedPtr const& parent, Lib3dsNode *n, Vec
 
     // calculate all the animation trafos for this camera
     Vec3f emptyPivot (0,0,0);
-    constructAnimation(anim,piv,emptyPivot,&pTrack,NULL,NULL,&rollTrack, P_TRACK | ROLL_TRACK);
+    constructAnimation(anim,piv,emptyPivot,&pTrack,NULL,NULL,&rollTrack, ThreeDSAnimFlags::P_TRACK | ThreeDSAnimFlags::ROLL_TRACK);
 
     // add this AnimatedTransform to the global camera location list to be postprocessed later
     m_camLocationList[n->name] = hAnim.getWeakPtr();
@@ -703,7 +703,7 @@ ThreeDSLoader::configurePointlight( GroupSharedPtr const& parent, Lib3dsNode *n,
 
     // construct the animation trafos for this point light
     Vec3f emptyPivot (0,0,0);
-    constructAnimation(anim,piv,emptyPivot,&pTrack,NULL,NULL,NULL,P_TRACK);
+    constructAnimation(anim,piv,emptyPivot,&pTrack,NULL,NULL,NULL,ThreeDSAnimFlags::P_TRACK);
 
     // add the light to the Transform
     anim->addChild( pointLight );
@@ -811,7 +811,7 @@ ThreeDSLoader::configureSpotlight( GroupSharedPtr const& parent, Lib3dsNode *n, 
 
     // calculate all the animation trafos for this spotlight
     Vec3f emptyPivot (0,0,0);
-    constructAnimation(anim,piv,emptyPivot,&pTrack,NULL,NULL,NULL, P_TRACK );
+    constructAnimation(anim,piv,emptyPivot,&pTrack,NULL,NULL,NULL, ThreeDSAnimFlags::P_TRACK );
 
     // add this AnimatedTransform to the global spotlight location list to be postprocessed later
     m_spotLocationList[n->name] = hAnim.getWeakPtr();
@@ -881,7 +881,7 @@ ThreeDSLoader::configureTarget( GroupSharedPtr const& parent, Lib3dsNode *n, Vec
       anim->setName(std::string(n->name) + " target");
 
       Vec3f emptyPivot (0,0,0);
-      constructAnimation(anim, piv, emptyPivot, &pTrack, NULL, NULL, NULL, P_TRACK);
+      constructAnimation(anim, piv, emptyPivot, &pTrack, NULL, NULL, NULL, ThreeDSAnimFlags::P_TRACK);
 
       if(isCamera) // we're dealing with a camera
       {
@@ -1043,10 +1043,10 @@ ThreeDSLoader::constructAnimation( AnimatedTransform *anim, Vec3f &parentPivot, 
   Vec3f accumPivot = pivot - parentPivot;
 
   // determine which types of animation we are including
-  bool position = (flags & P_TRACK) != 0;
-  bool rotation = (flags & R_TRACK) != 0;
-  bool scale = (flags & S_TRACK) != 0;
-  bool roll = (flags & ROLL_TRACK) != 0;
+  bool position = (flags & ThreeDSAnimFlags::P_TRACK) != 0;
+  bool rotation = (flags & ThreeDSAnimFlags::R_TRACK) != 0;
+  bool scale = (flags & ThreeDSAnimFlags::S_TRACK) != 0;
+  bool roll = (flags & ThreeDSAnimFlags::ROLL_TRACK) != 0;
 
   // pointers to the current and next frames of each animation type
   Lib3dsKey *pKey,*pNext;

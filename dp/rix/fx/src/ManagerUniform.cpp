@@ -90,7 +90,7 @@ namespace dp
                                       , SourceFragments const & sourceFragments )
       {
         DP_ASSERT( manager && effectSpec );
-        DP_ASSERT( effectSpec->getType() == dp::fx::EffectSpec::EST_PIPELINE );
+        DP_ASSERT( effectSpec->getType() == dp::fx::EffectSpec::Type::PIPELINE );
         DP_ASSERT( userDescriptors || numDescriptors == 0 );
 
         {
@@ -107,8 +107,8 @@ namespace dp
           dp::fx::ShaderPipelineSharedPtr shaderPipeline = dp::fx::EffectLibrary::instance()->generateShaderPipeline( configuration );
 
 #if !defined(NDEBUG)
-          const dp::fx::ShaderPipeline::iterator itStageVertex   = shaderPipeline->getStage( dp::fx::DOMAIN_VERTEX );
-          const dp::fx::ShaderPipeline::iterator itStageFragment = shaderPipeline->getStage( dp::fx::DOMAIN_FRAGMENT );
+          const dp::fx::ShaderPipeline::iterator itStageVertex   = shaderPipeline->getStage( dp::fx::Domain::VERTEX );
+          const dp::fx::ShaderPipeline::iterator itStageFragment = shaderPipeline->getStage( dp::fx::Domain::FRAGMENT );
 
           DP_ASSERT( itStageVertex   != shaderPipeline->endStages() );
           DP_ASSERT( itStageFragment != shaderPipeline->endStages() );
@@ -125,19 +125,19 @@ namespace dp
 
             switch ( (*it).domain )
             {
-            case dp::fx::DOMAIN_VERTEX:
+            case dp::fx::Domain::VERTEX:
               shaderEnums.push_back( dp::rix::core::ST_VERTEX_SHADER );
               break;
-            case dp::fx::DOMAIN_FRAGMENT:
+            case dp::fx::Domain::FRAGMENT:
               shaderEnums.push_back( dp::rix::core::ST_FRAGMENT_SHADER );
               break;
-            case dp::fx::DOMAIN_GEOMETRY:
+            case dp::fx::Domain::GEOMETRY:
               shaderEnums.push_back( dp::rix::core::ST_GEOMETRY_SHADER );
               break;
-            case dp::fx::DOMAIN_TESSELLATION_CONTROL:
+            case dp::fx::Domain::TESSELLATION_CONTROL:
               shaderEnums.push_back( dp::rix::core::ST_TESS_CONTROL_SHADER );
               break;
-            case dp::fx::DOMAIN_TESSELLATION_EVALUATION:
+            case dp::fx::Domain::TESSELLATION_EVALUATION:
               shaderEnums.push_back( dp::rix::core::ST_TESS_EVALUATION_SHADER );
               break;
             default:
@@ -452,15 +452,15 @@ namespace dp
         dp::fx::ParameterGroupLayoutSharedPtr layout = pgsi->m_groupLayout;
         switch( layout->getManager() )
         {
-        case dp::fx::MANAGER_UNIFORM:
-        case dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX:
-        case dp::fx::MANAGER_SHADER_STORAGE_BUFFER_OBJECT_RIX:
+        case dp::fx::Manager::UNIFORM:
+        case dp::fx::Manager::UNIFORM_BUFFER_OBJECT_RIX:
+        case dp::fx::Manager::SHADER_STORAGE_BUFFER_OBJECT_RIX:
           return new GroupDataUniform( this, pgsi );
 
-        case dp::fx::MANAGER_SHADERBUFFER:
+        case dp::fx::Manager::SHADERBUFFER:
           return new GroupDataBufferedCombined( this, pgsi );
 
-        case dp::fx::MANAGER_SHADER_STORAGE_BUFFER_OBJECT:
+        case dp::fx::Manager::SHADER_STORAGE_BUFFER_OBJECT:
           if ( layout->isInstanced() )
           {
             return new GroupDataBufferedCombined( this, pgsi );
@@ -469,7 +469,7 @@ namespace dp
           {
             return new GroupDataBuffered( this, pgsi );
           }
-        case dp::fx::MANAGER_UNIFORM_BUFFER_OBJECT_RIX_FX:
+        case dp::fx::Manager::UNIFORM_BUFFER_OBJECT_RIX_FX:
           return new GroupDataBufferedCombined( this, pgsi );
 
         default:
@@ -520,7 +520,7 @@ namespace dp
         if ( it == m_programs.end() )
         {
           dp::rix::fx::ProgramSharedHandle handle;
-          DP_ASSERT( m_managerType != dp::fx::MANAGER_UNKNOWN );
+          DP_ASSERT( m_managerType != dp::fx::Manager::UNKNOWN );
           if ( dp::fx::EffectLibrary::instance()->effectHasTechnique( effectSpec, technique, true ) )
           {
             handle = new ManagerUniform::Program( this, effectSpec, systemSpecs, technique, userDescriptors, numDescriptors, sourceFragments );
@@ -536,7 +536,7 @@ namespace dp
                                                                            , dp::rix::fx::Manager::SystemSpecs const & systemSpecs
                                                                            , SourceFragments const & sourceFragments ) const
       {
-        DP_ASSERT( effectSpec->getType() == dp::fx::EffectSpec::EST_PIPELINE );
+        DP_ASSERT( effectSpec->getType() == dp::fx::EffectSpec::Type::PIPELINE );
 
         dp::fx::ShaderPipelineConfiguration configuration( effectSpec->getName() );
 

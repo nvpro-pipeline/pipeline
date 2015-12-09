@@ -68,7 +68,7 @@ namespace dp
       Transform::Transform( void )
       : m_jointCount(0)
       {
-        m_objectCode = OC_TRANSFORM;
+        m_objectCode = ObjectCode::TRANSFORM;
       }
 
       Transform::Transform( const Transform &rhs )
@@ -76,7 +76,7 @@ namespace dp
       , m_trafo(rhs.m_trafo)
       , m_jointCount(0)
       {
-        m_objectCode = OC_TRANSFORM;
+        m_objectCode = ObjectCode::TRANSFORM;
       }
 
       Transform::~Transform( void )

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -107,7 +107,7 @@ namespace dp
         float ValenceBoostScale;
         float ValenceBoostPower;
 
-        enum Result
+        enum class Result
         {
           Success = 0,
           Fail_BadIndex,
@@ -116,7 +116,7 @@ namespace dp
 
         static bool Failed(Result r)
         {
-          return r != Success;
+          return r != Result::Success;
         }
 
       protected:
@@ -137,7 +137,7 @@ namespace dp
             // No tri needs this vertex!
             return -1.0f;
           }
-     
+
           float ret = 0.0f;
           if (v->position_in_cache < 0)
           {
@@ -162,12 +162,12 @@ namespace dp
               ret = powf(ret, CacheDecayPower);
             }
           }
-     
+
           // Bonus points for having a low number of tris still to
           // use the vert, so we get rid of lone verts quickly.
           float valence_boost = powf((float)v->remaining_valence, -ValenceBoostPower);
           ret += ValenceBoostScale * valence_boost;
-     
+
           return ret;
         }
 
@@ -214,12 +214,12 @@ namespace dp
             int index = inds[i];
             if (index < 0 || index >= (int)verts.size())
             {
-              return Fail_BadIndex;
+              return Result::Fail_BadIndex;
             }
 
             verts[index].total_valence++;
             verts[index].remaining_valence++;
-        
+
             verts[index].tri_indices.push_back(i/3);
           }
 
@@ -233,7 +233,7 @@ namespace dp
             triScoreMap[tris[i].current_score].insert( i );
           }
 
-          return Success;
+          return Result::Success;
         }
 
         Result Init(int *inds, int tri_count, int vertex_count)
@@ -427,7 +427,7 @@ namespace dp
           ValenceBoostScale = 2.0f;
           ValenceBoostPower = 0.5f;
         }
-    
+
         // stores new indices in place
         Result Optimize(int *inds, int tri_count)
         {
@@ -438,10 +438,10 @@ namespace dp
             if (inds[i] > max_vert) max_vert = inds[i];
           }
 
-          if (max_vert == -1) return Fail_NoVerts;
+          if (max_vert == -1) return Result::Fail_NoVerts;
 
           Result res = Init(inds, tri_count, max_vert + 1);
-          if (res) return res;
+          if (res != Result::Success) return res;
 
           // iterate until Iterate returns false
           while (Iterate());
@@ -454,7 +454,7 @@ namespace dp
             inds[3 * i + 2] = tris[draw_list[i]].verts[2];
           }
 
-          return Success;
+          return Result::Success;
         }
       };
 

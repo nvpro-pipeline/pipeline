@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2015
+// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -64,7 +64,7 @@ namespace dp
       , m_normalizeEnableFlags(0)
       {
         m_bufferObserver.setVertexAttributeSet( this );
-        m_objectCode = OC_VERTEX_ATTRIBUTE_SET;
+        m_objectCode = ObjectCode::VERTEX_ATTRIBUTE_SET;
       }
 
       VertexAttributeSet::VertexAttributeSet(const VertexAttributeSet& rhs)
@@ -74,7 +74,7 @@ namespace dp
       , m_vattribs(rhs.m_vattribs)
       {
         m_bufferObserver.setVertexAttributeSet( this );
-        m_objectCode = OC_VERTEX_ATTRIBUTE_SET;
+        m_objectCode = ObjectCode::VERTEX_ATTRIBUTE_SET;
       }
 
       VertexAttributeSet::~VertexAttributeSet()
@@ -88,7 +88,7 @@ namespace dp
       {
         DP_ASSERT( ( DP_SG_POSITION <= attrib ) && ( attrib <= DP_SG_ATTR15 ) ); // undefined behavior on invalid attrib
 
-        // we alias generic and conventional vertex attributes, that is - 
+        // we alias generic and conventional vertex attributes, that is -
         // pairs of generic and conventional vertex attributes are sharing the same storage
         unsigned int attrIndex = attribIndex(attrib);
 
@@ -125,7 +125,7 @@ namespace dp
         DP_ASSERT( ( DP_SG_POSITION <= attrib ) && ( attrib <= DP_SG_ATTR15 ) );
         DP_ASSERT( ( dp::DataType::INT_8 <= type ) && ( type <= dp::DataType::NUM_DATATYPES ) );
 
-        // we alias generic and conventional vertex attributes, that is - 
+        // we alias generic and conventional vertex attributes, that is -
         // pairs of generic and conventional vertex attributes are sharing the same storage
         unsigned int attrIndex = attribIndex(attrib);
 
@@ -157,7 +157,7 @@ namespace dp
         DP_ASSERT( ( dp::DataType::INT_8 <= type ) && ( type <= dp::DataType::NUM_DATATYPES ) );
         DP_ASSERT( data );
 
-        // we alias generic and conventional vertex attributes, that is - 
+        // we alias generic and conventional vertex attributes, that is -
         // pairs of generic and conventional vertex attributes are sharing the same storage
         unsigned int attrIndex = attribIndex(attrib);
 
@@ -190,7 +190,7 @@ namespace dp
         DP_ASSERT( ( dp::DataType::INT_8 <= type ) && ( type <= dp::DataType::NUM_DATATYPES ) );
         DP_ASSERT( data );
 
-        // we alias generic and conventional vertex attributes, that is - 
+        // we alias generic and conventional vertex attributes, that is -
         // pairs of generic and conventional vertex attributes are sharing the same storage
         unsigned int attrIndex = attribIndex(attrib);
 
@@ -231,7 +231,7 @@ namespace dp
         DP_ASSERT( ( dp::DataType::INT_8 <= type ) && ( type <= dp::DataType::NUM_DATATYPES ) );
         DP_ASSERT( buffer );
 
-        // we alias generic and conventional vertex attributes, that is - 
+        // we alias generic and conventional vertex attributes, that is -
         // pairs of generic and conventional vertex attributes are sharing the same storage
         unsigned int attrIndex = attribIndex(attrib);
 
@@ -268,8 +268,8 @@ namespace dp
         DP_ASSERT( from );
         DP_ASSERT( ( dp::DataType::INT_8 <= type ) && ( type <= dp::DataType::NUM_DATATYPES ) );
         DP_ASSERT( data );
-  
-        // we alias generic and conventional vertex attributes, that is - 
+
+        // we alias generic and conventional vertex attributes, that is -
         // pairs of generic and conventional vertex attributes are sharing the same storage
         unsigned int attrIndex = attribIndex(attrib);
 
@@ -334,9 +334,9 @@ namespace dp
       {
         DP_ASSERT( ( DP_SG_POSITION <= attrib ) && ( attrib <= DP_SG_ATTR15 ) ); // undefined behavior on invalid attrib
 
-        // we alias generic and conventional vertex attributes, that is - 
+        // we alias generic and conventional vertex attributes, that is -
         // pairs of generic and conventional vertex attributes are sharing the same storage
-        unsigned int attrIndex = attribIndex(attrib); 
+        unsigned int attrIndex = attribIndex(attrib);
 
         AttributeContainer::iterator it = m_vattribs.find( attrIndex );
         if ( it != m_vattribs.end() )
@@ -357,9 +357,9 @@ namespace dp
       {
         DP_ASSERT( ( DP_SG_POSITION <= attrib ) && ( attrib <= DP_SG_ATTR15 ) ); // undefined behavior on invalid attrib
 
-        // we alias generic and conventional vertex attributes, that is - 
+        // we alias generic and conventional vertex attributes, that is -
         // pairs of generic and conventional vertex attributes are sharing the same storage
-        unsigned int attrIndex = attribIndex(attrib); 
+        unsigned int attrIndex = attribIndex(attrib);
         AttributeContainer::const_iterator it = m_vattribs.find( attrIndex );
         DP_ASSERT( it != m_vattribs.end() );
 
@@ -372,7 +372,7 @@ namespace dp
 
       const BufferSharedPtr & VertexAttributeSet::getVertexBuffer(unsigned int attrib) const
       {
-        unsigned int attrIndex = attribIndex(attrib); 
+        unsigned int attrIndex = attribIndex(attrib);
         AttributeContainer::const_iterator it = m_vattribs.find( attrIndex );
         DP_ASSERT( it != m_vattribs.end() );
         return( it->second.getBuffer() );
@@ -816,10 +816,10 @@ namespace dp
             Buffer::DataReadLock lock( oldData );
 
             unsigned int size = from->getSizeOfVertexData( slot );
-            dp::DataType type = from->getTypeOfVertexData( slot ); 
+            dp::DataType type = from->getTypeOfVertexData( slot );
 
             to->setVertexData( slot, NULL, &iFrom[0], size, type, lock.getPtr()
-                                , from->getStrideOfVertexData( slot ) 
+                                , from->getStrideOfVertexData( slot )
                                 , dp::checked_cast<unsigned int>(iFrom.size()) );
 
             // inherit enable states from source attrib
@@ -862,7 +862,7 @@ namespace dp
             Buffer::DataReadLock lock( oldData );
 
             unsigned int size = from->getSizeOfVertexData( slot );
-            dp::DataType type = from->getTypeOfVertexData( slot ); 
+            dp::DataType type = from->getTypeOfVertexData( slot );
 
             to->setVertexData( slot, NULL, &iFrom[0], size, type, lock.getPtr()
                              , from->getStrideOfVertexData( slot )
@@ -957,7 +957,7 @@ namespace dp
 
             Buffer::DataReadLock drl(attributeOld.getBuffer());
             Buffer::DataWriteLock dwl(attributeNew.getBuffer(), Buffer::MAP_READWRITE );
-            dp::util::stridedMemcpy( dwl.getPtr(), attributeNew.getVertexDataOffsetInBytes(), attributeNew.getVertexDataStrideInBytes(), 
+            dp::util::stridedMemcpy( dwl.getPtr(), attributeNew.getVertexDataOffsetInBytes(), attributeNew.getVertexDataStrideInBytes(),
               drl.getPtr(), attributeOld.getVertexDataOffsetInBytes(), attributeOld.getVertexDataStrideInBytes(),
               attributeOld.getVertexDataBytes(), numberOfVertices
               );

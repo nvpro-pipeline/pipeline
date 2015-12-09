@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -59,9 +59,9 @@ namespace dp
     {
       return m_stages.end();
     }
-    
+
     ShaderPipeline::iterator ShaderPipeline::getStage( Domain domain )
-    { 
+    {
       return std::find_if( beginStages(), endStages(), boost::bind( &Stage::domain, _1) == domain);
     }
 
@@ -70,7 +70,7 @@ namespace dp
     /************************************************************************/
 
     ShaderPipelineConfiguration::ShaderPipelineConfiguration( std::string const& name )
-      : m_manager( MANAGER_UNIFORM )
+      : m_manager( Manager::UNIFORM )
       , m_name( name )
     {
     }
@@ -82,7 +82,7 @@ namespace dp
 
     void ShaderPipelineConfiguration::addEffectSpec( Domain domain, EffectSpecSharedPtr const& effectSpec, EffectSpecSharedPtr const& systemSpec )
     {
-      DP_ASSERT( !effectSpec || ( effectSpec->getType() != EffectSpec::EST_PIPELINE ) );
+      DP_ASSERT( !effectSpec || ( effectSpec->getType() != EffectSpec::Type::PIPELINE ) );
       if ( effectSpec || systemSpec )
       {
         m_effectSpecPerDomain[domain] = SpecInfo( effectSpec, systemSpec );
@@ -121,7 +121,7 @@ namespace dp
     {
       m_technique = technique;
     }
-    
+
     std::string const& ShaderPipelineConfiguration::getTechnique() const
     {
       return m_technique;
@@ -168,17 +168,17 @@ namespace dp
     {
       switch ( manager )
       {
-      case MANAGER_UNIFORM:
+      case Manager::UNIFORM:
         return dp::fx::glsl::UniformGeneratorGLSLStandard().getParameterGroupLayout(spec);
-      case MANAGER_SHADERBUFFER:
+      case Manager::SHADERBUFFER:
         return dp::fx::glsl::UniformGeneratorGLSLShaderBufferLoad().getParameterGroupLayout(spec);
-      case MANAGER_UNIFORM_BUFFER_OBJECT_RIX_FX:
+      case Manager::UNIFORM_BUFFER_OBJECT_RIX_FX:
         return dp::fx::glsl::UniformGeneratorUBOStd140(true).getParameterGroupLayout(spec);
-      case MANAGER_UNIFORM_BUFFER_OBJECT_RIX:
+      case Manager::UNIFORM_BUFFER_OBJECT_RIX:
         return dp::fx::glsl::UniformGeneratorUBOStd140(false).getParameterGroupLayout(spec);
-      case MANAGER_SHADER_STORAGE_BUFFER_OBJECT:
+      case Manager::SHADER_STORAGE_BUFFER_OBJECT:
         return dp::fx::glsl::UniformGeneratorSSBOStd140(true).getParameterGroupLayout(spec);
-      case MANAGER_SHADER_STORAGE_BUFFER_OBJECT_RIX:
+      case Manager::SHADER_STORAGE_BUFFER_OBJECT_RIX:
         return dp::fx::glsl::UniformGeneratorSSBOStd140(false).getParameterGroupLayout(spec);
       default:
         DP_ASSERT(!"Unsupported manager");
@@ -189,5 +189,4 @@ namespace dp
 
   } // fx
 } // dp
-
 
