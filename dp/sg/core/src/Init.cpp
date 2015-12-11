@@ -53,10 +53,23 @@ namespace dp
 
         dp::util::FileFinder fileFinder( dp::home() + "/media/dpfx" );
 
-        success &= dp::fx::EffectLibrary::instance()->loadEffects( dp::home() + "/media/effects/xml/standard_lights.xml", fileFinder );
-        success &= dp::fx::EffectLibrary::instance()->loadEffects( dp::home() + "/media/effects/xml/standard_material.xml", fileFinder );
-        success &= dp::fx::EffectLibrary::instance()->loadEffects( dp::home() + "/media/effects/xml/collada.xml", fileFinder );
-        DP_ASSERT(success && "EffectLibrary::loadLibrary failed.");
+        try
+        {
+          success &= dp::fx::EffectLibrary::instance()->loadEffects( dp::home() + "/media/effects/xml/standard_lights.xml", fileFinder );
+          success &= dp::fx::EffectLibrary::instance()->loadEffects( dp::home() + "/media/effects/xml/standard_material.xml", fileFinder );
+          success &= dp::fx::EffectLibrary::instance()->loadEffects( dp::home() + "/media/effects/xml/collada.xml", fileFinder );
+          DP_ASSERT(success && "EffectLibrary::loadLibrary failed.");
+        }
+        catch(std::runtime_error & e)
+        {
+          std::cout << "caught exception: " << std::endl << e.what() << std::endl;
+          success = false;
+        }
+        catch (...)
+        {
+          std::cout << "caught unknown exception: " << std::endl;
+          success = false;
+        }
 
         return success;
       }
