@@ -93,22 +93,22 @@ SceneTreeItem::SceneTreeItem( ObjectSharedPtr const & object )
         PrimitiveSharedPtr const& p = m_object.staticCast<Primitive>();
         switch( p->getPrimitiveType() )
         {
-          case PRIMITIVE_QUADS:
+          case PrimitiveType::QUADS:
             pixmap.load( ":/images/Quads.png" );
             break;
-          case PRIMITIVE_QUAD_STRIP :
+          case PrimitiveType::QUAD_STRIP :
             pixmap.load( ":/images/QuadMeshes.png" );
             break;
-          case PRIMITIVE_TRIANGLES :
-          case PRIMITIVE_TRIANGLE_STRIP :
-          case PRIMITIVE_TRIANGLE_FAN :
+          case PrimitiveType::TRIANGLES :
+          case PrimitiveType::TRIANGLE_STRIP :
+          case PrimitiveType::TRIANGLE_FAN :
             pixmap.load( ":/images/Triangles.png" );
             break;
-          case PRIMITIVE_LINES :
-          case PRIMITIVE_LINE_STRIP :
+          case PrimitiveType::LINES :
+          case PrimitiveType::LINE_STRIP :
             pixmap.load( ":/images/Lines.png" );
             break;
-          case PRIMITIVE_POINTS :
+          case PrimitiveType::POINTS :
             pixmap.load( ":/images/Points.png" );
             break;
           default :

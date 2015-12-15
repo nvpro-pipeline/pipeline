@@ -99,8 +99,8 @@ namespace dp
           \remarks If a RenderTarget cannot support this operation it returns a null object.
       **/
       DP_UI_API virtual dp::sg::core::TextureHostSharedPtr getImage( 
-            dp::sg::core::Image::PixelFormat pixelFormat = dp::sg::core::Image::IMG_BGR, 
-            dp::sg::core::Image::PixelDataType pixelDataType = dp::sg::core::Image::IMG_UNSIGNED_BYTE ) = 0;
+            dp::sg::core::Image::PixelFormat pixelFormat = dp::sg::core::Image::PixelFormat::BGR, 
+            dp::sg::core::Image::PixelDataType pixelDataType = dp::sg::core::Image::PixelDataType::UNSIGNED_BYTE ) = 0;
   #else
       /** \brief Fetch pixels of the surface in a TextureHost.
           \param pixelFormat Pixel format to use when grabbing the pixels.

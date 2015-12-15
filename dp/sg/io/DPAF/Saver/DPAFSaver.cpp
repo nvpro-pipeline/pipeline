@@ -112,13 +112,13 @@ void  fprintfCompareMode( FILE *fh, const char *prefix, TextureCompareMode mode 
   fprintf( fh, "%s", prefix );
   switch( mode )
   {
-    case TCM_R_TO_TEXTURE :
+    case TextureCompareMode::R_TO_TEXTURE :
       fprintf( fh, "R_TO_TEXTURE\n" );
       break;
     default :
-      DP_ASSERT( !"Unexpected TextureCompareMode. Using default TCM_NONE" );
+      DP_ASSERT( !"Unexpected TextureCompareMode. Using default TextureCompareMode::NONE" );
       // fall through
-    case TCM_NONE :
+    case TextureCompareMode::NONE :
       fprintf( fh, "NONE\n" );
       break;
   }
@@ -129,13 +129,13 @@ void  fprintfMagFilterMode( FILE *fh, const char *prefix, TextureMagFilterMode m
   fprintf( fh, "%s", prefix );
   switch( mode )
   {
-    case TFM_MAG_NEAREST :
+    case TextureMagFilterMode::NEAREST :
       fprintf( fh, "NEAREST\n" );
       break;
     default :
-      DP_ASSERT( !"Unexpected TextureMagFilterMode. Using default TFM_MAG_LINEAR" );
+      DP_ASSERT( !"Unexpected TextureMagFilterMode. Using default TextureMagFilterMode::LINEAR" );
       // fall through
-    case TFM_MAG_LINEAR :
+    case TextureMagFilterMode::LINEAR :
       fprintf( fh, "LINEAR\n" );
       break;
   }
@@ -146,25 +146,25 @@ void  fprintfMinFilterMode( FILE *fh, const char *prefix, TextureMinFilterMode m
   fprintf( fh, "%s", prefix );
   switch( mode )
   {
-    case TFM_MIN_NEAREST :
+    case TextureMinFilterMode::NEAREST :
       fprintf( fh, "NEAREST\n" );
       break;
-    case TFM_MIN_LINEAR :
+    case TextureMinFilterMode::LINEAR :
       fprintf( fh, "LINEAR\n" );
       break;
     default :
-      DP_ASSERT( !"Unexpected TextureMinFilterMode. Using default TFM_MIN_LINEAR_MIPMAP_LINEAR" );
+      DP_ASSERT( !"Unexpected TextureMinFilterMode. Using default TextureMinFilterMode::LINEAR_MIPMAP_LINEAR" );
       // fall through
-    case TFM_MIN_LINEAR_MIPMAP_LINEAR :
+    case TextureMinFilterMode::LINEAR_MIPMAP_LINEAR :
       fprintf( fh, "LINEAR_MIPMAP_LINEAR\n" );
       break;
-    case TFM_MIN_NEAREST_MIPMAP_NEAREST :
+    case TextureMinFilterMode::NEAREST_MIPMAP_NEAREST :
       fprintf( fh, "NEAREST_MIPMAP_NEAREST\n" );
       break;
-    case TFM_MIN_NEAREST_MIPMAP_LINEAR :
+    case TextureMinFilterMode::NEAREST_MIPMAP_LINEAR :
       fprintf( fh, "NEAREST_MIPMAP_LINEAR\n" );
       break;
-    case TFM_MIN_LINEAR_MIPMAP_NEAREST :
+    case TextureMinFilterMode::LINEAR_MIPMAP_NEAREST :
       fprintf( fh, "LINEAR_MIPMAP_NEAREST\n" );
       break;
   }
@@ -175,30 +175,30 @@ const char * wrapMode( TextureWrapMode mode )
   switch( mode )
   {
     default :
-      DP_ASSERT( !"Unexpected TextureWrapMode. Using default TWM_REPEAT" );
+      DP_ASSERT( !"Unexpected TextureWrapMode. Using default TextureWrapMode::REPEAT" );
       // fall through
-    case TWM_REPEAT :
+    case TextureWrapMode::REPEAT :
       return( "REPEAT" );
       break;
-    case TWM_CLAMP :
+    case TextureWrapMode::CLAMP :
       return( "CLAMP" );
       break;
-    case TWM_MIRROR_REPEAT :
+    case TextureWrapMode::MIRROR_REPEAT :
       return( "MIRROR_REPEAT" );
       break;
-    case TWM_CLAMP_TO_EDGE :
+    case TextureWrapMode::CLAMP_TO_EDGE :
       return( "CLAMP_TO_EDGE" );
       break;
-    case TWM_CLAMP_TO_BORDER :
+    case TextureWrapMode::CLAMP_TO_BORDER :
       return( "CLAMP_TO_BORDER" );
       break;
-    case TWM_MIRROR_CLAMP :
+    case TextureWrapMode::MIRROR_CLAMP :
       return( "MIRROR_CLAMP" );
       break;
-    case TWM_MIRROR_CLAMP_TO_EDGE :
+    case TextureWrapMode::MIRROR_CLAMP_TO_EDGE :
       return( "MIRROR_CLAMP_TO_EDGE" );
       break;
-    case TWM_MIRROR_CLAMP_TO_BORDER :
+    case TextureWrapMode::MIRROR_CLAMP_TO_BORDER :
       return( "MIRROR_CLAMP_TO_BORDER" );
       break;
   }
@@ -214,106 +214,106 @@ void  fprintfPixelFormat( FILE *fh, const char *prefix, Image::PixelFormat pf )
   fprintf( fh, "%s", prefix );
   switch( pf )
   {
-  case Image::IMG_COLOR_INDEX :
+  case Image::PixelFormat::COLOR_INDEX :
     fprintf( fh, "COLOR_INDEX\n" );
     break;
-  case Image::IMG_RGB :
+  case Image::PixelFormat::RGB :
     fprintf( fh, "RGB\n" );
     break;
-  case Image::IMG_RGBA :
+  case Image::PixelFormat::RGBA :
     fprintf( fh, "RGBA\n" );
     break;
-  case Image::IMG_BGR :
+  case Image::PixelFormat::BGR :
     fprintf( fh, "BGR\n" );
     break;
-  case Image::IMG_BGRA :
+  case Image::PixelFormat::BGRA :
     fprintf( fh, "BGRA\n" );
     break;
-  case Image::IMG_LUMINANCE :
+  case Image::PixelFormat::LUMINANCE :
     fprintf( fh, "LUMINANCE\n" );
     break;
-  case Image::IMG_LUMINANCE_ALPHA :
+  case Image::PixelFormat::LUMINANCE_ALPHA :
     fprintf( fh, "LUMINANCE_ALPHA\n" );
     break;
-  case Image::IMG_ALPHA :
-    fprintf( fh, "IMG_ALPHA\n" );
+  case Image::PixelFormat::ALPHA :
+    fprintf( fh, "PixelFormat::ALPHA\n" );
     break;
-  case Image::IMG_DEPTH_COMPONENT :
-    fprintf( fh, "IMG_DEPTH_COMPONENT\n" );
+  case Image::PixelFormat::DEPTH_COMPONENT :
+    fprintf( fh, "PixelFormat::DEPTH_COMPONENT\n" );
     break;
-  case Image::IMG_DEPTH_STENCIL :
-    fprintf( fh, "IMG_DEPTH_STENCIL\n" );
+  case Image::PixelFormat::DEPTH_STENCIL :
+    fprintf( fh, "PixelFormat::DEPTH_STENCIL\n" );
     break;
-  case Image::IMG_INTEGER_ALPHA :
-    fprintf( fh, "IMG_INTEGER_ALPHA\n" );
+  case Image::PixelFormat::INTEGER_ALPHA :
+    fprintf( fh, "PixelFormat::INTEGER_ALPHA\n" );
     break;
-  case Image::IMG_INTEGER_LUMINANCE :
-    fprintf( fh, "IMG_INTEGER_LUMINANCE\n" );
+  case Image::PixelFormat::INTEGER_LUMINANCE :
+    fprintf( fh, "PixelFormat::INTEGER_LUMINANCE\n" );
     break;
-  case Image::IMG_INTEGER_LUMINANCE_ALPHA :
-    fprintf( fh, "IMG_INTEGER_LUMINANCE_ALPHA\n" );
+  case Image::PixelFormat::INTEGER_LUMINANCE_ALPHA :
+    fprintf( fh, "PixelFormat::INTEGER_LUMINANCE_ALPHA\n" );
     break;
-  case Image::IMG_INTEGER_RGB :
-    fprintf( fh, "IMG_INTEGER_RGB\n" );
+  case Image::PixelFormat::INTEGER_RGB :
+    fprintf( fh, "PixelFormat::INTEGER_RGB\n" );
     break;
-  case Image::IMG_INTEGER_BGR :
-    fprintf( fh, "IMG_INTEGER_BGR\n" );
+  case Image::PixelFormat::INTEGER_BGR :
+    fprintf( fh, "PixelFormat::INTEGER_BGR\n" );
     break;
-  case Image::IMG_INTEGER_RGBA :
-    fprintf( fh, "IMG_INTEGER_RGBA\n" );
+  case Image::PixelFormat::INTEGER_RGBA :
+    fprintf( fh, "PixelFormat::INTEGER_RGBA\n" );
     break;
-  case Image::IMG_INTEGER_BGRA :
-    fprintf( fh, "IMG_INTEGER_BGRA\n" );
+  case Image::PixelFormat::INTEGER_BGRA :
+    fprintf( fh, "PixelFormat::INTEGER_BGRA\n" );
     break;
-  case Image::IMG_COMPRESSED_LUMINANCE_LATC1 :
-    fprintf( fh, "IMG_COMPRESSED_LUMINANCE_LATC1\n" );
+  case Image::PixelFormat::COMPRESSED_LUMINANCE_LATC1 :
+    fprintf( fh, "PixelFormat::COMPRESSED_LUMINANCE_LATC1\n" );
     break;
-  case Image::IMG_COMPRESSED_SIGNED_LUMINANCE_LATC1 :
-    fprintf( fh, "IMG_COMPRESSED_SIGNED_LUMINANCE_LATC1\n" );
+  case Image::PixelFormat::COMPRESSED_SIGNED_LUMINANCE_LATC1 :
+    fprintf( fh, "PixelFormat::COMPRESSED_SIGNED_LUMINANCE_LATC1\n" );
     break;
-  case Image::IMG_COMPRESSED_LUMINANCE_ALPHA_LATC2 :
-    fprintf( fh, "IMG_COMPRESSED_LUMINANCE_ALPHA_LATC2\n" );
+  case Image::PixelFormat::COMPRESSED_LUMINANCE_ALPHA_LATC2 :
+    fprintf( fh, "PixelFormat::COMPRESSED_LUMINANCE_ALPHA_LATC2\n" );
     break;
-  case Image::IMG_COMPRESSED_SIGNED_LUMINANCE_ALPHA_LATC2 :
-    fprintf( fh, "IMG_COMPRESSED_SIGNED_LUMINANCE_ALPHA_LATC2\n" );
+  case Image::PixelFormat::COMPRESSED_SIGNED_LUMINANCE_ALPHA_LATC2 :
+    fprintf( fh, "PixelFormat::COMPRESSED_SIGNED_LUMINANCE_ALPHA_LATC2\n" );
     break;
-  case Image::IMG_COMPRESSED_RED_RGTC1 :
-    fprintf( fh, "IMG_COMPRESSED_RED_RGTC1\n" );
+  case Image::PixelFormat::COMPRESSED_RED_RGTC1 :
+    fprintf( fh, "PixelFormat::COMPRESSED_RED_RGTC1\n" );
     break;
-  case Image::IMG_COMPRESSED_SIGNED_RED_RGTC1 :
-    fprintf( fh, "IMG_COMPRESSED_SIGNED_RED_RGTC1\n" );
+  case Image::PixelFormat::COMPRESSED_SIGNED_RED_RGTC1 :
+    fprintf( fh, "PixelFormat::COMPRESSED_SIGNED_RED_RGTC1\n" );
     break;
-  case Image::IMG_COMPRESSED_RG_RGTC2 :
-    fprintf( fh, "IMG_COMPRESSED_RG_RGTC2\n" );
+  case Image::PixelFormat::COMPRESSED_RG_RGTC2 :
+    fprintf( fh, "PixelFormat::COMPRESSED_RG_RGTC2\n" );
     break;
-  case Image::IMG_COMPRESSED_SIGNED_RG_RGTC2 :
-    fprintf( fh, "IMG_COMPRESSED_SIGNED_RG_RGTC2\n" );
+  case Image::PixelFormat::COMPRESSED_SIGNED_RG_RGTC2 :
+    fprintf( fh, "PixelFormat::COMPRESSED_SIGNED_RG_RGTC2\n" );
     break;
-  case Image::IMG_COMPRESSED_RGB_DXT1 :
-    fprintf( fh, "IMG_COMPRESSED_RGB_DXT1\n" );
+  case Image::PixelFormat::COMPRESSED_RGB_DXT1 :
+    fprintf( fh, "PixelFormat::COMPRESSED_RGB_DXT1\n" );
     break;
-  case Image::IMG_COMPRESSED_RGBA_DXT1 :
-    fprintf( fh, "IMG_COMPRESSED_RGBA_DXT1\n" );
+  case Image::PixelFormat::COMPRESSED_RGBA_DXT1 :
+    fprintf( fh, "PixelFormat::COMPRESSED_RGBA_DXT1\n" );
     break;
-  case Image::IMG_COMPRESSED_RGBA_DXT3 :
-    fprintf( fh, "IMG_COMPRESSED_RGBA_DXT3\n" );
+  case Image::PixelFormat::COMPRESSED_RGBA_DXT3 :
+    fprintf( fh, "PixelFormat::COMPRESSED_RGBA_DXT3\n" );
     break;
-  case Image::IMG_COMPRESSED_RGBA_DXT5 :
-    fprintf( fh, "IMG_COMPRESSED_RGBA_DXT5\n" );
+  case Image::PixelFormat::COMPRESSED_RGBA_DXT5 :
+    fprintf( fh, "PixelFormat::COMPRESSED_RGBA_DXT5\n" );
     break;
-  case Image::IMG_COMPRESSED_SRGB_DXT1 :
-    fprintf( fh, "IMG_COMPRESSED_SRGB_DXT1\n" );
+  case Image::PixelFormat::COMPRESSED_SRGB_DXT1 :
+    fprintf( fh, "PixelFormat::COMPRESSED_SRGB_DXT1\n" );
     break;
-  case Image::IMG_COMPRESSED_SRGBA_DXT1 :
-    fprintf( fh, "IMG_COMPRESSED_SRGBA_DXT1\n" );
+  case Image::PixelFormat::COMPRESSED_SRGBA_DXT1 :
+    fprintf( fh, "PixelFormat::COMPRESSED_SRGBA_DXT1\n" );
     break;
-  case Image::IMG_COMPRESSED_SRGBA_DXT3 :
-    fprintf( fh, "IMG_COMPRESSED_SRGBA_DXT3\n" );
+  case Image::PixelFormat::COMPRESSED_SRGBA_DXT3 :
+    fprintf( fh, "PixelFormat::COMPRESSED_SRGBA_DXT3\n" );
     break;
-  case Image::IMG_COMPRESSED_SRGBA_DXT5 :
-    fprintf( fh, "IMG_COMPRESSED_SRGBA_DXT5\n" );
+  case Image::PixelFormat::COMPRESSED_SRGBA_DXT5 :
+    fprintf( fh, "PixelFormat::COMPRESSED_SRGBA_DXT5\n" );
     break;
-  case Image::IMG_UNKNOWN_FORMAT :
+  case Image::PixelFormat::UNKNOWN :
   default :
     DP_ASSERT( false );
     fprintf( fh, "\n" );
@@ -326,31 +326,31 @@ void  fprintfPixelType( FILE *fh, const char *prefix, Image::PixelDataType dt )
   fprintf( fh, "%s", prefix );
   switch( dt )
   {
-  case Image::IMG_BYTE :
+  case Image::PixelDataType::BYTE :
     fprintf( fh, "BYTE\n" );
     break;
-  case Image::IMG_UNSIGNED_BYTE :
+  case Image::PixelDataType::UNSIGNED_BYTE :
     fprintf( fh, "UNSIGNED_BYTE\n" );
     break;
-  case Image::IMG_SHORT :
+  case Image::PixelDataType::SHORT :
     fprintf( fh, "SHORT\n" );
     break;
-  case Image::IMG_UNSIGNED_SHORT :
+  case Image::PixelDataType::UNSIGNED_SHORT :
     fprintf( fh, "UNSIGNED_SHORT\n" );
     break;
-  case Image::IMG_INT :
+  case Image::PixelDataType::INT :
     fprintf( fh, "INT\n" );
     break;
-  case Image::IMG_UNSIGNED_INT :
+  case Image::PixelDataType::UNSIGNED_INT :
     fprintf( fh, "UNSIGNED_INT\n" );
     break;
-  case Image::IMG_FLOAT :
+  case Image::PixelDataType::FLOAT :
     fprintf( fh, "FLOAT\n" );
     break;
-  case Image::IMG_HALF :
+  case Image::PixelDataType::HALF :
     fprintf( fh, "HALF\n" );
     break;
-  case Image::IMG_UNKNOWN_TYPE :
+  case Image::PixelDataType::UNKNOWN :
   default:
     DP_ASSERT( false );
     fprintf( fh, "\n" );
@@ -442,33 +442,33 @@ void fprintfPixels( FILE *fh, const char *prefix, TextureHostSharedPtr const& ti
 {
   switch( ti->getType( image, mipmap ) )
   {
-  case Image::IMG_BYTE :
+  case Image::PixelDataType::BYTE :
     writePixels<char>( fh, prefix, ti, image, mipmap );
     break;
-  case Image::IMG_UNSIGNED_BYTE :
+  case Image::PixelDataType::UNSIGNED_BYTE :
     writePixels<unsigned char>( fh, prefix, ti, image, mipmap );
     break;
-  case Image::IMG_SHORT :
+  case Image::PixelDataType::SHORT :
     writePixels<short>( fh, prefix, ti, image, mipmap );
     break;
-  case Image::IMG_UNSIGNED_SHORT :
+  case Image::PixelDataType::UNSIGNED_SHORT :
     writePixels<unsigned short>( fh, prefix, ti, image, mipmap );
     break;
-  case Image::IMG_INT :
+  case Image::PixelDataType::INT :
     writePixels<int>( fh, prefix, ti, image, mipmap );
     break;
-  case Image::IMG_UNSIGNED_INT :
+  case Image::PixelDataType::UNSIGNED_INT :
     writePixels<unsigned int>( fh, prefix, ti, image, mipmap );
     break;
-  case Image::IMG_FLOAT :
+  case Image::PixelDataType::FLOAT :
     writePixels<float>( fh, prefix, ti, image, mipmap );
     break;
 #if defined(HAVE_HALF_FLOAT)
-  case Image::IMG_HALF :
+  case Image::PixelDataType::HALF :
     writePixels<half>( fh, prefix, ti, image, mipmap );
     break;
 #endif
-  case Image::IMG_UNKNOWN_TYPE :
+  case Image::PixelDataType::UNKNOWN :
   default:
     DP_ASSERT( false );
     break;
@@ -480,16 +480,16 @@ void fprintfPatchesMode( FILE *fh, const char *prefix, PatchesMode pm )
   fprintf( fh, "%s", prefix );
   switch( pm )
   {
-    case PATCHES_MODE_TRIANGLES :
+    case PatchesMode::TRIANGLES :
       fprintf( fh, "Triangles\n" );
       break;
-    case PATCHES_MODE_QUADS :
+    case PatchesMode::QUADS :
       fprintf( fh, "Quads\n" );
       break;
-    case PATCHES_MODE_ISOLINES :
+    case PatchesMode::ISOLINES :
       fprintf( fh, "Isolines\n" );
       break;
-    case PATCHES_MODE_POINTS :
+    case PatchesMode::POINTS :
       fprintf( fh, "Points\n" );
       break;
     default :
@@ -503,10 +503,10 @@ void fprintfPatchesOrdering( FILE *fh, const char *prefix, PatchesOrdering po )
   fprintf( fh, "%s", prefix );
   switch( po )
   {
-    case PATCHES_ORDERING_CW :
+    case PatchesOrdering::CW :
       fprintf( fh, "CW\n" );
       break;
-    case PATCHES_ORDERING_CCW :
+    case PatchesOrdering::CCW :
       fprintf( fh, "CCW\n" );
       break;
     default :
@@ -520,13 +520,13 @@ void fprintfPatchesSpacing( FILE *fh, const char *prefix, PatchesSpacing ps )
   fprintf( fh, "%s", prefix );
   switch( ps )
   {
-    case PATCHES_SPACING_EQUAL :
+    case PatchesSpacing::EQUAL :
       fprintf( fh, "Equal\n" );
       break;
-    case PATCHES_SPACING_FRACTIONAL_EVEN :
+    case PatchesSpacing::FRACTIONAL_EVEN :
       fprintf( fh, "Even\n" );
       break;
-    case PATCHES_SPACING_FRACTIONAL_ODD :
+    case PatchesSpacing::FRACTIONAL_ODD :
       fprintf( fh, "Odd\n" );
       break;
     default :
@@ -865,15 +865,15 @@ void  fprintfTextureTarget( FILE *fh, const char * prefix, TextureTarget target,
   string name;
   switch( target)
   {
-  case TT_TEXTURE_1D :        name = "TEXTURE_1D";          break;
-  case TT_TEXTURE_2D :        name = "TEXTURE_2D";          break;
-  case TT_TEXTURE_3D :        name = "TEXTURE_3D";          break;
-  case TT_TEXTURE_CUBE :      name = "TEXTURE_CUBE";        break;
-  case TT_TEXTURE_1D_ARRAY :  name = "TEXTURE_1D_ARRAY";    break;
-  case TT_TEXTURE_2D_ARRAY :  name = "TEXTURE_2D_ARRAY";    break;
-  case TT_TEXTURE_RECTANGLE : name = "TEXTURE_RECTANGLE";   break;
-  case TT_TEXTURE_CUBE_ARRAY :name = "TEXTURE_CUBE_ARRAY";  break;
-  case TT_TEXTURE_BUFFER :    name = "TEXTURE_BUFFER";      break;
+  case TextureTarget::TEXTURE_1D :        name = "TEXTURE_1D";          break;
+  case TextureTarget::TEXTURE_2D :        name = "TEXTURE_2D";          break;
+  case TextureTarget::TEXTURE_3D :        name = "TEXTURE_3D";          break;
+  case TextureTarget::TEXTURE_CUBE :      name = "TEXTURE_CUBE";        break;
+  case TextureTarget::TEXTURE_1D_ARRAY :  name = "TEXTURE_1D_ARRAY";    break;
+  case TextureTarget::TEXTURE_2D_ARRAY :  name = "TEXTURE_2D_ARRAY";    break;
+  case TextureTarget::TEXTURE_RECTANGLE : name = "TEXTURE_RECTANGLE";   break;
+  case TextureTarget::TEXTURE_CUBE_ARRAY :name = "TEXTURE_CUBE_ARRAY";  break;
+  case TextureTarget::TEXTURE_BUFFER :    name = "TEXTURE_BUFFER";      break;
   default:                      name = "TEXTURE_UNSPECIFIED"; break;
   }
   fprintf( fh, "%s%s%s", prefix, name.c_str(), postfix );
@@ -1334,11 +1334,12 @@ void  DPAFSaveTraverser::handleVertexAttributeSet( const VertexAttributeSet *p )
   if ( isFirstTime( p ) )
   {
 
-    for ( unsigned int i=0; i<VertexAttributeSet::DP_SG_VERTEX_ATTRIB_COUNT; ++i )
+    for ( unsigned int i=0; i<static_cast<unsigned int>(VertexAttributeSet::AttributeID::VERTEX_ATTRIB_COUNT); ++i )
     {
-      if ( p->getSizeOfVertexData(i) )
+      VertexAttributeSet::AttributeID id = static_cast<VertexAttributeSet::AttributeID>(i);
+      if ( p->getSizeOfVertexData(id) )
       {
-        buffer( p->getVertexBuffer(i) );
+        buffer( p->getVertexBuffer(id) );
       }
     }
 
@@ -2257,7 +2258,7 @@ void  DPAFSaveTraverser::primitiveData( const Primitive *p )
 
   // primitive data
   fprintf( m_fh, "\tprimitiveType\t%s", primitiveTypeToName( p->getPrimitiveType() ).c_str() );
-  if ( p->getPrimitiveType() == PRIMITIVE_PATCHES )
+  if ( p->getPrimitiveType() == PrimitiveType::PATCHES )
   {
     fprintf( m_fh, "\tpatchesType\t%s", patchesTypeToName( p->getPatchesType() ).c_str() );
     fprintfPatchesMode( m_fh, "\tpatchesMode\t", p->getPatchesMode() );
@@ -2369,20 +2370,21 @@ void DPAFSaveTraverser::vertexAttributeSetData( const VertexAttributeSet * p )
   unsigned int enableFlags = 0;
   unsigned int normalizeFlags =0;
 
-  for ( unsigned int i=0; i<VertexAttributeSet::DP_SG_VERTEX_ATTRIB_COUNT; ++i )
+  for ( unsigned int i=0; i<static_cast<unsigned int>(VertexAttributeSet::AttributeID::VERTEX_ATTRIB_COUNT); ++i )
   {
-    enableFlags |= (p->isEnabled(i)<<i) | (p->isEnabled(i+16)<<(i+16));
-    normalizeFlags |= (p->isNormalizeEnabled(i+16)<<(i+16));
-    if ( p->getSizeOfVertexData(i) )
+    VertexAttributeSet::AttributeID id = static_cast<VertexAttributeSet::AttributeID>(i);
+    enableFlags |= (p->isEnabled(id)<<i) | (p->isEnabled(static_cast<VertexAttributeSet::AttributeID>(i+16))<<(i+16));
+    normalizeFlags |= (p->isNormalizeEnabled(static_cast<VertexAttributeSet::AttributeID>(i+16))<<(i+16));
+    if ( p->getSizeOfVertexData(id) )
     {
-      unsigned int count = p->getNumberOfVertexData(i);
-      DP_ASSERT( p->getNumberOfVertexData(i) <= UINT_MAX );
-      DP_ASSERT( m_storedBuffers.find( p->getVertexBuffer(i) ) != m_storedBuffers.end() );
+      unsigned int count = p->getNumberOfVertexData(id);
+      DP_ASSERT( p->getNumberOfVertexData(id) <= UINT_MAX );
+      DP_ASSERT( m_storedBuffers.find( p->getVertexBuffer(id) ) != m_storedBuffers.end() );
 
       fprintf( m_fh, "\tvattrib%u\t%u\t%u\t%s\t%u\t%u\t%u\n", i, 
-        p->getSizeOfVertexData(i), p->getTypeOfVertexData(i)
-        , m_storedBuffers[p->getVertexBuffer(i)].c_str()
-        , p->getOffsetOfVertexData(i), p->getStrideOfVertexData(i)
+        p->getSizeOfVertexData(id), p->getTypeOfVertexData(id)
+        , m_storedBuffers[p->getVertexBuffer(id)].c_str()
+        , p->getOffsetOfVertexData(id), p->getStrideOfVertexData(id)
         , count);
     }
   }

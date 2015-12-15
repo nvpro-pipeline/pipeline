@@ -149,40 +149,40 @@ static ILenum determineILFormat(Image::PixelFormat format)
   ILenum ilFormat = 0;
   switch( format )
   {
-    case Image::IMG_COLOR_INDEX :
+    case Image::PixelFormat::COLOR_INDEX :
       ilFormat = IL_COLOR_INDEX;
       break;
 
-    case Image::IMG_RGB :
-    case Image::IMG_INTEGER_RGB :
+    case Image::PixelFormat::RGB :
+    case Image::PixelFormat::INTEGER_RGB :
       ilFormat = IL_RGB;
       break;
 
-    case Image::IMG_RGBA :
-    case Image::IMG_INTEGER_RGBA :
+    case Image::PixelFormat::RGBA :
+    case Image::PixelFormat::INTEGER_RGBA :
       ilFormat = IL_RGBA;
       break;
 
-    case Image::IMG_BGR :
-    case Image::IMG_INTEGER_BGR :
+    case Image::PixelFormat::BGR :
+    case Image::PixelFormat::INTEGER_BGR :
       ilFormat = IL_BGR;
       break;
 
-    case Image::IMG_BGRA :
-    case Image::IMG_INTEGER_BGRA :
+    case Image::PixelFormat::BGRA :
+    case Image::PixelFormat::INTEGER_BGRA :
       ilFormat = IL_BGRA;
       break;
 
-    case Image::IMG_LUMINANCE :
-    case Image::IMG_ALPHA :
-    case Image::IMG_DEPTH_COMPONENT :
-    case Image::IMG_INTEGER_ALPHA :
-    case Image::IMG_INTEGER_LUMINANCE :
+    case Image::PixelFormat::LUMINANCE :
+    case Image::PixelFormat::ALPHA :
+    case Image::PixelFormat::DEPTH_COMPONENT :
+    case Image::PixelFormat::INTEGER_ALPHA :
+    case Image::PixelFormat::INTEGER_LUMINANCE :
       ilFormat = IL_LUMINANCE;
       break;
 
-    case Image::IMG_LUMINANCE_ALPHA :
-    case Image::IMG_INTEGER_LUMINANCE_ALPHA :
+    case Image::PixelFormat::LUMINANCE_ALPHA :
+    case Image::PixelFormat::INTEGER_LUMINANCE_ALPHA :
       ilFormat = IL_LUMINANCE_ALPHA;
       break;
 
@@ -199,28 +199,28 @@ static ILenum determineILType(Image::PixelDataType type)
   ILenum ilType = 0;
   switch( type )
   {
-    case Image::IMG_BYTE :  
+    case Image::PixelDataType::BYTE :  
       ilType = IL_BYTE;
       break;
-    case Image::IMG_UNSIGNED_BYTE :
+    case Image::PixelDataType::UNSIGNED_BYTE :
       ilType = IL_UNSIGNED_BYTE;
       break;
-    case Image::IMG_SHORT :
+    case Image::PixelDataType::SHORT :
       ilType = IL_SHORT;
       break;
-    case Image::IMG_UNSIGNED_SHORT :
+    case Image::PixelDataType::UNSIGNED_SHORT :
       ilType = IL_UNSIGNED_SHORT;
       break;
-    case Image::IMG_INT :
+    case Image::PixelDataType::INT :
       ilType = IL_INT;
       break;
-    case Image::IMG_UNSIGNED_INT :
+    case Image::PixelDataType::UNSIGNED_INT :
       ilType = IL_UNSIGNED_INT;
       break;
-    case Image::IMG_FLOAT :
+    case Image::PixelDataType::FLOAT :
       ilType = IL_FLOAT;
       break;
-    case Image::IMG_UNKNOWN_TYPE:
+    case Image::PixelDataType::UNKNOWN:
     default:
       ilType = 0;
       DP_ASSERT( !"Unknown pixel type" );

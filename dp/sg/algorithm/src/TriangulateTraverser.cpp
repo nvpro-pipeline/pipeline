@@ -122,11 +122,11 @@ namespace dp
         }
 
         DP_ASSERT( !m_triangulatedPrimitive );
-        unsigned int primitiveType = p->getPrimitiveType();
-        if ( ( primitiveType == PRIMITIVE_QUAD_STRIP ) || ( primitiveType == PRIMITIVE_QUADS ) )
+        PrimitiveType primitiveType = p->getPrimitiveType();
+        if ( ( primitiveType == PrimitiveType::QUAD_STRIP ) || ( primitiveType == PrimitiveType::QUADS ) )
         {
           // create a new Primitive QuadStrip -> TriStrip or Quads -> Tris
-          m_triangulatedPrimitive = Primitive::create( primitiveType == PRIMITIVE_QUAD_STRIP ? PRIMITIVE_TRIANGLE_STRIP : PRIMITIVE_TRIANGLES );
+          m_triangulatedPrimitive = Primitive::create( primitiveType == PrimitiveType::QUAD_STRIP ? PrimitiveType::TRIANGLE_STRIP : PrimitiveType::TRIANGLES );
 
           m_triangulatedPrimitive->setName( p->getName() );
           m_triangulatedPrimitive->setAnnotation( p->getAnnotation() );
@@ -140,7 +140,7 @@ namespace dp
 
           // from quad strip to tri strip is just copying the Primitive into a new tri strip; that is, we're alread done
           // otherwise...
-          if ( primitiveType == PRIMITIVE_QUADS )
+          if ( primitiveType == PrimitiveType::QUADS )
           {
             m_triangulatedPrimitive->makeIndexed();
             vector<unsigned int> newIndices;

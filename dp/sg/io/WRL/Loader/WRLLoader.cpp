@@ -1400,10 +1400,10 @@ void WRLLoader::determineTexGen( IndexedFaceSetSharedPtr const& pIndexedFaceSet
 
   const dp::fx::ParameterGroupSpecSharedPtr & pgs = parameterGroupData->getParameterGroupSpec();
   DP_ASSERT( pgs->getName() == "standardTextureParameters" );
-  DP_VERIFY( parameterGroupData->setParameterArrayElement<dp::fx::EnumSpec::StorageType>( "genMode", TCA_S, TGM_OBJECT_LINEAR ) );
-  DP_VERIFY( parameterGroupData->setParameterArrayElement<dp::fx::EnumSpec::StorageType>( "genMode", TCA_T, TGM_OBJECT_LINEAR ) );
-  DP_VERIFY( parameterGroupData->setParameterArrayElement<Vec4f>( "texGenPlane", TCA_S, plane[0] ) );
-  DP_VERIFY( parameterGroupData->setParameterArrayElement<Vec4f>( "texGenPlane", TCA_T, plane[1] ) );
+  DP_VERIFY( parameterGroupData->setParameterArrayElement<dp::fx::EnumSpec::StorageType>( "genMode", static_cast<unsigned int>(TexCoordAxis::S), static_cast<dp::fx::EnumSpec::StorageType>(TexGenMode::LINEAR) ) );
+  DP_VERIFY( parameterGroupData->setParameterArrayElement<dp::fx::EnumSpec::StorageType>( "genMode", static_cast<unsigned int>(TexCoordAxis::T), static_cast<dp::fx::EnumSpec::StorageType>(TexGenMode::LINEAR) ) );
+  DP_VERIFY( parameterGroupData->setParameterArrayElement<Vec4f>( "texGenPlane", static_cast<unsigned int>(TexCoordAxis::S), plane[0] ) );
+  DP_VERIFY( parameterGroupData->setParameterArrayElement<Vec4f>( "texGenPlane", static_cast<unsigned int>(TexCoordAxis::T), plane[1] ) );
 }
 
 template<typename VType>
@@ -1905,9 +1905,9 @@ dp::sg::core::PipelineDataSharedPtr WRLLoader::interpretAppearance( AppearanceSh
         if ( texture && texture.isPtrTo<TextureHost>() )
         {
           Image::PixelFormat ipf = texture.staticCast<TextureHost>()->getFormat();
-          transparent =   ( ipf == Image::IMG_RGBA )
-                      ||  ( ipf == Image::IMG_BGRA )
-                      ||  ( ipf == Image::IMG_LUMINANCE_ALPHA );
+          transparent =   ( ipf == Image::PixelFormat::RGBA )
+                      ||  ( ipf == Image::PixelFormat::BGRA )
+                      ||  ( ipf == Image::PixelFormat::LUMINANCE_ALPHA );
         }
       }
     }
@@ -1958,11 +1958,11 @@ inline bool evalTextured( const dp::sg::core::PrimitiveSharedPtr & pset, bool te
   if ( pset )
   {
     bool hasTexCoords = false;
-    for ( unsigned int i=VertexAttributeSet::DP_SG_TEXCOORD0
-        ; !hasTexCoords && i<VertexAttributeSet::DP_SG_VERTEX_ATTRIB_COUNT
+    for ( unsigned int i=static_cast<unsigned int>(VertexAttributeSet::AttributeID::TEXCOORD0)
+        ; !hasTexCoords && i<static_cast<unsigned int>(VertexAttributeSet::AttributeID::VERTEX_ATTRIB_COUNT)
         ; ++i )
     {
-      hasTexCoords = !!pset->getVertexAttributeSet()->getNumberOfVertexData(i);
+      hasTexCoords = !!pset->getVertexAttributeSet()->getNumberOfVertexData(static_cast<VertexAttributeSet::AttributeID>(i));
     }
     return hasTexCoords!=textured;
   }
@@ -2388,7 +2388,7 @@ ParameterGroupDataSharedPtr WRLLoader::interpretImageTexture( ImageTextureShared
       {
         texImg = dp::sg::io::loadTextureHost(fileName, m_fileFinder);
         DP_ASSERT( texImg );
-        texImg->setTextureTarget(TT_TEXTURE_2D); // TEXTURE_2D is the only target known by VRML
+        texImg->setTextureTarget(TextureTarget::TEXTURE_2D); // TEXTURE_2D is the only target known by VRML
         m_textureFiles[fileName] = texImg.getWeakPtr();
       }
       else
@@ -2397,8 +2397,8 @@ ParameterGroupDataSharedPtr WRLLoader::interpretImageTexture( ImageTextureShared
       }
 
       SamplerSharedPtr sampler = Sampler::create( texImg );
-      sampler->setWrapMode( TWCA_S, pImageTexture->repeatS ? TWM_REPEAT : TWM_CLAMP_TO_EDGE );
-      sampler->setWrapMode( TWCA_T, pImageTexture->repeatT ? TWM_REPEAT : TWM_CLAMP_TO_EDGE );
+      sampler->setWrapMode( TexWrapCoordAxis::S, pImageTexture->repeatS ? TextureWrapMode::REPEAT : TextureWrapMode::CLAMP_TO_EDGE );
+      sampler->setWrapMode( TexWrapCoordAxis::T, pImageTexture->repeatT ? TextureWrapMode::REPEAT : TextureWrapMode::CLAMP_TO_EDGE );
 
       pImageTexture->textureData = createStandardTextureParameterData( sampler );
       pImageTexture->textureData->setName( pImageTexture->getName() );
@@ -2502,7 +2502,7 @@ void  WRLLoader::interpretIndexedFaceSet( IndexedFaceSetSharedPtr const& pIndexe
                                                                    , triVerts, triFaces );
 
       //  create the Triangles
-      PrimitiveSharedPtr pTriangles = Primitive::create( PRIMITIVE_TRIANGLES );
+      PrimitiveSharedPtr pTriangles = Primitive::create( PrimitiveType::TRIANGLES );
       pTriangles->setName( pIndexedFaceSet->getName() );
       pTriangles->setVertexAttributeSet( vas );
       if ( !pIndexedFaceSet->normal )
@@ -2524,7 +2524,7 @@ void  WRLLoader::interpretIndexedFaceSet( IndexedFaceSetSharedPtr const& pIndexe
                                                                    , quadVerts, quadFaces );
 
       //  create the Quads
-      PrimitiveSharedPtr pQuads = Primitive::create( PRIMITIVE_QUADS );
+      PrimitiveSharedPtr pQuads = Primitive::create( PrimitiveType::QUADS );
       pQuads->setName( pIndexedFaceSet->getName() );
       pQuads->setVertexAttributeSet( vas );
       if ( !pIndexedFaceSet->normal )
@@ -2561,7 +2561,7 @@ void  WRLLoader::interpretIndexedFaceSet( IndexedFaceSetSharedPtr const& pIndexe
                                                                    , polygonVerts, polygonFaces );
 
       // create the polygons Primitive
-      PrimitiveSharedPtr pPolygons = Primitive::create( PRIMITIVE_POLYGON );
+      PrimitiveSharedPtr pPolygons = Primitive::create( PrimitiveType::POLYGON );
       pPolygons->setName( pIndexedFaceSet->getName() );
       pPolygons->setIndexSet( is );
       pPolygons->setVertexAttributeSet( vas );
@@ -2809,7 +2809,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
       VertexAttributeAnimationLock(vaah)->setDescription( livaadh );
       {
         AnimatedVertexAttributeSetLock avas(avash);
-        avas->setAnimation( VertexAttributeSet::DP_SG_POSITION, vaah );
+        avas->setAnimation( VertexAttributeSet::AttributeID::POSITION, vaah );
       }
     }
 
@@ -2884,7 +2884,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
       VertexAttributeAnimationLock(vaah)->setDescription( livaadh );
       {
         AnimatedVertexAttributeSetLock avas(avash);
-        avas->setAnimation( VertexAttributeSet::DP_SG_NORMAL, vaah );
+        avas->setAnimation( VertexAttributeSet::AttributeID::NORMAL, vaah );
       }
     }
 
@@ -3141,7 +3141,7 @@ void  WRLLoader::interpretIndexedLineSet( IndexedLineSetSharedPtr const& pIndexe
       cvas->setColors( &colors[0], dp::checked_cast<unsigned int>(colors.size()) );
     }
 
-    PrimitiveSharedPtr pLineStrips = Primitive::create( PRIMITIVE_LINE_STRIP );
+    PrimitiveSharedPtr pLineStrips = Primitive::create( PrimitiveType::LINE_STRIP );
     pLineStrips->setName( pIndexedLineSet->getName() );
     pLineStrips->setIndexSet( iset );
     pLineStrips->setVertexAttributeSet( cvas );
@@ -3354,7 +3354,7 @@ void  WRLLoader::interpretPointSet( PointSetSharedPtr const& pPointSet, vector<P
       cvas->setColors( &colors[0], dp::checked_cast<unsigned int>(colors.size()) );
     }
 
-    PrimitiveSharedPtr pPoints = Primitive::create( PRIMITIVE_POINTS );
+    PrimitiveSharedPtr pPoints = Primitive::create( PrimitiveType::POINTS );
     pPoints->setName( pPointSet->getName() );
     pPoints->setVertexAttributeSet( cvas );
 

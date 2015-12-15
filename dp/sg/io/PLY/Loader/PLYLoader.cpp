@@ -936,7 +936,7 @@ SceneSharedPtr PLYLoader::load(const string& filename, dp::util::FileFinder cons
         }
 
         // Generate the scene from the gathered data.
-        PrimitiveSharedPtr pTriangles = Primitive::create( PRIMITIVE_TRIANGLES );
+        PrimitiveSharedPtr pTriangles = Primitive::create( PrimitiveType::TRIANGLES );
         pTriangles->setIndexSet( iset );
         pTriangles->setVertexAttributeSet( cvas );
         if ( generateNormals )

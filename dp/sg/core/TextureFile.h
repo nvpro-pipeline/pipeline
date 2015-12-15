@@ -50,7 +50,7 @@ namespace dp
             \param filename Filename of the image for the given texture
             \param textureTarget TextureTarget of the texture
         **/
-        DP_SG_CORE_API static TextureFileSharedPtr create( const std::string& filename, TextureTarget textureTarget = TT_UNSPECIFIED_TEXTURE_TARGET );
+        DP_SG_CORE_API static TextureFileSharedPtr create( const std::string& filename, TextureTarget textureTarget = TextureTarget::UNSPECIFIED );
 
         DP_SG_CORE_API virtual HandledObjectSharedPtr clone() const;
 
@@ -73,7 +73,7 @@ namespace dp
         DP_SG_CORE_API virtual bool isEquivalent( TextureSharedPtr const& texture, bool deepCompare ) const;
 
       protected:
-        DP_SG_CORE_API TextureFile( const std::string& filename, TextureTarget textureTarget = TT_UNSPECIFIED_TEXTURE_TARGET );
+        DP_SG_CORE_API TextureFile( const std::string& filename, TextureTarget textureTarget = TextureTarget::UNSPECIFIED );
 
         /*! \brief Feed the data of this object into the provied HashGenerator.
          *  \param hg The HashGenerator to update with the data of this object.

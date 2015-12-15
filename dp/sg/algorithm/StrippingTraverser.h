@@ -40,7 +40,7 @@ namespace dp
     namespace algorithm
     {
 
-      //! Traverser to convert primitives of type PRIMITIVE_TRIANGLES or PRIMITIVE_QUADS to Primitives of type PRIMITIVE_TRIANGLE_STRIPS or PRIMITIVE_QUAD_STRIPS, respectively.
+      //! Traverser to convert primitives of type PrimitiveType::TRIANGLES or PrimitiveType::QUADS to Primitives of type PRIMITIVE_TRIANGLE_STRIPS or PRIMITIVE_QUAD_STRIPS, respectively.
       /** It is strongly recommended to use a VertexUnifyTraverser before using this StrippingTraverser, because it 
         * works only on indices. */
       class StrippingTraverser : public ExclusiveTraverser
@@ -55,7 +55,7 @@ namespace dp
         protected:
           DP_SG_ALGORITHM_API virtual void handleGeoNode( dp::sg::core::GeoNode * p );
 
-          //! Convert each Primitive of type PRIMITIVE_QUADS or PRIMITIVE_TRIANGLES to PRIMITIVE_QUAD_STRIP and PRIMITIVE_TRIANGLE_STRIP, respectively.
+          //! Convert each Primitive of type PrimitiveType::QUADS or PrimitiveType::TRIANGLES to PrimitiveType::QUAD_STRIP and PrimitiveType::TRIANGLE_STRIP, respectively.
           DP_SG_ALGORITHM_API virtual void handlePrimitive( dp::sg::core::Primitive * p );
 
           /*! \brief Test whether this Object should be optimized

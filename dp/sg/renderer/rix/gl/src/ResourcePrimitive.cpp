@@ -217,37 +217,37 @@ namespace dp
             dp::GeometryPrimitiveType primitiveType;
             switch (m_primitive->getPrimitiveType())
             {
-            case dp::sg::core::PRIMITIVE_POINTS:
+            case dp::sg::core::PrimitiveType::POINTS:
                 primitiveType = dp::GeometryPrimitiveType::POINTS;
             break;
-            case dp::sg::core::PRIMITIVE_LINE_STRIP:
+            case dp::sg::core::PrimitiveType::LINE_STRIP:
                 primitiveType = dp::GeometryPrimitiveType::LINE_STRIP;
                 break;
-            case dp::sg::core::PRIMITIVE_LINE_LOOP:
+            case dp::sg::core::PrimitiveType::LINE_LOOP:
                 primitiveType = dp::GeometryPrimitiveType::LINE_LOOP;
                 break;
-            case dp::sg::core::PRIMITIVE_LINES:
+            case dp::sg::core::PrimitiveType::LINES:
                 primitiveType = dp::GeometryPrimitiveType::LINES;
                 break;
-            case dp::sg::core::PRIMITIVE_TRIANGLE_STRIP:
+            case dp::sg::core::PrimitiveType::TRIANGLE_STRIP:
                 primitiveType = dp::GeometryPrimitiveType::TRIANGLE_STRIP;
                 break;
-            case dp::sg::core::PRIMITIVE_TRIANGLE_FAN:
+            case dp::sg::core::PrimitiveType::TRIANGLE_FAN:
                 primitiveType = dp::GeometryPrimitiveType::TRIANGLE_FAN;
                 break;
-            case dp::sg::core::PRIMITIVE_TRIANGLES:
+            case dp::sg::core::PrimitiveType::TRIANGLES:
                 primitiveType = dp::GeometryPrimitiveType::TRIANGLES;
                 break;
-            case dp::sg::core::PRIMITIVE_QUAD_STRIP:
+            case dp::sg::core::PrimitiveType::QUAD_STRIP:
                 primitiveType = dp::GeometryPrimitiveType::QUAD_STRIP;
                 break;
-            case dp::sg::core::PRIMITIVE_QUADS:
+            case dp::sg::core::PrimitiveType::QUADS:
                 primitiveType = dp::GeometryPrimitiveType::QUADS;
                 break;
-            case dp::sg::core::PRIMITIVE_POLYGON:
+            case dp::sg::core::PrimitiveType::POLYGON:
                 primitiveType = dp::GeometryPrimitiveType::POLYGON;
                 break;
-            case dp::sg::core::PRIMITIVE_PATCHES:
+            case dp::sg::core::PrimitiveType::PATCHES:
                 primitiveType = dp::GeometryPrimitiveType::PATCHES;
                 break;
             default:

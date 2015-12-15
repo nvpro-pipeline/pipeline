@@ -42,7 +42,7 @@ namespace dp
 
       Texture::Texture()
         : m_mipmapUseCount(0)
-        , m_textureTarget( TT_UNSPECIFIED_TEXTURE_TARGET )
+        , m_textureTarget( TextureTarget::UNSPECIFIED )
         , m_hashKey(0)
         , m_hashKeyValid(false)
       {
@@ -142,34 +142,34 @@ namespace dp
         unsigned int type = dp::fx::PT_UNDEFINED;
         switch( target )
         {
-          case dp::sg::core::TT_TEXTURE_1D :
+          case dp::sg::core::TextureTarget::TEXTURE_1D :
             type = dp::fx::PT_SAMPLER_1D;
             break;
-          case dp::sg::core::TT_TEXTURE_2D :
+          case dp::sg::core::TextureTarget::TEXTURE_2D :
             type = dp::fx::PT_SAMPLER_2D;
             break;
-          case dp::sg::core::TT_TEXTURE_3D :
+          case dp::sg::core::TextureTarget::TEXTURE_3D :
             type = dp::fx::PT_SAMPLER_3D;
             break;
-          case dp::sg::core::TT_TEXTURE_CUBE :
+          case dp::sg::core::TextureTarget::TEXTURE_CUBE :
             type = dp::fx::PT_SAMPLER_CUBE;
             break;
-          case dp::sg::core::TT_TEXTURE_1D_ARRAY :
+          case dp::sg::core::TextureTarget::TEXTURE_1D_ARRAY :
             type = dp::fx::PT_SAMPLER_1D_ARRAY;
             break;
-          case dp::sg::core::TT_TEXTURE_2D_ARRAY :
+          case dp::sg::core::TextureTarget::TEXTURE_2D_ARRAY :
             type = dp::fx::PT_SAMPLER_2D_ARRAY;
             break;
-          case dp::sg::core::TT_TEXTURE_RECTANGLE :
+          case dp::sg::core::TextureTarget::TEXTURE_RECTANGLE :
             type = dp::fx::PT_SAMPLER_2D_RECT;
             break;
-          case dp::sg::core::TT_TEXTURE_CUBE_ARRAY :
+          case dp::sg::core::TextureTarget::TEXTURE_CUBE_ARRAY :
             type = dp::fx::PT_SAMPLER_CUBE_ARRAY;
             break;
-          case dp::sg::core::TT_TEXTURE_BUFFER :
+          case dp::sg::core::TextureTarget::TEXTURE_BUFFER :
             type = dp::fx::PT_SAMPLER_BUFFER;
             break;
-          case dp::sg::core::TT_UNSPECIFIED_TEXTURE_TARGET :
+          case dp::sg::core::TextureTarget::UNSPECIFIED :
           default :
             DP_ASSERT( !"encountered unsupported texture Ttarget" );
             break;
@@ -183,35 +183,35 @@ namespace dp
 
       TextureTarget textureTypeToTarget( unsigned int type )
       {
-        TextureTarget target = dp::sg::core::TT_UNSPECIFIED_TEXTURE_TARGET;
+        TextureTarget target = dp::sg::core::TextureTarget::UNSPECIFIED;
         switch( type & dp::fx::PT_SAMPLER_TYPE_MASK )
         {
           case dp::fx::PT_SAMPLER_1D :
-            target = dp::sg::core::TT_TEXTURE_1D;
+            target = dp::sg::core::TextureTarget::TEXTURE_1D;
             break;
           case dp::fx::PT_SAMPLER_2D :
-            target = dp::sg::core::TT_TEXTURE_2D;
+            target = dp::sg::core::TextureTarget::TEXTURE_2D;
             break;
           case dp::fx::PT_SAMPLER_3D :
-            target = dp::sg::core::TT_TEXTURE_3D;
+            target = dp::sg::core::TextureTarget::TEXTURE_3D;
             break;
           case dp::fx::PT_SAMPLER_CUBE :
-            target = dp::sg::core::TT_TEXTURE_CUBE;
+            target = dp::sg::core::TextureTarget::TEXTURE_CUBE;
             break;
           case dp::fx::PT_SAMPLER_2D_RECT :
-            target = dp::sg::core::TT_TEXTURE_RECTANGLE;
+            target = dp::sg::core::TextureTarget::TEXTURE_RECTANGLE;
             break;
           case dp::fx::PT_SAMPLER_1D_ARRAY :
-            target = dp::sg::core::TT_TEXTURE_1D_ARRAY;
+            target = dp::sg::core::TextureTarget::TEXTURE_1D_ARRAY;
             break;
           case dp::fx::PT_SAMPLER_2D_ARRAY :
-            target = dp::sg::core::TT_TEXTURE_2D_ARRAY;
+            target = dp::sg::core::TextureTarget::TEXTURE_2D_ARRAY;
             break;
           case dp::fx::PT_SAMPLER_BUFFER :
-            target = dp::sg::core::TT_TEXTURE_BUFFER;
+            target = dp::sg::core::TextureTarget::TEXTURE_BUFFER;
             break;
           case dp::fx::PT_SAMPLER_CUBE_ARRAY :
-            target = dp::sg::core::TT_TEXTURE_CUBE_ARRAY;
+            target = dp::sg::core::TextureTarget::TEXTURE_CUBE_ARRAY;
             break;
           case dp::fx::PT_SAMPLER_2D_MULTI_SAMPLE :
           case dp::fx::PT_SAMPLER_2D_MULTI_SAMPLE_ARRAY :

@@ -119,11 +119,11 @@ WRLLOADER_API void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids
  *    An ImageTexture Node is translated into a ParameterGroupData. If a file could be found at
  *    Node::url, and a dp::sg::core::TextureHost could be created out of that, a dp::sg::core::ParameterGroupData
  *    is created to hold that dp::sg::core::TextureHost. ImageTexture::repeatS and ImageTexture::repeatT
- *    are translated to the dp::sg::core::TextureWrapMode TWM_REPEAT or TWM_CLAMP for the
- *    dp::sg::core::TextureWrapCoordAxis TWCA_S and TWCA_T, respectively.
+ *    are translated to the dp::sg::core::TextureWrapMode TextureWrapMode::REPEAT or TextureWrapMode::CLAMP for the
+ *    dp::sg::core::TextureWrapCoordAxis TexWrapCoordAxis::S and TexWrapCoordAxis::T, respectively.
  *  - IndexedFaceSet\n
- *    An IndexedFaceSet Node is translated int a Primitive of type PRIMITIVE_TRIANGLES, and/or one of type
- *    PRIMITIVE_QUADS, and/or one of type PRIMITIVE_POLYGON, for faces with 3, 4, or more vertices, respectively.
+ *    An IndexedFaceSet Node is translated int a Primitive of type PrimitiveType::TRIANGLES, and/or one of type
+ *    PrimitiveType::QUADS, and/or one of type PrimitiveType::POLYGON, for faces with 3, 4, or more vertices, respectively.
  *    If IndexedFaceSet::normal is NULL, a Normal Node holding a set of smoothed normals is created,
  *    using IndexedFaceSet::creaseAngle. If there is a ROUTE with a "set_point" eventIn on
  *    IndexedFaceSet::coord or if there is a ROUTE with a "set_vector" eventIn on
@@ -177,7 +177,7 @@ WRLLOADER_API void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids
 *     The PointLight::diffuseColor, PointLight::attenuation, and PointLight::location are set as the specular
 *     color, attenuation, and position, respectively, of the LightSource.
  *  - PointSet\n
- *    A PointSet Node is translated into a dp::sg::core::Primitive of type PRIMITIVE_POINTS. The PointSet::coord is set as
+ *    A PointSet Node is translated into a dp::sg::core::Primitive of type PrimitiveType::POINTS. The PointSet::coord is set as
 *     the vertices of the dp::sg::core::Primitive. If PointSet::colors is not NULL, they are set as the colors of the
  *    dp::sg::core::Primitive.
  *  - PositionInterpolator\n

@@ -185,76 +185,76 @@ namespace dp
 
       switch( p->getPrimitiveType() )
       {
-        case PRIMITIVE_POINTS:
+        case PrimitiveType::POINTS:
           stats.m_points += pcount;
           stats.m_pointsPrimitives++;
           break;
-        case PRIMITIVE_LINE_STRIP:
+        case PrimitiveType::LINE_STRIP:
           stats.m_lineStrips += pcount;
           stats.m_lineSegments += p->getElementCount() - pcount - p->getNumberOfPrimitiveRestarts();
           stats.m_lineStripPrimitives++;
           break;
-        case PRIMITIVE_LINES:
+        case PrimitiveType::LINES:
           stats.m_lines += pcount;
           stats.m_lineSegments += pcount;
           stats.m_linesPrimitives++;
           break;
-        case PRIMITIVE_LINE_LOOP:
+        case PrimitiveType::LINE_LOOP:
           stats.m_lineLoops += pcount;
           stats.m_lineSegments += p->getElementCount() - p->getNumberOfPrimitiveRestarts();
           stats.m_lineLoopPrimitives++;
           break;
-        case PRIMITIVE_LINES_ADJACENCY:
+        case PrimitiveType::LINES_ADJACENCY:
           stats.m_linesAdj += pcount;
           stats.m_lineSegments += pcount;
           stats.m_linesAdjacencyPrimitives++;
           break;
-        case PRIMITIVE_LINE_STRIP_ADJACENCY:
+        case PrimitiveType::LINE_STRIP_ADJACENCY:
           stats.m_lineStripAdj += pcount;
           stats.m_lineSegments += p->getElementCount() - pcount - p->getNumberOfPrimitiveRestarts();
           stats.m_lineStripAdjacencyPrimitives++;
           break;
-        case PRIMITIVE_TRIANGLE_STRIP:
+        case PrimitiveType::TRIANGLE_STRIP:
           stats.m_triStrips += pcount;
           stats.m_faces += fcount;
           stats.m_triangleStripPrimitives++;
           break;
-        case PRIMITIVE_TRIANGLE_FAN:
+        case PrimitiveType::TRIANGLE_FAN:
           stats.m_triFans += pcount;
           stats.m_faces += fcount;
           stats.m_triangleFanPrimitives++;
           break;
-        case PRIMITIVE_TRIANGLES:
+        case PrimitiveType::TRIANGLES:
           stats.m_tris += pcount;
           stats.m_faces += fcount;
           stats.m_trianglesPrimitives++;
           break;
-        case PRIMITIVE_QUAD_STRIP:
+        case PrimitiveType::QUAD_STRIP:
           stats.m_quadStrips += pcount;
           stats.m_faces += fcount;
           stats.m_quadStripPrimitives++;
           break;
-        case PRIMITIVE_QUADS:
+        case PrimitiveType::QUADS:
           stats.m_quads += pcount;
           stats.m_faces += fcount;
           stats.m_quadsPrimitives++;
           break;
-        case PRIMITIVE_POLYGON:
+        case PrimitiveType::POLYGON:
           stats.m_polygons += pcount;
           stats.m_faces += fcount;
           stats.m_polygonPrimitives++;
           break;
-        case PRIMITIVE_TRIANGLES_ADJACENCY:
+        case PrimitiveType::TRIANGLES_ADJACENCY:
           stats.m_trisAdj += pcount;
           stats.m_faces += fcount;
           stats.m_trianglesAdjacencyPrimitives++;
           break;
-        case PRIMITIVE_TRIANGLE_STRIP_ADJACENCY:
+        case PrimitiveType::TRIANGLE_STRIP_ADJACENCY:
           stats.m_triStripAdj += pcount;
           stats.m_faces += fcount;
           stats.m_triangleStripAdjacencyPrimitives++;
           break;
-        case PRIMITIVE_PATCHES:
+        case PrimitiveType::PATCHES:
           stats.m_patches += pcount;
           stats.m_faces += fcount;
           stats.m_patchesPrimitives++;

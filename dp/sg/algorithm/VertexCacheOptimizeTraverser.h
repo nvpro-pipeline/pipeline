@@ -459,7 +459,7 @@ namespace dp
       };
 
       /*! \brief Traverse that optimizes the indices and vertices of Primitives of type
-        *  PRIMITIVE_TRIANGLES by reordering */
+        *  PrimitiveType::TRIANGLES by reordering */
       class VertexCacheOptimizeTraverser : public ExclusiveTraverser
       {
         public:
@@ -473,7 +473,7 @@ namespace dp
           //! Cleanup temporary memory.
           DP_SG_ALGORITHM_API virtual void postApply( const dp::sg::core::NodeSharedPtr & root );
 
-          //! Optimize the indices of Primitives of type PRIMITIVE_TRIANGLES
+          //! Optimize the indices of Primitives of type PrimitiveType::TRIANGLES
           DP_SG_ALGORITHM_API virtual void handlePrimitive( dp::sg::core::Primitive * p );
 
         private:

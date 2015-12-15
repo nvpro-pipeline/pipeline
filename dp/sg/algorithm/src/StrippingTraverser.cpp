@@ -68,13 +68,13 @@ namespace dp
         {
           switch( p->getPrimitiveType() )
           {
-            case dp::sg::core::PRIMITIVE_TRIANGLES :
-            case dp::sg::core::PRIMITIVE_QUADS :
+            case dp::sg::core::PrimitiveType::TRIANGLES :
+            case dp::sg::core::PrimitiveType::QUADS :
               changeToStrips( p );
               break;
-            case dp::sg::core::PRIMITIVE_LINES :                // might to be added, as needed
-            case dp::sg::core::PRIMITIVE_TRIANGLES_ADJACENCY :  // might to be added, as needed
-            case dp::sg::core::PRIMITIVE_LINE_STRIP_ADJACENCY : // might to be added, as needed
+            case dp::sg::core::PrimitiveType::LINES :                // might to be added, as needed
+            case dp::sg::core::PrimitiveType::TRIANGLES_ADJACENCY :  // might to be added, as needed
+            case dp::sg::core::PrimitiveType::LINE_STRIP_ADJACENCY : // might to be added, as needed
             default:
               break;
           }
@@ -83,14 +83,14 @@ namespace dp
 
       void StrippingTraverser::changeToStrips( dp::sg::core::Primitive * p )
       {
-        DP_ASSERT(    ( p->getPrimitiveType() == dp::sg::core::PRIMITIVE_TRIANGLES )
-                  ||  ( p->getPrimitiveType() == dp::sg::core::PRIMITIVE_QUADS ) );
+        DP_ASSERT(    ( p->getPrimitiveType() == dp::sg::core::PrimitiveType::TRIANGLES )
+                  ||  ( p->getPrimitiveType() == dp::sg::core::PrimitiveType::QUADS ) );
 
         unsigned int vpp = p->getNumberOfVerticesPerPrimitive();
         DP_ASSERT( ( vpp == 3 ) || ( vpp == 4 ) );
 
         DP_ASSERT( !m_strip );
-        m_strip = dp::sg::core::Primitive::create( ( vpp == 3 ) ? dp::sg::core::PRIMITIVE_TRIANGLE_STRIP : dp::sg::core::PRIMITIVE_QUAD_STRIP );
+        m_strip = dp::sg::core::Primitive::create( ( vpp == 3 ) ? dp::sg::core::PrimitiveType::TRIANGLE_STRIP : dp::sg::core::PrimitiveType::QUAD_STRIP );
 
         m_strip->setName( p->getName() );
         m_strip->setAnnotation( p->getAnnotation() );

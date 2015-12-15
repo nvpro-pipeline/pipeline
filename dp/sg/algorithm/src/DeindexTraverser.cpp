@@ -41,7 +41,7 @@ namespace
 {
 
   template <unsigned int n, typename T>
-  void copyVertexDataNT( VertexAttributeSetSharedPtr const& dst, VertexAttributeSetSharedPtr const& src, unsigned int attrib, 
+  void copyVertexDataNT( VertexAttributeSetSharedPtr const& dst, VertexAttributeSetSharedPtr const& src, VertexAttributeSet::AttributeID attrib, 
                          IndexSet::ConstIterator<unsigned int> indices, unsigned int count, unsigned int pri )
   {
     vector<Vecnt<n,T> > a;
@@ -66,7 +66,7 @@ namespace
 
 
   template <unsigned int n>
-  void copyVertexDataN( VertexAttributeSetSharedPtr const& dst, VertexAttributeSetSharedPtr const& src, unsigned int attrib, 
+  void copyVertexDataN( VertexAttributeSetSharedPtr const& dst, VertexAttributeSetSharedPtr const& src, VertexAttributeSet::AttributeID attrib, 
                         IndexSet::ConstIterator<unsigned int> indices, unsigned int count, unsigned int pri )
   {
     switch( src->getTypeOfVertexData( attrib ) )
@@ -147,28 +147,29 @@ namespace dp
 
       IndexSet::ConstIterator<unsigned int> indices( p->getIndexSet(), offset );
 
-      for ( unsigned int i = 0; i < VertexAttributeSet::DP_SG_VERTEX_ATTRIB_COUNT; i++ )
+      for ( unsigned int i = 0; i < static_cast<unsigned int>(VertexAttributeSet::AttributeID::VERTEX_ATTRIB_COUNT); i++ )
       {
+        VertexAttributeSet::AttributeID attribute = static_cast<VertexAttributeSet::AttributeID>(i);
         // Handle all provided VertexAttributes, not only the enabled ones.
-        switch ( ovas->getSizeOfVertexData( i ) )
+        switch ( ovas->getSizeOfVertexData( attribute ) )
         {
           case 0: // VertexAttribute not specified for this attrib.
             break;
 
           case 1:
-            copyVertexDataN<1>( vash, ovas, i, indices, count, pri );
+            copyVertexDataN<1>( vash, ovas, attribute, indices, count, pri );
             break;
 
           case 2:
-            copyVertexDataN<2>( vash, ovas, i, indices, count, pri );
+            copyVertexDataN<2>( vash, ovas, attribute, indices, count, pri );
             break;
 
           case 3:
-            copyVertexDataN<3>( vash, ovas, i, indices, count, pri );
+            copyVertexDataN<3>( vash, ovas, attribute, indices, count, pri );
             break;
 
           case 4:
-            copyVertexDataN<4>( vash, ovas, i, indices, count, pri );
+            copyVertexDataN<4>( vash, ovas, attribute, indices, count, pri );
             break;
 
           default:
@@ -176,7 +177,7 @@ namespace dp
             break;
         }
         // Copy the enable state.
-        vash->setEnabled( i, ovas->isEnabled( i ) );
+        vash->setEnabled( attribute, ovas->isEnabled( attribute ) );
       }
 
       p->setIndexSet( dp::sg::core::IndexSetSharedPtr::null );        // Remove the IndexSet from this primitive.

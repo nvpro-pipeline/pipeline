@@ -40,71 +40,71 @@ namespace dp
     {
 
       //! Texture target specifier
-      typedef enum
+      enum class TextureTarget
       {
-        TT_UNSPECIFIED_TEXTURE_TARGET = ~0, //!< indicates an unspecified target
-        TT_TEXTURE_1D = 0,                  //!< indicates a 1-dimensional texture
-        TT_TEXTURE_2D,                      //!< indicates a 2-dimensional texture
-        TT_TEXTURE_3D,                      //!< indicates a 3-dimensional texture
-        TT_TEXTURE_CUBE,                    //!< indicates a cube map
-        TT_TEXTURE_1D_ARRAY,                //!< indicates a 1d texture array
-        TT_TEXTURE_2D_ARRAY,                //!< indicates a 2d texture array
-        TT_TEXTURE_RECTANGLE,               //!< indicates a non-power-of-two, rectangular texture
-        TT_TEXTURE_CUBE_ARRAY,              //!< indicates a cube map array
-        TT_TEXTURE_BUFFER,                  //!< indicates a buffer texture
-        TT_TEXTURE_TARGET_COUNT             //!< specifies the count of known texture targets
-      } TextureTarget;
+        UNSPECIFIED = ~0,     //!< indicates an unspecified target
+        TEXTURE_1D = 0,       //!< indicates a 1-dimensional texture
+        TEXTURE_2D,           //!< indicates a 2-dimensional texture
+        TEXTURE_3D,           //!< indicates a 3-dimensional texture
+        TEXTURE_CUBE,         //!< indicates a cube map
+        TEXTURE_1D_ARRAY,     //!< indicates a 1d texture array
+        TEXTURE_2D_ARRAY,     //!< indicates a 2d texture array
+        TEXTURE_RECTANGLE,    //!< indicates a non-power-of-two, rectangular texture
+        TEXTURE_CUBE_ARRAY,   //!< indicates a cube map array
+        TEXTURE_BUFFER,       //!< indicates a buffer texture
+        TEXTURE_TARGET_COUNT  //!< specifies the count of known texture targets
+      };
 
       //! Texture coordinate axis
-      typedef enum
+      enum class TexCoordAxis
       {
-        TCA_S = 0       //!< S axis
-      , TCA_T           //!< T axis
-      , TCA_R           //!< R axis
-      , TCA_Q           //!< Q axis
-      } TexCoordAxis;
+        S = 0                 //!< S axis
+      , T                     //!< T axis
+      , R                     //!< R axis
+      , Q                     //!< Q axis
+      };
 
       //! Texture environment mode
-      typedef enum
+      enum class TextureEnvMode
       {
-        TEM_REPLACE = 0  //!< C = C_t; A = A_t
-      , TEM_MODULATE     //!< C = C_f*C_t; A = A_f*A_t
-      , TEM_DECAL        //!< C = C_f*(1-A_t)+C_t*A_t; A = A_f
-      , TEM_BLEND        //!< C = C_f*(1-C_t)+C_c*C_t; A = A_f*A_t
-      , TEM_ADD          //!< C = min(1,C_f+C_t); A = A_f*A_t
-      , TEM_ADD_SIGNED   //!< C = texUnitCur + texUnitPrev - 0.5; A = Ac*Ap
-      , TEM_SUBTRACT     //!< C = texUnitCur - texUnitPrev; A = Ac*Ap
-      , TEM_INTERPOLATE  //!< C = tUC * (tevColor) + tUP * (1-tevColor); A = Ac*Ap
-      , TEM_DOT3_RGB     //!< C = texUnitCur.rgb dot texUnitPrev.rgb; A = N/A
-      , TEM_DOT3_RGBA    //!< C = texUnitCur.rgba dot texUnitPrev.rgba
-      } TextureEnvMode;
+        REPLACE = 0           //!< C = C_t; A = A_t
+      , MODULATE              //!< C = C_f*C_t; A = A_f*A_t
+      , DECAL                 //!< C = C_f*(1-A_t)+C_t*A_t; A = A_f
+      , BLEND                 //!< C = C_f*(1-C_t)+C_c*C_t; A = A_f*A_t
+      , ADD                   //!< C = min(1,C_f+C_t); A = A_f*A_t
+      , ADD_SIGNED            //!< C = texUnitCur + texUnitPrev - 0.5; A = Ac*Ap
+      , SUBTRACT              //!< C = texUnitCur - texUnitPrev; A = Ac*Ap
+      , INTERPOLATE           //!< C = tUC * (tevColor) + tUP * (1-tevColor); A = Ac*Ap
+      , DOT3_RGB              //!< C = texUnitCur.rgb dot texUnitPrev.rgb; A = N/A
+      , DOT3_RGBA             //!< C = texUnitCur.rgba dot texUnitPrev.rgba
+      };
 
       //! Texture environment scale
-      typedef enum
+      enum class TextureEnvScale
       {
-        TES_1X = 1  //!< scale factor 1x or no scaling
-      , TES_2X = 2  //!< scale factor 2x
-      , TES_4X = 4  //!< scale factor 4x
-      } TextureEnvScale;
+        X1 = 1                //!< scale factor 1x or no scaling
+      , X2 = 2                //!< scale factor 2x
+      , X4 = 4                //!< scale factor 4x
+      };
 
       //! Texture coordinate generation mode
-      typedef enum
+      enum class TexGenMode
       {
-        TGM_OFF           = 0   //!< Off
-      , TGM_OBJECT_LINEAR       //!< Object linear
-      , TGM_EYE_LINEAR          //!< Eye linear
-      , TGM_SPHERE_MAP          //!< Sphere map
-      , TGM_REFLECTION_MAP      //!< Reflection map
-      , TGM_NORMAL_MAP          //!< Normal map
-      } TexGenMode;
+        OFF           = 0     //!< Off
+      , LINEAR                //!< Object linear
+      , EYE_LINEAR            //!< Eye linear
+      , SPHERE_MAP            //!< Sphere map
+      , REFLECTION_MAP        //!< Reflection map
+      , NORMAL_MAP            //!< Normal map
+      };
 
       //! Texture generation plane
-      typedef enum
+      enum class TexGenLinearPlane
       {
-        TGLP_OBJECT = 0       //!< Object
-      , TGLP_EYE              //!< Eye
-      , TGLP_OBJECT_AND_EYE   //!< Object and eye
-      } TexGenLinearPlane;
+        OBJECT = 0            //!< Object
+      , EYE                   //!< Eye
+      , OBJECT_AND_EYE        //!< Object and eye
+      };
 
 
       /** \brief Interface for textures used as storage for SceniX. 

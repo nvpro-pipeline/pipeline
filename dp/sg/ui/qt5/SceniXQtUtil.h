@@ -43,7 +43,7 @@ namespace dp
         /** \brief Creates an QImage out of a TextureHost
             \param textureImage The TextureHost which should be used as source for the QImage.
                    Currently the following formats are supported
-                   <pre>IMG_RGB, IMG_RGBA, IMG_BGR, IMG_BGRA</pre>
+                   <pre>PixelFormat::RGB, PixelFormat::RGBA, PixelFormat::BGR, PixelFormat::BGRA</pre>
             \param image Image to use from \a textureImage
             \param mipmap Mipmap to use from \a textureImage
             \return A QImage created out of the pixel data from \a textureImage

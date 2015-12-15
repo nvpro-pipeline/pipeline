@@ -127,22 +127,22 @@ namespace dp
         public:
           unsigned int m_indexed;         //!< Counts the number of Primitive objects with indices.
           unsigned int m_arrays;          //!< Counts the number of Primitive objects without indices.
-          unsigned int m_patches;         //!< Counts the number of Primitive objects of type PRIMITIVE_PATCHES
-          unsigned int m_lineStripAdj;    //!< Counts the number of Primitive objects of type PRIMITIVE_LINE_STRIP_ADJACENCY
-          unsigned int m_linesAdj;        //!< Counts the number of Primitive objects of type PRIMITIVE_LINES_ADJACENCY
+          unsigned int m_patches;         //!< Counts the number of Primitive objects of type PrimitiveType::PATCHES
+          unsigned int m_lineStripAdj;    //!< Counts the number of Primitive objects of type PrimitiveType::LINE_STRIP_ADJACENCY
+          unsigned int m_linesAdj;        //!< Counts the number of Primitive objects of type PrimitiveType::LINES_ADJACENCY
           unsigned int m_lineSegments;    //!< Counts the number of lines segments in all encountered Primitive objects.
-          unsigned int m_triStripAdj;     //!< Counts the number of Primitive objects of type PRIMITIVE_TRIANGLE_STRIP_ADJACENCY
-          unsigned int m_trisAdj;         //!< Counts the number of Primitive objects of type PRIMITIVE_TRIANGLES_ADJACENCY
-          unsigned int m_polygons;        //!< Counts the number of Primitive objects of type PRIMITIVE_POLYGON
-          unsigned int m_lineLoops;       //!< Counts the number of Primitive objects of type PRIMITIVE_LINE_LOOP
-          unsigned int m_quads;           //!< Counts the number of Primitive objects of type PRIMITIVE_QUADS
-          unsigned int m_quadStrips;      //!< Counts the number of Primitive objects of type PRIMITIVE_QUAD_STRIP
-          unsigned int m_tris;            //!< Counts the number of Primitive objects of type PRIMITIVE_TRIANGLES
-          unsigned int m_triStrips;       //!< Counts the number of Primitive objects of type PRIMITIVE_TRIANGLE_STRIP
-          unsigned int m_triFans;         //!< Counts the number of Primitive objects of type PRIMITIVE_TRIANGLE_FAN
-          unsigned int m_lines;           //!< Counts the number of Primitive objects of type PRIMITIVE_LINES
-          unsigned int m_lineStrips;      //!< Counts the number of Primitive objects of type PRIMITIVE_LINE_STRIP
-          unsigned int m_points;          //!< Counts the number of Primitive objects of type PRIMITIVE_POINTS
+          unsigned int m_triStripAdj;     //!< Counts the number of Primitive objects of type PrimitiveType::TRIANGLE_STRIP_ADJACENCY
+          unsigned int m_trisAdj;         //!< Counts the number of Primitive objects of type PrimitiveType::TRIANGLES_ADJACENCY
+          unsigned int m_polygons;        //!< Counts the number of Primitive objects of type PrimitiveType::POLYGON
+          unsigned int m_lineLoops;       //!< Counts the number of Primitive objects of type PrimitiveType::LINE_LOOP
+          unsigned int m_quads;           //!< Counts the number of Primitive objects of type PrimitiveType::QUADS
+          unsigned int m_quadStrips;      //!< Counts the number of Primitive objects of type PrimitiveType::QUAD_STRIP
+          unsigned int m_tris;            //!< Counts the number of Primitive objects of type PrimitiveType::TRIANGLES
+          unsigned int m_triStrips;       //!< Counts the number of Primitive objects of type PrimitiveType::TRIANGLE_STRIP
+          unsigned int m_triFans;         //!< Counts the number of Primitive objects of type PrimitiveType::TRIANGLE_FAN
+          unsigned int m_lines;           //!< Counts the number of Primitive objects of type PrimitiveType::LINES
+          unsigned int m_lineStrips;      //!< Counts the number of Primitive objects of type PrimitiveType::STRIPS
+          unsigned int m_points;          //!< Counts the number of Primitive objects of type PrimitiveType::POINTS
           unsigned int m_faces;           //!< Counts the nubmer of faces in all encountered Primitive objects.
           unsigned int m_pointsPrimitives;
           unsigned int m_lineStripPrimitives;

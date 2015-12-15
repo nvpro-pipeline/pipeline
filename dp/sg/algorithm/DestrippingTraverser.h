@@ -38,10 +38,10 @@ namespace dp
     {
       /*! \brief Traverser to destripify stripped primitives.
        *  \par Namespace: dp::sg::algorithm
-       *  \remarks This Traverser destripifies Primitives of type PRIMITIVE_TRIANGLE_FAN and PRIMITIVE_TRIANGLE_STRIP
-       *  to Primitives of type PRIMITIVE_TRIANGLES, Primitives of type PRIMITIVE_QUAD_STRIP to Primitives of type
-       *  PRIMITIVE_QUADS, and Primitives of type PRIMITIVE_LINE_STRIP and PRIMITIVE_LINE_LOOP to Primitives of type
-       *  PRIMITIVE_LINES.\n
+       *  \remarks This Traverser destripifies Primitives of type PrimitiveType::TRIANGLE_FAN and PrimitiveType::TRIANGLE_STRIP
+       *  to Primitives of type PrimitiveType::TRIANGLES, Primitives of type PrimitiveType::QUAD_STRIP to Primitives of type
+       *  PrimitiveType::QUADS, and Primitives of type PrimitiveType::STRIPS and PrimitiveType::LINE_LOOP to Primitives of type
+       *  PrimitiveType::LINES.\n
        *  Using good TriStrips usually is more efficient than using Triangles, but often it is more efficient to use
        *  Triangles instead of badly stripped TriStrips. That is, it might be worth to try to destrip all the TriStrips
        *  to Triangles. The same holds for the other primitive types.

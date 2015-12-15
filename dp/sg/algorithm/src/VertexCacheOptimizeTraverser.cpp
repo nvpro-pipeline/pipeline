@@ -58,7 +58,7 @@ namespace dp
       pair<set<const void *>::iterator,bool> pitb = m_objects.insert( p );
       if ( pitb.second )
       {
-          if ( ( p->getPrimitiveType() == PRIMITIVE_TRIANGLES ) && p->isIndexed() )
+          if ( ( p->getPrimitiveType() == PrimitiveType::TRIANGLES ) && p->isIndexed() )
           {
             unsigned int count = p->getElementCount();
             DP_ASSERT( count % 3 == 0 );

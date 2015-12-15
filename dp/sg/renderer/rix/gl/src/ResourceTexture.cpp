@@ -65,22 +65,22 @@ namespace dp
           {
             switch ( pixelFormat )
             {
-            case dp::sg::core::Image::IMG_RGB:
+            case dp::sg::core::Image::PixelFormat::RGB:
               return dp::PixelFormat::RGB;
-            case dp::sg::core::Image::IMG_RGBA:
+            case dp::sg::core::Image::PixelFormat::RGBA:
               return dp::PixelFormat::RGBA;
-            case dp::sg::core::Image::IMG_BGR:
+            case dp::sg::core::Image::PixelFormat::BGR:
               return dp::PixelFormat::BGR;
-            case dp::sg::core::Image::IMG_BGRA:
+            case dp::sg::core::Image::PixelFormat::BGRA:
               return dp::PixelFormat::BGRA;
-            case dp::sg::core::Image::IMG_LUMINANCE:
+            case dp::sg::core::Image::PixelFormat::LUMINANCE:
               return dp::PixelFormat::LUMINANCE;
-            case dp::sg::core::Image::IMG_ALPHA:
+            case dp::sg::core::Image::PixelFormat::ALPHA:
               return dp::PixelFormat::ALPHA;
-            case dp::sg::core::Image::IMG_LUMINANCE_ALPHA:
+            case dp::sg::core::Image::PixelFormat::LUMINANCE_ALPHA:
               return dp::PixelFormat::LUMINANCE_ALPHA;
             default:
-              DP_ASSERT( !"unknown pixel format, assuming IMG_RGB");
+              DP_ASSERT( !"unknown pixel format, assuming PixelFormat::RGB");
               return dp::PixelFormat::RGB;
             }
           }
@@ -90,39 +90,39 @@ namespace dp
             dp::rix::core::TextureType tt;
             switch ( texture->getTextureTarget() )
             {
-            case dp::sg::core::TT_TEXTURE_1D:
+            case dp::sg::core::TextureTarget::TEXTURE_1D:
               tt = dp::rix::core::TT_1D;
               break;
 
-            case dp::sg::core::TT_TEXTURE_1D_ARRAY:
+            case dp::sg::core::TextureTarget::TEXTURE_1D_ARRAY:
               tt =dp::rix::core::TT_1D_ARRAY;
               break;
 
-            case dp::sg::core::TT_TEXTURE_2D:
+            case dp::sg::core::TextureTarget::TEXTURE_2D:
               tt =dp::rix::core::TT_2D;
               break;
 
-            case dp::sg::core::TT_TEXTURE_RECTANGLE:
+            case dp::sg::core::TextureTarget::TEXTURE_RECTANGLE:
               tt =dp::rix::core::TT_2D_RECTANGLE;
               break;
 
-            case dp::sg::core::TT_TEXTURE_2D_ARRAY:
+            case dp::sg::core::TextureTarget::TEXTURE_2D_ARRAY:
               tt =dp::rix::core::TT_2D_ARRAY;
               break;
 
-            case dp::sg::core::TT_TEXTURE_3D:
+            case dp::sg::core::TextureTarget::TEXTURE_3D:
               tt =dp::rix::core::TT_3D;
               break;
 
-            case dp::sg::core::TT_TEXTURE_CUBE:
+            case dp::sg::core::TextureTarget::TEXTURE_CUBE:
               tt =dp::rix::core::TT_CUBEMAP;
               break;
 
-            case dp::sg::core::TT_TEXTURE_CUBE_ARRAY:
+            case dp::sg::core::TextureTarget::TEXTURE_CUBE_ARRAY:
               tt =dp::rix::core::TT_CUBEMAP_ARRAY;
               break;
 
-            case dp::sg::core::TT_TEXTURE_BUFFER:
+            case dp::sg::core::TextureTarget::TEXTURE_BUFFER:
               DP_ASSERT( !"texture type not yet supported" );
               return dp::rix::core::TT_NUM_TEXTURETYPES;
 
@@ -148,57 +148,57 @@ namespace dp
 
             switch( texture->getTextureTarget() )
             {
-            case dp::sg::core::TT_TEXTURE_1D:
+            case dp::sg::core::TextureTarget::TEXTURE_1D:
               tt = dp::rix::core::TT_1D;
               width  = texture->getWidth();
               break;
 
-            case dp::sg::core::TT_TEXTURE_1D_ARRAY:
+            case dp::sg::core::TextureTarget::TEXTURE_1D_ARRAY:
               tt = dp::rix::core::TT_1D_ARRAY;
               width  = texture->getWidth();
               layers = texture->getNumberOfImages();
               break;
 
-            case dp::sg::core::TT_TEXTURE_2D:
+            case dp::sg::core::TextureTarget::TEXTURE_2D:
               tt = dp::rix::core::TT_2D;
               width  = texture->getWidth();
               height = texture->getHeight();
               break;
 
-            case dp::sg::core::TT_TEXTURE_RECTANGLE:
+            case dp::sg::core::TextureTarget::TEXTURE_RECTANGLE:
               tt = dp::rix::core::TT_2D_RECTANGLE;
               width  = texture->getWidth();
               height = texture->getHeight();
               break;
 
-            case dp::sg::core::TT_TEXTURE_2D_ARRAY:
+            case dp::sg::core::TextureTarget::TEXTURE_2D_ARRAY:
               tt = dp::rix::core::TT_2D_ARRAY;
               width  = texture->getWidth();
               height = texture->getHeight();
               layers = texture->getNumberOfImages();
               break;
 
-            case dp::sg::core::TT_TEXTURE_3D:
+            case dp::sg::core::TextureTarget::TEXTURE_3D:
               tt = dp::rix::core::TT_3D;
               width  = texture->getWidth();
               height = texture->getHeight();
               depth  = texture->getDepth();
               break;
 
-            case dp::sg::core::TT_TEXTURE_CUBE:
+            case dp::sg::core::TextureTarget::TEXTURE_CUBE:
               tt = dp::rix::core::TT_CUBEMAP;
               width  = texture->getWidth();
               height = texture->getHeight();
               break;
 
-            case dp::sg::core::TT_TEXTURE_CUBE_ARRAY:
+            case dp::sg::core::TextureTarget::TEXTURE_CUBE_ARRAY:
               tt = dp::rix::core::TT_CUBEMAP_ARRAY;
               width  = texture->getWidth();
               height = texture->getHeight();
               layers = texture->getNumberOfImages() / 6;  // !
               break;
 
-            case dp::sg::core::TT_TEXTURE_BUFFER:
+            case dp::sg::core::TextureTarget::TEXTURE_BUFFER:
               DP_ASSERT( !"texture type not yet supported" );
               return nullptr;
 

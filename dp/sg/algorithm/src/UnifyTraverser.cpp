@@ -502,9 +502,9 @@ namespace dp
               // ***************************************************************
               // the algorithm currently only works for float-typed vertex data!
               // ***************************************************************
-              for ( unsigned int i=0 ; i<VertexAttributeSet::DP_SG_VERTEX_ATTRIB_COUNT ; i++ )
+              for ( unsigned int i=0 ; i<static_cast<unsigned int>(VertexAttributeSet::AttributeID::VERTEX_ATTRIB_COUNT) ; i++ )
               {
-                dp::DataType type = p->getTypeOfVertexData(i);
+                dp::DataType type = p->getTypeOfVertexData(static_cast<VertexAttributeSet::AttributeID>(i));
                 if (  type != dp::DataType::UNKNOWN // no data is ok!
                    && type != dp::DataType::FLOAT_32 )
                 {
@@ -517,11 +517,12 @@ namespace dp
 
               //  count the dimension of the VertexAttributeSet
               unsigned int  dimension = 0;
-              for ( unsigned int i=0 ; i<VertexAttributeSet::DP_SG_VERTEX_ATTRIB_COUNT ; i++ )
+              for ( unsigned int i=0 ; i<static_cast<unsigned int>(VertexAttributeSet::AttributeID::VERTEX_ATTRIB_COUNT) ; i++ )
               {
-                if ( p->getNumberOfVertexData( i ) )
+                VertexAttributeSet::AttributeID id = static_cast<VertexAttributeSet::AttributeID>(i);
+                if ( p->getNumberOfVertexData( id ) )
                 {
-                  dimension += p->getSizeOfVertexData( i );
+                  dimension += p->getSizeOfVertexData( id );
                 }
               }
 
@@ -533,12 +534,13 @@ namespace dp
               }
 
               //  fill valuesIn with the vertex attribute data
-              for ( unsigned int i=0, j=0 ; i<VertexAttributeSet::DP_SG_VERTEX_ATTRIB_COUNT ; i++ )
+              for ( unsigned int i=0, j=0 ; i<static_cast<unsigned int>(VertexAttributeSet::AttributeID::VERTEX_ATTRIB_COUNT) ; i++ )
               {
-                if ( p->getNumberOfVertexData( i ) != 0 )
+                VertexAttributeSet::AttributeID id = static_cast<VertexAttributeSet::AttributeID>(i);
+                if ( p->getNumberOfVertexData( id ) != 0 )
                 {
-                  unsigned int dim = p->getSizeOfVertexData( i );
-                  Buffer::ConstIterator<float>::Type vad = p->getVertexData<float>( i );
+                  unsigned int dim = p->getSizeOfVertexData( id );
+                  Buffer::ConstIterator<float>::Type vad = p->getVertexData<float>( id );
                   for ( unsigned int k=0 ; k<n ; k++ )
                   {
                     const float *value = &vad[k];
@@ -586,11 +588,12 @@ namespace dp
 
                 //  create a new VertexAttributeSet with the condensed data
                 VertexAttributeSetSharedPtr newVAS = VertexAttributeSet::create();
-                for ( unsigned int i=0, j=0 ; i<VertexAttributeSet::DP_SG_VERTEX_ATTRIB_COUNT ; i++ )
+                for ( unsigned int i=0, j=0 ; i<static_cast<unsigned int>(VertexAttributeSet::AttributeID::VERTEX_ATTRIB_COUNT) ; i++ )
                 {
-                  if ( p->getNumberOfVertexData( i ) )
+                  VertexAttributeSet::AttributeID id = static_cast<VertexAttributeSet::AttributeID>(i);
+                  if ( p->getNumberOfVertexData( id ) )
                   {
-                    unsigned int dim = p->getSizeOfVertexData( i );
+                    unsigned int dim = p->getSizeOfVertexData( id );
                     vector<float> vad( dim * valuesOut.size() );
                     for ( size_t k=0 ; k<valuesOut.size() ; k++ )
                     {
@@ -599,13 +602,15 @@ namespace dp
                         vad[dim*k+l] = valuesOut[k][j+l];
                       }
                     }
-                    newVAS->setVertexData( i, dim, dp::DataType::FLOAT_32, &vad[0], 0, dp::checked_cast<unsigned int>(vad.size()/dim) );
+                    newVAS->setVertexData( id, dim, dp::DataType::FLOAT_32, &vad[0], 0, dp::checked_cast<unsigned int>(vad.size()/dim) );
 
                     // inherit enable states from source attrib
                     // normalize-enable state only meaningful for generic aliases!
-                    newVAS->setEnabled(i, p->isEnabled(i)); // conventional
-                    newVAS->setEnabled(i+16, p->isEnabled(i+16)); // generic
-                    newVAS->setNormalizeEnabled(i+16, p->isNormalizeEnabled(i+16)); // generic only!
+                    newVAS->setEnabled(id, p->isEnabled(id)); // conventional
+
+                    id = static_cast<VertexAttributeSet::AttributeID>(i+16);    // generic
+                    newVAS->setEnabled(id, p->isEnabled(id));
+                    newVAS->setNormalizeEnabled(id, p->isNormalizeEnabled(id));
                     j += dim;
                   }
                 }

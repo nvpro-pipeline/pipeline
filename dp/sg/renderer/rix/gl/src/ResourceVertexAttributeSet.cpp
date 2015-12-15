@@ -78,7 +78,7 @@ namespace dp
             std::vector<dp::rix::core::VertexFormatInfo>  vertexInfos;
             dp::rix::core::VertexDataSharedHandle vertexData = renderer->vertexDataCreate();
 
-            unsigned int numVertices = m_vertexAttributeSet->getVertexAttribute( 0 ).getVertexDataCount();
+            unsigned int numVertices = m_vertexAttributeSet->getVertexAttribute( dp::sg::core::VertexAttributeSet::AttributeID::POSITION ).getVertexDataCount();
 
             std::vector<ResourceBufferSharedPtr> resourceBuffers;
 
@@ -88,7 +88,7 @@ namespace dp
       
             for ( unsigned int i = 0; i < 16; ++i ) // FIXME Must match MAX_ATTRIBUTES, but that is only defined in inc\RendererAPI\RendererGL.h
             {
-              dp::sg::core::VertexAttribute va = m_vertexAttributeSet->getVertexAttribute( i );
+              dp::sg::core::VertexAttribute va = m_vertexAttributeSet->getVertexAttribute( static_cast<dp::sg::core::VertexAttributeSet::AttributeID>(i) );
 
               if ( va.getBuffer() && va.getVertexDataCount() == numVertices )
               {

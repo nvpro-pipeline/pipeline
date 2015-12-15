@@ -68,7 +68,7 @@ namespace dp
 
       /*! \brief Retrieves the best-matching TextureTarget from A TextureHost. 
        * \return The function returns the best-matching TextureTarget for the specified TextureHost, or
-       * TT_UNSPECIFIED_TEXTURE_TARGET if no matching TextureTarget can be determined.
+       * TextureTarget::UNSPECIFIED if no matching TextureTarget can be determined.
        */
       DP_SG_CORE_API TextureTarget determineTextureTarget( const TextureHostSharedPtr & img );
 
@@ -86,34 +86,34 @@ namespace dp
         //
         // TextureHost.cpp and GLContext.cpp contain dependencies.
         //
-        enum PixelFormat
+        enum class PixelFormat
         {
-            IMG_UNKNOWN_FORMAT = -1 //!< unknown pixel format
-          , IMG_COLOR_INDEX = 0     //!< color index format
-          , IMG_RGB                 //!< RGB format
-          , IMG_RGBA                //!< RGBA format
-          , IMG_BGR                 //!< BGR format
-          , IMG_BGRA                //!< BGRA format
-          , IMG_LUMINANCE           //!< luminance format
+            UNKNOWN = -1        //!< unknown pixel format
+          , COLOR_INDEX = 0     //!< color index format
+          , RGB                 //!< RGB format
+          , RGBA                //!< RGBA format
+          , BGR                 //!< BGR format
+          , BGRA                //!< BGRA format
+          , LUMINANCE           //!< luminance format
                                     //   luminace and intensity are the same cept for A
-          , IMG_LUMINANCE_ALPHA     //!< luminance alpha format
+          , LUMINANCE_ALPHA     //!< luminance alpha format
 
           //
           // New Formats
           // 
-          , IMG_ALPHA           //!< Alpha only format
+          , ALPHA               //!< Alpha only format
 
-          , IMG_DEPTH_COMPONENT //!< Depth only ( ARB_depth_texture )
-          , IMG_DEPTH_STENCIL   //!< Depth + stencil - EXT_packed_depth_stencil
+          , DEPTH_COMPONENT     //!< Depth only ( ARB_depth_texture )
+          , DEPTH_STENCIL       //!< Depth + stencil - EXT_packed_depth_stencil
 
           // Integer
-          , IMG_INTEGER_ALPHA
-          , IMG_INTEGER_LUMINANCE
-          , IMG_INTEGER_LUMINANCE_ALPHA
-          , IMG_INTEGER_RGB
-          , IMG_INTEGER_BGR
-          , IMG_INTEGER_RGBA
-          , IMG_INTEGER_BGRA
+          , INTEGER_ALPHA
+          , INTEGER_LUMINANCE
+          , INTEGER_LUMINANCE_ALPHA
+          , INTEGER_RGB
+          , INTEGER_BGR
+          , INTEGER_RGBA
+          , INTEGER_BGRA
 
           //
           // Compressed texture formats
@@ -122,26 +122,26 @@ namespace dp
           // point because they signify that the data has already been
           // compressed
           //
-          , IMG_COMPRESSED_LUMINANCE_LATC1        
-          , IMG_COMPRESSED_SIGNED_LUMINANCE_LATC1 
-          , IMG_COMPRESSED_LUMINANCE_ALPHA_LATC2  
-          , IMG_COMPRESSED_SIGNED_LUMINANCE_ALPHA_LATC2
-          , IMG_COMPRESSED_RED_RGTC1
-          , IMG_COMPRESSED_SIGNED_RED_RGTC1
-          , IMG_COMPRESSED_RG_RGTC2
-          , IMG_COMPRESSED_SIGNED_RG_RGTC2
+          , COMPRESSED_LUMINANCE_LATC1        
+          , COMPRESSED_SIGNED_LUMINANCE_LATC1 
+          , COMPRESSED_LUMINANCE_ALPHA_LATC2  
+          , COMPRESSED_SIGNED_LUMINANCE_ALPHA_LATC2
+          , COMPRESSED_RED_RGTC1
+          , COMPRESSED_SIGNED_RED_RGTC1
+          , COMPRESSED_RG_RGTC2
+          , COMPRESSED_SIGNED_RG_RGTC2
 
-          , IMG_COMPRESSED_RGB_DXT1
-          , IMG_COMPRESSED_RGBA_DXT1
-          , IMG_COMPRESSED_RGBA_DXT3
-          , IMG_COMPRESSED_RGBA_DXT5
+          , COMPRESSED_RGB_DXT1
+          , COMPRESSED_RGBA_DXT1
+          , COMPRESSED_RGBA_DXT3
+          , COMPRESSED_RGBA_DXT5
 
-          , IMG_COMPRESSED_SRGB_DXT1
-          , IMG_COMPRESSED_SRGBA_DXT1
-          , IMG_COMPRESSED_SRGBA_DXT3
-          , IMG_COMPRESSED_SRGBA_DXT5
+          , COMPRESSED_SRGB_DXT1
+          , COMPRESSED_SRGBA_DXT1
+          , COMPRESSED_SRGBA_DXT3
+          , COMPRESSED_SRGBA_DXT5
 
-          , IMG_NUM_FORMATS     //!< specifies number of valid format descriptors
+          , NUM_FORMATS         //!< specifies number of valid format descriptors
         };
 
         //! Enumeration type to describe the data type of pixel data
@@ -152,31 +152,31 @@ namespace dp
         //
         // TextureHost.cpp and GLContext.cpp contain dependencies.
         //
-        enum PixelDataType
+        enum class PixelDataType
         {
-            IMG_UNKNOWN_TYPE = -1 //!< unknown data type
-          , IMG_BYTE = 0          //!< signed byte type (8-bit)
-          , IMG_UNSIGNED_BYTE     //!< unsigned byte type (8-bit)
-          , IMG_SHORT             //!< signed short type (16-bit)  
-          , IMG_UNSIGNED_SHORT    //!< unsigned short type (16-bit)
-          , IMG_INT               //!< signed integer type (32-bit)
-          , IMG_UNSIGNED_INT      //!< unsigned integer type (32-bit)
-          , IMG_FLOAT32           //!< single-precision floating point (32-bit)
-          , IMG_FLOAT16           //!< half-precision floating point (16-bit)
+            UNKNOWN = -1              //!< unknown data type
+          , BYTE = 0                  //!< signed byte type (8-bit)
+          , UNSIGNED_BYTE             //!< unsigned byte type (8-bit)
+          , SHORT                     //!< signed short type (16-bit)  
+          , UNSIGNED_SHORT            //!< unsigned short type (16-bit)
+          , INT                       //!< signed integer type (32-bit)
+          , UNSIGNED_INT              //!< unsigned integer type (32-bit)
+          , FLOAT32                   //!< single-precision floating point (32-bit)
+          , FLOAT16                   //!< half-precision floating point (16-bit)
 
           // custom formats
-          , IMG_UNSIGNED_INT_2_10_10_10 //!< 2 Bits A, 10 bits RGB (RGB10/10A2)
-          , IMG_UNSIGNED_INT_5_9_9_9    //!< 5 bits exponent 9 bits RGB mantissa
-                                        //   (EXT_texture_shared_exponent) format
-          , IMG_UNSIGNED_INT_10F_11F_11F //!< 5 bits exp + 5,6,6 bits RGB mantissa
-                                         //   (EXT_packed_float) format
-          , IMG_UNSIGNED_INT_24_8      //!< 24 bits depth, 8 bits stencil
-                                         //   (EXT_packed_depth_stencil) format
-          , IMG_NUM_TYPES         //!< specifies number of valid type descriptors
+          , UNSIGNED_INT_2_10_10_10   //!< 2 Bits A, 10 bits RGB (RGB10/10A2)
+          , UNSIGNED_INT_5_9_9_9      //!< 5 bits exponent 9 bits RGB mantissa
+                                      //   (EXT_texture_shared_exponent) format
+          , UNSIGNED_INT_10F_11F_11F  //!< 5 bits exp + 5,6,6 bits RGB mantissa
+                                      //   (EXT_packed_float) format
+          , UNSIGNED_INT_24_8         //!< 24 bits depth, 8 bits stencil
+                                      //   (EXT_packed_depth_stencil) format
+          , NUM_TYPES                 //!< specifies number of valid type descriptors
 
           // compatibility
-          , IMG_FLOAT = IMG_FLOAT32
-          , IMG_HALF  = IMG_FLOAT16
+          , FLOAT = PixelDataType::FLOAT32
+          , HALF  = PixelDataType::FLOAT16
         };
 
 
@@ -341,121 +341,121 @@ namespace dp
 
         //! Enumeration type to describe the format of the data when it is resident 
         //  on the GPU as a texture map
-        enum TextureGPUFormat 
+        enum class TextureGPUFormat 
         { 
-          TGF_DEFAULT, // TYPICALLY, PICK THE FASTEST FORMAT FOR THE GIVEN DATA
+          DEFAULT, // TYPICALLY, PICK THE FASTEST FORMAT FOR THE GIVEN DATA
 
           // "generic formats" 
-          TGF_FIXED, // USE A FIXED-POINT GPU FORMAT
-          TGF_FLOAT, // USE A FLOATING-POINT GPU FORMAT (choose format based on size of float data supplied) 
-          TGF_NONLINEAR, // USE AN SRGB FORMAT (choose SRGB/SRGBA based on the data supplied) 
-          TGF_INTEGER, // USE AN INTEGER FORMAT, BASED ON THE DATA
-          TGF_COMPRESSED_FIXED, // USE A COMPRESSED FIXED POINT FORMAT 
+          FIXED, // USE A FIXED-POINT GPU FORMAT
+          FLOAT, // USE A FLOATING-POINT GPU FORMAT (choose format based on size of float data supplied) 
+          NONLINEAR, // USE AN SRGB FORMAT (choose SRGB/SRGBA based on the data supplied) 
+          INTEGER, // USE AN INTEGER FORMAT, BASED ON THE DATA
+          COMPRESSED_FIXED, // USE A COMPRESSED FIXED POINT FORMAT 
                                 // (compress on upload)
 
           // some "not so generic" formats
-          TGF_FLOAT16, // USE 16 BIT PER COMPONENT FLOAT FORMAT 
-          TGF_FLOAT32, // USE 32 BIT PER COMPONENT FLOAT FORMAT 
+          FLOAT16, // USE 16 BIT PER COMPONENT FLOAT FORMAT 
+          FLOAT32, // USE 32 BIT PER COMPONENT FLOAT FORMAT 
 
-          TGF_FIXED8,  // USE an 8 bit per component fixed point format
-          TGF_FIXED10, // USE a 10 BIT PER COMPONENT FIXED POINT FORMAT (10,10,10,2)
-          TGF_FIXED16, // USE a 16 bit per component fixed point format
+          FIXED8,  // USE an 8 bit per component fixed point format
+          FIXED10, // USE a 10 BIT PER COMPONENT FIXED POINT FORMAT (10,10,10,2)
+          FIXED16, // USE a 16 bit per component fixed point format
 
           // explicit formats
-          TGF_ALPHA8,
-          TGF_ALPHA16,
-          TGF_SIGNED_ALPHA8,
-          TGF_SIGNED_ALPHA16,
-          TGF_LUMINANCE8,
-          TGF_LUMINANCE16,
-          TGF_SIGNED_LUMINANCE8,
-          TGF_SIGNED_LUMINANCE16,
-          TGF_LUMINANCE8_ALPHA8,
-          TGF_LUMINANCE16_ALPHA16,
-          TGF_SIGNED_LUMINANCE8_ALPHA8,
-          TGF_SIGNED_LUMINANCE16_ALPHA16,
-          TGF_COMPRESSED_LUMINANCE,
-          TGF_COMPRESSED_LUMINANCE_ALPHA,
+          ALPHA8,
+          ALPHA16,
+          SIGNED_ALPHA8,
+          SIGNED_ALPHA16,
+          LUMINANCE8,
+          LUMINANCE16,
+          SIGNED_LUMINANCE8,
+          SIGNED_LUMINANCE16,
+          LUMINANCE8_ALPHA8,
+          LUMINANCE16_ALPHA16,
+          SIGNED_LUMINANCE8_ALPHA8,
+          SIGNED_LUMINANCE16_ALPHA16,
+          COMPRESSED_LUMINANCE,
+          COMPRESSED_LUMINANCE_ALPHA,
 
-          TGF_COMPRESSED_LUMINANCE_LATC,         // ext_texture_compression_latc
-          TGF_SIGNED_COMPRESSED_LUMINANCE_LATC,
-          TGF_COMPRESSED_LUMINANCE_ALPHA_LATC,
-          TGF_SIGNED_COMPRESSED_LUMINANCE_ALPHA_LATC,
-          TGF_COMPRESSED_RED_RGTC,
-          TGF_SIGNED_COMPRESSED_RED_RGTC,
-          TGF_COMPRESSED_RG_RGTC,
-          TGF_SIGNED_COMPRESSED_RG_RGTC,
+          COMPRESSED_LUMINANCE_LATC,         // ext_texture_compression_latc
+          SIGNED_COMPRESSED_LUMINANCE_LATC,
+          COMPRESSED_LUMINANCE_ALPHA_LATC,
+          SIGNED_COMPRESSED_LUMINANCE_ALPHA_LATC,
+          COMPRESSED_RED_RGTC,
+          SIGNED_COMPRESSED_RED_RGTC,
+          COMPRESSED_RG_RGTC,
+          SIGNED_COMPRESSED_RG_RGTC,
 
-          TGF_RGB8,
-          TGF_SIGNED_RGB8,
-          TGF_RGB16,       // native on G80
-          TGF_RGBA8,
-          TGF_SIGNED_RGBA8,
-          TGF_RGB10,       // native on G80
-          TGF_RGB10_A2,    // native on G80
-          TGF_RGBA16,      // native on G80
+          RGB8,
+          SIGNED_RGB8,
+          RGB16,       // native on G80
+          RGBA8,
+          SIGNED_RGBA8,
+          RGB10,       // native on G80
+          RGB10_A2,    // native on G80
+          RGBA16,      // native on G80
 
-          TGF_SRGB,         // ext_texture_srgb
-          TGF_SRGBA,
-          TGF_COMPRESSED_SRGB,
-          TGF_COMPRESSED_SRGBA,
-          TGF_COMPRESSED_SRGB_DXT1,
-          TGF_COMPRESSED_SRGB_DXT3,
-          TGF_COMPRESSED_SRGB_DXT5,
-          TGF_COMPRESSED_SRGBA_DXT1,
-          TGF_COMPRESSED_RGB,
-          TGF_COMPRESSED_RGBA,
-          TGF_COMPRESSED_RGB_DXT1,
-          TGF_COMPRESSED_RGB_DXT3,
-          TGF_COMPRESSED_RGB_DXT5,
-          TGF_COMPRESSED_RGBA_DXT1,
+          SRGB,         // ext_texture_srgb
+          SRGBA,
+          COMPRESSED_SRGB,
+          COMPRESSED_SRGBA,
+          COMPRESSED_SRGB_DXT1,
+          COMPRESSED_SRGB_DXT3,
+          COMPRESSED_SRGB_DXT5,
+          COMPRESSED_SRGBA_DXT1,
+          COMPRESSED_RGB,
+          COMPRESSED_RGBA,
+          COMPRESSED_RGB_DXT1,
+          COMPRESSED_RGB_DXT3,
+          COMPRESSED_RGB_DXT5,
+          COMPRESSED_RGBA_DXT1,
 
-          TGF_DEPTH16,              // arb_depth_texture
-          TGF_DEPTH24,
-          TGF_DEPTH32,
+          DEPTH16,              // arb_depth_texture
+          DEPTH24,
+          DEPTH32,
 
-          TGF_DEPTH24_STENCIL8,     // EXT_packed_depth_stencil
+          DEPTH24_STENCIL8,     // EXT_packed_depth_stencil
 
-          TGF_LUMINANCE16F,         // arb_texture_float
-          TGF_LUMINANCE32F,
-          TGF_LUMINANCE_ALPHA16F,
-          TGF_LUMINANCE_ALPHA32F,
-          TGF_RGB16F,
-          TGF_RGB32F,
-          TGF_RGBA16F,
-          TGF_RGBA32F,
+          LUMINANCE16F,         // arb_texture_float
+          LUMINANCE32F,
+          LUMINANCE_ALPHA16F,
+          LUMINANCE_ALPHA32F,
+          RGB16F,
+          RGB32F,
+          RGBA16F,
+          RGBA32F,
 
-          TGF_SIGNED_RGB_INTEGER32, // ext_texture_integer - require an integer
+          SIGNED_RGB_INTEGER32, // ext_texture_integer - require an integer
                                     // PixelDataFormat!
-          TGF_SIGNED_RGB_INTEGER16,
-          TGF_SIGNED_RGB_INTEGER8,
-          TGF_RGB_INTEGER32,
-          TGF_RGB_INTEGER16,
-          TGF_RGB_INTEGER8,
+          SIGNED_RGB_INTEGER16,
+          SIGNED_RGB_INTEGER8,
+          RGB_INTEGER32,
+          RGB_INTEGER16,
+          RGB_INTEGER8,
 
-          TGF_SIGNED_RGBA_INTEGER32,
-          TGF_SIGNED_RGBA_INTEGER16,
-          TGF_SIGNED_RGBA_INTEGER8,
-          TGF_RGBA_INTEGER32,
-          TGF_RGBA_INTEGER16,
-          TGF_RGBA_INTEGER8,
+          SIGNED_RGBA_INTEGER32,
+          SIGNED_RGBA_INTEGER16,
+          SIGNED_RGBA_INTEGER8,
+          RGBA_INTEGER32,
+          RGBA_INTEGER16,
+          RGBA_INTEGER8,
 
-          TGF_SIGNED_LUMINANCE_INTEGER32,
-          TGF_SIGNED_LUMINANCE_INTEGER16,
-          TGF_SIGNED_LUMINANCE_INTEGER8,
-          TGF_LUMINANCE_INTEGER32,
-          TGF_LUMINANCE_INTEGER16,
-          TGF_LUMINANCE_INTEGER8,
+          SIGNED_LUMINANCE_INTEGER32,
+          SIGNED_LUMINANCE_INTEGER16,
+          SIGNED_LUMINANCE_INTEGER8,
+          LUMINANCE_INTEGER32,
+          LUMINANCE_INTEGER16,
+          LUMINANCE_INTEGER8,
 
-          TGF_SIGNED_LUMINANCE_ALPHA_INTEGER32,
-          TGF_SIGNED_LUMINANCE_ALPHA_INTEGER16,
-          TGF_SIGNED_LUMINANCE_ALPHA_INTEGER8,
-          TGF_LUMINANCE_ALPHA_INTEGER32,
-          TGF_LUMINANCE_ALPHA_INTEGER16,
-          TGF_LUMINANCE_ALPHA_INTEGER8,
+          SIGNED_LUMINANCE_ALPHA_INTEGER32,
+          SIGNED_LUMINANCE_ALPHA_INTEGER16,
+          SIGNED_LUMINANCE_ALPHA_INTEGER8,
+          LUMINANCE_ALPHA_INTEGER32,
+          LUMINANCE_ALPHA_INTEGER16,
+          LUMINANCE_ALPHA_INTEGER8,
 
-          TGF_UNSIGNED_FLOAT_SHARED_EXPONENT, //USE RGB9_E5 format (EXT_texture_shared_exponent)
-          TGF_UNSIGNED_FLOAT_PACKED          // USE R11F_G11F_B10F_EXT format, (EXT_texture_packed_float)
+          UNSIGNED_FLOAT_SHARED_EXPONENT, //USE RGB9_E5 format (EXT_texture_shared_exponent)
+          UNSIGNED_FLOAT_PACKED          // USE R11F_G11F_B10F_EXT format, (EXT_texture_packed_float)
         };
 
         //! Flags considered for image processing
@@ -491,9 +491,9 @@ namespace dp
             /*! \brief Tries to set the TextureTarget, returns false if unable to convert the image data
             \param target The TextureTarget defines how the texture is uploaded to the renderers
             \returns When the conversion was successful or texture's own target already matches, then \c true is returned.
-              If the texture has a type other than \c TT_UNSPECIFIED_TEXTURE_TARGET or conversion is impossible \c false is returned.
+              If the texture has a type other than \c TextureTarget::UNSPECIFIED or conversion is impossible \c false is returned.
             \remarks Renderers require the TextureTarget to be specified in advance. Changing the target can only be performed if
-              the texture's target is TT_UNSPECIFIED_TEXTURE_TARGET.
+              the texture's target is TextureTarget::UNSPECIFIED.
         */
         DP_SG_CORE_API bool convertToTextureTarget( TextureTarget target );
 
@@ -519,7 +519,7 @@ namespace dp
          * particular format when uploaded to the GPU.  Compressed formats can be 
          * selected through this method, and Integer formats can be selected by
          * this method as well.
-         * The default is TGF_DEFAULT which is OpenGL's default of using either
+         * The default is TextureGPUFormat::DEFAULT which is OpenGL's default of using either
          * fixed or floating point format for textures, using the same methods
          * that were used in previous versions of SceniX.  Please see the extended
          * documentation for those defaults.

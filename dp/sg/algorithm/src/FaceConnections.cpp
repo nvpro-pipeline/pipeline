@@ -39,8 +39,8 @@ namespace dp
         , m_faceConnectionCounts(p->getNumberOfPrimitives())
         , m_faceSets(p->getNumberOfVerticesPerPrimitive()+1)
       {
-        DP_ASSERT( ( p->getPrimitiveType() == dp::sg::core::PRIMITIVE_TRIANGLES )
-                || ( p->getPrimitiveType() == dp::sg::core::PRIMITIVE_QUADS ) );
+        DP_ASSERT( ( p->getPrimitiveType() == dp::sg::core::PrimitiveType::TRIANGLES )
+                || ( p->getPrimitiveType() == dp::sg::core::PrimitiveType::QUADS ) );
 
         unsigned int elementCount = p->getElementCount();
         unsigned int primitiveSize = p->getNumberOfVerticesPerPrimitive();

@@ -1140,7 +1140,7 @@ namespace dp
       {
         // for patches with 3 vertices, we assume it's close to a triangle and handle it like that
         // for all others, we can't do anything
-        DP_ASSERT( p->getPrimitiveType() == PRIMITIVE_PATCHES );
+        DP_ASSERT( p->getPrimitiveType() == PrimitiveType::PATCHES );
         if ( verticesPerPatch( p->getPatchesType() ) == 3 )
         {
           handleTriangles( p );
@@ -1157,57 +1157,57 @@ namespace dp
           // dispatch to proper handler
           switch( p->getPrimitiveType() )
           {
-            case PRIMITIVE_POINTS:
+            case PrimitiveType::POINTS:
               handlePoints( p );
               break;
 
-            case PRIMITIVE_LINES:
+            case PrimitiveType::LINES:
               handleLines( p );
               break;
 
-            case PRIMITIVE_LINE_STRIP:
+            case PrimitiveType::LINE_STRIP:
               handleLineStrip( p );
               break;
 
-            case PRIMITIVE_LINE_LOOP:
+            case PrimitiveType::LINE_LOOP:
               handleLineLoop( p );
               break;
 
-            case PRIMITIVE_TRIANGLES:
+            case PrimitiveType::TRIANGLES:
               handleTriangles( p );
               break;
 
-            case PRIMITIVE_TRIANGLE_STRIP:
+            case PrimitiveType::TRIANGLE_STRIP:
               handleTriangleStrip( p );
               break;
 
             // handle polygon like a fan for now, assuming it is convex and verts are coplanar
-            case PRIMITIVE_POLYGON:
-            case PRIMITIVE_TRIANGLE_FAN:
+            case PrimitiveType::POLYGON:
+            case PrimitiveType::TRIANGLE_FAN:
               handleTriangleFan( p );
               break;
 
-            case PRIMITIVE_QUADS:
+            case PrimitiveType::QUADS:
               handleQuads( p );
               break;
 
-            case PRIMITIVE_QUAD_STRIP:
+            case PrimitiveType::QUAD_STRIP:
               handleQuadStrip( p );
               break;
 
-            case PRIMITIVE_TRIANGLE_STRIP_ADJACENCY:
-            case PRIMITIVE_LINE_STRIP_ADJACENCY:
-            case PRIMITIVE_LINES_ADJACENCY:
-            case PRIMITIVE_TRIANGLES_ADJACENCY:
+            case PrimitiveType::TRIANGLE_STRIP_ADJACENCY:
+            case PrimitiveType::LINE_STRIP_ADJACENCY:
+            case PrimitiveType::LINES_ADJACENCY:
+            case PrimitiveType::TRIANGLES_ADJACENCY:
               // TODO: ADD support for ME
               break;
 
-            case PRIMITIVE_PATCHES:
+            case PrimitiveType::PATCHES:
               handlePatches( p );
               break;
 
             default:
-            case PRIMITIVE_UNINITIALIZED:
+            case PrimitiveType::UNINITIALIZED:
               break;
           }
         }

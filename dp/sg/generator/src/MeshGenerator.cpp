@@ -187,7 +187,7 @@ namespace dp
         indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
         // Create a Primitive
-        primitivePtr = Primitive::create( PRIMITIVE_QUADS );
+        primitivePtr = Primitive::create( PrimitiveType::QUADS );
         primitivePtr->setVertexAttributeSet( vasPtr );
         primitivePtr->setIndexSet( indexSet );
 
@@ -240,7 +240,7 @@ namespace dp
         indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
         // Create a Primitive
-        primitivePtr = Primitive::create( PRIMITIVE_QUAD_STRIP );
+        primitivePtr = Primitive::create( PrimitiveType::QUAD_STRIP );
         primitivePtr->setVertexAttributeSet( vasPtr );
         primitivePtr->setIndexSet( indexSet );
 
@@ -306,7 +306,7 @@ namespace dp
         IndexSetSharedPtr indexSet( IndexSet::create() );
         indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
-        PrimitiveSharedPtr primitivePtr = Primitive::create( PRIMITIVE_TRIANGLES );
+        PrimitiveSharedPtr primitivePtr = Primitive::create( PrimitiveType::TRIANGLES );
         primitivePtr->setVertexAttributeSet( vasPtr );
         primitivePtr->setIndexSet( indexSet );
 
@@ -375,7 +375,7 @@ namespace dp
         indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
         // create pointer to return
-        PrimitiveSharedPtr primitivePtr = Primitive::create( PRIMITIVE_TRIANGLE_FAN );
+        PrimitiveSharedPtr primitivePtr = Primitive::create( PrimitiveType::TRIANGLE_FAN );
         primitivePtr->setVertexAttributeSet( vasPtr );
         primitivePtr->setIndexSet( indexSet );
 
@@ -425,7 +425,7 @@ namespace dp
         indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
         // create pointer to return
-        PrimitiveSharedPtr primitivePtr = Primitive::create( PRIMITIVE_TRIANGLE_STRIP );
+        PrimitiveSharedPtr primitivePtr = Primitive::create( PrimitiveType::TRIANGLE_STRIP );
         primitivePtr->setVertexAttributeSet( vasPtr );
         primitivePtr->setIndexSet( indexSet );
 
@@ -481,7 +481,7 @@ namespace dp
         vas->setVertices( &vertices[0], dp::checked_cast<unsigned int>(vertices.size()) );
 
         // Create a Primitive as triangular patches with 10 vertices per patch
-        PrimitiveSharedPtr triPatches = Primitive::create( PATCHES_CUBIC_BEZIER_TRIANGLES, PATCHES_MODE_TRIANGLES );
+        PrimitiveSharedPtr triPatches = Primitive::create( PatchesType::CUBIC_BEZIER_TRIANGLES, PatchesMode::TRIANGLES );
         triPatches->setVertexAttributeSet( vas );
 
         // Create a GeoNode and add the geometry
@@ -574,7 +574,7 @@ namespace dp
         vas->setVertices( &vertices[0], dp::checked_cast<unsigned int>( vertices.size() ) );
 
         // Create a Primitive as rectangular patches with 16 vertices per patch
-        PrimitiveSharedPtr patches = Primitive::create( PATCHES_CUBIC_BEZIER_QUADS, PATCHES_MODE_QUADS );
+        PrimitiveSharedPtr patches = Primitive::create( PatchesType::CUBIC_BEZIER_QUADS, PatchesMode::QUADS );
         patches->setVertexAttributeSet( vas );
 
         // Create a GeoNode and add the geometry
@@ -689,7 +689,7 @@ namespace dp
         indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
         // Create a Primitive
-        PrimitiveSharedPtr primitivePtr = Primitive::create( PRIMITIVE_TRIANGLES );
+        PrimitiveSharedPtr primitivePtr = Primitive::create( PrimitiveType::TRIANGLES );
         primitivePtr->setVertexAttributeSet( vasPtr );
         primitivePtr->setIndexSet( indexSet );
 
@@ -784,7 +784,7 @@ namespace dp
         IndexSetSharedPtr indexSet( IndexSet::create() );
         indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
-        primitivePtr = Primitive::create( PRIMITIVE_TRIANGLES );
+        primitivePtr = Primitive::create( PrimitiveType::TRIANGLES );
         primitivePtr->setVertexAttributeSet( vasPtr );
         primitivePtr->setIndexSet( indexSet );
 
@@ -897,7 +897,7 @@ namespace dp
         indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
         // Create a Primitive
-        PrimitiveSharedPtr primitivePtr = Primitive::create( PRIMITIVE_TRIANGLES );
+        PrimitiveSharedPtr primitivePtr = Primitive::create( PrimitiveType::TRIANGLES );
         primitivePtr->setVertexAttributeSet( vasPtr );
         primitivePtr->setIndexSet( indexSet );
 
@@ -1050,7 +1050,7 @@ namespace dp
         indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
         // create a Primitive
-        PrimitiveSharedPtr primitivePtr = Primitive::create( PRIMITIVE_TRIANGLES );
+        PrimitiveSharedPtr primitivePtr = Primitive::create( PrimitiveType::TRIANGLES );
         primitivePtr->setVertexAttributeSet( vasPtr );
         primitivePtr->setIndexSet( indexSet );
 
@@ -1145,7 +1145,7 @@ namespace dp
         indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
         // Create a Primitive
-        PrimitiveSharedPtr primitivePtr = Primitive::create( PRIMITIVE_TRIANGLES );
+        PrimitiveSharedPtr primitivePtr = Primitive::create( PrimitiveType::TRIANGLES );
         primitivePtr->setVertexAttributeSet( vasPtr );
         primitivePtr->setIndexSet( indexSet );
 
@@ -1232,14 +1232,14 @@ namespace dp
         vasPtr->setVertices( &vertices[0], size_v );
         vasPtr->setNormals( &normals[0], size_v );
         vasPtr->setTexCoords( 0, &texcoords[0], size_v );
-        vasPtr->setTexCoords( VertexAttributeSet::DP_SG_TANGENT  - VertexAttributeSet::DP_SG_TEXCOORD0, &tangents[0], size_v );
-        vasPtr->setTexCoords( VertexAttributeSet::DP_SG_BINORMAL - VertexAttributeSet::DP_SG_TEXCOORD0, &binormals[0], size_v );
+        vasPtr->setTexCoords( static_cast<unsigned int>(VertexAttributeSet::AttributeID::TANGENT)  - static_cast<unsigned int>(VertexAttributeSet::AttributeID::TEXCOORD0), &tangents[0], size_v );
+        vasPtr->setTexCoords( static_cast<unsigned int>(VertexAttributeSet::AttributeID::BINORMAL) - static_cast<unsigned int>(VertexAttributeSet::AttributeID::TEXCOORD0), &binormals[0], size_v );
 
         IndexSetSharedPtr indexSet( IndexSet::create() );
         indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
         // Create a Primitive
-        PrimitiveSharedPtr primitivePtr = Primitive::create( PRIMITIVE_TRIANGLES );
+        PrimitiveSharedPtr primitivePtr = Primitive::create( PrimitiveType::TRIANGLES );
         primitivePtr->setVertexAttributeSet( vasPtr );
         primitivePtr->setIndexSet( indexSet );
 
@@ -1407,7 +1407,7 @@ namespace dp
         IndexSetSharedPtr indexSet( IndexSet::create() );
         indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
-        PrimitiveSharedPtr primitivePtr = Primitive::create( PRIMITIVE_TRIANGLES );
+        PrimitiveSharedPtr primitivePtr = Primitive::create( PrimitiveType::TRIANGLES );
         primitivePtr->setVertexAttributeSet( vasPtr );
         primitivePtr->setIndexSet( indexSet );
 
@@ -1509,13 +1509,13 @@ namespace dp
         vasPtr->setVertices( &vertices[0], size_v );
         vasPtr->setNormals( &normals[0], size_v );
         vasPtr->setTexCoords( 0, &texcoords[0], size_v );
-        vasPtr->setTexCoords( VertexAttributeSet::DP_SG_TANGENT  - VertexAttributeSet::DP_SG_TEXCOORD0, &tangents[0], size_v );
-        vasPtr->setTexCoords( VertexAttributeSet::DP_SG_BINORMAL - VertexAttributeSet::DP_SG_TEXCOORD0, &binormals[0], size_v );
+        vasPtr->setTexCoords( static_cast<unsigned int>(VertexAttributeSet::AttributeID::TANGENT)  - static_cast<unsigned int>(VertexAttributeSet::AttributeID::TEXCOORD0), &tangents[0], size_v );
+        vasPtr->setTexCoords( static_cast<unsigned int>(VertexAttributeSet::AttributeID::BINORMAL) - static_cast<unsigned int>(VertexAttributeSet::AttributeID::TEXCOORD0), &binormals[0], size_v );
 
         IndexSetSharedPtr indexSet( IndexSet::create() );
         indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
-        PrimitiveSharedPtr primitivePtr = Primitive::create( PRIMITIVE_QUADS );
+        PrimitiveSharedPtr primitivePtr = Primitive::create( PrimitiveType::QUADS );
         primitivePtr->setVertexAttributeSet( vasPtr );
         primitivePtr->setIndexSet( indexSet );
 
@@ -1550,7 +1550,7 @@ namespace dp
         IndexSetSharedPtr indexSet( IndexSet::create() );
         indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
-        PrimitiveSharedPtr primitivePtr = Primitive::create( PRIMITIVE_TRIANGLES );
+        PrimitiveSharedPtr primitivePtr = Primitive::create( PrimitiveType::TRIANGLES );
         primitivePtr->setVertexAttributeSet( vasPtr );
         primitivePtr->setIndexSet( indexSet );
 
@@ -1604,7 +1604,7 @@ namespace dp
         vasPtr->setTexCoords( 0, &texcoords[0], 6 );
         vasPtr->setTexCoords( 1, &texcoords[0], 6 );
 
-        PrimitiveSharedPtr primitivePtr = Primitive::create( PRIMITIVE_TRIANGLES );
+        PrimitiveSharedPtr primitivePtr = Primitive::create( PrimitiveType::TRIANGLES );
         primitivePtr->setVertexAttributeSet( vasPtr );
 
         return primitivePtr;
@@ -1673,7 +1673,7 @@ namespace dp
         indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
         // Create a Primitive
-        PrimitiveSharedPtr primitivePtr = Primitive::create( PRIMITIVE_TRIANGLES );
+        PrimitiveSharedPtr primitivePtr = Primitive::create( PrimitiveType::TRIANGLES );
         primitivePtr->setVertexAttributeSet( vasPtr );
         primitivePtr->setIndexSet( indexSet );
 
@@ -1700,15 +1700,15 @@ namespace dp
 
         TextureHostSharedPtr textureHost = TextureHost::create();
         textureHost->setCreationFlags( TextureHost::F_PRESERVE_IMAGE_DATA_AFTER_UPLOAD );
-        unsigned int index = textureHost->addImage( 8, 8, 1, Image::IMG_RGBA, Image::IMG_FLOAT32 );
+        unsigned int index = textureHost->addImage( 8, 8, 1, Image::PixelFormat::RGBA, Image::PixelDataType::FLOAT32 );
         DP_ASSERT( index != -1 );
         textureHost->setImageData( index, (const void *) &tex[0] );
-        textureHost->setTextureTarget( TT_TEXTURE_2D );
-        textureHost->setTextureGPUFormat(TextureHost::TGF_FIXED8);
+        textureHost->setTextureTarget( TextureTarget::TEXTURE_2D );
+        textureHost->setTextureGPUFormat(TextureHost::TextureGPUFormat::FIXED8);
 
         SamplerSharedPtr sampler = Sampler::create( textureHost );
-        sampler->setMagFilterMode( TFM_MAG_NEAREST );
-        sampler->setMinFilterMode( TFM_MIN_NEAREST );
+        sampler->setMagFilterMode( TextureMagFilterMode::NEAREST );
+        sampler->setMinFilterMode( TextureMinFilterMode::NEAREST );
 
         ParameterGroupDataSharedPtr texture = createStandardTextureParameterData( sampler );
 
@@ -1743,15 +1743,15 @@ namespace dp
 
         TextureHostSharedPtr textureHost = TextureHost::create();
         textureHost->setCreationFlags( TextureHost::F_PRESERVE_IMAGE_DATA_AFTER_UPLOAD );
-        unsigned int index = textureHost->addImage( n, n, 1, Image::IMG_RGBA, Image::IMG_FLOAT32 );
+        unsigned int index = textureHost->addImage( n, n, 1, Image::PixelFormat::RGBA, Image::PixelDataType::FLOAT32 );
         DP_ASSERT( index != -1 );
         textureHost->setImageData( index, (const void *) &tex[0] );
-        textureHost->setTextureTarget( TT_TEXTURE_2D );
-        textureHost->setTextureGPUFormat(TextureHost::TGF_FIXED8);
+        textureHost->setTextureTarget( TextureTarget::TEXTURE_2D );
+        textureHost->setTextureGPUFormat(TextureHost::TextureGPUFormat::FIXED8);
 
         SamplerSharedPtr sampler = Sampler::create( textureHost );
-        sampler->setMagFilterMode( TFM_MAG_NEAREST );
-        sampler->setMinFilterMode( TFM_MIN_NEAREST );
+        sampler->setMagFilterMode( TextureMagFilterMode::NEAREST );
+        sampler->setMinFilterMode( TextureMinFilterMode::NEAREST );
 
         ParameterGroupDataSharedPtr texture = createStandardTextureParameterData( sampler );
 

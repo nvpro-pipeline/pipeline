@@ -38,7 +38,7 @@ namespace dp
     {
 
       //! \c Traverser that converts all flavors of quads to triangles.
-      /** Converts Primitives of type PRIMITIVE_QUADS or PRIMITIVE_TRIANGLES to Primitives of type PRIMITIVE_QUAD_STRIPS
+      /** Converts Primitives of type PrimitiveType::QUADS or PrimitiveType::TRIANGLES to Primitives of type PRIMITIVE_QUAD_STRIPS
         * or PRIMITIVE_TRIANGLE_STRIPS, respectively. */
       class TriangulateTraverser : public ExclusiveTraverser
       {
@@ -53,8 +53,8 @@ namespace dp
           DP_SG_ALGORITHM_API virtual void handleGeoNode( dp::sg::core::GeoNode * p );
 
           //! Handle a Primitive object.
-          /** Changes all Primitives of type PRIMITIVE_QUADS or PRIMITIVE_TRIANGLES and Primitives of type
-           *  PRIMITIVE_QUAD_STRIPS or PRIMITIVE_TRIANGLE_STRIP, respectively. */
+          /** Changes all Primitives of type PrimitiveType::QUADS or PrimitiveType::TRIANGLES and Primitives of type
+           *  PRIMITIVE_QUAD_STRIPS or PrimitiveType::TRIANGLE_STRIP, respectively. */
           DP_SG_ALGORITHM_API virtual void handlePrimitive( dp::sg::core::Primitive * p );
 
           /*! \brief Test whether this Object should be optimized

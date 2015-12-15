@@ -149,9 +149,9 @@ bool SceneRendererPipeline::init(const dp::gl::RenderContextSharedPtr &renderCon
   {
     const dp::sg::gl::TextureGLSharedPtr texGL = dp::sg::gl::TextureGL::create( texAtt->getTexture() );
     dp::sg::core::SamplerSharedPtr sampler = dp::sg::core::Sampler::create( texGL );
-    sampler->setWrapModes( dp::sg::core::TWM_CLAMP_TO_EDGE, dp::sg::core::TWM_CLAMP_TO_EDGE, dp::sg::core::TWM_CLAMP_TO_EDGE );
-    sampler->setMagFilterMode( dp::sg::core::TFM_MAG_NEAREST );
-    sampler->setMinFilterMode( dp::sg::core::TFM_MIN_NEAREST );
+    sampler->setWrapModes( dp::sg::core::TextureWrapMode::CLAMP_TO_EDGE, dp::sg::core::TextureWrapMode::CLAMP_TO_EDGE, dp::sg::core::TextureWrapMode::CLAMP_TO_EDGE );
+    sampler->setMagFilterMode( dp::sg::core::TextureMagFilterMode::NEAREST );
+    sampler->setMinFilterMode( dp::sg::core::TextureMinFilterMode::NEAREST );
 
     m_rendererHighlight->setSamplerByName( "selection", sampler );
   }
@@ -449,9 +449,9 @@ void SceneRendererPipeline::setTonemapperValues( const TonemapperValues& values 
 void SceneRendererPipeline::initBackdrop()
 {
   dp::sg::core::SamplerSharedPtr environmentSampler = dp::sg::core::Sampler::create( GetApp()->getEnvironmentSampler()->getTexture() );
-  environmentSampler->setWrapModes( dp::sg::core::TWM_REPEAT, dp::sg::core::TWM_CLAMP_TO_EDGE, dp::sg::core::TWM_REPEAT );
-  environmentSampler->setMagFilterMode( dp::sg::core::TFM_MAG_LINEAR );
-  environmentSampler->setMinFilterMode( dp::sg::core::TFM_MIN_LINEAR );
+  environmentSampler->setWrapModes( dp::sg::core::TextureWrapMode::REPEAT, dp::sg::core::TextureWrapMode::CLAMP_TO_EDGE, dp::sg::core::TextureWrapMode::REPEAT );
+  environmentSampler->setMagFilterMode( dp::sg::core::TextureMagFilterMode::LINEAR );
+  environmentSampler->setMinFilterMode( dp::sg::core::TextureMinFilterMode::LINEAR );
 
   DP_ASSERT( m_sceneRenderer );
   m_sceneRenderer->setEnvironmentSampler( environmentSampler );
@@ -495,9 +495,9 @@ void SceneRendererPipeline::initTonemapper()
   {
     const dp::sg::gl::TextureGLSharedPtr texGL = dp::sg::gl::TextureGL::create( texAttTonemap->getTexture() );
     dp::sg::core::SamplerSharedPtr sampler = dp::sg::core::Sampler::create( texGL );
-    sampler->setWrapModes( dp::sg::core::TWM_CLAMP_TO_EDGE, dp::sg::core::TWM_CLAMP_TO_EDGE, dp::sg::core::TWM_CLAMP_TO_EDGE );
-    sampler->setMagFilterMode( dp::sg::core::TFM_MAG_NEAREST );
-    sampler->setMinFilterMode( dp::sg::core::TFM_MIN_NEAREST );
+    sampler->setWrapModes( dp::sg::core::TextureWrapMode::CLAMP_TO_EDGE, dp::sg::core::TextureWrapMode::CLAMP_TO_EDGE, dp::sg::core::TextureWrapMode::CLAMP_TO_EDGE );
+    sampler->setMagFilterMode( dp::sg::core::TextureMagFilterMode::NEAREST );
+    sampler->setMinFilterMode( dp::sg::core::TextureMinFilterMode::NEAREST );
 
     m_tonemapper->setSamplerByName( "tonemapHDR", sampler );
   }

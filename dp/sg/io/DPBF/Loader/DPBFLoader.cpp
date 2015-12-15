@@ -251,15 +251,15 @@ struct NBFTextureAttributeItem_nbf_e : public NBFObject
                                     //!< TT_DISPLACEMENT, TT_FILTER, TT_OPACITY, TT_REFLECTION, TT_REFRACTION,
                                     //!< TT_SELF_ILLUM, TT_SHININESS, TT_SHINING_STRENGTH, and TT_SPECULAR.
   uint_t        texEnvMode;         //!< Specifies the texture environment mode for the actual texture object.
-                                    //!< Valid modes are TEM_REPLACE, TEM_MODULATE, TEM_DECAL, TEM_BLEND, and TEM_ADD.
+                                    //!< Valid modes are TextureEnvMode::REPLACE, TextureEnvMode::MODULATE, TextureEnvMode::DECAL, TextureEnvMode::BLEND, and TextureEnvMode::ADD.
   uint_t        texWrapS;           //!< Specifies the wrap parameter for texture coordinate s.
   uint_t        texWrapT;           //!< Specifies the wrap parameter for texture coordinate t.
   uint_t        texWrapR;           //!< Specifies the wrap parameter for texture coordinate r.
   uint_t        minFilter;          //!< Specifies the filter used with minimizing.
-                                    //!< //!< Valid values are TFM_MIN_NEAREST, TFM_MIN_LINEAR, TFM_MIN_LINEAR_MIPMAP_LINEAR,
-                                    //!< TFM_MIN_NEAREST_MIPMAP_NEAREST, TFM_MIN_NEAREST_MIPMAP_LINEAR, TFM_MIN_LINEAR_MIPMAP_NEAREST.
+                                    //!< //!< Valid values are TextureMinFilterMode::NEAREST, TextureMinFilterMode::LINEAR, TextureMinFilterMode::LINEAR_MIPMAP_LINEAR,
+                                    //!< TextureMinFilterMode::NEAREST_MIPMAP_NEAREST, TextureMinFilterMode::NEAREST_MIPMAP_LINEAR, TextureMinFilterMode::LINEAR_MIPMAP_NEAREST.
   uint_t        magFilter;          //!< Specifies the filter used with magnifying.
-                                    //!< Valid values are TFM_MAG_NEAREST, and TFM_MAG_LINEAR.
+                                    //!< Valid values are TextureMagFilterMode::NEAREST, and TextureMagFilterMode::LINEAR.
   float4_t      texBorderColor;     //!< Specifies the texture border RGBA color.
   trafo_t_nbf_f trafo;              //!< Specifies the texture transformation
   uint_t        texGenMode[4];      //!< Specifies the texture coordinate generation modes
@@ -272,15 +272,15 @@ struct NBFTextureAttributeItem_nbf_f : public NBFObject
 {
   uint_t        texImg;             //!< Specifies the file offset to the texture image object
   uint_t        texEnvMode;         //!< Specifies the texture environment mode for the actual texture object.
-  //!< Valid modes are TEM_REPLACE, TEM_MODULATE, TEM_DECAL, TEM_BLEND, and TEM_ADD.
+  //!< Valid modes are TextureEnvMode::REPLACE, TextureEnvMode::MODULATE, TextureEnvMode::DECAL, TextureEnvMode::BLEND, and TextureEnvMode::ADD.
   uint_t        texWrapS;           //!< Specifies the wrap parameter for texture coordinate s.
   uint_t        texWrapT;           //!< Specifies the wrap parameter for texture coordinate t.
   uint_t        texWrapR;           //!< Specifies the wrap parameter for texture coordinate r.
   uint_t        minFilter;          //!< Specifies the filter used with minimizing.
-                                    //!< Valid values are TFM_MIN_NEAREST, TFM_MIN_LINEAR, TFM_MIN_LINEAR_MIPMAP_LINEAR,
-                                    //!< TFM_MIN_NEAREST_MIPMAP_NEAREST, TFM_MIN_NEAREST_MIPMAP_LINEAR, TFM_MIN_LINEAR_MIPMAP_NEAREST.
+                                    //!< Valid values are TextureMinFilterMode::NEAREST, TextureMinFilterMode::LINEAR, TextureMinFilterMode::LINEAR_MIPMAP_LINEAR,
+                                    //!< TextureMinFilterMode::NEAREST_MIPMAP_NEAREST, TextureMinFilterMode::NEAREST_MIPMAP_LINEAR, TextureMinFilterMode::LINEAR_MIPMAP_NEAREST.
   uint_t        magFilter;          //!< Specifies the filter used with magnifying.
-                                    //!< Valid values are TFM_MAG_NEAREST, and TFM_MAG_LINEAR.
+                                    //!< Valid values are TextureMagFilterMode::NEAREST, and TextureMagFilterMode::LINEAR.
   float4_t      texBorderColor;     //!< Specifies the texture border RGBA color.
   trafo_t_nbf_f trafo;              //!< Specifies the texture transformation
   uint_t        texGenMode[4];      //!< Specifies the texture coordinate generation modes
@@ -292,15 +292,15 @@ struct NBFTextureAttributeItem_nbf_12 : public NBFObject
 {
   uint_t        texImg;             //!< Specifies the file offset to the texture image object
   uint_t        texEnvMode;         //!< Specifies the texture environment mode for the actual texture object.
-  //!< Valid modes are TEM_REPLACE, TEM_MODULATE, TEM_DECAL, TEM_BLEND, and TEM_ADD.
+  //!< Valid modes are TextureEnvMode::REPLACE, TextureEnvMode::MODULATE, TextureEnvMode::DECAL, TextureEnvMode::BLEND, and TextureEnvMode::ADD.
   uint_t        texWrapS;           //!< Specifies the wrap parameter for texture coordinate s.
   uint_t        texWrapT;           //!< Specifies the wrap parameter for texture coordinate t.
   uint_t        texWrapR;           //!< Specifies the wrap parameter for texture coordinate r.
   uint_t        minFilter;          //!< Specifies the filter used with minimizing.
-                                    //!< Valid values are TFM_MIN_NEAREST, TFM_MIN_LINEAR, TFM_MIN_LINEAR_MIPMAP_LINEAR,
-                                    //!< TFM_MIN_NEAREST_MIPMAP_NEAREST, TFM_MIN_NEAREST_MIPMAP_LINEAR, TFM_MIN_LINEAR_MIPMAP_NEAREST.
+                                    //!< Valid values are TextureMinFilterMode::NEAREST, TextureMinFilterMode::LINEAR, TextureMinFilterMode::LINEAR_MIPMAP_LINEAR,
+                                    //!< TextureMinFilterMode::NEAREST_MIPMAP_NEAREST, TextureMinFilterMode::NEAREST_MIPMAP_LINEAR, TextureMinFilterMode::LINEAR_MIPMAP_NEAREST.
   uint_t        magFilter;          //!< Specifies the filter used with magnifying.
-                                    //!< Valid values are TFM_MAG_NEAREST, and TFM_MAG_LINEAR.
+                                    //!< Valid values are TextureMagFilterMode::NEAREST, and TextureMagFilterMode::LINEAR.
   float4_t      texBorderColor;     //!< Specifies the texture border RGBA color.
   trafo_t       trafo;              //!< Specifies the texture transformation
   uint_t        texGenMode[4];      //!< Specifies the texture coordinate generation modes
@@ -313,15 +313,15 @@ struct NBFTextureAttributeItem_nbf_20 : public NBFObject
   uint_t        texImg;             //!< Specifies the file offset to the texture image object
   float4_t      texEnvColor;        //!< Specifies the texture environment color.
   uint_t        texEnvMode;         //!< Specifies the texture environment mode for the actual texture object.
-                                    //!< Valid modes are TEM_REPLACE, TEM_MODULATE, TEM_DECAL, TEM_BLEND, and TEM_ADD.
+                                    //!< Valid modes are TextureEnvMode::REPLACE, TextureEnvMode::MODULATE, TextureEnvMode::DECAL, TextureEnvMode::BLEND, and TextureEnvMode::ADD.
   uint_t        texWrapS;           //!< Specifies the wrap parameter for texture coordinate s.
   uint_t        texWrapT;           //!< Specifies the wrap parameter for texture coordinate t.
   uint_t        texWrapR;           //!< Specifies the wrap parameter for texture coordinate r.
   uint_t        minFilter;          //!< Specifies the filter used with minimizing.
-                                    //!< Valid values are TFM_MIN_NEAREST, TFM_MIN_LINEAR, TFM_MIN_LINEAR_MIPMAP_LINEAR,
-                                    //!< TFM_MIN_NEAREST_MIPMAP_NEAREST, TFM_MIN_NEAREST_MIPMAP_LINEAR, TFM_MIN_LINEAR_MIPMAP_NEAREST.
+                                    //!< Valid values are TextureMinFilterMode::NEAREST, TextureMinFilterMode::LINEAR, TextureMinFilterMode::LINEAR_MIPMAP_LINEAR,
+                                    //!< TextureMinFilterMode::NEAREST_MIPMAP_NEAREST, TextureMinFilterMode::NEAREST_MIPMAP_LINEAR, TextureMinFilterMode::LINEAR_MIPMAP_NEAREST.
   uint_t        magFilter;          //!< Specifies the filter used with magnifying.
-                                    //!< Valid values are TFM_MAG_NEAREST, and TFM_MAG_LINEAR.
+                                    //!< Valid values are TextureMagFilterMode::NEAREST, and TextureMagFilterMode::LINEAR.
   float4_t      texBorderColor;     //!< Specifies the texture border RGBA color.
   trafo_t       trafo;              //!< Specifies the texture transformation
   uint_t        texGenMode[4];      //!< Specifies the texture coordinate generation modes
@@ -334,16 +334,16 @@ struct NBFTextureAttributeItem_nbf_36 : public NBFObject
   uint_t        texImg;             //!< Specifies the file offset to the texture image object
   float4_t      texEnvColor;        //!< Specifies the texture environment color.
   uint_t        texEnvMode;         //!< Specifies the texture environment mode for the actual texture object.
-  //!< Valid modes are TEM_REPLACE, TEM_MODULATE, TEM_DECAL, TEM_BLEND, and TEM_ADD.
+  //!< Valid modes are TextureEnvMode::REPLACE, TextureEnvMode::MODULATE, TextureEnvMode::DECAL, TextureEnvMode::BLEND, and TextureEnvMode::ADD.
   uint_t        texEnvScale;        //!< Specifies the texture environment scale used with rasterization
   uint_t        texWrapS;           //!< Specifies the wrap parameter for texture coordinate s.
   uint_t        texWrapT;           //!< Specifies the wrap parameter for texture coordinate t.
   uint_t        texWrapR;           //!< Specifies the wrap parameter for texture coordinate r.
   uint_t        minFilter;          //!< Specifies the filter used with minimizing.
-                                    //!< Valid values are TFM_MIN_NEAREST, TFM_MIN_LINEAR, TFM_MIN_LINEAR_MIPMAP_LINEAR,
-                                    //!< TFM_MIN_NEAREST_MIPMAP_NEAREST, TFM_MIN_NEAREST_MIPMAP_LINEAR, TFM_MIN_LINEAR_MIPMAP_NEAREST.
+                                    //!< Valid values are TextureMinFilterMode::NEAREST, TextureMinFilterMode::LINEAR, TextureMinFilterMode::LINEAR_MIPMAP_LINEAR,
+                                    //!< TextureMinFilterMode::NEAREST_MIPMAP_NEAREST, TextureMinFilterMode::NEAREST_MIPMAP_LINEAR, TextureMinFilterMode::LINEAR_MIPMAP_NEAREST.
   uint_t        magFilter;          //!< Specifies the filter used with magnifying.
-                                    //!< Valid values are TFM_MAG_NEAREST, and TFM_MAG_LINEAR.
+                                    //!< Valid values are TextureMagFilterMode::NEAREST, and TextureMagFilterMode::LINEAR.
   float4_t      texBorderColor;     //!< Specifies the texture border RGBA color.
   trafo_t       trafo;              //!< Specifies the texture transformation
   uint_t        texGenMode[4];      //!< Specifies the texture coordinate generation modes
@@ -358,16 +358,16 @@ struct NBFTextureAttributeItem_nbf_4b : public NBFObject
   uint_t        texTarget;          //!< Specifies the texture target
   float4_t      texEnvColor;        //!< Specifies the texture environment color.
   uint_t        texEnvMode;         //!< Specifies the texture environment mode for the actual texture object.
-  //!< Valid modes are TEM_REPLACE, TEM_MODULATE, TEM_DECAL, TEM_BLEND, and TEM_ADD.
+  //!< Valid modes are TextureEnvMode::REPLACE, TextureEnvMode::MODULATE, TextureEnvMode::DECAL, TextureEnvMode::BLEND, and TextureEnvMode::ADD.
   uint_t        texEnvScale;        //!< Specifies the texture environment scale used with rasterization
   uint_t        texWrapS;           //!< Specifies the wrap parameter for texture coordinate s.
   uint_t        texWrapT;           //!< Specifies the wrap parameter for texture coordinate t.
   uint_t        texWrapR;           //!< Specifies the wrap parameter for texture coordinate r.
   uint_t        minFilter;          //!< Specifies the filter used with minimizing.
-                                    //!< Valid values are TFM_MIN_NEAREST, TFM_MIN_LINEAR, TFM_MIN_LINEAR_MIPMAP_LINEAR,
-                                    //!< TFM_MIN_NEAREST_MIPMAP_NEAREST, TFM_MIN_NEAREST_MIPMAP_LINEAR, TFM_MIN_LINEAR_MIPMAP_NEAREST.
+                                    //!< Valid values are TextureMinFilterMode::NEAREST, TextureMinFilterMode::LINEAR, TextureMinFilterMode::LINEAR_MIPMAP_LINEAR,
+                                    //!< TextureMinFilterMode::NEAREST_MIPMAP_NEAREST, TextureMinFilterMode::NEAREST_MIPMAP_LINEAR, TextureMinFilterMode::LINEAR_MIPMAP_NEAREST.
   uint_t        magFilter;          //!< Specifies the filter used with magnifying.
-                                    //!< Valid values are TFM_MAG_NEAREST, and TFM_MAG_LINEAR.
+                                    //!< Valid values are TextureMagFilterMode::NEAREST, and TextureMagFilterMode::LINEAR.
   float4_t      texBorderColor;     //!< Specifies the texture border RGBA color.
   trafo_t       trafo;              //!< Specifies the texture transformation
   uint_t        texGenMode[4];      //!< Specifies the texture coordinate generation modes
@@ -1371,16 +1371,16 @@ struct NBFTextureAttributeItem_nbf_54 : public NBFObject
   uint_t        texImg;             //!< Specifies the file offset to the texture image object
   float4_t      texEnvColor;        //!< Specifies the texture environment color.
   uint_t        texEnvMode;         //!< Specifies the texture environment mode for the actual texture object.
-                                    //!< Valid modes are TEM_REPLACE, TEM_MODULATE, TEM_DECAL, TEM_BLEND, and TEM_ADD.
+                                    //!< Valid modes are TextureEnvMode::REPLACE, TextureEnvMode::MODULATE, TextureEnvMode::DECAL, TextureEnvMode::BLEND, and TextureEnvMode::ADD.
   uint_t        texEnvScale;        //!< Specifies the texture environment scale used with rasterization
   uint_t        texWrapS;           //!< Specifies the wrap parameter for texture coordinate s.
   uint_t        texWrapT;           //!< Specifies the wrap parameter for texture coordinate t.
   uint_t        texWrapR;           //!< Specifies the wrap parameter for texture coordinate r.
   uint_t        minFilter;          //!< Specifies the filter used with minimizing.
-                                    //!< Valid values are TFM_MIN_NEAREST, TFM_MIN_LINEAR, TFM_MIN_LINEAR_MIPMAP_LINEAR,
-                                    //!< TFM_MIN_NEAREST_MIPMAP_NEAREST, TFM_MIN_NEAREST_MIPMAP_LINEAR, TFM_MIN_LINEAR_MIPMAP_NEAREST.
+                                    //!< Valid values are TextureMinFilterMode::NEAREST, TextureMinFilterMode::LINEAR, TextureMinFilterMode::LINEAR_MIPMAP_LINEAR,
+                                    //!< TextureMinFilterMode::NEAREST_MIPMAP_NEAREST, TextureMinFilterMode::NEAREST_MIPMAP_LINEAR, TextureMinFilterMode::LINEAR_MIPMAP_NEAREST.
   uint_t        magFilter;          //!< Specifies the filter used with magnifying.
-                                    //!< Valid values are TFM_MAG_NEAREST, and TFM_MAG_LINEAR.
+                                    //!< Valid values are TextureMagFilterMode::NEAREST, and TextureMagFilterMode::LINEAR.
   float4_t      texBorderColor;     //!< Specifies the texture border RGBA color.
   trafo_t       trafo;              //!< Specifies the texture transformation
   uint_t        texGenMode[4];      //!< Specifies the texture coordinate generation modes
@@ -1560,14 +1560,14 @@ struct NBFSamplerState_nbf_54 : public NBFObject
 {
   float4_t    borderColor;          //!< Speicifies the texture border RGBA color
   uint_t      magFilter;            //!< Specifies the filter used with magnifying.
-                                    //!< Valid values are TFM_MAG_NEAREST, and TFM_MAG_LINEAR.
+                                    //!< Valid values are TextureMagFilterMode::NEAREST, and TextureMagFilterMode::LINEAR.
   uint_t      minFilter;            //!< Specifies the filter used with minimizing.
-                                    //!< //!< Valid values are TFM_MIN_NEAREST, TFM_MIN_LINEAR, TFM_MIN_LINEAR_MIPMAP_LINEAR,
-                                    //!< TFM_MIN_NEAREST_MIPMAP_NEAREST, TFM_MIN_NEAREST_MIPMAP_LINEAR, TFM_MIN_LINEAR_MIPMAP_NEAREST.
+                                    //!< //!< Valid values are TextureMinFilterMode::NEAREST, TextureMinFilterMode::LINEAR, TextureMinFilterMode::LINEAR_MIPMAP_LINEAR,
+                                    //!< TextureMinFilterMode::NEAREST_MIPMAP_NEAREST, TextureMinFilterMode::NEAREST_MIPMAP_LINEAR, TextureMinFilterMode::LINEAR_MIPMAP_NEAREST.
   uint_t      texWrapS;             //!< Specifies the wrap parameter for texture coordinate s.
   uint_t      texWrapT;             //!< Specifies the wrap parameter for texture coordinate t.
   uint_t      texWrapR;             //!< Specifies the wrap parameter for texture coordinate r.
-  uint_t      compareMode;          //!> Specifies the compare mode parameter for a texture. Valid values are TCM_NONE and TCM_R_TO_TEXTURE.
+  uint_t      compareMode;          //!> Specifies the compare mode parameter for a texture. Valid values are TextureCompareMode::NONEa and TextureCompareMode::R_TO_TEXTURE.
 };
 DP_STATIC_ASSERT( ( sizeof(NBFSamplerState_nbf_54) % 8 ) == 0 );
 
@@ -3395,10 +3395,10 @@ PrimitiveSharedPtr DPBFLoader::loadSkinnedTriangles(uint_t offset)
   DP_ASSERT(triPtr->objectCode==DPBFCode::SKINNED_TRIANGLES);
 
   // need to care about object sharing
-  if ( !loadSharedObject<Primitive>(trianglesHdl, triPtr, PRIMITIVE_TRIANGLES) )
+  if ( !loadSharedObject<Primitive>(trianglesHdl, triPtr, PrimitiveType::TRIANGLES) )
   {
     // NOTE: general object data were already written by loadSharedObject
-    DP_ASSERT( trianglesHdl->getPrimitiveType() == PRIMITIVE_TRIANGLES );
+    DP_ASSERT( trianglesHdl->getPrimitiveType() == PrimitiveType::TRIANGLES );
     readIndependentPrimitiveSet( trianglesHdl, triPtr );
   }
   mapObject(offset, trianglesHdl);
@@ -3417,7 +3417,7 @@ PrimitiveSharedPtr DPBFLoader::loadAnimatedIndependents_nbf_3a( uint_t offset )
             ||  animatedPtr->objectCode==DPBFCode::ANIMATED_TRIANGLES );
 
   // need to care about object sharing
-  if ( !loadSharedObject<Primitive>( animatedHdl, animatedPtr, animatedPtr->objectCode == DPBFCode::ANIMATED_QUADS ? PRIMITIVE_QUADS : PRIMITIVE_TRIANGLES ) )
+  if ( !loadSharedObject<Primitive>( animatedHdl, animatedPtr, animatedPtr->objectCode == DPBFCode::ANIMATED_QUADS ? PrimitiveType::QUADS : PrimitiveType::TRIANGLES ) )
   {
     // NOTE: general object data were already written by loadSharedObject
     readIndependentPrimitiveSet( animatedHdl, animatedPtr );
@@ -3444,16 +3444,16 @@ PrimitiveSharedPtr DPBFLoader::loadIndependents( uint_t offset )
   switch( indPtr->objectCode )
   {
     case DPBFCode::LINES :
-      pt = PRIMITIVE_LINES;
+      pt = PrimitiveType::LINES;
       break;
     case DPBFCode::QUADS :
-      pt = PRIMITIVE_QUADS;
+      pt = PrimitiveType::QUADS;
       break;
     case DPBFCode::POINTS :
-      pt = PRIMITIVE_POINTS;
+      pt = PrimitiveType::POINTS;
       break;
     case DPBFCode::TRIANGLES :
-      pt = PRIMITIVE_TRIANGLES;
+      pt = PrimitiveType::TRIANGLES;
       break;
     default :
       DP_ASSERT( false );
@@ -3480,7 +3480,7 @@ PrimitiveSharedPtr DPBFLoader::loadMeshes(uint_t offset)
   // undefined behavior if called for other objects!
   DP_ASSERT( meshesPtr->objectCode==DPBFCode::QUADMESHES );
 
-  if ( !loadSharedObject<Primitive>( meshesHdl, meshesPtr, PRIMITIVE_QUADS ) )
+  if ( !loadSharedObject<Primitive>( meshesHdl, meshesPtr, PrimitiveType::QUADS ) )
   {
     // NOTE: general object data have already been written by loadSharedObject
     readPrimitiveSet( meshesHdl, meshesPtr);
@@ -3529,16 +3529,16 @@ PrimitiveSharedPtr DPBFLoader::loadStrips(uint_t offset)
   switch( stripsPtr->objectCode )
   {
     case DPBFCode::TRISTRIPS :
-      pt = PRIMITIVE_TRIANGLE_STRIP;
+      pt = PrimitiveType::TRIANGLE_STRIP;
       break;
     case DPBFCode::TRIFANS :
-      pt = PRIMITIVE_TRIANGLE_FAN;
+      pt = PrimitiveType::TRIANGLE_FAN;
       break;
     case DPBFCode::QUADSTRIPS :
-      pt = PRIMITIVE_QUAD_STRIP;
+      pt = PrimitiveType::QUAD_STRIP;
       break;
     case DPBFCode::LINESTRIPS :
-      pt = PRIMITIVE_LINE_STRIP;
+      pt = PrimitiveType::LINE_STRIP;
       break;
     default :
       DP_ASSERT( false );
@@ -5554,7 +5554,7 @@ void DPBFLoader::readPrimitive( PrimitiveSharedPtr const& dst, const NBFPrimitiv
   dst->setElementRange( src->elementOffset, src->elementCount );
   dst->setInstanceCount( src->instanceCount );
 
-  if ( dst->getPrimitiveType() == PRIMITIVE_PATCHES )
+  if ( dst->getPrimitiveType() == PrimitiveType::PATCHES )
   {
     if ( ( 0x54 < m_nbfMajor ) || ( ( m_nbfMajor == 0x54 ) && ( 0x02 < m_nbfMinor ) ) )
     {
@@ -5610,7 +5610,7 @@ PrimitiveSharedPtr DPBFLoader::loadPrimitive( uint_t offset )
     Offset_AutoPtr<NBFPrimitive> primPtr(m_fm, callback(), offset);
 
     PrimitiveSharedPtr primHdl;
-    if ( ( (PrimitiveType)primPtr->primitiveType == PRIMITIVE_PATCHES ) &&
+    if ( ( (PrimitiveType)primPtr->primitiveType == PrimitiveType::PATCHES ) &&
          ( ( 0x54 < m_nbfMajor ) || ( ( m_nbfMajor == 0x54 ) && ( 0x02 < m_nbfMinor ) ) ) )
     {
       primHdl = Primitive::create( (PatchesType)primPtr->patchesType, (PatchesMode)primPtr->patchesMode );
@@ -5654,7 +5654,7 @@ PrimitiveSharedPtr DPBFLoader::loadPatches_nbf_47( uint_t offset )
               ||  patchesPtr->objectCode >= DPBFCode::CUSTOM_OBJECT );
 
     DP_ASSERT( patchesPtr->verticesPerPatch == 16 );
-    PrimitiveSharedPtr patchesHdl = Primitive::create( PATCHES_CUBIC_BEZIER_QUADS, PATCHES_MODE_QUADS );
+    PrimitiveSharedPtr patchesHdl = Primitive::create( PatchesType::CUBIC_BEZIER_QUADS, PatchesMode::QUADS );
     readIndependentPrimitiveSet( patchesHdl, patchesPtr );
 
     mapObject(offset, patchesHdl);
@@ -5673,7 +5673,7 @@ PrimitiveSharedPtr DPBFLoader::loadQuadPatches_nbf_47( uint_t offset )
               ||  patchesPtr->objectCode >= DPBFCode::CUSTOM_OBJECT );
 
     DP_ASSERT( patchesPtr->size == 4 );
-    PrimitiveSharedPtr primitive = Primitive::create( PATCHES_CUBIC_BEZIER_QUADS, PATCHES_MODE_QUADS );
+    PrimitiveSharedPtr primitive = Primitive::create( PatchesType::CUBIC_BEZIER_QUADS, PatchesMode::QUADS );
     readIndependentPrimitiveSet( primitive, patchesPtr );
 
     mapObject(offset, primitive);
@@ -5691,7 +5691,7 @@ PrimitiveSharedPtr DPBFLoader::loadQuadPatches4x4_nbf_47( uint_t offset )
     DP_ASSERT(    patchesPtr->objectCode == DPBFCode::QUAD_PATCHES_4X4
               ||  patchesPtr->objectCode >= DPBFCode::CUSTOM_OBJECT );
 
-    PrimitiveSharedPtr primitive = Primitive::create( PATCHES_CUBIC_BEZIER_QUADS, PATCHES_MODE_QUADS );
+    PrimitiveSharedPtr primitive = Primitive::create( PatchesType::CUBIC_BEZIER_QUADS, PatchesMode::QUADS );
     readIndependentPrimitiveSet( primitive, patchesPtr );
 
     mapObject(offset, primitive);
@@ -5710,7 +5710,7 @@ PrimitiveSharedPtr DPBFLoader::loadRectPatches_nbf_47( uint_t offset )
               ||  patchesPtr->objectCode >= DPBFCode::CUSTOM_OBJECT );
 
     DP_ASSERT( ( patchesPtr->width == 4 ) && ( patchesPtr->height == 4 ) );
-    PrimitiveSharedPtr primitive = Primitive::create( PATCHES_CUBIC_BEZIER_QUADS, PATCHES_MODE_QUADS );
+    PrimitiveSharedPtr primitive = Primitive::create( PatchesType::CUBIC_BEZIER_QUADS, PatchesMode::QUADS );
     readIndependentPrimitiveSet( primitive, patchesPtr );
 
     mapObject(offset, primitive);
@@ -5729,7 +5729,7 @@ PrimitiveSharedPtr DPBFLoader::loadTriPatches_nbf_47( uint_t offset )
               ||  patchesPtr->objectCode >= DPBFCode::CUSTOM_OBJECT );
 
     DP_ASSERT( patchesPtr->size == 4 );
-    PrimitiveSharedPtr primitive = Primitive::create( PATCHES_CUBIC_BEZIER_TRIANGLES, PATCHES_MODE_TRIANGLES );
+    PrimitiveSharedPtr primitive = Primitive::create( PatchesType::CUBIC_BEZIER_TRIANGLES, PatchesMode::TRIANGLES );
     readIndependentPrimitiveSet( primitive, patchesPtr );
 
     mapObject(offset, primitive);
@@ -5747,7 +5747,7 @@ PrimitiveSharedPtr DPBFLoader::loadTriPatches4_nbf_47( uint_t offset )
     DP_ASSERT(    patchesPtr->objectCode == DPBFCode::TRI_PATCHES_4
               ||  patchesPtr->objectCode >= DPBFCode::CUSTOM_OBJECT );
 
-    PrimitiveSharedPtr primitive = Primitive::create( PATCHES_CUBIC_BEZIER_TRIANGLES, PATCHES_MODE_TRIANGLES );
+    PrimitiveSharedPtr primitive = Primitive::create( PatchesType::CUBIC_BEZIER_TRIANGLES, PatchesMode::TRIANGLES );
     readIndependentPrimitiveSet( primitive, patchesPtr );
 
     mapObject(offset, primitive);
@@ -5764,7 +5764,7 @@ PrimitiveSharedPtr DPBFLoader::loadQuadPatches( uint_t offset )
               ||  patchesPtr->objectCode >= DPBFCode::CUSTOM_OBJECT );
 
     DP_ASSERT( patchesPtr->size == 4 );
-    PrimitiveSharedPtr primitive = Primitive::create( PATCHES_CUBIC_BEZIER_QUADS, PATCHES_MODE_QUADS );
+    PrimitiveSharedPtr primitive = Primitive::create( PatchesType::CUBIC_BEZIER_QUADS, PatchesMode::QUADS );
     readPrimitive( primitive, patchesPtr );
 
     mapObject(offset, primitive);
@@ -5781,7 +5781,7 @@ PrimitiveSharedPtr DPBFLoader::loadQuadPatches_nbf_4d( uint_t offset )
               ||  patchesPtr->objectCode >= DPBFCode::CUSTOM_OBJECT );
 
     DP_ASSERT( patchesPtr->size == 4 );
-    PrimitiveSharedPtr primitive = Primitive::create( PATCHES_CUBIC_BEZIER_QUADS, PATCHES_MODE_QUADS );
+    PrimitiveSharedPtr primitive = Primitive::create( PatchesType::CUBIC_BEZIER_QUADS, PatchesMode::QUADS );
     readPrimitive_nbf_4d( primitive, patchesPtr );
 
     mapObject(offset, primitive);
@@ -5797,7 +5797,7 @@ PrimitiveSharedPtr DPBFLoader::loadQuadPatches4x4( uint_t offset )
     DP_ASSERT(    patchesPtr->objectCode == DPBFCode::QUAD_PATCHES_4X4
               ||  patchesPtr->objectCode >= DPBFCode::CUSTOM_OBJECT );
 
-    PrimitiveSharedPtr primitive = Primitive::create( PATCHES_CUBIC_BEZIER_QUADS, PATCHES_MODE_QUADS );
+    PrimitiveSharedPtr primitive = Primitive::create( PatchesType::CUBIC_BEZIER_QUADS, PatchesMode::QUADS );
     readPrimitive( primitive, patchesPtr );
 
     mapObject(offset, primitive);
@@ -5813,7 +5813,7 @@ PrimitiveSharedPtr DPBFLoader::loadQuadPatches4x4_nbf_4d( uint_t offset )
     DP_ASSERT(    patchesPtr->objectCode == DPBFCode::QUAD_PATCHES_4X4
               ||  patchesPtr->objectCode >= DPBFCode::CUSTOM_OBJECT );
 
-    PrimitiveSharedPtr primitive = Primitive::create( PATCHES_CUBIC_BEZIER_QUADS, PATCHES_MODE_QUADS );
+    PrimitiveSharedPtr primitive = Primitive::create( PatchesType::CUBIC_BEZIER_QUADS, PatchesMode::QUADS );
     readPrimitive_nbf_4d( primitive, patchesPtr );
 
     mapObject(offset, primitive);
@@ -5830,7 +5830,7 @@ PrimitiveSharedPtr DPBFLoader::loadRectPatches( uint_t offset )
               ||  patchesPtr->objectCode >= DPBFCode::CUSTOM_OBJECT );
 
     DP_ASSERT( ( patchesPtr->width == 4 ) && ( patchesPtr->height == 4 ) );
-    PrimitiveSharedPtr primitive = Primitive::create( PATCHES_CUBIC_BEZIER_QUADS, PATCHES_MODE_QUADS );
+    PrimitiveSharedPtr primitive = Primitive::create( PatchesType::CUBIC_BEZIER_QUADS, PatchesMode::QUADS );
     readPrimitive( primitive, patchesPtr );
 
     mapObject(offset, primitive);
@@ -5847,7 +5847,7 @@ PrimitiveSharedPtr DPBFLoader::loadRectPatches_nbf_4d( uint_t offset )
               ||  patchesPtr->objectCode >= DPBFCode::CUSTOM_OBJECT );
 
     DP_ASSERT( ( patchesPtr->width == 4 ) && ( patchesPtr->height == 4 ) );
-    PrimitiveSharedPtr primitive = Primitive::create( PATCHES_CUBIC_BEZIER_QUADS, PATCHES_MODE_QUADS );
+    PrimitiveSharedPtr primitive = Primitive::create( PatchesType::CUBIC_BEZIER_QUADS, PatchesMode::QUADS );
     readPrimitive_nbf_4d( primitive, patchesPtr );
 
     mapObject(offset, primitive);
@@ -5864,7 +5864,7 @@ PrimitiveSharedPtr DPBFLoader::loadTriPatches( uint_t offset )
               ||  patchesPtr->objectCode >= DPBFCode::CUSTOM_OBJECT );
 
     DP_ASSERT( patchesPtr->size == 4 );
-    PrimitiveSharedPtr primitive = Primitive::create( PATCHES_CUBIC_BEZIER_TRIANGLES, PATCHES_MODE_TRIANGLES );
+    PrimitiveSharedPtr primitive = Primitive::create( PatchesType::CUBIC_BEZIER_TRIANGLES, PatchesMode::TRIANGLES );
     readPrimitive( primitive, patchesPtr );
 
     mapObject(offset, primitive);
@@ -5881,7 +5881,7 @@ PrimitiveSharedPtr DPBFLoader::loadTriPatches_nbf_4d( uint_t offset )
               ||  patchesPtr->objectCode >= DPBFCode::CUSTOM_OBJECT );
 
     DP_ASSERT( patchesPtr->size == 4 );
-    PrimitiveSharedPtr primitive = Primitive::create( PATCHES_CUBIC_BEZIER_TRIANGLES, PATCHES_MODE_TRIANGLES );
+    PrimitiveSharedPtr primitive = Primitive::create( PatchesType::CUBIC_BEZIER_TRIANGLES, PatchesMode::TRIANGLES );
     readPrimitive_nbf_4d( primitive, patchesPtr );
 
     mapObject(offset, primitive);
@@ -5897,7 +5897,7 @@ PrimitiveSharedPtr DPBFLoader::loadTriPatches4( uint_t offset )
     DP_ASSERT(    patchesPtr->objectCode == DPBFCode::TRI_PATCHES_4
               ||  patchesPtr->objectCode >= DPBFCode::CUSTOM_OBJECT );
 
-    PrimitiveSharedPtr primitive = Primitive::create( PATCHES_CUBIC_BEZIER_TRIANGLES, PATCHES_MODE_TRIANGLES );
+    PrimitiveSharedPtr primitive = Primitive::create( PatchesType::CUBIC_BEZIER_TRIANGLES, PatchesMode::TRIANGLES );
     readPrimitive( primitive, patchesPtr );
 
     mapObject(offset, primitive);
@@ -5913,7 +5913,7 @@ PrimitiveSharedPtr DPBFLoader::loadTriPatches4_nbf_4d( uint_t offset )
     DP_ASSERT(    patchesPtr->objectCode == DPBFCode::TRI_PATCHES_4
               ||  patchesPtr->objectCode >= DPBFCode::CUSTOM_OBJECT );
 
-    PrimitiveSharedPtr primitive = Primitive::create( PATCHES_CUBIC_BEZIER_TRIANGLES, PATCHES_MODE_TRIANGLES );
+    PrimitiveSharedPtr primitive = Primitive::create( PatchesType::CUBIC_BEZIER_TRIANGLES, PatchesMode::TRIANGLES );
     readPrimitive_nbf_4d( primitive, patchesPtr );
 
     mapObject(offset, primitive);
@@ -5924,24 +5924,26 @@ PrimitiveSharedPtr DPBFLoader::loadTriPatches4_nbf_4d( uint_t offset )
 void DPBFLoader::readVertexAttributeSet( VertexAttributeSetSharedPtr const& dst, const NBFVertexAttributeSet * src )
 {
   // vertex attribute specific
-  for ( uint_t i=0; i<VertexAttributeSet::DP_SG_VERTEX_ATTRIB_COUNT; ++i )
+  for ( uint_t i=0; i<static_cast<unsigned int>(VertexAttributeSet::AttributeID::VERTEX_ATTRIB_COUNT); ++i )
   {
+    VertexAttributeSet::AttributeID id = static_cast<VertexAttributeSet::AttributeID>(i);
     if ( src->vattribs[i].numVData )
     {
       uint_t sizeofVertex = dp::checked_cast<uint_t>(src->vattribs[i].size * dp::getSizeOf( convertDataType(src->vattribs[i].type) ));
       Offset_AutoPtr<byte_t> vdata( m_fm, callback(), src->vattribs[i].vdata,
         src->vattribs[i].numVData * sizeofVertex );
 
-      dst->setVertexData( i, src->vattribs[i].size, convertDataType(src->vattribs[i].type),
+      dst->setVertexData( id, src->vattribs[i].size, convertDataType(src->vattribs[i].type),
         vdata, 0, src->vattribs[i].numVData );
-
-      // set the normalize enable flag for the aliased generic attribute only
-      dst->setNormalizeEnabled(i+16, !!(src->normalizeEnableFlags & (1<<(i+16))));
 
       // enable for rendering?
       DP_ASSERT(!(src->enableFlags & (1<<i)) || !(src->enableFlags & (1<<(i+16))));
-      dst->setEnabled(i, !!(src->enableFlags & (1<<i))); // conventional attrib
-      dst->setEnabled(i+16, !!(src->enableFlags & (1<<(i+16)))); // generic attrib
+      dst->setEnabled(id, !!(src->enableFlags & (1<<i))); // conventional attrib
+
+      id = static_cast<VertexAttributeSet::AttributeID>(i+16);
+      // set the normalize enable flag for the aliased generic attribute only
+      dst->setNormalizeEnabled(id, !!(src->normalizeEnableFlags & (1<<(i+16))));
+      dst->setEnabled(id, !!(src->enableFlags & (1<<(i+16)))); // generic attrib
     }
   }
 }
@@ -6023,24 +6025,26 @@ VertexAttributeSetSharedPtr DPBFLoader::loadVertexAttributeSet_nbf_3a( uint_t va
       readObject( hvas, vasPtr); // common object data
 
       // vertex attribute specific
-      for ( uint_t i=0; i<VertexAttributeSet::DP_SG_VERTEX_ATTRIB_COUNT; ++i )
+      for ( uint_t i=0; i<static_cast<unsigned int>(VertexAttributeSet::AttributeID::VERTEX_ATTRIB_COUNT); ++i )
       {
+        VertexAttributeSet::AttributeID id = static_cast<VertexAttributeSet::AttributeID>(i);
         if ( vasPtr->vattribs[i].numVData )
         {
           uint_t sizeofVertex = dp::checked_cast<uint_t>(vasPtr->vattribs[i].size * dp::getSizeOf( convertDataType(vasPtr->vattribs[i].type) ));
           Offset_AutoPtr<byte_t> vdata( m_fm, callback(), vasPtr->vattribs[i].vdata,
             vasPtr->vattribs[i].numVData * sizeofVertex );
 
-          hvas->setVertexData( i, vasPtr->vattribs[i].size, convertDataType(vasPtr->vattribs[i].type),
+          hvas->setVertexData( id, vasPtr->vattribs[i].size, convertDataType(vasPtr->vattribs[i].type),
             vdata, 0, vasPtr->vattribs[i].numVData );
-
-          // set the normalize enable flag for the aliased generic attribute only
-          hvas->setNormalizeEnabled(i+16, !!(vasPtr->normalizeEnableFlags & (1+16)));
 
           // enable for rendering?
           DP_ASSERT(!(vasPtr->enableFlags & (1<<i)) || !(vasPtr->enableFlags & (1<<(i+16))));
-          hvas->setEnabled(i, !!(vasPtr->enableFlags & (1<<i))); // conventional attrib
-          hvas->setEnabled(i+16, !!(vasPtr->enableFlags & (1<<(i+16)))); // generic attrib
+          hvas->setEnabled(id, !!(vasPtr->enableFlags & (1<<i))); // conventional attrib
+
+          id = static_cast<VertexAttributeSet::AttributeID>(i+16);
+          // set the normalize enable flag for the aliased generic attribute only
+          hvas->setNormalizeEnabled(id, !!(vasPtr->normalizeEnableFlags & (1+16)));
+          hvas->setEnabled(id, !!(vasPtr->enableFlags & (1<<(i+16)))); // generic attrib
         }
       }
     }
@@ -6079,8 +6083,8 @@ VertexAttributeSetSharedPtr DPBFLoader::loadVertexAttributeSet_nbf_38( uint_t va
           if ( tcSets[i].numTexCoords )
           {
             Offset_AutoPtr<float> coords(m_fm, callback(), tcSets[i].texCoords, tcSets[i].numTexCoords * tcSets[i].coordDim);
-            cvas->setVertexData( VertexAttributeSet::DP_SG_TEXCOORD0+i, tcSets[i].coordDim, dp::DataType::FLOAT_32, coords, 0, tcSets[i].numTexCoords );
-            cvas->setEnabled(VertexAttributeSet::DP_SG_TEXCOORD0+i, true); // generic API require explicit enable
+            cvas->setVertexData( static_cast<VertexAttributeSet::AttributeID>(static_cast<unsigned int>(VertexAttributeSet::AttributeID::TEXCOORD0)+i), tcSets[i].coordDim, dp::DataType::FLOAT_32, coords, 0, tcSets[i].numTexCoords );
+            cvas->setEnabled(static_cast<VertexAttributeSet::AttributeID>(static_cast<unsigned int>(VertexAttributeSet::AttributeID::TEXCOORD0)+i), true); // generic API require explicit enable
           }
         }
       }
@@ -6089,16 +6093,16 @@ VertexAttributeSetSharedPtr DPBFLoader::loadVertexAttributeSet_nbf_38( uint_t va
       if ( vasPtr->numColors )
       {
         Offset_AutoPtr<float> colors(m_fm, callback(), vasPtr->colors, vasPtr->numColors * vasPtr->colorDim);
-        cvas->setVertexData( VertexAttributeSet::DP_SG_COLOR, vasPtr->colorDim, dp::DataType::FLOAT_32, colors, 0, vasPtr->numColors );
-        cvas->setEnabled(VertexAttributeSet::DP_SG_COLOR, true);
+        cvas->setVertexData( VertexAttributeSet::AttributeID::COLOR, vasPtr->colorDim, dp::DataType::FLOAT_32, colors, 0, vasPtr->numColors );
+        cvas->setEnabled(VertexAttributeSet::AttributeID::COLOR, true);
       }
 
       // colors
       if ( vasPtr->numSecondaryColors )
       {
         Offset_AutoPtr<float> colors(m_fm, callback(), vasPtr->secondaryColors, vasPtr->numSecondaryColors * vasPtr->secondaryColorDim);
-        cvas->setVertexData( VertexAttributeSet::DP_SG_SECONDARY_COLOR, vasPtr->secondaryColorDim, dp::DataType::FLOAT_32, colors, 0, vasPtr->numSecondaryColors );
-        cvas->setEnabled(VertexAttributeSet::DP_SG_SECONDARY_COLOR, true); // generic API require explicit enable
+        cvas->setVertexData( VertexAttributeSet::AttributeID::SECONDARY_COLOR, vasPtr->secondaryColorDim, dp::DataType::FLOAT_32, colors, 0, vasPtr->numSecondaryColors );
+        cvas->setEnabled(VertexAttributeSet::AttributeID::SECONDARY_COLOR, true); // generic API require explicit enable
       }
 
       // fogCoords
@@ -6536,7 +6540,7 @@ TextureSharedPtr DPBFLoader::readTexture( uint_t offset )
 {
   string file;
   TextureHostSharedPtr texture = (this->*m_pfnLoadTextureHost)(offset, file);
-  if ( texture && texture->getTextureTarget() == TT_UNSPECIFIED_TEXTURE_TARGET )
+  if ( texture && texture->getTextureTarget() == TextureTarget::UNSPECIFIED )
   {
     TextureTarget target = determineTextureTarget( texture );
     texture->convertToTextureTarget( target );
@@ -6555,10 +6559,10 @@ TextureSharedPtr DPBFLoader::readTexture( const Offset_AutoPtr<NBFTextureAttribu
 {
   string file;
   TextureHostSharedPtr texture = (this->*m_pfnLoadTextureHost)(src->texImg, file);
-  if (texture && texture->getTextureTarget() == TT_UNSPECIFIED_TEXTURE_TARGET)
+  if (texture && texture->getTextureTarget() == TextureTarget::UNSPECIFIED)
   {
     TextureTarget target = (TextureTarget)src->texTarget;
-    if (target == TT_UNSPECIFIED_TEXTURE_TARGET)
+    if (target == TextureTarget::UNSPECIFIED)
     {
       target = determineTextureTarget(texture);
     }

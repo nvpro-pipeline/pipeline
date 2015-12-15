@@ -58,35 +58,35 @@ namespace dp
         // assuming 2D since 2D is the most common target used
         if ( th->is2D() )
         {
-          return TT_TEXTURE_2D;
+          return TextureTarget::TEXTURE_2D;
         }
 
         if ( th->is1D() )
         {
-          return TT_TEXTURE_1D;
+          return TextureTarget::TEXTURE_1D;
         }
 
         if ( th->is3D() )
         {
-          return TT_TEXTURE_3D;
+          return TextureTarget::TEXTURE_3D;
         }
 
         if ( th->isCubeMap() )
         {
-          return TT_TEXTURE_CUBE;
+          return TextureTarget::TEXTURE_CUBE;
         }
 
         if ( th->is1DArray() )
         {
-          return TT_TEXTURE_1D_ARRAY;
+          return TextureTarget::TEXTURE_1D_ARRAY;
         }
 
         if ( th->is2DArray() )
         {
-          return TT_TEXTURE_2D_ARRAY;
+          return TextureTarget::TEXTURE_2D_ARRAY;
         }
 
-        return TT_UNSPECIFIED_TEXTURE_TARGET;
+        return TextureTarget::UNSPECIFIED;
       }
 
       TextureTarget determineTextureTarget( const TextureHostSharedPtr & himg )
@@ -95,7 +95,7 @@ namespace dp
         {
           return( determineTextureTarget( himg ) );
         }
-        return TT_UNSPECIFIED_TEXTURE_TARGET;
+        return TextureTarget::UNSPECIFIED;
       }
 
       //
@@ -104,37 +104,37 @@ namespace dp
       //
       inline bool isProblematicType( Image::PixelDataType type ) 
       {
-        return ( type == Image::IMG_UNKNOWN_TYPE || 
-                 type == Image::IMG_UNSIGNED_INT_2_10_10_10 || 
-                 type == Image::IMG_UNSIGNED_INT_5_9_9_9 || 
-                 type == Image::IMG_UNSIGNED_INT_10F_11F_11F || 
-                 type == Image::IMG_UNSIGNED_INT_24_8 );
+        return ( type == Image::PixelDataType::UNKNOWN || 
+                 type == Image::PixelDataType::UNSIGNED_INT_2_10_10_10 || 
+                 type == Image::PixelDataType::UNSIGNED_INT_5_9_9_9 || 
+                 type == Image::PixelDataType::UNSIGNED_INT_10F_11F_11F || 
+                 type == Image::PixelDataType::UNSIGNED_INT_24_8 );
       }
 
       inline bool isProblematicFormat( Image::PixelFormat fmt )
       {
-        return ( fmt == Image::IMG_COLOR_INDEX
-              || fmt == Image::IMG_COMPRESSED_LUMINANCE_LATC1         
-              || fmt == Image::IMG_COMPRESSED_SIGNED_LUMINANCE_LATC1  
-              || fmt == Image::IMG_COMPRESSED_LUMINANCE_ALPHA_LATC2   
-              || fmt == Image::IMG_COMPRESSED_SIGNED_LUMINANCE_ALPHA_LATC2 
-              || fmt == Image::IMG_COMPRESSED_RED_RGTC1 
-              || fmt == Image::IMG_COMPRESSED_SIGNED_RED_RGTC1 
-              || fmt == Image::IMG_COMPRESSED_RG_RGTC2 
-              || fmt == Image::IMG_COMPRESSED_SIGNED_RG_RGTC2 
+        return ( fmt == Image::PixelFormat::COLOR_INDEX
+              || fmt == Image::PixelFormat::COMPRESSED_LUMINANCE_LATC1         
+              || fmt == Image::PixelFormat::COMPRESSED_SIGNED_LUMINANCE_LATC1  
+              || fmt == Image::PixelFormat::COMPRESSED_LUMINANCE_ALPHA_LATC2   
+              || fmt == Image::PixelFormat::COMPRESSED_SIGNED_LUMINANCE_ALPHA_LATC2 
+              || fmt == Image::PixelFormat::COMPRESSED_RED_RGTC1 
+              || fmt == Image::PixelFormat::COMPRESSED_SIGNED_RED_RGTC1 
+              || fmt == Image::PixelFormat::COMPRESSED_RG_RGTC2 
+              || fmt == Image::PixelFormat::COMPRESSED_SIGNED_RG_RGTC2 
        
-              || fmt == Image::IMG_COMPRESSED_RGB_DXT1 
-              || fmt == Image::IMG_COMPRESSED_RGBA_DXT1 
-              || fmt == Image::IMG_COMPRESSED_RGBA_DXT3 
-              || fmt == Image::IMG_COMPRESSED_RGBA_DXT5 
+              || fmt == Image::PixelFormat::COMPRESSED_RGB_DXT1 
+              || fmt == Image::PixelFormat::COMPRESSED_RGBA_DXT1 
+              || fmt == Image::PixelFormat::COMPRESSED_RGBA_DXT3 
+              || fmt == Image::PixelFormat::COMPRESSED_RGBA_DXT5 
        
-              || fmt == Image::IMG_COMPRESSED_SRGB_DXT1 
-              || fmt == Image::IMG_COMPRESSED_SRGBA_DXT1 
-              || fmt == Image::IMG_COMPRESSED_SRGBA_DXT3 
-              || fmt == Image::IMG_COMPRESSED_SRGBA_DXT5 
-              || fmt == Image::IMG_DEPTH_COMPONENT 
-              || fmt == Image::IMG_DEPTH_STENCIL 
-              || fmt == Image::IMG_UNKNOWN_FORMAT );
+              || fmt == Image::PixelFormat::COMPRESSED_SRGB_DXT1 
+              || fmt == Image::PixelFormat::COMPRESSED_SRGBA_DXT1 
+              || fmt == Image::PixelFormat::COMPRESSED_SRGBA_DXT3 
+              || fmt == Image::PixelFormat::COMPRESSED_SRGBA_DXT5 
+              || fmt == Image::PixelFormat::DEPTH_COMPONENT 
+              || fmt == Image::PixelFormat::DEPTH_STENCIL 
+              || fmt == Image::PixelFormat::UNKNOWN );
       }
 
       //  local helper function to add source pixel index i and corresponding weight to the
@@ -240,47 +240,47 @@ namespace dp
         unsigned int noc;
         switch( format )
         {
-          case Image::IMG_COLOR_INDEX :
-          case Image::IMG_LUMINANCE :
-          case Image::IMG_ALPHA :
-          case Image::IMG_DEPTH_COMPONENT :
-          case Image::IMG_DEPTH_STENCIL :
-          case Image::IMG_INTEGER_LUMINANCE :
-          case Image::IMG_COMPRESSED_LUMINANCE_LATC1 :
-          case Image::IMG_COMPRESSED_SIGNED_LUMINANCE_LATC1 :
-          case Image::IMG_COMPRESSED_RED_RGTC1 :
-          case Image::IMG_COMPRESSED_SIGNED_RED_RGTC1 :
+          case Image::PixelFormat::COLOR_INDEX :
+          case Image::PixelFormat::LUMINANCE :
+          case Image::PixelFormat::ALPHA :
+          case Image::PixelFormat::DEPTH_COMPONENT :
+          case Image::PixelFormat::DEPTH_STENCIL :
+          case Image::PixelFormat::INTEGER_LUMINANCE :
+          case Image::PixelFormat::COMPRESSED_LUMINANCE_LATC1 :
+          case Image::PixelFormat::COMPRESSED_SIGNED_LUMINANCE_LATC1 :
+          case Image::PixelFormat::COMPRESSED_RED_RGTC1 :
+          case Image::PixelFormat::COMPRESSED_SIGNED_RED_RGTC1 :
             noc = 1;
             break;
 
-          case Image::IMG_LUMINANCE_ALPHA :
-          case Image::IMG_INTEGER_LUMINANCE_ALPHA :
-          case Image::IMG_COMPRESSED_LUMINANCE_ALPHA_LATC2 :
-          case Image::IMG_COMPRESSED_SIGNED_LUMINANCE_ALPHA_LATC2 :
-          case Image::IMG_COMPRESSED_RG_RGTC2 :
-          case Image::IMG_COMPRESSED_SIGNED_RG_RGTC2 :
+          case Image::PixelFormat::LUMINANCE_ALPHA :
+          case Image::PixelFormat::INTEGER_LUMINANCE_ALPHA :
+          case Image::PixelFormat::COMPRESSED_LUMINANCE_ALPHA_LATC2 :
+          case Image::PixelFormat::COMPRESSED_SIGNED_LUMINANCE_ALPHA_LATC2 :
+          case Image::PixelFormat::COMPRESSED_RG_RGTC2 :
+          case Image::PixelFormat::COMPRESSED_SIGNED_RG_RGTC2 :
             noc = 2;
             break;
 
-          case Image::IMG_RGB :
-          case Image::IMG_BGR :
-          case Image::IMG_INTEGER_RGB :
-          case Image::IMG_INTEGER_BGR :
-          case Image::IMG_COMPRESSED_RGB_DXT1 :
-          case Image::IMG_COMPRESSED_SRGB_DXT1 :
+          case Image::PixelFormat::RGB :
+          case Image::PixelFormat::BGR :
+          case Image::PixelFormat::INTEGER_RGB :
+          case Image::PixelFormat::INTEGER_BGR :
+          case Image::PixelFormat::COMPRESSED_RGB_DXT1 :
+          case Image::PixelFormat::COMPRESSED_SRGB_DXT1 :
             noc = 3;
             break;
 
-          case Image::IMG_RGBA :
-          case Image::IMG_BGRA :
-          case Image::IMG_INTEGER_RGBA :
-          case Image::IMG_INTEGER_BGRA :
-          case Image::IMG_COMPRESSED_RGBA_DXT1 :
-          case Image::IMG_COMPRESSED_RGBA_DXT3 :
-          case Image::IMG_COMPRESSED_RGBA_DXT5 :
-          case Image::IMG_COMPRESSED_SRGBA_DXT1 :
-          case Image::IMG_COMPRESSED_SRGBA_DXT3 :
-          case Image::IMG_COMPRESSED_SRGBA_DXT5 :
+          case Image::PixelFormat::RGBA :
+          case Image::PixelFormat::BGRA :
+          case Image::PixelFormat::INTEGER_RGBA :
+          case Image::PixelFormat::INTEGER_BGRA :
+          case Image::PixelFormat::COMPRESSED_RGBA_DXT1 :
+          case Image::PixelFormat::COMPRESSED_RGBA_DXT3 :
+          case Image::PixelFormat::COMPRESSED_RGBA_DXT5 :
+          case Image::PixelFormat::COMPRESSED_SRGBA_DXT1 :
+          case Image::PixelFormat::COMPRESSED_SRGBA_DXT3 :
+          case Image::PixelFormat::COMPRESSED_SRGBA_DXT5 :
             noc = 4;
             break;
 
@@ -297,30 +297,30 @@ namespace dp
         unsigned int soc;
         switch( type )
         {
-          case Image::IMG_BYTE :
-          case Image::IMG_UNSIGNED_BYTE :
+          case Image::PixelDataType::BYTE :
+          case Image::PixelDataType::UNSIGNED_BYTE :
             soc = sizeof(char);
             break;
 
-          case Image::IMG_SHORT :
-          case Image::IMG_UNSIGNED_SHORT :
+          case Image::PixelDataType::SHORT :
+          case Image::PixelDataType::UNSIGNED_SHORT :
             soc = sizeof(short);
             break;
 
-          case Image::IMG_INT :
-          case Image::IMG_UNSIGNED_INT :
-          case Image::IMG_UNSIGNED_INT_2_10_10_10 :
-          case Image::IMG_UNSIGNED_INT_5_9_9_9 :
-          case Image::IMG_UNSIGNED_INT_10F_11F_11F :
-          case Image::IMG_UNSIGNED_INT_24_8 :
+          case Image::PixelDataType::INT :
+          case Image::PixelDataType::UNSIGNED_INT :
+          case Image::PixelDataType::UNSIGNED_INT_2_10_10_10 :
+          case Image::PixelDataType::UNSIGNED_INT_5_9_9_9 :
+          case Image::PixelDataType::UNSIGNED_INT_10F_11F_11F :
+          case Image::PixelDataType::UNSIGNED_INT_24_8 :
             soc = sizeof(int);
             break;
 
-          case Image::IMG_FLOAT :
+          case Image::PixelDataType::FLOAT :
             soc = sizeof(float);
             break;
 
-          case Image::IMG_HALF :
+          case Image::PixelDataType::HALF :
             soc = sizeof(float)/2;
             break;
 
@@ -344,8 +344,8 @@ namespace dp
         : m_width(0)
         , m_height(0)
         , m_depth(0)
-        , m_format(IMG_UNKNOWN_FORMAT)
-        , m_type(IMG_UNKNOWN_TYPE)
+        , m_format(PixelFormat::UNKNOWN)
+        , m_type(PixelDataType::UNKNOWN)
         , m_bpp(0)
         , m_bpl(0)
         , m_bps(0)
@@ -484,33 +484,33 @@ namespace dp
                     &&  ( z + src->m_depth  <= dst->m_depth ) );
         switch( src->m_type )
         {
-          case Image::IMG_UNSIGNED_BYTE:
+          case Image::PixelDataType::UNSIGNED_BYTE:
             _insert<unsigned char>( src, dst, x, y, z );
             break;
-          case Image::IMG_BYTE:                                 
+          case Image::PixelDataType::BYTE:                                 
             _insert<char>( src, dst, x, y, z );
             break;
-          case Image::IMG_UNSIGNED_SHORT:
+          case Image::PixelDataType::UNSIGNED_SHORT:
             _insert<unsigned short>( src, dst, x, y, z );
             break;
-          case Image::IMG_SHORT:
+          case Image::PixelDataType::SHORT:
             _insert<short>( src, dst, x, y, z );
             break;
-          case Image::IMG_UNSIGNED_INT:
-          case Image::IMG_UNSIGNED_INT_2_10_10_10:
-          case Image::IMG_UNSIGNED_INT_5_9_9_9:
-          case Image::IMG_UNSIGNED_INT_10F_11F_11F:
-          case Image::IMG_UNSIGNED_INT_24_8:
+          case Image::PixelDataType::UNSIGNED_INT:
+          case Image::PixelDataType::UNSIGNED_INT_2_10_10_10:
+          case Image::PixelDataType::UNSIGNED_INT_5_9_9_9:
+          case Image::PixelDataType::UNSIGNED_INT_10F_11F_11F:
+          case Image::PixelDataType::UNSIGNED_INT_24_8:
             _insert<unsigned int>( src, dst, x, y, z );
             break;
-          case Image::IMG_INT:
+          case Image::PixelDataType::INT:
             _insert<int>( src, dst, x, y, z );
             break;
-          case Image::IMG_FLOAT:
+          case Image::PixelDataType::FLOAT:
             _insert<float>( src, dst, x, y, z );
             break;
 #if defined(HAVE_HALF_FLOAT)
-          case Image::IMG_HALF:
+          case Image::PixelDataType::HALF:
             _insert<half>( src, dst, x, y, z );
             break;
 #endif
@@ -572,33 +572,33 @@ namespace dp
       {
         switch( src->m_type )
         {
-          case Image::IMG_UNSIGNED_BYTE:
+          case Image::PixelDataType::UNSIGNED_BYTE:
             _rescale<unsigned char>( src, dst, contributions );
             break;
-          case Image::IMG_BYTE:                                 
+          case Image::PixelDataType::BYTE:                                 
             _rescale<char>( src, dst, contributions );
             break;
-          case Image::IMG_UNSIGNED_SHORT:
+          case Image::PixelDataType::UNSIGNED_SHORT:
             _rescale<unsigned short>( src, dst, contributions );
             break;
-          case Image::IMG_SHORT:
+          case Image::PixelDataType::SHORT:
             _rescale<short>( src, dst, contributions );
             break;
-          case Image::IMG_UNSIGNED_INT:
-          case Image::IMG_UNSIGNED_INT_2_10_10_10:
-          case Image::IMG_UNSIGNED_INT_5_9_9_9:
-          case Image::IMG_UNSIGNED_INT_10F_11F_11F:
-          case Image::IMG_UNSIGNED_INT_24_8:
+          case Image::PixelDataType::UNSIGNED_INT:
+          case Image::PixelDataType::UNSIGNED_INT_2_10_10_10:
+          case Image::PixelDataType::UNSIGNED_INT_5_9_9_9:
+          case Image::PixelDataType::UNSIGNED_INT_10F_11F_11F:
+          case Image::PixelDataType::UNSIGNED_INT_24_8:
             _rescale<unsigned int>( src, dst, contributions );
             break;
-          case Image::IMG_INT:
+          case Image::PixelDataType::INT:
             _rescale<int>( src, dst, contributions );
             break;
-          case Image::IMG_FLOAT:
+          case Image::PixelDataType::FLOAT:
             _rescale<float>( src, dst, contributions );
             break;
 #if defined(HAVE_HALF_FLOAT)
-          case Image::IMG_HALF:
+          case Image::PixelDataType::HALF:
             _rescale<half>( src, dst, contributions );
             break;
 #endif
@@ -650,46 +650,46 @@ namespace dp
               // slow and klunky but works
               switch( src->m_format )
               {
-                case Image::IMG_RGB:            //!< RGB format
-                case Image::IMG_RGBA:           //!< RGBA format
-                case Image::IMG_INTEGER_RGB:    // treat integer as same
-                case Image::IMG_INTEGER_RGBA:
+                case Image::PixelFormat::RGB:            //!< RGB format
+                case Image::PixelFormat::RGBA:           //!< RGBA format
+                case Image::PixelFormat::INTEGER_RGB:    // treat integer as same
+                case Image::PixelFormat::INTEGER_RGBA:
                   switch( format )
                   {
-                  case Image::IMG_RGB:          //!< RGB format
-                  case Image::IMG_INTEGER_RGB:
+                  case Image::PixelFormat::RGB:          //!< RGB format
+                  case Image::PixelFormat::INTEGER_RGB:
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 0 )] = component[0];
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 1 )] = component[1];
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 2 )] = component[2];
                     break;
-                  case Image::IMG_RGBA:         //!< RGBA format
-                  case Image::IMG_INTEGER_RGBA:
+                  case Image::PixelFormat::RGBA:         //!< RGBA format
+                  case Image::PixelFormat::INTEGER_RGBA:
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 0 )] = component[0];
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 1 )] = component[1];
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 2 )] = component[2];
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 3 )] = component[3];
                     break;
-                  case Image::IMG_BGR:          //!< BGR format
-                  case Image::IMG_INTEGER_BGR:
+                  case Image::PixelFormat::BGR:          //!< BGR format
+                  case Image::PixelFormat::INTEGER_BGR:
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 0 )] = component[2];
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 1 )] = component[1];
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 2 )] = component[0];
                     break;
-                  case Image::IMG_BGRA:         //!< BGRA format
-                  case Image::IMG_INTEGER_BGRA:
+                  case Image::PixelFormat::BGRA:         //!< BGRA format
+                  case Image::PixelFormat::INTEGER_BGRA:
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 0 )] = component[2];
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 1 )] = component[1];
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 2 )] = component[0];
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 3 )] = component[3];
                     break;
-                  case Image::IMG_LUMINANCE:    //!< luminance format
-                  case Image::IMG_INTEGER_LUMINANCE: // correct?
+                  case Image::PixelFormat::LUMINANCE:    //!< luminance format
+                  case Image::PixelFormat::INTEGER_LUMINANCE: // correct?
                     {
                       T pix = (component[0]+component[1]+component[2])/3;
                       dstData[_pixelOffsetElements<T>( dst, x, y, z, 0 )] = pix;
                     }
                     break;
-                  case Image::IMG_LUMINANCE_ALPHA:  //!< luminance alpha format
+                  case Image::PixelFormat::LUMINANCE_ALPHA:  //!< luminance alpha format
                     {
                       T pix = (component[0]+component[1]+component[2])/3;
                       dstData[_pixelOffsetElements<T>( dst, x, y, z, 0 )] = pix;
@@ -697,8 +697,8 @@ namespace dp
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 2 )] = component[3];
                     break;
 
-                  case Image::IMG_ALPHA:
-                  case Image::IMG_INTEGER_ALPHA:
+                  case Image::PixelFormat::ALPHA:
+                  case Image::PixelFormat::INTEGER_ALPHA:
                     {
                       T pix = component[0];
                       dstData[_pixelOffsetElements<T>( dst, x, y, z, 0 )] = pix;
@@ -707,94 +707,94 @@ namespace dp
                   }
                   break;
 
-                case Image::IMG_BGR:          //!< BGR format
-                case Image::IMG_BGRA:         //!< BGRA format
+                case Image::PixelFormat::BGR:          //!< BGR format
+                case Image::PixelFormat::BGRA:         //!< BGRA format
                   switch( format )
                   {
-                  case Image::IMG_RGB:        //!< RGB format
-                  case Image::IMG_INTEGER_RGB:
+                  case Image::PixelFormat::RGB:        //!< RGB format
+                  case Image::PixelFormat::INTEGER_RGB:
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 0 )] = component[2];
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 1 )] = component[1];
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 2 )] = component[0];
                     break;
-                  case Image::IMG_RGBA:       //!< RGBA format
-                  case Image::IMG_INTEGER_RGBA:
+                  case Image::PixelFormat::RGBA:       //!< RGBA format
+                  case Image::PixelFormat::INTEGER_RGBA:
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 0 )] = component[2];
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 1 )] = component[1];
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 2 )] = component[0];
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 3 )] = component[3];
                     break;
-                  case Image::IMG_BGR:        //!< BGR format
-                  case Image::IMG_INTEGER_BGR:
+                  case Image::PixelFormat::BGR:        //!< BGR format
+                  case Image::PixelFormat::INTEGER_BGR:
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 0 )] = component[0];
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 1 )] = component[1];
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 2 )] = component[2];
                     break;
-                  case Image::IMG_BGRA:       //!< BGRA format
-                  case Image::IMG_INTEGER_BGRA:
+                  case Image::PixelFormat::BGRA:       //!< BGRA format
+                  case Image::PixelFormat::INTEGER_BGRA:
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 0 )] = component[0];
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 1 )] = component[1];
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 2 )] = component[2];
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 3 )] = component[3];
                     break;
-                  case Image::IMG_LUMINANCE:  //!< luminance format
-                  case Image::IMG_INTEGER_LUMINANCE:
+                  case Image::PixelFormat::LUMINANCE:  //!< luminance format
+                  case Image::PixelFormat::INTEGER_LUMINANCE:
                     {
                       T pix = (component[0]+component[1]+component[2])/3;
                       dstData[_pixelOffsetElements<T>( dst, x, y, z, 0 )] = pix;
                     }
                     break;
-                  case Image::IMG_LUMINANCE_ALPHA:  //!< luminance alpha format
-                  case Image::IMG_INTEGER_LUMINANCE_ALPHA:
+                  case Image::PixelFormat::LUMINANCE_ALPHA:  //!< luminance alpha format
+                  case Image::PixelFormat::INTEGER_LUMINANCE_ALPHA:
                     {
                       T pix = (component[0]+component[1]+component[2])/3;
                       dstData[_pixelOffsetElements<T>( dst, x, y, z, 0 )] = pix;
                     }
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 2 )] = component[3];
                     break;
-                  case Image::IMG_ALPHA:
-                  case Image::IMG_INTEGER_ALPHA:
+                  case Image::PixelFormat::ALPHA:
+                  case Image::PixelFormat::INTEGER_ALPHA:
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 0 )] = component[0];
                     break;
                   }
                   break;
 
-                case Image::IMG_ALPHA:
-                case Image::IMG_INTEGER_ALPHA:
-                case Image::IMG_LUMINANCE:        //!< luminance format
-                case Image::IMG_LUMINANCE_ALPHA:  //!< luminance alpha format
+                case Image::PixelFormat::ALPHA:
+                case Image::PixelFormat::INTEGER_ALPHA:
+                case Image::PixelFormat::LUMINANCE:        //!< luminance format
+                case Image::PixelFormat::LUMINANCE_ALPHA:  //!< luminance alpha format
                   switch( format )
                   {
-                  case Image::IMG_BGR:            //!< BGR format
-                  case Image::IMG_RGB:            //!< RGB format
-                  case Image::IMG_INTEGER_BGR:
-                  case Image::IMG_INTEGER_RGB:
+                  case Image::PixelFormat::BGR:            //!< BGR format
+                  case Image::PixelFormat::RGB:            //!< RGB format
+                  case Image::PixelFormat::INTEGER_BGR:
+                  case Image::PixelFormat::INTEGER_RGB:
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 0 )] = component[0];
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 1 )] = component[0];
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 2 )] = component[0];
                     break;
-                  case Image::IMG_BGRA:           //!< BGRA format
-                  case Image::IMG_RGBA:           //!< RGBA format
-                  case Image::IMG_INTEGER_BGRA:
-                  case Image::IMG_INTEGER_RGBA:
+                  case Image::PixelFormat::BGRA:           //!< BGRA format
+                  case Image::PixelFormat::RGBA:           //!< RGBA format
+                  case Image::PixelFormat::INTEGER_BGRA:
+                  case Image::PixelFormat::INTEGER_RGBA:
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 0 )] = component[0];
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 1 )] = component[0];
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 2 )] = component[0];
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 3 )] = component[1];
                     break;
-                  case Image::IMG_LUMINANCE_ALPHA:  //!< luminance alpha format
+                  case Image::PixelFormat::LUMINANCE_ALPHA:  //!< luminance alpha format
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 0 )] = component[0];
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 1 )] = component[1];
                     break;
-                  case Image::IMG_LUMINANCE:        //!< luminance format
-                  case Image::IMG_ALPHA:
-                  case Image::IMG_INTEGER_ALPHA:
+                  case Image::PixelFormat::LUMINANCE:        //!< luminance format
+                  case Image::PixelFormat::ALPHA:
+                  case Image::PixelFormat::INTEGER_ALPHA:
                     dstData[_pixelOffsetElements<T>( dst, x, y, z, 0 )] = component[0];
                   }
                   break;
 
                 default:
-                  DP_ASSERT( src->m_format /* UNKNOWN FORMAT */ );
+                  DP_ASSERT( src->m_format == Image::PixelFormat::UNKNOWN );
                   break;
               }
             }
@@ -811,29 +811,29 @@ namespace dp
 
         switch( src->m_type )
         {
-          case Image::IMG_UNSIGNED_BYTE:
+          case Image::PixelDataType::UNSIGNED_BYTE:
             _convertPixelFormat<unsigned char>( src, dst, format );
             break;
-          case Image::IMG_BYTE:                                 
+          case Image::PixelDataType::BYTE:                                 
             _convertPixelFormat<char>( src, dst, format );
             break;
-          case Image::IMG_UNSIGNED_SHORT:
+          case Image::PixelDataType::UNSIGNED_SHORT:
             _convertPixelFormat<unsigned short>( src, dst, format );
             break;
-          case Image::IMG_SHORT:
+          case Image::PixelDataType::SHORT:
             _convertPixelFormat<short>( src, dst, format );
             break;
-          case Image::IMG_UNSIGNED_INT:
+          case Image::PixelDataType::UNSIGNED_INT:
             _convertPixelFormat<unsigned int>( src, dst, format );
             break;
-          case Image::IMG_INT:
+          case Image::PixelDataType::INT:
             _convertPixelFormat<int>( src, dst, format );
             break;
-          case Image::IMG_FLOAT32:
+          case Image::PixelDataType::FLOAT32:
             _convertPixelFormat<float>( src, dst, format );
             break;
 #if defined(HAVE_HALF_FLOAT)
-          case Image::IMG_FLOAT16:
+          case Image::PixelDataType::FLOAT64:
             _convertPixelFormat<half>( src, dst, format );
             break;
 #endif
@@ -866,7 +866,7 @@ namespace dp
       , m_filename(filename)
       , m_internalFlags(0)
       , m_totalNumBytes(0)
-      , m_gpuFormat( TGF_DEFAULT )
+      , m_gpuFormat( TextureGPUFormat::DEFAULT )
       {
         DP_ASSERT( !isHashKeyValid() );
       }
@@ -1031,7 +1031,7 @@ namespace dp
             }
           }
         }
-        if ( getTextureTarget() == TT_UNSPECIFIED_TEXTURE_TARGET )
+        if ( getTextureTarget() == TextureTarget::UNSPECIFIED )
         {
           setTextureTarget( determineTextureTarget( this ) );
         }
@@ -1052,7 +1052,7 @@ namespace dp
         {
           createMipmaps( m_images[image], mipmaps );
         }
-        if ( getTextureTarget() == TT_UNSPECIFIED_TEXTURE_TARGET )
+        if ( getTextureTarget() == TextureTarget::UNSPECIFIED )
         {
           setTextureTarget( determineTextureTarget( this ) );
         }
@@ -1391,33 +1391,33 @@ namespace dp
 
         switch( srcImg->m_type )
         {
-          case Image::IMG_UNSIGNED_BYTE:
+          case Image::PixelDataType::UNSIGNED_BYTE:
             _getSubImagePixels<unsigned char>(srcImg, x_offset, y_offset, z_offset, width, height, depth, subPixels);
             break;
-          case Image::IMG_BYTE:                                 
+          case Image::PixelDataType::BYTE:                                 
             _getSubImagePixels<char>(srcImg, x_offset, y_offset, z_offset, width, height, depth, subPixels);
             break;
-          case Image::IMG_UNSIGNED_SHORT:
+          case Image::PixelDataType::UNSIGNED_SHORT:
             _getSubImagePixels<unsigned short>(srcImg, x_offset, y_offset, z_offset, width, height, depth, subPixels);
             break;
-          case Image::IMG_SHORT:
+          case Image::PixelDataType::SHORT:
             _getSubImagePixels<short>(srcImg, x_offset, y_offset, z_offset, width, height, depth, subPixels);
             break;
-          case Image::IMG_UNSIGNED_INT:
-          case Image::IMG_UNSIGNED_INT_2_10_10_10:
-          case Image::IMG_UNSIGNED_INT_5_9_9_9:
-          case Image::IMG_UNSIGNED_INT_10F_11F_11F:
-          case Image::IMG_UNSIGNED_INT_24_8:
+          case Image::PixelDataType::UNSIGNED_INT:
+          case Image::PixelDataType::UNSIGNED_INT_2_10_10_10:
+          case Image::PixelDataType::UNSIGNED_INT_5_9_9_9:
+          case Image::PixelDataType::UNSIGNED_INT_10F_11F_11F:
+          case Image::PixelDataType::UNSIGNED_INT_24_8:
             _getSubImagePixels<unsigned int>(srcImg, x_offset, y_offset, z_offset, width, height, depth, subPixels);
             break;
-          case Image::IMG_INT:
+          case Image::PixelDataType::INT:
             _getSubImagePixels<int>(srcImg, x_offset, y_offset, z_offset, width, height, depth, subPixels);
             break;
-          case Image::IMG_FLOAT:
+          case Image::PixelDataType::FLOAT:
             _getSubImagePixels<float>(srcImg, x_offset, y_offset, z_offset, width, height, depth, subPixels);
             break;
 #if defined(HAVE_HALF_FLOAT)
-          case Image::IMG_HALF:
+          case Image::PixelDataType::HALF:
             _getSubImagePixels<half>(srcImg, x_offset, y_offset, z_offset, width, height, depth, subPixels);
             break;
 #endif
@@ -1496,33 +1496,33 @@ namespace dp
 
         switch( dstImg->m_type )
         {
-          case Image::IMG_UNSIGNED_BYTE:
+          case Image::PixelDataType::UNSIGNED_BYTE:
             _setSubImagePixels<unsigned char>(dstImg, x_offset, y_offset, z_offset, width, height, depth, subPixels);
             break;
-          case Image::IMG_BYTE:                                 
+          case Image::PixelDataType::BYTE:                                 
             _setSubImagePixels<char>(dstImg, x_offset, y_offset, z_offset, width, height, depth, subPixels);
             break;
-          case Image::IMG_UNSIGNED_SHORT:
+          case Image::PixelDataType::UNSIGNED_SHORT:
             _setSubImagePixels<unsigned short>(dstImg, x_offset, y_offset, z_offset, width, height, depth, subPixels);
             break;
-          case Image::IMG_SHORT:
+          case Image::PixelDataType::SHORT:
             _setSubImagePixels<short>(dstImg, x_offset, y_offset, z_offset, width, height, depth, subPixels);
             break;
-          case Image::IMG_UNSIGNED_INT:
-          case Image::IMG_UNSIGNED_INT_2_10_10_10:
-          case Image::IMG_UNSIGNED_INT_5_9_9_9:
-          case Image::IMG_UNSIGNED_INT_10F_11F_11F:
-          case Image::IMG_UNSIGNED_INT_24_8:
+          case Image::PixelDataType::UNSIGNED_INT:
+          case Image::PixelDataType::UNSIGNED_INT_2_10_10_10:
+          case Image::PixelDataType::UNSIGNED_INT_5_9_9_9:
+          case Image::PixelDataType::UNSIGNED_INT_10F_11F_11F:
+          case Image::PixelDataType::UNSIGNED_INT_24_8:
             _setSubImagePixels<unsigned int>(dstImg, x_offset, y_offset, z_offset, width, height, depth, subPixels);
             break;
-          case Image::IMG_INT:
+          case Image::PixelDataType::INT:
             _setSubImagePixels<int>(dstImg, x_offset, y_offset, z_offset, width, height, depth, subPixels);
             break;
-          case Image::IMG_FLOAT:
+          case Image::PixelDataType::FLOAT:
             _setSubImagePixels<float>(dstImg, x_offset, y_offset, z_offset, width, height, depth, subPixels);
             break;
 #if defined(HAVE_HALF_FLOAT)
-          case Image::IMG_HALF:
+          case Image::PixelDataType::HALF:
             _setSubImagePixels<half>(dstImg, x_offset, y_offset, z_offset, width, height, depth, subPixels);
             break;
 #endif
@@ -1758,9 +1758,9 @@ namespace dp
         {
           Image::PixelDataType type = m_images[0][0].m_type;
       
-          return ( type==Image::IMG_FLOAT32 || type==Image::IMG_FLOAT16 ||
-                   type==Image::IMG_UNSIGNED_INT_5_9_9_9 ||
-                   type==Image::IMG_UNSIGNED_INT_10F_11F_11F );
+          return ( type==Image::PixelDataType::FLOAT32 || type==Image::PixelDataType::FLOAT16 ||
+                   type==Image::PixelDataType::UNSIGNED_INT_5_9_9_9 ||
+                   type==Image::PixelDataType::UNSIGNED_INT_10F_11F_11F );
         }
         return false;
       }
@@ -1777,8 +1777,8 @@ namespace dp
         {
           Image::PixelFormat fmt = m_images[0][0].m_format;
 
-          return ( (fmt >= Image::IMG_COMPRESSED_LUMINANCE_LATC1) &&
-                   (fmt <= Image::IMG_COMPRESSED_SRGBA_DXT5) );
+          return ( (fmt >= Image::PixelFormat::COMPRESSED_LUMINANCE_LATC1) &&
+                   (fmt <= Image::PixelFormat::COMPRESSED_SRGBA_DXT5) );
         }
 
         return false;
@@ -2055,28 +2055,28 @@ namespace dp
         bool valid;
         switch(target)
         {
-         case TT_TEXTURE_1D:
+         case TextureTarget::TEXTURE_1D:
            valid = is1D();
            break;
-         case TT_TEXTURE_2D:
+         case TextureTarget::TEXTURE_2D:
            valid = is2D();
            break;
-         case TT_TEXTURE_3D:
+         case TextureTarget::TEXTURE_3D:
            valid = is3D();
            break;
-         case TT_TEXTURE_CUBE:
+         case TextureTarget::TEXTURE_CUBE:
            valid = isCubeMap();
            break;
-         case TT_TEXTURE_1D_ARRAY:
+         case TextureTarget::TEXTURE_1D_ARRAY:
            valid = is1DArray();
            break;
-         case TT_TEXTURE_2D_ARRAY:
+         case TextureTarget::TEXTURE_2D_ARRAY:
            valid = is2DArray();
            break;
-         case TT_TEXTURE_RECTANGLE:
+         case TextureTarget::TEXTURE_RECTANGLE:
            valid = is2D();
            break;
-         case TT_TEXTURE_CUBE_ARRAY:
+         case TextureTarget::TEXTURE_CUBE_ARRAY:
            valid = isCubeMapArray();
            break;
          default:
@@ -2098,7 +2098,7 @@ namespace dp
           return true;
         }
         // don't allow a change if already set to something useful
-        if ( getTextureTarget() != TT_UNSPECIFIED_TEXTURE_TARGET )
+        if ( getTextureTarget() != TextureTarget::UNSPECIFIED )
         {
           return false;
         }
@@ -2111,7 +2111,7 @@ namespace dp
 
         switch( target )
         {
-        case TT_TEXTURE_CUBE:
+        case TextureTarget::TEXTURE_CUBE:
           valid = is2D() && VERTICAL_CROSS_FORMAT(getWidth(), getHeight());
           if (valid)
           {
@@ -2241,11 +2241,11 @@ namespace dp
 
         TextureHostSharedPtr textureHost = TextureHost::create();
         textureHost->setCreationFlags( TextureHost::F_PRESERVE_IMAGE_DATA_AFTER_UPLOAD );
-        unsigned int index = textureHost->addImage( 8, 8, 1, Image::IMG_RGBA, Image::IMG_FLOAT32 );
+        unsigned int index = textureHost->addImage( 8, 8, 1, Image::PixelFormat::RGBA, Image::PixelDataType::FLOAT32 );
         DP_ASSERT( index != -1 );
         textureHost->setImageData( index, (const void *) &tex[0] );
-        textureHost->setTextureTarget( TT_TEXTURE_2D );
-        textureHost->setTextureGPUFormat(TextureHost::TGF_FIXED8);
+        textureHost->setTextureTarget( TextureTarget::TEXTURE_2D );
+        textureHost->setTextureGPUFormat(TextureHost::TextureGPUFormat::FIXED8);
 
         return( textureHost );
       }

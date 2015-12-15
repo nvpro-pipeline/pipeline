@@ -46,13 +46,13 @@ namespace dp
 
       PrimitiveSharedPtr Primitive::create( PrimitiveType primitiveType )
       {
-        DP_ASSERT( primitiveType != PRIMITIVE_PATCHES );
-        return( std::shared_ptr<Primitive>( new Primitive( primitiveType, PATCHES_NO_PATCHES, PATCHES_MODE_TRIANGLES ) ) );
+        DP_ASSERT( primitiveType != PrimitiveType::PATCHES );
+        return( std::shared_ptr<Primitive>( new Primitive( primitiveType, PatchesType::NONE, PatchesMode::TRIANGLES ) ) );
       }
 
       PrimitiveSharedPtr Primitive::create( PatchesType patchesType, PatchesMode patchesMode )
       {
-        return( std::shared_ptr<Primitive>( new Primitive( PRIMITIVE_PATCHES, patchesType, patchesMode ) ) );
+        return( std::shared_ptr<Primitive>( new Primitive( PrimitiveType::PATCHES, patchesType, patchesMode ) ) );
       }
 
       HandledObjectSharedPtr Primitive::clone() const
@@ -64,8 +64,8 @@ namespace dp
         : m_primitiveType( primitiveType )
         , m_patchesType( patchesType )
         , m_patchesMode( patchesMode )
-        , m_patchesSpacing( PATCHES_SPACING_EQUAL )
-        , m_patchesOrdering( PATCHES_ORDERING_CCW )
+        , m_patchesSpacing( PatchesSpacing::EQUAL )
+        , m_patchesOrdering( PatchesOrdering::CCW )
         , m_indexSet( 0 )
         , m_elementOffset( 0 )
         , m_elementCount( ~0 )
@@ -283,7 +283,7 @@ namespace dp
                  m_instanceCount        == p->m_instanceCount &&
                  !!m_vertexAttributeSet == !!p->m_vertexAttributeSet &&
                  !!m_indexSet           == !!p->m_indexSet &&
-                 ( !( m_primitiveType == PRIMITIVE_PATCHES ) || (  ( m_patchesType == p->m_patchesType )
+                 ( !( m_primitiveType == PrimitiveType::PATCHES ) || (  ( m_patchesType == p->m_patchesType )
                                                                 && ( m_patchesMode == p->m_patchesMode )
                                                                 && ( m_patchesSpacing == p->m_patchesSpacing )
                                                                 && ( m_patchesOrdering == p->m_patchesOrdering ) ) );
@@ -386,71 +386,71 @@ namespace dp
 
         switch( getPrimitiveType() )
         {
-          case PRIMITIVE_TRIANGLE_STRIP_ADJACENCY:
+          case PrimitiveType::TRIANGLE_STRIP_ADJACENCY:
             m_cachedNumberOfPrimitives = numberOfPrimitiveRestarts + 1;
             // for N primitives, we need 2n + 4 indices.
             m_cachedNumberOfFaces = (correctedCount - 4 * m_cachedNumberOfPrimitives) / 2;
             break;
 
-          case PRIMITIVE_LINE_STRIP_ADJACENCY:
-          case PRIMITIVE_LINE_STRIP:
-          case PRIMITIVE_LINE_LOOP:
+          case PrimitiveType::LINE_STRIP_ADJACENCY:
+          case PrimitiveType::LINE_STRIP:
+          case PrimitiveType::LINE_LOOP:
             m_cachedNumberOfPrimitives = numberOfPrimitiveRestarts + 1;
             m_cachedNumberOfFaces = 0;
             break;
 
-          case PRIMITIVE_TRIANGLE_STRIP:
-          case PRIMITIVE_TRIANGLE_FAN:
+          case PrimitiveType::TRIANGLE_STRIP:
+          case PrimitiveType::TRIANGLE_FAN:
             m_cachedNumberOfPrimitives = numberOfPrimitiveRestarts + 1;
             // for N primitives, we need n + 2 indices.
             m_cachedNumberOfFaces = correctedCount - 2 * m_cachedNumberOfPrimitives;
             break;
 
-          case PRIMITIVE_QUAD_STRIP:
+          case PrimitiveType::QUAD_STRIP:
             m_cachedNumberOfPrimitives = numberOfPrimitiveRestarts + 1;
             // for N primitives, we need 2n + 2 indices.
             m_cachedNumberOfFaces = (correctedCount - 2 * m_cachedNumberOfPrimitives) / 2;
             break;
 
-          case PRIMITIVE_POLYGON:
+          case PrimitiveType::POLYGON:
             m_cachedNumberOfPrimitives = numberOfPrimitiveRestarts + 1;
             m_cachedNumberOfFaces = m_cachedNumberOfPrimitives;
             break;
 
-          case PRIMITIVE_POINTS:
+          case PrimitiveType::POINTS:
             m_cachedNumberOfPrimitives = correctedCount;
             m_cachedNumberOfFaces = 0;
             break;
 
-          case PRIMITIVE_LINES_ADJACENCY:
-          case PRIMITIVE_LINES:
+          case PrimitiveType::LINES_ADJACENCY:
+          case PrimitiveType::LINES:
             m_cachedNumberOfPrimitives = correctedCount / vpe;
             m_cachedNumberOfFaces = 0;
             break;
 
-          case PRIMITIVE_QUADS:
-          case PRIMITIVE_TRIANGLES:
-          case PRIMITIVE_TRIANGLES_ADJACENCY:
-          case PRIMITIVE_PATCHES:
+          case PrimitiveType::QUADS:
+          case PrimitiveType::TRIANGLES:
+          case PrimitiveType::TRIANGLES_ADJACENCY:
+          case PrimitiveType::PATCHES:
             m_cachedNumberOfFaces    = correctedCount / vpe;
             m_cachedNumberOfPrimitives = m_cachedNumberOfFaces;
             break;
 
           default:
-          case PRIMITIVE_UNINITIALIZED:
+          case PrimitiveType::UNINITIALIZED:
             m_cachedNumberOfPrimitives = 0;
             m_cachedNumberOfFaces    = 0;
             break;
         }
       }
 
-      void Primitive::generateTexCoords( TextureCoordType type, unsigned int tc, bool overwrite )
+      void Primitive::generateTexCoords( TextureCoordType type, VertexAttributeSet::AttributeID tc, bool overwrite )
       {
-        DP_ASSERT( ( VertexAttributeSet::DP_SG_TEXCOORD0 <= tc ) && ( tc <= VertexAttributeSet::DP_SG_TEXCOORD7 ) );
+        DP_ASSERT( ( VertexAttributeSet::AttributeID::TEXCOORD0 <= tc ) && ( tc <= VertexAttributeSet::AttributeID::TEXCOORD7 ) );
         calculateTexCoords( type, tc, overwrite );
       }
 
-      void Primitive::calculateTexCoords(TextureCoordType type, unsigned int tc, bool overwrite)
+      void Primitive::calculateTexCoords(TextureCoordType type, VertexAttributeSet::AttributeID tc, bool overwrite)
       {
         if ( m_vertexAttributeSet )
         {
@@ -476,7 +476,7 @@ namespace dp
         {
           hg.update( m_vertexAttributeSet );
         }
-        if ( m_primitiveType == PRIMITIVE_PATCHES )
+        if ( m_primitiveType == PrimitiveType::PATCHES )
         {
           hg.update( reinterpret_cast<const unsigned char *>(&m_patchesType), sizeof(m_patchesType) );
           hg.update( reinterpret_cast<const unsigned char *>(&m_patchesMode), sizeof(m_patchesMode) );
@@ -650,7 +650,7 @@ namespace dp
       {
         return m_indexSet ?
                m_indexSet->getNumberOfIndices() :
-               getVertexAttributeSet()->getNumberOfVertexData( VertexAttributeSet::DP_SG_POSITION );
+               getVertexAttributeSet()->getNumberOfVertexData( VertexAttributeSet::AttributeID::POSITION );
       }
 
       unsigned int Primitive::getElementCount() const
@@ -976,12 +976,12 @@ namespace dp
         DP_ASSERT( vassp->getNumberOfVertices() );
 
         bool ok =   ( overwrite || !vassp->getNumberOfNormals() )
-                &&  (   ( m_primitiveType == PRIMITIVE_TRIANGLE_STRIP )
-                    ||  ( m_primitiveType == PRIMITIVE_TRIANGLE_FAN )
-                    ||  ( m_primitiveType == PRIMITIVE_TRIANGLES )
-                    ||  ( m_primitiveType == PRIMITIVE_QUAD_STRIP )
-                    ||  ( m_primitiveType == PRIMITIVE_QUADS )
-                    ||  ( m_primitiveType == PRIMITIVE_POLYGON ) );
+                &&  (   ( m_primitiveType == PrimitiveType::TRIANGLE_STRIP )
+                    ||  ( m_primitiveType == PrimitiveType::TRIANGLE_FAN )
+                    ||  ( m_primitiveType == PrimitiveType::TRIANGLES )
+                    ||  ( m_primitiveType == PrimitiveType::QUAD_STRIP )
+                    ||  ( m_primitiveType == PrimitiveType::QUADS )
+                    ||  ( m_primitiveType == PrimitiveType::POLYGON ) );
         if ( ok )
         {
           // temporary normals buffer
@@ -1001,28 +1001,28 @@ namespace dp
           // initialize with zero
           memset( &normals[0], 0, normals.size() * sizeof(Vec3f) );
 
-          DP_ASSERT( vassp->getVertexBuffer( VertexAttributeSet::DP_SG_POSITION ) );
+          DP_ASSERT( vassp->getVertexBuffer( VertexAttributeSet::AttributeID::POSITION ) );
           Buffer::ConstIterator<Vec3f>::Type vertices = vassp->getVertices();
 
           // calculate the normals, depending on primitive type
           switch( m_primitiveType )
           {
-            case PRIMITIVE_TRIANGLE_STRIP :
+            case PrimitiveType::TRIANGLE_STRIP :
               calculateNormalsTriStrip( vertices, normals );
               break;
-            case PRIMITIVE_TRIANGLE_FAN :
+            case PrimitiveType::TRIANGLE_FAN :
               calculateNormalsTriFan( vertices, normals );
               break;
-            case PRIMITIVE_TRIANGLES :
+            case PrimitiveType::TRIANGLES :
               calculateNormalsTriangle( vertices, normals );
               break;
-            case PRIMITIVE_QUAD_STRIP :
+            case PrimitiveType::QUAD_STRIP :
               calculateNormalsQuadStrip( vertices, normals );
               break;
-            case PRIMITIVE_QUADS :
+            case PrimitiveType::QUADS :
               calculateNormalsQuad( vertices, normals );
               break;
-            case PRIMITIVE_POLYGON :
+            case PrimitiveType::POLYGON :
               calculateNormalsPolygon( vertices, normals );
               break;
             default :
@@ -1042,12 +1042,12 @@ namespace dp
         return( ok );
       }
 
-      void calculateTangent( VertexAttributeSetSharedPtr const& vas, unsigned int tc, unsigned int i, unsigned int i1
+      void calculateTangent( VertexAttributeSetSharedPtr const& vas, VertexAttributeSet::AttributeID tc, unsigned int i, unsigned int i1
                            , unsigned int i2, std::vector<Vec3f> & tangents )
       {
         //  determine the texture dependent plane weight
-        DP_ASSERT( vas->getVertexBuffer( VertexAttributeSet::DP_SG_POSITION ) );
-        DP_ASSERT( tc );
+        DP_ASSERT( vas->getVertexBuffer( VertexAttributeSet::AttributeID::POSITION ) );
+        DP_ASSERT( tc != VertexAttributeSet::AttributeID::POSITION );
 
         Buffer::ConstIterator<Vec3f>::Type vertices = vas->getVertices();
         Vec3f edge0 = vertices[i1] - vertices[i];
@@ -1062,7 +1062,7 @@ namespace dp
         tangents[i] += dTex1[1] * edge0 - dTex0[1] * edge1;
       }
 
-      void Primitive::calculateTangentsQuad( VertexAttributeSetSharedPtr const& vas, unsigned int tc, std::vector<Vec3f> & tangents )
+      void Primitive::calculateTangentsQuad( VertexAttributeSetSharedPtr const& vas, VertexAttributeSet::AttributeID tc, std::vector<Vec3f> & tangents )
       {
         unsigned int offset = getElementOffset();
         unsigned int count  = getElementCount();
@@ -1094,7 +1094,7 @@ namespace dp
         }
       }
 
-      void Primitive::calculateTangentsQuadStrip( VertexAttributeSetSharedPtr const& vas, unsigned int tc, std::vector<Vec3f> & tangents )
+      void Primitive::calculateTangentsQuadStrip( VertexAttributeSetSharedPtr const& vas, VertexAttributeSet::AttributeID tc, std::vector<Vec3f> & tangents )
       {
         unsigned int offset = getElementOffset();
         unsigned int count  = getElementCount();
@@ -1130,7 +1130,7 @@ namespace dp
         }
       }
 
-      void Primitive::calculateTangentsTriangle( VertexAttributeSetSharedPtr const& vas, unsigned int tc, std::vector<Vec3f> & tangents )
+      void Primitive::calculateTangentsTriangle( VertexAttributeSetSharedPtr const& vas, VertexAttributeSet::AttributeID tc, std::vector<Vec3f> & tangents )
       {
         unsigned int offset = getElementOffset();
         unsigned int count  = getElementCount();
@@ -1160,7 +1160,7 @@ namespace dp
         }
       }
 
-      void Primitive::calculateTangentsTriFan( VertexAttributeSetSharedPtr const& vas, unsigned int tc, std::vector<Vec3f> & tangents )
+      void Primitive::calculateTangentsTriFan( VertexAttributeSetSharedPtr const& vas, VertexAttributeSet::AttributeID tc, std::vector<Vec3f> & tangents )
       {
         unsigned int offset = getElementOffset();
         unsigned int count  = getElementCount();
@@ -1198,7 +1198,7 @@ namespace dp
         }
       }
 
-      void Primitive::calculateTangentsTriStrip( VertexAttributeSetSharedPtr const& vas, unsigned int tc
+      void Primitive::calculateTangentsTriStrip( VertexAttributeSetSharedPtr const& vas, VertexAttributeSet::AttributeID tc
                                                , std::vector<Vec3f> & tangents )
       {
         unsigned int offset = getElementOffset();
@@ -1256,12 +1256,12 @@ namespace dp
         }
       }
 
-      void Primitive::generateTangentSpace( unsigned int tc, unsigned int tg, unsigned int bn, bool overwrite )
+      void Primitive::generateTangentSpace( VertexAttributeSet::AttributeID tc, VertexAttributeSet::AttributeID tg, VertexAttributeSet::AttributeID bn, bool overwrite )
       {
         calculateTangentSpace( tc, tg, bn, overwrite );
       }
 
-      void Primitive::calculateTangentSpace( unsigned int tc, unsigned int tg, unsigned int bn, bool overwrite )
+      void Primitive::calculateTangentSpace( VertexAttributeSet::AttributeID tc, VertexAttributeSet::AttributeID tg, VertexAttributeSet::AttributeID bn, bool overwrite )
       {
         DP_ASSERT( ( tc != tg ) && ( tc != bn ) && ( tg != bn ) );
         DP_ASSERT( getVertexAttributeSet() );
@@ -1274,11 +1274,11 @@ namespace dp
                  &&  ( m_vertexAttributeSet->getNumberOfVertices() == m_vertexAttributeSet->getNumberOfVertexData(tc) ) );
 
         bool ok =   ( overwrite || (!m_vertexAttributeSet->getNumberOfVertexData( tg ) && !m_vertexAttributeSet->getNumberOfVertexData( bn ) ) )
-                &&  (   ( m_primitiveType == PRIMITIVE_TRIANGLE_STRIP )
-                    ||  ( m_primitiveType == PRIMITIVE_TRIANGLE_FAN )
-                    ||  ( m_primitiveType == PRIMITIVE_TRIANGLES )
-                    ||  ( m_primitiveType == PRIMITIVE_QUAD_STRIP )
-                    ||  ( m_primitiveType == PRIMITIVE_QUADS ) );
+                &&  (   ( m_primitiveType == PrimitiveType::TRIANGLE_STRIP )
+                    ||  ( m_primitiveType == PrimitiveType::TRIANGLE_FAN )
+                    ||  ( m_primitiveType == PrimitiveType::TRIANGLES )
+                    ||  ( m_primitiveType == PrimitiveType::QUAD_STRIP )
+                    ||  ( m_primitiveType == PrimitiveType::QUADS ) );
         if ( ok )
         {
           // temporary tangents buffer
@@ -1318,19 +1318,19 @@ namespace dp
           // calculate the normals, depending on primitive type
           switch( m_primitiveType )
           {
-            case PRIMITIVE_TRIANGLE_STRIP :
+            case PrimitiveType::TRIANGLE_STRIP :
               calculateTangentsTriStrip( m_vertexAttributeSet, tc, tangents );
               break;
-            case PRIMITIVE_TRIANGLE_FAN :
+            case PrimitiveType::TRIANGLE_FAN :
               calculateTangentsTriFan( m_vertexAttributeSet, tc, tangents );
               break;
-            case PRIMITIVE_TRIANGLES :
+            case PrimitiveType::TRIANGLES :
               calculateTangentsTriangle( m_vertexAttributeSet, tc, tangents );
               break;
-            case PRIMITIVE_QUAD_STRIP :
+            case PrimitiveType::QUAD_STRIP :
               calculateTangentsQuadStrip( m_vertexAttributeSet, tc, tangents );
               break;
-            case PRIMITIVE_QUADS :
+            case PrimitiveType::QUADS :
               calculateTangentsQuad( m_vertexAttributeSet, tc, tangents );
               break;
             default :
@@ -1391,21 +1391,21 @@ namespace dp
       {
         static const std::map<std::string, PrimitiveType> primitiveTypes =
         {
-          { "Points",                 PRIMITIVE_POINTS                    },
-          { "LineStrip",              PRIMITIVE_LINE_STRIP                },
-          { "LineLoop",               PRIMITIVE_LINE_LOOP                 },
-          { "Lines",                  PRIMITIVE_LINES                     },
-          { "TriangleStrip",          PRIMITIVE_TRIANGLE_STRIP            },
-          { "TriangleFan",            PRIMITIVE_TRIANGLE_FAN              },
-          { "Triangles",              PRIMITIVE_TRIANGLES                 },
-          { "QuadStrip",              PRIMITIVE_QUAD_STRIP                },
-          { "Quads",                  PRIMITIVE_QUADS                     },
-          { "Polygon",                PRIMITIVE_POLYGON                   },
-          { "TrianglesAdjacency",     PRIMITIVE_TRIANGLES_ADJACENCY       },
-          { "TriangleStripAdjacency", PRIMITIVE_TRIANGLE_STRIP_ADJACENCY  },
-          { "LinesAdjacency",         PRIMITIVE_LINES_ADJACENCY           },
-          { "LineStripAdjacency",     PRIMITIVE_LINE_STRIP_ADJACENCY      },
-          { "Patches",                PRIMITIVE_PATCHES                   }
+          { "Points",                 PrimitiveType::POINTS                    },
+          { "LineStrip",              PrimitiveType::LINE_STRIP                },
+          { "LineLoop",               PrimitiveType::LINE_LOOP                 },
+          { "Lines",                  PrimitiveType::LINES                     },
+          { "TriangleStrip",          PrimitiveType::TRIANGLE_STRIP            },
+          { "TriangleFan",            PrimitiveType::TRIANGLE_FAN              },
+          { "Triangles",              PrimitiveType::TRIANGLES                 },
+          { "QuadStrip",              PrimitiveType::QUAD_STRIP                },
+          { "Quads",                  PrimitiveType::QUADS                     },
+          { "Polygon",                PrimitiveType::POLYGON                   },
+          { "TrianglesAdjacency",     PrimitiveType::TRIANGLES_ADJACENCY       },
+          { "TriangleStripAdjacency", PrimitiveType::TRIANGLE_STRIP_ADJACENCY  },
+          { "LinesAdjacency",         PrimitiveType::LINES_ADJACENCY           },
+          { "LineStripAdjacency",     PrimitiveType::LINE_STRIP_ADJACENCY      },
+          { "Patches",                PrimitiveType::PATCHES                   }
         };
 
           std::map<std::string,PrimitiveType>::const_iterator it = primitiveTypes.find( name );
@@ -1417,21 +1417,21 @@ namespace dp
       {
         switch( pt )
         {
-          case PRIMITIVE_POINTS :                   return( "Points" );
-          case PRIMITIVE_LINE_STRIP :               return( "LineStrip" );
-          case PRIMITIVE_LINE_LOOP :                return( "LineLoop" );
-          case PRIMITIVE_LINES :                    return( "Lines" );
-          case PRIMITIVE_TRIANGLE_STRIP :           return( "TriangleStrip" );
-          case PRIMITIVE_TRIANGLE_FAN :             return( "TriangleFan" );
-          case PRIMITIVE_TRIANGLES :                return( "Triangles" );
-          case PRIMITIVE_QUAD_STRIP :               return( "QuadStrip" );
-          case PRIMITIVE_QUADS :                    return( "Quads" );
-          case PRIMITIVE_POLYGON :                  return( "Polygon" );
-          case PRIMITIVE_TRIANGLES_ADJACENCY :      return( "TrianglesAdjacency" );
-          case PRIMITIVE_TRIANGLE_STRIP_ADJACENCY : return( "TriangleStripAdjacency" );
-          case PRIMITIVE_LINES_ADJACENCY :          return( "LinesAdjacency" );
-          case PRIMITIVE_LINE_STRIP_ADJACENCY :     return( "LineStripAdjacency" );
-          case PRIMITIVE_PATCHES :                  return( "Patches" );
+          case PrimitiveType::POINTS :                   return( "Points" );
+          case PrimitiveType::LINE_STRIP :               return( "LineStrip" );
+          case PrimitiveType::LINE_LOOP :                return( "LineLoop" );
+          case PrimitiveType::LINES :                    return( "Lines" );
+          case PrimitiveType::TRIANGLE_STRIP :           return( "TriangleStrip" );
+          case PrimitiveType::TRIANGLE_FAN :             return( "TriangleFan" );
+          case PrimitiveType::TRIANGLES :                return( "Triangles" );
+          case PrimitiveType::QUAD_STRIP :               return( "QuadStrip" );
+          case PrimitiveType::QUADS :                    return( "Quads" );
+          case PrimitiveType::POLYGON :                  return( "Polygon" );
+          case PrimitiveType::TRIANGLES_ADJACENCY :      return( "TrianglesAdjacency" );
+          case PrimitiveType::TRIANGLE_STRIP_ADJACENCY : return( "TriangleStripAdjacency" );
+          case PrimitiveType::LINES_ADJACENCY :          return( "LinesAdjacency" );
+          case PrimitiveType::LINE_STRIP_ADJACENCY :     return( "LineStripAdjacency" );
+          case PrimitiveType::PATCHES :                  return( "Patches" );
           default :
             DP_ASSERT( !"unknown primtive type" );
             return( "" );
@@ -1442,11 +1442,11 @@ namespace dp
       {
         static const std::map<std::string, PatchesType> patchesTypes =
         {
-          { "NoPatches",            PATCHES_NO_PATCHES              },
-          { "PNTriangles",          PATCHES_PN_TRIANGLES            },
-          { "PNQuads",              PATCHES_PN_QUADS                },
-          { "CubicBezierTriangles", PATCHES_CUBIC_BEZIER_TRIANGLES  },
-          { "CubicBezierQuads",     PATCHES_CUBIC_BEZIER_QUADS      }
+          { "NoPatches",            PatchesType::NONE                   },
+          { "PNTriangles",          PatchesType::PN_TRIANGLES           },
+          { "PNQuads",              PatchesType::PN_QUADS               },
+          { "CubicBezierTriangles", PatchesType::CUBIC_BEZIER_TRIANGLES },
+          { "CubicBezierQuads",     PatchesType::CUBIC_BEZIER_QUADS     }
         };
 
           std::map<std::string,PatchesType>::const_iterator it = patchesTypes.find( name );
@@ -1458,11 +1458,11 @@ namespace dp
       {
         switch( pt )
         {
-          case PATCHES_NO_PATCHES :             return( "NoPatches" );
-          case PATCHES_PN_TRIANGLES :           return( "PNTriangles" );
-          case PATCHES_PN_QUADS :               return( "PNQuads" );
-          case PATCHES_CUBIC_BEZIER_TRIANGLES : return( "CubicBezierTriangles" );
-          case PATCHES_CUBIC_BEZIER_QUADS :     return( "CubicBezierQuads" );
+          case PatchesType::NONE :                    return( "NoPatches" );
+          case PatchesType::PN_TRIANGLES :            return( "PNTriangles" );
+          case PatchesType::PN_QUADS :                return( "PNQuads" );
+          case PatchesType::CUBIC_BEZIER_TRIANGLES :  return( "CubicBezierTriangles" );
+          case PatchesType::CUBIC_BEZIER_QUADS :      return( "CubicBezierQuads" );
           default :
             DP_ASSERT( !"unknown patches type!" );
             return( "" );
@@ -1473,11 +1473,11 @@ namespace dp
       {
         switch( pt )
         {
-          case PATCHES_NO_PATCHES :             return( 0 );
-          case PATCHES_PN_TRIANGLES :           return( 3 );
-          case PATCHES_PN_QUADS :               return( 4 );
-          case PATCHES_CUBIC_BEZIER_TRIANGLES : return( 10 );
-          case PATCHES_CUBIC_BEZIER_QUADS :     return( 16 );
+          case PatchesType::NONE :                    return( 0 );
+          case PatchesType::PN_TRIANGLES :            return( 3 );
+          case PatchesType::PN_QUADS :                return( 4 );
+          case PatchesType::CUBIC_BEZIER_TRIANGLES :  return( 10 );
+          case PatchesType::CUBIC_BEZIER_QUADS :      return( 16 );
           default :
             DP_ASSERT( !"unknown patches type!" );
             return( 0 );

@@ -149,21 +149,21 @@ void SceneTreeBrowser::contextMenuEvent( QContextMenuEvent * event )
       case ObjectCode::PRIMITIVE :
         {
           VertexAttributeSetSharedPtr const& vas = currentItem->getObject().staticCast<Primitive>()->getVertexAttributeSet();
-          if ( !vas->getVertexAttribute( VertexAttributeSet::DP_SG_TEXCOORD0 ).getBuffer() )
+          if ( !vas->getVertexAttribute( VertexAttributeSet::AttributeID::TEXCOORD0 ).getBuffer() )
           {
             QMenu * subMenu = menu.addMenu( "Generate Texture &Coordinates" );
             subMenu->addAction( "Cylindrical" );
-            subMenu->actions().back()->setData( TCT_CYLINDRICAL );
+            subMenu->actions().back()->setData( static_cast<unsigned int>(TextureCoordType::CYLINDRICAL) );
             subMenu->addAction( "Planar" );
-            subMenu->actions().back()->setData( TCT_PLANAR );
+            subMenu->actions().back()->setData( static_cast<unsigned int>(TextureCoordType::PLANAR) );
             subMenu->addAction( "Spherical" );
-            subMenu->actions().back()->setData( TCT_SPHERICAL );
+            subMenu->actions().back()->setData( static_cast<unsigned int>(TextureCoordType::SPHERICAL) );
             connect( subMenu, SIGNAL( triggered( QAction * ) ), this, SLOT( triggeredGenerateTextureCoordinatesMenu( QAction * ) ) );
           }
 
-          if (      vas->getVertexAttribute( VertexAttributeSet::DP_SG_TEXCOORD0 ).getBuffer()
-              &&  ! vas->getVertexAttribute( VertexAttributeSet::DP_SG_TEXCOORD6 ).getBuffer()
-              &&  ! vas->getVertexAttribute( VertexAttributeSet::DP_SG_TEXCOORD7 ).getBuffer() )
+          if (      vas->getVertexAttribute( VertexAttributeSet::AttributeID::TEXCOORD0 ).getBuffer()
+              &&  ! vas->getVertexAttribute( VertexAttributeSet::AttributeID::TEXCOORD6 ).getBuffer()
+              &&  ! vas->getVertexAttribute( VertexAttributeSet::AttributeID::TEXCOORD7 ).getBuffer() )
           {
             QAction * action = menu.addAction( "Generate &Tangent Space" );
             connect( action, SIGNAL(triggered()), this, SLOT(triggeredGenerateTangentSpace()) );

@@ -81,7 +81,7 @@ namespace dp
             newIndices.push_back( i );
           }
         }
-        return( PRIMITIVE_LINES );
+        return( PrimitiveType::LINES );
       }
 
       PrimitiveType convertLineLoop( Primitive * p, vector<unsigned int> & newIndices )
@@ -129,7 +129,7 @@ namespace dp
           }
           newIndices.push_back( 0 );
         }
-        return( PRIMITIVE_LINES );
+        return( PrimitiveType::LINES );
       }
 
       PrimitiveType convertTriangleStrip( Primitive * p, vector<unsigned int> & newIndices )
@@ -182,7 +182,7 @@ namespace dp
             }
           }
         }
-        return( PRIMITIVE_TRIANGLES );
+        return( PrimitiveType::TRIANGLES );
       }
 
       PrimitiveType convertTriangleFan( Primitive * p, vector<unsigned int> & newIndices )
@@ -220,7 +220,7 @@ namespace dp
             newIndices.push_back( i );
           }
         }
-        return( PRIMITIVE_TRIANGLES );
+        return( PrimitiveType::TRIANGLES );
       }
 
       PrimitiveType convertQuadStrip( Primitive * p, vector<unsigned int> & newIndices )
@@ -260,7 +260,7 @@ namespace dp
             newIndices.push_back( i-1 );
           }
         }
-        return( PRIMITIVE_QUADS );
+        return( PrimitiveType::QUADS );
       }
 
       PrimitiveType convertTriangleStripAdjacency( Primitive * p, vector<unsigned int> & newIndices )
@@ -493,7 +493,7 @@ namespace dp
             }
           }
         }
-        return( PRIMITIVE_TRIANGLES_ADJACENCY );
+        return( PrimitiveType::TRIANGLES_ADJACENCY );
       }
 
       PrimitiveType convertLineStripAdajcency( Primitive * p, vector<unsigned int> & newIndices )
@@ -544,7 +544,7 @@ namespace dp
             newIndices.push_back( i );
           }
         }
-        return( PRIMITIVE_LINES_ADJACENCY );
+        return( PrimitiveType::LINES_ADJACENCY );
       }
 
       void DestrippingTraverser::doApply( const dp::sg::core::NodeSharedPtr & root )
@@ -574,35 +574,35 @@ namespace dp
           if ( it == m_primitiveMap.end() )
           {
             vector<unsigned int> newIndices;
-            PrimitiveType newPrimitiveType = PRIMITIVE_UNINITIALIZED;
+            PrimitiveType newPrimitiveType = PrimitiveType::UNINITIALIZED;
             switch( p->getPrimitiveType() )
             {
-              case PRIMITIVE_LINE_STRIP :
+              case PrimitiveType::LINE_STRIP :
                 newPrimitiveType = convertLineStrip( p, newIndices );
                 break;
-              case PRIMITIVE_LINE_LOOP :
+              case PrimitiveType::LINE_LOOP :
                 newPrimitiveType = convertLineLoop( p, newIndices );
                 break;
-              case PRIMITIVE_TRIANGLE_STRIP :
+              case PrimitiveType::TRIANGLE_STRIP :
                 newPrimitiveType = convertTriangleStrip( p, newIndices );
                 break;
-              case PRIMITIVE_TRIANGLE_FAN :
+              case PrimitiveType::TRIANGLE_FAN :
                 newPrimitiveType = convertTriangleFan( p, newIndices );
                 break;
-              case PRIMITIVE_QUAD_STRIP :
+              case PrimitiveType::QUAD_STRIP :
                 newPrimitiveType = convertQuadStrip( p, newIndices );
                 break;
-              case PRIMITIVE_TRIANGLE_STRIP_ADJACENCY :
+              case PrimitiveType::TRIANGLE_STRIP_ADJACENCY :
                 newPrimitiveType = convertTriangleStripAdjacency( p, newIndices );
                 break;
-              case PRIMITIVE_LINE_STRIP_ADJACENCY :
+              case PrimitiveType::LINE_STRIP_ADJACENCY :
                 newPrimitiveType = convertLineStripAdajcency( p, newIndices );
                 break;
               default :
                 DP_ASSERT( false );
                 break;
             }
-            DP_ASSERT( newPrimitiveType != PRIMITIVE_UNINITIALIZED )
+            DP_ASSERT( newPrimitiveType != PrimitiveType::UNINITIALIZED )
             DP_ASSERT( !newIndices.empty() );
             IndexSetSharedPtr newIndexSet = IndexSet::create();
             if ( p->getIndexSet() )

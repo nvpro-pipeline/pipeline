@@ -173,28 +173,28 @@ namespace dp
             // convert to RGBA
             switch ( textureImage->getFormat( image, mipmap ) )
             {
-            case Image::IMG_BGR:
+            case Image::PixelFormat::BGR:
               switch (textureImage->getType())
               {
-              case Image::IMG_UNSIGNED_BYTE:
+              case Image::PixelDataType::UNSIGNED_BYTE:
                 convertBGRToRGBA( &tmpData[0], (char*)srcData, numPixels, UnsignedIntegerToUnsignedChar<unsigned char>() );
                 break;
-              case Image::IMG_UNSIGNED_SHORT:
+              case Image::PixelDataType::UNSIGNED_SHORT:
                 convertBGRToRGBA( &tmpData[0], (char *)srcData, numPixels, UnsignedIntegerToUnsignedChar<unsigned short>() );
                 break;
-              case Image::IMG_UNSIGNED_INT:
+              case Image::PixelDataType::UNSIGNED_INT:
                 convertBGRToRGBA( &tmpData[0], (char *)srcData, numPixels, UnsignedIntegerToUnsignedChar<unsigned int>() );
                 break;
-              case Image::IMG_BYTE:
+              case Image::PixelDataType::BYTE:
                 convertBGRToRGBA( &tmpData[0], (char*)srcData, numPixels, IntegerToUnsignedChar<char>() );
                 break;
-              case Image::IMG_SHORT:
+              case Image::PixelDataType::SHORT:
                 convertBGRToRGBA( &tmpData[0], (char *)srcData, numPixels, IntegerToUnsignedChar<short>() );
                 break;
-              case Image::IMG_INT:
+              case Image::PixelDataType::INT:
                 convertBGRToRGBA( &tmpData[0], (char *)srcData, numPixels, IntegerToUnsignedChar<int>() );
                 break;
-              case Image::IMG_FLOAT:
+              case Image::PixelDataType::FLOAT:
                 {
                   const float *src = static_cast<const float *>(srcData);
                   float max = *std::max_element( src, src + 3 * numPixels );
@@ -205,28 +205,28 @@ namespace dp
                 supported = false;
               }
               break;
-            case Image::IMG_RGB:
+            case Image::PixelFormat::RGB:
               switch (textureImage->getType())
               {
-              case Image::IMG_UNSIGNED_BYTE:
+              case Image::PixelDataType::UNSIGNED_BYTE:
                 convertRGBToRGBA( &tmpData[0], (char *)srcData, numPixels, UnsignedIntegerToUnsignedChar<unsigned char>() );
                 break;
-              case Image::IMG_UNSIGNED_SHORT:
+              case Image::PixelDataType::UNSIGNED_SHORT:
                 convertRGBToRGBA( &tmpData[0], (char *)srcData, numPixels, UnsignedIntegerToUnsignedChar<unsigned short>() );
                 break;
-              case Image::IMG_UNSIGNED_INT:
+              case Image::PixelDataType::UNSIGNED_INT:
                 convertRGBToRGBA( &tmpData[0], (char *)srcData, numPixels, UnsignedIntegerToUnsignedChar<unsigned int>() );
                 break;
-              case Image::IMG_BYTE:
+              case Image::PixelDataType::BYTE:
                 convertRGBToRGBA( &tmpData[0], (char *)srcData, numPixels, IntegerToUnsignedChar<char>() );
                 break;
-              case Image::IMG_SHORT:
+              case Image::PixelDataType::SHORT:
                 convertRGBToRGBA( &tmpData[0], (char *)srcData, numPixels, IntegerToUnsignedChar<short>() );
                 break;
-              case Image::IMG_INT:
+              case Image::PixelDataType::INT:
                 convertRGBToRGBA( &tmpData[0], (char *)srcData, numPixels, IntegerToUnsignedChar<int>() );
                 break;
-              case Image::IMG_FLOAT:
+              case Image::PixelDataType::FLOAT:
                 {
                   const float *src = static_cast<const float *>(srcData);
                   float max = *std::max_element( src, src + 3 * numPixels );
@@ -237,28 +237,28 @@ namespace dp
                 supported = false;
               }
               break;
-            case Image::IMG_RGBA:
+            case Image::PixelFormat::RGBA:
               switch (textureImage->getType())
               {
-              case Image::IMG_UNSIGNED_BYTE:
+              case Image::PixelDataType::UNSIGNED_BYTE:
                 convertRGBAToRGBA( &tmpData[0], (char *)srcData, numPixels, UnsignedIntegerToUnsignedChar<unsigned char>() );
                 break;
-              case Image::IMG_UNSIGNED_SHORT:
+              case Image::PixelDataType::UNSIGNED_SHORT:
                 convertRGBAToRGBA( &tmpData[0], (char *)srcData, numPixels, UnsignedIntegerToUnsignedChar<unsigned short>() );
                 break;
-              case Image::IMG_UNSIGNED_INT:
+              case Image::PixelDataType::UNSIGNED_INT:
                 convertRGBAToRGBA( &tmpData[0], (char *)srcData, numPixels, UnsignedIntegerToUnsignedChar<unsigned int>() );
                 break;
-              case Image::IMG_BYTE:
+              case Image::PixelDataType::BYTE:
                 convertRGBAToRGBA( &tmpData[0], (char *)srcData, numPixels, IntegerToUnsignedChar<char>() );
                 break;
-              case Image::IMG_SHORT:
+              case Image::PixelDataType::SHORT:
                 convertRGBAToRGBA( &tmpData[0], (char *)srcData, numPixels, IntegerToUnsignedChar<short>() );
                 break;
-              case Image::IMG_INT:
+              case Image::PixelDataType::INT:
                 convertRGBAToRGBA( &tmpData[0], (char *)srcData, numPixels, IntegerToUnsignedChar<int>() );
                 break;
-              case Image::IMG_FLOAT:
+              case Image::PixelDataType::FLOAT:
                 {
                   const float *src = static_cast<const float *>(srcData);
                   float max = *std::max_element( src, src + 4 * numPixels );
@@ -269,28 +269,28 @@ namespace dp
                 supported = false;
               }
               break;
-            case Image::IMG_BGRA:
+            case Image::PixelFormat::BGRA:
               switch (textureImage->getType())
               {
-              case Image::IMG_UNSIGNED_BYTE:
+              case Image::PixelDataType::UNSIGNED_BYTE:
                 convertBGRAToRGBA( &tmpData[0], (char *)srcData, numPixels, UnsignedIntegerToUnsignedChar<unsigned char>() );
                 break;
-              case Image::IMG_UNSIGNED_SHORT:
+              case Image::PixelDataType::UNSIGNED_SHORT:
                 convertBGRAToRGBA( &tmpData[0], (char *)srcData, numPixels, UnsignedIntegerToUnsignedChar<unsigned short>() );
                 break;
-              case Image::IMG_UNSIGNED_INT:
+              case Image::PixelDataType::UNSIGNED_INT:
                 convertBGRAToRGBA( &tmpData[0], (char *)srcData, numPixels, UnsignedIntegerToUnsignedChar<unsigned int>() );
                 break;
-              case Image::IMG_BYTE:
+              case Image::PixelDataType::BYTE:
                 convertBGRAToRGBA( &tmpData[0], (char *)srcData, numPixels, IntegerToUnsignedChar<char>() );
                 break;
-              case Image::IMG_SHORT:
+              case Image::PixelDataType::SHORT:
                 convertBGRAToRGBA( &tmpData[0], (char *)srcData, numPixels, IntegerToUnsignedChar<short>() );
                 break;
-              case Image::IMG_INT:
+              case Image::PixelDataType::INT:
                 convertBGRAToRGBA( &tmpData[0], (char *)srcData, numPixels, IntegerToUnsignedChar<int>() );
                 break;
-              case Image::IMG_FLOAT:
+              case Image::PixelDataType::FLOAT:
                 {
                   const float *src = static_cast<const float *>(srcData);
                   float max = *std::max_element( src, src + 4 * numPixels );

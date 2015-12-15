@@ -184,7 +184,7 @@ int ExtractGeometryTraverser::addPrimitive(int geometryIDX, const Primitive* p)
   // Turn all filled primitive types into triangulated index lists.
   switch ( p->getPrimitiveType() )
   {
-  case PRIMITIVE_QUADS:
+  case PrimitiveType::QUADS:
     {
       valid = true;
       // just in case
@@ -253,7 +253,7 @@ int ExtractGeometryTraverser::addPrimitive(int geometryIDX, const Primitive* p)
     }
     break;
 
-  case PRIMITIVE_QUAD_STRIP:
+  case PrimitiveType::QUAD_STRIP:
     {
       valid = true;
 
@@ -329,8 +329,8 @@ int ExtractGeometryTraverser::addPrimitive(int geometryIDX, const Primitive* p)
     }
     break;
 
-  case PRIMITIVE_POLYGON:
-  case PRIMITIVE_TRIANGLE_FAN:
+  case PrimitiveType::POLYGON:
+  case PrimitiveType::TRIANGLE_FAN:
     {
       valid = true;
 
@@ -374,7 +374,7 @@ int ExtractGeometryTraverser::addPrimitive(int geometryIDX, const Primitive* p)
     }
     break;
 
-  case PRIMITIVE_TRIANGLE_STRIP:
+  case PrimitiveType::TRIANGLE_STRIP:
     {
       valid = true;
 
@@ -436,7 +436,7 @@ int ExtractGeometryTraverser::addPrimitive(int geometryIDX, const Primitive* p)
     }
     break;
 
-  case PRIMITIVE_TRIANGLES:
+  case PrimitiveType::TRIANGLES:
     {
       valid = true;
       // just in case

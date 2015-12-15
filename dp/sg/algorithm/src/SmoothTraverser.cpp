@@ -151,23 +151,23 @@ namespace dp
         // we only work for certain types at the moment
         switch( p->getPrimitiveType() )
         {
-          case PRIMITIVE_QUADS:
-          case PRIMITIVE_TRIANGLES:
-          case PRIMITIVE_TRIANGLES_ADJACENCY:
-          case PRIMITIVE_PATCHES:
+          case PrimitiveType::QUADS:
+          case PrimitiveType::TRIANGLES:
+          case PrimitiveType::TRIANGLES_ADJACENCY:
+          case PrimitiveType::PATCHES:
             flattenPrimitive( p );
             break;
-          case PRIMITIVE_POINTS:
-          case PRIMITIVE_LINE_STRIP:
-          case PRIMITIVE_LINE_LOOP:
-          case PRIMITIVE_LINES:
-          case PRIMITIVE_TRIANGLE_STRIP:
-          case PRIMITIVE_TRIANGLE_FAN:
-          case PRIMITIVE_QUAD_STRIP:
-          case PRIMITIVE_POLYGON:
-          case PRIMITIVE_TRIANGLE_STRIP_ADJACENCY:
-          case PRIMITIVE_LINES_ADJACENCY:
-          case PRIMITIVE_LINE_STRIP_ADJACENCY:
+          case PrimitiveType::POINTS:
+          case PrimitiveType::LINE_STRIP:
+          case PrimitiveType::LINE_LOOP:
+          case PrimitiveType::LINES:
+          case PrimitiveType::TRIANGLE_STRIP:
+          case PrimitiveType::TRIANGLE_FAN:
+          case PrimitiveType::QUAD_STRIP:
+          case PrimitiveType::POLYGON:
+          case PrimitiveType::TRIANGLE_STRIP_ADJACENCY:
+          case PrimitiveType::LINES_ADJACENCY:
+          case PrimitiveType::LINE_STRIP_ADJACENCY:
             break;                  // no support of other primitive types (yet)
           default:
             DP_ASSERT( false );
@@ -220,22 +220,23 @@ namespace dp
             ||  ! checkTrivial( (const T *)indexBuffer.getPtr(), noi ) )
         {
           VertexAttributeSetSharedPtr newVASH = VertexAttributeSet::create();
-          for ( unsigned int i=0 ; i<VertexAttributeSet::DP_SG_VERTEX_ATTRIB_COUNT ; i++ )
+          for ( unsigned int i=0 ; i<static_cast<unsigned int>(VertexAttributeSet::AttributeID::VERTEX_ATTRIB_COUNT) ; i++ )
           {
-            if ( vas->getSizeOfVertexData(i) )
+            VertexAttributeSet::AttributeID id = static_cast<VertexAttributeSet::AttributeID>(i);
+            if ( vas->getSizeOfVertexData(id) )
             {
               Buffer::DataReadLock indexBufferLock( p->getIndexSet()->getBuffer() );
               const T * idxPtr = indexBufferLock.getPtr<T>();
-              dp::DataType type = vas->getTypeOfVertexData(i);
-              unsigned int size = dp::checked_cast<unsigned int>(vas->getSizeOfVertexData(i) * dp::getSizeOf( type ));
-              unsigned int stride = vas->getStrideOfVertexData(i);
+              dp::DataType type = vas->getTypeOfVertexData(id);
+              unsigned int size = dp::checked_cast<unsigned int>(vas->getSizeOfVertexData(id) * dp::getSizeOf( type ));
+              unsigned int stride = vas->getStrideOfVertexData(id);
               DP_ASSERT( size <= stride );
               unsigned int numIndices = p->getIndexSet()->getNumberOfIndices();
 
               BufferHostSharedPtr newVertexBuffer = BufferHost::create();
               newVertexBuffer->setSize( numIndices * size );
               {
-                Buffer::DataReadLock oldBufferLock( vas->getVertexData( i ) );
+                Buffer::DataReadLock oldBufferLock( vas->getVertexData( id ) );
                 const unsigned char * oldBuffPtr = oldBufferLock.getPtr<unsigned char>();
 
                 Buffer::DataWriteLock newBufferLock( newVertexBuffer, Buffer::MAP_WRITE );
@@ -248,13 +249,15 @@ namespace dp
                 }
               }
 
-              newVASH->setVertexData( i, vas->getSizeOfVertexData(i), type, newVertexBuffer, 0, stride, numIndices );
+              newVASH->setVertexData( id, vas->getSizeOfVertexData(id), type, newVertexBuffer, 0, stride, numIndices );
 
               // inherit enable states from source attrib
               // normalize-enable state only meaningful for generic aliases!
-              newVASH->setEnabled(i, vas->isEnabled(i)); // conventional
-              newVASH->setEnabled(i+16, vas->isEnabled(i+16)); // generic
-              newVASH->setNormalizeEnabled(i+16, vas->isNormalizeEnabled(i+16)); // only generic
+              newVASH->setEnabled(id, vas->isEnabled(id)); // conventional
+
+              id = static_cast<VertexAttributeSet::AttributeID>(i+16);    // generic
+              newVASH->setEnabled(id, vas->isEnabled(id));
+              newVASH->setNormalizeEnabled(id, vas->isNormalizeEnabled(id));
             }
           }
           p->setVertexAttributeSet( newVASH );

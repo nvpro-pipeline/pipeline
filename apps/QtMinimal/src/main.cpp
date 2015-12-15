@@ -324,12 +324,12 @@ dp::sg::core::TextureCoordType getTextureCoordType( std::string const& name )
 {
   static const std::map<std::string,dp::sg::core::TextureCoordType> textureCoordTypes =
   {
-    { "cylindrical",  dp::sg::core::TCT_CYLINDRICAL },
-    { "planar",       dp::sg::core::TCT_PLANAR      },
-    { "spherical",    dp::sg::core::TCT_SPHERICAL   }
+    { "cylindrical",  dp::sg::core::TextureCoordType::CYLINDRICAL },
+    { "planar",       dp::sg::core::TextureCoordType::PLANAR      },
+    { "spherical",    dp::sg::core::TextureCoordType::SPHERICAL   }
   };
 
-  dp::sg::core::TextureCoordType tct = dp::sg::core::TCT_PLANAR;
+  dp::sg::core::TextureCoordType tct = dp::sg::core::TextureCoordType::PLANAR;
   std::map<std::string,dp::sg::core::TextureCoordType>::const_iterator it = textureCoordTypes.find( name );
   if ( it != textureCoordTypes.end() )
   {
@@ -337,7 +337,7 @@ dp::sg::core::TextureCoordType getTextureCoordType( std::string const& name )
   }
   else
   {
-    std::cerr << "Unknown texture coord type <" << name << ">. Using TCT_PLANAR instead.\n";
+    std::cerr << "Unknown texture coord type <" << name << ">. Using TextureCoordType::PLANAR instead.\n";
     DP_ASSERT( !"Unknown texture coord type" );
   }
   return( tct );
@@ -493,7 +493,7 @@ int runApp( int argc, char *argv[], options::variables_map const& opts )
     const std::vector<dp::sg::core::ObjectSharedPtr> vp = dp::sg::algorithm::searchClass( viewState->getScene()->getRootNode(), "class dp::sg::core::Primitive", true );
     for ( size_t i=0 ; i<vp.size() ; i++ )
     {
-      vp[i].inplaceCast<dp::sg::core::Primitive>()->generateTexCoords( tct, dp::sg::core::VertexAttributeSet::DP_SG_TEXCOORD0, false );
+      vp[i].inplaceCast<dp::sg::core::Primitive>()->generateTexCoords( tct, dp::sg::core::VertexAttributeSet::AttributeID::TEXCOORD0, false );
       // don't overwrite if there already are some texture coordinate                                                          ^^^^^
     }
   }
@@ -504,9 +504,9 @@ int runApp( int argc, char *argv[], options::variables_map const& opts )
     const std::vector<dp::sg::core::ObjectSharedPtr> vp = dp::sg::algorithm::searchClass( viewState->getScene()->getRootNode(), "class dp::sg::core::Primitive", true );
     for ( size_t i=0 ; i<vp.size() ; i++ )
     {
-      vp[i].inplaceCast<dp::sg::core::Primitive>()->generateTangentSpace( dp::sg::core::VertexAttributeSet::DP_SG_TEXCOORD0
-                                                                        , dp::sg::core::VertexAttributeSet::DP_SG_TANGENT
-                                                                        , dp::sg::core::VertexAttributeSet::DP_SG_BINORMAL
+      vp[i].inplaceCast<dp::sg::core::Primitive>()->generateTangentSpace( dp::sg::core::VertexAttributeSet::AttributeID::TEXCOORD0
+                                                                        , dp::sg::core::VertexAttributeSet::AttributeID::TANGENT
+                                                                        , dp::sg::core::VertexAttributeSet::AttributeID::BINORMAL
                                                                         , false );
       // don't overwrite if there already are some texture coordinate     ^^^^^
     }

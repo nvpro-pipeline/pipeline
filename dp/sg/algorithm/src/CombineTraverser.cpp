@@ -97,14 +97,14 @@ namespace dp
 
       static bool needsPrimitiveRestartIndex( PrimitiveType type )
       {
-        return(   type == PRIMITIVE_LINE_STRIP
-               || type == PRIMITIVE_LINE_LOOP
-               || type == PRIMITIVE_TRIANGLE_STRIP
-               || type == PRIMITIVE_TRIANGLE_FAN
-               || type == PRIMITIVE_QUAD_STRIP
-               || type == PRIMITIVE_POLYGON
-               || type == PRIMITIVE_TRIANGLE_STRIP_ADJACENCY
-               || type == PRIMITIVE_LINE_STRIP_ADJACENCY );
+        return(   type == PrimitiveType::LINE_STRIP
+               || type == PrimitiveType::LINE_LOOP
+               || type == PrimitiveType::TRIANGLE_STRIP
+               || type == PrimitiveType::TRIANGLE_FAN
+               || type == PrimitiveType::QUAD_STRIP
+               || type == PrimitiveType::POLYGON
+               || type == PrimitiveType::TRIANGLE_STRIP_ADJACENCY
+               || type == PrimitiveType::LINE_STRIP_ADJACENCY );
       }
 
       CombineTraverser::CombineTraverser( void )
@@ -278,12 +278,13 @@ namespace dp
       bool CombineTraverser::areCombinable( VertexAttributeSetSharedPtr const& p0, VertexAttributeSetSharedPtr const& p1, bool ignoreNames )
       {
         bool combinable =   areCombinable( ObjectSharedPtr( p0 ), ObjectSharedPtr( p1 ), ignoreNames );
-        for ( unsigned int i=0 ; combinable && i<VertexAttributeSet::DP_SG_VERTEX_ATTRIB_COUNT ; i++ )
+        for ( unsigned int i=0 ; combinable && i<static_cast<unsigned int>(VertexAttributeSet::AttributeID::VERTEX_ATTRIB_COUNT) ; i++ )
         {
-          combinable =  ( p0->getSizeOfVertexData( i ) == p1->getSizeOfVertexData( i ) )
-                    &&  ( p0->getTypeOfVertexData( i ) == p1->getTypeOfVertexData( i ) )
-                    &&  ( p0->isEnabled( i )           == p1->isEnabled( i ) )
-                    &&  ( p0->isNormalizeEnabled( i )  == p1->isNormalizeEnabled( i ) );
+          VertexAttributeSet::AttributeID attribute = static_cast<VertexAttributeSet::AttributeID>(i);
+          combinable =  ( p0->getSizeOfVertexData( attribute ) == p1->getSizeOfVertexData( attribute ) )
+                    &&  ( p0->getTypeOfVertexData( attribute ) == p1->getTypeOfVertexData( attribute ) )
+                    &&  ( p0->isEnabled( attribute )           == p1->isEnabled( attribute ) )
+                    &&  ( p0->isNormalizeEnabled( attribute )  == p1->isNormalizeEnabled( attribute ) );
         }
         return( combinable );
       }
@@ -342,7 +343,7 @@ namespace dp
               {
                 noi += dp::checked_cast<unsigned int>( it->second.size() );
               }
-              nov = basePrimitive->getVertexAttributeSet()->getNumberOfVertexData( 0 );
+              nov = basePrimitive->getVertexAttributeSet()->getNumberOfVertexData( VertexAttributeSet::AttributeID::NORMAL );
 
               for ( size_t i=0 ; i<it->second.size() ; i++ )
               {
@@ -350,7 +351,7 @@ namespace dp
                 reduceVertexAttributeSet( primitive );
                 DP_ASSERT( primitive->getPrimitiveType() == basePrimitive->getPrimitiveType() );
                 noi += primitive->getElementCount();
-                nov += primitive->getVertexAttributeSet()->getNumberOfVertexData( 0 );
+                nov += primitive->getVertexAttributeSet()->getNumberOfVertexData( VertexAttributeSet::AttributeID::NORMAL );
               }
 
               // create a clone of the first Primitive
@@ -358,11 +359,12 @@ namespace dp
                 VertexAttributeSetSharedPtr const& newVAS = basePrimitive->getVertexAttributeSet();
 
                 // reserve new vertex data set accordingly
-                for ( unsigned int j=0 ; j<VertexAttributeSet::DP_SG_VERTEX_ATTRIB_COUNT ; j++ )
+                for ( unsigned int j=0 ; j<static_cast<unsigned int>(VertexAttributeSet::AttributeID::VERTEX_ATTRIB_COUNT) ; j++ )
                 {
-                  if ( newVAS->getSizeOfVertexData( j ) )
+                  VertexAttributeSet::AttributeID attribute = static_cast<VertexAttributeSet::AttributeID>(j);
+                  if ( newVAS->getSizeOfVertexData( attribute ) )
                   {
-                    newVAS->reserveVertexData( j, newVAS->getSizeOfVertexData( j ), newVAS->getTypeOfVertexData( j ), nov );
+                    newVAS->reserveVertexData( attribute, newVAS->getSizeOfVertexData( attribute ), newVAS->getTypeOfVertexData( attribute ), nov );
                   }
                 }
               }
@@ -621,19 +623,20 @@ namespace dp
                                     , const VertexAttributeSetSharedPtr & vash1 )
       {
         DP_ASSERT( vash0->getObjectCode() == vash1->getObjectCode() );
-        for ( unsigned int i=0 ; i<VertexAttributeSet::DP_SG_VERTEX_ATTRIB_COUNT ; i++ )
+        for ( unsigned int i=0 ; i<static_cast<unsigned int>(VertexAttributeSet::AttributeID::VERTEX_ATTRIB_COUNT) ; i++ )
         {
-          unsigned int size = vash1->getSizeOfVertexData(i);
+          VertexAttributeSet::AttributeID attribute = static_cast<VertexAttributeSet::AttributeID>(i);
+          unsigned int size = vash1->getSizeOfVertexData(attribute);
           if ( size )
           {
-            DP_ASSERT( vash0->getVertexBuffer(i) != vash1->getVertexBuffer(i) && "shared buffers not supported" );
-            DP_ASSERT( !vash0->getOffsetOfVertexData(i) && !vash1->getOffsetOfVertexData(i) && "buffer offsets not supported" );
-            DP_ASSERT( vash0->isContiguousVertexData(i) && vash1->isContiguousVertexData(i) && "interleaved not supported" );
-            Buffer::DataReadLock lock = vash1->getVertexData(i);
-            unsigned int stride = vash1->getStrideOfVertexData(i);
+            DP_ASSERT( vash0->getVertexBuffer(attribute) != vash1->getVertexBuffer(attribute) && "shared buffers not supported" );
+            DP_ASSERT( !vash0->getOffsetOfVertexData(attribute) && !vash1->getOffsetOfVertexData(attribute) && "buffer offsets not supported" );
+            DP_ASSERT( vash0->isContiguousVertexData(attribute) && vash1->isContiguousVertexData(attribute) && "interleaved not supported" );
+            Buffer::DataReadLock lock = vash1->getVertexData(attribute);
+            unsigned int stride = vash1->getStrideOfVertexData(attribute);
             // append data
-            vash0->setVertexData( i, ~0, size, vash1->getTypeOfVertexData(i)
-                                , lock.getPtr(), stride, vash1->getNumberOfVertexData(i) );
+            vash0->setVertexData( attribute, ~0, size, vash1->getTypeOfVertexData(attribute)
+                                , lock.getPtr(), stride, vash1->getNumberOfVertexData(attribute) );
             setTreeModified();
           }
         }
@@ -707,23 +710,26 @@ namespace dp
         DP_ASSERT( ( from.size() == foundIndices ) && ( to.size() == foundIndices ) );
 
         VertexAttributeSetSharedPtr newVASH = VertexAttributeSet::create();
-        for ( unsigned int i=0 ; i<VertexAttributeSet::DP_SG_VERTEX_ATTRIB_COUNT ; i++ )
+        for ( unsigned int i=0 ; i<static_cast<unsigned int>(VertexAttributeSet::AttributeID::VERTEX_ATTRIB_COUNT) ; i++ )
         {
-          if ( p->getNumberOfVertexData( i ) )
+          VertexAttributeSet::AttributeID attribute = static_cast<VertexAttributeSet::AttributeID>(i);
+          if ( p->getNumberOfVertexData( attribute ) )
           {
-            Buffer::DataReadLock oldData = p->getVertexData(i);
+            Buffer::DataReadLock oldData = p->getVertexData(attribute);
             if ( oldData.getPtr() )
             {
-              unsigned int size = p->getSizeOfVertexData(i);
-              dp::DataType type = p->getTypeOfVertexData(i);
+              unsigned int size = p->getSizeOfVertexData(attribute);
+              dp::DataType type = p->getTypeOfVertexData(attribute);
 
-              newVASH->setVertexData( i, &to[0], &from[0], size, type, oldData.getPtr(), p->getStrideOfVertexData(i), foundIndices );
+              newVASH->setVertexData( attribute, &to[0], &from[0], size, type, oldData.getPtr(), p->getStrideOfVertexData(attribute), foundIndices );
 
               // inherit enable states from source attrib
               // normalize-enable state only meaningful for generic aliases!
-              newVASH->setEnabled(i, p->isEnabled(i)); // conventional
-              newVASH->setEnabled(i+16, p->isEnabled(i+16)); // generic
-              newVASH->setNormalizeEnabled(i+16, p->isNormalizeEnabled(i+16)); // only generic
+              newVASH->setEnabled(attribute, p->isEnabled(attribute)); // conventional
+
+              attribute = static_cast<VertexAttributeSet::AttributeID>(i+16);   // generic
+              newVASH->setEnabled(attribute, p->isEnabled(attribute));
+              newVASH->setNormalizeEnabled(attribute, p->isNormalizeEnabled(attribute));
             }
           }
         }
@@ -736,23 +742,26 @@ namespace dp
         DP_ASSERT( m_combineTargets & CT_GEONODE );
 
         VertexAttributeSetSharedPtr newVASH = VertexAttributeSet::create();
-        for ( unsigned int i=0 ; i<VertexAttributeSet::DP_SG_VERTEX_ATTRIB_COUNT ; i++ )
+        for ( unsigned int i=0 ; i<static_cast<unsigned int>(VertexAttributeSet::AttributeID::VERTEX_ATTRIB_COUNT) ; i++ )
         {
-          if ( p->getNumberOfVertexData( i ) )
+          VertexAttributeSet::AttributeID attribute = static_cast<VertexAttributeSet::AttributeID>(i);
+          if ( p->getNumberOfVertexData( attribute ) )
           {
-            unsigned int size = p->getVertexAttribute( i ).getVertexDataBytes();
+            unsigned int size = p->getVertexAttribute( attribute ).getVertexDataBytes();
             if ( size )
             {
-              Buffer::DataReadLock oldData( p->getVertexBuffer(i), offset * size, count * size );
+              Buffer::DataReadLock oldData( p->getVertexBuffer(attribute), offset * size, count * size );
               DP_ASSERT( oldData.getPtr() );
-              newVASH->setVertexData( i, p->getSizeOfVertexData( i ), p->getTypeOfVertexData( i )
-                                   , oldData.getPtr(), p->getStrideOfVertexData( i ), count );
+              newVASH->setVertexData( attribute, p->getSizeOfVertexData( attribute ), p->getTypeOfVertexData( attribute )
+                                   , oldData.getPtr(), p->getStrideOfVertexData( attribute ), count );
 
               // inherit enable states from source attrib
               // normalize-enable state only meaningful for generic aliases!
-              newVASH->setEnabled(i, p->isEnabled(i)); // conventional
-              newVASH->setEnabled(i+16, p->isEnabled(i+16)); // generic
-              newVASH->setNormalizeEnabled(i+16, p->isNormalizeEnabled(i+16)); // only generic
+              newVASH->setEnabled(attribute, p->isEnabled(attribute)); // conventional
+
+              attribute = static_cast<VertexAttributeSet::AttributeID>(i+16);   // generic
+              newVASH->setEnabled(attribute, p->isEnabled(attribute));
+              newVASH->setNormalizeEnabled(attribute, p->isNormalizeEnabled(attribute));
             }
           }
         }

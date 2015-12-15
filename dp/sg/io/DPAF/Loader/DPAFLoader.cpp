@@ -599,7 +599,7 @@ SamplerSharedPtr DPAFLoader::readSampler( const string & name )
   if ( token == "{" )
   {
     unsigned int cf = 0;
-    TextureTarget target = TT_UNSPECIFIED_TEXTURE_TARGET;
+    TextureTarget target = TextureTarget::UNSPECIFIED;
     string textureName;
 
     sampler = Sampler::create();
@@ -645,10 +645,10 @@ SamplerSharedPtr DPAFLoader::readSampler( const string & name )
             {
               TextureTarget texTarget = textureHost->getTextureTarget();
               // try to set proper Target before assigning
-              if ( texTarget == TT_UNSPECIFIED_TEXTURE_TARGET )
+              if ( texTarget == TextureTarget::UNSPECIFIED )
               {
                 texTarget = determineTextureTarget( textureHost );
-                textureHost->setTextureTarget( target != TT_UNSPECIFIED_TEXTURE_TARGET ? target : texTarget );
+                textureHost->setTextureTarget( target != TextureTarget::UNSPECIFIED ? target : texTarget );
               }
               sampler->setTexture( textureHost );
             }
@@ -665,9 +665,9 @@ SamplerSharedPtr DPAFLoader::readSampler( const string & name )
       }
       else if ( token == "wrapMode" )
       {
-        sampler->setWrapMode( TWCA_S, readTextureWrapMode() );
-        sampler->setWrapMode( TWCA_T, readTextureWrapMode() );
-        sampler->setWrapMode( TWCA_R, readTextureWrapMode() );
+        sampler->setWrapMode( TexWrapCoordAxis::S, readTextureWrapMode() );
+        sampler->setWrapMode( TexWrapCoordAxis::T, readTextureWrapMode() );
+        sampler->setWrapMode( TexWrapCoordAxis::R, readTextureWrapMode() );
       }
       else
       {
@@ -693,14 +693,14 @@ SamplerSharedPtr DPAFLoader::readSampler( const string & name )
 TextureCompareMode  DPAFLoader::readTextureCompareMode()
 {
   string token = getNextToken();
-  TextureCompareMode tcm = TCM_NONE;
+  TextureCompareMode tcm = TextureCompareMode::NONE;
   if ( token == "NONE" )
   {
-    tcm = TCM_NONE;
+    tcm = TextureCompareMode::NONE;
   }
   else if ( token == "R_TO_TEXTURE" )
   {
-    tcm = TCM_R_TO_TEXTURE;
+    tcm = TextureCompareMode::R_TO_TEXTURE;
   }
   else
   {
@@ -713,14 +713,14 @@ TextureCompareMode  DPAFLoader::readTextureCompareMode()
 TextureMagFilterMode  DPAFLoader::readTextureMagFilterMode( void )
 {
   std::string token = getNextToken();
-  TextureMagFilterMode tmfm = TFM_MAG_NEAREST;
+  TextureMagFilterMode tmfm = TextureMagFilterMode::NEAREST;
   if ( token == "NEAREST" )
   {
-    tmfm = TFM_MAG_NEAREST;
+    tmfm = TextureMagFilterMode::NEAREST;
   }
   else if ( token == "LINEAR" )
   {
-    tmfm = TFM_MAG_LINEAR;
+    tmfm = TextureMagFilterMode::LINEAR;
   }
   else
   {
@@ -733,30 +733,30 @@ TextureMagFilterMode  DPAFLoader::readTextureMagFilterMode( void )
 TextureMinFilterMode  DPAFLoader::readTextureMinFilterMode( void )
 {
   std::string token = getNextToken();
-  TextureMinFilterMode tmfm = TFM_MIN_NEAREST;
+  TextureMinFilterMode tmfm = TextureMinFilterMode::NEAREST;
   if ( token == "NEAREST" )
   {
-    tmfm = TFM_MIN_NEAREST;
+    tmfm = TextureMinFilterMode::NEAREST;
   }
   else if ( token == "LINEAR" )
   {
-    tmfm = TFM_MIN_LINEAR;
+    tmfm = TextureMinFilterMode::LINEAR;
   }
   else if ( token == "LINEAR_MIPMAP_LINEAR" )
   {
-    tmfm = TFM_MIN_LINEAR_MIPMAP_LINEAR;
+    tmfm = TextureMinFilterMode::LINEAR_MIPMAP_LINEAR;
   }
   else if ( token == "NEAREST_MIPMAP_NEAREST" )
   {
-    tmfm = TFM_MIN_NEAREST_MIPMAP_NEAREST;
+    tmfm = TextureMinFilterMode::NEAREST_MIPMAP_NEAREST;
   }
   else if ( token == "NEAREST_MIPMAP_LINEAR" )
   {
-    tmfm = TFM_MIN_NEAREST_MIPMAP_LINEAR;
+    tmfm = TextureMinFilterMode::NEAREST_MIPMAP_LINEAR;
   }
   else if ( token == "LINEAR_MIPMAP_NEAREST" )
   {
-    tmfm = TFM_MIN_LINEAR_MIPMAP_NEAREST;
+    tmfm = TextureMinFilterMode::LINEAR_MIPMAP_NEAREST;
   }
   else
   {
@@ -769,38 +769,38 @@ TextureMinFilterMode  DPAFLoader::readTextureMinFilterMode( void )
 TextureWrapMode DPAFLoader::readTextureWrapMode( void )
 {
   std::string token = getNextToken();
-  TextureWrapMode twm = TWM_REPEAT;
+  TextureWrapMode twm = TextureWrapMode::REPEAT;
   if ( token == "CLAMP" )
   {
-    twm = TWM_CLAMP;
+    twm = TextureWrapMode::CLAMP;
   }
   else if ( token == "CLAMP_TO_BORDER" )
   {
-    twm = TWM_CLAMP_TO_BORDER;
+    twm = TextureWrapMode::CLAMP_TO_BORDER;
   }
   else if ( token == "CLAMP_TO_EDGE" )
   {
-    twm = TWM_CLAMP_TO_EDGE;
+    twm = TextureWrapMode::CLAMP_TO_EDGE;
   }
   else if ( ( token == "MIRROR" ) || ( token == "MIRROR_REPEAT" ) )
   {
-    twm = TWM_MIRROR_REPEAT;
+    twm = TextureWrapMode::MIRROR_REPEAT;
   }
   else if ( token == "MIRROR_CLAMP" )
   {
-    twm = TWM_MIRROR_CLAMP;
+    twm = TextureWrapMode::MIRROR_CLAMP;
   }
   else if ( token == "MIRROR_CLAMP_TO_BORDER" )
   {
-    twm = TWM_MIRROR_CLAMP_TO_BORDER;
+    twm = TextureWrapMode::MIRROR_CLAMP_TO_BORDER;
   }
   else if ( token == "MIRROR_CLAMP_TO_EDGE" )
   {
-    twm = TWM_MIRROR_CLAMP_TO_EDGE;
+    twm = TextureWrapMode::MIRROR_CLAMP_TO_EDGE;
   }
   else if ( token == "REPEAT" )
   {
-    twm = TWM_REPEAT;
+    twm = TextureWrapMode::REPEAT;
   }
   else
   {
@@ -1124,8 +1124,8 @@ void DPAFLoader::readImages( TextureHostSharedPtr const& th )
   token = getNextToken();
   while ( token != "]" )
   {
-    Image::PixelFormat pf = Image::IMG_UNKNOWN_FORMAT;
-    Image::PixelDataType pt = Image::IMG_UNKNOWN_TYPE;
+    Image::PixelFormat pf = Image::PixelFormat::UNKNOWN;
+    Image::PixelDataType pt = Image::PixelDataType::UNKNOWN;
     unsigned int width(1), height(1), depth(1);
     unsigned char * pixels(NULL);
     vector<const void *> mipmaps;
@@ -1156,7 +1156,7 @@ void DPAFLoader::readImages( TextureHostSharedPtr const& th )
       }
       else if ( token == "pixels" )
       {
-        DP_ASSERT( ( pf != Image::IMG_UNKNOWN_FORMAT ) && ( pt != Image::IMG_UNKNOWN_TYPE ) );
+        DP_ASSERT( ( pf != Image::PixelFormat::UNKNOWN ) && ( pt != Image::PixelDataType::UNKNOWN ) );
         pixels = readPixels( width * height * depth * numberOfComponents( pf ), pt );
       }
       else if ( token == "width" )
@@ -1308,139 +1308,139 @@ dp::sg::core::PipelineDataSharedPtr DPAFLoader::readPipelineData( const char * n
 
 Image::PixelFormat DPAFLoader::readPixelFormat()
 {
-  Image::PixelFormat pf = Image::IMG_UNKNOWN_FORMAT;
+  Image::PixelFormat pf = Image::PixelFormat::UNKNOWN;
   std::string token = getNextToken();
   if ( token == "COLOR_INDEX" )
   {
-    pf = Image::IMG_COLOR_INDEX;
+    pf = Image::PixelFormat::COLOR_INDEX;
   }
   else if ( token == "RGB" )
   {
-    pf = Image::IMG_RGB;
+    pf = Image::PixelFormat::RGB;
   }
   else if ( token == "RGBA" )
   {
-    pf = Image::IMG_RGBA;
+    pf = Image::PixelFormat::RGBA;
   }
   else if ( token == "BGR" )
   {
-    pf = Image::IMG_BGR;
+    pf = Image::PixelFormat::BGR;
   }
   else if ( token == "BGRA" )
   {
-    pf = Image::IMG_BGRA;
+    pf = Image::PixelFormat::BGRA;
   }
   else if ( token == "LUMINANCE" )
   {
-    pf = Image::IMG_LUMINANCE;
+    pf = Image::PixelFormat::LUMINANCE;
   }
-  else if ( token == "IMG_LUMINANCE_ALPHA" )
+  else if ( token == "PixelFormat::LUMINANCE_ALPHA" )
   {
-    pf = Image::IMG_LUMINANCE_ALPHA;
+    pf = Image::PixelFormat::LUMINANCE_ALPHA;
   }
-  else if ( token == "IMG_ALPHA" )
+  else if ( token == "PixelFormat::ALPHA" )
   {
-    pf = Image::IMG_ALPHA;
+    pf = Image::PixelFormat::ALPHA;
   }
-  else if ( token == "IMG_DEPTH_COMPONENT" )
+  else if ( token == "PixelFormat::DEPTH_COMPONENT" )
   {
-    pf = Image::IMG_DEPTH_COMPONENT;
+    pf = Image::PixelFormat::DEPTH_COMPONENT;
   }
-  else if ( token == "IMG_DEPTH_STENCIL" )
+  else if ( token == "PixelFormat::DEPTH_STENCIL" )
   {
-    pf = Image::IMG_DEPTH_STENCIL;
+    pf = Image::PixelFormat::DEPTH_STENCIL;
   }
-  else if ( token == "IMG_INTEGER_ALPHA" )
+  else if ( token == "PixelFormat::INTEGER_ALPHA" )
   {
-    pf = Image::IMG_INTEGER_ALPHA;
+    pf = Image::PixelFormat::INTEGER_ALPHA;
   }
-  else if ( token == "IMG_INTEGER_LUMINANCE" )
+  else if ( token == "PixelFormat::INTEGER_LUMINANCE" )
   {
-    pf = Image::IMG_INTEGER_LUMINANCE;
+    pf = Image::PixelFormat::INTEGER_LUMINANCE;
   }
-  else if ( token == "IMG_INTEGER_LUMINANCE_ALPHA" )
+  else if ( token == "PixelFormat::INTEGER_LUMINANCE_ALPHA" )
   {
-    pf = Image::IMG_INTEGER_LUMINANCE_ALPHA;
+    pf = Image::PixelFormat::INTEGER_LUMINANCE_ALPHA;
   }
-  else if ( token == "IMG_INTEGER_RGB" )
+  else if ( token == "PixelFormat::INTEGER_RGB" )
   {
-    pf = Image::IMG_INTEGER_RGB;
+    pf = Image::PixelFormat::INTEGER_RGB;
   }
-  else if ( token == "IMG_INTEGER_BGR" )
+  else if ( token == "PixelFormat::INTEGER_BGR" )
   {
-    pf = Image::IMG_INTEGER_BGR;
+    pf = Image::PixelFormat::INTEGER_BGR;
   }
-  else if ( token == "IMG_INTEGER_RGBA" )
+  else if ( token == "PixelFormat::INTEGER_RGBA" )
   {
-    pf = Image::IMG_INTEGER_RGBA;
+    pf = Image::PixelFormat::INTEGER_RGBA;
   }
-  else if ( token == "IMG_INTEGER_BGRA" )
+  else if ( token == "PixelFormat::INTEGER_BGRA" )
   {
-    pf = Image::IMG_INTEGER_BGRA;
+    pf = Image::PixelFormat::INTEGER_BGRA;
   }
-  else if ( token == "IMG_COMPRESSED_LUMINANCE_LATC1" )
+  else if ( token == "PixelFormat::COMPRESSED_LUMINANCE_LATC1" )
   {
-    pf = Image::IMG_COMPRESSED_LUMINANCE_LATC1;
+    pf = Image::PixelFormat::COMPRESSED_LUMINANCE_LATC1;
   }
-  else if ( token == "IMG_COMPRESSED_SIGNED_LUMINANCE_LATC1" )
+  else if ( token == "PixelFormat::COMPRESSED_SIGNED_LUMINANCE_LATC1" )
   {
-    pf = Image::IMG_COMPRESSED_SIGNED_LUMINANCE_LATC1;
+    pf = Image::PixelFormat::COMPRESSED_SIGNED_LUMINANCE_LATC1;
   }
-  else if ( token == "IMG_COMPRESSED_LUMINANCE_ALPHA_LATC2" )
+  else if ( token == "PixelFormat::COMPRESSED_LUMINANCE_ALPHA_LATC2" )
   {
-    pf = Image::IMG_COMPRESSED_LUMINANCE_ALPHA_LATC2;
+    pf = Image::PixelFormat::COMPRESSED_LUMINANCE_ALPHA_LATC2;
   }
-  else if ( token == "IMG_COMPRESSED_SIGNED_LUMINANCE_ALPHA_LATC2" )
+  else if ( token == "PixelFormat::COMPRESSED_SIGNED_LUMINANCE_ALPHA_LATC2" )
   {
-    pf = Image::IMG_COMPRESSED_SIGNED_LUMINANCE_ALPHA_LATC2;
+    pf = Image::PixelFormat::COMPRESSED_SIGNED_LUMINANCE_ALPHA_LATC2;
   }
-  else if ( token == "IMG_COMPRESSED_RED_RGTC1" )
+  else if ( token == "PixelFormat::COMPRESSED_RED_RGTC1" )
   {
-    pf = Image::IMG_COMPRESSED_RED_RGTC1;
+    pf = Image::PixelFormat::COMPRESSED_RED_RGTC1;
   }
-  else if ( token == "IMG_COMPRESSED_SIGNED_RED_RGTC1" )
+  else if ( token == "PixelFormat::COMPRESSED_SIGNED_RED_RGTC1" )
   {
-    pf = Image::IMG_COMPRESSED_SIGNED_RED_RGTC1;
+    pf = Image::PixelFormat::COMPRESSED_SIGNED_RED_RGTC1;
   }
-  else if ( token == "IMG_COMPRESSED_RG_RGTC2" )
+  else if ( token == "PixelFormat::COMPRESSED_RG_RGTC2" )
   {
-    pf = Image::IMG_COMPRESSED_RG_RGTC2;
+    pf = Image::PixelFormat::COMPRESSED_RG_RGTC2;
   }
-  else if ( token == "IMG_COMPRESSED_SIGNED_RG_RGTC2" )
+  else if ( token == "PixelFormat::COMPRESSED_SIGNED_RG_RGTC2" )
   {
-    pf = Image::IMG_COMPRESSED_SIGNED_RG_RGTC2;
+    pf = Image::PixelFormat::COMPRESSED_SIGNED_RG_RGTC2;
   }
-  else if ( token == "IMG_COMPRESSED_RGB_DXT1" )
+  else if ( token == "PixelFormat::COMPRESSED_RGB_DXT1" )
   {
-    pf = Image::IMG_COMPRESSED_RGB_DXT1;
+    pf = Image::PixelFormat::COMPRESSED_RGB_DXT1;
   }
-  else if ( token == "IMG_COMPRESSED_RGBA_DXT1" )
+  else if ( token == "PixelFormat::COMPRESSED_RGBA_DXT1" )
   {
-    pf = Image::IMG_COMPRESSED_RGBA_DXT1;
+    pf = Image::PixelFormat::COMPRESSED_RGBA_DXT1;
   }
-  else if ( token == "IMG_COMPRESSED_RGBA_DXT3" )
+  else if ( token == "PixelFormat::COMPRESSED_RGBA_DXT3" )
   {
-    pf = Image::IMG_COMPRESSED_RGBA_DXT3;
+    pf = Image::PixelFormat::COMPRESSED_RGBA_DXT3;
   }
-  else if ( token == "IMG_COMPRESSED_RGBA_DXT5" )
+  else if ( token == "PixelFormat::COMPRESSED_RGBA_DXT5" )
   {
-    pf = Image::IMG_COMPRESSED_RGBA_DXT5;
+    pf = Image::PixelFormat::COMPRESSED_RGBA_DXT5;
   }
-  else if ( token == "IMG_COMPRESSED_SRGB_DXT1" )
+  else if ( token == "PixelFormat::COMPRESSED_SRGB_DXT1" )
   {
-    pf = Image::IMG_COMPRESSED_SRGB_DXT1;
+    pf = Image::PixelFormat::COMPRESSED_SRGB_DXT1;
   }
-  else if ( token == "IMG_COMPRESSED_SRGBA_DXT1" )
+  else if ( token == "PixelFormat::COMPRESSED_SRGBA_DXT1" )
   {
-    pf = Image::IMG_COMPRESSED_SRGBA_DXT1;
+    pf = Image::PixelFormat::COMPRESSED_SRGBA_DXT1;
   }
-  else if ( token == "IMG_COMPRESSED_SRGBA_DXT3" )
+  else if ( token == "PixelFormat::COMPRESSED_SRGBA_DXT3" )
   {
-    pf = Image::IMG_COMPRESSED_SRGBA_DXT3;
+    pf = Image::PixelFormat::COMPRESSED_SRGBA_DXT3;
   }
-  else if ( token == "IMG_COMPRESSED_SRGBA_DXT5" )
+  else if ( token == "PixelFormat::COMPRESSED_SRGBA_DXT5" )
   {
-    pf = Image::IMG_COMPRESSED_SRGBA_DXT5;
+    pf = Image::PixelFormat::COMPRESSED_SRGBA_DXT5;
   }
   else
   {
@@ -1451,39 +1451,39 @@ Image::PixelFormat DPAFLoader::readPixelFormat()
 
 Image::PixelDataType DPAFLoader::readPixelType()
 {
-  Image::PixelDataType pt = Image::IMG_UNKNOWN_TYPE;
+  Image::PixelDataType pt = Image::PixelDataType::UNKNOWN;
   std::string token = getNextToken();
   if ( token == "BYTE" )
   {
-    pt = Image::IMG_BYTE;
+    pt = Image::PixelDataType::BYTE;
   }
   else if ( token == "UNSIGNED_BYTE" )
   {
-    pt = Image::IMG_UNSIGNED_BYTE;
+    pt = Image::PixelDataType::UNSIGNED_BYTE;
   }
   else if ( token == "SHORT" )
   {
-    pt = Image::IMG_SHORT;
+    pt = Image::PixelDataType::SHORT;
   }
   else if ( token == "UNSIGNED_SHORT" )
   {
-    pt = Image::IMG_UNSIGNED_SHORT;
+    pt = Image::PixelDataType::UNSIGNED_SHORT;
   }
   else if ( token == "INT" )
   {
-    pt = Image::IMG_INT;
+    pt = Image::PixelDataType::INT;
   }
   else if ( token == "UNSIGNED_INT" )
   {
-    pt = Image::IMG_UNSIGNED_INT;
+    pt = Image::PixelDataType::UNSIGNED_INT;
   }
   else if ( token == "FLOAT" )
   {
-    pt = Image::IMG_FLOAT;
+    pt = Image::PixelDataType::FLOAT;
   }
   else if ( token == "HALF" )
   {
-    pt = Image::IMG_HALF;
+    pt = Image::PixelDataType::HALF;
   }
   else
   {
@@ -1529,29 +1529,29 @@ unsigned char * DPAFLoader::readPixels( unsigned int nov,
   unsigned char * p(NULL);
   switch( pt )
   {
-    case Image::IMG_BYTE :
+    case Image::PixelDataType::BYTE :
       p = readPixels<char>( nov );
       break;
-    case Image::IMG_UNSIGNED_BYTE :
+    case Image::PixelDataType::UNSIGNED_BYTE :
       p = readPixels<unsigned char>( nov );
       break;
-    case Image::IMG_SHORT :
+    case Image::PixelDataType::SHORT :
       p = readPixels<short>( nov );
       break;
-    case Image::IMG_UNSIGNED_SHORT :
+    case Image::PixelDataType::UNSIGNED_SHORT :
       p = readPixels<unsigned short>( nov );
       break;
-    case Image::IMG_INT :
+    case Image::PixelDataType::INT :
       p = readPixels<int>( nov );
       break;
-    case Image::IMG_UNSIGNED_INT :
+    case Image::PixelDataType::UNSIGNED_INT :
       p = readPixels<unsigned int>( nov );
       break;
-    case Image::IMG_FLOAT :
+    case Image::PixelDataType::FLOAT :
       p = readPixels<float>( nov );
       break;
 #if defined(HAVE_HALF_FLOAT)
-    case Image::IMG_HALF :
+    case Image::PixelDataType::HALF :
       p = readPixels<half>( nov );
       break;
 #endif
@@ -2433,24 +2433,24 @@ PatchesMode DPAFLoader::readPatchesMode()
   string token = getNextToken();
   if ( token == "Triangles" )
   {
-    return( PATCHES_MODE_TRIANGLES );
+    return( PatchesMode::TRIANGLES );
   }
   else if ( token == "Quads" )
   {
-    return( PATCHES_MODE_QUADS );
+    return( PatchesMode::QUADS );
   }
   else if ( token == "Isolines" )
   {
-    return( PATCHES_MODE_ISOLINES );
+    return( PatchesMode::ISOLINES );
   }
   else if ( token == "Points" )
   {
-    return( PATCHES_MODE_POINTS );
+    return( PatchesMode::POINTS );
   }
   else
   {
     onUndefinedToken( "PatchesMode", token );
-    return( PATCHES_MODE_TRIANGLES );
+    return( PatchesMode::TRIANGLES );
   }
 }
 
@@ -2459,16 +2459,16 @@ PatchesOrdering DPAFLoader::readPatchesOrdering()
   string token = getNextToken();
   if ( token == "CCW" )
   {
-    return( PATCHES_ORDERING_CCW );
+    return( PatchesOrdering::CCW );
   }
   else if ( token == "CW" )
   {
-    return( PATCHES_ORDERING_CW );
+    return( PatchesOrdering::CW );
   }
   else
   {
     onUndefinedToken( "PatchesOrdering", token );
-    return( PATCHES_ORDERING_CCW );
+    return( PatchesOrdering::CCW );
   }
 }
 
@@ -2477,20 +2477,20 @@ PatchesSpacing DPAFLoader::readPatchesSpacing()
   string token = getNextToken();
   if ( token == "Equal" )
   {
-    return( PATCHES_SPACING_EQUAL );
+    return( PatchesSpacing::EQUAL );
   }
   else if ( token == "Even" )
   {
-    return( PATCHES_SPACING_FRACTIONAL_EVEN );
+    return( PatchesSpacing::FRACTIONAL_EVEN );
   }
   else if ( token == "Odd" )
   {
-    return( PATCHES_SPACING_FRACTIONAL_ODD );
+    return( PatchesSpacing::FRACTIONAL_ODD );
   }
   else
   {
     onUndefinedToken( "PatchesSpacing", token );
-    return( PATCHES_SPACING_EQUAL );
+    return( PatchesSpacing::EQUAL );
   }
 }
 
@@ -2568,7 +2568,7 @@ PrimitiveSharedPtr DPAFLoader::readPrimitive( const char *name )
 
   if ( token == "{" )
   {
-    PrimitiveData primitiveData = { PRIMITIVE_UNINITIALIZED, PATCHES_NO_PATCHES, PATCHES_MODE_TRIANGLES, PATCHES_SPACING_EQUAL, PATCHES_ORDERING_CCW, ~0u, ~0u, dp::sg::core::IndexSetSharedPtr::null, ~0u, dp::sg::core::VertexAttributeSetSharedPtr::null };
+    PrimitiveData primitiveData = { PrimitiveType::UNINITIALIZED, PatchesType::NONE, PatchesMode::TRIANGLES, PatchesSpacing::EQUAL, PatchesOrdering::CCW, ~0u, ~0u, dp::sg::core::IndexSetSharedPtr::null, ~0u, dp::sg::core::VertexAttributeSetSharedPtr::null };
  
     token = getNextToken();
     while ( token != "}" )
@@ -2576,8 +2576,8 @@ PrimitiveSharedPtr DPAFLoader::readPrimitive( const char *name )
       readPrimitiveToken( primitiveData, token, "Primitive" );
       token = getNextToken();
     }
-    DP_ASSERT( primitiveData.primitiveType != PRIMITIVE_UNINITIALIZED );
-    if ( primitiveData.primitiveType == PRIMITIVE_PATCHES )
+    DP_ASSERT( primitiveData.primitiveType != PrimitiveType::UNINITIALIZED );
+    if ( primitiveData.primitiveType == PrimitiveType::PATCHES )
     {
       primitive = Primitive::create( primitiveData.patchesType, primitiveData.patchesMode );
     }
@@ -2785,47 +2785,47 @@ SwitchSharedPtr DPAFLoader::readSwitch( const char *name, const std::string & ex
 
 TextureTarget DPAFLoader::readTextureTarget()
 {
-  TextureTarget target = TT_UNSPECIFIED_TEXTURE_TARGET;
+  TextureTarget target = TextureTarget::UNSPECIFIED;
   std::string token = getNextToken();
   if ( token == "TEXTURE_1D" )
   {
-    target = TT_TEXTURE_1D;
+    target = TextureTarget::TEXTURE_1D;
   }
   else if ( token == "TEXTURE_2D" )
   {
-    target = TT_TEXTURE_2D;
+    target = TextureTarget::TEXTURE_2D;
   }
   else if ( token == "TEXTURE_3D" )
   {
-    target = TT_TEXTURE_3D;
+    target = TextureTarget::TEXTURE_3D;
   }
   else if ( token == "TEXTURE_CUBE" )
   {
-    target = TT_TEXTURE_CUBE;
+    target = TextureTarget::TEXTURE_CUBE;
   }
   else if ( token == "TEXTURE_1D_ARRAY" )
   {
-    target = TT_TEXTURE_1D_ARRAY;
+    target = TextureTarget::TEXTURE_1D_ARRAY;
   }
   else if ( token == "TEXTURE_2D_ARRAY" )
   {
-    target = TT_TEXTURE_2D_ARRAY;
+    target = TextureTarget::TEXTURE_2D_ARRAY;
   }
   else if ( token == "TEXTURE_RECTANGLE" )
   {
-    target = TT_TEXTURE_RECTANGLE;
+    target = TextureTarget::TEXTURE_RECTANGLE;
   }
   else if ( token == "TEXTURE_CUBE_ARRAY" )
   {
-    target = TT_TEXTURE_CUBE_ARRAY;
+    target = TextureTarget::TEXTURE_CUBE_ARRAY;
   }
   else if ( token == "TEXTURE_BUFFER" )
   {
-    target = TT_TEXTURE_BUFFER;
+    target = TextureTarget::TEXTURE_BUFFER;
   }
   else if ( token == "TEXTURE_UNSPECIFIED" )
   {
-    target = TT_UNSPECIFIED_TEXTURE_TARGET;
+    target = TextureTarget::UNSPECIFIED;
   }
   else
   {
@@ -2844,7 +2844,7 @@ TextureHostSharedPtr DPAFLoader::readTextureHost( const char *name )
   if ( token == "{" )
   {
     textureHost = TextureHost::create();
-    TextureTarget textureTarget = TT_UNSPECIFIED_TEXTURE_TARGET;
+    TextureTarget textureTarget = TextureTarget::UNSPECIFIED;
 
     token = getNextToken();
     while ( token != "}" )
@@ -3042,8 +3042,8 @@ bool DPAFLoader::readVertexAttributeSetToken( VertexAttributeSetSharedPtr const&
   string::size_type idx = token.find( "vattrib" );
   if ( idx == 0 )
   {
-    unsigned int attrIndex = atoi( token.c_str() + strlen( "vattrib" ) );
-    DP_ASSERT(attrIndex < VertexAttributeSet::DP_SG_VERTEX_ATTRIB_COUNT);
+    VertexAttributeSet::AttributeID attrIndex = static_cast<VertexAttributeSet::AttributeID>(atoi( token.c_str() + strlen( "vattrib" ) ));
+    DP_ASSERT(attrIndex < VertexAttributeSet::AttributeID::VERTEX_ATTRIB_COUNT);
 
     unsigned int size = readScalar<unsigned int>( getNextToken() );
     dp::DataType type = readType();
@@ -3063,7 +3063,7 @@ bool DPAFLoader::readVertexAttributeSetToken( VertexAttributeSetSharedPtr const&
     {
       if ( enableFlags & (1<<i) )
       {
-        vas->setEnabled(i, true);
+        vas->setEnabled(static_cast<VertexAttributeSet::AttributeID>(i), true);
       }
     }
   }
@@ -3076,7 +3076,7 @@ bool DPAFLoader::readVertexAttributeSetToken( VertexAttributeSetSharedPtr const&
     {
       if ( normalizeFlags & (1<<i) )
       {
-        vas->setNormalizeEnabled(i+16, true);
+        vas->setNormalizeEnabled(static_cast<VertexAttributeSet::AttributeID>(i+16), true);
       }
     }
   }
@@ -3149,7 +3149,7 @@ void DPAFLoader::setPrimitiveData( const PrimitiveSharedPtr & primitive, const P
   primitive->setInstanceCount( data.instanceCount );
   primitive->setVertexAttributeSet( data.vertexAttributeSet );
   primitive->setElementRange( data.elementOffset, data.elementCount );
-  if ( primitive->getPrimitiveType() == PRIMITIVE_PATCHES )
+  if ( primitive->getPrimitiveType() == PrimitiveType::PATCHES )
   {
     primitive->setPatchesOrdering( data.patchesOrdering );
     primitive->setPatchesSpacing( data.patchesSpacing );

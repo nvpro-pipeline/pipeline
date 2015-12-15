@@ -762,12 +762,12 @@ void DPBFSaveTraverser::handleSampler( const Sampler * p )
       }
 
       assign( samplerPtr->borderColor, p->getBorderColor() );
-      samplerPtr->magFilter = p->getMagFilterMode();
-      samplerPtr->minFilter = p->getMinFilterMode();
-      samplerPtr->texWrapS = p->getWrapModeS();
-      samplerPtr->texWrapT = p->getWrapModeT();
-      samplerPtr->texWrapR = p->getWrapModeR();
-      samplerPtr->compareMode = p->getCompareMode();
+      samplerPtr->magFilter = static_cast<uint_t>(p->getMagFilterMode());
+      samplerPtr->minFilter = static_cast<uint_t>(p->getMinFilterMode());
+      samplerPtr->texWrapS = static_cast<uint_t>(p->getWrapModeS());
+      samplerPtr->texWrapT = static_cast<uint_t>(p->getWrapModeT());
+      samplerPtr->texWrapR = static_cast<uint_t>(p->getWrapModeR());
+      samplerPtr->compareMode = static_cast<uint_t>(p->getCompareMode());
     }
   }
 }
@@ -983,13 +983,13 @@ void DPBFSaveTraverser::writePrimitive(const Primitive * prim, NBFPrimitive * nb
 
   writeObject(prim, nbfPrim, objCode ); // a Primitive is an Object
 
-  nbfPrim->primitiveType    = prim->getPrimitiveType();
-  if ( prim->getPrimitiveType() == PRIMITIVE_PATCHES )
+  nbfPrim->primitiveType    = static_cast<uint_t>(prim->getPrimitiveType());
+  if ( prim->getPrimitiveType() == PrimitiveType::PATCHES )
   {
-    nbfPrim->patchesType      = prim->getPatchesType();
-    nbfPrim->patchesMode      = prim->getPatchesMode();
-    nbfPrim->patchesOrdering  = prim->getPatchesOrdering();
-    nbfPrim->patchesSpacing   = prim->getPatchesSpacing();
+    nbfPrim->patchesType      = static_cast<ubyte_t>(prim->getPatchesType());
+    nbfPrim->patchesMode      = static_cast<ubyte_t>(prim->getPatchesMode());
+    nbfPrim->patchesOrdering  = static_cast<ubyte_t>(prim->getPatchesOrdering());
+    nbfPrim->patchesSpacing   = static_cast<ubyte_t>(prim->getPatchesSpacing());
   }
   nbfPrim->elementOffset    = prim->getElementOffset();
   nbfPrim->elementCount     = prim->getElementCount();
@@ -1182,23 +1182,24 @@ void DPBFSaveTraverser::writeVertexAttributeSet(const VertexAttributeSet * vasPt
 
   writeObject(vasPtr, nbfVASPtr, objCode); // a VertexAttributeSet is an Object
 
-  for ( unsigned int i=0; i<VertexAttributeSet::DP_SG_VERTEX_ATTRIB_COUNT; ++i )
+  for ( unsigned int i=0; i<static_cast<unsigned int>(VertexAttributeSet::AttributeID::VERTEX_ATTRIB_COUNT); ++i )
   {
-    if ( vasPtr->getSizeOfVertexData(i) )
+    VertexAttributeSet::AttributeID id = static_cast<VertexAttributeSet::AttributeID>(i);
+    if ( vasPtr->getSizeOfVertexData(id) )
     {
-      nbfVASPtr->enableFlags |= ((!!vasPtr->isEnabled(i+16))<<(i+16)) | ((!!vasPtr->isEnabled(i))<<i);
-      nbfVASPtr->normalizeEnableFlags |= ((!!vasPtr->isNormalizeEnabled(i+16))<<(i+16));
-      nbfVASPtr->vattribs[i].size = vasPtr->getSizeOfVertexData(i);
-      nbfVASPtr->vattribs[i].type = (uint_t)vasPtr->getTypeOfVertexData(i);
-      nbfVASPtr->vattribs[i].numVData = vasPtr->getNumberOfVertexData(i);
+      nbfVASPtr->enableFlags |= ((!!vasPtr->isEnabled(static_cast<VertexAttributeSet::AttributeID>(i+16)))<<(i+16)) | ((!!vasPtr->isEnabled(id))<<i);
+      nbfVASPtr->normalizeEnableFlags |= ((!!vasPtr->isNormalizeEnabled(static_cast<VertexAttributeSet::AttributeID>(i+16)))<<(i+16));
+      nbfVASPtr->vattribs[i].size = vasPtr->getSizeOfVertexData(id);
+      nbfVASPtr->vattribs[i].type = (uint_t)vasPtr->getTypeOfVertexData(id);
+      nbfVASPtr->vattribs[i].numVData = vasPtr->getNumberOfVertexData(id);
       uint_t sizeOfVertex = static_cast<unsigned int>(nbfVASPtr->vattribs[i].size * dp::getSizeOf(static_cast<dp::DataType>(nbfVASPtr->vattribs[i].type) ));
       unsigned int numBytes = nbfVASPtr->vattribs[i].numVData * sizeOfVertex;
       Offset_AutoPtr<byte_t> vdata(this, nbfVASPtr->vattribs[i].vdata, numBytes);
 
       // copy strided vertex data
       byte_t *itDst = vdata;
-      Buffer::ConstIterator<char>::Type itSrc = vasPtr->getVertexData<char>(i);
-      size_t vdc = vasPtr->getNumberOfVertexData(i);
+      Buffer::ConstIterator<char>::Type itSrc = vasPtr->getVertexData<char>(id);
+      size_t vdc = vasPtr->getNumberOfVertexData(id);
       for ( size_t index = 0;index < vdc; ++index )
       {
         memcpy( itDst, &itSrc[0], sizeOfVertex );
@@ -1299,8 +1300,8 @@ void DPBFSaveTraverser::writeTexImage( const string& file, TextureHostSharedPtr 
       nbfImg->width = img->getWidth();
       nbfImg->height = img->getHeight();
       nbfImg->depth  = img->getDepth();
-      nbfImg->pixelFormat = img->getFormat();
-      nbfImg->dataType = img->getType();
+      nbfImg->pixelFormat = static_cast<uint_t>(img->getFormat());
+      nbfImg->dataType = static_cast<uint_t>(img->getType());
       // write raw pixels to file
       uint_t nbytes = img->getNumberOfBytes();
 
@@ -1397,9 +1398,10 @@ void DPBFSaveTraverser::pseudoAllocTexImage(const string& file, const TextureHos
 void DPBFSaveTraverser::pseudoAllocVertexAttributeSet( const VertexAttributeSet * vas )
 {
   pseudoAllocObject(vas);   // a VertexAttributeSet is an Object
-  for ( unsigned int i=0; i<VertexAttributeSet::DP_SG_VERTEX_ATTRIB_COUNT; ++i )
+  for ( unsigned int i=0; i<static_cast<unsigned int>(VertexAttributeSet::AttributeID::VERTEX_ATTRIB_COUNT); ++i )
   {
-    uint_t sizeofVertex = static_cast<uint_t>(vas->getSizeOfVertexData(i) * dp::getSizeOf(vas->getTypeOfVertexData(i)));
-    pseudoAlloc(vas->getNumberOfVertexData(i)*sizeofVertex);
+    VertexAttributeSet::AttributeID id = static_cast<VertexAttributeSet::AttributeID>(i);
+    uint_t sizeofVertex = static_cast<uint_t>(vas->getSizeOfVertexData(id) * dp::getSizeOf(vas->getTypeOfVertexData(id)));
+    pseudoAlloc(vas->getNumberOfVertexData(id)*sizeofVertex);
   }
 }

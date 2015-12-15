@@ -40,52 +40,52 @@ namespace dp
     {
 
       //! Texture compare mode
-      typedef enum
+      enum class TextureCompareMode
       {
-        TCM_NONE = 0                        //!< Corresponds to GL_NONE in OpenGL
-      , TCM_R_TO_TEXTURE                    //!< Corrensponds to GL_COMPARE_R_TO_TEXTURE in OpenGL
-      } TextureCompareMode;
+        NONE = 0                  //!< Corresponds to GL_NONE in OpenGL
+      , R_TO_TEXTURE              //!< Corrensponds to GL_COMPARE_R_TO_TEXTURE in OpenGL
+      };
 
       //! Texture magnification mode
-      typedef enum
+      enum class TextureMagFilterMode
       {
-        TFM_MAG_NEAREST = 0                 //!< Corresponds to GL_NEAREST in OpenGL
-      , TFM_MAG_LINEAR                      //!< Corresponds to GL_LINEAR in OpenGL
-      } TextureMagFilterMode;
+        NEAREST = 0               //!< Corresponds to GL_NEAREST in OpenGL
+      , LINEAR                    //!< Corresponds to GL_LINEAR in OpenGL
+      };
 
       //! Texture minification mode
-      typedef enum
+      enum class TextureMinFilterMode
       {
-        TFM_MIN_NEAREST = 0                               //!< Corresponds to GL_NEAREST in OpenGL
-      , TFM_MIN_LINEAR                                    //!< Corresponds to GL_LINEAR in OpenGL
-      , TFM_MIN_LINEAR_MIPMAP_LINEAR                      //!< Corresponds to GL_LINEAR_MIPMAP_LINEAR
-      , TFM_MIN_NEAREST_MIPMAP_NEAREST                    //!< Corresponds to GL_NEAREST_MIPMAP_NEAREST
-      , TFM_MIN_NEAREST_MIPMAP_LINEAR                     //!< Corresponds to GL_NEAREST_MIPMAP_LINEAR (the OpenGL default)
-      , TFM_MIN_LINEAR_MIPMAP_NEAREST                     //!< Corresponds to GL_LINEAR_MIPMAP_NEAREST
-      } TextureMinFilterMode;
+        NEAREST = 0               //!< Corresponds to GL_NEAREST in OpenGL
+      , LINEAR                    //!< Corresponds to GL_LINEAR in OpenGL
+      , LINEAR_MIPMAP_LINEAR      //!< Corresponds to GL_LINEAR_MIPMAP_LINEAR
+      , NEAREST_MIPMAP_NEAREST    //!< Corresponds to GL_NEAREST_MIPMAP_NEAREST
+      , NEAREST_MIPMAP_LINEAR     //!< Corresponds to GL_NEAREST_MIPMAP_LINEAR (the OpenGL default)
+      , LINEAR_MIPMAP_NEAREST     //!< Corresponds to GL_LINEAR_MIPMAP_NEAREST
+      };
 
       DP_SG_CORE_API bool requiresMipmaps( TextureMinFilterMode tmfm );
 
       //! Texture wrap coordinate axis
-      typedef enum
+      enum class TexWrapCoordAxis
       {
-        TWCA_S = 0    //!< S axis
-      , TWCA_T        //!< T axis
-      , TWCA_R        //!< R axis
-      } TexWrapCoordAxis;
+        S = 0                     //!< S axis
+      , T                         //!< T axis
+      , R                         //!< R axis
+      };
 
       //! Texture wrap mode
-      typedef enum
+      enum class TextureWrapMode
       {
-        TWM_REPEAT = 0              //!< Corresponds to GL_REPEAT in OpenGL
-      , TWM_CLAMP                   //!< Corresponds to GL_CLAMP in OpenGL
-      , TWM_MIRROR_REPEAT           //!< Corresponds to GL_MIRRORED_REPEAT in OpenGL
-      , TWM_CLAMP_TO_EDGE           //!< Corresponds to GL_CLAMP_TO_EDGE in OpenGL
-      , TWM_CLAMP_TO_BORDER         //!< Corresponds to GL_CLAMP_TO_BORDER in OpenGL
-      , TWM_MIRROR_CLAMP            //!< Corresponds to GL_MIRROR_CLAMP in OpenGL
-      , TWM_MIRROR_CLAMP_TO_EDGE    //!< Corresponds to GL_MIRROR_CLAMP_TO_EDGE in OpenGL
-      , TWM_MIRROR_CLAMP_TO_BORDER  //!< Corresponds to GL_MIRROR_CLAMP_TO_BORDER in OpenGL
-      } TextureWrapMode;
+        REPEAT = 0                //!< Corresponds to GL_REPEAT in OpenGL
+      , CLAMP                     //!< Corresponds to GL_CLAMP in OpenGL
+      , MIRROR_REPEAT             //!< Corresponds to GL_MIRRORED_REPEAT in OpenGL
+      , CLAMP_TO_EDGE             //!< Corresponds to GL_CLAMP_TO_EDGE in OpenGL
+      , CLAMP_TO_BORDER           //!< Corresponds to GL_CLAMP_TO_BORDER in OpenGL
+      , MIRROR_CLAMP              //!< Corresponds to GL_MIRROR_CLAMP in OpenGL
+      , MIRROR_CLAMP_TO_EDGE      //!< Corresponds to GL_MIRROR_CLAMP_TO_EDGE in OpenGL
+      , MIRROR_CLAMP_TO_BORDER    //!< Corresponds to GL_MIRROR_CLAMP_TO_BORDER in OpenGL
+      };
 
 
       class Sampler : public Object

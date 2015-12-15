@@ -693,14 +693,14 @@ struct NBFSampler : public NBFObject
   uint_t      texture;              //!< Specifies the offset of the Texture
   float4_t    borderColor;          //!< Speicifies the texture border RGBA color
   uint_t      magFilter;            //!< Specifies the filter used with magnifying.
-                                    //!< Valid values are TFM_MAG_NEAREST, and TFM_MAG_LINEAR.
+                                    //!< Valid values are TextureMagFilterMode::NEAREST, and TextureMagFilterMode::LINEAR.
   uint_t      minFilter;            //!< Specifies the filter used with minimizing.
-                                    //!< //!< Valid values are TFM_MIN_NEAREST, TFM_MIN_LINEAR, TFM_MIN_LINEAR_MIPMAP_LINEAR,
-                                    //!< TFM_MIN_NEAREST_MIPMAP_NEAREST, TFM_MIN_NEAREST_MIPMAP_LINEAR, TFM_MIN_LINEAR_MIPMAP_NEAREST.
+                                    //!< //!< Valid values are TextureMinFilterMode::NEAREST, TextureMinFilterMode::LINEAR, TextureMinFilterMode::LINEAR_MIPMAP_LINEAR,
+                                    //!< TextureMinFilterMode::NEAREST_MIPMAP_NEAREST, TextureMinFilterMode::NEAREST_MIPMAP_LINEAR, TextureMinFilterMode::LINEAR_MIPMAP_NEAREST.
   uint_t      texWrapS;             //!< Specifies the wrap parameter for texture coordinate s.
   uint_t      texWrapT;             //!< Specifies the wrap parameter for texture coordinate t.
   uint_t      texWrapR;             //!< Specifies the wrap parameter for texture coordinate r.
-  uint_t      compareMode;          //!> Specifies the compare mode parameter for a texture. Valid values are TCM_NONE and TCM_R_TO_TEXTURE.
+  uint_t      compareMode;          //!> Specifies the compare mode parameter for a texture. Valid values are TextureCompareMode::NONE and TextureCompareMode::R_TO_TEXTURE.
   PADDING(4);                       //!< Padding bits ensure offset of next elements is on a 4-byte boundary, regardless of packing
 };
 DP_STATIC_ASSERT( ( sizeof(NBFSampler) % 8 ) == 0 );

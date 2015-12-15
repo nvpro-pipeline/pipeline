@@ -459,7 +459,7 @@ static PrimitiveSharedPtr createGeoSphereObject()
   indexSet->setData( &indices[src][0], dp::checked_cast<unsigned int>(indices[src].size()) );
 
   // create pointer to return
-  PrimitiveSharedPtr primitive = Primitive::create( PRIMITIVE_TRIANGLES );
+  PrimitiveSharedPtr primitive = Primitive::create( PrimitiveType::TRIANGLES );
   primitive->setVertexAttributeSet( vertexAttributeSet );
   primitive->setIndexSet( indexSet );
 

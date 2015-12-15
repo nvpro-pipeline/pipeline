@@ -68,15 +68,15 @@ namespace dp
       Sampler::Sampler( const TextureSharedPtr & texture )
         : m_texture( texture )
         , m_borderColor( dp::math::Vec4f( 0.0f, 0.0f, 0.0f, 0.0f ) )
-        , m_magFilterMode( TFM_MAG_LINEAR )
-        , m_minFilterMode( TFM_MIN_LINEAR )
-        , m_compareMode( TCM_NONE )
+        , m_magFilterMode( TextureMagFilterMode::LINEAR )
+        , m_minFilterMode( TextureMinFilterMode::LINEAR )
+        , m_compareMode( TextureCompareMode::NONE )
       {
         m_objectCode = ObjectCode::SAMPLER;
 
-        m_wrapMode[0] = TWM_REPEAT;
-        m_wrapMode[1] = TWM_REPEAT;
-        m_wrapMode[2] = TWM_REPEAT;
+        m_wrapMode[0] = TextureWrapMode::REPEAT;
+        m_wrapMode[1] = TextureWrapMode::REPEAT;
+        m_wrapMode[2] = TextureWrapMode::REPEAT;
       }
 
       Sampler::~Sampler()
@@ -158,53 +158,53 @@ namespace dp
 
       TextureWrapMode Sampler::getWrapMode( TexWrapCoordAxis axis ) const
       {
-        return( m_wrapMode[axis] );
+        return( m_wrapMode[static_cast<unsigned int>(axis)] );
       }
 
       void Sampler::setWrapMode( TexWrapCoordAxis axis, TextureWrapMode wrapMode )
       {
-        if ( m_wrapMode[axis] != wrapMode )
+        if ( m_wrapMode[static_cast<unsigned int>(axis)] != wrapMode )
         {
-          m_wrapMode[axis] = wrapMode;
+          m_wrapMode[static_cast<unsigned int>(axis)] = wrapMode;
           notify( Event(this ) );
         }
       }
 
       void Sampler::setWrapModes( TextureWrapMode wrapModeS, TextureWrapMode wrapModeT, TextureWrapMode wrapModeR )
       {
-        setWrapMode( TWCA_S, wrapModeS );
-        setWrapMode( TWCA_T, wrapModeT );
-        setWrapMode( TWCA_R, wrapModeR );
+        setWrapMode( TexWrapCoordAxis::S, wrapModeS );
+        setWrapMode( TexWrapCoordAxis::T, wrapModeT );
+        setWrapMode( TexWrapCoordAxis::R, wrapModeR );
       }
 
       TextureWrapMode Sampler::getWrapModeS() const
       {
-        return( getWrapMode( TWCA_S ) );
+        return( getWrapMode( TexWrapCoordAxis::S ) );
       }
 
       void Sampler::setWrapModeS( TextureWrapMode wrapMode )
       {
-        setWrapMode( TWCA_S, wrapMode );
+        setWrapMode( TexWrapCoordAxis::S, wrapMode );
       }
 
       TextureWrapMode Sampler::getWrapModeT() const
       {
-        return( getWrapMode( TWCA_T ) );
+        return( getWrapMode( TexWrapCoordAxis::T ) );
       }
 
       void Sampler::setWrapModeT( TextureWrapMode wrapMode )
       {
-        setWrapMode( TWCA_T, wrapMode );
+        setWrapMode( TexWrapCoordAxis::T, wrapMode );
       }
 
       TextureWrapMode Sampler::getWrapModeR() const
       {
-        return( getWrapMode( TWCA_R ) );
+        return( getWrapMode( TexWrapCoordAxis::R ) );
       }
 
       void Sampler::setWrapModeR( TextureWrapMode wrapMode )
       {
-        setWrapMode( TWCA_R, wrapMode );
+        setWrapMode( TexWrapCoordAxis::R, wrapMode );
       }
 
       TextureCompareMode Sampler::getCompareMode() const
@@ -264,9 +264,9 @@ namespace dp
           setBorderColor( rhs.m_borderColor );
           setMagFilterMode( rhs.m_magFilterMode );
           setMinFilterMode( rhs.m_minFilterMode );
-          setWrapMode( TWCA_S, rhs.m_wrapMode[0] );
-          setWrapMode( TWCA_T, rhs.m_wrapMode[1] );
-          setWrapMode( TWCA_R, rhs.m_wrapMode[2] );
+          setWrapMode( TexWrapCoordAxis::S, rhs.m_wrapMode[0] );
+          setWrapMode( TexWrapCoordAxis::T, rhs.m_wrapMode[1] );
+          setWrapMode( TexWrapCoordAxis::R, rhs.m_wrapMode[2] );
           setCompareMode( rhs.m_compareMode );
         }
         return( *this );
@@ -307,14 +307,14 @@ namespace dp
       {
         switch( tmfm )
         {
-          case TFM_MIN_NEAREST :
-          case TFM_MIN_LINEAR :
+          case TextureMinFilterMode::NEAREST :
+          case TextureMinFilterMode::LINEAR :
             return( false );
             break;
-          case TFM_MIN_LINEAR_MIPMAP_LINEAR :
-          case TFM_MIN_NEAREST_MIPMAP_NEAREST :
-          case TFM_MIN_NEAREST_MIPMAP_LINEAR :
-          case TFM_MIN_LINEAR_MIPMAP_NEAREST :
+          case TextureMinFilterMode::LINEAR_MIPMAP_LINEAR :
+          case TextureMinFilterMode::NEAREST_MIPMAP_NEAREST :
+          case TextureMinFilterMode::NEAREST_MIPMAP_LINEAR :
+          case TextureMinFilterMode::LINEAR_MIPMAP_NEAREST :
             return( true );
             break;
           default :
@@ -336,34 +336,34 @@ namespace dp
 
     template <> const std::map<dp::sg::core::TextureMagFilterMode,std::string> EnumReflection<dp::sg::core::TextureMagFilterMode>::values =
     {
-      { dp::sg::core::TFM_MAG_NEAREST, "nearest"  },
-      { dp::sg::core::TFM_MAG_LINEAR,  "linear"   }
+      { dp::sg::core::TextureMagFilterMode::NEAREST, "nearest"  },
+      { dp::sg::core::TextureMagFilterMode::LINEAR,  "linear"   }
     };
 
     template <> const std::string EnumReflection<dp::sg::core::TextureMinFilterMode>::name = "TextureMinFilterMode";
 
     template <> const std::map<dp::sg::core::TextureMinFilterMode,std::string> EnumReflection<dp::sg::core::TextureMinFilterMode>::values =
     {
-      { dp::sg::core::TFM_MIN_NEAREST,                "nearest"                 },
-      { dp::sg::core::TFM_MIN_LINEAR,                 "linear"                  },
-      { dp::sg::core::TFM_MIN_LINEAR_MIPMAP_LINEAR,   "linear_mipmap_linear"    },
-      { dp::sg::core::TFM_MIN_NEAREST_MIPMAP_NEAREST, "nearest_mipmap_nearest"  },
-      { dp::sg::core::TFM_MIN_NEAREST_MIPMAP_LINEAR,  "nearest_mipmap_linear"   },
-      { dp::sg::core::TFM_MIN_LINEAR_MIPMAP_NEAREST,  "linear_mipmap_nearest"   }
+      { dp::sg::core::TextureMinFilterMode::NEAREST,                "nearest"                 },
+      { dp::sg::core::TextureMinFilterMode::LINEAR,                 "linear"                  },
+      { dp::sg::core::TextureMinFilterMode::LINEAR_MIPMAP_LINEAR,   "linear_mipmap_linear"    },
+      { dp::sg::core::TextureMinFilterMode::NEAREST_MIPMAP_NEAREST, "nearest_mipmap_nearest"  },
+      { dp::sg::core::TextureMinFilterMode::NEAREST_MIPMAP_LINEAR,  "nearest_mipmap_linear"   },
+      { dp::sg::core::TextureMinFilterMode::LINEAR_MIPMAP_NEAREST,  "linear_mipmap_nearest"   }
     };
 
     template <> const std::string EnumReflection<dp::sg::core::TextureWrapMode>::name = "TextureWrapMode";
 
     template <> const std::map<dp::sg::core::TextureWrapMode,std::string> EnumReflection<dp::sg::core::TextureWrapMode>::values =
     {
-      { dp::sg::core::TWM_REPEAT,                 "repeat"                  },
-      { dp::sg::core::TWM_CLAMP,                  "clamp"                   },
-      { dp::sg::core::TWM_MIRROR_REPEAT,          "mirror_repeat"           },
-      { dp::sg::core::TWM_CLAMP_TO_EDGE,          "clamp_to_edge"           },
-      { dp::sg::core::TWM_CLAMP_TO_BORDER,        "clamp_to_border"         },
-      { dp::sg::core::TWM_MIRROR_CLAMP,           "mirror_clamp"            },
-      { dp::sg::core::TWM_MIRROR_CLAMP_TO_EDGE,   "mirror_clamp_to_edge"    },
-      { dp::sg::core::TWM_MIRROR_CLAMP_TO_BORDER, "mirror_clamp_to_border"  }
+      { dp::sg::core::TextureWrapMode::REPEAT,                 "repeat"                  },
+      { dp::sg::core::TextureWrapMode::CLAMP,                  "clamp"                   },
+      { dp::sg::core::TextureWrapMode::MIRROR_REPEAT,          "mirror_repeat"           },
+      { dp::sg::core::TextureWrapMode::CLAMP_TO_EDGE,          "clamp_to_edge"           },
+      { dp::sg::core::TextureWrapMode::CLAMP_TO_BORDER,        "clamp_to_border"         },
+      { dp::sg::core::TextureWrapMode::MIRROR_CLAMP,           "mirror_clamp"            },
+      { dp::sg::core::TextureWrapMode::MIRROR_CLAMP_TO_EDGE,   "mirror_clamp_to_edge"    },
+      { dp::sg::core::TextureWrapMode::MIRROR_CLAMP_TO_BORDER, "mirror_clamp_to_border"  }
     };
 
   } // namespace util

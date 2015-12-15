@@ -1207,13 +1207,13 @@ static PrimitiveSharedPtr createPreviewMainObject( int m )
   vasPtr->setVertices( &verticesOut[0], numVertices );
   vasPtr->setNormals( &normalsOut[0], numVertices );
   vasPtr->setTexCoords( 0, &texcoordsOut[0], numVertices );
-  vasPtr->setTexCoords( VertexAttributeSet::DP_SG_TANGENT  - VertexAttributeSet::DP_SG_TEXCOORD0, &tangentsOut[0],  numVertices );
-  vasPtr->setTexCoords( VertexAttributeSet::DP_SG_BINORMAL - VertexAttributeSet::DP_SG_TEXCOORD0, &binormalsOut[0], numVertices );
+  vasPtr->setTexCoords( static_cast<unsigned int>(VertexAttributeSet::AttributeID::TANGENT)  - static_cast<unsigned int>(VertexAttributeSet::AttributeID::TEXCOORD0), &tangentsOut[0],  numVertices );
+  vasPtr->setTexCoords( static_cast<unsigned int>(VertexAttributeSet::AttributeID::BINORMAL) - static_cast<unsigned int>(VertexAttributeSet::AttributeID::TEXCOORD0), &binormalsOut[0], numVertices );
 
   IndexSetSharedPtr indexSet = IndexSet::create();
   indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
-  PrimitiveSharedPtr primitivePtr = Primitive::create( PRIMITIVE_TRIANGLES );
+  PrimitiveSharedPtr primitivePtr = Primitive::create( PrimitiveType::TRIANGLES );
   primitivePtr->setVertexAttributeSet( vasPtr );
   primitivePtr->setIndexSet( indexSet );
 
@@ -1362,14 +1362,14 @@ static PrimitiveSharedPtr createPreviewBowl( int m )
   vasPtr->setVertices( &verticesOut[0], numVertices );
   vasPtr->setNormals( &normalsOut[0], numVertices );
   vasPtr->setTexCoords( 0, &texcoordsOut[0], numVertices );
-  vasPtr->setTexCoords( VertexAttributeSet::DP_SG_TANGENT  - VertexAttributeSet::DP_SG_TEXCOORD0, &tangentsOut[0],  numVertices );
-  vasPtr->setTexCoords( VertexAttributeSet::DP_SG_BINORMAL - VertexAttributeSet::DP_SG_TEXCOORD0, &binormalsOut[0], numVertices );
+  vasPtr->setTexCoords( static_cast<unsigned int>(VertexAttributeSet::AttributeID::TANGENT)  - static_cast<unsigned int>(VertexAttributeSet::AttributeID::TEXCOORD0), &tangentsOut[0],  numVertices );
+  vasPtr->setTexCoords( static_cast<unsigned int>(VertexAttributeSet::AttributeID::BINORMAL) - static_cast<unsigned int>(VertexAttributeSet::AttributeID::TEXCOORD0), &binormalsOut[0], numVertices );
 
   IndexSetSharedPtr indexSet( IndexSet::create() );
   indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
   // create pointer to return
-  PrimitiveSharedPtr primitivePtr = Primitive::create( PRIMITIVE_TRIANGLES );
+  PrimitiveSharedPtr primitivePtr = Primitive::create( PrimitiveType::TRIANGLES );
   primitivePtr->setVertexAttributeSet( vasPtr );
   primitivePtr->setIndexSet( indexSet );
 
@@ -1475,14 +1475,14 @@ static PrimitiveSharedPtr createPreviewSphere( int m )
   vasPtr->setVertices( &verticesOut[0], numVertices );
   vasPtr->setNormals( &normalsOut[0], numVertices );
   vasPtr->setTexCoords( 0, &texcoordsOut[0], numVertices );
-  vasPtr->setTexCoords( VertexAttributeSet::DP_SG_TANGENT  - VertexAttributeSet::DP_SG_TEXCOORD0, &tangentsOut[0],  numVertices );
-  vasPtr->setTexCoords( VertexAttributeSet::DP_SG_BINORMAL - VertexAttributeSet::DP_SG_TEXCOORD0, &binormalsOut[0], numVertices );
+  vasPtr->setTexCoords( static_cast<unsigned int>(VertexAttributeSet::AttributeID::TANGENT)  - static_cast<unsigned int>(VertexAttributeSet::AttributeID::TEXCOORD0), &tangentsOut[0],  numVertices );
+  vasPtr->setTexCoords( static_cast<unsigned int>(VertexAttributeSet::AttributeID::BINORMAL) - static_cast<unsigned int>(VertexAttributeSet::AttributeID::TEXCOORD0), &binormalsOut[0], numVertices );
 
   IndexSetSharedPtr indexSet( IndexSet::create() );
   indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
   // create pointer to return
-  PrimitiveSharedPtr primitivePtr = Primitive::create( PRIMITIVE_TRIANGLES );
+  PrimitiveSharedPtr primitivePtr = Primitive::create( PrimitiveType::TRIANGLES );
   primitivePtr->setVertexAttributeSet( vasPtr );
   primitivePtr->setIndexSet( indexSet );
 
@@ -1658,14 +1658,14 @@ static PrimitiveSharedPtr createPreviewPlatform( int m )
   vasPtr->setVertices( &verticesOut[0], numVertices );
   vasPtr->setNormals( &normalsOut[0], numVertices );
   vasPtr->setTexCoords( 0, &texcoordsOut[0], numVertices );
-  vasPtr->setTexCoords( VertexAttributeSet::DP_SG_TANGENT  - VertexAttributeSet::DP_SG_TEXCOORD0, &tangentsOut[0],  numVertices );
-  vasPtr->setTexCoords( VertexAttributeSet::DP_SG_BINORMAL - VertexAttributeSet::DP_SG_TEXCOORD0, &binormalsOut[0], numVertices );
+  vasPtr->setTexCoords( static_cast<unsigned int>(VertexAttributeSet::AttributeID::TANGENT)  - static_cast<unsigned int>(VertexAttributeSet::AttributeID::TEXCOORD0), &tangentsOut[0],  numVertices );
+  vasPtr->setTexCoords( static_cast<unsigned int>(VertexAttributeSet::AttributeID::BINORMAL) - static_cast<unsigned int>(VertexAttributeSet::AttributeID::TEXCOORD0), &binormalsOut[0], numVertices );
 
   IndexSetSharedPtr indexSet( IndexSet::create() );
   indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
   // Create a Primitive
-  PrimitiveSharedPtr primitivePtr = Primitive::create( PRIMITIVE_TRIANGLES );
+  PrimitiveSharedPtr primitivePtr = Primitive::create( PrimitiveType::TRIANGLES );
   primitivePtr->setVertexAttributeSet( vasPtr );
   primitivePtr->setIndexSet( indexSet );
 
@@ -2098,14 +2098,14 @@ static PrimitiveSharedPtr createPreviewRing( int m )
   vasPtr->setVertices( &verticesOut[0], numVertices );
   vasPtr->setNormals( &normalsOut[0], numVertices );
   vasPtr->setTexCoords( 0, &texcoordsOut[0], numVertices );
-  vasPtr->setTexCoords( VertexAttributeSet::DP_SG_TANGENT  - VertexAttributeSet::DP_SG_TEXCOORD0, &tangentsOut[0],  numVertices );
-  vasPtr->setTexCoords( VertexAttributeSet::DP_SG_BINORMAL - VertexAttributeSet::DP_SG_TEXCOORD0, &binormalsOut[0], numVertices );
+  vasPtr->setTexCoords( static_cast<unsigned int>(VertexAttributeSet::AttributeID::TANGENT)  - static_cast<unsigned int>(VertexAttributeSet::AttributeID::TEXCOORD0), &tangentsOut[0],  numVertices );
+  vasPtr->setTexCoords( static_cast<unsigned int>(VertexAttributeSet::AttributeID::BINORMAL)  - static_cast<unsigned int>(VertexAttributeSet::AttributeID::TEXCOORD0), &binormalsOut[0], numVertices );
 
   IndexSetSharedPtr indexSet( IndexSet::create() );
   indexSet->setData( &indices[0], dp::checked_cast<unsigned int>(indices.size()) );
 
   // Create a Primitive
-  PrimitiveSharedPtr primitivePtr = Primitive::create( PRIMITIVE_TRIANGLES );
+  PrimitiveSharedPtr primitivePtr = Primitive::create( PrimitiveType::TRIANGLES );
   primitivePtr->setVertexAttributeSet( vasPtr );
   primitivePtr->setIndexSet( indexSet );
 

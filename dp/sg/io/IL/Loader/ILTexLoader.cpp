@@ -170,28 +170,28 @@ static Image::PixelFormat determinePixelFormat(int format)
   switch( format )
   {
     case IL_COLOR_INDEX :
-      pixelFormat = Image::IMG_COLOR_INDEX;
+      pixelFormat = Image::PixelFormat::COLOR_INDEX;
       break;
     case IL_RGB :
-      pixelFormat = Image::IMG_RGB;
+      pixelFormat = Image::PixelFormat::RGB;
       break;
     case IL_RGBA :
-      pixelFormat = Image::IMG_RGBA;
+      pixelFormat = Image::PixelFormat::RGBA;
       break;
     case IL_BGR :
-      pixelFormat = Image::IMG_BGR;
+      pixelFormat = Image::PixelFormat::BGR;
       break;
     case IL_BGRA :
-      pixelFormat = Image::IMG_BGRA;
+      pixelFormat = Image::PixelFormat::BGRA;
       break;
     case IL_LUMINANCE :
-      pixelFormat = Image::IMG_LUMINANCE;
+      pixelFormat = Image::PixelFormat::LUMINANCE;
       break;
     case IL_LUMINANCE_ALPHA :
-      pixelFormat = Image::IMG_LUMINANCE_ALPHA;
+      pixelFormat = Image::PixelFormat::LUMINANCE_ALPHA;
       break;
     default :
-      pixelFormat = Image::IMG_UNKNOWN_FORMAT;
+      pixelFormat = Image::PixelFormat::UNKNOWN;
       DP_ASSERT( false );
       break;
   }
@@ -204,28 +204,28 @@ static Image::PixelDataType determinePixelDataType(int type)
   switch( type )
   {
     case IL_BYTE :
-      pixelType = Image::IMG_BYTE;
+      pixelType = Image::PixelDataType::BYTE;
       break;
     case IL_UNSIGNED_BYTE :
-      pixelType = Image::IMG_UNSIGNED_BYTE;
+      pixelType = Image::PixelDataType::UNSIGNED_BYTE;
       break;
     case IL_SHORT :
-      pixelType = Image::IMG_SHORT;
+      pixelType = Image::PixelDataType::SHORT;
       break;
     case IL_UNSIGNED_SHORT :
-      pixelType = Image::IMG_UNSIGNED_SHORT;
+      pixelType = Image::PixelDataType::UNSIGNED_SHORT;
       break;
     case IL_INT :
-      pixelType = Image::IMG_INT;
+      pixelType = Image::PixelDataType::INT;
       break;
     case IL_UNSIGNED_INT :
-      pixelType = Image::IMG_UNSIGNED_INT;
+      pixelType = Image::PixelDataType::UNSIGNED_INT;
       break;
     case IL_FLOAT :
-      pixelType = Image::IMG_FLOAT;
+      pixelType = Image::PixelDataType::FLOAT;
       break;
     default :
-      pixelType = Image::IMG_UNKNOWN_TYPE;
+      pixelType = Image::PixelDataType::UNKNOWN;
       DP_ASSERT( false );
       break;
   }
@@ -454,7 +454,7 @@ bool ILTexLoader::onLoad( TextureHostSharedPtr const& texImg
 
     if ( cube )
     {
-      texImg->setTextureTarget( TT_TEXTURE_CUBE );
+      texImg->setTextureTarget( TextureTarget::TEXTURE_CUBE );
     }
     if ( numMipMaps )
     {

@@ -95,7 +95,7 @@ NormalizeDialog::NormalizeDialog( const SceneSharedPtr & scene, QWidget * parent
     dp::sg::core::VertexAttributeSetSharedPtr const& vas = vp[i].staticCast<dp::sg::core::VertexAttributeSet>();
     for ( unsigned int attrib = 0 ; attrib<16 ; ++attrib )
     {
-      if ( vas->getNumberOfVertexData( attrib ) )
+      if ( vas->getNumberOfVertexData( static_cast<dp::sg::core::VertexAttributeSet::AttributeID>(attrib) ) )
       {
         vaMask |= ( 1 << attrib );
       }

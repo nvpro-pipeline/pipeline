@@ -1832,7 +1832,7 @@ bool containsQuadPrimitives( std::vector<dp::sg::core::ObjectSharedPtr> const & 
   for ( size_t i=0 ; i<vp.size() ; i++ )
   {
     dp::sg::core::PrimitiveType pt = vp[i].inplaceCast<dp::sg::core::Primitive>()->getPrimitiveType();
-    if ( ( pt == dp::sg::core::PRIMITIVE_QUADS ) || ( pt == dp::sg::core::PRIMITIVE_QUAD_STRIP ) )
+    if ( ( pt == dp::sg::core::PrimitiveType::QUADS ) || ( pt == dp::sg::core::PrimitiveType::QUAD_STRIP ) )
     {
       return( true );
     }
@@ -1845,7 +1845,7 @@ bool containsStripablePrimitives( std::vector<dp::sg::core::ObjectSharedPtr> con
   for ( size_t i=0 ; i<vp.size() ; i++ )
   {
     dp::sg::core::PrimitiveType pt = vp[i].inplaceCast<dp::sg::core::Primitive>()->getPrimitiveType();
-    if ( ( pt == dp::sg::core::PRIMITIVE_QUADS ) || ( pt == dp::sg::core::PRIMITIVE_TRIANGLES ) )
+    if ( ( pt == dp::sg::core::PrimitiveType::QUADS ) || ( pt == dp::sg::core::PrimitiveType::TRIANGLES ) )
     {
       return( true );
     }
@@ -1858,13 +1858,13 @@ bool containsStrippedPrimitives( std::vector<dp::sg::core::ObjectSharedPtr> cons
   for ( size_t i=0 ; i<vp.size() ; i++ )
   {
     dp::sg::core::PrimitiveType pt = vp[i].inplaceCast<dp::sg::core::Primitive>()->getPrimitiveType();
-    if (    ( pt == dp::sg::core::PRIMITIVE_LINE_STRIP )
-        ||  ( pt == dp::sg::core::PRIMITIVE_LINE_LOOP )
-        ||  ( pt == dp::sg::core::PRIMITIVE_TRIANGLE_STRIP )
-        ||  ( pt == dp::sg::core::PRIMITIVE_TRIANGLE_FAN )
-        ||  ( pt == dp::sg::core::PRIMITIVE_QUAD_STRIP )
-        ||  ( pt == dp::sg::core::PRIMITIVE_TRIANGLE_STRIP_ADJACENCY )
-        ||  ( pt == dp::sg::core::PRIMITIVE_LINE_STRIP_ADJACENCY ) )
+    if (    ( pt == dp::sg::core::PrimitiveType::LINE_STRIP )
+        ||  ( pt == dp::sg::core::PrimitiveType::LINE_LOOP )
+        ||  ( pt == dp::sg::core::PrimitiveType::TRIANGLE_STRIP )
+        ||  ( pt == dp::sg::core::PrimitiveType::TRIANGLE_FAN )
+        ||  ( pt == dp::sg::core::PrimitiveType::QUAD_STRIP )
+        ||  ( pt == dp::sg::core::PrimitiveType::TRIANGLE_STRIP_ADJACENCY )
+        ||  ( pt == dp::sg::core::PrimitiveType::LINE_STRIP_ADJACENCY ) )
     {
       return( true );
     }
@@ -1992,30 +1992,30 @@ void setTraversalMasks( dp::sg::core::SceneSharedPtr const & scene, unsigned int
 bool textureTypeIsCompatible( unsigned int id, dp::sg::core::TextureTarget tt )
 {
   DP_ASSERT( id & dp::fx::PT_SAMPLER_TYPE_MASK );
-  return(   ( ( id & dp::fx::PT_SAMPLER_1D ) && ( tt == dp::sg::core::TT_TEXTURE_1D ) )
-        ||  ( ( id & dp::fx::PT_SAMPLER_2D ) && ( tt == dp::sg::core::TT_TEXTURE_2D ) )
-        ||  ( ( id & dp::fx::PT_SAMPLER_3D ) && ( tt == dp::sg::core::TT_TEXTURE_3D ) )
-        ||  ( ( id & dp::fx::PT_SAMPLER_CUBE ) && ( tt == dp::sg::core::TT_TEXTURE_CUBE ) )
-        ||  ( ( id & dp::fx::PT_SAMPLER_1D_ARRAY ) && ( tt == dp::sg::core::TT_TEXTURE_1D_ARRAY ) )
-        ||  ( ( id & dp::fx::PT_SAMPLER_2D_ARRAY ) && ( tt == dp::sg::core::TT_TEXTURE_2D_ARRAY ) )
-        ||  ( ( id & dp::fx::PT_SAMPLER_2D_RECT ) && ( tt == dp::sg::core::TT_TEXTURE_RECTANGLE ) )
-        ||  ( ( id & dp::fx::PT_SAMPLER_CUBE_ARRAY ) && ( tt == dp::sg::core::TT_TEXTURE_CUBE_ARRAY ) )
-        ||  ( ( id & dp::fx::PT_SAMPLER_BUFFER ) && ( tt == dp::sg::core::TT_TEXTURE_BUFFER ) ) );
+  return(   ( ( id & dp::fx::PT_SAMPLER_1D ) && ( tt == dp::sg::core::TextureTarget::TEXTURE_1D ) )
+        ||  ( ( id & dp::fx::PT_SAMPLER_2D ) && ( tt == dp::sg::core::TextureTarget::TEXTURE_2D ) )
+        ||  ( ( id & dp::fx::PT_SAMPLER_3D ) && ( tt == dp::sg::core::TextureTarget::TEXTURE_3D ) )
+        ||  ( ( id & dp::fx::PT_SAMPLER_CUBE ) && ( tt == dp::sg::core::TextureTarget::TEXTURE_CUBE ) )
+        ||  ( ( id & dp::fx::PT_SAMPLER_1D_ARRAY ) && ( tt == dp::sg::core::TextureTarget::TEXTURE_1D_ARRAY ) )
+        ||  ( ( id & dp::fx::PT_SAMPLER_2D_ARRAY ) && ( tt == dp::sg::core::TextureTarget::TEXTURE_2D_ARRAY ) )
+        ||  ( ( id & dp::fx::PT_SAMPLER_2D_RECT ) && ( tt == dp::sg::core::TextureTarget::TEXTURE_RECTANGLE ) )
+        ||  ( ( id & dp::fx::PT_SAMPLER_CUBE_ARRAY ) && ( tt == dp::sg::core::TextureTarget::TEXTURE_CUBE_ARRAY ) )
+        ||  ( ( id & dp::fx::PT_SAMPLER_BUFFER ) && ( tt == dp::sg::core::TextureTarget::TEXTURE_BUFFER ) ) );
 }
 
 std::string textureTargetToString( dp::sg::core::TextureTarget tt )
 {
   switch( tt )
   {
-    case dp::sg::core::TT_TEXTURE_1D :          return( "1D Texture" );
-    case dp::sg::core::TT_TEXTURE_2D :          return( "2D Texture" );
-    case dp::sg::core::TT_TEXTURE_3D :          return( "3D Texture" );
-    case dp::sg::core::TT_TEXTURE_CUBE :        return( "Cube Texture" );
-    case dp::sg::core::TT_TEXTURE_1D_ARRAY :    return( "1D Texture Array" );
-    case dp::sg::core::TT_TEXTURE_2D_ARRAY :    return( "2D Texture Array" );
-    case dp::sg::core::TT_TEXTURE_RECTANGLE :   return( "Rectangle Texture" );
-    case dp::sg::core::TT_TEXTURE_CUBE_ARRAY :  return( "Cube Texture Array" );
-    case dp::sg::core::TT_TEXTURE_BUFFER :      return( "Buffer Texture" );
+    case dp::sg::core::TextureTarget::TEXTURE_1D :          return( "1D Texture" );
+    case dp::sg::core::TextureTarget::TEXTURE_2D :          return( "2D Texture" );
+    case dp::sg::core::TextureTarget::TEXTURE_3D :          return( "3D Texture" );
+    case dp::sg::core::TextureTarget::TEXTURE_CUBE :        return( "Cube Texture" );
+    case dp::sg::core::TextureTarget::TEXTURE_1D_ARRAY :    return( "1D Texture Array" );
+    case dp::sg::core::TextureTarget::TEXTURE_2D_ARRAY :    return( "2D Texture Array" );
+    case dp::sg::core::TextureTarget::TEXTURE_RECTANGLE :   return( "Rectangle Texture" );
+    case dp::sg::core::TextureTarget::TEXTURE_CUBE_ARRAY :  return( "Cube Texture Array" );
+    case dp::sg::core::TextureTarget::TEXTURE_BUFFER :      return( "Buffer Texture" );
     default:
       DP_ASSERT( !"unknown dp::sg::core::TextureTarget encountered" );
       return( "" );

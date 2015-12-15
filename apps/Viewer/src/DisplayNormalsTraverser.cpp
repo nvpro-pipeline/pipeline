@@ -285,7 +285,7 @@ void DisplayNormalsTraverser::handleGeoNode( dp::sg::core::GeoNode *p )
         normVas->setVertices( &linesVerts[0], dp::checked_cast<unsigned int>( linesVerts.size() ) );
 
         // create a Lines dp::sg::core::Primitive to hold the normals
-        dp::sg::core::PrimitiveSharedPtr normals = dp::sg::core::Primitive::create( dp::sg::core::PRIMITIVE_LINES );
+        dp::sg::core::PrimitiveSharedPtr normals = dp::sg::core::Primitive::create( dp::sg::core::PrimitiveType::LINES );
         normals->setName(NORMALS_NAME);
         normals->setVertexAttributeSet( normVas );
 

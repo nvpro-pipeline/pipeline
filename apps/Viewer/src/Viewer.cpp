@@ -194,13 +194,13 @@ Viewer::Viewer( int & argc, char ** argv )
   connect( m_preferences, SIGNAL(environmentEnabledChanged()), this, SLOT(setEnvironmentEnabledChanged()) );
   connect( m_preferences, SIGNAL(environmentTextureNameChanged(const QString&)), this, SLOT(setEnvironmentTextureName(const QString&)) );
 
-  dp::sg::core::TextureFileSharedPtr textureFile = dp::sg::core::TextureFile::create( m_preferences->getEnvironmentTextureName().toStdString(), dp::sg::core::TT_TEXTURE_2D );
+  dp::sg::core::TextureFileSharedPtr textureFile = dp::sg::core::TextureFile::create( m_preferences->getEnvironmentTextureName().toStdString(), dp::sg::core::TextureTarget::TEXTURE_2D );
   textureFile->incrementMipmapUseCount();
 
   m_environmentSampler = dp::sg::core::Sampler::create( textureFile );
-  m_environmentSampler->setMagFilterMode( dp::sg::core::TFM_MAG_LINEAR );
-  m_environmentSampler->setMinFilterMode( dp::sg::core::TFM_MIN_LINEAR_MIPMAP_LINEAR );
-  m_environmentSampler->setWrapModes( dp::sg::core::TWM_REPEAT, dp::sg::core::TWM_CLAMP_TO_EDGE, dp::sg::core::TWM_CLAMP_TO_EDGE );
+  m_environmentSampler->setMagFilterMode( dp::sg::core::TextureMagFilterMode::LINEAR );
+  m_environmentSampler->setMinFilterMode( dp::sg::core::TextureMinFilterMode::LINEAR_MIPMAP_LINEAR );
+  m_environmentSampler->setWrapModes( dp::sg::core::TextureWrapMode::REPEAT, dp::sg::core::TextureWrapMode::CLAMP_TO_EDGE, dp::sg::core::TextureWrapMode::CLAMP_TO_EDGE );
 
   connect( this, SIGNAL(applicationStateChanged(Qt::ApplicationState)), this, SLOT(onApplicationStateChanged(Qt::ApplicationState)) );
 
@@ -232,7 +232,7 @@ void Viewer::setEnvironmentEnabledChanged()
 
 void Viewer::setEnvironmentTextureName( const QString & name )
 {
-  dp::sg::core::TextureFileSharedPtr textureFile = dp::sg::core::TextureFile::create( name.toStdString(), dp::sg::core::TT_TEXTURE_2D );
+  dp::sg::core::TextureFileSharedPtr textureFile = dp::sg::core::TextureFile::create( name.toStdString(), dp::sg::core::TextureTarget::TEXTURE_2D );
   textureFile->incrementMipmapUseCount();
 
   m_environmentSampler->setTexture( textureFile );

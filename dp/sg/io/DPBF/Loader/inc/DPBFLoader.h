@@ -309,7 +309,7 @@ private:
   template <typename ObjectType, typename NBFObjectType>
   bool loadSharedObject( typename dp::util::ObjectTraits<ObjectType>::SharedPtr & obj
                        , Offset_AutoPtr<NBFObjectType>& objPtr
-                       , dp::sg::core::PrimitiveType pt = dp::sg::core::PRIMITIVE_UNINITIALIZED );
+                       , dp::sg::core::PrimitiveType pt = dp::sg::core::PrimitiveType::UNINITIALIZED );
 
   // read in non-concrete objects
   void readObject(dp::sg::core::ObjectSharedPtr const& dst, const NBFObject * src);

@@ -981,7 +981,7 @@ A3DStatus HOOPSLoader::parseTess3D( const A3DRiRepresentationItem * pRepItem, co
         }
 
         vector<Vec3f> normals;
-        g->addChild( createGeoNode( PRIMITIVE_LINE_STRIP, vertices, vector<Vec3f>(), vector<Vec2f>(), pimit->second.one.newIndices, bd.name, hints, pimit->first ) );
+        g->addChild( createGeoNode( PrimitiveType::LINE_STRIP, vertices, vector<Vec3f>(), vector<Vec2f>(), pimit->second.one.newIndices, bd.name, hints, pimit->first ) );
       }
 
       if ( ! pimit->second.two.newIndices.empty() )
@@ -998,7 +998,7 @@ A3DStatus HOOPSLoader::parseTess3D( const A3DRiRepresentationItem * pRepItem, co
           vertices[it->second] = Vec3f( (float)verts[idx[1]+0], (float)verts[idx[1]+1], (float)verts[idx[1]+2] );
         }
 
-        g->addChild( createGeoNode( PRIMITIVE_TRIANGLES, vertices, normals, vector<Vec2f>(), pimit->second.two.newIndices, bd.name, hints, pimit->first ) );
+        g->addChild( createGeoNode( PrimitiveType::TRIANGLES, vertices, normals, vector<Vec2f>(), pimit->second.two.newIndices, bd.name, hints, pimit->first ) );
       }
 
       if ( ! pimit->second.three.newIndices.empty() )
@@ -1018,7 +1018,7 @@ A3DStatus HOOPSLoader::parseTess3D( const A3DRiRepresentationItem * pRepItem, co
           vertices[it->second] = Vec3f( (float)verts[idx[2]+0], (float)verts[idx[2]+1], (float)verts[idx[2]+2] );
         }
 
-        g->addChild( createGeoNode( PRIMITIVE_TRIANGLES, vertices, normals, textures, pimit->second.three.newIndices, bd.name, hints, pimit->first ) );
+        g->addChild( createGeoNode( PrimitiveType::TRIANGLES, vertices, normals, textures, pimit->second.three.newIndices, bd.name, hints, pimit->first ) );
       }
     }
   }
@@ -1115,7 +1115,7 @@ A3DStatus HOOPSLoader::parseTess3DWire( const A3DRiRepresentationItem * pRepItem
       vasSP->setColors  ( &colors[0], count );
 
       // create Primitive
-      PrimitiveSharedPtr primSP( Primitive::create( PRIMITIVE_LINE_STRIP ) );
+      PrimitiveSharedPtr primSP( Primitive::create( PrimitiveType::LINE_STRIP ) );
       primSP->setVertexAttributeSet( vasSP );
 
       // create GeoNode
@@ -1153,7 +1153,7 @@ A3DStatus HOOPSLoader::parseTess3DWire( const A3DRiRepresentationItem * pRepItem
     vasSP->setColors( &colors[0], dp::checked_cast< unsigned int >( colors.size() ) );
 
     // create Primitive
-    PrimitiveSharedPtr primSP( Primitive::create( PRIMITIVE_LINE_STRIP ) );
+    PrimitiveSharedPtr primSP( Primitive::create( PrimitiveType::LINE_STRIP ) );
     primSP->setVertexAttributeSet( vasSP );
 
     // create GeoNode

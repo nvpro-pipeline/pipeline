@@ -142,7 +142,7 @@ namespace dp
         std::vector<dp::math::Vec3f> colors;
 
         dp::sg::core::GeoNodeSharedPtr geoNode = dp::sg::core::GeoNode::create();
-        dp::sg::core::PrimitiveSharedPtr primitive = dp::sg::core::Primitive::create( dp::sg::core::PRIMITIVE_TRIANGLES );
+        dp::sg::core::PrimitiveSharedPtr primitive = dp::sg::core::Primitive::create( dp::sg::core::PrimitiveType::TRIANGLES );
         dp::sg::core::VertexAttributeSetSharedPtr vertexAttributeset = dp::sg::core::VertexAttributeSet::create();
         dp::sg::core::IndexSetSharedPtr indexSet = dp::sg::core::IndexSet::create();
 
@@ -214,8 +214,8 @@ namespace dp
         {
           dp::sg::core::SamplerSharedPtr sampler = dp::sg::core::Sampler::create( colorMap );
           sampler->setName( "textureMap" );
-          sampler->setMagFilterMode( dp::sg::core::TFM_MAG_LINEAR );
-          sampler->setMinFilterMode( dp::sg::core::TFM_MIN_LINEAR );
+          sampler->setMagFilterMode( dp::sg::core::TextureMagFilterMode::LINEAR );
+          sampler->setMinFilterMode( dp::sg::core::TextureMinFilterMode::LINEAR );
 
           pipelineData->setParameterGroupData( dp::sg::core::createStandardTextureParameterData( sampler ) );
         }
@@ -250,24 +250,24 @@ namespace dp
         dp::fx::EffectLibrary::instance()->loadEffects( "terrain.xml", dp::util::FileFinder( dp::home() + "/media/effects/xml" ) );
 
         std::string effectName;
-        dp::sg::core::PrimitiveType primitiveType = dp::sg::core::PRIMITIVE_TRIANGLES;
+        dp::sg::core::PrimitiveType primitiveType = dp::sg::core::PrimitiveType::TRIANGLES;
         //size_t verticesPerTexel = 6;
         float verticesPerTexel = 6;
         switch ( mode )
         {
         case MODE_VERTEX:
           effectName = "terrain";
-          primitiveType = dp::sg::core::PRIMITIVE_TRIANGLES;
+          primitiveType = dp::sg::core::PrimitiveType::TRIANGLES;
           verticesPerTexel = 6;
           break;
         case MODE_GEOMETRY:
           effectName = "terrain_geometry";
-          primitiveType = dp::sg::core::PRIMITIVE_POINTS;
+          primitiveType = dp::sg::core::PrimitiveType::POINTS;
           verticesPerTexel = 1;
           break;
         case MODE_TESSELLATION:
           effectName = "terrain_tessellation";
-          primitiveType = dp::sg::core::PRIMITIVE_PATCHES;
+          primitiveType = dp::sg::core::PrimitiveType::PATCHES;
           verticesPerTexel = 1.0f / (4.0f * 4.0f);
           //verticesPerTexel = 1.0f / (64.0f * 64.0f);
           break;
@@ -279,20 +279,20 @@ namespace dp
         float height; // scale due to the int->[0...1] float conversion
         switch ( heightMap->getType() )
         {
-        case dp::sg::core::Image::IMG_UNSIGNED_BYTE:
+        case dp::sg::core::Image::PixelDataType::UNSIGNED_BYTE:
           height = 255.0f;
           break;
-        case dp::sg::core::Image::IMG_UNSIGNED_SHORT:
+        case dp::sg::core::Image::PixelDataType::UNSIGNED_SHORT:
           height = 65535.0f;
           break;
-        case dp::sg::core::Image::IMG_UNSIGNED_INT:
+        case dp::sg::core::Image::PixelDataType::UNSIGNED_INT:
           height = 4294967295.0f;
           break;
-        case dp::sg::core::Image::IMG_FLOAT16:
-        case dp::sg::core::Image::IMG_FLOAT32:
-        case dp::sg::core::Image::IMG_BYTE:
-        case dp::sg::core::Image::IMG_SHORT:
-        case dp::sg::core::Image::IMG_INT:
+        case dp::sg::core::Image::PixelDataType::FLOAT16:
+        case dp::sg::core::Image::PixelDataType::FLOAT32:
+        case dp::sg::core::Image::PixelDataType::BYTE:
+        case dp::sg::core::Image::PixelDataType::SHORT:
+        case dp::sg::core::Image::PixelDataType::INT:
           DP_ASSERT( !"those are currently not supported.");
           break;
         }
@@ -314,7 +314,7 @@ namespace dp
 
         va.setData( 3, dp::DataType::FLOAT_32, buffer, 0, 0, (unsigned int)(verticesPerTexel * numRects) );
         dp::sg::core::VertexAttributeSetSharedPtr vertexAttributeset = dp::sg::core::VertexAttributeSet::create();
-        vertexAttributeset->setVertexAttribute(dp::sg::core::VertexAttributeSet::DP_SG_POSITION, va);
+        vertexAttributeset->setVertexAttribute(dp::sg::core::VertexAttributeSet::AttributeID::POSITION, va);
 
         // setup primtive
         dp::sg::core::PrimitiveSharedPtr primitive = dp::sg::core::Primitive::create( primitiveType );
@@ -323,8 +323,8 @@ namespace dp
 
         dp::sg::core::SamplerSharedPtr sampler = dp::sg::core::Sampler::create( heightMap );
         sampler->setName( "heightMap" );
-        sampler->setMagFilterMode( dp::sg::core::TFM_MAG_LINEAR );
-        sampler->setMinFilterMode( dp::sg::core::TFM_MIN_LINEAR );
+        sampler->setMagFilterMode( dp::sg::core::TextureMagFilterMode::LINEAR );
+        sampler->setMinFilterMode( dp::sg::core::TextureMinFilterMode::LINEAR );
         sampler->setTexture( heightMap );
 
         dp::sg::core::PipelineDataSharedPtr pipelineData = dp::sg::core::PipelineData::create( dp::fx::EffectLibrary::instance()->getEffectData(effectName) );
@@ -342,8 +342,8 @@ namespace dp
         {
           dp::sg::core::SamplerSharedPtr sampler = dp::sg::core::Sampler::create( colorMap );
           sampler->setName( "textureMap" );
-          sampler->setMagFilterMode( dp::sg::core::TFM_MAG_LINEAR );
-          sampler->setMinFilterMode( dp::sg::core::TFM_MIN_LINEAR );
+          sampler->setMagFilterMode( dp::sg::core::TextureMagFilterMode::LINEAR );
+          sampler->setMinFilterMode( dp::sg::core::TextureMinFilterMode::LINEAR );
 
           pipelineData->setParameterGroupData( dp::sg::core::createStandardTextureParameterData( sampler ) );
         }

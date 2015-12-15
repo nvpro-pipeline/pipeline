@@ -50,7 +50,7 @@ namespace dp
       END_REFLECTION_INFO
 
       NormalizeTraverser::NormalizeTraverser(void)
-      : m_attrib(VertexAttributeSet::DP_SG_NORMAL)
+      : m_attrib(static_cast<unsigned int>(VertexAttributeSet::AttributeID::NORMAL))
       {
       }
 
@@ -72,12 +72,13 @@ namespace dp
         pair<set<const void *>::iterator,bool> pitb = m_objects.insert( p );
         if ( pitb.second )
         {
-          if ( p->getSizeOfVertexData(m_attrib) )
+          dp::sg::core::VertexAttributeSet::AttributeID id = static_cast<dp::sg::core::VertexAttributeSet::AttributeID>(m_attrib);
+          if ( p->getSizeOfVertexData(id) )
           {
             VertexAttribute va;
-            p->swapVertexData(m_attrib, va);
+            p->swapVertexData(id, va);
             normalize( va );
-            p->swapVertexData(m_attrib, va);
+            p->swapVertexData(id, va);
             setTreeModified();
           }
         }

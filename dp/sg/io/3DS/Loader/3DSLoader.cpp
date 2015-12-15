@@ -1616,7 +1616,7 @@ ThreeDSLoader::constructGeometry(GroupSharedPtr const& group, char *name, Lib3ds
 
     // there are no materials present; export this whole mesh as one Primitive
     // create the triangle group to hold the vertex data, faces, and possibly texture coordinates
-    PrimitiveSharedPtr hTris( Primitive::create( PRIMITIVE_TRIANGLES ) );
+    PrimitiveSharedPtr hTris( Primitive::create( PrimitiveType::TRIANGLES ) );
     hTris->setIndexSet( iset );
     hTris->setVertexAttributeSet( hVas );
 
@@ -1775,7 +1775,7 @@ ThreeDSLoader::constructGeometry(GroupSharedPtr const& group, char *name, Lib3ds
             }
           }
 
-          PrimitiveSharedPtr hLines(Primitive::create( PRIMITIVE_LINES ));
+          PrimitiveSharedPtr hLines(Primitive::create( PrimitiveType::LINES ));
           if ( !indices.empty() )
           {
             // add the list of segments to the Lines object
@@ -1790,7 +1790,7 @@ ThreeDSLoader::constructGeometry(GroupSharedPtr const& group, char *name, Lib3ds
         }
         else
         {
-          PrimitiveSharedPtr hTris = Primitive::create( PRIMITIVE_TRIANGLES );
+          PrimitiveSharedPtr hTris = Primitive::create( PrimitiveType::TRIANGLES );
           // add the list of faces to the Triangles object
           IndexSetSharedPtr iset( IndexSet::create() );
           iset->setData( &matGroup->indices[0], dp::checked_cast<unsigned int>(matGroup->indices.size()) );
@@ -2039,28 +2039,28 @@ ParameterGroupDataSharedPtr ThreeDSLoader::createTexture( Lib3dsTextureMap &text
     {
       if ( texture.flags & LIB3DS_TEXTURE_MIRROR )
       {
-        wrapS = wrapT = TWM_MIRROR_CLAMP;
+        wrapS = wrapT = TextureWrapMode::MIRROR_CLAMP;
       }
       else
       {
-        wrapS = wrapT = TWM_CLAMP;
+        wrapS = wrapT = TextureWrapMode::CLAMP;
       }
     }
     else
     {
       if ( texture.flags & LIB3DS_TEXTURE_MIRROR )
       {
-        wrapS = wrapT = TWM_MIRROR_REPEAT;
+        wrapS = wrapT = TextureWrapMode::MIRROR_REPEAT;
       }
       else
       {
-        wrapS = wrapT = TWM_REPEAT;
+        wrapS = wrapT = TextureWrapMode::REPEAT;
       }
     }
 
     SamplerSharedPtr sampler = Sampler::create( textureHost );
-    sampler->setWrapMode( TWCA_S, wrapS );
-    sampler->setWrapMode( TWCA_T, wrapT );
+    sampler->setWrapMode( TexWrapCoordAxis::S, wrapS );
+    sampler->setWrapMode( TexWrapCoordAxis::T, wrapT );
 
     // create a standardTexturesParameter ParameterGroupData
     parameterGroupData = createStandardTextureParameterData( sampler );
@@ -2074,11 +2074,14 @@ ParameterGroupDataSharedPtr ThreeDSLoader::createTexture( Lib3dsTextureMap &text
 
     if ( isEnvMap )
     {
-      static std::array<dp::fx::EnumSpec::StorageType, 4> texGenMode{ TGM_REFLECTION_MAP, TGM_REFLECTION_MAP, TGM_REFLECTION_MAP, TGM_OFF };
+      static std::array<dp::fx::EnumSpec::StorageType, 4> texGenMode{ static_cast<dp::fx::EnumSpec::StorageType>(TexGenMode::REFLECTION_MAP)
+                                                                    , static_cast<dp::fx::EnumSpec::StorageType>(TexGenMode::REFLECTION_MAP)
+                                                                    , static_cast<dp::fx::EnumSpec::StorageType>(TexGenMode::REFLECTION_MAP)
+                                                                    , static_cast<dp::fx::EnumSpec::StorageType>(TexGenMode::OFF) };
 
       DP_VERIFY( (parameterGroupData->setParameterArray<dp::fx::EnumSpec::StorageType,4>( "genMode", texGenMode )) );
       DP_VERIFY( parameterGroupData->setParameter<Vec4f>( "envColor", Vec4f( texture.percent, texture.percent, texture.percent, texture.percent ) ) );
-      DP_VERIFY( parameterGroupData->setParameter<dp::fx::EnumSpec::StorageType>( "envMode", TEM_INTERPOLATE ) );
+      DP_VERIFY( parameterGroupData->setParameter<dp::fx::EnumSpec::StorageType>( "envMode", static_cast<dp::fx::EnumSpec::StorageType>(TextureEnvMode::INTERPOLATE) ) );
     }
   }
   return( parameterGroupData );

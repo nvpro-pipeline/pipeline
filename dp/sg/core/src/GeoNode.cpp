@@ -126,8 +126,9 @@ namespace dp
         if ( m_primitive && m_primitive->getVertexAttributeSet() )
         {
           VertexAttributeSetSharedPtr const& vas = m_primitive->getVertexAttributeSet();
-          vas->setEnabled( VertexAttributeSet::DP_SG_TEXCOORD0 + tu, false );    // disable attribute!
-          vas->removeVertexData( VertexAttributeSet::DP_SG_TEXCOORD0 + tu );
+          VertexAttributeSet::AttributeID id = static_cast<VertexAttributeSet::AttributeID>(static_cast<unsigned int>(VertexAttributeSet::AttributeID::TEXCOORD0) + tu);
+          vas->setEnabled( id, false );    // disable attribute!
+          vas->removeVertexData( id );
           // Note: index cache stays valid, so no need to dismiss them
         }
       }
@@ -212,7 +213,7 @@ namespace dp
         }
       }
 
-      void GeoNode::generateTangentSpace( unsigned int tc, unsigned int tg, unsigned int bn, bool overwrite )
+      void GeoNode::generateTangentSpace( VertexAttributeSet::AttributeID tc, VertexAttributeSet::AttributeID tg, VertexAttributeSet::AttributeID bn, bool overwrite )
       {
         if ( m_primitive )
         {
@@ -220,7 +221,7 @@ namespace dp
         }
       }
 
-      void GeoNode::generateTexCoords( TextureCoordType tct, unsigned int tc, bool overwrite )
+      void GeoNode::generateTexCoords( TextureCoordType tct, VertexAttributeSet::AttributeID tc, bool overwrite )
       {
         if ( m_primitive )
         {

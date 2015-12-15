@@ -47,21 +47,21 @@ namespace dp
           {
             switch( scenixDataType )
             {
-            case dp::sg::core::Image::IMG_BYTE:
+            case dp::sg::core::Image::PixelDataType::BYTE:
               return dp::DataType::INT_8;
-            case dp::sg::core::Image::IMG_UNSIGNED_BYTE:
+            case dp::sg::core::Image::PixelDataType::UNSIGNED_BYTE:
               return dp::DataType::UNSIGNED_INT_8;
-            case dp::sg::core::Image::IMG_SHORT:
+            case dp::sg::core::Image::PixelDataType::SHORT:
               return dp::DataType::INT_16;
-            case dp::sg::core::Image::IMG_UNSIGNED_SHORT:
+            case dp::sg::core::Image::PixelDataType::UNSIGNED_SHORT:
               return dp::DataType::UNSIGNED_INT_16;
-            case dp::sg::core::Image::IMG_INT:
+            case dp::sg::core::Image::PixelDataType::INT:
               return dp::DataType::INT_32;
-            case dp::sg::core::Image::IMG_UNSIGNED_INT:
+            case dp::sg::core::Image::PixelDataType::UNSIGNED_INT:
               return dp::DataType::UNSIGNED_INT_32;
-            case dp::sg::core::Image::IMG_FLOAT16:
+            case dp::sg::core::Image::PixelDataType::FLOAT16:
               return dp::DataType::FLOAT_16;
-            case dp::sg::core::Image::IMG_FLOAT32:
+            case dp::sg::core::Image::PixelDataType::FLOAT32:
               return dp::DataType::FLOAT_32;
             default:
               DP_ASSERT( false && "unknown datatype");

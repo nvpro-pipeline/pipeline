@@ -82,7 +82,7 @@ namespace dp
                         dp::rix::core::VertexAttributesSharedHandle rixVA;
 
                         std::vector<dp::rix::core::VertexFormatInfo>  vertexInfos;
-                        std::vector<unsigned int> sourceAttributes;
+                        std::vector<dp::sg::core::VertexAttributeSet::AttributeID> sourceAttributes;
 
                         unsigned int offset = 0;
                         baseVertex = 0;
@@ -90,9 +90,10 @@ namespace dp
                         // TODO hack, magic number!
                         for (unsigned int index = 0;index < 16;++index)
                         {
-                            if (vertexAttributeSet->isEnabled(index))
+                          dp::sg::core::VertexAttributeSet::AttributeID id = static_cast<dp::sg::core::VertexAttributeSet::AttributeID>(index);
+                            if (vertexAttributeSet->isEnabled(id))
                             {
-                                dp::sg::core::VertexAttribute const & va = vertexAttributeSet->getVertexAttribute(index);
+                                dp::sg::core::VertexAttribute const & va = vertexAttributeSet->getVertexAttribute(id);
 
                                 dp::rix::core::VertexFormatInfo vfi( index,
                                     va.getVertexDataType(),
@@ -103,7 +104,7 @@ namespace dp
                                     0 // stride, fill in later
                                     );
                                 vertexInfos.push_back(vfi);
-                                sourceAttributes.push_back(index);
+                                sourceAttributes.push_back(id);
 
                                 offset += (unsigned int)(getSizeOf(va.getVertexDataType()) * va.getVertexDataSize());
                             }

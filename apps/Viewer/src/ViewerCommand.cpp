@@ -159,8 +159,8 @@ CommandGenerateTangentSpace::~CommandGenerateTangentSpace()
 bool CommandGenerateTangentSpace::doUndo()
 {
   // reset the tangent space texture coordinates again
-  m_primitive->getVertexAttributeSet()->setVertexAttribute( VertexAttributeSet::DP_SG_TEXCOORD6, dp::sg::core::VertexAttribute(), false );
-  m_primitive->getVertexAttributeSet()->setVertexAttribute( VertexAttributeSet::DP_SG_TEXCOORD7, dp::sg::core::VertexAttribute(), false );
+  m_primitive->getVertexAttributeSet()->setVertexAttribute( VertexAttributeSet::AttributeID::TEXCOORD6, dp::sg::core::VertexAttribute(), false );
+  m_primitive->getVertexAttributeSet()->setVertexAttribute( VertexAttributeSet::AttributeID::TEXCOORD7, dp::sg::core::VertexAttribute(), false );
   return( true );
 }
 
@@ -179,13 +179,13 @@ CommandGenerateTextureCoordinates::CommandGenerateTextureCoordinates( const dp::
   QString type;
   switch( tct )
   {
-    case TCT_CYLINDRICAL :
+    case TextureCoordType::CYLINDRICAL :
       type = QString( "Cylindrical" );
       break;
-    case TCT_PLANAR :
+    case TextureCoordType::PLANAR :
       type = QString( "Planar" );
       break;
-    case TCT_SPHERICAL :
+    case TextureCoordType::SPHERICAL :
       type = QString( "Spherical" );
       break;
     default :
@@ -203,7 +203,7 @@ CommandGenerateTextureCoordinates::~CommandGenerateTextureCoordinates()
 bool CommandGenerateTextureCoordinates::doUndo()
 {
   // reset the texture coordinates again
-  m_primitive->getVertexAttributeSet()->setVertexAttribute( VertexAttributeSet::DP_SG_TEXCOORD0, dp::sg::core::VertexAttribute(), false );
+  m_primitive->getVertexAttributeSet()->setVertexAttribute( VertexAttributeSet::AttributeID::TEXCOORD0, dp::sg::core::VertexAttribute(), false );
   return( true );
 }
 

@@ -40,63 +40,63 @@ namespace dp
     {
 
       /*! \brief PrimitiveTypes associated with this Primitive */
-      enum PrimitiveType
+      enum class PrimitiveType
       {
         // default Primitive types
-        PRIMITIVE_POINTS,
-        PRIMITIVE_LINE_STRIP,
-        PRIMITIVE_LINE_LOOP,
-        PRIMITIVE_LINES,
-        PRIMITIVE_TRIANGLE_STRIP,
-        PRIMITIVE_TRIANGLE_FAN,
-        PRIMITIVE_TRIANGLES,
-        PRIMITIVE_QUAD_STRIP,
-        PRIMITIVE_QUADS,
-        PRIMITIVE_POLYGON,
+        POINTS,
+        LINE_STRIP,
+        LINE_LOOP,
+        LINES,
+        TRIANGLE_STRIP,
+        TRIANGLE_FAN,
+        TRIANGLES,
+        QUAD_STRIP,
+        QUADS,
+        POLYGON,
 
         //  If NV_geometry_program4 is supported, then the following primitive types are also supported:
-        PRIMITIVE_TRIANGLES_ADJACENCY,
-        PRIMITIVE_TRIANGLE_STRIP_ADJACENCY,
-        PRIMITIVE_LINES_ADJACENCY,
-        PRIMITIVE_LINE_STRIP_ADJACENCY,
+        TRIANGLES_ADJACENCY,
+        TRIANGLE_STRIP_ADJACENCY,
+        LINES_ADJACENCY,
+        LINE_STRIP_ADJACENCY,
 
         // if NV_tessellation_program5 / ARB_tessellation_shader is supported
-        PRIMITIVE_PATCHES,
+        PATCHES,
 
-        PRIMITIVE_UNINITIALIZED = ~0
+        UNINITIALIZED = ~0
       };
 
       DP_SG_CORE_API PrimitiveType primitiveNameToType( std::string const& name );
       DP_SG_CORE_API std::string primitiveTypeToName( PrimitiveType pt );
 
-      enum PatchesMode
+      enum class PatchesMode
       {
-        PATCHES_MODE_TRIANGLES,
-        PATCHES_MODE_QUADS,
-        PATCHES_MODE_ISOLINES,
-        PATCHES_MODE_POINTS
+        TRIANGLES,
+        QUADS,
+        ISOLINES,
+        POINTS
       };
 
-      enum PatchesSpacing
+      enum class PatchesSpacing
       {
-        PATCHES_SPACING_EQUAL,
-        PATCHES_SPACING_FRACTIONAL_EVEN,
-        PATCHES_SPACING_FRACTIONAL_ODD
+        EQUAL,
+        FRACTIONAL_EVEN,
+        FRACTIONAL_ODD
       };
 
-      enum PatchesOrdering
+      enum class PatchesOrdering
       {
-        PATCHES_ORDERING_CW,
-        PATCHES_ORDERING_CCW
+        CW,
+        CCW
       };
 
-      enum PatchesType
+      enum class PatchesType
       {
-        PATCHES_NO_PATCHES,
-        PATCHES_PN_TRIANGLES,
-        PATCHES_PN_QUADS,
-        PATCHES_CUBIC_BEZIER_TRIANGLES,
-        PATCHES_CUBIC_BEZIER_QUADS
+        NONE,
+        PN_TRIANGLES,
+        PN_QUADS,
+        CUBIC_BEZIER_TRIANGLES,
+        CUBIC_BEZIER_QUADS
       };
 
       DP_SG_CORE_API PatchesType patchesNameToType( std::string const& name );
@@ -111,7 +111,7 @@ namespace dp
         public:
           DP_SG_CORE_API static PrimitiveSharedPtr create( PrimitiveType pt );
 
-          DP_SG_CORE_API static PrimitiveSharedPtr create( PatchesType pt, PatchesMode pm = PATCHES_MODE_TRIANGLES );
+          DP_SG_CORE_API static PrimitiveSharedPtr create( PatchesType pt, PatchesMode pm = PatchesMode::TRIANGLES );
 
           DP_SG_CORE_API virtual HandledObjectSharedPtr clone() const;
 
@@ -296,8 +296,8 @@ namespace dp
 
           /*! \brief Get the number of vertices per Primitive
            *  \remarks This function returns the number of vertices required to specify a complete Primitive.  For instance
-           *  it would be 3 for PRIMITIVE_TRIANGLES, 4 for PRIMITIVE_QUADS, etc.  For types with a variable number of 
-           *  vertices per primitive (PRIMITIVE_POLYGON, PRIMITIVE_TRIANGLE_STRIP, etc) the return value is zero.
+           *  it would be 3 for PrimitiveType::TRIANGLES, 4 for PrimitiveType::QUADS, etc.  For types with a variable number of 
+           *  vertices per primitive (PrimitiveType::POLYGON, PrimitiveType::TRIANGLE_STRIP, etc) the return value is zero.
            *  \return The vertex count, 0, or ~0 if the primitive is uninitialized.
            *  \sa getNumberOfFaces, getNumberOfPrimitives, getNumberOfPrimitiveRestarts
            */
@@ -322,14 +322,14 @@ namespace dp
           /*! \brief Generates tangents and binormals
            * \param texcoords
            * Addresses the vertex attribute to hold the input 2D texture coordinates used to calculate the tangent space.
-           * By default, input texture coordinates are taken from the VertexAttributeSet::DP_SG_TEXCOORD0. 
+           * By default, input texture coordinates are taken from the VertexAttributeSet::AttributeID::TEXCOORD0. 
            * \param tangents
            * Addresses the vertex attribute where to output the calculated tangents. 
-           * By default tangents are written to VertexAttributeSet::DP_SG_TANGENT, 
+           * By default tangents are written to VertexAttributeSet::AttributeID::TANGENT, 
            * which is aligned to the TANGENT binding semantic used by Cg for varying vertex shader input. 
            * \param binormals
            * Addresses the vertex attribute where to output the calculated binormals.
-           * By default binormals are written to VertexAttributeSet::DP_SG_BINORMAL, 
+           * By default binormals are written to VertexAttributeSet::AttributeID::BINORMAL, 
            * which is aligned to the BINORMAL binding semantic used by Cg for varying vertex shader input. 
            * \param overwrite 
            * An optional flag indicating whether to overwrite existing vertex data.
@@ -338,18 +338,18 @@ namespace dp
            * The function calls the protected virtual function calculateTangentSpace, which concrete Drawables
            * should override to provide correct tangent space calculation.
            * \sa calculateTangentSpace */
-          DP_SG_CORE_API void generateTangentSpace( unsigned int texcoords = VertexAttributeSet::DP_SG_TEXCOORD0, 
-                                              unsigned int tangents  = VertexAttributeSet::DP_SG_TANGENT, 
-                                              unsigned int binormals = VertexAttributeSet::DP_SG_BINORMAL,
-                                              bool overwrite = true );
+          DP_SG_CORE_API void generateTangentSpace( VertexAttributeSet::AttributeID texcoords = VertexAttributeSet::AttributeID::TEXCOORD0, 
+                                                    VertexAttributeSet::AttributeID tangents  = VertexAttributeSet::AttributeID::TANGENT, 
+                                                    VertexAttributeSet::AttributeID binormals = VertexAttributeSet::AttributeID::BINORMAL,
+                                                    bool overwrite = true );
 
           /*! \brief Generates 2D texture coordinates 
            * \param type
-           * Desired texture coordinate type. Accepted are TCT_CYLINDRICAL, TCT_PLANAR, and TCT_SPHERICAL. 
+           * Desired texture coordinate type. Accepted are TextureCoordType::CYLINDRICAL, TextureCoordType::PLANAR, and TextureCoordType::SPHERICAL. 
            * \param texcoords 
            * Addresses the vertex attribute where to output the generated texture coords. 
-           * VertexAttributeSet::DP_SG_TEXCOORD0 - VertexAttributeSet::DP_SG_TEXCOORD7 are allowed identifiers.
-           * By default texture coords are written to VertexAttributeSet::DP_SG_TEXCOORD0, 
+           * VertexAttributeSet::AttributeID::TEXCOORD0 - VertexAttributeSet::AttributeID::TEXCOORD7 are allowed identifiers.
+           * By default texture coords are written to VertexAttributeSet::AttributeID::TEXCOORD0, 
            * \param overwrite 
            * An optional flag indicating whether to overwrite existing vertex data.
            * The default is to overwrite existing data.
@@ -358,8 +358,8 @@ namespace dp
            * should override to provide correct texture coordinate calculation.
            * \sa calculateTexCoords */
           DP_SG_CORE_API void generateTexCoords( TextureCoordType type, 
-                                           unsigned int texcoords = VertexAttributeSet::DP_SG_TEXCOORD0, 
-                                           bool overwrite = true );
+                                                 VertexAttributeSet::AttributeID texcoords = VertexAttributeSet::AttributeID::TEXCOORD0, 
+                                                 bool overwrite = true );
 
           REFLECTION_INFO_API( DP_SG_CORE_API, Primitive );
 
@@ -374,7 +374,7 @@ namespace dp
           DP_SG_CORE_API void determinePrimitiveAndFaceCount() const;
 
           /*! \brief Override to specialize calculation of texture coords */
-          DP_SG_CORE_API virtual void calculateTexCoords(TextureCoordType type, unsigned int texcoords, bool overwrite);
+          DP_SG_CORE_API virtual void calculateTexCoords(TextureCoordType type, VertexAttributeSet::AttributeID texcoords, bool overwrite);
 
           /*! \brief Calculates the bounding box of this Primitive.
            *  \return The axis-aligned bounding box of this Primitive.
@@ -394,8 +394,8 @@ namespace dp
            *  \param overwrite A flag indicating whether to overwrite existing vertex normals.
            *  \return \c true, if normals could be calculated, otherwise \c false.
            *  \remarks This function gets called from the generateNormals API. If \a overwrite is \c true or the
-           *  Primitive has no normals, and the Primitive is of type PRIMITIVE_TRIANGLE_STRIP, PRIMITIVE_TRIANGLE_FAN,
-           *  PRIMITIVE_TRIANGLES, PRIMITIVE_QUAD_STRIP, or PRIMITIVE_QUADS, normals are calculated and \c true is
+           *  Primitive has no normals, and the Primitive is of type PrimitiveType::TRIANGLE_STRIP, PrimitiveType::TRIANGLE_FAN,
+           *  PrimitiveType::TRIANGLES, PrimitiveType::QUAD_STRIP, or PrimitiveType::QUADS, normals are calculated and \c true is
            *  returned. Otherwise \c false is returned.
            *  \sa generateNormals */
           DP_SG_CORE_API virtual bool calculateNormals(bool overwrite);
@@ -407,10 +407,10 @@ namespace dp
            *  \param binormals Addresses the vertex attribute where to output the calculated binormals.
            *  \param overwrite A flag indicating whether to overwrite existing vertex data.
            *  \remarks This function gets called from the generateTangentSpace API. If \a overwrite is \c true or the
-           *  Primitive has no normals, and the Primitive is of type PRIMITIVE_TRIANGLE_STRIP, PRIMITIVE_TRIANGLE_FAN,
-           *  PRIMITIVE_TRIANGLES, PRIMITIVE_QUAD_STRIP, or PRIMITIVE_QUADS, tangents and binormals are calculated.
+           *  Primitive has no normals, and the Primitive is of type PrimitiveType::TRIANGLE_STRIP, PrimitiveType::TRIANGLE_FAN,
+           *  PrimitiveType::TRIANGLES, PrimitiveType::QUAD_STRIP, or PrimitiveType::QUADS, tangents and binormals are calculated.
            * \sa generateTangentSpace */
-          DP_SG_CORE_API virtual void calculateTangentSpace(unsigned int texcoords, unsigned int tangents, unsigned int binormals, bool overwrite);
+          DP_SG_CORE_API virtual void calculateTangentSpace(VertexAttributeSet::AttributeID texcoords, VertexAttributeSet::AttributeID tangents, VertexAttributeSet::AttributeID binormals, bool overwrite);
 
           /*! \brief Feed the data of this object into the provied HashGenerator.
            *  \param hg The HashGenerator to update with the data of this object.
@@ -431,15 +431,15 @@ namespace dp
                                      , std::vector<dp::math::Vec3f> & normals );
           void calculateNormalsTriStrip( Buffer::ConstIterator<dp::math::Vec3f>::Type & vertices
                                        , std::vector<dp::math::Vec3f> & normals );
-          void calculateTangentsQuad( VertexAttributeSetSharedPtr const& vas, unsigned int tc
+          void calculateTangentsQuad( VertexAttributeSetSharedPtr const& vas, VertexAttributeSet::AttributeID tc
                                     , std::vector<dp::math::Vec3f> & tangents );
-          void calculateTangentsQuadStrip( VertexAttributeSetSharedPtr const& vas, unsigned int tc
+          void calculateTangentsQuadStrip( VertexAttributeSetSharedPtr const& vas, VertexAttributeSet::AttributeID tc
                                          , std::vector<dp::math::Vec3f> & tangents );
-          void calculateTangentsTriangle( VertexAttributeSetSharedPtr const& vas, unsigned int tc
+          void calculateTangentsTriangle( VertexAttributeSetSharedPtr const& vas, VertexAttributeSet::AttributeID tc
                                         , std::vector<dp::math::Vec3f> & tangents );
-          void calculateTangentsTriFan( VertexAttributeSetSharedPtr const& vas, unsigned int tc
+          void calculateTangentsTriFan( VertexAttributeSetSharedPtr const& vas, VertexAttributeSet::AttributeID tc
                                       , std::vector<dp::math::Vec3f> & tangents );
-          void calculateTangentsTriStrip( VertexAttributeSetSharedPtr const& vas, unsigned int tc
+          void calculateTangentsTriStrip( VertexAttributeSetSharedPtr const& vas, VertexAttributeSet::AttributeID tc
                                         , std::vector<dp::math::Vec3f> & tangents );
 
           void clearCachedCounts() const;
@@ -519,37 +519,37 @@ namespace dp
       {
         switch( getPrimitiveType() )
         {
-          case PRIMITIVE_LINE_STRIP:
-          case PRIMITIVE_LINE_LOOP:
-          case PRIMITIVE_TRIANGLE_STRIP:
-          case PRIMITIVE_TRIANGLE_FAN:
-          case PRIMITIVE_QUAD_STRIP:
-          case PRIMITIVE_POLYGON:
-          case PRIMITIVE_TRIANGLE_STRIP_ADJACENCY:
-          case PRIMITIVE_LINE_STRIP_ADJACENCY:
+          case PrimitiveType::LINE_STRIP:
+          case PrimitiveType::LINE_LOOP:
+          case PrimitiveType::TRIANGLE_STRIP:
+          case PrimitiveType::TRIANGLE_FAN:
+          case PrimitiveType::QUAD_STRIP:
+          case PrimitiveType::POLYGON:
+          case PrimitiveType::TRIANGLE_STRIP_ADJACENCY:
+          case PrimitiveType::LINE_STRIP_ADJACENCY:
             return 0; // we can't tell
 
-          case PRIMITIVE_POINTS:
+          case PrimitiveType::POINTS:
             return 1;
 
-          case PRIMITIVE_LINES:
+          case PrimitiveType::LINES:
             return 2;
 
-          case PRIMITIVE_TRIANGLES:
+          case PrimitiveType::TRIANGLES:
             return 3;
 
-          case PRIMITIVE_QUADS:
-          case PRIMITIVE_LINES_ADJACENCY:
+          case PrimitiveType::QUADS:
+          case PrimitiveType::LINES_ADJACENCY:
             return 4;
 
-          case PRIMITIVE_TRIANGLES_ADJACENCY:
+          case PrimitiveType::TRIANGLES_ADJACENCY:
             return 6;
 
-          case PRIMITIVE_PATCHES:
+          case PrimitiveType::PATCHES:
             return( verticesPerPatch( m_patchesType ) );
 
           default:
-          case PRIMITIVE_UNINITIALIZED:
+          case PrimitiveType::UNINITIALIZED:
             return ~0; // we can't tell
         }
       }

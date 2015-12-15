@@ -606,15 +606,15 @@ namespace dp
                 if ( extension == ".mbsdf" )
                 {
                   sampler->setName( it->first.getName() );
-                  sampler->setMagFilterMode( TFM_MAG_NEAREST );
-                  sampler->setMinFilterMode( TFM_MIN_NEAREST );
-                  sampler->setWrapModes( TWM_CLAMP_TO_EDGE, TWM_CLAMP_TO_EDGE, TWM_CLAMP_TO_EDGE );
+                  sampler->setMagFilterMode( TextureMagFilterMode::NEAREST );
+                  sampler->setMinFilterMode( TextureMinFilterMode::NEAREST );
+                  sampler->setWrapModes( TextureWrapMode::CLAMP_TO_EDGE, TextureWrapMode::CLAMP_TO_EDGE, TextureWrapMode::CLAMP_TO_EDGE );
                 }
                 else
                 {
                   sampler->setName( it->first.getName() );
-                  sampler->setMagFilterMode( TFM_MAG_LINEAR );
-                  sampler->setMinFilterMode( TFM_MIN_LINEAR_MIPMAP_LINEAR );
+                  sampler->setMagFilterMode( TextureMagFilterMode::LINEAR );
+                  sampler->setMinFilterMode( TextureMinFilterMode::LINEAR_MIPMAP_LINEAR );
                 }
                 setParameter( it, sampler );
               }
@@ -634,16 +634,16 @@ namespace dp
               TextureHostSharedPtr textureHost = TextureHost::create();
               DP_ASSERT( textureHost );
               textureHost->setCreationFlags( TextureHost::F_PRESERVE_IMAGE_DATA_AFTER_UPLOAD );
-              unsigned int index = textureHost->addImage( 2, 2, 1, Image::IMG_RGBA, Image::IMG_UNSIGNED_BYTE );
+              unsigned int index = textureHost->addImage( 2, 2, 1, Image::PixelFormat::RGBA, Image::PixelDataType::UNSIGNED_BYTE );
               DP_ASSERT( index != -1 );
               textureHost->setImageData( index, (const void *) &texel[0] );
-              textureHost->setTextureTarget( TT_TEXTURE_2D );
+              textureHost->setTextureTarget( TextureTarget::TEXTURE_2D );
 
               SamplerSharedPtr sampler = Sampler::create( textureHost );
               DP_ASSERT( sampler );
               sampler->setName( "default_sampler2D" );
-              sampler->setMagFilterMode( TFM_MAG_NEAREST );
-              sampler->setMinFilterMode( TFM_MIN_NEAREST );
+              sampler->setMagFilterMode( TextureMagFilterMode::NEAREST );
+              sampler->setMinFilterMode( TextureMinFilterMode::NEAREST );
               setParameter( it, sampler );
             }
           }
