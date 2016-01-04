@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2012
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -109,12 +109,12 @@ namespace dp
 
           void TransparencyManager::addFragmentParameters( std::vector<dp::rix::core::ProgramParameter> & parameters )
           {
-            parameters.push_back( dp::rix::core::ProgramParameter( "sys_TransparentPass", dp::rix::core::CPT_BOOL ) );
+            parameters.push_back( dp::rix::core::ProgramParameter( "sys_TransparentPass", dp::rix::core::ContainerParameterType::BOOL ) );
           }
 
           void TransparencyManager::addFragmentParameterSpecs( std::vector<dp::fx::ParameterSpec> & specs )
           {
-            specs.push_back( dp::fx::ParameterSpec( "sys_TransparentPass", dp::fx::PT_BOOL, dp::util::SEMANTIC_VALUE ) );
+            specs.push_back( dp::fx::ParameterSpec( "sys_TransparentPass", dp::fx::PT_BOOL, dp::util::Semantic::VALUE ) );
           }
 
           void TransparencyManager::updateFragmentParameters()

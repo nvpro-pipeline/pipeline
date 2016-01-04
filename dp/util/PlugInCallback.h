@@ -51,39 +51,39 @@ namespace dp
     {
       public:
         //! Enumeration of PlugInCallback errors.
-        typedef enum
+        enum class Error
         {
-          PICE_UNEXPECTED_EOF,
-          PICE_UNEXPECTED_TOKEN,
-          PICE_UNKNOWN_TOKEN,
-          PICE_FILE_ACCESS_FAILED,
-          PICE_FILE_MAPPING_FAILED,
-          PICE_INCOMPATIBLE_FILE,
-          PICE_INVALID_FILE,
-          PICE_UNSPECIFIED_ERROR
-        } PIC_ERROR;
+          UNEXPECTED_EOF,
+          UNEXPECTED_TOKEN,
+          UNKNOWN_TOKEN,
+          FILE_ACCESS_FAILED,
+          FILE_MAPPING_FAILED,
+          INCOMPATIBLE_FILE,
+          INVALID_FILE,
+          UNSPECIFIED_ERROR
+        };
 
         //! Enumeration of PlugInCallback warnings.
-        typedef enum
+        enum class Warning
         {
-          PICW_FILE_EMPTY,
-          PICW_FILE_NOT_FOUND,
-          PICW_FILES_NOT_FOUND,
-          PICW_EMPTY_TOKEN,
-          PICW_INCOMPATIBLE_VALUES,
-          PICW_INVALID_VALUE,
-          PICW_UNDEFINED_TOKEN,
-          PICW_UNSUPPORTED_TOKEN,
-          PICW_DEGENERATE_GEOMETRY,
-          PICW_UNSPECIFIED_WARNING
-        } PIC_WARNING;
+          FILE_EMPTY,
+          FILE_NOT_FOUND,
+          FILES_NOT_FOUND,
+          EMPTY_TOKEN,
+          INCOMPATIBLE_VALUES,
+          INVALID_VALUE,
+          UNDEFINED_TOKEN,
+          UNSUPPORTED_TOKEN,
+          DEGENERATE_GEOMETRY,
+          UNSPECIFIED_WARNING
+        };
 
         //! Enumeration of value types used in warnings/errors.
-        typedef enum
+        enum class TypeID
         {
-          PICT_INT,
-          PICT_FLOAT
-        } PIC_TYPE_ID;
+          INT,
+          FLOAT
+        };
 
         //! Information structure used for warning PICW_EMPTY_TOKEN
         typedef struct
@@ -96,22 +96,22 @@ namespace dp
         //! Information structure used for warning PICW_INCOMPATIBLE_VALUES
         typedef struct
         {
-          unsigned int        position;     //!<  position in file, where the warning was raised
-          std::string        context;      //!<  context of the warning
-          PIC_TYPE_ID   valueType;    //!<  type of the incompatible values
-          std::string        value0Name;   //!<  name of the first value
+          unsigned int  position;     //!<  position in file, where the warning was raised
+          std::string   context;      //!<  context of the warning
+          TypeID        valueType;    //!<  type of the incompatible values
+          std::string   value0Name;   //!<  name of the first value
           const void *  value0;       //!<  pointer to the first value
-          std::string        value1Name;   //!<  name of the second value
+          std::string   value1Name;   //!<  name of the second value
           const void *  value1;       //!<  pointer to the second value
         } IncompatibleValueInfo;
 
         //! Information structure used for warning PICW_INVALID_VALUE
         typedef struct
         {
-          unsigned int        position;     //!<  position in file, where the warning was raised
-          std::string        context;      //!<  context of the warning
-          PIC_TYPE_ID   valueType;    //!<  type of the invalid value
-          std::string        valueName;    //!<  name of the value
+          unsigned int  position;     //!<  position in file, where the warning was raised
+          std::string   context;      //!<  context of the warning
+          TypeID        valueType;    //!<  type of the invalid value
+          std::string   valueName;    //!<  name of the value
           const void *  value;        //!<  pointer to the value
         } InvalidValueInfo;
 
@@ -198,7 +198,7 @@ namespace dp
           * If throwExceptionOnError is set (default), onError throws an PIC_ERROR exception.
           * The specific error callbacks fall back to this function.
           * This callback can be overloaded to support new error conditions.  */
-        virtual void onError( PIC_ERROR eid       //!<  error ID
+        virtual void onError( Error eid           //!<  error ID
                             , const void *info    //!<  pointer to information structure corresponding to \a eid
                             ) const;
 
@@ -209,7 +209,7 @@ namespace dp
           * without danger.
           * The specific warning callbacks fall back to this function.
           * This callback can be overloaded to support new warning conditions.  */
-        virtual bool onWarning( PIC_WARNING wid   //!<  waringing ID
+        virtual bool onWarning( Warning wid       //!<  waringing ID
                               , const void *info  //!<  pointer to information structure corresponding to \a wid
                               ) const;
 
@@ -429,7 +429,7 @@ namespace dp
       m_throwExceptionOnError = set;
     }
 
-    inline  void  PlugInCallback::onError( PIC_ERROR eid, const void *info ) const
+    inline  void  PlugInCallback::onError( Error eid, const void *info ) const
     {
       if ( m_throwExceptionOnError )
       {
@@ -437,7 +437,7 @@ namespace dp
       }
     }
 
-    inline  bool  PlugInCallback::onWarning( PIC_WARNING wid, const void *info ) const
+    inline  bool  PlugInCallback::onWarning( Warning wid, const void *info ) const
     {
       return( true );
     }
@@ -448,7 +448,7 @@ namespace dp
     {
       if ( (severity == "ERROR") && m_throwExceptionOnError )
       {
-        throw( PICE_UNSPECIFIED_ERROR );
+        throw( Error::UNSPECIFIED_ERROR );
       }
       else
       {
@@ -458,7 +458,7 @@ namespace dp
 
     inline  void  PlugInCallback::onUnexpectedEndOfFile( unsigned int position ) const
     {
-      onError( PICE_UNEXPECTED_EOF, &position );
+      onError( Error::UNEXPECTED_EOF, &position );
     }
 
     inline  void  PlugInCallback::onUnexpectedToken( unsigned int position, const std::string &expected, const std::string &encountered ) const
@@ -467,7 +467,7 @@ namespace dp
       uti.position    = position;
       uti.expected    = expected;
       uti.encountered = encountered;
-      onError( PICE_UNEXPECTED_TOKEN, &uti );
+      onError( Error::UNEXPECTED_TOKEN, &uti );
     }
 
     inline  void  PlugInCallback::onUnknownToken( unsigned int position, const std::string &context, const std::string &token ) const
@@ -476,7 +476,7 @@ namespace dp
       uti.position  = position;
       uti.context   = context;
       uti.token     = token;
-      onError( PICE_UNKNOWN_TOKEN, &uti );
+      onError( Error::UNKNOWN_TOKEN, &uti );
     }
 
 
@@ -486,7 +486,7 @@ namespace dp
       uti.position  = position;
       uti.context   = context;
       uti.token     = token;
-      return( onWarning( PICW_EMPTY_TOKEN, &uti ) );
+      return( onWarning( Warning::EMPTY_TOKEN, &uti ) );
     }
 
     inline  bool  PlugInCallback::onDegenerateGeometry( unsigned int position, const std::string &name ) const
@@ -494,22 +494,22 @@ namespace dp
       DegenerateGeometryInfo  dg;
       dg.position  = position;
       dg.name      = name;
-      return( onWarning( PICW_DEGENERATE_GEOMETRY, &dg ) );
+      return( onWarning( Warning::DEGENERATE_GEOMETRY, &dg ) );
     }
 
     inline  bool  PlugInCallback::onFileEmpty( const std::string &file ) const
     {
-      return( onWarning( PICW_FILE_EMPTY, &file ) );
+      return( onWarning( Warning::FILE_EMPTY, &file ) );
     }
 
     inline  bool  PlugInCallback::onFileNotFound( const std::string &file ) const
     {
-      return( onWarning( PICW_FILE_NOT_FOUND, &file ) );
+      return( onWarning( Warning::FILE_NOT_FOUND, &file ) );
     }
 
     inline  bool  PlugInCallback::onFilesNotFound( const std::vector<std::string> &files ) const
     {
-      return( onWarning( PICW_FILES_NOT_FOUND, &files ) );
+      return( onWarning( Warning::FILES_NOT_FOUND, &files ) );
     }
 
     inline  bool  PlugInCallback::onUndefinedToken( unsigned int position, const std::string &context, const std::string &token ) const
@@ -518,7 +518,7 @@ namespace dp
       uti.position  = position;
       uti.context   = context;
       uti.token     = token;
-      return( onWarning( PICW_UNDEFINED_TOKEN, &uti ) );
+      return( onWarning( Warning::UNDEFINED_TOKEN, &uti ) );
     }
 
     inline  bool  PlugInCallback::onIncompatibleValues( unsigned int position, const std::string &context, const std::string &value0Name,
@@ -527,12 +527,12 @@ namespace dp
       IncompatibleValueInfo ivi;
       ivi.position    = position;
       ivi.context     = context;
-      ivi.valueType   = PICT_INT;
+      ivi.valueType   = TypeID::INT;
       ivi.value0Name  = value0Name;
       ivi.value0      = &value0;
       ivi.value1Name  = value1Name;
       ivi.value1      = &value1;
-      return( onWarning( PICW_INCOMPATIBLE_VALUES, &ivi ) );
+      return( onWarning( Warning::INCOMPATIBLE_VALUES, &ivi ) );
     }
 
     inline  bool  PlugInCallback::onIncompatibleValues( unsigned int position, const std::string &context, const std::string &value0Name,
@@ -541,12 +541,12 @@ namespace dp
       IncompatibleValueInfo ivi;
       ivi.position    = position;
       ivi.context     = context;
-      ivi.valueType   = PICT_FLOAT;
+      ivi.valueType   = TypeID::FLOAT;
       ivi.value0Name  = value0Name;
       ivi.value0      = &value0;
       ivi.value1Name  = value1Name;
       ivi.value1      = &value1;
-      return( onWarning( PICW_INCOMPATIBLE_VALUES, &ivi ) );
+      return( onWarning( Warning::INCOMPATIBLE_VALUES, &ivi ) );
     }
 
 
@@ -557,9 +557,9 @@ namespace dp
       ivi.position  = position;
       ivi.context   = context;
       ivi.valueName = valueName;
-      ivi.valueType = PICT_INT;
+      ivi.valueType = TypeID::INT;
       ivi.value     = &value;
-      return( onWarning( PICW_INVALID_VALUE, &ivi ) );
+      return( onWarning( Warning::INVALID_VALUE, &ivi ) );
     }
 
     inline  bool  PlugInCallback::onInvalidValue( unsigned int position, const std::string &context,
@@ -569,9 +569,9 @@ namespace dp
       ivi.position  = position;
       ivi.context   = context;
       ivi.valueName = valueName;
-      ivi.valueType = PICT_FLOAT;
+      ivi.valueType = TypeID::FLOAT;
       ivi.value     = &value;
-      return( onWarning( PICW_INVALID_VALUE, &ivi ) );
+      return( onWarning( Warning::INVALID_VALUE, &ivi ) );
     }
 
     inline  bool  PlugInCallback::onUnsupportedToken( unsigned int position, const std::string &context, const std::string &token ) const
@@ -580,7 +580,7 @@ namespace dp
       uti.position  = position;
       uti.context   = context;
       uti.token     = token;
-      return( onWarning( PICW_UNSUPPORTED_TOKEN, &uti ) );
+      return( onWarning( Warning::UNSUPPORTED_TOKEN, &uti ) );
     }
 
     inline  void  PlugInCallback::onFileAccessFailed( const std::string& file, unsigned int systemSpecificErrorCode ) const
@@ -588,14 +588,14 @@ namespace dp
       FileAccessFailedInfo fafi;
       fafi.file = file;
       fafi.systemSpecificErrorCode = systemSpecificErrorCode;
-      onError(PICE_FILE_ACCESS_FAILED, &fafi);
+      onError(Error::FILE_ACCESS_FAILED, &fafi);
     }
 
     inline  void  PlugInCallback::onFileMappingFailed( unsigned int systemSpecificErrorCode ) const
     {
       FileMappingFailedInfo fmfi;
       fmfi.systemSpecificErrorCode = systemSpecificErrorCode;
-      onError(PICE_FILE_MAPPING_FAILED, &fmfi);
+      onError(Error::FILE_MAPPING_FAILED, &fmfi);
     }
 
     inline  void  PlugInCallback::onIncompatibleFile( const std::string& file, const std::string& context
@@ -606,7 +606,7 @@ namespace dp
       ifi.context = context;
       ifi.expectedVersion = expectedVersion;
       ifi.detectedVersion = detectedVersion;
-      onError(PICE_INCOMPATIBLE_FILE, &ifi);
+      onError(Error::INCOMPATIBLE_FILE, &ifi);
     }
 
     inline  void  PlugInCallback::onInvalidFile( const std::string& file, const std::string& context ) const
@@ -614,7 +614,7 @@ namespace dp
       InvalidFileInfo ifi;
       ifi.file = file;
       ifi.context = context;
-      onError(PICE_INVALID_FILE, &ifi);
+      onError(Error::INVALID_FILE, &ifi);
     }
   } // namespace util
 } // namespace dp

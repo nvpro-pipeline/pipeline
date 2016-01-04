@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -74,278 +74,278 @@ namespace dp
       DEFINE_RIX_HANDLE(VertexData);
       DEFINE_RIX_HANDLE(VertexFormat);
 
-      enum BufferFormat
+      enum class BufferFormat
       {
-          BF_UNKNOWN
-        , BF_FLOAT // DAR FIXME Change these to BF_FLOAT_32
-        , BF_FLOAT2
-        , BF_FLOAT3
-        , BF_FLOAT4
-        , BF_INT_8
-        , BF_INT2_8
-        , BF_INT3_8
-        , BF_INT4_8
-        , BF_INT_16
-        , BF_INT2_16
-        , BF_INT3_16
-        , BF_INT4_16
-        , BF_INT_32
-        , BF_INT2_32
-        , BF_INT3_32
-        , BF_INT4_32
-        , BF_UINT_8
-        , BF_UINT2_8
-        , BF_UINT3_8
-        , BF_UINT4_8
-        , BF_UINT_16
-        , BF_UINT2_16
-        , BF_UINT3_16
-        , BF_UINT4_16
-        , BF_UINT_32
-        , BF_UINT2_32
-        , BF_UINT3_32
-        , BF_UINT4_32
-        , BF_NATIVE
-        , BF_NUM_BUFFERFORMATS
+          UNKNOWN
+        , FLOAT // DAR FIXME Change these to BF_FLOAT_32
+        , FLOAT2
+        , FLOAT3
+        , FLOAT4
+        , INT_8
+        , INT2_8
+        , INT3_8
+        , INT4_8
+        , INT_16
+        , INT2_16
+        , INT3_16
+        , INT4_16
+        , INT_32
+        , INT2_32
+        , INT3_32
+        , INT4_32
+        , UINT_8
+        , UINT2_8
+        , UINT3_8
+        , UINT4_8
+        , UINT_16
+        , UINT2_16
+        , UINT3_16
+        , UINT4_16
+        , UINT_32
+        , UINT2_32
+        , UINT3_32
+        , UINT4_32
+        , NATIVE
+        , NUM_BUFFERFORMATS
       };
 
-      enum InternalTextureFormat
+      enum class InternalTextureFormat
       {
-          ITF_R8
-        , ITF_R16
-        , ITF_RG8
-        , ITF_RG16
-        , ITF_RGB8
-        , ITF_RGB16
-        , ITF_RGBA8
-        , ITF_RGBA16
-        , ITF_R16F
-        , ITF_RG16F
-        , ITF_RGB16F
-        , ITF_RGBA16F
-        , ITF_R32F
-        , ITF_RG32F
-        , ITF_RGB32F
-        , ITF_RGBA32F
-        , ITF_R8I
-        , ITF_R8UI
-        , ITF_R16I
-        , ITF_R16UI
-        , ITF_R32I
-        , ITF_R32UI
-        , ITF_RG8I
-        , ITF_RG8UI
-        , ITF_RG16I
-        , ITF_RG16UI
-        , ITF_RG32I
-        , ITF_RG32UI
-        , ITF_RGB8I
-        , ITF_RGB8UI
-        , ITF_RGB16I
-        , ITF_RGB16UI
-        , ITF_RGB32I
-        , ITF_RGB32UI
-        , ITF_RGBA8I
-        , ITF_RGBA8UI
-        , ITF_RGBA16I
-        , ITF_RGBA16UI
-        , ITF_RGBA32I
-        , ITF_RGBA32UI
-        , ITF_COMPRESSED_R
-        , ITF_COMPRESSED_RG
-        , ITF_COMPRESSED_RGB
-        , ITF_COMPRESSED_RGBA
-        , ITF_COMPRESSED_SRGB
-        , ITF_COMPRESSED_SRGB_ALPHA
-        , ITF_ALPHA
-        , ITF_LUMINANCE
-        , ITF_LUMINANCE_ALPHA
-        , ITF_RGB
-        , ITF_RGBA
-        , ITF_NATIVE
-        , ITF_NUM_INTERNALTEXTUREFORMATS
+          R8
+        , R16
+        , RG8
+        , RG16
+        , RGB8
+        , RGB16
+        , RGBA8
+        , RGBA16
+        , R16F
+        , RG16F
+        , RGB16F
+        , RGBA16F
+        , R32F
+        , RG32F
+        , RGB32F
+        , RGBA32F
+        , R8I
+        , R8UI
+        , R16I
+        , R16UI
+        , R32I
+        , R32UI
+        , RG8I
+        , RG8UI
+        , RG16I
+        , RG16UI
+        , RG32I
+        , RG32UI
+        , RGB8I
+        , RGB8UI
+        , RGB16I
+        , RGB16UI
+        , RGB32I
+        , RGB32UI
+        , RGBA8I
+        , RGBA8UI
+        , RGBA16I
+        , RGBA16UI
+        , RGBA32I
+        , RGBA32UI
+        , COMPRESSED_R
+        , COMPRESSED_RG
+        , COMPRESSED_RGB
+        , COMPRESSED_RGBA
+        , COMPRESSED_SRGB
+        , COMPRESSED_SRGB_ALPHA
+        , ALPHA
+        , LUMINANCE
+        , LUMINANCE_ALPHA
+        , RGB
+        , RGBA
+        , NATIVE
+        , NUM_INTERNALTEXTUREFORMATS
       };
 
       // for cube maps, either use a native data type
       // or pass in the faces via TextureDataPtr
       // with 6 layers: +x,-x,+y,-y,+z,-z
-      enum TextureType
+      enum class TextureType
       {
-          TT_1D
-        , TT_1D_ARRAY
-        , TT_2D
-        , TT_2D_RECTANGLE
-        , TT_2D_ARRAY
-        , TT_3D
-        , TT_BUFFER
-        , TT_CUBEMAP
-        , TT_CUBEMAP_ARRAY
-        , TT_NATIVE
-        , TT_NUM_TEXTURETYPES
+          _1D
+        , _1D_ARRAY
+        , _2D
+        , _2D_RECTANGLE
+        , _2D_ARRAY
+        , _3D
+        , BUFFER
+        , CUBEMAP
+        , CUBEMAP_ARRAY
+        , NATIVE
+        , NUM_TEXTURETYPES
       };
 
-      enum TextureDataType
+      enum class TextureDataType
       {
-          TDT_POINTER
-        , TDT_BUFFER
-        , TDT_NATIVE
-        , TDT_NUM_TEXTUREDATATYPES
+          POINTER
+        , BUFFER
+        , NATIVE
+        , NUM_TEXTUREDATATYPES
       };
 
-      enum GeometryInstanceDescriptionType
+      enum class GeometryInstanceDescriptionType
       {
-          GIDT_COMMON
-        , GIDT_NATIVE
-        , GIDT_NUM_GEOMETRYINSTANCEDESCRIPTIONTYPES
+          COMMON
+        , NATIVE
+        , NUM_GEOMETRYINSTANCEDESCRIPTIONTYPES
       };
 
-      enum ContainerParameterType
+      enum class ContainerParameterType
       {
-          CPT_FLOAT
-        , CPT_FLOAT2
-        , CPT_FLOAT3
-        , CPT_FLOAT4
-        , CPT_INT_8
-        , CPT_INT2_8
-        , CPT_INT3_8
-        , CPT_INT4_8
-        , CPT_INT_16
-        , CPT_INT2_16
-        , CPT_INT3_16
-        , CPT_INT4_16
-        , CPT_INT_32
-        , CPT_INT2_32
-        , CPT_INT3_32
-        , CPT_INT4_32
-        , CPT_INT_64
-        , CPT_INT2_64
-        , CPT_INT3_64
-        , CPT_INT4_64
-        , CPT_UINT_8
-        , CPT_UINT2_8
-        , CPT_UINT3_8
-        , CPT_UINT4_8
-        , CPT_UINT_16
-        , CPT_UINT2_16
-        , CPT_UINT3_16
-        , CPT_UINT4_16
-        , CPT_UINT_32
-        , CPT_UINT2_32
-        , CPT_UINT3_32
-        , CPT_UINT4_32
-        , CPT_UINT_64
-        , CPT_UINT2_64
-        , CPT_UINT3_64
-        , CPT_UINT4_64
-        , CPT_BOOL
-        , CPT_BOOL2
-        , CPT_BOOL3
-        , CPT_BOOL4
-        , CPT_MAT2X2
-        , CPT_MAT2X3
-        , CPT_MAT2X4
-        , CPT_MAT3X2
-        , CPT_MAT3X3
-        , CPT_MAT3X4
-        , CPT_MAT4X2
-        , CPT_MAT4X3
-        , CPT_MAT4X4
-        , CPT_SAMPLER
-        , CPT_IMAGE
-        , CPT_BUFFER_ADDRESS
-        , CPT_BUFFER
-        , CPT_CALLBACK
-        , CPT_NATIVE
-        , CPT_NUM_PARAMETERTYPES
+          FLOAT
+        , FLOAT2
+        , FLOAT3
+        , FLOAT4
+        , INT_8
+        , INT2_8
+        , INT3_8
+        , INT4_8
+        , INT_16
+        , INT2_16
+        , INT3_16
+        , INT4_16
+        , INT_32
+        , INT2_32
+        , INT3_32
+        , INT4_32
+        , INT_64
+        , INT2_64
+        , INT3_64
+        , INT4_64
+        , UINT_8
+        , UINT2_8
+        , UINT3_8
+        , UINT4_8
+        , UINT_16
+        , UINT2_16
+        , UINT3_16
+        , UINT4_16
+        , UINT_32
+        , UINT2_32
+        , UINT3_32
+        , UINT4_32
+        , UINT_64
+        , UINT2_64
+        , UINT3_64
+        , UINT4_64
+        , BOOL
+        , BOOL2
+        , BOOL3
+        , BOOL4
+        , MAT2X2
+        , MAT2X3
+        , MAT2X4
+        , MAT3X2
+        , MAT3X3
+        , MAT3X4
+        , MAT4X2
+        , MAT4X3
+        , MAT4X4
+        , SAMPLER
+        , IMAGE
+        , BUFFER_ADDRESS
+        , BUFFER
+        , CALLBACK_
+        , NATIVE
+        , NUM_PARAMETERTYPES
       };
 
-      enum ContainerDataType
+      enum class ContainerDataType
       {
-          CDT_RAW
-        , CDT_BUFFER
-        , CDT_SAMPLER
-        , CDT_IMAGE
-        , CDT_NATIVE
-        , CDT_NUM_CONTAINERDATATYPES
+          RAW
+        , BUFFER
+        , SAMPLER
+        , IMAGE
+        , NATIVE
+        , NUM_CONTAINERDATATYPES
       };
 
-      enum BufferReferenceType
+      enum class BufferReferenceType
       {
-          BRT_BUFFER
-        , BRT_SAMPLER
-        , BRT_NATIVE
-        , BRT_NUM_BUFFERREFERENCETYPES
+          BUFFER
+        , SAMPLER
+        , NATIVE
+        , NUM_BUFFERREFERENCETYPES
       };
 
-      enum ProgramParameterDescriptorType
+      enum class ProgramParameterDescriptorType
       {
-          PPDT_COMMON
-        , PPDT_NATIVE
-        , PPDT_NUM_CONTAINERDATATYPES
+          COMMON
+        , NATIVE
+        , NUM_CONTAINERDATATYPES
       };
 
-      enum ProgramShaderType
+      enum class ProgramShaderType
       {
-          PST_CODE
-        , PST_NATIVE
-        , PST_NUM_PROGRAMSHADERTYPES
+          CODE
+        , NATIVE
+        , NUM_PROGRAMSHADERTYPES
       };
 
-      enum ShaderType
+      enum class ShaderType
       {
-        ST_VERTEX_SHADER,
-        ST_TESS_CONTROL_SHADER,
-        ST_TESS_EVALUATION_SHADER,
-        ST_GEOMETRY_SHADER,
-        ST_FRAGMENT_SHADER,
-        ST_NUM_SHADERTYPES
+        VERTEX_SHADER,
+        TESS_CONTROL_SHADER,
+        TESS_EVALUATION_SHADER,
+        GEOMETRY_SHADER,
+        FRAGMENT_SHADER,
+        NUM_SHADERTYPES
       };
 
-      enum SamplerStateCompareMode
+      enum class SamplerStateCompareMode
       {
-          SSCM_NONE
-        , SSCM_R_TO_TEXTURE
+          NONE
+        , R_TO_TEXTURE
       };
 
-      enum SamplerStateDataType
+      enum class SamplerStateDataType
       {
-          SSDT_COMMON
-        , SSDT_NATIVE
-        , SSDT_NUM_SAMPLERSTATEDATATYPES
+          COMMON
+        , NATIVE
+        , NUM_SAMPLERSTATEDATATYPES
       };
 
-      enum SamplerStateFilterMode
+      enum class SamplerStateFilterMode
       {
-          SSFM_NEAREST
-        , SSFM_LINEAR
-        , SSFM_NEAREST_MIPMAP_NEAREST
-        , SSFM_LINEAR_MIPMAP_NEAREST
-        , SSFM_NEAREST_MIPMAP_LINEAR
-        , SSFM_LINEAR_MIPMAP_LINEAR
-        , SSFM_NUM_SAMPLERSTATEFILTERMODES
+          NEAREST
+        , LINEAR
+        , NEAREST_MIPMAP_NEAREST
+        , LINEAR_MIPMAP_NEAREST
+        , NEAREST_MIPMAP_LINEAR
+        , LINEAR_MIPMAP_LINEAR
+        , NUM_SAMPLERSTATEFILTERMODES
       };
 
-      enum SamplerStateWrapMode
+      enum class SamplerStateWrapMode
       {
-          SSWM_CLAMP
-        , SSWM_CLAMP_TO_BORDER
-        , SSWM_CLAMP_TO_EDGE
-        , SSWM_MIRRORED_REPEAT
-        , SSWM_REPEAT
+          CLAMP
+        , CLAMP_TO_BORDER
+        , CLAMP_TO_EDGE
+        , MIRRORED_REPEAT
+        , REPEAT
       };
 
-      enum AccessType
+      enum class AccessType
       {
-          AT_NONE
-        , AT_READ_ONLY
-        , AT_WRITE_ONLY
-        , AT_READ_WRITE
+          NONE
+        , READ_ONLY
+        , WRITE_ONLY
+        , READ_WRITE
       };
 
-      enum BufferDescriptionType
+      enum class BufferDescriptionType
       {
-          BDT_COMMON
-        , BDT_NATIVE
+          COMMON
+        , NATIVE
       };
 
       struct SamplerStateData
@@ -364,13 +364,13 @@ namespace dp
 
       struct SamplerStateDataCommon : public SamplerStateData
       {
-        SamplerStateDataCommon( SamplerStateFilterMode minFilterMode = SSFM_NEAREST
-                              , SamplerStateFilterMode magFilterMode = SSFM_NEAREST
-                              , SamplerStateWrapMode wrapSMode = SSWM_CLAMP_TO_EDGE
-                              , SamplerStateWrapMode wrapTMode = SSWM_CLAMP_TO_EDGE
-                              , SamplerStateWrapMode wrapRMode = SSWM_CLAMP_TO_EDGE
-                              , SamplerStateCompareMode compareMode = SSCM_NONE)
-          : SamplerStateData( SSDT_COMMON )
+        SamplerStateDataCommon( SamplerStateFilterMode minFilterMode = SamplerStateFilterMode::NEAREST
+                              , SamplerStateFilterMode magFilterMode = SamplerStateFilterMode::NEAREST
+                              , SamplerStateWrapMode wrapSMode = SamplerStateWrapMode::CLAMP_TO_EDGE
+                              , SamplerStateWrapMode wrapTMode = SamplerStateWrapMode::CLAMP_TO_EDGE
+                              , SamplerStateWrapMode wrapRMode = SamplerStateWrapMode::CLAMP_TO_EDGE
+                              , SamplerStateCompareMode compareMode = SamplerStateCompareMode::NONE)
+          : SamplerStateData( SamplerStateDataType::COMMON )
           , m_minFilterMode( minFilterMode )
           , m_magFilterMode( magFilterMode )
           , m_wrapSMode( wrapSMode )
@@ -389,7 +389,7 @@ namespace dp
 
       struct BufferDescription
       {
-        RIX_CORE_API BufferDescription( BufferDescriptionType type = BDT_COMMON );
+        RIX_CORE_API BufferDescription( BufferDescriptionType type = BufferDescriptionType::COMMON );
         RIX_CORE_API virtual ~BufferDescription();
 
         BufferDescriptionType m_type;
@@ -425,12 +425,12 @@ namespace dp
         TextureDataType m_type;
       };
 
-      /** \brief Texture Data struct to pass references to previously constructed Buffers. Sets m_type to TDT_BUFFER.
-          \remarks This struct can only be used in conjunction with TT_BUFFER texture types.
+      /** \brief Texture Data struct to pass references to previously constructed Buffers. Sets m_type to TextureDataType::BUFFER.
+          \remarks This struct can only be used in conjunction with BUFFER texture types.
        **/
       struct TextureDataBuffer : public TextureData
       {
-        /** \brief Provide a buffer as source for a TT_BUFFER texture
+        /** \brief Provide a buffer as source for a BUFFER texture
             \param buffer The handle of the buffer
          **/
         RIX_CORE_API TextureDataBuffer( BufferSharedHandle const & buffer );
@@ -438,7 +438,7 @@ namespace dp
         BufferSharedHandle m_buffer;
       };
 
-      /** \brief Texture Data struct to pass raw data pointers into the Renderer API. Sets m_type to TDT_POINTER.
+      /** \brief Texture Data struct to pass raw data pointers into the Renderer API. Sets m_type to TextureDataType::POINTER.
        **/
       struct TextureDataPtr : public TextureData
       {
@@ -478,7 +478,7 @@ namespace dp
 
       struct GeometryInstanceDescription
       {
-        RIX_CORE_API GeometryInstanceDescription( GeometryInstanceDescriptionType type = GIDT_COMMON );
+        RIX_CORE_API GeometryInstanceDescription( GeometryInstanceDescriptionType type = GeometryInstanceDescriptionType::COMMON );
         RIX_CORE_API virtual ~GeometryInstanceDescription();
 
         GeometryInstanceDescriptionType m_type;
@@ -526,7 +526,7 @@ namespace dp
       struct ProgramParameterDescriptorCommon : public ProgramParameterDescriptor
       {
         ProgramParameterDescriptorCommon( ProgramParameter* parameters, size_t numParameters )
-          : ProgramParameterDescriptor( PPDT_COMMON )
+          : ProgramParameterDescriptor( ProgramParameterDescriptorType::COMMON )
           , m_parameters( parameters )
           , m_numParameters( numParameters )
         {
@@ -598,7 +598,7 @@ namespace dp
       struct ContainerDataRaw : public ContainerData
       {
         ContainerDataRaw( size_t offset, const void *data, size_t size )
-          : ContainerData( CDT_RAW )
+          : ContainerData( ContainerDataType::RAW )
           , m_offset( offset )
           , m_data( data )
           , m_size( size )
@@ -613,7 +613,7 @@ namespace dp
       struct ContainerDataBuffer : public ContainerData
       {
         ContainerDataBuffer( BufferSharedHandle const & bufferHandle, size_t offset = 0, size_t length = ~0)
-          : ContainerData( CDT_BUFFER )
+          : ContainerData( ContainerDataType::BUFFER )
           , m_bufferHandle( bufferHandle )
           , m_offset( offset )
           , m_length( length )
@@ -628,7 +628,7 @@ namespace dp
       struct ContainerDataSampler : public ContainerData
       {
         ContainerDataSampler( SamplerSharedHandle const & sampler )
-          : ContainerData( CDT_SAMPLER )
+          : ContainerData( ContainerDataType::SAMPLER )
           , m_samplerHandle( sampler )
         {}
 
@@ -638,7 +638,7 @@ namespace dp
       struct ContainerDataImage : public ContainerData
       {
         ContainerDataImage( TextureSharedHandle const & textureHandle, int level, bool layered, int layer, AccessType access )
-          : ContainerData( CDT_IMAGE )
+          : ContainerData( ContainerDataType::IMAGE )
           , m_textureHandle( textureHandle )
           , m_level( level )
           , m_layered( layered )
@@ -675,7 +675,7 @@ namespace dp
       struct BufferReferencesSampler : public BufferReferences
       {
         BufferReferencesSampler( size_t slots)
-          : BufferReferences( BRT_SAMPLER )
+          : BufferReferences( BufferReferenceType::SAMPLER )
           , m_numSlots( slots )
         {}
 
@@ -685,7 +685,7 @@ namespace dp
       struct BufferReferencesBuffer : public BufferReferences
       {
         BufferReferencesBuffer( size_t slots)
-          : BufferReferences( BRT_BUFFER )
+          : BufferReferences( BufferReferenceType::BUFFER )
           , m_numSlots( slots )
         {
         }

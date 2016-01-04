@@ -47,28 +47,28 @@ namespace dp
         {
           if ( m_lockMajorAxis )
           {
-            if ( !(m_lockAxis[AXIS_X] | m_lockAxis[AXIS_Y]) )
+            if ( !(m_lockAxis[static_cast<size_t>(Axis::X)] | m_lockAxis[static_cast<size_t>(Axis::Y)]) )
             {
-               m_activeLockAxis[AXIS_X] = abs(dx)>abs(dy);
-               m_activeLockAxis[AXIS_Y] = abs(dx)<abs(dy);
+               m_activeLockAxis[static_cast<size_t>(Axis::X)] = abs(dx)>abs(dy);
+               m_activeLockAxis[static_cast<size_t>(Axis::Y)] = abs(dx)<abs(dy);
             }
           }
           else
           {
-            m_activeLockAxis[AXIS_X] = m_lockAxis[AXIS_X];
-            m_activeLockAxis[AXIS_Y] = m_lockAxis[AXIS_Y];
+            m_activeLockAxis[static_cast<size_t>(Axis::X)] = m_lockAxis[static_cast<size_t>(Axis::X)];
+            m_activeLockAxis[static_cast<size_t>(Axis::Y)] = m_lockAxis[static_cast<size_t>(Axis::Y)];
           }
         }
 
         TrackballCameraManipulator::TrackballCameraManipulator()
         : Manipulator()
         , CursorState()
-        , m_mode(MODE_NONE)
+        , m_mode(Mode::NONE)
         , m_speed( 0.001f )
         , m_lockMajorAxis( false )
         {
-          m_lockAxis[AXIS_X]       = m_lockAxis[AXIS_Y]       = m_lockAxis[AXIS_Z]       = false;
-          m_activeLockAxis[AXIS_X] = m_activeLockAxis[AXIS_Y] = m_activeLockAxis[AXIS_Z] = false;
+          m_lockAxis[static_cast<size_t>(Axis::X)]       = m_lockAxis[static_cast<size_t>(Axis::Y)]       = m_lockAxis[static_cast<size_t>(Axis::Z)]       = false;
+          m_activeLockAxis[static_cast<size_t>(Axis::X)] = m_activeLockAxis[static_cast<size_t>(Axis::Y)] = m_activeLockAxis[static_cast<size_t>(Axis::Z)] = false;
         }
 
         TrackballCameraManipulator::~TrackballCameraManipulator()
@@ -88,39 +88,39 @@ namespace dp
           {
             switch ( m_mode )
             {
-            case MODE_ORBIT:
+            case Mode::ORBIT:
               result = orbit();
               break;
 
-            case MODE_PAN:
+            case Mode::PAN:
               result = pan();
               break;
 
-            case MODE_ROTATE_XY:
+            case Mode::ROTATE_XY:
               result = rotate();
               break;
 
-            case MODE_DOLLY:
+            case Mode::DOLLY:
               result = dolly();
               break;
 
-            case MODE_ROLL_Z:
+            case Mode::ROLL_Z:
               result = roll();
               break;
 
-            case MODE_ZOOM_FOV:
+            case Mode::ZOOM_FOV:
               result = zoom();
               break;
 
-            case MODE_ZOOM_DOLLY:
+            case Mode::ZOOM_DOLLY:
               result = dollyZoom();
               break;
 
-            case MODE_LOOKAT:
+            case Mode::LOOKAT:
               result = lookAt();
               break;
 
-            case MODE_LOOKAT_DEPTH:
+            case Mode::LOOKAT_DEPTH:
               result = lookAtDepthGL();
               break;
 
@@ -128,7 +128,7 @@ namespace dp
               break;
             }
 
-            if ( getWheelTicksDelta() && (m_mode != MODE_DOLLY) )
+            if ( getWheelTicksDelta() && (m_mode != Mode::DOLLY) )
             {
               result = dolly();
             }
@@ -156,14 +156,14 @@ namespace dp
                 float stepX = m_speed * m_viewState->getTargetDistance() * float(dx);
                 float stepY = m_speed * m_viewState->getTargetDistance() * float(dy);
 
-                if( m_activeLockAxis[AXIS_X] )
+                if( m_activeLockAxis[static_cast<size_t>(Axis::X)] )
                 {
                   if(dx!=0)
                     stepY =0;
                   else
                     return false;
                 }
-                else if( m_activeLockAxis[AXIS_Y] )
+                else if( m_activeLockAxis[static_cast<size_t>(Axis::Y)] )
                 {
                   if(dy!=0)
                     stepX =0;
@@ -311,7 +311,7 @@ namespace dp
                 axis = Vec3f(m[1], -m[0],0.0f);
                 axis.normalize();
 
-                if( m_activeLockAxis[AXIS_X] )
+                if( m_activeLockAxis[static_cast<size_t>(Axis::X)] )
                 {
                   if(dx>0)
                     axis = Vec3f(0.0f,-1.0f,0.0f);
@@ -320,7 +320,7 @@ namespace dp
                   else
                     return false;
                 }
-                else if( m_activeLockAxis[AXIS_Y] )
+                else if( m_activeLockAxis[static_cast<size_t>(Axis::Y)] )
                 {
                   if(dy>0)
                     axis = Vec3f(1.0f,0.0f,0.0f);
@@ -411,7 +411,7 @@ namespace dp
                 float angle;
                 m_trackball.apply(p0, p1, axis, angle);
 
-                if ( m_activeLockAxis[AXIS_X] )
+                if ( m_activeLockAxis[static_cast<size_t>(Axis::X)] )
                 {
                   if(dx>0)
                     axis = Vec3f(0.0f,1.0f,0.0f);
@@ -420,7 +420,7 @@ namespace dp
                   else
                     return false;
                 }
-                else if( m_activeLockAxis[AXIS_Y] )
+                else if( m_activeLockAxis[static_cast<size_t>(Axis::Y)] )
                 {
                   if(dy>0)
                     axis = Vec3f(-1.0f,0.0f,0.0f);
@@ -571,12 +571,12 @@ namespace dp
 
         void TrackballCameraManipulator::lockAxis( Axis axis )
         {
-          m_lockAxis[axis] = true;
+          m_lockAxis[static_cast<size_t>(axis)] = true;
         }
 
         void TrackballCameraManipulator::unlockAxis( Axis axis )
         {
-          m_lockAxis[axis] = false;
+          m_lockAxis[static_cast<size_t>(axis)] = false;
         }
 
         void TrackballCameraManipulator::lockMajorAxis( )

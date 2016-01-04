@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -37,7 +37,7 @@ namespace dp
       DEFINE_STATIC_PROPERTY( Texture, MipmapRequired );
 
       BEGIN_REFLECTION_INFO ( Texture )
-        INIT_STATIC_PROPERTY_RO_BOOL( Texture, MipmapRequired , bool , SEMANTIC_VALUE, value );
+        INIT_STATIC_PROPERTY_RO_BOOL( Texture, MipmapRequired , bool , Semantic::VALUE, value );
       END_REFLECTION_INFO
 
       Texture::Texture()

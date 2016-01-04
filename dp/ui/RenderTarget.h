@@ -47,10 +47,10 @@ namespace dp
     class RenderTarget
     {
     public:
-      enum StereoTarget { LEFT = 0,         //!< Left eye only. Mono is aliased to the left eye.
-                          RIGHT,            //!< Right eye only
-                          LEFT_AND_RIGHT    //!< Left and right eye at the same time, may not work on all targets
-                        };
+      enum class StereoTarget { LEFT = 0,         //!< Left eye only. Mono is aliased to the left eye.
+                                RIGHT,            //!< Right eye only
+                                LEFT_AND_RIGHT    //!< Left and right eye at the same time, may not work on all targets
+                              };
 
       DP_UI_API virtual ~RenderTarget();
 

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2015
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -49,14 +49,14 @@ namespace dp
 
         switch ( textureData.getTextureDataType() )
         {
-        case dp::rix::core::TDT_NATIVE:
+        case dp::rix::core::TextureDataType::NATIVE:
           {
             DP_ASSERT( dynamic_cast<const TextureDataGLTexture*>(&textureData) );
             const TextureDataGLTexture& textureDataGLTexture = static_cast<const TextureDataGLTexture&>(textureData);
             setTexture( textureDataGLTexture.m_texture );
           }
         break;
-        case dp::rix::core::TDT_BUFFER:
+        case dp::rix::core::TextureDataType::BUFFER:
           {
             DP_ASSERT( dynamic_cast<const TextureDataBuffer*>(&textureData) );
             const TextureDataBuffer& dataBuffer = static_cast<const TextureDataBuffer&>(textureData);
@@ -69,8 +69,8 @@ namespace dp
             m_textureBuffer = buffer;
           }
           break;
-        case dp::rix::core::TDT_POINTER:
-        case dp::rix::core::TDT_NUM_TEXTUREDATATYPES:
+        case dp::rix::core::TextureDataType::POINTER:
+        case dp::rix::core::TextureDataType::NUM_TEXTUREDATATYPES:
           DP_ASSERT( !"unsupported" );
           break;
         }

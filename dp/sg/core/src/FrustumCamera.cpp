@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2011
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -44,12 +44,12 @@ namespace dp
 
       BEGIN_REFLECTION_INFO( FrustumCamera )
         DERIVE_STATIC_PROPERTIES ( FrustumCamera, Camera );
-        INIT_STATIC_PROPERTY_RW( FrustumCamera, FarDistance,   float,    SEMANTIC_VALUE,     value,           value );
-        INIT_STATIC_PROPERTY_RW( FrustumCamera, NearDistance,  float,    SEMANTIC_VALUE,     value,           value );
-        INIT_STATIC_PROPERTY_RW( FrustumCamera, WindowOffset,  Vec2f,    SEMANTIC_VALUE,     const_reference, const_reference );
-        INIT_STATIC_PROPERTY_RW( FrustumCamera, WindowSize,    Vec2f,    SEMANTIC_VALUE,     const_reference, const_reference );
-        INIT_STATIC_PROPERTY_RW( FrustumCamera, WindowRegion,  Box2f,    SEMANTIC_VALUE,     const_reference, const_reference );
-        INIT_STATIC_PROPERTY_RW( FrustumCamera, AspectRatio,   float,    SEMANTIC_VALUE,     value,           value );
+        INIT_STATIC_PROPERTY_RW( FrustumCamera, FarDistance,   float,    Semantic::VALUE,     value,           value );
+        INIT_STATIC_PROPERTY_RW( FrustumCamera, NearDistance,  float,    Semantic::VALUE,     value,           value );
+        INIT_STATIC_PROPERTY_RW( FrustumCamera, WindowOffset,  Vec2f,    Semantic::VALUE,     const_reference, const_reference );
+        INIT_STATIC_PROPERTY_RW( FrustumCamera, WindowSize,    Vec2f,    Semantic::VALUE,     const_reference, const_reference );
+        INIT_STATIC_PROPERTY_RW( FrustumCamera, WindowRegion,  Box2f,    Semantic::VALUE,     const_reference, const_reference );
+        INIT_STATIC_PROPERTY_RW( FrustumCamera, AspectRatio,   float,    Semantic::VALUE,     value,           value );
       END_REFLECTION_INFO
 
       FrustumCamera::FrustumCamera(void)

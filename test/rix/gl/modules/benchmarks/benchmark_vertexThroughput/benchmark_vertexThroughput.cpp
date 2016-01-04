@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -169,7 +169,7 @@ void Benchmark_vertexThroughput::createScene()
     "}\n";
 
   std::vector<ProgramParameter> programParameterWorld2View;
-  programParameterWorld2View.push_back( ProgramParameter("world2view", CPT_MAT4X4) );
+  programParameterWorld2View.push_back( ProgramParameter("world2view", ContainerParameterType::MAT4X4) );
 
   m_containerDescriptorWorld2View = m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( &programParameterWorld2View[0], 1 ) );
 
@@ -197,7 +197,7 @@ void Benchmark_vertexThroughput::generateGeometry(const char * vertexShader,
                                                   const float transZ)
 {
   std::vector<ProgramParameter> vertexProgramParameters;
-  vertexProgramParameters.push_back( ProgramParameter("model2world", CPT_MAT4X4) );
+  vertexProgramParameters.push_back( ProgramParameter("model2world", ContainerParameterType::MAT4X4) );
 
   ContainerDescriptorSharedHandle vertexContainerDescriptor =
     m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( &vertexProgramParameters[0],
@@ -211,7 +211,7 @@ void Benchmark_vertexThroughput::generateGeometry(const char * vertexShader,
   containerDescriptors.push_back( vertexContainerDescriptor );
 
   const char* shaders[] = {vertexShader, fragmentShader};
-  ShaderType  shaderTypes[] = { ST_VERTEX_SHADER, ST_FRAGMENT_SHADER };
+  ShaderType  shaderTypes[] = { ShaderType::VERTEX_SHADER, ShaderType::FRAGMENT_SHADER };
   ProgramShaderCode programShaderCode( sizeof dp::util::array( shaders ), shaders, shaderTypes );
 
   ProgramDescription programDescription( programShaderCode, &containerDescriptors[0], dp::checked_cast<unsigned int>(containerDescriptors.size() ));

@@ -44,15 +44,15 @@ namespace dp
 
           class ShaderManager;
 
-          typedef enum
+          enum class TransparencyMode
           {
-            TM_UNKNOWN
-          , TM_NONE
-          , TM_ORDER_INDEPENDENT_ALL
-          , TM_ORDER_INDEPENDENT_CLOSEST_ARRAY
-          , TM_ORDER_INDEPENDENT_CLOSEST_LIST
-          , TM_SORTED_BLENDED
-          } TransparencyMode;
+            UNKNOWN
+          , NONE
+          , ORDER_INDEPENDENT_ALL
+          , ORDER_INDEPENDENT_CLOSEST_ARRAY
+          , ORDER_INDEPENDENT_CLOSEST_LIST
+          , SORTED_BLENDED
+          };
 
           class TransparencyManager
           {

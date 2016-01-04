@@ -1,4 +1,4 @@
-// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -116,12 +116,12 @@ void Feature_texture_buffer::createScene()
   GeometrySharedHandle geometry = dp::rix::util::generateGeometry(mesh, m_rix);
 
   std::vector<ProgramParameter> vertexProgramParameters;
-  vertexProgramParameters.push_back( ProgramParameter("model2world", CPT_MAT4X4) );
-  vertexProgramParameters.push_back( ProgramParameter("world2view", CPT_MAT4X4) );
+  vertexProgramParameters.push_back( ProgramParameter("model2world", ContainerParameterType::MAT4X4) );
+  vertexProgramParameters.push_back( ProgramParameter("world2view", ContainerParameterType::MAT4X4) );
 
   std::vector<ProgramParameter> fragmentProgramParameters;
-  fragmentProgramParameters.push_back( ProgramParameter("buf", CPT_SAMPLER) );
-  fragmentProgramParameters.push_back( ProgramParameter("color", CPT_FLOAT4) );
+  fragmentProgramParameters.push_back( ProgramParameter("buf", ContainerParameterType::SAMPLER) );
+  fragmentProgramParameters.push_back( ProgramParameter("color", ContainerParameterType::FLOAT4) );
 
   ContainerDescriptorSharedHandle vertexContainerDescriptor =
     m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( &vertexProgramParameters[0],
@@ -142,7 +142,7 @@ void Feature_texture_buffer::createScene()
   containerDescriptors.push_back( fragmentContainerDescriptor );
 
   const char* shaders[] = {vertexShader, fragmentShader};
-  ShaderType  shaderTypes[] = { ST_VERTEX_SHADER, ST_FRAGMENT_SHADER };
+  ShaderType  shaderTypes[] = { ShaderType::VERTEX_SHADER, ShaderType::FRAGMENT_SHADER };
   ProgramShaderCode programShaderCode( sizeof dp::util::array( shaders ), shaders, shaderTypes );
 
   ProgramDescription programDescription( programShaderCode, &containerDescriptors[0], dp::checked_cast<unsigned int>(containerDescriptors.size() ));
@@ -180,7 +180,7 @@ void Feature_texture_buffer::createScene()
     m_rix->containerSetData( vertexContainer, containerEntryModel2world, ContainerDataRaw( 0, trafo.getMatrix().getPtr(), 16*sizeof(float) ) );
 
     // prepare & set texture
-    TextureDescription textureDescription( TT_BUFFER, ITF_RGBA32F, dp::PixelFormat::RGBA, dp::DataType::FLOAT_32 );
+    TextureDescription textureDescription( TextureType::BUFFER, InternalTextureFormat::RGBA32F, dp::PixelFormat::RGBA, dp::DataType::FLOAT_32 );
 
     BufferSharedHandle textureBuffer = m_rix->bufferCreate();
     m_rix->bufferSetSize( textureBuffer, tex1DSize );

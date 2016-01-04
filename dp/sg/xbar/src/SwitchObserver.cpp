@@ -61,7 +61,7 @@ namespace dp
       {
         switch ( event.getType() )
         {
-        case dp::util::Event::PROPERTY:
+        case dp::util::Event::Type::PROPERTY:
           {
             dp::util::Reflection::PropertyEvent const& propertyEvent = static_cast<dp::util::Reflection::PropertyEvent const&>(event);
 

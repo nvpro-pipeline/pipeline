@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2005
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -118,12 +118,12 @@ PLYElement::~PLYElement()
 
 PLYProperty::PLYProperty()
 : name("")
-, countType(PLY_TOKEN_UNKNOWN)
-, dataType(PLY_TOKEN_UNKNOWN)
+, countType(PLYToken::UNKNOWN)
+, dataType(PLYToken::UNKNOWN)
 , pfnReadCount(NULL)
 , pfnReadData(NULL)
 , pfnReadAttribute(NULL)
-, index(PLY_USER_DEFINED_COMPONENT)
+, index(PLYAttributeComponent::USER_DEFINED)
 {
 }
 
@@ -386,30 +386,30 @@ SceneSharedPtr PLYLoader::load(const string& filename, dp::util::FileFinder cons
           m_pcCurrent = pcFileMapping.operator->();
           m_pcEOF     = m_pcCurrent + filesize;
 
-          PLY_PARSER_STATE state = PLY_STATE_PLY;
+          PLYParserState state = PLYParserState::PLY;
 
           // Parsing the header
-          while (success && m_pcCurrent < m_pcEOF && state != PLY_STATE_END)
+          while (success && m_pcCurrent < m_pcEOF && state != PLYParserState::END)
           {
             int advance = lookAheadToken();
             if (advance)
             {
-              PLY_TOKEN idToken;
+              PLYToken idToken;
               std::string token = m_token;
                 
               // Look up the parsed token and convert it into an enum for the state machine.
-              std::map<std::string, PLY_TOKEN>::const_iterator it = m_mapStringToToken.find(token);
+              std::map<std::string, PLYToken>::const_iterator it = m_mapStringToToken.find(token);
               if (it != m_mapStringToToken.end())
               {
                 idToken = it->second;
               }
               else
               {
-                idToken = PLY_TOKEN_UNKNOWN; // Element and property identifiers will map to this.
+                idToken = PLYToken::UNKNOWN; // Element and property identifiers will map to this.
               }
 
-              if (idToken == PLY_TOKEN_COMMENT || 
-                  idToken == PLY_TOKEN_OBJINFO) // Not supporting obj_info, handle it as comment.
+              if (idToken == PLYToken::COMMENT || 
+                  idToken == PLYToken::OBJINFO) // Not supporting obj_info, handle it as comment.
               {
                 m_pcCurrent += advance; // Skip what we tokenized in that line so far. 
                                         // Otherwise we would see the last linefeed again and skipLine would do nothing.
@@ -420,10 +420,10 @@ SceneSharedPtr PLYLoader::load(const string& filename, dp::util::FileFinder cons
                 // Small state machine which handles the header parsing.
                 switch (state)
                 {
-                  case PLY_STATE_PLY: // PLY file header identifier.
-                    if (idToken == PLY_TOKEN_PLY)
+                  case PLYParserState::PLY: // PLY file header identifier.
+                    if (idToken == PLYToken::PLY)
                     {
-                      state = PLY_STATE_FORMAT;
+                      state = PLYParserState::FORMAT;
                     }
                     else
                     {
@@ -432,10 +432,10 @@ SceneSharedPtr PLYLoader::load(const string& filename, dp::util::FileFinder cons
                     }
                     break;
 
-                  case PLY_STATE_FORMAT:
-                    if (idToken == PLY_TOKEN_FORMAT)
+                  case PLYParserState::FORMAT:
+                    if (idToken == PLYToken::FORMAT)
                     {
-                      state = PLY_STATE_FORMAT_TYPE;
+                      state = PLYParserState::FORMAT_TYPE;
                     }
                     else
                     {
@@ -444,14 +444,14 @@ SceneSharedPtr PLYLoader::load(const string& filename, dp::util::FileFinder cons
                     }
                     break;
 
-                  case PLY_STATE_FORMAT_TYPE:
-                    if (idToken == PLY_TOKEN_ASCII || 
-                        idToken == PLY_TOKEN_BINARYLITTLEENDIAN ||
-                        idToken == PLY_TOKEN_BINARYBIGENDIAN)
+                  case PLYParserState::FORMAT_TYPE:
+                    if (idToken == PLYToken::ASCII || 
+                        idToken == PLYToken::BINARYLITTLEENDIAN ||
+                        idToken == PLYToken::BINARYBIGENDIAN)
                     {
                       // Convert to [0,2] index (ascii/little/big) for table lookups.
-                      m_plyFormat = idToken - PLY_TOKEN_ASCII; 
-                      state = PLY_STATE_FORMAT_VERSION;
+                      m_plyFormat = static_cast<int>(idToken) - static_cast<int>(PLYToken::ASCII); 
+                      state = PLYParserState::FORMAT_VERSION;
                     }
                     else
                     {
@@ -460,20 +460,20 @@ SceneSharedPtr PLYLoader::load(const string& filename, dp::util::FileFinder cons
                     }
                     break;
 
-                  case PLY_STATE_FORMAT_VERSION:
-                    if (idToken == PLY_TOKEN_ONEPOINTZERO)
+                  case PLYParserState::FORMAT_VERSION:
+                    if (idToken == PLYToken::ONEPOINTZERO)
                     {
-                      state = PLY_STATE_ELEMENT;
+                      state = PLYParserState::ELEMENT;
                     }
                     else
                     {
-                      state = PLY_STATE_ELEMENT; // Try to continue.
+                      state = PLYParserState::ELEMENT; // Try to continue.
                       onUnsupportedToken("expected format version 1.0, ignored", token);
                     }
                     break;
 
-                  case PLY_STATE_ELEMENT:
-                    if (idToken == PLY_TOKEN_ELEMENT)
+                  case PLYParserState::ELEMENT:
+                    if (idToken == PLYToken::ELEMENT)
                     {
                       // Generate a new element which will be filled with data 
                       // until the next element or end_header is found.
@@ -483,7 +483,7 @@ SceneSharedPtr PLYLoader::load(const string& filename, dp::util::FileFinder cons
                         success = false;
                         onError("Out of memory while allocating PLYElement");
                       }
-                      state = PLY_STATE_ELEMENT_IDENTIFIER;
+                      state = PLYParserState::ELEMENT_IDENTIFIER;
                     }
                     else
                     {
@@ -492,18 +492,18 @@ SceneSharedPtr PLYLoader::load(const string& filename, dp::util::FileFinder cons
                     }
                     break;
 
-                  case PLY_STATE_ELEMENT_IDENTIFIER:
+                  case PLYParserState::ELEMENT_IDENTIFIER:
                     // It's just a name, figure out later what data we can handle.
                     curElement->name = m_token;
-                    state = PLY_STATE_ELEMENT_COUNT;
+                    state = PLYParserState::ELEMENT_COUNT;
                     break;
 
-                  case PLY_STATE_ELEMENT_COUNT:
+                  case PLYParserState::ELEMENT_COUNT:
                     curElement->count = atoi(m_token);
-                    state = PLY_STATE_PROPERTY;
+                    state = PLYParserState::PROPERTY;
                     break;
 
-                  case PLY_STATE_PROPERTY:
+                  case PLYParserState::PROPERTY:
                     // Whatever we find in this state, if we have seen a property before, 
                     // that one must be completely specified here (or something is wrong
                     // with the header, which we'll find out later) and attached to the 
@@ -514,7 +514,7 @@ SceneSharedPtr PLYLoader::load(const string& filename, dp::util::FileFinder cons
                       curProperty = NULL;
                     }
 
-                    if (idToken == PLY_TOKEN_PROPERTY)
+                    if (idToken == PLYToken::PROPERTY)
                     {
                       curProperty = new PLYProperty;
                       if (!curProperty)
@@ -522,7 +522,7 @@ SceneSharedPtr PLYLoader::load(const string& filename, dp::util::FileFinder cons
                         success = false;
                         onError("Out of memory while allocating PLYProperty");
                       }
-                      state = PLY_STATE_PROPERTY_TYPE; // data type or "list".
+                      state = PLYParserState::PROPERTY_TYPE; // data type or "list".
                     }
                     else // If there is not a property anymore, store the current element.
                     {
@@ -535,15 +535,15 @@ SceneSharedPtr PLYLoader::load(const string& filename, dp::util::FileFinder cons
                       // Determine where the state machine needs to continue.
                       // Only element or end_header should follow here.
                       // Comments or obj_type don't reach this.
-                      if (idToken == PLY_TOKEN_ELEMENT)
+                      if (idToken == PLYToken::ELEMENT)
                       {
-                        state = PLY_STATE_ELEMENT;  // Start a new element description.
+                        state = PLYParserState::ELEMENT;  // Start a new element description.
                         advance = 0;  // Do not consume this element token, read it again at a different state. 
                                       // That's why the function is named "look ahead".
                       }
-                      else if (idToken == PLY_TOKEN_ENDHEADER)
+                      else if (idToken == PLYToken::ENDHEADER)
                       {
-                        state = PLY_STATE_END; // Exit the header parsing.
+                        state = PLYParserState::END; // Exit the header parsing.
                       }
                       else // Remember, comments and obj_type tokens don't reach this!
                       {
@@ -553,28 +553,28 @@ SceneSharedPtr PLYLoader::load(const string& filename, dp::util::FileFinder cons
                     }
                     break;
 
-                  case PLY_STATE_PROPERTY_TYPE: // scalar or list
+                  case PLYParserState::PROPERTY_TYPE: // scalar or list
                     switch (idToken)
                     {
                       // Data type directly behind property keyword means scalar data.
-                      case PLY_TOKEN_CHAR:
-                      case PLY_TOKEN_UCHAR:
-                      case PLY_TOKEN_SHORT:
-                      case PLY_TOKEN_USHORT:
-                      case PLY_TOKEN_INT:
-                      case PLY_TOKEN_UINT:
-                      case PLY_TOKEN_FLOAT:
-                      case PLY_TOKEN_DOUBLE:
-                        curProperty->countType = PLY_TOKEN_UNKNOWN; // Not a list.
+                      case PLYToken::CHAR:
+                      case PLYToken::UCHAR:
+                      case PLYToken::SHORT:
+                      case PLYToken::USHORT:
+                      case PLYToken::INT:
+                      case PLYToken::UINT:
+                      case PLYToken::FLOAT:
+                      case PLYToken::DOUBLE:
+                        curProperty->countType = PLYToken::UNKNOWN; // Not a list.
                         curProperty->dataType  = idToken;
                         // Could be user defined unknown data, that is skipped by the read as-is function in pfnReadData.
-                        curProperty->pfnReadData      = m_apfnRead[idToken][m_plyFormat];
-                        curProperty->pfnReadAttribute = m_apfnReadAttribute[idToken][m_plyFormat];
-                        state = PLY_STATE_PROPERTY_NAME;
+                        curProperty->pfnReadData      = m_apfnRead[static_cast<size_t>(idToken)][m_plyFormat];
+                        curProperty->pfnReadAttribute = m_apfnReadAttribute[static_cast<size_t>(idToken)][m_plyFormat];
+                        state = PLYParserState::PROPERTY_NAME;
                         break;
 
-                      case PLY_TOKEN_LIST:
-                        state = PLY_STATE_PROPERTY_LIST_COUNT_TYPE;
+                      case PLYToken::LIST:
+                        state = PLYParserState::PROPERTY_LIST_COUNT_TYPE;
                         break;
 
                       default:
@@ -584,18 +584,18 @@ SceneSharedPtr PLYLoader::load(const string& filename, dp::util::FileFinder cons
                     }
                     break;
 
-                  case PLY_STATE_PROPERTY_LIST_COUNT_TYPE: // integer scalar counts only.
+                  case PLYParserState::PROPERTY_LIST_COUNT_TYPE: // integer scalar counts only.
                     switch (idToken)
                     {
-                      case PLY_TOKEN_CHAR:
-                      case PLY_TOKEN_UCHAR:
-                      case PLY_TOKEN_SHORT:
-                      case PLY_TOKEN_USHORT:
-                      case PLY_TOKEN_INT:
-                      case PLY_TOKEN_UINT:
+                      case PLYToken::CHAR:
+                      case PLYToken::UCHAR:
+                      case PLYToken::SHORT:
+                      case PLYToken::USHORT:
+                      case PLYToken::INT:
+                      case PLYToken::UINT:
                         curProperty->countType = idToken;
-                        curProperty->pfnReadCount = m_apfnRead[idToken][m_plyFormat];
-                        state = PLY_STATE_PROPERTY_LIST_DATA_TYPE;
+                        curProperty->pfnReadCount = m_apfnRead[static_cast<size_t>(idToken)][m_plyFormat];
+                        state = PLYParserState::PROPERTY_LIST_DATA_TYPE;
                         break;
 
                       default:
@@ -605,20 +605,20 @@ SceneSharedPtr PLYLoader::load(const string& filename, dp::util::FileFinder cons
                     }
                     break;
 
-                  case PLY_STATE_PROPERTY_LIST_DATA_TYPE: // scalar data type
+                  case PLYParserState::PROPERTY_LIST_DATA_TYPE: // scalar data type
                     switch (idToken)
                     {
-                      case PLY_TOKEN_CHAR:
-                      case PLY_TOKEN_UCHAR:
-                      case PLY_TOKEN_SHORT:
-                      case PLY_TOKEN_USHORT:
-                      case PLY_TOKEN_INT:
-                      case PLY_TOKEN_UINT:
-                      case PLY_TOKEN_FLOAT:
-                      case PLY_TOKEN_DOUBLE:
+                      case PLYToken::CHAR:
+                      case PLYToken::UCHAR:
+                      case PLYToken::SHORT:
+                      case PLYToken::USHORT:
+                      case PLYToken::INT:
+                      case PLYToken::UINT:
+                      case PLYToken::FLOAT:
+                      case PLYToken::DOUBLE:
                         curProperty->dataType = idToken;
-                        curProperty->pfnReadData = m_apfnRead[idToken][m_plyFormat];
-                        state = PLY_STATE_PROPERTY_NAME;
+                        curProperty->pfnReadData = m_apfnRead[static_cast<size_t>(idToken)][m_plyFormat];
+                        state = PLYParserState::PROPERTY_NAME;
                         break;
 
                       default:
@@ -628,7 +628,7 @@ SceneSharedPtr PLYLoader::load(const string& filename, dp::util::FileFinder cons
                     }
                     break;
 
-                  case PLY_STATE_PROPERTY_NAME: // Determines where the data goes.
+                  case PLYParserState::PROPERTY_NAME: // Determines where the data goes.
                     curProperty->name = m_token;
 
                     // Determine the destination data offset inside of a vertex attribute component.
@@ -637,9 +637,9 @@ SceneSharedPtr PLYLoader::load(const string& filename, dp::util::FileFinder cons
                     // Reading vertex attribute data is done to a local vertex attribute consisting of a six float array for now.
                     if (curElement->name == "vertex")
                     {
-                      PLY_ATTRIBUTE_COMPONENT component = PLY_USER_DEFINED_COMPONENT; // Assume we don't know what it is.
+                      PLYAttributeComponent component = PLYAttributeComponent::USER_DEFINED; // Assume we don't know what it is.
 
-                      std::map<std::string, PLY_ATTRIBUTE_COMPONENT>::const_iterator it = 
+                      std::map<std::string, PLYAttributeComponent>::const_iterator it = 
                         m_mapStringToAttributeComponent.find(curProperty->name);
 
                       if (it != m_mapStringToAttributeComponent.end())
@@ -649,10 +649,10 @@ SceneSharedPtr PLYLoader::load(const string& filename, dp::util::FileFinder cons
                         
                       // Enums are zero based and indices and bit position in the hasAttribute flag match accordingly.
                       // where "user defined" components all go into the ignored slot.
-                      if (PLY_VERTEX_X <= component && component <= PLY_USER_DEFINED_COMPONENT) 
+                      if (PLYAttributeComponent::VERTEX_X <= component && component <= PLYAttributeComponent::USER_DEFINED) 
                       {
                         curProperty->index = component;
-                        hasAttribute |= (1 << component);
+                        hasAttribute |= (1 << static_cast<size_t>(component));
                       }
                       else
                       {
@@ -660,12 +660,12 @@ SceneSharedPtr PLYLoader::load(const string& filename, dp::util::FileFinder cons
                         DP_ASSERT(0);
                         // Reading that data would access the attribute array out of bounds, 
                         // so force it into the user defined slot.
-                        curProperty->index = PLY_USER_DEFINED_COMPONENT;
-                        hasAttribute |= (1 << PLY_USER_DEFINED_COMPONENT);
+                        curProperty->index = PLYAttributeComponent::USER_DEFINED;
+                        hasAttribute |= (1 << static_cast<size_t>(PLYAttributeComponent::USER_DEFINED));
                         success = false;
                       }
                     }
-                    state = PLY_STATE_PROPERTY; // Expect more properties.
+                    state = PLYParserState::PROPERTY; // Expect more properties.
                     break;
 
                   default:
@@ -707,7 +707,7 @@ SceneSharedPtr PLYLoader::load(const string& filename, dp::util::FileFinder cons
           }
            
 
-          if (success && state == PLY_STATE_END)
+          if (success && state == PLYParserState::END)
           {
             // The question is now if the file contains \r or \n or \r\n as nextline.
             // The PLY "spec" says \r, Linux could have \n, but the problematic case is \r\n under Windows in a binary file.
@@ -757,7 +757,7 @@ SceneSharedPtr PLYLoader::load(const string& filename, dp::util::FileFinder cons
             DP_ASSERT((hasAttribute & ATTRIBUTE_MASK_COLOR) == 0 || 
                         (hasAttribute & ATTRIBUTE_MASK_COLOR) == ATTRIBUTE_MASK_COLOR);
 
-            float attributes[PLY_USER_DEFINED_COMPONENT + 1] = {0.0f}; // All unused components are 0.0f.
+            float attributes[static_cast<int>(PLYAttributeComponent::USER_DEFINED) + 1] = {0.0f}; // All unused components are 0.0f.
 
 
             for (itpEle = m_pElements.begin(); itpEle != m_pElements.end(); itpEle++)
@@ -785,20 +785,20 @@ SceneSharedPtr PLYLoader::load(const string& filename, dp::util::FileFinder cons
                 {
                   for (itpProp = (*itpEle)->m_pProperties.begin(); itpProp != (*itpEle)->m_pProperties.end(); itpProp++)
                   {
-                    (this->*((*itpProp)->pfnReadAttribute))(&attributes[(*itpProp)->index]);
+                    (this->*((*itpProp)->pfnReadAttribute))(&attributes[static_cast<int>((*itpProp)->index)]);
                   }
 
                   if (hasAttribute & ATTRIBUTE_MASK_VERTEX) // Vertex3f
                   {
-                    setVec(vertex[i], attributes[PLY_VERTEX_X], attributes[PLY_VERTEX_Y], attributes[PLY_VERTEX_Z]);
+                    setVec(vertex[i], attributes[static_cast<int>(PLYAttributeComponent::VERTEX_X)], attributes[static_cast<int>(PLYAttributeComponent::VERTEX_Y)], attributes[static_cast<int>(PLYAttributeComponent::VERTEX_Z)]);
                   }
                   if (hasAttribute & ATTRIBUTE_MASK_NORMAL) // Normal3f
                   {
-                    setVec(normal[i], attributes[PLY_NORMAL_X], attributes[PLY_NORMAL_Y], attributes[PLY_NORMAL_Z]);
+                    setVec(normal[i], attributes[static_cast<int>(PLYAttributeComponent::NORMAL_X)], attributes[static_cast<int>(PLYAttributeComponent::NORMAL_Y)], attributes[static_cast<int>(PLYAttributeComponent::NORMAL_Z)]);
                   }
                   if (hasAttribute & ATTRIBUTE_MASK_COLOR) // Color3f
                   {
-                    setVec(color[i], attributes[PLY_COLOR_R], attributes[PLY_COLOR_G], attributes[PLY_COLOR_B]);
+                    setVec(color[i], attributes[static_cast<int>(PLYAttributeComponent::COLOR_R)], attributes[static_cast<int>(PLYAttributeComponent::COLOR_G)], attributes[static_cast<int>(PLYAttributeComponent::COLOR_B)]);
                   }
                 }
               }
@@ -1037,54 +1037,54 @@ void PLYLoader::initializeMapStringToToken(void)
   m_mapStringToToken.clear();
   
   // "Magic" file identifier:
-  m_mapStringToToken.insert(std::make_pair("ply", PLY_TOKEN_PLY)); 
+  m_mapStringToToken.insert(std::make_pair("ply", PLYToken::PLY)); 
   // Format description of data folowing the header:
-  m_mapStringToToken.insert(std::make_pair("format", PLY_TOKEN_FORMAT));
-  m_mapStringToToken.insert(std::make_pair("ascii", PLY_TOKEN_ASCII));
-  m_mapStringToToken.insert(std::make_pair("binary_little_endian", PLY_TOKEN_BINARYLITTLEENDIAN));
-  m_mapStringToToken.insert(std::make_pair("binary_big_endian", PLY_TOKEN_BINARYBIGENDIAN));
-  m_mapStringToToken.insert(std::make_pair("1.0", PLY_TOKEN_ONEPOINTZERO));
+  m_mapStringToToken.insert(std::make_pair("format", PLYToken::FORMAT));
+  m_mapStringToToken.insert(std::make_pair("ascii", PLYToken::ASCII));
+  m_mapStringToToken.insert(std::make_pair("binary_little_endian", PLYToken::BINARYLITTLEENDIAN));
+  m_mapStringToToken.insert(std::make_pair("binary_big_endian", PLYToken::BINARYBIGENDIAN));
+  m_mapStringToToken.insert(std::make_pair("1.0", PLYToken::ONEPOINTZERO));
   // Comments and annotations, skipped in this loader:
-  m_mapStringToToken.insert(std::make_pair("comment", PLY_TOKEN_COMMENT)); // Skip line
-  m_mapStringToToken.insert(std::make_pair("obj_info", PLY_TOKEN_OBJINFO)); // Skip line
+  m_mapStringToToken.insert(std::make_pair("comment", PLYToken::COMMENT)); // Skip line
+  m_mapStringToToken.insert(std::make_pair("obj_info", PLYToken::OBJINFO)); // Skip line
   // The main data description containers:
-  m_mapStringToToken.insert(std::make_pair("element", PLY_TOKEN_ELEMENT));
-  m_mapStringToToken.insert(std::make_pair("property", PLY_TOKEN_PROPERTY));
+  m_mapStringToToken.insert(std::make_pair("element", PLYToken::ELEMENT));
+  m_mapStringToToken.insert(std::make_pair("property", PLYToken::PROPERTY));
   // Official datatypes:
-  m_mapStringToToken.insert(std::make_pair("int8", PLY_TOKEN_CHAR));
-  m_mapStringToToken.insert(std::make_pair("uint8", PLY_TOKEN_UCHAR));
-  m_mapStringToToken.insert(std::make_pair("int16", PLY_TOKEN_SHORT));
-  m_mapStringToToken.insert(std::make_pair("uint16", PLY_TOKEN_USHORT));
-  m_mapStringToToken.insert(std::make_pair("int32", PLY_TOKEN_INT));
-  m_mapStringToToken.insert(std::make_pair("uint32", PLY_TOKEN_UINT));
-  m_mapStringToToken.insert(std::make_pair("float32", PLY_TOKEN_FLOAT));
-  m_mapStringToToken.insert(std::make_pair("float64", PLY_TOKEN_DOUBLE));
+  m_mapStringToToken.insert(std::make_pair("int8", PLYToken::CHAR));
+  m_mapStringToToken.insert(std::make_pair("uint8", PLYToken::UCHAR));
+  m_mapStringToToken.insert(std::make_pair("int16", PLYToken::SHORT));
+  m_mapStringToToken.insert(std::make_pair("uint16", PLYToken::USHORT));
+  m_mapStringToToken.insert(std::make_pair("int32", PLYToken::INT));
+  m_mapStringToToken.insert(std::make_pair("uint32", PLYToken::UINT));
+  m_mapStringToToken.insert(std::make_pair("float32", PLYToken::FLOAT));
+  m_mapStringToToken.insert(std::make_pair("float64", PLYToken::DOUBLE));
   // Datatypes found in old files:
-  m_mapStringToToken.insert(std::make_pair("char", PLY_TOKEN_CHAR));
-  m_mapStringToToken.insert(std::make_pair("uchar", PLY_TOKEN_UCHAR));
-  m_mapStringToToken.insert(std::make_pair("short", PLY_TOKEN_SHORT));
-  m_mapStringToToken.insert(std::make_pair("ushort", PLY_TOKEN_USHORT));
-  m_mapStringToToken.insert(std::make_pair("int", PLY_TOKEN_INT));
-  m_mapStringToToken.insert(std::make_pair("uint", PLY_TOKEN_UINT));
-  m_mapStringToToken.insert(std::make_pair("float", PLY_TOKEN_FLOAT));
-  m_mapStringToToken.insert(std::make_pair("double", PLY_TOKEN_DOUBLE));
+  m_mapStringToToken.insert(std::make_pair("char", PLYToken::CHAR));
+  m_mapStringToToken.insert(std::make_pair("uchar", PLYToken::UCHAR));
+  m_mapStringToToken.insert(std::make_pair("short", PLYToken::SHORT));
+  m_mapStringToToken.insert(std::make_pair("ushort", PLYToken::USHORT));
+  m_mapStringToToken.insert(std::make_pair("int", PLYToken::INT));
+  m_mapStringToToken.insert(std::make_pair("uint", PLYToken::UINT));
+  m_mapStringToToken.insert(std::make_pair("float", PLYToken::FLOAT));
+  m_mapStringToToken.insert(std::make_pair("double", PLYToken::DOUBLE));
   // List type property:
-  m_mapStringToToken.insert(std::make_pair("list", PLY_TOKEN_LIST));
+  m_mapStringToToken.insert(std::make_pair("list", PLYToken::LIST));
   // End of header magic:
-  m_mapStringToToken.insert(std::make_pair("end_header", PLY_TOKEN_ENDHEADER));
+  m_mapStringToToken.insert(std::make_pair("end_header", PLYToken::ENDHEADER));
 
-  // Map known user defined names to PLY_ATTRIBUTE_COMPONENT IDs for simpler code.
-  m_mapStringToAttributeComponent.insert(std::make_pair("x", PLY_VERTEX_X)); // Vertex.xyz
-  m_mapStringToAttributeComponent.insert(std::make_pair("y", PLY_VERTEX_Y));
-  m_mapStringToAttributeComponent.insert(std::make_pair("z", PLY_VERTEX_Z));
-  m_mapStringToAttributeComponent.insert(std::make_pair("nx", PLY_NORMAL_X)); // Normal.xyz
-  m_mapStringToAttributeComponent.insert(std::make_pair("ny", PLY_NORMAL_Y));
-  m_mapStringToAttributeComponent.insert(std::make_pair("nz", PLY_NORMAL_Z));
-  m_mapStringToAttributeComponent.insert(std::make_pair("red",   PLY_COLOR_R)); // Color.rgb
-  m_mapStringToAttributeComponent.insert(std::make_pair("green", PLY_COLOR_G));
-  m_mapStringToAttributeComponent.insert(std::make_pair("blue",  PLY_COLOR_B));
-  //m_mapStringToAttributeComponent.insert(std::make_pair("s", PLY_TOKEN_S)); // TexCoord // Not seen, yet.
-  //m_mapStringToAttributeComponent.insert(std::make_pair("t", PLY_TOKEN_T));
+  // Map known user defined names to PLYAttributeComponent IDs for simpler code.
+  m_mapStringToAttributeComponent.insert(std::make_pair("x", PLYAttributeComponent::VERTEX_X)); // Vertex.xyz
+  m_mapStringToAttributeComponent.insert(std::make_pair("y", PLYAttributeComponent::VERTEX_Y));
+  m_mapStringToAttributeComponent.insert(std::make_pair("z", PLYAttributeComponent::VERTEX_Z));
+  m_mapStringToAttributeComponent.insert(std::make_pair("nx", PLYAttributeComponent::NORMAL_X)); // Normal.xyz
+  m_mapStringToAttributeComponent.insert(std::make_pair("ny", PLYAttributeComponent::NORMAL_Y));
+  m_mapStringToAttributeComponent.insert(std::make_pair("nz", PLYAttributeComponent::NORMAL_Z));
+  m_mapStringToAttributeComponent.insert(std::make_pair("red",   PLYAttributeComponent::COLOR_R)); // Color.rgb
+  m_mapStringToAttributeComponent.insert(std::make_pair("green", PLYAttributeComponent::COLOR_G));
+  m_mapStringToAttributeComponent.insert(std::make_pair("blue",  PLYAttributeComponent::COLOR_B));
+  //m_mapStringToAttributeComponent.insert(std::make_pair("s", PLYToken::S)); // TexCoord // Not seen, yet.
+  //m_mapStringToAttributeComponent.insert(std::make_pair("t", PLYToken::T));
 }
 
 
@@ -1093,7 +1093,7 @@ void  PLYLoader::onError(const string &message) const
 {
   if ( callback() )
   {
-    callback()->onError(PlugInCallback::PICE_UNSPECIFIED_ERROR, NULL);
+    callback()->onError(PlugInCallback::Error::UNSPECIFIED_ERROR, NULL);
   }
 }
 
@@ -1560,7 +1560,7 @@ void PLYLoader::readAttributeBigEndian_DOUBLE(float *dst)
 
 // Don't write another 24 functions just to get an unsigned int returned.
 // The switch looks costly though.
-unsigned int PLYLoader::readListCounterOrIndex(PFN_READ pfn, PLY_TOKEN type)
+unsigned int PLYLoader::readListCounterOrIndex(PFN_READ pfn, PLYToken type)
 {
   union
   {
@@ -1582,7 +1582,7 @@ unsigned int PLYLoader::readListCounterOrIndex(PFN_READ pfn, PLY_TOKEN type)
   // Assume that if any of those are negative, it has been meant to be unsigned, so fall through on the signed ones and see if that helps
   switch (type)
   {
-    case PLY_TOKEN_CHAR:
+    case PLYToken::CHAR:
       if (data.c < 0)
       {
         onInvalidValue(data.c, "Expected positive list count or vertex index.", "char");
@@ -1590,10 +1590,10 @@ unsigned int PLYLoader::readListCounterOrIndex(PFN_READ pfn, PLY_TOKEN type)
       }
       value = (unsigned int) data.c;
       break;
-    case PLY_TOKEN_UCHAR:
+    case PLYToken::UCHAR:
       value = (unsigned int) data.uc;
       break;
-    case PLY_TOKEN_SHORT:
+    case PLYToken::SHORT:
       if (data.s < 0)
       {
         onInvalidValue(data.s, "Expected positive list count or vertex index", "short");
@@ -1601,10 +1601,10 @@ unsigned int PLYLoader::readListCounterOrIndex(PFN_READ pfn, PLY_TOKEN type)
       }
       value = (unsigned int) data.s;
       break;
-    case PLY_TOKEN_USHORT:
+    case PLYToken::USHORT:
       value = (unsigned int) data.us;
       break;
-    case PLY_TOKEN_INT:
+    case PLYToken::INT:
       if (data.i < 0)
       {
         onInvalidValue(data.i, "Expected positive list count or vertex index.", "int");
@@ -1612,10 +1612,10 @@ unsigned int PLYLoader::readListCounterOrIndex(PFN_READ pfn, PLY_TOKEN type)
       }
       value = (unsigned int) data.i;
       break;
-    case PLY_TOKEN_UINT:
+    case PLYToken::UINT:
       value = (unsigned int) data.ui;
       break;
-    case PLY_TOKEN_FLOAT:
+    case PLYToken::FLOAT:
       if (data.f < 0)
       {
         onInvalidValue(data.f, "Expected positive list count or vertex index.", "float");
@@ -1624,7 +1624,7 @@ unsigned int PLYLoader::readListCounterOrIndex(PFN_READ pfn, PLY_TOKEN type)
       }
       value = (unsigned int) data.f;
       break;
-    case PLY_TOKEN_DOUBLE:
+    case PLYToken::DOUBLE:
       if (data.d < 0)
       {
         onInvalidValue((float) data.d, "Expected positive list count or vertex index.", "double"); // float cast is needed for overload resolve.

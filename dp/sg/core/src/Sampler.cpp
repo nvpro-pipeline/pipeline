@@ -1,4 +1,4 @@
-// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -46,13 +46,13 @@ namespace dp
 
       BEGIN_REFLECTION_INFO ( Sampler )
         DERIVE_STATIC_PROPERTIES( Sampler, Object );
-        INIT_STATIC_PROPERTY_RW(      Sampler, Texture      , TextureSharedPtr    , SEMANTIC_OBJECT, const_reference, const_reference );
-        INIT_STATIC_PROPERTY_RW(      Sampler, BorderColor  , dp::math::Vec4f     , SEMANTIC_COLOR , const_reference, const_reference );
-        INIT_STATIC_PROPERTY_RW_ENUM( Sampler, MagFilterMode, TextureMagFilterMode, SEMANTIC_VALUE , value          , value );
-        INIT_STATIC_PROPERTY_RW_ENUM( Sampler, MinFilterMode, TextureMinFilterMode, SEMANTIC_VALUE , value          , value );
-        INIT_STATIC_PROPERTY_RW_ENUM( Sampler, WrapModeS    , TextureWrapMode     , SEMANTIC_VALUE , value          , value );
-        INIT_STATIC_PROPERTY_RW_ENUM( Sampler, WrapModeT    , TextureWrapMode     , SEMANTIC_VALUE , value          , value );
-        INIT_STATIC_PROPERTY_RW_ENUM( Sampler, WrapModeR    , TextureWrapMode     , SEMANTIC_VALUE , value          , value );
+        INIT_STATIC_PROPERTY_RW(      Sampler, Texture      , TextureSharedPtr    , Semantic::OBJECT, const_reference, const_reference );
+        INIT_STATIC_PROPERTY_RW(      Sampler, BorderColor  , dp::math::Vec4f     , Semantic::COLOR , const_reference, const_reference );
+        INIT_STATIC_PROPERTY_RW_ENUM( Sampler, MagFilterMode, TextureMagFilterMode, Semantic::VALUE , value          , value );
+        INIT_STATIC_PROPERTY_RW_ENUM( Sampler, MinFilterMode, TextureMinFilterMode, Semantic::VALUE , value          , value );
+        INIT_STATIC_PROPERTY_RW_ENUM( Sampler, WrapModeS    , TextureWrapMode     , Semantic::VALUE , value          , value );
+        INIT_STATIC_PROPERTY_RW_ENUM( Sampler, WrapModeT    , TextureWrapMode     , Semantic::VALUE , value          , value );
+        INIT_STATIC_PROPERTY_RW_ENUM( Sampler, WrapModeR    , TextureWrapMode     , Semantic::VALUE , value          , value );
       END_REFLECTION_INFO
 
       SamplerSharedPtr Sampler::create( const TextureSharedPtr & texture )

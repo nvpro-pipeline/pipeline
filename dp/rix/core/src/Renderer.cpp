@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -39,7 +39,7 @@ namespace dp
       {
       }
 
-      BufferDescription::BufferDescription( BufferDescriptionType type /* = BDT_COMMON */ )
+      BufferDescription::BufferDescription( BufferDescriptionType type /* = BufferDescriptionType::COMMON */ )
         : m_type( type )
       {
       }
@@ -78,13 +78,13 @@ namespace dp
       }
 
       TextureDataBuffer::TextureDataBuffer( BufferSharedHandle const & buffer )
-        : TextureData( TDT_BUFFER )
+        : TextureData( TextureDataType::BUFFER )
         , m_buffer( buffer )
       {
       }
 
       TextureDataPtr::TextureDataPtr( void const * data, dp::PixelFormat pixelFormat, dp::DataType pixelDataType )
-        : TextureData( TDT_POINTER )
+        : TextureData( TextureDataType::POINTER )
         , m_pData( data )
         , m_data( &m_pData )
         , m_numLayers( 1 )
@@ -95,7 +95,7 @@ namespace dp
       }
 
       TextureDataPtr::TextureDataPtr( void const * const * data, unsigned int numMipMapLevels, dp::PixelFormat pixelFormat, dp::DataType pixelDataType )
-        : TextureData( TDT_POINTER )
+        : TextureData( TextureDataType::POINTER )
         , m_pData( nullptr )
         , m_data( data )
         , m_numLayers( 1 )
@@ -106,7 +106,7 @@ namespace dp
       }
 
       TextureDataPtr::TextureDataPtr( void const * const * data, unsigned int numMipMapLevels, unsigned int numLayers, dp::PixelFormat pixelFormat, dp::DataType pixelDataType )
-        : TextureData( TDT_POINTER )
+        : TextureData( TextureDataType::POINTER )
         , m_pData( nullptr )
         , m_data( data )
         , m_numLayers( numLayers )
@@ -142,7 +142,7 @@ namespace dp
       }
       
       ProgramShaderCode::ProgramShaderCode( const char* code, ShaderType shaderType )
-        : ProgramShader( PST_CODE )
+        : ProgramShader( ProgramShaderType::CODE )
         , m_numShaders( 1 )
       {
         m_codeData = code;
@@ -152,9 +152,9 @@ namespace dp
       }
 
       ProgramShaderCode::ProgramShaderCode( size_t numShaders, const char** codes, ShaderType* shaderTypes )
-        : ProgramShader( PST_CODE )
+        : ProgramShader( ProgramShaderType::CODE )
         , m_codeData( nullptr )
-        , m_shaderTypeData( ST_NUM_SHADERTYPES )
+        , m_shaderTypeData( ShaderType::NUM_SHADERTYPES )
         , m_numShaders( numShaders )
         , m_codes( codes )
         , m_shaderTypes( shaderTypes )

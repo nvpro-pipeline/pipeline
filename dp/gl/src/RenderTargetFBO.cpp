@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -35,7 +35,7 @@ namespace dp
     RenderTargetFBO::RenderTargetFBO( const RenderContextSharedPtr &glContext)
       : RenderTarget( glContext )
       , m_framebuffer( 0 )
-      , m_stereoTarget( LEFT )
+      , m_stereoTarget( StereoTarget::LEFT )
       , m_stereoEnabled( false )
       , m_currentlyBoundAttachments( 0 )
     {
@@ -57,7 +57,7 @@ namespace dp
       // get default buffer bindings
       GLint buffer;
       glGetIntegerv( GL_DRAW_BUFFER, &buffer );
-      m_drawBuffers.push_back( buffer );
+      m_drawBuffers.push_back( static_cast<AttachmentTarget>(buffer) );
 
       glGetIntegerv( GL_READ_BUFFER, &buffer );
       m_readBuffer = buffer;
@@ -107,12 +107,12 @@ namespace dp
       }
       else if ( m_drawBuffers.size() == 1 )
       {
-        glDrawBuffer( m_drawBuffers[0] );
+        glDrawBuffer( static_cast<GLenum>(m_drawBuffers[0]) );
       }
       else
       {
         // extension is being checked in setDrawBuffers 
-        glDrawBuffers( dp::checked_cast<GLsizei>(m_drawBuffers.size()), &m_drawBuffers[0] ); 
+        glDrawBuffers( dp::checked_cast<GLsizei>(m_drawBuffers.size()), reinterpret_cast<GLenum*>(&m_drawBuffers[0]) ); 
       }
     }
 
@@ -137,10 +137,10 @@ namespace dp
         StereoTarget target = getStereoTarget();
 
         // Grab left and right image
-        setStereoTarget( LEFT );
+        setStereoTarget( StereoTarget::LEFT );
         dp::util::ImageSharedPtr texLeft = getTargetAsImage( GL_COLOR_ATTACHMENT0_EXT + index, pixelFormat, pixelDataType );
 
-        setStereoTarget( RIGHT );
+        setStereoTarget( StereoTarget::RIGHT );
         dp::util::ImageSharedPtr texRight = getTargetAsImage( GL_COLOR_ATTACHMENT0_EXT + index, pixelFormat, pixelDataType );
 
         setStereoTarget( target );
@@ -163,13 +163,13 @@ namespace dp
     {
       switch (stereoTarget)
       {
-      case LEFT:
+      case StereoTarget::LEFT:
         m_attachments[0].clear();
       break;
-      case RIGHT:
+      case StereoTarget::RIGHT:
         m_attachments[1].clear();
       break;
-      case LEFT_AND_RIGHT:
+      case StereoTarget::LEFT_AND_RIGHT:
         m_attachments[0].clear();
         m_attachments[1].clear();
       break;
@@ -178,7 +178,7 @@ namespace dp
       }
     }
 
-    bool RenderTargetFBO::setAttachment( GLenum target, const SharedAttachment &attachment, StereoTarget stereoTarget )
+    bool RenderTargetFBO::setAttachment( AttachmentTarget target, const SharedAttachment &attachment, StereoTarget stereoTarget )
     {
       int stereoId = getStereoTargetId( stereoTarget );
 
@@ -201,9 +201,9 @@ namespace dp
     {
       switch (stereoTarget)
       {
-      case LEFT:
+      case StereoTarget::LEFT:
         return 0;
-      case RIGHT:
+      case StereoTarget::RIGHT:
         return 1;
       default:
         DP_ASSERT( 0 && "invalid stereoTarget" );
@@ -211,7 +211,7 @@ namespace dp
       }
     }
 
-    RenderTargetFBO::SharedAttachment RenderTargetFBO::getAttachment( GLenum target, StereoTarget stereoTarget )
+    RenderTargetFBO::SharedAttachment RenderTargetFBO::getAttachment( AttachmentTarget target, StereoTarget stereoTarget )
     {
       int stereoId = getStereoTargetId( stereoTarget );
 
@@ -442,14 +442,14 @@ namespace dp
       (this->*m_resizeFunc)( width, height );
     }
 
-    void RenderTargetFBO::AttachmentTexture::bind( GLenum attachment )
+    void RenderTargetFBO::AttachmentTexture::bind( AttachmentTarget attachment )
     {
       DP_ASSERT( m_bindFunc );
       (this->*m_bindFunc)( attachment, m_texture->getGLId() );
     
     }
 
-    void RenderTargetFBO::AttachmentTexture::unbind( GLenum attachment )
+    void RenderTargetFBO::AttachmentTexture::unbind( AttachmentTarget attachment )
     {
       (this->*m_bindFunc)( attachment, 0 );
     }
@@ -500,25 +500,25 @@ namespace dp
     /******************/
     /* Bind functions */
     /******************/
-    void RenderTargetFBO::AttachmentTexture::bind1D( GLenum attachment, GLuint textureId )
+    void RenderTargetFBO::AttachmentTexture::bind1D( AttachmentTarget attachment, GLuint textureId )
     {
-      glFramebufferTexture1D( GL_FRAMEBUFFER_EXT, attachment, m_textureTarget, textureId, m_level );
+      glFramebufferTexture1D( GL_FRAMEBUFFER_EXT, static_cast<GLenum>(attachment), m_textureTarget, textureId, m_level );
     }
 
-    void RenderTargetFBO::AttachmentTexture::bind2D( GLenum attachment, GLuint textureId )
+    void RenderTargetFBO::AttachmentTexture::bind2D( AttachmentTarget attachment, GLuint textureId )
     {
-      glFramebufferTexture2D( GL_FRAMEBUFFER_EXT, attachment, m_textureTarget, textureId, m_level );
+      glFramebufferTexture2D( GL_FRAMEBUFFER_EXT, static_cast<GLenum>(attachment), m_textureTarget, textureId, m_level );
     }
 
-    void RenderTargetFBO::AttachmentTexture::bind3D( GLenum attachment, GLuint textureId )
+    void RenderTargetFBO::AttachmentTexture::bind3D( AttachmentTarget attachment, GLuint textureId )
     {
       // INFO this could use bindLayer too, but will fail if the GL_EXT_texture_array extension is not available.
-      glFramebufferTexture3D( GL_FRAMEBUFFER_EXT, attachment, m_textureTarget, textureId, m_level, m_zoffset );
+      glFramebufferTexture3D( GL_FRAMEBUFFER_EXT, static_cast<GLenum>(attachment), m_textureTarget, textureId, m_level, m_zoffset );
     }
 
-    void RenderTargetFBO::AttachmentTexture::bindLayer( GLenum attachment, GLuint textureId )
+    void RenderTargetFBO::AttachmentTexture::bindLayer( AttachmentTarget attachment, GLuint textureId )
     {
-      glFramebufferTextureLayer( GL_FRAMEBUFFER_EXT, attachment, textureId, m_level, m_zoffset );
+      glFramebufferTextureLayer( GL_FRAMEBUFFER_EXT, static_cast<GLenum>(attachment), textureId, m_level, m_zoffset );
     }
 
     /**************************/
@@ -550,21 +550,21 @@ namespace dp
 
     void RenderTargetFBO::AttachmentRenderbuffer::bind( AttachmentTarget attachment )
     {
-      glFramebufferRenderbuffer( GL_FRAMEBUFFER_EXT, attachment, GL_RENDERBUFFER_EXT, m_renderbuffer->getGLId() );
+      glFramebufferRenderbuffer( GL_FRAMEBUFFER_EXT, static_cast<GLenum>(attachment), GL_RENDERBUFFER_EXT, m_renderbuffer->getGLId() );
     }
 
     void RenderTargetFBO::AttachmentRenderbuffer::unbind( AttachmentTarget attachment )
     {
-      glFramebufferRenderbuffer( GL_FRAMEBUFFER_EXT, attachment, GL_RENDERBUFFER_EXT, 0 );
+      glFramebufferRenderbuffer( GL_FRAMEBUFFER_EXT, static_cast<GLenum>(attachment), GL_RENDERBUFFER_EXT, 0 );
     }
 
-    void RenderTargetFBO::setDrawBuffers( const std::vector<GLenum> &drawBuffers )
+    void RenderTargetFBO::setDrawBuffers( const std::vector<AttachmentTarget> &drawBuffers )
     {
       DP_ASSERT( m_drawBuffers.size() <= 1 || isMultiTargetSupported() );
       m_drawBuffers = drawBuffers;
     }
 
-    std::vector<GLenum> const& RenderTargetFBO::getDrawBuffers() const
+    std::vector<RenderTargetFBO::AttachmentTarget> const& RenderTargetFBO::getDrawBuffers() const
     {
       return( m_drawBuffers );
     }
@@ -656,7 +656,7 @@ namespace dp
       glBindFramebuffer( GL_DRAW_FRAMEBUFFER, framebufferID );
       glBlitFramebuffer( srcRegion.x, srcRegion.y, srcRegion.x + srcRegion.width, srcRegion.y + srcRegion.height,  
                          destRegion.x, destRegion.y, destRegion.x + destRegion.width, destRegion.y + destRegion.height,
-                         mask, filter );                       
+                         mask, static_cast<GLenum>(filter) );
     }
 
     bool RenderTargetFBO::isSupported()
@@ -684,7 +684,7 @@ namespace dp
         // ensure that mono target is being used in non stereo mode
         if ( !m_stereoEnabled )
         {
-          setStereoTarget( LEFT );
+          setStereoTarget( StereoTarget::LEFT );
         }
       }
     }
@@ -698,8 +698,8 @@ namespace dp
     {
       if ( stereoTarget != m_stereoTarget )
       {
-        if (  (!m_stereoEnabled && stereoTarget != LEFT)          // only mono target supported for non stereo mode
-            ||( m_stereoEnabled && stereoTarget == LEFT_AND_RIGHT ) ) // not supported to render on left/right target at the same time
+        if (  (!m_stereoEnabled && stereoTarget != StereoTarget::LEFT)          // only mono target supported for non stereo mode
+            ||( m_stereoEnabled && stereoTarget == StereoTarget::LEFT_AND_RIGHT ) ) // not supported to render on left/right target at the same time
         {
           return false;
         }

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2011
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -76,6 +76,30 @@ namespace dp
     class RenderTargetFBO : public RenderTarget
     {
     public:
+      // RenderTarget interface
+      enum class AttachmentTarget
+      {
+         COLOR0           = GL_COLOR_ATTACHMENT0
+        ,COLOR1           = GL_COLOR_ATTACHMENT1
+        ,COLOR2           = GL_COLOR_ATTACHMENT2
+        ,COLOR3           = GL_COLOR_ATTACHMENT3
+        ,COLOR4           = GL_COLOR_ATTACHMENT4
+        ,COLOR5           = GL_COLOR_ATTACHMENT5
+        ,COLOR6           = GL_COLOR_ATTACHMENT6
+        ,COLOR7           = GL_COLOR_ATTACHMENT7
+        ,COLOR8           = GL_COLOR_ATTACHMENT8
+        ,COLOR9           = GL_COLOR_ATTACHMENT9
+        ,COLOR10          = GL_COLOR_ATTACHMENT10
+        ,COLOR11          = GL_COLOR_ATTACHMENT11
+        ,COLOR12          = GL_COLOR_ATTACHMENT12
+        ,COLOR13          = GL_COLOR_ATTACHMENT13
+        ,COLOR14          = GL_COLOR_ATTACHMENT14
+        ,COLOR15          = GL_COLOR_ATTACHMENT15
+        ,DEPTH            = GL_DEPTH_ATTACHMENT
+        ,STENCIL          = GL_STENCIL_ATTACHMENT
+        ,DEPTH_STENCIL    = GL_DEPTH_STENCIL_ATTACHMENT
+      };
+
       /***************/
       /* Attachment */
       /***************/
@@ -95,12 +119,12 @@ namespace dp
         /** \brief Bind the attachment to the current framebuffer.
             \param target Target to bind the attachment to.
         **/
-        DP_GL_API virtual void bind( GLenum target ) = 0;
+        DP_GL_API virtual void bind( AttachmentTarget target ) = 0;
 
         /** \brief Remove the binding for the given target.
             \param param target The binding for the given target will be removed.
         **/
-        DP_GL_API virtual void unbind( GLenum target ) = 0;
+        DP_GL_API virtual void unbind( AttachmentTarget target ) = 0;
       };
 
       typedef dp::util::SharedPtr<Attachment> SharedAttachment;
@@ -172,12 +196,12 @@ namespace dp
         /** \brief Bind the texture to the given target of the framebuffer.
             \param param target. The texture will be bound to the given target of the current framebuffer.
         **/
-        DP_GL_API virtual void bind( GLenum target );
+        DP_GL_API virtual void bind( AttachmentTarget target );
 
         /** \brief Remove the texture binding for given a target of the current framebuffer.
             \param param target The binding for the given target will be removed.
         ´**/
-        DP_GL_API virtual void unbind( GLenum target );
+        DP_GL_API virtual void unbind( AttachmentTarget target );
 
         DP_GL_API void init( const TextureSharedPtr &texture, GLenum target, GLenum level, GLenum zoffset );
 
@@ -203,32 +227,32 @@ namespace dp
             \param attachment Attachment to bind the texture to.
             \param textureId OpenGL texture name which to bind.
         **/
-        DP_GL_API void bind1D( GLenum attachment, GLuint textureId );
+        DP_GL_API void bind1D( AttachmentTarget attachment, GLuint textureId );
 
         /** \brief Bind a 2D texture to an attachment.
             \param attachment Attachment to bind the texture to.
             \param textureId OpenGL texture name which to bind.
         **/
-        DP_GL_API void bind2D( GLenum attachment, GLuint textureId );
+        DP_GL_API void bind2D( AttachmentTarget attachment, GLuint textureId );
 
         /** \brief Bind a 3D texture to an attachment.
             \param attachment Attachment to bind the texture to.
             \param textureId OpenGL texture name which to bind.
         **/
-        DP_GL_API void bind3D( GLenum attachment, GLuint textureId );
+        DP_GL_API void bind3D( AttachmentTarget attachment, GLuint textureId );
 
         /** \brief Bind a layered texture to an attachment.
             \param attachment Attachment to bind the texture to.
             \param textureId OpenGL texture name to bind.
         **/
-        DP_GL_API void bindLayer( GLenum attachment, GLuint textureId );
+        DP_GL_API void bindLayer( AttachmentTarget attachment, GLuint textureId );
 
       private:
         /** \brief Function pointer to resize the attached texture type **/
         void (AttachmentTexture::*m_resizeFunc)(int width, int height);
 
         /** \brief Function pointer to bind the attached texture type to the framebuffer. **/
-        void (AttachmentTexture::*m_bindFunc)( GLenum target, GLuint textureId );
+        void (AttachmentTexture::*m_bindFunc)( AttachmentTarget target, GLuint textureId );
 
         GLenum            m_textureTarget;
         GLuint            m_level;
@@ -265,12 +289,12 @@ namespace dp
         /** \brief Bind the renderbuffer to the current framebuffer.
             \param param target. The renderbuffer will be bound to the given target of the current framebuffer.
         ´**/
-        DP_GL_API virtual void bind( GLenum target );
+        DP_GL_API virtual void bind( AttachmentTarget target );
 
         /** \brief Remove the renderbuffer binding for given a target of the current framebuffer.
             \param param target The binding for the given target will be removed.
         ´**/
-        DP_GL_API virtual void unbind( GLenum target );
+        DP_GL_API virtual void unbind( AttachmentTarget target );
 
         /** \brief Get the RenderBufferGL object of this attachment.
             \return RenderbufferSharedPtr object used by this attachment.
@@ -281,43 +305,19 @@ namespace dp
         RenderbufferSharedPtr m_renderbuffer;
       };
 
-      // RenderTarget interface
-      enum {
-         COLOR_ATTACHMENT0           = GL_COLOR_ATTACHMENT0_EXT
-        ,COLOR_ATTACHMENT1           = GL_COLOR_ATTACHMENT1_EXT
-        ,COLOR_ATTACHMENT2           = GL_COLOR_ATTACHMENT2_EXT
-        ,COLOR_ATTACHMENT3           = GL_COLOR_ATTACHMENT3_EXT
-        ,COLOR_ATTACHMENT4           = GL_COLOR_ATTACHMENT4_EXT
-        ,COLOR_ATTACHMENT5           = GL_COLOR_ATTACHMENT5_EXT
-        ,COLOR_ATTACHMENT6           = GL_COLOR_ATTACHMENT6_EXT
-        ,COLOR_ATTACHMENT7           = GL_COLOR_ATTACHMENT7_EXT
-        ,COLOR_ATTACHMENT8           = GL_COLOR_ATTACHMENT8_EXT
-        ,COLOR_ATTACHMENT9           = GL_COLOR_ATTACHMENT9_EXT
-        ,COLOR_ATTACHMENT10          = GL_COLOR_ATTACHMENT10_EXT
-        ,COLOR_ATTACHMENT11          = GL_COLOR_ATTACHMENT11_EXT
-        ,COLOR_ATTACHMENT12          = GL_COLOR_ATTACHMENT12_EXT
-        ,COLOR_ATTACHMENT13          = GL_COLOR_ATTACHMENT13_EXT
-        ,COLOR_ATTACHMENT14          = GL_COLOR_ATTACHMENT14_EXT
-        ,COLOR_ATTACHMENT15          = GL_COLOR_ATTACHMENT15_EXT
-        ,DEPTH_ATTACHMENT            = GL_DEPTH_ATTACHMENT_EXT
-        ,STENCIL_ATTACHMENT          = GL_STENCIL_ATTACHMENT_EXT
-        ,DEPTH_STENCIL_ATTACHMENT    = GL_DEPTH_STENCIL_ATTACHMENT
-      };
-
       enum {
          COLOR_BUFFER_BIT            = GL_COLOR_BUFFER_BIT
         ,DEPTH_BUFFER_BIT            = GL_DEPTH_BUFFER_BIT
         ,STENCIL_BUFFER_BIT          = GL_STENCIL_BUFFER_BIT
       };
 
-      enum {
+      enum class BlitFilter
+      {
          NEAREST                     = GL_NEAREST
         ,LINEAR                      = GL_LINEAR
       };
 
-      typedef unsigned int AttachmentTarget;
       typedef unsigned int BlitMask;
-      typedef unsigned int BlitFilter;
 
     protected:
       DP_GL_API RenderTargetFBO( const RenderContextSharedPtr &glContext );
@@ -350,7 +350,7 @@ namespace dp
       /** \brief Remove all attachments for the given stereo target.
           \param stereoTarget All attachments of the given stereoTarget will be removed.
       **/
-      DP_GL_API void clearAttachments( StereoTarget stereoTarget = RenderTarget::LEFT_AND_RIGHT );
+      DP_GL_API void clearAttachments( StereoTarget stereoTarget = RenderTarget::StereoTarget::LEFT_AND_RIGHT );
 
       /** \brief Sets the attachment for a given target.
           \param target The attachment will be attached to the given target.
@@ -358,7 +358,7 @@ namespace dp
           \param stereoTarget For stereo rendering it's possible to assign the attachment to the LEFT, RIGHT or LEFT_AND_RIGHT eye.
           \return true if the operation was successful, false otherwise.
       **/
-      DP_GL_API bool setAttachment( AttachmentTarget target, const SharedAttachment &attachment, StereoTarget stereoTarget = RenderTarget::LEFT );
+      DP_GL_API bool setAttachment( AttachmentTarget target, const SharedAttachment &attachment, StereoTarget stereoTarget = RenderTarget::StereoTarget::LEFT );
 
       // convenience functions to set an attachment
       /** \brief Attach a 1d texture.
@@ -368,7 +368,7 @@ namespace dp
           \param level Mipmap level to use for the attachment
           \return true if the operation was successful, false otherwise.
       **/
-      DP_GL_API bool setAttachment( AttachmentTarget target, const Texture1DSharedPtr &texture, StereoTarget stereoTarget = RenderTarget::LEFT, int level = 0 );
+      DP_GL_API bool setAttachment( AttachmentTarget target, const Texture1DSharedPtr &texture, StereoTarget stereoTarget = RenderTarget::StereoTarget::LEFT, int level = 0 );
 
       /** \brief Attach a 2d texture.
           \param target The attachment will be attached to the given target.
@@ -377,7 +377,7 @@ namespace dp
           \param level Mipmap level to use for the attachment
           \return true if the operation was successful, false otherwise.
       **/
-      DP_GL_API bool setAttachment( AttachmentTarget target, const Texture2DSharedPtr &texture, StereoTarget stereoTarget = RenderTarget::LEFT, int level = 0 );
+      DP_GL_API bool setAttachment( AttachmentTarget target, const Texture2DSharedPtr &texture, StereoTarget stereoTarget = RenderTarget::StereoTarget::LEFT, int level = 0 );
 
       /** \brief Attach a 3d texture.
           \param target The attachment will be attached to the given target.
@@ -387,7 +387,7 @@ namespace dp
           \param level Mipmap level to use for the attachment.
           \return true if the operation was successful, false otherwise.
       **/
-      DP_GL_API bool setAttachment( AttachmentTarget target, const Texture3DSharedPtr &texture, StereoTarget stereoTarget = RenderTarget::LEFT, int zoffset = 0, int level = 0 );
+      DP_GL_API bool setAttachment( AttachmentTarget target, const Texture3DSharedPtr &texture, StereoTarget stereoTarget = RenderTarget::StereoTarget::LEFT, int zoffset = 0, int level = 0 );
 
       /** \brief Attach a 1d texture array.
           \param target The attachment will be attached to the given target.
@@ -397,7 +397,7 @@ namespace dp
           \param level Mipmap level to use for the attachment.
           \return true if the operation was successful, false otherwise.
       **/
-      DP_GL_API bool setAttachment( AttachmentTarget target, const Texture1DArraySharedPtr &texture, StereoTarget stereoTarget = RenderTarget::LEFT, int layer = 0, int level = 0 );
+      DP_GL_API bool setAttachment( AttachmentTarget target, const Texture1DArraySharedPtr &texture, StereoTarget stereoTarget = RenderTarget::StereoTarget::LEFT, int layer = 0, int level = 0 );
 
       /** \brief Attach a 2d texture array.
           \param target The attachment will be attached to the given target.
@@ -407,7 +407,7 @@ namespace dp
           \param level Mipmap level to use for the attachment.
           \return true if the operation was successful, false otherwise.
       **/
-      DP_GL_API bool setAttachment( AttachmentTarget target, const Texture2DArraySharedPtr &texture, StereoTarget stereoTarget = RenderTarget::LEFT, int layer = 0, int level = 0 );
+      DP_GL_API bool setAttachment( AttachmentTarget target, const Texture2DArraySharedPtr &texture, StereoTarget stereoTarget = RenderTarget::StereoTarget::LEFT, int layer = 0, int level = 0 );
 
       /** \brief Attach a cubemap.
           \param target The attachment will be attached to the given target.
@@ -417,7 +417,7 @@ namespace dp
           \param level Mipmap level to use for the attachment.
           \return true if the operation was successful, false otherwise.
       **/
-      DP_GL_API bool setAttachment( AttachmentTarget target, const TextureCubemapSharedPtr &texture, StereoTarget stereoTarget = RenderTarget::LEFT, int face = 0, int level = 0 );
+      DP_GL_API bool setAttachment( AttachmentTarget target, const TextureCubemapSharedPtr &texture, StereoTarget stereoTarget = RenderTarget::StereoTarget::LEFT, int face = 0, int level = 0 );
 
       /** \brief Attach a 2d rectangular texture.
           \param target The attachment will be attached to the given target.
@@ -425,7 +425,7 @@ namespace dp
           \param stereoTarget For stereo rendering it's possible to assign the attachment to the LEFT, RIGHT or LEFT_AND_RIGHT eye.
           \return true if the operation was successful, false otherwise.
       **/
-      DP_GL_API bool setAttachment( AttachmentTarget target, const TextureRectangleSharedPtr &texture, StereoTarget stereoTarget = RenderTarget::LEFT );
+      DP_GL_API bool setAttachment( AttachmentTarget target, const TextureRectangleSharedPtr &texture, StereoTarget stereoTarget = RenderTarget::StereoTarget::LEFT );
 
       /** \brief Attach a renderbuffer.
           \param target The attachment will be attached to the given target.
@@ -433,23 +433,23 @@ namespace dp
           \param stereoTarget For stereo rendering it's possible to assign the attachment to the LEFT, RIGHT or LEFT_AND_RIGHT eye.
           \return true if the operation was successful, false otherwise.
       **/
-      DP_GL_API bool setAttachment( AttachmentTarget target, const RenderbufferSharedPtr &buffer, StereoTarget stereoTarget = RenderTarget::LEFT );
+      DP_GL_API bool setAttachment( AttachmentTarget target, const RenderbufferSharedPtr &buffer, StereoTarget stereoTarget = RenderTarget::StereoTarget::LEFT );
 
       /** \brief Get the attachment for a given target
           \param target Target of the FramebufferObject for the query.
           \param stereoTarget LEFT or RIGHT for the eye.
           \return Attachment for the given parameters.
       **/
-      DP_GL_API SharedAttachment getAttachment( AttachmentTarget target, StereoTarget stereoTarget = RenderTarget::LEFT );
+      DP_GL_API SharedAttachment getAttachment( AttachmentTarget target, StereoTarget stereoTarget = RenderTarget::StereoTarget::LEFT );
 
       /** \brief Set which targets of the framebuffer object should be active
           \param drawBuffers Vector of GLenums with attachment names
       **/
-      DP_GL_API void setDrawBuffers( const std::vector<GLenum> &drawBuffers );
+      DP_GL_API void setDrawBuffers( const std::vector<AttachmentTarget> &drawBuffers );
 
       /** \brief Get the targets of the framebuffer being active
       **/
-      DP_GL_API std::vector<GLenum> const& getDrawBuffers() const;
+      DP_GL_API std::vector<AttachmentTarget> const& getDrawBuffers() const;
 
       /** \brief Select the attachment which should be used for read operations on the framebuffer object
           \param readBuffer attachment name of the buffer to read.
@@ -485,9 +485,9 @@ namespace dp
 
    
       DP_GL_API void blit( const RenderTargetFBOSharedPtr & destination, const BlitMask & mask = COLOR_BUFFER_BIT, 
-                          const BlitFilter & filter = NEAREST );
+                          const BlitFilter & filter = BlitFilter::NEAREST );
       DP_GL_API void blit( const RenderTargetFBSharedPtr & destination, const BlitMask & mask = COLOR_BUFFER_BIT, 
-                          const BlitFilter & filter = NEAREST );
+                          const BlitFilter & filter = BlitFilter::NEAREST );
       DP_GL_API void blit( const RenderTargetFBOSharedPtr & destination, const BlitMask & mask, 
                           const BlitFilter & filter, const BlitRegion & destRegion, 
                           const BlitRegion & srcRegion );
@@ -530,11 +530,11 @@ namespace dp
 
       GLuint m_framebuffer;
 
-      std::vector<GLenum> m_drawBuffers; //!< List of drawbuffers to activate for rendering
-      GLenum              m_readBuffer;  //!< read buffer to activate for rendering
-      std::vector<GLint> m_bindingStack;    //!< Bind stack for FBO
+      std::vector<AttachmentTarget> m_drawBuffers;    //!< List of drawbuffers to activate for rendering
+      GLenum                        m_readBuffer;     //!< read buffer to activate for rendering
+      std::vector<GLint>            m_bindingStack;   //!< Bind stack for FBO
 
-      typedef std::map< GLenum,SharedAttachment > AttachmentMap;
+      typedef std::map< AttachmentTarget,SharedAttachment > AttachmentMap;
       typedef std::map< unsigned int, dp::math::Vec4f > ClearColorMap;
 
       AttachmentMap m_attachments[2]; //<! left/right eye attachments

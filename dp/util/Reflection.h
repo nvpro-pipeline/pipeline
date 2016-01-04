@@ -1,4 +1,4 @@
-// Copyright (c) 2009-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2009-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -58,39 +58,39 @@ namespace dp
     {
     public:
       /** Supported property types **/
-      enum Type
+      enum class Type
       {
-          TYPE_FLOAT
-        , TYPE_FLOAT2
-        , TYPE_FLOAT3
-        , TYPE_FLOAT4
-        , TYPE_INT
-        , TYPE_INT2
-        , TYPE_INT3
-        , TYPE_INT4
-        , TYPE_UINT
-        , TYPE_UINT2
-        , TYPE_UINT3
-        , TYPE_UINT4
-        , TYPE_QUATERNION_FLOAT
-        , TYPE_BOX2_FLOAT
-        , TYPE_BOX3_FLOAT
-        , TYPE_BOX4_FLOAT
-        , TYPE_MATRIX33_FLOAT
-        , TYPE_MATRIX44_FLOAT
-        , TYPE_BOOLEAN
-        , TYPE_CHAR
-        , TYPE_TRANSFORMATION
-        , TYPE_VERTEX_ATTRIBUTE
-        , TYPE_OBJECT     //!< class dp::sg::core::Object
-        , TYPE_STRING     //!< class std::string
-        , TYPE_SET_UINT   //!< class std::set<unsigned int>
-        , TYPE_NODE
-        , TYPE_SCENE
-        , TYPE_VIEWSTATE
-        , TYPE_RENDERTARGET
-        , TYPE_TEXTURE
-        , TYPE_UNKNOWN
+          FLOAT
+        , FLOAT2
+        , FLOAT3
+        , FLOAT4
+        , INT
+        , INT2
+        , INT3
+        , INT4
+        , UINT
+        , UINT2
+        , UINT3
+        , UINT4
+        , QUATERNION_FLOAT
+        , BOX2_FLOAT
+        , BOX3_FLOAT
+        , BOX4_FLOAT
+        , MATRIX33_FLOAT
+        , MATRIX44_FLOAT
+        , BOOLEAN
+        , CHAR
+        , TRANSFORMATION
+        , VERTEX_ATTRIBUTE
+        , OBJECT     //!< class dp::sg::core::Object
+        , STRING     //!< class std::string
+        , SET_UINT   //!< class std::set<unsigned int>
+        , NODE
+        , SCENE
+        , VIEWSTATE
+        , RENDERTARGET
+        , TEXTURE
+        , UNKNOWN
       };
 
       DP_UTIL_API virtual ~Property();
@@ -130,129 +130,129 @@ namespace dp
 
     /*! \brief Specialization of the TypedPropertyEnum template for type float. */
     template <> struct TypedPropertyEnum<float> {
-      enum { type = Property::TYPE_FLOAT };
+      enum { type = Property::Type::FLOAT };
     };
 
     /*! \brief Specialization of the TypedPropertyEnum template for type dp::math::Vec2f. */
     template <> struct TypedPropertyEnum<dp::math::Vec2f> {
-      enum { type = Property::TYPE_FLOAT2 };
+      enum { type = Property::Type::FLOAT2 };
     };
 
     /*! \brief Specialization of the TypedPropertyEnum template for type dp::math::Vec3f. */
     template <> struct TypedPropertyEnum<dp::math::Vec3f> {
-      enum { type = Property::TYPE_FLOAT3 };
+      enum { type = Property::Type::FLOAT3 };
     };
 
     /*! \brief Specialization of the TypedPropertyEnum template for type dp::math::Vec4f. */
     template <> struct TypedPropertyEnum<dp::math::Vec4f> {
-      enum { type = Property::TYPE_FLOAT4 };
+      enum { type = Property::Type::FLOAT4 };
     };
 
     /*! \brief Specialization of the TypedPropertyEnum template for type dp::math::Box2f. */
     template <> struct TypedPropertyEnum<dp::math::Box2f> {
-      enum { type = Property::TYPE_BOX2_FLOAT };
+      enum { type = Property::Type::BOX2_FLOAT };
     };
 
     /*! \brief Specialization of the TypedPropertyEnum template for type dp::math::Box3f. */
     template <> struct TypedPropertyEnum<dp::math::Box3f> {
-      enum { type = Property::TYPE_BOX3_FLOAT };
+      enum { type = Property::Type::BOX3_FLOAT };
     };
 
     /*! \brief Specialization of the TypedPropertyEnum template for type dp::math::Box4f. */
     template <> struct TypedPropertyEnum<dp::math::Box4f> {
-      enum { type = Property::TYPE_BOX4_FLOAT };
+      enum { type = Property::Type::BOX4_FLOAT };
     };
 
     /*! \brief Specialization of the TypedPropertyEnum template for type dp::math::Mat33f. */
     template <> struct TypedPropertyEnum<dp::math::Mat33f> {
-      enum { type = Property::TYPE_MATRIX33_FLOAT };
+      enum { type = Property::Type::MATRIX33_FLOAT };
     };
 
     /*! \brief Specialization of the TypedPropertyEnum template for type dp::math::Mat44f. */
     template <> struct TypedPropertyEnum<dp::math::Mat44f> {
-      enum { type = Property::TYPE_MATRIX44_FLOAT };
+      enum { type = Property::Type::MATRIX44_FLOAT };
     };
 
     /*! \brief Specialization of the TypedPropertyEnum template for type dp::math::Quatf. */
     template <> struct TypedPropertyEnum<dp::math::Quatf> {
-      enum { type = Property::TYPE_QUATERNION_FLOAT };
+      enum { type = Property::Type::QUATERNION_FLOAT };
     };
 
     /*! \brief Specialization of the TypedPropertyEnum template for type bool. */
     template <> struct TypedPropertyEnum<bool> {
-      enum { type = Property::TYPE_BOOLEAN };
+      enum { type = Property::Type::BOOLEAN };
     };
 
     /*! \brief Specialization of the TypedPropertyEnum template for type char. */
     template <> struct TypedPropertyEnum<char> {
-      enum { type = Property::TYPE_CHAR };
+      enum { type = Property::Type::CHAR };
     };
 
     /*! \brief Specialization of the TypedPropertyEnum template for type unsigned int. */
     template <> struct TypedPropertyEnum<unsigned int> {
-      enum { type = Property::TYPE_UINT };
+      enum { type = Property::Type::UINT };
     };
 
     /*! \brief Specialization of the TypedPropertyEnum template for type dp::math::Vec2ui. */
     template <> struct TypedPropertyEnum<dp::math::Vec2ui> {
-      enum { type = Property::TYPE_UINT2 };
+      enum { type = Property::Type::UINT2 };
     };
 
     /*! \brief Specialization of the TypedPropertyEnum template for type dp::math::Vec3ui. */
     template <> struct TypedPropertyEnum<dp::math::Vec3ui> {
-      enum { type = Property::TYPE_UINT3 };
+      enum { type = Property::Type::UINT3 };
     };
 
     /*! \brief Specialization of the TypedPropertyEnum template for type dp::math::Vec4ui. */
     template <> struct TypedPropertyEnum<dp::math::Vec4ui> {
-      enum { type = Property::TYPE_UINT4 };
+      enum { type = Property::Type::UINT4 };
     };
 
     /*! \brief Specialization of the TypedPropertyEnum template for type int. */
     template <> struct TypedPropertyEnum<int> {
-      enum { type = Property::TYPE_INT };
+      enum { type = Property::Type::INT };
     };
 
     /*! \brief Specialization of the TypedPropertyEnum template for type dp::math::Vec2i. */
     template <> struct TypedPropertyEnum<dp::math::Vec2i> {
-      enum { type = Property::TYPE_INT2 };
+      enum { type = Property::Type::INT2 };
     };
 
     /*! \brief Specialization of the TypedPropertyEnum template for type dp::math::Vec3i. */
     template <> struct TypedPropertyEnum<dp::math::Vec3i> {
-      enum { type = Property::TYPE_INT3 };
+      enum { type = Property::Type::INT3 };
     };
 
     /*! \brief Specialization of the TypedPropertyEnum template for type dp::math::Vec4i. */
     template <> struct TypedPropertyEnum<dp::math::Vec4i> {
-      enum { type = Property::TYPE_INT4 };
+      enum { type = Property::Type::INT4 };
     };
 
     /*! \brief Specialization of the TypedPropertyEnum template for type dp::math::Trafo. */
     template <> struct TypedPropertyEnum<dp::math::Trafo> {
-      enum { type = Property::TYPE_TRANSFORMATION };
+      enum { type = Property::Type::TRANSFORMATION };
     };
 
     /*! \brief Specialization of the TypedPropertyEnum template for type Reflection. */
     template <> struct TypedPropertyEnum<Reflection> {
-      enum { type = Property::TYPE_OBJECT };
+      enum { type = Property::Type::OBJECT };
     };
 
     /*! \brief Specialization of the TypedPropertyEnum template for type std::string. */
     template <> struct TypedPropertyEnum<std::string> {
-      enum { type = Property::TYPE_STRING };
+      enum { type = Property::Type::STRING };
     };
 
     /*! \brief Specialization of the TypedPropertyEnum template for type std::set<unsigned int>. */
     template <> struct TypedPropertyEnum<std::set<unsigned int> > {
-      enum { type = Property::TYPE_SET_UINT };
+      enum { type = Property::Type::SET_UINT };
     };
 
     // TODO must be moved to new dp::(ui?) module
   #if 0
     /*! \brief Specialization of the TypedPropertyEnum template for type dp::ui::RenderTargetSharedPtr. */
     template <> struct TypedPropertyEnum< dp::ui::RenderTargetSharedPtr > {
-      enum { type = Property::TYPE_RENDERTARGET };
+      enum { type = Property::Type::RENDERTARGET };
     };
   #endif
 
@@ -1172,7 +1172,7 @@ namespace dp
     {
     public:
       PropertyEvent( Reflection const* source , dp::util::PropertyId propertyId )
-        : Event( dp::util::Event::PROPERTY )
+        : Event( dp::util::Event::Type::PROPERTY )
         , m_source( source )
         , m_propertyId( propertyId )
       {
@@ -1472,12 +1472,12 @@ public:
   // here are some examples how to initialize those static properties
   BEGIN_REFLECT_STATIC_PROPERTIES( Material )
   //          property name,        datatype, semantic information, set parameter type, get return type
-  ADD_PROPERTY_RW     (Value,       int,      SEMANTIC_VALUE,       value,              value           );
-  ADD_PROPERTY_RW_BOOL(BoolValue,   bool,     SEMANTIC_VALUE,       value,              value           );
-  ADD_PROPERTY_RW     (Vec3fValue,  Vec3f,    SEMANTIC_VALUE,       const_reference,    const_reference);
-  ADD_PROPERTY_RW     (Vec3fValue2, Vec3f,    SEMANTIC_VALUE,       const_reference,    value);
-  ADD_PROPERTY_RO     (MaxSize,     Vec2f,    SEMANTIC_VALUE,       value);
-  ADD_PROPERTY_RO_BOOL(Supported,   bool,     SEMANTIC_VALUE,       value);
+  ADD_PROPERTY_RW     (Value,       int,      Semantic::VALUE,       value,              value           );
+  ADD_PROPERTY_RW_BOOL(BoolValue,   bool,     Semantic::VALUE,       value,              value           );
+  ADD_PROPERTY_RW     (Vec3fValue,  Vec3f,    Semantic::VALUE,       const_reference,    const_reference);
+  ADD_PROPERTY_RW     (Vec3fValue2, Vec3f,    Semantic::VALUE,       const_reference,    value);
+  ADD_PROPERTY_RO     (MaxSize,     Vec2f,    Semantic::VALUE,       value);
+  ADD_PROPERTY_RO_BOOL(Supported,   bool,     Semantic::VALUE,       value);
 
   END_REFLECT_STATIC_PROPERTIES()
 };

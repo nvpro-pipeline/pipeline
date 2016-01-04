@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2014-2015
+// Copyright (c) 2014-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -81,23 +81,23 @@ namespace dp
         // TODO replace by factory where objects automatically get registered
         switch ( textureDescription.m_type )
         {
-        case TT_BUFFER:
+        case TextureType::BUFFER:
           return TextureGLBuffer::create( textureDescription );
-        case TT_1D:
+        case TextureType::_1D:
           return TextureGL1D::create( textureDescription );
-        case TT_1D_ARRAY:
+        case TextureType::_1D_ARRAY:
           return TextureGL1DArray::create( textureDescription );
-        case TT_2D:
+        case TextureType::_2D:
           return TextureGL2D::create( textureDescription );
-        case TT_2D_ARRAY:
+        case TextureType::_2D_ARRAY:
           return TextureGL2DArray::create( textureDescription );
-        case TT_2D_RECTANGLE:
+        case TextureType::_2D_RECTANGLE:
           return TextureGL2DRectangle::create( textureDescription );
-        case TT_3D:
+        case TextureType::_3D:
           return TextureGL3D::create( textureDescription );
-        case TT_CUBEMAP:
+        case TextureType::CUBEMAP:
           return TextureGLCubeMap::create( textureDescription );
-        case TT_NATIVE:
+        case TextureType::NATIVE:
           {
             DP_ASSERT( dynamic_cast<const TextureDescriptionGL*>(&textureDescription) );
             DP_ASSERT(!"native texture types not yet implemented");
@@ -113,7 +113,7 @@ namespace dp
       {
         switch( textureData.getTextureDataType() )
         {
-        case dp::rix::core::TDT_NATIVE:
+        case dp::rix::core::TextureDataType::NATIVE:
           {
             DP_ASSERT( dynamic_cast<const TextureDataGLTexture*>(&textureData) );
             const TextureDataGLTexture& textureDataGLTexture = static_cast<const TextureDataGLTexture&>(textureData);
@@ -121,14 +121,14 @@ namespace dp
           }
           break;
 
-        case dp::rix::core::TDT_BUFFER:
+        case dp::rix::core::TextureDataType::BUFFER:
           {
             DP_ASSERT(!"this function is implemented in TextureGLBuffer.h");
             return false;
           }
           break;
 
-        case dp::rix::core::TDT_POINTER:
+        case dp::rix::core::TextureDataType::POINTER:
           {
             DP_ASSERT( m_texture->getTarget() != GL_TEXTURE_BUFFER );
             DP_ASSERT( dynamic_cast<const dp::rix::core::TextureDataPtr*>(&textureData) );
@@ -190,13 +190,13 @@ namespace dp
 
         switch( samplerState->m_borderColorDataType )
         {
-        case SBCDT_FLOAT:
+        case SamplerBorderColorDataType::FLOAT:
           m_texture->setBorderColor( samplerState->m_borderColor.f );
           break;
-        case SBCDT_UINT:
+        case SamplerBorderColorDataType::UINT:
           m_texture->setBorderColor( samplerState->m_borderColor.ui );
           break;
-        case SBCDT_INT:
+        case SamplerBorderColorDataType::INT:
           m_texture->setBorderColor( samplerState->m_borderColor.i );
           break;
         default:

@@ -1,4 +1,4 @@
-// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -47,11 +47,11 @@ namespace dp
 
       BEGIN_REFLECTION_INFO( Camera )
         DERIVE_STATIC_PROPERTIES( Camera, Object );
-        INIT_STATIC_PROPERTY_RW( Camera, Position,      Vec3f,    SEMANTIC_POSITION,  const_reference, const_reference );
-        INIT_STATIC_PROPERTY_RW( Camera, Orientation,   Quatf,    SEMANTIC_POSITION,  const_reference, const_reference );
-        INIT_STATIC_PROPERTY_RW( Camera, Direction,     Vec3f,    SEMANTIC_DIRECTION, value,           const_reference );
-        INIT_STATIC_PROPERTY_RW( Camera, UpVector,      Vec3f,    SEMANTIC_VALUE,     value,           const_reference );
-        INIT_STATIC_PROPERTY_RW( Camera, FocusDistance, float,    SEMANTIC_VALUE,     value,           value );
+        INIT_STATIC_PROPERTY_RW( Camera, Position,      Vec3f,    Semantic::POSITION,  const_reference, const_reference );
+        INIT_STATIC_PROPERTY_RW( Camera, Orientation,   Quatf,    Semantic::POSITION,  const_reference, const_reference );
+        INIT_STATIC_PROPERTY_RW( Camera, Direction,     Vec3f,    Semantic::DIRECTION, value,           const_reference );
+        INIT_STATIC_PROPERTY_RW( Camera, UpVector,      Vec3f,    Semantic::VALUE,     value,           const_reference );
+        INIT_STATIC_PROPERTY_RW( Camera, FocusDistance, float,    Semantic::VALUE,     value,           value );
       END_REFLECTION_INFO
 
       Camera::Camera(void)

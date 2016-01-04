@@ -1,5 +1,4 @@
-
-// Copyright NVIDIA Corporation 2009-2010
+// Copyright (c) 2009-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -39,14 +38,14 @@ class LogWidget : public QDockWidget
     LogWidget(QWidget *parent = 0);
     virtual ~LogWidget();
 
-    enum Severity
+    enum class Severity
     {
       LOG_MESSAGE,   // pass the message straight through (could contain html markup)
       LOG_WARNING,   // color text to indicate a 'warning'
       LOG_ERROR      // color text to indicate an 'error'
     };
 
-    virtual void message( const QString & message, Severity severity = LOG_MESSAGE );
+    virtual void message( const QString & message, Severity severity = Severity::LOG_MESSAGE );
 
     QString latestMessage() const;
 

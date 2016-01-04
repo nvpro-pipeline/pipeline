@@ -1,4 +1,4 @@
-// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -210,14 +210,14 @@ WRLLoader::WRLLoader()
   m_line = (char *) malloc( m_lineLength + 1 );
 
   // The circular ones used for Cone, Cylinder, and Sphere.
-  m_subdivisions[SUBDIVISION_SPHERE_MIN]     = 12;  // minimum       // 30 degrees
-  m_subdivisions[SUBDIVISION_SPHERE_DEFAULT] = 36;  // at radius 1.0 // 10 degrees
-  m_subdivisions[SUBDIVISION_SPHERE_MAX]     = 90;  // maximum       //  4 degrees
+  m_subdivisions.sphereMin     = 12;  // minimum       // 30 degrees
+  m_subdivisions.sphereDefault = 36;  // at radius 1.0 // 10 degrees
+  m_subdivisions.sphereMax     = 90;  // maximum       //  4 degrees
 
   // The rectangular ones used for the Box. (It needs a much lower maximum!)
-  m_subdivisions[SUBDIVISION_BOX_MIN]     = 2;  // minimum
-  m_subdivisions[SUBDIVISION_BOX_DEFAULT] = 4;  // at size 1.0! (Box default size is 2.0 though.)
-  m_subdivisions[SUBDIVISION_BOX_MAX]     = 8;  // maximum
+  m_subdivisions.boxMin     = 2;  // minimum
+  m_subdivisions.boxDefault = 4;  // at size 1.0! (Box default size is 2.0 though.)
+  m_subdivisions.boxMax     = 8;  // maximum
 
   // The user can define the subdivisions used for build built-in geometry!
   if ( const char * env = getenv( "DP_WRL_SUBDIVISIONS" ) )
@@ -235,38 +235,45 @@ WRLLoader::WRLLoader()
         token.assign( values, tokenStart, tokenEnd - tokenStart );
         if ( !token.empty() )
         {
-          m_subdivisions[i] = atoi( token.c_str() );
+          int value = atoi( token.c_str() );
+          switch ( i )
+          {
+            case 0 : m_subdivisions.sphereMin     = value; break;
+            case 1 : m_subdivisions.sphereDefault = value; break;
+            case 2 : m_subdivisions.sphereMax     = value; break;
+            case 3 : m_subdivisions.boxMin        = value; break;
+            case 4 : m_subdivisions.boxDefault    = value; break;
+            case 5 : m_subdivisions.boxMax        = value; break;
+          }
         }
       }
     }
 
     // Now make sure the input values are consistent.
     // Absolute minimum required for non-degenerated circular objects is 3.
-    if ( m_subdivisions[SUBDIVISION_SPHERE_MIN] < 3 )
+    if ( m_subdivisions.sphereMin < 3 )
     {
-      m_subdivisions[SUBDIVISION_SPHERE_MIN] = 3;
+      m_subdivisions.sphereMin = 3;
     }
-    if ( m_subdivisions[SUBDIVISION_SPHERE_MAX] < m_subdivisions[SUBDIVISION_SPHERE_MIN] )
+    if ( m_subdivisions.sphereMax < m_subdivisions.sphereMin )
     {
-      m_subdivisions[SUBDIVISION_SPHERE_MAX] = m_subdivisions[SUBDIVISION_SPHERE_MIN];
+      m_subdivisions.sphereMax = m_subdivisions.sphereMin;
     }
     // Make sure the subdivision at radius 1.0 is within the limits.
-    m_subdivisions[SUBDIVISION_SPHERE_DEFAULT] =
-      clamp(m_subdivisions[SUBDIVISION_SPHERE_DEFAULT], m_subdivisions[SUBDIVISION_SPHERE_MIN], m_subdivisions[SUBDIVISION_SPHERE_MAX]);
+    m_subdivisions.sphereDefault = clamp(m_subdivisions.sphereDefault, m_subdivisions.sphereMin, m_subdivisions.sphereMax);
 
     // Now the same for the Box:
     // Absolute minimum required for non-degenerated Box object is 2.
-    if ( m_subdivisions[SUBDIVISION_BOX_MIN] < 2 )
+    if ( m_subdivisions.boxMin < 2 )
     {
-      m_subdivisions[SUBDIVISION_BOX_MIN] = 2;
+      m_subdivisions.boxMin = 2;
     }
-    if ( m_subdivisions[SUBDIVISION_BOX_MAX] < m_subdivisions[SUBDIVISION_BOX_MIN] )
+    if ( m_subdivisions.boxMax < m_subdivisions.boxMin )
     {
-      m_subdivisions[SUBDIVISION_BOX_MAX] = m_subdivisions[SUBDIVISION_BOX_MIN];
+      m_subdivisions.boxMax = m_subdivisions.boxMin;
     }
     // Make sure the subdivision at size 1.0 is within the limits.
-    m_subdivisions[SUBDIVISION_BOX_DEFAULT] =
-      clamp(m_subdivisions[SUBDIVISION_BOX_DEFAULT], m_subdivisions[SUBDIVISION_BOX_MIN], m_subdivisions[SUBDIVISION_BOX_MAX]);
+    m_subdivisions.boxDefault = clamp(m_subdivisions.boxDefault, m_subdivisions.boxMin, m_subdivisions.boxMax);
   }
 }
 
@@ -282,9 +289,9 @@ void WRLLoader::createBox( IndexedFaceSetSharedPtr & pIndexedFaceSet, const SFVe
   float depth  = size[2];
 
   // Tessellate with square quads when inside the unclamped range.
-  int w = clamp( (int) (m_subdivisions[SUBDIVISION_BOX_DEFAULT] * width ), m_subdivisions[SUBDIVISION_BOX_MIN], m_subdivisions[SUBDIVISION_BOX_MAX] );
-  int h = clamp( (int) (m_subdivisions[SUBDIVISION_BOX_DEFAULT] * height), m_subdivisions[SUBDIVISION_BOX_MIN], m_subdivisions[SUBDIVISION_BOX_MAX] );
-  int d = clamp( (int) (m_subdivisions[SUBDIVISION_BOX_DEFAULT] * depth ), m_subdivisions[SUBDIVISION_BOX_MIN], m_subdivisions[SUBDIVISION_BOX_MAX] );
+  int w = clamp( (int) (m_subdivisions.boxDefault * width ), m_subdivisions.boxMin, m_subdivisions.boxMax );
+  int h = clamp( (int) (m_subdivisions.boxDefault * height), m_subdivisions.boxMin, m_subdivisions.boxMax );
+  int d = clamp( (int) (m_subdivisions.boxDefault * depth ), m_subdivisions.boxMin, m_subdivisions.boxMax );
 
   size_t numVertices = 2 * (h * d + d * w + h * w);
   size_t numIndices  = 5 * ((h - 1) * (d - 1) + (d - 1) * (w - 1) + (h - 1) * (w - 1));
@@ -678,9 +685,9 @@ void WRLLoader::createCone( IndexedFaceSetSharedPtr & pIndexedFaceSet,
   }
 
   // Tessellate with square quads when inside the unclamped range.
-  int m = clamp( (int) (m_subdivisions[SUBDIVISION_SPHERE_DEFAULT] * radius), m_subdivisions[SUBDIVISION_SPHERE_MIN], m_subdivisions[SUBDIVISION_SPHERE_MAX] );
-  int n = clamp( (int) (m_subdivisions[SUBDIVISION_SPHERE_DEFAULT] * height / (2.0f * PI)), 2, m_subdivisions[SUBDIVISION_SPHERE_MAX] );
-  int k = clamp( (int) (m_subdivisions[SUBDIVISION_SPHERE_DEFAULT] * radius / (2.0f * PI)), 2, m_subdivisions[SUBDIVISION_SPHERE_MAX] );
+  int m = clamp( (int) (m_subdivisions.sphereDefault * radius), m_subdivisions.sphereMin, m_subdivisions.sphereMax );
+  int n = clamp( (int) (m_subdivisions.sphereDefault * height / (2.0f * PI)), 2, m_subdivisions.sphereMax );
+  int k = clamp( (int) (m_subdivisions.sphereDefault * radius / (2.0f * PI)), 2, m_subdivisions.sphereMax );
 
   size_t numVertices = 0;
   size_t numIndices  = 0;
@@ -908,9 +915,9 @@ void WRLLoader::createCylinder( IndexedFaceSetSharedPtr & pIndexedFaceSet,
   }
 
   // Tessellate with square quads when inside the unclamped range.
-  int m = clamp( (int) (m_subdivisions[SUBDIVISION_SPHERE_DEFAULT] * radius), m_subdivisions[SUBDIVISION_SPHERE_MIN], m_subdivisions[SUBDIVISION_SPHERE_MAX] );
-  int n = clamp( (int) (m_subdivisions[SUBDIVISION_SPHERE_DEFAULT] * height / (2.0f * PI)), 2, m_subdivisions[SUBDIVISION_SPHERE_MAX] );
-  int k = clamp( (int) (m_subdivisions[SUBDIVISION_SPHERE_DEFAULT] * radius / (2.0f * PI)), 2, m_subdivisions[SUBDIVISION_SPHERE_MAX] );
+  int m = clamp( (int) (m_subdivisions.sphereDefault * radius), m_subdivisions.sphereMin, m_subdivisions.sphereMax );
+  int n = clamp( (int) (m_subdivisions.sphereDefault * height / (2.0f * PI)), 2, m_subdivisions.sphereMax );
+  int k = clamp( (int) (m_subdivisions.sphereDefault * radius / (2.0f * PI)), 2, m_subdivisions.sphereMax );
 
   size_t numVertices = 0;
   size_t numIndices  = 0;
@@ -1236,8 +1243,8 @@ void WRLLoader::createCylinder( IndexedFaceSetSharedPtr & pIndexedFaceSet,
 
 void WRLLoader::createSphere( IndexedFaceSetSharedPtr & pIndexedFaceSet, float radius, bool textured )
 {
-  int m = clamp( (int) (m_subdivisions[SUBDIVISION_SPHERE_DEFAULT] * radius), m_subdivisions[SUBDIVISION_SPHERE_MIN], m_subdivisions[SUBDIVISION_SPHERE_MAX] );
-  int n = clamp( m >> 1, std::max(3, m_subdivisions[SUBDIVISION_SPHERE_MIN] >> 1), std::max(3, m_subdivisions[SUBDIVISION_SPHERE_MAX] >> 1) );
+  int m = clamp( (int) (m_subdivisions.sphereDefault * radius), m_subdivisions.sphereMin, m_subdivisions.sphereMax );
+  int n = clamp( m >> 1, std::max(3, m_subdivisions.sphereMin >> 1), std::max(3, m_subdivisions.sphereMax >> 1) );
 
   const size_t numVertices = n * (m + 1);     // Number of vertices.
   const size_t numIndices  = (n - 1) * m * 5; // Number of indices (quad plus -1 end index = 5)

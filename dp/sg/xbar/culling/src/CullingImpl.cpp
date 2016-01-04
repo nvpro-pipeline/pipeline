@@ -190,17 +190,17 @@ namespace dp
 
           switch (eventObject.getType())
           {
-          case SceneTree::Event::Added:
+          case SceneTree::Event::Type::ADDED:
             addObject(index);
             break;
 
-          case SceneTree::Event::Removed:
+          case SceneTree::Event::Type::REMOVED:
             DP_ASSERT( m_objects[eventObject.getIndex()] && "culling object for the given object has already been destroyed" );
             m_culling->groupRemoveObject( m_cullingGroup, m_objects[index] );
             m_objects[index].reset();
             break;
 
-          case SceneTree::Event::Changed:
+          case SceneTree::Event::Type::CHANGED:
             DP_ASSERT( m_objects[eventObject.getIndex()]  && "no culling object available for the given index" );
             updateBoundingBox( index );
             // TODO update bounding box!

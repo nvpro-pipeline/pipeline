@@ -1,4 +1,4 @@
-// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -430,6 +430,17 @@ class WRLLoader : public dp::sg::io::SceneLoader
     void                                        setNextToken( void );
     bool                                        testWRLVersion( const std::string &filename );
 
+  private:
+    struct Subdivisions
+    {
+      int sphereMin;
+      int sphereDefault;
+      int sphereMax;
+      int boxMin;
+      int boxDefault;
+      int boxMax;
+    };
+
   private :
     std::string                                               m_currentString;
     std::string                                               m_currentToken;
@@ -458,7 +469,7 @@ class WRLLoader : public dp::sg::io::SceneLoader
     // Minimum, standard at size 1.0, and maximum subdivisions for a Box depending on its size.
     // These six values can be defined by the user via the environment variable DP_WRL_SUBDIVISIONS.
     // Defaults are DP_WRL_SUBDIVISIONS = 12 36 90  2 4 8
-    int                                                       m_subdivisions[6];
+    Subdivisions                                              m_subdivisions;
 };
 
 inline unsigned int WRLLoader::getStepsPerUnit() const

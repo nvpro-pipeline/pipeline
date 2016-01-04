@@ -1,4 +1,4 @@
-// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -40,8 +40,8 @@ namespace dp
 
       BEGIN_REFLECTION_INFO( LightSource )
         DERIVE_STATIC_PROPERTIES( LightSource, Node );
-        INIT_STATIC_PROPERTY_RW_BOOL( LightSource, Enabled      , bool         , SEMANTIC_VALUE, value          , value );
-        INIT_STATIC_PROPERTY_RW_BOOL( LightSource, ShadowCasting, bool         , SEMANTIC_VALUE, value          , value );
+        INIT_STATIC_PROPERTY_RW_BOOL( LightSource, Enabled      , bool         , Semantic::VALUE, value          , value );
+        INIT_STATIC_PROPERTY_RW_BOOL( LightSource, ShadowCasting, bool         , Semantic::VALUE, value          , value );
       END_REFLECTION_INFO
       /* FIXME MISSING
         * Animation

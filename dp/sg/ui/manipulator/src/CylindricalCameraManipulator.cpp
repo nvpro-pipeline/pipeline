@@ -47,16 +47,16 @@ namespace dp
         {
           if ( m_lockMajorAxis )
           {
-            if ( !(m_lockAxis[AXIS_X] | m_lockAxis[AXIS_Y]) )
+            if ( !(m_lockAxis[static_cast<size_t>(Axis::X)] | m_lockAxis[static_cast<size_t>(Axis::Y)]) )
             {
-              m_activeLockAxis[AXIS_X] = abs(dx)>abs(dy);
-              m_activeLockAxis[AXIS_Y] = abs(dx)<abs(dy);
+              m_activeLockAxis[static_cast<size_t>(Axis::X)] = abs(dx)>abs(dy);
+              m_activeLockAxis[static_cast<size_t>(Axis::Y)] = abs(dx)<abs(dy);
             }
           }
           else
           {
-            m_activeLockAxis[AXIS_X] = m_lockAxis[AXIS_X];
-            m_activeLockAxis[AXIS_Y] = m_lockAxis[AXIS_Y];
+            m_activeLockAxis[static_cast<size_t>(Axis::X)] = m_lockAxis[static_cast<size_t>(Axis::X)];
+            m_activeLockAxis[static_cast<size_t>(Axis::Y)] = m_lockAxis[static_cast<size_t>(Axis::Y)];
           }
         }
 
@@ -104,35 +104,35 @@ namespace dp
           {
             switch ( getMode() )
             {
-              case MODE_ORBIT:
+              case Mode::ORBIT:
                 result = orbit();
                 break;
 
-              case MODE_PAN:
+              case Mode::PAN:
                 result = pan();
                 break;
 
-              case MODE_ROTATE_XY:
+              case Mode::ROTATE_XY:
                 result = rotate();
                 break;
 
-              case MODE_DOLLY:
+              case Mode::DOLLY:
                 result = dolly();
                 break;
 
-              case MODE_ROLL_Z:
+              case Mode::ROLL_Z:
                 result = roll();
                 break;
 
-              case MODE_ZOOM_FOV:
+              case Mode::ZOOM_FOV:
                 result = zoom();
                 break;
 
-              case MODE_ZOOM_DOLLY:
+              case Mode::ZOOM_DOLLY:
                 result = dollyZoom();
                 break;
 
-              case MODE_LOOKAT:
+              case Mode::LOOKAT:
                 result = lookAt();
                 break;
 
@@ -140,7 +140,7 @@ namespace dp
                 break;
             }
 
-            if ( getWheelTicksDelta() && (m_mode != MODE_DOLLY) )
+            if ( getWheelTicksDelta() && (m_mode != Mode::DOLLY) )
             {
               result = dolly();
             }
@@ -178,7 +178,7 @@ namespace dp
                 float stepX = m_speed * viewState->getTargetDistance() * float(dx);
                 float stepY = m_speed * viewState->getTargetDistance() * float(dy);
 
-                if( m_activeLockAxis[ AXIS_X ] )
+                if( m_activeLockAxis[ static_cast<size_t>(static_cast<size_t>(Axis::X)) ] )
                 {
                   if(dx != 0)
                   {
@@ -189,7 +189,7 @@ namespace dp
                     return false;
                   }
                 }
-                else if( m_activeLockAxis[ AXIS_Y ] )
+                else if( m_activeLockAxis[ static_cast<size_t>(static_cast<size_t>(Axis::Y)) ] )
                 {
                   if(dy != 0)
                   {
@@ -632,12 +632,12 @@ namespace dp
 
         void CylindricalCameraManipulator::lockAxis( Axis axis )
         {
-          m_lockAxis[axis] = true;
+          m_lockAxis[static_cast<size_t>(axis)] = true;
         }
 
         void CylindricalCameraManipulator::unlockAxis( Axis axis )
         {
-          m_lockAxis[axis] = false;
+          m_lockAxis[static_cast<size_t>(axis)] = false;
         }
 
         void CylindricalCameraManipulator::lockMajorAxis( )

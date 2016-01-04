@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -101,8 +101,8 @@ bool Feature_FBO::onRunInit( unsigned int i )
   rt->setClearColor( 0.46f, 0.72f, 0.0f, 1.0f );
   rt->setClearDepth( 1.0f );
 
-  std::vector<GLenum> drawBuffers;
-  drawBuffers.push_back(GL_COLOR_ATTACHMENT0);
+  std::vector<dp::gl::RenderTargetFBO::AttachmentTarget> drawBuffers;
+  drawBuffers.push_back(dp::gl::RenderTargetFBO::AttachmentTarget::COLOR0);
   m_fbo.inplaceCast<dp::gl::RenderTargetFBO>()->setDrawBuffers(drawBuffers);
   m_fbo->setSize( 2*m_width, 2*m_height );
 
@@ -191,10 +191,10 @@ void Feature_FBO::createCamera( void )
   // Program Parameters
 
   ProgramParameter vertexConstProgramParameters[] = {
-    ProgramParameter("g_world2view", CPT_MAT4X4),
-    ProgramParameter("g_view2world", CPT_MAT4X4),
-    ProgramParameter("g_view2clip",  CPT_MAT4X4),
-    ProgramParameter("g_world2clip", CPT_MAT4X4)
+    ProgramParameter("g_world2view", ContainerParameterType::MAT4X4),
+    ProgramParameter("g_view2world", ContainerParameterType::MAT4X4),
+    ProgramParameter("g_view2clip",  ContainerParameterType::MAT4X4),
+    ProgramParameter("g_world2clip", ContainerParameterType::MAT4X4)
   };
 
 
@@ -292,7 +292,7 @@ void Feature_FBO::createScene()
     "  gl_Position   = g_world2clip * worldPos;\n"
     "}\n";
 
-  ProgramShaderCode vertShader( vertexShader, ST_VERTEX_SHADER );
+  ProgramShaderCode vertShader( vertexShader, ShaderType::VERTEX_SHADER );
 
 
   const char * fragmentShader = "" 
@@ -360,22 +360,22 @@ void Feature_FBO::createScene()
 
     "}\n";
 
-  ProgramShaderCode fragShader( fragmentShader, ST_FRAGMENT_SHADER );
+  ProgramShaderCode fragShader( fragmentShader, ShaderType::FRAGMENT_SHADER );
 
 
   // Program Parameters
 
   ProgramParameter vertexVarProgramParameters[] = {
-    ProgramParameter("model2world", CPT_MAT4X4),
-    ProgramParameter("model2worldIT", CPT_MAT4X4)
+    ProgramParameter("model2world", ContainerParameterType::MAT4X4),
+    ProgramParameter("model2worldIT", ContainerParameterType::MAT4X4)
   };
 
   ProgramParameter fragmentVarProgramParameters[] = {
-    ProgramParameter("diffuseTex", CPT_SAMPLER) 
+    ProgramParameter("diffuseTex", ContainerParameterType::SAMPLER) 
   };
 
   ProgramParameter fragmentConstProgramParameters[] = {
-    ProgramParameter("lightDir", CPT_FLOAT3)
+    ProgramParameter("lightDir", ContainerParameterType::FLOAT3)
   };
 
 
@@ -464,9 +464,9 @@ void Feature_FBO::createScene()
 
   Vec3f lightDirection(-0.5f, 1.0f, 1.0f);
 
-  SamplerStateDataCommon samplerStateDataCommon( SSFM_NEAREST, SSFM_NEAREST );
+  SamplerStateDataCommon samplerStateDataCommon( SamplerStateFilterMode::NEAREST, SamplerStateFilterMode::NEAREST );
   SamplerStateSharedHandle samplerStateHandle = m_rix->samplerStateCreate(samplerStateDataCommon);
-  TextureSharedHandle diffuseMap = dp::rix::util::generateTexture( m_rix, dp::rix::util::createTextureGradient( Vec2ui(128, 128), Vec4f(1.0, 0.0f, 0.0f, 1.0), Vec4f(0.0, 1.0f, 0.0f, 1.0), Vec4f(0.0, 0.0f, 1.0f, 1.0) ), dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_32, ITF_RGBA8 );
+  TextureSharedHandle diffuseMap = dp::rix::util::generateTexture( m_rix, dp::rix::util::createTextureGradient( Vec2ui(128, 128), Vec4f(1.0, 0.0f, 0.0f, 1.0), Vec4f(0.0, 1.0f, 0.0f, 1.0), Vec4f(0.0, 0.0f, 1.0f, 1.0) ), dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_32, InternalTextureFormat::RGBA8 );
 
 
   // Set Container Data
@@ -553,7 +553,7 @@ void Feature_FBO::createSecondPass()
     "  gl_Position   = world2clip * vec4( Position, 1.0 );\n"
     "}\n";
 
-  ProgramShaderCode vertShader( vertexShader, ST_VERTEX_SHADER );
+  ProgramShaderCode vertShader( vertexShader, ShaderType::VERTEX_SHADER );
 
 
   const char * fragmentShader = "" 
@@ -577,17 +577,17 @@ void Feature_FBO::createSecondPass()
     "  Color = vec4( curSample/9.0, 1.0 );\n"
     "}\n";
 
-  ProgramShaderCode fragShader( fragmentShader, ST_FRAGMENT_SHADER );
+  ProgramShaderCode fragShader( fragmentShader, ShaderType::FRAGMENT_SHADER );
 
 
   // Program Parameters
 
   ProgramParameter vertexProgramParameters[] = {
-    ProgramParameter("world2clip", CPT_MAT4X4)
+    ProgramParameter("world2clip", ContainerParameterType::MAT4X4)
   };
 
   ProgramParameter fragmentProgramParameters[] = {
-    ProgramParameter("FBOTex", CPT_SAMPLER) 
+    ProgramParameter("FBOTex", ContainerParameterType::SAMPLER) 
   };
 
   // Container Descriptors
@@ -653,14 +653,14 @@ void Feature_FBO::createSecondPass()
   //Make a native GL texture for our FBO attachment
   TextureSharedHandle textureFBO;
   {
-    TextureDescription textureDescription( TT_2D, ITF_RGBA32F, dp::PixelFormat::RGBA, dp::DataType::FLOAT_32, 2*m_width, 2*m_height );
+    TextureDescription textureDescription( TextureType::_2D, InternalTextureFormat::RGBA32F, dp::PixelFormat::RGBA, dp::DataType::FLOAT_32, 2*m_width, 2*m_height );
     textureFBO = m_rix->textureCreate( textureDescription );
 
     m_colorBuf = gl::Texture2D::create( GL_RGBA32F, GL_RGBA, GL_UNSIGNED_BYTE, 2*m_width, 2*m_height );
     m_depthBuf = gl::Texture2D::create( GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, 2*m_width, 2*m_height );
 
-    m_fbo.inplaceCast<dp::gl::RenderTargetFBO>()->setAttachment( gl::RenderTargetFBO::COLOR_ATTACHMENT0, m_colorBuf );
-    m_fbo.inplaceCast<dp::gl::RenderTargetFBO>()->setAttachment( gl::RenderTargetFBO::DEPTH_ATTACHMENT, m_depthBuf );
+    m_fbo.inplaceCast<dp::gl::RenderTargetFBO>()->setAttachment( gl::RenderTargetFBO::AttachmentTarget::COLOR0, m_colorBuf );
+    m_fbo.inplaceCast<dp::gl::RenderTargetFBO>()->setAttachment( gl::RenderTargetFBO::AttachmentTarget::DEPTH, m_depthBuf );
 
     rix::gl::TextureDataGLTexture textureDataGLTexture( m_colorBuf );
     m_rix->textureSetData( textureFBO, textureDataGLTexture );

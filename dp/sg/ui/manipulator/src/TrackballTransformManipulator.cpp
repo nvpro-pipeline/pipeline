@@ -47,27 +47,27 @@ namespace dp
         {
           if ( m_lockMajorAxis )
           {
-            if ( !(m_lockAxis[AXIS_X] | m_lockAxis[AXIS_Y]) )
+            if ( !(m_lockAxis[static_cast<size_t>(Axis::X)] | m_lockAxis[static_cast<size_t>(Axis::Y)]) )
             {
-               m_activeLockAxis[AXIS_X] = abs(dx)>abs(dy);
-               m_activeLockAxis[AXIS_Y] = abs(dx)<abs(dy);
+               m_activeLockAxis[static_cast<size_t>(Axis::X)] = abs(dx)>abs(dy);
+               m_activeLockAxis[static_cast<size_t>(Axis::Y)] = abs(dx)<abs(dy);
             }
           }
           else
           {
-            m_activeLockAxis[AXIS_X] = m_lockAxis[AXIS_X];
-            m_activeLockAxis[AXIS_Y] = m_lockAxis[AXIS_Y];
+            m_activeLockAxis[static_cast<size_t>(Axis::X)] = m_lockAxis[static_cast<size_t>(Axis::X)];
+            m_activeLockAxis[static_cast<size_t>(Axis::Y)] = m_lockAxis[static_cast<size_t>(Axis::Y)];
           }
         }
 
         TrackballTransformManipulator::TrackballTransformManipulator()
           : Manipulator()
           , CursorState()
-          , m_mode( MODE_NONE )
+          , m_mode( Mode::NONE )
           , m_lockMajorAxis( false )
         {
-          m_lockAxis[AXIS_X]       = m_lockAxis[AXIS_Y]       = m_lockAxis[AXIS_Z] = false;
-          m_activeLockAxis[AXIS_X] = m_activeLockAxis[AXIS_Y] = m_activeLockAxis[AXIS_Z] = false;
+          m_lockAxis[static_cast<size_t>(Axis::X)]       = m_lockAxis[static_cast<size_t>(Axis::Y)]       = m_lockAxis[static_cast<size_t>(Axis::Z)] = false;
+          m_activeLockAxis[static_cast<size_t>(Axis::X)] = m_activeLockAxis[static_cast<size_t>(Axis::Y)] = m_activeLockAxis[static_cast<size_t>(Axis::Z)] = false;
         }
 
         TrackballTransformManipulator::~TrackballTransformManipulator()
@@ -87,15 +87,15 @@ namespace dp
           {
             switch( m_mode )
             {
-              case MODE_ROTATE:
+              case Mode::ROTATE:
                 result = rotate();
                 break;
 
-              case MODE_PAN:
+              case Mode::PAN:
                 result = pan();
                 break;
 
-              case MODE_DOLLY:
+              case Mode::DOLLY:
                 result = dolly();
                 break;
 
@@ -138,7 +138,7 @@ namespace dp
                 Vec2f centerWindowSize = - center[2] / getViewState()->getTargetDistance() * camWinSize;
 
                 checkLockAxis(dxScreen, dyScreen);
-                if ( m_activeLockAxis[AXIS_X] )
+                if ( m_activeLockAxis[static_cast<size_t>(Axis::X)] )
                 {
                   if ( dxScreen != 0 )
                   {
@@ -149,7 +149,7 @@ namespace dp
                     return false;
                   }
                 }
-                else if ( m_activeLockAxis[AXIS_Y] )
+                else if ( m_activeLockAxis[static_cast<size_t>(Axis::Y)] )
                 {
                   if ( dyScreen != 0)
                   {
@@ -247,7 +247,7 @@ namespace dp
 
                 checkLockAxis(dx, dy);
 
-                if ( m_activeLockAxis[AXIS_X] )
+                if ( m_activeLockAxis[static_cast<size_t>(Axis::X)] )
                 {
                   if ( dx < 0 )
                     axis = Vec3f(0.f, -1.f, 0.f);
@@ -256,7 +256,7 @@ namespace dp
                   else
                     return false;
                 }
-                else if ( m_activeLockAxis[AXIS_Y] )
+                else if ( m_activeLockAxis[static_cast<size_t>(Axis::Y)] )
                 {
                   if ( dy < 0 ) 
                     axis = Vec3f(1.f, 0.f, 0.f);
@@ -356,12 +356,12 @@ namespace dp
 
         void TrackballTransformManipulator::lockAxis( Axis axis )
         {
-          m_lockAxis[axis] = true;
+          m_lockAxis[static_cast<size_t>(axis)] = true;
         }
 
         void TrackballTransformManipulator::unlockAxis( Axis axis )
         {
-          m_lockAxis[axis] = false;
+          m_lockAxis[static_cast<size_t>(axis)] = false;
         }
 
         void TrackballTransformManipulator::lockMajorAxis( )

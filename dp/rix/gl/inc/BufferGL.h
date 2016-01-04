@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2015
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -52,16 +52,16 @@ namespace dp
         class Event : public dp::util::Event
         {
         public:
-          enum EventType
+          enum class Type
           {
             DATA_CHANGED = 0,
             DATA_AND_SIZE_CHANGED
           };
 
-          Event( BufferGL *buffer, EventType type );
+          Event( BufferGL *buffer, Type type );
 
           BufferGL* m_buffer;
-          EventType m_eventType;
+          Type      m_type;
         };
 
       public:

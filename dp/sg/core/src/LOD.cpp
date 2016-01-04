@@ -1,4 +1,4 @@
-// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -39,7 +39,7 @@ namespace dp
 
       BEGIN_REFLECTION_INFO( LOD )
         DERIVE_STATIC_PROPERTIES( LOD, Group );
-        INIT_STATIC_PROPERTY_RW ( LOD, Center,    Vec3f,  SEMANTIC_POSITION, const_reference, const_reference );
+        INIT_STATIC_PROPERTY_RW ( LOD, Center,    Vec3f,  Semantic::POSITION, const_reference, const_reference );
       END_REFLECTION_INFO
 
       LODSharedPtr LOD::create()

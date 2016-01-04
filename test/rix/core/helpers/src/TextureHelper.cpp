@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -171,10 +171,10 @@ namespace dp
                                          , dp::rix::util::TextureObjectDataSharedPtr data
                                          , dp::PixelFormat pixelFormat /*= PixelFormat::RGBA */
                                          , dp::DataType dataType /*= DataType::FLOAT_32 */
-                                         , InternalTextureFormat internalFormat /*= ITF_RGBA8*/
+                                         , InternalTextureFormat internalFormat /*= InternalTextureFormat::RGBA8*/
                                          , bool generateMipmaps /*= false*/)
       {
-        TextureDescription textureDescription( TT_2D, internalFormat, pixelFormat, dataType, data->m_size[0], data->m_size[1], 0, 0, generateMipmaps );
+        TextureDescription textureDescription( TextureType::_2D, internalFormat, pixelFormat, dataType, data->m_size[0], data->m_size[1], 0, 0, generateMipmaps );
         TextureSharedHandle textureHandle = rix->textureCreate( textureDescription );
 
         switch( dataType )
@@ -212,7 +212,7 @@ namespace dp
       }
 
       TextureSharedHandle createTextureFromFile( dp::rix::core::Renderer* rix, std::string filename
-                                               , InternalTextureFormat internalFormat /*= core::ITF_RGBA8*/
+                                               , InternalTextureFormat internalFormat /*= core::InternalTextureFormat::RGBA8*/
                                                , bool generateMipmaps /*= false*/ )
       {
         dp::util::ImageSharedPtr texImage = dp::util::imageFromFile(filename);
@@ -225,10 +225,10 @@ namespace dp
         DP_ASSERT( texImage->getNumLayers() == 1 );
 
         // make textures with height 1 or less a 1D texture
-        TextureType tt = TT_2D;
+        TextureType tt = TextureType::_2D;
         if ( texHeight <= 1 )
         {
-          tt = TT_1D;
+          tt = TextureType::_1D;
           texHeight = 0;
         }
 
@@ -248,7 +248,7 @@ namespace dp
       }
 
       TextureSharedHandle createCubemapFromFile( dp::rix::core::Renderer* rix, std::string filename
-        , InternalTextureFormat internalFormat /*= core::ITF_RGBA8*/
+        , InternalTextureFormat internalFormat /*= core::InternalTextureFormat::RGBA8*/
         , bool generateMipmaps /*= false*/ )
       {
         dp::util::ImageSharedPtr cubeMapImage = dp::util::imageFromFile(filename);
@@ -263,7 +263,7 @@ namespace dp
         DP_ASSERT(numFaces == 6);
         vector<const void*> rawData = cubeMapImage->getLayerDataArray();
 
-        TextureDescription textureDescription( TT_CUBEMAP, internalFormat, pixelFormat, dataType, texWidth, texWidth, 0, 0, generateMipmaps || !!numMipmaps );
+        TextureDescription textureDescription( TextureType::CUBEMAP, internalFormat, pixelFormat, dataType, texWidth, texWidth, 0, 0, generateMipmaps || !!numMipmaps );
         TextureSharedHandle texture = rix->textureCreate( textureDescription );
         TextureDataPtr textureDataPtr( &rawData[0], numMipmaps, 6, pixelFormat, dataType );
         rix->textureSetData( texture, textureDataPtr );

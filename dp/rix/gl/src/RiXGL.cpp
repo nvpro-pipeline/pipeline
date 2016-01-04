@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -164,7 +164,7 @@ namespace dp
       {
         switch ( programParameterDescriptor.getType() )
         {
-        case dp::rix::core::PPDT_COMMON:
+        case dp::rix::core::ProgramParameterDescriptorType::COMMON:
         {
           DP_ASSERT( dynamic_cast<const dp::rix::core::ProgramParameterDescriptorCommon*>(&programParameterDescriptor) );
           dp::rix::core::ProgramParameterDescriptorCommon const & descriptor = static_cast<dp::rix::core::ProgramParameterDescriptorCommon const &>(programParameterDescriptor);

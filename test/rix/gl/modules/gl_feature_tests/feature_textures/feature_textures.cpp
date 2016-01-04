@@ -1,4 +1,4 @@
-// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -308,7 +308,7 @@ void Feature_textures::createScene()
   m_rix->vertexAttributesSet( m_vertexAttributes, vertexData, vertexFormat );
 
   std::vector<ProgramParameter> programParameterWorld2View;
-  programParameterWorld2View.push_back( ProgramParameter("world2view", CPT_MAT4X4) );
+  programParameterWorld2View.push_back( ProgramParameter("world2view", ContainerParameterType::MAT4X4) );
 
   m_containerDescriptorWorld2View = m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( &programParameterWorld2View[0], 1 ) );
 
@@ -316,13 +316,13 @@ void Feature_textures::createScene()
 
   m_vertexContainerW2V = m_rix->containerCreate( m_containerDescriptorWorld2View );
 
-  InternalTextureFormat itf = ITF_RGBA8;
-  TextureDescription textureDescription1D     ( TT_1D,           itf, dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_8, texWidth );
-  TextureDescription textureDescription2D     ( TT_2D,           itf, dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_8, texWidth, texHeight );
-  TextureDescription textureDescription3D     ( TT_3D,           itf, dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_8, texWidth, texHeight, texDepth );
-  TextureDescription textureDescription1DArray( TT_1D_ARRAY,     itf, dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_8, texWidth, 0        , 0,        tex1DArraySize );
-  TextureDescription textureDescription2DArray( TT_2D_ARRAY,     itf, dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_8, texWidth, texHeight, 0,        tex2DArraySize );
-  TextureDescription textureDescription2DRect ( TT_2D_RECTANGLE, itf, dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_8, std::min<size_t>(texWidth, 5), std::min<size_t>(texHeight, 7) );
+  InternalTextureFormat itf = InternalTextureFormat::RGBA8;
+  TextureDescription textureDescription1D     ( TextureType::_1D,           itf, dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_8, texWidth );
+  TextureDescription textureDescription2D     ( TextureType::_2D,           itf, dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_8, texWidth, texHeight );
+  TextureDescription textureDescription3D     ( TextureType::_3D,           itf, dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_8, texWidth, texHeight, texDepth );
+  TextureDescription textureDescription1DArray( TextureType::_1D_ARRAY,     itf, dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_8, texWidth, 0        , 0,        tex1DArraySize );
+  TextureDescription textureDescription2DArray( TextureType::_2D_ARRAY,     itf, dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_8, texWidth, texHeight, 0,        tex2DArraySize );
+  TextureDescription textureDescription2DRect ( TextureType::_2D_RECTANGLE, itf, dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_8, std::min<size_t>(texWidth, 5), std::min<size_t>(texHeight, 7) );
 
   // just pass in texture data
   TextureDataPtr textureData( tex, dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_8 );
@@ -359,22 +359,22 @@ void Feature_textures::createScene()
   const size_t indexSetTri3DSize = 2*3;
   const unsigned int indexSetTri3D[indexSetTri3DSize] = { 0, 5, 7,  7, 5, 2 };
 
-  generateGI( vertexShader, fragmentShaderSampler1D, CPT_SAMPLER, texture1D,
+  generateGI( vertexShader, fragmentShaderSampler1D, ContainerParameterType::SAMPLER, texture1D,
     0.9f, -2.0f, 1.0f, 0.0f, indexSetQuad, indexSetQuadSize );
 
-  generateGI( vertexShader, fragmentShaderSampler2D, CPT_SAMPLER, texture2D,
+  generateGI( vertexShader, fragmentShaderSampler2D, ContainerParameterType::SAMPLER, texture2D,
     0.9f, -1.0f, 1.0f, 0.0f,  indexSetQuad, indexSetQuadSize );
 
-  generateGI( vertexShader, fragmentShaderSampler2DRect, CPT_SAMPLER, texture2DRect,
+  generateGI( vertexShader, fragmentShaderSampler2DRect, ContainerParameterType::SAMPLER, texture2DRect,
     0.9f, 0.0f, 1.0f, 0.0f, indexSetQuad, indexSetQuadSize );
 
-  generateGI( vertexShader, fragmentShaderSampler2DArray, CPT_SAMPLER, texture2DArray,
+  generateGI( vertexShader, fragmentShaderSampler2DArray, ContainerParameterType::SAMPLER, texture2DArray,
     0.9f, 1.0f, 1.0f, 0.0f, indexSetQuad, indexSetQuadSize );
 
-  generateGI( vertexShader, fragmentShaderSampler1DArray, CPT_SAMPLER, texture1DArray,
+  generateGI( vertexShader, fragmentShaderSampler1DArray, ContainerParameterType::SAMPLER, texture1DArray,
     0.9f, -2.0f, 0.0f, 0.0f, indexSetQuad, indexSetQuadSize );
 
-  generateGI( vertexShader, fragmentShaderSampler3D, CPT_SAMPLER, texture3D,
+  generateGI( vertexShader, fragmentShaderSampler3D, ContainerParameterType::SAMPLER, texture3D,
     0.9f, -1.0f, 0.0f, 0.0f, indexSetTri3D, indexSetTri3DSize );
 
 #if 0
@@ -435,7 +435,7 @@ void Feature_textures::createScene()
 
     // vertex shader parameter model2world
     std::vector<ProgramParameter> vertexProgramParameters;
-    vertexProgramParameters.push_back( ProgramParameter("model2world", CPT_MAT4X4) );
+    vertexProgramParameters.push_back( ProgramParameter("model2world", ContainerParameterType::MAT4X4) );
 
     ContainerDescriptorSharedHandle vertexContainerDescriptor =
       m_rix->containerDescriptorCreate( &vertexProgramParameters[0],
@@ -445,7 +445,7 @@ void Feature_textures::createScene()
 
     // fragment shader parameter tex
     std::vector<ProgramParameter> fragmentProgramParameters;
-    fragmentProgramParameters.push_back( ProgramParameter("tex", CPT_BUFFER_ADDRESS) );
+    fragmentProgramParameters.push_back( ProgramParameter("tex", ContainerParameterType::BUFFER_ADDRESS) );
 
     ContainerDescriptorSharedHandle fragmentContainerDescriptor =
       m_rix->containerDescriptorCreate( &fragmentProgramParameters[0],
@@ -528,7 +528,7 @@ void Feature_textures::generateGI
 
   // vertex shader parameter model2world
   std::vector<ProgramParameter> vertexProgramParameters;
-  vertexProgramParameters.push_back( ProgramParameter("model2world", CPT_MAT4X4) );
+  vertexProgramParameters.push_back( ProgramParameter("model2world", ContainerParameterType::MAT4X4) );
 
   ContainerDescriptorSharedHandle vertexContainerDescriptor =
     m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( &vertexProgramParameters[0],
@@ -553,7 +553,7 @@ void Feature_textures::generateGI
 
 
   const char* shaders[] = {vertexShader, fragmentShader};
-  ShaderType  shaderTypes[] = { ST_VERTEX_SHADER, ST_FRAGMENT_SHADER };
+  ShaderType  shaderTypes[] = { ShaderType::VERTEX_SHADER, ShaderType::FRAGMENT_SHADER };
   ProgramShaderCode programShaderCode( sizeof dp::util::array( shaders ), shaders, shaderTypes );
 
   ProgramDescription programDescription( programShaderCode, &containerDescriptors[0], dp::checked_cast<unsigned int>(containerDescriptors.size() ));
@@ -581,13 +581,13 @@ void Feature_textures::generateGI
   m_rix->containerSetData( vertexContainer, containerEntryModel2World, ContainerDataRaw( 0, mat, 16*sizeof(float) ) );
 
   // prepare & set sampler & texture
-  SamplerStateDataCommon samplerStateDataCommon( SSFM_LINEAR, SSFM_LINEAR );
+  SamplerStateDataCommon samplerStateDataCommon( SamplerStateFilterMode::LINEAR, SamplerStateFilterMode::LINEAR );
   SamplerStateSharedHandle samplerStateHandle = m_rix->samplerStateCreate( samplerStateDataCommon );
 
   rix::core::SamplerSharedHandle sampler = m_rix->samplerCreate();
   m_rix->samplerSetTexture( sampler, texture );
 
-  if( samplerType != CPT_SAMPLER )
+  if( samplerType != ContainerParameterType::SAMPLER )
   {
     m_rix->samplerSetSamplerState( sampler, samplerStateHandle );
   }

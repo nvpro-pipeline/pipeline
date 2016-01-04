@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2015
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -91,44 +91,44 @@ namespace dp
             switch ( texture->getTextureTarget() )
             {
             case dp::sg::core::TextureTarget::TEXTURE_1D:
-              tt = dp::rix::core::TT_1D;
+              tt = dp::rix::core::TextureType::_1D;
               break;
 
             case dp::sg::core::TextureTarget::TEXTURE_1D_ARRAY:
-              tt =dp::rix::core::TT_1D_ARRAY;
+              tt =dp::rix::core::TextureType::_1D_ARRAY;
               break;
 
             case dp::sg::core::TextureTarget::TEXTURE_2D:
-              tt =dp::rix::core::TT_2D;
+              tt =dp::rix::core::TextureType::_2D;
               break;
 
             case dp::sg::core::TextureTarget::TEXTURE_RECTANGLE:
-              tt =dp::rix::core::TT_2D_RECTANGLE;
+              tt =dp::rix::core::TextureType::_2D_RECTANGLE;
               break;
 
             case dp::sg::core::TextureTarget::TEXTURE_2D_ARRAY:
-              tt =dp::rix::core::TT_2D_ARRAY;
+              tt =dp::rix::core::TextureType::_2D_ARRAY;
               break;
 
             case dp::sg::core::TextureTarget::TEXTURE_3D:
-              tt =dp::rix::core::TT_3D;
+              tt =dp::rix::core::TextureType::_3D;
               break;
 
             case dp::sg::core::TextureTarget::TEXTURE_CUBE:
-              tt =dp::rix::core::TT_CUBEMAP;
+              tt =dp::rix::core::TextureType::CUBEMAP;
               break;
 
             case dp::sg::core::TextureTarget::TEXTURE_CUBE_ARRAY:
-              tt =dp::rix::core::TT_CUBEMAP_ARRAY;
+              tt =dp::rix::core::TextureType::CUBEMAP_ARRAY;
               break;
 
             case dp::sg::core::TextureTarget::TEXTURE_BUFFER:
               DP_ASSERT( !"texture type not yet supported" );
-              return dp::rix::core::TT_NUM_TEXTURETYPES;
+              return dp::rix::core::TextureType::NUM_TEXTURETYPES;
 
             default:
               DP_ASSERT( !"unknwon texture type");
-              return dp::rix::core::TT_NUM_TEXTURETYPES;
+              return dp::rix::core::TextureType::NUM_TEXTURETYPES;
             }
 
             return tt;
@@ -149,50 +149,50 @@ namespace dp
             switch( texture->getTextureTarget() )
             {
             case dp::sg::core::TextureTarget::TEXTURE_1D:
-              tt = dp::rix::core::TT_1D;
+              tt = dp::rix::core::TextureType::_1D;
               width  = texture->getWidth();
               break;
 
             case dp::sg::core::TextureTarget::TEXTURE_1D_ARRAY:
-              tt = dp::rix::core::TT_1D_ARRAY;
+              tt = dp::rix::core::TextureType::_1D_ARRAY;
               width  = texture->getWidth();
               layers = texture->getNumberOfImages();
               break;
 
             case dp::sg::core::TextureTarget::TEXTURE_2D:
-              tt = dp::rix::core::TT_2D;
+              tt = dp::rix::core::TextureType::_2D;
               width  = texture->getWidth();
               height = texture->getHeight();
               break;
 
             case dp::sg::core::TextureTarget::TEXTURE_RECTANGLE:
-              tt = dp::rix::core::TT_2D_RECTANGLE;
+              tt = dp::rix::core::TextureType::_2D_RECTANGLE;
               width  = texture->getWidth();
               height = texture->getHeight();
               break;
 
             case dp::sg::core::TextureTarget::TEXTURE_2D_ARRAY:
-              tt = dp::rix::core::TT_2D_ARRAY;
+              tt = dp::rix::core::TextureType::_2D_ARRAY;
               width  = texture->getWidth();
               height = texture->getHeight();
               layers = texture->getNumberOfImages();
               break;
 
             case dp::sg::core::TextureTarget::TEXTURE_3D:
-              tt = dp::rix::core::TT_3D;
+              tt = dp::rix::core::TextureType::_3D;
               width  = texture->getWidth();
               height = texture->getHeight();
               depth  = texture->getDepth();
               break;
 
             case dp::sg::core::TextureTarget::TEXTURE_CUBE:
-              tt = dp::rix::core::TT_CUBEMAP;
+              tt = dp::rix::core::TextureType::CUBEMAP;
               width  = texture->getWidth();
               height = texture->getHeight();
               break;
 
             case dp::sg::core::TextureTarget::TEXTURE_CUBE_ARRAY:
-              tt = dp::rix::core::TT_CUBEMAP_ARRAY;
+              tt = dp::rix::core::TextureType::CUBEMAP_ARRAY;
               width  = texture->getWidth();
               height = texture->getHeight();
               layers = texture->getNumberOfImages() / 6;  // !
@@ -219,7 +219,7 @@ namespace dp
             }
 
             bool mipMaps = texture->isMipmapRequired();
-            dp::rix::gl::TextureDescriptionGL td( tt, dp::rix::core::ITF_NATIVE, getRiXPixelFormat( texture->getFormat() ), getRiXDataType( texture->getType() ), width, height, depth, layers, mipMaps );
+            dp::rix::gl::TextureDescriptionGL td( tt, dp::rix::core::InternalTextureFormat::NATIVE, getRiXPixelFormat( texture->getFormat() ), getRiXDataType( texture->getType() ), width, height, depth, layers, mipMaps );
             td.m_internalFormatGL = texFormat.intFmt;
 
             return renderer->textureCreate( td );
@@ -317,7 +317,7 @@ namespace dp
             else if ( m_texture.isPtrTo<dp::sg::gl::TextureGL>() )
             {
               dp::sg::gl::TextureGLSharedPtr const& textureGL = m_texture.staticCast<dp::sg::gl::TextureGL>();
-              dp::rix::gl::TextureDescriptionGL td( getRiXTextureType(m_texture), dp::rix::core::ITF_NATIVE, dp::rix::gl::getDPPixelFormat( textureGL->getTexture()->getFormat() )
+              dp::rix::gl::TextureDescriptionGL td( getRiXTextureType(m_texture), dp::rix::core::InternalTextureFormat::NATIVE, dp::rix::gl::getDPPixelFormat( textureGL->getTexture()->getFormat() )
                                                   , dp::rix::gl::getDPDataType( textureGL->getTexture()->getType() ) );
               m_textureHandle = renderer->textureCreate( td );
               renderer->textureSetData( m_textureHandle, dp::rix::gl::TextureDataGLTexture( textureGL->getTexture() ) );

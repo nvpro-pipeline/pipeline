@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2009-2010
+// Copyright (c) 2009-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -34,7 +34,7 @@ inline void LogMessage( const char * format, ... )
   va_list valist;
   va_start( valist, format );
 
-  GetApp()->log( format, valist, LogWidget::LOG_MESSAGE );
+  GetApp()->log( format, valist, LogWidget::Severity::LOG_MESSAGE );
   va_end( valist );
 }
 
@@ -43,7 +43,7 @@ inline void LogWarning( const char * format, ... )
   va_list valist;
   va_start( valist, format );
 
-  GetApp()->log( format, valist, LogWidget::LOG_WARNING );
+  GetApp()->log( format, valist, LogWidget::Severity::LOG_WARNING );
   va_end( valist );
 }
 
@@ -52,7 +52,7 @@ inline void LogError( const char * format, ... )
   va_list valist;
   va_start( valist, format );
 
-  GetApp()->log( format, valist, LogWidget::LOG_ERROR );
+  GetApp()->log( format, valist, LogWidget::Severity::LOG_ERROR );
   va_end( valist );
 }
 

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -52,7 +52,7 @@ namespace dp
               if ( buffer.isPtrTo<dp::sg::gl::BufferGL>() )
               {
                 dp::sg::gl::BufferGLSharedPtr const& buffergl = buffer.staticCast<dp::sg::gl::BufferGL>();
-                dp::rix::gl::BufferDescriptionGL bufferDescription( dp::rix::gl::UH_STATIC_DRAW, buffergl->getBuffer() );
+                dp::rix::gl::BufferDescriptionGL bufferDescription( dp::rix::gl::UsageHint::STATIC_DRAW, buffergl->getBuffer() );
 
                 resourceBuffer->m_bufferHandle = resourceManager->getRenderer()->bufferCreate( bufferDescription );
                 resourceBuffer->m_isNativeBuffer = true;

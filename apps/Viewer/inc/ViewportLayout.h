@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2009-2011
+// Copyright (c) 2009-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -32,23 +32,22 @@
 class QSplitterMovable;
 class ViewerRendererWidget;
 
-enum VIEWPORT_LAYOUT
-{
-  VIEWPORT_LAYOUT_ONE,
-  VIEWPORT_LAYOUT_TWO_LEFT,
-  VIEWPORT_LAYOUT_TWO_TOP,
-  VIEWPORT_LAYOUT_THREE_LEFT,
-  VIEWPORT_LAYOUT_THREE_TOP,
-  VIEWPORT_LAYOUT_FOUR
-};
-
-unsigned int viewportCount( int viewportLayout );
-
 class ViewportLayout : public QWidget
 {
   Q_OBJECT
 
 public:
+  enum class Type
+  {
+    ONE,
+    TWO_LEFT,
+    TWO_TOP,
+    THREE_LEFT,
+    THREE_TOP,
+    FOUR,
+    UNDEFINED
+  };
+
   enum { MAX_VIEWS = 4 };
 
   ViewportLayout(QWidget * parent = 0);
@@ -59,7 +58,7 @@ protected:
   virtual bool eventFilter( QObject * obj, QEvent * event );
 
 public slots:
-  void setViewportLayout(int layoutSelector);
+  void setViewportLayout(Type type);
   void setActiveViewport(int index);
   void clear();
 
@@ -71,7 +70,7 @@ signals:
   void activeViewportChanged( int, QWidget * );
 
 private:
-  int m_currentLayout;
+  Type m_currentLayout;
   int m_activeViewportIndex;
   int m_displayViewport[MAX_VIEWS];
   QWidget *m_viewport[MAX_VIEWS];
@@ -80,3 +79,4 @@ private:
   bool m_preventSplitterMoveRecursion;
 };
 
+unsigned int viewportCount( ViewportLayout::Type viewportLayout );

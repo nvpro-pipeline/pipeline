@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -93,7 +93,7 @@ namespace dp
       : m_name(name)
       , m_type(PT_ENUM)
       , m_annotation(annotation)
-      , m_semantic(SEMANTIC_VALUE)
+      , m_semantic(Semantic::VALUE)
       , m_enumSpec(enumSpec)
       , m_arraySize(arraySize)
       , m_defaultValue(nullptr)

@@ -66,7 +66,7 @@ namespace dp
       {
         switch ( event.getType() )
         {
-        case dp::util::Event::PROPERTY:
+        case dp::util::Event::Type::PROPERTY:
           {
             dp::util::Reflection::PropertyEvent const& propertyEvent = static_cast<dp::util::Reflection::PropertyEvent const&>(event);
             dp::util::PropertyId propertyId = propertyEvent.getPropertyId();
@@ -83,7 +83,7 @@ namespace dp
             }
           }
           break;
-        case dp::util::Event::DP_SG_CORE:
+        case dp::util::Event::Type::DP_SG_CORE:
           {
             dp::sg::core::Event const& coreEvent = static_cast<dp::sg::core::Event const&>(event);
             if ( coreEvent.getType() == dp::sg::core::Event::Type::GROUP )

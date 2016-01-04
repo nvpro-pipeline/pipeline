@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2015
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -78,7 +78,7 @@ namespace dp
             m_geometry->attach( this );
           }
 
-          notify( Event(this, CHANGED_DATA) );
+          notify( Event(this, EventType::CHANGED_DATA) );
         }
       }
 
@@ -128,7 +128,7 @@ namespace dp
         if ( it != m_programPipeline->m_containerDescriptorPositions.end() )
         {
           m_containers[it->second].container = container;
-          notify( Event( this, container.get(), CHANGED_CONTAINER ) );
+          notify( Event( this, container.get(), EventType::CHANGED_CONTAINER ) );
           return true;
         }
         return false;
@@ -140,7 +140,7 @@ namespace dp
         if ( isVisible != m_isVisible )
         {
           m_isVisible = isVisible;
-          notify( Event(this, CHANGED_VISIBILITY) );
+          notify( Event(this, EventType::CHANGED_VISIBILITY) );
         }
 
       }
@@ -148,7 +148,7 @@ namespace dp
       void GeometryInstanceGL::onNotify( dp::util::Event const & /*event*/, dp::util::Payload* /*payload*/ )
       {
         // comes from Geometry-Object
-        notify( Event( this, CHANGED_DATA ) );
+        notify( Event( this, EventType::CHANGED_DATA ) );
       }
 
       void GeometryInstanceGL::onDestroyed( dp::util::Subject const & /*subject*/, dp::util::Payload* /*payload*/ )

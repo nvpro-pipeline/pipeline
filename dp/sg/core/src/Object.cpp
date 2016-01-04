@@ -1,4 +1,4 @@
-// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -46,10 +46,10 @@ namespace dp
       DEFINE_STATIC_PROPERTY(Object, TraversalMask);
 
       BEGIN_REFLECTION_INFO(Object)
-        INIT_STATIC_PROPERTY_RW (Object, Name,          std::string,  SEMANTIC_VALUE, const_reference, const_reference);
-        INIT_STATIC_PROPERTY_RW (Object, Annotation,    std::string,  SEMANTIC_VALUE, const_reference, const_reference);
-        INIT_STATIC_PROPERTY_RW (Object, Hints,         unsigned int, SEMANTIC_VALUE, value, value);
-        INIT_STATIC_PROPERTY_RW (Object, TraversalMask, unsigned int, SEMANTIC_VALUE, value, value);
+        INIT_STATIC_PROPERTY_RW (Object, Name,          std::string,  Semantic::VALUE, const_reference, const_reference);
+        INIT_STATIC_PROPERTY_RW (Object, Annotation,    std::string,  Semantic::VALUE, const_reference, const_reference);
+        INIT_STATIC_PROPERTY_RW (Object, Hints,         unsigned int, Semantic::VALUE, value, value);
+        INIT_STATIC_PROPERTY_RW (Object, TraversalMask, unsigned int, Semantic::VALUE, value, value);
       END_REFLECTION_INFO
 
       Object::Object(void)
@@ -248,7 +248,7 @@ namespace dp
         unsigned int changedState = 0;
         switch(event.getType())
         {
-          case dp::util::Event::DP_SG_CORE:
+          case dp::util::Event::Type::DP_SG_CORE:
             {
               // we can ingore core events
               dp::sg::core::Event const& coreEvent = static_cast<dp::sg::core::Event const&>(event);
@@ -304,10 +304,10 @@ namespace dp
               }
             }
             break;
-          case dp::util::Event::GENERIC:
+          case dp::util::Event::Type::GENERIC:
             // no need to change anything on a generic event
             break;
-          case dp::util::Event::PROPERTY:
+          case dp::util::Event::Type::PROPERTY:
             {
               //The only property events we're interested in are those that potentially change the bounding volumes.
               dp::util::Reflection::PropertyEvent const& propertyEvent = static_cast<dp::util::Reflection::PropertyEvent const&>(event);

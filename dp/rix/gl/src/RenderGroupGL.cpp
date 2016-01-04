@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -170,16 +170,16 @@ namespace dp
         const GeometryInstanceGL::Event& eventGeometryInstance = static_cast<const GeometryInstanceGL::Event&>(event);
         switch ( eventGeometryInstance.getEventType() )
         {
-          case GeometryInstanceGL::CHANGED_DATA:
+          case GeometryInstanceGL::EventType::CHANGED_DATA:
             markDirty( eventGeometryInstance.getGeometryInstance() );
           break;
-          case GeometryInstanceGL::CHANGED_CONTAINER:
+          case GeometryInstanceGL::EventType::CHANGED_CONTAINER:
             for ( ProgramPipelineCaches::iterator it = m_programPipelineCaches.begin(); it != m_programPipelineCaches.end(); ++it )
             {
               it->second->onContainerExchanged();
             }
           break;
-          case GeometryInstanceGL::CHANGED_VISIBILITY:
+          case GeometryInstanceGL::EventType::CHANGED_VISIBILITY:
             // nothing to do
           break;
         }

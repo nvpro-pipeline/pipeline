@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -56,7 +56,7 @@ namespace dp
 
       ProgramGL::ProgramGL( const ProgramDescription& descr )
       {
-        DP_ASSERT( descr.m_shader.m_type == PST_CODE );
+        DP_ASSERT( descr.m_shader.m_type == ProgramShaderType::CODE );
         DP_ASSERT( dynamic_cast<const ProgramShaderCode*>(&descr.m_shader) );
         const ProgramShaderCode& sc = static_cast<const ProgramShaderCode&>( descr.m_shader );
 
@@ -131,7 +131,7 @@ namespace dp
         std::vector<dp::gl::Program::Block> const& ubos = m_program->getActiveUniformBlocks();
         for ( size_t i=0 ; i<ubos.size() ; i++ )
         {
-          registerBufferBinding( ubos[i].name, ubos[i].binding, BBT_UBO );
+          registerBufferBinding( ubos[i].name, ubos[i].binding, BufferBindingType::UBO );
         }
 
         glUseProgram( m_program->getGLId() );
@@ -164,7 +164,7 @@ namespace dp
                 GLenum type;
                 glGetActiveUniform( programID, counterIndices[counterIndex], maxUniformNameLen, &nameLen, &arraySize, &type, &name[0] );
                 std::string atomicName(&name[0],nameLen);
-                registerBufferBinding( atomicName, bindingPoint, BBT_ATOMIC_COUNTER );
+                registerBufferBinding( atomicName, bindingPoint, BufferBindingType::ATOMIC_COUNTER );
               }
             }
           }
@@ -174,7 +174,7 @@ namespace dp
         std::vector<dp::gl::Program::Block> const& ssbs = m_program->getShaderStorageBlocks();
         for ( size_t i=0 ; i<ssbs.size() ; i++ )
         {
-          registerBufferBinding( ssbs[i].name, ssbs[i].binding, BBT_SHADER_STORAGE_BUFFER );
+          registerBufferBinding( ssbs[i].name, ssbs[i].binding, BufferBindingType::SHADER_STORAGE_BUFFER );
         }
       }
 

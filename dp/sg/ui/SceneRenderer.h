@@ -123,7 +123,7 @@ namespace dp
         **/
         DP_SG_UI_API void render( dp::sg::ui::ViewStateSharedPtr const& viewState
                                 , dp::ui::RenderTargetSharedPtr const& renderTarget = dp::ui::RenderTargetSharedPtr()
-                                , dp::ui::RenderTarget::StereoTarget stereoTarget = dp::ui::RenderTarget::LEFT_AND_RIGHT );
+                                , dp::ui::RenderTarget::StereoTarget stereoTarget = dp::ui::RenderTarget::StereoTarget::LEFT_AND_RIGHT );
 
         /** \brief Add all renderer options required by this renderer to the given dp::sg::ui::RendererOptions object. It is possible
         *          to pass the same options object to multiple SceneRenderers as long as there are no property name collisions.

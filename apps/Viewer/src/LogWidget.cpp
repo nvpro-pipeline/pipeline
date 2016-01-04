@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2009-2010
+// Copyright (c) 2009-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -58,14 +58,14 @@ void LogWidget::message( const QString & inmessage, Severity severity )
   QString message( inmessage );
   escapeHTML( message );
 
-  if ( severity == LOG_MESSAGE )
+  if ( severity == Severity::LOG_MESSAGE )
   {
     output += QString("<b>") + message + QString("</b>");
   }
   else
   {
     output.append( "<b><span style=\"color:" );
-    output.append( (severity == LOG_WARNING) ? m_warningColor : m_errorColor );
+    output.append( (severity == Severity::LOG_WARNING) ? m_warningColor : m_errorColor );
     output.append( "\">" );
     output.append( message );
     output.append( "</span></b>" );

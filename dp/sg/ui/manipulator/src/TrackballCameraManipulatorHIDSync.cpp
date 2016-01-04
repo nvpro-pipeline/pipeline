@@ -77,44 +77,44 @@ namespace dp
           setCursorPosition( m_hid->getValue<dp::math::Vec2i>( PID_Pos ) );
           setWheelTicks( m_hid->getValue<int>( PID_Wheel ) );
 
-          TrackballCameraManipulator::Mode mode = TrackballCameraManipulator::MODE_NONE;
+          TrackballCameraManipulator::Mode mode = TrackballCameraManipulator::Mode::NONE;
           if ( hotspot )
           {
-            mode = TrackballCameraManipulator::MODE_LOOKAT;
+            mode = TrackballCameraManipulator::Mode::LOOKAT;
           }
           else if ( hotspot_depth)
           {
-            mode = TrackballCameraManipulator::MODE_LOOKAT_DEPTH;
+            mode = TrackballCameraManipulator::Mode::LOOKAT_DEPTH;
           }
           else 
           {
             if ( orbit && pan && control && shift )  // vertigo
             {
-              mode = TrackballCameraManipulator::MODE_ZOOM_DOLLY;
+              mode = TrackballCameraManipulator::Mode::ZOOM_DOLLY;
             }
             if ( orbit && pan && control && !shift )  // zoom
             {
-              mode = TrackballCameraManipulator::MODE_ZOOM_FOV;
+              mode = TrackballCameraManipulator::Mode::ZOOM_FOV;
             }
             if ( orbit && pan && !control && !shift )  // dolly
             {
-              mode = TrackballCameraManipulator::MODE_DOLLY;
+              mode = TrackballCameraManipulator::Mode::DOLLY;
             }
             else if ( orbit && !pan && !control && !shift )
             {
-              mode = TrackballCameraManipulator::MODE_ORBIT;
+              mode = TrackballCameraManipulator::Mode::ORBIT;
             }
             else if ( !orbit && pan && !control && !shift )
             {
-              mode = TrackballCameraManipulator::MODE_PAN;
+              mode = TrackballCameraManipulator::Mode::PAN;
             }
             else if ( !orbit && pan && control && !shift )
             {
-              mode = TrackballCameraManipulator::MODE_ROLL_Z;
+              mode = TrackballCameraManipulator::Mode::ROLL_Z;
             }
             else if ( orbit && !pan && control && !shift )
             {
-              mode = TrackballCameraManipulator::MODE_ROTATE_XY;
+              mode = TrackballCameraManipulator::Mode::ROTATE_XY;
             }
           }
 

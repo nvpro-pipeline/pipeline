@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -111,15 +111,15 @@ namespace dp
         {
           if (itBufferMode->second == "bufferSubData")
           {
-            m_bufferMode = BM_BUFFER_SUBDATA;
+            m_bufferMode = BufferMode::BUFFER_SUBDATA;
           }
           else if (itBufferMode->second == "bindBufferRange")
           {
-            m_bufferMode = BM_BIND_BUFFER_RANGE;
+            m_bufferMode = BufferMode::BIND_BUFFER_RANGE;
           }
           else if (itBufferMode->second == "persistentBufferMapping")
           {
-            m_bufferMode = BM_PERSISTENT_BUFFER_MAPPING;
+            m_bufferMode = BufferMode::PERSISTENT_BUFFER_MAPPING;
           }
           else
           {
@@ -128,10 +128,10 @@ namespace dp
         }
         else
         {
-          m_bufferMode = BM_BIND_BUFFER_RANGE;
+          m_bufferMode = BufferMode::BIND_BUFFER_RANGE;
         }
 
-        if (m_bufferMode == BM_BUFFER_SUBDATA && m_useUniformBufferUnifiedMemory == true)
+        if (m_bufferMode == BufferMode::BUFFER_SUBDATA && m_useUniformBufferUnifiedMemory == true)
         {
           throw std::runtime_error("bufferMode=bufferSubData is currently not compatible with uniformUnifiedMemory=true");
         }

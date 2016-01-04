@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2015
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -40,9 +40,9 @@ namespace dp
       {
         switch( compareMode )
         {
-        case dp::rix::core::SSCM_NONE :
+        case dp::rix::core::SamplerStateCompareMode::NONE :
           return GL_NONE;
-        case dp::rix::core::SSCM_R_TO_TEXTURE :
+        case dp::rix::core::SamplerStateCompareMode::R_TO_TEXTURE :
           return GL_COMPARE_R_TO_TEXTURE;
         default :
           DP_ASSERT( !"Unknown RiX SamplerStateCompareMode" );
@@ -226,109 +226,109 @@ namespace dp
       {
         switch ( description.m_internalFormat )
         {
-        case dp::rix::core::ITF_R8:
+        case dp::rix::core::InternalTextureFormat::R8:
           return GL_R8;
-        case dp::rix::core::ITF_R16:
+        case dp::rix::core::InternalTextureFormat::R16:
           return GL_R16;
-        case dp::rix::core::ITF_RG8:
+        case dp::rix::core::InternalTextureFormat::RG8:
           return GL_RG8;
-        case dp::rix::core::ITF_RG16:
+        case dp::rix::core::InternalTextureFormat::RG16:
           return GL_RG16;
-        case dp::rix::core::ITF_RGB8:
+        case dp::rix::core::InternalTextureFormat::RGB8:
           return GL_RGB8;
-        case dp::rix::core::ITF_RGB16:
+        case dp::rix::core::InternalTextureFormat::RGB16:
           return GL_RGB16;
-        case dp::rix::core::ITF_RGBA8:
+        case dp::rix::core::InternalTextureFormat::RGBA8:
           return GL_RGBA8;
-        case dp::rix::core::ITF_RGBA16:
+        case dp::rix::core::InternalTextureFormat::RGBA16:
           return GL_RGBA16;
-        case dp::rix::core::ITF_R16F:
+        case dp::rix::core::InternalTextureFormat::R16F:
           return GL_R16F;
-        case dp::rix::core::ITF_RG16F:
+        case dp::rix::core::InternalTextureFormat::RG16F:
           return GL_RG16F;
-        case dp::rix::core::ITF_RGB16F:
+        case dp::rix::core::InternalTextureFormat::RGB16F:
           return GL_RGB16F;
-        case dp::rix::core::ITF_RGBA16F:
+        case dp::rix::core::InternalTextureFormat::RGBA16F:
           return GL_RGBA16F;
-        case dp::rix::core::ITF_R32F:
+        case dp::rix::core::InternalTextureFormat::R32F:
           return GL_R32F;
-        case dp::rix::core::ITF_RG32F:
+        case dp::rix::core::InternalTextureFormat::RG32F:
           return GL_RG32F;
-        case dp::rix::core::ITF_RGB32F:
+        case dp::rix::core::InternalTextureFormat::RGB32F:
           return GL_RGB32F;
-        case dp::rix::core::ITF_RGBA32F:
+        case dp::rix::core::InternalTextureFormat::RGBA32F:
           return GL_RGBA32F;
-        case dp::rix::core::ITF_R8I:
+        case dp::rix::core::InternalTextureFormat::R8I:
           return GL_R8I;
-        case dp::rix::core::ITF_R8UI:
+        case dp::rix::core::InternalTextureFormat::R8UI:
           return GL_R8UI;
-        case dp::rix::core::ITF_R16I:
+        case dp::rix::core::InternalTextureFormat::R16I:
           return GL_R16I;
-        case dp::rix::core::ITF_R16UI:
+        case dp::rix::core::InternalTextureFormat::R16UI:
           return GL_R16UI;
-        case dp::rix::core::ITF_R32I:
+        case dp::rix::core::InternalTextureFormat::R32I:
           return GL_R32I;
-        case dp::rix::core::ITF_R32UI:
+        case dp::rix::core::InternalTextureFormat::R32UI:
           return GL_R32UI;
-        case dp::rix::core::ITF_RG8I:
+        case dp::rix::core::InternalTextureFormat::RG8I:
           return GL_RG8I;
-        case dp::rix::core::ITF_RG8UI:
+        case dp::rix::core::InternalTextureFormat::RG8UI:
           return GL_RG8UI;
-        case dp::rix::core::ITF_RG16I:
+        case dp::rix::core::InternalTextureFormat::RG16I:
           return GL_RG16I;
-        case dp::rix::core::ITF_RG16UI:
+        case dp::rix::core::InternalTextureFormat::RG16UI:
           return GL_RG16UI;
-        case dp::rix::core::ITF_RG32I:
+        case dp::rix::core::InternalTextureFormat::RG32I:
           return GL_RG32I;
-        case dp::rix::core::ITF_RG32UI:
+        case dp::rix::core::InternalTextureFormat::RG32UI:
           return GL_RG32UI;
-        case dp::rix::core::ITF_RGB8I:
+        case dp::rix::core::InternalTextureFormat::RGB8I:
           return GL_RGB8I;
-        case dp::rix::core::ITF_RGB8UI:
+        case dp::rix::core::InternalTextureFormat::RGB8UI:
           return GL_RGB8UI;
-        case dp::rix::core::ITF_RGB16I:
+        case dp::rix::core::InternalTextureFormat::RGB16I:
           return GL_RGB16I;
-        case dp::rix::core::ITF_RGB16UI:
+        case dp::rix::core::InternalTextureFormat::RGB16UI:
           return GL_RGB16UI;
-        case dp::rix::core::ITF_RGB32I:
+        case dp::rix::core::InternalTextureFormat::RGB32I:
           return GL_RGB32I;
-        case dp::rix::core::ITF_RGB32UI:
+        case dp::rix::core::InternalTextureFormat::RGB32UI:
           return GL_RGB32UI;
-        case dp::rix::core::ITF_RGBA8I:
+        case dp::rix::core::InternalTextureFormat::RGBA8I:
           return GL_RGBA8I;
-        case dp::rix::core::ITF_RGBA8UI:
+        case dp::rix::core::InternalTextureFormat::RGBA8UI:
           return GL_RGBA8UI;
-        case dp::rix::core::ITF_RGBA16I:
+        case dp::rix::core::InternalTextureFormat::RGBA16I:
           return GL_RGBA16I;
-        case dp::rix::core::ITF_RGBA16UI:
+        case dp::rix::core::InternalTextureFormat::RGBA16UI:
           return GL_RGBA16UI;
-        case dp::rix::core::ITF_RGBA32I:
+        case dp::rix::core::InternalTextureFormat::RGBA32I:
           return GL_RGBA32I;
-        case dp::rix::core::ITF_RGBA32UI:
+        case dp::rix::core::InternalTextureFormat::RGBA32UI:
           return GL_RGBA32UI;
-        case dp::rix::core::ITF_COMPRESSED_R:
+        case dp::rix::core::InternalTextureFormat::COMPRESSED_R:
           return GL_COMPRESSED_RED;
-        case dp::rix::core::ITF_COMPRESSED_RG:
+        case dp::rix::core::InternalTextureFormat::COMPRESSED_RG:
           return GL_COMPRESSED_RG;
-        case dp::rix::core::ITF_COMPRESSED_RGB:
+        case dp::rix::core::InternalTextureFormat::COMPRESSED_RGB:
           return GL_COMPRESSED_RGB;
-        case dp::rix::core::ITF_COMPRESSED_RGBA:
+        case dp::rix::core::InternalTextureFormat::COMPRESSED_RGBA:
           return GL_COMPRESSED_RGBA;
-        case dp::rix::core::ITF_COMPRESSED_SRGB:
+        case dp::rix::core::InternalTextureFormat::COMPRESSED_SRGB:
           return GL_COMPRESSED_SRGB;
-        case dp::rix::core::ITF_COMPRESSED_SRGB_ALPHA:
+        case dp::rix::core::InternalTextureFormat::COMPRESSED_SRGB_ALPHA:
           return GL_COMPRESSED_SRGB_ALPHA;
-        case dp::rix::core::ITF_ALPHA:
+        case dp::rix::core::InternalTextureFormat::ALPHA:
           return GL_ALPHA;
-        case dp::rix::core::ITF_LUMINANCE:
+        case dp::rix::core::InternalTextureFormat::LUMINANCE:
           return GL_LUMINANCE;
-        case dp::rix::core::ITF_LUMINANCE_ALPHA:
+        case dp::rix::core::InternalTextureFormat::LUMINANCE_ALPHA:
           return GL_LUMINANCE_ALPHA;
-        case dp::rix::core::ITF_RGB:
+        case dp::rix::core::InternalTextureFormat::RGB:
           return GL_RGB;
-        case dp::rix::core::ITF_RGBA:
+        case dp::rix::core::InternalTextureFormat::RGBA:
           return GL_RGBA;
-        case dp::rix::core::ITF_NATIVE:
+        case dp::rix::core::InternalTextureFormat::NATIVE:
           {
             DP_ASSERT( dynamic_cast<const TextureDescriptionGL*>(&description) );
             const TextureDescriptionGL& descriptionGL = static_cast<const TextureDescriptionGL&>(description);
@@ -385,17 +385,17 @@ namespace dp
       {
         switch ( filterMode )
         {
-        case dp::rix::core::SSFM_NEAREST:
+        case dp::rix::core::SamplerStateFilterMode::NEAREST:
            return GL_NEAREST;
-        case dp::rix::core::SSFM_LINEAR:
+        case dp::rix::core::SamplerStateFilterMode::LINEAR:
            return GL_LINEAR;
-        case dp::rix::core::SSFM_NEAREST_MIPMAP_NEAREST:
+        case dp::rix::core::SamplerStateFilterMode::NEAREST_MIPMAP_NEAREST:
            return GL_NEAREST_MIPMAP_NEAREST;
-        case dp::rix::core::SSFM_LINEAR_MIPMAP_NEAREST:
+        case dp::rix::core::SamplerStateFilterMode::LINEAR_MIPMAP_NEAREST:
            return GL_LINEAR_MIPMAP_NEAREST;
-        case dp::rix::core::SSFM_NEAREST_MIPMAP_LINEAR:
+        case dp::rix::core::SamplerStateFilterMode::NEAREST_MIPMAP_LINEAR:
            return GL_NEAREST_MIPMAP_LINEAR;
-        case dp::rix::core::SSFM_LINEAR_MIPMAP_LINEAR:
+        case dp::rix::core::SamplerStateFilterMode::LINEAR_MIPMAP_LINEAR:
            return GL_LINEAR_MIPMAP_LINEAR;
         default:
           DP_ASSERT( !"Unknown RiX SamplerStateFilterMode" );
@@ -407,15 +407,15 @@ namespace dp
       {
         switch ( wrapMode )
         {
-        case dp::rix::core::SSWM_CLAMP:
+        case dp::rix::core::SamplerStateWrapMode::CLAMP:
            return GL_CLAMP;
-        case dp::rix::core::SSWM_CLAMP_TO_BORDER:
+        case dp::rix::core::SamplerStateWrapMode::CLAMP_TO_BORDER:
            return GL_CLAMP_TO_BORDER;
-        case dp::rix::core::SSWM_CLAMP_TO_EDGE:
+        case dp::rix::core::SamplerStateWrapMode::CLAMP_TO_EDGE:
            return GL_CLAMP_TO_EDGE;
-        case dp::rix::core::SSWM_MIRRORED_REPEAT:
+        case dp::rix::core::SamplerStateWrapMode::MIRRORED_REPEAT:
            return GL_MIRRORED_REPEAT;
-        case dp::rix::core::SSWM_REPEAT:
+        case dp::rix::core::SamplerStateWrapMode::REPEAT:
            return GL_REPEAT;
         default:
           DP_ASSERT( !"Unknown RiX SamplerStateWrapMode" );
@@ -427,11 +427,11 @@ namespace dp
       {
         switch ( access )
         {
-        case dp::rix::core::AT_READ_ONLY:
+        case dp::rix::core::AccessType::READ_ONLY:
           return GL_READ_ONLY;
-        case dp::rix::core::AT_WRITE_ONLY:
+        case dp::rix::core::AccessType::WRITE_ONLY:
           return GL_WRITE_ONLY;
-        case dp::rix::core::AT_READ_WRITE:
+        case dp::rix::core::AccessType::READ_WRITE:
           return GL_READ_WRITE;
         default:
           DP_ASSERT( !"Unexpected RiX AccessType" );
@@ -443,11 +443,11 @@ namespace dp
       {
         switch ( access )
         {
-        case dp::rix::core::AT_READ_ONLY:
+        case dp::rix::core::AccessType::READ_ONLY:
           return GL_MAP_READ_BIT;
-        case dp::rix::core::AT_WRITE_ONLY:
+        case dp::rix::core::AccessType::WRITE_ONLY:
           return GL_MAP_WRITE_BIT;
-        case dp::rix::core::AT_READ_WRITE:
+        case dp::rix::core::AccessType::READ_WRITE:
           return GL_MAP_READ_BIT | GL_MAP_WRITE_BIT;
         default:
           DP_ASSERT( !"Unexpected RiX AccessType" );
@@ -460,15 +460,15 @@ namespace dp
       {
         switch ( shaderType )
         {
-          case dp::rix::core::ST_VERTEX_SHADER:
+          case dp::rix::core::ShaderType::VERTEX_SHADER:
             return GL_VERTEX_SHADER;
-          case dp::rix::core::ST_TESS_CONTROL_SHADER:
+          case dp::rix::core::ShaderType::TESS_CONTROL_SHADER:
             return GL_TESS_CONTROL_SHADER;
-          case dp::rix::core::ST_TESS_EVALUATION_SHADER:
+          case dp::rix::core::ShaderType::TESS_EVALUATION_SHADER:
             return GL_TESS_EVALUATION_SHADER;
-          case dp::rix::core::ST_GEOMETRY_SHADER:
+          case dp::rix::core::ShaderType::GEOMETRY_SHADER:
             return GL_GEOMETRY_SHADER;
-          case dp::rix::core::ST_FRAGMENT_SHADER:
+          case dp::rix::core::ShaderType::FRAGMENT_SHADER:
             return GL_FRAGMENT_SHADER;
           default:
             DP_ASSERT( !"Unknown RiX ShaderType");
@@ -480,14 +480,14 @@ namespace dp
       {
         switch( type )
         {
-          case GL_VERTEX_SHADER           : return( dp::rix::core::ST_VERTEX_SHADER );
-          case GL_TESS_CONTROL_SHADER     : return( dp::rix::core::ST_TESS_CONTROL_SHADER );
-          case GL_TESS_EVALUATION_SHADER  : return( dp::rix::core::ST_TESS_EVALUATION_SHADER );
-          case GL_GEOMETRY_SHADER         : return( dp::rix::core::ST_GEOMETRY_SHADER );
-          case GL_FRAGMENT_SHADER         : return( dp::rix::core::ST_FRAGMENT_SHADER );
+          case GL_VERTEX_SHADER           : return( dp::rix::core::ShaderType::VERTEX_SHADER );
+          case GL_TESS_CONTROL_SHADER     : return( dp::rix::core::ShaderType::TESS_CONTROL_SHADER );
+          case GL_TESS_EVALUATION_SHADER  : return( dp::rix::core::ShaderType::TESS_EVALUATION_SHADER );
+          case GL_GEOMETRY_SHADER         : return( dp::rix::core::ShaderType::GEOMETRY_SHADER );
+          case GL_FRAGMENT_SHADER         : return( dp::rix::core::ShaderType::FRAGMENT_SHADER );
           default :
             DP_ASSERT( !"Invalid GL Shader Type" );
-            return( dp::rix::core::ST_NUM_SHADERTYPES );
+            return( dp::rix::core::ShaderType::NUM_SHADERTYPES );
         }
       }
 
@@ -495,15 +495,15 @@ namespace dp
       {
         switch ( shaderType )
         {
-        case dp::rix::core::ST_VERTEX_SHADER:
+        case dp::rix::core::ShaderType::VERTEX_SHADER:
           return GL_VERTEX_SHADER_BIT;
-        case dp::rix::core::ST_TESS_CONTROL_SHADER:
+        case dp::rix::core::ShaderType::TESS_CONTROL_SHADER:
           return GL_TESS_CONTROL_SHADER_BIT;
-        case dp::rix::core::ST_TESS_EVALUATION_SHADER:
+        case dp::rix::core::ShaderType::TESS_EVALUATION_SHADER:
           return GL_TESS_EVALUATION_SHADER_BIT;
-        case dp::rix::core::ST_GEOMETRY_SHADER:
+        case dp::rix::core::ShaderType::GEOMETRY_SHADER:
           return GL_GEOMETRY_SHADER_BIT;
-        case dp::rix::core::ST_FRAGMENT_SHADER:
+        case dp::rix::core::ShaderType::FRAGMENT_SHADER:
           return GL_FRAGMENT_SHADER_BIT;
         default:
           DP_ASSERT( !"Unknown RiX ShaderType");

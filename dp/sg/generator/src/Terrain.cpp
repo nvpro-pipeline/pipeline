@@ -229,7 +229,7 @@ namespace dp
       class TerrainNode : public dp::sg::core::GeoNode
       {
       public:
-        enum Mode { MODE_VERTEX, MODE_GEOMETRY, MODE_TESSELLATION };
+        enum class Mode { VERTEX, GEOMETRY, TESSELLATION };
       public:
         TerrainNode( dp::sg::core::TextureHostSharedPtr const & heightMap, dp::sg::core::TextureHostSharedPtr const & colorMap
                     , dp::math::Vec3f const & resolution, dp::math::Vec3f const & offset, Mode mode);
@@ -255,17 +255,17 @@ namespace dp
         float verticesPerTexel = 6;
         switch ( mode )
         {
-        case MODE_VERTEX:
+        case Mode::VERTEX:
           effectName = "terrain";
           primitiveType = dp::sg::core::PrimitiveType::TRIANGLES;
           verticesPerTexel = 6;
           break;
-        case MODE_GEOMETRY:
+        case Mode::GEOMETRY:
           effectName = "terrain_geometry";
           primitiveType = dp::sg::core::PrimitiveType::POINTS;
           verticesPerTexel = 1;
           break;
-        case MODE_TESSELLATION:
+        case Mode::TESSELLATION:
           effectName = "terrain_tessellation";
           primitiveType = dp::sg::core::PrimitiveType::PATCHES;
           verticesPerTexel = 1.0f / (4.0f * 4.0f);
@@ -377,7 +377,7 @@ namespace dp
           dp::sg::core::TextureHostSharedPtr heightMap = dp::sg::io::loadTextureHost( filenameHeightMap );
           dp::sg::core::TextureHostSharedPtr colorMap = dp::sg::io::loadTextureHost( filenameColorMap );
 
-          return( std::make_shared<TerrainNode>( heightMap, colorMap, resolution, offset, TerrainNode::MODE_TESSELLATION ) );
+          return( std::make_shared<TerrainNode>( heightMap, colorMap, resolution, offset, TerrainNode::Mode::TESSELLATION ) );
         }
       }
 

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -93,16 +93,16 @@ namespace dp
                                                              , dp::rix::util::TextureObjectDataSharedPtr data
                                                              , dp::PixelFormat pixelFormat = dp::PixelFormat::RGBA
                                                              , dp::DataType dataType = dp::DataType::FLOAT_32
-                                                             , core::InternalTextureFormat internalFormat = core::ITF_RGBA8
+                                                             , core::InternalTextureFormat internalFormat = core::InternalTextureFormat::RGBA8
                                                              , bool generateMipmaps = false );
 
       DPHELPERS_API core::TextureSharedHandle createTextureFromFile( dp::rix::core::Renderer* rix, std::string filename
-                                                                   , core::InternalTextureFormat internalFormat = core::ITF_RGBA8
+                                                                   , core::InternalTextureFormat internalFormat = core::InternalTextureFormat::RGBA8
                                                                    , bool generateMipmaps = false );
 
       DPHELPERS_API core::TextureSharedHandle createCubemapFromFile( dp::rix::core::Renderer* rix
                                                                    , std::string filename
-                                                                   , core::InternalTextureFormat internalFormat = core::ITF_RGBA8
+                                                                   , core::InternalTextureFormat internalFormat = core::InternalTextureFormat::RGBA8
                                                                    , bool generateMipmaps = false);
     
     } // namespace util

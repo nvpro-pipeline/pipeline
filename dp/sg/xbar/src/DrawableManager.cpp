@@ -76,7 +76,7 @@ namespace dp
 
         switch ( eventObject.getType() )
         {
-        case SceneTree::Event::Added:
+        case SceneTree::Event::Type::ADDED:
           DP_ASSERT( !m_drawableManager->m_dis[eventObject.getIndex()] );
 
           // TODO there're two locations which execute this code, unify with as function
@@ -84,19 +84,19 @@ namespace dp
           m_drawableManager->setDrawableInstanceActive( m_drawableManager->m_dis[eventObject.getIndex()], node.m_worldActive );
           m_drawableManager->m_geoNodeObserver->attach( geoNode, eventObject.getIndex() );
           break;
-        case SceneTree::Event::Removed:
+        case SceneTree::Event::Type::REMOVED:
           DP_ASSERT( m_drawableManager->m_dis[eventObject.getIndex()] );
           m_drawableManager->m_geoNodeObserver->detach( eventObject.getIndex() );
           m_drawableManager->removeDrawableInstance( m_drawableManager->m_dis[eventObject.getIndex()] );
           m_drawableManager->m_dis[eventObject.getIndex()].reset();
           break;
-        case SceneTree::Event::Changed:
+        case SceneTree::Event::Type::CHANGED:
           DP_ASSERT(!"removed");
-        case SceneTree::Event::ActiveChanged:
+        case SceneTree::Event::Type::ACTIVE_CHANGED:
           DP_ASSERT( m_drawableManager->m_dis[eventObject.getIndex()] );
           m_drawableManager->setDrawableInstanceActive( m_drawableManager->m_dis[eventObject.getIndex()], node.m_worldActive );
           break;
-        case SceneTree::Event::TraversalMaskChanged:
+        case SceneTree::Event::Type::TRAVERSAL_MASK_CHANGED:
           DP_ASSERT( m_drawableManager->m_dis[eventObject.getIndex()] );
           m_drawableManager->setDrawableInstanceTraversalMask( m_drawableManager->m_dis[eventObject.getIndex()], node.m_worldMask );
           break;

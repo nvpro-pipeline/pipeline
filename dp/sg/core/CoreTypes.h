@@ -1,4 +1,4 @@
-// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -149,17 +149,17 @@ namespace dp
     /************************************************************************/
     /*! \brief Specialization of the TypedPropertyEnum template for type SceneSharedPtr. */
     template <> struct TypedPropertyEnum< dp::sg::core::SceneSharedPtr > {
-      enum { type = Property::TYPE_SCENE };
+      enum { type = Property::Type::SCENE };
     };
 
     /*! \brief Specialization of the TypedPropertyEnum template for type Texture. */
     template <> struct TypedPropertyEnum< dp::sg::core::TextureSharedPtr> {
-      enum { type = Property::TYPE_TEXTURE };
+      enum { type = Property::Type::TEXTURE };
     };
 
     /*! \brief Specialization of the TypedPropertyEnum template for type NodeSharedPtr. */
     template <> struct TypedPropertyEnum< dp::sg::core::NodeSharedPtr > {
-      enum { type = Property::TYPE_NODE };
+      enum { type = Property::Type::NODE };
     };
 
   } // namespace util

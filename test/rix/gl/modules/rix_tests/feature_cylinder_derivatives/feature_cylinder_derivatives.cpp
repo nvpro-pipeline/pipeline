@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -197,23 +197,23 @@ void Feature_cylinder_derivatives::createScene()
   // Container Descriptors
 
   ProgramParameter vertexConstProgramParameters[] = {
-    ProgramParameter("world2view", CPT_MAT4X4),
-    ProgramParameter("view2world", CPT_MAT4X4),
-    ProgramParameter("view2clip",  CPT_MAT4X4),
-    ProgramParameter("world2clip", CPT_MAT4X4)
+    ProgramParameter("world2view", ContainerParameterType::MAT4X4),
+    ProgramParameter("view2world", ContainerParameterType::MAT4X4),
+    ProgramParameter("view2clip",  ContainerParameterType::MAT4X4),
+    ProgramParameter("world2clip", ContainerParameterType::MAT4X4)
   };
 
   ProgramParameter vertexVarProgramParameters[] = {
-    ProgramParameter("model2world", CPT_MAT4X4),
-    ProgramParameter("model2worldIT", CPT_MAT4X4)
+    ProgramParameter("model2world", ContainerParameterType::MAT4X4),
+    ProgramParameter("model2worldIT", ContainerParameterType::MAT4X4)
   };
 
   ProgramParameter fragmentTexturedProgramParameters[] = {
-    ProgramParameter("diffuseTex", CPT_SAMPLER) 
+    ProgramParameter("diffuseTex", ContainerParameterType::SAMPLER) 
   };
 
   ProgramParameter fragmentConstProgramParameters[] = {
-    ProgramParameter("lightDir", CPT_FLOAT3)
+    ProgramParameter("lightDir", ContainerParameterType::FLOAT3)
   };
 
   ContainerDescriptorSharedHandle vertConstContainerDescriptor =
@@ -235,8 +235,8 @@ void Feature_cylinder_derivatives::createScene()
 
   // Program
 
-  ProgramShaderCode vertShader( vertexShader, ST_VERTEX_SHADER );
-  ProgramShaderCode fragTexturedShader( fragmentTextureShader, ST_FRAGMENT_SHADER );
+  ProgramShaderCode vertShader( vertexShader, ShaderType::VERTEX_SHADER );
+  ProgramShaderCode fragTexturedShader( fragmentTextureShader, ShaderType::FRAGMENT_SHADER );
 
   ContainerDescriptorSharedHandle vertContainerDescriptors[] = { vertConstContainerDescriptor, vertVarContainerDescriptor };
   ContainerDescriptorSharedHandle fragTexturedContainerDescriptors[] = { fragTexturedContainerDescriptor, fragConstContainerDescriptor  };
@@ -353,9 +353,9 @@ void Feature_cylinder_derivatives::createScene()
   m_rix->containerSetData( vertViewProjContainer,  containerEntryView2world, ContainerDataRaw( 0, world2ViewI.getPtr(), 16*sizeof(float) ) );
   m_rix->containerSetData( vertViewProjContainer,  containerEntryWorld2clip, ContainerDataRaw( 0, world2Clip.getPtr(),  16*sizeof(float) ) );
 
-  SamplerStateDataCommon samplerStateDataCommon( SSFM_NEAREST, SSFM_NEAREST );
+  SamplerStateDataCommon samplerStateDataCommon( SamplerStateFilterMode::NEAREST, SamplerStateFilterMode::NEAREST );
   SamplerStateSharedHandle samplerStateHandle = m_rix->samplerStateCreate(samplerStateDataCommon);
-  TextureSharedHandle diffuseMap = dp::rix::util::generateTexture( m_rix, dp::rix::util::createTextureGradient( Vec2ui(128, 128), Vec4f(1.0, 0.0f, 0.0f, 1.0), Vec4f(0.0, 1.0f, 0.0f, 1.0), Vec4f(0.0, 0.0f, 1.0f, 1.0) ), dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_32, ITF_RGBA8 );
+  TextureSharedHandle diffuseMap = dp::rix::util::generateTexture( m_rix, dp::rix::util::createTextureGradient( Vec2ui(128, 128), Vec4f(1.0, 0.0f, 0.0f, 1.0), Vec4f(0.0, 1.0f, 0.0f, 1.0), Vec4f(0.0, 0.0f, 1.0f, 1.0) ), dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_32, InternalTextureFormat::RGBA8 );
 
   rix::core::SamplerSharedHandle samplerDiffuseMap = m_rix->samplerCreate();
   m_rix->samplerSetTexture( samplerDiffuseMap, diffuseMap );

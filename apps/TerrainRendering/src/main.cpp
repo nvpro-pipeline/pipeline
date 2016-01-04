@@ -1,4 +1,4 @@
-// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -83,11 +83,11 @@ private:
 
   void updateSceneRendererEngine();
 
-  enum AttributeType
+  enum class AttributeType
   {
-      ATTRIBUTE_GENERIC // GL 2.x
-    , ATTRIBUTE_VAO // GL 3.x
-    , ATTRIBUTE_VAB // GL 4.3
+      GENERIC // GL 2.x
+    , VAO // GL 3.x
+    , VAB // GL 4.3
   };
 
   // benchmark
@@ -112,7 +112,7 @@ TerrainRenderer::TerrainRenderer()
   , m_exitCode( 0 )
   , m_duration( 0.0 )
   , m_engineBindless( true )
-  , m_attributeType( ATTRIBUTE_GENERIC )
+  , m_attributeType( AttributeType::GENERIC )
   , m_shaderManager( dp::fx::Manager::SHADERBUFFER )
 {
   m_trackballHIDSync->setHID( this );

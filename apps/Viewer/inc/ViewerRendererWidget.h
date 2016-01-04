@@ -1,4 +1,4 @@
-// Copyright (c) 2009-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2009-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -55,21 +55,21 @@ class ViewerRendererWidget : public dp::sg::ui::qt5::SceniXQGLSceneRendererWidge
 public:
 
   // Renderer type.
-  enum RendererType
+  enum class RendererType
   {
-    RENDERER_NONE,                    // default
-    RENDERER_RASTERIZE_GL2,           // OpenGL renderer version 2
-    RENDERER_RASTERIZE_XBAR,          // rasterize with new xbar gl pipeline
+    NONE,                    // default
+    RASTERIZE_GL2,           // OpenGL renderer version 2
+    RASTERIZE_XBAR,          // rasterize with new xbar gl pipeline
   };
 
-  enum ManipulatorType
+  enum class ManipulatorType
   {
-    MANIPULATOR_NONE        = ~0,
-    MANIPULATOR_TRACKBALL   = 0,
-    MANIPULATOR_CYLINDRICAL = 1,
-    MANIPULATOR_FLY         = 2,
-    MANIPULATOR_WALK        = 3,
-    MANIPULATOR_COUNT       = 4
+    NONE        = ~0,
+    TRACKBALL   = 0,
+    CYLINDRICAL = 1,
+    FLY         = 2,
+    WALK        = 3,
+    COUNT       = 4
   };
 
   ViewerRendererWidget( QWidget *parent = 0, SceniXQGLWidget *shareWidget = 0 );

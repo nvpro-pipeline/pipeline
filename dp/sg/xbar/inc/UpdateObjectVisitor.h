@@ -104,7 +104,7 @@ namespace dp
             current.m_worldMask = newMask;
             if ( current.m_isDrawable )
             {
-              m_sceneTree->notify( SceneTree::Event( index, current, SceneTree::Event::TraversalMaskChanged ) );
+              m_sceneTree->notify( SceneTree::Event( index, current, SceneTree::Event::Type::TRAVERSAL_MASK_CHANGED ) );
             }
           }
 
@@ -113,7 +113,7 @@ namespace dp
             current.m_worldActive = newActive;
             if ( current.m_isDrawable )
             {
-              m_sceneTree->notify( SceneTree::Event( index, current, SceneTree::Event::ActiveChanged ) );
+              m_sceneTree->notify( SceneTree::Event( index, current, SceneTree::Event::Type::ACTIVE_CHANGED ) );
             }
           }
 

@@ -72,19 +72,19 @@ namespace dp
           setCursorPosition( m_hid->getValue<dp::math::Vec2i>( PID_Pos ) );
           setWheelTicks( m_hid->getValue<int>( PID_Wheel ) );
 
-          TrackballTransformManipulator::Mode mode = TrackballTransformManipulator::MODE_NONE;
+          TrackballTransformManipulator::Mode mode = TrackballTransformManipulator::Mode::NONE;
 
           if ( rotate && pan || getWheelTicksDelta() )
           {
-            mode = TrackballTransformManipulator::MODE_DOLLY;
+            mode = TrackballTransformManipulator::Mode::DOLLY;
           }
           else if ( !rotate && pan )
           {
-            mode = TrackballTransformManipulator::MODE_PAN;
+            mode = TrackballTransformManipulator::Mode::PAN;
           }
           else if ( rotate && !pan )
           {
-            mode = TrackballTransformManipulator::MODE_ROTATE;
+            mode = TrackballTransformManipulator::Mode::ROTATE;
           }
 
           setMode( mode );

@@ -54,7 +54,7 @@ namespace dp
         Type getType() const { return m_eventType; }
       protected:
         Event( Type type )
-          : dp::util::Event( dp::util::Event::DP_SG_CORE )
+          : dp::util::Event( dp::util::Event::Type::DP_SG_CORE )
           , m_eventType( type )
         {
         }

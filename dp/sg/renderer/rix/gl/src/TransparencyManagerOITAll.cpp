@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2014
+// Copyright (c) 2014-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -50,7 +50,7 @@ namespace dp
           }
 
           TransparencyManagerOITAll::TransparencyManagerOITAll( dp::math::Vec2ui const & size )
-            : TransparencyManager( TM_ORDER_INDEPENDENT_ALL )
+            : TransparencyManager( TransparencyMode::ORDER_INDEPENDENT_ALL )
             , m_initializedBuffers( false )
             , m_initializedHandles( false )
             , m_samplesPassedQuery(-1)
@@ -196,24 +196,24 @@ namespace dp
 
           void TransparencyManagerOITAll::initializeParameterContainer( dp::rix::core::Renderer * renderer, dp::math::Vec2ui const & viewportSize )
           {
-            m_perFragmentCountTexture   = renderer->textureCreate( dp::rix::core::TextureDescription( dp::rix::core::TT_2D, dp::rix::core::ITF_R32UI, dp::PixelFormat::R, dp::DataType::UNSIGNED_INT_32 ) );
-            m_perFragmentOffsetTexture  = renderer->textureCreate( dp::rix::core::TextureDescription( dp::rix::core::TT_2D, dp::rix::core::ITF_R32UI, dp::PixelFormat::R, dp::DataType::UNSIGNED_INT_32 ) );
-            m_samplesTexture  = renderer->textureCreate( dp::rix::core::TextureDescription( dp::rix::core::TT_BUFFER, dp::rix::core::ITF_RG32UI, dp::PixelFormat::RG, dp::DataType::UNSIGNED_INT_32 ) );
+            m_perFragmentCountTexture   = renderer->textureCreate( dp::rix::core::TextureDescription( dp::rix::core::TextureType::_2D, dp::rix::core::InternalTextureFormat::R32UI, dp::PixelFormat::R, dp::DataType::UNSIGNED_INT_32 ) );
+            m_perFragmentOffsetTexture  = renderer->textureCreate( dp::rix::core::TextureDescription( dp::rix::core::TextureType::_2D, dp::rix::core::InternalTextureFormat::R32UI, dp::PixelFormat::R, dp::DataType::UNSIGNED_INT_32 ) );
+            m_samplesTexture  = renderer->textureCreate( dp::rix::core::TextureDescription( dp::rix::core::TextureType::BUFFER, dp::rix::core::InternalTextureFormat::RG32UI, dp::PixelFormat::RG, dp::DataType::UNSIGNED_INT_32 ) );
 
             std::vector<dp::rix::core::ProgramParameter> parameters;
-            parameters.push_back( dp::rix::core::ProgramParameter( "perFragmentCount", dp::rix::core::CPT_IMAGE, 0 ) );
-            parameters.push_back( dp::rix::core::ProgramParameter( "perFragmentOffset", dp::rix::core::CPT_IMAGE, 0 ) );
-            parameters.push_back( dp::rix::core::ProgramParameter( "samplesBuffer", dp::rix::core::CPT_IMAGE, 0 ) );
+            parameters.push_back( dp::rix::core::ProgramParameter( "perFragmentCount", dp::rix::core::ContainerParameterType::IMAGE, 0 ) );
+            parameters.push_back( dp::rix::core::ProgramParameter( "perFragmentOffset", dp::rix::core::ContainerParameterType::IMAGE, 0 ) );
+            parameters.push_back( dp::rix::core::ProgramParameter( "samplesBuffer", dp::rix::core::ContainerParameterType::IMAGE, 0 ) );
 
             m_parameterContainerDescriptor = renderer->containerDescriptorCreate( dp::rix::core::ProgramParameterDescriptorCommon( parameters.data(), parameters.size() ) );
             m_parameterContainer = renderer->containerCreate( m_parameterContainerDescriptor );
 
             renderer->containerSetData( m_parameterContainer, renderer->containerDescriptorGetEntry( m_parameterContainerDescriptor, "perFragmentCount" )
-                                      , dp::rix::core::ContainerDataImage( m_perFragmentCountTexture.get(), 0, false, 0, dp::rix::core::AT_READ_WRITE ) );
+                                      , dp::rix::core::ContainerDataImage( m_perFragmentCountTexture.get(), 0, false, 0, dp::rix::core::AccessType::READ_WRITE ) );
             renderer->containerSetData( m_parameterContainer, renderer->containerDescriptorGetEntry( m_parameterContainerDescriptor, "perFragmentOffset" )
-                                      , dp::rix::core::ContainerDataImage( m_perFragmentOffsetTexture.get(), 0, false, 0, dp::rix::core::AT_READ_WRITE ) );
+                                      , dp::rix::core::ContainerDataImage( m_perFragmentOffsetTexture.get(), 0, false, 0, dp::rix::core::AccessType::READ_WRITE ) );
             renderer->containerSetData( m_parameterContainer, renderer->containerDescriptorGetEntry( m_parameterContainerDescriptor, "samplesBuffer" )
-                                      , dp::rix::core::ContainerDataImage( m_samplesTexture.get(), 0, false, 0, dp::rix::core::AT_READ_WRITE ) );
+                                      , dp::rix::core::ContainerDataImage( m_samplesTexture.get(), 0, false, 0, dp::rix::core::AccessType::READ_WRITE ) );
           }
 
           void TransparencyManagerOITAll::useParameterContainer( dp::rix::core::Renderer * renderer, dp::rix::core::RenderGroupSharedHandle const & transparentRenderGroup )

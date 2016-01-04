@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2015
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -90,10 +90,10 @@ namespace dp
 
         const ContainerMap& getGlobalContainers() const { return m_globalContainers; }
 
-        enum EventType
+        enum class EventType
         {
-            EVENT_CONTAINER_CHANGED
-          , EVENT_CONTAINER_ADDED
+            CONTAINER_CHANGED
+          , CONTAINER_ADDED
         };
 
         struct Cache : public dp::rix::core::HandledObject

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2009-2010
+// Copyright (c) 2009-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -52,18 +52,18 @@ class MainWindow : public QMainWindow
   Q_OBJECT
 
 public:
-  typedef enum
+  enum class MenuID
   {
-    MID_ADD_HEADLIGHT,
-    MID_ADD_LIGHT_SOURCE,
-    MID_ANTIALIASING,
-    MID_CONVERT_SCENE,
-    MID_CULLING,
-    MID_MODIFY_SCENE,
-    MID_RENDER_ENGINE,
-    MID_VIEWPORT_FORMAT,
-    MENU_ID_COUNT
-  } MenuID;
+    ADD_HEADLIGHT,
+    ADD_LIGHT_SOURCE,
+    ANTIALIASING,
+    CONVERT_SCENE,
+    CULLING,
+    MODIFY_SCENE,
+    RENDER_ENGINE,
+    VIEWPORT_FORMAT,
+    COUNT
+  };
 
 public:
   MainWindow();
@@ -155,7 +155,7 @@ private:    // all the simple widgets we need to hold
   QAction   * m_continuousRedrawAction;
   QAction   * m_depthPassAction;
   QAction   * m_destripSceneAction;
-  QAction   * m_manipulatorAction[ViewerRendererWidget::MANIPULATOR_COUNT];
+  QAction   * m_manipulatorAction[ViewerRendererWidget::ManipulatorType::COUNT];
   QAction   * m_normalsDialogAction;
   QAction   * m_openAction;
   QAction   * m_optimizeSceneAction;
@@ -182,7 +182,7 @@ private:    // all the simple widgets we need to hold
   QComboBox * m_viewportCombo;
   QLabel    * m_fpsLabel;
   QLabel    * m_statisticsLabel;
-  QMenu     * m_menus[MENU_ID_COUNT];
+  QMenu     * m_menus[MenuID::COUNT];
 
 private:
   std::vector<CameraAnimator *>         m_cameraAnimators;

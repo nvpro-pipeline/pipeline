@@ -1,4 +1,4 @@
-// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -150,12 +150,12 @@ void Feature_transform_attribute::createScene()
   geometry[3] = dp::rix::util::generateGeometry(mesh[3], m_rix);
 
   std::vector<ProgramParameter> vertexProgramParameters;
-  vertexProgramParameters.push_back( ProgramParameter("model2world", CPT_MAT4X4) );
-  vertexProgramParameters.push_back( ProgramParameter("world2view", CPT_MAT4X4) );
+  vertexProgramParameters.push_back( ProgramParameter("model2world", ContainerParameterType::MAT4X4) );
+  vertexProgramParameters.push_back( ProgramParameter("world2view", ContainerParameterType::MAT4X4) );
 
   std::vector<ProgramParameter> fragmentProgramParameters;
-  fragmentProgramParameters.push_back( ProgramParameter("tex", CPT_SAMPLER) );
-  fragmentProgramParameters.push_back( ProgramParameter("color", CPT_FLOAT4) );
+  fragmentProgramParameters.push_back( ProgramParameter("tex", ContainerParameterType::SAMPLER) );
+  fragmentProgramParameters.push_back( ProgramParameter("color", ContainerParameterType::FLOAT4) );
 
   m_vertexContainerDescriptor =
     m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( &vertexProgramParameters[0],
@@ -172,7 +172,7 @@ void Feature_transform_attribute::createScene()
   m_containerEntryColor  = m_rix->containerDescriptorGetEntry( m_fragmentContainerDescriptor, "color" );
 
   const char* shaders[] = {vertexShader, fragmentShader};
-  ShaderType  shaderTypes[] = { ST_VERTEX_SHADER, ST_FRAGMENT_SHADER };
+  ShaderType  shaderTypes[] = { ShaderType::VERTEX_SHADER, ShaderType::FRAGMENT_SHADER };
   ProgramShaderCode programShaderCode( sizeof dp::util::array( shaders ) , shaders, shaderTypes );
 
   std::vector<ContainerDescriptorSharedHandle> containerDescriptors;
@@ -183,7 +183,7 @@ void Feature_transform_attribute::createScene()
   m_programSampler = m_rix->programCreate( programDescription );
 
   // prepare & set texture
-  TextureDescription textureDescription( TT_2D, ITF_RGBA32F, dp::PixelFormat::RGBA, dp::DataType::FLOAT_32, tex2DWidth, tex2DHeight, 0, 0, true );
+  TextureDescription textureDescription( TextureType::_2D, InternalTextureFormat::RGBA32F, dp::PixelFormat::RGBA, dp::DataType::FLOAT_32, tex2DWidth, tex2DHeight, 0, 0, true );
   m_textureHandle = m_rix->textureCreate( textureDescription );
 
   TextureDataPtr textureDataPtr( tex2D, dp::PixelFormat::RGBA, dp::DataType::FLOAT_32 );
@@ -240,7 +240,7 @@ void Feature_transform_attribute::generateGI( GeometrySharedHandle geometry, con
 
   m_rix->containerSetData( vertexContainer, m_containerEntryModel2world, ContainerDataRaw( 0, trafo.getMatrix().getPtr(), 16*sizeof(float) ) );
 
-  SamplerStateDataCommon samplerStateDataCommon( SSFM_NEAREST, SSFM_NEAREST );
+  SamplerStateDataCommon samplerStateDataCommon( SamplerStateFilterMode::NEAREST, SamplerStateFilterMode::NEAREST );
   SamplerStateSharedHandle samplerStateHandle = m_rix->samplerStateCreate(samplerStateDataCommon);
 
   rix::core::SamplerSharedHandle sampler = m_rix->samplerCreate();

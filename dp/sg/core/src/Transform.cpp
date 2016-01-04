@@ -1,4 +1,4 @@
-// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -46,13 +46,13 @@ namespace dp
       BEGIN_REFLECTION_INFO( Transform )
         DERIVE_STATIC_PROPERTIES( Transform, Group );
 
-        INIT_STATIC_PROPERTY_RW( Transform, Center,           Vec3f,  SEMANTIC_POSITION, const_reference, const_reference );
-        INIT_STATIC_PROPERTY_RW( Transform, Orientation,      Quatf,  SEMANTIC_DIRECTION, const_reference, const_reference );
-        INIT_STATIC_PROPERTY_RW( Transform, ScaleOrientation, Quatf,  SEMANTIC_DIRECTION, const_reference, const_reference );
-        INIT_STATIC_PROPERTY_RW( Transform, Scaling,          Vec3f,  SEMANTIC_SCALING, const_reference, const_reference );
-        INIT_STATIC_PROPERTY_RW( Transform, Translation,      Vec3f,  SEMANTIC_POSITION, const_reference, const_reference );
-        INIT_STATIC_PROPERTY_RW( Transform, Matrix,           Mat44f, SEMANTIC_VALUE, value,           const_reference );
-        INIT_STATIC_PROPERTY_RO( Transform, Inverse,          Mat44f, SEMANTIC_VALUE, value );
+        INIT_STATIC_PROPERTY_RW( Transform, Center,           Vec3f,  Semantic::POSITION, const_reference, const_reference );
+        INIT_STATIC_PROPERTY_RW( Transform, Orientation,      Quatf,  Semantic::DIRECTION, const_reference, const_reference );
+        INIT_STATIC_PROPERTY_RW( Transform, ScaleOrientation, Quatf,  Semantic::DIRECTION, const_reference, const_reference );
+        INIT_STATIC_PROPERTY_RW( Transform, Scaling,          Vec3f,  Semantic::SCALING, const_reference, const_reference );
+        INIT_STATIC_PROPERTY_RW( Transform, Translation,      Vec3f,  Semantic::POSITION, const_reference, const_reference );
+        INIT_STATIC_PROPERTY_RW( Transform, Matrix,           Mat44f, Semantic::VALUE, value,           const_reference );
+        INIT_STATIC_PROPERTY_RO( Transform, Inverse,          Mat44f, Semantic::VALUE, value );
       END_REFLECTION_INFO
 
       TransformSharedPtr Transform::create()

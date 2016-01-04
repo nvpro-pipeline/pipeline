@@ -37,7 +37,7 @@ namespace dp
      : RenderTarget( glContext)
      , m_swapBuffersEnabled(false)
      , m_stereoEnabled( glContext->getFormat().isStereo() )
-     , m_stereoTarget( glContext->getFormat().isStereo() ? LEFT_AND_RIGHT : LEFT )
+     , m_stereoTarget( glContext->getFormat().isStereo() ? StereoTarget::LEFT_AND_RIGHT : StereoTarget::LEFT )
      , m_clearMaskGL(0)
      , m_clearColorR(0.0f)
      , m_clearColorG(0.0f)
@@ -93,8 +93,8 @@ namespace dp
         StereoTarget target = getStereoTarget();
 
         // Grab left and right image
-        dp::util::ImageSharedPtr texLeft = getTargetAsImage( getStereoTargetBuffer( LEFT, isCurrent() ), pixelFormat, pixelDataType );
-        dp::util::ImageSharedPtr texRight = getTargetAsImage( getStereoTargetBuffer( RIGHT, isCurrent() ), pixelFormat, pixelDataType );
+        dp::util::ImageSharedPtr texLeft = getTargetAsImage( getStereoTargetBuffer( StereoTarget::LEFT, isCurrent() ), pixelFormat, pixelDataType );
+        dp::util::ImageSharedPtr texRight = getTargetAsImage( getStereoTargetBuffer( StereoTarget::RIGHT, isCurrent() ), pixelFormat, pixelDataType );
 #if 0
         return createStereoTextureHost( texLeft, texRight );
 #else
@@ -126,7 +126,7 @@ namespace dp
     bool RenderTargetFB::setStereoTarget( StereoTarget target )
     {
       // Only left/mono available in non stereo mode
-      if ( !m_stereoEnabled && target != LEFT )
+      if ( !m_stereoEnabled && target != StereoTarget::LEFT )
       {
         return false;
       }
@@ -155,13 +155,13 @@ namespace dp
       {
         switch ( stereoTarget )
         {
-          case LEFT:
+          case StereoTarget::LEFT:
             return backbuffer ? GL_BACK_LEFT : GL_FRONT_LEFT;
           break;
-          case RIGHT:
+          case StereoTarget::RIGHT:
             return backbuffer ? GL_BACK_RIGHT : GL_FRONT_RIGHT;
           break;
-          case LEFT_AND_RIGHT:
+          case StereoTarget::LEFT_AND_RIGHT:
             return backbuffer ? GL_BACK : GL_FRONT;
           break;
           default:

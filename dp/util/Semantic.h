@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -33,35 +33,35 @@ namespace dp
   namespace util
   {
     /** Supported semantics **/
-    enum Semantic
+    enum class Semantic
     {
-        SEMANTIC_VALUE        //!< Element does not have a special semantic
-      , SEMANTIC_POSITION     //!< Element is a position
-      , SEMANTIC_DIRECTION    //!< Element is a direction, i.e. for directional lights
-      , SEMANTIC_ORIENTATION  //!< Element is an orientation
-      , SEMANTIC_DIMENSION    //!< Element is a dimension
-      , SEMANTIC_SCALING      //!< Element is a scaling factor
-      , SEMANTIC_COLOR        //!< Element is a color
-      , SEMANTIC_OBJECT       //!< Element is an object
+        VALUE        //!< Element does not have a special semantic
+      , POSITION     //!< Element is a position
+      , DIRECTION    //!< Element is a direction, i.e. for directional lights
+      , ORIENTATION  //!< Element is an orientation
+      , DIMENSION    //!< Element is a dimension
+      , SCALING      //!< Element is a scaling factor
+      , COLOR        //!< Element is a color
+      , OBJECT       //!< Element is an object
     };
 
     inline std::string semanticToString( Semantic semantic )
     {
       switch( semantic )
       {
-        case SEMANTIC_VALUE:
+        case Semantic::VALUE:
           return "VALUE";
-        case SEMANTIC_POSITION:
+        case Semantic::POSITION:
           return "POSITION";
-        case SEMANTIC_DIRECTION:
+        case Semantic::DIRECTION:
           return "DIRECTION";
-        case SEMANTIC_ORIENTATION:
+        case Semantic::ORIENTATION:
           return "ORIENTATION";
-        case SEMANTIC_SCALING:
+        case Semantic::SCALING:
           return "SCALING";
-        case SEMANTIC_COLOR:
+        case Semantic::COLOR:
           return "COLOR";
-        case SEMANTIC_OBJECT:
+        case Semantic::OBJECT:
           return "OBJECT";
         default:
           return "UNKNOWN";
@@ -72,36 +72,36 @@ namespace dp
     {
       if ( semantic == "COLOR" )
       {
-        return( SEMANTIC_COLOR );
+        return( Semantic::COLOR );
       }
       else if ( semantic == "DIRECTION" )
       {
-        return( SEMANTIC_DIRECTION );
+        return( Semantic::DIRECTION );
       }
       else if ( semantic == "OBJECT" )
       {
-        return( SEMANTIC_OBJECT );
+        return( Semantic::OBJECT );
       }
       else if ( semantic == "ORIENTATION" )
       {
-        return( SEMANTIC_ORIENTATION );
+        return( Semantic::ORIENTATION );
       }
       else if ( semantic == "POSITION" )
       {
-        return( SEMANTIC_POSITION );
+        return( Semantic::POSITION );
       }
       else if ( semantic == "SCALING" )
       {
-        return( SEMANTIC_SCALING );
+        return( Semantic::SCALING );
       }
       else if ( ( semantic == "VALUE" ) || semantic.empty() )
       {
-        return( SEMANTIC_VALUE );
+        return( Semantic::VALUE );
       }
       else
       {
         DP_ASSERT( !"unknown semantic string" );
-        return( SEMANTIC_VALUE );
+        return( Semantic::VALUE );
       }
     }
 

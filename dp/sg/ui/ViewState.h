@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2011
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -420,7 +420,7 @@ namespace dp
   {
     /*! \brief Specialization of the TypedPropertyEnum template for type dp::sg::ui::ViewStateSharedPtr. */
     template <> struct TypedPropertyEnum< dp::sg::ui::ViewStateSharedPtr > {
-      enum { type = Property::TYPE_VIEWSTATE };
+      enum { type = Property::Type::VIEWSTATE };
     };
   } // namespace util
 } // namespace dp

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2015
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -38,7 +38,7 @@ namespace dp
 
       SamplerStateGL::SamplerStateGL()
       {
-        m_borderColorDataType = SBCDT_FLOAT;
+        m_borderColorDataType = SamplerBorderColorDataType::FLOAT;
         m_borderColor.f[0]  = 0.0f;
         m_borderColor.f[1]  = 0.0f;
         m_borderColor.f[2]  = 0.0f;
@@ -84,7 +84,7 @@ namespace dp
 
         switch( samplerStateData.getSamplerStateDataType() )
         {
-        case dp::rix::core::SSDT_COMMON:
+        case dp::rix::core::SamplerStateDataType::COMMON:
           {
             assert( dynamic_cast<const dp::rix::core::SamplerStateDataCommon*>(&samplerStateData) );
             const SamplerStateDataCommon& samplerStateDataCommon = static_cast<const SamplerStateDataCommon&>(samplerStateData);
@@ -98,7 +98,7 @@ namespace dp
           }
           break;
 
-        case dp::rix::core::SSDT_NATIVE:
+        case dp::rix::core::SamplerStateDataType::NATIVE:
           {          
             assert( dynamic_cast<const SamplerStateDataGL*>(&samplerStateData) );
             const SamplerStateDataGL& samplerStateDataGL = static_cast<const SamplerStateDataGL&>(samplerStateData);
@@ -146,13 +146,13 @@ namespace dp
       {
         switch( m_borderColorDataType )
         {
-        case SBCDT_FLOAT:
+        case SamplerBorderColorDataType::FLOAT:
           glSamplerParameterfv( m_id, GL_TEXTURE_BORDER_COLOR, m_borderColor.f );
           break;
-        case SBCDT_UINT:
+        case SamplerBorderColorDataType::UINT:
           glSamplerParameterIuiv( m_id, GL_TEXTURE_BORDER_COLOR, m_borderColor.ui );
           break;
-        case SBCDT_INT:
+        case SamplerBorderColorDataType::INT:
           glSamplerParameterIiv( m_id, GL_TEXTURE_BORDER_COLOR, m_borderColor.i );
           break;
         default:

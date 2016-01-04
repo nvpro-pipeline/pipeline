@@ -1,4 +1,4 @@
-// Copyright (c) 2013-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2013-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -57,11 +57,11 @@ namespace dp
       {
         switch(m_bufferMode)
         {
-        case BM_PERSISTENT_BUFFER_MAPPING:
+          case BufferMode::PERSISTENT_BUFFER_MAPPING:
           m_uboDataUBO = dp::gl::Buffer::create(dp::gl::Buffer::PERSISTENT_BUFFER, GL_DYNAMIC_STORAGE_BIT | GL_MAP_WRITE_BIT | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT);
           break;
-        case BM_BIND_BUFFER_RANGE:
-        case BM_BUFFER_SUBDATA:
+        case BufferMode::BIND_BUFFER_RANGE:
+        case BufferMode::BUFFER_SUBDATA:
           m_uboDataUBO = dp::gl::Buffer::create(dp::gl::Buffer::CORE, GL_DYNAMIC_DRAW);
           break;
         default:
@@ -112,7 +112,7 @@ namespace dp
 
             switch (m_bufferMode)
             {
-            case BM_BUFFER_SUBDATA:
+            case BufferMode::BUFFER_SUBDATA:
               {
                 dp::gl::BufferSharedPtr ubo = dp::gl::Buffer::create(dp::gl::Buffer::CORE, GL_STREAM_DRAW, GL_UNIFORM_BUFFER);
                 if ( glNamedBufferSubDataEXT /** GLEW_EXT_direct_state_access, glew has a bug not reporting this extension because the double versions are missing **/)
@@ -129,7 +129,7 @@ namespace dp
                 m_isUBOData.push_back(false);
               }
               break;
-            case BM_BIND_BUFFER_RANGE:
+            case BufferMode::BIND_BUFFER_RANGE:
               if ( m_useUniformBufferUnifiedMemory )
               {
                 parameterState.m_parameterRenderer.reset( new ParameterRendererBufferAddressRange( parameterCacheEntries, m_uboDataUBO, GL_UNIFORM_BUFFER_ADDRESS_NV, binding, blockSize, m_batchedUpdates ) );
@@ -141,7 +141,7 @@ namespace dp
 
               m_isUBOData.push_back(true);
               break;
-            case BM_PERSISTENT_BUFFER_MAPPING:
+            case BufferMode::PERSISTENT_BUFFER_MAPPING:
               if ( m_useUniformBufferUnifiedMemory )
               {
                 parameterState.m_parameterRenderer.reset(new ParameterRendererPersistentBufferMappingUnifiedMemory(parameterCacheEntries, m_uboDataUBO, GL_UNIFORM_BUFFER_ADDRESS_NV, binding, blockSize));
@@ -177,7 +177,7 @@ namespace dp
 
             switch (m_bufferMode)
             {
-            case BM_BUFFER_SUBDATA:
+            case BufferMode::BUFFER_SUBDATA:
               {
                 dp::gl::BufferSharedPtr ubo = dp::gl::Buffer::create(dp::gl::Buffer::CORE, GL_STREAM_DRAW, GL_UNIFORM_BUFFER);
                 if ( glNamedBufferSubDataEXT /** GLEW_EXT_direct_state_access, glew has a bug not reporting this extension because the double versions are missing **/)
@@ -194,7 +194,7 @@ namespace dp
                 m_isUBOData.push_back(false);
               }
               break;
-            case BM_BIND_BUFFER_RANGE:
+            case BufferMode::BIND_BUFFER_RANGE:
               parameterState.m_parameterRenderer.reset( new ParameterRendererBufferRange( parameterCacheEntries, m_uboDataUBO, GL_SHADER_STORAGE_BUFFER, binding, blockSize, m_batchedUpdates) );
               m_isUBOData.push_back(true);
               break;
@@ -299,14 +299,14 @@ namespace dp
             m_uboDataUBO->makeNonResident();
           }
 
-          if (m_bufferMode == BM_PERSISTENT_BUFFER_MAPPING && m_uboDataUBO->isMapped())
+          if (m_bufferMode == BufferMode::PERSISTENT_BUFFER_MAPPING && m_uboDataUBO->isMapped())
           {
             m_uboDataUBO->unmap();
           }
 
           m_uboDataUBO->setSize(m_currentUBOOffset);
 
-          if (m_bufferMode == BM_PERSISTENT_BUFFER_MAPPING)
+          if (m_bufferMode == BufferMode::PERSISTENT_BUFFER_MAPPING)
           {
             m_uboDataUBO->map(GL_MAP_WRITE_BIT | GL_MAP_PERSISTENT_BIT | GL_MAP_COHERENT_BIT);
           }

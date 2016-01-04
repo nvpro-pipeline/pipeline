@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2015
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -40,21 +40,21 @@ namespace dp
       /************************************************************************/
       /* BufferGL::Event                                                      */
       /************************************************************************/
-      BufferGL::Event::Event( BufferGL *buffer, Event::EventType eventType )
+      BufferGL::Event::Event( BufferGL *buffer, Event::Type type )
         : m_buffer( buffer )
-        , m_eventType( eventType )
+        , m_type( type )
       {
       }
 
       BufferGL::BufferGL( const dp::rix::core::BufferDescription& bufferDescription )
-        : m_format( dp::rix::core::BF_UNKNOWN )
+        : m_format( dp::rix::core::BufferFormat::UNKNOWN )
         , m_elementSize( 1 )  // NOTE: set to one for now ( see setElementSize )
         , m_usageHint( GL_STATIC_DRAW )
         , m_width( 0 )
         , m_height( 0 )
         , m_depth( 0 )
 #if !defined(NDEBUG)
-        , m_accessType( dp::rix::core::AT_NONE )
+        , m_accessType( dp::rix::core::AccessType::NONE )
 #endif
 #if 0
         , m_numBufferSlots( 0 )
@@ -63,7 +63,7 @@ namespace dp
         , m_samplerReferences( nullptr )
 #endif
       {
-        if ( bufferDescription.m_type == dp::rix::core::BDT_NATIVE )
+        if ( bufferDescription.m_type == dp::rix::core::BufferDescriptionType::NATIVE )
         {
           DP_ASSERT( dynamic_cast<const BufferDescriptionGL*>( &bufferDescription ) );
           const BufferDescriptionGL& bd = static_cast<const BufferDescriptionGL&>( bufferDescription );
@@ -102,7 +102,7 @@ namespace dp
 
       void BufferGL::setSize( size_t width, size_t height /*= 0*/, size_t depth /*= 0 */ )
       {
-        DP_ASSERT( m_accessType == dp::rix::core::AT_NONE );
+        DP_ASSERT( m_accessType == dp::rix::core::AccessType::NONE );
 
         m_width  = width;
         m_height = height;
@@ -126,33 +126,33 @@ namespace dp
         if ( size != m_buffer->getSize() )
         {
           m_buffer->setSize(size);
-          notify( Event( this, Event::DATA_AND_SIZE_CHANGED ) ); // Data is undefined after glBufferData with nullptr.
+          notify( Event( this, Event::Type::DATA_AND_SIZE_CHANGED ) ); // Data is undefined after glBufferData with nullptr.
         }
       }
 
       void BufferGL::setElementSize( size_t elementSize )
       {
         DP_ASSERT( !"Not supported" );
-        DP_ASSERT( m_accessType == dp::rix::core::AT_NONE );
+        DP_ASSERT( m_accessType == dp::rix::core::AccessType::NONE );
         m_elementSize = elementSize;
       }
 
       void BufferGL::setFormat( dp::rix::core::BufferFormat bufferFormat )
       {
         DP_ASSERT( !"Not supported" );
-        DP_ASSERT( m_accessType == dp::rix::core::AT_NONE );
+        DP_ASSERT( m_accessType == dp::rix::core::AccessType::NONE );
         m_format = bufferFormat;
       }
 
       void BufferGL::updateData( size_t offset, const void *data, size_t size )
       {
-        DP_ASSERT( m_accessType == dp::rix::core::AT_NONE );
+        DP_ASSERT( m_accessType == dp::rix::core::AccessType::NONE );
         DP_ASSERT( offset + size <= m_buffer->getSize() );
         DP_ASSERT( m_managesData );
-        // DP_ASSERT( m_format != dp::rix::core::BF_UNKNOWN ); // TODO: check this when setFormat and setElementsize are implemented
+        // DP_ASSERT( m_format != dp::rix::core::BufferFormat::UNKNOWN ); // TODO: check this when setFormat and setElementsize are implemented
 
         m_buffer->update(data, offset, size);
-        notify( Event( this, Event::DATA_CHANGED ) );
+        notify( Event( this, Event::Type::DATA_CHANGED ) );
       }
 
 #if 0
@@ -195,11 +195,11 @@ namespace dp
       {
         switch ( infoData.getBufferReferenceType() )
         {
-        case dp::rix::core::BRT_BUFFER:
+        case dp::rix::core::BufferReferenceType::BUFFER:
           DP_ASSERT( dynamic_cast<const dp::rix::core::BufferReferencesBuffer*>(&infoData) );
           initReferences( static_cast<const dp::rix::core::BufferReferencesBuffer&>( infoData) );
           break;
-        case dp::rix::core::BRT_SAMPLER:
+        case dp::rix::core::BufferReferenceType::SAMPLER:
           DP_ASSERT( dynamic_cast<const dp::rix::core::BufferReferencesSampler*>(&infoData) );
           initReferences( static_cast<const dp::rix::core::BufferReferencesSampler&>( infoData ) );
           break;
@@ -261,11 +261,11 @@ namespace dp
       {
         switch ( containerData.getContainerDataType() )
         {
-        case dp::rix::core::CDT_BUFFER:
+        case dp::rix::core::ContainerDataType::BUFFER:
           DP_ASSERT( dynamic_cast<const dp::rix::core::ContainerDataBuffer*>(&containerData) );
           setReference( slot, static_cast<const dp::rix::core::ContainerDataBuffer&>( containerData), refstore );
           break;
-        case dp::rix::core::CDT_SAMPLER:
+        case dp::rix::core::ContainerDataType::SAMPLER:
           DP_ASSERT( dynamic_cast<const dp::rix::core::ContainerDataSampler*>(&containerData) );
           setReference( slot, static_cast<const dp::rix::core::ContainerDataSampler&>( containerData), refstore );
           break;
@@ -280,7 +280,7 @@ namespace dp
       {
         DP_ASSERT( !"never passed this path!" );
         DP_ASSERT( m_buffer->getGLId() );
-        DP_ASSERT( m_accessType == dp::rix::core::AT_NONE ); // Assert that the buffer is not mapped.
+        DP_ASSERT( m_accessType == dp::rix::core::AccessType::NONE ); // Assert that the buffer is not mapped.
 #if !defined(NDEBUG)
         m_accessType = accessType;
 #endif
@@ -292,12 +292,12 @@ namespace dp
       {
         DP_ASSERT( !"never passed this path!" );
         DP_ASSERT( m_buffer->getGLId() );
-        DP_ASSERT( m_accessType != dp::rix::core::AT_NONE );
+        DP_ASSERT( m_accessType != dp::rix::core::AccessType::NONE );
 
         bool success = !!m_buffer->unmap();
 
 #if !defined(NDEBUG)
-        m_accessType = dp::rix::core::AT_NONE; // Not mapped.
+        m_accessType = dp::rix::core::AccessType::NONE; // Not mapped.
 #endif
         return success;
       }

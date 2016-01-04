@@ -1,4 +1,4 @@
-// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -46,7 +46,7 @@ AnimationTime::AnimationTime()
 DEFINE_STATIC_PROPERTY(AnimationTime, Time);
 
 BEGIN_REFLECTION_INFO(AnimationTime)
-INIT_STATIC_PROPERTY_RW(AnimationTime, Time, float, SEMANTIC_VALUE, value, value);
+INIT_STATIC_PROPERTY_RW(AnimationTime, Time, float, Semantic::VALUE, value, value);
 END_REFLECTION_INFO
 
 Animator::~Animator()
@@ -64,9 +64,9 @@ DEFINE_STATIC_PROPERTY(AnimatorColor, Color3);
 DEFINE_STATIC_PROPERTY(AnimatorColor, Color4);
 
 BEGIN_REFLECTION_INFO(AnimatorColor)
-INIT_STATIC_PROPERTY_RW(AnimatorColor, Time, float, SEMANTIC_VALUE, value, value);
-INIT_STATIC_PROPERTY_RO(AnimatorColor, Color3, dp::math::Vec3f, SEMANTIC_VALUE, value);
-INIT_STATIC_PROPERTY_RO(AnimatorColor, Color4, dp::math::Vec4f, SEMANTIC_VALUE, value);
+INIT_STATIC_PROPERTY_RW(AnimatorColor, Time, float, Semantic::VALUE, value, value);
+INIT_STATIC_PROPERTY_RO(AnimatorColor, Color3, dp::math::Vec3f, Semantic::VALUE, value);
+INIT_STATIC_PROPERTY_RO(AnimatorColor, Color4, dp::math::Vec4f, Semantic::VALUE, value);
 END_REFLECTION_INFO
 
 

@@ -319,7 +319,7 @@ namespace dp
       {
         // attach observer
         m_objectTree[index].m_isDrawable = true;
-        notify( Event( index, m_objectTree[index], Event::Added ) );
+        notify( Event( index, m_objectTree[index], Event::Type::ADDED ) );
       }
 
       void SceneTree::addLightSource( ObjectTreeIndex index )
@@ -354,7 +354,7 @@ namespace dp
 
           if ( m_objectTree[currentIndex].m_isDrawable )
           {
-            notify( Event( currentIndex, m_objectTree[currentIndex], Event::Removed) );
+            notify( Event( currentIndex, m_objectTree[currentIndex], Event::Type::REMOVED) );
             m_objectTree[index].m_isDrawable = false;
           }
 

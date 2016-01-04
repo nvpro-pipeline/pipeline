@@ -55,19 +55,19 @@ namespace dp
         {
         public:
   
-          enum Mode
+          enum class Mode
           {
-              MODE_NONE = 0
-            , MODE_PAN
-            , MODE_ROTATE
-            , MODE_DOLLY
+              NONE = 0
+            , PAN
+            , ROTATE
+            , DOLLY
           };
 
-          enum Axis
+          enum class Axis
           {
-              AXIS_X = 0
-            , AXIS_Y = 1
-            , AXIS_Z = 2
+              X = 0
+            , Y = 1
+            , Z = 2
           };
 
           /*! \brief Default constructor.
@@ -93,9 +93,9 @@ namespace dp
            *  \remarks The manipulator's mode determines how it updates the object upon every timestep. This 
            *  Manipulator supports the following list of modes:
            *
-           *  MODE_PAN     Translate the objects below the transform in the XZ plane.
-           *  MODE_ROTATE  Rotate the object using a trackball style based on the object's bounding volume.
-           *  MODE_DOLLY   Translate the object toward or away from the viewer.
+           *  Mode::PAN     Translate the objects below the transform in the XZ plane.
+           *  Mode::ROTATE  Rotate the object using a trackball style based on the object's bounding volume.
+           *  Mode::DOLLY   Translate the object toward or away from the viewer.
            *
            *  \sa getMode */
           DP_SG_UI_MANIPULATOR_API void setMode( Mode mode );

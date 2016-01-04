@@ -50,12 +50,12 @@ namespace dp
 
     bool RenderTarget::setStereoTarget( StereoTarget target )
     {
-      return target == LEFT;
+      return target == StereoTarget::LEFT;
     }
 
     RenderTarget::StereoTarget RenderTarget::getStereoTarget() const
     {
-      return LEFT;
+      return StereoTarget::LEFT;
     }
   } // namespace ui
 } // namespace dp

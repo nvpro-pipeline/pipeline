@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2015
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -50,7 +50,7 @@ namespace dp
 
       BEGIN_REFLECTION_INFO( SmoothTraverser )
         DERIVE_STATIC_PROPERTIES( SmoothTraverser, ExclusiveTraverser );
-        INIT_STATIC_PROPERTY_RW(SmoothTraverser, CreaseAngle, float, SEMANTIC_VALUE, value, value );
+        INIT_STATIC_PROPERTY_RW(SmoothTraverser, CreaseAngle, float, Semantic::VALUE, value, value );
       END_REFLECTION_INFO
 
       SmoothTraverser::SmoothTraverser(void)

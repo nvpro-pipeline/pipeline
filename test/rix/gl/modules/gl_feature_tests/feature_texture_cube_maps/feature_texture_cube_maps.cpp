@@ -1,4 +1,4 @@
-// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -314,12 +314,12 @@ void Feature_texture_cube_maps::createScene()
   m_rix->geometrySetData( geometry, geometryDescription, vertexAttributes, indices );
 
   std::vector<ProgramParameter> vertexProgramParameters;
-  vertexProgramParameters.push_back( ProgramParameter("model2world", CPT_MAT4X4) );
-  vertexProgramParameters.push_back( ProgramParameter("world2view", CPT_MAT4X4) );
+  vertexProgramParameters.push_back( ProgramParameter("model2world", ContainerParameterType::MAT4X4) );
+  vertexProgramParameters.push_back( ProgramParameter("world2view", ContainerParameterType::MAT4X4) );
 
   std::vector<ProgramParameter> fragmentProgramParameters;
-  fragmentProgramParameters.push_back( ProgramParameter("color", CPT_FLOAT4) );
-  fragmentProgramParameters.push_back( ProgramParameter("tex",   CPT_SAMPLER) );
+  fragmentProgramParameters.push_back( ProgramParameter("color", ContainerParameterType::FLOAT4) );
+  fragmentProgramParameters.push_back( ProgramParameter("tex",   ContainerParameterType::SAMPLER) );
 
   ContainerDescriptorSharedHandle vertexContainerDescriptor =
     m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( &vertexProgramParameters[0],
@@ -338,7 +338,7 @@ void Feature_texture_cube_maps::createScene()
   containerDescriptorsColor.push_back( fragmentContainerDescriptor );
 
   const char* shaders[] = {vertexShader, fragmentShaderColor};
-  ShaderType  shaderTypes[] = { ST_VERTEX_SHADER, ST_FRAGMENT_SHADER };
+  ShaderType  shaderTypes[] = { ShaderType::VERTEX_SHADER, ShaderType::FRAGMENT_SHADER };
   ProgramShaderCode programShaderCode( sizeof util::array( shaders ), shaders, shaderTypes );
 
   ProgramDescription programDescription( programShaderCode, &containerDescriptorsColor[0], dp::checked_cast<unsigned int>(containerDescriptorsColor.size() ));
@@ -374,7 +374,7 @@ void Feature_texture_cube_maps::createScene()
   TextureSharedHandle texture = createDebugCubeMap( texWidth );
   //TextureSharedHandle texture = createColorCubeMap( texWidth );
 
-  SamplerStateDataCommon samplerStateData( SSFM_LINEAR, SSFM_LINEAR );
+  SamplerStateDataCommon samplerStateData( SamplerStateFilterMode::LINEAR, SamplerStateFilterMode::LINEAR );
 
   SamplerStateSharedHandle samplerState = m_rix->samplerStateCreate( samplerStateData );
   rix::core::SamplerSharedHandle sampler = m_rix->samplerCreate();
@@ -428,7 +428,7 @@ TextureSharedHandle Feature_texture_cube_maps::createDebugCubeMap( size_t texWid
     }
   }
 
-  TextureDescription textureDescription( TT_CUBEMAP, ITF_RGBA8, dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_8, texWidth, texWidth );
+  TextureDescription textureDescription( TextureType::CUBEMAP, InternalTextureFormat::RGBA8, dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_8, texWidth, texWidth );
 
   TextureSharedHandle texture = m_rix->textureCreate( textureDescription );
 
@@ -480,7 +480,7 @@ TextureSharedHandle Feature_texture_cube_maps::createColorCubeMap( size_t texWid
     }
   }
 
-  TextureDescription textureDescription( TT_CUBEMAP, ITF_RGBA8, dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_8, texWidth, texWidth );
+  TextureDescription textureDescription( TextureType::CUBEMAP, InternalTextureFormat::RGBA8, dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_8, texWidth, texWidth );
 
   TextureSharedHandle texture = m_rix->textureCreate( textureDescription );
 

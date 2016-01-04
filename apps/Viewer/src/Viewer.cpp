@@ -1,4 +1,4 @@
-// Copyright (c) 2009-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2009-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -98,10 +98,10 @@ dp::sg::renderer::rix::gl::TransparencyMode determineTransparencyMode( std::stri
 {
   static std::map<std::string,dp::sg::renderer::rix::gl::TransparencyMode> transparencyModes =
   {
-    { "None",             dp::sg::renderer::rix::gl::TM_NONE                            },
-    { "OITAll",           dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_ALL           },
-    { "OITClosestList",   dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_CLOSEST_LIST  },
-    { "SB",               dp::sg::renderer::rix::gl::TM_SORTED_BLENDED                  }
+    { "None",             dp::sg::renderer::rix::gl::TransparencyMode::NONE                            },
+    { "OITAll",           dp::sg::renderer::rix::gl::TransparencyMode::ORDER_INDEPENDENT_ALL           },
+    { "OITClosestList",   dp::sg::renderer::rix::gl::TransparencyMode::ORDER_INDEPENDENT_CLOSEST_LIST  },
+    { "SB",               dp::sg::renderer::rix::gl::TransparencyMode::SORTED_BLENDED                  }
   };
 
   std::map<std::string,dp::sg::renderer::rix::gl::TransparencyMode>::const_iterator it = transparencyModes.find( name );
@@ -145,7 +145,7 @@ void Viewer::parseCommandLine( int & argc, char ** argv )
     m_shaderManagerType = determineShaderManagerType( opts["shadermanager"].as<std::string>() );
     if ( !opts["transparency"].empty() )
     {
-      m_preferences->setTransparencyMode( determineTransparencyMode( opts["transparency"].as<std::string>() ) );
+      m_preferences->setTransparencyMode( static_cast<unsigned int>(determineTransparencyMode( opts["transparency"].as<std::string>() )) );
     }
     m_width = opts["width"].as<int>();
   }
@@ -393,7 +393,7 @@ Viewer::log( const char * format, va_list valist, LogWidget::Severity severity )
     if( !preOpenBuffer.isEmpty() )
     {
       // we don't remember the severity of these messages
-      lw->message( preOpenBuffer, LogWidget::LOG_WARNING );
+      lw->message( preOpenBuffer, LogWidget::Severity::LOG_WARNING );
       preOpenBuffer.clear();
     }
 

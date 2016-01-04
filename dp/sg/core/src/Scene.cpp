@@ -1,4 +1,4 @@
-// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -43,9 +43,9 @@ namespace dp
 
       BEGIN_REFLECTION_INFO( Scene )
         DERIVE_STATIC_PROPERTIES( Scene, Object );
-        INIT_STATIC_PROPERTY_RW( Scene, AmbientColor,     Vec3f,   SEMANTIC_COLOR,      const_reference, const_reference );
-        INIT_STATIC_PROPERTY_RW( Scene, BackColor,        Vec4f,   SEMANTIC_COLOR,      const_reference, const_reference );
-        INIT_STATIC_PROPERTY_RW( Scene, RootNode, NodeSharedPtr,  SEMANTIC_OBJECT,      const_reference, const_reference );
+        INIT_STATIC_PROPERTY_RW( Scene, AmbientColor,     Vec3f,   Semantic::COLOR,      const_reference, const_reference );
+        INIT_STATIC_PROPERTY_RW( Scene, BackColor,        Vec4f,   Semantic::COLOR,      const_reference, const_reference );
+        INIT_STATIC_PROPERTY_RW( Scene, RootNode, NodeSharedPtr,  Semantic::OBJECT,      const_reference, const_reference );
       END_REFLECTION_INFO
 
       SceneSharedPtr Scene::create()

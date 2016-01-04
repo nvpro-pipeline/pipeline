@@ -50,7 +50,7 @@ namespace dp
     class Event
     {
     public:
-      enum Type
+      enum class Type
       {
           GENERIC
         , PROPERTY
@@ -60,7 +60,7 @@ namespace dp
       virtual~ Event() {}
       Type getType() const { return m_eventType; }
 
-      Event( Type type = GENERIC )
+      Event( Type type = Type::GENERIC )
         : m_eventType( type )
       {
       }

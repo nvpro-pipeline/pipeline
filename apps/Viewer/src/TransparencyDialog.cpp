@@ -45,27 +45,27 @@ TransparencyDialog::TransparencyDialog( QWidget * parent, ViewerRendererWidget *
 
   m_restoreTransparencyMode = m_renderer->getTransparencyMode();
   QRadioButton * noneButton = new QRadioButton( "None" );
-  noneButton->setChecked( m_restoreTransparencyMode == dp::sg::renderer::rix::gl::TM_NONE );
+  noneButton->setChecked( m_restoreTransparencyMode == dp::sg::renderer::rix::gl::TransparencyMode::NONE );
   QRadioButton * sortedBlendedButton = new QRadioButton( "Sorted Blended" );
-  sortedBlendedButton->setChecked( m_restoreTransparencyMode == dp::sg::renderer::rix::gl::TM_SORTED_BLENDED );
+  sortedBlendedButton->setChecked( m_restoreTransparencyMode == dp::sg::renderer::rix::gl::TransparencyMode::SORTED_BLENDED );
   QRadioButton * orderIndependentClosestListButton = new QRadioButton( "Order Independent Closest List" );
-  orderIndependentClosestListButton->setChecked( m_restoreTransparencyMode == dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_CLOSEST_LIST );
+  orderIndependentClosestListButton->setChecked( m_restoreTransparencyMode == dp::sg::renderer::rix::gl::TransparencyMode::ORDER_INDEPENDENT_CLOSEST_LIST );
   QRadioButton * orderIndependentAllButton = new QRadioButton( "Order Independent All" );
-  orderIndependentAllButton->setChecked( m_restoreTransparencyMode == dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_ALL );
+  orderIndependentAllButton->setChecked( m_restoreTransparencyMode == dp::sg::renderer::rix::gl::TransparencyMode::ORDER_INDEPENDENT_ALL );
 
   QButtonGroup * buttonGroup = new QButtonGroup();
-  buttonGroup->addButton( noneButton, dp::sg::renderer::rix::gl::TM_NONE );
-  buttonGroup->addButton( sortedBlendedButton, dp::sg::renderer::rix::gl::TM_SORTED_BLENDED );
-  buttonGroup->addButton( orderIndependentClosestListButton, dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_CLOSEST_LIST );
-  buttonGroup->addButton( orderIndependentAllButton, dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_ALL );
+  buttonGroup->addButton( noneButton, static_cast<int>(dp::sg::renderer::rix::gl::TransparencyMode::NONE) );
+  buttonGroup->addButton( sortedBlendedButton, static_cast<int>(dp::sg::renderer::rix::gl::TransparencyMode::SORTED_BLENDED) );
+  buttonGroup->addButton( orderIndependentClosestListButton, static_cast<int>(dp::sg::renderer::rix::gl::TransparencyMode::ORDER_INDEPENDENT_CLOSEST_LIST) );
+  buttonGroup->addButton( orderIndependentAllButton, static_cast<int>(dp::sg::renderer::rix::gl::TransparencyMode::ORDER_INDEPENDENT_ALL) );
   connect( buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(buttonClicked(int)) );
 
   m_restoreLayers = m_renderer->getOITDepth();
   m_layersBox = new QSpinBox();
   m_layersBox->setMinimum( 1 );
   m_layersBox->setValue( m_restoreLayers );
-  m_layersBox->setEnabled( ( m_restoreTransparencyMode == dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_CLOSEST_ARRAY )
-                        || ( m_restoreTransparencyMode == dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_CLOSEST_LIST ) );
+  m_layersBox->setEnabled( ( m_restoreTransparencyMode == dp::sg::renderer::rix::gl::TransparencyMode::ORDER_INDEPENDENT_CLOSEST_ARRAY )
+                        || ( m_restoreTransparencyMode == dp::sg::renderer::rix::gl::TransparencyMode::ORDER_INDEPENDENT_CLOSEST_LIST ) );
   connect( m_layersBox, SIGNAL(valueChanged(int)), this, SLOT(layersChanged(int)) );
   QFormLayout * layersLayout = new QFormLayout;
   layersLayout->addRow( "Transparency Layers", m_layersBox );
@@ -100,9 +100,9 @@ TransparencyDialog::~TransparencyDialog()
 
 void TransparencyDialog::buttonClicked( int id )
 {
-  m_layersBox->setEnabled( ( id == dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_CLOSEST_ARRAY )
-                        || ( id == dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_CLOSEST_LIST ) );
-  if ( m_renderer->getTransparencyMode() != id )
+  m_layersBox->setEnabled( ( id == static_cast<int>(dp::sg::renderer::rix::gl::TransparencyMode::ORDER_INDEPENDENT_CLOSEST_ARRAY) )
+                        || ( id == static_cast<int>(dp::sg::renderer::rix::gl::TransparencyMode::ORDER_INDEPENDENT_CLOSEST_LIST) ) );
+  if ( static_cast<int>(m_renderer->getTransparencyMode()) != id )
   {
     m_renderer->setTransparencyMode( dp::sg::renderer::rix::gl::TransparencyMode(id) );
     GetApp()->getPreferences()->setTransparencyMode( id );

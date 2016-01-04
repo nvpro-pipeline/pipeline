@@ -1,4 +1,4 @@
-// Copyright (c) 2009-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2009-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -70,8 +70,8 @@ unsigned int ViewerRendererWidget::s_slightCount = 0;
 ViewerRendererWidget::ViewerRendererWidget( QWidget *parent, SceniXQGLWidget *shareWidget )
   : SceniXQGLSceneRendererWidget( parent, s_glFormat, shareWidget )
   , m_currentManipulator(0)
-  , m_manipulatorType(MANIPULATOR_NONE)
-  , m_rendererType( RENDERER_NONE )
+  , m_manipulatorType(ManipulatorType::NONE)
+  , m_rendererType( RendererType::NONE )
   , m_restartAccumulation(true)  // Start from scratch on initial frame.
   , m_highlightedObject(0)
   , m_canManipulateObject(false)
@@ -88,7 +88,7 @@ ViewerRendererWidget::ViewerRendererWidget( QWidget *parent, SceniXQGLWidget *sh
   m_sceneRendererPipeline = SceneRendererPipeline::create(); // Allow the setSceneRenderer() API to work!
 
   // use new manipulator
-  setManipulatorType( MANIPULATOR_TRACKBALL );
+  setManipulatorType( ManipulatorType::TRACKBALL );
 
   // create our default viewstate
   m_defaultViewState = dp::sg::ui::ViewState::create();
@@ -128,11 +128,11 @@ ViewerRendererWidget::setRendererType( RendererType type )
     // set up renderer
     switch( type )
     {
-      case RENDERER_NONE:
+      case RendererType::NONE:
         setSceneRenderer( dp::sg::ui::SceneRendererSharedPtr::null );
         break;
 
-      case RENDERER_RASTERIZE_XBAR:
+      case RendererType::RASTERIZE_XBAR:
       {
         addRasterizeActions();
         setSceneRenderer( createSceneRenderer( getRenderTarget() ) );
@@ -181,7 +181,7 @@ ViewerRendererWidget::addDefaultActions()
   // Render Engine submenu
   {
     m_renderEngineActions.clear();
-    QMenu * renderEngineMenu = GetApp()->getMainWindow()->getMenu( MainWindow::MID_RENDER_ENGINE );
+    QMenu * renderEngineMenu = GetApp()->getMainWindow()->getMenu( MainWindow::MenuID::RENDER_ENGINE );
     QList<QAction *> actions = renderEngineMenu->actions();
     for ( QList<QAction*>::const_iterator it = actions.begin() ; it != actions.end() ; ++it )
     {
@@ -208,8 +208,8 @@ ViewerRendererWidget::addDefaultActions()
 
   m_contextMenuEntries.push_back( act );
 
-  m_contextMenuEntries.push_back( GetApp()->getMainWindow()->getMenu( MainWindow::MID_ADD_HEADLIGHT ) );
-  m_contextMenuEntries.push_back( GetApp()->getMainWindow()->getMenu( MainWindow::MID_ADD_LIGHT_SOURCE ) );
+  m_contextMenuEntries.push_back( GetApp()->getMainWindow()->getMenu( MainWindow::MenuID::ADD_HEADLIGHT ) );
+  m_contextMenuEntries.push_back( GetApp()->getMainWindow()->getMenu( MainWindow::MenuID::ADD_LIGHT_SOURCE ) );
 
   act = new QAction(this);
   act->setSeparator(true);
@@ -235,8 +235,8 @@ ViewerRendererWidget::addDefaultActions()
   connect( act, SIGNAL(triggered()), this, SLOT(moveSelectedObject()) );
   m_contextMenuEntries.push_back( act );
 
-  m_contextMenuEntries.push_back( GetApp()->getMainWindow()->getMenu( MainWindow::MID_CULLING ) );
-  m_contextMenuEntries.push_back( GetApp()->getMainWindow()->getMenu( MainWindow::MID_VIEWPORT_FORMAT ) );
+  m_contextMenuEntries.push_back( GetApp()->getMainWindow()->getMenu( MainWindow::MenuID::CULLING ) );
+  m_contextMenuEntries.push_back( GetApp()->getMainWindow()->getMenu( MainWindow::MenuID::VIEWPORT_FORMAT ) );
 
   connect( GetApp()->getPreferences(), SIGNAL(environmentEnabledChanged()), this, SLOT(setEnvironmentEnabledChanged()) );
   connect( GetApp(), SIGNAL(environmentChanged()), this, SLOT(updateEnvironment()) );
@@ -254,7 +254,7 @@ ViewerRendererWidget::~ViewerRendererWidget()
   getRenderContext()->makeCurrent();
 
   // this will delete the current manipulator
-  setManipulatorType( MANIPULATOR_NONE );
+  setManipulatorType( ManipulatorType::NONE );
 }
 
 void
@@ -294,7 +294,7 @@ void ViewerRendererWidget::setScene( dp::sg::core::SceneSharedPtr const & scene 
 
     // reset manipulator in case the manip corrects for scene size and whatnot
     ManipulatorType mt = getManipulatorType();
-    setManipulatorType( MANIPULATOR_NONE );
+    setManipulatorType( ManipulatorType::NONE );
     setManipulatorType( mt );
   }
   else
@@ -356,17 +356,17 @@ void ViewerRendererWidget::keyPressEvent ( QKeyEvent * keyEvent )
       case Qt::Key_T :
         switch( getTransparencyMode() )
         {
-          case dp::sg::renderer::rix::gl::TM_NONE :
-            setTransparencyMode( dp::sg::renderer::rix::gl::TM_SORTED_BLENDED );
+          case dp::sg::renderer::rix::gl::TransparencyMode::NONE :
+            setTransparencyMode( dp::sg::renderer::rix::gl::TransparencyMode::SORTED_BLENDED );
             break;
-          case dp::sg::renderer::rix::gl::TM_SORTED_BLENDED :
-            setTransparencyMode( dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_CLOSEST_LIST );
+          case dp::sg::renderer::rix::gl::TransparencyMode::SORTED_BLENDED :
+            setTransparencyMode( dp::sg::renderer::rix::gl::TransparencyMode::ORDER_INDEPENDENT_CLOSEST_LIST );
             break;
-          case dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_CLOSEST_LIST :
-            setTransparencyMode( dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_ALL );
+          case dp::sg::renderer::rix::gl::TransparencyMode::ORDER_INDEPENDENT_CLOSEST_LIST :
+            setTransparencyMode( dp::sg::renderer::rix::gl::TransparencyMode::ORDER_INDEPENDENT_ALL );
             break;
-          case dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_ALL :
-            setTransparencyMode( dp::sg::renderer::rix::gl::TM_NONE );
+          case dp::sg::renderer::rix::gl::TransparencyMode::ORDER_INDEPENDENT_ALL :
+            setTransparencyMode( dp::sg::renderer::rix::gl::TransparencyMode::NONE );
             break;
           default :
             DP_ASSERT( !"ViewerRendererWidget::keyPressEvent: unknown transparency mode encountered!" );
@@ -951,7 +951,7 @@ void ViewerRendererWidget::aboutToShowRenderEngineMenu()
   QList<QAction*> actions = menu->actions();
   for ( QList<QAction*>::const_iterator it = actions.begin() ; it != actions.end() ; ++it )
   {
-    (*it)->setChecked( m_rendererType == (*it)->data().toInt() );
+    (*it)->setChecked( static_cast<int>(m_rendererType) == (*it)->data().toInt() );
   }
 }
 
@@ -1348,7 +1348,7 @@ void ViewerRendererWidget::setManipulatorType( ManipulatorType mt  )
 
     switch( m_manipulatorType )
     {
-      case MANIPULATOR_TRACKBALL:
+      case ManipulatorType::TRACKBALL:
       {
         dp::sg::ui::manipulator::TrackballCameraManipulatorHIDSync * manip = new dp::sg::ui::manipulator::TrackballCameraManipulatorHIDSync();
         // MMM - shouldn't the SceniXSceneRendererWidget set these too, so we don't have to
@@ -1359,7 +1359,7 @@ void ViewerRendererWidget::setManipulatorType( ManipulatorType mt  )
       }
       break;
 
-      case MANIPULATOR_CYLINDRICAL:
+      case ManipulatorType::CYLINDRICAL:
       {
         dp::sg::ui::manipulator::CylindricalCameraManipulatorHIDSync * manip = new dp::sg::ui::manipulator::CylindricalCameraManipulatorHIDSync();
         manip->setHID( this );
@@ -1368,7 +1368,7 @@ void ViewerRendererWidget::setManipulatorType( ManipulatorType mt  )
       }
       break;
 
-      case MANIPULATOR_FLY:
+      case ManipulatorType::FLY:
       {
         dp::sg::ui::manipulator::FlightCameraManipulatorHIDSync * manip = new dp::sg::ui::manipulator::FlightCameraManipulatorHIDSync();
 
@@ -1393,7 +1393,7 @@ void ViewerRendererWidget::setManipulatorType( ManipulatorType mt  )
       }
       break;
 
-      case MANIPULATOR_WALK:
+      case ManipulatorType::WALK:
       {
         dp::sg::ui::manipulator::WalkCameraManipulatorHIDSync * manip = new dp::sg::ui::manipulator::WalkCameraManipulatorHIDSync();
 
@@ -1418,7 +1418,7 @@ void ViewerRendererWidget::setManipulatorType( ManipulatorType mt  )
       }
       break;
 
-      case MANIPULATOR_NONE:
+      case ManipulatorType::NONE:
       default:
         // do nothing for now
         break;
@@ -1438,7 +1438,7 @@ void ViewerRendererWidget::onRenderTargetChanged( const dp::gl::RenderTargetShar
 {
   switch( getRendererType() )
   {
-    case RENDERER_RASTERIZE_XBAR :
+    case RendererType::RASTERIZE_XBAR :
       setSceneRenderer( createSceneRenderer( newTarget ) );
       //getSceneRenderer()->setRenderTarget( newTarget );   // TODO: just setting the render target should work (with non-bindless, at least)
       break;

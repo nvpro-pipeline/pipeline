@@ -69,13 +69,13 @@ namespace dp
         class Event : public dp::util::Event
         {
         public:
-          enum Type
+          enum class Type
           {
-              Added
-            , Removed
-            , Changed
-            , ActiveChanged
-            , TraversalMaskChanged
+              ADDED
+            , REMOVED
+            , CHANGED
+            , ACTIVE_CHANGED
+            , TRAVERSAL_MASK_CHANGED
           };
 
           Event(ObjectTreeIndex index, ObjectTreeNode const& node, Type subType)

@@ -43,8 +43,8 @@ class viewerPlugInCallback : public dp::util::PlugInCallback
     static viewerPlugInCallbackSharedPtr create();
     virtual ~viewerPlugInCallback();
 
-    virtual void onError( PIC_ERROR eid, const void *info ) const;
-    virtual bool onWarning( PIC_WARNING wid, const void *info ) const;
+    virtual void onError( Error eid, const void *info ) const;
+    virtual bool onWarning( Warning wid, const void *info ) const;
 
     virtual void onUnexpectedEndOfFile( unsigned int position ) const;
     virtual void onUnexpectedToken( unsigned int position, const std::string &expected, const std::string &encountered ) const;
@@ -102,19 +102,19 @@ inline void viewerPlugInCallback::logMessage(int severity, const std::string & m
   }
 }
 
-inline  void  viewerPlugInCallback::onError( PIC_ERROR eid, const void *info ) const
+inline  void  viewerPlugInCallback::onError( Error eid, const void *info ) const
 {
   std::ostringstream message;
-  message << "Unknown error: " << eid;
+  message << "Unknown error: " << static_cast<size_t>(eid) << std::endl;
   LogError( message.str().c_str() );
   PlugInCallback::onError( eid, info );
 }
 
-inline  bool  viewerPlugInCallback::onWarning( PIC_WARNING wid, const void *info ) const
+inline  bool  viewerPlugInCallback::onWarning( Warning wid, const void *info ) const
 {
   std::ostringstream msg;
 
-  msg << "Unknown warning: " << wid << "\n";
+  msg << "Unknown warning: " << static_cast<size_t>(wid) << std::endl;
 
   LogWarning( msg.str().c_str() );
 
@@ -127,7 +127,7 @@ inline void viewerPlugInCallback::onUnexpectedEndOfFile( unsigned int position )
   std::ostringstream message;
   message << "Encountered unexpected end of file after line " << position;
   LogError( message.str().c_str() );
-  PlugInCallback::onError( PICE_UNEXPECTED_EOF, NULL );
+  PlugInCallback::onError( Error::UNEXPECTED_EOF, NULL );
 }
 
 inline void viewerPlugInCallback::onUnexpectedToken( unsigned int position, const std::string &expected, const std::string &encountered ) const
@@ -135,7 +135,7 @@ inline void viewerPlugInCallback::onUnexpectedToken( unsigned int position, cons
   std::ostringstream message;
   message << "Line " << position << ": Encountered unexpected token \"" << encountered << "\" instead of \"" << expected << "\"";
   LogError( message.str().c_str() );
-  PlugInCallback::onError( PICE_UNEXPECTED_TOKEN, NULL );
+  PlugInCallback::onError( Error::UNEXPECTED_TOKEN, NULL );
 }
 
 inline void viewerPlugInCallback::onUnknownToken( unsigned int position, const std::string &context, const std::string &token ) const
@@ -143,7 +143,7 @@ inline void viewerPlugInCallback::onUnknownToken( unsigned int position, const s
   std::ostringstream message;
   message << "Line " << position << ": Encountered unknown token \"" << token << "\" in context \"" << context << "\"";
   LogError( message.str().c_str() );
-  PlugInCallback::onError( PICE_UNKNOWN_TOKEN, NULL );
+  PlugInCallback::onError( Error::UNKNOWN_TOKEN, NULL );
 }
 
 inline void viewerPlugInCallback::onFileAccessFailed(const std::string& file, unsigned int systemSpecificErrorCode) const
@@ -151,7 +151,7 @@ inline void viewerPlugInCallback::onFileAccessFailed(const std::string& file, un
   std::ostringstream message;
   message << "Cannot access " << file << "\nError code: " << systemSpecificErrorCode;
   LogError( message.str().c_str() );
-  PlugInCallback::onError( PICE_FILE_ACCESS_FAILED, NULL );
+  PlugInCallback::onError( Error::FILE_ACCESS_FAILED, NULL );
 }
 
 inline void viewerPlugInCallback::onFileMappingFailed(unsigned int systemSpecificErrorCode) const
@@ -159,7 +159,7 @@ inline void viewerPlugInCallback::onFileMappingFailed(unsigned int systemSpecifi
   std::ostringstream message;
   message << "File mapping failed! Error code: " << systemSpecificErrorCode;
   LogError( message.str().c_str() );
-  PlugInCallback::onError( PICE_FILE_MAPPING_FAILED, NULL );
+  PlugInCallback::onError( Error::FILE_MAPPING_FAILED, NULL );
 }
 
 inline void viewerPlugInCallback::onImcompatibleFile(const std::string& file, const std::string& context, unsigned int expectedVersion, unsigned int detectedVersion) const
@@ -178,7 +178,7 @@ inline void viewerPlugInCallback::onImcompatibleFile(const std::string& file, co
           << "Detected Version: " << detected[1] << "." << detected[0] << "\n";
 
   LogError( message.str().c_str() );
-  PlugInCallback::onError( PICE_INCOMPATIBLE_FILE, NULL );
+  PlugInCallback::onError( Error::INCOMPATIBLE_FILE, NULL );
 }
 
 inline void viewerPlugInCallback::onInvalidFile(const std::string& file, const std::string& context) const
@@ -186,7 +186,7 @@ inline void viewerPlugInCallback::onInvalidFile(const std::string& file, const s
   std::ostringstream message;
   message << "The file " << file << " is an invalid " << context << " file!";
   LogError( message.str().c_str() );
-  PlugInCallback::onError( PICE_INVALID_FILE, NULL );
+  PlugInCallback::onError( Error::INVALID_FILE, NULL );
 }
 
 inline  bool  viewerPlugInCallback::onEmptyToken( unsigned int position, const std::string &context, const std::string &token ) const

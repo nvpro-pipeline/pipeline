@@ -212,11 +212,11 @@ namespace dp
         {
           switch( (*testIt).run( *m_mf, m_userOptions ) )
           {
-          case core::TRF_FAILED:
+          case core::TestReturnFlag::FAILED:
             cout << (*testIt).getName() << " has failed\n";
             ++m_failedTests;
             break;
-          case core::TRF_INVALID_INPUT:
+          case core::TestReturnFlag::INVALID_INPUT:
             cout << "invalid input for test: " << (*testIt).getName() << "\n";
             break;
           }

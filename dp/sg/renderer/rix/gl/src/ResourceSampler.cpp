@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2013
+// Copyright (c) 2013-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -112,12 +112,12 @@ namespace dp
             switch ( mf )
             {
               case dp::sg::core::TextureMinFilterMode::NEAREST:
-                return dp::rix::core::SSFM_NEAREST;
+                return dp::rix::core::SamplerStateFilterMode::NEAREST;
               default:
                 assert(!"Unexpected TextureMagFilterMode");
                 // fall through
               case dp::sg::core::TextureMinFilterMode::LINEAR:
-                return dp::rix::core::SSFM_LINEAR;
+                return dp::rix::core::SamplerStateFilterMode::LINEAR;
             }
           }
 
@@ -126,20 +126,20 @@ namespace dp
             switch ( mf )
             {
               case dp::sg::core::TextureMinFilterMode::NEAREST:
-                return dp::rix::core::SSFM_NEAREST;
+                return dp::rix::core::SamplerStateFilterMode::NEAREST;
               case dp::sg::core::TextureMinFilterMode::LINEAR:
-                return dp::rix::core::SSFM_LINEAR;
+                return dp::rix::core::SamplerStateFilterMode::LINEAR;
               case dp::sg::core::TextureMinFilterMode::NEAREST_MIPMAP_NEAREST:
-                return dp::rix::core::SSFM_NEAREST_MIPMAP_NEAREST;
+                return dp::rix::core::SamplerStateFilterMode::NEAREST_MIPMAP_NEAREST;
               case dp::sg::core::TextureMinFilterMode::LINEAR_MIPMAP_NEAREST:
-                return dp::rix::core::SSFM_NEAREST_MIPMAP_LINEAR;
+                return dp::rix::core::SamplerStateFilterMode::NEAREST_MIPMAP_LINEAR;
               case dp::sg::core::TextureMinFilterMode::LINEAR_MIPMAP_LINEAR:
-                return dp::rix::core::SSFM_LINEAR_MIPMAP_LINEAR;
+                return dp::rix::core::SamplerStateFilterMode::LINEAR_MIPMAP_LINEAR;
               default:
                 assert(!"Unexpected TextureMinFilterMode");
                 // fall through
               case dp::sg::core::TextureMinFilterMode::NEAREST_MIPMAP_LINEAR:
-                return dp::rix::core::SSFM_NEAREST_MIPMAP_LINEAR;
+                return dp::rix::core::SamplerStateFilterMode::NEAREST_MIPMAP_LINEAR;
             }
           }
 
@@ -148,22 +148,22 @@ namespace dp
             switch ( wm )
             {
               case dp::sg::core::TextureWrapMode::CLAMP:
-                return dp::rix::core::SSWM_CLAMP;
+                return dp::rix::core::SamplerStateWrapMode::CLAMP;
               case dp::sg::core::TextureWrapMode::CLAMP_TO_BORDER:
-                return dp::rix::core::SSWM_CLAMP_TO_BORDER;
+                return dp::rix::core::SamplerStateWrapMode::CLAMP_TO_BORDER;
               case dp::sg::core::TextureWrapMode::CLAMP_TO_EDGE:
-                return dp::rix::core::SSWM_CLAMP_TO_EDGE;
+                return dp::rix::core::SamplerStateWrapMode::CLAMP_TO_EDGE;
               // DAR FIXME No RiX equivalents existing for the three mirror_clamp modes. Map them to mirror_repeat.
               case dp::sg::core::TextureWrapMode::MIRROR_CLAMP:
               case dp::sg::core::TextureWrapMode::MIRROR_CLAMP_TO_EDGE:
               case dp::sg::core::TextureWrapMode::MIRROR_CLAMP_TO_BORDER:
               case dp::sg::core::TextureWrapMode::MIRROR_REPEAT:
-                return dp::rix::core::SSWM_MIRRORED_REPEAT;
+                return dp::rix::core::SamplerStateWrapMode::MIRRORED_REPEAT;
               default:
                 assert(!"Unexpected wrap mode");
                 // fall through
               case dp::sg::core::TextureWrapMode::REPEAT:
-                return dp::rix::core::SSWM_REPEAT;
+                return dp::rix::core::SamplerStateWrapMode::REPEAT;
             }
           }
 
@@ -172,12 +172,12 @@ namespace dp
             switch( tcm )
             {
               case dp::sg::core::TextureCompareMode::R_TO_TEXTURE :
-                return dp::rix::core::SSCM_R_TO_TEXTURE;
+                return dp::rix::core::SamplerStateCompareMode::R_TO_TEXTURE;
               default :
                 assert( !"Unexpected compare mode" );
                 // fall through
               case dp::sg::core::TextureCompareMode::NONE :
-                return dp::rix::core::SSCM_NONE;
+                return dp::rix::core::SamplerStateCompareMode::NONE;
             }
           }
 

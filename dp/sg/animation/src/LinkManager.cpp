@@ -1,4 +1,4 @@
-// Copyright (c) 2009-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2009-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -173,46 +173,46 @@ namespace dp
 
         Link *link;
         switch (srcObject->getPropertyType(srcProperty)) {
-        case dp::util::Property::TYPE_FLOAT:
+        case dp::util::Property::Type::FLOAT:
           link = new LinkImpl<float>(srcObject, srcProperty, dstObject, dstProperty);
           break;
-        case dp::util::Property::TYPE_FLOAT2:
+        case dp::util::Property::Type::FLOAT2:
           link = new LinkImpl<dp::math::Vec2f>(srcObject, srcProperty, dstObject, dstProperty);
           break;
-        case dp::util::Property::TYPE_FLOAT3:
+        case dp::util::Property::Type::FLOAT3:
           link = new LinkImpl<dp::math::Vec3f>(srcObject, srcProperty, dstObject, dstProperty);
           break;
-        case dp::util::Property::TYPE_FLOAT4:
+        case dp::util::Property::Type::FLOAT4:
           link = new LinkImpl<dp::math::Vec4f>(srcObject, srcProperty, dstObject, dstProperty);
           break;
-        case dp::util::Property::TYPE_UINT:
+        case dp::util::Property::Type::UINT:
           link = new LinkImpl<unsigned int>(srcObject, srcProperty, dstObject, dstProperty);
           break;
-        case dp::util::Property::TYPE_QUATERNION_FLOAT:
+        case dp::util::Property::Type::QUATERNION_FLOAT:
           link = new LinkImpl<dp::math::Quatf>(srcObject, srcProperty, dstObject, dstProperty);
           break;
-        case dp::util::Property::TYPE_BOX2_FLOAT:
+        case dp::util::Property::Type::BOX2_FLOAT:
           link = new LinkImpl<dp::math::Box2f>(srcObject, srcProperty, dstObject, dstProperty);
           break;
-        case dp::util::Property::TYPE_BOX3_FLOAT:
+        case dp::util::Property::Type::BOX3_FLOAT:
           link = new LinkImpl<dp::math::Box3f>(srcObject, srcProperty, dstObject, dstProperty);
           break;
-        case dp::util::Property::TYPE_BOX4_FLOAT:
+        case dp::util::Property::Type::BOX4_FLOAT:
           link = new LinkImpl<dp::math::Box4f>(srcObject, srcProperty, dstObject, dstProperty);
           break;
-        case dp::util::Property::TYPE_MATRIX33_FLOAT:
+        case dp::util::Property::Type::MATRIX33_FLOAT:
           link = new LinkImpl<dp::math::Mat33f>(srcObject, srcProperty, dstObject, dstProperty);
           break;
-        case dp::util::Property::TYPE_MATRIX44_FLOAT:
+        case dp::util::Property::Type::MATRIX44_FLOAT:
           link = new LinkImpl<dp::math::Mat44f>(srcObject, srcProperty, dstObject, dstProperty);
           break;
-        case dp::util::Property::TYPE_BOOLEAN:
+        case dp::util::Property::Type::BOOLEAN:
           link = new LinkImpl<bool>(srcObject, srcProperty, dstObject, dstProperty);
           break;
-        case dp::util::Property::TYPE_TRANSFORMATION:
+        case dp::util::Property::Type::TRANSFORMATION:
           link = new LinkImpl<dp::math::Trafo>(srcObject, srcProperty, dstObject, dstProperty);
           break;
-        case dp::util::Property::TYPE_VERTEX_ATTRIBUTE:
+        case dp::util::Property::Type::VERTEX_ATTRIBUTE:
           link = new LinkImpl<dp::sg::core::VertexAttribute>(srcObject, srcProperty, dstObject, dstProperty);
           break;
 

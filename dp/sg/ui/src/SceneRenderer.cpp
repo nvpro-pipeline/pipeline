@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2011
+// Copyright (c) 2010-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -72,7 +72,7 @@ namespace dp
           // and assign a cloned camera
           if ( stereoViewState->getCamera() && stereoViewState->getCamera().isPtrTo<FrustumCamera>() )
           {
-            float direction = (eye == dp::ui::RenderTarget::LEFT ) ? -1.0f : 1.0f;
+            float direction = (eye == dp::ui::RenderTarget::StereoTarget::LEFT ) ? -1.0f : 1.0f;
             float eyeDistance = stereoViewState->getStereoEyeDistance();
             //  do the left pass first
             FrustumCameraSharedPtr const& clonedCamera = stereoViewState->getCamera().clone().staticCast<FrustumCamera>();
@@ -94,8 +94,8 @@ namespace dp
       BEGIN_REFLECTION_INFO( SceneRenderer )
         DERIVE_STATIC_PROPERTIES( SceneRenderer, Renderer );
 
-        INIT_STATIC_PROPERTY_RW_BOOL( SceneRenderer, PreserveTexturesAfterUpload,   bool, SEMANTIC_VALUE, value, value );
-        INIT_STATIC_PROPERTY_RW     ( SceneRenderer, TraversalMaskOverride, unsigned int, SEMANTIC_VALUE, value, value );
+        INIT_STATIC_PROPERTY_RW_BOOL( SceneRenderer, PreserveTexturesAfterUpload,   bool, Semantic::VALUE, value, value );
+        INIT_STATIC_PROPERTY_RW     ( SceneRenderer, TraversalMaskOverride, unsigned int, Semantic::VALUE, value, value );
       END_REFLECTION_INFO
 
       SceneRenderer::SceneRenderer( const dp::ui::RenderTargetSharedPtr &renderTarget )
@@ -150,23 +150,23 @@ namespace dp
         {
           ViewStateSharedPtr stereoViewState;
 
-          if ( stereoTarget == dp::ui::RenderTarget::LEFT || stereoTarget == dp::ui::RenderTarget::LEFT_AND_RIGHT )
+          if ( stereoTarget == dp::ui::RenderTarget::StereoTarget::LEFT || stereoTarget == dp::ui::RenderTarget::StereoTarget::LEFT_AND_RIGHT )
           {
-            curRenderTarget->setStereoTarget( dp::ui::RenderTarget::LEFT );
-            stereoViewState = m_stereoViewStateProvider->getViewState( viewState, dp::ui::RenderTarget::LEFT );
+            curRenderTarget->setStereoTarget( dp::ui::RenderTarget::StereoTarget::LEFT );
+            stereoViewState = m_stereoViewStateProvider->getViewState( viewState, dp::ui::RenderTarget::StereoTarget::LEFT );
             doRender( stereoViewState, curRenderTarget );
           }
 
-          if ( stereoTarget == dp::ui::RenderTarget::RIGHT || stereoTarget == dp::ui::RenderTarget::LEFT_AND_RIGHT )
+          if ( stereoTarget == dp::ui::RenderTarget::StereoTarget::RIGHT || stereoTarget == dp::ui::RenderTarget::StereoTarget::LEFT_AND_RIGHT )
           {
-            curRenderTarget->setStereoTarget( dp::ui::RenderTarget::RIGHT );
-            stereoViewState = m_stereoViewStateProvider->getViewState( viewState, dp::ui::RenderTarget::RIGHT );
+            curRenderTarget->setStereoTarget( dp::ui::RenderTarget::StereoTarget::RIGHT );
+            stereoViewState = m_stereoViewStateProvider->getViewState( viewState, dp::ui::RenderTarget::StereoTarget::RIGHT );
             doRender( stereoViewState, curRenderTarget );
           }
         }
         else
         {
-          DP_ASSERT( stereoTarget == dp::ui::RenderTarget::LEFT  || stereoTarget == dp::ui::RenderTarget::LEFT_AND_RIGHT );
+          DP_ASSERT( stereoTarget == dp::ui::RenderTarget::StereoTarget::LEFT  || stereoTarget == dp::ui::RenderTarget::StereoTarget::LEFT_AND_RIGHT );
           doRender( viewState, curRenderTarget );
         }
         endRendering( viewState, curRenderTarget );

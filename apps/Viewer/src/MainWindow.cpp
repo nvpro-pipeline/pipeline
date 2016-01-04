@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2009-2015
+// Copyright (c) 2009-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -165,11 +165,11 @@ void MainWindow::aboutToShowEditMenu()
 {
   bool enabled = !!GetApp()->getScene();
   m_optimizeSceneAction->setEnabled( enabled );
-  m_menus[MID_CONVERT_SCENE]->setEnabled( enabled );
-  m_menus[MID_MODIFY_SCENE]->setEnabled( enabled );
+  m_menus[static_cast<size_t>(MenuID::CONVERT_SCENE)]->setEnabled( enabled );
+  m_menus[static_cast<size_t>(MenuID::MODIFY_SCENE)]->setEnabled( enabled );
 
-  m_menus[MID_ADD_HEADLIGHT]->setEnabled( m_currentViewport != ~0 );
-  m_menus[MID_ADD_LIGHT_SOURCE]->setEnabled( m_currentViewport != ~0 );
+  m_menus[static_cast<size_t>(MenuID::ADD_HEADLIGHT)]->setEnabled( m_currentViewport != ~0 );
+  m_menus[static_cast<size_t>(MenuID::ADD_LIGHT_SOURCE)]->setEnabled( m_currentViewport != ~0 );
 }
 
 void MainWindow::aboutToShowFileMenu()
@@ -187,9 +187,9 @@ void MainWindow::aboutToShowViewMenu()
 {
   bool viewing = ( m_currentViewport != ~0 );
 
-  m_menus[MID_RENDER_ENGINE]->setEnabled( viewing );
-  m_menus[MID_VIEWPORT_FORMAT]->setEnabled( viewing );
-  m_menus[MID_CULLING]->setEnabled( viewing );
+  m_menus[static_cast<size_t>(MenuID::RENDER_ENGINE)]->setEnabled( viewing );
+  m_menus[static_cast<size_t>(MenuID::VIEWPORT_FORMAT)]->setEnabled( viewing );
+  m_menus[static_cast<size_t>(MenuID::CULLING)]->setEnabled( viewing );
 
   if ( viewing )
   {
@@ -221,17 +221,17 @@ void MainWindow::activeViewportChanged( int index, QWidget * widget )
     if ( m_currentViewport != ~0 )
     {
       ViewerRendererWidget * cvp = m_renderWidgets[m_currentViewport];
-      disconnect( m_menus[MID_ADD_HEADLIGHT], SIGNAL(triggered(QAction*)), cvp, SLOT(triggeredAddHeadlightMenu(QAction*) ) );
-      disconnect( m_menus[MID_ADD_LIGHT_SOURCE], SIGNAL(triggered(QAction*)), cvp, SLOT(triggeredAddLightSourceMenu(QAction*) ) );
-      disconnect( m_menus[MID_ANTIALIASING], SIGNAL(aboutToShow()), cvp, SLOT(aboutToShowAntialiasingMenu()) );
-      disconnect( m_menus[MID_ANTIALIASING], SIGNAL(triggered(QAction*)), cvp, SLOT(triggeredAntialiasingMenu(QAction*)) );
-      disconnect( m_menus[MID_CULLING], SIGNAL(aboutToShow()), cvp, SLOT(aboutToShowCullingMenu()) );
-      disconnect( m_menus[MID_CULLING], SIGNAL(triggered(QAction*)), cvp, SLOT(triggeredCullingMenu(QAction*) ) );
+      disconnect( m_menus[static_cast<size_t>(MenuID::ADD_HEADLIGHT)], SIGNAL(triggered(QAction*)), cvp, SLOT(triggeredAddHeadlightMenu(QAction*) ) );
+      disconnect( m_menus[static_cast<size_t>(MenuID::ADD_LIGHT_SOURCE)], SIGNAL(triggered(QAction*)), cvp, SLOT(triggeredAddLightSourceMenu(QAction*) ) );
+      disconnect( m_menus[static_cast<size_t>(MenuID::ANTIALIASING)], SIGNAL(aboutToShow()), cvp, SLOT(aboutToShowAntialiasingMenu()) );
+      disconnect( m_menus[static_cast<size_t>(MenuID::ANTIALIASING)], SIGNAL(triggered(QAction*)), cvp, SLOT(triggeredAntialiasingMenu(QAction*)) );
+      disconnect( m_menus[static_cast<size_t>(MenuID::CULLING)], SIGNAL(aboutToShow()), cvp, SLOT(aboutToShowCullingMenu()) );
+      disconnect( m_menus[static_cast<size_t>(MenuID::CULLING)], SIGNAL(triggered(QAction*)), cvp, SLOT(triggeredCullingMenu(QAction*) ) );
       disconnect( this, SIGNAL(manipulatorChanged(ViewerRendererWidget::ManipulatorType)), 
                   cvp,  SLOT(setManipulatorType(ViewerRendererWidget::ManipulatorType)) );
-      disconnect( m_menus[MID_RENDER_ENGINE], SIGNAL(aboutToShow()), cvp, SLOT(aboutToShowRenderEngineMenu()) );
-      disconnect( m_menus[MID_RENDER_ENGINE], SIGNAL(triggered(QAction*)), cvp, SLOT(triggeredRenderEngineMenu(QAction*)) );
-      disconnect( m_menus[MID_VIEWPORT_FORMAT], SIGNAL(aboutToShow()), cvp, SLOT(aboutToShowViewportFormatMenu()) );
+      disconnect( m_menus[static_cast<size_t>(MenuID::RENDER_ENGINE)], SIGNAL(aboutToShow()), cvp, SLOT(aboutToShowRenderEngineMenu()) );
+      disconnect( m_menus[static_cast<size_t>(MenuID::RENDER_ENGINE)], SIGNAL(triggered(QAction*)), cvp, SLOT(triggeredRenderEngineMenu(QAction*)) );
+      disconnect( m_menus[static_cast<size_t>(MenuID::VIEWPORT_FORMAT)], SIGNAL(aboutToShow()), cvp, SLOT(aboutToShowViewportFormatMenu()) );
       disconnect( m_viewportFormat30BitAction, SIGNAL(triggered(bool)), cvp, SLOT(triggeredViewportFormat30Bit(bool)) );
       disconnect( m_viewportFormatSRGBAction, SIGNAL(triggered(bool)), cvp, SLOT(triggeredViewportFormatSRGB(bool)) );
       disconnect( m_viewportFormatStencilAction, SIGNAL(triggered(bool)), cvp, SLOT(triggeredViewportFormatStencil(bool)) );
@@ -249,28 +249,28 @@ void MainWindow::activeViewportChanged( int index, QWidget * widget )
     m_orbitZAction->setChecked( ca->isCameraOrbitZ() );
 
     // clear these, and then set the appropriate one
-    for( unsigned int i = 0; i < ViewerRendererWidget::MANIPULATOR_COUNT; i ++ )
+    for( unsigned int i = 0; i < static_cast<unsigned int>(ViewerRendererWidget::ManipulatorType::COUNT); i ++ )
     {
       m_manipulatorAction[i]->setChecked( false );
     }
 
     ViewerRendererWidget * cvp = m_renderWidgets[m_currentViewport];
-    DP_ASSERT( (int)(cvp->getManipulatorType()) < (int)(ViewerRendererWidget::MANIPULATOR_COUNT) );
+    DP_ASSERT( (int)(cvp->getManipulatorType()) < (int)(ViewerRendererWidget::ManipulatorType::COUNT) );
     // our buttons are layed out in the same order as the enum in ViewerRendererWidget
-    m_manipulatorAction[cvp->getManipulatorType()]->setChecked( true );
+    m_manipulatorAction[static_cast<size_t>(cvp->getManipulatorType())]->setChecked( true );
 
-    initMultisampleMenu( m_menus[MID_ANTIALIASING] );
-    connect( m_menus[MID_ADD_HEADLIGHT], SIGNAL(triggered(QAction*)), cvp, SLOT(triggeredAddHeadlightMenu(QAction*) ) );
-    connect( m_menus[MID_ADD_LIGHT_SOURCE], SIGNAL(triggered(QAction*)), cvp, SLOT(triggeredAddLightSourceMenu(QAction*) ) );
-    connect( m_menus[MID_ANTIALIASING], SIGNAL(aboutToShow()), cvp, SLOT(aboutToShowAntialiasingMenu()) );
-    connect( m_menus[MID_ANTIALIASING], SIGNAL(triggered(QAction*)), cvp, SLOT(triggeredAntialiasingMenu(QAction*)) );
-    connect( m_menus[MID_CULLING], SIGNAL(aboutToShow()), cvp, SLOT(aboutToShowCullingMenu()) );
-    connect( m_menus[MID_CULLING], SIGNAL(triggered(QAction*)), cvp, SLOT(triggeredCullingMenu(QAction*) ) );
+    initMultisampleMenu( m_menus[static_cast<size_t>(MenuID::ANTIALIASING)] );
+    connect( m_menus[static_cast<size_t>(MenuID::ADD_HEADLIGHT)], SIGNAL(triggered(QAction*)), cvp, SLOT(triggeredAddHeadlightMenu(QAction*) ) );
+    connect( m_menus[static_cast<size_t>(MenuID::ADD_LIGHT_SOURCE)], SIGNAL(triggered(QAction*)), cvp, SLOT(triggeredAddLightSourceMenu(QAction*) ) );
+    connect( m_menus[static_cast<size_t>(MenuID::ANTIALIASING)], SIGNAL(aboutToShow()), cvp, SLOT(aboutToShowAntialiasingMenu()) );
+    connect( m_menus[static_cast<size_t>(MenuID::ANTIALIASING)], SIGNAL(triggered(QAction*)), cvp, SLOT(triggeredAntialiasingMenu(QAction*)) );
+    connect( m_menus[static_cast<size_t>(MenuID::CULLING)], SIGNAL(aboutToShow()), cvp, SLOT(aboutToShowCullingMenu()) );
+    connect( m_menus[static_cast<size_t>(MenuID::CULLING)], SIGNAL(triggered(QAction*)), cvp, SLOT(triggeredCullingMenu(QAction*) ) );
     connect( this, SIGNAL(manipulatorChanged(ViewerRendererWidget::ManipulatorType)), 
              cvp,  SLOT(setManipulatorType(ViewerRendererWidget::ManipulatorType)) );
-    connect( m_menus[MID_RENDER_ENGINE], SIGNAL(aboutToShow()), cvp, SLOT(aboutToShowRenderEngineMenu()) );
-    connect( m_menus[MID_RENDER_ENGINE], SIGNAL(triggered(QAction*)), cvp, SLOT(triggeredRenderEngineMenu(QAction*)) );
-    connect( m_menus[MID_VIEWPORT_FORMAT], SIGNAL(aboutToShow()), cvp, SLOT(aboutToShowViewportFormatMenu()) );
+    connect( m_menus[static_cast<size_t>(MenuID::RENDER_ENGINE)], SIGNAL(aboutToShow()), cvp, SLOT(aboutToShowRenderEngineMenu()) );
+    connect( m_menus[static_cast<size_t>(MenuID::RENDER_ENGINE)], SIGNAL(triggered(QAction*)), cvp, SLOT(triggeredRenderEngineMenu(QAction*)) );
+    connect( m_menus[static_cast<size_t>(MenuID::VIEWPORT_FORMAT)], SIGNAL(aboutToShow()), cvp, SLOT(aboutToShowViewportFormatMenu()) );
     connect( m_viewportFormat30BitAction, SIGNAL(triggered(bool)), cvp, SLOT(triggeredViewportFormat30Bit(bool)) );
     connect( m_viewportFormatSRGBAction, SIGNAL(triggered(bool)), cvp, SLOT(triggeredViewportFormatSRGB(bool)) );
     connect( m_viewportFormatStencilAction, SIGNAL(triggered(bool)), cvp, SLOT(triggeredViewportFormatStencil(bool)) );
@@ -300,7 +300,7 @@ ViewerRendererWidget * MainWindow::createRenderer( QWidget * parent, dp::sg::cor
   // add the renderer - use sharewidget, add menu, not standalone
   ViewerRendererWidget *vrw = new ViewerRendererWidget( parent, GetApp()->getGlobalShareGLWidget() );
    
-  vrw->setRendererType( ViewerRendererWidget::RENDERER_RASTERIZE_XBAR );
+  vrw->setRendererType( ViewerRendererWidget::RendererType::RASTERIZE_XBAR );
 
   vrw->setScene( scene );
 
@@ -394,7 +394,7 @@ QWidget * MainWindow::getLog() const
 
 QMenu * MainWindow::getMenu( MenuID id ) const
 {
-  return( m_menus[id] );
+  return( m_menus[static_cast<size_t>(id)] );
 }
 
 QLabel * MainWindow::getStatisticsLabel() const
@@ -563,7 +563,7 @@ void MainWindow::sceneChanged()
     m_saveAction->setEnabled( true );
     m_closeAction->setEnabled( true );
 
-    for ( unsigned int i = 0; i < ViewerRendererWidget::MANIPULATOR_COUNT; i ++ )
+    for ( unsigned int i = 0; i < static_cast<unsigned int>(ViewerRendererWidget::ManipulatorType::COUNT); i ++ )
     {
       m_manipulatorAction[i]->setEnabled( true );
     }
@@ -584,7 +584,7 @@ void MainWindow::sceneChanged()
     m_saveAction->setEnabled( false );
     m_closeAction->setEnabled( false );
 
-    for ( unsigned int i = 0; i < ViewerRendererWidget::MANIPULATOR_COUNT; i ++ )
+    for ( unsigned int i = 0; i < static_cast<unsigned int>(ViewerRendererWidget::ManipulatorType::COUNT); i ++ )
     {
       m_manipulatorAction[i]->setEnabled( false );
     }
@@ -774,7 +774,7 @@ void MainWindow::setupActions()
   QActionGroup * manipulatorsActionGroup = new QActionGroup( this );
   manipulatorsActionGroup->setExclusive( true );
 
-  for ( unsigned int i = 0; i < ViewerRendererWidget::MANIPULATOR_COUNT; i ++ )
+  for ( unsigned int i = 0; i < static_cast<size_t>(ViewerRendererWidget::ManipulatorType::COUNT); i ++ )
   {
     m_manipulatorAction[i] = new QAction( this );
     QString name;
@@ -784,29 +784,29 @@ void MainWindow::setupActions()
 
     switch( i )
     {
-      case ViewerRendererWidget::MANIPULATOR_TRACKBALL:
+      case ViewerRendererWidget::ManipulatorType::TRACKBALL:
         name = "TrackballCameraManipulator";
         toolTip = "Manipulate camera as if scene was encased in a sphere";
-        data = ViewerRendererWidget::MANIPULATOR_TRACKBALL;
+        data = i;
         checked = true;
         break;
 
-      case ViewerRendererWidget::MANIPULATOR_CYLINDRICAL:
+      case ViewerRendererWidget::ManipulatorType::CYLINDRICAL:
         name = "CylindricalCameraManipulator";
         toolTip = "Manipulate camera as if scene was encased in cylinder";
-        data = ViewerRendererWidget::MANIPULATOR_CYLINDRICAL;
+        data = i;
         break;
 
-      case ViewerRendererWidget::MANIPULATOR_FLY:
+      case ViewerRendererWidget::ManipulatorType::FLY:
         name = "FlightCameraManipulator";
         toolTip = "Manipulate camera as if flying through the scene";
-        data = ViewerRendererWidget::MANIPULATOR_FLY;
+        data = i;
         break;
 
-      case ViewerRendererWidget::MANIPULATOR_WALK:
+      case ViewerRendererWidget::ManipulatorType::WALK:
         name = "WalkCameraManipulator";
         toolTip = "Manipulate camera as if walking through the scene";
-        data = ViewerRendererWidget::MANIPULATOR_WALK;
+        data = i;
         break;
 
       default :
@@ -908,29 +908,31 @@ void MainWindow::setupMenus()
 
     // Convert menu
     {
-      m_menus[MID_CONVERT_SCENE] = editMenu->addMenu( "&Convert Scene" );
-      connect( m_menus[MID_CONVERT_SCENE], SIGNAL(aboutToShow()), this, SLOT(aboutToShowConvertSceneMenu()) );
+      QMenu * convertSceneMenu = editMenu->addMenu( "&Convert Scene" );
+      m_menus[static_cast<size_t>(MenuID::CONVERT_SCENE)] = convertSceneMenu;
+      connect( convertSceneMenu, SIGNAL(aboutToShow()), this, SLOT(aboutToShowConvertSceneMenu()) );
 
-      m_destripSceneAction = m_menus[MID_CONVERT_SCENE]->addAction( "&Destrip Scene" );
+      m_destripSceneAction = convertSceneMenu->addAction( "&Destrip Scene" );
       connect( m_destripSceneAction, SIGNAL(triggered(bool)), this, SLOT(triggeredDestripScene(bool)) );
 
-      m_stripSceneAction = m_menus[MID_CONVERT_SCENE]->addAction( "&Strip Scene" );
+      m_stripSceneAction = convertSceneMenu->addAction( "&Strip Scene" );
       connect( m_stripSceneAction, SIGNAL(triggered(bool)), this, SLOT(triggeredStripScene(bool)) );
 
-      m_menus[MID_CONVERT_SCENE]->addSeparator();
+      convertSceneMenu->addSeparator();
 
-      m_triangulateSceneAction = m_menus[MID_CONVERT_SCENE]->addAction( "&Triangulate Scene" );
+      m_triangulateSceneAction = convertSceneMenu->addAction( "&Triangulate Scene" );
       connect( m_triangulateSceneAction, SIGNAL(triggered(bool)), this, SLOT(triggeredTriangulateScene(bool)) );
     }
 
     // Modify menu
     {
-      m_menus[MID_MODIFY_SCENE] = editMenu->addMenu( "&Modify Scene" );
+      QMenu * modifySceneMenu = editMenu->addMenu( "&Modify Scene" );
+      m_menus[static_cast<size_t>(MenuID::MODIFY_SCENE)] = modifySceneMenu;
 
-      QAction * action = m_menus[MID_MODIFY_SCENE]->addAction( "&Normalize Scene ..." );
+      QAction * action = modifySceneMenu->addAction( "&Normalize Scene ..." );
       connect( action, SIGNAL(triggered(bool)), this, SLOT(triggeredNormalizeScene(bool)) );
 
-      action = m_menus[MID_MODIFY_SCENE]->addAction( "&Smooth Scene ..." );
+      action = modifySceneMenu->addAction( "&Smooth Scene ..." );
       connect( action, SIGNAL(triggered(bool)), this, SLOT(triggeredSmoothScene(bool)) );
     }
 
@@ -942,28 +944,30 @@ void MainWindow::setupMenus()
 
     // Edit -> Add Headlight menu
     {
-      m_menus[MID_ADD_HEADLIGHT] = new QMenu( "Add &Headlight" );
-      m_menus[MID_ADD_HEADLIGHT]->addAction( "&Directed Light" );
-      m_menus[MID_ADD_HEADLIGHT]->addAction( "&Point Light" );
-      m_menus[MID_ADD_HEADLIGHT]->addAction( "&Spot Light" );
-      for ( int i=0 ; i<m_menus[MID_ADD_HEADLIGHT]->actions().size() ; i++ )
+      QMenu * addHeadlightMenu = new QMenu( "Add &Headlight" );
+      m_menus[static_cast<size_t>(MenuID::ADD_HEADLIGHT)] = addHeadlightMenu;
+      addHeadlightMenu->addAction( "&Directed Light" );
+      addHeadlightMenu->addAction( "&Point Light" );
+      addHeadlightMenu->addAction( "&Spot Light" );
+      for ( int i=0 ; i<addHeadlightMenu->actions().size() ; i++ )
       {
-        m_menus[MID_ADD_HEADLIGHT]->actions()[i]->setData( i );
+        addHeadlightMenu->actions()[i]->setData( i );
       }
-      editMenu->addMenu( m_menus[MID_ADD_HEADLIGHT] );
+      editMenu->addMenu( addHeadlightMenu );
     }
 
     // Edit -> Add Light Source menu
     {
-      m_menus[MID_ADD_LIGHT_SOURCE] = new QMenu( "Add &Light Source" );
-      m_menus[MID_ADD_LIGHT_SOURCE]->addAction( "&Directed Light" );
-      m_menus[MID_ADD_LIGHT_SOURCE]->addAction( "&Point Light" );
-      m_menus[MID_ADD_LIGHT_SOURCE]->addAction( "&Spot Light" );
-      for ( int i=0 ; i<m_menus[MID_ADD_LIGHT_SOURCE]->actions().size() ; i++ )
+      QMenu * addLightSourceMenu = new QMenu( "Add &Light Source" );
+      m_menus[static_cast<size_t>(MenuID::ADD_LIGHT_SOURCE)] = addLightSourceMenu;
+      addLightSourceMenu->addAction( "&Directed Light" );
+      addLightSourceMenu->addAction( "&Point Light" );
+      addLightSourceMenu->addAction( "&Spot Light" );
+      for ( int i=0 ; i<addLightSourceMenu->actions().size() ; i++ )
       {
-        m_menus[MID_ADD_LIGHT_SOURCE]->actions()[i]->setData( i );
+        addLightSourceMenu->actions()[i]->setData( i );
       }
-      editMenu->addMenu( m_menus[MID_ADD_LIGHT_SOURCE] );
+      editMenu->addMenu( addLightSourceMenu );
     }
   }
 
@@ -974,48 +978,50 @@ void MainWindow::setupMenus()
 
     // View -> Render Engine menu
     {
-      m_menus[MID_RENDER_ENGINE] = new QMenu( "Render &Engine" );
+      QMenu * renderEngineMenu = new QMenu( "Render &Engine" );
+      m_menus[static_cast<size_t>(MenuID::RENDER_ENGINE)] = renderEngineMenu;
 
-      QAction * action = m_menus[MID_RENDER_ENGINE]->addAction( "&OpenGL" );
+      QAction * action = renderEngineMenu->addAction( "&OpenGL" );
       action->setCheckable( true );
-      action->setData( ViewerRendererWidget::RENDERER_RASTERIZE_XBAR );
+      action->setData( static_cast<int>(ViewerRendererWidget::RendererType::RASTERIZE_XBAR) );
 
       // DAR FIXME Switching the renderer dynamically doesn't work, yet.
       // The OpenGL driver (310.90 QK5000) throws an error about invalid clear bits and 
       // a performance warning that the pixel pipeline is synchronized with the 3D engine.
       // Rendering is corrupted.
-      //action = m_menus[MID_RENDER_ENGINE]->addAction( "Opti&X" );
+      //action = renderEngineMenu->addAction( "Opti&X" );
       //action->setCheckable( true );
-      //action->setData( RENDERER_RAYTRACE_XBAR );
+      //action->setData( RendererType::RAYTRACE_XBAR );
 
-      viewMenu->addMenu( m_menus[MID_RENDER_ENGINE] );
+      viewMenu->addMenu( renderEngineMenu );
     }
 
     // View -> Viewport Format menu
     {
-      m_menus[MID_VIEWPORT_FORMAT] = new QMenu( "&Viewport Formats" );
+      QMenu * viewportFormatMenu = new QMenu( "&Viewport Formats" );
+      m_menus[static_cast<size_t>(MenuID::VIEWPORT_FORMAT)] = viewportFormatMenu;
 
-      m_viewportFormat30BitAction = m_menus[MID_VIEWPORT_FORMAT]->addAction( "&30 Bit" );
+      m_viewportFormat30BitAction = viewportFormatMenu->addAction( "&30 Bit" );
       m_viewportFormat30BitAction->setCheckable( true );
 
       // View -> Viewport Format -> Antialiasing menu
       {
-        m_menus[MID_ANTIALIASING] = new QMenu( "&Antialiasing" );
-        m_menus[MID_VIEWPORT_FORMAT]->addMenu( m_menus[MID_ANTIALIASING] );
+        m_menus[static_cast<size_t>(MenuID::ANTIALIASING)] = new QMenu( "&Antialiasing" );
+        viewportFormatMenu->addMenu( m_menus[static_cast<size_t>(MenuID::ANTIALIASING)] );
         // the actions of this submenu can be created in when there is a ViewerRenderer created, earliest,
         // as a Renderer is needed to determine the multisample support
       }
 
-      m_viewportFormatSRGBAction = m_menus[MID_VIEWPORT_FORMAT]->addAction( "s&RGB" );
+      m_viewportFormatSRGBAction = viewportFormatMenu->addAction( "s&RGB" );
       m_viewportFormatSRGBAction->setCheckable( true );
 
-      m_viewportFormatStencilAction = m_menus[MID_VIEWPORT_FORMAT]->addAction( "&Stencil" );
+      m_viewportFormatStencilAction = viewportFormatMenu->addAction( "&Stencil" );
       m_viewportFormatStencilAction->setCheckable( true );
 
-      m_viewportFormatStereoAction = m_menus[MID_VIEWPORT_FORMAT]->addAction( "S&tereo" );
+      m_viewportFormatStereoAction = viewportFormatMenu->addAction( "S&tereo" );
       m_viewportFormatStereoAction->setCheckable( true );
 
-      viewMenu->addMenu( m_menus[MID_VIEWPORT_FORMAT] );
+      viewMenu->addMenu( viewportFormatMenu );
     }
 
     // add separator between viewport specific and renderer specific menu entries
@@ -1023,17 +1029,18 @@ void MainWindow::setupMenus()
 
     // View -> Culling menu
     {
-      m_menus[MID_CULLING] = new QMenu( "&Culling" );
-      m_menus[MID_CULLING]->addAction( "CPU" );
-      m_menus[MID_CULLING]->addAction( "OpenGL Compute" );
-      m_menus[MID_CULLING]->addAction( "CUDA" );
-      m_menus[MID_CULLING]->addAction( "Auto" );
-      m_menus[MID_CULLING]->addAction( "Off" );
-      for ( int i=0 ; i<m_menus[MID_CULLING]->actions().size() ; i++ )
+      QMenu * cullingMenu = new QMenu( "&Culling" );
+      m_menus[static_cast<size_t>(MenuID::CULLING)] = cullingMenu;
+      cullingMenu->addAction( "CPU" );
+      cullingMenu->addAction( "OpenGL Compute" );
+      cullingMenu->addAction( "CUDA" );
+      cullingMenu->addAction( "Auto" );
+      cullingMenu->addAction( "Off" );
+      for ( int i=0 ; i<cullingMenu->actions().size() ; i++ )
       {
-        m_menus[MID_CULLING]->actions()[i]->setCheckable( true );
+        cullingMenu->actions()[i]->setCheckable( true );
       }
-      viewMenu->addMenu( m_menus[MID_CULLING] );
+      viewMenu->addMenu( cullingMenu );
     }
 
     // View -> Depth Pass
@@ -1135,7 +1142,7 @@ void MainWindow::setupToolbar()
   toolBar->addAction( m_undoAction );
   toolBar->addAction( m_redoAction );
   toolBar->addSeparator();
-  for( unsigned int i = 0; i < ViewerRendererWidget::MANIPULATOR_COUNT; i ++ )
+  for( unsigned int i = 0; i < static_cast<unsigned int>(ViewerRendererWidget::ManipulatorType::COUNT); i ++ )
   {
     toolBar->addAction( m_manipulatorAction[i] );
   }
@@ -1571,17 +1578,17 @@ void MainWindow::updateRenderers( dp::sg::ui::ViewStateSharedPtr const& viewStat
     {
       setTraversalMasks( viewState->getScene(), 0x01 );
 
-      // create one RenderWidget, as we always start with VIEWPORT_LAYOUT_ONE
+      // create one RenderWidget, as we always start with ViewportLayout::Type::ONE
       m_renderWidgets.push_back( createRenderer( m_viewportLayout, viewState->getScene() ) );
       m_cameraAnimators.push_back( createAnimator( m_renderWidgets.back() ) );
 
       // add it to the viewport layout
       m_viewportLayout->setViewport( 0, m_renderWidgets.back() );
       // Trigger this at least once (because the default m_currentLayout is ~0) or the ViewportLayout doesn't refresh properly.
-      m_viewportLayout->setViewportLayout( VIEWPORT_LAYOUT_ONE );
+      m_viewportLayout->setViewportLayout( ViewportLayout::Type::ONE );
 
       // Reset the toolbar to the current state, possibly triggered setViewportLayout() finds that state active.
-      m_viewportCombo->setCurrentIndex( VIEWPORT_LAYOUT_ONE );
+      m_viewportCombo->setCurrentIndex( static_cast<int>(ViewportLayout::Type::ONE) );
     }
     else
     {
@@ -1665,7 +1672,8 @@ void MainWindow::updateRenderers( dp::sg::ui::ViewStateSharedPtr const& viewStat
 
 void MainWindow::viewportLayoutChanged( int index )
 {
-  unsigned int numViewports = viewportCount( index );
+  ViewportLayout::Type type = static_cast<ViewportLayout::Type>(index);
+  unsigned int numViewports = viewportCount( type );
   if ( numViewports < m_renderWidgets.size() )
   {
     for ( unsigned int i=numViewports ; i<m_renderWidgets.size() ; i++ )
@@ -1691,7 +1699,7 @@ void MainWindow::viewportLayoutChanged( int index )
       m_renderWidgets[i]->setCamera( cameras[i] );
     }
   }
-  m_viewportLayout->setViewportLayout( index );
+  m_viewportLayout->setViewportLayout( type );
 }
 
 QString analyze( const dp::sg::core::SceneSharedPtr & scene )

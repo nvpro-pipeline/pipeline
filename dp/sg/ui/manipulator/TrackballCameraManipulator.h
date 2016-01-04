@@ -59,25 +59,25 @@ namespace dp
         {
         public:
 
-          enum Mode
+          enum class Mode
           {
-              MODE_NONE = 0
-            , MODE_ORBIT
-            , MODE_PAN
-            , MODE_ROTATE_XY
-            , MODE_DOLLY
-            , MODE_ROLL_Z
-            , MODE_ZOOM_FOV
-            , MODE_ZOOM_DOLLY
-            , MODE_LOOKAT
-            , MODE_LOOKAT_DEPTH
+              NONE = 0
+            , ORBIT
+            , PAN
+            , ROTATE_XY
+            , DOLLY
+            , ROLL_Z
+            , ZOOM_FOV
+            , ZOOM_DOLLY
+            , LOOKAT
+            , LOOKAT_DEPTH
           };
 
-          enum Axis
+          enum class Axis
           {
-              AXIS_X = 0
-            , AXIS_Y = 1
-            , AXIS_Z = 2
+              X = 0
+            , Y = 1
+            , Z = 2
           };
 
           /*! \brief Default constructor.

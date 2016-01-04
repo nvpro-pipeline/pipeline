@@ -70,7 +70,7 @@ namespace dp
             static DP_SG_RDR_RIX_GL_API SceneRendererSharedPtr create( const char *renderEngine = 0,
                                                                        dp::fx::Manager shaderManagerType = dp::fx::Manager::SHADERBUFFER,
                                                                        dp::culling::Mode cullingMode = dp::culling::Mode::AUTO,
-                                                                       TransparencyMode transparencyMode = TM_ORDER_INDEPENDENT_CLOSEST_LIST,
+                                                                       TransparencyMode transparencyMode = TransparencyMode::ORDER_INDEPENDENT_CLOSEST_LIST,
                                                                        const dp::gl::RenderTargetSharedPtr &renderTarget = dp::gl::RenderTargetSharedPtr() );
             DP_SG_RDR_RIX_GL_API virtual ~SceneRenderer();
 

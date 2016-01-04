@@ -66,11 +66,11 @@ namespace dp
             RGL_COUNT
           };
 
-          enum RenderGroupPass
+          enum class RenderGroupPass
           {
-            RGP_FORWARD,
-            RGP_DEPTH,
-            RGP_COUNT
+            FORWARD,
+            DEPTH,
+            COUNT
           };
 
           class ShaderManager;
@@ -199,10 +199,10 @@ namespace dp
 
             virtual void cull( const dp::sg::core::CameraSharedPtr &camera );
 
-            dp::rix::core::RenderGroupSharedHandle getRenderGroup() { return m_renderGroups[RGL_OPAQUE][RGP_FORWARD]; }
-            dp::rix::core::RenderGroupSharedHandle getRenderGroupDepthPass() { return m_renderGroups[RGL_OPAQUE][RGP_DEPTH]; }
-            dp::rix::core::RenderGroupSharedHandle getRenderGroupTransparent() { return m_renderGroups[RGL_TRANSPARENT][RGP_FORWARD]; }
-            dp::rix::core::RenderGroupSharedHandle getRenderGroupTransparentDepthPass() { return m_renderGroups[RGL_TRANSPARENT][RGP_DEPTH]; }
+            dp::rix::core::RenderGroupSharedHandle getRenderGroup() { return m_renderGroups[RGL_OPAQUE][static_cast<size_t>(RenderGroupPass::FORWARD)]; }
+            dp::rix::core::RenderGroupSharedHandle getRenderGroupDepthPass() { return m_renderGroups[RGL_OPAQUE][static_cast<size_t>(RenderGroupPass::DEPTH)]; }
+            dp::rix::core::RenderGroupSharedHandle getRenderGroupTransparent() { return m_renderGroups[RGL_TRANSPARENT][static_cast<size_t>(RenderGroupPass::FORWARD)]; }
+            dp::rix::core::RenderGroupSharedHandle getRenderGroupTransparentDepthPass() { return m_renderGroups[RGL_TRANSPARENT][static_cast<size_t>(RenderGroupPass::DEPTH)]; }
             std::vector<dp::rix::core::GeometryInstanceSharedHandle>& getSortedTransparentGIs( const dp::math::Vec3f& cameraPosition );
             bool containsTransparentGIs();
 
@@ -239,8 +239,8 @@ namespace dp
             std::vector<Instance>                   m_instances;
 
             //  m_renderGroup(Instance)s[Opaque|Transparent][Forward|DepthPass]
-            dp::rix::core::RenderGroupSharedHandle  m_renderGroups[RGL_COUNT][RGP_COUNT];
-            ShaderManagerRenderGroupSharedPtr       m_renderGroupInstances[RGL_COUNT][RGP_COUNT];
+            dp::rix::core::RenderGroupSharedHandle  m_renderGroups[RGL_COUNT][RenderGroupPass::COUNT];
+            ShaderManagerRenderGroupSharedPtr       m_renderGroupInstances[RGL_COUNT][RenderGroupPass::COUNT];
 
             std::vector<DefaultHandleDataSharedPtr>                   m_transparentDIs;
             std::vector<dp::rix::core::GeometryInstanceSharedHandle>  m_depthSortedTransparentGIs;

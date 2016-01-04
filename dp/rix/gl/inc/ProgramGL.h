@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2015
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -46,19 +46,19 @@ namespace dp
       public:
         typedef std::map< ContainerDescriptorGLHandle, unsigned int > DescriptorIndexMap;
 
-        enum BufferBindingType
+        enum class BufferBindingType
         {
-            BBT_UBO
-          , BBT_ATOMIC_COUNTER
-          , BBT_SHADER_STORAGE_BUFFER
-          , BBT_NONE
+            UBO
+          , ATOMIC_COUNTER
+          , SHADER_STORAGE_BUFFER
+          , NONE
         };
 
         struct BufferBinding
         {
           BufferBinding()
             : bufferIndex( 0 )
-            , bufferBindingType( BBT_NONE )
+            , bufferBindingType( BufferBindingType::NONE )
           {
           }
 

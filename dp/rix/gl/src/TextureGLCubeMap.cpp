@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2015
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -56,13 +56,13 @@ namespace dp
         bool ok = false;
         switch( textureData.getTextureDataType() )
         {
-        case dp::rix::core::TDT_NATIVE:
+        case dp::rix::core::TextureDataType::NATIVE:
           {
             ok = TextureGL::setData( textureData );
           }
           break;
 
-        case dp::rix::core::TDT_POINTER:
+        case dp::rix::core::TextureDataType::POINTER:
           {
             DP_ASSERT( dynamic_cast<const dp::rix::core::TextureDataPtr*>(&textureData) );
             const TextureDataPtr& dataPtr = static_cast<const TextureDataPtr&>(textureData);

@@ -39,11 +39,11 @@ namespace dp
     namespace core
     {
 
-      enum TestReturnFlag
+      enum class TestReturnFlag
       {
-          TRF_PASSED = 0
-        , TRF_FAILED = 1
-        , TRF_INVALID_INPUT = 2
+          PASSED = 0
+        , FAILED = 1
+        , INVALID_INPUT = 2
       };
 
       class TestObject

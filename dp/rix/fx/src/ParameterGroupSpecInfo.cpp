@@ -1,4 +1,4 @@
-// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -85,7 +85,7 @@ namespace dp
           {
             size_t alignment = 16;
 
-            programParameters.push_back( dp::rix::core::ProgramParameter( m_groupLayout->getGroupName().c_str(), CPT_BUFFER, 0 ) );
+            programParameters.push_back( dp::rix::core::ProgramParameter( m_groupLayout->getGroupName().c_str(), ContainerParameterType::BUFFER, 0 ) );
             m_descriptor = renderer->containerDescriptorCreate( dp::rix::core::ProgramParameterDescriptorCommon( &programParameters[0], programParameters.size() ) );
 
             if ( m_groupLayout->isInstanced() )
@@ -94,7 +94,7 @@ namespace dp
 
               std::string groupId = m_groupLayout->getGroupName() + "Id";
               programParameters.clear();
-              programParameters.push_back( dp::rix::core::ProgramParameter( groupId.c_str(), CPT_INT_32, 0 ) );
+              programParameters.push_back( dp::rix::core::ProgramParameter( groupId.c_str(), ContainerParameterType::INT_32, 0 ) );
               m_descriptorId = renderer->containerDescriptorCreate( dp::rix::core::ProgramParameterDescriptorCommon( &programParameters[0], programParameters.size() ) );
               dp::rix::core::ContainerEntry entryId = renderer->containerDescriptorGetEntry( m_descriptorId, groupId.c_str());
 

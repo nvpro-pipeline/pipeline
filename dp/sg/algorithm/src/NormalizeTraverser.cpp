@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2011
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -46,7 +46,7 @@ namespace dp
       BEGIN_REFLECTION_INFO( NormalizeTraverser )
         DERIVE_STATIC_PROPERTIES( NormalizeTraverser, ExclusiveTraverser );
   
-        INIT_STATIC_PROPERTY_RW( NormalizeTraverser, VertexAttributeIndex, unsigned int, SEMANTIC_VALUE, value, value );
+        INIT_STATIC_PROPERTY_RW( NormalizeTraverser, VertexAttributeIndex, unsigned int, Semantic::VALUE, value, value );
       END_REFLECTION_INFO
 
       NormalizeTraverser::NormalizeTraverser(void)

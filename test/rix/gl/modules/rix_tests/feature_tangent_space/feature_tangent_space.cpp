@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -211,25 +211,25 @@ void Feature_tangent_space::createScene()
   // Container Descriptors
 
   ProgramParameter vertexConstProgramParameters[] = {
-    ProgramParameter("world2view", CPT_MAT4X4),
-    ProgramParameter("view2world", CPT_MAT4X4),
-    ProgramParameter("view2clip",  CPT_MAT4X4),
-    ProgramParameter("world2clip", CPT_MAT4X4)
+    ProgramParameter("world2view", ContainerParameterType::MAT4X4),
+    ProgramParameter("view2world", ContainerParameterType::MAT4X4),
+    ProgramParameter("view2clip",  ContainerParameterType::MAT4X4),
+    ProgramParameter("world2clip", ContainerParameterType::MAT4X4)
   };
 
   ProgramParameter vertexVarProgramParameters[] = {
-    ProgramParameter("model2world", CPT_MAT4X4),
-    ProgramParameter("model2worldIT", CPT_MAT4X4)
+    ProgramParameter("model2world", ContainerParameterType::MAT4X4),
+    ProgramParameter("model2worldIT", ContainerParameterType::MAT4X4)
   };
 
   ProgramParameter fragmentProgramParameters[] = {
-    ProgramParameter("color", CPT_FLOAT4),
-    ProgramParameter("bumpTex", CPT_SAMPLER)
+    ProgramParameter("color", ContainerParameterType::FLOAT4),
+    ProgramParameter("bumpTex", ContainerParameterType::SAMPLER)
   };
 
 
   ProgramParameter fragmentConstProgramParameters[] = {
-    ProgramParameter("lightDir", CPT_FLOAT3)
+    ProgramParameter("lightDir", ContainerParameterType::FLOAT3)
   };
 
   ContainerDescriptorSharedHandle vertConstContainerDescriptor =
@@ -251,8 +251,8 @@ void Feature_tangent_space::createScene()
 
   // Program
 
-  ProgramShaderCode vertShader( vertexShader, ST_VERTEX_SHADER );
-  ProgramShaderCode fragShader( fragmentShader, ST_FRAGMENT_SHADER );
+  ProgramShaderCode vertShader( vertexShader, ShaderType::VERTEX_SHADER );
+  ProgramShaderCode fragShader( fragmentShader, ShaderType::FRAGMENT_SHADER );
 
   ContainerDescriptorSharedHandle vertContainerDescriptors[] = { vertConstContainerDescriptor, vertVarContainerDescriptor };
   ContainerDescriptorSharedHandle fragContainerDescriptors[] = { fragContainerDescriptor, fragConstContainerDescriptor };
@@ -376,7 +376,7 @@ void Feature_tangent_space::createScene()
 
   // Set Container Data
 
-  SamplerStateDataCommon samplerStateDataCommon( SSFM_NEAREST, SSFM_NEAREST );
+  SamplerStateDataCommon samplerStateDataCommon( SamplerStateFilterMode::NEAREST, SamplerStateFilterMode::NEAREST );
   SamplerStateSharedHandle samplerStateHandle = m_rix->samplerStateCreate(samplerStateDataCommon);
 
   m_rix->containerSetData( vertConstContainer,  containerEntryView2clip,  ContainerDataRaw( 0, view2Clip.getPtr(),   16 * sizeof(float) ) );
@@ -403,10 +403,10 @@ void Feature_tangent_space::createScene()
 
   dp::rix::util::TextureObjectDataSharedPtr noiseTexture = dp::rix::util::createNoiseTexture( math::Vec2ui(256, 256), 10.0f, 20.0f );
   dp::rix::util::TextureObjectDataSharedPtr normalTexture = dp::rix::util::convertHeightMapToNormalMap( noiseTexture, 0.014f );
-  TextureSharedHandle noiseNormalMap = dp::rix::util::generateTexture( m_rix, normalTexture, dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_32, ITF_RGBA8 );
+  TextureSharedHandle noiseNormalMap = dp::rix::util::generateTexture( m_rix, normalTexture, dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_32, InternalTextureFormat::RGBA8 );
 
   dp::rix::util::TextureObjectDataSharedPtr pyramidNormalTexture = dp::rix::util::createPyramidNormalMap( math::Vec2ui(256, 256), math::Vec2ui(16, 16), 0.03125f );
-  TextureSharedHandle pyramidNormalMap = dp::rix::util::generateTexture( m_rix, pyramidNormalTexture, dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_32, ITF_RGBA8 );
+  TextureSharedHandle pyramidNormalMap = dp::rix::util::generateTexture( m_rix, pyramidNormalTexture, dp::PixelFormat::RGBA, dp::DataType::UNSIGNED_INT_32, InternalTextureFormat::RGBA8 );
 
   rix::core::SamplerSharedHandle samplerNoiseNormalMap = m_rix->samplerCreate();
   m_rix->samplerSetTexture( samplerNoiseNormalMap, noiseNormalMap );

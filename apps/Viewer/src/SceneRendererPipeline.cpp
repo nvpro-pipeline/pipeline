@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -101,15 +101,15 @@ bool SceneRendererPipeline::init(const dp::gl::RenderContextSharedPtr &renderCon
   rcglstack.push(renderContext);
 
   // Render to 2D texture.
-  m_highlightFBO->setAttachment(dp::gl::RenderTargetFBO::COLOR_ATTACHMENT0,
+  m_highlightFBO->setAttachment(dp::gl::RenderTargetFBO::AttachmentTarget::COLOR0,
                                 dp::gl::Texture2D::create(GL_RGBA8, GL_BGRA, GL_UNSIGNED_BYTE));
   // Depth and Stencil are Renderbuffers.
   dp::gl::RenderbufferSharedPtr depthStencil(dp::gl::Renderbuffer::create(GL_DEPTH24_STENCIL8)); // Shared depth stencil buffer between the tonemap and hightlight FBOs.
-  m_highlightFBO->setAttachment(dp::gl::RenderTargetFBO::DEPTH_ATTACHMENT,   depthStencil);
-  m_highlightFBO->setAttachment(dp::gl::RenderTargetFBO::STENCIL_ATTACHMENT, depthStencil);
+  m_highlightFBO->setAttachment(dp::gl::RenderTargetFBO::AttachmentTarget::DEPTH,   depthStencil);
+  m_highlightFBO->setAttachment(dp::gl::RenderTargetFBO::AttachmentTarget::STENCIL, depthStencil);
 
-  std::vector<GLenum> drawBuffers;
-  drawBuffers.push_back(dp::gl::RenderTargetFBO::COLOR_ATTACHMENT0);
+  std::vector<dp::gl::RenderTargetFBO::AttachmentTarget> drawBuffers;
+  drawBuffers.push_back(dp::gl::RenderTargetFBO::AttachmentTarget::COLOR0);
   m_highlightFBO->setDrawBuffers(drawBuffers);
 
   rcglstack.pop();
@@ -122,7 +122,7 @@ bool SceneRendererPipeline::init(const dp::gl::RenderContextSharedPtr &renderCon
     m_sceneRendererHighlight = dp::sg::renderer::rix::gl::SceneRenderer::create( viewer->getRenderEngine().c_str(),
                                                                                  viewer->getShaderManagerType(),
                                                                                  viewer->getCullingMode(),
-                                                                                 dp::sg::renderer::rix::gl::TM_SORTED_BLENDED );
+                                                                                 dp::sg::renderer::rix::gl::TransparencyMode::SORTED_BLENDED );
   }
 
   if ( GetApp()->isTonemapperEnabled() )
@@ -143,7 +143,7 @@ bool SceneRendererPipeline::init(const dp::gl::RenderContextSharedPtr &renderCon
   m_rendererHighlight->setPipeline( dp::sg::core::PipelineData::create( EffectLibrary::instance()->getEffectSpec( std::string("highlight") ) ) );
 
   // m_rendererHighlight uses the previously rendered texture rectangle as input for the shader.
-  const dp::gl::RenderTargetFBO::SharedAttachment &attachment = m_highlightFBO->getAttachment(dp::gl::RenderTargetFBO::COLOR_ATTACHMENT0);
+  const dp::gl::RenderTargetFBO::SharedAttachment &attachment = m_highlightFBO->getAttachment(dp::gl::RenderTargetFBO::AttachmentTarget::COLOR0);
   const dp::gl::RenderTargetFBO::SharedAttachmentTexture &texAtt = attachment.inplaceCast<dp::gl::RenderTargetFBO::AttachmentTexture>();
   if (texAtt)
   {
@@ -311,7 +311,7 @@ void SceneRendererPipeline::setSceneRenderer(const dp::sg::ui::SceneRendererShar
     m_sceneRendererHighlight = dp::sg::renderer::rix::gl::SceneRenderer::create( viewer->getRenderEngine().c_str(),
                                                                                  viewer->getShaderManagerType(),
                                                                                  viewer->getCullingMode(),
-                                                                                 dp::sg::renderer::rix::gl::TM_SORTED_BLENDED );
+                                                                                 dp::sg::renderer::rix::gl::TransparencyMode::SORTED_BLENDED );
   }
 }
 
@@ -475,13 +475,13 @@ void SceneRendererPipeline::initTonemapper()
   rcglstack.push( m_highlightFBO->getRenderContext() );
 
   // Render to 2D texture.
-  m_tonemapFBO->setAttachment(dp::gl::RenderTargetFBO::COLOR_ATTACHMENT0,
+  m_tonemapFBO->setAttachment(dp::gl::RenderTargetFBO::AttachmentTarget::COLOR0,
                               dp::gl::Texture2D::create(GL_RGBA32F, GL_RGBA, GL_FLOAT)); // HDR rendering!
   // Depth and Stencil are Renderbuffers.
-  m_tonemapFBO->setAttachment(dp::gl::RenderTargetFBO::DEPTH_ATTACHMENT,   m_highlightFBO->getAttachment( dp::gl::RenderTargetFBO::DEPTH_ATTACHMENT ) );
-  m_tonemapFBO->setAttachment(dp::gl::RenderTargetFBO::STENCIL_ATTACHMENT, m_highlightFBO->getAttachment( dp::gl::RenderTargetFBO::STENCIL_ATTACHMENT ));
+  m_tonemapFBO->setAttachment(dp::gl::RenderTargetFBO::AttachmentTarget::DEPTH,   m_highlightFBO->getAttachment( dp::gl::RenderTargetFBO::AttachmentTarget::DEPTH ) );
+  m_tonemapFBO->setAttachment(dp::gl::RenderTargetFBO::AttachmentTarget::STENCIL, m_highlightFBO->getAttachment( dp::gl::RenderTargetFBO::AttachmentTarget::STENCIL ));
 
-  m_tonemapFBO->setDrawBuffers( m_highlightFBO->getDrawBuffers() ); // Still COLOR_ATTACHMENT0.
+  m_tonemapFBO->setDrawBuffers( m_highlightFBO->getDrawBuffers() ); // Still AttachmentTarget::COLOR0.
 
   rcglstack.pop();
 
@@ -489,7 +489,7 @@ void SceneRendererPipeline::initTonemapper()
   m_tonemapperData = dp::sg::core::PipelineData::create( dp::fx::EffectLibrary::instance()->getEffectData("tonemapper") );
   m_tonemapper->setPipeline( m_tonemapperData );
 
-  const dp::gl::RenderTargetFBO::SharedAttachment &attachmentTonemap = m_tonemapFBO->getAttachment(dp::gl::RenderTargetFBO::COLOR_ATTACHMENT0);
+  const dp::gl::RenderTargetFBO::SharedAttachment &attachmentTonemap = m_tonemapFBO->getAttachment(dp::gl::RenderTargetFBO::AttachmentTarget::COLOR0);
   const dp::gl::RenderTargetFBO::SharedAttachmentTexture &texAttTonemap = attachmentTonemap.dynamicCast<dp::gl::RenderTargetFBO::AttachmentTexture>();
   if ( texAttTonemap )
   {

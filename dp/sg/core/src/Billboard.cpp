@@ -1,4 +1,4 @@
-// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -41,8 +41,8 @@ namespace dp
 
       BEGIN_REFLECTION_INFO ( Billboard )
         DERIVE_STATIC_PROPERTIES( Billboard, Group );
-        INIT_STATIC_PROPERTY_RW_ENUM( Billboard, Alignment,     Alignment,  SEMANTIC_VALUE,  value,           value );
-        INIT_STATIC_PROPERTY_RW     ( Billboard, RotationAxis,  Vec3f,      SEMANTIC_VALUE,  const_reference, const_reference );
+        INIT_STATIC_PROPERTY_RW_ENUM( Billboard, Alignment,     Alignment,  Semantic::VALUE,  value,           value );
+        INIT_STATIC_PROPERTY_RW     ( Billboard, RotationAxis,  Vec3f,      Semantic::VALUE,  const_reference, const_reference );
       END_REFLECTION_INFO
 
       BillboardSharedPtr Billboard::create()

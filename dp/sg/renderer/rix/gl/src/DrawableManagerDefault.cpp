@@ -184,11 +184,11 @@ namespace dp
 
             if ( di.m_currentRenderGroup )
             {
-              DP_ASSERT( di.m_currentRenderGroup == m_renderGroups[di.m_transparent][RGP_FORWARD].get() );
+              DP_ASSERT( di.m_currentRenderGroup == m_renderGroups[di.m_transparent][static_cast<size_t>(RenderGroupPass::FORWARD)].get() );
               renderer->renderGroupRemoveGeometryInstance( di.m_currentRenderGroup, di.m_geometryInstance );
               if ( di.m_smartShaderObjectDepthPass )
               {
-                renderer->renderGroupRemoveGeometryInstance( m_renderGroups[di.m_transparent][RGP_DEPTH], di.m_geometryInstanceDepthPass );
+                renderer->renderGroupRemoveGeometryInstance( m_renderGroups[di.m_transparent][static_cast<size_t>(RenderGroupPass::DEPTH)], di.m_geometryInstanceDepthPass );
               }
               di.m_currentRenderGroup = nullptr;
             }
@@ -264,28 +264,28 @@ namespace dp
                 di.m_currentPipelineData = effectDataSurface;
 
                 di.m_smartShaderObject = m_shaderManager->registerGeometryInstance(geoNode, di.m_objectTreeIndex, di.m_geometryInstance );
-                di.m_smartShaderObjectDepthPass = m_shaderManager->registerGeometryInstance(geoNode, di.m_objectTreeIndex, di.m_geometryInstanceDepthPass, RPT_DEPTH );
+                di.m_smartShaderObjectDepthPass = m_shaderManager->registerGeometryInstance(geoNode, di.m_objectTreeIndex, di.m_geometryInstanceDepthPass, RenderPassType::DEPTH );
 
                 di.m_currentPipelineData->attach( m_effectDataObserver.get(), di.m_payload.operator->() );   // Big Hack !!
                 di.m_effectDataAttached = true;
               }
 
-              dp::rix::core::RenderGroupHandle newRenderGroup = m_renderGroups[di.m_transparent][RGP_FORWARD].get();
+              dp::rix::core::RenderGroupHandle newRenderGroup = m_renderGroups[di.m_transparent][static_cast<size_t>(RenderGroupPass::FORWARD)].get();
               if ( newRenderGroup != di.m_currentRenderGroup )
               {
                 if ( di.m_currentRenderGroup )
                 {
-                  DP_ASSERT( di.m_currentRenderGroup == m_renderGroups[!di.m_transparent][RGP_FORWARD].get() );
+                  DP_ASSERT( di.m_currentRenderGroup == m_renderGroups[!di.m_transparent][static_cast<size_t>(RenderGroupPass::FORWARD)].get() );
                   renderer->renderGroupRemoveGeometryInstance( di.m_currentRenderGroup, di.m_geometryInstance );
                   if ( shaderObjectDepthPass )
                   {
-                    renderer->renderGroupRemoveGeometryInstance( m_renderGroups[!di.m_transparent][RGP_DEPTH], di.m_geometryInstanceDepthPass );
+                    renderer->renderGroupRemoveGeometryInstance( m_renderGroups[!di.m_transparent][static_cast<size_t>(RenderGroupPass::DEPTH)], di.m_geometryInstanceDepthPass );
                   }
                 }
                 renderer->renderGroupAddGeometryInstance( newRenderGroup, di.m_geometryInstance );
                 if ( di.m_smartShaderObjectDepthPass )
                 {
-                  renderer->renderGroupAddGeometryInstance( m_renderGroups[di.m_transparent][RGP_DEPTH], di.m_geometryInstanceDepthPass );
+                  renderer->renderGroupAddGeometryInstance( m_renderGroups[di.m_transparent][static_cast<size_t>(RenderGroupPass::DEPTH)], di.m_geometryInstanceDepthPass );
                 }
 
                 di.m_currentRenderGroup = newRenderGroup;
@@ -293,18 +293,18 @@ namespace dp
               else if ( !shaderObjectDepthPass && di.m_smartShaderObjectDepthPass )
               {
                 // if the smartShaderObjectDepthPass is newly added
-                renderer->renderGroupAddGeometryInstance( m_renderGroups[di.m_transparent][RGP_DEPTH], di.m_geometryInstanceDepthPass );
+                renderer->renderGroupAddGeometryInstance( m_renderGroups[di.m_transparent][static_cast<size_t>(RenderGroupPass::DEPTH)], di.m_geometryInstanceDepthPass );
               }
             }
             else
             {
               if ( di.m_currentRenderGroup )
               {
-                DP_ASSERT( di.m_currentRenderGroup == m_renderGroups[di.m_transparent][RGP_FORWARD].get() );
+                DP_ASSERT( di.m_currentRenderGroup == m_renderGroups[di.m_transparent][static_cast<size_t>(RenderGroupPass::FORWARD)].get() );
                 renderer->renderGroupRemoveGeometryInstance( di.m_currentRenderGroup, di.m_geometryInstance );
                 if ( di.m_smartShaderObjectDepthPass )
                 {
-                  renderer->renderGroupRemoveGeometryInstance( m_renderGroups[di.m_transparent][RGP_DEPTH], di.m_geometryInstanceDepthPass );
+                  renderer->renderGroupRemoveGeometryInstance( m_renderGroups[di.m_transparent][static_cast<size_t>(RenderGroupPass::DEPTH)], di.m_geometryInstanceDepthPass );
                 }
                 di.m_resourcePrimitive = ResourcePrimitiveSharedPtr::null;
                 di.m_geometryInstance = nullptr;
@@ -550,7 +550,7 @@ namespace dp
               dp::rix::core::Renderer *renderer = m_resourceManager->getRenderer();
               for ( int i=0 ; i<RGL_COUNT ; i++ )
               {
-                for ( int j=0 ; j<RGP_COUNT ; j++ )
+                for ( int j=0 ; j<static_cast<int>(RenderGroupPass::COUNT) ; j++ )
                 {
                   m_renderGroups[i][j] = renderer->renderGroupCreate();
                   m_renderGroupInstances[i][j] = m_shaderManager->registerRenderGroup( m_renderGroups[i][j] );

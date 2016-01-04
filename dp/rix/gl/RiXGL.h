@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -81,21 +81,21 @@ namespace dp
 
       typedef unsigned int ID;
 
-      enum SamplerBorderColorDataType
+      enum class SamplerBorderColorDataType
       {
-          SBCDT_FLOAT
-        , SBCDT_UINT
-        , SBCDT_INT
+          FLOAT
+        , UINT
+        , INT
       };
 
       struct SamplerStateDataGL : public dp::rix::core::SamplerStateData
       {
         SamplerStateDataGL( unsigned int minFilterModeGL, unsigned int magFilterMode, unsigned int wrapMode,
                             unsigned int compareModeGL, unsigned int compareFuncGL )
-          : dp::rix::core::SamplerStateData( dp::rix::core::SSDT_NATIVE )
+          : dp::rix::core::SamplerStateData( dp::rix::core::SamplerStateDataType::NATIVE )
         {
           // argh!
-          m_borderColorDataType = SBCDT_FLOAT;
+          m_borderColorDataType = SamplerBorderColorDataType::FLOAT;
           m_borderColor.f[0]  = 0.0f;
           m_borderColor.f[1]  = 0.0f;
           m_borderColor.f[2]  = 0.0f;
@@ -154,11 +154,11 @@ namespace dp
           , m_internalFormatGL( 0 )
         {}
 
-        unsigned int m_typeGL;           // GL enum of the texture type (set type to TT_NATIVE to use it)
-        unsigned int m_internalFormatGL; // GL enum of the internal format (set internalFormat to ITF_NATIVE to use it)
+        unsigned int m_typeGL;           // GL enum of the texture type (set type to TextureType::NATIVE to use it)
+        unsigned int m_internalFormatGL; // GL enum of the internal format (set internalFormat to InternalTextureFormat::NATIVE to use it)
       };
 
-      /** \brief Texture Data struct to pass in the GL id of a previously generated texture. Sets m_type to TDT_NATIVE.
+      /** \brief Texture Data struct to pass in the GL id of a previously generated texture. Sets m_type to TextureDataType::NATIVE.
        **/
       struct TextureDataGLTexture : public dp::rix::core::TextureData
       {
@@ -166,24 +166,24 @@ namespace dp
             \param id The GL id of the previously generated and prepared texture
          **/
         TextureDataGLTexture( dp::gl::TextureSharedPtr const& texture )
-          : dp::rix::core::TextureData( dp::rix::core::TDT_NATIVE )
+          : dp::rix::core::TextureData( dp::rix::core::TextureDataType::NATIVE )
           , m_texture( texture )
         {}
 
         dp::gl::TextureSharedPtr  m_texture;
       };
 
-      enum UsageHint
+      enum class UsageHint
       {
-        UH_STREAM_DRAW,
-        UH_STREAM_READ,
-        UH_STREAM_COPY,
-        UH_STATIC_DRAW,
-        UH_STATIC_READ,
-        UH_STATIC_COPY,
-        UH_DYNAMIC_DRAW,
-        UH_DYNAMIC_READ,
-        UH_DYNAMIC_COPY
+        STREAM_DRAW,
+        STREAM_READ,
+        STREAM_COPY,
+        STATIC_DRAW,
+        STATIC_READ,
+        STATIC_COPY,
+        DYNAMIC_DRAW,
+        DYNAMIC_READ,
+        DYNAMIC_COPY
       };
 
       inline GLenum getGLUsage( UsageHint usageHint )
@@ -192,23 +192,23 @@ namespace dp
 
         switch ( usageHint )
         {
-          case UH_STREAM_DRAW:  result = GL_STREAM_DRAW;  break;
-          case UH_STREAM_READ:  result = GL_STREAM_READ;  break;
-          case UH_STREAM_COPY:  result = GL_STREAM_COPY;  break;
-          case UH_STATIC_DRAW:  result = GL_STATIC_DRAW;  break;
-          case UH_STATIC_READ:  result = GL_STATIC_READ;  break;
-          case UH_STATIC_COPY:  result = GL_STATIC_COPY;  break;
-          case UH_DYNAMIC_DRAW: result = GL_DYNAMIC_DRAW; break;
-          case UH_DYNAMIC_READ: result = GL_DYNAMIC_READ; break;
-          case UH_DYNAMIC_COPY: result = GL_DYNAMIC_COPY; break;
+          case UsageHint::STREAM_DRAW:  result = GL_STREAM_DRAW;  break;
+          case UsageHint::STREAM_READ:  result = GL_STREAM_READ;  break;
+          case UsageHint::STREAM_COPY:  result = GL_STREAM_COPY;  break;
+          case UsageHint::STATIC_DRAW:  result = GL_STATIC_DRAW;  break;
+          case UsageHint::STATIC_READ:  result = GL_STATIC_READ;  break;
+          case UsageHint::STATIC_COPY:  result = GL_STATIC_COPY;  break;
+          case UsageHint::DYNAMIC_DRAW: result = GL_DYNAMIC_DRAW; break;
+          case UsageHint::DYNAMIC_READ: result = GL_DYNAMIC_READ; break;
+          case UsageHint::DYNAMIC_COPY: result = GL_DYNAMIC_COPY; break;
         }
         return result;
       }
 
       struct BufferDescriptionGL : public dp::rix::core::BufferDescription
       {
-        BufferDescriptionGL( UsageHint usageHint = UH_STATIC_DRAW, dp::gl::BufferSharedPtr const& buffer = dp::gl::BufferSharedPtr::null )
-          : dp::rix::core::BufferDescription( dp::rix::core::BDT_NATIVE )
+        BufferDescriptionGL( UsageHint usageHint = UsageHint::STATIC_DRAW, dp::gl::BufferSharedPtr const& buffer = dp::gl::BufferSharedPtr::null )
+          : dp::rix::core::BufferDescription( dp::rix::core::BufferDescriptionType::NATIVE )
           , m_buffer( buffer )
           , m_usageHint( usageHint )
         {

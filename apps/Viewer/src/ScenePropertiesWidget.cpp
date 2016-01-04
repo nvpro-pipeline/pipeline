@@ -1,4 +1,4 @@
-// Copyright (c) 2009-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2009-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -521,7 +521,7 @@ QLayout * ScenePropertiesWidget::createEdit( const dp::math::Vecnt<N,float> & va
 
     return( layout );
   }
-  else if ( pid->getSemantic() == dp::util::SEMANTIC_COLOR )
+  else if ( pid->getSemantic() == dp::util::Semantic::COLOR )
   {
     DP_ASSERT( enabled );
     DP_ASSERT( ( N == 3 ) || ( N == 4 ) );
@@ -599,7 +599,7 @@ void ScenePropertiesWidget::updateEdit( QLayout * layout, const dp::math::Vecnt<
       updateLabledSlider( static_cast<QHBoxLayout*>(sliderLayout->itemAt( i )->layout() ), value[i] );
     }
   }
-  else if ( pid->getSemantic() == dp::util::SEMANTIC_COLOR )
+  else if ( pid->getSemantic() == dp::util::Semantic::COLOR )
   {
     DP_ASSERT( ( N == 3 ) || ( N == 4 ) );
     DP_ASSERT( ( 0.0f <= value[0] ) && ( value[0] <= 1.0f ) );
@@ -931,34 +931,34 @@ void ScenePropertiesWidget::displayItem( dp::sg::core::ObjectSharedPtr const & o
         dp::util::Property::Type type = pid->getType();
         switch( type )
         {
-          case dp::util::Property::TYPE_FLOAT :
+          case dp::util::Property::Type::FLOAT :
             groupLayout->addRow( label, createEdit( m_object->getValue<float>( pid ), pid, enabled ) );
             break;
-          case dp::util::Property::TYPE_FLOAT2 :
+          case dp::util::Property::Type::FLOAT2 :
             groupLayout->addRow( label, createEdit<2>( m_object->getValue<dp::math::Vecnt<2,float> >( pid ), pid, enabled ) );
             break;
-          case dp::util::Property::TYPE_FLOAT3 :
+          case dp::util::Property::Type::FLOAT3 :
             groupLayout->addRow( label, createEdit<3>( m_object->getValue<dp::math::Vecnt<3,float> >( pid ), pid, enabled ) );
             break;
-          case dp::util::Property::TYPE_FLOAT4 :
+          case dp::util::Property::Type::FLOAT4 :
             groupLayout->addRow( label, createEdit<4>( m_object->getValue<dp::math::Vecnt<4,float> >( pid ), pid, enabled ) );
             break;
-          case dp::util::Property::TYPE_INT :
+          case dp::util::Property::Type::INT :
             groupLayout->addRow( label, createEdit( m_object->getValue<int>( pid ), pid, enabled ) );
             break;
-          case dp::util::Property::TYPE_UINT :
+          case dp::util::Property::Type::UINT :
             groupLayout->addRow( label, createEdit( m_object->getValue<unsigned int>( pid ), pid, enabled ) );
             break;
-          case dp::util::Property::TYPE_QUATERNION_FLOAT :
+          case dp::util::Property::Type::QUATERNION_FLOAT :
             groupLayout->addRow( label, createEdit( m_object->getValue<dp::math::Quatf>( pid ), pid, enabled ) );
             break;
-          case dp::util::Property::TYPE_BOOLEAN :
+          case dp::util::Property::Type::BOOLEAN :
             groupLayout->addRow( label, createEdit( m_object->getValue<bool>( pid ), pid, enabled ) );
             break;
-          case dp::util::Property::TYPE_STRING :
+          case dp::util::Property::Type::STRING :
             groupLayout->addRow( label, createEdit( m_object->getValue<std::string>( pid ), pid, enabled ) );
             break;
-          case dp::util::Property::TYPE_TEXTURE :
+          case dp::util::Property::Type::TEXTURE :
             groupLayout->addRow( label, createEdit( m_object->getValue<dp::sg::core::TextureSharedPtr>( pid ), pid, enabled ) );
             break;
           default :
@@ -1009,34 +1009,34 @@ void ScenePropertiesWidget::updateItem()
       dp::util::Property::Type type = pid->getType();
       switch( type )
       {
-        case dp::util::Property::TYPE_FLOAT :
+        case dp::util::Property::Type::FLOAT :
           updateEdit( layoutItem->layout(), m_object->getValue<float>( pid ), pid );
           break;
-        case dp::util::Property::TYPE_FLOAT2 :
+        case dp::util::Property::Type::FLOAT2 :
           updateEdit<2>( layoutItem->layout(), m_object->getValue<dp::math::Vecnt<2,float> >( pid ), pid );
           break;
-        case dp::util::Property::TYPE_FLOAT3 :
+        case dp::util::Property::Type::FLOAT3 :
           updateEdit<3>( layoutItem->layout(), m_object->getValue<dp::math::Vecnt<3,float> >( pid ), pid );
           break;
-        case dp::util::Property::TYPE_FLOAT4 :
+        case dp::util::Property::Type::FLOAT4 :
           updateEdit<4>( layoutItem->layout(), m_object->getValue<dp::math::Vecnt<4,float> >( pid ), pid );
           break;
-        case dp::util::Property::TYPE_INT :
+        case dp::util::Property::Type::INT :
           updateEdit( layoutItem->widget(), m_object->getValue<int>( pid ), pid );
           break;
-        case dp::util::Property::TYPE_UINT :
+        case dp::util::Property::Type::UINT :
           updateEdit( layoutItem->widget(), m_object->getValue<unsigned int>( pid ) );
           break;
-        case dp::util::Property::TYPE_QUATERNION_FLOAT :
+        case dp::util::Property::Type::QUATERNION_FLOAT :
           updateEdit( layoutItem->layout(), m_object->getValue<dp::math::Quatf>( pid ) );
           break;
-        case dp::util::Property::TYPE_BOOLEAN :
+        case dp::util::Property::Type::BOOLEAN :
           updateEdit( layoutItem->widget(), m_object->getValue<bool>( pid ) );
           break;
-        case dp::util::Property::TYPE_STRING :
+        case dp::util::Property::Type::STRING :
           updateEdit( layoutItem->widget(), m_object->getValue<std::string>( pid ) );
           break;
-        case dp::util::Property::TYPE_TEXTURE :
+        case dp::util::Property::Type::TEXTURE :
           updateEdit( layoutItem->widget(), m_object->getValue<dp::sg::core::TextureSharedPtr>( pid ) );
           break;
         default :

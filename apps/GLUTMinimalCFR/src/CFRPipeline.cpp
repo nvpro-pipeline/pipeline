@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -156,12 +156,12 @@ bool CFRPipeline::init( const dp::gl::RenderContextSharedPtr &renderContext,
 
       rt->beginRendering();
       // Render to rectangle texture.
-      rt->setAttachment(dp::gl::RenderTargetFBO::COLOR_ATTACHMENT0, dp::gl::Texture2D::create(GL_RGBA8, GL_BGRA, GL_UNSIGNED_BYTE));
+      rt->setAttachment(dp::gl::RenderTargetFBO::AttachmentTarget::COLOR0, dp::gl::Texture2D::create(GL_RGBA8, GL_BGRA, GL_UNSIGNED_BYTE));
 
       // Depth and Stencil are Renderbuffers.
       dp::gl::RenderbufferSharedPtr depthStencil0(dp::gl::Renderbuffer::create(GL_DEPTH24_STENCIL8)); // maybe use GL_DEPTH32F_STENCIL8
-      rt->setAttachment(dp::gl::RenderTargetFBO::DEPTH_ATTACHMENT,   depthStencil0);
-      rt->setAttachment(dp::gl::RenderTargetFBO::STENCIL_ATTACHMENT, depthStencil0);
+      rt->setAttachment(dp::gl::RenderTargetFBO::AttachmentTarget::DEPTH,   depthStencil0);
+      rt->setAttachment(dp::gl::RenderTargetFBO::AttachmentTarget::STENCIL, depthStencil0);
 
       rt->endRendering();
 
@@ -248,7 +248,7 @@ void CFRPipeline::doRender(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::
 
     GpuData& gpuData = m_gpuData[i];
 
-    const dp::gl::RenderTargetFBO::SharedAttachment &attachment = gpuData.m_renderTarget.inplaceCast<dp::gl::RenderTargetFBO>()->getAttachment(dp::gl::RenderTargetFBO::COLOR_ATTACHMENT0);
+    const dp::gl::RenderTargetFBO::SharedAttachment &attachment = gpuData.m_renderTarget.inplaceCast<dp::gl::RenderTargetFBO>()->getAttachment(dp::gl::RenderTargetFBO::AttachmentTarget::COLOR0);
     const dp::gl::RenderTargetFBO::SharedAttachmentTexture &texAtt = attachment.inplaceCast<dp::gl::RenderTargetFBO::AttachmentTexture>();
 
     DP_ASSERT( texAtt );

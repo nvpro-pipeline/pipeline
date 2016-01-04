@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2007
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -111,74 +111,74 @@ PLYLOADER_API void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & piids
 
 
 // These enums encode the predefined keywords inside standard PLY files.
-typedef enum 
+enum class PLYToken
 {
-  PLY_TOKEN_CHAR = 0,   // These data type tokens are zero based and used to index read function tables.
-  PLY_TOKEN_UCHAR,
-  PLY_TOKEN_SHORT,
-  PLY_TOKEN_USHORT,
-  PLY_TOKEN_INT,
-  PLY_TOKEN_UINT,
-  PLY_TOKEN_FLOAT,
-  PLY_TOKEN_DOUBLE,
-  
-  PLY_TOKEN_PLY,
-  PLY_TOKEN_FORMAT,
-  
-  PLY_TOKEN_ASCII,                // These three enums must be consecutive in this order to be used for function table lookup.
-  PLY_TOKEN_BINARYLITTLEENDIAN,   // "-"
-  PLY_TOKEN_BINARYBIGENDIAN,      // "-"
-  
-  PLY_TOKEN_ONEPOINTZERO,
-  PLY_TOKEN_COMMENT,
-  PLY_TOKEN_OBJINFO,
-  PLY_TOKEN_ELEMENT,
-  PLY_TOKEN_PROPERTY,
-  PLY_TOKEN_LIST,
-  PLY_TOKEN_ENDHEADER,
+  CHAR = 0,   // These data type tokens are zero based and used to index read function tables.
+  UCHAR,
+  SHORT,
+  USHORT,
+  INT,
+  UINT,
+  FLOAT,
+  DOUBLE,
 
-  PLY_TOKEN_UNKNOWN
+  PLY,
+  FORMAT,
 
-} PLY_TOKEN;
+  ASCII,                // These three enums must be consecutive in this order to be used for function table lookup.
+  BINARYLITTLEENDIAN,   // "-"
+  BINARYBIGENDIAN,      // "-"
+
+  ONEPOINTZERO,
+  COMMENT,
+  OBJINFO,
+  ELEMENT,
+  PROPERTY,
+  LIST,
+  ENDHEADER,
+
+  UNKNOWN
+
+};
 
 
 // These enums define the states of a simple state machine used during parsing of the PLY header.
-typedef enum
+enum class PLYParserState
 {
-  PLY_STATE_PLY,
-  PLY_STATE_FORMAT,
-  PLY_STATE_FORMAT_TYPE,
-  PLY_STATE_FORMAT_VERSION,
-  PLY_STATE_ELEMENT,
-  PLY_STATE_ELEMENT_IDENTIFIER,
-  PLY_STATE_ELEMENT_COUNT,
-  PLY_STATE_PROPERTY,
-  PLY_STATE_PROPERTY_TYPE,
-  PLY_STATE_PROPERTY_LIST_COUNT_TYPE,
-  PLY_STATE_PROPERTY_LIST_DATA_TYPE,
-  PLY_STATE_PROPERTY_NAME,
-  PLY_STATE_END
-} PLY_PARSER_STATE;
+  PLY,
+  FORMAT,
+  FORMAT_TYPE,
+  FORMAT_VERSION,
+  ELEMENT,
+  ELEMENT_IDENTIFIER,
+  ELEMENT_COUNT,
+  PROPERTY,
+  PROPERTY_TYPE,
+  PROPERTY_LIST_COUNT_TYPE,
+  PROPERTY_LIST_DATA_TYPE,
+  PROPERTY_NAME,
+  END
+};
 
 
-typedef enum 
+enum class PLYAttributeComponent
 {
-  PLY_VERTEX_X = 0, // Zero based, used as indices and attribute bit flag location.
-  PLY_VERTEX_Y,
-  PLY_VERTEX_Z,
-  PLY_NORMAL_X,
-  PLY_NORMAL_Y,
-  PLY_NORMAL_Z,
-  PLY_COLOR_R,
-  PLY_COLOR_G,
-  PLY_COLOR_B,
-  PLY_USER_DEFINED_COMPONENT // Will be ignored.
-} PLY_ATTRIBUTE_COMPONENT;
+  VERTEX_X = 0, // Zero based, used as indices and attribute bit flag location.
+  VERTEX_Y,
+  VERTEX_Z,
+  NORMAL_X,
+  NORMAL_Y,
+  NORMAL_Z,
+  COLOR_R,
+  COLOR_G,
+  COLOR_B,
+  USER_DEFINED // Will be ignored.
+};
 
 
-#define ATTRIBUTE_MASK_VERTEX  ((1 << PLY_VERTEX_X) | (1 << PLY_VERTEX_Y) | (1 << PLY_VERTEX_Z))
-#define ATTRIBUTE_MASK_NORMAL  ((1 << PLY_NORMAL_X) | (1 << PLY_NORMAL_Y) | (1 << PLY_NORMAL_Z))
-#define ATTRIBUTE_MASK_COLOR   ((1 << PLY_COLOR_R)  | (1 << PLY_COLOR_G)  | (1 << PLY_COLOR_B))
+#define ATTRIBUTE_MASK_VERTEX  ((1 << static_cast<int>(PLYAttributeComponent::VERTEX_X)) | (1 << static_cast<int>(PLYAttributeComponent::VERTEX_Y)) | (1 << static_cast<int>(PLYAttributeComponent::VERTEX_Z)))
+#define ATTRIBUTE_MASK_NORMAL  ((1 << static_cast<int>(PLYAttributeComponent::NORMAL_X)) | (1 << static_cast<int>(PLYAttributeComponent::NORMAL_Y)) | (1 << static_cast<int>(PLYAttributeComponent::NORMAL_Z)))
+#define ATTRIBUTE_MASK_COLOR   ((1 << static_cast<int>(PLYAttributeComponent::COLOR_R))  | (1 << static_cast<int>(PLYAttributeComponent::COLOR_G))  | (1 << static_cast<int>(PLYAttributeComponent::COLOR_B)))
 
 
 class PLYLoader;
@@ -196,12 +196,12 @@ public:
     ~PLYProperty();
 
     std::string name;      // Name of this poperty inside this element. Required to identify attributes (so far x, y, z, nx, ny, nz).
-    PLY_TOKEN countType;   // Scalar integer count for list properties. TOKEN_UNKNOWN indicates non-list property.
-    PLY_TOKEN dataType;    // Scalar data type for any property.
+    PLYToken countType;   // Scalar integer count for list properties. TOKEN_UNKNOWN indicates non-list property.
+    PLYToken dataType;    // Scalar data type for any property.
     PFN_READ pfnReadCount; // Read function for this property count, set if it's a list.
     PFN_READ pfnReadData;  // Read function for this property data, set if it's a list.
     PFN_READ_ATTRIBUTE pfnReadAttribute;  // Read function for this property data, set if it's an attribute. (Automatic conversion!)
-    unsigned int index;    // Index inside attribute float array, the last element outside the supported attribute components is used to ignore unknown attribute data.
+    PLYAttributeComponent index;    // Index inside attribute float array, the last element outside the supported attribute components is used to ignore unknown attribute data.
 };
 
 
@@ -298,8 +298,8 @@ class PLYLoader : public dp::sg::io::SceneLoader
     // Parsing a binary filemapping.
     dp::util::ReadMapping * m_fm;
 
-    std::map<std::string, PLY_TOKEN>               m_mapStringToToken;
-    std::map<std::string, PLY_ATTRIBUTE_COMPONENT> m_mapStringToAttributeComponent;
+    std::map<std::string, PLYToken>                m_mapStringToToken;
+    std::map<std::string, PLYAttributeComponent> m_mapStringToAttributeComponent;
 
     char *m_pcCurrent;
     char *m_pcEOF;
@@ -358,7 +358,7 @@ class PLYLoader : public dp::sg::io::SceneLoader
     void readLittleEndian_DOUBLE(void *dst);
     void readBigEndian_DOUBLE(void *dst);
 
-    unsigned int readListCounterOrIndex(PFN_READ pfn, PLY_TOKEN type);
+    unsigned int readListCounterOrIndex(PFN_READ pfn, PLYToken type);
     void ignoreProperty(PLYProperty *p);
 
     // Tables of read functions.

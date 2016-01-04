@@ -347,14 +347,14 @@ dp::sg::renderer::rix::gl::TransparencyMode getTransparencyMode( std::string con
 {
   static const std::map<std::string,dp::sg::renderer::rix::gl::TransparencyMode> transparencyModes =
   {
-    { "none",             dp::sg::renderer::rix::gl::TM_NONE                            },
-    { "OITAll",           dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_ALL           },
-    { "OITClosestArray",  dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_CLOSEST_ARRAY },
-    { "OITClosestList",   dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_CLOSEST_LIST  },
-    { "SB",               dp::sg::renderer::rix::gl::TM_SORTED_BLENDED                  }
+    { "none",             dp::sg::renderer::rix::gl::TransparencyMode::NONE                            },
+    { "OITAll",           dp::sg::renderer::rix::gl::TransparencyMode::ORDER_INDEPENDENT_ALL           },
+    { "OITClosestArray",  dp::sg::renderer::rix::gl::TransparencyMode::ORDER_INDEPENDENT_CLOSEST_ARRAY },
+    { "OITClosestList",   dp::sg::renderer::rix::gl::TransparencyMode::ORDER_INDEPENDENT_CLOSEST_LIST  },
+    { "SB",               dp::sg::renderer::rix::gl::TransparencyMode::SORTED_BLENDED                  }
   };
 
-  dp::sg::renderer::rix::gl::TransparencyMode mode = dp::sg::renderer::rix::gl::TM_ORDER_INDEPENDENT_CLOSEST_LIST;
+  dp::sg::renderer::rix::gl::TransparencyMode mode = dp::sg::renderer::rix::gl::TransparencyMode::ORDER_INDEPENDENT_CLOSEST_LIST;
   std::map<std::string,dp::sg::renderer::rix::gl::TransparencyMode>::const_iterator it = transparencyModes.find( name );
   if ( it != transparencyModes.end() )
   {
@@ -362,7 +362,7 @@ dp::sg::renderer::rix::gl::TransparencyMode getTransparencyMode( std::string con
   }
   else
   {
-    std::cerr << "Unknown transparency mode <" << name << ">. Using TM_ORDER_INDEPENDENT_CLOSEST_LIST instead.\n";
+    std::cerr << "Unknown transparency mode <" << name << ">. Using TransparencyMode::ORDER_INDEPENDENT_CLOSEST_LIST instead.\n";
     DP_ASSERT( !"Unknown transparency mode" );
   }
   return( mode );

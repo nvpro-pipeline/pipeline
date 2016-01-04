@@ -75,40 +75,40 @@ namespace dp
           setCursorPosition( m_hid->getValue<dp::math::Vec2i>( PID_Pos ) );
           setWheelTicks( m_hid->getValue<int>( PID_Wheel ) );
 
-          CylindricalCameraManipulator::Mode mode = CylindricalCameraManipulator::MODE_NONE;
+          CylindricalCameraManipulator::Mode mode = CylindricalCameraManipulator::Mode::NONE;
           if ( hotspot )
           {
-            mode = CylindricalCameraManipulator::MODE_LOOKAT;
+            mode = CylindricalCameraManipulator::Mode::LOOKAT;
           }
           else 
           {
             if ( orbit && pan && control && shift )  // vertigo
             {
-              mode = CylindricalCameraManipulator::MODE_ZOOM_DOLLY;
+              mode = CylindricalCameraManipulator::Mode::ZOOM_DOLLY;
             }
             if ( orbit && pan && control && !shift )  // zoom
             {
-              mode = CylindricalCameraManipulator::MODE_ZOOM_FOV;
+              mode = CylindricalCameraManipulator::Mode::ZOOM_FOV;
             }
             if ( orbit && pan && !control && !shift )  // dolly
             {
-              mode = CylindricalCameraManipulator::MODE_DOLLY;
+              mode = CylindricalCameraManipulator::Mode::DOLLY;
             }
             else if ( orbit && !pan && !control && !shift )
             {
-              mode = CylindricalCameraManipulator::MODE_ORBIT;
+              mode = CylindricalCameraManipulator::Mode::ORBIT;
             }
             else if ( !orbit && pan && !control && !shift )
             {
-              mode = CylindricalCameraManipulator::MODE_PAN;
+              mode = CylindricalCameraManipulator::Mode::PAN;
             }
             else if ( !orbit && pan && control && !shift )
             {
-              mode = CylindricalCameraManipulator::MODE_ROLL_Z;
+              mode = CylindricalCameraManipulator::Mode::ROLL_Z;
             }
             else if ( orbit && !pan && control && !shift )
             {
-              mode = CylindricalCameraManipulator::MODE_ROTATE_XY;
+              mode = CylindricalCameraManipulator::Mode::ROTATE_XY;
             }
           }
 

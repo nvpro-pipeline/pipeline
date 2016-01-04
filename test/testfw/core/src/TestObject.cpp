@@ -51,10 +51,10 @@ namespace dp
 
         if( !test->option( options ) || !mf.option( options ) )
         {
-          return TRF_INVALID_INPUT;
+          return TestReturnFlag::INVALID_INPUT;
         }
 
-        return test->run(mf, m_name) ? TRF_PASSED : TRF_FAILED;
+        return test->run(mf, m_name) ? TestReturnFlag::PASSED : TestReturnFlag::FAILED;
       }
 
       TestObject::TestObject( TestCreateFunc testCreator, const dp::util::DynamicLibrarySharedPtr& dynLib )

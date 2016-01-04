@@ -1,4 +1,4 @@
-// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -98,11 +98,11 @@ private:
 
   void updateSceneRendererEngine();
 
-  enum AttributeType
+  enum class AttributeType
   {
-      ATTRIBUTE_GENERIC // GL 2.x
-    , ATTRIBUTE_VAO // GL 3.x
-    , ATTRIBUTE_VAB // GL 4.3
+      GENERIC // GL 2.x
+    , VAO // GL 3.x
+    , VAB // GL 4.3
   };
 
   // benchmark
@@ -127,7 +127,7 @@ GLUTMinimal::GLUTMinimal()
   , m_exitCode( 0 )
   , m_duration( 0.0 )
   , m_engineBindless( true )
-  , m_attributeType( ATTRIBUTE_GENERIC )
+  , m_attributeType( AttributeType::GENERIC )
   , m_shaderManager( dp::fx::Manager::UNIFORM_BUFFER_OBJECT_RIX )
 {
   m_trackballHIDSync->setHID( this );
@@ -290,7 +290,7 @@ void GLUTMinimal::onHIDEvent( dp::util::PropertyId propertyId )
   {
     if ( getValue<bool>( propertyId ) )
     {
-      m_attributeType = ATTRIBUTE_GENERIC;
+      m_attributeType = AttributeType::GENERIC;
       updateSceneRendererEngine();
   }
   }
@@ -299,7 +299,7 @@ void GLUTMinimal::onHIDEvent( dp::util::PropertyId propertyId )
   {
     if ( getValue<bool>( propertyId ) )
     {
-      m_attributeType = ATTRIBUTE_VAO;
+      m_attributeType = AttributeType::VAO;
       updateSceneRendererEngine();
     }
   }
@@ -308,7 +308,7 @@ void GLUTMinimal::onHIDEvent( dp::util::PropertyId propertyId )
   {
     if ( getValue<bool>( propertyId ) )
     {
-      m_attributeType = ATTRIBUTE_VAB;
+      m_attributeType = AttributeType::VAB;
       updateSceneRendererEngine();
     }
   }
@@ -367,13 +367,13 @@ void GLUTMinimal::updateSceneRendererEngine()
   {
     switch ( m_attributeType )
     {
-    case ATTRIBUTE_GENERIC:
+    case AttributeType::GENERIC:
       engine = "Bindless";
     break;
-    case ATTRIBUTE_VAO:
+    case AttributeType::VAO:
       engine = "BindlessVAO";
       break;
-    case ATTRIBUTE_VAB:
+    case AttributeType::VAB:
       engine = "BVAB";
       break;
     }
@@ -382,13 +382,13 @@ void GLUTMinimal::updateSceneRendererEngine()
   {
     switch ( m_attributeType )
     {
-    case ATTRIBUTE_GENERIC:
+    case AttributeType::GENERIC:
       engine = "VBO";
       break;
-    case ATTRIBUTE_VAO:
+    case AttributeType::VAO:
       engine = "VBOVAO";
       break;
-    case ATTRIBUTE_VAB:
+    case AttributeType::VAB:
       engine = "VAB";
       break;
     }
@@ -524,7 +524,7 @@ int runApp( options::variables_map const& opts )
       opts["renderengine"].as<std::string>().c_str()
     , getShaderManager( opts["shadermanager"].as<std::string>() )
     , cullingMode
-    //, dp::sg::renderer::rix::gl::TM_NONE
+    //, dp::sg::renderer::rix::gl::TransparencyMode::NONE
   );
   renderer->setCullingEnabled( opts["culling"].as<bool>() );
 

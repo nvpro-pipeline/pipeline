@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2011
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -58,14 +58,14 @@ namespace dp
       BEGIN_REFLECTION_INFO( ViewState )
         DERIVE_STATIC_PROPERTIES( ViewState, Reflection );
 
-        INIT_STATIC_PROPERTY_RW( ViewState, AutoClipPlanes,                       bool,    SEMANTIC_VALUE,  value,   value);
-        INIT_STATIC_PROPERTY_RW( ViewState, TargetDistance,                       float,    SEMANTIC_VALUE,  value,   value);
-        INIT_STATIC_PROPERTY_RW( ViewState, StereoAutomaticEyeDistanceFactor,     float,    SEMANTIC_VALUE,  value,   value);
-        INIT_STATIC_PROPERTY_RW( ViewState, StereoEyeDistance,                    float,    SEMANTIC_VALUE,  value,   value);
-        INIT_STATIC_PROPERTY_RW( ViewState, LODRangeScale,                        float,    SEMANTIC_VALUE,  value,   value);
-        INIT_STATIC_PROPERTY_RW( ViewState, TraversalMask,                        unsigned int,    SEMANTIC_VALUE,  value,   value);
-        INIT_STATIC_PROPERTY_RW_BOOL( ViewState, StereoAutomaticEyeDistanceAdjustment, bool,    SEMANTIC_VALUE,  value,   value);
-        INIT_STATIC_PROPERTY_RW_BOOL( ViewState, StereoReversedEyes,                   bool,    SEMANTIC_VALUE,  value,   value);
+        INIT_STATIC_PROPERTY_RW( ViewState, AutoClipPlanes,                       bool,    Semantic::VALUE,  value,   value);
+        INIT_STATIC_PROPERTY_RW( ViewState, TargetDistance,                       float,    Semantic::VALUE,  value,   value);
+        INIT_STATIC_PROPERTY_RW( ViewState, StereoAutomaticEyeDistanceFactor,     float,    Semantic::VALUE,  value,   value);
+        INIT_STATIC_PROPERTY_RW( ViewState, StereoEyeDistance,                    float,    Semantic::VALUE,  value,   value);
+        INIT_STATIC_PROPERTY_RW( ViewState, LODRangeScale,                        float,    Semantic::VALUE,  value,   value);
+        INIT_STATIC_PROPERTY_RW( ViewState, TraversalMask,                        unsigned int,    Semantic::VALUE,  value,   value);
+        INIT_STATIC_PROPERTY_RW_BOOL( ViewState, StereoAutomaticEyeDistanceAdjustment, bool,    Semantic::VALUE,  value,   value);
+        INIT_STATIC_PROPERTY_RW_BOOL( ViewState, StereoReversedEyes,                   bool,    Semantic::VALUE,  value,   value);
       END_REFLECTION_INFO
 
       ViewStateSharedPtr ViewState::create()

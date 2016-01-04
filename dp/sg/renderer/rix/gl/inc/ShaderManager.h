@@ -51,10 +51,10 @@ namespace dp
           // LightState 
           #define MAXLIGHTS 128
 
-          enum RenderPassType
+          enum class RenderPassType
           {
-            RPT_DEPTH,
-            RPT_FORWARD
+            DEPTH,
+            FORWARD
           };
 
           DEFINE_PTR_TYPES( ShaderManagerInstance );
@@ -111,7 +111,7 @@ namespace dp
             ShaderManagerInstanceSharedPtr registerGeometryInstance( dp::sg::core::GeoNodeSharedPtr const & geoNode,
                                                                      dp::sg::xbar::ObjectTreeIndex objectTreeIndex,
                                                                      dp::rix::core::GeometryInstanceSharedHandle & geometryInstance,
-                                                                     RenderPassType rpt = RPT_FORWARD );
+                                                                     RenderPassType rpt = RenderPassType::FORWARD );
 
             virtual ShaderManagerRenderGroupSharedPtr registerRenderGroup( dp::rix::core::RenderGroupSharedHandle const & renderGroup ) = 0;
 

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2015
+// Copyright (c) 201-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -58,11 +58,11 @@ namespace dp
     namespace gl
     {
       // UBO parameter technique to switch between parameters
-      enum BufferMode
+      enum class BufferMode
       {
-        BM_BIND_BUFFER_RANGE,         // put parameters in a big UBO, use glBindBufferRange to switch between parameters
-        BM_BUFFER_SUBDATA,            // create one UBO for each binding, use glBufferSubData to switch between parameters
-        BM_PERSISTENT_BUFFER_MAPPING  // put parameters in a big persistently mapped UBO, use glBindBufferRange to switch between parameters
+        BIND_BUFFER_RANGE,         // put parameters in a big UBO, use glBindBufferRange to switch between parameters
+        BUFFER_SUBDATA,            // create one UBO for each binding, use glBufferSubData to switch between parameters
+        PERSISTENT_BUFFER_MAPPING  // put parameters in a big persistently mapped UBO, use glBindBufferRange to switch between parameters
       };
 
     }

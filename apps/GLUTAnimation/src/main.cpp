@@ -221,7 +221,7 @@ void showStatistics( dp::sg::ui::ViewStateSharedPtr const& viewState )
 int runApp( int argc, char *argv[], bool stereo, bool continuous, int frames, const char *renderEngine, dp::fx::Manager smt )
 {
   // Create SceneRenderer without transparency and culling. This application is an update benchmark, not an OIT benchmark
-  SceneRendererSharedPtr renderer = dp::sg::renderer::rix::gl::SceneRenderer::create(renderEngine, smt, dp::culling::Mode::CPU, dp::sg::renderer::rix::gl::TM_NONE);
+  SceneRendererSharedPtr renderer = dp::sg::renderer::rix::gl::SceneRenderer::create(renderEngine, smt, dp::culling::Mode::CPU, dp::sg::renderer::rix::gl::TransparencyMode::NONE);
   renderer->setCullingEnabled(false);
 
   // Setup default OpenGL format descriptor

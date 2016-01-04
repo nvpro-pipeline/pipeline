@@ -46,7 +46,7 @@ namespace dp
           }
 
           TransparencyManagerNone::TransparencyManagerNone()
-            : TransparencyManager( TM_NONE )
+            : TransparencyManager( TransparencyMode::NONE )
           {
           }
 

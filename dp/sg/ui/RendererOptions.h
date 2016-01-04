@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2011
+// Copyright (c) 2010-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -129,7 +129,7 @@ namespace dp
       template <typename ValueType> void RendererOptions::addProperty( const std::string &name, const std::string &annotation, const ValueType &value )
       {
         DP_ASSERT(!getProperty(name) && "Property has already been added");
-        m_dynamicProperties->addProperty( name, new dp::util::TypedPropertyValue<ValueType>( dp::util::SEMANTIC_VALUE, annotation, true, value ) );
+        m_dynamicProperties->addProperty( name, new dp::util::TypedPropertyValue<ValueType>( dp::util::Semantic::VALUE, annotation, true, value ) );
       }
 
       template <typename ValueType> ValueType RendererOptions::getValue( const std::string &name ) const

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -100,67 +100,67 @@ namespace dp
       };
     
         
-      // Utility function to convert parameter type dp::fx::PT_* back to dp::rix::core::ContainerParameterType CPT_*.
+      // Utility function to convert parameter type dp::fx::PT_* back to dp::rix::core::ContainerParameterType ContainerParameterType::*.
       inline dp::rix::core::ContainerParameterType getContainerParameterType( unsigned int parameterType )
       {
         switch ( parameterType )
         {
-        case dp::fx::PT_BOOL                      : return dp::rix::core::CPT_BOOL;
-        case dp::fx::PT_BOOL | dp::fx::PT_VECTOR2 : return dp::rix::core::CPT_BOOL2;
-        case dp::fx::PT_BOOL | dp::fx::PT_VECTOR3 : return dp::rix::core::CPT_BOOL3;
-        case dp::fx::PT_BOOL | dp::fx::PT_VECTOR4 : return dp::rix::core::CPT_BOOL4;
+        case dp::fx::PT_BOOL                      : return dp::rix::core::ContainerParameterType::BOOL;
+        case dp::fx::PT_BOOL | dp::fx::PT_VECTOR2 : return dp::rix::core::ContainerParameterType::BOOL2;
+        case dp::fx::PT_BOOL | dp::fx::PT_VECTOR3 : return dp::rix::core::ContainerParameterType::BOOL3;
+        case dp::fx::PT_BOOL | dp::fx::PT_VECTOR4 : return dp::rix::core::ContainerParameterType::BOOL4;
 
-        case dp::fx::PT_ENUM                      : return dp::rix::core::CPT_INT_32;
-        case dp::fx::PT_ENUM | dp::fx::PT_VECTOR2 : return dp::rix::core::CPT_INT2_32;
-        case dp::fx::PT_ENUM | dp::fx::PT_VECTOR3 : return dp::rix::core::CPT_INT3_32;
-        case dp::fx::PT_ENUM | dp::fx::PT_VECTOR4 : return dp::rix::core::CPT_INT4_32;
+        case dp::fx::PT_ENUM                      : return dp::rix::core::ContainerParameterType::INT_32;
+        case dp::fx::PT_ENUM | dp::fx::PT_VECTOR2 : return dp::rix::core::ContainerParameterType::INT2_32;
+        case dp::fx::PT_ENUM | dp::fx::PT_VECTOR3 : return dp::rix::core::ContainerParameterType::INT3_32;
+        case dp::fx::PT_ENUM | dp::fx::PT_VECTOR4 : return dp::rix::core::ContainerParameterType::INT4_32;
 
-        case dp::fx::PT_INT8                      : return dp::rix::core::CPT_INT_8;
-        case dp::fx::PT_INT8 | dp::fx::PT_VECTOR2 : return dp::rix::core::CPT_INT2_8;
-        case dp::fx::PT_INT8 | dp::fx::PT_VECTOR3 : return dp::rix::core::CPT_INT3_8;
-        case dp::fx::PT_INT8 | dp::fx::PT_VECTOR4 : return dp::rix::core::CPT_INT4_8;
+        case dp::fx::PT_INT8                      : return dp::rix::core::ContainerParameterType::INT_8;
+        case dp::fx::PT_INT8 | dp::fx::PT_VECTOR2 : return dp::rix::core::ContainerParameterType::INT2_8;
+        case dp::fx::PT_INT8 | dp::fx::PT_VECTOR3 : return dp::rix::core::ContainerParameterType::INT3_8;
+        case dp::fx::PT_INT8 | dp::fx::PT_VECTOR4 : return dp::rix::core::ContainerParameterType::INT4_8;
 
-        case dp::fx::PT_UINT8                      : return dp::rix::core::CPT_UINT_8;
-        case dp::fx::PT_UINT8 | dp::fx::PT_VECTOR2 : return dp::rix::core::CPT_UINT2_8;
-        case dp::fx::PT_UINT8 | dp::fx::PT_VECTOR3 : return dp::rix::core::CPT_UINT3_8;
-        case dp::fx::PT_UINT8 | dp::fx::PT_VECTOR4 : return dp::rix::core::CPT_UINT4_8;
+        case dp::fx::PT_UINT8                      : return dp::rix::core::ContainerParameterType::UINT_8;
+        case dp::fx::PT_UINT8 | dp::fx::PT_VECTOR2 : return dp::rix::core::ContainerParameterType::UINT2_8;
+        case dp::fx::PT_UINT8 | dp::fx::PT_VECTOR3 : return dp::rix::core::ContainerParameterType::UINT3_8;
+        case dp::fx::PT_UINT8 | dp::fx::PT_VECTOR4 : return dp::rix::core::ContainerParameterType::UINT4_8;
 
-        case dp::fx::PT_INT16                      : return dp::rix::core::CPT_INT_16;
-        case dp::fx::PT_INT16 | dp::fx::PT_VECTOR2 : return dp::rix::core::CPT_INT2_16;
-        case dp::fx::PT_INT16 | dp::fx::PT_VECTOR3 : return dp::rix::core::CPT_INT3_16;
-        case dp::fx::PT_INT16 | dp::fx::PT_VECTOR4 : return dp::rix::core::CPT_INT4_16;
+        case dp::fx::PT_INT16                      : return dp::rix::core::ContainerParameterType::INT_16;
+        case dp::fx::PT_INT16 | dp::fx::PT_VECTOR2 : return dp::rix::core::ContainerParameterType::INT2_16;
+        case dp::fx::PT_INT16 | dp::fx::PT_VECTOR3 : return dp::rix::core::ContainerParameterType::INT3_16;
+        case dp::fx::PT_INT16 | dp::fx::PT_VECTOR4 : return dp::rix::core::ContainerParameterType::INT4_16;
 
-        case dp::fx::PT_UINT16                      : return dp::rix::core::CPT_UINT_16;
-        case dp::fx::PT_UINT16 | dp::fx::PT_VECTOR2 : return dp::rix::core::CPT_UINT2_16;
-        case dp::fx::PT_UINT16 | dp::fx::PT_VECTOR3 : return dp::rix::core::CPT_UINT3_16;
-        case dp::fx::PT_UINT16 | dp::fx::PT_VECTOR4 : return dp::rix::core::CPT_UINT4_16;
+        case dp::fx::PT_UINT16                      : return dp::rix::core::ContainerParameterType::UINT_16;
+        case dp::fx::PT_UINT16 | dp::fx::PT_VECTOR2 : return dp::rix::core::ContainerParameterType::UINT2_16;
+        case dp::fx::PT_UINT16 | dp::fx::PT_VECTOR3 : return dp::rix::core::ContainerParameterType::UINT3_16;
+        case dp::fx::PT_UINT16 | dp::fx::PT_VECTOR4 : return dp::rix::core::ContainerParameterType::UINT4_16;
 
-        case dp::fx::PT_INT32                      : return dp::rix::core::CPT_INT_32;
-        case dp::fx::PT_INT32 | dp::fx::PT_VECTOR2 : return dp::rix::core::CPT_INT2_32;
-        case dp::fx::PT_INT32 | dp::fx::PT_VECTOR3 : return dp::rix::core::CPT_INT3_32;
-        case dp::fx::PT_INT32 | dp::fx::PT_VECTOR4 : return dp::rix::core::CPT_INT4_32;
+        case dp::fx::PT_INT32                      : return dp::rix::core::ContainerParameterType::INT_32;
+        case dp::fx::PT_INT32 | dp::fx::PT_VECTOR2 : return dp::rix::core::ContainerParameterType::INT2_32;
+        case dp::fx::PT_INT32 | dp::fx::PT_VECTOR3 : return dp::rix::core::ContainerParameterType::INT3_32;
+        case dp::fx::PT_INT32 | dp::fx::PT_VECTOR4 : return dp::rix::core::ContainerParameterType::INT4_32;
 
-        case dp::fx::PT_UINT32                      : return dp::rix::core::CPT_UINT_32;
-        case dp::fx::PT_UINT32 | dp::fx::PT_VECTOR2 : return dp::rix::core::CPT_UINT2_32;
-        case dp::fx::PT_UINT32 | dp::fx::PT_VECTOR3 : return dp::rix::core::CPT_UINT3_32;
-        case dp::fx::PT_UINT32 | dp::fx::PT_VECTOR4 : return dp::rix::core::CPT_UINT4_32;
+        case dp::fx::PT_UINT32                      : return dp::rix::core::ContainerParameterType::UINT_32;
+        case dp::fx::PT_UINT32 | dp::fx::PT_VECTOR2 : return dp::rix::core::ContainerParameterType::UINT2_32;
+        case dp::fx::PT_UINT32 | dp::fx::PT_VECTOR3 : return dp::rix::core::ContainerParameterType::UINT3_32;
+        case dp::fx::PT_UINT32 | dp::fx::PT_VECTOR4 : return dp::rix::core::ContainerParameterType::UINT4_32;
 
-        case dp::fx::PT_FLOAT32                      : return dp::rix::core::CPT_FLOAT;
-        case dp::fx::PT_FLOAT32 | dp::fx::PT_VECTOR2 : return dp::rix::core::CPT_FLOAT2;
-        case dp::fx::PT_FLOAT32 | dp::fx::PT_VECTOR3 : return dp::rix::core::CPT_FLOAT3;
-        case dp::fx::PT_FLOAT32 | dp::fx::PT_VECTOR4 : return dp::rix::core::CPT_FLOAT4;
+        case dp::fx::PT_FLOAT32                      : return dp::rix::core::ContainerParameterType::FLOAT;
+        case dp::fx::PT_FLOAT32 | dp::fx::PT_VECTOR2 : return dp::rix::core::ContainerParameterType::FLOAT2;
+        case dp::fx::PT_FLOAT32 | dp::fx::PT_VECTOR3 : return dp::rix::core::ContainerParameterType::FLOAT3;
+        case dp::fx::PT_FLOAT32 | dp::fx::PT_VECTOR4 : return dp::rix::core::ContainerParameterType::FLOAT4;
 
-        case dp::fx::PT_FLOAT32 | dp::fx::PT_MATRIX2x2 : return dp::rix::core::CPT_MAT2X2;
-        case dp::fx::PT_FLOAT32 | dp::fx::PT_MATRIX2x3 : return dp::rix::core::CPT_MAT2X3;
-        case dp::fx::PT_FLOAT32 | dp::fx::PT_MATRIX2x4 : return dp::rix::core::CPT_MAT2X4;
+        case dp::fx::PT_FLOAT32 | dp::fx::PT_MATRIX2x2 : return dp::rix::core::ContainerParameterType::MAT2X2;
+        case dp::fx::PT_FLOAT32 | dp::fx::PT_MATRIX2x3 : return dp::rix::core::ContainerParameterType::MAT2X3;
+        case dp::fx::PT_FLOAT32 | dp::fx::PT_MATRIX2x4 : return dp::rix::core::ContainerParameterType::MAT2X4;
 
-        case dp::fx::PT_FLOAT32 | dp::fx::PT_MATRIX3x2 : return dp::rix::core::CPT_MAT3X2;
-        case dp::fx::PT_FLOAT32 | dp::fx::PT_MATRIX3x3 : return dp::rix::core::CPT_MAT3X3;
-        case dp::fx::PT_FLOAT32 | dp::fx::PT_MATRIX3x4 : return dp::rix::core::CPT_MAT3X4;
+        case dp::fx::PT_FLOAT32 | dp::fx::PT_MATRIX3x2 : return dp::rix::core::ContainerParameterType::MAT3X2;
+        case dp::fx::PT_FLOAT32 | dp::fx::PT_MATRIX3x3 : return dp::rix::core::ContainerParameterType::MAT3X3;
+        case dp::fx::PT_FLOAT32 | dp::fx::PT_MATRIX3x4 : return dp::rix::core::ContainerParameterType::MAT3X4;
 
-        case dp::fx::PT_FLOAT32 | dp::fx::PT_MATRIX4x2 : return dp::rix::core::CPT_MAT4X2;
-        case dp::fx::PT_FLOAT32 | dp::fx::PT_MATRIX4x3 : return dp::rix::core::CPT_MAT4X3;
-        case dp::fx::PT_FLOAT32 | dp::fx::PT_MATRIX4x4 : return dp::rix::core::CPT_MAT4X4;
+        case dp::fx::PT_FLOAT32 | dp::fx::PT_MATRIX4x2 : return dp::rix::core::ContainerParameterType::MAT4X2;
+        case dp::fx::PT_FLOAT32 | dp::fx::PT_MATRIX4x3 : return dp::rix::core::ContainerParameterType::MAT4X3;
+        case dp::fx::PT_FLOAT32 | dp::fx::PT_MATRIX4x4 : return dp::rix::core::ContainerParameterType::MAT4X4;
 
         // DAR FIXME Add doubles here once the ContainerParameterTypes exist.
 
@@ -169,7 +169,7 @@ namespace dp
         //case dp::fx::PT_BUFFER_PTR | dp::fx::PT_BUFFER_1D:
         //case dp::fx::PT_BUFFER_PTR | dp::fx::PT_BUFFER_2D:
         //case dp::fx::PT_BUFFER_PTR | dp::fx::PT_BUFFER_3D:
-        //  return dp::rix::core::CPT_BUFFER;
+        //  return dp::rix::core::ContainerParameterType::BUFFER;
 
         case dp::fx::PT_SAMPLER_PTR | dp::fx::PT_SAMPLER_1D:
         case dp::fx::PT_SAMPLER_PTR | dp::fx::PT_SAMPLER_2D:
@@ -189,11 +189,11 @@ namespace dp
         case dp::fx::PT_SAMPLER_PTR | dp::fx::PT_SAMPLER_2D_ARRAY_SHADOW:
         case dp::fx::PT_SAMPLER_PTR | dp::fx::PT_SAMPLER_CUBE_SHADOW:
         case dp::fx::PT_SAMPLER_PTR | dp::fx::PT_SAMPLER_CUBE_ARRAY_SHADOW:
-          return dp::rix::core::CPT_SAMPLER;
+          return dp::rix::core::ContainerParameterType::SAMPLER;
 
         default:
           DP_ASSERT(!"getContainerParameterType(): Implement this parameter type!");
-          return dp::rix::core::CPT_NUM_PARAMETERTYPES; // Return something which will definitely fail later on.
+          return dp::rix::core::ContainerParameterType::NUM_PARAMETERTYPES; // Return something which will definitely fail later on.
         }
       }
         

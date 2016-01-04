@@ -1,4 +1,4 @@
-// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -102,8 +102,8 @@ namespace dp
 
             // create system group specs
             std::vector<dp::fx::ParameterSpec> parameterSpecs;
-            parameterSpecs.push_back( ParameterSpec( "sys_WorldMatrix", PT_MATRIX4x4 | PT_FLOAT32, dp::util::SEMANTIC_VALUE ) );
-            parameterSpecs.push_back( ParameterSpec( "sys_WorldMatrixIT", PT_MATRIX4x4 | PT_FLOAT32, dp::util::SEMANTIC_VALUE ) );
+            parameterSpecs.push_back( ParameterSpec( "sys_WorldMatrix", PT_MATRIX4x4 | PT_FLOAT32, dp::util::Semantic::VALUE ) );
+            parameterSpecs.push_back( ParameterSpec( "sys_WorldMatrixIT", PT_MATRIX4x4 | PT_FLOAT32, dp::util::Semantic::VALUE ) );
             m_groupSpecWorldMatrices = ParameterGroupSpec::create( "sys_WorldMatrices", parameterSpecs );
 
             m_itWorldMatrix   = m_groupSpecWorldMatrices->findParameterSpec( "sys_WorldMatrix" );
@@ -247,8 +247,8 @@ namespace dp
 
             // create GroupSpec for Camera
             std::vector<dp::fx::ParameterSpec> parameterSpecs;
-            parameterSpecs.push_back( ParameterSpec( "sys_ViewProjMatrix", PT_MATRIX4x4 | PT_FLOAT32, dp::util::SEMANTIC_VALUE ) );
-            parameterSpecs.push_back( ParameterSpec( "sys_ViewMatrixI",    PT_MATRIX4x4 | PT_FLOAT32, dp::util::SEMANTIC_VALUE ) );
+            parameterSpecs.push_back( ParameterSpec( "sys_ViewProjMatrix", PT_MATRIX4x4 | PT_FLOAT32, dp::util::Semantic::VALUE ) );
+            parameterSpecs.push_back( ParameterSpec( "sys_ViewMatrixI",    PT_MATRIX4x4 | PT_FLOAT32, dp::util::Semantic::VALUE ) );
             dp::fx::ParameterGroupSpecSharedPtr groupSpecCamera = ParameterGroupSpec::create( "sys_camera", parameterSpecs );
 
             // Get iterators for fast updates later
@@ -265,17 +265,17 @@ namespace dp
             m_groupDataCamera = m_rixFxManager->groupDataCreate( groupSpecCamera );
 
             std::vector<dp::rix::core::ProgramParameter> programParametersFragment;
-            programParametersFragment.push_back( dp::rix::core::ProgramParameter( "sys_EnvironmentSampler",        dp::rix::core::CPT_SAMPLER ) );
-            programParametersFragment.push_back( dp::rix::core::ProgramParameter( "sys_EnvironmentSamplerEnabled", dp::rix::core::CPT_BOOL ) );
-            programParametersFragment.push_back( dp::rix::core::ProgramParameter( "sys_ViewportSize",              dp::rix::core::CPT_UINT2_32 ) );
+            programParametersFragment.push_back( dp::rix::core::ProgramParameter( "sys_EnvironmentSampler",        dp::rix::core::ContainerParameterType::SAMPLER ) );
+            programParametersFragment.push_back( dp::rix::core::ProgramParameter( "sys_EnvironmentSamplerEnabled", dp::rix::core::ContainerParameterType::BOOL ) );
+            programParametersFragment.push_back( dp::rix::core::ProgramParameter( "sys_ViewportSize",              dp::rix::core::ContainerParameterType::UINT2_32 ) );
             getTransparencyManager()->addFragmentParameters( programParametersFragment );
             m_descriptorFragment = m_renderer->containerDescriptorCreate( dp::rix::core::ProgramParameterDescriptorCommon( programParametersFragment.data(), programParametersFragment.size() ) );
             m_containerFragment = m_renderer->containerCreate( m_descriptorFragment );
 
             std::vector<dp::fx::ParameterSpec> fragmentSpecs;
-            fragmentSpecs.push_back( ParameterSpec( "sys_EnvironmentSampler", PT_SAMPLER_PTR | PT_SAMPLER_2D, dp::util::SEMANTIC_VALUE ) );
-            fragmentSpecs.push_back( ParameterSpec( "sys_EnvironmentSamplerEnabled", PT_BOOL, dp::util::SEMANTIC_VALUE ) );
-            fragmentSpecs.push_back( ParameterSpec( "sys_ViewportSize", PT_VECTOR2 | PT_UINT32, dp::util::SEMANTIC_VALUE ) );
+            fragmentSpecs.push_back( ParameterSpec( "sys_EnvironmentSampler", PT_SAMPLER_PTR | PT_SAMPLER_2D, dp::util::Semantic::VALUE ) );
+            fragmentSpecs.push_back( ParameterSpec( "sys_EnvironmentSamplerEnabled", PT_BOOL, dp::util::Semantic::VALUE ) );
+            fragmentSpecs.push_back( ParameterSpec( "sys_ViewportSize", PT_VECTOR2 | PT_UINT32, dp::util::Semantic::VALUE ) );
             getTransparencyManager()->addFragmentParameterSpecs( fragmentSpecs );
             dp::fx::ParameterGroupSpecSharedPtr fragmentGroupSpec = dp::fx::ParameterGroupSpec::create( "sys_FragmentParameters", fragmentSpecs );
 
@@ -286,10 +286,10 @@ namespace dp
             m_systemSpecs["sys_Fragment"] = dp::rix::fx::Manager::EffectSpecInfo( m_fragmentSystemSpec, true );
 
             // get snippets for opaque|transparent and color|depth passes
-            getTransparencyManager()->addFragmentCodeSnippets( false, false, m_additionalCodeSnippets[RGL_OPAQUE][RGP_FORWARD][dp::fx::Domain::FRAGMENT] );
-            getTransparencyManager()->addFragmentCodeSnippets( false, true,  m_additionalCodeSnippets[RGL_OPAQUE][RGP_DEPTH][dp::fx::Domain::FRAGMENT] );
-            getTransparencyManager()->addFragmentCodeSnippets( true, false, m_additionalCodeSnippets[RGL_TRANSPARENT][RGP_FORWARD][dp::fx::Domain::FRAGMENT] );
-            getTransparencyManager()->addFragmentCodeSnippets( true, true,  m_additionalCodeSnippets[RGL_TRANSPARENT][RGP_DEPTH][dp::fx::Domain::FRAGMENT] );
+            getTransparencyManager()->addFragmentCodeSnippets( false, false, m_additionalCodeSnippets[RGL_OPAQUE][static_cast<size_t>(RenderGroupPass::FORWARD)][dp::fx::Domain::FRAGMENT] );
+            getTransparencyManager()->addFragmentCodeSnippets( false, true,  m_additionalCodeSnippets[RGL_OPAQUE][static_cast<size_t>(RenderGroupPass::DEPTH)][dp::fx::Domain::FRAGMENT] );
+            getTransparencyManager()->addFragmentCodeSnippets( true, false, m_additionalCodeSnippets[RGL_TRANSPARENT][static_cast<size_t>(RenderGroupPass::FORWARD)][dp::fx::Domain::FRAGMENT] );
+            getTransparencyManager()->addFragmentCodeSnippets( true, true,  m_additionalCodeSnippets[RGL_TRANSPARENT][static_cast<size_t>(RenderGroupPass::DEPTH)][dp::fx::Domain::FRAGMENT] );
           }
 
           void ShaderManagerRiXFx::updateCameraState( Mat44f const & worldToProj, Mat44f const & viewToWorld )
@@ -368,10 +368,10 @@ namespace dp
               // use the EffectSpecs to determine potential transparency
               dp::fx::EffectSpecSharedPtr const & effectSpec = pipelineData->getEffectSpec();
 
-              dp::rix::fx::SourceFragments const& sf = m_additionalCodeSnippets[effectSpec->getTransparent()][rpt==RPT_DEPTH];
+              dp::rix::fx::SourceFragments const& sf = m_additionalCodeSnippets[effectSpec->getTransparent()][rpt==RenderPassType::DEPTH];
               dp::rix::fx::ProgramSharedHandle program = m_rixFxManager->programCreate( effectSpec, m_systemSpecs
-                                                                                      , ( rpt == RPT_FORWARD ) ? "forward" : "depthPass"
-                                                                                      , nullptr, 0, m_additionalCodeSnippets[effectSpec->getTransparent()][rpt==RPT_DEPTH] ); // no user descriptors
+                                                                                      , ( rpt == RenderPassType::FORWARD ) ? "forward" : "depthPass"
+                                                                                      , nullptr, 0, m_additionalCodeSnippets[effectSpec->getTransparent()][rpt==RenderPassType::DEPTH] ); // no user descriptors
               ShaderManagerRiXFxInstanceSharedPtr o;
               if ( program )
               {

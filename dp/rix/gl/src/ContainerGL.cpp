@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -45,94 +45,94 @@ namespace dp
       {
         switch ( parameterType )
         {
-        case CPT_FLOAT:
-        case CPT_FLOAT2:
-        case CPT_FLOAT3:
-        case CPT_FLOAT4:
+        case ContainerParameterType::FLOAT:
+        case ContainerParameterType::FLOAT2:
+        case ContainerParameterType::FLOAT3:
+        case ContainerParameterType::FLOAT4:
           return sizeof(float);
 
-        case CPT_INT_8:
-        case CPT_INT2_8:
-        case CPT_INT3_8:
-        case CPT_INT4_8:
+        case ContainerParameterType::INT_8:
+        case ContainerParameterType::INT2_8:
+        case ContainerParameterType::INT3_8:
+        case ContainerParameterType::INT4_8:
           return sizeof(int8_t);
 
-        case CPT_INT_16:
-        case CPT_INT2_16:
-        case CPT_INT3_16:
-        case CPT_INT4_16:
+        case ContainerParameterType::INT_16:
+        case ContainerParameterType::INT2_16:
+        case ContainerParameterType::INT3_16:
+        case ContainerParameterType::INT4_16:
           return sizeof(int16_t);
 
-        case CPT_INT_32:
-        case CPT_INT2_32:
-        case CPT_INT3_32:
-        case CPT_INT4_32:
+        case ContainerParameterType::INT_32:
+        case ContainerParameterType::INT2_32:
+        case ContainerParameterType::INT3_32:
+        case ContainerParameterType::INT4_32:
           return sizeof(int32_t);
 
-        case CPT_INT_64:
-        case CPT_INT2_64:
-        case CPT_INT3_64:
-        case CPT_INT4_64:
+        case ContainerParameterType::INT_64:
+        case ContainerParameterType::INT2_64:
+        case ContainerParameterType::INT3_64:
+        case ContainerParameterType::INT4_64:
           return sizeof(int64_t);
 
-        case CPT_UINT_8:
-        case CPT_UINT2_8:
-        case CPT_UINT3_8:
-        case CPT_UINT4_8:
+        case ContainerParameterType::UINT_8:
+        case ContainerParameterType::UINT2_8:
+        case ContainerParameterType::UINT3_8:
+        case ContainerParameterType::UINT4_8:
           return sizeof(uint8_t);
 
-        case CPT_UINT_16:
-        case CPT_UINT2_16:
-        case CPT_UINT3_16:
-        case CPT_UINT4_16:
+        case ContainerParameterType::UINT_16:
+        case ContainerParameterType::UINT2_16:
+        case ContainerParameterType::UINT3_16:
+        case ContainerParameterType::UINT4_16:
           return sizeof(uint16_t);
 
-        case CPT_UINT_32:
-        case CPT_UINT2_32:
-        case CPT_UINT3_32:
-        case CPT_UINT4_32:
+        case ContainerParameterType::UINT_32:
+        case ContainerParameterType::UINT2_32:
+        case ContainerParameterType::UINT3_32:
+        case ContainerParameterType::UINT4_32:
           return sizeof(uint32_t);
 
-        case CPT_UINT_64:
-        case CPT_UINT2_64:
-        case CPT_UINT3_64:
-        case CPT_UINT4_64:
+        case ContainerParameterType::UINT_64:
+        case ContainerParameterType::UINT2_64:
+        case ContainerParameterType::UINT3_64:
+        case ContainerParameterType::UINT4_64:
           return sizeof(uint64_t);
 
-        case CPT_BOOL:
-        case CPT_BOOL2:
-        case CPT_BOOL3:
-        case CPT_BOOL4:
+        case ContainerParameterType::BOOL:
+        case ContainerParameterType::BOOL2:
+        case ContainerParameterType::BOOL3:
+        case ContainerParameterType::BOOL4:
           return sizeof(uint8_t);
 
-        case CPT_MAT2X2:
-        case CPT_MAT2X3:
-        case CPT_MAT2X4:
+        case ContainerParameterType::MAT2X2:
+        case ContainerParameterType::MAT2X3:
+        case ContainerParameterType::MAT2X4:
           return sizeof(float);
 
-        case CPT_MAT3X2:
-        case CPT_MAT3X3:
-        case CPT_MAT3X4:
+        case ContainerParameterType::MAT3X2:
+        case ContainerParameterType::MAT3X3:
+        case ContainerParameterType::MAT3X4:
           return sizeof(float);
 
-        case CPT_MAT4X2:
-        case CPT_MAT4X3:
-        case CPT_MAT4X4:
+        case ContainerParameterType::MAT4X2:
+        case ContainerParameterType::MAT4X3:
+        case ContainerParameterType::MAT4X4:
           return sizeof(float);
 
-        case CPT_BUFFER_ADDRESS:
+        case ContainerParameterType::BUFFER_ADDRESS:
           return sizeof(long long); // 64 bit value
 
-        case CPT_SAMPLER:
+        case ContainerParameterType::SAMPLER:
           return sizeof(ContainerGL::ParameterDataSampler);
 
-        case CPT_IMAGE:
+        case ContainerParameterType::IMAGE:
           return sizeof(ContainerGL::ParameterDataImage);
 
-        case CPT_BUFFER:
+        case ContainerParameterType::BUFFER:
           return sizeof(ContainerGL::ParameterDataBuffer);
 
-        case CPT_CALLBACK:
+        case ContainerParameterType::CALLBACK_:
           return sizeof(CallbackObject);
 
         default:
@@ -145,130 +145,130 @@ namespace dp
       {
         switch ( parameterType )
         {
-        case CPT_FLOAT:
+        case ContainerParameterType::FLOAT:
           return sizeof(float);
-        case CPT_FLOAT2:
+        case ContainerParameterType::FLOAT2:
           return sizeof(float) * 2;
-        case CPT_FLOAT3:
+        case ContainerParameterType::FLOAT3:
           return sizeof(float) * 3;
-        case CPT_FLOAT4:
+        case ContainerParameterType::FLOAT4:
           return sizeof(float) * 4;
 
-        case CPT_INT_8:
+        case ContainerParameterType::INT_8:
           return sizeof(int8_t);
-        case CPT_INT2_8:
+        case ContainerParameterType::INT2_8:
           return sizeof(int8_t) * 2;
-        case CPT_INT3_8:
+        case ContainerParameterType::INT3_8:
           return sizeof(int8_t) * 3;
-        case CPT_INT4_8:
+        case ContainerParameterType::INT4_8:
           return sizeof(int8_t) * 4;
 
-        case CPT_INT_16:
+        case ContainerParameterType::INT_16:
           return sizeof(int16_t);
-        case CPT_INT2_16:
+        case ContainerParameterType::INT2_16:
           return sizeof(int16_t) * 2;
-        case CPT_INT3_16:
+        case ContainerParameterType::INT3_16:
           return sizeof(int16_t) * 3;
-        case CPT_INT4_16:
+        case ContainerParameterType::INT4_16:
           return sizeof(int16_t) * 4;
 
-        case CPT_INT_32:
+        case ContainerParameterType::INT_32:
           return sizeof(int32_t);
-        case CPT_INT2_32:
+        case ContainerParameterType::INT2_32:
           return sizeof(int32_t) * 2;
-        case CPT_INT3_32:
+        case ContainerParameterType::INT3_32:
           return sizeof(int32_t) * 3;
-        case CPT_INT4_32:
+        case ContainerParameterType::INT4_32:
           return sizeof(int32_t) * 4;
 
-        case CPT_INT_64:
+        case ContainerParameterType::INT_64:
           return sizeof(int64_t);
-        case CPT_INT2_64:
+        case ContainerParameterType::INT2_64:
           return sizeof(int64_t) * 2;
-        case CPT_INT3_64:
+        case ContainerParameterType::INT3_64:
           return sizeof(int64_t) * 3;
-        case CPT_INT4_64:
+        case ContainerParameterType::INT4_64:
           return sizeof(int64_t) * 4;
 
-        case CPT_UINT_8:
+        case ContainerParameterType::UINT_8:
           return sizeof(uint8_t);
-        case CPT_UINT2_8:
+        case ContainerParameterType::UINT2_8:
           return sizeof(uint8_t) * 2;
-        case CPT_UINT3_8:
+        case ContainerParameterType::UINT3_8:
           return sizeof(uint8_t) * 3;
-        case CPT_UINT4_8:
+        case ContainerParameterType::UINT4_8:
           return sizeof(uint8_t) * 4;
 
-        case CPT_UINT_16:
+        case ContainerParameterType::UINT_16:
           return sizeof(uint16_t);
-        case CPT_UINT2_16:
+        case ContainerParameterType::UINT2_16:
           return sizeof(uint16_t) * 2;
-        case CPT_UINT3_16:
+        case ContainerParameterType::UINT3_16:
           return sizeof(uint16_t) * 3;
-        case CPT_UINT4_16:
+        case ContainerParameterType::UINT4_16:
           return sizeof(uint16_t) * 4;
 
-        case CPT_UINT_32:
+        case ContainerParameterType::UINT_32:
           return sizeof(uint32_t);
-        case CPT_UINT2_32:
+        case ContainerParameterType::UINT2_32:
           return sizeof(uint32_t) * 2;
-        case CPT_UINT3_32:
+        case ContainerParameterType::UINT3_32:
           return sizeof(uint32_t) * 3;
-        case CPT_UINT4_32:
+        case ContainerParameterType::UINT4_32:
           return sizeof(uint32_t) * 4;
 
-        case CPT_UINT_64:
+        case ContainerParameterType::UINT_64:
           return sizeof(uint64_t);
-        case CPT_UINT2_64:
+        case ContainerParameterType::UINT2_64:
           return sizeof(uint64_t) * 2;
-        case CPT_UINT3_64:
+        case ContainerParameterType::UINT3_64:
           return sizeof(uint64_t) * 3;
-        case CPT_UINT4_64:
+        case ContainerParameterType::UINT4_64:
           return sizeof(uint64_t) * 4;
 
-        case CPT_BOOL:
+        case ContainerParameterType::BOOL:
           return sizeof(uint8_t);
-        case CPT_BOOL2:
+        case ContainerParameterType::BOOL2:
           return sizeof(uint8_t) * 2;
-        case CPT_BOOL3:
+        case ContainerParameterType::BOOL3:
           return sizeof(uint8_t) * 3;
-        case CPT_BOOL4:
+        case ContainerParameterType::BOOL4:
           return sizeof(uint8_t) * 4;
 
-        case CPT_MAT2X2:
+        case ContainerParameterType::MAT2X2:
           return sizeof(float) * 4;
-        case CPT_MAT2X3:
+        case ContainerParameterType::MAT2X3:
           return sizeof(float) * 6;
-        case CPT_MAT2X4:
+        case ContainerParameterType::MAT2X4:
           return sizeof(float) * 8;
 
-        case CPT_MAT3X2:
+        case ContainerParameterType::MAT3X2:
           return sizeof(float) * 6;
-        case CPT_MAT3X3:
+        case ContainerParameterType::MAT3X3:
           return sizeof(float) * 9;
-        case CPT_MAT3X4:
+        case ContainerParameterType::MAT3X4:
           return sizeof(float) * 12;
 
-        case CPT_MAT4X2:
+        case ContainerParameterType::MAT4X2:
           return sizeof(float) * 8;
-        case CPT_MAT4X3:
+        case ContainerParameterType::MAT4X3:
           return sizeof(float) * 12;
-        case CPT_MAT4X4:
+        case ContainerParameterType::MAT4X4:
           return sizeof(float) * 16;
 
-        case CPT_BUFFER_ADDRESS:
+        case ContainerParameterType::BUFFER_ADDRESS:
           return sizeof(long long); // 64 bit value
 
-        case CPT_SAMPLER:
+        case ContainerParameterType::SAMPLER:
           return sizeof(ContainerGL::ParameterDataSampler);
 
-        case CPT_IMAGE:
+        case ContainerParameterType::IMAGE:
           return sizeof(ContainerGL::ParameterDataImage);
 
-        case CPT_BUFFER:
+        case ContainerParameterType::BUFFER:
           return sizeof(ContainerGL::ParameterDataBuffer);
 
-        case CPT_CALLBACK:
+        case ContainerParameterType::CALLBACK_:
           return sizeof(CallbackObject);
 
         default:
@@ -331,7 +331,7 @@ namespace dp
           const ContainerDescriptorGL::ParameterInfo &descr = m_descriptor->m_parameterInfos[index];
           switch( descr.m_type )
           {
-          case CPT_SAMPLER:
+          case ContainerParameterType::SAMPLER:
             {
               char* selfdata = static_cast<char*>(m_data) + descr.m_offset;
               ParameterDataSampler* parameterData = reinterpret_cast<ParameterDataSampler*>(selfdata);
@@ -343,7 +343,7 @@ namespace dp
               }
             }
             break;
-          case CPT_IMAGE:
+          case ContainerParameterType::IMAGE:
             {
               char* selfdata = static_cast<char*>(m_data) + descr.m_offset;
               ParameterDataImage* parameterImage = reinterpret_cast<ParameterDataImage*>(selfdata);
@@ -351,7 +351,7 @@ namespace dp
               handleReset( parameterImage->m_textureHandle );
             }
             break;
-          case CPT_BUFFER:
+          case ContainerParameterType::BUFFER:
             {
               DP_ASSERT( (descr.m_size / descr.m_elementSize) == 1);
 
@@ -383,19 +383,19 @@ namespace dp
 
           switch ( containerData.getContainerDataType() )
           {
-          case CDT_RAW:
+          case ContainerDataType::RAW:
             DP_ASSERT( dynamic_cast<const ContainerDataRaw*>(&containerData) );
             setData( parameterInfo, static_cast<const ContainerDataRaw&>( containerData ) );
             break;
-          case CDT_BUFFER:
+          case ContainerDataType::BUFFER:
             DP_ASSERT( dynamic_cast<const ContainerDataBuffer*>(&containerData) );
             setData( parameterInfo, static_cast<const ContainerDataBuffer&>( containerData ) );
             break;
-          case CDT_SAMPLER:
+          case ContainerDataType::SAMPLER:
             DP_ASSERT( dynamic_cast<const ContainerDataSampler*>(&containerData) );
             setData( parameterInfo, static_cast<const ContainerDataSampler&>( containerData ) );
             break;
-          case CDT_IMAGE:
+          case ContainerDataType::IMAGE:
             DP_ASSERT( dynamic_cast< const ContainerDataImage*>(&containerData) );
             setData( parameterInfo, static_cast<const ContainerDataImage&>( containerData ) );
             break;
@@ -421,57 +421,57 @@ namespace dp
 
           switch( parameterInfo.m_type )
           {
-          case CPT_FLOAT:
-          case CPT_FLOAT2:
-          case CPT_FLOAT3:
-          case CPT_FLOAT4:
-          case CPT_INT_8:
-          case CPT_INT2_8:
-          case CPT_INT3_8:
-          case CPT_INT4_8:
-          case CPT_INT_16:
-          case CPT_INT2_16:
-          case CPT_INT3_16:
-          case CPT_INT4_16:
-          case CPT_INT_32:
-          case CPT_INT2_32:
-          case CPT_INT3_32:
-          case CPT_INT4_32:
-          case CPT_INT_64:
-          case CPT_INT2_64:
-          case CPT_INT3_64:
-          case CPT_INT4_64:
-          case CPT_UINT_8:
-          case CPT_UINT2_8:
-          case CPT_UINT3_8:
-          case CPT_UINT4_8:
-          case CPT_UINT_16:
-          case CPT_UINT2_16:
-          case CPT_UINT3_16:
-          case CPT_UINT4_16:
-          case CPT_UINT_32:
-          case CPT_UINT2_32:
-          case CPT_UINT3_32:
-          case CPT_UINT4_32:
-          case CPT_UINT_64:
-          case CPT_UINT2_64:
-          case CPT_UINT3_64:
-          case CPT_UINT4_64:
-          case CPT_BOOL:
-          case CPT_BOOL2:
-          case CPT_BOOL3:
-          case CPT_BOOL4:
-          case CPT_MAT2X2: // DAR What about transpose handling?
-          case CPT_MAT2X3:
-          case CPT_MAT2X4:
-          case CPT_MAT3X2:
-          case CPT_MAT3X3:
-          case CPT_MAT3X4:
-          case CPT_MAT4X2:
-          case CPT_MAT4X3:
-          case CPT_MAT4X4:
-          case CPT_BUFFER_ADDRESS:
-          case CPT_CALLBACK:
+          case ContainerParameterType::FLOAT:
+          case ContainerParameterType::FLOAT2:
+          case ContainerParameterType::FLOAT3:
+          case ContainerParameterType::FLOAT4:
+          case ContainerParameterType::INT_8:
+          case ContainerParameterType::INT2_8:
+          case ContainerParameterType::INT3_8:
+          case ContainerParameterType::INT4_8:
+          case ContainerParameterType::INT_16:
+          case ContainerParameterType::INT2_16:
+          case ContainerParameterType::INT3_16:
+          case ContainerParameterType::INT4_16:
+          case ContainerParameterType::INT_32:
+          case ContainerParameterType::INT2_32:
+          case ContainerParameterType::INT3_32:
+          case ContainerParameterType::INT4_32:
+          case ContainerParameterType::INT_64:
+          case ContainerParameterType::INT2_64:
+          case ContainerParameterType::INT3_64:
+          case ContainerParameterType::INT4_64:
+          case ContainerParameterType::UINT_8:
+          case ContainerParameterType::UINT2_8:
+          case ContainerParameterType::UINT3_8:
+          case ContainerParameterType::UINT4_8:
+          case ContainerParameterType::UINT_16:
+          case ContainerParameterType::UINT2_16:
+          case ContainerParameterType::UINT3_16:
+          case ContainerParameterType::UINT4_16:
+          case ContainerParameterType::UINT_32:
+          case ContainerParameterType::UINT2_32:
+          case ContainerParameterType::UINT3_32:
+          case ContainerParameterType::UINT4_32:
+          case ContainerParameterType::UINT_64:
+          case ContainerParameterType::UINT2_64:
+          case ContainerParameterType::UINT3_64:
+          case ContainerParameterType::UINT4_64:
+          case ContainerParameterType::BOOL:
+          case ContainerParameterType::BOOL2:
+          case ContainerParameterType::BOOL3:
+          case ContainerParameterType::BOOL4:
+          case ContainerParameterType::MAT2X2: // DAR What about transpose handling?
+          case ContainerParameterType::MAT2X3:
+          case ContainerParameterType::MAT2X4:
+          case ContainerParameterType::MAT3X2:
+          case ContainerParameterType::MAT3X3:
+          case ContainerParameterType::MAT3X4:
+          case ContainerParameterType::MAT4X2:
+          case ContainerParameterType::MAT4X3:
+          case ContainerParameterType::MAT4X4:
+          case ContainerParameterType::BUFFER_ADDRESS:
+          case ContainerParameterType::CALLBACK_:
             {
               memcpy( static_cast<char*>(m_data) + parameterInfo.m_offset + offset, data, size );
             }
@@ -493,7 +493,7 @@ namespace dp
       {
         switch (parameterInfo.m_type)
         {
-        case CPT_BUFFER:
+        case ContainerParameterType::BUFFER:
           {
             char* selfdata =  static_cast<char*>(m_data) + parameterInfo.m_offset;
             ParameterDataBuffer* parameterData = reinterpret_cast<ParameterDataBuffer*>(selfdata);
@@ -534,7 +534,7 @@ namespace dp
       {
         switch ( parameterInfo.m_type )
         {
-        case CPT_SAMPLER:
+        case ContainerParameterType::SAMPLER:
           {
             char* selfdata = static_cast<char*>(m_data) + parameterInfo.m_offset;
             ParameterDataSampler* parameterData = reinterpret_cast<ParameterDataSampler*>(selfdata);
@@ -566,7 +566,7 @@ namespace dp
       {
         switch ( parameterInfo.m_type )
         {
-        case CPT_IMAGE:
+        case ContainerParameterType::IMAGE:
           {
             char* selfdata = static_cast<char*>(m_data) + parameterInfo.m_offset;
             ParameterDataImage* parameterDataImage = reinterpret_cast<ParameterDataImage*>(selfdata);
@@ -598,7 +598,7 @@ namespace dp
         {
           // Buffer Events are only of interest if the size does change
           const BufferGL::Event& bufferEvent = static_cast<const BufferGL::Event&>(event);
-          if ( bufferEvent.m_eventType == BufferGL::Event::DATA_AND_SIZE_CHANGED )
+          if ( bufferEvent.m_type == BufferGL::Event::Type::DATA_AND_SIZE_CHANGED )
           {
             notify( ContainerGL::Event(this) );
           }

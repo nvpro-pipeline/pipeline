@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -118,7 +118,7 @@ namespace dp
       DEFINE_STATIC_PROPERTY( PipelineData, Transparent);
       BEGIN_REFLECTION_INFO ( PipelineData )
         DERIVE_STATIC_PROPERTIES( PipelineData, Object );
-        INIT_STATIC_PROPERTY_RW( PipelineData, Transparent, bool, SEMANTIC_VALUE, value, value );
+        INIT_STATIC_PROPERTY_RW( PipelineData, Transparent, bool, Semantic::VALUE, value, value );
       END_REFLECTION_INFO
 
       PipelineDataSharedPtr PipelineData::create( const EffectSpecSharedPtr & effectSpec )

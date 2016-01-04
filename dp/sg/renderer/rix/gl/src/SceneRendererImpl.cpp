@@ -73,17 +73,17 @@ namespace dp
           {
             switch( mode )
             {
-              case TM_NONE :
+              case TransparencyMode::NONE :
                 return( TransparencyManagerNone::create() );
-              case TM_ORDER_INDEPENDENT_ALL :
+              case TransparencyMode::ORDER_INDEPENDENT_ALL :
                 return( TransparencyManagerOITAll::create( viewportSize ) );
-              case TM_ORDER_INDEPENDENT_CLOSEST_ARRAY :
+              case TransparencyMode::ORDER_INDEPENDENT_CLOSEST_ARRAY :
                 return( TransparencyManagerOITClosestArray::create( viewportSize, 16 ) );
-              case TM_ORDER_INDEPENDENT_CLOSEST_LIST :
+              case TransparencyMode::ORDER_INDEPENDENT_CLOSEST_LIST :
                 return( TransparencyManagerOITClosestList::create( viewportSize, 16, 8.0f ) );
-              case TM_SORTED_BLENDED :
+              case TransparencyMode::SORTED_BLENDED :
                 return( TransparencyManagerSB::create() );
-              case TM_UNKNOWN :
+              case TransparencyMode::UNKNOWN :
               default :
                 DP_ASSERT( false );
                 return( TransparencyManagerSB::create() );

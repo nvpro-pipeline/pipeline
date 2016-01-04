@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2009-2011
+// Copyright (c) 2009-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -59,7 +59,7 @@ class QSplitterMovable : public QSplitter
 
 ViewportLayout::ViewportLayout(QWidget * parent)
  : QWidget( parent )
- , m_currentLayout( ~0 )
+ , m_currentLayout( Type::UNDEFINED )
  , m_activeViewportIndex( ~0 )
  , m_preventSplitterMoveRecursion( false )
 {
@@ -103,7 +103,7 @@ void ViewportLayout::clear()
   }
 
   // reset these vars too
-  m_currentLayout = ~0;
+  m_currentLayout = Type::UNDEFINED;
   m_activeViewportIndex = ~0;
   m_preventSplitterMoveRecursion = false;
 }
@@ -201,7 +201,7 @@ void ViewportLayout::setActiveViewport(int index)
   m_activeViewportIndex = index;
 
   // set new style sheet, but only if we have more than one view
-  if( m_currentLayout != 0 && m_currentLayout != ~0 )
+  if( m_currentLayout != Type::ONE && m_currentLayout != Type::UNDEFINED )
   {
     m_viewport[m_activeViewportIndex]->setStyleSheet("border: 1px solid #76b900;"); // NVIDIA Green.
   }
@@ -229,10 +229,10 @@ void ViewportLayout::setActiveViewport(int index)
   }
 }
 
-void ViewportLayout::setViewportLayout(int layoutSelector)
+void ViewportLayout::setViewportLayout(Type type)
 {
   // ignore same requests
-  if( layoutSelector == m_currentLayout )
+  if( type == m_currentLayout )
   {
     return;
   }
@@ -252,12 +252,12 @@ void ViewportLayout::setViewportLayout(int layoutSelector)
     m_splitter[i]->setParent(NULL);
   }
 
-  if( m_currentLayout == VIEWPORT_LAYOUT_ONE )
+  if( m_currentLayout == ViewportLayout::Type::ONE )
   {
     // if we were in layout 0, then nothing was highlighted.  highlight it now
     m_viewport[m_activeViewportIndex]->setStyleSheet("border: 1px solid #76b900;"); // NVIDIA Green
   }
-  else if( m_currentLayout == VIEWPORT_LAYOUT_FOUR )
+  else if( m_currentLayout == ViewportLayout::Type::FOUR )
   {
     // if we were in layout 5, then remove the signals
     disconnect( m_splitter[1], SIGNAL(splitterMoved(int, int)), this, SLOT(synchMoveSplitter2(int, int)));
@@ -266,9 +266,9 @@ void ViewportLayout::setViewportLayout(int layoutSelector)
 
   QSize size = this->size();
 
-  switch(layoutSelector)
+  switch(type)
   {
-    case VIEWPORT_LAYOUT_ONE:
+    case ViewportLayout::Type::ONE:
     {
       // if we are moving to layout 0, then remove the border
       m_viewport[m_activeViewportIndex]->setStyleSheet("border: 1px solid #5a5a5a;");
@@ -280,7 +280,7 @@ void ViewportLayout::setViewportLayout(int layoutSelector)
     }
     break;
 
-    case VIEWPORT_LAYOUT_TWO_LEFT:
+    case ViewportLayout::Type::TWO_LEFT:
     {
       m_splitter[0]->setParent(this);
       m_splitter[0]->setOrientation(Qt::Horizontal);
@@ -295,7 +295,7 @@ void ViewportLayout::setViewportLayout(int layoutSelector)
     }
     break;
 
-    case VIEWPORT_LAYOUT_TWO_TOP:
+    case ViewportLayout::Type::TWO_TOP:
     {
       m_splitter[0]->setParent(this);
       m_splitter[0]->setOrientation(Qt::Vertical);
@@ -310,7 +310,7 @@ void ViewportLayout::setViewportLayout(int layoutSelector)
     }
     break;
 
-    case VIEWPORT_LAYOUT_THREE_LEFT:
+    case ViewportLayout::Type::THREE_LEFT:
     {
       QList<int> size0, size1;
       m_splitter[0]->setParent(this);
@@ -333,7 +333,7 @@ void ViewportLayout::setViewportLayout(int layoutSelector)
     }
     break;
 
-    case VIEWPORT_LAYOUT_THREE_TOP:
+    case ViewportLayout::Type::THREE_TOP:
     {
       QList<int> size0, size1;
       m_splitter[0]->setParent(this);
@@ -356,7 +356,7 @@ void ViewportLayout::setViewportLayout(int layoutSelector)
     }
     break;
 
-    case VIEWPORT_LAYOUT_FOUR:
+    case ViewportLayout::Type::FOUR:
     {
       QList<int> size0, size1;
 
@@ -389,7 +389,7 @@ void ViewportLayout::setViewportLayout(int layoutSelector)
     break;
   }
 
-  m_currentLayout = layoutSelector;
+  m_currentLayout = type;
 }
 
 void ViewportLayout::synchMoveSplitter1(int pos, int index)
@@ -408,19 +408,19 @@ void ViewportLayout::synchMoveSplitter2(int pos, int index)
   m_splitter[2]->moveSplitterExt(pos, index);
 }
 
-unsigned int viewportCount( int viewportLayout )
+unsigned int viewportCount( ViewportLayout::Type type )
 {
-  switch( viewportLayout )
+  switch( type )
   {
-    case VIEWPORT_LAYOUT_ONE :
+    case ViewportLayout::Type::ONE :
       return( 1 );
-    case VIEWPORT_LAYOUT_TWO_LEFT :
-    case VIEWPORT_LAYOUT_TWO_TOP :
+    case ViewportLayout::Type::TWO_LEFT :
+    case ViewportLayout::Type::TWO_TOP :
       return( 2 );
-    case VIEWPORT_LAYOUT_THREE_LEFT :
-    case VIEWPORT_LAYOUT_THREE_TOP :
+    case ViewportLayout::Type::THREE_LEFT :
+    case ViewportLayout::Type::THREE_TOP :
       return( 3 );
-    case VIEWPORT_LAYOUT_FOUR :
+    case ViewportLayout::Type::FOUR :
       return( 4 );
     default :
       DP_ASSERT( false );
