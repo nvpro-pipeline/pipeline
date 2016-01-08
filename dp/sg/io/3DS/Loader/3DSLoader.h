@@ -69,15 +69,6 @@ THREEDSLOADER_API void queryPlugInterfacePIIDs( std::vector<dp::util::UPIID> & p
 
 using std::vector;
 
-// flags that are used to indicate which tracks should be read in the constructAnimation() function
-enum ThreeDSAnimFlags
-{
-  P_TRACK = BIT(0),
-  R_TRACK = BIT(1),
-  S_TRACK = BIT(2),
-  ROLL_TRACK = BIT(3)
-};
-
 // struct containing all the data for one smoothing group in a scene
 typedef struct SmoothingData
 {

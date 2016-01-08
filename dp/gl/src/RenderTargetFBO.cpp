@@ -656,7 +656,7 @@ namespace dp
       glBindFramebuffer( GL_DRAW_FRAMEBUFFER, framebufferID );
       glBlitFramebuffer( srcRegion.x, srcRegion.y, srcRegion.x + srcRegion.width, srcRegion.y + srcRegion.height,  
                          destRegion.x, destRegion.y, destRegion.x + destRegion.width, destRegion.y + destRegion.height,
-                         mask, static_cast<GLenum>(filter) );
+                         static_cast<GLbitfield>(mask), static_cast<GLenum>(filter) );
     }
 
     bool RenderTargetFBO::isSupported()

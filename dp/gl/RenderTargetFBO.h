@@ -305,7 +305,8 @@ namespace dp
         RenderbufferSharedPtr m_renderbuffer;
       };
 
-      enum {
+      enum class BlitMask
+      {
          COLOR_BUFFER_BIT            = GL_COLOR_BUFFER_BIT
         ,DEPTH_BUFFER_BIT            = GL_DEPTH_BUFFER_BIT
         ,STENCIL_BUFFER_BIT          = GL_STENCIL_BUFFER_BIT
@@ -316,8 +317,6 @@ namespace dp
          NEAREST                     = GL_NEAREST
         ,LINEAR                      = GL_LINEAR
       };
-
-      typedef unsigned int BlitMask;
 
     protected:
       DP_GL_API RenderTargetFBO( const RenderContextSharedPtr &glContext );
@@ -484,9 +483,9 @@ namespace dp
       };
 
    
-      DP_GL_API void blit( const RenderTargetFBOSharedPtr & destination, const BlitMask & mask = COLOR_BUFFER_BIT, 
+      DP_GL_API void blit( const RenderTargetFBOSharedPtr & destination, const BlitMask & mask = BlitMask::COLOR_BUFFER_BIT, 
                           const BlitFilter & filter = BlitFilter::NEAREST );
-      DP_GL_API void blit( const RenderTargetFBSharedPtr & destination, const BlitMask & mask = COLOR_BUFFER_BIT, 
+      DP_GL_API void blit( const RenderTargetFBSharedPtr & destination, const BlitMask & mask = BlitMask::COLOR_BUFFER_BIT, 
                           const BlitFilter & filter = BlitFilter::NEAREST );
       DP_GL_API void blit( const RenderTargetFBOSharedPtr & destination, const BlitMask & mask, 
                           const BlitFilter & filter, const BlitRegion & destRegion, 
