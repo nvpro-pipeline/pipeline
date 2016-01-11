@@ -10,7 +10,7 @@ endif()
 include( CopyFile )
 
 include_directories( ${Boost_INCLUDE_DIRS}
-                     ${NVPMAPI_INCLUDE_DIR} 
+                     ${NVPMAPI_INCLUDE_DIR}
                    )
 
 add_definitions(
@@ -32,6 +32,7 @@ set(DPUTIL_INCLUDES
   DynamicLibrary.h
   File.h
   FileFinder.h
+  Flags.h
   FrameProfiler.h
   HashGenerator.h
   HashGeneratorMurMur.h
@@ -103,7 +104,7 @@ if (MSVC)
 endif()
 
 if (WIN32 AND CMAKE_COMPILER_IS_GNUCC)
-  # GCC requires the declspec(export) keyword behind the class keyword to export the vtable ( class declspec(export) MyKlass {} ). 
+  # GCC requires the declspec(export) keyword behind the class keyword to export the vtable ( class declspec(export) MyKlass {} ).
   # Export everything for now and adopt sources later.
   set_target_properties( DPUtil PROPERTIES LINK_FLAGS "-Wl,--export-all" )
 endif()

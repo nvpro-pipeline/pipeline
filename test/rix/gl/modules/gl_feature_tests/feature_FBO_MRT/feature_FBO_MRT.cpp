@@ -121,9 +121,9 @@ bool Feature_FBO_MRT::onRun( unsigned int idx )
   // First Pass
   glEnable(GL_DEPTH_TEST);
 
-  m_renderData->setRenderGroup(m_renderGroupScene);  
+  m_renderData->setRenderGroup(m_renderGroupScene);
   render(m_renderData, m_fbo);
-  
+
   //Generate mipmaps of our glow mask
   m_colorGlowBuf->generateMipMap();
 
@@ -203,7 +203,7 @@ void Feature_FBO_MRT::createCamera( void )
   // Container Descriptors
 
   m_vertContainerDescriptorCamera =
-    m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( vertexConstProgramParameters, 
+    m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( vertexConstProgramParameters,
     sizeof testfw::core::array(vertexConstProgramParameters) ) );
 
   // Container Entries
@@ -247,9 +247,9 @@ void Feature_FBO_MRT::createScene()
 {
   // Geometry
 
-  GeometryDataSharedPtr cylinderDataNormal  = createCylinder( ATTRIB_POSITION | ATTRIB_NORMAL | ATTRIB_TEXCOORD0, 64 );
-  GeometryDataSharedPtr cylinderDataCut     = createCylinder( ATTRIB_POSITION | ATTRIB_NORMAL | ATTRIB_TEXCOORD0, 64, 8, 3.0f*PI_HALF );
-  GeometryDataSharedPtr cylinderDataCutTube = createCylinder( ATTRIB_POSITION | ATTRIB_NORMAL | ATTRIB_TEXCOORD0, 64, 8, 3.0f*PI_HALF, 0.5f );
+  GeometryDataSharedPtr cylinderDataNormal  = createCylinder( { AttributeID::POSITION, AttributeID::NORMAL, AttributeID::TEXCOORD0 }, 64 );
+  GeometryDataSharedPtr cylinderDataCut     = createCylinder( { AttributeID::POSITION, AttributeID::NORMAL, AttributeID::TEXCOORD0 }, 64, 8, 3.0f*PI_HALF );
+  GeometryDataSharedPtr cylinderDataCutTube = createCylinder( { AttributeID::POSITION, AttributeID::NORMAL, AttributeID::TEXCOORD0 }, 64, 8, 3.0f*PI_HALF, 0.5f );
 
   GeometrySharedHandle cylinder = rix::util::generateGeometry(cylinderDataNormal, m_rix);
   GeometrySharedHandle cylinderCut = rix::util::generateGeometry(cylinderDataCut, m_rix);
@@ -294,7 +294,7 @@ void Feature_FBO_MRT::createScene()
   ProgramShaderCode vertShader( vertexShader, ShaderType::VERTEX_SHADER );
 
 
-  const char * fragmentShader = "" 
+  const char * fragmentShader = ""
     "#version 400\n"
     "uniform sampler2D diffuseTex;\n"
     "uniform vec3 lightDir;\n"
@@ -373,7 +373,7 @@ void Feature_FBO_MRT::createScene()
 
   ProgramParameter fragmentVarProgramParameters[] = {
     ProgramParameter("diffuseTex", ContainerParameterType::SAMPLER),
-    ProgramParameter("glowIntensity", ContainerParameterType::FLOAT) 
+    ProgramParameter("glowIntensity", ContainerParameterType::FLOAT)
   };
 
   ProgramParameter fragmentConstProgramParameters[] = {
@@ -388,7 +388,7 @@ void Feature_FBO_MRT::createScene()
     sizeof testfw::core::array(fragmentConstProgramParameters) ) );
 
   ContainerDescriptorSharedHandle vertVarContainerDescriptor =
-    m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( vertexVarProgramParameters, 
+    m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( vertexVarProgramParameters,
     sizeof testfw::core::array(vertexVarProgramParameters) ) );
 
   ContainerDescriptorSharedHandle fragVarContainerDescriptor =
@@ -539,7 +539,7 @@ void Feature_FBO_MRT::createSecondPass()
 {
   // Geometry
 
-  GeometryDataSharedPtr geoDataScreenQuad = createQuad( ATTRIB_POSITION | ATTRIB_TEXCOORD0, math::Vec3f(-m_aspectRatio, -1.0f, 0.0f), math::Vec3f(m_aspectRatio, -1.0f, 0.0f), math::Vec3f(-m_aspectRatio, 1.0f, 0.0f) );
+  GeometryDataSharedPtr geoDataScreenQuad = createQuad( { AttributeID::POSITION, AttributeID::TEXCOORD0 }, math::Vec3f(-m_aspectRatio, -1.0f, 0.0f), math::Vec3f(m_aspectRatio, -1.0f, 0.0f), math::Vec3f(-m_aspectRatio, 1.0f, 0.0f) );
   GeometrySharedHandle geoScreenQuad = rix::util::generateGeometry(geoDataScreenQuad, m_rix);
 
   // Shader Code
@@ -562,7 +562,7 @@ void Feature_FBO_MRT::createSecondPass()
   ProgramShaderCode vertShader( vertexShader, ShaderType::VERTEX_SHADER );
 
 
-  const char * fragmentShader = "" 
+  const char * fragmentShader = ""
     "#version 400\n"
     "uniform sampler2D FBOTex0;\n"
     "uniform sampler2D FBOTex1;\n"
@@ -601,7 +601,7 @@ void Feature_FBO_MRT::createSecondPass()
 
   ProgramParameter fragmentProgramParameters[] = {
     ProgramParameter("FBOTex0", ContainerParameterType::SAMPLER),
-    ProgramParameter("FBOTex1", ContainerParameterType::SAMPLER) 
+    ProgramParameter("FBOTex1", ContainerParameterType::SAMPLER)
   };
 
   // Container Descriptors
@@ -733,7 +733,7 @@ void Feature_FBO_MRT::setupCamera( dp::math::Vec3f eye, dp::math::Vec3f center, 
 {
   // Set up world2view matrix
   m_world2View = makeLookAt<float>( eye, center, up );
-  
+
   // Set up view2clip matrix
   float fovyFactor = tan(0.5f*m_fovy);
   m_view2Clip = makeFrustum<float>( /* LEFT, RIGHT */  -m_nearPlane * fovyFactor * m_aspectRatio, m_nearPlane * fovyFactor * m_aspectRatio

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2009-2015
+// Copyright (c) 2009-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
   }
 
   dp::sg::ui::ViewStateSharedPtr viewStateHandle;
-  
+
   // make sbf saver include shader sourcecode
   _putenv( "DP_DAE_WORKAROUNDS=ADD_DP_MATERIAL:DP_MATERIAL_ONLY:MATERIAL_TO_VERTEX_COLORS" );
 
@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
   bool eraseTmp = false;
 
   QFileInfo fileInfo( argv[1] );
-  
+
   QString fileExt;
   if( argc > 2 )
   {
@@ -108,13 +108,13 @@ int main(int argc, char *argv[])
 
   std::cout << "optimizing..." << std::endl;
   dp::sg::algorithm::optimizeScene( viewStateHandle->getScene(), true, true
-                                  , dp::sg::algorithm::CombineTraverser::CT_ALL_TARGETS_MASK
+                                  , dp::sg::algorithm::CombineTraverser::Target::ALL
                                   , dp::sg::algorithm::EliminateTraverser::ET_ALL_TARGETS_MASK
                                   , dp::sg::algorithm::UnifyTraverser::UT_ALL_TARGETS_MASK, FLT_EPSILON );
 
   int return_code = 0;
   std::cout << "saving scene to " << outputName.toLocal8Bit().data() << std::endl;
-  if (!dp::sg::io::saveScene( std::string(outputName.toLocal8Bit()), viewStateHandle )) 
+  if (!dp::sg::io::saveScene( std::string(outputName.toLocal8Bit()), viewStateHandle ))
   {
     std::cerr << "Error saving scene\n";
     return_code = 2;

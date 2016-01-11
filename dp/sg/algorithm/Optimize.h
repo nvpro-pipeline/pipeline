@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -57,7 +57,7 @@ namespace dp
        *  \param epsilon The epsilon value to use to identify unique vertices while running the UnifyTraverser.
        **/
       DP_SG_ALGORITHM_API void optimizeScene( const dp::sg::core::SceneSharedPtr & scene, bool ignoreNames = true, bool identityToGroup = true
-                                            , unsigned int combineFlags = CombineTraverser::CT_ALL_TARGETS_MASK
+                                            , CombineTraverser::TargetMask combineFlags = CombineTraverser::Target::ALL
                                             , unsigned int eliminateFlags = EliminateTraverser::ET_ALL_TARGETS_MASK
                                             , unsigned int unifyFlags = UnifyTraverser::UT_ALL_TARGETS_MASK
                                             , float epsilon = FLT_EPSILON, bool optimizeVertexCache = true );

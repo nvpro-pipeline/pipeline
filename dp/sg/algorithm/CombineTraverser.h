@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2011
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -31,6 +31,7 @@
 #include <dp/sg/algorithm/Config.h>
 #include <dp/sg/algorithm/OptimizeTraverser.h>
 #include <dp/sg/core/Primitive.h>
+#include <dp/util/Flags.h>
 #include <list>
 
 namespace dp
@@ -49,14 +50,16 @@ namespace dp
       class CombineTraverser : public OptimizeTraverser
       {
         public:
-          enum
+          enum class Target
           {
-            CT_GEONODE          = BIT0,   //!< CombineTarget GeoNode: combine compatible GeoNode objects into one.
-            CT_LOD              = BIT1,   //!< CombineTarget LOD: combine compatible LOD objects into one.
-            CT_LOD_RANGES       = BIT2,   //!< CombineTarget LOD Range: combine identical adjacent LOD levels into one.
-            CT_TRANSFORM        = BIT3,   //!< CombineTarget Transform: combine compatible Transform objects into one.
-            CT_ALL_TARGETS_MASK = ( CT_GEONODE | CT_LOD | CT_LOD_RANGES | CT_TRANSFORM )
-          } CombineTarget;
+            GEONODE     = BIT0,   //!< CombineTarget GeoNode: combine compatible GeoNode objects into one.
+            LOD         = BIT1,   //!< CombineTarget LOD: combine compatible LOD objects into one.
+            LOD_RANGES  = BIT2,   //!< CombineTarget LOD Range: combine identical adjacent LOD levels into one.
+            TRANSFORM   = BIT3,   //!< CombineTarget Transform: combine compatible Transform objects into one.
+            ALL         = ( GEONODE | LOD | LOD_RANGES | TRANSFORM )
+          };
+
+          typedef dp::util::Flags<Target> TargetMask;
 
         public:
           DP_SG_ALGORITHM_API static bool areCombinable( dp::sg::core::GeoNodeSharedPtr const& p0, dp::sg::core::GeoNodeSharedPtr const& p1, bool ignoreNames );
@@ -76,11 +79,11 @@ namespace dp
 
           /*! \brief Get the bitmask describing the targets to combine.
            *  \return A bitmask describing the targets to combine. */
-          DP_SG_ALGORITHM_API unsigned int getCombineTargets() const;
+          DP_SG_ALGORITHM_API TargetMask getCombineTargets() const;
 
           /*! \brief Set the bitmask describing the targets to combine.
            *  \param mask The bitmask describing the targets to combine. */
-          DP_SG_ALGORITHM_API void setCombineTargets( unsigned int mask );
+          DP_SG_ALGORITHM_API void setCombineTargets( TargetMask mask );
 
           //! Get the 'ignore acceleration builder' hint.
           /** If the 'ignore acceleration builder' hint is set, combinable objects with different hints are
@@ -132,17 +135,17 @@ namespace dp
           dp::sg::core::VertexAttributeSetSharedPtr reduceVertexAttributeSet( const dp::sg::core::VertexAttributeSetSharedPtr & p, unsigned int offset, unsigned int count );
 
         private:
-          unsigned int            m_combineTargets;
+          TargetMask              m_combineTargets;
           bool                    m_ignoreAccelerationBuilderHints;
           std::set<const void *>  m_objects;      //!< A set of pointers to hold all objects already encountered.
       };
 
-      inline unsigned int CombineTraverser::getCombineTargets() const
+      inline CombineTraverser::TargetMask CombineTraverser::getCombineTargets() const
       {
         return( m_combineTargets );
       }
 
-      inline void CombineTraverser::setCombineTargets( unsigned int mask )
+      inline void CombineTraverser::setCombineTargets( TargetMask mask )
       {
         if ( mask != m_combineTargets )
         {
@@ -168,5 +171,17 @@ namespace dp
     } // namespace algorithm
   } // namespace sp
 } // namespace dp
+
+namespace dp
+{
+  namespace util
+  {
+    /*! \brief Specialization of the TypedPropertyEnum template for type CombineTraverser::TargetMask. */
+    template <> struct TypedPropertyEnum<dp::sg::algorithm::CombineTraverser::TargetMask>
+    {
+      enum { type = Property::Type::UINT };
+    };
+  }
+}
 
 #pragma warning(pop)

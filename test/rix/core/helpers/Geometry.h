@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -29,10 +29,11 @@
 #include <vector>
 #include <map>
 #include <dp/Types.h>
-#include <dp/util/SharedPtr.h>
 #include <dp/math/math.h>
 #include <dp/math/Matmnt.h>
 #include <dp/math/Vecnt.h>
+#include <dp/util/Flags.h>
+#include <dp/util/SharedPtr.h>
 #include <test/rix/core/helpers/inc/Config.h>
 
 namespace dp
@@ -42,27 +43,29 @@ namespace dp
     namespace util
     {
       #define NUM_ATTRIBS 16
-      enum AttributeID
+      enum class AttributeID
       {
-        ATTRIB_POSITION        =1<<0,
-        ATTRIB_VERTEX_WEIGHT   =1<<1,
-        ATTRIB_NORMAL          =1<<2,
-        ATTRIB_COLOR           =1<<3,
-        ATTRIB_SECONDARY_COLOR =1<<4,
-        ATTRIB_FOG_COORD       =1<<5,
-        ATTRIB_UNUSED_1        =1<<6,
-        ATTRIB_UNUSED_2        =1<<7,
-        ATTRIB_TEXCOORD0       =1<<8,
-        ATTRIB_TEXCOORD1       =1<<9,
-        ATTRIB_TEXCOORD2       =1<<10,
-        ATTRIB_TEXCOORD3       =1<<11,
-        ATTRIB_TEXCOORD4       =1<<12,
-        ATTRIB_TEXCOORD5       =1<<13,
-        ATTRIB_TANGENT         =1<<14,
-        ATTRIB_BINORMAL        =1<<15,
+        POSITION        =1<<0,
+        VERTEX_WEIGHT   =1<<1,
+        NORMAL          =1<<2,
+        COLOR           =1<<3,
+        SECONDARY_COLOR =1<<4,
+        FOG_COORD       =1<<5,
+        UNUSED_1        =1<<6,
+        UNUSED_2        =1<<7,
+        TEXCOORD0       =1<<8,
+        TEXCOORD1       =1<<9,
+        TEXCOORD2       =1<<10,
+        TEXCOORD3       =1<<11,
+        TEXCOORD4       =1<<12,
+        TEXCOORD5       =1<<13,
+        TANGENT         =1<<14,
+        BINORMAL        =1<<15,
       };
 
-      static const bool ATTRIB_POS_DEFAULTS[NUM_ATTRIBS] = 
+      typedef dp::util::Flags<AttributeID>  AttributeMask;
+
+      static const bool ATTRIB_POS_DEFAULTS[NUM_ATTRIBS] =
       {
         true,
         true,
@@ -112,7 +115,7 @@ namespace dp
       class AttributeFeed
       {
       public:
-        AttributeFeed(GeometryDataSharedPtr& data, AttributeID attributeId, unsigned int attrMask, unsigned int dimensionality, size_t numElements = 0)
+        AttributeFeed(GeometryDataSharedPtr& data, AttributeID attributeId, AttributeMask attrMask, unsigned int dimensionality, size_t numElements = 0)
         {
           if( m_enabled = !!(attrMask & attributeId) )
           {
@@ -225,7 +228,7 @@ namespace dp
         return meshOut;
       }
 
-      DPHELPERS_API GeometryDataSharedPtr createQuad( unsigned int attrMask
+      DPHELPERS_API GeometryDataSharedPtr createQuad( AttributeMask attrMask
                                                   , math::Vec3f v0 = math::Vec3f(0.0f, 0.0f, 0.0f)
                                                   , math::Vec3f v1 = math::Vec3f(1.0f, 0.0f, 0.0f)
                                                   , math::Vec3f v2 = math::Vec3f(0.0f, 1.0f, 0.0f)
@@ -233,38 +236,38 @@ namespace dp
                                                   , math::Vec2f t1 = math::Vec2f(1.0f, 0.0f)
                                                   , math::Vec2f t2 = math::Vec2f(0.0f, 1.0f) );
 
-      DPHELPERS_API GeometryDataSharedPtr createQuadIndexed( unsigned int attrMask
+      DPHELPERS_API GeometryDataSharedPtr createQuadIndexed( AttributeMask attrMask
                                                          , math::Vec2f t0 = math::Vec2f(0.0f, 0.0f)
                                                          , math::Vec2f t1 = math::Vec2f(1.0f, 0.0f)
                                                          , math::Vec2f t2 = math::Vec2f(0.0f, 1.0f) );
 
-      DPHELPERS_API GeometryDataSharedPtr createTriangle( unsigned int attrMask
+      DPHELPERS_API GeometryDataSharedPtr createTriangle( AttributeMask attrMask
                                                       , math::Vec3f v0 = math::Vec3f(0.0f, 0.0f, 0.0f)
-                                                      , math::Vec3f v1 = math::Vec3f(1.0f, 0.0f, 0.0f) 
+                                                      , math::Vec3f v1 = math::Vec3f(1.0f, 0.0f, 0.0f)
                                                       , math::Vec3f v2 = math::Vec3f(0.0f, 1.0f, 0.0f)
                                                       , math::Vec2f t0 = math::Vec2f(0.0f, 0.0f)
                                                       , math::Vec2f t1 = math::Vec2f(1.0f, 0.0f)
                                                       , math::Vec2f t2 = math::Vec2f(0.0f, 1.0f) );
 
       //TODO: The float t{Left|Top|Right|Bottom} needs to be adapted to Vec4f tRect
-      DPHELPERS_API GeometryDataSharedPtr createRectangle( unsigned int attrMask
+      DPHELPERS_API GeometryDataSharedPtr createRectangle( AttributeMask attrMask
                                                        , float left, float top, float right, float bottom
                                                        , float tLeft = 0.0f, float tTop = 1.0f
                                                        , float tRight = 1.0f, float tBottom = 0.0f);
 
-      DPHELPERS_API GeometryDataSharedPtr createCube( unsigned int attrMask
+      DPHELPERS_API GeometryDataSharedPtr createCube( AttributeMask attrMask
                                                   , math::Vec2f t0 = math::Vec2f(0.0f, 0.0f)
                                                   , math::Vec2f t1 = math::Vec2f(1.0f, 0.0f)
                                                   , math::Vec2f t2 = math::Vec2f(0.0f, 1.0f) );
 
-      DPHELPERS_API GeometryDataSharedPtr createCylinder( unsigned int attrMask
+      DPHELPERS_API GeometryDataSharedPtr createCylinder( AttributeMask attrMask
                                                       , unsigned int longitudeDivs                   //Number of times to subdivide the circular cross-section
                                                       , unsigned int heightDivs = 2                  //Number of times to subdivide the height span of the cylinder
                                                       , float longitudeEnd = 0.0f                    //Optionally set the ending angle of the circular cross-section
                                                       , float innerRadius = 0.0f );                  //Optionally set an inner Radius, thus making the shape a solid tube
 
-      DPHELPERS_API GeometryDataSharedPtr createSphere( unsigned int attrMask
-                                                    , unsigned int longitudeDivs                     //Number of axial subdivisions (y-axis)  
+      DPHELPERS_API GeometryDataSharedPtr createSphere( AttributeMask attrMask
+                                                    , unsigned int longitudeDivs                     //Number of axial subdivisions (y-axis)
                                                     , unsigned int latitudeDivs                      //Number of meridional subdivisions
                                                     , float longitudeEnd = 0.0f                      //Optionally set the ending longitudinal angle
                                                     , float latitudeEnd = math::PI                   //Optionally set the ending latitudinal angle

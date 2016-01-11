@@ -1,4 +1,4 @@
-// Copyright (c) 2009-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2009-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -135,7 +135,7 @@ void QtMinimalWidget::keyPressEvent( QKeyEvent *event )
   else if ( event->text().compare( "o" ) == 0 )
   {
     dp::sg::algorithm::optimizeScene( getViewState()->getScene(), true, true
-                                    , dp::sg::algorithm::CombineTraverser::CT_ALL_TARGETS_MASK
+                                    , dp::sg::algorithm::CombineTraverser::Target::ALL
                                     , dp::sg::algorithm::EliminateTraverser::ET_ALL_TARGETS_MASK
                                     , dp::sg::algorithm::UnifyTraverser::UT_ALL_TARGETS_MASK
                                     , FLT_EPSILON );

@@ -63,7 +63,7 @@ bool Feature_FBO_native::onInit()
   DP_ASSERT( dynamic_cast<test::framework::RiXBackend*>(&(*m_backend)) );
   m_rix = dynamic_cast<test::framework::RiXBackend*>(&(*m_backend))->getRenderer();
   m_displayTarget.inplaceCast<dp::gl::RenderTarget>()->setClearColor( 0.46f, 0.72f, 0.0f, 1.0f );
-  
+
   m_renderData = new test::framework::RenderDataRiX;
 
   glEnable(GL_DEPTH_TEST);
@@ -73,7 +73,7 @@ bool Feature_FBO_native::onInit()
   glGenFramebuffers( 1, &m_framebufferName );
   createScene();
 
-  return true;  
+  return true;
 }
 
 bool Feature_FBO_native::onRun( unsigned int idx )
@@ -144,7 +144,7 @@ void Feature_FBO_native::createScene()
     "  gl_Position   = world2clip * worldPos;\n"
     "}\n";
 
-  const char * fragmentTexturePhongShader = "" 
+  const char * fragmentTexturePhongShader = ""
     "#version 400\n"
     "uniform sampler2D diffuseTex;\n"
     "uniform vec3 lightDir;\n\n"
@@ -209,7 +209,7 @@ void Feature_FBO_native::createScene()
 
     "}\n";
 
-  const char * fragmentTextureRTTShader = "" 
+  const char * fragmentTextureRTTShader = ""
     "#version 400\n"
     "uniform sampler2D FBOTex;\n"
 
@@ -244,12 +244,12 @@ void Feature_FBO_native::createScene()
     "}\n";
 
   //Geometry
-  GeometryDataSharedPtr cylinderDataNormal  = createCylinder( ATTRIB_POSITION | ATTRIB_NORMAL | ATTRIB_TEXCOORD0, 64 );
-  GeometryDataSharedPtr cylinderDataCut     = createCylinder( ATTRIB_POSITION | ATTRIB_NORMAL | ATTRIB_TEXCOORD0, 64, 8, 3.0f*PI_HALF );
-  GeometryDataSharedPtr cylinderDataCutTube = createCylinder( ATTRIB_POSITION | ATTRIB_NORMAL | ATTRIB_TEXCOORD0, 64, 8, 3.0f*PI_HALF, 0.5f );
+  GeometryDataSharedPtr cylinderDataNormal  = createCylinder( { AttributeID::POSITION, AttributeID::NORMAL, AttributeID::TEXCOORD0 }, 64 );
+  GeometryDataSharedPtr cylinderDataCut     = createCylinder( { AttributeID::POSITION, AttributeID::NORMAL, AttributeID::TEXCOORD0 }, 64, 8, 3.0f*PI_HALF );
+  GeometryDataSharedPtr cylinderDataCutTube = createCylinder( { AttributeID::POSITION, AttributeID::NORMAL, AttributeID::TEXCOORD0 }, 64, 8, 3.0f*PI_HALF, 0.5f );
 
-  GeometryDataSharedPtr quadDataRTTScreen = createQuad( ATTRIB_POSITION | ATTRIB_TEXCOORD0 );
-  
+  GeometryDataSharedPtr quadDataRTTScreen = createQuad( { AttributeID::POSITION, AttributeID::TEXCOORD0 } );
+
   GeometrySharedHandle cylinderNormal = rix::util::generateGeometry(cylinderDataNormal, m_rix);
   GeometrySharedHandle cylinderCut = rix::util::generateGeometry(cylinderDataCut, m_rix);
   GeometrySharedHandle cylinderCutTube = rix::util::generateGeometry(cylinderDataCutTube, m_rix);
@@ -270,10 +270,10 @@ void Feature_FBO_native::createScene()
   };
 
   ProgramParameter fragmentTexturedPhongProgramParameters[] = {
-    ProgramParameter("diffuseTex", ContainerParameterType::SAMPLER) 
+    ProgramParameter("diffuseTex", ContainerParameterType::SAMPLER)
   };
   ProgramParameter fragmentTextureRTTProgramParameters[] = {
-    ProgramParameter("FBOTex", ContainerParameterType::SAMPLER) 
+    ProgramParameter("FBOTex", ContainerParameterType::SAMPLER)
   };
 
   ProgramParameter fragmentConstProgramParameters[] = {
@@ -282,11 +282,11 @@ void Feature_FBO_native::createScene()
 
 
   ContainerDescriptorSharedHandle vertConstContainerDescriptor =
-    m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( vertexConstProgramParameters, 
+    m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( vertexConstProgramParameters,
     sizeof testfw::core::array(vertexConstProgramParameters) ) );
 
   ContainerDescriptorSharedHandle vertVarContainerDescriptor =
-    m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( vertexVarProgramParameters, 
+    m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( vertexVarProgramParameters,
     sizeof testfw::core::array(vertexVarProgramParameters) ) );
 
   ContainerDescriptorSharedHandle fragTexturedPhongContainerDescriptor =
@@ -420,12 +420,12 @@ void Feature_FBO_native::createScene()
   m_view2Clip = makeFrustum<float>(-0.1f, 0.1f, -0.1f*m_height/m_width, 0.1f*m_height/m_width, 0.1f, 50.0f);
   m_world2View = makeLookAt<float>( Vec3f(0.0f, 3.0f, 4.0f), Vec3f(0.0f, 0.0f, 0.0f), Vec3f(0.0f, 1.0f, 0.0f) );
   m_world2ViewLookBack = makeLookAt<float>( Vec3f(0.0f, 0.0f, 3.0f), Vec3f(0.0f, 0.0f, 0.0f), Vec3f(0.0f, 1.0f, 0.0f) );
-  
+
   Mat44f world2ViewI = m_world2View;
   world2ViewI.invert();
   Mat44f world2ViewILookBack = m_world2View;
   world2ViewILookBack.invert();
-  
+
   Mat44f world2Clip = m_world2View * m_view2Clip;
   Mat44f world2ClipLookBack = m_world2ViewLookBack * m_view2Clip;
 

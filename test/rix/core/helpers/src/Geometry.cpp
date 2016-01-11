@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -113,7 +113,7 @@ namespace dp
         b.normalize();
       }
 
-      GeometryDataSharedPtr createQuad( unsigned int attrMask
+      GeometryDataSharedPtr createQuad( AttributeMask attrMask
                                       , Vec3f v0 /*= math::Vec3f(0.0f, 0.0f, 0.0f)*/
                                       , Vec3f v1 /*= math::Vec3f(1.0f, 0.0f, 0.0f)*/
                                       , Vec3f v2 /*= math::Vec3f(0.0f, 1.0f, 0.0f)*/
@@ -124,11 +124,11 @@ namespace dp
 
         GeometryDataSharedPtr meshOut = GeometryData::create(GeometryPrimitiveType::TRIANGLE_STRIP);
 
-        AttributeFeed positions(meshOut, ATTRIB_POSITION, attrMask, 3, 4);
-        AttributeFeed texCoords(meshOut, ATTRIB_TEXCOORD0, attrMask, 2, 4);
-        AttributeFeed normals(meshOut, ATTRIB_NORMAL, attrMask, 3, 4);
-        AttributeFeed tangents(meshOut, ATTRIB_TANGENT, attrMask, 3, 4);
-        AttributeFeed binormals(meshOut, ATTRIB_BINORMAL, attrMask, 3, 4);
+        AttributeFeed positions(meshOut, AttributeID::POSITION, attrMask, 3, 4);
+        AttributeFeed texCoords(meshOut, AttributeID::TEXCOORD0, attrMask, 2, 4);
+        AttributeFeed normals(meshOut, AttributeID::NORMAL, attrMask, 3, 4);
+        AttributeFeed tangents(meshOut, AttributeID::TANGENT, attrMask, 3, 4);
+        AttributeFeed binormals(meshOut, AttributeID::BINORMAL, attrMask, 3, 4);
 
         Vec3f n0, tg0, bn0;
         calculateTBN( v0, v1, v2, t0, t1, t2, tg0, bn0, n0 );
@@ -162,7 +162,7 @@ namespace dp
         return meshOut;
       }
 
-      GeometryDataSharedPtr createQuadIndexed( unsigned int attrMask
+      GeometryDataSharedPtr createQuadIndexed( AttributeMask attrMask
                                              , Vec3f v0 /*= math::Vec3f(0.0f, 0.0f, 0.0f)*/
                                              , Vec3f v1 /*= math::Vec3f(1.0f, 0.0f, 0.0f)*/
                                              , Vec3f v2 /*= math::Vec3f(0.0f, 1.0f, 0.0f)*/
@@ -173,11 +173,11 @@ namespace dp
 
         GeometryDataSharedPtr meshOut = GeometryData::create(GeometryPrimitiveType::TRIANGLE_STRIP);
 
-        AttributeFeed positions(meshOut, ATTRIB_POSITION, attrMask, 3, 4);
-        AttributeFeed texCoords(meshOut, ATTRIB_TEXCOORD0, attrMask, 2, 4);
-        AttributeFeed normals(meshOut, ATTRIB_NORMAL, attrMask, 3, 4);
-        AttributeFeed tangents(meshOut, ATTRIB_TANGENT, attrMask, 3, 4);
-        AttributeFeed binormals(meshOut, ATTRIB_BINORMAL, attrMask, 3, 4);
+        AttributeFeed positions(meshOut, AttributeID::POSITION, attrMask, 3, 4);
+        AttributeFeed texCoords(meshOut, AttributeID::TEXCOORD0, attrMask, 2, 4);
+        AttributeFeed normals(meshOut, AttributeID::NORMAL, attrMask, 3, 4);
+        AttributeFeed tangents(meshOut, AttributeID::TANGENT, attrMask, 3, 4);
+        AttributeFeed binormals(meshOut, AttributeID::BINORMAL, attrMask, 3, 4);
 
         Vec3f n0, tg0, bn0;
         calculateTBN( v0, v1, v2, t0, t1, t2, tg0, bn0, n0 );
@@ -218,7 +218,7 @@ namespace dp
       }
 
 
-      GeometryDataSharedPtr createTriangle( unsigned int attrMask
+      GeometryDataSharedPtr createTriangle( AttributeMask attrMask
                                           , Vec3f v0 /*= math::Vec3f(0.0f, 0.0f, 0.0f)*/
                                           , Vec3f v1 /*= math::Vec3f(1.0f, 0.0f, 0.0f)*/
                                           , Vec3f v2 /*= math::Vec3f(0.0f, 1.0f, 0.0f)*/
@@ -229,11 +229,11 @@ namespace dp
 
         GeometryDataSharedPtr meshOut = GeometryData::create(GeometryPrimitiveType::TRIANGLES);
 
-        AttributeFeed positions(meshOut, ATTRIB_POSITION, attrMask, 3, 3);
-        AttributeFeed texCoord(meshOut, ATTRIB_TEXCOORD0, attrMask, 2, 3);
-        AttributeFeed normals(meshOut, ATTRIB_NORMAL, attrMask, 3, 3);
-        AttributeFeed tangents(meshOut, ATTRIB_TANGENT, attrMask, 3, 3);
-        AttributeFeed binormals(meshOut, ATTRIB_BINORMAL, attrMask, 3, 3);
+        AttributeFeed positions(meshOut, AttributeID::POSITION, attrMask, 3, 3);
+        AttributeFeed texCoord(meshOut, AttributeID::TEXCOORD0, attrMask, 2, 3);
+        AttributeFeed normals(meshOut, AttributeID::NORMAL, attrMask, 3, 3);
+        AttributeFeed tangents(meshOut, AttributeID::TANGENT, attrMask, 3, 3);
+        AttributeFeed binormals(meshOut, AttributeID::BINORMAL, attrMask, 3, 3);
 
         Vec3f n0, tg0, bn0;
         calculateTBN( v0, v1, v2, t0, t1, t2, tg0, bn0, n0 );
@@ -262,14 +262,14 @@ namespace dp
       }
 
       //TODO: The float t{Left|Top|Right|Bottom} needs to be adapted to Vec4f tRect
-      GeometryDataSharedPtr createRectangle( unsigned int attrMask
+      GeometryDataSharedPtr createRectangle( AttributeMask attrMask
                                            , float left, float top, float right, float bottom
                                            , float tLeft /*= 0.0f*/
                                            , float tTop /*= 1.0f*/
                                            , float tRight /*= 1.0f*/
                                            , float tBottom /*= 0.0f*/)
       {
-        return createQuadIndexed(attrMask, Vec3f(left, bottom, 0.0f) 
+        return createQuadIndexed(attrMask, Vec3f(left, bottom, 0.0f)
                                          , Vec3f(right, bottom, 0.0f)
                                          , Vec3f(left, top, 0.0f)
                                          , Vec2f(tLeft, tBottom)
@@ -277,7 +277,7 @@ namespace dp
                                          , Vec2f(tLeft, tTop) );
       }
 
-      GeometryDataSharedPtr createCube( unsigned int attrMask
+      GeometryDataSharedPtr createCube( AttributeMask attrMask
                                       , Vec2f t0 /*= math::Vec2f(0.0f, 0.0f)*/
                                       , Vec2f t1 /*= math::Vec2f(1.0f, 0.0f)*/
                                       , Vec2f t2 /*= math::Vec2f(0.0f, 1.0f)*/ )
@@ -286,11 +286,11 @@ namespace dp
 
         GeometryDataSharedPtr meshOut = GeometryData::create(GeometryPrimitiveType::TRIANGLES);
 
-        AttributeFeed positions(meshOut, ATTRIB_POSITION, attrMask, 3, numVerts);
-        AttributeFeed texCoords(meshOut, ATTRIB_TEXCOORD0, attrMask, 2, numVerts);
-        AttributeFeed normals(meshOut, ATTRIB_NORMAL, attrMask, 3, numVerts);
-        AttributeFeed tangents(meshOut, ATTRIB_TANGENT, attrMask, 3, numVerts);
-        AttributeFeed binormals(meshOut, ATTRIB_BINORMAL, attrMask, 3, numVerts);
+        AttributeFeed positions(meshOut, AttributeID::POSITION, attrMask, 3, numVerts);
+        AttributeFeed texCoords(meshOut, AttributeID::TEXCOORD0, attrMask, 2, numVerts);
+        AttributeFeed normals(meshOut, AttributeID::NORMAL, attrMask, 3, numVerts);
+        AttributeFeed tangents(meshOut, AttributeID::TANGENT, attrMask, 3, numVerts);
+        AttributeFeed binormals(meshOut, AttributeID::BINORMAL, attrMask, 3, numVerts);
 
 
         positions.add( Vec3f(-1.0f, -1.0f, 1.0f) );
@@ -462,7 +462,7 @@ namespace dp
         return meshOut;
       }
 
-      GeometryDataSharedPtr createCylinder( unsigned int attrMask
+      GeometryDataSharedPtr createCylinder( AttributeMask attrMask
                                           , unsigned int longitudeDivs
                                           , unsigned int heightDivs /*= 2*/
                                           , float longitudeEnd /*= 0.0f*/
@@ -481,17 +481,17 @@ namespace dp
         unsigned int numVertsPerLongitude = longitudeDivs + 1;
         unsigned int numVerts = (bTube ? 2 : 1) * heightDivs * numVertsPerLongitude        // If we have an inner radius then it's a tube and the circular prism must be repeated
 
-                              + (bTube ? 4 * numVertsPerLongitude : 2 * numVertsPerLongitude)  // If we don't have an inner radius we just need two sets of vertices for the circular 
+                              + (bTube ? 4 * numVertsPerLongitude : 2 * numVertsPerLongitude)  // If we don't have an inner radius we just need two sets of vertices for the circular
                                                                                                   // caps. If we do have an inner radius, wee have four circles, and so we need four such sets.
 
                               + (bLongEndSplit ? 8 : 0) + 2;                        // If our longitude angle is sort of the full circle we need to fill the two resulting
                                                                                                   // rectangular cross sections, and so wee need eight more vertices.
 
-        AttributeFeed positions(meshOut, ATTRIB_POSITION, attrMask, 3, numVerts);
-        AttributeFeed texCoords(meshOut, ATTRIB_TEXCOORD0, attrMask, 2, numVerts);
-        AttributeFeed normals(meshOut, ATTRIB_NORMAL, attrMask, 3, numVerts);
-        AttributeFeed tangents(meshOut, ATTRIB_TANGENT, attrMask, 3, numVerts);
-        AttributeFeed binormals(meshOut, ATTRIB_BINORMAL, attrMask, 3, numVerts);
+        AttributeFeed positions(meshOut, AttributeID::POSITION, attrMask, 3, numVerts);
+        AttributeFeed texCoords(meshOut, AttributeID::TEXCOORD0, attrMask, 2, numVerts);
+        AttributeFeed normals(meshOut, AttributeID::NORMAL, attrMask, 3, numVerts);
+        AttributeFeed tangents(meshOut, AttributeID::TANGENT, attrMask, 3, numVerts);
+        AttributeFeed binormals(meshOut, AttributeID::BINORMAL, attrMask, 3, numVerts);
 
         float dtheta = (bLongEndSplit ? longitudeEnd : 2.0f * PI) / longitudeDivs;
         float dh = 2.0f / (heightDivs - 1);
@@ -571,7 +571,7 @@ namespace dp
             float x = -sin(curAngle);
             float z = -cos(curAngle);
             float inv = k ? 1.0f : -1.0f;
-            
+
             for(unsigned int i = 0; i < heightDivs; i++)
             {
               float y = i * dh - 1.0f;
@@ -691,7 +691,7 @@ namespace dp
         return meshOut;
       }
 
-      GeometryDataSharedPtr createSphere( unsigned int attrMask
+      GeometryDataSharedPtr createSphere( AttributeMask attrMask
                                         , unsigned int longitudeDivs
                                         , unsigned int latitudeDivs
                                         , float longitudeEnd /*= 0.0f*/
@@ -721,11 +721,11 @@ namespace dp
                               + (bLatEndSplit ? longitudeDivs + 4 : 0)       //Cap for circular cross-section in case the ending latitudinal cut-off angle is short of PI
                               + (bLatBeginSplit ? longitudeDivs + 4 : 0);    //Cap for circular cross-section in case the starting latitudinal cut-off angle is greater than 0
 
-        AttributeFeed positions(meshOut, ATTRIB_POSITION, attrMask, 3, numVerts);
-        AttributeFeed texCoords(meshOut, ATTRIB_TEXCOORD0, attrMask, 2, numVerts);
-        AttributeFeed normals(meshOut, ATTRIB_NORMAL, attrMask, 3, numVerts);
-        AttributeFeed tangents(meshOut, ATTRIB_TANGENT, attrMask, 3, numVerts);
-        AttributeFeed binormals(meshOut, ATTRIB_BINORMAL, attrMask, 3, numVerts);
+        AttributeFeed positions(meshOut, AttributeID::POSITION, attrMask, 3, numVerts);
+        AttributeFeed texCoords(meshOut, AttributeID::TEXCOORD0, attrMask, 2, numVerts);
+        AttributeFeed normals(meshOut, AttributeID::NORMAL, attrMask, 3, numVerts);
+        AttributeFeed tangents(meshOut, AttributeID::TANGENT, attrMask, 3, numVerts);
+        AttributeFeed binormals(meshOut, AttributeID::BINORMAL, attrMask, 3, numVerts);
 
         float dphi = (latitudeEnd - latitudeBegin) / (latitudeDivs - 1);
         float phi0 = latitudeBegin;

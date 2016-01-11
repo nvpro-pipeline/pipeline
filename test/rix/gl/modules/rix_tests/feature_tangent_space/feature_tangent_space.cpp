@@ -135,7 +135,7 @@ void Feature_tangent_space::createScene()
     "  gl_Position   = world2clip * worldPos;\n"
     "}\n";
 
-  const char * fragmentShader = "" 
+  const char * fragmentShader = ""
     "#version 400\n"
     "uniform vec4 color;\n"
     "uniform sampler2D bumpTex;\n"
@@ -199,13 +199,13 @@ void Feature_tangent_space::createScene()
     "}\n";
   //Geometry
 
-  GeometryDataSharedPtr sphereData = createSphere( ATTRIB_POSITION | ATTRIB_NORMAL | ATTRIB_TEXCOORD0 | ATTRIB_TANGENT | ATTRIB_BINORMAL, 64, 32);
+  GeometryDataSharedPtr sphereData = createSphere( { AttributeID::POSITION, AttributeID::NORMAL, AttributeID::TEXCOORD0, AttributeID::TANGENT, AttributeID::BINORMAL }, 64, 32);
   GeometrySharedHandle sphere = rix::util::generateGeometry(sphereData, m_rix);
 
-  GeometryDataSharedPtr cylinderData = createCylinder( ATTRIB_POSITION | ATTRIB_NORMAL | ATTRIB_TEXCOORD0 | ATTRIB_TANGENT |ATTRIB_BINORMAL, 64, 2 );
+  GeometryDataSharedPtr cylinderData = createCylinder( { AttributeID::POSITION, AttributeID::NORMAL, AttributeID::TEXCOORD0, AttributeID::TANGENT, AttributeID::BINORMAL }, 64, 2 );
   GeometrySharedHandle cylinder = rix::util::generateGeometry(cylinderData, m_rix);
-  
-  GeometryDataSharedPtr quadData = createQuad( ATTRIB_POSITION | ATTRIB_NORMAL | ATTRIB_TEXCOORD0 | ATTRIB_TANGENT |ATTRIB_BINORMAL );
+
+  GeometryDataSharedPtr quadData = createQuad( { AttributeID::POSITION, AttributeID::NORMAL, AttributeID::TEXCOORD0, AttributeID::TANGENT, AttributeID::BINORMAL } );
   GeometrySharedHandle quad = rix::util::generateGeometry(quadData, m_rix);
 
   // Container Descriptors
@@ -233,11 +233,11 @@ void Feature_tangent_space::createScene()
   };
 
   ContainerDescriptorSharedHandle vertConstContainerDescriptor =
-    m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( vertexConstProgramParameters, 
+    m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( vertexConstProgramParameters,
     sizeof testfw::core::array(vertexConstProgramParameters) ) );
 
   ContainerDescriptorSharedHandle vertVarContainerDescriptor =
-    m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( vertexVarProgramParameters, 
+    m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( vertexVarProgramParameters,
     sizeof testfw::core::array(vertexVarProgramParameters) ) );
 
   ContainerDescriptorSharedHandle fragContainerDescriptor =
@@ -388,11 +388,11 @@ void Feature_tangent_space::createScene()
   m_rix->containerSetData( vertVarContainer0,   containerEntryModel2world, ContainerDataRaw( 0, model2world0.getMatrix().getPtr(), 16 * sizeof(float) ) );
   m_rix->containerSetData( vertVarContainer0,   containerEntryModel2worldIT, ContainerDataRaw( 0, model2world0IT.getPtr(), 16 * sizeof(float) ) );
   m_rix->containerSetData( fragContainer0,      containerEntryColor,       ContainerDataRaw( 0, redish, 4 * sizeof(float) ) );
-  
+
   m_rix->containerSetData( vertVarContainer1,   containerEntryModel2world, ContainerDataRaw( 0, model2world1.getMatrix().getPtr(), 16 * sizeof(float) ) );
   m_rix->containerSetData( vertVarContainer1,   containerEntryModel2worldIT, ContainerDataRaw( 0, model2world1IT.getPtr(), 16 * sizeof(float) ) );
   m_rix->containerSetData( fragContainer1,      containerEntryColor,       ContainerDataRaw( 0, greenish, 4 * sizeof(float) ) );
-  
+
   m_rix->containerSetData( vertVarContainer2,   containerEntryModel2world, ContainerDataRaw( 0, model2world2.getMatrix().getPtr(), 16 * sizeof(float) ) );
   m_rix->containerSetData( vertVarContainer2,   containerEntryModel2worldIT, ContainerDataRaw( 0, model2world2IT.getPtr(), 16 * sizeof(float) ) );
   m_rix->containerSetData( fragContainer2,      containerEntryColor,       ContainerDataRaw( 0, bluish, 4 * sizeof(float) ) );

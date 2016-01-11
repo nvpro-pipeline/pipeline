@@ -112,12 +112,12 @@ bool Feature_FBO::onRunInit( unsigned int i )
 bool Feature_FBO::onRun( unsigned int idx )
 {
   setupCamera( Vec3f(0.0f, 6.0f, 10.0f), Vec3f(0.0f, 0.0f, 0.0f), Vec3f(0.0f, 1.0f, 0.0f) );
-  
+
   // First Pass
 
   glEnable(GL_DEPTH_TEST);
 
-  m_renderData->setRenderGroup(m_renderGroupScene);  
+  m_renderData->setRenderGroup(m_renderGroupScene);
   render(m_renderData, m_fbo);
 
 
@@ -201,7 +201,7 @@ void Feature_FBO::createCamera( void )
   // Container Descriptors
 
   m_vertContainerDescriptorCamera =
-    m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( vertexConstProgramParameters, 
+    m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( vertexConstProgramParameters,
     sizeof testfw::core::array(vertexConstProgramParameters) ) );
 
 
@@ -247,9 +247,9 @@ void Feature_FBO::createScene()
 {
   // Geometry
 
-  GeometryDataSharedPtr cylinderDataNormal  = createCylinder( ATTRIB_POSITION | ATTRIB_NORMAL | ATTRIB_TEXCOORD0, 64 );
-  GeometryDataSharedPtr cylinderDataCut     = createCylinder( ATTRIB_POSITION | ATTRIB_NORMAL | ATTRIB_TEXCOORD0, 64, 8, 3.0f*PI_HALF );
-  GeometryDataSharedPtr cylinderDataCutTube = createCylinder( ATTRIB_POSITION | ATTRIB_NORMAL | ATTRIB_TEXCOORD0, 64, 8, 3.0f*PI_HALF, 0.5f );
+  GeometryDataSharedPtr cylinderDataNormal  = createCylinder( { AttributeID::POSITION, AttributeID::NORMAL, AttributeID::TEXCOORD0 }, 64 );
+  GeometryDataSharedPtr cylinderDataCut     = createCylinder( { AttributeID::POSITION, AttributeID::NORMAL, AttributeID::TEXCOORD0 }, 64, 8, 3.0f*PI_HALF );
+  GeometryDataSharedPtr cylinderDataCutTube = createCylinder( { AttributeID::POSITION, AttributeID::NORMAL, AttributeID::TEXCOORD0 }, 64, 8, 3.0f*PI_HALF, 0.5f );
 
   GeometrySharedHandle cylinder = rix::util::generateGeometry(cylinderDataNormal, m_rix);
   GeometrySharedHandle cylinderCut = rix::util::generateGeometry(cylinderDataCut, m_rix);
@@ -295,7 +295,7 @@ void Feature_FBO::createScene()
   ProgramShaderCode vertShader( vertexShader, ShaderType::VERTEX_SHADER );
 
 
-  const char * fragmentShader = "" 
+  const char * fragmentShader = ""
     "#version 400\n"
     "uniform sampler2D diffuseTex;\n"
     "uniform vec3 lightDir;\n\n"
@@ -371,7 +371,7 @@ void Feature_FBO::createScene()
   };
 
   ProgramParameter fragmentVarProgramParameters[] = {
-    ProgramParameter("diffuseTex", ContainerParameterType::SAMPLER) 
+    ProgramParameter("diffuseTex", ContainerParameterType::SAMPLER)
   };
 
   ProgramParameter fragmentConstProgramParameters[] = {
@@ -387,7 +387,7 @@ void Feature_FBO::createScene()
     sizeof testfw::core::array(fragmentConstProgramParameters) ) );
 
   ContainerDescriptorSharedHandle vertVarContainerDescriptor =
-    m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( vertexVarProgramParameters, 
+    m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( vertexVarProgramParameters,
     sizeof testfw::core::array(vertexVarProgramParameters) ) );
 
   ContainerDescriptorSharedHandle fragVarContainerDescriptor =
@@ -533,7 +533,7 @@ void Feature_FBO::createSecondPass()
 {
   // Geometry
 
-  GeometryDataSharedPtr geoDataScreenQuad = createQuad( ATTRIB_POSITION | ATTRIB_TEXCOORD0, math::Vec3f(-m_aspectRatio, -1.0f, 0.0f), math::Vec3f(m_aspectRatio, -1.0f, 0.0f), math::Vec3f(-m_aspectRatio, 1.0f, 0.0f) );
+  GeometryDataSharedPtr geoDataScreenQuad = createQuad( { AttributeID::POSITION, AttributeID::TEXCOORD0 }, math::Vec3f(-m_aspectRatio, -1.0f, 0.0f), math::Vec3f(m_aspectRatio, -1.0f, 0.0f), math::Vec3f(-m_aspectRatio, 1.0f, 0.0f) );
   GeometrySharedHandle geoScreenQuad = rix::util::generateGeometry(geoDataScreenQuad, m_rix);
 
   // Shader Code
@@ -556,7 +556,7 @@ void Feature_FBO::createSecondPass()
   ProgramShaderCode vertShader( vertexShader, ShaderType::VERTEX_SHADER );
 
 
-  const char * fragmentShader = "" 
+  const char * fragmentShader = ""
     "#version 400\n"
     "uniform sampler2D FBOTex;\n"
 
@@ -587,7 +587,7 @@ void Feature_FBO::createSecondPass()
   };
 
   ProgramParameter fragmentProgramParameters[] = {
-    ProgramParameter("FBOTex", ContainerParameterType::SAMPLER) 
+    ProgramParameter("FBOTex", ContainerParameterType::SAMPLER)
   };
 
   // Container Descriptors
@@ -706,7 +706,7 @@ void Feature_FBO::setupCamera( dp::math::Vec3f eye, dp::math::Vec3f center, dp::
 {
   // Set up world2view matrix
   m_world2View = makeLookAt<float>( eye, center, up );
-  
+
   // Set up view2clip matrix
   float fovyFactor = tan(0.5f*m_fovy);
   m_view2Clip = makeFrustum<float>( /* LEFT, RIGHT */  -m_nearPlane * fovyFactor * m_aspectRatio, m_nearPlane * fovyFactor * m_aspectRatio

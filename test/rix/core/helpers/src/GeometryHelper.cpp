@@ -1,4 +1,4 @@
-// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -40,7 +40,7 @@ namespace dp
 
       GeometrySharedHandle generateGeometry( dp::rix::util::GeometryDataSharedPtr& meshIn, dp::rix::core::Renderer* m_rix )
       {
-        unsigned int attrMask = 0;
+        AttributeMask attrMask;
 
         for( map<dp::rix::util::AttributeID, dp::rix::util::AttributeData>::iterator it = meshIn->m_attributes.begin(); it != meshIn->m_attributes.end(); ++it )
         {
@@ -63,7 +63,7 @@ namespace dp
         for(unsigned int i = 0; i < NUM_ATTRIBS; i++)
         {
           dp::rix::util::AttributeID curAttr = (dp::rix::util::AttributeID)(1 << i);
-          if( attrMask & curAttr )
+          if ( attrMask & curAttr )
           {
             vbuffers[curAttr] = m_rix->bufferCreate();
             m_rix->bufferSetSize( vbuffers[curAttr], meshIn->m_attributes[curAttr].m_data.size() * sizeof(float) );

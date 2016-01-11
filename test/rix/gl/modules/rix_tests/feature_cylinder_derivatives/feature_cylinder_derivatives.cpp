@@ -120,7 +120,7 @@ void Feature_cylinder_derivatives::createScene()
     "  gl_Position   = world2clip * worldPos;\n"
     "}\n";
 
-  const char * fragmentTextureShader = "" 
+  const char * fragmentTextureShader = ""
     "#version 400\n"
     "uniform sampler2D diffuseTex;\n"
     "uniform vec3 lightDir;\n\n"
@@ -186,10 +186,10 @@ void Feature_cylinder_derivatives::createScene()
     "}\n";
 
   //Geometry
-  GeometryDataSharedPtr cylinderDataNormal  = createCylinder( ATTRIB_POSITION | ATTRIB_NORMAL | ATTRIB_TEXCOORD0, 64 );
-  GeometryDataSharedPtr cylinderDataCut     = createCylinder( ATTRIB_POSITION | ATTRIB_NORMAL | ATTRIB_TEXCOORD0, 64, 8, 3.0f*PI_HALF );
-  GeometryDataSharedPtr cylinderDataCutTube = createCylinder( ATTRIB_POSITION | ATTRIB_NORMAL | ATTRIB_TEXCOORD0, 64, 8, 3.0f*PI_HALF, 0.5f );
-  
+  GeometryDataSharedPtr cylinderDataNormal  = createCylinder( { AttributeID::POSITION, AttributeID::NORMAL, AttributeID::TEXCOORD0 }, 64 );
+  GeometryDataSharedPtr cylinderDataCut     = createCylinder( { AttributeID::POSITION, AttributeID::NORMAL, AttributeID::TEXCOORD0 }, 64, 8, 3.0f*PI_HALF );
+  GeometryDataSharedPtr cylinderDataCutTube = createCylinder( { AttributeID::POSITION, AttributeID::NORMAL, AttributeID::TEXCOORD0 }, 64, 8, 3.0f*PI_HALF, 0.5f );
+
   GeometrySharedHandle cylinderNormal = rix::util::generateGeometry(cylinderDataNormal, m_rix);
   GeometrySharedHandle cylinderCut = rix::util::generateGeometry(cylinderDataCut, m_rix);
   GeometrySharedHandle cylinderCutTube = rix::util::generateGeometry(cylinderDataCutTube, m_rix);
@@ -209,7 +209,7 @@ void Feature_cylinder_derivatives::createScene()
   };
 
   ProgramParameter fragmentTexturedProgramParameters[] = {
-    ProgramParameter("diffuseTex", ContainerParameterType::SAMPLER) 
+    ProgramParameter("diffuseTex", ContainerParameterType::SAMPLER)
   };
 
   ProgramParameter fragmentConstProgramParameters[] = {
@@ -217,11 +217,11 @@ void Feature_cylinder_derivatives::createScene()
   };
 
   ContainerDescriptorSharedHandle vertConstContainerDescriptor =
-    m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( vertexConstProgramParameters, 
+    m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( vertexConstProgramParameters,
     sizeof testfw::core::array(vertexConstProgramParameters) ) );
 
   ContainerDescriptorSharedHandle vertVarContainerDescriptor =
-    m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( vertexVarProgramParameters, 
+    m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( vertexVarProgramParameters,
     sizeof testfw::core::array(vertexVarProgramParameters) ) );
 
   ContainerDescriptorSharedHandle fragTexturedContainerDescriptor =

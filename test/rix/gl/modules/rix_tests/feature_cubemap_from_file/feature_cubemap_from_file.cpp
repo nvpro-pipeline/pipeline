@@ -133,7 +133,7 @@ void Feature_cubemap_from_file::createScene()
     "  gl_Position    = world2clip * vPosition;\n"
     "}\n";
 
-  const char * fragmentCubemapShader = "" 
+  const char * fragmentCubemapShader = ""
     "#version 400\n"
     "uniform samplerCube cubeTex;\n\n"
 
@@ -153,8 +153,8 @@ void Feature_cubemap_from_file::createScene()
     "  Color = vec4( rgb, 1.0 );\n"
     "}\n";
 
-  //Geometry  
-  GeometrySharedHandle simpleSphere = rix::util::generateGeometry( createSphere( ATTRIB_POSITION | ATTRIB_TEXCOORD0 | ATTRIB_NORMAL, 64, 64), m_rix );
+  //Geometry
+  GeometrySharedHandle simpleSphere = rix::util::generateGeometry( createSphere( { AttributeID::POSITION, AttributeID::TEXCOORD0, AttributeID::NORMAL }, 64, 64), m_rix );
 
   // Container Descriptors
 
@@ -169,15 +169,15 @@ void Feature_cubemap_from_file::createScene()
   };
 
   ProgramParameter fragmentTexturedProgramParameters[] = {
-    ProgramParameter("cubeTex", ContainerParameterType::SAMPLER) 
+    ProgramParameter("cubeTex", ContainerParameterType::SAMPLER)
   };
 
   ContainerDescriptorSharedHandle vertConstContainerDescriptor =
-    m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( vertexConstProgramParameters, 
+    m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( vertexConstProgramParameters,
     sizeof testfw::core::array(vertexConstProgramParameters) ) );
 
   ContainerDescriptorSharedHandle vertVarContainerDescriptor =
-    m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( vertexVarProgramParameters, 
+    m_rix->containerDescriptorCreate( ProgramParameterDescriptorCommon( vertexVarProgramParameters,
     sizeof testfw::core::array(vertexVarProgramParameters) ) );
 
   ContainerDescriptorSharedHandle fragCubemapReflectionDescriptor =

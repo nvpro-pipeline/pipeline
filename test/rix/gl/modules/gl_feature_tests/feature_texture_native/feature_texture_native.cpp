@@ -112,7 +112,7 @@ void Feature_texture_native::createScene()
     "  Color = color + texture( tex, vTexCoords );\n"
     "}\n";
 
-  dp::rix::util::GeometryDataSharedPtr mesh = dp::rix::util::createRectangle( dp::rix::util::ATTRIB_POSITION | dp::rix::util::ATTRIB_TEXCOORD0, 0.0f, 0.5f*m_height, 0.5f*m_width, 0.0f );
+  dp::rix::util::GeometryDataSharedPtr mesh = dp::rix::util::createRectangle( { dp::rix::util::AttributeID::POSITION, dp::rix::util::AttributeID::TEXCOORD0 }, 0.0f, 0.5f*m_height, 0.5f*m_width, 0.0f );
   GeometrySharedHandle geometry = dp::rix::util::generateGeometry(mesh, m_rix);
 
   std::vector<ProgramParameter> vertexProgramParameters;

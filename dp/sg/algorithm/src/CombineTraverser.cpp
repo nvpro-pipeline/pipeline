@@ -58,8 +58,8 @@ namespace dp
 
       BEGIN_REFLECTION_INFO( CombineTraverser )
         DERIVE_STATIC_PROPERTIES( CombineTraverser, OptimizeTraverser );
-        INIT_STATIC_PROPERTY_RW( CombineTraverser, CombineTargets,                 unsigned int, Semantic::VALUE, value, value );
-        INIT_STATIC_PROPERTY_RW( CombineTraverser, IgnoreAccelerationBuilderHints, bool        , Semantic::VALUE, value, value );
+        INIT_STATIC_PROPERTY_RW( CombineTraverser, CombineTargets,                 CombineTraverser::TargetMask, Semantic::VALUE, value, value );
+        INIT_STATIC_PROPERTY_RW( CombineTraverser, IgnoreAccelerationBuilderHints, bool                        , Semantic::VALUE, value, value );
       END_REFLECTION_INFO
 
       /** \brief Combines two vertex attributes. Copies data in a new host buffer
@@ -108,7 +108,7 @@ namespace dp
       }
 
       CombineTraverser::CombineTraverser( void )
-      : m_combineTargets(CT_ALL_TARGETS_MASK)
+      : m_combineTargets(Target::ALL)
       {
       }
 
@@ -129,15 +129,15 @@ namespace dp
         {
           filterMultiple( p );
           OptimizeTraverser::handleBillboard( p );
-          if ( m_combineTargets & CT_GEONODE )
+          if ( m_combineTargets & Target::GEONODE )
           {
             combineGeoNodes( p );
           }
-          if ( m_combineTargets & CT_LOD )
+          if ( m_combineTargets & Target::LOD )
           {
             combineLODs( p );
           }
-          if ( m_combineTargets & CT_TRANSFORM )
+          if ( m_combineTargets & Target::TRANSFORM )
           {
             combineTransforms( p );
           }
@@ -151,15 +151,15 @@ namespace dp
         {
           filterMultiple( p );
           OptimizeTraverser::handleGroup( p );
-          if ( m_combineTargets & CT_GEONODE )
+          if ( m_combineTargets & Target::GEONODE )
           {
             combineGeoNodes( p );
           }
-          if ( m_combineTargets & CT_LOD )
+          if ( m_combineTargets & Target::LOD )
           {
             combineLODs( p );
           }
-          if ( m_combineTargets & CT_TRANSFORM )
+          if ( m_combineTargets & Target::TRANSFORM )
           {
             combineTransforms( p );
           }
@@ -171,7 +171,7 @@ namespace dp
         pair<set<const void *>::iterator,bool> pitb = m_objects.insert( p );
         if ( pitb.second )
         {
-          if ( m_combineTargets & CT_LOD_RANGES )
+          if ( m_combineTargets & Target::LOD_RANGES )
           {
             combineLODRanges( p );
           }
@@ -186,15 +186,15 @@ namespace dp
         {
           filterMultiple( p );
           OptimizeTraverser::handleTransform( p );
-          if ( m_combineTargets & CT_GEONODE )
+          if ( m_combineTargets & Target::GEONODE )
           {
             combineGeoNodes( p );
           }
-          if ( m_combineTargets & CT_LOD )
+          if ( m_combineTargets & Target::LOD )
           {
             combineLODs( p );
           }
-          if ( m_combineTargets & CT_TRANSFORM )
+          if ( m_combineTargets & Target::TRANSFORM )
           {
             combineTransforms( p );
           }
@@ -291,7 +291,7 @@ namespace dp
 
       void CombineTraverser::combineGeoNodes( Group *p )
       {
-        DP_ASSERT( m_combineTargets & CT_GEONODE );
+        DP_ASSERT( m_combineTargets & Target::GEONODE );
 
         if ( optimizationAllowed( p->getSharedPtr<Group>() ) )
         {
@@ -392,7 +392,7 @@ namespace dp
 
       void CombineTraverser::combineLODs( Group *p )
       {
-        DP_ASSERT( m_combineTargets & CT_LOD );
+        DP_ASSERT( m_combineTargets & Target::LOD );
 
         if( !optimizationAllowed( p->getSharedPtr<Group>() ) )
         {
@@ -468,7 +468,7 @@ namespace dp
 
       void CombineTraverser::combineLODRanges( LOD *p )
       {
-        DP_ASSERT( m_combineTargets & CT_LOD_RANGES );
+        DP_ASSERT( m_combineTargets & Target::LOD_RANGES );
 
         if( !optimizationAllowed( p->getSharedPtr<LOD>() ) )
         {
@@ -519,7 +519,7 @@ namespace dp
 
       void CombineTraverser::combineTransforms( Group *p )
       {
-        DP_ASSERT( m_combineTargets & CT_TRANSFORM );
+        DP_ASSERT( m_combineTargets & Target::TRANSFORM );
 
         if( !optimizationAllowed( p->getSharedPtr<Group>() ) )
         {
@@ -645,7 +645,7 @@ namespace dp
       unsigned int CombineTraverser::combine( const PrimitiveSharedPtr & p0, vector<unsigned int> & combinedIndices
                                             , unsigned int indexOffset, const PrimitiveSharedPtr & p1 )
       {
-        DP_ASSERT( m_combineTargets & CT_GEONODE );
+        DP_ASSERT( m_combineTargets & Target::GEONODE );
         DP_ASSERT( p0 != p1 );
 
         DP_ASSERT( p0->getPrimitiveType() == p1->getPrimitiveType() );
@@ -693,7 +693,7 @@ namespace dp
                                                                             , const vector<unsigned int> & indexMap
                                                                             , unsigned int foundIndices )
       {
-        DP_ASSERT( m_combineTargets & CT_GEONODE );
+        DP_ASSERT( m_combineTargets & Target::GEONODE );
 
         // copy from/to indices to plain vectors
         vector<unsigned int> from; from.reserve(foundIndices);
@@ -739,7 +739,7 @@ namespace dp
       VertexAttributeSetSharedPtr CombineTraverser::reduceVertexAttributeSet( const VertexAttributeSetSharedPtr & p
                                                                             , unsigned int offset, unsigned int count )
       {
-        DP_ASSERT( m_combineTargets & CT_GEONODE );
+        DP_ASSERT( m_combineTargets & Target::GEONODE );
 
         VertexAttributeSetSharedPtr newVASH = VertexAttributeSet::create();
         for ( unsigned int i=0 ; i<static_cast<unsigned int>(VertexAttributeSet::AttributeID::VERTEX_ATTRIB_COUNT) ; i++ )
@@ -770,7 +770,7 @@ namespace dp
 
       unsigned int CombineTraverser::reduceVertexAttributeSet( const PrimitiveSharedPtr & p )
       {
-        DP_ASSERT( m_combineTargets & CT_GEONODE );
+        DP_ASSERT( m_combineTargets & Target::GEONODE );
 
         unsigned int offset = p->getElementOffset();
         unsigned int count  = p->getElementCount();

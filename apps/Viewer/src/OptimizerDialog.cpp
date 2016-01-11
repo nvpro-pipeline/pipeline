@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -196,24 +196,24 @@ void OptimizerDialog::clickedNone( bool checked )
 
 void OptimizerDialog::accept()
 {
-  unsigned int combineFlags = 0;
+  dp::sg::algorithm::CombineTraverser::TargetMask combineFlags;
   if ( m_combineBox->isChecked() )
   {
     if ( m_combineGeoNodesButton->isChecked() )
     {
-      combineFlags |= dp::sg::algorithm::CombineTraverser::CT_GEONODE;
+      combineFlags |= dp::sg::algorithm::CombineTraverser::Target::GEONODE;
     }
     if ( m_combineLODsButton->isChecked() )
     {
-      combineFlags |= dp::sg::algorithm::CombineTraverser::CT_LOD;
+      combineFlags |= dp::sg::algorithm::CombineTraverser::Target::LOD;
     }
     if ( m_combineLODRangesButton->isChecked() )
     {
-      combineFlags |= dp::sg::algorithm::CombineTraverser::CT_LOD_RANGES;
+      combineFlags |= dp::sg::algorithm::CombineTraverser::Target::LOD_RANGES;
     }
     if ( m_combineTransformsButton->isChecked() )
     {
-      combineFlags |= dp::sg::algorithm::CombineTraverser::CT_TRANSFORM;
+      combineFlags |= dp::sg::algorithm::CombineTraverser::Target::TRANSFORM;
     }
   }
   unsigned int eliminateFlags = 0;

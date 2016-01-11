@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -49,7 +49,7 @@ namespace dp
     {
 
       void optimizeScene( const SceneSharedPtr & scene, bool ignoreNames, bool identityToGroup
-        , unsigned int combineFlags, unsigned int eliminateFlags, unsigned int unifyFlags
+        , CombineTraverser::TargetMask combineFlags, unsigned int eliminateFlags, unsigned int unifyFlags
         , float epsilon, bool optimizeVertexCache )
       {
         if ( identityToGroup )
@@ -67,7 +67,7 @@ namespace dp
         int lastModifyingTraverser = UNDEFINED_TRAVERSER;
 
         bool modified;
-        do 
+        do
         {
           modified = false;
           //  first eliminate redundant/degenerated objects
@@ -192,7 +192,7 @@ namespace dp
           {
             CombineTraverser tr;
             tr.setIgnoreNames( ignoreNames );
-            tr.setCombineTargets( CombineTraverser::CT_ALL_TARGETS_MASK );
+            tr.setCombineTargets( CombineTraverser::Target::ALL );
             tr.apply( scene );
             modified = tr.getTreeModified();
           }

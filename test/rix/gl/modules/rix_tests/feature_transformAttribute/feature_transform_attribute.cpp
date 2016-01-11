@@ -119,7 +119,7 @@ void Feature_transform_attribute::createScene()
     "}\n";
 
   dp::rix::util::GeometryDataSharedPtr mesh[4];
-  mesh[0] = dp::rix::util::createQuad( dp::rix::util::ATTRIB_POSITION | dp::rix::util::ATTRIB_TEXCOORD0
+  mesh[0] = dp::rix::util::createQuad( { dp::rix::util::AttributeID::POSITION, dp::rix::util::AttributeID::TEXCOORD0 }
                                            , math::Vec3f(-0.125f*m_height, -0.125f*m_height, 0.0f)
                                            , math::Vec3f(0.125f*m_height, -0.125f*m_height, 0.0f)
                                            , math::Vec3f(-0.125f*m_height, 0.125f*m_height, 0.0f)
@@ -138,10 +138,10 @@ void Feature_transform_attribute::createScene()
   matPos[1] = math::Vec3f(-sinf(angle), cosf(angle), 0.0f);
   matPos[2] = math::Vec3f(0.0f,         0.0f,        1.0f);
 
-  mesh[1] = transformAttribute(matPos, dp::rix::util::ATTRIB_POSITION, mesh[0]);
-  mesh[2] = transformAttribute(matTex, dp::rix::util::ATTRIB_TEXCOORD0, mesh[0]);
-  mesh[3] = transformAttribute(matTex, dp::rix::util::ATTRIB_TEXCOORD0, mesh[0]);
-  mesh[3] = transformAttribute(matPos, dp::rix::util::ATTRIB_POSITION, mesh[0], true, mesh[3]);
+  mesh[1] = transformAttribute(matPos, dp::rix::util::AttributeID::POSITION, mesh[0]);
+  mesh[2] = transformAttribute(matTex, dp::rix::util::AttributeID::TEXCOORD0, mesh[0]);
+  mesh[3] = transformAttribute(matTex, dp::rix::util::AttributeID::TEXCOORD0, mesh[0]);
+  mesh[3] = transformAttribute(matPos, dp::rix::util::AttributeID::POSITION, mesh[0], true, mesh[3]);
 
   GeometrySharedHandle geometry[4];
   geometry[0] = dp::rix::util::generateGeometry(mesh[0], m_rix);
