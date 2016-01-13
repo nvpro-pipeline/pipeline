@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2015
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -463,7 +463,7 @@ namespace dp
         void _insert( const Image * src, Image * dst, unsigned int x, unsigned int y, unsigned int z )
       {
         Buffer::DataReadLock  bufferSrc(src->m_pixels);
-        Buffer::DataWriteLock bufferDst(dst->m_pixels, Buffer::MAP_WRITE);
+        Buffer::DataWriteLock bufferDst(dst->m_pixels, Buffer::MapMode::WRITE);
 
         const T *srcData = bufferSrc.getPtr<T>();
         T *dstData = bufferDst.getPtr<T>();
@@ -527,7 +527,7 @@ namespace dp
         DP_ASSERT(numChannels<=4);
 
         Buffer::DataReadLock  bufferSrc(src->m_pixels);
-        Buffer::DataWriteLock bufferDst(dst->m_pixels, Buffer::MAP_WRITE);
+        Buffer::DataWriteLock bufferDst(dst->m_pixels, Buffer::MapMode::WRITE);
 
         const T *srcData = bufferSrc.getPtr<T>();
         T *dstData = bufferDst.getPtr<T>();
@@ -629,7 +629,7 @@ namespace dp
         }
 
         Buffer::DataReadLock  bufferSrc(src->m_pixels);
-        Buffer::DataWriteLock bufferDst(dst->m_pixels, Buffer::MAP_WRITE);
+        Buffer::DataWriteLock bufferDst(dst->m_pixels, Buffer::MapMode::WRITE);
 
         const T *srcData = bufferSrc.getPtr<T>();
         T *dstData = bufferDst.getPtr<T>();
@@ -1438,7 +1438,7 @@ namespace dp
         unsigned int bufferSize = width * height * srcImg->m_bpp;
         buffer->setSize(bufferSize);
 
-        Buffer::DataWriteLock bufferLock( buffer, Buffer::MAP_WRITE );
+        Buffer::DataWriteLock bufferLock( buffer, Buffer::MapMode::WRITE );
         bool result = getSubImagePixels( image, mipmap, x_offset, y_offset, z_offset, width, height, depth, bufferLock.getPtr() );
 
         return result;
@@ -1449,7 +1449,7 @@ namespace dp
                                , unsigned int z_offset, unsigned int width, unsigned int height
                                , unsigned int depth, const void * subPixels )
       {
-        Buffer::DataWriteLock bufferDst(dstImg->m_pixels, Buffer::MAP_WRITE);
+        Buffer::DataWriteLock bufferDst(dstImg->m_pixels, Buffer::MapMode::WRITE);
 
         T *dstData = bufferDst.getPtr<T>();
 
@@ -1880,7 +1880,7 @@ namespace dp
           int nTgt = 0;
 
           Buffer::DataReadLock  bufferSrc( srcImg.m_pixels );
-          Buffer::DataWriteLock bufferDst( img->m_pixels, Buffer::MAP_WRITE );
+          Buffer::DataWriteLock bufferDst( img->m_pixels, Buffer::MapMode::WRITE );
 
           const char *src = bufferSrc.getPtr<char>();
           char *dst = bufferDst.getPtr<char>();
@@ -1955,7 +1955,7 @@ namespace dp
           }
 
           Buffer::DataReadLock  bufferSrc( src->m_pixels );
-          Buffer::DataWriteLock bufferDst( pixels[i], Buffer::MAP_WRITE );
+          Buffer::DataWriteLock bufferDst( pixels[i], Buffer::MapMode::WRITE );
 
           const char *srcData = bufferSrc.getPtr<char>();
           char *dstData = bufferDst.getPtr<char>();
@@ -2007,7 +2007,7 @@ namespace dp
           }
       
           Buffer::DataReadLock  bufferSrc( src->m_pixels );
-          Buffer::DataWriteLock bufferDst( pixels[i], Buffer::MAP_WRITE );
+          Buffer::DataWriteLock bufferDst( pixels[i], Buffer::MapMode::WRITE );
 
           const char *srcData = bufferSrc.getPtr<char>();
           char *dstData = bufferDst.getPtr<char>();

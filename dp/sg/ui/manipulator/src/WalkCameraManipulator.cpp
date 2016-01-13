@@ -1,4 +1,4 @@
-// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -48,7 +48,7 @@ namespace dp
         , CursorState()
         , m_cameraHeightAboveTerrain(2.f)
         , m_sensitivity( sensitivity )
-        , m_mode( MODE_FREELOOK )
+        , m_mode( Mode::FREELOOK )
         , m_upVector(0.f,1.f,0.f)
         , m_saveCameraDirection(0.f,0.f,-1.f)
         {
@@ -71,7 +71,7 @@ namespace dp
           {
             // first, set orientation
             // NOTE: Freelook now controls the direction of travel.  All other elements set the position only.
-            if( m_mode & MODE_FREELOOK )
+            if( m_mode & Mode::FREELOOK )
             {
               retval |= freeLook();
             }
@@ -80,19 +80,19 @@ namespace dp
             // findTerrainPosition will set the position to be current camera pos, or terrain pos (if found)
             findTerrainPosition();
 
-            if( m_mode & MODE_WALK )
+            if( m_mode & Mode::WALK )
             {
               retval |= walk();
             }
 
-            if( m_mode & MODE_TRANSLATE )
+            if( m_mode & Mode::TRANSLATE )
             {
               retval |= translate();
             }
 
-            if( m_mode & (MODE_STRAFE_LEFT | MODE_STRAFE_RIGHT) )
+            if( m_mode & ModeMask{Mode::STRAFE_LEFT, Mode::STRAFE_RIGHT} )
             {
-              retval |= strafe( (m_mode & MODE_STRAFE_RIGHT) != 0 );
+              retval |= strafe( (m_mode & Mode::STRAFE_RIGHT) != 0 );
             }
 
             // now, set the new camera position

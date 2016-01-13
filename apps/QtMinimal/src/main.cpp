@@ -136,8 +136,8 @@ void QtMinimalWidget::keyPressEvent( QKeyEvent *event )
   {
     dp::sg::algorithm::optimizeScene( getViewState()->getScene(), true, true
                                     , dp::sg::algorithm::CombineTraverser::Target::ALL
-                                    , dp::sg::algorithm::EliminateTraverser::ET_ALL_TARGETS_MASK
-                                    , dp::sg::algorithm::UnifyTraverser::UT_ALL_TARGETS_MASK
+                                    , dp::sg::algorithm::EliminateTraverser::Target::ALL
+                                    , dp::sg::algorithm::UnifyTraverser::Target::ALL
                                     , FLT_EPSILON );
   }
   else if ( event->text().compare("x") == 0 )

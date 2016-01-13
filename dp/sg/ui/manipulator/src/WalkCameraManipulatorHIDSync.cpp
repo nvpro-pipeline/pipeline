@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010
+// Copyright (c) 2010-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -100,7 +100,7 @@ namespace dp
 
           float run = m_hid->getValue<bool>( PID_KeyRun ) ? 2.0f : 1.0f;
 
-          unsigned int mode = MODE_FREELOOK;
+          ModeMask mode = Mode::FREELOOK;
   
           // update speed based on wheel
           m_speed += getWheelTicksDelta() * 0.1f;
@@ -115,22 +115,22 @@ namespace dp
             float speed = forward ? m_speed : -m_speed;
             WalkCameraManipulator::setSpeed( speed * run );
 
-            mode |= MODE_WALK;
+            mode |= Mode::WALK;
           }
 
           if( strafeLeft )
           {
             WalkCameraManipulator::setSpeed( m_speed * run );
-            mode |= MODE_STRAFE_LEFT;
+            mode |= Mode::STRAFE_LEFT;
           }
           else if( strafeRight )
           {
             WalkCameraManipulator::setSpeed( m_speed * run );
-            mode |= MODE_STRAFE_RIGHT;
+            mode |= Mode::STRAFE_RIGHT;
           }
 
           // if not moving, set speed to 0
-          if( mode == MODE_FREELOOK )
+          if( mode == Mode::FREELOOK )
           {
             // stopped
             WalkCameraManipulator::setSpeed( 0.f );

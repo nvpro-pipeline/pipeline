@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2015
+// Copyright (c) 2010-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -58,12 +58,15 @@ namespace dp
         DP_SG_GL_API virtual ~BufferGL();
 
       public:
-        enum BufferState{
-          STATE_MANAGED                 = BIT0,
-          STATE_CAPABILITY_RANGE        = BIT1,
-          STATE_CAPABILITY_COPY         = BIT2,
-          STATE_CAPABILITY_RANGEANDCOPY = STATE_CAPABILITY_RANGE | STATE_CAPABILITY_COPY,
+        enum class State
+        {
+          MANAGED                 = BIT0,
+          CAPABILITY_RANGE        = BIT1,
+          CAPABILITY_COPY         = BIT2,
+          CAPABILITY_RANGEANDCOPY = CAPABILITY_RANGE | CAPABILITY_COPY,
         };
+
+        typedef dp::util::Flags<State> StateMask;
   
         using Buffer::setData;
         using Buffer::getData;
@@ -134,11 +137,11 @@ namespace dp
         DP_SG_GL_API virtual const void *mapRead( size_t offset, size_t length ) const;
         DP_SG_GL_API virtual void unmapRead( ) const;
 
-        mutable Buffer::MapMode m_mapMode;
+        mutable Buffer::MapModeMask m_mapMode;
 
-        GLenum          m_target;
-        GLenum          m_usage;
-        unsigned int    m_stateFlags;
+        GLenum    m_target;
+        GLenum    m_usage;
+        StateMask m_stateFlags;
 
       private:
         dp::gl::BufferSharedPtr m_buffer;
@@ -146,7 +149,7 @@ namespace dp
 
       inline void BufferGL::setTarget( GLenum target )
       {
-        DP_ASSERT( m_mapMode == MAP_NONE );
+        DP_ASSERT( m_mapMode == MapMode::NONE );
         m_target = target;
       }
 
@@ -157,7 +160,7 @@ namespace dp
 
       inline void BufferGL::setUsage( GLenum usage )
       {
-        DP_ASSERT( m_mapMode == MAP_NONE );
+        DP_ASSERT( m_mapMode == MapMode::NONE );
         m_usage = usage;
       }
 

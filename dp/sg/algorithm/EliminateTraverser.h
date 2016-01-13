@@ -1,4 +1,4 @@
-// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -29,6 +29,7 @@
 
 #include <dp/sg/algorithm/Config.h>
 #include <dp/sg/algorithm/OptimizeTraverser.h>
+#include <dp/util/Flags.h>
 
 namespace dp
 {
@@ -49,14 +50,16 @@ namespace dp
       class EliminateTraverser : public OptimizeTraverser
       {
         public:
-          enum
+          enum class Target
           {
-            ET_GROUP                  = BIT0,   //!< EliminateTarget Group: replace redundant Groups by their child/children.
-            ET_GROUP_SINGLE_CHILD     = BIT1,   //!< EliminateTarget Group: replace single-child Groups by their chid
-            ET_INDEX_SET              = BIT2,   //!< EliminateTarget IndexSet: remove IndexSet that just enumerates from 0 to n-1.
-            ET_LOD                    = BIT3,   //!< EliminateTarget LOD: replace redundant LODs by its child.
-            ET_ALL_TARGETS_MASK   = ( ET_GROUP | ET_INDEX_SET | ET_LOD )
-          } EliminateTarget;
+            GROUP               = BIT0,   //!< EliminateTarget Group: replace redundant Groups by their child/children.
+            GROUP_SINGLE_CHILD  = BIT1,   //!< EliminateTarget Group: replace single-child Groups by their chid
+            INDEX_SET           = BIT2,   //!< EliminateTarget IndexSet: remove IndexSet that just enumerates from 0 to n-1.
+            LOD                 = BIT3,   //!< EliminateTarget LOD: replace redundant LODs by its child.
+            ALL                 = ( GROUP | INDEX_SET | LOD )
+          };
+
+          typedef dp::util::Flags<Target> TargetMask;
 
         public:
           //! Constructor
@@ -67,11 +70,11 @@ namespace dp
 
           /*! \brief Get the bitmask describing the targets to eliminate.
            *  \return A bitmask describing the targets to eliminate. */
-          DP_SG_ALGORITHM_API unsigned int getEliminateTargets() const;
+          DP_SG_ALGORITHM_API TargetMask getEliminateTargets() const;
 
           /*! \brief Set the bitmask describing the targets to eliminate.
            *  \param mask The bitmask describing the targets to eliminate. */
-          DP_SG_ALGORITHM_API void setEliminateTargets( unsigned int mask );
+          DP_SG_ALGORITHM_API void setEliminateTargets( TargetMask mask );
 
           REFLECTION_INFO_API( DP_SG_ALGORITHM_API, EliminateTraverser );
           BEGIN_DECLARE_STATIC_PROPERTIES
@@ -105,16 +108,16 @@ namespace dp
           bool isOneChildCandidate( dp::sg::core::GroupSharedPtr const& p );
 
         private:
-          unsigned int            m_eliminateTargets;
+          TargetMask              m_eliminateTargets;
           std::set<const void *>  m_objects;      //!< A set of pointers to hold all objects already encountered.
       };
 
-      inline unsigned int EliminateTraverser::getEliminateTargets() const
+      inline EliminateTraverser::TargetMask EliminateTraverser::getEliminateTargets() const
       {
         return( m_eliminateTargets );
       }
 
-      inline void EliminateTraverser::setEliminateTargets( unsigned int mask )
+      inline void EliminateTraverser::setEliminateTargets( TargetMask mask )
       {
         if ( mask != m_eliminateTargets )
         {
@@ -126,3 +129,15 @@ namespace dp
     } // namespace algorithm
   } // namespace sp
 } // namespace dp
+
+namespace dp
+{
+  namespace util
+  {
+    /*! \brief Specialization of the TypedPropertyEnum template for type EliminateTraverser::TargetMask. */
+    template <> struct TypedPropertyEnum<dp::sg::algorithm::EliminateTraverser::TargetMask>
+    {
+      enum { type = Property::Type::UINT };
+    };
+  }
+}

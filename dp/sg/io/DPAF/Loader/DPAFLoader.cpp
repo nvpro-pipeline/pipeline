@@ -1,4 +1,4 @@
-// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -2377,7 +2377,7 @@ IndexSetSharedPtr DPAFLoader::readIndexSet( const char * name )
         BufferHostSharedPtr buffer = BufferHost::create();
         buffer->setSize( dp::getSizeOf( iset->getIndexDataType() ) * numberOfIndices );
 
-        Buffer::DataWriteLock writer( buffer, Buffer::MAP_WRITE );
+        Buffer::DataWriteLock writer( buffer, Buffer::MapMode::WRITE );
         unsigned char * bufPtr = writer.getPtr<unsigned char>();
 
         // move to first index 

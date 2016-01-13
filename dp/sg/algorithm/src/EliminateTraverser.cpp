@@ -52,11 +52,11 @@ namespace dp
 
       BEGIN_REFLECTION_INFO( EliminateTraverser )
         DERIVE_STATIC_PROPERTIES( EliminateTraverser, OptimizeTraverser );
-        INIT_STATIC_PROPERTY_RW( EliminateTraverser, EliminateTargets, unsigned int, Semantic::VALUE, value, value );
+        INIT_STATIC_PROPERTY_RW( EliminateTraverser, EliminateTargets, EliminateTraverser::TargetMask, Semantic::VALUE, value, value );
       END_REFLECTION_INFO
 
       EliminateTraverser::EliminateTraverser( void )
-      : m_eliminateTargets(ET_ALL_TARGETS_MASK)
+      : m_eliminateTargets(Target::ALL)
       {
       }
 
@@ -72,8 +72,8 @@ namespace dp
 
         NodeSharedPtr oldRoot(root);
         {
-          if (  ( ( m_eliminateTargets & ET_LOD )                               && ( oldRoot.isPtrTo<LOD>() ) )
-            ||  ( ( m_eliminateTargets & ( ET_GROUP | ET_GROUP_SINGLE_CHILD ) ) && ( oldRoot.isPtrTo<Group>() ) ) )
+          if (  ( ( m_eliminateTargets & Target::LOD )                                                  && ( oldRoot.isPtrTo<LOD>() ) )
+            ||  ( ( m_eliminateTargets & TargetMask( { Target::GROUP, Target::GROUP_SINGLE_CHILD } ) )  && ( oldRoot.isPtrTo<Group>() ) ) )
           {
             GroupSharedPtr const& group = oldRoot.staticCast<Group>();
             if ( m_scene &&  isOneChildCandidate( group ) ) // Apply this optimization only if we have valid scene handle,
@@ -94,15 +94,15 @@ namespace dp
         if ( pitb.second )
         {
           OptimizeTraverser::handleBillboard( p );
-          if ( m_eliminateTargets & ET_GROUP )
+          if ( m_eliminateTargets & Target::GROUP )
           {
             eliminateGroups( dynamic_cast<Group *>( p ) );
           }
-          else if ( m_eliminateTargets & ET_GROUP_SINGLE_CHILD )
+          else if ( m_eliminateTargets & Target::GROUP_SINGLE_CHILD )
           {
             eliminateSingleChildChildren( p, ObjectCode::GROUP );
           }
-          if ( m_eliminateTargets & ET_LOD )
+          if ( m_eliminateTargets & Target::LOD )
           {
             eliminateSingleChildChildren( p, ObjectCode::LOD );
           }
@@ -115,15 +115,15 @@ namespace dp
         if ( pitb.second )
         {
           OptimizeTraverser::handleGroup( p );
-          if ( m_eliminateTargets & ET_GROUP )
+          if ( m_eliminateTargets & Target::GROUP )
           {
             eliminateGroups( p );
           }
-          else if ( m_eliminateTargets & ET_GROUP_SINGLE_CHILD )
+          else if ( m_eliminateTargets & Target::GROUP_SINGLE_CHILD )
           {
             eliminateSingleChildChildren( p, ObjectCode::GROUP );
           }
-          if ( m_eliminateTargets & ET_LOD )
+          if ( m_eliminateTargets & Target::LOD )
           {
             eliminateSingleChildChildren( p, ObjectCode::LOD );
           }
@@ -136,11 +136,11 @@ namespace dp
         if ( pitb.second )
         {
           OptimizeTraverser::handleLOD( p );
-          if ( m_eliminateTargets & ( ET_GROUP | ET_GROUP_SINGLE_CHILD ) )
+          if ( m_eliminateTargets & TargetMask( { Target::GROUP, Target::GROUP_SINGLE_CHILD } ) )
           {
             eliminateSingleChildChildren( dynamic_cast<Group *>( p ), ObjectCode::GROUP );
           }
-          if ( m_eliminateTargets & ET_LOD )
+          if ( m_eliminateTargets & Target::LOD )
           {
             eliminateSingleChildChildren( p, ObjectCode::LOD );
           }
@@ -167,7 +167,7 @@ namespace dp
         {
           OptimizeTraverser::handlePrimitive( p );
           if (    optimizationAllowed( p->getSharedPtr<Primitive>() )
-              &&  ( m_eliminateTargets & ET_INDEX_SET )
+              &&  ( m_eliminateTargets & Target::INDEX_SET )
               &&  p->isIndexed()
               &&  ( p->getIndexSet()->getNumberOfIndices() == p->getVertexAttributeSet()->getNumberOfVertices() )
               &&  isFlatIndexSet( p->getIndexSet(), p->getElementOffset(), p->getElementCount() ) )
@@ -184,11 +184,11 @@ namespace dp
         if ( pitb.second )
         {
           OptimizeTraverser::handleSwitch( p );
-          if ( m_eliminateTargets & ( ET_GROUP | ET_GROUP_SINGLE_CHILD ) )
+          if ( m_eliminateTargets & TargetMask( { Target::GROUP, Target::GROUP_SINGLE_CHILD } ) )
           {
             eliminateSingleChildChildren( dynamic_cast<Group *>( p ), ObjectCode::GROUP );
           }
-          if ( m_eliminateTargets & ET_LOD )
+          if ( m_eliminateTargets & Target::LOD )
           {
             eliminateSingleChildChildren( p, ObjectCode::LOD );
           }
@@ -201,15 +201,15 @@ namespace dp
         if ( pitb.second )
         {
           OptimizeTraverser::handleTransform( p );
-          if ( m_eliminateTargets & ET_GROUP )
+          if ( m_eliminateTargets & Target::GROUP )
           {
             eliminateGroups( dynamic_cast<Group *>( p ) );
           }
-          else if ( m_eliminateTargets & ET_GROUP_SINGLE_CHILD )
+          else if ( m_eliminateTargets & Target::GROUP_SINGLE_CHILD )
           {
             eliminateSingleChildChildren( p, ObjectCode::GROUP );
           }
-          if ( m_eliminateTargets & ET_LOD )
+          if ( m_eliminateTargets & Target::LOD )
           {
             eliminateSingleChildChildren( p, ObjectCode::LOD );
           }

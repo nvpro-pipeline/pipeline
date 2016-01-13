@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2012
+// Copyright (c) 2010-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -43,19 +43,19 @@ namespace dp
       }
 
       BufferGL::BufferGL( )
-        : m_mapMode( MAP_NONE )
+        : m_mapMode( MapMode::NONE )
         , m_target( GL_ARRAY_BUFFER )
         , m_usage( GL_STATIC_DRAW )
-        , m_stateFlags( STATE_MANAGED )
+        , m_stateFlags( State::MANAGED )
       {
         if ( !!GLEW_ARB_map_buffer_range )
         {
-          m_stateFlags |= STATE_CAPABILITY_RANGE;
+          m_stateFlags |= State::CAPABILITY_RANGE;
         }
 
         if ( !!GLEW_ARB_copy_buffer )
         {
-          m_stateFlags |= STATE_CAPABILITY_COPY;
+          m_stateFlags |= State::CAPABILITY_COPY;
         }
 
         m_buffer = dp::gl::Buffer::create(dp::gl::Buffer::CORE, m_usage);
@@ -74,7 +74,7 @@ namespace dp
 
       void *BufferGL::map( MapMode mapMode, size_t offset, size_t size)
       {
-        DP_ASSERT( m_mapMode == MAP_NONE );
+        DP_ASSERT( m_mapMode == MapMode::NONE );
         DP_ASSERT( m_buffer->getGLId() );
         DP_ASSERT( (offset + size) >= offset && (offset + size) <= m_buffer->getSize() );
 
@@ -83,16 +83,16 @@ namespace dp
         GLbitfield access;
         switch (mapMode)
         {
-        case core::Buffer::MAP_READ:
+        case core::Buffer::MapMode::READ:
           access |= GL_MAP_READ_BIT;
           break;
-        case core::Buffer::MAP_WRITE:
+        case core::Buffer::MapMode::WRITE:
           access |= GL_MAP_WRITE_BIT;
             break;
-        case core::Buffer::MAP_READWRITE:
+        case core::Buffer::MapMode::READWRITE:
           access = GL_MAP_READ_BIT | GL_MAP_WRITE_BIT;
           break;
-        case core::Buffer::MAP_NONE:
+        case core::Buffer::MapMode::NONE:
         default:
           return nullptr;
         }
@@ -103,37 +103,37 @@ namespace dp
 
       const void *BufferGL::mapRead( size_t offset, size_t size ) const
       {
-        DP_ASSERT( m_mapMode == MAP_NONE );
+        DP_ASSERT( m_mapMode == MapMode::NONE );
         DP_ASSERT( m_buffer->getGLId() );
         DP_ASSERT( (offset + size) >= offset && (offset + size) <= m_buffer->getSize() );
 
-        m_mapMode = MAP_READ;
+        m_mapMode = MapMode::READ;
 
         return m_buffer->map(GL_MAP_READ_BIT, offset, size);
       }
 
       void BufferGL::unmap( )
       {
-        if ( m_mapMode & MAP_WRITE )
+        if ( m_mapMode & MapMode::WRITE )
         {
           notify( Event( this ) );
         }
 
         m_buffer->unmap();
-        m_mapMode = MAP_NONE;
+        m_mapMode = MapMode::NONE;
       }
 
       void BufferGL::unmapRead( ) const
       {
-        DP_ASSERT(m_mapMode == MAP_READ);
+        DP_ASSERT(m_mapMode == MapMode::READ);
         DP_VERIFY(m_buffer->unmap());
-        m_mapMode = MAP_NONE;
+        m_mapMode = MapMode::NONE;
       }
 
       void BufferGL::getData( size_t srcOffset, size_t size, const core::BufferSharedPtr &dstBuffer , size_t dstOffset) const
       {
         // check if we support GL buffer copy at all, and if other obj is a BufferGL
-        if ( (m_stateFlags & STATE_CAPABILITY_COPY) && dstBuffer.isPtrTo<BufferGL>() )
+        if ( (m_stateFlags & State::CAPABILITY_COPY) && dstBuffer.isPtrTo<BufferGL>() )
         {
           copy( m_buffer, dstBuffer.staticCast<BufferGL>()->m_buffer, srcOffset, dstOffset, size );
         }
@@ -146,7 +146,7 @@ namespace dp
       void BufferGL::setData( size_t dstOffset, size_t size, const core::BufferSharedPtr &srcBuffer , size_t srcOffset)
       {
         // check if we support GL buffer copy at all, and if other obj is a BufferGL
-        if ( (m_stateFlags & STATE_CAPABILITY_COPY) && srcBuffer.isPtrTo<BufferGL>() )
+        if ( (m_stateFlags & State::CAPABILITY_COPY) && srcBuffer.isPtrTo<BufferGL>() )
         {
           copy( srcBuffer.staticCast<BufferGL>()->m_buffer, m_buffer, srcOffset, dstOffset, size );
         }
@@ -159,7 +159,7 @@ namespace dp
       size_t BufferGL::getSize() const
       {
         DP_ASSERT( m_buffer->getGLId() );
-        DP_ASSERT( m_stateFlags & STATE_MANAGED );
+        DP_ASSERT( m_stateFlags & State::MANAGED );
 
         return( m_buffer->getSize() );
       }
@@ -167,8 +167,8 @@ namespace dp
       void BufferGL::setSize( size_t size)
       {
         DP_ASSERT( m_buffer->getGLId() );
-        DP_ASSERT( m_stateFlags & STATE_MANAGED );
-        DP_ASSERT( m_mapMode == MAP_NONE );
+        DP_ASSERT( m_stateFlags & State::MANAGED );
+        DP_ASSERT( m_mapMode == MapMode::NONE );
 
         m_buffer->setSize(size);
       }

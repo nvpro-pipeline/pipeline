@@ -60,17 +60,6 @@ using std::pair;
 using std::make_pair;
 using std::multimap;
 
-// Indices for the m_subdivisions array.
-enum
-{
-  SUBDIVISION_SPHERE_MIN = 0,
-  SUBDIVISION_SPHERE_DEFAULT,
-  SUBDIVISION_SPHERE_MAX,
-  SUBDIVISION_BOX_MIN,
-  SUBDIVISION_BOX_DEFAULT,
-  SUBDIVISION_BOX_MAX
-};
-
 const UPITID PITID_SCENE_LOADER(UPITID_SCENE_LOADER, UPITID_VERSION); // plug-in type
 const UPIID  PIID_WRL_SCENE_LOADER(".WRL", PITID_SCENE_LOADER); // plug-in ID
 

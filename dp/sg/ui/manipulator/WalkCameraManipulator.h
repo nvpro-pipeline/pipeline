@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2005
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -51,14 +51,16 @@ namespace dp
         class WalkCameraManipulator : public Manipulator, public CursorState
         {
           public:
-            enum
+            enum class Mode
             {
-              MODE_FREELOOK     = 0x01,
-              MODE_WALK         = 0x02,
-              MODE_TRANSLATE    = 0x04,
-              MODE_STRAFE_RIGHT = 0x08,
-              MODE_STRAFE_LEFT  = 0x10
+              FREELOOK     = 0x01,
+              WALK         = 0x02,
+              TRANSLATE    = 0x04,
+              STRAFE_RIGHT = 0x08,
+              STRAFE_LEFT  = 0x10
             };
+
+            typedef dp::util::Flags<Mode> ModeMask;
 
             /*! \brief Constructor .
              *  \param sensitivity The vector should be greater than (0,0).  This will set the "look" controls sensitivity
@@ -114,14 +116,14 @@ namespace dp
              *  \remarks The manipulator's mode determines how it updates the camera upon every timestep. This 
              *  Manipulator supports the following list of modes (which may be or'ed together):
              *
-             *  MODE_WALK           Typical walk mode where direction is based on camera "look" vector.
-             *  MODE_TRANSLATE      Translate in a circle around the hitpoint.
-             *  MODE_FREELOOK       Freeform "look" where viewing direction is based on mouse position.
-             *  MODE_STRAFE_RIGHT   Strafe right (move right, in a direction parallel to Forward X Up vectors)
-             *  MODE_STRAFE_LEFT    Strafe left (move left, in a direction parallel to Forward X Up vectors)
+             *  Mode::WALK           Typical walk mode where direction is based on camera "look" vector.
+             *  Mode::TRANSLATE      Translate in a circle around the hitpoint.
+             *  Mode::FREELOOK       Freeform "look" where viewing direction is based on mouse position.
+             *  Mode::STRAFE_RIGHT   Strafe right (move right, in a direction parallel to Forward X Up vectors)
+             *  Mode::STRAFE_LEFT    Strafe left (move left, in a direction parallel to Forward X Up vectors)
              *
              *  \sa getMode */
-            void setMode( unsigned int mode );
+            void setMode( ModeMask mode );
 
             /*! \brief Get the mode this manipulator is operating in.
              *  \return The manipulator's current mode.
@@ -183,7 +185,7 @@ namespace dp
 
             float m_cameraHeightAboveTerrain;//!< Camera's Height Above Terrain. Default: 2.f.
             dp::math::Vec3f m_upVector;
-            unsigned int m_mode;
+            ModeMask m_mode;
             float m_speed;
             dp::math::Vec2f m_sensitivity;
             dp::math::Vec3f m_saveCameraDirection;
@@ -217,7 +219,7 @@ namespace dp
           return m_cameraHeightAboveTerrain; 
         }
 
-        inline void WalkCameraManipulator::setMode( unsigned int mode )
+        inline void WalkCameraManipulator::setMode( ModeMask mode )
         {
           m_mode = mode;
         }

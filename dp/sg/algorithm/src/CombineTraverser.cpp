@@ -73,7 +73,7 @@ namespace dp
         BufferSharedPtr buffer = BufferHost::create();
         buffer->setSize( ( v0.getVertexDataCount() + v1.getVertexDataCount() ) * v0.getVertexDataBytes() );
 
-        Buffer::Iterator<char>::Type itDst = buffer->getIterator<char>( Buffer::MAP_WRITE, v0.getVertexDataBytes() );
+        Buffer::Iterator<char>::Type itDst = buffer->getIterator<char>( Buffer::MapMode::WRITE, v0.getVertexDataBytes() );
         Buffer::ConstIterator<char>::Type itSrc0 = v0.beginRead<char>();
         Buffer::ConstIterator<char>::Type itSrc1 = v1.beginRead<char>();
 

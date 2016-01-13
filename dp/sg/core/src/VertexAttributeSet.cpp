@@ -1,4 +1,4 @@
-// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -966,7 +966,7 @@ namespace dp
             attributeNew.setData( attributeOld.getVertexDataSize(), attributeOld.getVertexDataType(), newBufferSharedPtr, offset, stride, numberOfVertices );
 
             Buffer::DataReadLock drl(attributeOld.getBuffer());
-            Buffer::DataWriteLock dwl(attributeNew.getBuffer(), Buffer::MAP_READWRITE );
+            Buffer::DataWriteLock dwl(attributeNew.getBuffer(), Buffer::MapMode::READWRITE );
             dp::util::stridedMemcpy( dwl.getPtr(), attributeNew.getVertexDataOffsetInBytes(), attributeNew.getVertexDataStrideInBytes(),
               drl.getPtr(), attributeOld.getVertexDataOffsetInBytes(), attributeOld.getVertexDataStrideInBytes(),
               attributeOld.getVertexDataBytes(), numberOfVertices

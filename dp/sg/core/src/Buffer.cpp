@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010
+// Copyright (c) 2010-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -57,7 +57,7 @@ namespace dp
       {
         DP_ASSERT( src_data );
 
-        void* to = map( MAP_WRITE, dst_offset, size );
+        void* to = map( MapMode::WRITE, dst_offset, size );
         memcpy( to, src_data, size );
         unmap();
       }
@@ -67,7 +67,7 @@ namespace dp
       {
         DP_ASSERT( dst_buffer );
 
-        void* to = dst_buffer->map( MAP_WRITE, dst_offset, size );
+        void* to = dst_buffer->map( MapMode::WRITE, dst_offset, size );
         const void* from = mapRead( offset, size );
 
         memcpy( to, from, size );
@@ -80,7 +80,7 @@ namespace dp
       {
         DP_ASSERT( src_buffer );
 
-        void* to = map( MAP_WRITE, offset, size );
+        void* to = map( MapMode::WRITE, offset, size );
         const void* from = src_buffer->mapRead( src_offset, size );
 
         memcpy( to, from, size );

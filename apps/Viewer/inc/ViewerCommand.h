@@ -1,4 +1,4 @@
-// Copyright (c) 2009-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2009-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -30,19 +30,22 @@
 #include <QVariant>
 #include <dp/sg/core/CoreTypes.h>
 #include <dp/sg/core/VertexAttributeSet.h>
+#include <dp/util/Flags.h>
 
 class ViewerCommand : public QUndoCommand
 {
   protected:
-    enum UpdateFlag
+    enum class UpdateFlag
     {
-      UPDATE_ITEMMODELS = 0x01,
-      UPDATE_MATERIAL   = 0x02,
-      UPDATE_SCENE_TREE = 0x04
+      ITEMMODELS = 0x01,
+      MATERIAL   = 0x02,
+      SCENE_TREE = 0x04
     };
 
+    typedef dp::util::Flags<UpdateFlag> UpdateMask;
+
   public:
-    ViewerCommand( unsigned int updateFlags = 0, bool parameterCommand = false, int id = -1 );
+    ViewerCommand( UpdateMask updateFlags = UpdateMask(), bool parameterCommand = false, int id = -1 );
     virtual ~ViewerCommand();
 
     bool isParameterCommand() const;
@@ -57,7 +60,7 @@ class ViewerCommand : public QUndoCommand
 
   protected:
     bool m_parameterCommand;
-    unsigned int m_updateFlags;
+    UpdateMask m_updateFlags;
     int m_id;
 };
 

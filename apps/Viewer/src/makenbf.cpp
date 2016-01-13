@@ -109,8 +109,8 @@ int main(int argc, char *argv[])
   std::cout << "optimizing..." << std::endl;
   dp::sg::algorithm::optimizeScene( viewStateHandle->getScene(), true, true
                                   , dp::sg::algorithm::CombineTraverser::Target::ALL
-                                  , dp::sg::algorithm::EliminateTraverser::ET_ALL_TARGETS_MASK
-                                  , dp::sg::algorithm::UnifyTraverser::UT_ALL_TARGETS_MASK, FLT_EPSILON );
+                                  , dp::sg::algorithm::EliminateTraverser::Target::ALL
+                                  , dp::sg::algorithm::UnifyTraverser::Target::ALL, FLT_EPSILON );
 
   int return_code = 0;
   std::cout << "saving scene to " << outputName.toLocal8Bit().data() << std::endl;

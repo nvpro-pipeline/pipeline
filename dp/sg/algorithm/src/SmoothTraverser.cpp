@@ -239,7 +239,7 @@ namespace dp
                 Buffer::DataReadLock oldBufferLock( vas->getVertexData( id ) );
                 const unsigned char * oldBuffPtr = oldBufferLock.getPtr<unsigned char>();
 
-                Buffer::DataWriteLock newBufferLock( newVertexBuffer, Buffer::MAP_WRITE );
+                Buffer::DataWriteLock newBufferLock( newVertexBuffer, Buffer::MapMode::WRITE );
                 unsigned char * newBuffPtr = newBufferLock.getPtr<unsigned char>();
 
                 for ( unsigned int idx=0 ; idx < numIndices ; idx++ )

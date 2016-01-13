@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2010
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -138,7 +138,7 @@ namespace dp
 
         m_buffer = BufferHost::create();
         m_buffer->setSize( m_count * m_strideInBytes );
-        Buffer::DataWriteLock lock( m_buffer, Buffer::MAP_WRITE, m_offset, m_count * m_strideInBytes );
+        Buffer::DataWriteLock lock( m_buffer, Buffer::MapMode::WRITE, m_offset, m_count * m_strideInBytes );
         dp::util::stridedMemcpy( lock.getPtr(), 0, m_strideInBytes, data, 0, stride ? stride : m_bytes, m_bytes, count );
       }
 
@@ -190,7 +190,7 @@ namespace dp
           m_count = newCount;
         }
 
-        Buffer::DataWriteLock lock( m_buffer, Buffer::MAP_WRITE, m_offset + dstOffset * m_strideInBytes, count * m_strideInBytes );
+        Buffer::DataWriteLock lock( m_buffer, Buffer::MapMode::WRITE, m_offset + dstOffset * m_strideInBytes, count * m_strideInBytes );
         util::stridedMemcpy( lock.getPtr(), 0, m_strideInBytes, data, 0, stride ? stride : m_bytes, m_bytes, count );
       }
 

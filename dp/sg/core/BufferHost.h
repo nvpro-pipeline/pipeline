@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2015
+// Copyright (c) 2010-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -66,10 +66,10 @@ namespace dp
         DP_SG_CORE_API virtual void unmapRead() const;
 
 
-        size_t                  m_sizeInBytes;
-        char*                   m_data;
-        mutable Buffer::MapMode m_mapMode;
-        bool                    m_managed;
+        size_t                      m_sizeInBytes;
+        char*                       m_data;
+        mutable Buffer::MapModeMask m_mapMode;
+        bool                        m_managed;
       };
 
     } // namespace core

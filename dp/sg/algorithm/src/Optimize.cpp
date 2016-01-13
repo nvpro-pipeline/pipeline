@@ -49,7 +49,7 @@ namespace dp
     {
 
       void optimizeScene( const SceneSharedPtr & scene, bool ignoreNames, bool identityToGroup
-        , CombineTraverser::TargetMask combineFlags, unsigned int eliminateFlags, unsigned int unifyFlags
+        , CombineTraverser::TargetMask combineFlags, EliminateTraverser::TargetMask eliminateFlags, UnifyTraverser::TargetMask unifyFlags
         , float epsilon, bool optimizeVertexCache )
       {
         if ( identityToGroup )
@@ -99,7 +99,7 @@ namespace dp
               UnifyTraverser ut;
               ut.setIgnoreNames( ignoreNames );
               ut.setUnifyTargets( unifyFlags );
-              if ( unifyFlags & UnifyTraverser::UT_VERTICES )
+              if ( unifyFlags & UnifyTraverser::Target::VERTICES )
               {
                 ut.setEpsilon( epsilon );
               }
@@ -109,7 +109,7 @@ namespace dp
                 modified = true;
                 lastModifyingTraverser = UNIFY_TRAVERSER;
 
-                if ( unifyFlags & UnifyTraverser::UT_VERTICES )
+                if ( unifyFlags & UnifyTraverser::Target::VERTICES )
                 {
                   // after unifying vertices we need to re-normalize the normals
                   NormalizeTraverser nt;
@@ -183,7 +183,7 @@ namespace dp
           {
             EliminateTraverser tr;
             tr.setIgnoreNames( ignoreNames );
-            tr.setEliminateTargets( EliminateTraverser::ET_ALL_TARGETS_MASK );
+            tr.setEliminateTargets( EliminateTraverser::Target::ALL );
             tr.apply( scene );
             modified = tr.getTreeModified();
           }
@@ -201,12 +201,9 @@ namespace dp
 
       void optimizeUnifyVertices( const SceneSharedPtr & scene )
       {
-        unsigned int unifySelection = 0;
-        unifySelection |= UnifyTraverser::UT_VERTICES;
-
         UnifyTraverser tr;
         tr.setIgnoreNames( false );
-        tr.setUnifyTargets( unifySelection );
+        tr.setUnifyTargets( UnifyTraverser::Target::VERTICES );
         tr.setEpsilon( FLT_EPSILON );
         tr.apply( scene );
 

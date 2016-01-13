@@ -216,77 +216,77 @@ void OptimizerDialog::accept()
       combineFlags |= dp::sg::algorithm::CombineTraverser::Target::TRANSFORM;
     }
   }
-  unsigned int eliminateFlags = 0;
+  dp::sg::algorithm::EliminateTraverser::TargetMask eliminateFlags;
   if ( m_eliminateBox->isChecked() )
   {
     if ( m_eliminateGroupsButton->isChecked() )
     {
-      eliminateFlags |= dp::sg::algorithm::EliminateTraverser::ET_GROUP;
+      eliminateFlags |= dp::sg::algorithm::EliminateTraverser::Target::GROUP;
     }
     if ( m_eliminateSingleChildGroupsButton->isChecked() )
     {
-      eliminateFlags |= dp::sg::algorithm::EliminateTraverser::ET_GROUP_SINGLE_CHILD;
+      eliminateFlags |= dp::sg::algorithm::EliminateTraverser::Target::GROUP_SINGLE_CHILD;
     }
     if ( m_eliminateIndexSetsButton->isChecked() )
     {
-      eliminateFlags |= dp::sg::algorithm::EliminateTraverser::ET_INDEX_SET;
+      eliminateFlags |= dp::sg::algorithm::EliminateTraverser::Target::INDEX_SET;
     }
     if ( m_eliminateLODsButton->isChecked() )
     {
-      eliminateFlags |= dp::sg::algorithm::EliminateTraverser::ET_LOD;
+      eliminateFlags |= dp::sg::algorithm::EliminateTraverser::Target::LOD;
     }
   }
-  unsigned int unifyFlags = 0;
+  dp::sg::algorithm::UnifyTraverser::TargetMask unifyFlags;
   float epsilon = 0.0f;
   if ( m_unifyBox->isChecked() )
   {
     if ( m_unifyEffectDataButton->isChecked() )
     {
-      unifyFlags |= dp::sg::algorithm::UnifyTraverser::UT_PIPELINE_DATA;
+      unifyFlags |= dp::sg::algorithm::UnifyTraverser::Target::PIPELINE_DATA;
     }
     if ( m_unifyGeoNodesButton->isChecked() )
     {
-      unifyFlags |= dp::sg::algorithm::UnifyTraverser::UT_GEONODE;
+      unifyFlags |= dp::sg::algorithm::UnifyTraverser::Target::GEONODE;
     }
     if ( m_unifyGroupsButton->isChecked() )
     {
-      unifyFlags |= dp::sg::algorithm::UnifyTraverser::UT_GROUP;
+      unifyFlags |= dp::sg::algorithm::UnifyTraverser::Target::GROUP;
     }
     if ( m_unifyIndexSetsButton->isChecked() )
     {
-      unifyFlags |= dp::sg::algorithm::UnifyTraverser::UT_INDEX_SET;
+      unifyFlags |= dp::sg::algorithm::UnifyTraverser::Target::INDEX_SET;
     }
     if ( m_unifyLODsButton->isChecked() )
     {
-      unifyFlags |= dp::sg::algorithm::UnifyTraverser::UT_LOD;
+      unifyFlags |= dp::sg::algorithm::UnifyTraverser::Target::LOD;
     }
     if ( m_unifyParameterGroupDataButton->isChecked() )
     {
-      unifyFlags |= dp::sg::algorithm::UnifyTraverser::UT_PARAMETER_GROUP_DATA;
+      unifyFlags |= dp::sg::algorithm::UnifyTraverser::Target::PARAMETER_GROUP_DATA;
     }
     if ( m_unifyPrimitivesButton->isChecked() )
     {
-      unifyFlags |= dp::sg::algorithm::UnifyTraverser::UT_PRIMITIVE;
+      unifyFlags |= dp::sg::algorithm::UnifyTraverser::Target::PRIMITIVE;
     }
     if ( m_unifySamplersButton->isChecked() )
     {
-      unifyFlags |= dp::sg::algorithm::UnifyTraverser::UT_SAMPLER;
+      unifyFlags |= dp::sg::algorithm::UnifyTraverser::Target::SAMPLER;
     }
     if ( m_unifyTexturesButton->isChecked() )
     {
-      unifyFlags |= dp::sg::algorithm::UnifyTraverser::UT_TEXTURE;
+      unifyFlags |= dp::sg::algorithm::UnifyTraverser::Target::TEXTURE;
     }
     if ( m_unifyTrafoAnimationsButton->isChecked() )
     {
-      unifyFlags |= dp::sg::algorithm::UnifyTraverser::UT_TRAFO_ANIMATION;
+      unifyFlags |= dp::sg::algorithm::UnifyTraverser::Target::TRAFO_ANIMATION;
     }
     if ( m_unifyVertexAttributeSetsButton->isChecked() )
     {
-      unifyFlags |= dp::sg::algorithm::UnifyTraverser::UT_VERTEX_ATTRIBUTE_SET;
+      unifyFlags |= dp::sg::algorithm::UnifyTraverser::Target::VERTEX_ATTRIBUTE_SET;
     }
     if ( m_unifyVerticesButton->isChecked() )
     {
-      unifyFlags |= dp::sg::algorithm::UnifyTraverser::UT_VERTICES;
+      unifyFlags |= dp::sg::algorithm::UnifyTraverser::Target::VERTICES;
       epsilon = m_epsilonEdit->text().toFloat();
     }
   }
@@ -314,7 +314,7 @@ void OptimizerDialog::switchAllButtons( bool on )
   m_combineTransformsButton->setChecked( on );
 
   m_eliminateGroupsButton->setChecked( on );
-  m_eliminateSingleChildGroupsButton->setChecked( false );  // as a subset of ET_GROUPS, this isn't needed
+  m_eliminateSingleChildGroupsButton->setChecked( false );  // as a subset of Target::GROUPS, this isn't needed
   m_eliminateIndexSetsButton->setChecked( on );
   m_eliminateLODsButton->setChecked( on );
 

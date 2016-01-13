@@ -1,4 +1,4 @@
-// Copyright (c) 2010-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2010-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -31,6 +31,8 @@
 #include <dp/sg/core/CoreTypes.h>
 #include <dp/sg/core/Event.h>
 #include <dp/sg/core/HandledObject.h>
+#include <dp/util/BitMask.h>
+#include <dp/util/Flags.h>
 #include <dp/util/StridedIterator.h>
 #include <cstring>
 
@@ -68,7 +70,15 @@ namespace dp
         DP_SG_CORE_API virtual ~Buffer();
 
       public:
-        enum MapMode { MAP_NONE = 0, MAP_READ = 1, MAP_WRITE = 2, MAP_READWRITE = MAP_READ | MAP_WRITE };
+        enum class MapMode
+        {
+          NONE      = 0,
+          READ      = BIT0,
+          WRITE     = BIT1,
+          READWRITE = READ | WRITE
+        };
+
+        typedef dp::util::Flags<MapMode> MapModeMask;
 
         /** \brief copy the continuous memory from another buffer to self
         **/
@@ -157,7 +167,7 @@ namespace dp
               \param mapMode desired MapMode to the buffer.
               \param offset in bytes to start map from
               \param length in bytes for the mapped range
-              \note Mapping with \c MAP_WRITE must not be used to retrieve data, and when using \c MAP_READ
+              \note Mapping with \c MapMode::WRITE must not be used to retrieve data, and when using \c MapMode::READ
               you must not write data. Both operations are legal on the C++ side as you get a non-const pointer
               when mapping, but are illegal for the system's integrity. Buffer implementations will have undefined behavior
               when you use the MapMode wrongly.
@@ -239,7 +249,7 @@ namespace dp
             \param mode desired MapMode to the buffer
             \param offset in bytes to start map from
             \param length in bytes for the mapped range
-            \note Mapping with \c MAP_WRITE must not be used to retrieve data, and when using \c MAP_READ
+            \note Mapping with \c MapMode::WRITE must not be used to retrieve data, and when using \c MapMode::READ
             you must not write data. Both operations are legal on the C++ side as you get a non-const pointer
             when mapping, but are illegal for the system's integrity. Buffer implementations will have undefined behavior
             when you use the MapMode wrongly.
@@ -298,7 +308,7 @@ namespace dp
 
           setSize( newSize );
 
-          char *newData = reinterpret_cast<char *>(map( MAP_WRITE ));
+          char *newData = reinterpret_cast<char *>(map( MapMode::WRITE ));
           memcpy( newData, tmpData, tmpSize );
           unmap();
 

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2005
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -27,11 +27,12 @@
 #pragma once
 /** \file */
 
+#include <dp/math/Vecnt.h>
 #include <dp/sg/ui/Config.h>
 #include <dp/sg/core/CoreTypes.h>
 #include <dp/sg/ui/ViewState.h>
 #include <dp/ui/RenderTarget.h>
-#include <dp/math/Vecnt.h>
+#include <dp/util/Flags.h>
 #include <map>
 
 namespace dp
@@ -124,17 +125,19 @@ namespace dp
           void resetInput();
 
         private:
-          enum
+          enum class InitialUpdate
           {
-            IUP_WHEEL    = 0x01,
-            IUP_POSITION = 0x02
+            WHEEL    = 0x01,
+            POSITION = 0x02
           };
 
-          dp::math::Vec2i m_cursorPosition;
-          dp::math::Vec2i m_lastCursorPosition;
-          int           m_wheelTicks;
-          int           m_lastWheelTicks;
-          unsigned int  m_initialUpdate;
+          typedef dp::util::Flags<InitialUpdate> InitialUpdateMask;
+
+          dp::math::Vec2i     m_cursorPosition;
+          dp::math::Vec2i     m_lastCursorPosition;
+          int                 m_wheelTicks;
+          int                 m_lastWheelTicks;
+          InitialUpdateMask  m_initialUpdate;
       };
 
       inline void CursorState::resetInput()
@@ -143,7 +146,7 @@ namespace dp
         m_lastCursorPosition = dp::math::Vec2i(0,0);
         m_wheelTicks         = 0;
         m_lastWheelTicks     = 0;
-        m_initialUpdate      = IUP_WHEEL | IUP_POSITION;
+        m_initialUpdate      = { InitialUpdate::WHEEL, InitialUpdate::POSITION };
       }
 
       inline CursorState::CursorState()
@@ -177,10 +180,10 @@ namespace dp
 
       inline void CursorState::setCursorPosition( const dp::math::Vec2i &cursor )
       {
-        if( m_initialUpdate & IUP_POSITION )
+        if( m_initialUpdate & InitialUpdate::POSITION )
         {
           m_lastCursorPosition = cursor;
-          m_initialUpdate &= ~IUP_POSITION;
+          m_initialUpdate ^= InitialUpdate::POSITION;
         }
         else
         {
@@ -202,10 +205,10 @@ namespace dp
 
       inline void CursorState::setWheelTicks( int wheelTicks )
       {
-        if( m_initialUpdate & IUP_WHEEL )
+        if( m_initialUpdate & InitialUpdate::WHEEL )
         {
           m_lastWheelTicks = wheelTicks;
-          m_initialUpdate &= ~IUP_WHEEL;
+          m_initialUpdate ^= InitialUpdate::WHEEL;
         }
         else
         {

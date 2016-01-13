@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2015
+// Copyright (c) 2010-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -47,7 +47,7 @@ namespace dp
       BufferHost::BufferHost( )
         : m_sizeInBytes( 0 )
         , m_data( 0 )
-        , m_mapMode( MAP_NONE )
+        , m_mapMode( MapMode::NONE )
         , m_managed( true )
       {
       }
@@ -72,7 +72,7 @@ namespace dp
 
       void *BufferHost::map( MapMode mapMode, size_t offset, size_t size )
       {
-        DP_ASSERT( m_mapMode == MAP_NONE );
+        DP_ASSERT( m_mapMode == MapMode::NONE );
         DP_ASSERT( m_data );
         DP_ASSERT( (offset + size) >= offset && (offset + size) <= m_sizeInBytes );
 
@@ -83,31 +83,31 @@ namespace dp
 
       void BufferHost::unmap( )
       {
-        DP_ASSERT( m_mapMode != MAP_NONE );
+        DP_ASSERT( m_mapMode != MapMode::NONE );
 
-        if ( m_mapMode & MAP_WRITE )
+        if ( m_mapMode & MapMode::WRITE )
         {
           notify( Event( this ) );
         }
-        m_mapMode = MAP_NONE;
+        m_mapMode = MapMode::NONE;
       }
 
       const void *BufferHost::mapRead( size_t offset, size_t size ) const
       {
-        DP_ASSERT( m_mapMode == MAP_NONE );
+        DP_ASSERT( m_mapMode == MapMode::NONE );
         DP_ASSERT( m_data );
         DP_ASSERT( (offset + size) >= offset && (offset + size) <= m_sizeInBytes );
 
-        m_mapMode = MAP_READ;
+        m_mapMode = MapMode::READ;
         const char* data = reinterpret_cast<const char*>( m_data );
         return reinterpret_cast<const void*>( data + offset );
       }
 
       void BufferHost::unmapRead( ) const
       {
-        DP_ASSERT( m_mapMode == MAP_READ );
+        DP_ASSERT( m_mapMode == MapMode::READ );
 
-        m_mapMode = MAP_NONE;
+        m_mapMode = MapMode::NONE;
       }
 
       size_t BufferHost::getSize() const
@@ -117,7 +117,7 @@ namespace dp
 
       void BufferHost::setSize( size_t size )
       {
-        DP_ASSERT( m_mapMode == MAP_NONE );
+        DP_ASSERT( m_mapMode == MapMode::NONE );
 
         if ( m_sizeInBytes != size)
         {

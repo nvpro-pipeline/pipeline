@@ -358,7 +358,7 @@ namespace dp
       template <typename ValueType>
       typename Buffer::Iterator<ValueType>::Type VertexAttribute::begin()
       {
-        Buffer::DataWriteLock lock = Buffer::DataWriteLock( m_buffer, Buffer::MAP_READWRITE, m_offset, m_count * m_strideInBytes );
+        Buffer::DataWriteLock lock = Buffer::DataWriteLock( m_buffer, Buffer::MapMode::READWRITE, m_offset, m_count * m_strideInBytes );
         return typename Buffer::Iterator<ValueType>::Type( lock.getPtr<ValueType>(), m_strideInBytes, lock );
       }
 
@@ -372,7 +372,7 @@ namespace dp
       template <typename ValueType>
       typename Buffer::Iterator<ValueType>::Type VertexAttribute::end()
       {
-        Buffer::DataWriteLock lock = Buffer::DataWriteLock( m_buffer, Buffer::MAP_READWRITE, m_offset, m_count * m_strideInBytes );
+        Buffer::DataWriteLock lock = Buffer::DataWriteLock( m_buffer, Buffer::MapMode::READWRITE, m_offset, m_count * m_strideInBytes );
         void *end = lock.getPtr<char>() + m_count * m_strideInBytes;
         return typename Buffer::Iterator<ValueType>::Type( reinterpret_cast<ValueType*>(end) , m_strideInBytes, lock );
       }

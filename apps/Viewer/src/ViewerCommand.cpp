@@ -1,4 +1,4 @@
-// Copyright (c) 2009-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2009-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -33,7 +33,7 @@
 
 using namespace dp::sg::core;
 
-ViewerCommand::ViewerCommand( unsigned int updateFlags, bool parameterCommand, int id )
+ViewerCommand::ViewerCommand( UpdateMask updateFlags, bool parameterCommand, int id )
   : m_updateFlags( updateFlags )
   , m_parameterCommand( parameterCommand )
   , m_id( id )
@@ -72,19 +72,19 @@ void ViewerCommand::redo()
 
 void ViewerCommand::update()
 {
-  if( m_updateFlags & UPDATE_MATERIAL )
+  if( m_updateFlags & UpdateFlag::MATERIAL )
   {
     GetApp()->emitMaterialChanged();
   }
 
-  if ( m_updateFlags & UPDATE_SCENE_TREE )
+  if ( m_updateFlags & UpdateFlag::SCENE_TREE )
   {
     GetApp()->emitSceneTreeChanged();
   }
 }
 
 CommandReplacePipeline::CommandReplacePipeline( const dp::sg::core::GeoNodeSharedPtr & geoNode, const dp::sg::core::PipelineDataSharedPtr & newPipeline )
-  : ViewerCommand( ViewerCommand::UPDATE_ITEMMODELS | ViewerCommand::UPDATE_MATERIAL )
+  : ViewerCommand( { ViewerCommand::UpdateFlag::ITEMMODELS, ViewerCommand::UpdateFlag::MATERIAL } )
   , m_geoNode( geoNode )
   , m_newPipeline( newPipeline )
 {
@@ -146,7 +146,7 @@ bool CommandReplacePipeline::doRedo()
 }
 
 CommandGenerateTangentSpace::CommandGenerateTangentSpace( const dp::sg::core::PrimitiveSharedPtr & primitive )
-  : ViewerCommand( ViewerCommand::UPDATE_MATERIAL )
+  : ViewerCommand( ViewerCommand::UpdateFlag::MATERIAL )
   , m_primitive(primitive)
 {
   setText( QString( "Generate Tangent Space" ) );
@@ -172,7 +172,7 @@ bool CommandGenerateTangentSpace::doRedo()
 }
 
 CommandGenerateTextureCoordinates::CommandGenerateTextureCoordinates( const dp::sg::core::PrimitiveSharedPtr & primitive, dp::sg::core::TextureCoordType tct )
-  : ViewerCommand( ViewerCommand::UPDATE_MATERIAL )
+  : ViewerCommand( ViewerCommand::UpdateFlag::MATERIAL )
   , m_primitive(primitive)
   , m_tct(tct)
 {

@@ -1,4 +1,4 @@
-// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -29,6 +29,7 @@
 #include <dp/sg/algorithm/Config.h>
 #include <dp/sg/algorithm/OptimizeTraverser.h>
 #include <dp/sg/core/Primitive.h>
+#include <dp/util/Flags.h>
 
 #include <list>
 #include <vector>
@@ -62,23 +63,25 @@ namespace dp
       class UnifyTraverser : public OptimizeTraverser
       {
         public:
-          enum
+          enum class Target
           {
-            UT_GEONODE                = BIT0,   //!< UnifyTarget dp::sg::core::GeoNode: unify identical GeoNode objects into one.
-            UT_GROUP                  = BIT1,   //!< UnifyTarget dp::sg::core::Group: unify identical Group objects into one.
-            UT_INDEX_SET              = BIT2,   //!< UnifyTarget dp::sg::core::IndexSet: unify identical IndexSet objects into one.
-            UT_LOD                    = BIT3,   //!< UnifyTarget dp::sg::core::LOD: unify identical LOD objects into one.
-            UT_PARAMETER_GROUP_DATA   = BIT4,   //!< UnifyTarget dp::sg::core::ParameterGroupData: unify identical ParameterGroupData objects into one.
-            UT_PIPELINE_DATA          = BIT5,   //!< UnifyTarget dp::sg::core::PipelineData: unify identical EffectData objects into one.
-            UT_PRIMITIVE              = BIT6,   //!< UnifyTarget dp::sg::core::Primitive: unify identical Primitive objects into one.
-            UT_SAMPLER                = BIT7,   //!< UnifyTarget dp::sg::core::Sampler: unify identical Sampler objects into one.
-            UT_TEXTURE                = BIT8,  //!< UnifyTarget dp::sg::core::Texture: unify identical Texture objects into one.
-            UT_TRAFO_ANIMATION        = BIT9,  //!< UnifyTarget dp::sg::core::Animation<dp::math::Trafo>: unify identical Animations on Trafo into one.
-            UT_VERTEX_ATTRIBUTE_SET   = BIT10,  //!< UnifyTarget dp::sg::core::VertexAttributeSet: unify identical VertexAttributeSet objects into one.
-            UT_VERTICES               = BIT11,  //!< UnifyTarget Vertices: unify identical Vertices (with an epsilon) into one.
-            UT_ALL_TARGETS_MASK       = ( UT_GEONODE | UT_GROUP | UT_INDEX_SET | UT_LOD | UT_PARAMETER_GROUP_DATA | UT_PIPELINE_DATA | UT_PRIMITIVE
-                                        | UT_SAMPLER | UT_TEXTURE | UT_TRAFO_ANIMATION | UT_VERTEX_ATTRIBUTE_SET | UT_VERTICES )
-          } UnifyTarget;                        //!< Enum to specify the object types to unify.
+            GEONODE               = BIT0,   //!< UnifyTarget dp::sg::core::GeoNode: unify identical GeoNode objects into one.
+            GROUP                 = BIT1,   //!< UnifyTarget dp::sg::core::Group: unify identical Group objects into one.
+            INDEX_SET             = BIT2,   //!< UnifyTarget dp::sg::core::IndexSet: unify identical IndexSet objects into one.
+            LOD                   = BIT3,   //!< UnifyTarget dp::sg::core::LOD: unify identical LOD objects into one.
+            PARAMETER_GROUP_DATA  = BIT4,   //!< UnifyTarget dp::sg::core::ParameterGroupData: unify identical ParameterGroupData objects into one.
+            PIPELINE_DATA         = BIT5,   //!< UnifyTarget dp::sg::core::PipelineData: unify identical EffectData objects into one.
+            PRIMITIVE             = BIT6,   //!< UnifyTarget dp::sg::core::Primitive: unify identical Primitive objects into one.
+            SAMPLER               = BIT7,   //!< UnifyTarget dp::sg::core::Sampler: unify identical Sampler objects into one.
+            TEXTURE               = BIT8,  //!< UnifyTarget dp::sg::core::Texture: unify identical Texture objects into one.
+            TRAFO_ANIMATION       = BIT9,  //!< UnifyTarget dp::sg::core::Animation<dp::math::Trafo>: unify identical Animations on Trafo into one.
+            VERTEX_ATTRIBUTE_SET  = BIT10,  //!< UnifyTarget dp::sg::core::VertexAttributeSet: unify identical VertexAttributeSet objects into one.
+            VERTICES              = BIT11,  //!< UnifyTarget Vertices: unify identical Vertices (with an epsilon) into one.
+            ALL                   = ( GEONODE | GROUP | INDEX_SET | LOD | PARAMETER_GROUP_DATA | PIPELINE_DATA | PRIMITIVE
+                                     | SAMPLER | TEXTURE | TRAFO_ANIMATION | VERTEX_ATTRIBUTE_SET | VERTICES )
+          };                                 //!< Enum to specify the object types to unify.
+
+          typedef dp::util::Flags<Target> TargetMask;
 
         public:
           /*! \brief Default constructor of an UnifyTraverser.
@@ -92,11 +95,11 @@ namespace dp
 
           /*! \brief Get the bitmask describing the targets to unify.
            *  \return A bitmask describing the targets to unify. */
-          DP_SG_ALGORITHM_API unsigned int getUnifyTargets() const;
+          DP_SG_ALGORITHM_API TargetMask getUnifyTargets() const;
 
           /*! \brief Set the bitmask describing the targets to unify.
            *  \param mask The bitmask describing the targets to unify. */
-          DP_SG_ALGORITHM_API void setUnifyTargets( unsigned int mask );
+          DP_SG_ALGORITHM_API void setUnifyTargets( TargetMask mask );
 
           /*! \brief Get the epsilon used for compares in vertex unification.
            *  \return The epsilon used on component of a vertex to determine equality. */
@@ -212,17 +215,17 @@ namespace dp
           dp::sg::core::PrimitiveSharedPtr                                            m_replacementPrimitive;
           std::multimap<dp::util::HashKey,dp::sg::core::SamplerSharedPtr>             m_samplers;
           std::multimap<dp::util::HashKey,dp::sg::core::TextureSharedPtr>             m_textures;
-          unsigned int                                                                m_unifyTargets;
+          TargetMask                                                                  m_unifyTargets;
           VASReplacementMap                                                           m_vasReplacements;
           std::multimap<dp::util::HashKey,dp::sg::core::VertexAttributeSetSharedPtr>  m_vertexAttributeSets;
       };
 
-      inline unsigned int UnifyTraverser::getUnifyTargets() const
+      inline UnifyTraverser::TargetMask UnifyTraverser::getUnifyTargets() const
       {
         return( m_unifyTargets );
       }
 
-      inline void UnifyTraverser::setUnifyTargets( unsigned int mask )
+      inline void UnifyTraverser::setUnifyTargets( TargetMask mask )
       {
         if ( mask != m_unifyTargets )
         {
@@ -249,3 +252,16 @@ namespace dp
     } // namespace algorithm
   } // namespace sg
 } // namespace dp
+
+
+namespace dp
+{
+  namespace util
+  {
+    /*! \brief Specialization of the TypedPropertyEnum template for type UnifyTraverser::TargetMask. */
+    template <> struct TypedPropertyEnum<dp::sg::algorithm::UnifyTraverser::TargetMask>
+    {
+      enum { type = Property::Type::UINT };
+    };
+  }
+}

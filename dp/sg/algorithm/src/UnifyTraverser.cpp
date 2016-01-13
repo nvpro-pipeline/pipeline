@@ -134,13 +134,13 @@ namespace dp
 
       BEGIN_REFLECTION_INFO( UnifyTraverser )
         DERIVE_STATIC_PROPERTIES( UnifyTraverser, OptimizeTraverser );
-        INIT_STATIC_PROPERTY_RW( UnifyTraverser, UnifyTargets, unsigned int, Semantic::VALUE, value, value );
-        INIT_STATIC_PROPERTY_RW( UnifyTraverser, Epsilon,      float,        Semantic::VALUE, value, value );
+        INIT_STATIC_PROPERTY_RW( UnifyTraverser, UnifyTargets, TargetMask,  Semantic::VALUE, value, value );
+        INIT_STATIC_PROPERTY_RW( UnifyTraverser, Epsilon,      float,       Semantic::VALUE, value, value );
       END_REFLECTION_INFO
 
       UnifyTraverser::UnifyTraverser( void )
       : m_epsilon(std::numeric_limits<float>::epsilon())
-      , m_unifyTargets(UT_ALL_TARGETS_MASK)
+      , m_unifyTargets(Target::ALL)
       {
       }
 
@@ -188,7 +188,7 @@ namespace dp
 
           if ( optimizationAllowed( p->getSharedPtr<GeoNode>() ) )
           {
-            if ( ( m_unifyTargets & UT_PIPELINE_DATA ) && p->getMaterialPipeline() )
+            if ( ( m_unifyTargets & Target::PIPELINE_DATA ) && p->getMaterialPipeline() )
             {
               const dp::sg::core::PipelineDataSharedPtr & replacement = unifyPipelineData( p->getMaterialPipeline() );
               if ( replacement )
@@ -196,7 +196,7 @@ namespace dp
                 p->setMaterialPipeline( replacement );
               }
             }
-            if ( ( m_unifyTargets & UT_PRIMITIVE ) && m_replacementPrimitive )
+            if ( ( m_unifyTargets & Target::PRIMITIVE ) && m_replacementPrimitive )
             {
               p->setPrimitive( m_replacementPrimitive );
               m_replacementPrimitive.reset();
@@ -211,7 +211,7 @@ namespace dp
         if ( pitb.second )
         {
           OptimizeTraverser::handlePipelineData( p );
-          if ( optimizationAllowed( p->getSharedPtr<dp::sg::core::PipelineData>() ) && ( m_unifyTargets & UT_PARAMETER_GROUP_DATA ) )
+          if ( optimizationAllowed( p->getSharedPtr<dp::sg::core::PipelineData>() ) && ( m_unifyTargets & Target::PARAMETER_GROUP_DATA ) )
           {
             const dp::fx::EffectSpecSharedPtr & es = p->getEffectSpec();
             for ( dp::fx::EffectSpec::iterator it = es->beginParameterGroupSpecs() ; it != es->endParameterGroupSpecs() ; ++it )
@@ -257,7 +257,7 @@ namespace dp
 
       dp::sg::core::PipelineDataSharedPtr const& UnifyTraverser::unifyPipelineData( dp::sg::core::PipelineDataSharedPtr const& pipelineData )
       {
-        DP_ASSERT( ( m_unifyTargets & UT_PIPELINE_DATA ) && pipelineData );
+        DP_ASSERT( ( m_unifyTargets & Target::PIPELINE_DATA ) && pipelineData );
         typedef multimap<HashKey,dp::sg::core::PipelineDataSharedPtr>::const_iterator I;
         I it;
         HashKey hashKey;
@@ -303,7 +303,7 @@ namespace dp
         if ( pitb.second )
         {
           OptimizeTraverser::handleLightSource( p );
-          if ( optimizationAllowed( p->getSharedPtr<LightSource>() ) && ( m_unifyTargets & UT_PIPELINE_DATA ) && p->getLightPipeline() )
+          if ( optimizationAllowed( p->getSharedPtr<LightSource>() ) && ( m_unifyTargets & Target::PIPELINE_DATA ) && p->getLightPipeline() )
           {
             const dp::sg::core::PipelineDataSharedPtr & replacement = unifyPipelineData( p->getLightPipeline() );
             if ( replacement )
@@ -330,7 +330,7 @@ namespace dp
         if ( pitb.second )
         {
           OptimizeTraverser::handleParameterGroupData( p );
-          if ( optimizationAllowed( p->getSharedPtr<ParameterGroupData>() ) && ( m_unifyTargets & UT_SAMPLER ) )
+          if ( optimizationAllowed( p->getSharedPtr<ParameterGroupData>() ) && ( m_unifyTargets & Target::SAMPLER ) )
           {
             const dp::fx::ParameterGroupSpecSharedPtr & pgs = p->getParameterGroupSpec();
             for ( dp::fx::ParameterGroupSpec::iterator it = pgs->beginParameterSpecs() ; it != pgs->endParameterSpecs() ; ++it )
@@ -407,15 +407,15 @@ namespace dp
 
           if ( optimizationAllowed( p->getSharedPtr<Primitive>() ) )
           {
-            if ( m_unifyTargets & UT_INDEX_SET )
+            if ( m_unifyTargets & Target::INDEX_SET )
             {
               unifyIndexSets( p );
             }
-            if ( m_unifyTargets & UT_VERTEX_ATTRIBUTE_SET )
+            if ( m_unifyTargets & Target::VERTEX_ATTRIBUTE_SET )
             {
               unifyVertexAttributeSet( p );
             }
-            if ( m_unifyTargets & UT_PRIMITIVE )
+            if ( m_unifyTargets & Target::PRIMITIVE )
             {
               checkPrimitive( m_primitives[p->getPrimitiveType()], p );
             }
@@ -431,7 +431,7 @@ namespace dp
           OptimizeTraverser::handleSampler( p );
           if ( optimizationAllowed( p->getSharedPtr<Sampler>() ) )
           {
-            if ( ( m_unifyTargets & UT_TEXTURE ) && p->getTexture() )
+            if ( ( m_unifyTargets & Target::TEXTURE ) && p->getTexture() )
             {
               typedef multimap<HashKey,TextureSharedPtr>::const_iterator I;
               I it;
@@ -491,7 +491,7 @@ namespace dp
         {
           OptimizeTraverser::handleVertexAttributeSet( p );
           // Check if optimization is allowed
-          if ( optimizationAllowed( p->getSharedPtr<VertexAttributeSet>() ) && (m_unifyTargets & UT_VERTICES) )
+          if ( optimizationAllowed( p->getSharedPtr<VertexAttributeSet>() ) && (m_unifyTargets & Target::VERTICES) )
           {
             VertexAttributeSetSharedPtr vas = p->getSharedPtr<VertexAttributeSet>();
             unsigned int n = p->getNumberOfVertices();
@@ -632,15 +632,15 @@ namespace dp
         // make sure we can optimize the children of this group
         if( optimizationAllowed( p->getSharedPtr<Group>() ) )
         {
-          if ( m_unifyTargets & UT_GEONODE )
+          if ( m_unifyTargets & Target::GEONODE )
           {
             unifyGeoNodes( p );
           }
-          if ( m_unifyTargets & UT_GROUP )
+          if ( m_unifyTargets & Target::GROUP )
           {
             unifyGroups( p );
           }
-          if ( m_unifyTargets & UT_LOD )
+          if ( m_unifyTargets & Target::LOD )
           {
             unifyLODs( p );
           }
@@ -649,7 +649,7 @@ namespace dp
 
       void UnifyTraverser::unifyGeoNodes( Group *p )
       {
-        DP_ASSERT( m_unifyTargets & UT_GEONODE );
+        DP_ASSERT( m_unifyTargets & Target::GEONODE );
 
         for ( Group::ChildrenIterator gci = p->beginChildren() ; gci != p->endChildren() ; ++gci )
         {
@@ -695,7 +695,7 @@ namespace dp
 
       void UnifyTraverser::unifyGroups( Group *p )
       {
-        DP_ASSERT( m_unifyTargets & UT_GROUP );
+        DP_ASSERT( m_unifyTargets & Target::GROUP );
 
         for ( Group::ChildrenIterator gci = p->beginChildren() ; gci != p->endChildren() ; ++gci )
         {
@@ -741,7 +741,7 @@ namespace dp
 
       void UnifyTraverser::unifyIndexSets( Primitive *p )
       {
-        DP_ASSERT( m_unifyTargets & UT_INDEX_SET );
+        DP_ASSERT( m_unifyTargets & Target::INDEX_SET );
         if ( p->isIndexed() )
         {
           const IndexSetSharedPtr & iset = p->getIndexSet();
@@ -782,7 +782,7 @@ namespace dp
 
       void UnifyTraverser::unifyLODs( Group *p )
       {
-        DP_ASSERT( m_unifyTargets & UT_LOD );
+        DP_ASSERT( m_unifyTargets & Target::LOD );
 
         for ( Group::ChildrenIterator gci = p->beginChildren() ; gci != p->endChildren() ; ++gci )
         {
@@ -819,7 +819,7 @@ namespace dp
       void UnifyTraverser::checkPrimitive( multimap<HashKey,PrimitiveSharedPtr> &v, Primitive * p )
       {
         // Unify Primitives of each type
-        DP_ASSERT( m_unifyTargets & UT_PRIMITIVE );
+        DP_ASSERT( m_unifyTargets & Target::PRIMITIVE );
 
         if( !optimizationAllowed( p->getSharedPtr<Primitive>() ) )
         {
@@ -875,7 +875,7 @@ namespace dp
 
       void UnifyTraverser::unifyVertexAttributeSet( Primitive *p )
       {
-        DP_ASSERT( m_unifyTargets & UT_VERTEX_ATTRIBUTE_SET );
+        DP_ASSERT( m_unifyTargets & Target::VERTEX_ATTRIBUTE_SET );
         DP_ASSERT( p && p->getVertexAttributeSet() );
 
         if( !optimizationAllowed( p->getSharedPtr<Primitive>() ) )

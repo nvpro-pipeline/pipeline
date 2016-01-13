@@ -58,8 +58,8 @@ namespace dp
        **/
       DP_SG_ALGORITHM_API void optimizeScene( const dp::sg::core::SceneSharedPtr & scene, bool ignoreNames = true, bool identityToGroup = true
                                             , CombineTraverser::TargetMask combineFlags = CombineTraverser::Target::ALL
-                                            , unsigned int eliminateFlags = EliminateTraverser::ET_ALL_TARGETS_MASK
-                                            , unsigned int unifyFlags = UnifyTraverser::UT_ALL_TARGETS_MASK
+                                            , EliminateTraverser::TargetMask eliminateFlags = EliminateTraverser::Target::ALL
+                                            , UnifyTraverser::TargetMask unifyFlags = UnifyTraverser::Target::ALL
                                             , float epsilon = FLT_EPSILON, bool optimizeVertexCache = true );
 
       /*! \brief optimize the given scene for optimal raytracing performance

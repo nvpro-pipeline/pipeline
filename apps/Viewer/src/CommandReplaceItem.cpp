@@ -1,4 +1,4 @@
-// Copyright (c) 2013-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2013-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -36,7 +36,7 @@
 using namespace dp::sg::core;
 
 CommandReplaceItem::CommandReplaceItem( SceneTreeItem * parent, SceneTreeItem * oldChild, SceneTreeItem * newChild, dp::util::Observer * observer )
-  : ViewerCommand( ViewerCommand::UPDATE_SCENE_TREE )
+  : ViewerCommand( ViewerCommand::UpdateFlag::SCENE_TREE )
   , m_parent(parent)
   , m_oldChild(oldChild)
   , m_newChild(newChild)
