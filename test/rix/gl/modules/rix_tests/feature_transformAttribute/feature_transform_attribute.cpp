@@ -119,12 +119,12 @@ void Feature_transform_attribute::createScene()
     "}\n";
 
   dp::rix::util::GeometryDataSharedPtr mesh[4];
-  mesh[0] = dp::rix::util::createQuad( { dp::rix::util::AttributeID::POSITION, dp::rix::util::AttributeID::TEXCOORD0 }
-                                           , math::Vec3f(-0.125f*m_height, -0.125f*m_height, 0.0f)
-                                           , math::Vec3f(0.125f*m_height, -0.125f*m_height, 0.0f)
-                                           , math::Vec3f(-0.125f*m_height, 0.125f*m_height, 0.0f)
-                                           , math::Vec2f(0.25f, 0.25f), math::Vec2f(0.75f, 0.25f)
-                                           , math::Vec2f(0.25f, 0.75f) );
+  mesh[0] = dp::rix::util::createQuad( dp::rix::util::AttributeID::POSITION | dp::rix::util::AttributeID::TEXCOORD0
+                                     , math::Vec3f(-0.125f*m_height, -0.125f*m_height, 0.0f)
+                                     , math::Vec3f(0.125f*m_height, -0.125f*m_height, 0.0f)
+                                     , math::Vec3f(-0.125f*m_height, 0.125f*m_height, 0.0f)
+                                     , math::Vec2f(0.25f, 0.25f), math::Vec2f(0.75f, 0.25f)
+                                     , math::Vec2f(0.25f, 0.75f) );
 
   float angle = math::PI_QUARTER;
 

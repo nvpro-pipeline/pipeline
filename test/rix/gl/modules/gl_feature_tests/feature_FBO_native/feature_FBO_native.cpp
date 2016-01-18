@@ -244,11 +244,11 @@ void Feature_FBO_native::createScene()
     "}\n";
 
   //Geometry
-  GeometryDataSharedPtr cylinderDataNormal  = createCylinder( { AttributeID::POSITION, AttributeID::NORMAL, AttributeID::TEXCOORD0 }, 64 );
-  GeometryDataSharedPtr cylinderDataCut     = createCylinder( { AttributeID::POSITION, AttributeID::NORMAL, AttributeID::TEXCOORD0 }, 64, 8, 3.0f*PI_HALF );
-  GeometryDataSharedPtr cylinderDataCutTube = createCylinder( { AttributeID::POSITION, AttributeID::NORMAL, AttributeID::TEXCOORD0 }, 64, 8, 3.0f*PI_HALF, 0.5f );
+  GeometryDataSharedPtr cylinderDataNormal  = createCylinder( AttributeID::POSITION | AttributeID::NORMAL | AttributeID::TEXCOORD0, 64 );
+  GeometryDataSharedPtr cylinderDataCut     = createCylinder( AttributeID::POSITION | AttributeID::NORMAL | AttributeID::TEXCOORD0, 64, 8, 3.0f*PI_HALF );
+  GeometryDataSharedPtr cylinderDataCutTube = createCylinder( AttributeID::POSITION | AttributeID::NORMAL | AttributeID::TEXCOORD0, 64, 8, 3.0f*PI_HALF, 0.5f );
 
-  GeometryDataSharedPtr quadDataRTTScreen = createQuad( { AttributeID::POSITION, AttributeID::TEXCOORD0 } );
+  GeometryDataSharedPtr quadDataRTTScreen = createQuad( AttributeID::POSITION | AttributeID::TEXCOORD0 );
 
   GeometrySharedHandle cylinderNormal = rix::util::generateGeometry(cylinderDataNormal, m_rix);
   GeometrySharedHandle cylinderCut = rix::util::generateGeometry(cylinderDataCut, m_rix);

@@ -247,9 +247,9 @@ void Feature_FBO_MRT::createScene()
 {
   // Geometry
 
-  GeometryDataSharedPtr cylinderDataNormal  = createCylinder( { AttributeID::POSITION, AttributeID::NORMAL, AttributeID::TEXCOORD0 }, 64 );
-  GeometryDataSharedPtr cylinderDataCut     = createCylinder( { AttributeID::POSITION, AttributeID::NORMAL, AttributeID::TEXCOORD0 }, 64, 8, 3.0f*PI_HALF );
-  GeometryDataSharedPtr cylinderDataCutTube = createCylinder( { AttributeID::POSITION, AttributeID::NORMAL, AttributeID::TEXCOORD0 }, 64, 8, 3.0f*PI_HALF, 0.5f );
+  GeometryDataSharedPtr cylinderDataNormal  = createCylinder( AttributeID::POSITION | AttributeID::NORMAL | AttributeID::TEXCOORD0, 64 );
+  GeometryDataSharedPtr cylinderDataCut     = createCylinder( AttributeID::POSITION | AttributeID::NORMAL | AttributeID::TEXCOORD0, 64, 8, 3.0f*PI_HALF );
+  GeometryDataSharedPtr cylinderDataCutTube = createCylinder( AttributeID::POSITION | AttributeID::NORMAL | AttributeID::TEXCOORD0, 64, 8, 3.0f*PI_HALF, 0.5f );
 
   GeometrySharedHandle cylinder = rix::util::generateGeometry(cylinderDataNormal, m_rix);
   GeometrySharedHandle cylinderCut = rix::util::generateGeometry(cylinderDataCut, m_rix);
@@ -539,7 +539,7 @@ void Feature_FBO_MRT::createSecondPass()
 {
   // Geometry
 
-  GeometryDataSharedPtr geoDataScreenQuad = createQuad( { AttributeID::POSITION, AttributeID::TEXCOORD0 }, math::Vec3f(-m_aspectRatio, -1.0f, 0.0f), math::Vec3f(m_aspectRatio, -1.0f, 0.0f), math::Vec3f(-m_aspectRatio, 1.0f, 0.0f) );
+  GeometryDataSharedPtr geoDataScreenQuad = createQuad( AttributeID::POSITION | AttributeID::TEXCOORD0, math::Vec3f(-m_aspectRatio, -1.0f, 0.0f), math::Vec3f(m_aspectRatio, -1.0f, 0.0f), math::Vec3f(-m_aspectRatio, 1.0f, 0.0f) );
   GeometrySharedHandle geoScreenQuad = rix::util::generateGeometry(geoDataScreenQuad, m_rix);
 
   // Shader Code

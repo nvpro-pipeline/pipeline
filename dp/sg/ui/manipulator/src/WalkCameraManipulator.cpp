@@ -90,7 +90,7 @@ namespace dp
               retval |= translate();
             }
 
-            if( m_mode & ModeMask{Mode::STRAFE_LEFT, Mode::STRAFE_RIGHT} )
+            if( m_mode & ( Mode::STRAFE_LEFT | Mode::STRAFE_RIGHT ) )
             {
               retval |= strafe( (m_mode & Mode::STRAFE_RIGHT) != 0 );
             }

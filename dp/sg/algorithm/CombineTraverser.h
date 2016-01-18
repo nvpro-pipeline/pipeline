@@ -140,6 +140,11 @@ namespace dp
           std::set<const void *>  m_objects;      //!< A set of pointers to hold all objects already encountered.
       };
 
+      inline CombineTraverser::TargetMask operator|( CombineTraverser::Target bit0, CombineTraverser::Target bit1 )
+      {
+        return CombineTraverser::TargetMask( bit0 ) | bit1;
+      }
+
       inline CombineTraverser::TargetMask CombineTraverser::getCombineTargets() const
       {
         return( m_combineTargets );

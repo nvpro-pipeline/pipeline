@@ -65,6 +65,11 @@ namespace dp
 
       typedef dp::util::Flags<AttributeID>  AttributeMask;
 
+      inline AttributeMask operator|( AttributeID bit0, AttributeID bit1 )
+      {
+        return AttributeMask( bit0 ) | bit1;
+      }
+
       static const bool ATTRIB_POS_DEFAULTS[NUM_ATTRIBS] =
       {
         true,

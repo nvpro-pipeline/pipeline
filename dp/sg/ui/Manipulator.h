@@ -133,12 +133,19 @@ namespace dp
 
           typedef dp::util::Flags<InitialUpdate> InitialUpdateMask;
 
-          dp::math::Vec2i     m_cursorPosition;
-          dp::math::Vec2i     m_lastCursorPosition;
-          int                 m_wheelTicks;
-          int                 m_lastWheelTicks;
-          InitialUpdateMask  m_initialUpdate;
+          friend InitialUpdateMask operator|( InitialUpdate bit0, InitialUpdate bit1 );
+
+          dp::math::Vec2i   m_cursorPosition;
+          dp::math::Vec2i   m_lastCursorPosition;
+          int               m_wheelTicks;
+          int               m_lastWheelTicks;
+          InitialUpdateMask m_initialUpdate;
       };
+
+      inline CursorState::InitialUpdateMask operator|( CursorState::InitialUpdate bit0, CursorState::InitialUpdate bit1 )
+      {
+        return CursorState::InitialUpdateMask( bit0 ) | bit1;
+      }
 
       inline void CursorState::resetInput()
       {
@@ -146,7 +153,7 @@ namespace dp
         m_lastCursorPosition = dp::math::Vec2i(0,0);
         m_wheelTicks         = 0;
         m_lastWheelTicks     = 0;
-        m_initialUpdate      = { InitialUpdate::WHEEL, InitialUpdate::POSITION };
+        m_initialUpdate      = InitialUpdate::WHEEL | InitialUpdate::POSITION;
       }
 
       inline CursorState::CursorState()

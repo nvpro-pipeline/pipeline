@@ -154,7 +154,7 @@ void Feature_cubemap_from_file::createScene()
     "}\n";
 
   //Geometry
-  GeometrySharedHandle simpleSphere = rix::util::generateGeometry( createSphere( { AttributeID::POSITION, AttributeID::TEXCOORD0, AttributeID::NORMAL }, 64, 64), m_rix );
+  GeometrySharedHandle simpleSphere = rix::util::generateGeometry( createSphere( AttributeID::POSITION | AttributeID::TEXCOORD0 | AttributeID::NORMAL, 64, 64), m_rix );
 
   // Container Descriptors
 

@@ -119,8 +119,7 @@ bool Benchmark_vertexThroughput::onInit()
 
 bool Benchmark_vertexThroughput::onRunInit( unsigned int i )
 {
-
-  GeometryDataSharedPtr geometryData = rix::util::createSphere( { AttributeID::POSITION, AttributeID::NORMAL, AttributeID::TEXCOORD0, AttributeID::TANGENT, AttributeID::BINORMAL }, getSubdivs(i), getSubdivs(i) );
+  GeometryDataSharedPtr geometryData = rix::util::createSphere( AttributeID::POSITION | AttributeID::NORMAL | AttributeID::TEXCOORD0 | AttributeID::TANGENT | AttributeID::BINORMAL, getSubdivs(i), getSubdivs(i) );
   GeometrySharedHandle geometry = rix::util::generateGeometry(geometryData, m_rix);
   m_rix->geometryInstanceSetGeometry(  m_geometryInstance, geometry );
 

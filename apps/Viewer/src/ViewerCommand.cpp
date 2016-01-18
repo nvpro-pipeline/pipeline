@@ -84,7 +84,7 @@ void ViewerCommand::update()
 }
 
 CommandReplacePipeline::CommandReplacePipeline( const dp::sg::core::GeoNodeSharedPtr & geoNode, const dp::sg::core::PipelineDataSharedPtr & newPipeline )
-  : ViewerCommand( { ViewerCommand::UpdateFlag::ITEMMODELS, ViewerCommand::UpdateFlag::MATERIAL } )
+  : ViewerCommand( ViewerCommand::UpdateFlag::ITEMMODELS | ViewerCommand::UpdateFlag::MATERIAL )
   , m_geoNode( geoNode )
   , m_newPipeline( newPipeline )
 {

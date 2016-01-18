@@ -186,9 +186,9 @@ void Feature_cylinder_derivatives::createScene()
     "}\n";
 
   //Geometry
-  GeometryDataSharedPtr cylinderDataNormal  = createCylinder( { AttributeID::POSITION, AttributeID::NORMAL, AttributeID::TEXCOORD0 }, 64 );
-  GeometryDataSharedPtr cylinderDataCut     = createCylinder( { AttributeID::POSITION, AttributeID::NORMAL, AttributeID::TEXCOORD0 }, 64, 8, 3.0f*PI_HALF );
-  GeometryDataSharedPtr cylinderDataCutTube = createCylinder( { AttributeID::POSITION, AttributeID::NORMAL, AttributeID::TEXCOORD0 }, 64, 8, 3.0f*PI_HALF, 0.5f );
+  GeometryDataSharedPtr cylinderDataNormal  = createCylinder( AttributeID::POSITION | AttributeID::NORMAL | AttributeID::TEXCOORD0, 64 );
+  GeometryDataSharedPtr cylinderDataCut     = createCylinder( AttributeID::POSITION | AttributeID::NORMAL | AttributeID::TEXCOORD0, 64, 8, 3.0f*PI_HALF );
+  GeometryDataSharedPtr cylinderDataCutTube = createCylinder( AttributeID::POSITION | AttributeID::NORMAL | AttributeID::TEXCOORD0, 64, 8, 3.0f*PI_HALF, 0.5f );
 
   GeometrySharedHandle cylinderNormal = rix::util::generateGeometry(cylinderDataNormal, m_rix);
   GeometrySharedHandle cylinderCut = rix::util::generateGeometry(cylinderDataCut, m_rix);

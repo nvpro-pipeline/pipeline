@@ -220,6 +220,11 @@ namespace dp
           std::multimap<dp::util::HashKey,dp::sg::core::VertexAttributeSetSharedPtr>  m_vertexAttributeSets;
       };
 
+      inline UnifyTraverser::TargetMask operator|( UnifyTraverser::Target bit0, UnifyTraverser::Target bit1 )
+      {
+        return UnifyTraverser::TargetMask( bit0 ) | bit1;
+      }
+
       inline UnifyTraverser::TargetMask UnifyTraverser::getUnifyTargets() const
       {
         return( m_unifyTargets );

@@ -199,13 +199,13 @@ void Feature_tangent_space::createScene()
     "}\n";
   //Geometry
 
-  GeometryDataSharedPtr sphereData = createSphere( { AttributeID::POSITION, AttributeID::NORMAL, AttributeID::TEXCOORD0, AttributeID::TANGENT, AttributeID::BINORMAL }, 64, 32);
+  GeometryDataSharedPtr sphereData = createSphere( AttributeID::POSITION | AttributeID::NORMAL | AttributeID::TEXCOORD0 | AttributeID::TANGENT | AttributeID::BINORMAL, 64, 32);
   GeometrySharedHandle sphere = rix::util::generateGeometry(sphereData, m_rix);
 
-  GeometryDataSharedPtr cylinderData = createCylinder( { AttributeID::POSITION, AttributeID::NORMAL, AttributeID::TEXCOORD0, AttributeID::TANGENT, AttributeID::BINORMAL }, 64, 2 );
+  GeometryDataSharedPtr cylinderData = createCylinder( AttributeID::POSITION | AttributeID::NORMAL | AttributeID::TEXCOORD0 | AttributeID::TANGENT | AttributeID::BINORMAL, 64, 2 );
   GeometrySharedHandle cylinder = rix::util::generateGeometry(cylinderData, m_rix);
 
-  GeometryDataSharedPtr quadData = createQuad( { AttributeID::POSITION, AttributeID::NORMAL, AttributeID::TEXCOORD0, AttributeID::TANGENT, AttributeID::BINORMAL } );
+  GeometryDataSharedPtr quadData = createQuad( AttributeID::POSITION | AttributeID::NORMAL | AttributeID::TEXCOORD0 | AttributeID::TANGENT | AttributeID::BINORMAL );
   GeometrySharedHandle quad = rix::util::generateGeometry(quadData, m_rix);
 
   // Container Descriptors

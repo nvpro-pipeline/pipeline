@@ -50,16 +50,6 @@ namespace dp
             : m_mask(rhs.m_mask)
           {}
 
-          Flags( std::initializer_list<BitType> const& rhs )
-            : m_mask(0)
-          {
-            // TODO: check if compiler can unroll this loop
-            for ( auto it = rhs.begin() ; it != rhs.end() ; ++it )
-            {
-              m_mask |= static_cast<uint32_t>(*it);
-            }
-          }
-
           Flags<BitType> & operator=( Flags<BitType> const& rhs )
           {
             m_mask = rhs.m_mask;
@@ -130,19 +120,19 @@ namespace dp
       };
 
       template <typename BitType>
-      dp::util::Flags<BitType> operator|( BitType bit, dp::util::Flags<BitType> const& flags )
+      Flags<BitType> operator|( BitType bit, Flags<BitType> const& flags )
       {
         return flags | bit;
       }
 
       template <typename BitType>
-      dp::util::Flags<BitType> operator&( BitType bit, dp::util::Flags<BitType> const& flags )
+      Flags<BitType> operator&( BitType bit, Flags<BitType> const& flags )
       {
         return flags & bit;
       }
 
       template <typename BitType>
-      dp::util::Flags<BitType> operator^( BitType bit, dp::util::Flags<BitType> const& flags )
+      Flags<BitType> operator^( BitType bit, Flags<BitType> const& flags )
       {
         return flags ^ bit;
       }

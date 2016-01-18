@@ -112,6 +112,11 @@ namespace dp
           std::set<const void *>  m_objects;      //!< A set of pointers to hold all objects already encountered.
       };
 
+      inline EliminateTraverser::TargetMask operator|( EliminateTraverser::Target bit0, EliminateTraverser::Target bit1 )
+      {
+        return EliminateTraverser::TargetMask( bit0 ) | bit1;
+      }
+
       inline EliminateTraverser::TargetMask EliminateTraverser::getEliminateTargets() const
       {
         return( m_eliminateTargets );

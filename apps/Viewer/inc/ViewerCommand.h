@@ -44,6 +44,8 @@ class ViewerCommand : public QUndoCommand
 
     typedef dp::util::Flags<UpdateFlag> UpdateMask;
 
+    friend UpdateMask operator|( UpdateFlag bit0, UpdateFlag bit1 );
+
   public:
     ViewerCommand( UpdateMask updateFlags = UpdateMask(), bool parameterCommand = false, int id = -1 );
     virtual ~ViewerCommand();
@@ -63,6 +65,11 @@ class ViewerCommand : public QUndoCommand
     UpdateMask m_updateFlags;
     int m_id;
 };
+
+inline ViewerCommand::UpdateMask operator|( ViewerCommand::UpdateFlag bit0, ViewerCommand::UpdateFlag bit1 )
+{
+  return ViewerCommand::UpdateMask( bit0 ) | bit1;
+}
 
 class CommandReplacePipeline : public ViewerCommand
 {

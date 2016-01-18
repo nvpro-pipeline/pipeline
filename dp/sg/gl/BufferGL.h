@@ -147,6 +147,11 @@ namespace dp
         dp::gl::BufferSharedPtr m_buffer;
       };
 
+      inline BufferGL::StateMask operator|( BufferGL::State bit0, BufferGL::State bit1 )
+      {
+        return BufferGL::StateMask( bit0 ) | bit1;
+      }
+
       inline void BufferGL::setTarget( GLenum target )
       {
         DP_ASSERT( m_mapMode == MapMode::NONE );

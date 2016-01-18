@@ -193,6 +193,11 @@ namespace dp
             float m_deltaT;
         };
 
+        inline WalkCameraManipulator::ModeMask operator|( WalkCameraManipulator::Mode bit0, WalkCameraManipulator::Mode bit1 )
+        {
+          return WalkCameraManipulator::ModeMask( bit0 ) | bit1;
+        }
+
         inline void WalkCameraManipulator::setViewState( dp::sg::ui::ViewStateSharedPtr const& viewState)
         {
           Manipulator::setViewState( viewState );

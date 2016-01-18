@@ -72,8 +72,8 @@ namespace dp
 
         NodeSharedPtr oldRoot(root);
         {
-          if (  ( ( m_eliminateTargets & Target::LOD )                                                  && ( oldRoot.isPtrTo<LOD>() ) )
-            ||  ( ( m_eliminateTargets & TargetMask( { Target::GROUP, Target::GROUP_SINGLE_CHILD } ) )  && ( oldRoot.isPtrTo<Group>() ) ) )
+          if (  ( ( m_eliminateTargets & Target::LOD )                                    && ( oldRoot.isPtrTo<LOD>() ) )
+            ||  ( ( m_eliminateTargets & ( Target::GROUP | Target::GROUP_SINGLE_CHILD ) ) && ( oldRoot.isPtrTo<Group>() ) ) )
           {
             GroupSharedPtr const& group = oldRoot.staticCast<Group>();
             if ( m_scene &&  isOneChildCandidate( group ) ) // Apply this optimization only if we have valid scene handle,
@@ -136,7 +136,7 @@ namespace dp
         if ( pitb.second )
         {
           OptimizeTraverser::handleLOD( p );
-          if ( m_eliminateTargets & TargetMask( { Target::GROUP, Target::GROUP_SINGLE_CHILD } ) )
+          if ( m_eliminateTargets & ( Target::GROUP | Target::GROUP_SINGLE_CHILD ) )
           {
             eliminateSingleChildChildren( dynamic_cast<Group *>( p ), ObjectCode::GROUP );
           }
@@ -184,7 +184,7 @@ namespace dp
         if ( pitb.second )
         {
           OptimizeTraverser::handleSwitch( p );
-          if ( m_eliminateTargets & TargetMask( { Target::GROUP, Target::GROUP_SINGLE_CHILD } ) )
+          if ( m_eliminateTargets & ( Target::GROUP | Target::GROUP_SINGLE_CHILD ) )
           {
             eliminateSingleChildChildren( dynamic_cast<Group *>( p ), ObjectCode::GROUP );
           }

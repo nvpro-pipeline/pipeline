@@ -280,6 +280,11 @@ namespace dp
         bool          m_managedBySystem;
       };
 
+      inline Buffer::MapModeMask operator|( Buffer::MapMode bit0, Buffer::MapMode bit1 )
+      {
+        return Buffer::MapModeMask( bit0 ) | bit1;
+      }
+
       inline bool Buffer::isManagedBySystem() const
       {
         return m_managedBySystem;
