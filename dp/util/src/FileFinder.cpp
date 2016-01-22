@@ -1,4 +1,4 @@
-// Copyright (c) 2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2015-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -59,11 +59,13 @@ namespace dp
 
     bool FileFinder::addSearchPath( std::string const& path )
     {
-      boost::filesystem::path boostPath(path);
-      bool toAdd = boost::filesystem::exists( boostPath ) && ( std::find( m_searchPaths.begin(), m_searchPaths.end(), path ) == m_searchPaths.end() );
+      std::string cleanPath(path);
+      convertPath(cleanPath);
+      boost::filesystem::path boostPath(cleanPath);
+      bool toAdd = boost::filesystem::exists( boostPath ) && ( std::find( m_searchPaths.begin(), m_searchPaths.end(), cleanPath ) == m_searchPaths.end() );
       if ( toAdd )
       {
-        m_searchPaths.push_back( path );
+        m_searchPaths.push_back( cleanPath );
       }
       return toAdd;
     }
