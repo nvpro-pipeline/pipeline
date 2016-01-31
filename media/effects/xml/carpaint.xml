@@ -19,7 +19,6 @@
         <source input="vec3" name="varWorldPos"/>
         <source input="vec3" name="varEyePos"/>
         <source input="vec2" name="varTexCoord0"/>
-        <source file="spherical_environment.glsl" />
         <source file="standard_lights/glsl/ambient_diffuse_specular.glsl" />
         <source file="carpaint/glsl/eval_glossy.glsl"/>
         <source file="carpaint/glsl/carpaint.glsl"/>

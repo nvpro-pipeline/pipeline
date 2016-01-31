@@ -13,7 +13,6 @@
         <source input="vec3" name="varNormal"/>
         <source input="vec3" name="varWorldPos"/>
         <source input="vec3" name="varEyePos"/>
-        <source file="spherical_environment.glsl" />
         <source file="standard_lights/glsl/ambient_diffuse_specular.glsl" />
         <source file="thinglass/glsl/thinglass.glsl"/>
       </glsl>

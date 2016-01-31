@@ -48,7 +48,6 @@
         <source input="vec2" name="varTexCoord7"/>
         <source input="vec3" name="varTangent"/>
         <source input="vec3" name="varBinormal"/>
-        <source file="spherical_environment.glsl" />
         <source file="standard_lights/glsl/ambient_diffuse_specular.glsl" />
         <source file="collada/glsl/colladaCommonTexture.glsl" />
         <source file="collada/glsl/colladaCommonBumpmap.glsl" />
