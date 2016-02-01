@@ -239,8 +239,8 @@ namespace dp
             std::vector<Instance>                   m_instances;
 
             //  m_renderGroup(Instance)s[Opaque|Transparent][Forward|DepthPass]
-            dp::rix::core::RenderGroupSharedHandle  m_renderGroups[RGL_COUNT][RenderGroupPass::COUNT];
-            ShaderManagerRenderGroupSharedPtr       m_renderGroupInstances[RGL_COUNT][RenderGroupPass::COUNT];
+            dp::rix::core::RenderGroupSharedHandle  m_renderGroups[RGL_COUNT][int(RenderGroupPass::COUNT)];
+            ShaderManagerRenderGroupSharedPtr       m_renderGroupInstances[RGL_COUNT][int(RenderGroupPass::COUNT)];
 
             std::vector<DefaultHandleDataSharedPtr>                   m_transparentDIs;
             std::vector<dp::rix::core::GeometryInstanceSharedHandle>  m_depthSortedTransparentGIs;

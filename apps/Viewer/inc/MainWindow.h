@@ -155,7 +155,7 @@ private:    // all the simple widgets we need to hold
   QAction   * m_continuousRedrawAction;
   QAction   * m_depthPassAction;
   QAction   * m_destripSceneAction;
-  QAction   * m_manipulatorAction[ViewerRendererWidget::ManipulatorType::COUNT];
+  QAction   * m_manipulatorAction[size_t(ViewerRendererWidget::ManipulatorType::COUNT)];
   QAction   * m_normalsDialogAction;
   QAction   * m_openAction;
   QAction   * m_optimizeSceneAction;
@@ -182,7 +182,7 @@ private:    // all the simple widgets we need to hold
   QComboBox * m_viewportCombo;
   QLabel    * m_fpsLabel;
   QLabel    * m_statisticsLabel;
-  QMenu     * m_menus[MenuID::COUNT];
+  QMenu     * m_menus[size_t(MenuID::COUNT)];
 
 private:
   std::vector<CameraAnimator *>         m_cameraAnimators;

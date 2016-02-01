@@ -90,7 +90,7 @@ namespace dp
 
             std::map<std::string, dp::rix::core::ProgramHandle> m_mapEffectsToPrograms;
 
-            dp::rix::fx::SourceFragments m_additionalCodeSnippets[RGL_COUNT][RenderGroupPass::COUNT];    // code snippets for opaque|transparent and color|depth pass
+            dp::rix::fx::SourceFragments m_additionalCodeSnippets[RGL_COUNT][int(RenderGroupPass::COUNT)];    // code snippets for opaque|transparent and color|depth pass
           };
 
         } // namespace gl

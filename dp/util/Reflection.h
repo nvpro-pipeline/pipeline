@@ -58,7 +58,7 @@ namespace dp
     {
     public:
       /** Supported property types **/
-      enum class Type
+      enum Type
       {
           FLOAT
         , FLOAT2
@@ -741,7 +741,7 @@ namespace dp
       virtual std::string const & getEnumName( ValueType idx ) const
       {
         static std::string emptyString;
-        std::map<ValueType,std::string>::const_iterator it = EnumReflection<ValueType>::values.find( idx );
+        typename std::map<ValueType,std::string>::const_iterator it = EnumReflection<ValueType>::values.find( idx );
         return( ( it != EnumReflection<ValueType>::values.end() ) ? it->second : emptyString );
       }
 

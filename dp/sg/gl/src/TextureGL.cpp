@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2015
+// Copyright NVIDIA Corporation 2015-2016
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -37,9 +37,9 @@ namespace dp
 
       // glRecentTexImageFmts represents formats corresponding to recent hardware features.
       // Note: this table should be updated as hardware improves!
-      dp::sg::gl::TexImageFmt recentTexImageFmts[Image::PixelFormat::NUM_FORMATS][Image::PixelDataType::NUM_TYPES] =
+      dp::sg::gl::TexImageFmt recentTexImageFmts[int(Image::PixelFormat::NUM_FORMATS)][int(Image::PixelDataType::NUM_TYPES)] =
       {
-        { // PixelFormat::COLOR_INDEX - unsupported!! 
+        { // PixelFormat::COLOR_INDEX - unsupported!!
           { 0,0,0, 0,0, 0, 0,0 }   // PixelDataType::BYTE
           ,  { 0,0,0, 0,0, 0, 0,0 }   // PixelDataType::UNSIGNED_BYTE
           ,  { 0,0,0, 0,0, 0, 0,0 }   // PixelDataType::SHORT
@@ -62,12 +62,12 @@ namespace dp
         // unsupported format.  There do not appear to be any support for compressed, signed, (NV?) formats
         // for the typical 1,2,3,4 component textures, other than LATC.
         //
-        , { // PixelFormat::RGB !! 
+        , { // PixelFormat::RGB !!
 
-          // fixedfmt           floatFmt           integerFmt           compressedFmt       nonlinear  
+          // fixedfmt           floatFmt           integerFmt           compressedFmt       nonlinear
           // userFmt            type                upload
 
-          { GL_SIGNED_RGB8_NV, GL_RGB16F_ARB,     GL_RGB8I_EXT,        GL_SIGNED_RGB8_NV,  GL_SRGB8_EXT, 
+          { GL_SIGNED_RGB8_NV, GL_RGB16F_ARB,     GL_RGB8I_EXT,        GL_SIGNED_RGB8_NV,  GL_SRGB8_EXT,
             GL_RGB,            GL_BYTE,            0 }  // PixelDataType::BYTE - NOTE: requires NV_texture_shader
 
           ,  { GL_RGB8,           GL_RGB16F_ARB,     GL_RGB8UI_EXT,        GL_COMPRESSED_RGB,  GL_SRGB8_EXT,
@@ -76,16 +76,16 @@ namespace dp
           ,  { GL_SIGNED_RGB8_NV, GL_RGB16F_ARB,     GL_RGB16I_EXT,       GL_SIGNED_RGB8_NV,  GL_SRGB8_EXT,
             GL_RGB,            GL_SHORT,           0 }  // PixelDataType::SHORT - NOTE: requires NV_texture_shader
 
-          ,  { GL_RGB16,          GL_RGB16F_ARB,     GL_RGB16UI_EXT,      GL_COMPRESSED_RGB,  GL_SRGB8_EXT, 
+          ,  { GL_RGB16,          GL_RGB16F_ARB,     GL_RGB16UI_EXT,      GL_COMPRESSED_RGB,  GL_SRGB8_EXT,
             GL_RGB,            GL_UNSIGNED_SHORT,  0 }  // PixelDataType::UNSIGNED_SHORT - NOTE: precision loss!
 
-          ,  { GL_SIGNED_RGB8_NV, GL_RGB32F_ARB,     GL_RGB32I_EXT,       GL_SIGNED_RGB8_NV,  GL_SRGB8_EXT,  
+          ,  { GL_SIGNED_RGB8_NV, GL_RGB32F_ARB,     GL_RGB32I_EXT,       GL_SIGNED_RGB8_NV,  GL_SRGB8_EXT,
             GL_RGB,            GL_INT,             0 }  // PixelDataType::INT - NOTE: requires NV_texture_shader
 
-          ,  { GL_RGB16,          GL_RGB32F_ARB,     GL_RGB32UI_EXT,      GL_COMPRESSED_RGB,  GL_SRGB8_EXT, 
+          ,  { GL_RGB16,          GL_RGB32F_ARB,     GL_RGB32UI_EXT,      GL_COMPRESSED_RGB,  GL_SRGB8_EXT,
             GL_RGB,            GL_UNSIGNED_INT,    0 }  // PixelDataType::UNSIGNED_INT - NOTE: precision loss!
 
-          ,  { GL_RGB16,          GL_RGB32F_ARB,     GL_RGB32I_EXT,       GL_RGB32F_ARB,      GL_SRGB8_EXT,  
+          ,  { GL_RGB16,          GL_RGB32F_ARB,     GL_RGB32I_EXT,       GL_RGB32F_ARB,      GL_SRGB8_EXT,
             GL_RGB,            GL_FLOAT,           0 }  // PixelDataType::FLOAT - NOTE: requires ARB_texture_float
 
           ,  { GL_RGB16,          GL_RGB16F_ARB,     GL_RGB32I_EXT,       GL_RGB16F_ARB,      GL_SRGB8_EXT,
@@ -96,13 +96,13 @@ namespace dp
           //
           // requires 4-component format
           ,  { DP_TIF_INVALID,  DP_TIF_INVALID,   DP_TIF_INVALID,   DP_TIF_INVALID,    DP_TIF_INVALID,
-            DP_TIF_INVALID,  0, 0}  // PixelDataType::UNSIGNED_INT_2_10_10_10  
+            DP_TIF_INVALID,  0, 0}  // PixelDataType::UNSIGNED_INT_2_10_10_10
 
-          // supported if EXT_texture_shared_exponent exported                                                                                                    
+          // supported if EXT_texture_shared_exponent exported
           ,  { GL_RGB9_E5_EXT,    GL_RGB9_E5_EXT,    GL_RGB9_E5_EXT,      GL_RGB9_E5_EXT,     GL_RGB9_E5_EXT,
             GL_RGB,            GL_UNSIGNED_INT_5_9_9_9_REV_EXT,   0 }  // PixelDataType::UNSIGNED_INT_5_9_9_9
 
-          // supported if EXT_packed_float exported                                                                                                    
+          // supported if EXT_packed_float exported
           ,  { GL_R11F_G11F_B10F_EXT,  GL_R11F_G11F_B10F_EXT,   GL_R11F_G11F_B10F_EXT,   GL_R11F_G11F_B10F_EXT,    GL_R11F_G11F_B10F_EXT,
             GL_RGB,            GL_UNSIGNED_INT_10F_11F_11F_REV_EXT, 0 }  // PixelDataType::UNSIGNED_INT_10F_11F_11F
 
@@ -111,12 +111,12 @@ namespace dp
             DP_TIF_INVALID,  0, 0 }  // PixelDataType::UNSIGNED_INT_24_8
 
         }
-        , { // PixelFormat::RGBA !! 
+        , { // PixelFormat::RGBA !!
 
-          // fixedfmt           floatFmt           integerFmt           compressedFmt       nonlinear  
+          // fixedfmt           floatFmt           integerFmt           compressedFmt       nonlinear
           // userFmtFixed       type                upload
 
-          { GL_SIGNED_RGBA8_NV, GL_RGBA16F_ARB,   GL_RGBA8I_EXT,        GL_SIGNED_RGBA8_NV,  GL_SRGB8_ALPHA8_EXT, 
+          { GL_SIGNED_RGBA8_NV, GL_RGBA16F_ARB,   GL_RGBA8I_EXT,        GL_SIGNED_RGBA8_NV,  GL_SRGB8_ALPHA8_EXT,
             GL_RGBA,            GL_BYTE,            0 }  // PixelDataType::BYTE - NOTE: requires NV_texture_shader
 
           ,  { GL_RGBA8,           GL_RGBA16F_ARB,   GL_RGBA8UI_EXT,       GL_COMPRESSED_RGBA,  GL_SRGB8_ALPHA8_EXT,
@@ -125,17 +125,17 @@ namespace dp
           ,  { GL_SIGNED_RGBA8_NV, GL_RGBA16F_ARB,   GL_RGBA16I_EXT,       GL_SIGNED_RGBA8_NV,  GL_SRGB8_ALPHA8_EXT,
             GL_RGBA,            GL_SHORT,           0 }  // PixelDataType::SHORT - NOTE: requires NV_texture_shader
 
-          ,  { GL_RGBA16,          GL_RGBA16F_ARB,   GL_RGBA16UI_EXT,      GL_COMPRESSED_RGBA,  GL_SRGB8_ALPHA8_EXT, 
+          ,  { GL_RGBA16,          GL_RGBA16F_ARB,   GL_RGBA16UI_EXT,      GL_COMPRESSED_RGBA,  GL_SRGB8_ALPHA8_EXT,
             GL_RGBA,            GL_UNSIGNED_SHORT,  0 }  // PixelDataType::UNSIGNED_SHORT - NOTE: precision loss!
 
-          ,  { GL_SIGNED_RGBA8_NV, GL_RGBA32F_ARB,   GL_RGBA32I_EXT,       GL_SIGNED_RGBA8_NV,  GL_SRGB8_ALPHA8_EXT,  
+          ,  { GL_SIGNED_RGBA8_NV, GL_RGBA32F_ARB,   GL_RGBA32I_EXT,       GL_SIGNED_RGBA8_NV,  GL_SRGB8_ALPHA8_EXT,
             GL_RGBA,            GL_INT,             0 }  // PixelDataType::INT - NOTE: requires NV_texture_shader
 
-          ,  { GL_RGBA16,          GL_RGBA32F_ARB,   GL_RGBA32UI_EXT,      GL_COMPRESSED_RGBA,  GL_SRGB8_ALPHA8_EXT, 
+          ,  { GL_RGBA16,          GL_RGBA32F_ARB,   GL_RGBA32UI_EXT,      GL_COMPRESSED_RGBA,  GL_SRGB8_ALPHA8_EXT,
             GL_RGBA,            GL_UNSIGNED_INT,    0 }  // PixelDataType::UNSIGNED_INT - NOTE: precision loss!
 
           // fast upload format
-          ,  { GL_RGBA16,          GL_RGBA32F_ARB,   GL_RGBA32I_EXT,       GL_RGBA32F_ARB,      GL_SRGB8_ALPHA8_EXT,  
+          ,  { GL_RGBA16,          GL_RGBA32F_ARB,   GL_RGBA32I_EXT,       GL_RGBA32F_ARB,      GL_SRGB8_ALPHA8_EXT,
             GL_RGBA,            GL_FLOAT,           1 }  // PixelDataType::FLOAT - NOTE: requires ARB_texture_float
 
           // fast upload format
@@ -144,11 +144,11 @@ namespace dp
 
           //
           // custom formats
-          // 
+          //
 
-          // G80 native    
+          // G80 native
           ,  { GL_RGB10_A2,       GL_RGBA16F_ARB,    GL_RGBA16I_EXT,      GL_COMPRESSED_RGBA,  GL_SRGB8_ALPHA8_EXT,
-            GL_RGBA,           GL_UNSIGNED_INT_2_10_10_10_REV,   0 }  // PixelDataType::UNSIGNED_INT_2_10_10_10  
+            GL_RGBA,           GL_UNSIGNED_INT_2_10_10_10_REV,   0 }  // PixelDataType::UNSIGNED_INT_2_10_10_10
 
           // requires RGB
           ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,    DP_TIF_INVALID,
@@ -163,12 +163,12 @@ namespace dp
             DP_TIF_INVALID,  0, 0  } // PixelDataType::UNSIGNED_INT_24_8
 
         }
-        , { // PixelFormat::BGR !! 
+        , { // PixelFormat::BGR !!
 
-          // fixedfmt           floatFmt           integerFmt           compressedFmt       nonlinear  
+          // fixedfmt           floatFmt           integerFmt           compressedFmt       nonlinear
           // userFmtFixed       type                upload
 
-          { GL_SIGNED_RGB8_NV, GL_RGB16F_ARB,     GL_RGB8I_EXT,        GL_SIGNED_RGB8_NV,  GL_SRGB8_EXT, 
+          { GL_SIGNED_RGB8_NV, GL_RGB16F_ARB,     GL_RGB8I_EXT,        GL_SIGNED_RGB8_NV,  GL_SRGB8_EXT,
             GL_BGR,            GL_BYTE,            0 }  // PixelDataType::BYTE - NOTE: requires NV_texture_shader
 
           ,  { GL_RGB8,           GL_RGB16F_ARB,     GL_RGB8UI_EXT,       GL_COMPRESSED_RGB,  GL_SRGB8_EXT,
@@ -177,16 +177,16 @@ namespace dp
           ,  { GL_SIGNED_RGB8_NV, GL_RGB16F_ARB,     GL_RGB16I_EXT,       GL_SIGNED_RGB8_NV,  GL_SRGB8_EXT,
             GL_BGR,            GL_SHORT,           0 }  // PixelDataType::SHORT - NOTE: requires NV_texture_shader
 
-          ,  { GL_RGB16,          GL_RGB16F_ARB,     GL_RGB16UI_EXT,      GL_COMPRESSED_RGB,  GL_SRGB8_EXT, 
+          ,  { GL_RGB16,          GL_RGB16F_ARB,     GL_RGB16UI_EXT,      GL_COMPRESSED_RGB,  GL_SRGB8_EXT,
             GL_BGR,            GL_UNSIGNED_SHORT,  0 }  // PixelDataType::UNSIGNED_SHORT - NOTE: precision loss!
 
-          ,  { GL_SIGNED_RGB8_NV, GL_RGB32F_ARB,     GL_RGB32I_EXT,       GL_SIGNED_RGB8_NV,  GL_SRGB8_EXT,  
+          ,  { GL_SIGNED_RGB8_NV, GL_RGB32F_ARB,     GL_RGB32I_EXT,       GL_SIGNED_RGB8_NV,  GL_SRGB8_EXT,
             GL_BGR,            GL_INT,             0 }  // PixelDataType::INT - NOTE: requires NV_texture_shader
 
-          ,  { GL_RGB16,          GL_RGB32F_ARB,     GL_RGB32UI_EXT,      GL_COMPRESSED_RGB,  GL_SRGB8_EXT, 
+          ,  { GL_RGB16,          GL_RGB32F_ARB,     GL_RGB32UI_EXT,      GL_COMPRESSED_RGB,  GL_SRGB8_EXT,
             GL_BGR,            GL_UNSIGNED_INT,    0 }  // PixelDataType::UNSIGNED_INT - NOTE: precision loss!
 
-          ,  { GL_RGB16,          GL_RGB32F_ARB,     GL_RGB32I_EXT,       GL_RGB32F_ARB,      GL_SRGB8_EXT,  
+          ,  { GL_RGB16,          GL_RGB32F_ARB,     GL_RGB32I_EXT,       GL_RGB32F_ARB,      GL_SRGB8_EXT,
             GL_BGR,            GL_FLOAT,           0 }  // PixelDataType::FLOAT - NOTE: requires ARB_texture_float
 
           ,  { GL_RGB16,          GL_RGB16F_ARB,     GL_RGB32I_EXT,       GL_RGB16F_ARB,      GL_SRGB8_EXT,
@@ -194,18 +194,18 @@ namespace dp
 
           //
           // custom formats
-          // 
+          //
           // meaningless because RGB layout doesn't map to 32-bit input data. would crash for 8-bit per channel user data
 
           // requires 4-component format
           ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
-            DP_TIF_INVALID,  0, 0}  // PixelDataType::UNSIGNED_INT_2_10_10_10  
+            DP_TIF_INVALID,  0, 0}  // PixelDataType::UNSIGNED_INT_2_10_10_10
           // G80 native
-          // requires RGB                                                                                                     
+          // requires RGB
           ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
             DP_TIF_INVALID,  0, 0 }  // PixelDataType::UNSIGNED_INT_5_9_9_9
 
-          // requires RGB                                                                                                     
+          // requires RGB
           ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
             DP_TIF_INVALID,  0, 0 }  // PixelDataType::UNSIGNED_INT_10F_11F_11F
 
@@ -214,13 +214,13 @@ namespace dp
             DP_TIF_INVALID,  0, 0  }  // PixelDataType::UNSIGNED_INT_24_8
 
         }
-        , { // PixelFormat::BGRA !! 
+        , { // PixelFormat::BGRA !!
 
-          // fixedfmt           floatFmt           integerFmt           compressedFmt       nonlinear  
+          // fixedfmt           floatFmt           integerFmt           compressedFmt       nonlinear
           // userFmtFixed       type                upload
 
           // fast upload format
-          { GL_SIGNED_RGBA8_NV, GL_RGBA16F_ARB,   GL_RGBA8I_EXT,        GL_SIGNED_RGBA8_NV,  GL_SRGB8_ALPHA8_EXT, 
+          { GL_SIGNED_RGBA8_NV, GL_RGBA16F_ARB,   GL_RGBA8I_EXT,        GL_SIGNED_RGBA8_NV,  GL_SRGB8_ALPHA8_EXT,
             GL_BGRA,            GL_BYTE,            1 }  // PixelDataType::BYTE - NOTE: requires NV_texture_shader
 
           // fast upload format
@@ -230,16 +230,16 @@ namespace dp
           ,  { GL_SIGNED_RGBA8_NV, GL_RGBA16F_ARB,   GL_RGBA16I_EXT,       GL_SIGNED_RGBA8_NV,  GL_SRGB8_ALPHA8_EXT,
             GL_BGRA,            GL_SHORT,           0 }  // PixelDataType::SHORT - NOTE: requires NV_texture_shader
 
-          ,  { GL_RGBA16,          GL_RGBA16F_ARB,   GL_RGBA16UI_EXT,      GL_COMPRESSED_RGBA,  GL_SRGB8_ALPHA8_EXT, 
+          ,  { GL_RGBA16,          GL_RGBA16F_ARB,   GL_RGBA16UI_EXT,      GL_COMPRESSED_RGBA,  GL_SRGB8_ALPHA8_EXT,
             GL_BGRA,            GL_UNSIGNED_SHORT,  0 }  // PixelDataType::UNSIGNED_SHORT - NOTE: precision loss!
 
-          ,  { GL_SIGNED_RGBA8_NV, GL_RGBA32F_ARB,   GL_RGBA32I_EXT,       GL_SIGNED_RGBA8_NV,  GL_SRGB8_ALPHA8_EXT,  
+          ,  { GL_SIGNED_RGBA8_NV, GL_RGBA32F_ARB,   GL_RGBA32I_EXT,       GL_SIGNED_RGBA8_NV,  GL_SRGB8_ALPHA8_EXT,
             GL_BGRA,            GL_INT,             0 }  // PixelDataType::INT - NOTE: requires NV_texture_shader
 
-          ,  { GL_RGBA16,          GL_RGBA32F_ARB,   GL_RGBA32UI_EXT,      GL_COMPRESSED_RGBA,  GL_SRGB8_ALPHA8_EXT, 
+          ,  { GL_RGBA16,          GL_RGBA32F_ARB,   GL_RGBA32UI_EXT,      GL_COMPRESSED_RGBA,  GL_SRGB8_ALPHA8_EXT,
             GL_BGRA,            GL_UNSIGNED_INT,    0 }  // PixelDataType::UNSIGNED_INT - NOTE: precision loss!
 
-          ,  { GL_RGBA16,          GL_RGBA32F_ARB,   GL_RGBA32I_EXT,       GL_RGBA32F_ARB,      GL_SRGB8_ALPHA8_EXT,  
+          ,  { GL_RGBA16,          GL_RGBA32F_ARB,   GL_RGBA32I_EXT,       GL_RGBA32F_ARB,      GL_SRGB8_ALPHA8_EXT,
             GL_BGRA,            GL_FLOAT,           0 }  // PixelDataType::FLOAT - NOTE: requires ARB_texture_float
 
           ,  { GL_RGBA16,          GL_RGBA16F_ARB,   GL_RGBA32I_EXT,       GL_RGBA16F_ARB,      GL_SRGB8_ALPHA8_EXT,
@@ -247,10 +247,10 @@ namespace dp
 
           //
           // custom formats
-          // 
-          // G80 native 
+          //
+          // G80 native
           ,  { GL_RGB10_A2,       GL_RGBA16F_ARB,    GL_RGBA16I_EXT,      GL_COMPRESSED_RGBA,  GL_SRGB8_ALPHA8_EXT,
-            GL_BGRA,           GL_UNSIGNED_INT_2_10_10_10_REV,   0 }  // PixelDataType::UNSIGNED_INT_2_10_10_10  
+            GL_BGRA,           GL_UNSIGNED_INT_2_10_10_10_REV,   0 }  // PixelDataType::UNSIGNED_INT_2_10_10_10
 
           // requires RGB
           ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
@@ -265,12 +265,12 @@ namespace dp
             DP_TIF_INVALID,  0, 0  }  // PixelDataType::UNSIGNED_INT_24_8
 
         }
-        , { // PixelFormat::LUMINANCE !! 
+        , { // PixelFormat::LUMINANCE !!
 
-          // fixedfmt           floatFmt           integerFmt           compressedFmt       nonlinear  
+          // fixedfmt           floatFmt           integerFmt           compressedFmt       nonlinear
           // userFmtFixed       type                upload
 
-          { GL_SIGNED_LUMINANCE8_NV, GL_LUMINANCE16F_ARB,   GL_LUMINANCE8I_EXT,  GL_COMPRESSED_SIGNED_LUMINANCE_LATC1_EXT, GL_SLUMINANCE8_EXT, 
+          { GL_SIGNED_LUMINANCE8_NV, GL_LUMINANCE16F_ARB,   GL_LUMINANCE8I_EXT,  GL_COMPRESSED_SIGNED_LUMINANCE_LATC1_EXT, GL_SLUMINANCE8_EXT,
             GL_LUMINANCE,            GL_BYTE,            0 }  // PixelDataType::BYTE - NOTE: requires NV_texture_shader
 
           ,  { GL_LUMINANCE8,           GL_LUMINANCE16F_ARB,   GL_LUMINANCE8UI_EXT,       GL_COMPRESSED_LUMINANCE_LATC1_EXT,  GL_SLUMINANCE8_EXT,
@@ -279,29 +279,29 @@ namespace dp
           ,  { GL_SIGNED_LUMINANCE8_NV, GL_LUMINANCE16F_ARB,   GL_LUMINANCE16I_EXT,       GL_COMPRESSED_SIGNED_LUMINANCE_LATC1_EXT,  GL_SLUMINANCE8_EXT,
             GL_LUMINANCE,            GL_SHORT,           0 }  // PixelDataType::SHORT - NOTE: requires NV_texture_shader
 
-          ,  { GL_LUMINANCE16,          GL_LUMINANCE16F_ARB,     GL_LUMINANCE16UI_EXT,    GL_COMPRESSED_LUMINANCE_LATC1_EXT,  GL_SLUMINANCE8_EXT, 
+          ,  { GL_LUMINANCE16,          GL_LUMINANCE16F_ARB,     GL_LUMINANCE16UI_EXT,    GL_COMPRESSED_LUMINANCE_LATC1_EXT,  GL_SLUMINANCE8_EXT,
             GL_LUMINANCE,            GL_UNSIGNED_SHORT,  1 }  // PixelDataType::UNSIGNED_SHORT - NOTE: precision loss!
 
-          ,  { GL_SIGNED_LUMINANCE8_NV, GL_LUMINANCE32F_ARB,     GL_LUMINANCE32I_EXT,     GL_COMPRESSED_SIGNED_LUMINANCE_LATC1_EXT,  
-            GL_SLUMINANCE8_EXT,  
+          ,  { GL_SIGNED_LUMINANCE8_NV, GL_LUMINANCE32F_ARB,     GL_LUMINANCE32I_EXT,     GL_COMPRESSED_SIGNED_LUMINANCE_LATC1_EXT,
+            GL_SLUMINANCE8_EXT,
             GL_LUMINANCE,            GL_INT,             0 }  // PixelDataType::INT - NOTE: requires NV_texture_shader
 
-          ,  { GL_LUMINANCE16,          GL_LUMINANCE32F_ARB,     GL_LUMINANCE32UI_EXT,      GL_COMPRESSED_LUMINANCE_LATC1_EXT,  
-            GL_SLUMINANCE8_EXT, 
+          ,  { GL_LUMINANCE16,          GL_LUMINANCE32F_ARB,     GL_LUMINANCE32UI_EXT,      GL_COMPRESSED_LUMINANCE_LATC1_EXT,
+            GL_SLUMINANCE8_EXT,
             GL_LUMINANCE,            GL_UNSIGNED_INT,    0 }  // PixelDataType::UNSIGNED_INT - NOTE: precision loss!
 
           ,  { GL_LUMINANCE16,          GL_LUMINANCE32F_ARB,     GL_LUMINANCE32I_EXT,       GL_COMPRESSED_LUMINANCE_LATC1_EXT,
-            GL_SLUMINANCE8_EXT,  
+            GL_SLUMINANCE8_EXT,
             GL_LUMINANCE,            GL_FLOAT,           0 }  // PixelDataType::FLOAT - NOTE: requires ARB_texture_float
 
-          ,  { GL_LUMINANCE16,          GL_LUMINANCE16F_ARB,     GL_LUMINANCE32I_EXT,       GL_COMPRESSED_LUMINANCE_LATC1_EXT, 
+          ,  { GL_LUMINANCE16,          GL_LUMINANCE16F_ARB,     GL_LUMINANCE32I_EXT,       GL_COMPRESSED_LUMINANCE_LATC1_EXT,
             GL_SLUMINANCE8_EXT,
             GL_LUMINANCE,            GL_HALF_FLOAT_NV,   0 }  // PixelDataType::HALF - NOTE: requires ARB_texture_float
 
           //
           // custom formats
-          // 
-          // requires 4-component format      
+          //
+          // requires 4-component format
           ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
             DP_TIF_INVALID,  0, 0 }  // PixelDataType::UNSIGNED_INT_2_10_10_10
 
@@ -318,40 +318,40 @@ namespace dp
             DP_TIF_INVALID,  0, 0  }  // PixelDataType::UNSIGNED_INT_24_8
 
         }
-        , { // PixelFormat::LUMINANCE_ALPHA !! 
+        , { // PixelFormat::LUMINANCE_ALPHA !!
 
-          // fixedfmt           floatFmt           integerFmt           compressedFmt       nonlinear  
+          // fixedfmt           floatFmt           integerFmt           compressedFmt       nonlinear
           // userFmtFixed       type                upload
 
-          { GL_SIGNED_LUMINANCE8_ALPHA8_NV, GL_LUMINANCE_ALPHA16F_ARB,   GL_LUMINANCE_ALPHA8I_EXT,  
-            GL_COMPRESSED_SIGNED_LUMINANCE_ALPHA_LATC2_EXT,  GL_SLUMINANCE8_ALPHA8_EXT, 
+          { GL_SIGNED_LUMINANCE8_ALPHA8_NV, GL_LUMINANCE_ALPHA16F_ARB,   GL_LUMINANCE_ALPHA8I_EXT,
+            GL_COMPRESSED_SIGNED_LUMINANCE_ALPHA_LATC2_EXT,  GL_SLUMINANCE8_ALPHA8_EXT,
             GL_LUMINANCE_ALPHA,            GL_BYTE,            0 }  // PixelDataType::BYTE - NOTE: requires NV_texture_shader
 
-          ,  { GL_LUMINANCE8_ALPHA8,           GL_LUMINANCE_ALPHA16F_ARB,   GL_LUMINANCE_ALPHA8UI_EXT,       GL_COMPRESSED_LUMINANCE_ALPHA_LATC2_EXT,  
+          ,  { GL_LUMINANCE8_ALPHA8,           GL_LUMINANCE_ALPHA16F_ARB,   GL_LUMINANCE_ALPHA8UI_EXT,       GL_COMPRESSED_LUMINANCE_ALPHA_LATC2_EXT,
             GL_SLUMINANCE8_ALPHA8_EXT,
             GL_LUMINANCE_ALPHA,            GL_UNSIGNED_BYTE,   0 }  // PixelDataType::UNSIGNED_BYTE
 
-          ,  { GL_SIGNED_LUMINANCE8_ALPHA8_NV, GL_LUMINANCE_ALPHA16F_ARB,   GL_LUMINANCE_ALPHA16I_EXT,       
+          ,  { GL_SIGNED_LUMINANCE8_ALPHA8_NV, GL_LUMINANCE_ALPHA16F_ARB,   GL_LUMINANCE_ALPHA16I_EXT,
             GL_COMPRESSED_SIGNED_LUMINANCE_ALPHA_LATC2_EXT,  GL_SLUMINANCE8_ALPHA8_EXT,
             GL_LUMINANCE_ALPHA,            GL_SHORT,           0 }  // PixelDataType::SHORT - NOTE: requires NV_texture_shader
 
-          ,  { GL_LUMINANCE16_ALPHA16,          GL_LUMINANCE_ALPHA16F_ARB,     GL_LUMINANCE_ALPHA16UI_EXT,    
-            GL_COMPRESSED_LUMINANCE_ALPHA_LATC2_EXT,  GL_SLUMINANCE8_ALPHA8_EXT, 
+          ,  { GL_LUMINANCE16_ALPHA16,          GL_LUMINANCE_ALPHA16F_ARB,     GL_LUMINANCE_ALPHA16UI_EXT,
+            GL_COMPRESSED_LUMINANCE_ALPHA_LATC2_EXT,  GL_SLUMINANCE8_ALPHA8_EXT,
             GL_LUMINANCE_ALPHA,            GL_UNSIGNED_SHORT,  0 }  // PixelDataType::UNSIGNED_SHORT - NOTE: precision loss!
 
-          ,  { GL_SIGNED_LUMINANCE8_ALPHA8_NV, GL_LUMINANCE_ALPHA32F_ARB,     GL_LUMINANCE_ALPHA32I_EXT,     
-            GL_COMPRESSED_SIGNED_LUMINANCE_ALPHA_LATC2_EXT,  
-            GL_SLUMINANCE8_ALPHA8_EXT,  
+          ,  { GL_SIGNED_LUMINANCE8_ALPHA8_NV, GL_LUMINANCE_ALPHA32F_ARB,     GL_LUMINANCE_ALPHA32I_EXT,
+            GL_COMPRESSED_SIGNED_LUMINANCE_ALPHA_LATC2_EXT,
+            GL_SLUMINANCE8_ALPHA8_EXT,
             GL_LUMINANCE_ALPHA,             GL_INT,             0 }  // PixelDataType::INT - NOTE: requires NV_texture_shader
 
-          ,  { GL_LUMINANCE16_ALPHA16,          GL_LUMINANCE_ALPHA32F_ARB,     GL_LUMINANCE_ALPHA32UI_EXT,      
-            GL_COMPRESSED_LUMINANCE_ALPHA_LATC2_EXT,  
-            GL_SLUMINANCE8_ALPHA8_EXT, 
+          ,  { GL_LUMINANCE16_ALPHA16,          GL_LUMINANCE_ALPHA32F_ARB,     GL_LUMINANCE_ALPHA32UI_EXT,
+            GL_COMPRESSED_LUMINANCE_ALPHA_LATC2_EXT,
+            GL_SLUMINANCE8_ALPHA8_EXT,
             GL_LUMINANCE_ALPHA,             GL_UNSIGNED_INT,    0 }  // PixelDataType::UNSIGNED_INT - NOTE: precision loss!
 
-          ,  { GL_LUMINANCE16_ALPHA16,          GL_LUMINANCE_ALPHA32F_ARB,     GL_LUMINANCE_ALPHA32I_EXT,       
+          ,  { GL_LUMINANCE16_ALPHA16,          GL_LUMINANCE_ALPHA32F_ARB,     GL_LUMINANCE_ALPHA32I_EXT,
             GL_COMPRESSED_LUMINANCE_ALPHA_LATC2_EXT,
-            GL_SLUMINANCE8_ALPHA8_EXT,  
+            GL_SLUMINANCE8_ALPHA8_EXT,
             GL_LUMINANCE_ALPHA,             GL_FLOAT,           0 }  // PixelDataType::FLOAT - NOTE: requires ARB_texture_float
 
           ,  { GL_LUMINANCE16_ALPHA16,          GL_LUMINANCE_ALPHA16F_ARB,     GL_LUMINANCE_ALPHA32I_EXT, GL_COMPRESSED_LUMINANCE_ALPHA_LATC2_EXT,
@@ -360,8 +360,8 @@ namespace dp
 
           //
           // custom formats
-          // 
-          // requires 4-component format 
+          //
+          // requires 4-component format
           ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
             DP_TIF_INVALID,  0, 0 }  // PixelDataType::UNSIGNED_INT_2_10_10_10
 
@@ -371,19 +371,19 @@ namespace dp
 
           // requires RGB
           ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
-            DP_TIF_INVALID,  0, 0 }  // PixelDataType::UNSIGNED_INT_10F_11F_11F  
+            DP_TIF_INVALID,  0, 0 }  // PixelDataType::UNSIGNED_INT_10F_11F_11F
 
           // format - type mismatch
           ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
             DP_TIF_INVALID,  0, 0 }  // PixelDataType::UNSIGNED_INT_24_8
 
         }
-        , { // PixelFormat::ALPHA !! 
+        , { // PixelFormat::ALPHA !!
 
-          // fixedfmt           floatFmt           integerFmt           compressedFmt       nonlinear  
+          // fixedfmt           floatFmt           integerFmt           compressedFmt       nonlinear
           // userFmtFixed       userFmtFloat       userFmtInteger       type                upload
 
-          { GL_SIGNED_ALPHA8_NV, GL_ALPHA16F_ARB,   GL_ALPHA8I_EXT,  GL_SIGNED_ALPHA8_NV, GL_SIGNED_ALPHA8_NV, 
+          { GL_SIGNED_ALPHA8_NV, GL_ALPHA16F_ARB,   GL_ALPHA8I_EXT,  GL_SIGNED_ALPHA8_NV, GL_SIGNED_ALPHA8_NV,
             GL_ALPHA,            GL_BYTE,            0 }  // PixelDataType::BYTE - NOTE: requires NV_texture_shader
 
           ,  { GL_ALPHA8,           GL_ALPHA16F_ARB,   GL_ALPHA8UI_EXT,       GL_ALPHA8,  GL_ALPHA8,
@@ -392,27 +392,27 @@ namespace dp
           ,  { GL_SIGNED_ALPHA8_NV, GL_ALPHA16F_ARB,   GL_ALPHA16I_EXT,       GL_SIGNED_ALPHA8_NV,  GL_SIGNED_ALPHA8_NV,
             GL_ALPHA,            GL_SHORT,           0 }  // PixelDataType::SHORT - NOTE: requires NV_texture_shader
 
-          ,  { GL_ALPHA16,          GL_ALPHA16F_ARB,     GL_ALPHA16UI_EXT,    GL_ALPHA16,  GL_ALPHA16, 
+          ,  { GL_ALPHA16,          GL_ALPHA16F_ARB,     GL_ALPHA16UI_EXT,    GL_ALPHA16,  GL_ALPHA16,
             GL_ALPHA,            GL_UNSIGNED_SHORT,  0 }  // PixelDataType::UNSIGNED_SHORT
 
-          ,  { GL_SIGNED_ALPHA8_NV, GL_ALPHA32F_ARB,     GL_ALPHA32I_EXT,     GL_SIGNED_ALPHA8_NV,  GL_SIGNED_ALPHA8_NV,  
+          ,  { GL_SIGNED_ALPHA8_NV, GL_ALPHA32F_ARB,     GL_ALPHA32I_EXT,     GL_SIGNED_ALPHA8_NV,  GL_SIGNED_ALPHA8_NV,
             GL_ALPHA,            GL_INT,             0 }  // PixelDataType::INT - NOTE: requires NV_texture_shader
 
-          ,  { GL_ALPHA16,          GL_ALPHA32F_ARB,     GL_ALPHA32UI_EXT,      GL_ALPHA16,  GL_ALPHA16, 
+          ,  { GL_ALPHA16,          GL_ALPHA32F_ARB,     GL_ALPHA32UI_EXT,      GL_ALPHA16,  GL_ALPHA16,
             GL_ALPHA,            GL_UNSIGNED_INT,    0 }  // PixelDataType::UNSIGNED_INT
 
-          ,  { GL_ALPHA16,          GL_ALPHA32F_ARB,     GL_ALPHA32I_EXT,       GL_ALPHA16, GL_ALPHA16,  
+          ,  { GL_ALPHA16,          GL_ALPHA32F_ARB,     GL_ALPHA32I_EXT,       GL_ALPHA16, GL_ALPHA16,
             GL_ALPHA,            GL_FLOAT,           0 }  // PixelDataType::FLOAT - NOTE: requires ARB_texture_float
 
-          ,  { GL_ALPHA16,          GL_ALPHA16F_ARB,     GL_ALPHA32I_EXT,       GL_ALPHA16, GL_ALPHA16, 
+          ,  { GL_ALPHA16,          GL_ALPHA16F_ARB,     GL_ALPHA32I_EXT,       GL_ALPHA16, GL_ALPHA16,
             GL_ALPHA,            GL_HALF_FLOAT_NV,   0 }  // PixelDataType::HALF - NOTE: requires ARB_texture_float
 
           //
           // custom formats
-          // 
+          //
           // 1-component format does not match. requires 4-component format (RGBA|BGRA)
           ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
-            DP_TIF_INVALID,  0, 0 } // PixelDataType::UNSIGNED_INT_2_10_10_10 
+            DP_TIF_INVALID,  0, 0 } // PixelDataType::UNSIGNED_INT_2_10_10_10
 
           // requires RGB format
           ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
@@ -428,36 +428,36 @@ namespace dp
         }
         , { // PixelFormat::DEPTH_COMPONENT - Requires ARB_depth_texture
 
-          // fixedfmt           floatFmt           integerFmt           compressedFmt       nonlinear  
+          // fixedfmt           floatFmt           integerFmt           compressedFmt       nonlinear
           // userFmtFixed       userFmtFloat       userFmtInteger       type                upload
 
-          { GL_DEPTH_COMPONENT16_ARB, GL_DEPTH_COMPONENT16_ARB,   GL_DEPTH_COMPONENT16_ARB,  GL_DEPTH_COMPONENT16_ARB, GL_DEPTH_COMPONENT16_ARB, 
+          { GL_DEPTH_COMPONENT16_ARB, GL_DEPTH_COMPONENT16_ARB,   GL_DEPTH_COMPONENT16_ARB,  GL_DEPTH_COMPONENT16_ARB, GL_DEPTH_COMPONENT16_ARB,
             GL_DEPTH_COMPONENT,            GL_BYTE,            0 }  // PixelDataType::BYTE - NOTE: requires ARB_depth_texture
 
-          ,  { GL_DEPTH_COMPONENT16_ARB, GL_DEPTH_COMPONENT16_ARB,   GL_DEPTH_COMPONENT16_ARB,  GL_DEPTH_COMPONENT16_ARB, GL_DEPTH_COMPONENT16_ARB, 
-            GL_DEPTH_COMPONENT,            GL_UNSIGNED_BYTE,            0 }  // PixelDataType::UNSIGNED_BYTE 
+          ,  { GL_DEPTH_COMPONENT16_ARB, GL_DEPTH_COMPONENT16_ARB,   GL_DEPTH_COMPONENT16_ARB,  GL_DEPTH_COMPONENT16_ARB, GL_DEPTH_COMPONENT16_ARB,
+            GL_DEPTH_COMPONENT,            GL_UNSIGNED_BYTE,            0 }  // PixelDataType::UNSIGNED_BYTE
 
-          ,  { GL_DEPTH_COMPONENT16_ARB, GL_DEPTH_COMPONENT16_ARB,   GL_DEPTH_COMPONENT16_ARB,  GL_DEPTH_COMPONENT16_ARB, GL_DEPTH_COMPONENT16_ARB, 
-            GL_DEPTH_COMPONENT,            GL_SHORT,            0 }  // PixelDataType::SHORT 
+          ,  { GL_DEPTH_COMPONENT16_ARB, GL_DEPTH_COMPONENT16_ARB,   GL_DEPTH_COMPONENT16_ARB,  GL_DEPTH_COMPONENT16_ARB, GL_DEPTH_COMPONENT16_ARB,
+            GL_DEPTH_COMPONENT,            GL_SHORT,            0 }  // PixelDataType::SHORT
 
-          ,  { GL_DEPTH_COMPONENT16_ARB, GL_DEPTH_COMPONENT16_ARB,   GL_DEPTH_COMPONENT16_ARB,  GL_DEPTH_COMPONENT16_ARB, GL_DEPTH_COMPONENT16_ARB, 
-            GL_DEPTH_COMPONENT,            GL_SHORT,            0 }  // PixelDataType::UNSIGNED_SHORT 
+          ,  { GL_DEPTH_COMPONENT16_ARB, GL_DEPTH_COMPONENT16_ARB,   GL_DEPTH_COMPONENT16_ARB,  GL_DEPTH_COMPONENT16_ARB, GL_DEPTH_COMPONENT16_ARB,
+            GL_DEPTH_COMPONENT,            GL_SHORT,            0 }  // PixelDataType::UNSIGNED_SHORT
 
-          ,  { GL_DEPTH_COMPONENT32_ARB, GL_DEPTH_COMPONENT32_ARB,   GL_DEPTH_COMPONENT32_ARB,  GL_DEPTH_COMPONENT32_ARB, GL_DEPTH_COMPONENT32_ARB, 
-            GL_DEPTH_COMPONENT,            GL_INT,            0 }  // PixelDataType::INT 
+          ,  { GL_DEPTH_COMPONENT32_ARB, GL_DEPTH_COMPONENT32_ARB,   GL_DEPTH_COMPONENT32_ARB,  GL_DEPTH_COMPONENT32_ARB, GL_DEPTH_COMPONENT32_ARB,
+            GL_DEPTH_COMPONENT,            GL_INT,            0 }  // PixelDataType::INT
 
-          ,  { GL_DEPTH_COMPONENT32_ARB, GL_DEPTH_COMPONENT32_ARB,   GL_DEPTH_COMPONENT32_ARB,  GL_DEPTH_COMPONENT32_ARB, GL_DEPTH_COMPONENT32_ARB, 
-            GL_DEPTH_COMPONENT,            GL_UNSIGNED_INT,            0 }  // PixelDataType::UNSIGNED_INT 
+          ,  { GL_DEPTH_COMPONENT32_ARB, GL_DEPTH_COMPONENT32_ARB,   GL_DEPTH_COMPONENT32_ARB,  GL_DEPTH_COMPONENT32_ARB, GL_DEPTH_COMPONENT32_ARB,
+            GL_DEPTH_COMPONENT,            GL_UNSIGNED_INT,            0 }  // PixelDataType::UNSIGNED_INT
 
-          ,  { GL_DEPTH_COMPONENT32_ARB, GL_DEPTH_COMPONENT32_ARB,   GL_DEPTH_COMPONENT32_ARB,  GL_DEPTH_COMPONENT32_ARB, GL_DEPTH_COMPONENT32_ARB, 
-            GL_DEPTH_COMPONENT,            GL_FLOAT,            0 }  // PixelDataType::FLOAT 
+          ,  { GL_DEPTH_COMPONENT32_ARB, GL_DEPTH_COMPONENT32_ARB,   GL_DEPTH_COMPONENT32_ARB,  GL_DEPTH_COMPONENT32_ARB, GL_DEPTH_COMPONENT32_ARB,
+            GL_DEPTH_COMPONENT,            GL_FLOAT,            0 }  // PixelDataType::FLOAT
 
-          ,  { GL_DEPTH_COMPONENT16_ARB, GL_DEPTH_COMPONENT16_ARB,   GL_DEPTH_COMPONENT16_ARB,  GL_DEPTH_COMPONENT16_ARB, GL_DEPTH_COMPONENT16_ARB, 
-            GL_DEPTH_COMPONENT,            GL_HALF_FLOAT_NV,       0 }  // PixelDataType::HALF 
+          ,  { GL_DEPTH_COMPONENT16_ARB, GL_DEPTH_COMPONENT16_ARB,   GL_DEPTH_COMPONENT16_ARB,  GL_DEPTH_COMPONENT16_ARB, GL_DEPTH_COMPONENT16_ARB,
+            GL_DEPTH_COMPONENT,            GL_HALF_FLOAT_NV,       0 }  // PixelDataType::HALF
 
           //
           // custom formats
-          // 
+          //
           // requires 4-component format (RGBA|BGRA)
           ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
             DP_TIF_INVALID,  0, 0 } // PixelDataType::UNSIGNED_INT_2_10_10_10
@@ -468,7 +468,7 @@ namespace dp
 
           // requires RGB format
           ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
-            DP_TIF_INVALID,  0, 0 } // PixelDataType::UNSIGNED_INT_10F_11F_11F 
+            DP_TIF_INVALID,  0, 0 } // PixelDataType::UNSIGNED_INT_10F_11F_11F
 
           // load only depth pixels out of the depth stencil - supported if EXT_packed_depth_stencil exported
           ,  { GL_DEPTH_COMPONENT24_ARB,  GL_DEPTH_COMPONENT24_ARB,  GL_DEPTH_COMPONENT24_ARB,  GL_DEPTH_COMPONENT24_ARB,  GL_DEPTH_COMPONENT24_ARB,
@@ -476,7 +476,7 @@ namespace dp
         }
         , { // PixelFormat::DEPTH_STENCIL - Requires EXT_packed_depth_stencil
 
-          // fixedfmt           floatFmt           integerFmt           compressedFmt       nonlinear  
+          // fixedfmt           floatFmt           integerFmt           compressedFmt       nonlinear
           // userFmtFixed       userFmtFloat       userFmtInteger       type                upload
 
           // DEPTH_STENCIL requires UNSIGNED_INT_24_8
@@ -485,44 +485,44 @@ namespace dp
 
           // DEPTH_STENCIL requires UNSIGNED_INT_24_8
           ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
-            DP_TIF_INVALID,  0, 0}  // PixelDataType::UNSIGNED_BYTE 
+            DP_TIF_INVALID,  0, 0}  // PixelDataType::UNSIGNED_BYTE
 
           // DEPTH_STENCIL requires UNSIGNED_INT_24_8
           ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
-            DP_TIF_INVALID,  0, 0 }  // PixelDataType::SHORT 
+            DP_TIF_INVALID,  0, 0 }  // PixelDataType::SHORT
 
           // DEPTH_STENCIL requires UNSIGNED_INT_24_8
           ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
-            DP_TIF_INVALID,  0, 0 }  // PixelDataType::UNSIGNED_SHORT 
+            DP_TIF_INVALID,  0, 0 }  // PixelDataType::UNSIGNED_SHORT
 
           // DEPTH_STENCIL requires UNSIGNED_INT_24_8
           ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
-            DP_TIF_INVALID,  0, 0 }  // PixelDataType::INT 
+            DP_TIF_INVALID,  0, 0 }  // PixelDataType::INT
 
           // DEPTH_STENCIL requires UNSIGNED_INT_24_8
           ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
-            DP_TIF_INVALID,  0, 0 }  // PixelDataType::UNSIGNED_INT 
+            DP_TIF_INVALID,  0, 0 }  // PixelDataType::UNSIGNED_INT
 
           // DEPTH_STENCIL requires UNSIGNED_INT_24_8
           ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
-            DP_TIF_INVALID,  0, 0 }  // PixelDataType::FLOAT 
+            DP_TIF_INVALID,  0, 0 }  // PixelDataType::FLOAT
 
           // DEPTH_STENCIL requires UNSIGNED_INT_24_8
           ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
-            DP_TIF_INVALID,  0, 0 }  // PixelDataType::HALF 
+            DP_TIF_INVALID,  0, 0 }  // PixelDataType::HALF
 
           //
           // custom formats
-          // 
-          // format - type mismatch 
+          //
+          // format - type mismatch
           ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
             DP_TIF_INVALID,  0, 0 }  // PixelDataType::UNSIGNED_INT_2_10_10_10
 
-          // format - type mismatch 
+          // format - type mismatch
           ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
             DP_TIF_INVALID,  0, 0 }  // PixelDataType::UNSIGNED_INT_5_9_9_9
 
-          // format - type mismatch 
+          // format - type mismatch
           ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
             DP_TIF_INVALID,  0, 0 }  // PixelDataType::UNSIGNED_INT_10F_11F_11F
 
@@ -531,12 +531,12 @@ namespace dp
           ,  { GL_DEPTH24_STENCIL8_EXT,  GL_DEPTH24_STENCIL8_EXT,   GL_DEPTH24_STENCIL8_EXT,   GL_DEPTH24_STENCIL8_EXT,    GL_DEPTH24_STENCIL8_EXT,
             GL_DEPTH_STENCIL_EXT,     GL_UNSIGNED_INT_24_8_EXT, 1 }  // PixelDataType::UNSIGNED_INT_24_8
         }
-        , { // PixelFormat::INTEGER_ALPHA !! 
+        , { // PixelFormat::INTEGER_ALPHA !!
 
-          // fixedfmt           floatFmt           integerFmt           compressedFmt       nonlinear  
+          // fixedfmt           floatFmt           integerFmt           compressedFmt       nonlinear
           // userFmtFixed       userFmtFloat       userFmtInteger       type                upload
 
-          { GL_ALPHA8I_EXT, GL_ALPHA8I_EXT,   GL_ALPHA8I_EXT,  GL_ALPHA8I_EXT, GL_ALPHA8I_EXT, 
+          { GL_ALPHA8I_EXT, GL_ALPHA8I_EXT,   GL_ALPHA8I_EXT,  GL_ALPHA8I_EXT, GL_ALPHA8I_EXT,
             GL_ALPHA_INTEGER_EXT,  GL_BYTE,            0 }  // PixelDataType::BYTE
 
           ,  { GL_ALPHA8UI_EXT,        GL_ALPHA8UI_EXT,   GL_ALPHA8UI_EXT,       GL_ALPHA8UI_EXT,  GL_ALPHA8UI_EXT,
@@ -545,25 +545,25 @@ namespace dp
           ,  { GL_ALPHA16I_EXT, GL_ALPHA16I_EXT,   GL_ALPHA16I_EXT,    GL_ALPHA16I_EXT,  GL_ALPHA16I_EXT,
             GL_ALPHA_INTEGER_EXT,   GL_SHORT,           0 }  // PixelDataType::SHORT
 
-          ,  { GL_ALPHA16UI_EXT,          GL_ALPHA16UI_EXT,     GL_ALPHA16UI_EXT,    GL_ALPHA16UI_EXT,  GL_ALPHA16UI_EXT, 
+          ,  { GL_ALPHA16UI_EXT,          GL_ALPHA16UI_EXT,     GL_ALPHA16UI_EXT,    GL_ALPHA16UI_EXT,  GL_ALPHA16UI_EXT,
             GL_ALPHA_INTEGER_EXT,      GL_UNSIGNED_SHORT,  0 }  // PixelDataType::UNSIGNED_SHORT
 
-          ,  { GL_ALPHA32I_EXT, GL_ALPHA32I_EXT,     GL_ALPHA32I_EXT,     GL_ALPHA32I_EXT,  GL_ALPHA32I_EXT,  
+          ,  { GL_ALPHA32I_EXT, GL_ALPHA32I_EXT,     GL_ALPHA32I_EXT,     GL_ALPHA32I_EXT,  GL_ALPHA32I_EXT,
             GL_ALPHA_INTEGER_EXT,            GL_INT,             0 }  // PixelDataType::INT -
 
-          ,  { GL_ALPHA32UI_EXT,          GL_ALPHA32UI_EXT,     GL_ALPHA32UI_EXT,      GL_ALPHA32UI_EXT,  GL_ALPHA32UI_EXT, 
+          ,  { GL_ALPHA32UI_EXT,          GL_ALPHA32UI_EXT,     GL_ALPHA32UI_EXT,      GL_ALPHA32UI_EXT,  GL_ALPHA32UI_EXT,
             GL_ALPHA,            GL_UNSIGNED_INT,    0 }  // PixelDataType::UNSIGNED_INT
 
-          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,  
+          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,
             DP_TIF_INVALID,    0,           0 }  // PixelDataType::FLOAT - float data with integer fmt = invalid
 
-          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,  
+          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,
             DP_TIF_INVALID,    0,           0 }  // PixelDataType::HALF - float data with integer fmt = invalid
 
           //
           // custom formats
-          // 
-          // requires 4-component format 
+          //
+          // requires 4-component format
           ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
             DP_TIF_INVALID,  0, 0 }  // PixelDataType::UNSIGNED_INT_2_10_10_10
 
@@ -579,12 +579,12 @@ namespace dp
           ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
             DP_TIF_INVALID,  0, 0 }  // PixelDataType::UNSIGNED_INT_24_8
         }
-        , { // PixelFormat::INTEGER_LUMINANCE !! 
+        , { // PixelFormat::INTEGER_LUMINANCE !!
 
-          // fixedfmt           floatFmt           integerFmt           compressedFmt       nonlinear  
+          // fixedfmt           floatFmt           integerFmt           compressedFmt       nonlinear
           // userFmtFixed       userFmtFloat       userFmtInteger       type                upload
 
-          { GL_LUMINANCE8I_EXT,        GL_LUMINANCE8I_EXT,   GL_LUMINANCE8I_EXT,  GL_LUMINANCE8I_EXT, GL_LUMINANCE8I_EXT, 
+          { GL_LUMINANCE8I_EXT,        GL_LUMINANCE8I_EXT,   GL_LUMINANCE8I_EXT,  GL_LUMINANCE8I_EXT, GL_LUMINANCE8I_EXT,
             GL_LUMINANCE_INTEGER_EXT,  GL_BYTE,            0 }  // PixelDataType::BYTE
 
           ,  { GL_LUMINANCE8UI_EXT,       GL_LUMINANCE8UI_EXT,   GL_LUMINANCE8UI_EXT,       GL_LUMINANCE8UI_EXT,  GL_LUMINANCE8UI_EXT,
@@ -593,25 +593,25 @@ namespace dp
           ,  { GL_LUMINANCE16I_EXT, GL_LUMINANCE16I_EXT,   GL_LUMINANCE16I_EXT,    GL_LUMINANCE16I_EXT,  GL_LUMINANCE16I_EXT,
             GL_LUMINANCE_INTEGER_EXT,  GL_SHORT,           0 }  // PixelDataType::SHORT
 
-          ,  { GL_LUMINANCE16UI_EXT,      GL_LUMINANCE16UI_EXT,     GL_LUMINANCE16UI_EXT,    GL_LUMINANCE16UI_EXT,  GL_LUMINANCE16UI_EXT, 
+          ,  { GL_LUMINANCE16UI_EXT,      GL_LUMINANCE16UI_EXT,     GL_LUMINANCE16UI_EXT,    GL_LUMINANCE16UI_EXT,  GL_LUMINANCE16UI_EXT,
             GL_LUMINANCE_INTEGER_EXT,  GL_UNSIGNED_SHORT,  0 }  // PixelDataType::UNSIGNED_SHORT
 
-          ,  { GL_LUMINANCE32I_EXT, GL_LUMINANCE32I_EXT,     GL_LUMINANCE32I_EXT,     GL_LUMINANCE32I_EXT,  GL_LUMINANCE32I_EXT,  
+          ,  { GL_LUMINANCE32I_EXT, GL_LUMINANCE32I_EXT,     GL_LUMINANCE32I_EXT,     GL_LUMINANCE32I_EXT,  GL_LUMINANCE32I_EXT,
             GL_LUMINANCE_INTEGER_EXT,  GL_INT,             0 }  // PixelDataType::INT -
 
-          ,  { GL_LUMINANCE32UI_EXT,      GL_LUMINANCE32UI_EXT,     GL_LUMINANCE32UI_EXT,      GL_LUMINANCE32UI_EXT,  GL_LUMINANCE32UI_EXT, 
+          ,  { GL_LUMINANCE32UI_EXT,      GL_LUMINANCE32UI_EXT,     GL_LUMINANCE32UI_EXT,      GL_LUMINANCE32UI_EXT,  GL_LUMINANCE32UI_EXT,
             GL_LUMINANCE,              GL_UNSIGNED_INT,    0 }  // PixelDataType::UNSIGNED_INT
 
-          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,  
+          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,
             DP_TIF_INVALID,    0,           0 }  // PixelDataType::FLOAT - float data with integer fmt = invalid
 
-          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,  
+          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,
             DP_TIF_INVALID,    0,           0 }  // PixelDataType::HALF - float data with integer fmt = invalid
 
           //
           // custom formats
-          // 
-          // requires 4-component format (RGBA|BGRA) 
+          //
+          // requires 4-component format (RGBA|BGRA)
           ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
             DP_TIF_INVALID,  0, 0 }  // PixelDataType::UNSIGNED_INT_2_10_10_10
 
@@ -627,12 +627,12 @@ namespace dp
           ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
             DP_TIF_INVALID,  0, 0 }  // PixelDataType::UNSIGNED_INT_24_8
         }
-        , { // PixelFormat::INTEGER_LUMINANCE_ALPHA !! 
+        , { // PixelFormat::INTEGER_LUMINANCE_ALPHA !!
 
-          // fixedfmt           floatFmt           integerFmt           compressedFmt       nonlinear  
+          // fixedfmt           floatFmt           integerFmt           compressedFmt       nonlinear
           // userFmtFixed       userFmtFloat       userFmtInteger       type                upload
 
-          { GL_LUMINANCE_ALPHA8I_EXT, GL_LUMINANCE_ALPHA8I_EXT,   GL_LUMINANCE_ALPHA8I_EXT,  GL_LUMINANCE_ALPHA8I_EXT, GL_LUMINANCE_ALPHA8I_EXT, 
+          { GL_LUMINANCE_ALPHA8I_EXT, GL_LUMINANCE_ALPHA8I_EXT,   GL_LUMINANCE_ALPHA8I_EXT,  GL_LUMINANCE_ALPHA8I_EXT, GL_LUMINANCE_ALPHA8I_EXT,
             GL_LUMINANCE_ALPHA_INTEGER_EXT,  GL_BYTE,            0 }  // PixelDataType::BYTE
 
           ,  { GL_LUMINANCE_ALPHA8UI_EXT,        GL_LUMINANCE_ALPHA8UI_EXT,   GL_LUMINANCE_ALPHA8UI_EXT,       GL_LUMINANCE_ALPHA8UI_EXT,  GL_LUMINANCE_ALPHA8UI_EXT,
@@ -641,26 +641,26 @@ namespace dp
           ,  { GL_LUMINANCE_ALPHA16I_EXT, GL_LUMINANCE_ALPHA16I_EXT,   GL_LUMINANCE_ALPHA16I_EXT,    GL_LUMINANCE_ALPHA16I_EXT,  GL_LUMINANCE_ALPHA16I_EXT,
             GL_LUMINANCE_ALPHA_INTEGER_EXT,   GL_SHORT,           0 }  // PixelDataType::SHORT
 
-          ,  { GL_LUMINANCE_ALPHA16UI_EXT,          GL_LUMINANCE_ALPHA16UI_EXT,     GL_LUMINANCE_ALPHA16UI_EXT,    GL_LUMINANCE_ALPHA16UI_EXT,  GL_LUMINANCE_ALPHA16UI_EXT, 
+          ,  { GL_LUMINANCE_ALPHA16UI_EXT,          GL_LUMINANCE_ALPHA16UI_EXT,     GL_LUMINANCE_ALPHA16UI_EXT,    GL_LUMINANCE_ALPHA16UI_EXT,  GL_LUMINANCE_ALPHA16UI_EXT,
             GL_LUMINANCE_ALPHA_INTEGER_EXT,      GL_UNSIGNED_SHORT,  0 }  // PixelDataType::UNSIGNED_SHORT
 
-          ,  { GL_LUMINANCE_ALPHA32I_EXT, GL_LUMINANCE_ALPHA32I_EXT,     GL_LUMINANCE_ALPHA32I_EXT,     GL_LUMINANCE_ALPHA32I_EXT,  GL_LUMINANCE_ALPHA32I_EXT,  
+          ,  { GL_LUMINANCE_ALPHA32I_EXT, GL_LUMINANCE_ALPHA32I_EXT,     GL_LUMINANCE_ALPHA32I_EXT,     GL_LUMINANCE_ALPHA32I_EXT,  GL_LUMINANCE_ALPHA32I_EXT,
             GL_LUMINANCE_ALPHA_INTEGER_EXT,            GL_INT,             0 }  // PixelDataType::INT -
 
-          ,  { GL_LUMINANCE_ALPHA32UI_EXT,          GL_LUMINANCE_ALPHA32UI_EXT,     GL_LUMINANCE_ALPHA32UI_EXT,      GL_LUMINANCE_ALPHA32UI_EXT,  GL_LUMINANCE_ALPHA32UI_EXT, 
+          ,  { GL_LUMINANCE_ALPHA32UI_EXT,          GL_LUMINANCE_ALPHA32UI_EXT,     GL_LUMINANCE_ALPHA32UI_EXT,      GL_LUMINANCE_ALPHA32UI_EXT,  GL_LUMINANCE_ALPHA32UI_EXT,
             GL_LUMINANCE_ALPHA,            GL_UNSIGNED_INT,    0 }  // PixelDataType::UNSIGNED_INT
 
-          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,  
+          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,
             DP_TIF_INVALID,    0,           0 }  // PixelDataType::FLOAT - float data with integer fmt = invalid
 
-          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,  
+          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,
             DP_TIF_INVALID,    0,           0 }  // PixelDataType::HALF - float data with integer fmt = invalid
 
           //
           // custom formats
-          // 
+          //
 
-          // requires 4-component format (RGBA|BGRA) 
+          // requires 4-component format (RGBA|BGRA)
           ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
             DP_TIF_INVALID,  0, 0 }  // PixelDataType::UNSIGNED_INT_2_10_10_10
 
@@ -676,12 +676,12 @@ namespace dp
           ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
             DP_TIF_INVALID,  0, 0 }  // PixelDataType::UNSIGNED_INT_24_8
         }
-        , { // PixelFormat::INTEGER_RGB !! 
+        , { // PixelFormat::INTEGER_RGB !!
 
-          // fixedfmt           floatFmt           integerFmt           compressedFmt       nonlinear  
+          // fixedfmt           floatFmt           integerFmt           compressedFmt       nonlinear
           // userFmtFixed       userFmtFloat       userFmtInteger       type                upload
 
-          { GL_RGB8I_EXT, GL_RGB8I_EXT,   GL_RGB8I_EXT,  GL_RGB8I_EXT, GL_RGB8I_EXT, 
+          { GL_RGB8I_EXT, GL_RGB8I_EXT,   GL_RGB8I_EXT,  GL_RGB8I_EXT, GL_RGB8I_EXT,
             GL_RGB_INTEGER_EXT,  GL_BYTE,            0 }  // PixelDataType::BYTE
 
           ,  { GL_RGB8UI_EXT,        GL_RGB8UI_EXT,   GL_RGB8UI_EXT,       GL_RGB8UI_EXT,  GL_RGB8UI_EXT,
@@ -690,26 +690,26 @@ namespace dp
           ,  { GL_RGB16I_EXT, GL_RGB16I_EXT,   GL_RGB16I_EXT,    GL_RGB16I_EXT,  GL_RGB16I_EXT,
             GL_RGB_INTEGER_EXT,   GL_SHORT,           0 }  // PixelDataType::SHORT
 
-          ,  { GL_RGB16UI_EXT,          GL_RGB16UI_EXT,     GL_RGB16UI_EXT,    GL_RGB16UI_EXT,  GL_RGB16UI_EXT, 
+          ,  { GL_RGB16UI_EXT,          GL_RGB16UI_EXT,     GL_RGB16UI_EXT,    GL_RGB16UI_EXT,  GL_RGB16UI_EXT,
             GL_RGB_INTEGER_EXT,      GL_UNSIGNED_SHORT,  0 }  // PixelDataType::UNSIGNED_SHORT
 
-          ,  { GL_RGB32I_EXT, GL_RGB32I_EXT,     GL_RGB32I_EXT,     GL_RGB32I_EXT,  GL_RGB32I_EXT,  
+          ,  { GL_RGB32I_EXT, GL_RGB32I_EXT,     GL_RGB32I_EXT,     GL_RGB32I_EXT,  GL_RGB32I_EXT,
             GL_RGB_INTEGER_EXT,            GL_INT,             0 }  // PixelDataType::INT -
 
-          ,  { GL_RGB32UI_EXT,          GL_RGB32UI_EXT,     GL_RGB32UI_EXT,      GL_RGB32UI_EXT,  GL_RGB32UI_EXT, 
+          ,  { GL_RGB32UI_EXT,          GL_RGB32UI_EXT,     GL_RGB32UI_EXT,      GL_RGB32UI_EXT,  GL_RGB32UI_EXT,
             GL_RGB,            GL_UNSIGNED_INT,    0 }  // PixelDataType::UNSIGNED_INT
 
-          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,  
+          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,
             DP_TIF_INVALID,    0,           0 }  // PixelDataType::FLOAT - float data with integer fmt = invalid
 
-          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,  
+          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,
             DP_TIF_INVALID,    0,           0 }  // PixelDataType::HALF - float data with integer fmt = invalid
 
           //
           // custom formats
-          // 
+          //
 
-          // requires 4-component format (RGBA|BGRA) 
+          // requires 4-component format (RGBA|BGRA)
           ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
             DP_TIF_INVALID,  0, 0 }  // PixelDataType::UNSIGNED_INT_2_10_10_10
 
@@ -725,12 +725,12 @@ namespace dp
           ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
             DP_TIF_INVALID,  0, 0 }  // PixelDataType::UNSIGNED_INT_24_8
         }
-        , { // PixelFormat::INTEGER_BGR !! 
+        , { // PixelFormat::INTEGER_BGR !!
 
-          // fixedfmt           floatFmt           integerFmt           compressedFmt       nonlinear  
+          // fixedfmt           floatFmt           integerFmt           compressedFmt       nonlinear
           // userFmtFixed       userFmtFloat       userFmtInteger       type                upload
 
-          { GL_RGB8I_EXT, GL_RGB8I_EXT,   GL_RGB8I_EXT,  GL_RGB8I_EXT, GL_RGB8I_EXT, 
+          { GL_RGB8I_EXT, GL_RGB8I_EXT,   GL_RGB8I_EXT,  GL_RGB8I_EXT, GL_RGB8I_EXT,
             GL_BGR_INTEGER_EXT,  GL_BYTE,            0 }  // PixelDataType::BYTE
 
           ,  { GL_RGB8UI_EXT,        GL_RGB8UI_EXT,   GL_RGB8UI_EXT,       GL_RGB8UI_EXT,  GL_RGB8UI_EXT,
@@ -739,26 +739,26 @@ namespace dp
           ,  { GL_RGB16I_EXT, GL_RGB16I_EXT,   GL_RGB16I_EXT,    GL_RGB16I_EXT,  GL_RGB16I_EXT,
             GL_BGR_INTEGER_EXT,   GL_SHORT,           0 }  // PixelDataType::SHORT
 
-          ,  { GL_RGB16UI_EXT,          GL_RGB16UI_EXT,     GL_RGB16UI_EXT,    GL_RGB16UI_EXT,  GL_RGB16UI_EXT, 
+          ,  { GL_RGB16UI_EXT,          GL_RGB16UI_EXT,     GL_RGB16UI_EXT,    GL_RGB16UI_EXT,  GL_RGB16UI_EXT,
             GL_BGR_INTEGER_EXT,      GL_UNSIGNED_SHORT,  0 }  // PixelDataType::UNSIGNED_SHORT
 
-          ,  { GL_RGB32I_EXT, GL_RGB32I_EXT,     GL_RGB32I_EXT,     GL_RGB32I_EXT,  GL_RGB32I_EXT,  
+          ,  { GL_RGB32I_EXT, GL_RGB32I_EXT,     GL_RGB32I_EXT,     GL_RGB32I_EXT,  GL_RGB32I_EXT,
             GL_BGR_INTEGER_EXT,            GL_INT,             0 }  // PixelDataType::INT -
 
-          ,  { GL_RGB32UI_EXT,          GL_RGB32UI_EXT,     GL_RGB32UI_EXT,      GL_RGB32UI_EXT,  GL_RGB32UI_EXT, 
+          ,  { GL_RGB32UI_EXT,          GL_RGB32UI_EXT,     GL_RGB32UI_EXT,      GL_RGB32UI_EXT,  GL_RGB32UI_EXT,
             GL_BGR_INTEGER_EXT,            GL_UNSIGNED_INT,    0 }  // PixelDataType::UNSIGNED_INT
 
-          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,  
+          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,
             DP_TIF_INVALID,    0,           0 }  // PixelDataType::FLOAT - float data with integer fmt = invalid
 
-          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,  
+          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,
             DP_TIF_INVALID,    0,           0 }  // PixelDataType::HALF - float data with integer fmt = invalid
 
           //
           // custom formats
-          // 
+          //
 
-          // requires 4-component format (RGBA|BGRA) 
+          // requires 4-component format (RGBA|BGRA)
           ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
             DP_TIF_INVALID,  0, 0 }  // PixelDataType::UNSIGNED_INT_2_10_10_10
 
@@ -774,12 +774,12 @@ namespace dp
           ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
             DP_TIF_INVALID,  0, 0 }  // PixelDataType::UNSIGNED_INT_24_8
         }
-        , { // PixelFormat::INTEGER_RGBA !! 
+        , { // PixelFormat::INTEGER_RGBA !!
 
-          // fixedfmt           floatFmt           integerFmt           compressedFmt       nonlinear  
+          // fixedfmt           floatFmt           integerFmt           compressedFmt       nonlinear
           // userFmtFixed       userFmtFloat       userFmtInteger       type                upload
 
-          { GL_RGBA8I_EXT, GL_RGBA8I_EXT,   GL_RGBA8I_EXT,  GL_RGBA8I_EXT, GL_RGBA8I_EXT, 
+          { GL_RGBA8I_EXT, GL_RGBA8I_EXT,   GL_RGBA8I_EXT,  GL_RGBA8I_EXT, GL_RGBA8I_EXT,
             GL_RGBA_INTEGER_EXT,  GL_BYTE,            0 }  // PixelDataType::BYTE
 
           ,  { GL_RGBA8UI_EXT,        GL_RGBA8UI_EXT,   GL_RGBA8UI_EXT,       GL_RGBA8UI_EXT,  GL_RGBA8UI_EXT,
@@ -788,26 +788,26 @@ namespace dp
           ,  { GL_RGBA16I_EXT, GL_RGBA16I_EXT,   GL_RGBA16I_EXT,    GL_RGBA16I_EXT,  GL_RGBA16I_EXT,
             GL_RGBA_INTEGER_EXT,   GL_SHORT,           0 }  // PixelDataType::SHORT
 
-          ,  { GL_RGBA16UI_EXT,          GL_RGBA16UI_EXT,     GL_RGBA16UI_EXT,    GL_RGBA16UI_EXT,  GL_RGBA16UI_EXT, 
+          ,  { GL_RGBA16UI_EXT,          GL_RGBA16UI_EXT,     GL_RGBA16UI_EXT,    GL_RGBA16UI_EXT,  GL_RGBA16UI_EXT,
             GL_RGBA_INTEGER_EXT,      GL_UNSIGNED_SHORT,  0 }  // PixelDataType::UNSIGNED_SHORT
 
-          ,  { GL_RGBA32I_EXT, GL_RGBA32I_EXT,     GL_RGBA32I_EXT,     GL_RGBA32I_EXT,  GL_RGBA32I_EXT,  
+          ,  { GL_RGBA32I_EXT, GL_RGBA32I_EXT,     GL_RGBA32I_EXT,     GL_RGBA32I_EXT,  GL_RGBA32I_EXT,
             GL_RGBA_INTEGER_EXT,            GL_INT,             0 }  // PixelDataType::INT -
 
-          ,  { GL_RGBA32UI_EXT,          GL_RGBA32UI_EXT,     GL_RGBA32UI_EXT,      GL_RGBA32UI_EXT,  GL_RGBA32UI_EXT, 
+          ,  { GL_RGBA32UI_EXT,          GL_RGBA32UI_EXT,     GL_RGBA32UI_EXT,      GL_RGBA32UI_EXT,  GL_RGBA32UI_EXT,
             GL_RGBA_INTEGER_EXT,            GL_UNSIGNED_INT,    0 }  // PixelDataType::UNSIGNED_INT
 
-          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,  
+          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,
             DP_TIF_INVALID,    0,           0 }  // PixelDataType::FLOAT - float data with integer fmt = invalid
 
-          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,  
+          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,
             DP_TIF_INVALID,    0,           0 }  // PixelDataType::HALF - float data with integer fmt = invalid
 
           //
           // custom formats
-          // 
+          //
 
-          // not sure if this makes sense, but it should work according to the specs 
+          // not sure if this makes sense, but it should work according to the specs
           ,  { GL_RGBA16UI_EXT,     GL_RGBA16UI_EXT,     GL_RGBA16UI_EXT,    GL_RGBA16UI_EXT,  GL_RGBA16UI_EXT,
             GL_RGBA_INTEGER_EXT, GL_UNSIGNED_INT_2_10_10_10_REV,   0 }  // PixelDataType::UNSIGNED_INT_2_10_10_10
 
@@ -823,12 +823,12 @@ namespace dp
           ,  { DP_TIF_INVALID,  DP_TIF_INVALID,  DP_TIF_INVALID,    DP_TIF_INVALID,   DP_TIF_INVALID,
             DP_TIF_INVALID,  0, 0 }  // PixelDataType::UNSIGNED_INT_24_8
         }
-        , { // PixelFormat::INTEGER_BGRA !! 
+        , { // PixelFormat::INTEGER_BGRA !!
 
-          // fixedfmt           floatFmt           integerFmt           compressedFmt       nonlinear  
+          // fixedfmt           floatFmt           integerFmt           compressedFmt       nonlinear
           // userFmtFixed       userFmtFloat       userFmtInteger       type                upload
 
-          { GL_RGBA8I_EXT, GL_RGBA8I_EXT,   GL_RGBA8I_EXT,  GL_RGBA8I_EXT, GL_RGBA8I_EXT, 
+          { GL_RGBA8I_EXT, GL_RGBA8I_EXT,   GL_RGBA8I_EXT,  GL_RGBA8I_EXT, GL_RGBA8I_EXT,
             GL_BGRA_INTEGER_EXT,  GL_BYTE,            0 }  // PixelDataType::BYTE
 
           ,  { GL_RGBA8UI_EXT,        GL_RGBA8UI_EXT,   GL_RGBA8UI_EXT,       GL_RGBA8UI_EXT,  GL_RGBA8UI_EXT,
@@ -837,25 +837,25 @@ namespace dp
           ,  { GL_RGBA16I_EXT, GL_RGBA16I_EXT,   GL_RGBA16I_EXT,    GL_RGBA16I_EXT,  GL_RGBA16I_EXT,
             GL_BGRA_INTEGER_EXT,   GL_SHORT,           0 }  // PixelDataType::SHORT
 
-          ,  { GL_RGBA16UI_EXT,          GL_RGBA16UI_EXT,     GL_RGBA16UI_EXT,    GL_RGBA16UI_EXT,  GL_RGBA16UI_EXT, 
+          ,  { GL_RGBA16UI_EXT,          GL_RGBA16UI_EXT,     GL_RGBA16UI_EXT,    GL_RGBA16UI_EXT,  GL_RGBA16UI_EXT,
             GL_BGRA_INTEGER_EXT,      GL_UNSIGNED_SHORT,  0 }  // PixelDataType::UNSIGNED_SHORT
 
-          ,  { GL_RGBA32I_EXT, GL_RGBA32I_EXT,     GL_RGBA32I_EXT,     GL_RGBA32I_EXT,  GL_RGBA32I_EXT,  
+          ,  { GL_RGBA32I_EXT, GL_RGBA32I_EXT,     GL_RGBA32I_EXT,     GL_RGBA32I_EXT,  GL_RGBA32I_EXT,
             GL_BGRA_INTEGER_EXT, GL_INT,             0 }  // PixelDataType::INT -
 
-          ,  { GL_RGBA32UI_EXT,     GL_RGBA32UI_EXT,     GL_RGBA32UI_EXT,      GL_RGBA32UI_EXT,  GL_RGBA32UI_EXT, 
+          ,  { GL_RGBA32UI_EXT,     GL_RGBA32UI_EXT,     GL_RGBA32UI_EXT,      GL_RGBA32UI_EXT,  GL_RGBA32UI_EXT,
             GL_BGRA_INTEGER_EXT, GL_UNSIGNED_INT,    0 }  // PixelDataType::UNSIGNED_INT
 
-          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,  
+          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,
             DP_TIF_INVALID,    0,           0 }  // PixelDataType::FLOAT - float data with integer fmt = invalid
 
-          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,  
+          ,  { DP_TIF_INVALID,    DP_TIF_INVALID,     DP_TIF_INVALID,       DP_TIF_INVALID, DP_TIF_INVALID,
             DP_TIF_INVALID,    0,           0 }  // PixelDataType::HALF - float data with integer fmt = invalid
 
           //
           // custom formats
-          // 
-          // not sure if this makes sense, but it should work according to the specs 
+          //
+          // not sure if this makes sense, but it should work according to the specs
           ,  { GL_RGBA16UI_EXT,     GL_RGBA16UI_EXT,     GL_RGBA16UI_EXT,    GL_RGBA16UI_EXT,  GL_RGBA16UI_EXT,
             GL_BGRA_INTEGER_EXT, GL_UNSIGNED_INT_2_10_10_10_REV,   0 }  // PixelDataType::UNSIGNED_INT_2_10_10_10
 
@@ -879,7 +879,7 @@ namespace dp
 
       class TexImageFmts
       {
-      public: 
+      public:
         TexImageFmts();
         dp::sg::gl::TexImageFmt getFmt( Image::PixelFormat pf, Image::PixelDataType pdt );
         dp::sg::gl::TexImageFmt* getFmts( Image::PixelFormat pf );
@@ -889,7 +889,7 @@ namespace dp
 
       private:
         bool initialized;
-        dp::sg::gl::TexImageFmt m_texImageFmts[Image::PixelFormat::NUM_FORMATS][Image::PixelDataType::NUM_TYPES];     
+        dp::sg::gl::TexImageFmt m_texImageFmts[int(Image::PixelFormat::NUM_FORMATS)][int(Image::PixelDataType::NUM_TYPES)];
       };
 
       TexImageFmts::TexImageFmts()
@@ -919,7 +919,7 @@ namespace dp
       }
 
       void TexImageFmts::initialize()
-      { 
+      {
         // initialize texture image formats according to current hardware and driver configuration
 
         // NOTE: we first setup for most recent hardware features.
@@ -953,11 +953,11 @@ namespace dp
           //
           for( size_t i = 0; i < static_cast<size_t>(Image::PixelFormat::NUM_FORMATS); i ++ )
           {
-            m_texImageFmts[i][static_cast<size_t>(Image::PixelDataType::BYTE)].fixedPtFmt = 
+            m_texImageFmts[i][static_cast<size_t>(Image::PixelDataType::BYTE)].fixedPtFmt =
               m_texImageFmts[i][static_cast<size_t>(Image::PixelDataType::UNSIGNED_BYTE)].fixedPtFmt;
-            m_texImageFmts[i][static_cast<size_t>(Image::PixelDataType::SHORT)].fixedPtFmt = 
+            m_texImageFmts[i][static_cast<size_t>(Image::PixelDataType::SHORT)].fixedPtFmt =
               m_texImageFmts[i][static_cast<size_t>(Image::PixelDataType::UNSIGNED_SHORT)].fixedPtFmt;
-            m_texImageFmts[i][static_cast<size_t>(Image::PixelDataType::INT)].fixedPtFmt = 
+            m_texImageFmts[i][static_cast<size_t>(Image::PixelDataType::INT)].fixedPtFmt =
               m_texImageFmts[i][static_cast<size_t>(Image::PixelDataType::UNSIGNED_INT)].fixedPtFmt;
           }
         }
@@ -1074,14 +1074,14 @@ namespace dp
           for( size_t j = 0; j < static_cast<size_t>(Image::PixelDataType::NUM_TYPES); j ++ )
           {
             m_texImageFmts[static_cast<size_t>(Image::PixelFormat::LUMINANCE)][j].compressedFmt = m_texImageFmts[static_cast<size_t>(Image::PixelFormat::LUMINANCE)][j].fixedPtFmt;
-            m_texImageFmts[static_cast<size_t>(Image::PixelFormat::LUMINANCE_ALPHA)][j].compressedFmt = 
+            m_texImageFmts[static_cast<size_t>(Image::PixelFormat::LUMINANCE_ALPHA)][j].compressedFmt =
               m_texImageFmts[static_cast<size_t>(Image::PixelFormat::LUMINANCE_ALPHA)][j].fixedPtFmt;
           }
         }
         else
         {
           // set up these formats
-          size_t i = static_cast<size_t>(Image::PixelFormat::COMPRESSED_LUMINANCE_LATC1);
+          size_t i = static_cast<size_t>(Image::PixelFormat::COMPRESSED_LUMNANCE_LATC1);
           for( size_t j = 0; j < static_cast<size_t>(Image::PixelDataType::NUM_TYPES); j++ )
           {
             m_texImageFmts[i][j].fixedPtFmt    = GL_COMPRESSED_LUMINANCE_LATC1_EXT;
@@ -1444,11 +1444,11 @@ namespace dp
           }
         }
 
-        if (  !GLEW_ARB_vertex_buffer_object 
+        if (  !GLEW_ARB_vertex_buffer_object
           || !GLEW_ARB_pixel_buffer_object )
         {
-          m_texImageFmts[static_cast<size_t>(Image::PixelFormat::BGRA)][static_cast<size_t>(Image::PixelDataType::BYTE)].uploadHint = 0; 
-          m_texImageFmts[static_cast<size_t>(Image::PixelFormat::BGRA)][static_cast<size_t>(Image::PixelDataType::UNSIGNED_BYTE)].uploadHint = 0; 
+          m_texImageFmts[static_cast<size_t>(Image::PixelFormat::BGRA)][static_cast<size_t>(Image::PixelDataType::BYTE)].uploadHint = 0;
+          m_texImageFmts[static_cast<size_t>(Image::PixelFormat::BGRA)][static_cast<size_t>(Image::PixelDataType::UNSIGNED_BYTE)].uploadHint = 0;
           m_texImageFmts[static_cast<size_t>(Image::PixelFormat::RGBA)][static_cast<size_t>(Image::PixelDataType::HALF)].uploadHint = 0;
           m_texImageFmts[static_cast<size_t>(Image::PixelFormat::RGBA)][static_cast<size_t>(Image::PixelDataType::FLOAT)].uploadHint = 0;
         }
@@ -1462,7 +1462,7 @@ namespace dp
       static
         bool isInteger( GLint usrFmt )
       {
-        if( usrFmt >= static_cast<size_t>(Image::PixelFormat::INTEGER_ALPHA) && 
+        if( usrFmt >= static_cast<size_t>(Image::PixelFormat::INTEGER_ALPHA) &&
             usrFmt <= static_cast<size_t>(Image::PixelFormat::INTEGER_BGRA) )
         {
           return true;
@@ -1480,27 +1480,27 @@ namespace dp
       {
         switch( usrFmt )
         {
-        case GL_RGB:              //!< RGB format  
+        case GL_RGB:              //!< RGB format
         case GL_RGB_INTEGER_EXT:
           return GL_RGB_INTEGER_EXT;
 
-        case GL_RGBA:            //!< RGBA format  
+        case GL_RGBA:            //!< RGBA format
         case GL_RGBA_INTEGER_EXT:
           return GL_RGBA_INTEGER_EXT;
 
-        case GL_BGR:              //!< BGR format  
+        case GL_BGR:              //!< BGR format
         case GL_BGR_INTEGER_EXT:
           return GL_BGR_INTEGER_EXT;
 
-        case GL_BGRA:            //!< BGRA format  
+        case GL_BGRA:            //!< BGRA format
         case GL_BGRA_INTEGER_EXT:
           return GL_BGRA_INTEGER_EXT;
 
-        case GL_LUMINANCE:        //!< luminance format   
+        case GL_LUMINANCE:        //!< luminance format
         case GL_LUMINANCE_INTEGER_EXT:
           return GL_LUMINANCE_INTEGER_EXT;
 
-        case GL_LUMINANCE_ALPHA:  //!< luminance alpha format  
+        case GL_LUMINANCE_ALPHA:  //!< luminance alpha format
         case GL_LUMINANCE_ALPHA_INTEGER_EXT:
           return GL_LUMINANCE_ALPHA_INTEGER_EXT;
 
@@ -1930,7 +1930,7 @@ namespace dp
           return false;
         }
       }
-      
+
       TextureGLSharedPtr TextureGL::create( const dp::gl::TextureSharedPtr& texture )
       {
         return( std::shared_ptr<TextureGL>( new TextureGL( texture ) ) );
@@ -1986,9 +1986,9 @@ namespace dp
       bool TextureGL::getTexImageFmt( GLTexImageFmt & tfmt, Image::PixelFormat fmt, Image::PixelDataType type, TextureHost::TextureGPUFormat gpufmt )
       {
         // give a hint while debugging. though, need a run-time check below
-        DP_ASSERT(fmt!=Image::PixelFormat::UNKNOWN || type!=Image::PixelDataType::UNKNOWN);  
+        DP_ASSERT(fmt!=Image::PixelFormat::UNKNOWN || type!=Image::PixelDataType::UNKNOWN);
 
-        if( fmt==Image::PixelFormat::UNKNOWN || type==Image::PixelDataType::UNKNOWN )  
+        if( fmt==Image::PixelFormat::UNKNOWN || type==Image::PixelDataType::UNKNOWN )
         {
           return false;
         }
@@ -2005,7 +2005,7 @@ namespace dp
         // If gpufmt == TextureGPUFormat::DEFAULT, and we have a floating point format texture, then the assumption is that
         // the texture will be loaded with a floating point format to match the way dp used to work.  So, unless
         // the user has selected a specific generic format, examine the PixelData and if it is float, reset the
-        // GPUformat to be float as well. 
+        // GPUformat to be float as well.
         //
         if( gpufmt == TextureHost::TextureGPUFormat::DEFAULT )
         {

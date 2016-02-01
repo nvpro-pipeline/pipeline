@@ -25,6 +25,7 @@
 
 
 #include <dp/sg/core/LOD.h>
+#include <cstring>
 
 using namespace dp::math;
 

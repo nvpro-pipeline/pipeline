@@ -111,12 +111,12 @@ namespace dp
           {
             switch ( mf )
             {
-              case dp::sg::core::TextureMinFilterMode::NEAREST:
+              case dp::sg::core::TextureMagFilterMode::NEAREST:
                 return dp::rix::core::SamplerStateFilterMode::NEAREST;
               default:
                 assert(!"Unexpected TextureMagFilterMode");
                 // fall through
-              case dp::sg::core::TextureMinFilterMode::LINEAR:
+              case dp::sg::core::TextureMagFilterMode::LINEAR:
                 return dp::rix::core::SamplerStateFilterMode::LINEAR;
             }
           }

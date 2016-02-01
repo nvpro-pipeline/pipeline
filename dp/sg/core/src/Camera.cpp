@@ -280,7 +280,7 @@ namespace dp
         DP_ASSERT( areOrthonormal( dir, up ) );
         Vec3f scaling;
         Quatf scaleOrientation, orientation;
-        Mat33f  m = ~Mat33f( { dir ^ up, up, -dir } );
+        Mat33f  m = ~Mat33f{ dir ^ up, up, -dir };
         decompose( m, orientation, scaling, scaleOrientation );
         setOrientation( ~orientation );
       }

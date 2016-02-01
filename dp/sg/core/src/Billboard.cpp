@@ -144,7 +144,7 @@ namespace dp
         Vec3f newXAxis = upVector ^ newZAxis;
 
         //  determine the rotation matrix that does just that
-        Mat33f rot( { newXAxis, upVector, newZAxis } );
+        Mat33f rot{ newXAxis, upVector, newZAxis };
         DP_ASSERT( isRotation( rot ) );
 
         //  and set the Orientation
@@ -181,7 +181,7 @@ namespace dp
           Vec3f newXAxis = newYAxis ^ newZAxis;
 
           //  determine the rotation matrix that does just that
-          Mat33f rot( { newXAxis, newYAxis, newZAxis } );
+          Mat33f rot{ newXAxis, newYAxis, newZAxis };
           DP_ASSERT( isRotation( rot ) );
 
           //  and set the Orientation

@@ -782,7 +782,7 @@ void MainWindow::setupActions()
     QVariant data;
     bool checked = false;
 
-    switch( i )
+    switch( ViewerRendererWidget::ManipulatorType(i) )
     {
       case ViewerRendererWidget::ManipulatorType::TRACKBALL:
         name = "TrackballCameraManipulator";

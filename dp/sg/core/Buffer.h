@@ -34,6 +34,7 @@
 #include <dp/util/BitMask.h>
 #include <dp/util/Flags.h>
 #include <dp/util/StridedIterator.h>
+#include <dp/util/WeakPtr.h>
 #include <cstring>
 
 namespace dp
@@ -462,7 +463,7 @@ namespace dp
       template <typename ValueType>
       typename Buffer::ConstIterator<ValueType>::Type Buffer::getConstIterator( size_t offset, int strideInBytes ) const
       {
-        DataReadLock readLock( dp::util::getWeakPtr<Buffer>(this) );
+        DataReadLock readLock( this->getSharedPtr<Buffer>() );
         const char *basePtr = reinterpret_cast<const char*>(readLock.getPtr()) + offset;
         return ConstIterator<ValueType>::Type( reinterpret_cast<const ValueType *>(basePtr), strideInBytes ? strideInBytes : sizeof(ValueType), readLock );
       }

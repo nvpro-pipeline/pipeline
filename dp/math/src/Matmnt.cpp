@@ -230,7 +230,7 @@ namespace dp
       T mRow = _rowNorm( mk );
       do
       {
-        Matmnt<3, 3, T> mAdjTk( { mk[1] ^ mk[2], mk[2] ^ mk[0], mk[0] ^ mk[1] } );
+        Matmnt<3, 3, T> mAdjTk{ mk[1] ^ mk[2], mk[2] ^ mk[0], mk[0] ^ mk[1] };
         det = mk[0] * mAdjTk[0];
         T absDet = abs( det );
         if ( std::numeric_limits<T>::epsilon() < absDet )

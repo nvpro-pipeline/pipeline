@@ -159,14 +159,16 @@ namespace dp
         bool m_cycleDetected;
       };
 
+      template <typename T> class LinkImpl;
+
       template <typename T>
       LinkId LinkManager::link(dp::sg::core::ObjectSharedPtr const & srcObject, dp::util::PropertyId srcProperty,
                                dp::sg::core::ObjectSharedPtr const & dstObject, dp::util::PropertyId  dstProperty)
       {
-        DP_ASSERT( srcObjectLock->getPropertyType(srcProperty) == static_cast<Property::Type>(TypedPropertyEnum<T>::type) );
-        DP_ASSERT( dstObjectLock->getPropertyType(dstProperty) == static_cast<Property::Type>(TypedPropertyEnum<T>::type) );
+        DP_ASSERT( srcObject->getPropertyType(srcProperty) == static_cast<Property::Type>(TypedPropertyEnum<T>::type) );
+        DP_ASSERT( dstObject->getPropertyType(dstProperty) == static_cast<Property::Type>(TypedPropertyEnum<T>::type) );
 
-        LinkId link = new LinkImpl<T>(srcObjectLock, srcProperty, dstObjectLock, dstProperty);
+        LinkId link = new LinkImpl<T>(srcObject, srcProperty, dstObject, dstProperty);
         storeLink(link);
         return link;
       }
@@ -175,7 +177,7 @@ namespace dp
       LinkId LinkManager::link(dp::sg::core::ObjectSharedPtr const & srcObject, const char *srcProperty,
                                dp::sg::core::ObjectSharedPtr const & dstObject, const char *dstProperty)
       {
-        return link<T>(srcObjectLock, srcObjectLock->getProperty(srcProperty), dstObjectLock, dstObjectLock->getProperty(dstProperty));
+        return link<T>(srcObject, srcObject->getProperty(srcProperty), dstObject, dstObject->getProperty(dstProperty));
       }
 
     } // namespace animation
