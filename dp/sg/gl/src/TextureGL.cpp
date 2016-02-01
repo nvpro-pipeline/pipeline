@@ -1081,7 +1081,7 @@ namespace dp
         else
         {
           // set up these formats
-          size_t i = static_cast<size_t>(Image::PixelFormat::COMPRESSED_LUMNANCE_LATC1);
+          size_t i = static_cast<size_t>(Image::PixelFormat::COMPRESSED_LUMINANCE_LATC1);
           for( size_t j = 0; j < static_cast<size_t>(Image::PixelDataType::NUM_TYPES); j++ )
           {
             m_texImageFmts[i][j].fixedPtFmt    = GL_COMPRESSED_LUMINANCE_LATC1_EXT;
