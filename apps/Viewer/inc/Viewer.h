@@ -1,4 +1,4 @@
-// Copyright (c) 2009-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2009-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -227,3 +227,11 @@ inline QUndoStack & GetSceneStateUndoStack()
 {
   return GetApp()->getSceneStateUndoStack();
 }
+
+inline std::string stripNameSpaces(std::string const& name)
+{
+  size_t pos = name.find_last_of("::");
+  return((pos != std::string::npos) ? name.substr(pos + 1) : name);
+  return(name.substr(pos + 1));
+}
+

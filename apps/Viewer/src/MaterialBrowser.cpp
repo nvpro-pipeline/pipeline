@@ -1,4 +1,4 @@
-// Copyright (c) 2013-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2013-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -65,7 +65,7 @@ void MaterialBrowser::catalogItemCollapsed( QTreeWidgetItem * item )
   }
 }
 
-void MaterialBrowser::catalogItemExpanded( QTreeWidgetItem * item )
+void MaterialBrowser::catalogItemExpanded(QTreeWidgetItem * item)
 {
   GetApp()->setOverrideCursor( Qt::WaitCursor );
 
@@ -103,7 +103,7 @@ void MaterialBrowser::catalogItemExpanded( QTreeWidgetItem * item )
       {
         QTreeWidgetItem * childItem = new QTreeWidgetItem();
         childItem->setData( 0, Qt::UserRole, QString( it->c_str() ) );
-        childItem->setText( 0, QString( it->c_str() ) );
+        childItem->setText(0, QString(stripNameSpaces(*it).c_str()));
         item->addChild( childItem );
       }
     }

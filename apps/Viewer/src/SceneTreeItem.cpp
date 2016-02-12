@@ -1,4 +1,4 @@
-// Copyright (c) 2013-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2013-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -25,6 +25,7 @@
 
 
 #include "SceneTreeItem.h"
+#include "Viewer.h"
 #include <dp/fx/EffectSpec.h>
 #include <dp/sg/core/GeoNode.h>
 #include <dp/sg/core/Object.h>
@@ -35,12 +36,12 @@
 
 using namespace dp::sg::core;
 
-SceneTreeItem::SceneTreeItem( ObjectSharedPtr const & object )
+SceneTreeItem::SceneTreeItem(ObjectSharedPtr const & object)
   : m_object(object)
 {
   dp::sg::core::ObjectCode objectCode = m_object->getObjectCode();
 
-  std::string name = m_object->getName();
+  std::string name = stripNameSpaces(m_object->getName());
   if ( name.empty() )
   {
     name = "unnamed " + objectCodeToName( objectCode );
