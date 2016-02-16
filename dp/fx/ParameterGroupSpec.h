@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -116,6 +116,14 @@ namespace dp
             ||  (   ( ignoreNames ? true : m_name == p->m_name )
                 &&  ( m_dataSize == p->m_dataSize )
                 &&  ( m_specs == p->m_specs ) ) );
+    }
+
+
+    inline std::string stripNameSpaces(std::string const& name)
+    {
+      size_t pos = name.find_last_of("::");
+      return((pos != std::string::npos) ? name.substr(pos + 1) : name);
+      return(name.substr(pos + 1));
     }
 
   } // namespace fx

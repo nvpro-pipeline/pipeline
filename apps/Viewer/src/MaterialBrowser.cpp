@@ -103,7 +103,7 @@ void MaterialBrowser::catalogItemExpanded(QTreeWidgetItem * item)
       {
         QTreeWidgetItem * childItem = new QTreeWidgetItem();
         childItem->setData( 0, Qt::UserRole, QString( it->c_str() ) );
-        childItem->setText(0, QString(stripNameSpaces(*it).c_str()));
+        childItem->setText(0, QString(dp::fx::stripNameSpaces(*it).c_str()));
         item->addChild( childItem );
       }
     }

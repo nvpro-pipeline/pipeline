@@ -41,7 +41,7 @@ SceneTreeItem::SceneTreeItem(ObjectSharedPtr const & object)
 {
   dp::sg::core::ObjectCode objectCode = m_object->getObjectCode();
 
-  std::string name = stripNameSpaces(m_object->getName());
+  std::string name = dp::fx::stripNameSpaces(m_object->getName());
   if ( name.empty() )
   {
     name = "unnamed " + objectCodeToName( objectCode );
