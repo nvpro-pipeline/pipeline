@@ -46,7 +46,7 @@ CFRPipeline::MonoViewStateProviderSharedPtr CFRPipeline::MonoViewStateProvider::
   return( std::shared_ptr<MonoViewStateProvider>( new CFRPipeline::MonoViewStateProvider() ) );
 }
 
-// This does nothing except for providing the setSceneRenderer() override which 
+// This does nothing except for providing the setSceneRenderer() override which
 // allows to set the scene renderer before any OpenGL resources have been allocated.
 CFRPipeline::CFRPipeline( const char *renderEngine,
                           dp::fx::Manager shaderManagerType,
@@ -98,7 +98,7 @@ bool CFRPipeline::init( const dp::gl::RenderContextSharedPtr &renderContext,
     std::cout << "GPU " << gpuIndex;
     gpus.push_back( gpu );
 
-    // find out which GPU has the primary display 
+    // find out which GPU has the primary display
     // this GPU is used for rendering in win7, so we can use the renderTarget that was passed
 
 #if CFRPIPELINE_PRIMARY_GPU_IMPROVEMENT
@@ -132,7 +132,7 @@ bool CFRPipeline::init( const dp::gl::RenderContextSharedPtr &renderContext,
   for ( size_t i = 0; i < m_rendererCount; ++i )
   {
     GpuData& gpuData = m_gpuData[i];
- 
+
     gpuData.m_sceneRenderer = dp::sg::renderer::rix::gl::SceneRenderer::create( m_renderEngine.c_str(), m_shaderManager, m_cullingMode );
 
     if( i == m_primaryGpuIndex )
@@ -144,12 +144,12 @@ bool CFRPipeline::init( const dp::gl::RenderContextSharedPtr &renderContext,
     }
     else
     {
-      // all other gpus get an own render context and render target that will be copied to the final rendertarget 
+      // all other gpus get an own render context and render target that will be copied to the final rendertarget
       std::vector< HGPUNV > gpu;
       gpu.push_back( gpus[i] );
 
       dp::gl::RenderContextFormat format;
-      dp::gl::RenderContextSharedPtr context = dp::gl::RenderContext::create( dp::gl::RenderContext::Headless( &format, dp::gl::RenderContextSharedPtr::null, gpu ) );
+      dp::gl::RenderContextSharedPtr context = dp::gl::RenderContext::create( dp::gl::RenderContext::Headless( &format, dp::gl::RenderContextSharedPtr(), gpu ) );
 
       dp::gl::RenderTargetFBOSharedPtr rt = dp::gl::RenderTargetFBO::create(context);
       gpuData.m_renderTarget = rt;
@@ -210,7 +210,7 @@ void CFRPipeline::resize( size_t width, size_t height )
 // Mind, this is called for left and right eye independently.
 void CFRPipeline::doRender(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget)
 {
-  const dp::gl::RenderTargetSharedPtr renderTargetGL = renderTarget.staticCast<dp::gl::RenderTarget>();
+  const dp::gl::RenderTargetSharedPtr renderTargetGL = std::static_pointer_cast<dp::gl::RenderTarget>(renderTarget);
   DP_ASSERT( renderTargetGL );
   if( m_gpuData.empty() )
   {
@@ -248,8 +248,8 @@ void CFRPipeline::doRender(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::
 
     GpuData& gpuData = m_gpuData[i];
 
-    const dp::gl::RenderTargetFBO::SharedAttachment &attachment = gpuData.m_renderTarget.inplaceCast<dp::gl::RenderTargetFBO>()->getAttachment(dp::gl::RenderTargetFBO::AttachmentTarget::COLOR0);
-    const dp::gl::RenderTargetFBO::SharedAttachmentTexture &texAtt = attachment.inplaceCast<dp::gl::RenderTargetFBO::AttachmentTexture>();
+    const dp::gl::RenderTargetFBO::SharedAttachment &attachment = std::static_pointer_cast<dp::gl::RenderTargetFBO>(gpuData.m_renderTarget)->getAttachment(dp::gl::RenderTargetFBO::AttachmentTarget::COLOR0);
+    const dp::gl::RenderTargetFBO::SharedAttachmentTexture &texAtt = std::static_pointer_cast<dp::gl::RenderTargetFBO::AttachmentTexture>(attachment);
 
     DP_ASSERT( texAtt );
 
@@ -257,7 +257,7 @@ void CFRPipeline::doRender(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::
     gpuData.m_renderTarget->setClearMask(0);
     gpuData.m_renderTarget->beginRendering();
 
-    gpuData.m_textureTransfer->transfer( i, m_compositeTexture, texAtt->getTexture().inplaceCast<dp::gl::Texture2D>() );
+    gpuData.m_textureTransfer->transfer(i, m_compositeTexture, std::static_pointer_cast<dp::gl::Texture2D>(texAtt->getTexture()));
 
     gpuData.m_renderTarget->endRendering();
     gpuData.m_renderTarget->setClearMask( dp::gl::TBM_COLOR_BUFFER | dp::gl::TBM_DEPTH_BUFFER );

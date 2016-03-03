@@ -198,19 +198,19 @@ dp::sg::core::PipelineDataSharedPtr AnimatedScene::createMaterial( size_t x, siz
     }
     break;
   case 1:
-    effect = m_carpaint.clone();
+    effect = std::static_pointer_cast<dp::sg::core::PipelineData>(m_carpaint->clone());
     linkAnimationColor2(AnimatorColor::create(int(x), int(y), m_objectCount), effect, "carpaint_parameters", "diffuse");
     break;
   case 2:
-    effect = m_phong.clone();
+    effect = std::static_pointer_cast<dp::sg::core::PipelineData>(m_phong->clone());
     linkAnimationColor2(AnimatorColor::create(int(x), int(y), m_objectCount), effect, "phongParameters", "diffuseColor");
     break;
   case 3:
-    effect = m_standard_material.clone();
+    effect = std::static_pointer_cast<dp::sg::core::PipelineData>(m_standard_material->clone());
     linkAnimationColor2(AnimatorColor::create(int(x), int(y), m_objectCount), effect, "standardMaterialParameters", "frontDiffuseColor");
     break;
   case 4:
-    effect = m_thinglass.clone();
+    effect = std::static_pointer_cast<dp::sg::core::PipelineData>(m_thinglass->clone());
     linkAnimationColor2(AnimatorColor::create(int(x), int(y), m_objectCount), effect, "thinglass_parameters", "transparentColor");
     break;
   }

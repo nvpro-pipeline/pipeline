@@ -129,7 +129,7 @@ ViewerRendererWidget::setRendererType( RendererType type )
     switch( type )
     {
       case RendererType::NONE:
-        setSceneRenderer( dp::sg::ui::SceneRendererSharedPtr::null );
+        setSceneRenderer( dp::sg::ui::SceneRendererSharedPtr() );
         break;
 
       case RendererType::RASTERIZE_XBAR:
@@ -300,8 +300,8 @@ void ViewerRendererWidget::setScene( dp::sg::core::SceneSharedPtr const & scene 
   else
   {
     // reset scene and camera here
-    m_viewState->setSceneTree( dp::sg::xbar::SceneTreeSharedPtr::null );
-    m_viewState->setCamera( CameraSharedPtr::null );
+    m_viewState->setSceneTree( dp::sg::xbar::SceneTreeSharedPtr() );
+    m_viewState->setCamera( CameraSharedPtr() );
   }
 
   // set scene data
@@ -460,7 +460,7 @@ void ViewerRendererWidget::highlightObject( const dp::sg::core::NodeSharedPtr & 
   vector<ObjectSharedPtr>::const_iterator it;
   for(it=searchResults.begin(); it!=searchResults.end(); it++)
   {
-    highlightGeoNode( it->inplaceCast<dp::sg::core::GeoNode>() );
+    highlightGeoNode(std::static_pointer_cast<dp::sg::core::GeoNode>(*it));
   }
 }
 
@@ -518,7 +518,7 @@ void ViewerRendererWidget::dropEvent( QDropEvent * event )
     dp::sg::core::GeoNodeSharedPtr geoNode( reinterpret_cast<dp::sg::core::GeoNode*>( mimeData->data( "EffectData" ).data() )->getSharedPtr<GeoNode>() );
 
     DP_ASSERT( m_selectedGeoNodes.size() == 1 );
-    DP_ASSERT( m_selectedGeoNodes.begin()->isPtrTo<GeoNode>() );
+    DP_ASSERT( std::dynamic_pointer_cast<GeoNode>(*m_selectedGeoNodes.begin()) );
 
     if ( *m_selectedGeoNodes.begin() != geoNode )
     {
@@ -576,18 +576,18 @@ bool ViewerRendererWidget::selectObject( QMouseEvent * mouseEvent )
 
 void ViewerRendererWidget::currentItemChanged( dp::sg::core::ObjectSharedPtr current, dp::sg::core::ObjectSharedPtr previous )
 {
-  if ( previous.isPtrTo<GeoNode>() )
+  if ( std::dynamic_pointer_cast<GeoNode>(previous) )
   {
     // set to default value
     m_selectedGeoNodes.clear();
-    previous.staticCast<GeoNode>()->setTraversalMask( 0x01 );
+    std::static_pointer_cast<GeoNode>(previous)->setTraversalMask(0x01);
     enableHighlighting( false );
   }
-  if ( current.isPtrTo<GeoNode>() )
+  if ( std::dynamic_pointer_cast<GeoNode>(current) )
   {
     // set to selected
-    m_selectedGeoNodes.insert( current.staticCast<GeoNode>() );
-    current.staticCast<GeoNode>()->setTraversalMask( 0x02 );
+    m_selectedGeoNodes.insert(std::static_pointer_cast<GeoNode>(current));
+    std::static_pointer_cast<GeoNode>(current)->setTraversalMask(0x02);
     enableHighlighting( true );
   }
   m_highlightedObject = current;
@@ -600,9 +600,9 @@ ViewerRendererWidget::intersectObject( const dp::sg::core::NodeSharedPtr & baseS
                                        dp::sg::algorithm::Intersection & result )
 {
   // requires a camera attached to the ViewState
-  if ( m_viewState->getCamera().isPtrTo<FrustumCamera>() )
+  if ( std::dynamic_pointer_cast<FrustumCamera>(m_viewState->getCamera()) )
   {
-    FrustumCameraSharedPtr const& pCam = m_viewState->getCamera().staticCast<FrustumCamera>();
+    FrustumCameraSharedPtr const& pCam = std::static_pointer_cast<FrustumCamera>(m_viewState->getCamera());
 
     // calculate ray origin and direction from the input point
     Vec3f rayOrigin;
@@ -742,9 +742,9 @@ inline GroupSharedPtr makeRootGroup( SceneSharedPtr const& scene )
 {
   GroupSharedPtr group;
 
-  if ( scene->getRootNode().isPtrTo<Group>() )
+  if ( std::dynamic_pointer_cast<Group>(scene->getRootNode()) )
   {
-    group = scene->getRootNode().staticCast<Group>();
+    group = std::static_pointer_cast<Group>(scene->getRootNode());
   }
   else
   {
@@ -771,7 +771,7 @@ void ViewerRendererWidget::addDirectedLight()
 
   const ParameterGroupDataSharedPtr & pgd = directedLight->getLightPipeline()->findParameterGroupData( std::string( "standardDirectedLightParameters" ) );
   DP_ASSERT( pgd );
-  moveDirectedLightToCamera( pgd, m_viewState->getCamera().staticCast<PerspectiveCamera>() );
+  moveDirectedLightToCamera(pgd, std::static_pointer_cast<PerspectiveCamera>(m_viewState->getCamera()));
   GroupSharedPtr group = makeRootGroup( m_viewState->getScene() );
 
   // NOTE: Nothing can be read/write locked during executecommand
@@ -785,7 +785,7 @@ void ViewerRendererWidget::addPointLight()
 
   const ParameterGroupDataSharedPtr & pgd = pointLight->getLightPipeline()->findParameterGroupData( std::string( "standardPointLightParameters" ) );
   DP_ASSERT( pgd );
-  movePointLightToCamera( pgd, m_viewState->getCamera().staticCast<PerspectiveCamera>() );
+  movePointLightToCamera(pgd, std::static_pointer_cast<PerspectiveCamera>(m_viewState->getCamera()));
   GroupSharedPtr group = makeRootGroup( m_viewState->getScene() );
 
   // NOTE: Nothing can be read/write locked during executecommand
@@ -799,7 +799,7 @@ void ViewerRendererWidget::addSpotLight()
 
   const ParameterGroupDataSharedPtr & pgd = spotLight->getLightPipeline()->findParameterGroupData( std::string( "standardSpotLightParameters" ) );
   DP_ASSERT( pgd );
-  moveSpotLightToCamera( pgd, m_viewState->getCamera().staticCast<PerspectiveCamera>() );
+  moveSpotLightToCamera(pgd, std::static_pointer_cast<PerspectiveCamera>(m_viewState->getCamera()));
   GroupSharedPtr group = makeRootGroup( m_viewState->getScene() );
 
   // NOTE: Nothing can be read/write locked during executecommand
@@ -826,12 +826,12 @@ static void nameCamera( CameraSharedPtr camWP, const std::string & baseName, uns
 
 void ViewerRendererWidget::addCamera()
 {
-  PerspectiveCameraSharedPtr const& pcamh = m_viewState->getCamera().staticCast<PerspectiveCamera>();
+  PerspectiveCameraSharedPtr const& pcamh = std::static_pointer_cast<PerspectiveCamera>(m_viewState->getCamera());
   SceneSharedPtr const& ssh = m_viewState->getScene();
 
   if( pcamh )
   {
-    PerspectiveCameraSharedPtr newPcamh = pcamh.clone();
+    PerspectiveCameraSharedPtr newPcamh = std::static_pointer_cast<PerspectiveCamera>(pcamh->clone());
     nameCamera( newPcamh, "SVPerspectiveCamera", s_cameraCount++ );
 
     // so this can be used for camera cycling
@@ -852,7 +852,7 @@ void ViewerRendererWidget::moveSelectedObject()
 
   bool modified = false;
 
-  PerspectiveCameraSharedPtr const& pcam = m_viewState->getCamera().staticCast<PerspectiveCamera>();
+  PerspectiveCameraSharedPtr const& pcam = std::static_pointer_cast<PerspectiveCamera>(m_viewState->getCamera());
 
   // ensure we have an object highlighted!
   DP_ASSERT( m_highlightedObject );
@@ -861,7 +861,7 @@ void ViewerRendererWidget::moveSelectedObject()
   {
     case ObjectCode::LIGHT_SOURCE:
     {
-      dp::sg::core::PipelineDataSharedPtr const& lp = m_highlightedObject.staticCast<LightSource>()->getLightPipeline();
+      dp::sg::core::PipelineDataSharedPtr const& lp = std::static_pointer_cast<LightSource>(m_highlightedObject)->getLightPipeline();
       const dp::fx::EffectSpecSharedPtr & es = lp->getEffectSpec();
       for ( dp::fx::EffectSpec::iterator it = es->beginParameterGroupSpecs() ; it != es->endParameterGroupSpecs() ; ++it )
       {
@@ -895,7 +895,7 @@ void ViewerRendererWidget::moveSelectedObject()
 
     case ObjectCode::PERSPECTIVE_CAMERA:
     {
-      PerspectiveCameraSharedPtr const& pc = m_highlightedObject.staticCast<PerspectiveCamera>();
+      PerspectiveCameraSharedPtr const& pc = std::static_pointer_cast<PerspectiveCamera>(m_highlightedObject);
       pc->setPosition( pcam->getPosition() );
       pc->setOrientation( pcam->getOrientation() );
       modified = true;
@@ -1304,7 +1304,7 @@ void ViewerRendererWidget::setOITDepth( unsigned int depth )
   if ( m_oitDepth != depth )
   {
     m_oitDepth = depth;
-    dp::sg::renderer::rix::gl::SceneRendererSharedPtr const& sceneRenderer = getSceneRenderer().staticCast<dp::sg::renderer::rix::gl::SceneRenderer>();
+    dp::sg::renderer::rix::gl::SceneRendererSharedPtr const& sceneRenderer = std::static_pointer_cast<dp::sg::renderer::rix::gl::SceneRenderer>(getSceneRenderer());
     if ( sceneRenderer )
     {
       sceneRenderer->getTransparencyManager()->setLayersCount( m_oitDepth );

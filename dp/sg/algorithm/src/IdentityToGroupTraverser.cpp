@@ -1,4 +1,4 @@
-// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -58,7 +58,7 @@ namespace dp
 
         if ( m_scene && root->getObjectCode() == ObjectCode::TRANSFORM )
         {
-          TransformSharedPtr const& th = root.staticCast<Transform>();
+          TransformSharedPtr const& th = std::static_pointer_cast<Transform>(root);
           m_scene->setRootNode( createGroupFromTransform( th ) );
           setTreeModified();
         }
@@ -137,9 +137,9 @@ namespace dp
       bool IdentityToGroupTraverser::isTransformToReplace( const NodeSharedPtr & nh )
       {
         bool ok = false;
-        if( nh.isPtrTo<Transform>() )
+        if( std::dynamic_pointer_cast<Transform>(nh) )
         {
-          TransformSharedPtr const& t = nh.staticCast<Transform>();
+          TransformSharedPtr const& t = std::static_pointer_cast<Transform>(nh);
           ok =    ( getIgnoreNames() || t->getName().empty() )
               &&  optimizationAllowed( t )
               &&  !t->isJoint()
@@ -154,7 +154,7 @@ namespace dp
         {
           if ( isTransformToReplace( *gci ) )
           {
-            GroupSharedPtr gh = createGroupFromTransform( gci->staticCast<Transform>() );
+            GroupSharedPtr gh = createGroupFromTransform( std::static_pointer_cast<Transform>(*gci) );
             p->replaceChild( gh, gci );
             setTreeModified();
           }

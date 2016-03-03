@@ -255,7 +255,7 @@ namespace dp
         }
       }
 
-      dp::sg::core::PipelineDataSharedPtr const& UnifyTraverser::unifyPipelineData( dp::sg::core::PipelineDataSharedPtr const& pipelineData )
+      dp::sg::core::PipelineDataSharedPtr UnifyTraverser::unifyPipelineData( dp::sg::core::PipelineDataSharedPtr const& pipelineData )
       {
         DP_ASSERT( ( m_unifyTargets & Target::PIPELINE_DATA ) && pipelineData );
         typedef multimap<HashKey,dp::sg::core::PipelineDataSharedPtr>::const_iterator I;
@@ -283,7 +283,7 @@ namespace dp
         else
         {
           m_pipelineData.insert( make_pair( hashKey, pipelineData ) );
-          return( dp::sg::core::PipelineDataSharedPtr::null );
+          return( dp::sg::core::PipelineDataSharedPtr() );
         }
       }
 
@@ -653,9 +653,9 @@ namespace dp
 
         for ( Group::ChildrenIterator gci = p->beginChildren() ; gci != p->endChildren() ; ++gci )
         {
-          if ( gci->isPtrTo<GeoNode>() )
+          if ( std::dynamic_pointer_cast<GeoNode>(*gci) )
           {
-            GeoNodeSharedPtr const& geoNode = gci->staticCast<GeoNode>();
+            GeoNodeSharedPtr const& geoNode = std::static_pointer_cast<GeoNode>(*gci);
             {
               if ( optimizationAllowed( geoNode ) )
               {
@@ -699,9 +699,9 @@ namespace dp
 
         for ( Group::ChildrenIterator gci = p->beginChildren() ; gci != p->endChildren() ; ++gci )
         {
-          if ( gci->isPtrTo<Group>() )
+          if ( std::dynamic_pointer_cast<Group>(*gci) )
           {
-            GroupSharedPtr const& group = gci->staticCast<Group>();
+            GroupSharedPtr const& group = std::static_pointer_cast<Group>(*gci);
             {
               if ( optimizationAllowed( group ) )
               {
@@ -786,10 +786,10 @@ namespace dp
 
         for ( Group::ChildrenIterator gci = p->beginChildren() ; gci != p->endChildren() ; ++gci )
         {
-          if ( gci->isPtrTo<LOD>() )
+          if ( std::dynamic_pointer_cast<LOD>(*gci) )
           {
             bool optimizable = false, found = false;
-            LODSharedPtr const& lod = gci->staticCast<LOD>();
+            LODSharedPtr const& lod = std::static_pointer_cast<LOD>(*gci);
             {
               optimizable = optimizationAllowed( lod );
               if( optimizable )
@@ -849,7 +849,7 @@ namespace dp
 #if CHECK_HASH_RESULTS
           if ( found )
           {
-            foundPrimitive = it->second.getWeakPtr();
+            foundPrimitive = it->second;
           }
 #endif
         }
@@ -861,7 +861,7 @@ namespace dp
         {
           checkFound = ( primitive == it->second )
                     || pT->isEquivalent( SharedHandle<T>::Lock(it->second), getIgnoreNames(), false );
-          DP_ASSERT( !checkFound || ( primitive == it->second ) || ( foundPrimitive == it->second.getWeakPtr() ) );
+          DP_ASSERT( !checkFound || ( primitive == it->second ) || ( foundPrimitive == it->second ) );
         }
         DP_ASSERT( found == checkFound );
 #endif
@@ -906,7 +906,7 @@ namespace dp
           {
             checkFound = ( vertexAttributeSet == it->second )
                       || vertexAttributeSet->isEquivalent( it->second, getIgnoreNames(), false );
-            DP_ASSERT( !checkFound || ( vertexAttributeSet == it->second ) || ( p->getVertexAttributeSet() == it->second.getWeakPtr() ) );
+            DP_ASSERT( !checkFound || ( vertexAttributeSet == it->second ) || ( p->getVertexAttributeSet() == it->second ) );
           }
           DP_ASSERT( found == checkFound );
 #endif

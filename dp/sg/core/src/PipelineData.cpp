@@ -49,8 +49,8 @@ namespace
 
             const dp::sg::core::TextureSharedPtr & texture = sampler->getTexture();
             DP_ASSERT( texture );
-            DP_ASSERT( texture.isPtrTo<dp::sg::core::TextureFile>() );
-            dp::sg::core::TextureFileSharedPtr const& textureFile = texture.staticCast<dp::sg::core::TextureFile>();
+            DP_ASSERT( std::dynamic_pointer_cast<dp::sg::core::TextureFile>(texture) );
+            dp::sg::core::TextureFileSharedPtr const& textureFile = std::static_pointer_cast<dp::sg::core::TextureFile>(texture);
             std::string filename = textureFile->getFilename();
 
             char*& destination = *reinterpret_cast<char**>(&m_data[it->second]);
@@ -176,7 +176,7 @@ namespace dp
         {
           if ( rhs.m_parameterGroupData[i] )
           {
-            m_parameterGroupData[i] = rhs.m_parameterGroupData[i].clone();
+            m_parameterGroupData[i] = std::static_pointer_cast<dp::sg::core::ParameterGroupData>(rhs.m_parameterGroupData[i]->clone());
             m_parameterGroupData[i]->attach( this );
           }
           else
@@ -236,24 +236,24 @@ namespace dp
         return( count );
       }
 
-      const ParameterGroupDataSharedPtr & PipelineData::findParameterGroupData( const ParameterGroupSpecSharedPtr & spec ) const
+      ParameterGroupDataSharedPtr PipelineData::findParameterGroupData( const ParameterGroupSpecSharedPtr & spec ) const
       {
         EffectSpec::iterator it = m_effectSpec->findParameterGroupSpec( spec );
         if ( it != m_effectSpec->endParameterGroupSpecs() )
         {
           return( getParameterGroupData( it ) );
         }
-        return( ParameterGroupDataSharedPtr::null );
+        return( ParameterGroupDataSharedPtr() );
       }
 
-      const ParameterGroupDataSharedPtr & PipelineData::findParameterGroupData( const std::string & name ) const
+      ParameterGroupDataSharedPtr PipelineData::findParameterGroupData( const std::string & name ) const
       {
         EffectSpec::iterator it = m_effectSpec->findParameterGroupSpec( name );
         if ( it != m_effectSpec->endParameterGroupSpecs() )
         {
           return( getParameterGroupData( it ) );
         }
-        return( ParameterGroupDataSharedPtr::null );
+        return( ParameterGroupDataSharedPtr() );
       }
 
       PipelineData & PipelineData::operator=( const PipelineData & rhs )
@@ -279,15 +279,15 @@ namespace dp
 
       bool PipelineData::isEquivalent( ObjectSharedPtr const& object, bool ignoreNames, bool deepCompare ) const
       {
-        if ( object == this )
+        if ( object.get() == this )
         {
           return( true );
         }
 
-        bool equi = object.isPtrTo<PipelineData>() && Object::isEquivalent( object, ignoreNames, deepCompare );
+        bool equi = std::dynamic_pointer_cast<PipelineData>(object) && Object::isEquivalent( object, ignoreNames, deepCompare );
         if ( equi )
         {
-          PipelineDataSharedPtr const& ed = object.staticCast<PipelineData>();
+          PipelineDataSharedPtr const& ed = std::static_pointer_cast<PipelineData>(object);
 
           equi = ( m_effectSpec->getNumberOfParameterGroupSpecs() == ed->m_effectSpec->getNumberOfParameterGroupSpecs() );
           if ( equi )
@@ -361,38 +361,38 @@ namespace dp
       bool PipelineData::save( const std::string & filename ) const
       {
         EffectDataLocalSharedPtr edl = EffectDataLocal::create( this );
-        return( EffectLibrary::instance()->save( edl.inplaceCast<dp::fx::EffectData>(), filename ) );
+        return( EffectLibrary::instance()->save( std::static_pointer_cast<dp::fx::EffectData>(edl), filename ) );
       }
 
-      const EffectSpecSharedPtr& getStandardGeometrySpec()
+      EffectSpecSharedPtr getStandardGeometrySpec()
       {
         EffectSpecSharedPtr const & es = EffectLibrary::instance()->getEffectSpec( std::string("standardGeometryEffect") );
         DP_ASSERT( !es->getTransparent() );
         return( es );
       }
 
-      const EffectSpecSharedPtr& getStandardDirectedLightSpec()
+      EffectSpecSharedPtr getStandardDirectedLightSpec()
       {
         EffectSpecSharedPtr const & es = EffectLibrary::instance()->getEffectSpec( std::string("standardDirectedLightEffect") );
         DP_ASSERT( !es->getTransparent() );
         return( es );
       }
 
-      const EffectSpecSharedPtr& getStandardPointLightSpec()
+      EffectSpecSharedPtr getStandardPointLightSpec()
       {
         EffectSpecSharedPtr const & es = EffectLibrary::instance()->getEffectSpec( std::string("standardPointLightEffect") );
         DP_ASSERT( !es->getTransparent() );
         return( es );
       }
 
-      const EffectSpecSharedPtr& getStandardSpotLightSpec()
+      EffectSpecSharedPtr getStandardSpotLightSpec()
       {
         EffectSpecSharedPtr const & es = EffectLibrary::instance()->getEffectSpec( std::string("standardSpotLightEffect") );
         DP_ASSERT( !es->getTransparent() );
         return( es );
       }
 
-      const EffectSpecSharedPtr& getStandardMaterialSpec()
+      EffectSpecSharedPtr getStandardMaterialSpec()
       {
         EffectSpecSharedPtr const & es = EffectLibrary::instance()->getEffectSpec( std::string("standardMaterial") );
         DP_ASSERT( es->getTransparent() );

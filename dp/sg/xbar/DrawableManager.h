@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -59,14 +59,14 @@ namespace dp
         class HandleData
         {
         public:
-          DP_SG_XBAR_API static dp::util::SharedPtr<HandleData> create();
+          DP_SG_XBAR_API static std::shared_ptr<HandleData> create();
           DP_SG_XBAR_API virtual ~HandleData();
 
         protected:
           HandleData() {}
         };
 
-        typedef dp::util::SharedPtr<HandleData> Handle;
+        typedef std::shared_ptr<HandleData> Handle;
 
         DP_SG_XBAR_API virtual void update( dp::sg::ui::ViewStateSharedPtr const& viewState ) = 0;
         DP_SG_XBAR_API virtual void update( dp::math::Vec2ui const & viewportSize ) = 0;

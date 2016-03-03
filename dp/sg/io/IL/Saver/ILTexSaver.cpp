@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2015
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -85,8 +85,8 @@ static string SUPPORTED_EXTENSIONS[] = { ".TGA",
 
 
 #if defined(_WIN32)
-BOOL APIENTRY DllMain( HANDLE hModule, 
-                       DWORD  ul_reason_for_call, 
+BOOL APIENTRY DllMain( HANDLE hModule,
+                       DWORD  ul_reason_for_call,
                        LPVOID lpReserved
           )
 {
@@ -199,7 +199,7 @@ static ILenum determineILType(Image::PixelDataType type)
   ILenum ilType = 0;
   switch( type )
   {
-    case Image::PixelDataType::BYTE :  
+    case Image::PixelDataType::BYTE :
       ilType = IL_BYTE;
       break;
     case Image::PixelDataType::UNSIGNED_BYTE :
@@ -225,7 +225,7 @@ static ILenum determineILType(Image::PixelDataType type)
       ilType = 0;
       DP_ASSERT( !"Unknown pixel type" );
       break;
-  } 
+  }
   return ilType;
 }
 
@@ -254,13 +254,13 @@ ILTexSaver::ILTexSaver()
 ILTexSaver::~ILTexSaver()
 {
   ilShutDown();
-  ILTexSaver::m_instance = ILTexSaverSharedPtr::null;
+  ILTexSaver::m_instance = ILTexSaverSharedPtr();
 }
 
 bool ILTexSaver::save( const TextureHostSharedPtr & image, const string & fileName )
 {
   DP_ASSERT(image);
-  
+
   // set locale temporarily to standard "C" locale
   dp::util::Locale tl("C");
 
@@ -268,13 +268,13 @@ bool ILTexSaver::save( const TextureHostSharedPtr & image, const string & fileNa
   unsigned int imageID;
 
   ilGenImages( 1, (ILuint *) &imageID );
-  ilBindImage( imageID );  
+  ilBindImage( imageID );
 
   string ext = dp::util::getFileExtension( fileName );
   bool isDDS = !_stricmp(".DDS", ext.c_str());   // .dds needs special handling
 
   if ( isDDS )
-  {      
+  {
     // DirectDraw Surfaces have their origin at upper left
     ilEnable( IL_ORIGIN_SET );
     ilOriginFunc( IL_ORIGIN_UPPER_LEFT );
@@ -289,12 +289,12 @@ bool ILTexSaver::save( const TextureHostSharedPtr & image, const string & fileNa
   // FIXME Sent bug report to DevIL. Remove this once jps/pns is added to DevIL.
   bool isStereoFormat = false;
   std::string devilFilename = fileName;
-  
+
   if (!_stricmp(".JPS", ext.c_str()))
   {
     isStereoFormat = true;
     devilFilename += ".JPG";
-    
+
   }
   else if (!_stricmp(".PNS", ext.c_str()))
   {
@@ -312,10 +312,10 @@ bool ILTexSaver::save( const TextureHostSharedPtr & image, const string & fileNa
 
   for ( unsigned int i = 0; i < numImages; ++i )
   {
-    // for DDS cube maps we need to juggle with the faces 
+    // for DDS cube maps we need to juggle with the faces
     // to get them into the right order for DDS formats
     int face = determineImage( i, isDDS, isCube );
-   
+
     ilBindImage(imageID);
     ilActiveImage(0);
     ilActiveFace(face);
@@ -330,7 +330,7 @@ bool ILTexSaver::save( const TextureHostSharedPtr & image, const string & fileNa
     //      // convert color index to whatever the base type of the palette is
     //      if ( !ilConvertImage(ilGetInteger(IL_PALETTE_BASE_TYPE), IL_UNSIGNED_BYTE) )
     //      {
-    //        DP_TRACE_OUT("ERROR: conversion from color index format failed!\n");        
+    //        DP_TRACE_OUT("ERROR: conversion from color index format failed!\n");
     //        INVOKE_CALLBACK(onInvalidFile(fileName, "DevIL Loadable Color-Indexed Image"));
     //        goto ERROREXIT;
     //      }
@@ -342,7 +342,7 @@ bool ILTexSaver::save( const TextureHostSharedPtr & image, const string & fileNa
     // Determine the Pixel Format and type
     ILenum ilFormat = determineILFormat(image->getFormat());
     ILenum ilType = determineILType(image->getType());
-    
+
     // Retrieve the image dimensions
     unsigned int width = image->getWidth(i);
     unsigned int height = image->getHeight(i);
@@ -350,9 +350,9 @@ bool ILTexSaver::save( const TextureHostSharedPtr & image, const string & fileNa
 
     // If assertion fires, something is wrong
     DP_ASSERT( (width > 0) && (height > 0) && (depth > 0) );
-    
 
-    // again some twiddling for DDS format necessary prior to 
+
+    // again some twiddling for DDS format necessary prior to
     // specify the IL image
     if ( isDDS && isCube )
     {
@@ -370,7 +370,7 @@ bool ILTexSaver::save( const TextureHostSharedPtr & image, const string & fileNa
 
     // done with the temporary pixel cache
     delete[] pixels;
-    
+
 
     DP_ASSERT(IL_NO_ERROR == ilGetError());
 
@@ -400,13 +400,13 @@ bool ILTexSaver::save( const TextureHostSharedPtr & image, const string & fileNa
   else
   {
 #if 0
-    DP_TRACE_OUT("ERROR: save image failed!\n");      
+    DP_TRACE_OUT("ERROR: save image failed!\n");
 #endif
 
     // clean up errors
     while( ilGetError() != IL_NO_ERROR )
     {}
-       
+
     // report that an error has occured
     INVOKE_CALLBACK( onInvalidFile( fileName, "saving image file failed!") );
 

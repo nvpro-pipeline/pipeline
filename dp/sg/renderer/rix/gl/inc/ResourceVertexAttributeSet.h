@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -53,7 +53,7 @@ namespace dp
 
             ~ResourceVertexAttributeSet();
 
-            virtual const dp::sg::core::HandledObjectSharedPtr& getHandledObject() const;
+            virtual dp::sg::core::HandledObjectSharedPtr getHandledObject() const;
 
             dp::rix::core::VertexAttributesSharedHandle m_vertexAttributesHandle;
           protected:

@@ -1,4 +1,4 @@
-// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -608,7 +608,7 @@ ThreeDSLoader::configureCamera( GroupSharedPtr const& parent, Lib3dsNode *n, Vec
     constructAnimation(anim,piv,emptyPivot,&pTrack,NULL,NULL,&rollTrack, ThreeDSAnimFlags::P_TRACK | ThreeDSAnimFlags::ROLL_TRACK);
 
     // add this AnimatedTransform to the global camera location list to be postprocessed later
-    m_camLocationList[n->name] = hAnim.getWeakPtr();
+    m_camLocationList[n->name] = hAnim;
 
     // add all of this chamera's children (linked meshes) to the scene
     addAllChildren( anim, n, piv, data );
@@ -814,7 +814,7 @@ ThreeDSLoader::configureSpotlight( GroupSharedPtr const& parent, Lib3dsNode *n, 
     constructAnimation(anim,piv,emptyPivot,&pTrack,NULL,NULL,NULL, ThreeDSAnimFlags::P_TRACK );
 
     // add this AnimatedTransform to the global spotlight location list to be postprocessed later
-    m_spotLocationList[n->name] = hAnim.getWeakPtr();
+    m_spotLocationList[n->name] = hAnim;
 
     // add all of this spotlight's children (linked meshes) to the scene
     addAllChildren( anim, n, piv, data );
@@ -886,12 +886,12 @@ ThreeDSLoader::configureTarget( GroupSharedPtr const& parent, Lib3dsNode *n, Vec
       if(isCamera) // we're dealing with a camera
       {
         // add this AnimatedTranform to the global camera target list to be postprocessed later
-        m_camTargetList[n->name] = hAnim.getWeakPtr();
+        m_camTargetList[n->name] = hAnim;
       }
       else // we're dealing with a spotlight
       {
         // add this AnimatedTranform to the global spotlight target list to be postprocessed later
-        m_spotTargetList[n->name] = hAnim.getWeakPtr();
+        m_spotTargetList[n->name] = hAnim;
       }
 
       // add all of this target's children to the animated transform

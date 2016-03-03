@@ -132,14 +132,14 @@ bool add( dp::sg::core::ObjectSharedPtr const& parent, dp::sg::core::ObjectShare
   switch( parent->getObjectCode() )
   {
     case dp::sg::core::ObjectCode::GEO_NODE :
-      if ( child.isPtrTo<dp::sg::core::PipelineData>() )
+      if ( std::dynamic_pointer_cast<dp::sg::core::PipelineData>(child) )
       {
-        parent.staticCast<dp::sg::core::GeoNode>()->setMaterialPipeline( child.staticCast<dp::sg::core::PipelineData>() );
+        std::static_pointer_cast<dp::sg::core::GeoNode>(parent)->setMaterialPipeline(std::static_pointer_cast<dp::sg::core::PipelineData>(child));
       }
       else
       {
-        DP_ASSERT( child.isPtrTo<dp::sg::core::Primitive>() );
-        parent.staticCast<dp::sg::core::GeoNode>()->setPrimitive( child.staticCast<dp::sg::core::Primitive>() );
+        DP_ASSERT( std::dynamic_pointer_cast<dp::sg::core::Primitive>(child) );
+        std::static_pointer_cast<dp::sg::core::GeoNode>(parent)->setPrimitive(std::static_pointer_cast<dp::sg::core::Primitive>(child));
       }
       break;
     case dp::sg::core::ObjectCode::GROUP :
@@ -147,56 +147,56 @@ bool add( dp::sg::core::ObjectSharedPtr const& parent, dp::sg::core::ObjectShare
     case dp::sg::core::ObjectCode::SWITCH :
     case dp::sg::core::ObjectCode::TRANSFORM :
     case dp::sg::core::ObjectCode::BILLBOARD :
-      if ( child.isPtrTo<dp::sg::core::Node>() )
+      if ( std::dynamic_pointer_cast<dp::sg::core::Node>(child) )
       {
-        parent.staticCast<dp::sg::core::Group>()->addChild( child.staticCast<dp::sg::core::Node>() );
+        std::static_pointer_cast<dp::sg::core::Group>(parent)->addChild(std::static_pointer_cast<dp::sg::core::Node>(child));
       }
       else
       {
-        DP_ASSERT( child.isPtrTo<dp::sg::core::ClipPlane>() );
-        parent.staticCast<dp::sg::core::Group>()->addClipPlane( child.staticCast<dp::sg::core::ClipPlane>() );
+        DP_ASSERT( std::dynamic_pointer_cast<dp::sg::core::ClipPlane>(child) );
+        std::static_pointer_cast<dp::sg::core::Group>(parent)->addClipPlane(std::static_pointer_cast<dp::sg::core::ClipPlane>(child));
       }
       break;
     case dp::sg::core::ObjectCode::PRIMITIVE :
-      if ( child.isPtrTo<dp::sg::core::IndexSet>() )
+      if ( std::dynamic_pointer_cast<dp::sg::core::IndexSet>(child) )
       {
-        parent.staticCast<dp::sg::core::Primitive>()->setIndexSet( child.staticCast<dp::sg::core::IndexSet>() );
+        std::static_pointer_cast<dp::sg::core::Primitive>(parent)->setIndexSet(std::static_pointer_cast<dp::sg::core::IndexSet>(child));
       }
       else
       {
-        DP_ASSERT( child.isPtrTo<dp::sg::core::VertexAttributeSet>() );
-        parent.staticCast<dp::sg::core::Primitive>()->setVertexAttributeSet( child.staticCast<dp::sg::core::VertexAttributeSet>() );
+        DP_ASSERT( std::dynamic_pointer_cast<dp::sg::core::VertexAttributeSet>(child) );
+        std::static_pointer_cast<dp::sg::core::Primitive>(parent)->setVertexAttributeSet(std::static_pointer_cast<dp::sg::core::VertexAttributeSet>(child));
       }
       break;
     case dp::sg::core::ObjectCode::PARAMETER_GROUP_DATA :
       DP_ASSERT( child->getObjectCode() == dp::sg::core::ObjectCode::SAMPLER );
       {
-        dp::sg::core::ParameterGroupDataSharedPtr const& pgd = parent.staticCast<dp::sg::core::ParameterGroupData>();
+        dp::sg::core::ParameterGroupDataSharedPtr const& pgd = std::static_pointer_cast<dp::sg::core::ParameterGroupData>(parent);
         const dp::fx::ParameterGroupSpecSharedPtr & pgs = pgd->getParameterGroupSpec();
-        dp::fx::ParameterGroupSpec::iterator it = pgs->findParameterSpec( child.staticCast<dp::sg::core::Sampler>()->getName() );
+        dp::fx::ParameterGroupSpec::iterator it = pgs->findParameterSpec(std::static_pointer_cast<dp::sg::core::Sampler>(child)->getName());
         DP_ASSERT( it != pgs->endParameterSpecs() );
-        pgd->setParameter( it, child.staticCast<dp::sg::core::Sampler>() );
+        pgd->setParameter(it, std::static_pointer_cast<dp::sg::core::Sampler>(child));
       }
       break;
     case dp::sg::core::ObjectCode::PARALLEL_CAMERA :
     case dp::sg::core::ObjectCode::PERSPECTIVE_CAMERA :
     case dp::sg::core::ObjectCode::MATRIX_CAMERA :
       DP_ASSERT( child->getObjectCode() == dp::sg::core::ObjectCode::LIGHT_SOURCE );
-      parent.staticCast<dp::sg::core::Camera>()->addHeadLight( child.staticCast<dp::sg::core::LightSource>() );
+      std::static_pointer_cast<dp::sg::core::Camera>(parent)->addHeadLight(std::static_pointer_cast<dp::sg::core::LightSource>(child));
       break;
     case dp::sg::core::ObjectCode::PIPELINE_DATA :
-      DP_ASSERT( child.isPtrTo<dp::sg::core::ParameterGroupData>() );
-      parent.staticCast<dp::sg::core::PipelineData>()->setParameterGroupData( child.staticCast<dp::sg::core::ParameterGroupData>() );
+      DP_ASSERT( std::dynamic_pointer_cast<dp::sg::core::ParameterGroupData>(child) );
+      std::static_pointer_cast<dp::sg::core::PipelineData>(parent)->setParameterGroupData(std::static_pointer_cast<dp::sg::core::ParameterGroupData>(child));
       break;
     case dp::sg::core::ObjectCode::SCENE :
-      if ( child.isPtrTo<dp::sg::core::Camera>() )
+      if ( std::dynamic_pointer_cast<dp::sg::core::Camera>(child) )
       {
-        parent.staticCast<dp::sg::core::Scene>()->addCamera( child.staticCast<dp::sg::core::Camera>() );
+        std::static_pointer_cast<dp::sg::core::Scene>(parent)->addCamera(std::static_pointer_cast<dp::sg::core::Camera>(child));
       }
       else
       {
-        DP_ASSERT( child.isPtrTo<dp::sg::core::Node>() );
-        parent.staticCast<dp::sg::core::Scene>()->setRootNode( child.staticCast<dp::sg::core::Node>() );
+        DP_ASSERT( std::dynamic_pointer_cast<dp::sg::core::Node>(child) );
+        std::static_pointer_cast<dp::sg::core::Scene>(parent)->setRootNode(std::static_pointer_cast<dp::sg::core::Node>(child));
       }
       break;
     default :
@@ -214,14 +214,14 @@ bool remove( dp::sg::core::ObjectSharedPtr const& parent, dp::sg::core::ObjectSh
   switch( parent->getObjectCode() )
   {
     case dp::sg::core::ObjectCode::GEO_NODE :
-      if ( child.isPtrTo<dp::sg::core::PipelineData>() )
+      if ( std::dynamic_pointer_cast<dp::sg::core::PipelineData>(child) )
       {
-        parent.staticCast<dp::sg::core::GeoNode>()->setMaterialPipeline( dp::sg::core::PipelineDataSharedPtr() );
+        std::static_pointer_cast<dp::sg::core::GeoNode>(parent)->setMaterialPipeline(dp::sg::core::PipelineDataSharedPtr());
       }
       else
       {
-        DP_ASSERT( child.isPtrTo<dp::sg::core::Primitive>() );
-        parent.staticCast<dp::sg::core::GeoNode>()->setPrimitive( dp::sg::core::PrimitiveSharedPtr() );
+        DP_ASSERT( std::dynamic_pointer_cast<dp::sg::core::Primitive>(child) );
+        std::static_pointer_cast<dp::sg::core::GeoNode>(parent)->setPrimitive(dp::sg::core::PrimitiveSharedPtr());
       }
       break;
     case dp::sg::core::ObjectCode::GROUP :
@@ -229,33 +229,33 @@ bool remove( dp::sg::core::ObjectSharedPtr const& parent, dp::sg::core::ObjectSh
     case dp::sg::core::ObjectCode::SWITCH :
     case dp::sg::core::ObjectCode::TRANSFORM :
     case dp::sg::core::ObjectCode::BILLBOARD :
-      if ( child.isPtrTo<dp::sg::core::Node>() )
+      if ( std::dynamic_pointer_cast<dp::sg::core::Node>(child) )
       {
-        parent.staticCast<dp::sg::core::Group>()->removeChild( child.staticCast<dp::sg::core::Node>() );
+        std::static_pointer_cast<dp::sg::core::Group>(parent)->removeChild(std::static_pointer_cast<dp::sg::core::Node>(child));
       }
       else
       {
-        DP_ASSERT( child.isPtrTo<dp::sg::core::ClipPlane>() );
-        parent.staticCast<dp::sg::core::Group>()->removeClipPlane( child.staticCast<dp::sg::core::ClipPlane>() );
+        DP_ASSERT( std::dynamic_pointer_cast<dp::sg::core::ClipPlane>(child) );
+        std::static_pointer_cast<dp::sg::core::Group>(parent)->removeClipPlane(std::static_pointer_cast<dp::sg::core::ClipPlane>(child));
       }
       break;
     case dp::sg::core::ObjectCode::PRIMITIVE :
-      if ( child.isPtrTo<dp::sg::core::IndexSet>() )
+      if ( std::dynamic_pointer_cast<dp::sg::core::IndexSet>(child) )
       {
-        parent.staticCast<dp::sg::core::Primitive>()->setIndexSet( dp::sg::core::IndexSetSharedPtr() );
+        std::static_pointer_cast<dp::sg::core::Primitive>(parent)->setIndexSet(dp::sg::core::IndexSetSharedPtr());
       }
       else
       {
-        DP_ASSERT( child.isPtrTo<dp::sg::core::VertexAttributeSet>() );
-        parent.staticCast<dp::sg::core::Primitive>()->setVertexAttributeSet( dp::sg::core::VertexAttributeSetSharedPtr() );
+        DP_ASSERT( std::dynamic_pointer_cast<dp::sg::core::VertexAttributeSet>(child) );
+        std::static_pointer_cast<dp::sg::core::Primitive>(parent)->setVertexAttributeSet(dp::sg::core::VertexAttributeSetSharedPtr());
       }
       break;
     case dp::sg::core::ObjectCode::PARAMETER_GROUP_DATA :
       DP_ASSERT( child->getObjectCode() == dp::sg::core::ObjectCode::SAMPLER );
       {
-        dp::sg::core::ParameterGroupDataSharedPtr const& pgd = parent.staticCast<dp::sg::core::ParameterGroupData>();
+        dp::sg::core::ParameterGroupDataSharedPtr const& pgd = std::static_pointer_cast<dp::sg::core::ParameterGroupData>(parent);
         const dp::fx::ParameterGroupSpecSharedPtr & pgs = pgd->getParameterGroupSpec();
-        dp::fx::ParameterGroupSpec::iterator it = pgs->findParameterSpec( child.staticCast<dp::sg::core::Sampler>()->getName() );
+        dp::fx::ParameterGroupSpec::iterator it = pgs->findParameterSpec(std::static_pointer_cast<dp::sg::core::Sampler>(child)->getName());
         DP_ASSERT( it != pgs->endParameterSpecs() );
         pgd->setParameter( it, dp::sg::core::SamplerSharedPtr() );
       }
@@ -264,27 +264,27 @@ bool remove( dp::sg::core::ObjectSharedPtr const& parent, dp::sg::core::ObjectSh
     case dp::sg::core::ObjectCode::PERSPECTIVE_CAMERA :
     case dp::sg::core::ObjectCode::MATRIX_CAMERA :
       DP_ASSERT( child->getObjectCode() == dp::sg::core::ObjectCode::LIGHT_SOURCE );
-      parent.staticCast<dp::sg::core::Camera>()->removeHeadLight( child.staticCast<dp::sg::core::LightSource>() );
+      std::static_pointer_cast<dp::sg::core::Camera>(parent)->removeHeadLight(std::static_pointer_cast<dp::sg::core::LightSource>(child));
       break;
     case dp::sg::core::ObjectCode::PIPELINE_DATA :
-      DP_ASSERT( child.isPtrTo<dp::sg::core::ParameterGroupData>() );
+      DP_ASSERT( std::dynamic_pointer_cast<dp::sg::core::ParameterGroupData>(child) );
       {
-        dp::sg::core::ParameterGroupDataSharedPtr const& pgd = child.staticCast<dp::sg::core::ParameterGroupData>();
-        dp::sg::core::PipelineDataSharedPtr const& pd = parent.staticCast<dp::sg::core::PipelineData>();
+        dp::sg::core::ParameterGroupDataSharedPtr const& pgd = std::static_pointer_cast<dp::sg::core::ParameterGroupData>(child);
+        dp::sg::core::PipelineDataSharedPtr const& pd = std::static_pointer_cast<dp::sg::core::PipelineData>(parent);
         dp::fx::EffectSpecSharedPtr const & es = pd->getEffectSpec();
         DP_ASSERT( es->findParameterGroupSpec( pgd->getParameterGroupSpec() ) != es->endParameterGroupSpecs() );
-        parent.staticCast<dp::sg::core::PipelineData>()->setParameterGroupData( es->findParameterGroupSpec( pgd->getParameterGroupSpec() ), dp::sg::core::ParameterGroupDataSharedPtr() );
+        std::static_pointer_cast<dp::sg::core::PipelineData>(parent)->setParameterGroupData(es->findParameterGroupSpec(pgd->getParameterGroupSpec()), dp::sg::core::ParameterGroupDataSharedPtr());
       }
       break;
     case dp::sg::core::ObjectCode::SCENE :
-      if ( child.isPtrTo<dp::sg::core::Camera>() )
+      if ( std::dynamic_pointer_cast<dp::sg::core::Camera>(child) )
       {
-        DP_VERIFY( parent.staticCast<dp::sg::core::Scene>()->removeCamera( child.staticCast<dp::sg::core::Camera>() ) );
+        DP_VERIFY(std::static_pointer_cast<dp::sg::core::Scene>(parent)->removeCamera(std::static_pointer_cast<dp::sg::core::Camera>(child)));
       }
       else
       {
-        DP_ASSERT( child.isPtrTo<dp::sg::core::Node>() );
-        parent.staticCast<dp::sg::core::Scene>()->setRootNode( dp::sg::core::NodeSharedPtr() );
+        DP_ASSERT( std::dynamic_pointer_cast<dp::sg::core::Node>(child) );
+        std::static_pointer_cast<dp::sg::core::Scene>(parent)->setRootNode(dp::sg::core::NodeSharedPtr());
       }
       break;
     default :

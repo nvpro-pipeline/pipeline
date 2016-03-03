@@ -67,15 +67,15 @@ bool CommandReplaceItem::doReplace( SceneTreeItem * oldChild, SceneTreeItem * ne
   switch( m_parent->getObject()->getObjectCode() )
   {
     case ObjectCode::GEO_NODE :
-      DP_ASSERT( m_parent->getObject().staticCast<GeoNode>()->getMaterialPipeline() == oldChild->getObject().staticCast<dp::sg::core::PipelineData>() );
-      if ( newChild->getObject().isPtrTo<dp::sg::core::PipelineData>() )
+      DP_ASSERT(std::static_pointer_cast<GeoNode>(m_parent->getObject())->getMaterialPipeline() == std::static_pointer_cast<dp::sg::core::PipelineData>(oldChild->getObject()));
+      if ( std::dynamic_pointer_cast<dp::sg::core::PipelineData>(newChild->getObject()) )
       {
-        m_parent->getObject().staticCast<GeoNode>()->setMaterialPipeline( newChild->getObject().staticCast<dp::sg::core::PipelineData>() );
+        std::static_pointer_cast<GeoNode>(m_parent->getObject())->setMaterialPipeline(std::static_pointer_cast<dp::sg::core::PipelineData>(newChild->getObject()));
       }
       else
       {
-        DP_ASSERT( m_newChild->getObject().isPtrTo<Primitive>() );
-        m_parent->getObject().staticCast<GeoNode>()->setPrimitive( newChild->getObject().staticCast<Primitive>() );
+        DP_ASSERT( std::dynamic_pointer_cast<Primitive>(m_newChild->getObject()) );
+        std::static_pointer_cast<GeoNode>(m_parent->getObject())->setPrimitive(std::static_pointer_cast<Primitive>(newChild->getObject()));
       }
       break;
     case ObjectCode::GROUP :
@@ -84,65 +84,65 @@ bool CommandReplaceItem::doReplace( SceneTreeItem * oldChild, SceneTreeItem * ne
     case ObjectCode::TRANSFORM :
     case ObjectCode::BILLBOARD :
       {
-        GroupSharedPtr const& g = m_parent->getObject().staticCast<Group>();
-        if ( newChild->getObject().isPtrTo<Node>() )
+        GroupSharedPtr const& g = std::static_pointer_cast<Group>(m_parent->getObject());
+        if ( std::dynamic_pointer_cast<Node>(newChild->getObject()) )
         {
-          DP_ASSERT( g->findChild( g->beginChildren(), oldChild->getObject().staticCast<Node>() ) != g->endChildren() );
-          g->replaceChild( newChild->getObject().staticCast<Node>(), oldChild->getObject().staticCast<Node>() );
+          DP_ASSERT(g->findChild(g->beginChildren(), std::static_pointer_cast<Node>(oldChild->getObject())) != g->endChildren());
+          g->replaceChild(std::static_pointer_cast<Node>(newChild->getObject()), std::static_pointer_cast<Node>(oldChild->getObject()));
         }
         else
         {
-          DP_ASSERT( newChild->getObject().isPtrTo<ClipPlane>() );
-          DP_ASSERT( g->findClipPlane( oldChild->getObject().staticCast<ClipPlane>() ) != g->endClipPlanes() );
-          g->removeClipPlane( oldChild->getObject().staticCast<ClipPlane>() );
-          g->addClipPlane( newChild->getObject().staticCast<ClipPlane>() );
+          DP_ASSERT( std::dynamic_pointer_cast<ClipPlane>(newChild->getObject()) );
+          DP_ASSERT( g->findClipPlane( std::static_pointer_cast<ClipPlane>(oldChild->getObject()) ) != g->endClipPlanes() );
+          g->removeClipPlane(std::static_pointer_cast<ClipPlane>(oldChild->getObject()));
+          g->addClipPlane(std::static_pointer_cast<ClipPlane>(newChild->getObject()));
         }
       }
       break;
     case ObjectCode::PRIMITIVE :
-      if ( newChild->getObject().isPtrTo<IndexSet>() )
+      if ( std::dynamic_pointer_cast<IndexSet>(newChild->getObject()) )
       {
-        m_parent->getObject().staticCast<Primitive>()->setIndexSet( newChild->getObject().staticCast<IndexSet>() );
+        std::static_pointer_cast<Primitive>(m_parent->getObject())->setIndexSet(std::static_pointer_cast<IndexSet>(newChild->getObject()));
       }
       else
       {
-        DP_ASSERT( newChild->getObject().isPtrTo<VertexAttributeSet>() );
-        m_parent->getObject().staticCast<Primitive>()->setVertexAttributeSet( newChild->getObject().staticCast<VertexAttributeSet>() );
+        DP_ASSERT( std::dynamic_pointer_cast<VertexAttributeSet>(newChild->getObject()) );
+        std::static_pointer_cast<Primitive>(m_parent->getObject())->setVertexAttributeSet(std::static_pointer_cast<VertexAttributeSet>(newChild->getObject()));
       }
       break;
     case ObjectCode::PARAMETER_GROUP_DATA :
       DP_ASSERT( newChild->getObject()->getObjectCode() == ObjectCode::SAMPLER );
       {
-        ParameterGroupDataSharedPtr const& pgd = m_parent->getObject().staticCast<ParameterGroupData>();
+        ParameterGroupDataSharedPtr const& pgd = std::static_pointer_cast<ParameterGroupData>(m_parent->getObject());
         const dp::fx::ParameterGroupSpecSharedPtr & pgs = pgd->getParameterGroupSpec();
-        dp::fx::ParameterGroupSpec::iterator it = pgs->findParameterSpec( newChild->getObject().staticCast<Sampler>()->getName() );
+        dp::fx::ParameterGroupSpec::iterator it = pgs->findParameterSpec(std::static_pointer_cast<Sampler>(newChild->getObject())->getName());
         DP_ASSERT( it != pgs->endParameterSpecs() );
-        DP_ASSERT( pgs->findParameterSpec( oldChild->getObject().staticCast<Sampler>()->getName() ) == it );
-        pgd->setParameter( it, newChild->getObject().staticCast<Sampler>() );
+        DP_ASSERT(pgs->findParameterSpec(std::static_pointer_cast<Sampler>(oldChild->getObject())->getName()) == it);
+        pgd->setParameter(it, std::static_pointer_cast<Sampler>(newChild->getObject()));
       }
       break;
     case ObjectCode::PARALLEL_CAMERA :
     case ObjectCode::PERSPECTIVE_CAMERA :
     case ObjectCode::MATRIX_CAMERA :
       DP_ASSERT( m_newChild->getObject()->getObjectCode() == ObjectCode::LIGHT_SOURCE );
-      m_parent->getObject().staticCast<Camera>()->replaceHeadLight( newChild->getObject().staticCast<LightSource>(), oldChild->getObject().staticCast<LightSource>() );
+      std::static_pointer_cast<Camera>(m_parent->getObject())->replaceHeadLight(std::static_pointer_cast<LightSource>(newChild->getObject()), std::static_pointer_cast<LightSource>(oldChild->getObject()));
       break;
     case ObjectCode::PIPELINE_DATA :
-      DP_ASSERT( newChild->getObject().isPtrTo<ParameterGroupData>() );
-      DP_ASSERT( newChild->getObject().staticCast<ParameterGroupData>()->getParameterGroupSpec() == oldChild->getObject().staticCast<ParameterGroupData>()->getParameterGroupSpec() );
-      m_parent->getObject().staticCast<dp::sg::core::PipelineData>()->setParameterGroupData( newChild->getObject().staticCast<ParameterGroupData>() );
+      DP_ASSERT( std::dynamic_pointer_cast<ParameterGroupData>(newChild->getObject()) );
+      DP_ASSERT(std::static_pointer_cast<ParameterGroupData>(newChild->getObject())->getParameterGroupSpec() == std::static_pointer_cast<ParameterGroupData>(oldChild->getObject())->getParameterGroupSpec());
+      std::static_pointer_cast<dp::sg::core::PipelineData>(m_parent->getObject())->setParameterGroupData(std::static_pointer_cast<ParameterGroupData>(newChild->getObject()));
       break;
     case ObjectCode::SCENE :
-      if ( m_newChild->getObject().isPtrTo<Camera>() )
+      if ( std::dynamic_pointer_cast<Camera>(m_newChild->getObject()) )
       {
-        SceneSharedPtr const& s = m_parent->getObject().staticCast<Scene>();
-        s->removeCamera( oldChild->getObject().staticCast<Camera>() );
-        s->addCamera( newChild->getObject().staticCast<Camera>() );
+        SceneSharedPtr const& s = std::static_pointer_cast<Scene>(m_parent->getObject());
+        s->removeCamera(std::static_pointer_cast<Camera>(oldChild->getObject()));
+        s->addCamera(std::static_pointer_cast<Camera>(newChild->getObject()));
       }
       else
       {
-        DP_ASSERT( newChild->getObject().isPtrTo<Node>() );
-        m_parent->getObject().staticCast<Scene>()->setRootNode( newChild->getObject().staticCast<Node>() );
+        DP_ASSERT( std::dynamic_pointer_cast<Node>(newChild->getObject()) );
+        std::static_pointer_cast<Scene>(m_parent->getObject())->setRootNode(std::static_pointer_cast<Node>(newChild->getObject()));
       }
       break;
     default :
@@ -161,11 +161,11 @@ bool CommandReplaceItem::doReplace( SceneTreeItem * oldChild, SceneTreeItem * ne
   m_parent->setChildIndicatorPolicy();
   GetApp()->outputStatistics();
 
-  ObjectSharedPtr const& s = oldChild->getObject().staticCast<Object>();
+  ObjectSharedPtr const& s = std::static_pointer_cast<Object>(oldChild->getObject());
   if ( s->isAttached( m_observer ) )
   {
     s->detach( m_observer );
-    newChild->getObject().staticCast<Object>()->attach( m_observer );
+    std::static_pointer_cast<Object>(newChild->getObject())->attach(m_observer);
   }
 
   return true;

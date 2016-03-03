@@ -357,8 +357,8 @@ void ScenePropertiesWidget::stateChangedBool( int state )
 
 void ScenePropertiesWidget::textureSelectionClicked( bool checked )
 {
-  DP_ASSERT( m_object.isPtrTo<dp::sg::core::Sampler>() );
-  dp::sg::core::SamplerSharedPtr const& sampler = m_object.staticCast<dp::sg::core::Sampler>();
+  DP_ASSERT( std::dynamic_pointer_cast<dp::sg::core::Sampler>(m_object) );
+  dp::sg::core::SamplerSharedPtr const& sampler = std::static_pointer_cast<dp::sg::core::Sampler>(m_object);
 
   QString textureFile = GetApp()->getMainWindow()->getTextureFile( textureTargetToType( sampler->getTexture()->getTextureTarget() ) );
   if ( ! textureFile.isEmpty() )
@@ -768,13 +768,13 @@ QWidget * ScenePropertiesWidget::createEdit( const dp::sg::core::TextureSharedPt
 {
   DP_ASSERT( enabled );
   std::string fileName;
-  if ( value.isPtrTo<dp::sg::core::TextureFile>() )
+  if ( std::dynamic_pointer_cast<dp::sg::core::TextureFile>(value) )
   {
-    fileName = value.staticCast<dp::sg::core::TextureFile>()->getFilename();
+    fileName = std::static_pointer_cast<dp::sg::core::TextureFile>(value)->getFilename();
   }
-  else if ( value.isPtrTo<dp::sg::core::TextureHost>() )
+  else if ( std::dynamic_pointer_cast<dp::sg::core::TextureHost>(value) )
   {
-    fileName = value.staticCast<dp::sg::core::TextureHost>()->getFileName();
+    fileName = std::static_pointer_cast<dp::sg::core::TextureHost>(value)->getFileName();
   }
 
   QPushButton * fsButton = new QPushButton( fileName.empty() ? "..." : fileName.c_str() );
@@ -787,13 +787,13 @@ QWidget * ScenePropertiesWidget::createEdit( const dp::sg::core::TextureSharedPt
 void ScenePropertiesWidget::updateEdit( QWidget * widget, const dp::sg::core::TextureSharedPtr & value )
 {
   std::string fileName;
-  if ( value.isPtrTo<dp::sg::core::TextureFile>() )
+  if ( std::dynamic_pointer_cast<dp::sg::core::TextureFile>(value) )
   {
-    fileName = value.staticCast<dp::sg::core::TextureFile>()->getFilename();
+    fileName = std::static_pointer_cast<dp::sg::core::TextureFile>(value)->getFilename();
   }
-  else if ( value.isPtrTo<dp::sg::core::TextureHost>() )
+  else if ( std::dynamic_pointer_cast<dp::sg::core::TextureHost>(value) )
   {
-    fileName = value.staticCast<dp::sg::core::TextureHost>()->getFileName();
+    fileName = std::static_pointer_cast<dp::sg::core::TextureHost>(value)->getFileName();
   }
 
   DP_ASSERT( dynamic_cast<QPushButton*>(widget) );
@@ -866,7 +866,7 @@ bool checkEnabled( dp::sg::core::ObjectSharedPtr const& o, dp::util::PropertyId 
 {
   std::string propertyName = o->getPropertyName( pid );                             // filter out ...
   return(   ( ( propertyName != "Hints" ) && ( propertyName != "TraversalMask" ) )  // ... "Hints" and "TraversalMask" in dp::sg::core::Object, as they are not supposed to be editable
-        &&  (   !o.isPtrTo<dp::sg::core::Camera>()                                  // ... some properties of a dp::sg::core::Camera, which are supposed to be edited by special means
+        &&  (   !std::dynamic_pointer_cast<dp::sg::core::Camera>(o)                 // ... some properties of a dp::sg::core::Camera, which are supposed to be edited by special means
             ||  ( ( propertyName != "Direction" ) && ( propertyName != "Orientation" ) && ( propertyName != "Position" ) && ( propertyName != "UpVector" ) ) ) );
 }
 
@@ -884,7 +884,7 @@ void ScenePropertiesWidget::displayItem( dp::sg::core::ObjectSharedPtr const & o
     title += QString( " (" ) + QString( dp::sg::core::objectCodeToName( object->getObjectCode() ).c_str() );
     if ( object->getObjectCode() == dp::sg::core::ObjectCode::PRIMITIVE )
     {
-      title += QString( " : " ) + QString( dp::sg::core::primitiveTypeToName( object.staticCast<dp::sg::core::Primitive>()->getPrimitiveType() ).c_str() );
+      title += QString(" : ") + QString(dp::sg::core::primitiveTypeToName(std::static_pointer_cast<dp::sg::core::Primitive>(object)->getPrimitiveType()).c_str());
     }
     title += QString( ")" );
   }

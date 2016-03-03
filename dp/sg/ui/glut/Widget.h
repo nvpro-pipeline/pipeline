@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -47,7 +47,7 @@ namespace dp
           DP_SG_UI_GLUT_API Widget( int x = -1, int y = -1 );
           DP_SG_UI_GLUT_API virtual ~Widget();
 
-          DP_SG_UI_GLUT_API const dp::gl::RenderContextSharedPtr & getRenderContext() const;
+          DP_SG_UI_GLUT_API dp::gl::RenderContextSharedPtr getRenderContext() const;
           DP_SG_UI_GLUT_API const dp::gl::RenderTargetSharedPtr  & getRenderTarget() const;
 
           /** \brief Enforce a repaint of the viewport **/
@@ -95,7 +95,7 @@ namespace dp
 
           /** \brief Override to fetch HID events **/
           DP_SG_UI_GLUT_API virtual void onHIDEvent( dp::util::PropertyId propertyId );
-          
+
         private:
 #if !defined(HAVE_FREEGLUT_2_8)
           void updateModifiers();

@@ -75,7 +75,7 @@ namespace dp
     {
       DP_ASSERT( m_bindingStack.empty() );
       DP_ASSERT( !isCurrent() );
-    
+
       RenderTarget::makeCurrent();
       glDeleteFramebuffers( 1, &m_framebuffer );
       clearAttachments();
@@ -85,7 +85,7 @@ namespace dp
     void RenderTargetFBO::makeCurrent()
     {
       RenderTarget::makeCurrent();
-    
+
       GLint binding;
       glGetIntegerv( GL_FRAMEBUFFER_BINDING_EXT, &binding );
       m_bindingStack.push_back( binding );
@@ -98,7 +98,7 @@ namespace dp
 
       // Choose Read/DrawBuffers. Note that Read/DrawBuffer state is bound to the FBO and thus does not
       // need to be reset in makeNoncurrent.
-    
+
       glReadBuffer( m_readBuffer );
 
       if ( m_drawBuffers.empty() )
@@ -111,8 +111,8 @@ namespace dp
       }
       else
       {
-        // extension is being checked in setDrawBuffers 
-        glDrawBuffers( dp::checked_cast<GLsizei>(m_drawBuffers.size()), reinterpret_cast<GLenum*>(&m_drawBuffers[0]) ); 
+        // extension is being checked in setDrawBuffers
+        glDrawBuffers( dp::checked_cast<GLsizei>(m_drawBuffers.size()), reinterpret_cast<GLenum*>(&m_drawBuffers[0]) );
       }
     }
 
@@ -148,7 +148,7 @@ namespace dp
         return createStereoTextureHost( texLeft, texRight );
 #else
         DP_ASSERT( !"There's no equivalent for createStereoTextureHost for dp::util::Image yet" );
-        return dp::util::ImageSharedPtr::null;
+        return dp::util::ImageSharedPtr();
 #endif
       }
     }
@@ -280,12 +280,12 @@ namespace dp
       // indicates the reason why the framebuffer is not complete
       // At this point then, the user would typically
       // specify new parameters to make it work with different creation
-      // parameters. Refer to  
+      // parameters. Refer to
       // http://www.nvidia.com/dev_content/nvopenglspecs/GL_EXT_framebuffer_object.txt
       // on strategies to implement this.
       // The official OpenGL extension repository is http://www.opengl.org/registry/
 
-      switch (status) 
+      switch (status)
       {
         case GL_FRAMEBUFFER_COMPLETE_EXT:
           complete = true;
@@ -293,7 +293,7 @@ namespace dp
         case GL_FRAMEBUFFER_UNSUPPORTED_EXT:
           // Unsupported framebuffer format
           break;
-        case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT: 
+        case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT:
           // Framebuffer incomplete attachment
           break;
         case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT:
@@ -446,7 +446,7 @@ namespace dp
     {
       DP_ASSERT( m_bindFunc );
       (this->*m_bindFunc)( attachment, m_texture->getGLId() );
-    
+
     }
 
     void RenderTargetFBO::AttachmentTexture::unbind( AttachmentTarget attachment )
@@ -468,33 +468,33 @@ namespace dp
     void RenderTargetFBO::AttachmentTexture::resizeTexture1D( int width, int height )
     {
       DP_ASSERT( height == 1 );
-      m_texture.inplaceCast<dp::gl::Texture1D>()->resize( width );
+      std::static_pointer_cast<dp::gl::Texture1D>(m_texture)->resize(width);
     }
 
     void RenderTargetFBO::AttachmentTexture::resizeTexture2D( int width, int height )
     {
-      m_texture.inplaceCast<dp::gl::Texture2D>()->resize( width, height );
+      std::static_pointer_cast<dp::gl::Texture2D>(m_texture)->resize(width, height);
     }
 
     void RenderTargetFBO::AttachmentTexture::resizeTexture3D( int width, int height )
     {
-      m_texture.inplaceCast<dp::gl::Texture3D>()->resize( width, height, m_texture.inplaceCast<dp::gl::Texture3D>()->getDepth() );
+      std::static_pointer_cast<dp::gl::Texture3D>(m_texture)->resize(width, height, std::static_pointer_cast<dp::gl::Texture3D>(m_texture)->getDepth());
     }
 
     void RenderTargetFBO::AttachmentTexture::resizeTexture1DArray( int width, int height )
     {
       DP_ASSERT( height == 1 );
-      m_texture.inplaceCast<dp::gl::Texture1DArray>()->resize( width, m_texture.inplaceCast<dp::gl::Texture1DArray>()->getLayers() );
+      std::static_pointer_cast<dp::gl::Texture1DArray>(m_texture)->resize(width, std::static_pointer_cast<dp::gl::Texture1DArray>(m_texture)->getLayers());
     }
 
     void RenderTargetFBO::AttachmentTexture::resizeTexture2DArray( int width, int height )
     {
-      m_texture.inplaceCast<dp::gl::Texture2DArray>()->resize( width, height, m_texture.inplaceCast<dp::gl::Texture2DArray>()->getLayers() );
+      std::static_pointer_cast<dp::gl::Texture2DArray>(m_texture)->resize(width, height, std::static_pointer_cast<dp::gl::Texture2DArray>(m_texture)->getLayers());
     }
 
     void RenderTargetFBO::AttachmentTexture::resizeTextureCubemap( int width, int height )
     {
-      m_texture.inplaceCast<dp::gl::TextureCubemap>()->resize( width, height );
+      std::static_pointer_cast<dp::gl::TextureCubemap>(m_texture)->resize(width, height);
     }
 
     /******************/
@@ -579,7 +579,7 @@ namespace dp
       BlitRegion destRegion(0,0, destination->getWidth(), destination->getHeight());
       BlitRegion srcRegion(0,0, this->getWidth(), this->getHeight());
       blit(destination->getFramebufferId(), mask, filter, destRegion, srcRegion);
-    } 
+    }
 
     void RenderTargetFBO::blit( const RenderTargetFBSharedPtr & destination, const BlitMask & mask, const BlitFilter & filter )
     {
@@ -626,7 +626,7 @@ namespace dp
       m_bindingStack.pop_back();
 
       blit(destination->getFramebufferId(), mask, filter, destRegion, srcRegion);
-    } 
+    }
 
     void RenderTargetFBO::blit( const RenderTargetFBSharedPtr & destination, const BlitMask & mask, const BlitFilter & filter,
                                 const BlitRegion & destRegion, const BlitRegion & srcRegion )
@@ -649,12 +649,12 @@ namespace dp
       blit(0, mask, filter, destRegion, srcRegion);
     }
 
-    void RenderTargetFBO::blit( const int & framebufferID, const BlitMask & mask, const BlitFilter & filter, 
+    void RenderTargetFBO::blit( const int & framebufferID, const BlitMask & mask, const BlitFilter & filter,
                                   const BlitRegion & destRegion, const BlitRegion & srcRegion )
     {
       glBindFramebuffer( GL_READ_FRAMEBUFFER, m_framebuffer );
       glBindFramebuffer( GL_DRAW_FRAMEBUFFER, framebufferID );
-      glBlitFramebuffer( srcRegion.x, srcRegion.y, srcRegion.x + srcRegion.width, srcRegion.y + srcRegion.height,  
+      glBlitFramebuffer( srcRegion.x, srcRegion.y, srcRegion.x + srcRegion.width, srcRegion.y + srcRegion.height,
                          destRegion.x, destRegion.y, destRegion.x + destRegion.width, destRegion.y + destRegion.height,
                          static_cast<GLbitfield>(mask), static_cast<GLenum>(filter) );
     }
@@ -668,7 +668,7 @@ namespace dp
     {
       return GLEW_VERSION_2_0 || !!GLEW_ARB_draw_buffers;
     }
-  
+
     bool RenderTargetFBO::isBlitSupported()
     {
       return /*!!GLEW_ARB_framebuffer_object ||*/ !!GLEW_EXT_framebuffer_blit;
@@ -721,42 +721,42 @@ namespace dp
 
     bool RenderTargetFBO::setAttachment( AttachmentTarget target, const Texture1DSharedPtr &texture, StereoTarget stereoTarget, int level )
     {
-      return setAttachment( target, AttachmentTexture::create( texture, level ).inplaceCast<Attachment>(), stereoTarget );
+      return setAttachment( target, std::static_pointer_cast<Attachment>(AttachmentTexture::create( texture, level )), stereoTarget );
     }
 
     bool RenderTargetFBO::setAttachment( AttachmentTarget target, const Texture2DSharedPtr &texture, StereoTarget stereoTarget, int level )
     {
-      return setAttachment( target, AttachmentTexture::create( texture, level ).inplaceCast<Attachment>(), stereoTarget );
+      return setAttachment( target, std::static_pointer_cast<Attachment>(AttachmentTexture::create( texture, level )), stereoTarget );
     }
 
     bool RenderTargetFBO::setAttachment( AttachmentTarget target, const Texture3DSharedPtr &texture, StereoTarget stereoTarget, int zoffset, int level )
     {
-      return setAttachment( target, AttachmentTexture::create( texture, zoffset, level ).inplaceCast<Attachment>(), stereoTarget );
+      return setAttachment( target, std::static_pointer_cast<Attachment>(AttachmentTexture::create( texture, zoffset, level )), stereoTarget );
     }
 
     bool RenderTargetFBO::setAttachment( AttachmentTarget target, const Texture1DArraySharedPtr &texture, StereoTarget stereoTarget, int layer, int level )
     {
-      return setAttachment( target, AttachmentTexture::create( texture, layer, level ).inplaceCast<Attachment>(), stereoTarget );
+      return setAttachment( target, std::static_pointer_cast<Attachment>(AttachmentTexture::create( texture, layer, level )), stereoTarget );
     }
 
     bool RenderTargetFBO::setAttachment( AttachmentTarget target, const Texture2DArraySharedPtr &texture, StereoTarget stereoTarget, int layer, int level )
     {
-      return setAttachment( target, AttachmentTexture::create( texture, layer, level ).inplaceCast<Attachment>(), stereoTarget );
+      return setAttachment( target, std::static_pointer_cast<Attachment>(AttachmentTexture::create( texture, layer, level )), stereoTarget );
     }
 
     bool RenderTargetFBO::setAttachment( AttachmentTarget target, const TextureCubemapSharedPtr &texture, StereoTarget stereoTarget, int face, int level )
     {
-      return setAttachment( target, AttachmentTexture::create( texture, face, level ).inplaceCast<Attachment>(), stereoTarget );
+      return setAttachment( target, std::static_pointer_cast<Attachment>(AttachmentTexture::create( texture, face, level )), stereoTarget );
     }
 
     bool RenderTargetFBO::setAttachment( AttachmentTarget target, const TextureRectangleSharedPtr &texture, StereoTarget stereoTarget )
     {
-      return setAttachment( target, AttachmentTexture::create( texture ).inplaceCast<Attachment>(), stereoTarget );
+      return setAttachment( target, std::static_pointer_cast<Attachment>(AttachmentTexture::create( texture )), stereoTarget );
     }
 
     bool RenderTargetFBO::setAttachment( AttachmentTarget target, const RenderbufferSharedPtr &buffer, StereoTarget stereoTarget )
     {
-      return setAttachment( target, AttachmentRenderbuffer::create( buffer ).inplaceCast<Attachment>(), stereoTarget );
+      return setAttachment( target, std::static_pointer_cast<Attachment>(AttachmentRenderbuffer::create( buffer )), stereoTarget );
     }
 
     bool RenderTargetFBO::beginRendering()
@@ -764,7 +764,7 @@ namespace dp
       makeCurrent();
 
       glViewport( m_x, m_y, m_width, m_height );
-      
+
       unsigned int colorBufferMask = m_clearMask & TBM_COLOR_BUFFER_MASK;
       unsigned int i = 0;
       while ( colorBufferMask )
@@ -774,7 +774,7 @@ namespace dp
           glClearBufferfv(GL_COLOR, i, &m_attachmentsClearColor[ getStereoTargetId( m_stereoTarget ) ][i][0] );
         }
         colorBufferMask >>= 1;
-        ++i; 
+        ++i;
       }
 
       if ( m_clearMask & TBM_DEPTH_BUFFER )

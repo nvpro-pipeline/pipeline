@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -70,8 +70,8 @@ namespace dp
             DPTRIX_API virtual dp::ui::RenderTargetSharedPtr createDisplay(int width, int height, bool visible) = 0;
             DPTRIX_API virtual dp::ui::RenderTargetSharedPtr createAuxiliaryRenderTarget(int width, int height) = 0;
 
-            DPTRIX_API virtual void render( dp::testfw::core::RenderData* renderData, dp::ui::RenderTargetSharedPtr renderTarget = dp::ui::RenderTargetSharedPtr::null );
-            
+            DPTRIX_API virtual void render( dp::testfw::core::RenderData* renderData, dp::ui::RenderTargetSharedPtr renderTarget = dp::ui::RenderTargetSharedPtr() );
+
             DPTRIX_API dp::rix::core::Renderer* getRenderer() const;
 
           protected:
@@ -80,7 +80,7 @@ namespace dp
           protected:
             dp::rix::core::Renderer* m_rix;
             dp::util::DynamicLibrarySharedPtr m_rixLib;
-          
+
           };
 
         } // namespace framework

@@ -94,12 +94,12 @@ bool Feature_FBO_MRT::onInit()
   DP_ASSERT(m_renderGroupSecondPass);
 
   // Set the clear color for our main framebuffer
-  m_displayTarget.inplaceCast<dp::gl::RenderTarget>()->setClearColor( 0.46f, 0.72f, 0.0f, 1.0f );
+  std::static_pointer_cast<dp::gl::RenderTarget>(m_displayTarget)->setClearColor(0.46f, 0.72f, 0.0f, 1.0f);
   // Set the clear color for our FBO
-  m_fbo.inplaceCast<dp::gl::RenderTarget>()->setClearMask( gl::TBM_COLOR_BUFFER0 | gl::TBM_COLOR_BUFFER1 | gl::TBM_DEPTH_BUFFER );
-  m_fbo.inplaceCast<dp::gl::RenderTarget>()->setClearColor( 0.46f, 0.72f, 0.0f, 1.0f, 0 );
-  m_fbo.inplaceCast<dp::gl::RenderTarget>()->setClearColor( 0.0f,  0.0f,  0.0f, 1.0f, 1 );
-  m_fbo.inplaceCast<dp::gl::RenderTarget>()->setClearDepth( 1.0f );
+  std::static_pointer_cast<dp::gl::RenderTarget>(m_fbo)->setClearMask(gl::TBM_COLOR_BUFFER0 | gl::TBM_COLOR_BUFFER1 | gl::TBM_DEPTH_BUFFER);
+  std::static_pointer_cast<dp::gl::RenderTarget>(m_fbo)->setClearColor(0.46f, 0.72f, 0.0f, 1.0f, 0);
+  std::static_pointer_cast<dp::gl::RenderTarget>(m_fbo)->setClearColor(0.0f, 0.0f, 0.0f, 1.0f, 1);
+  std::static_pointer_cast<dp::gl::RenderTarget>(m_fbo)->setClearDepth(1.0f);
 
   return true;
 }
@@ -109,7 +109,7 @@ bool Feature_FBO_MRT::onRunInit( unsigned int i )
   std::vector<dp::gl::RenderTargetFBO::AttachmentTarget> drawBuffers;
   drawBuffers.push_back(dp::gl::RenderTargetFBO::AttachmentTarget::COLOR0);
   drawBuffers.push_back(dp::gl::RenderTargetFBO::AttachmentTarget::COLOR1);
-  m_fbo.inplaceCast<dp::gl::RenderTargetFBO>()->setDrawBuffers(drawBuffers);
+  std::static_pointer_cast<dp::gl::RenderTargetFBO>(m_fbo)->setDrawBuffers(drawBuffers);
 
   return true;
 }
@@ -675,9 +675,9 @@ void Feature_FBO_MRT::createSecondPass()
 
     m_colorGlowBuf = gl::Texture2D::create( GL_R32F, GL_RGBA, GL_UNSIGNED_BYTE, 2*m_width, 2*m_height );
 
-    m_fbo.inplaceCast<dp::gl::RenderTargetFBO>()->setAttachment( gl::RenderTargetFBO::AttachmentTarget::COLOR0, m_colorBuf );
-    m_fbo.inplaceCast<dp::gl::RenderTargetFBO>()->setAttachment( gl::RenderTargetFBO::AttachmentTarget::COLOR1, m_colorGlowBuf );
-    m_fbo.inplaceCast<dp::gl::RenderTargetFBO>()->setAttachment( gl::RenderTargetFBO::AttachmentTarget::DEPTH, m_depthBuf );
+    std::static_pointer_cast<dp::gl::RenderTargetFBO>(m_fbo)->setAttachment(gl::RenderTargetFBO::AttachmentTarget::COLOR0, m_colorBuf);
+    std::static_pointer_cast<dp::gl::RenderTargetFBO>(m_fbo)->setAttachment(gl::RenderTargetFBO::AttachmentTarget::COLOR1, m_colorGlowBuf);
+    std::static_pointer_cast<dp::gl::RenderTargetFBO>(m_fbo)->setAttachment(gl::RenderTargetFBO::AttachmentTarget::DEPTH, m_depthBuf);
 
     rix::gl::TextureDataGLTexture textureDataGLTexture0( m_colorBuf );
     m_rix->textureSetData( textureFBO0, textureDataGLTexture0 );

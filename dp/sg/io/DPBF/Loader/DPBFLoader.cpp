@@ -1,4 +1,4 @@
-// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -3146,7 +3146,7 @@ CameraSharedPtr DPBFLoader::loadCamera(uint_t offset)
     // camera should have been mapped if we get here
     DP_ASSERT(m_offsetObjectMap.find(offset)!=m_offsetObjectMap.end());
   }
-  return m_offsetObjectMap[offset].staticCast<Camera>();
+  return std::static_pointer_cast<Camera>(m_offsetObjectMap[offset]);
 }
 
 CameraSharedPtr DPBFLoader::loadCamera_nbf_4c(uint_t offset)
@@ -3173,7 +3173,7 @@ CameraSharedPtr DPBFLoader::loadCamera_nbf_4c(uint_t offset)
     // camera should have been mapped if we get here
     DP_ASSERT(m_offsetObjectMap.find(offset)!=m_offsetObjectMap.end());
   }
-  return m_offsetObjectMap[offset].staticCast<Camera>();
+  return std::static_pointer_cast<Camera>(m_offsetObjectMap[offset]);
 }
 
 CameraSharedPtr DPBFLoader::loadCamera_nbf_44(uint_t offset)
@@ -3198,7 +3198,7 @@ CameraSharedPtr DPBFLoader::loadCamera_nbf_44(uint_t offset)
     // camera should have been mapped if we get here
     DP_ASSERT(m_offsetObjectMap.find(offset)!=m_offsetObjectMap.end());
   }
-  return m_offsetObjectMap[offset].staticCast<Camera>();
+  return std::static_pointer_cast<Camera>(m_offsetObjectMap[offset]);
 }
 
 MatrixCameraSharedPtr DPBFLoader::loadMatrixCamera(uint_t offset)
@@ -3380,7 +3380,7 @@ PrimitiveSharedPtr DPBFLoader::loadAnyPrimitive(uint_t offset)
     // primitive should have been mapped if we get here
     DP_ASSERT(m_offsetObjectMap.find(offset)!=m_offsetObjectMap.end());
   }
-  return m_offsetObjectMap[offset].staticCast<Primitive>();
+  return std::static_pointer_cast<Primitive>(m_offsetObjectMap[offset]);
 }
 
 // loader for old-fashioned SkinnedTriangles; are mapped to Skin in a Triangles
@@ -3613,7 +3613,7 @@ NodeSharedPtr DPBFLoader::loadNode(uint_t offset)
     // node should have been mapped if we get here
     DP_ASSERT(m_offsetObjectMap.find(offset)!=m_offsetObjectMap.end());
   }
-  return m_offsetObjectMap[offset].staticCast<Node>();
+  return std::static_pointer_cast<Node>(m_offsetObjectMap[offset]);
 }
 
 ObjectSharedPtr DPBFLoader::loadNode_nbf_12(uint_t offset)
@@ -4297,7 +4297,7 @@ LightSourceSharedPtr DPBFLoader::loadLightSource(uint_t offset)
     // light should have been mapped if we get here
     DP_ASSERT(m_offsetObjectMap.find(offset)!=m_offsetObjectMap.end());
   }
-  return m_offsetObjectMap[offset].staticCast<LightSource>();
+  return std::static_pointer_cast<LightSource>(m_offsetObjectMap[offset]);
 }
 
 LightSourceSharedPtr DPBFLoader::loadLightSource_nbf_53(uint_t offset)
@@ -4322,7 +4322,7 @@ LightSourceSharedPtr DPBFLoader::loadLightSource_nbf_53(uint_t offset)
     // light should have been mapped if we get here
     DP_ASSERT(m_offsetObjectMap.find(offset)!=m_offsetObjectMap.end());
   }
-  return m_offsetObjectMap[offset].staticCast<LightSource>();
+  return std::static_pointer_cast<LightSource>(m_offsetObjectMap[offset]);
 }
 
 LightSourceSharedPtr DPBFLoader::loadLightSource_nbf_52(uint_t offset)
@@ -4347,7 +4347,7 @@ LightSourceSharedPtr DPBFLoader::loadLightSource_nbf_52(uint_t offset)
     // light should have been mapped if we get here
     DP_ASSERT(m_offsetObjectMap.find(offset)!=m_offsetObjectMap.end());
   }
-  return m_offsetObjectMap[offset].staticCast<LightSource>();
+  return std::static_pointer_cast<LightSource>(m_offsetObjectMap[offset]);
 }
 
 LightSourceSharedPtr DPBFLoader::loadLightSource_nbf_50(uint_t offset)
@@ -4372,7 +4372,7 @@ LightSourceSharedPtr DPBFLoader::loadLightSource_nbf_50(uint_t offset)
     // light should have been mapped if we get here
     DP_ASSERT(m_offsetObjectMap.find(offset)!=m_offsetObjectMap.end());
   }
-  return m_offsetObjectMap[offset].staticCast<LightSource>();
+  return std::static_pointer_cast<LightSource>(m_offsetObjectMap[offset]);
 }
 
 LightSourceSharedPtr DPBFLoader::loadLightSource_nbf_12(uint_t offset)
@@ -4397,7 +4397,7 @@ LightSourceSharedPtr DPBFLoader::loadLightSource_nbf_12(uint_t offset)
     // light should have been mapped if we get here
     DP_ASSERT(m_offsetObjectMap.find(offset)!=m_offsetObjectMap.end());
   }
-  return m_offsetObjectMap[offset].staticCast<LightSource>();
+  return std::static_pointer_cast<LightSource>(m_offsetObjectMap[offset]);
 }
 
 LightSourceSharedPtr DPBFLoader::loadDirectedLight_nbf_53(uint_t offset)
@@ -5109,7 +5109,7 @@ ParameterGroupDataSharedPtr DPBFLoader::loadTextureAttributeItem_nbf_e(uint_t of
     Offset_AutoPtr<NBFTextureAttributeItem_nbf_e> itemPtr(m_fm, callback(), offset);
     mapObject(offset, readTexAttribItem_nbf_54(itemPtr));
   }
-  return m_offsetObjectMap[offset].staticCast<ParameterGroupData>();
+  return std::static_pointer_cast<ParameterGroupData>(m_offsetObjectMap[offset]);
 }
 
 ParameterGroupDataSharedPtr DPBFLoader::loadTextureAttributeItem_nbf_f(uint_t offset)
@@ -5121,7 +5121,7 @@ ParameterGroupDataSharedPtr DPBFLoader::loadTextureAttributeItem_nbf_f(uint_t of
     Offset_AutoPtr<NBFTextureAttributeItem_nbf_f> itemPtr(m_fm, callback(), offset);
     mapObject(offset, readTexAttribItem_nbf_54(itemPtr));
   }
-  return m_offsetObjectMap[offset].staticCast<ParameterGroupData>();
+  return std::static_pointer_cast<ParameterGroupData>(m_offsetObjectMap[offset]);
 }
 
 ParameterGroupDataSharedPtr DPBFLoader::loadTextureAttributeItem_nbf_12(uint_t offset)
@@ -5133,7 +5133,7 @@ ParameterGroupDataSharedPtr DPBFLoader::loadTextureAttributeItem_nbf_12(uint_t o
     Offset_AutoPtr<NBFTextureAttributeItem_nbf_12> itemPtr(m_fm, callback(), offset);
     mapObject(offset, readTexAttribItem_nbf_54(itemPtr));
   }
-  return m_offsetObjectMap[offset].staticCast<ParameterGroupData>();
+  return std::static_pointer_cast<ParameterGroupData>(m_offsetObjectMap[offset]);
 }
 
 ParameterGroupDataSharedPtr DPBFLoader::loadTextureAttributeItem_nbf_20(uint_t offset)
@@ -5145,7 +5145,7 @@ ParameterGroupDataSharedPtr DPBFLoader::loadTextureAttributeItem_nbf_20(uint_t o
     Offset_AutoPtr<NBFTextureAttributeItem_nbf_20> itemPtr(m_fm, callback(), offset);
     mapObject(offset, readTexAttribItem_nbf_54(itemPtr));
   }
-  return m_offsetObjectMap[offset].staticCast<ParameterGroupData>();
+  return std::static_pointer_cast<ParameterGroupData>(m_offsetObjectMap[offset]);
 }
 
 ParameterGroupDataSharedPtr DPBFLoader::loadTextureAttributeItem_nbf_36(uint_t offset)
@@ -5157,7 +5157,7 @@ ParameterGroupDataSharedPtr DPBFLoader::loadTextureAttributeItem_nbf_36(uint_t o
     Offset_AutoPtr<NBFTextureAttributeItem_nbf_36> itemPtr(m_fm, callback(), offset);
     mapObject(offset, readTexAttribItem_nbf_54(itemPtr));
   }
-  return m_offsetObjectMap[offset].staticCast<ParameterGroupData>();
+  return std::static_pointer_cast<ParameterGroupData>(m_offsetObjectMap[offset]);
 }
 
 ParameterGroupDataSharedPtr DPBFLoader::loadTextureAttributeItem_nbf_4b(uint_t offset)
@@ -5169,7 +5169,7 @@ ParameterGroupDataSharedPtr DPBFLoader::loadTextureAttributeItem_nbf_4b(uint_t o
     Offset_AutoPtr<NBFTextureAttributeItem_nbf_4b> itemPtr(m_fm, callback(), offset);
     mapObject(offset, readTexAttribItem_nbf_54(itemPtr));
   }
-  return m_offsetObjectMap[offset].staticCast<ParameterGroupData>();
+  return std::static_pointer_cast<ParameterGroupData>(m_offsetObjectMap[offset]);
 }
 
 ParameterGroupDataSharedPtr DPBFLoader::loadTextureAttributeItem_nbf_54(uint_t offset)
@@ -5181,7 +5181,7 @@ ParameterGroupDataSharedPtr DPBFLoader::loadTextureAttributeItem_nbf_54(uint_t o
     Offset_AutoPtr<NBFTextureAttributeItem_nbf_54> itemPtr(m_fm, callback(), offset);
     mapObject(offset, readTexAttribItem_nbf_54(itemPtr));
   }
-  return m_offsetObjectMap[offset].staticCast<ParameterGroupData>();
+  return std::static_pointer_cast<ParameterGroupData>(m_offsetObjectMap[offset]);
 }
 
 TextureHostSharedPtr DPBFLoader::loadTextureHost(uint_t offset, std::string& file)
@@ -5192,7 +5192,7 @@ TextureHostSharedPtr DPBFLoader::loadTextureHost(uint_t offset, std::string& fil
   if ( !offset )
   {
     // 0-offset is regular and means no TextureHost saved -> return NULL
-    return TextureHostSharedPtr::null;
+    return TextureHostSharedPtr();
   }
 
   TextureHostSharedPtr imgHdl;
@@ -5206,13 +5206,13 @@ TextureHostSharedPtr DPBFLoader::loadTextureHost(uint_t offset, std::string& fil
       map<string,TextureHostWeakPtr>::const_iterator it = m_textureImages.find( file );
       if ( it != m_textureImages.end() )
       {
-        imgHdl = it->second.getSharedPtr().staticCast<TextureHost>();
+        imgHdl = std::static_pointer_cast<TextureHost>(it->second.lock());
       }
       else
       {
         imgHdl = dp::sg::io::loadTextureHost(file, m_fileFinder);
         imgHdl->setTextureTarget( (TextureTarget)imgPtr->target );
-        m_textureImages[file] = imgHdl.getWeakPtr();
+        m_textureImages[file] = imgHdl;
       }
     }
     else
@@ -5248,7 +5248,7 @@ TextureHostSharedPtr DPBFLoader::loadTextureHost_nbf_4b(uint_t offset, std::stri
   if ( !offset )
   {
     // 0-offset is regular and means no TextureHost saved -> return NULL
-    return TextureHostSharedPtr::null;
+    return TextureHostSharedPtr();
   }
 
   TextureHostSharedPtr imgHdl;
@@ -5262,12 +5262,12 @@ TextureHostSharedPtr DPBFLoader::loadTextureHost_nbf_4b(uint_t offset, std::stri
       map<string,TextureHostWeakPtr>::const_iterator it = m_textureImages.find( file );
       if ( it != m_textureImages.end() )
       {
-        imgHdl = it->second.getSharedPtr().staticCast<TextureHost>();
+        imgHdl = std::static_pointer_cast<TextureHost>(it->second.lock());
       }
       else
       {
         imgHdl = dp::sg::io::loadTextureHost(file, m_fileFinder);
-        m_textureImages[file] = imgHdl.getWeakPtr();
+        m_textureImages[file] = imgHdl;
       }
     }
     else
@@ -5413,9 +5413,9 @@ bool DPBFLoader::loadSharedObject( typename ObjectTraits<ObjectType>::SharedPtr 
      && m_sharedObjectsMap.find(objPtr->objectDataID) != m_sharedObjectsMap.end()
      )
   { // copy construct the object
-    DP_ASSERT( m_sharedObjectsMap[objPtr->objectDataID].isPtrTo<ObjectType>() );
-    dp::sg::core::ObjectSharedPtr obj = m_sharedObjectsMap[objPtr->objectDataID].clone();
-    objHdl = obj.staticCast<ObjectType>();
+    DP_ASSERT( std::dynamic_pointer_cast<ObjectType>(m_sharedObjectsMap[objPtr->objectDataID]) );
+    dp::sg::core::ObjectSharedPtr obj = std::static_pointer_cast<dp::sg::core::Object>(m_sharedObjectsMap[objPtr->objectDataID]->clone());
+    objHdl = std::static_pointer_cast<ObjectType>(obj);
     // override general object data!
     // objects do not share general object data, e.g. the name, even if they are shared!
     readObject( objHdl, objPtr);
@@ -5624,7 +5624,7 @@ PrimitiveSharedPtr DPBFLoader::loadPrimitive( uint_t offset )
     mapObject(offset, primHdl);
   }
 
-  return( m_offsetObjectMap[offset].staticCast<Primitive>() );
+  return(std::static_pointer_cast<Primitive>(m_offsetObjectMap[offset]));
 }
 
 PrimitiveSharedPtr DPBFLoader::loadPrimitive_nbf_4d( uint_t offset )
@@ -5639,7 +5639,7 @@ PrimitiveSharedPtr DPBFLoader::loadPrimitive_nbf_4d( uint_t offset )
     mapObject(offset, primHdl);
   }
 
-  return( m_offsetObjectMap[offset].staticCast<Primitive>() );
+  return(std::static_pointer_cast<Primitive>(m_offsetObjectMap[offset]));
 }
 
 PrimitiveSharedPtr DPBFLoader::loadPatches_nbf_47( uint_t offset )
@@ -5659,7 +5659,7 @@ PrimitiveSharedPtr DPBFLoader::loadPatches_nbf_47( uint_t offset )
 
     mapObject(offset, patchesHdl);
   }
-  return( m_offsetObjectMap[offset].staticCast<Primitive>() );
+  return(std::static_pointer_cast<Primitive>(m_offsetObjectMap[offset]));
 }
 
 PrimitiveSharedPtr DPBFLoader::loadQuadPatches_nbf_47( uint_t offset )
@@ -5678,7 +5678,7 @@ PrimitiveSharedPtr DPBFLoader::loadQuadPatches_nbf_47( uint_t offset )
 
     mapObject(offset, primitive);
   }
-  return( m_offsetObjectMap[offset].staticCast<Primitive>() );
+  return(std::static_pointer_cast<Primitive>(m_offsetObjectMap[offset]));
 }
 
 PrimitiveSharedPtr DPBFLoader::loadQuadPatches4x4_nbf_47( uint_t offset )
@@ -5696,7 +5696,7 @@ PrimitiveSharedPtr DPBFLoader::loadQuadPatches4x4_nbf_47( uint_t offset )
 
     mapObject(offset, primitive);
   }
-  return( m_offsetObjectMap[offset].staticCast<Primitive>() );
+  return(std::static_pointer_cast<Primitive>(m_offsetObjectMap[offset]));
 }
 
 PrimitiveSharedPtr DPBFLoader::loadRectPatches_nbf_47( uint_t offset )
@@ -5715,7 +5715,7 @@ PrimitiveSharedPtr DPBFLoader::loadRectPatches_nbf_47( uint_t offset )
 
     mapObject(offset, primitive);
   }
-  return( m_offsetObjectMap[offset].staticCast<Primitive>() );
+  return(std::static_pointer_cast<Primitive>(m_offsetObjectMap[offset]));
 }
 
 PrimitiveSharedPtr DPBFLoader::loadTriPatches_nbf_47( uint_t offset )
@@ -5734,7 +5734,7 @@ PrimitiveSharedPtr DPBFLoader::loadTriPatches_nbf_47( uint_t offset )
 
     mapObject(offset, primitive);
   }
-  return( m_offsetObjectMap[offset].staticCast<Primitive>() );
+  return(std::static_pointer_cast<Primitive>(m_offsetObjectMap[offset]));
 }
 
 PrimitiveSharedPtr DPBFLoader::loadTriPatches4_nbf_47( uint_t offset )
@@ -5752,7 +5752,7 @@ PrimitiveSharedPtr DPBFLoader::loadTriPatches4_nbf_47( uint_t offset )
 
     mapObject(offset, primitive);
   }
-  return( m_offsetObjectMap[offset].staticCast<Primitive>() );
+  return(std::static_pointer_cast<Primitive>(m_offsetObjectMap[offset]));
 }
 
 PrimitiveSharedPtr DPBFLoader::loadQuadPatches( uint_t offset )
@@ -5769,7 +5769,7 @@ PrimitiveSharedPtr DPBFLoader::loadQuadPatches( uint_t offset )
 
     mapObject(offset, primitive);
   }
-  return( m_offsetObjectMap[offset].staticCast<Primitive>() );
+  return(std::static_pointer_cast<Primitive>(m_offsetObjectMap[offset]));
 }
 
 PrimitiveSharedPtr DPBFLoader::loadQuadPatches_nbf_4d( uint_t offset )
@@ -5786,7 +5786,7 @@ PrimitiveSharedPtr DPBFLoader::loadQuadPatches_nbf_4d( uint_t offset )
 
     mapObject(offset, primitive);
   }
-  return( m_offsetObjectMap[offset].staticCast<Primitive>() );
+  return(std::static_pointer_cast<Primitive>(m_offsetObjectMap[offset]));
 }
 
 PrimitiveSharedPtr DPBFLoader::loadQuadPatches4x4( uint_t offset )
@@ -5802,7 +5802,7 @@ PrimitiveSharedPtr DPBFLoader::loadQuadPatches4x4( uint_t offset )
 
     mapObject(offset, primitive);
   }
-  return( m_offsetObjectMap[offset].staticCast<Primitive>() );
+  return(std::static_pointer_cast<Primitive>(m_offsetObjectMap[offset]));
 }
 
 PrimitiveSharedPtr DPBFLoader::loadQuadPatches4x4_nbf_4d( uint_t offset )
@@ -5818,7 +5818,7 @@ PrimitiveSharedPtr DPBFLoader::loadQuadPatches4x4_nbf_4d( uint_t offset )
 
     mapObject(offset, primitive);
   }
-  return( m_offsetObjectMap[offset].staticCast<Primitive>() );
+  return(std::static_pointer_cast<Primitive>(m_offsetObjectMap[offset]));
 }
 
 PrimitiveSharedPtr DPBFLoader::loadRectPatches( uint_t offset )
@@ -5835,7 +5835,7 @@ PrimitiveSharedPtr DPBFLoader::loadRectPatches( uint_t offset )
 
     mapObject(offset, primitive);
   }
-  return( m_offsetObjectMap[offset].staticCast<Primitive>() );
+  return(std::static_pointer_cast<Primitive>(m_offsetObjectMap[offset]));
 }
 
 PrimitiveSharedPtr DPBFLoader::loadRectPatches_nbf_4d( uint_t offset )
@@ -5852,7 +5852,7 @@ PrimitiveSharedPtr DPBFLoader::loadRectPatches_nbf_4d( uint_t offset )
 
     mapObject(offset, primitive);
   }
-  return( m_offsetObjectMap[offset].staticCast<Primitive>() );
+  return(std::static_pointer_cast<Primitive>(m_offsetObjectMap[offset]));
 }
 
 PrimitiveSharedPtr DPBFLoader::loadTriPatches( uint_t offset )
@@ -5869,7 +5869,7 @@ PrimitiveSharedPtr DPBFLoader::loadTriPatches( uint_t offset )
 
     mapObject(offset, primitive);
   }
-  return( m_offsetObjectMap[offset].staticCast<Primitive>() );
+  return(std::static_pointer_cast<Primitive>(m_offsetObjectMap[offset]));
 }
 
 PrimitiveSharedPtr DPBFLoader::loadTriPatches_nbf_4d( uint_t offset )
@@ -5886,7 +5886,7 @@ PrimitiveSharedPtr DPBFLoader::loadTriPatches_nbf_4d( uint_t offset )
 
     mapObject(offset, primitive);
   }
-  return( m_offsetObjectMap[offset].staticCast<Primitive>() );
+  return(std::static_pointer_cast<Primitive>(m_offsetObjectMap[offset]));
 }
 
 PrimitiveSharedPtr DPBFLoader::loadTriPatches4( uint_t offset )
@@ -5902,7 +5902,7 @@ PrimitiveSharedPtr DPBFLoader::loadTriPatches4( uint_t offset )
 
     mapObject(offset, primitive);
   }
-  return( m_offsetObjectMap[offset].staticCast<Primitive>() );
+  return(std::static_pointer_cast<Primitive>(m_offsetObjectMap[offset]));
 }
 
 PrimitiveSharedPtr DPBFLoader::loadTriPatches4_nbf_4d( uint_t offset )
@@ -5918,7 +5918,7 @@ PrimitiveSharedPtr DPBFLoader::loadTriPatches4_nbf_4d( uint_t offset )
 
     mapObject(offset, primitive);
   }
-  return( m_offsetObjectMap[offset].staticCast<Primitive>() );
+  return(std::static_pointer_cast<Primitive>(m_offsetObjectMap[offset]));
 }
 
 void DPBFLoader::readVertexAttributeSet( VertexAttributeSetSharedPtr const& dst, const NBFVertexAttributeSet * src )
@@ -5965,7 +5965,7 @@ IndexSetSharedPtr DPBFLoader::loadIndexSet( uint_t offset )
     }
     mapObject( offset, iset );
   }
-  return m_offsetObjectMap[offset].staticCast<IndexSet>();
+  return std::static_pointer_cast<IndexSet>(m_offsetObjectMap[offset]);
 }
 
 VertexAttributeSetSharedPtr DPBFLoader::loadVertexAttributeSet( uint_t vasOffset )
@@ -5980,7 +5980,7 @@ VertexAttributeSetSharedPtr DPBFLoader::loadVertexAttributeSet( uint_t vasOffset
     readVertexAttributeSet( vash, vasPtr );
     mapObject(vasOffset, vash);
   }
-  return m_offsetObjectMap[vasOffset].staticCast<VertexAttributeSet>();
+  return std::static_pointer_cast<VertexAttributeSet>(m_offsetObjectMap[vasOffset]);
 }
 
 VertexAttributeSetSharedPtr DPBFLoader::loadVertexAttributeSet_nbf_54( uint_t vasOffset )
@@ -6007,7 +6007,7 @@ VertexAttributeSetSharedPtr DPBFLoader::loadVertexAttributeSet_nbf_54( uint_t va
       mapObject(vasOffset, vertexAttributeSet);
     }
   }
-  return m_offsetObjectMap[vasOffset].staticCast<VertexAttributeSet>();
+  return std::static_pointer_cast<VertexAttributeSet>(m_offsetObjectMap[vasOffset]);
 }
 
 VertexAttributeSetSharedPtr DPBFLoader::loadVertexAttributeSet_nbf_3a( uint_t vasOffset )
@@ -6050,7 +6050,7 @@ VertexAttributeSetSharedPtr DPBFLoader::loadVertexAttributeSet_nbf_3a( uint_t va
     }
     mapObject(vasOffset, hvas);
   }
-  return m_offsetObjectMap[vasOffset].staticCast<VertexAttributeSet>();
+  return std::static_pointer_cast<VertexAttributeSet>(m_offsetObjectMap[vasOffset]);
 }
 
 VertexAttributeSetSharedPtr DPBFLoader::loadVertexAttributeSet_nbf_38( uint_t vasOffset)
@@ -6115,7 +6115,7 @@ VertexAttributeSetSharedPtr DPBFLoader::loadVertexAttributeSet_nbf_38( uint_t va
     mapObject(vasOffset, cvas);
     cvas;
   }
-  return m_offsetObjectMap[vasOffset].staticCast<VertexAttributeSet>();
+  return std::static_pointer_cast<VertexAttributeSet>(m_offsetObjectMap[vasOffset]);
 }
 
 dp::sg::core::PipelineDataSharedPtr DPBFLoader::loadPipelineData( uint_t offset )
@@ -6163,7 +6163,7 @@ dp::sg::core::PipelineDataSharedPtr DPBFLoader::loadPipelineData( uint_t offset 
     }
     return( effectData );
   }
-  return( objIt->second.staticCast<dp::sg::core::PipelineData>() );
+  return(std::static_pointer_cast<dp::sg::core::PipelineData>(objIt->second));
 }
 
 dp::sg::core::PipelineDataSharedPtr DPBFLoader::loadPipelineData_nbf_55( uint_t offset )
@@ -6210,7 +6210,7 @@ dp::sg::core::PipelineDataSharedPtr DPBFLoader::loadPipelineData_nbf_55( uint_t 
     }
     return( effectData );
   }
-  return( objIt->second.staticCast<dp::sg::core::PipelineData>() );
+  return(std::static_pointer_cast<dp::sg::core::PipelineData>(objIt->second));
 }
 
 ParameterGroupDataSharedPtr DPBFLoader::loadParameterGroupData( uint_t offset )
@@ -6268,7 +6268,7 @@ ParameterGroupDataSharedPtr DPBFLoader::loadParameterGroupData( uint_t offset )
       return( parameterGroupData );
     }
   }
-  return( objIt->second.staticCast<ParameterGroupData>() );
+  return(std::static_pointer_cast<ParameterGroupData>(objIt->second));
 }
 
 SamplerSharedPtr DPBFLoader::loadSampler( uint_t offset )
@@ -6291,7 +6291,7 @@ SamplerSharedPtr DPBFLoader::loadSampler( uint_t offset )
     sampler->setCompareMode( (TextureCompareMode)samplerPtr->compareMode );
     mapObject( offset, sampler );
   }
-  return( m_offsetObjectMap[offset].staticCast<Sampler>() );
+  return(std::static_pointer_cast<Sampler>(m_offsetObjectMap[offset]));
 }
 
 SamplerSharedPtr DPBFLoader::loadSampler_nbf_54( uint_t offset )
@@ -6323,7 +6323,7 @@ SamplerSharedPtr DPBFLoader::loadSampler_nbf_54( uint_t offset )
     }
     mapObject( offset, sampler );
   }
-  return( m_offsetObjectMap[offset].staticCast<Sampler>() );
+  return(std::static_pointer_cast<Sampler>(m_offsetObjectMap[offset]));
 }
 
 void DPBFLoader::readGroup(GroupSharedPtr const& dst, const NBFGroup * src)
@@ -6372,8 +6372,8 @@ void DPBFLoader::readGroup_nbf_12(GroupSharedPtr const& dst, const NBFGroup_nbf_
     ObjectSharedPtr child(loadNode_nbf_12(childOffs[i]));
     if ( child )
     {
-      DP_ASSERT( child.isPtrTo<Node>() );
-      dst->addChild( child.staticCast<Node>() );
+      DP_ASSERT( std::dynamic_pointer_cast<Node>(child) );
+      dst->addChild(std::static_pointer_cast<Node>(child));
     }
   }
 
@@ -6397,8 +6397,8 @@ void DPBFLoader::readGroup_nbf_11(GroupSharedPtr const& dst, const NBFGroup_nbf_
     ObjectSharedPtr child(loadNode_nbf_12(childOffs[i]));
     if ( child )
     {
-      DP_ASSERT( child.isPtrTo<Node>() );
-      dst->addChild( child.staticCast<Node>() );
+      DP_ASSERT( std::dynamic_pointer_cast<Node>(child) );
+      dst->addChild(std::static_pointer_cast<Node>(child));
     }
   }
 }

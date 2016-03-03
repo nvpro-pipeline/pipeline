@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -53,13 +53,13 @@ namespace dp
       virtual bool save( const EffectDataSharedPtr& effectData, const std::string& filename );
       virtual void getEffectNames(std::vector<std::string>& names );
       virtual void getEffectNames( const std::string & filename, EffectSpec::Type type, std::vector<std::string> & names ) const;
-      virtual const EffectSpecSharedPtr& getEffectSpec(const std::string& effectName) const;
+      virtual EffectSpecSharedPtr getEffectSpec(const std::string& effectName) const;
       virtual std::string const& getEffectFile( std::string const& effectName ) const;
-      virtual const ParameterGroupSpecSharedPtr& getParameterGroupSpec( const std::string & pgsName ) const;
-      virtual const EnumSpecSharedPtr& getEnumSpec( const std::string& name ) const;
+      virtual ParameterGroupSpecSharedPtr getParameterGroupSpec( const std::string & pgsName ) const;
+      virtual EnumSpecSharedPtr getEnumSpec( const std::string& name ) const;
 
-      virtual const ParameterGroupDataSharedPtr& getParameterGroupData( const std::string& name ) const;
-      virtual const EffectDataSharedPtr& getEffectData( const std::string& name ) const;
+      virtual ParameterGroupDataSharedPtr getParameterGroupData( const std::string& name ) const;
+      virtual EffectDataSharedPtr getEffectData( const std::string& name ) const;
 
       ShaderPipelineSharedPtr generateShaderPipeline( const ShaderPipelineConfiguration& configuration );
 
@@ -108,7 +108,7 @@ namespace dp
       };
 
       typedef std::map<std::string, EffectSpecInfo> EffectSpecs;
-      EffectSpecs m_effectSpecs; 
+      EffectSpecs m_effectSpecs;
 
       typedef std::map<std::string, EnumSpecSharedPtr> EnumSpecs;
       EnumSpecs m_enumSpecs;

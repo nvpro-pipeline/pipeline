@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -25,6 +25,7 @@
 
 
 #include <test/testfw/core/TestObjectUtil.h>
+#include <dp/Assert.h>
 #include <dp/util/File.h>
 #include <dp/util/DynamicLibrary.h>
 
@@ -61,7 +62,7 @@ namespace dp
           else
           {
             std::cerr << "Error: " << filePath << " could not be found or is not a regular file\n";
-            return dp::util::DynamicLibrarySharedPtr::null;
+            return dp::util::DynamicLibrarySharedPtr();
           }
         }
 
@@ -93,7 +94,7 @@ namespace dp
 
           size_t oldSize = testsOut.size();
           testEnumerate( testsOut );
-          
+
           return testsOut.size() - oldSize;
         }
 

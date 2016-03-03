@@ -1,4 +1,4 @@
-// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -163,7 +163,7 @@ namespace dp
       }
     }
 
-    const EffectSpecSharedPtr& EffectLibraryImpl::getEffectSpec(const std::string& effectName ) const
+    EffectSpecSharedPtr EffectLibraryImpl::getEffectSpec(const std::string& effectName ) const
     {
       EffectSpecs::const_iterator it = m_effectSpecs.find( effectName );
       if ( it != m_effectSpecs.end() )
@@ -172,7 +172,7 @@ namespace dp
       }
       else
       {
-        return( EffectSpecSharedPtr::null );
+        return( EffectSpecSharedPtr() );
       }
     }
 
@@ -190,7 +190,7 @@ namespace dp
       }
     }
 
-    const ParameterGroupSpecSharedPtr& EffectLibraryImpl::getParameterGroupSpec( const std::string & pgsName ) const
+    ParameterGroupSpecSharedPtr EffectLibraryImpl::getParameterGroupSpec( const std::string & pgsName ) const
     {
       ParameterGroupSpecs::const_iterator it = m_parameterGroupSpecs.find( pgsName );
       if ( it != m_parameterGroupSpecs.end() )
@@ -199,7 +199,7 @@ namespace dp
       }
       else
       {
-        return( ParameterGroupSpecSharedPtr::null );
+        return( ParameterGroupSpecSharedPtr() );
       }
     }
 
@@ -304,7 +304,7 @@ namespace dp
       }
     }
 
-    const EnumSpecSharedPtr& EffectLibraryImpl::getEnumSpec( const std::string& name ) const
+    EnumSpecSharedPtr EffectLibraryImpl::getEnumSpec( const std::string& name ) const
     {
       EnumSpecs::const_iterator it = m_enumSpecs.find( name );
       if ( it != m_enumSpecs.end() )
@@ -313,11 +313,11 @@ namespace dp
       }
       else
       {
-        return( EnumSpecSharedPtr::null );
+        return( EnumSpecSharedPtr() );
       }
     }
 
-    const ParameterGroupDataSharedPtr& EffectLibraryImpl::getParameterGroupData( const std::string& name ) const
+    ParameterGroupDataSharedPtr EffectLibraryImpl::getParameterGroupData( const std::string& name ) const
     {
       ParameterGroupDatas::const_iterator it = m_parameterGroupDatas.find( name );
       if ( it != m_parameterGroupDatas.end() )
@@ -326,11 +326,11 @@ namespace dp
       }
       else
       {
-        return( ParameterGroupDataSharedPtr::null );
+        return( ParameterGroupDataSharedPtr() );
       }
     }
 
-    const EffectDataSharedPtr& EffectLibraryImpl::getEffectData( const std::string& name ) const
+    EffectDataSharedPtr EffectLibraryImpl::getEffectData( const std::string& name ) const
     {
       EffectDatas::const_iterator it = m_effectDatas.find( name );
       if ( it != m_effectDatas.end() )
@@ -339,7 +339,7 @@ namespace dp
       }
       else
       {
-        return( EffectDataSharedPtr::null );
+        return( EffectDataSharedPtr() );
       }
     }
 

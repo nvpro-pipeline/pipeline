@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -40,7 +40,7 @@ namespace dp
       {
       }
 
-      dp::util::SharedPtr<DrawableManager::HandleData> DrawableManager::HandleData::create()
+      std::shared_ptr<DrawableManager::HandleData> DrawableManager::HandleData::create()
       {
         return(std::shared_ptr<DrawableManager::HandleData>(new DrawableManager::HandleData()));
       }
@@ -67,7 +67,7 @@ namespace dp
       {
         SceneTree::Event const& eventObject = static_cast<SceneTree::Event const&>(event);
         ObjectTreeNode const &node = eventObject.getNode();
-        dp::sg::core::GeoNodeSharedPtr geoNode = node.m_object.staticCast<dp::sg::core::GeoNode>();
+        dp::sg::core::GeoNodeSharedPtr geoNode = std::static_pointer_cast<dp::sg::core::GeoNode>(node.m_object);
 
         if ( m_drawableManager->m_dis.size() != m_drawableManager->m_sceneTree->getObjectTree().size() )
         {
@@ -80,7 +80,7 @@ namespace dp
           DP_ASSERT( !m_drawableManager->m_dis[eventObject.getIndex()] );
 
           // TODO there're two locations which execute this code, unify with as function
-          m_drawableManager->m_dis[eventObject.getIndex()] = m_drawableManager->addDrawableInstance( geoNode.getWeakPtr(), eventObject.getIndex() ); // TODO, don't pass geonode?
+          m_drawableManager->m_dis[eventObject.getIndex()] = m_drawableManager->addDrawableInstance( geoNode, eventObject.getIndex() ); // TODO, don't pass geonode?
           m_drawableManager->setDrawableInstanceActive( m_drawableManager->m_dis[eventObject.getIndex()], node.m_worldActive );
           m_drawableManager->m_geoNodeObserver->attach( geoNode, eventObject.getIndex() );
           break;
@@ -164,9 +164,9 @@ namespace dp
             if ( m_objectTree[index].m_isDrawable )
             {
               ObjectTreeNode const &node = m_objectTree[index];
-              dp::sg::core::GeoNodeSharedPtr geoNode = node.m_object.staticCast<dp::sg::core::GeoNode>();
+              dp::sg::core::GeoNodeSharedPtr geoNode = std::static_pointer_cast<dp::sg::core::GeoNode>(node.m_object);
 
-              m_drawableManager->m_dis[index] = m_drawableManager->addDrawableInstance( geoNode.getWeakPtr(), index );
+              m_drawableManager->m_dis[index] = m_drawableManager->addDrawableInstance( geoNode, index );
               m_drawableManager->setDrawableInstanceActive( m_drawableManager->m_dis[index], node.m_worldActive );
               m_drawableManager->m_geoNodeObserver->attach( geoNode, index );
             }
@@ -256,7 +256,7 @@ namespace dp
           DP_ASSERT( m_dis[index] );
           // Remove/Add to change GeometryInstance
           removeDrawableInstance( m_dis[index] );
-          m_dis[index] = addDrawableInstance( node.m_object.staticCast<dp::sg::core::GeoNode>().getWeakPtr(), index );    // TODO, don't pass geonode?
+          m_dis[index] = addDrawableInstance( std::static_pointer_cast<dp::sg::core::GeoNode>(node.m_object), index );    // TODO, don't pass geonode?
           setDrawableInstanceActive( m_dis[index], node.m_worldActive );
           break;
         }

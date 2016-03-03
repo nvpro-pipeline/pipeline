@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010
+// Copyright (c) 2010-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -58,7 +58,7 @@ namespace dp
         case GL_FRAGMENT_SHADER :         return( FragmentShader::create( source ) );
         default :
           DP_ASSERT( false );
-          return( ShaderSharedPtr::null );
+          return( ShaderSharedPtr() );
       }
     }
 

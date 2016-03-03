@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2014
+// Copyright (c) 2014-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -227,24 +227,24 @@ namespace dp
     /*! \brief Macro to define ObjectType and our four standard types of a base type T as part of a templated struct.
      *  \remark Using this struct, the standard types Handle, SharedPtr, WeakPtr and Lock, as well as
      *  the ObjectType itself, are easily available within a template context. */
-    #define OBJECT_TRAITS_BASE(T)                 \
-    template <> struct ObjectTraits<T>            \
-    {                                             \
-      typedef T                       ObjectType; \
-      typedef dp::util::SharedPtr<T>  SharedPtr;  \
-      typedef T*                      WeakPtr;    \
+    #define OBJECT_TRAITS_BASE(T)             \
+    template <> struct ObjectTraits<T>        \
+    {                                         \
+      typedef T                   ObjectType; \
+      typedef std::shared_ptr<T>  SharedPtr;  \
+      typedef T*                  WeakPtr;    \
     }
 
     /*! \brief Macro to define ObjectType and our five standard types of a type T, with base type BT, as part of a templated struct.
      *  \remark Using this struct, the standard types Handle, SharedPtr, WeakPtr and Lock, as well as
      *  the ObjectType itself, are easily available within a template context. */
-    #define OBJECT_TRAITS(T, BT)                  \
-    template <> struct ObjectTraits<T>            \
-    {                                             \
-      typedef T                       ObjectType; \
-      typedef BT                      Base;       \
-      typedef dp::util::SharedPtr<T>  SharedPtr;  \
-      typedef T*                      WeakPtr;    \
+    #define OBJECT_TRAITS(T, BT)              \
+    template <> struct ObjectTraits<T>        \
+    {                                         \
+      typedef T                   ObjectType; \
+      typedef BT                  Base;       \
+      typedef std::shared_ptr<T>  SharedPtr;  \
+      typedef T*                  WeakPtr;    \
     }
 
     OBJECT_TRAITS_BASE( dp::gl::Object );

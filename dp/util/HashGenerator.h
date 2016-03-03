@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -28,7 +28,7 @@
 /** \file */
 
 #include <dp/util/Config.h>
-#include <dp/util/SharedPtr.h>
+#include <memory>
 #include <string>
 
 namespace dp
@@ -63,7 +63,7 @@ namespace dp
          *  \sa finalize */
         DP_UTIL_API void update( const unsigned char * input, unsigned int elementSize, unsigned int stride, unsigned int elementCount );
 
-        template <typename T> void update( SharedPtr<T> const& ptr );
+        template <typename T> void update( std::shared_ptr<T> const& ptr );
 
         /*! \brief Get the size of the hash
          *  \return The size of the hash.
@@ -108,7 +108,7 @@ namespace dp
     }
 
     template <typename T>
-    inline void HashGenerator::update( SharedPtr<T> const& ptr )
+    inline void HashGenerator::update( std::shared_ptr<T> const& ptr )
     {
       update( reinterpret_cast<const unsigned char *>( ptr.operator->() ), sizeof(const T *) );
     }

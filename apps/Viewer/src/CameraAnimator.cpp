@@ -1,4 +1,4 @@
-// Copyright (c) 2009-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2009-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -94,7 +94,7 @@ double clampDeviation( float start, float end, float part, double minTime )
 
 void CameraAnimator::orbitCamera( unsigned int axisID, bool cameraRelative, float radians )
 {
-  dp::sg::core::FrustumCameraSharedPtr const& fch = m_viewState->getCamera().staticCast<dp::sg::core::FrustumCamera>();
+  dp::sg::core::FrustumCameraSharedPtr const& fch = std::static_pointer_cast<dp::sg::core::FrustumCamera>(m_viewState->getCamera());
   float targetDistance = m_viewState->getTargetDistance();
   dp::math::Vec3f axis( (axisID & BIT0) ? 1.0f : 0.0f,
                         (axisID & BIT1) ? 1.0f : 0.0f,
@@ -137,8 +137,8 @@ double CameraAnimator::determineDurationFactor()
 
 void CameraAnimator::initCameraMove( dp::sg::core::FrustumCameraSharedPtr const& targetCam )
 {
-  DP_ASSERT( m_viewState->getCamera().isPtrTo<dp::sg::core::FrustumCamera>() );
-  m_cameraMoveStart = m_viewState->getCamera().clone().staticCast<dp::sg::core::FrustumCamera>();
+  DP_ASSERT(std::static_pointer_cast<dp::sg::core::FrustumCamera>(m_viewState->getCamera()));
+  m_cameraMoveStart = std::static_pointer_cast<dp::sg::core::FrustumCamera>(m_viewState->getCamera()->clone());
   m_cameraMoveTarget = targetCam->getSharedPtr<dp::sg::core::FrustumCamera>();
   DP_ASSERT( m_cameraMoveStart->getObjectCode() == m_cameraMoveTarget->getObjectCode() );
   cameraMoveDurationFactor( determineDurationFactor() );
@@ -146,10 +146,10 @@ void CameraAnimator::initCameraMove( dp::sg::core::FrustumCameraSharedPtr const&
 
 void CameraAnimator::initCameraMoveToLight( dp::sg::core::LightSourceSharedPtr const& targetLight )
 {
-  DP_ASSERT( m_viewState->getCamera().isPtrTo<dp::sg::core::FrustumCamera>() );
-  m_cameraMoveStart = m_viewState->getCamera().clone().staticCast<dp::sg::core::FrustumCamera>();
+  DP_ASSERT(std::static_pointer_cast<dp::sg::core::FrustumCamera>(m_viewState->getCamera()));
+  m_cameraMoveStart = std::static_pointer_cast<dp::sg::core::FrustumCamera>(m_viewState->getCamera()->clone());
 
-  m_cameraMoveTarget = m_cameraMoveStart.clone();
+  m_cameraMoveTarget = std::static_pointer_cast<dp::sg::core::FrustumCamera>(m_cameraMoveStart->clone());
 
   dp::sg::core::LightSourceSharedPtr lsh( targetLight->getSharedPtr<dp::sg::core::LightSource>() );
   {
@@ -214,8 +214,8 @@ void CameraAnimator::initCameraMoveToLight( dp::sg::core::LightSourceSharedPtr c
 
 void CameraAnimator::initCameraZoomAll()
 {
-  m_cameraMoveStart = m_viewState->getCamera().clone().staticCast<dp::sg::core::FrustumCamera>();
-  m_cameraMoveTarget = m_cameraMoveStart.clone();
+  m_cameraMoveStart = std::static_pointer_cast<dp::sg::core::FrustumCamera>(m_viewState->getCamera()->clone());
+  m_cameraMoveTarget = std::static_pointer_cast<dp::sg::core::FrustumCamera>(m_cameraMoveStart->clone());
 
   if ( m_viewState->getScene()->getRootNode() )
   {
@@ -250,8 +250,8 @@ void CameraAnimator::moveCamera( double t )
     dp::math::lerp( t, windowRegionStart.getUpper(), windowRegionTarget.getUpper(), upperRight );
   }
 
-  DP_ASSERT( m_viewState->getCamera().isPtrTo<dp::sg::core::FrustumCamera>() );
-  dp::sg::core::FrustumCameraSharedPtr const& fch = m_viewState->getCamera().staticCast<dp::sg::core::FrustumCamera>();
+  DP_ASSERT( std::dynamic_pointer_cast<dp::sg::core::FrustumCamera>(m_viewState->getCamera()) );
+  dp::sg::core::FrustumCameraSharedPtr const& fch = std::static_pointer_cast<dp::sg::core::FrustumCamera>(m_viewState->getCamera());
   fch->setOrientation( orientation );
   fch->setPosition( position );
   fch->setNearDistance( nearDistance );
@@ -361,7 +361,7 @@ void CameraAnimator::zoomAll()
   setCameraMoveTo( true );
 }
 
-dp::sg::core::FrustumCameraSharedPtr const& CameraAnimator::findNextIterationCamera()
+dp::sg::core::FrustumCameraSharedPtr CameraAnimator::findNextIterationCamera()
 {
   unsigned int noc = m_viewState->getScene()->getNumberOfCameras();
 
@@ -381,9 +381,9 @@ dp::sg::core::FrustumCameraSharedPtr const& CameraAnimator::findNextIterationCam
   while( m_cameraIterationIndex != first )
   {
     // check if its a frustum camera, and is not one of the ones being used in any of the viewports (userdata)
-    if ( scci->isPtrTo<dp::sg::core::FrustumCamera>() && (*scci)->getUserData() == nullptr )
+    if ( std::dynamic_pointer_cast<dp::sg::core::FrustumCamera>(*scci) && (*scci)->getUserData() == nullptr )
     {
-      return( scci->inplaceCast<dp::sg::core::FrustumCamera>() );
+      return(std::static_pointer_cast<dp::sg::core::FrustumCamera>(*scci));
     }
 
     ++scci;
@@ -397,7 +397,7 @@ dp::sg::core::FrustumCameraSharedPtr const& CameraAnimator::findNextIterationCam
     }
   }
 
-  return dp::sg::core::FrustumCameraSharedPtr::null;
+  return dp::sg::core::FrustumCameraSharedPtr();
 }
 
 void CameraAnimator::setCameraIteration( bool ci )
@@ -442,8 +442,8 @@ void CameraAnimator::moveToCameraIndex( unsigned int index )
   {
     dp::sg::core::Scene::CameraIterator scci = m_viewState->getScene()->beginCameras();
     std::advance( scci, index );
-    DP_ASSERT( scci->isPtrTo<dp::sg::core::FrustumCamera>() );
-    moveToCamera( scci->staticCast<dp::sg::core::FrustumCamera>() );
+    DP_ASSERT( std::dynamic_pointer_cast<dp::sg::core::FrustumCamera>(*scci) );
+    moveToCamera(std::static_pointer_cast<dp::sg::core::FrustumCamera>(*scci));
   }
 }
 

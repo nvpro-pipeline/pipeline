@@ -104,7 +104,7 @@ namespace dp
       {
         if ( rhs.m_camera )
         {
-          m_camera = rhs.m_camera.clone();
+          m_camera = std::static_pointer_cast<dp::sg::core::Camera>(rhs.m_camera->clone());
         }
         if ( rhs.m_sceneTree )
         {
@@ -154,9 +154,9 @@ namespace dp
         }
       }
 
-      const SceneSharedPtr & ViewState::getScene( ) const
+      SceneSharedPtr ViewState::getScene( ) const
       {
-        return m_sceneTree ? m_sceneTree->getScene() : dp::sg::core::SceneSharedPtr::null;
+        return m_sceneTree ? m_sceneTree->getScene() : dp::sg::core::SceneSharedPtr();
       }
 
       void ViewState::setSceneTree(dp::sg::xbar::SceneTreeSharedPtr const& sceneTree)
@@ -220,7 +220,7 @@ namespace dp
                 Sphere3f sphere( scene->getBoundingSphere() );
                 if ( isPositive(sphere) )
                 {
-                  camera.staticCast<dp::sg::core::PerspectiveCamera>()->zoom( sphere, float(dp::math::PI_QUARTER) );
+                  std::static_pointer_cast<dp::sg::core::PerspectiveCamera>(camera)->zoom(sphere, float(dp::math::PI_QUARTER));
                 }
               }
             }
@@ -232,7 +232,7 @@ namespace dp
         if( !options )
         {
           viewState->setRendererOptions( dp::sg::ui::RendererOptions::create() );
-        }    
+        }
 
         return true;
       }

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -28,7 +28,7 @@
 /** \file */
 
 #include <dp/fx/Config.h>
-#include <dp/util/SharedPtr.h>
+#include <dp/util/PointerTypes.h>
 #include <memory>
 #include <string>
 #include <vector>

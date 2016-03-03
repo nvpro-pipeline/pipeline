@@ -1,4 +1,4 @@
-// Copyright (c) 2010-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2010-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -126,7 +126,7 @@ namespace dp
           class FSQRenderer : public dp::sg::ui::Renderer
           {
             public:
-              DP_SG_RDR_RIX_GL_API static FSQRendererSharedPtr create( const dp::gl::RenderTargetSharedPtr &renderTarget = dp::gl::RenderTargetSharedPtr::null );
+              DP_SG_RDR_RIX_GL_API static FSQRendererSharedPtr create( const dp::gl::RenderTargetSharedPtr &renderTarget = dp::gl::RenderTargetSharedPtr() );
               DP_SG_RDR_RIX_GL_API virtual ~FSQRenderer(void);
 
               DP_SG_RDR_RIX_GL_API virtual void setPipeline( const dp::sg::core::PipelineDataSharedPtr & pipeline ) = 0;

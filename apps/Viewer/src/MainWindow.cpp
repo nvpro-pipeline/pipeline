@@ -205,12 +205,12 @@ void MainWindow::aboutToShowViewMenu()
     m_tonemapperDialogAction->setEnabled( false );
   }
 
-  bool enable = viewing && m_renderWidgets[m_currentViewport]->getSceneRenderer().isPtrTo<dp::sg::renderer::rix::gl::SceneRenderer>();
+  bool enable = viewing && std::dynamic_pointer_cast<dp::sg::renderer::rix::gl::SceneRenderer>(m_renderWidgets[m_currentViewport]->getSceneRenderer());
   m_depthPassAction->setEnabled( enable );
   m_transparencyDialogAction->setEnabled( enable );
   if ( enable )
   {
-    m_depthPassAction->setChecked( m_renderWidgets[m_currentViewport]->getSceneRenderer().staticCast<dp::sg::renderer::rix::gl::SceneRenderer>()->getDepthPass() );
+    m_depthPassAction->setChecked(std::static_pointer_cast<dp::sg::renderer::rix::gl::SceneRenderer>(m_renderWidgets[m_currentViewport]->getSceneRenderer())->getDepthPass());
   }
 }
 
@@ -227,7 +227,7 @@ void MainWindow::activeViewportChanged( int index, QWidget * widget )
       disconnect( m_menus[static_cast<size_t>(MenuID::ANTIALIASING)], SIGNAL(triggered(QAction*)), cvp, SLOT(triggeredAntialiasingMenu(QAction*)) );
       disconnect( m_menus[static_cast<size_t>(MenuID::CULLING)], SIGNAL(aboutToShow()), cvp, SLOT(aboutToShowCullingMenu()) );
       disconnect( m_menus[static_cast<size_t>(MenuID::CULLING)], SIGNAL(triggered(QAction*)), cvp, SLOT(triggeredCullingMenu(QAction*) ) );
-      disconnect( this, SIGNAL(manipulatorChanged(ViewerRendererWidget::ManipulatorType)), 
+      disconnect( this, SIGNAL(manipulatorChanged(ViewerRendererWidget::ManipulatorType)),
                   cvp,  SLOT(setManipulatorType(ViewerRendererWidget::ManipulatorType)) );
       disconnect( m_menus[static_cast<size_t>(MenuID::RENDER_ENGINE)], SIGNAL(aboutToShow()), cvp, SLOT(aboutToShowRenderEngineMenu()) );
       disconnect( m_menus[static_cast<size_t>(MenuID::RENDER_ENGINE)], SIGNAL(triggered(QAction*)), cvp, SLOT(triggeredRenderEngineMenu(QAction*)) );
@@ -266,7 +266,7 @@ void MainWindow::activeViewportChanged( int index, QWidget * widget )
     connect( m_menus[static_cast<size_t>(MenuID::ANTIALIASING)], SIGNAL(triggered(QAction*)), cvp, SLOT(triggeredAntialiasingMenu(QAction*)) );
     connect( m_menus[static_cast<size_t>(MenuID::CULLING)], SIGNAL(aboutToShow()), cvp, SLOT(aboutToShowCullingMenu()) );
     connect( m_menus[static_cast<size_t>(MenuID::CULLING)], SIGNAL(triggered(QAction*)), cvp, SLOT(triggeredCullingMenu(QAction*) ) );
-    connect( this, SIGNAL(manipulatorChanged(ViewerRendererWidget::ManipulatorType)), 
+    connect( this, SIGNAL(manipulatorChanged(ViewerRendererWidget::ManipulatorType)),
              cvp,  SLOT(setManipulatorType(ViewerRendererWidget::ManipulatorType)) );
     connect( m_menus[static_cast<size_t>(MenuID::RENDER_ENGINE)], SIGNAL(aboutToShow()), cvp, SLOT(aboutToShowRenderEngineMenu()) );
     connect( m_menus[static_cast<size_t>(MenuID::RENDER_ENGINE)], SIGNAL(triggered(QAction*)), cvp, SLOT(triggeredRenderEngineMenu(QAction*)) );
@@ -299,7 +299,7 @@ ViewerRendererWidget * MainWindow::createRenderer( QWidget * parent, dp::sg::cor
 {
   // add the renderer - use sharewidget, add menu, not standalone
   ViewerRendererWidget *vrw = new ViewerRendererWidget( parent, GetApp()->getGlobalShareGLWidget() );
-   
+
   vrw->setRendererType( ViewerRendererWidget::RendererType::RASTERIZE_XBAR );
 
   vrw->setScene( scene );
@@ -307,9 +307,9 @@ ViewerRendererWidget * MainWindow::createRenderer( QWidget * parent, dp::sg::cor
   //
   // configure signals
   //
-  
+
   // sent from the app
-  connect(GetApp(), SIGNAL(continuousUpdate()), vrw, SLOT(update()));         // Continuous redraw just needs to rerender. 
+  connect(GetApp(), SIGNAL(continuousUpdate()), vrw, SLOT(update()));         // Continuous redraw just needs to rerender.
   connect(GetApp(), SIGNAL(viewChanged()),      vrw, SLOT(restartUpdate()));  // These need to additionally restart accumulation.
   connect(GetApp(), SIGNAL(materialChanged()),  vrw, SLOT(restartUpdate()));
   connect(GetApp(), SIGNAL(sceneTreeChanged()), vrw, SLOT(restartUpdate()));
@@ -607,13 +607,13 @@ void MainWindow::sceneChanged()
 void MainWindow::selectObject( dp::sg::core::PathSharedPtr const& path )
 {
   dp::sg::core::ObjectSharedPtr object = path->getTail();
-  if ( object.isPtrTo<dp::sg::core::FrustumCamera>() )
+  if ( std::dynamic_pointer_cast<dp::sg::core::FrustumCamera>(object) )
   {
-    static_cast<CameraAnimator*>(getCurrentCameraAnimator())->moveToCamera( object.staticCast<dp::sg::core::FrustumCamera>() );
+    static_cast<CameraAnimator*>(getCurrentCameraAnimator())->moveToCamera(std::static_pointer_cast<dp::sg::core::FrustumCamera>(object));
   }
-  else if ( object.isPtrTo<dp::sg::core::LightSource>() )
+  else if ( std::dynamic_pointer_cast<dp::sg::core::LightSource>(object) )
   {
-    static_cast<CameraAnimator*>(getCurrentCameraAnimator())->moveToLight( object.staticCast<dp::sg::core::LightSource>() );
+    static_cast<CameraAnimator*>(getCurrentCameraAnimator())->moveToLight(std::static_pointer_cast<dp::sg::core::LightSource>(object));
   }
 }
 
@@ -756,7 +756,7 @@ void MainWindow::setupActions()
   m_normalsDialogAction->setIcon( QIcon( ":/images/Normals_off.png" ) );
   connect( m_normalsDialogAction, SIGNAL(triggered()), this, SLOT(triggeredNormalsDialog()) );
 
-  // Add undo and redo actions. 
+  // Add undo and redo actions.
   // Icons only. The operation will be shown inside the tooltip and the undo widget stack.
   QIcon undoIcon( ":/images/Undo_off.png" );
   undoIcon.addFile( ":/images/Undo_on.png", QSize(), QIcon::Normal, QIcon::On );
@@ -986,7 +986,7 @@ void MainWindow::setupMenus()
       action->setData( static_cast<int>(ViewerRendererWidget::RendererType::RASTERIZE_XBAR) );
 
       // DAR FIXME Switching the renderer dynamically doesn't work, yet.
-      // The OpenGL driver (310.90 QK5000) throws an error about invalid clear bits and 
+      // The OpenGL driver (310.90 QK5000) throws an error about invalid clear bits and
       // a performance warning that the pixel pipeline is synchronized with the 3D engine.
       // Rendering is corrupted.
       //action = renderEngineMenu->addAction( "Opti&X" );
@@ -1073,7 +1073,7 @@ void MainWindow::setupMenus()
 
   // separator to Help menu
   menuBar()->addSeparator();
- 
+
   // Help menu
   QAction * actionAbout = new QAction( "&About", this );
   connect( actionAbout, SIGNAL(triggered()), this, SLOT(triggeredAbout()) );
@@ -1318,8 +1318,8 @@ void MainWindow::triggeredClose()
 
 void MainWindow::triggeredDepthPass( bool checked )
 {
-  DP_ASSERT( m_renderWidgets[m_currentViewport]->getSceneRenderer().isPtrTo<dp::sg::renderer::rix::gl::SceneRenderer>() );
-  m_renderWidgets[m_currentViewport]->getSceneRenderer().staticCast<dp::sg::renderer::rix::gl::SceneRenderer>()->setDepthPass( checked );
+  DP_ASSERT( std::dynamic_pointer_cast<dp::sg::renderer::rix::gl::SceneRenderer>(m_renderWidgets[m_currentViewport]->getSceneRenderer()) );
+  std::static_pointer_cast<dp::sg::renderer::rix::gl::SceneRenderer>(m_renderWidgets[m_currentViewport]->getSceneRenderer())->setDepthPass(checked);
   GetApp()->getPreferences()->setDepthPass( checked );
 }
 
@@ -1347,7 +1347,7 @@ void MainWindow::triggeredNormalizeScene( bool checked )
   }
 }
 
-void MainWindow::triggeredNormalsDialog() 
+void MainWindow::triggeredNormalsDialog()
 {
   float length = GetPreferences()->getNormalsLineLength();
 
@@ -1471,7 +1471,7 @@ void MainWindow::triggeredSmoothScene( bool checked )
   }
 }
 
-void MainWindow::triggeredStereoDialog() 
+void MainWindow::triggeredStereoDialog()
 {
   StereoDialog dlg( this, getCurrentViewport() );
   if( dlg.exec() == QDialog::Rejected )
@@ -1621,7 +1621,7 @@ void MainWindow::updateRenderers( dp::sg::ui::ViewStateSharedPtr const& viewStat
     if ( !dp::sg::algorithm::containsLight( viewState->getScene() )  && ( dp::sg::core::CameraLock( cameras[0] )->getNumberOfHeadLights() == 0 ) )
     {
       QMessageBox msgbox( this ); // MainWindow as parent to center the dialog on the application.
-      
+
       msgbox.setIcon( QMessageBox::Question );
       msgbox.setText( "Neither scene nor first camera contain lights." );
       msgbox.setInformativeText( "Add Headlights - will add a PointLight as headlight to each camera in the scene when needed.\n"
@@ -1839,7 +1839,7 @@ bool containsQuadPrimitives( std::vector<dp::sg::core::ObjectSharedPtr> const & 
 {
   for ( size_t i=0 ; i<vp.size() ; i++ )
   {
-    dp::sg::core::PrimitiveType pt = vp[i].inplaceCast<dp::sg::core::Primitive>()->getPrimitiveType();
+    dp::sg::core::PrimitiveType pt = std::static_pointer_cast<dp::sg::core::Primitive>(vp[i])->getPrimitiveType();
     if ( ( pt == dp::sg::core::PrimitiveType::QUADS ) || ( pt == dp::sg::core::PrimitiveType::QUAD_STRIP ) )
     {
       return( true );
@@ -1852,7 +1852,7 @@ bool containsStripablePrimitives( std::vector<dp::sg::core::ObjectSharedPtr> con
 {
   for ( size_t i=0 ; i<vp.size() ; i++ )
   {
-    dp::sg::core::PrimitiveType pt = vp[i].inplaceCast<dp::sg::core::Primitive>()->getPrimitiveType();
+    dp::sg::core::PrimitiveType pt = std::static_pointer_cast<dp::sg::core::Primitive>(vp[i])->getPrimitiveType();
     if ( ( pt == dp::sg::core::PrimitiveType::QUADS ) || ( pt == dp::sg::core::PrimitiveType::TRIANGLES ) )
     {
       return( true );
@@ -1865,7 +1865,7 @@ bool containsStrippedPrimitives( std::vector<dp::sg::core::ObjectSharedPtr> cons
 {
   for ( size_t i=0 ; i<vp.size() ; i++ )
   {
-    dp::sg::core::PrimitiveType pt = vp[i].inplaceCast<dp::sg::core::Primitive>()->getPrimitiveType();
+    dp::sg::core::PrimitiveType pt = std::static_pointer_cast<dp::sg::core::Primitive>(vp[i])->getPrimitiveType();
     if (    ( pt == dp::sg::core::PrimitiveType::LINE_STRIP )
         ||  ( pt == dp::sg::core::PrimitiveType::LINE_LOOP )
         ||  ( pt == dp::sg::core::PrimitiveType::TRIANGLE_STRIP )
@@ -1987,12 +1987,12 @@ void setTraversalMasks( dp::sg::core::SceneSharedPtr const & scene, unsigned int
 
     searchTraverser.setClassName( "class dp::sg::core::GeoNode" );
     searchTraverser.setBaseClassSearch( true );
-    searchTraverser.apply( scene );  
+    searchTraverser.apply( scene );
 
     const std::vector<dp::sg::core::ObjectSharedPtr> & searchResults = searchTraverser.getResults();
     for ( std::vector<dp::sg::core::ObjectSharedPtr>::const_iterator it = searchResults.begin() ; it != searchResults.end() ; ++it )
     {
-      it->inplaceCast<dp::sg::core::GeoNode>()->setTraversalMask( mask );
+      std::static_pointer_cast<dp::sg::core::GeoNode>(*it)->setTraversalMask(mask);
     }
   }
 }

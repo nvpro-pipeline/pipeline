@@ -1,4 +1,4 @@
-// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -232,7 +232,7 @@ namespace dp
         m_children.resize(children.size()); // allocate destination range
         for ( size_t i=0; i<children.size(); ++i )
         {
-          m_children[i] = children[i].clone();
+          m_children[i] = std::static_pointer_cast<dp::sg::core::Node>(children[i]->clone());
           m_children[i]->attach( this );
         }
       }
@@ -245,7 +245,7 @@ namespace dp
         m_clipPlanes.resize(clipPlanes.size());   // allocate destination range
         for ( size_t i=0 ; i<clipPlanes.size() ; i++ )
         {
-          m_clipPlanes[i] = clipPlanes[i].clone();
+          m_clipPlanes[i] = std::static_pointer_cast<dp::sg::core::ClipPlane>(clipPlanes[i]->clone());
           m_clipPlanes[i]->attach( this );
         }
       }
@@ -269,15 +269,15 @@ namespace dp
 
       bool Group::isEquivalent( ObjectSharedPtr const& object, bool ignoreNames, bool deepCompare ) const
       {
-        if ( object == this )
+        if ( object.get() == this )
         {
           return( true );
         }
 
-        bool equi = object.isPtrTo<Group>() && Node::isEquivalent( object, ignoreNames, deepCompare );
+        bool equi = std::dynamic_pointer_cast<Group>(object) && Node::isEquivalent( object, ignoreNames, deepCompare );
         if ( equi )
         {
-          GroupSharedPtr const& g = object.staticCast<Group>();
+          GroupSharedPtr const& g = std::static_pointer_cast<Group>(object);
           equi =   ( m_children.size()   == g->m_children.size() )
                 && ( m_clipPlanes.size() == g->m_clipPlanes.size() );
           if ( deepCompare )

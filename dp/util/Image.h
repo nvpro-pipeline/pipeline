@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -27,7 +27,7 @@
 #pragma once
 
 #include <dp/Types.h>
-#include <dp/util/SharedPtr.h>
+#include <dp/util/PointerTypes.h>
 #include <boost/shared_array.hpp>
 #include <string>
 #include <vector>
@@ -58,7 +58,7 @@ namespace dp
       DataType getDataType()        const { return m_dataType; }
       size_t getNumLayers()         const { return m_numLayers; }
       size_t getMipmapLevels()      const { return m_mipmapLevels; }
-      
+
       virtual DP_UTIL_API const void* getLayerData(size_t layer = 0, size_t mipmapLevel = 0) const;
       virtual DP_UTIL_API std::vector<const void*> getLayerDataArray( size_t layerStart = 0, size_t layerEnd = ~0, size_t mipmapStart = 0, size_t mipmapEnd = ~0 ) const;
 

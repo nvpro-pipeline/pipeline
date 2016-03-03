@@ -64,7 +64,7 @@ namespace dp
             DP_ASSERT( handleIsTypeOf<BufferGL>( dataBuffer.m_buffer ) );
             BufferGLHandle buffer = handleCast<BufferGL>( dataBuffer.m_buffer.get() );
 
-            getTexture().inplaceCast<dp::gl::TextureBuffer>()->setBuffer( buffer->getBuffer() );
+            std::static_pointer_cast<dp::gl::TextureBuffer>(getTexture())->setBuffer( buffer->getBuffer() );
 
             m_textureBuffer = buffer;
           }
@@ -86,7 +86,7 @@ namespace dp
         DP_ASSERT( description.m_height == 0 );
         DP_ASSERT( description.m_depth  == 0 );
         DP_ASSERT( description.m_layers == 0 );
-        
+
   #if RIX_GL_SAMPLEROBJECT_SUPPORT
   #else
         // delete the defaulte sampler state for texture buffers, they should not have a sampler state
@@ -124,5 +124,3 @@ namespace dp
     } // namespace gl
   } // namespace rix
 } // namespace dp
-
-

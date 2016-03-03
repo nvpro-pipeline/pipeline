@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -92,7 +92,7 @@ NormalizeDialog::NormalizeDialog( const SceneSharedPtr & scene, QWidget * parent
   const vector<ObjectSharedPtr> &vp = searchTraverser.getResults();
   for ( size_t i=0 ; i<vp.size() ; i++ )
   {
-    dp::sg::core::VertexAttributeSetSharedPtr const& vas = vp[i].staticCast<dp::sg::core::VertexAttributeSet>();
+    dp::sg::core::VertexAttributeSetSharedPtr const& vas = std::static_pointer_cast<dp::sg::core::VertexAttributeSet>(vp[i]);
     for ( unsigned int attrib = 0 ; attrib<16 ; ++attrib )
     {
       if ( vas->getNumberOfVertexData( static_cast<dp::sg::core::VertexAttributeSet::AttributeID>(attrib) ) )

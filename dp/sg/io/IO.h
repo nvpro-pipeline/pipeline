@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -48,7 +48,7 @@ namespace dp
        *  \sa saveScene */
       DP_SG_IO_API dp::sg::ui::ViewStateSharedPtr loadScene( std::string const& filename
                                                            , dp::util::FileFinder const& fileFinder = dp::util::FileFinder()
-                                                           , dp::util::PlugInCallbackSharedPtr const& callback = dp::util::PlugInCallbackSharedPtr::null );
+                                                           , dp::util::PlugInCallbackSharedPtr const& callback = dp::util::PlugInCallbackSharedPtr() );
 
       /*! \brief Save a scene, internally doing all the SceneSaver handling.
        *  \param filename The name of the file to save to.

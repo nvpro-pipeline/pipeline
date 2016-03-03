@@ -62,7 +62,7 @@ namespace dp
 
       bool Texture::isEquivalent( TextureSharedPtr const& texture, bool deepCompare ) const
       {
-        if ( texture == this )
+        if ( texture.get() == this )
         {
           return( true );
         }

@@ -325,10 +325,10 @@ namespace dp
       {
         DP_ASSERT(this!=&rhs);
         DP_ASSERT(m_headLights.empty());
-        transform( rhs.m_headLights.begin()
-                 , rhs.m_headLights.end()
-                 , back_inserter(m_headLights)
-                 , dp::util::CloneObject() );
+        for (Camera::HeadLightContainer::const_iterator it = rhs.m_headLights.begin(); it != rhs.m_headLights.end(); ++it)
+        {
+          m_headLights.push_back(std::static_pointer_cast<dp::sg::core::LightSource>((*it)->clone()));
+        }
         notify( Event(this ) );
       }
 

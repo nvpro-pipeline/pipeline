@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -29,7 +29,7 @@
 #include <vector>
 #include <map>
 #include <dp/util/Config.h>
-#include <dp/util/SharedPtr.h>
+#include <dp/util/PointerTypes.h>
 #include <dp/math/Vecnt.h>
 #include <test/rix/core/helpers/inc/Config.h>
 
@@ -57,28 +57,28 @@ namespace dp
       // Creates a plain-colored texture
       DPHELPERS_API TextureObjectDataSharedPtr createTextureColored(const math::Vec2ui& size     // Dimensions of the texture
                                                                  , const math::Vec4f& color ); // The color of the texture
-      
+
       // Creates a checkered texture
       DPHELPERS_API TextureObjectDataSharedPtr createTextureCheckered( const math::Vec2ui& size       // Dimensions of the texture
                                                                    , const math::Vec2ui& tileCount  // The number of color tiles in both directions
                                                                    , const math::Vec4f& oddColor    // The color of the odd color tiles
                                                                    , const math::Vec4f& evenColor );// The color of the even color tiles
-      
+
       // Creates a three-colored gradient
       DPHELPERS_API TextureObjectDataSharedPtr createTextureGradient( const math::Vec2ui& size            // Dimensions of the texture
                                                                   , const math::Vec4f& bottomColor      // The color that is centered along the bottom edge
                                                                   , const math::Vec4f& topLeftColor     // The color that is centered on the top left corner
                                                                   , const math::Vec4f& topRightColor ); // The color that is centered on the top right corner
-      
+
       // Converts a grayscale height map into a normal map
       DPHELPERS_API TextureObjectDataSharedPtr convertHeightMapToNormalMap( const TextureObjectDataSharedPtr& heightMap // The height-map to convert
                                                                         , float factor );                         // The maximum virtual height of a texel (would ultimately be relative to texture dimensions)
-      
+
       // Creates a simplex noise heightmap
       DPHELPERS_API TextureObjectDataSharedPtr createNoiseTexture( const math::Vec2ui& size   // Dimensions of the texture
                                                                , float frequencyX = 1.0f    // Multiplier of the sampling interval along the U texture coordinate
                                                                , float frequencyY = 1.0f ); // Multiplier of the sampling interval along the V texture coordinate
-      
+
       // Creates a normal map of tiled pyramids
       DPHELPERS_API TextureObjectDataSharedPtr createPyramidNormalMap( const math::Vec2ui& size         // Dimensions of the texture
                                                                    , const math::Vec2ui& pyramidTiles // The number of pyramids in both directions

@@ -452,7 +452,7 @@ void combineVertexAttributes( dp::sg::ui::ViewStateSharedPtr const& viewState )
   std::vector<dp::sg::core::ObjectSharedPtr> results = searchTraverser.getResults();
   for ( std::vector<dp::sg::core::ObjectSharedPtr>::iterator it = results.begin(); it != results.end(); ++it )
   {
-    it->inplaceCast<dp::sg::core::VertexAttributeSet>()->combineBuffers();
+    std::static_pointer_cast<dp::sg::core::VertexAttributeSet>(*it)->combineBuffers();
   }
 }
 
@@ -531,7 +531,7 @@ void setLights( size_t counter = ~0 )
 {
   if( !g_lightSources[0] )
   {
-    dp::sg::core::GroupSharedPtr const& rootPtr = g_viewState->getScene()->getRootNode().staticCast<dp::sg::core::Group>();
+    dp::sg::core::GroupSharedPtr const& rootPtr = std::static_pointer_cast<dp::sg::core::Group>(g_viewState->getScene()->getRootNode());
     DP_ASSERT( rootPtr );
 
     // add own lights to the root node

@@ -330,21 +330,21 @@ namespace dp
             ShaderManagerRiXFxRenderGroupSharedPtr rixFxRenderGroup = ShaderManagerRiXFxRenderGroup::create();
             rixFxRenderGroup->renderGroup = renderGroup;
             rixFxRenderGroup->instance = m_rixFxManager->instanceCreate( renderGroup.get() );
-            addSystemContainers( rixFxRenderGroup.inplaceCast<ShaderManagerRenderGroup>() );
+            addSystemContainers(std::static_pointer_cast<ShaderManagerRenderGroup>(rixFxRenderGroup));
 
             return rixFxRenderGroup;
           }
 
           void ShaderManagerRiXFx::addSystemContainers( ShaderManagerInstanceSharedPtr const & shaderObject )
           {
-            const dp::sg::xbar::ObjectTreeNode &objectTreeNode = m_sceneTree->getObjectTreeNode( shaderObject->objectTreeIndex );
-            ShaderManagerRiXFxInstanceSharedPtr o = shaderObject.staticCast<ShaderManagerRiXFxInstance>();
+            const dp::sg::xbar::ObjectTreeNode &objectTreeNode = m_sceneTree.lock()->getObjectTreeNode( shaderObject->objectTreeIndex );
+            ShaderManagerRiXFxInstanceSharedPtr o = std::static_pointer_cast<ShaderManagerRiXFxInstance>(shaderObject);
             m_rixFxManager->instanceUseGroupData(o->instance.get(), m_shaderManagerTransforms->getGroupData(objectTreeNode.m_transform).get());
           }
 
           void ShaderManagerRiXFx::addSystemContainers( ShaderManagerRenderGroupSharedPtr const & renderGroup )
           {
-            ShaderManagerRiXFxRenderGroupSharedPtr o = renderGroup.staticCast<ShaderManagerRiXFxRenderGroup>();
+            ShaderManagerRiXFxRenderGroupSharedPtr o = std::static_pointer_cast<ShaderManagerRiXFxRenderGroup>(renderGroup);
 
             m_rixFxManager->instanceUseGroupData( o->instance.get(), m_groupDataCamera.get() );
             m_renderer->renderGroupUseContainer( renderGroup->renderGroup, m_containerFragment );
@@ -389,7 +389,7 @@ namespace dp
                 ResourceEffectDataRiXFx::GroupDatas gec = resourceEffectData->getGroupDatas();
                 std::copy( gec.begin(), gec.end(), std::back_inserter(groupDatas) ) ;
 
-                addSystemContainers( o.inplaceCast<ShaderManagerInstance>() );
+                addSystemContainers(std::static_pointer_cast<ShaderManagerInstance>(o));
                 for (size_t i = 0; i < groupDatas.size(); i++)
                 {
                   m_rixFxManager->instanceUseGroupData( o->instance.get(), groupDatas[i].get() );

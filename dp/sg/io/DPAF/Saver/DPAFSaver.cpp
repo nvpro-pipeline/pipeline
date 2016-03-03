@@ -1,4 +1,4 @@
-// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -1871,9 +1871,9 @@ void DPAFSaveTraverser::handleSampler( const Sampler * p )
 
       // first handle TextureHosts not defined by filename
       const TextureSharedPtr & texture = p->getTexture();
-      if ( texture && texture.isPtrTo<TextureHost>() )
+      if ( texture && std::dynamic_pointer_cast<TextureHost>(texture) )
       {
-        TextureHostSharedPtr const& textureHost = texture.staticCast<TextureHost>();
+        TextureHostSharedPtr const& textureHost = std::static_pointer_cast<TextureHost>(texture);
         if ( textureHost->getFileName().empty() )
         {
           textureImage( textureHost );
@@ -1883,9 +1883,9 @@ void DPAFSaveTraverser::handleSampler( const Sampler * p )
       // then the Sampler itself
       fprintf( m_fh, "Sampler\t%s\n{\n", name.c_str() );
       objectData( p );
-      if ( texture && texture.isPtrTo<TextureHost>() )
+      if ( texture && std::dynamic_pointer_cast<TextureHost>(texture) )
       {
-        TextureHostSharedPtr const& textureHost = texture.staticCast<TextureHost>();
+        TextureHostSharedPtr const& textureHost = std::static_pointer_cast<TextureHost>(texture);
         if ( textureHost->getFileName().empty() )
         {
           DP_ASSERT( m_textureImageNames.find(textureHost) != m_textureImageNames.end() );
@@ -2109,11 +2109,11 @@ void DPAFSaveTraverser::doApply( const NodeSharedPtr & root )
     fprintf( m_fh, "Links\n{\n" );
     for ( unsigned int i=0 ; i<m_links.size() ; i++ )
     {
-      DP_ASSERT( m_objectNames.find( m_links[i].subject.getSharedPtr() ) != m_objectNames.end() );
-      DP_ASSERT( m_objectNames.find( m_links[i].observer.getSharedPtr() ) != m_objectNames.end() );
+      DP_ASSERT( m_objectNames.find( m_links[i].subject.lock() ) != m_objectNames.end() );
+      DP_ASSERT( m_objectNames.find( m_links[i].observer.lock() ) != m_objectNames.end() );
       fprintf( m_fh, "\t%s %s, %s;\n" , m_links[i].name.c_str()
-        , m_objectNames[m_links[i].subject.getSharedPtr()].c_str()
-        , m_objectNames[m_links[i].observer.getSharedPtr()].c_str() );
+        , m_objectNames[m_links[i].subject.lock()].c_str()
+        , m_objectNames[m_links[i].observer.lock()].c_str() );
     }
     fprintf( m_fh, "}\n\n" );
     m_links.clear();

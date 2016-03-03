@@ -195,15 +195,15 @@ namespace dp
 
       bool LOD::isEquivalent( ObjectSharedPtr const& object, bool ignoreNames, bool deepCompare ) const
       {
-        if ( object == this )
+        if ( object.get() == this )
         {
           return( true );
         }
 
-        bool equi = object.isPtrTo<LOD>() && Group::isEquivalent( object, ignoreNames, deepCompare );
+        bool equi = std::dynamic_pointer_cast<LOD>(object) && Group::isEquivalent( object, ignoreNames, deepCompare );
         if ( equi )
         {
-          LODSharedPtr const& l = object.staticCast<LOD>();
+          LODSharedPtr const& l = std::static_pointer_cast<LOD>(object);
           equi =    ( m_center        == l->m_center        )
                 &&  ( m_ranges        == l->m_ranges        )
                 &&  ( m_isRangeLocked == l->m_isRangeLocked )

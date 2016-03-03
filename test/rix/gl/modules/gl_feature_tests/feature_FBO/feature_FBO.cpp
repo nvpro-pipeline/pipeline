@@ -78,7 +78,7 @@ bool Feature_FBO::onInit()
 {
   DP_ASSERT( dynamic_cast<test::framework::RiXBackend*>(&(*m_backend)) );
   m_rix = static_cast<test::framework::RiXBackend*>(&(*m_backend))->getRenderer();
-  m_displayTarget.inplaceCast<dp::gl::RenderTarget>()->setClearColor( 0.46f, 0.72f, 0.0f, 1.0f );
+  std::static_pointer_cast<dp::gl::RenderTarget>(m_displayTarget)->setClearColor(0.46f, 0.72f, 0.0f, 1.0f);
 
   m_renderData = new test::framework::RenderDataRiX;
 
@@ -96,14 +96,14 @@ bool Feature_FBO::onInit()
 
 bool Feature_FBO::onRunInit( unsigned int i )
 {
-  dp::gl::RenderTargetSharedPtr rt = m_fbo.staticCast<dp::gl::RenderTarget>();
+  dp::gl::RenderTargetSharedPtr rt = std::static_pointer_cast<dp::gl::RenderTarget>(m_fbo);
   rt->setClearMask( gl::TBM_COLOR_BUFFER | gl::TBM_DEPTH_BUFFER );
   rt->setClearColor( 0.46f, 0.72f, 0.0f, 1.0f );
   rt->setClearDepth( 1.0f );
 
   std::vector<dp::gl::RenderTargetFBO::AttachmentTarget> drawBuffers;
   drawBuffers.push_back(dp::gl::RenderTargetFBO::AttachmentTarget::COLOR0);
-  m_fbo.inplaceCast<dp::gl::RenderTargetFBO>()->setDrawBuffers(drawBuffers);
+  std::static_pointer_cast<dp::gl::RenderTargetFBO>(m_fbo)->setDrawBuffers(drawBuffers);
   m_fbo->setSize( 2*m_width, 2*m_height );
 
   return true;
@@ -659,8 +659,8 @@ void Feature_FBO::createSecondPass()
     m_colorBuf = gl::Texture2D::create( GL_RGBA32F, GL_RGBA, GL_UNSIGNED_BYTE, 2*m_width, 2*m_height );
     m_depthBuf = gl::Texture2D::create( GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, 2*m_width, 2*m_height );
 
-    m_fbo.inplaceCast<dp::gl::RenderTargetFBO>()->setAttachment( gl::RenderTargetFBO::AttachmentTarget::COLOR0, m_colorBuf );
-    m_fbo.inplaceCast<dp::gl::RenderTargetFBO>()->setAttachment( gl::RenderTargetFBO::AttachmentTarget::DEPTH, m_depthBuf );
+    std::static_pointer_cast<dp::gl::RenderTargetFBO>(m_fbo)->setAttachment(gl::RenderTargetFBO::AttachmentTarget::COLOR0, m_colorBuf);
+    std::static_pointer_cast<dp::gl::RenderTargetFBO>(m_fbo)->setAttachment(gl::RenderTargetFBO::AttachmentTarget::DEPTH, m_depthBuf);
 
     rix::gl::TextureDataGLTexture textureDataGLTexture( m_colorBuf );
     m_rix->textureSetData( textureFBO, textureDataGLTexture );

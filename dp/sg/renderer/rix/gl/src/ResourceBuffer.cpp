@@ -44,14 +44,14 @@ namespace dp
           {
             assert( buffer );
             assert( !!resourceManager );
-    
+
             ResourceBufferSharedPtr resourceBuffer = resourceManager->getResource<ResourceBuffer>( reinterpret_cast<size_t>(buffer.operator->()) );   // Big Hack !!
             if ( !resourceBuffer )
             {
               resourceBuffer = std::shared_ptr<ResourceBuffer>( new ResourceBuffer( buffer, resourceManager ) );
-              if ( buffer.isPtrTo<dp::sg::gl::BufferGL>() )
+              if ( std::dynamic_pointer_cast<dp::sg::gl::BufferGL>(buffer) )
               {
-                dp::sg::gl::BufferGLSharedPtr const& buffergl = buffer.staticCast<dp::sg::gl::BufferGL>();
+                dp::sg::gl::BufferGLSharedPtr const& buffergl = std::static_pointer_cast<dp::sg::gl::BufferGL>(buffer);
                 dp::rix::gl::BufferDescriptionGL bufferDescription( dp::rix::gl::UsageHint::STATIC_DRAW, buffergl->getBuffer() );
 
                 resourceBuffer->m_bufferHandle = resourceManager->getRenderer()->bufferCreate( bufferDescription );
@@ -63,7 +63,7 @@ namespace dp
               }
               resourceBuffer->update();
             }
-    
+
             return resourceBuffer;
           }
 
@@ -84,9 +84,9 @@ namespace dp
             }
           }
 
-          const dp::sg::core::HandledObjectSharedPtr& ResourceBuffer::getHandledObject() const
+          dp::sg::core::HandledObjectSharedPtr ResourceBuffer::getHandledObject() const
           {
-            return m_buffer.inplaceCast<dp::sg::core::HandledObject>();
+            return std::static_pointer_cast<dp::sg::core::HandledObject>(m_buffer);
           }
 
           void ResourceBuffer::update()

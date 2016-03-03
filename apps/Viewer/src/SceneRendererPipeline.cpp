@@ -144,7 +144,7 @@ bool SceneRendererPipeline::init(const dp::gl::RenderContextSharedPtr &renderCon
 
   // m_rendererHighlight uses the previously rendered texture rectangle as input for the shader.
   const dp::gl::RenderTargetFBO::SharedAttachment &attachment = m_highlightFBO->getAttachment(dp::gl::RenderTargetFBO::AttachmentTarget::COLOR0);
-  const dp::gl::RenderTargetFBO::SharedAttachmentTexture &texAtt = attachment.inplaceCast<dp::gl::RenderTargetFBO::AttachmentTexture>();
+  const dp::gl::RenderTargetFBO::SharedAttachmentTexture &texAtt = std::static_pointer_cast<dp::gl::RenderTargetFBO::AttachmentTexture>(attachment);
   if (texAtt)
   {
     const dp::sg::gl::TextureGLSharedPtr texGL = dp::sg::gl::TextureGL::create( texAtt->getTexture() );
@@ -188,7 +188,7 @@ void SceneRendererPipeline::doRenderStandard(dp::sg::ui::ViewStateSharedPtr cons
 
 void SceneRendererPipeline::doRenderTonemap(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget)
 {
-  dp::gl::RenderTargetSharedPtr const & renderTargetGL = renderTarget.inplaceCast<dp::gl::RenderTarget>();
+  dp::gl::RenderTargetSharedPtr const & renderTargetGL = std::static_pointer_cast<dp::gl::RenderTarget>(renderTarget);
   dp::gl::TargetBufferMask clearMask = renderTargetGL->getClearMask();
 
   // Match the size of the tonemapFBO to the destination renderTarget.
@@ -278,7 +278,7 @@ void SceneRendererPipeline::doRenderHighlight(dp::sg::ui::ViewStateSharedPtr con
   glPopAttrib();
 
   // Render the outline around the highlighted object onto the main renderTarget (framebuffer).
-  dp::gl::RenderTargetSharedPtr const & renderTargetGL = renderTarget.inplaceCast<dp::gl::RenderTarget>();
+  dp::gl::RenderTargetSharedPtr const & renderTargetGL = std::static_pointer_cast<dp::gl::RenderTarget>(renderTarget);
   dp::gl::TargetBufferMask clearMask = renderTargetGL->getClearMask();
 
   // keep the following render call from clearing the previous rendered content
@@ -301,9 +301,9 @@ void SceneRendererPipeline::setSceneRenderer(const dp::sg::ui::SceneRendererShar
   }
 
   // If the renderer is a SceneRendererGL2 reuse it for the highlighting to keep the number of RenderLists small.
-  if ( m_sceneRenderer.isPtrTo<dp::sg::renderer::rix::gl::SceneRenderer>() )
+  if ( std::dynamic_pointer_cast<dp::sg::renderer::rix::gl::SceneRenderer>(m_sceneRenderer) )
   {
-    m_sceneRendererHighlight = m_sceneRenderer.staticCast<dp::sg::renderer::rix::gl::SceneRenderer>();
+    m_sceneRendererHighlight = std::static_pointer_cast<dp::sg::renderer::rix::gl::SceneRenderer>(m_sceneRenderer);
   }
   else
   {
@@ -399,16 +399,16 @@ dp::fx::Manager SceneRendererPipeline::getShaderManager( ) const
 dp::sg::renderer::rix::gl::TransparencyMode SceneRendererPipeline::getTransparencyMode() const
 {
   DP_ASSERT( m_sceneRenderer );
-  DP_ASSERT( m_sceneRenderer.isPtrTo<dp::sg::renderer::rix::gl::SceneRenderer>() );
-  return( m_sceneRenderer.staticCast<dp::sg::renderer::rix::gl::SceneRenderer>()->getTransparencyMode() );
+  DP_ASSERT( std::dynamic_pointer_cast<dp::sg::renderer::rix::gl::SceneRenderer>(m_sceneRenderer) );
+  return(std::static_pointer_cast<dp::sg::renderer::rix::gl::SceneRenderer>(m_sceneRenderer)->getTransparencyMode());
 }
 
 void SceneRendererPipeline::setTransparencyMode( dp::sg::renderer::rix::gl::TransparencyMode mode )
 {
   DP_ASSERT( mode != getTransparencyMode() );
   DP_ASSERT( m_sceneRenderer );
-  DP_ASSERT( m_sceneRenderer.isPtrTo<dp::sg::renderer::rix::gl::SceneRenderer>() );
-  m_sceneRenderer.staticCast<dp::sg::renderer::rix::gl::SceneRenderer>()->setTransparencyMode( mode );
+  DP_ASSERT( std::dynamic_pointer_cast<dp::sg::renderer::rix::gl::SceneRenderer>(m_sceneRenderer) );
+  std::static_pointer_cast<dp::sg::renderer::rix::gl::SceneRenderer>(m_sceneRenderer)->setTransparencyMode(mode);
 }
 
 void SceneRendererPipeline::setTonemapperEnabled( bool enabled )
@@ -490,7 +490,7 @@ void SceneRendererPipeline::initTonemapper()
   m_tonemapper->setPipeline( m_tonemapperData );
 
   const dp::gl::RenderTargetFBO::SharedAttachment &attachmentTonemap = m_tonemapFBO->getAttachment(dp::gl::RenderTargetFBO::AttachmentTarget::COLOR0);
-  const dp::gl::RenderTargetFBO::SharedAttachmentTexture &texAttTonemap = attachmentTonemap.dynamicCast<dp::gl::RenderTargetFBO::AttachmentTexture>();
+  const dp::gl::RenderTargetFBO::SharedAttachmentTexture &texAttTonemap = std::static_pointer_cast<dp::gl::RenderTargetFBO::AttachmentTexture>(attachmentTonemap);
   if ( texAttTonemap )
   {
     const dp::sg::gl::TextureGLSharedPtr texGL = dp::sg::gl::TextureGL::create( texAttTonemap->getTexture() );

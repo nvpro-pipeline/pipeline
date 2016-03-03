@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -91,13 +91,13 @@ namespace dp
            *  \param spec A constant reference to a dp::fx::ParameterGroupSpecSharedPtr, that specifies the ParameterGroupData to find.
            *  \return The ParameterGroupData in this PipelineData corresponding to the ParameterGroupSpec \a spec.
            *  \note If there is no ParameterGroupData corresponding the ParameterGroupSpec \a spec, an empty ParameterGroupData is returned. */
-          DP_SG_CORE_API const ParameterGroupDataSharedPtr & findParameterGroupData( const dp::fx::ParameterGroupSpecSharedPtr & spec ) const;
+          DP_SG_CORE_API ParameterGroupDataSharedPtr findParameterGroupData( const dp::fx::ParameterGroupSpecSharedPtr & spec ) const;
 
           /*! \brief Find the element in this PipelineData for the specified name of the ParameterGroupSpec.
            *  \param specName The name of the ParameterGroupSpec that specifies the ParameterGroupData to find.
            *  \return The ParameterGroupData in this PipelineData corresponding to the name \a specName.
            *  \note If there is no ParameterGroupData corresponding the name \a specName, an empty ParameterGroupData is returned. */
-          DP_SG_CORE_API const ParameterGroupDataSharedPtr & findParameterGroupData( const std::string & specName ) const;
+          DP_SG_CORE_API ParameterGroupDataSharedPtr findParameterGroupData( const std::string & specName ) const;
 
           /*! \brief Remove all elements from this PipelineData. */
           DP_SG_CORE_API void clearParameterGroupData();
@@ -129,11 +129,11 @@ namespace dp
 
 
       // Helper function to get some "standard" spec
-      DP_SG_CORE_API const dp::fx::EffectSpecSharedPtr& getStandardGeometrySpec();
-      DP_SG_CORE_API const dp::fx::EffectSpecSharedPtr& getStandardDirectedLightSpec();
-      DP_SG_CORE_API const dp::fx::EffectSpecSharedPtr& getStandardPointLightSpec();
-      DP_SG_CORE_API const dp::fx::EffectSpecSharedPtr& getStandardSpotLightSpec();
-      DP_SG_CORE_API const dp::fx::EffectSpecSharedPtr& getStandardMaterialSpec();
+      DP_SG_CORE_API dp::fx::EffectSpecSharedPtr getStandardGeometrySpec();
+      DP_SG_CORE_API dp::fx::EffectSpecSharedPtr getStandardDirectedLightSpec();
+      DP_SG_CORE_API dp::fx::EffectSpecSharedPtr getStandardPointLightSpec();
+      DP_SG_CORE_API dp::fx::EffectSpecSharedPtr getStandardSpotLightSpec();
+      DP_SG_CORE_API dp::fx::EffectSpecSharedPtr getStandardMaterialSpec();
 
       DP_SG_CORE_API PipelineDataSharedPtr createStandardGeometryData();
       DP_SG_CORE_API PipelineDataSharedPtr createStandardDirectedLightData( const dp::math::Vec3f & direction = dp::math::Vec3f( 0.0f, 0.0f, -1.0f )

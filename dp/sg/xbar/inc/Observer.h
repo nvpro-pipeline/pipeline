@@ -1,4 +1,4 @@
-// Copyright (c) 2010-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2010-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -88,7 +88,7 @@ namespace dp
       template <typename IndexType>
       void Observer<IndexType>::attach( dp::util::SubjectSharedPtr const& subject, PayloadSharedPtr const& payload )
       {
-        m_indexMap.insert( std::make_pair(payload->m_index, std::make_pair( subject.getWeakPtr(), payload ) ) );
+        m_indexMap.insert( std::make_pair(payload->m_index, std::make_pair( dp::util::SubjectWeakPtr(subject), payload ) ) );
         subject->attach( this, payload.operator->() );    // BIG HACK!! we somehow need to align dp::util::Payload and dp::sg::xbar::Observer<IndexType::Payload
       }
 
@@ -100,7 +100,7 @@ namespace dp
         typename IndexMap::iterator it = m_indexMap.find( index );
         DP_ASSERT( it != m_indexMap.end() );
 
-        it->second.first->detach( this, it->second.second.operator->() );    // BIG HACK!! we somehow need to align dp::util::Payload and dp::sg::xbar::Observer<IndexType::Payload
+        it->second.first.lock()->detach( this, it->second.second.get() );    // BIG HACK!! we somehow need to align dp::util::Payload and dp::sg::xbar::Observer<IndexType::Payload
 
         m_indexMap.erase( it );
       }
@@ -111,7 +111,7 @@ namespace dp
         typename IndexMap::iterator it, it_end = m_indexMap.end();
         for( it = m_indexMap.begin(); it != it_end; ++it )
         {
-          it->second.first->detach( this, it->second.second.operator->() );    // BIG HACK!! we somehow need to align dp::util::Payload and dp::sg::xbar::Observer<IndexType::Payload
+          it->second.first.lock()->detach( this, it->second.second.get() );    // BIG HACK!! we somehow need to align dp::util::Payload and dp::sg::xbar::Observer<IndexType::Payload
         }
         m_indexMap.clear();
       }

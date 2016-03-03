@@ -44,13 +44,12 @@ set(DPUTIL_INCLUDES
   Observer.h
   PlugIn.h
   PlugInCallback.h
+  PointerTypes.h
   Reflection.h
   Semantic.h
-  SharedPtr.h
   Singleton.h
   StridedIterator.h
   Timer.h
-  WeakPtr.h
 )
 
 add_definitions("-DDP_UTIL_USE_BOOST")

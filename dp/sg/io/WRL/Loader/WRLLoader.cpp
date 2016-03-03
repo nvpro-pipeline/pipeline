@@ -296,7 +296,7 @@ void WRLLoader::createBox( IndexedFaceSetSharedPtr & pIndexedFaceSet, const SFVe
   pIndexedFaceSet->normalIndex.reserve( numIndices );
   pIndexedFaceSet->normalPerVertex = true; // Is the default.
 
-  TextureCoordinateSharedPtr pTextureCoordinate = TextureCoordinateSharedPtr::null;
+  TextureCoordinateSharedPtr pTextureCoordinate = TextureCoordinateSharedPtr();
   if ( textured )
   {
     pTextureCoordinate = TextureCoordinate::create();
@@ -702,7 +702,7 @@ void WRLLoader::createCone( IndexedFaceSetSharedPtr & pIndexedFaceSet,
   pIndexedFaceSet->normalIndex.reserve( numIndices );
   pIndexedFaceSet->normalPerVertex = true; // Is the default.
 
-  TextureCoordinateSharedPtr pTextureCoordinate = TextureCoordinateSharedPtr::null;
+  TextureCoordinateSharedPtr pTextureCoordinate = TextureCoordinateSharedPtr();
   if ( textured )
   {
     pTextureCoordinate = TextureCoordinate::create();
@@ -937,7 +937,7 @@ void WRLLoader::createCylinder( IndexedFaceSetSharedPtr & pIndexedFaceSet,
   pIndexedFaceSet->normalIndex.reserve( numIndices );
   pIndexedFaceSet->normalPerVertex = true; // Is the default.
 
-  TextureCoordinateSharedPtr pTextureCoordinate = TextureCoordinateSharedPtr::null;
+  TextureCoordinateSharedPtr pTextureCoordinate = TextureCoordinateSharedPtr();
   if ( textured )
   {
     pTextureCoordinate = TextureCoordinate::create();
@@ -1337,9 +1337,9 @@ void WRLLoader::determineTexGen( IndexedFaceSetSharedPtr const& pIndexedFaceSet
                                , const ParameterGroupDataSharedPtr & parameterGroupData )
 {
   DP_ASSERT( pIndexedFaceSet && parameterGroupData );
-  DP_ASSERT( pIndexedFaceSet->coord.isPtrTo<Coordinate>() );
+  DP_ASSERT( std::dynamic_pointer_cast<Coordinate>(pIndexedFaceSet->coord) );
 
-  MFVec3f const& point = pIndexedFaceSet->coord.staticCast<Coordinate>()->point;
+  MFVec3f const& point = std::static_pointer_cast<Coordinate>(pIndexedFaceSet->coord)->point;
   SFVec3f min = point[0];
   SFVec3f max = min;
   for ( size_t i=1 ; i<point.size() ; i++ )
@@ -1835,8 +1835,8 @@ SceneSharedPtr WRLLoader::import( const string &filename )
         {
           for ( Scene::CameraIterator scci = m_scene->beginCameras() ; scci != m_scene->endCameras() ; ++scci )
           {
-            DP_ASSERT( scci->isPtrTo<PerspectiveCamera>() );
-            PerspectiveCameraSharedPtr const& pc = scci->staticCast<PerspectiveCamera>();
+            DP_ASSERT( std::dynamic_pointer_cast<PerspectiveCamera>(*scci) );
+            PerspectiveCameraSharedPtr const& pc = std::static_pointer_cast<PerspectiveCamera>(*scci);
             pc->calcNearFarDistances( bs );
             pc->setFocusDistance( 0.5f * ( pc->getNearDistance() + pc->getFarDistance() ) );
           }
@@ -1870,27 +1870,27 @@ dp::sg::core::PipelineDataSharedPtr WRLLoader::interpretAppearance( AppearanceSh
 
     if ( pAppearance->material )
     {
-      DP_ASSERT( pAppearance->material.isPtrTo<vrml::Material>() );
-      DP_VERIFY( pAppearance->materialPipeline->setParameterGroupData( interpretMaterial( pAppearance->material.staticCast<vrml::Material>() ) ) );
+      DP_ASSERT( std::dynamic_pointer_cast<vrml::Material>(pAppearance->material) );
+      DP_VERIFY(pAppearance->materialPipeline->setParameterGroupData(interpretMaterial(std::static_pointer_cast<vrml::Material>(pAppearance->material))));
     }
 
     ParameterGroupDataSharedPtr textureData;
     if ( pAppearance->texture )
     {
-      DP_ASSERT( pAppearance->texture.isPtrTo<vrml::Texture>() );
-      textureData = interpretTexture( pAppearance->texture.staticCast<vrml::Texture>() );
+      DP_ASSERT( std::dynamic_pointer_cast<vrml::Texture>(pAppearance->texture) );
+      textureData = interpretTexture(std::static_pointer_cast<vrml::Texture>(pAppearance->texture));
       if ( textureData )
       {
         if ( pAppearance->textureTransform )
         {
-          DP_ASSERT( pAppearance->textureTransform.isPtrTo<TextureTransform>() );
-          interpretTextureTransform( pAppearance->textureTransform.staticCast<TextureTransform>(), textureData );
+          DP_ASSERT( std::dynamic_pointer_cast<TextureTransform>(pAppearance->textureTransform) );
+          interpretTextureTransform(std::static_pointer_cast<TextureTransform>(pAppearance->textureTransform), textureData);
         }
         DP_VERIFY( pAppearance->materialPipeline->setParameterGroupData( textureData ) );
       }
     }
 
-    bool transparent = ( pAppearance->material && ( 0.0f < pAppearance->material.staticCast<vrml::Material>()->transparency ) );
+    bool transparent = (pAppearance->material && (0.0f < std::static_pointer_cast<vrml::Material>(pAppearance->material)->transparency));
     if ( textureData && ! transparent )
     {
       const dp::fx::ParameterGroupSpecSharedPtr & pgs = textureData->getParameterGroupSpec();
@@ -1898,9 +1898,9 @@ dp::sg::core::PipelineDataSharedPtr WRLLoader::interpretAppearance( AppearanceSh
       if ( sampler )
       {
         const dp::sg::core::TextureSharedPtr & texture = sampler->getTexture();
-        if ( texture && texture.isPtrTo<TextureHost>() )
+        if ( texture && std::dynamic_pointer_cast<TextureHost>(texture) )
         {
-          Image::PixelFormat ipf = texture.staticCast<TextureHost>()->getFormat();
+          Image::PixelFormat ipf = std::static_pointer_cast<TextureHost>(texture)->getFormat();
           transparent =   ( ipf == Image::PixelFormat::RGBA )
                       ||  ( ipf == Image::PixelFormat::BGRA )
                       ||  ( ipf == Image::PixelFormat::LUMINANCE_ALPHA );
@@ -2130,8 +2130,8 @@ void  WRLLoader::interpretChildren( MFNode &children, dp::sg::core::GroupSharedP
     dp::sg::core::ObjectSharedPtr pObject = interpretSFNode( children[i] );
     if ( pObject )
     {
-      DP_ASSERT( pObject.isPtrTo<Node>() );
-      pGroup->addChild( pObject.staticCast<Node>() );
+      DP_ASSERT( std::dynamic_pointer_cast<Node>(pObject) );
+      pGroup->addChild(std::static_pointer_cast<Node>(pObject));
       // LightReferences will be added to the root with the WRLLoadTraverser !
     }
   }
@@ -2318,38 +2318,38 @@ void  WRLLoader::interpretElevationGrid( ElevationGridSharedPtr const& pElevatio
 void  WRLLoader::interpretGeometry( vrml::GeometrySharedPtr const& pGeometry, vector<PrimitiveSharedPtr> &primitives
                                   , bool textured )
 {
-  if ( pGeometry.isPtrTo<Box>() )
+  if ( std::dynamic_pointer_cast<Box>(pGeometry) )
   {
-    interpretBox( pGeometry.staticCast<Box>(), primitives, textured );
+    interpretBox(std::static_pointer_cast<Box>(pGeometry), primitives, textured);
   }
-  else if ( pGeometry.isPtrTo<Cone>() )
+  else if ( std::dynamic_pointer_cast<Cone>(pGeometry) )
   {
-    interpretCone( pGeometry.staticCast<Cone>(), primitives, textured );
+    interpretCone(std::static_pointer_cast<Cone>(pGeometry), primitives, textured);
   }
-  else if ( pGeometry.isPtrTo<Cylinder>() )
+  else if ( std::dynamic_pointer_cast<Cylinder>(pGeometry) )
   {
-    interpretCylinder( pGeometry.staticCast<Cylinder>(), primitives, textured );
+    interpretCylinder(std::static_pointer_cast<Cylinder>(pGeometry), primitives, textured);
   }
-  else if ( pGeometry.isPtrTo<ElevationGrid>() )
+  else if ( std::dynamic_pointer_cast<ElevationGrid>(pGeometry) )
   {
-    interpretElevationGrid( pGeometry.staticCast<ElevationGrid>(), primitives );
+    interpretElevationGrid(std::static_pointer_cast<ElevationGrid>(pGeometry), primitives);
   }
-  else if ( pGeometry.isPtrTo<IndexedFaceSet>() )
+  else if ( std::dynamic_pointer_cast<IndexedFaceSet>(pGeometry) )
   {
-    interpretIndexedFaceSet( pGeometry.staticCast<IndexedFaceSet>(), primitives );
+    interpretIndexedFaceSet(std::static_pointer_cast<IndexedFaceSet>(pGeometry), primitives);
   }
-  else if ( pGeometry.isPtrTo<IndexedLineSet>() )
+  else if ( std::dynamic_pointer_cast<IndexedLineSet>(pGeometry) )
   {
-    interpretIndexedLineSet( pGeometry.staticCast<IndexedLineSet>(), primitives );
+    interpretIndexedLineSet(std::static_pointer_cast<IndexedLineSet>(pGeometry), primitives);
   }
-  else if ( pGeometry.isPtrTo<PointSet>() )
+  else if ( std::dynamic_pointer_cast<PointSet>(pGeometry) )
   {
-    interpretPointSet( pGeometry.staticCast<PointSet>(), primitives );
+    interpretPointSet(std::static_pointer_cast<PointSet>(pGeometry), primitives);
   }
   else
   {
-    DP_ASSERT( pGeometry.isPtrTo<Sphere>() );
-    interpretSphere( pGeometry.staticCast<Sphere>(), primitives, textured );
+    DP_ASSERT( std::dynamic_pointer_cast<Sphere>(pGeometry) );
+    interpretSphere(std::static_pointer_cast<Sphere>(pGeometry), primitives, textured);
   }
 }
 
@@ -2385,11 +2385,11 @@ ParameterGroupDataSharedPtr WRLLoader::interpretImageTexture( ImageTextureShared
         texImg = dp::sg::io::loadTextureHost(fileName, m_fileFinder);
         DP_ASSERT( texImg );
         texImg->setTextureTarget(TextureTarget::TEXTURE_2D); // TEXTURE_2D is the only target known by VRML
-        m_textureFiles[fileName] = texImg.getWeakPtr();
+        m_textureFiles[fileName] = texImg;
       }
       else
       {
-        texImg = it->second.getSharedPtr().staticCast<TextureHost>();
+        texImg = std::static_pointer_cast<TextureHost>(it->second.lock());
       }
 
       SamplerSharedPtr sampler = Sampler::create( texImg );
@@ -2467,18 +2467,18 @@ void  WRLLoader::interpretIndexedFaceSet( IndexedFaceSetSharedPtr const& pIndexe
   {
     if ( pIndexedFaceSet->color )
     {
-      DP_ASSERT( pIndexedFaceSet->color.isPtrTo<Color>() );
-      interpretColor( pIndexedFaceSet->color.staticCast<Color>() );
+      DP_ASSERT( std::dynamic_pointer_cast<Color>(pIndexedFaceSet->color) );
+      interpretColor(std::static_pointer_cast<Color>(pIndexedFaceSet->color));
     }
     if ( pIndexedFaceSet->coord )
     {
-      DP_ASSERT( pIndexedFaceSet->coord.isPtrTo<Coordinate>() );
-      interpretCoordinate( pIndexedFaceSet->coord.staticCast<Coordinate>() );
+      DP_ASSERT( std::dynamic_pointer_cast<Coordinate>(pIndexedFaceSet->coord) );
+      interpretCoordinate(std::static_pointer_cast<Coordinate>(pIndexedFaceSet->coord));
     }
     if ( pIndexedFaceSet->normal )
     {
-      DP_ASSERT( pIndexedFaceSet->normal.isPtrTo<Normal>() );
-      interpretNormal( pIndexedFaceSet->normal.staticCast<Normal>() );
+      DP_ASSERT( std::dynamic_pointer_cast<Normal>(pIndexedFaceSet->normal) );
+      interpretNormal(std::static_pointer_cast<Normal>(pIndexedFaceSet->normal));
     }
     // no need to interpret texCoord
 
@@ -2770,14 +2770,14 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
                                                                   , const vector<unsigned int> & startIndices
                                                                   , const vector<unsigned int> & faceIndices )
 {
-  DP_ASSERT( pIndexedFaceSet->coord.isPtrTo<Coordinate>() );
-  DP_ASSERT( !pIndexedFaceSet->normal || pIndexedFaceSet->normal.isPtrTo<Normal>() );
-  DP_ASSERT( !pIndexedFaceSet->color || pIndexedFaceSet->color.isPtrTo<Color>() );
-  CoordinateSharedPtr const& pCoordinate = pIndexedFaceSet->coord.staticCast<Coordinate>();
+  DP_ASSERT( std::dynamic_pointer_cast<Coordinate>(pIndexedFaceSet->coord) );
+  DP_ASSERT( !pIndexedFaceSet->normal || std::dynamic_pointer_cast<Normal>(pIndexedFaceSet->normal) );
+  DP_ASSERT( !pIndexedFaceSet->color || std::dynamic_pointer_cast<Color>(pIndexedFaceSet->color) );
+  CoordinateSharedPtr const& pCoordinate = std::static_pointer_cast<Coordinate>(pIndexedFaceSet->coord);
 
   VertexAttributeSetSharedPtr vash;
 #if defined(KEEP_ANIMATION)
-  if ( pCoordinate->set_point || ( pIndexedFaceSet->normal && pIndexedFaceSet->normal.staticCast<Normal>()->set_vector ) || ( pIndexedFaceSet->color && pIndexedFaceSet->color.staticCast<Color>()->set_color ) )
+  if ( pCoordinate->set_point || ( pIndexedFaceSet->normal && std::static_pointer_cast<Normal>(pIndexedFaceSet->normal)->set_vector ) || ( pIndexedFaceSet->color && std::static_pointer_cast<Color>(pIndexedFaceSet->color)->set_color ) )
   {
     AnimatedVertexAttributeSetSharedPtr avash = AnimatedVertexAttributeSet::create();
     //  set the animated vertices
@@ -2810,9 +2810,9 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
     }
 
     //  set the animated normals
-    if ( pIndexedFaceSet->normal && pIndexedFaceSet->normal.staticCast<Normal>()->set_vector )
+    if ( pIndexedFaceSet->normal && std::static_pointer_cast<Normal>(pIndexedFaceSet->normal)->set_vector )
     {
-      NormalSharedPtr const& pNormal = pIndexedFaceSet->normal.staticCast<Normal>();
+      NormalSharedPtr const& pNormal = std::static_pointer_cast<Normal>(pIndexedFaceSet->normal);
       DP_ASSERT( pNormal->interpreted );
       DP_ASSERT( pCoordinate->set_point->key == pNormal->set_vector->key );
 
@@ -2885,9 +2885,9 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
     }
 
     //  set the animated colors
-    if ( pIndexedFaceSet->color && pIndexedFaceSet->color.staticCast<Color>()->set_color )
+    if ( pIndexedFaceSet->color && std::static_pointer_cast<Color>(pIndexedFaceSet->color)->set_color )
     {
-      ColorSharedPtr const& pColor = pIndexedFaceSet->color.staticCast<Color>();
+      ColorSharedPtr const& pColor = std::static_pointer_cast<Color>(pIndexedFaceSet->color);
       DP_ASSERT( pColor->interpreted );
       DP_ASSERT( pCoordinate->set_point->key == pColor->set_color->key );
 
@@ -2976,7 +2976,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
     //  set the normals
     if ( pIndexedFaceSet->normal )
     {
-      NormalSharedPtr const& pNormal = pIndexedFaceSet->normal.staticCast<Normal>();
+      NormalSharedPtr const& pNormal = std::static_pointer_cast<Normal>(pIndexedFaceSet->normal);
       vector<Vec3f> normals;
       if ( pIndexedFaceSet->normalPerVertex )
       {
@@ -3006,7 +3006,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
     //  set the texture coordinates
     if ( pIndexedFaceSet->texCoord )
     {
-      TextureCoordinateSharedPtr const& pTextureCoordinate = pIndexedFaceSet->texCoord.staticCast<TextureCoordinate>();
+      TextureCoordinateSharedPtr const& pTextureCoordinate = std::static_pointer_cast<TextureCoordinate>(pIndexedFaceSet->texCoord);
       vector<Vec2f> texCoords;
       gatherPerVertex<Vec2f>( texCoords, pTextureCoordinate->point,
                               pIndexedFaceSet->texCoordIndex.empty()
@@ -3019,7 +3019,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
     //  set the colors
     if ( pIndexedFaceSet->color )
     {
-      ColorSharedPtr const& pColor = pIndexedFaceSet->color.staticCast<Color>();
+      ColorSharedPtr const& pColor = std::static_pointer_cast<Color>(pIndexedFaceSet->color);
       vector<Vec3f> colors;
       if ( pIndexedFaceSet->colorPerVertex )
       {
@@ -3072,8 +3072,8 @@ void  WRLLoader::interpretIndexedLineSet( IndexedLineSetSharedPtr const& pIndexe
     IndexSetSharedPtr iset( IndexSet::create() );
     iset->setData( &indices[0] , dp::checked_cast<unsigned int>(indices.size()) );
 
-    DP_ASSERT( pIndexedLineSet->coord.isPtrTo<Coordinate>() );
-    CoordinateSharedPtr const& pCoordinate = pIndexedLineSet->coord.staticCast<Coordinate>();
+    DP_ASSERT( std::dynamic_pointer_cast<Coordinate>(pIndexedLineSet->coord) );
+    CoordinateSharedPtr const& pCoordinate = std::static_pointer_cast<Coordinate>(pIndexedLineSet->coord);
     DP_ASSERT( pCoordinate && ! pCoordinate->set_point );
     vector<Vec3f> vertices( ic );
     for ( size_t i=0, j=0 ; i<pIndexedLineSet->coordIndex.size() ; i++ )
@@ -3088,7 +3088,7 @@ void  WRLLoader::interpretIndexedLineSet( IndexedLineSetSharedPtr const& pIndexe
 
     if ( pIndexedLineSet->color )
     {
-      ColorSharedPtr const& pColor = pIndexedLineSet->color.staticCast<Color>();
+      ColorSharedPtr const& pColor = std::static_pointer_cast<Color>(pIndexedLineSet->color);
       vector<Vec3f> colors( vertices.size() );
       if ( pIndexedLineSet->colorPerVertex )
       {
@@ -3327,8 +3327,8 @@ void  WRLLoader::interpretPointSet( PointSetSharedPtr const& pPointSet, vector<P
   {
     VertexAttributeSetSharedPtr cvas = VertexAttributeSet::create();
 
-    DP_ASSERT( pPointSet->coord.isPtrTo<Coordinate>() );
-    CoordinateSharedPtr const& pCoordinate = pPointSet->coord.staticCast<Coordinate>();
+    DP_ASSERT( std::dynamic_pointer_cast<Coordinate>(pPointSet->coord) );
+    CoordinateSharedPtr const& pCoordinate = std::static_pointer_cast<Coordinate>(pPointSet->coord);
     DP_ASSERT( pCoordinate->point.size() < UINT_MAX );
     vector<Vec3f> vertices( pCoordinate->point.size() );
     for ( unsigned i=0 ; i<pCoordinate->point.size() ; i++ )
@@ -3339,8 +3339,8 @@ void  WRLLoader::interpretPointSet( PointSetSharedPtr const& pPointSet, vector<P
 
     if ( pPointSet->color )
     {
-      DP_ASSERT( pPointSet->color.isPtrTo<Color>() );
-      ColorSharedPtr const& pColor = pPointSet->color.staticCast<Color>();
+      DP_ASSERT( std::dynamic_pointer_cast<Color>(pPointSet->color) );
+      ColorSharedPtr const& pColor = std::static_pointer_cast<Color>(pPointSet->color);
       DP_ASSERT( pCoordinate->point.size() <= pColor->color.size() );
       vector<Vec3f> colors( pCoordinate->point.size() );
       for ( size_t i=0 ; i<pCoordinate->point.size() ; i++ )
@@ -3373,76 +3373,76 @@ void WRLLoader::interpretPositionInterpolator( PositionInterpolatorSharedPtr con
 dp::sg::core::ObjectSharedPtr WRLLoader::interpretSFNode( const SFNode n )
 {
   dp::sg::core::ObjectSharedPtr pObject;
-  if ( n.isPtrTo<Appearance>() )
+  if ( std::dynamic_pointer_cast<Appearance>(n) )
   {
     DP_ASSERT( false );
   }
-  else if ( n.isPtrTo<Background>() )
+  else if ( std::dynamic_pointer_cast<Background>(n) )
   {
-    interpretBackground( n.staticCast<Background>() );
+    interpretBackground(std::static_pointer_cast<Background>(n));
   }
-  else if ( n.isPtrTo<Coordinate>() )
+  else if ( std::dynamic_pointer_cast<Coordinate>(n) )
   {
     //  NOP
   }
-  else if ( n.isPtrTo<vrml::Group>() )
+  else if ( std::dynamic_pointer_cast<vrml::Group>(n) )
   {
-    if ( n.isPtrTo<vrml::Billboard>() )
+    if ( std::dynamic_pointer_cast<vrml::Billboard>(n) )
     {
-      pObject = interpretBillboard( n.staticCast<vrml::Billboard>() );
+      pObject = interpretBillboard(std::static_pointer_cast<vrml::Billboard>(n));
     }
-    else if ( n.isPtrTo<vrml::LOD>() )
+    else if ( std::dynamic_pointer_cast<vrml::LOD>(n) )
     {
-      pObject = interpretLOD( n.staticCast<vrml::LOD>() );
+      pObject = interpretLOD(std::static_pointer_cast<vrml::LOD>(n));
     }
-    else if ( n.isPtrTo<vrml::Switch>() )
+    else if ( std::dynamic_pointer_cast<vrml::Switch>(n) )
     {
-      pObject = interpretSwitch( n.staticCast<vrml::Switch>() );
+      pObject = interpretSwitch(std::static_pointer_cast<vrml::Switch>(n));
     }
-    else if ( n.isPtrTo<vrml::Transform>() )
+    else if ( std::dynamic_pointer_cast<vrml::Transform>(n) )
     {
-      pObject = interpretTransform( n.staticCast<vrml::Transform>() );
+      pObject = interpretTransform(std::static_pointer_cast<vrml::Transform>(n));
     }
     else
     {
-      pObject = interpretGroup( n.staticCast<vrml::Group>() );
+      pObject = interpretGroup(std::static_pointer_cast<vrml::Group>(n));
     }
   }
-  else if ( n.isPtrTo<Inline>() )
+  else if ( std::dynamic_pointer_cast<Inline>(n) )
   {
-    pObject = interpretInline( n.staticCast<Inline>() );
+    pObject = interpretInline(std::static_pointer_cast<Inline>(n));
   }
-  else if ( n.isPtrTo<Interpolator>() )
+  else if ( std::dynamic_pointer_cast<Interpolator>(n) )
   {
     //  NOP
   }
-  else if ( n.isPtrTo<Light>() )
+  else if ( std::dynamic_pointer_cast<Light>(n) )
   {
-    if ( n.isPtrTo<DirectionalLight>() )
+    if ( std::dynamic_pointer_cast<DirectionalLight>(n) )
     {
-      pObject = interpretDirectionalLight( n.staticCast<DirectionalLight>() );
+      pObject = interpretDirectionalLight(std::static_pointer_cast<DirectionalLight>(n));
     }
-    else if ( n.isPtrTo<vrml::PointLight>() )
+    else if ( std::dynamic_pointer_cast<vrml::PointLight>(n) )
     {
-      pObject = interpretPointLight( n.staticCast<vrml::PointLight>() );
+      pObject = interpretPointLight(std::static_pointer_cast<vrml::PointLight>(n));
     }
     else
     {
-      DP_ASSERT( n.isPtrTo<vrml::SpotLight>() );
-      pObject = interpretSpotLight( n.staticCast<vrml::SpotLight>() );
+      DP_ASSERT( std::dynamic_pointer_cast<vrml::SpotLight>(n) );
+      pObject = interpretSpotLight(std::static_pointer_cast<vrml::SpotLight>(n));
     }
   }
-  else if ( n.isPtrTo<vrml::Shape>() )
+  else if ( std::dynamic_pointer_cast<vrml::Shape>(n) )
   {
-    pObject = interpretShape( n.staticCast<vrml::Shape>() );
+    pObject = interpretShape(std::static_pointer_cast<vrml::Shape>(n));
   }
-  else if ( n.isPtrTo<TimeSensor>() )
+  else if ( std::dynamic_pointer_cast<TimeSensor>(n) )
   {
     //  NOP
   }
-  else if ( n.isPtrTo<Viewpoint>() )
+  else if ( std::dynamic_pointer_cast<Viewpoint>(n) )
   {
-    pObject = interpretViewpoint( n.staticCast<Viewpoint>() );
+    pObject = interpretViewpoint(std::static_pointer_cast<Viewpoint>(n));
   }
   else
   {
@@ -3468,15 +3468,15 @@ NodeSharedPtr WRLLoader::interpretShape( vrml::ShapeSharedPtr const& pShape )
 
     if ( pShape->appearance )
     {
-      DP_ASSERT( pShape->appearance.isPtrTo<Appearance>() );
-      materialPipeline = interpretAppearance( pShape->appearance.staticCast<Appearance>() );
+      DP_ASSERT( std::dynamic_pointer_cast<Appearance>(pShape->appearance) );
+      materialPipeline = interpretAppearance(std::static_pointer_cast<Appearance>(pShape->appearance));
     }
     if ( pShape->geometry )
     {
-      DP_ASSERT(      pShape->geometry.isPtrTo<Geometry>()
-                  &&  ( !pShape->appearance || pShape->appearance.isPtrTo<Appearance>() ) );
-      interpretGeometry( pShape->geometry.staticCast<Geometry>(), primitives
-                       , pShape->appearance && pShape->appearance.staticCast<Appearance>()->texture );
+      DP_ASSERT(      std::dynamic_pointer_cast<Geometry>(pShape->geometry)
+                  &&  ( !pShape->appearance || std::dynamic_pointer_cast<Appearance>(pShape->appearance) ) );
+      interpretGeometry(std::static_pointer_cast<Geometry>(pShape->geometry), primitives
+                        , pShape->appearance && std::static_pointer_cast<Appearance>(pShape->appearance)->texture);
     }
 
     if ( materialPipeline && pShape->geometry )
@@ -3484,26 +3484,26 @@ NodeSharedPtr WRLLoader::interpretShape( vrml::ShapeSharedPtr const& pShape )
       const ParameterGroupDataSharedPtr & pgd = materialPipeline->findParameterGroupData( string( "standardTextureParameters" ) );
       if ( pgd )
       {
-        if ( pShape->geometry.isPtrTo<IndexedFaceSet>() )
+        if ( std::dynamic_pointer_cast<IndexedFaceSet>(pShape->geometry) )
         {
-          IndexedFaceSetSharedPtr const& pIndexedFaceSet = pShape->geometry.staticCast<IndexedFaceSet>();
+          IndexedFaceSetSharedPtr const& pIndexedFaceSet = std::static_pointer_cast<IndexedFaceSet>(pShape->geometry);
           if ( ! pIndexedFaceSet->texCoord )
           {
             determineTexGen( pIndexedFaceSet, pgd );
           }
         }
-        else if (   pShape->geometry.isPtrTo<Box>()
-                ||  pShape->geometry.isPtrTo<Cone>()
-                ||  pShape->geometry.isPtrTo<Cylinder>()
-                ||  pShape->geometry.isPtrTo<ElevationGrid>()
-                ||  pShape->geometry.isPtrTo<IndexedLineSet>()
-                ||  pShape->geometry.isPtrTo<PointSet>()
-                ||  pShape->geometry.isPtrTo<Sphere>() )
+        else if (   std::dynamic_pointer_cast<Box>(pShape->geometry)
+                ||  std::dynamic_pointer_cast<Cone>(pShape->geometry)
+                ||  std::dynamic_pointer_cast<Cylinder>(pShape->geometry)
+                ||  std::dynamic_pointer_cast<ElevationGrid>(pShape->geometry)
+                ||  std::dynamic_pointer_cast<IndexedLineSet>(pShape->geometry)
+                ||  std::dynamic_pointer_cast<PointSet>(pShape->geometry)
+                ||  std::dynamic_pointer_cast<Sphere>(pShape->geometry) )
         {
           //  NOP
         }
-        else if (   pShape->geometry.isPtrTo<Extrusion>()
-                 || pShape->geometry.isPtrTo<Text>() )
+        else if (   std::dynamic_pointer_cast<Extrusion>(pShape->geometry)
+                 || std::dynamic_pointer_cast<Text>(pShape->geometry) )
         {
           DP_ASSERT( false );
         }
@@ -3570,18 +3570,18 @@ LightSourceSharedPtr WRLLoader::interpretSpotLight( vrml::SpotLightSharedPtr con
 ParameterGroupDataSharedPtr WRLLoader::interpretTexture( vrml::TextureSharedPtr const& pTexture )
 {
   ParameterGroupDataSharedPtr textureData;
-  if ( pTexture.isPtrTo<ImageTexture>() )
+  if ( std::dynamic_pointer_cast<ImageTexture>(pTexture) )
   {
-    textureData = interpretImageTexture( pTexture.staticCast<ImageTexture>() );
+    textureData = interpretImageTexture(std::static_pointer_cast<ImageTexture>(pTexture));
   }
-  else if ( pTexture.isPtrTo<MovieTexture>() )
+  else if ( std::dynamic_pointer_cast<MovieTexture>(pTexture) )
   {
-    textureData = interpretMovieTexture( pTexture.staticCast<MovieTexture>() );
+    textureData = interpretMovieTexture(std::static_pointer_cast<MovieTexture>(pTexture));
   }
   else
   {
-    DP_ASSERT( pTexture.isPtrTo<PixelTexture>() );
-    textureData = interpretPixelTexture( pTexture.staticCast<PixelTexture>() );
+    DP_ASSERT( std::dynamic_pointer_cast<PixelTexture>(pTexture) );
+    textureData = interpretPixelTexture(std::static_pointer_cast<PixelTexture>(pTexture));
   }
   return( textureData );
 }
@@ -3911,7 +3911,7 @@ dp::sg::core::ObjectSharedPtr  WRLLoader::interpretViewpoint( ViewpointSharedPtr
 
   m_scene->addCamera( pc );
 
-  return( dp::sg::core::ObjectSharedPtr::null );
+  return( dp::sg::core::ObjectSharedPtr() );
 }
 
 bool  WRLLoader::isValidScaling( PositionInterpolatorSharedPtr const& pPositionInterpolator ) const
@@ -4103,7 +4103,7 @@ AppearanceSharedPtr WRLLoader::readAppearance( const string &nodeName )
     if ( token == "material" )
     {
       readSFNode( pAppearance, pAppearance->material, getNextToken() );
-      if ( pAppearance->material && ! pAppearance->material.isPtrTo<vrml::Material>() )
+      if ( pAppearance->material && ! std::dynamic_pointer_cast<vrml::Material>(pAppearance->material) )
       {
         onUnsupportedToken( "Appearance.material", pAppearance->material->getType() );
         pAppearance->material.reset();
@@ -4112,7 +4112,7 @@ AppearanceSharedPtr WRLLoader::readAppearance( const string &nodeName )
     else if ( token == "texture" )
     {
       readSFNode( pAppearance, pAppearance->texture, getNextToken() );
-      if ( pAppearance->texture && ! pAppearance->texture.isPtrTo<vrml::Texture>() )
+      if ( pAppearance->texture && ! std::dynamic_pointer_cast<vrml::Texture>(pAppearance->texture) )
       {
         onUnsupportedToken( "Appearance.texture", pAppearance->texture->getType() );
         pAppearance->texture.reset();
@@ -4121,7 +4121,7 @@ AppearanceSharedPtr WRLLoader::readAppearance( const string &nodeName )
     else if ( token == "textureTransform" )
     {
       readSFNode( pAppearance, pAppearance->textureTransform, getNextToken() );
-      if ( pAppearance->textureTransform && ! pAppearance->textureTransform.isPtrTo<TextureTransform>() )
+      if ( pAppearance->textureTransform && ! std::dynamic_pointer_cast<TextureTransform>(pAppearance->textureTransform) )
       {
         onUnsupportedToken( "Appearance.textureTransform", pAppearance->textureTransform->getType() );
         pAppearance->textureTransform.reset();
@@ -4942,8 +4942,8 @@ void  WRLLoader::readIndex( vector<SFInt32> &mf )
 
 bool removeCollinearPoint( IndexedFaceSetSharedPtr const& pIndexedFaceSet, unsigned int i0, unsigned int i1, unsigned int i2 )
 {
-  DP_ASSERT( pIndexedFaceSet->coord.isPtrTo<Coordinate>() );
-  CoordinateSharedPtr const& pC = pIndexedFaceSet->coord.staticCast<Coordinate>();
+  DP_ASSERT( std::dynamic_pointer_cast<Coordinate>(pIndexedFaceSet->coord) );
+  CoordinateSharedPtr const& pC = std::static_pointer_cast<Coordinate>(pIndexedFaceSet->coord);
   Vec3f e0 = pC->point[pIndexedFaceSet->coordIndex[i1]] - pC->point[pIndexedFaceSet->coordIndex[i0]];
   Vec3f e1 = pC->point[pIndexedFaceSet->coordIndex[i2]] - pC->point[pIndexedFaceSet->coordIndex[i1]];
   if ( length( e0 ^ e1 ) <= FLT_EPSILON )
@@ -4951,16 +4951,16 @@ bool removeCollinearPoint( IndexedFaceSetSharedPtr const& pIndexedFaceSet, unsig
     bool remove = true;
     if ( pIndexedFaceSet->color && pIndexedFaceSet->colorPerVertex && ! pIndexedFaceSet->colorIndex.empty() )
     {
-      DP_ASSERT( pIndexedFaceSet->color.isPtrTo<Color>() );
-      ColorSharedPtr const& pColor = pIndexedFaceSet->color.staticCast<Color>();
+      DP_ASSERT( std::dynamic_pointer_cast<Color>(pIndexedFaceSet->color) );
+      ColorSharedPtr const& pColor = std::static_pointer_cast<Color>(pIndexedFaceSet->color);
       Vec3f dc0 = pColor->color[pIndexedFaceSet->colorIndex[i1]] - pColor->color[pIndexedFaceSet->colorIndex[i0]];
       Vec3f dc1 = pColor->color[pIndexedFaceSet->colorIndex[i2]] - pColor->color[pIndexedFaceSet->colorIndex[i1]];
       remove = ( length( dc0 / length( e0 ) - dc1 / length( e1 ) ) < FLT_EPSILON );
     }
     if ( remove && pIndexedFaceSet->normal && pIndexedFaceSet->normalPerVertex && ! pIndexedFaceSet->normalIndex.empty() )
     {
-      DP_ASSERT( pIndexedFaceSet->normal.isPtrTo<Normal>() );
-      NormalSharedPtr const& pNormal = pIndexedFaceSet->normal.staticCast<Normal>();
+      DP_ASSERT( std::dynamic_pointer_cast<Normal>(pIndexedFaceSet->normal) );
+      NormalSharedPtr const& pNormal = std::static_pointer_cast<Normal>(pIndexedFaceSet->normal);
       Vec3f nxn0 = pNormal->vector[pIndexedFaceSet->normalIndex[i0]] ^ pNormal->vector[pIndexedFaceSet->normalIndex[i1]];
       Vec3f nxn1 = pNormal->vector[pIndexedFaceSet->normalIndex[i1]] ^ pNormal->vector[pIndexedFaceSet->normalIndex[i2]];
       float c0 = pNormal->vector[pIndexedFaceSet->normalIndex[i0]] * pNormal->vector[pIndexedFaceSet->normalIndex[i1]];
@@ -4970,8 +4970,8 @@ bool removeCollinearPoint( IndexedFaceSetSharedPtr const& pIndexedFaceSet, unsig
     }
     if ( remove && pIndexedFaceSet->texCoord && ! pIndexedFaceSet->texCoordIndex.empty() )
     {
-      DP_ASSERT( pIndexedFaceSet->texCoord.isPtrTo<TextureCoordinate>() );
-      TextureCoordinateSharedPtr const& pTextureCoordinate = pIndexedFaceSet->texCoord.staticCast<TextureCoordinate>();
+      DP_ASSERT( std::dynamic_pointer_cast<TextureCoordinate>(pIndexedFaceSet->texCoord) );
+      TextureCoordinateSharedPtr const& pTextureCoordinate = std::static_pointer_cast<TextureCoordinate>(pIndexedFaceSet->texCoord);
       Vec2f dt0 = pTextureCoordinate->point[pIndexedFaceSet->texCoordIndex[i1]] - pTextureCoordinate->point[pIndexedFaceSet->texCoordIndex[i0]];
       Vec2f dt1 = pTextureCoordinate->point[pIndexedFaceSet->texCoordIndex[i2]] - pTextureCoordinate->point[pIndexedFaceSet->texCoordIndex[i1]];
       remove = ( length( dt0 / length( e0 ) - dt1 / length( e1 ) ) < FLT_EPSILON );
@@ -5001,31 +5001,31 @@ bool removeCollinearPoint( IndexedFaceSetSharedPtr const& pIndexedFaceSet, unsig
 
 bool removeRedundantPoint( IndexedFaceSetSharedPtr const& pIndexedFaceSet, unsigned int i0, unsigned int i1 )
 {
-  DP_ASSERT( pIndexedFaceSet->coord.isPtrTo<Coordinate>() );
-  CoordinateSharedPtr const& pC = pIndexedFaceSet->coord.staticCast<Coordinate>();
+  DP_ASSERT( std::dynamic_pointer_cast<Coordinate>(pIndexedFaceSet->coord) );
+  CoordinateSharedPtr const& pC = std::static_pointer_cast<Coordinate>(pIndexedFaceSet->coord);
   if (    ( pIndexedFaceSet->coordIndex[i0] == pIndexedFaceSet->coordIndex[i1] )
       ||  ( length( pC->point[pIndexedFaceSet->coordIndex[i1]] - pC->point[pIndexedFaceSet->coordIndex[i0]] ) < FLT_EPSILON ) )
   {
     bool remove = true;
     if ( pIndexedFaceSet->color && pIndexedFaceSet->colorPerVertex && ! pIndexedFaceSet->colorIndex.empty() )
     {
-      DP_ASSERT( pIndexedFaceSet->color.isPtrTo<Color>() );
-      ColorSharedPtr const& pColor = pIndexedFaceSet->color.staticCast<Color>();
+      DP_ASSERT( std::dynamic_pointer_cast<Color>(pIndexedFaceSet->color) );
+      ColorSharedPtr const& pColor = std::static_pointer_cast<Color>(pIndexedFaceSet->color);
       remove =    ( pIndexedFaceSet->colorIndex[i0] == pIndexedFaceSet->colorIndex[i1] )
                || ( length( pColor->color[pIndexedFaceSet->colorIndex[i1]] - pColor->color[pIndexedFaceSet->colorIndex[i0]] ) < FLT_EPSILON );
       DP_ASSERT( remove );    // never encountered this
     }
     if ( remove && pIndexedFaceSet->normal && pIndexedFaceSet->normalPerVertex && ! pIndexedFaceSet->normalIndex.empty() )
     {
-      DP_ASSERT( pIndexedFaceSet->normal.isPtrTo<Normal>() );
-      NormalSharedPtr const& pNormal = pIndexedFaceSet->normal.staticCast<Normal>();
+      DP_ASSERT( std::dynamic_pointer_cast<Normal>(pIndexedFaceSet->normal) );
+      NormalSharedPtr const& pNormal = std::static_pointer_cast<Normal>(pIndexedFaceSet->normal);
       remove =    ( pIndexedFaceSet->normalIndex[i0] == pIndexedFaceSet->normalIndex[i1] )
                || ( length( pNormal->vector[pIndexedFaceSet->normalIndex[i1]] - pNormal->vector[pIndexedFaceSet->normalIndex[i0]] ) < FLT_EPSILON );
     }
     if ( remove && pIndexedFaceSet->texCoord && ! pIndexedFaceSet->texCoordIndex.empty() )
     {
-      DP_ASSERT( pIndexedFaceSet->texCoord.isPtrTo<TextureCoordinate>() );
-      TextureCoordinateSharedPtr const& pTextureCoordinate = pIndexedFaceSet->texCoord.staticCast<TextureCoordinate>();
+      DP_ASSERT( std::dynamic_pointer_cast<TextureCoordinate>(pIndexedFaceSet->texCoord) );
+      TextureCoordinateSharedPtr const& pTextureCoordinate = std::static_pointer_cast<TextureCoordinate>(pIndexedFaceSet->texCoord);
       remove =    ( pIndexedFaceSet->texCoordIndex[i0] == pIndexedFaceSet->texCoordIndex[i1] )
                || ( length( pTextureCoordinate->point[pIndexedFaceSet->texCoordIndex[i1]] - pTextureCoordinate->point[pIndexedFaceSet->texCoordIndex[i0]] ) < FLT_EPSILON );
       DP_ASSERT( remove );    // never encountered this
@@ -5105,12 +5105,12 @@ IndexedFaceSetSharedPtr WRLLoader::readIndexedFaceSet( const string &nodeName )
       readSFNode( pIndexedFaceSet, pIndexedFaceSet->color, getNextToken() );
       if ( pIndexedFaceSet->color )
       {
-        if ( !pIndexedFaceSet->color.isPtrTo<Color>() )
+        if ( !std::dynamic_pointer_cast<Color>(pIndexedFaceSet->color) )
         {
           onUnsupportedToken( "IndexedFaceSet.color", pIndexedFaceSet->color->getType() );
           pIndexedFaceSet->color.reset();
         }
-        else if ( pIndexedFaceSet->color.staticCast<Color>()->color.empty() )
+        else if (std::static_pointer_cast<Color>(pIndexedFaceSet->color)->color.empty())
         {
           onEmptyToken( "IndexedFaceSet", "color" );
           pIndexedFaceSet->color.reset();
@@ -5122,12 +5122,12 @@ IndexedFaceSetSharedPtr WRLLoader::readIndexedFaceSet( const string &nodeName )
       readSFNode( pIndexedFaceSet, pIndexedFaceSet->coord, getNextToken() );
       if ( pIndexedFaceSet->coord )
       {
-        if ( ! pIndexedFaceSet->coord.isPtrTo<Coordinate>() )
+        if ( ! std::dynamic_pointer_cast<Coordinate>(pIndexedFaceSet->coord) )
         {
           onUnsupportedToken( "IndexedFaceSet.coord", pIndexedFaceSet->coord->getType() );
           pIndexedFaceSet->coord.reset();
         }
-        else if ( pIndexedFaceSet->coord.staticCast<Coordinate>()->point.empty() )
+        else if (std::static_pointer_cast<Coordinate>(pIndexedFaceSet->coord)->point.empty())
         {
           onEmptyToken( "IndexedFaceSet", "coord" );
           pIndexedFaceSet->coord.reset();
@@ -5139,12 +5139,12 @@ IndexedFaceSetSharedPtr WRLLoader::readIndexedFaceSet( const string &nodeName )
       readSFNode( pIndexedFaceSet, pIndexedFaceSet->normal, getNextToken() );
       if ( pIndexedFaceSet->normal )
       {
-        if ( !pIndexedFaceSet->normal.isPtrTo<Normal>() )
+        if ( !std::dynamic_pointer_cast<Normal>(pIndexedFaceSet->normal) )
         {
           onUnsupportedToken( "IndexedFaceSet.normal", pIndexedFaceSet->normal->getType() );
           pIndexedFaceSet->normal.reset();
         }
-        else if ( pIndexedFaceSet->normal.staticCast<Normal>()->vector.empty() )
+        else if (std::static_pointer_cast<Normal>(pIndexedFaceSet->normal)->vector.empty())
         {
           onEmptyToken( "IndexedFaceSet", "normal" );
           pIndexedFaceSet->normal.reset();
@@ -5156,12 +5156,12 @@ IndexedFaceSetSharedPtr WRLLoader::readIndexedFaceSet( const string &nodeName )
       readSFNode( pIndexedFaceSet, pIndexedFaceSet->texCoord, getNextToken() );
       if ( pIndexedFaceSet->texCoord )
       {
-        if ( ! pIndexedFaceSet->texCoord.isPtrTo<TextureCoordinate>() )
+        if ( ! std::dynamic_pointer_cast<TextureCoordinate>(pIndexedFaceSet->texCoord) )
         {
           onUnsupportedToken( "IndexedFaceSet.texCoord", pIndexedFaceSet->texCoord->getType() );
           pIndexedFaceSet->texCoord.reset();
         }
-        else if ( pIndexedFaceSet->texCoord.staticCast<TextureCoordinate>()->point.empty() )
+        else if (std::static_pointer_cast<TextureCoordinate>(pIndexedFaceSet->texCoord)->point.empty())
         {
           onEmptyToken( "IndexedFaceSet", "texCoord" );
           pIndexedFaceSet->texCoord.reset();
@@ -5279,8 +5279,8 @@ IndexedFaceSetSharedPtr WRLLoader::readIndexedFaceSet( const string &nodeName )
         // retest colorIndex on emptiness: might be cleared above
         if ( pIndexedFaceSet->colorIndex.empty() )
         {
-          DP_ASSERT( pIndexedFaceSet->color.staticCast<Color>()->color.size() <= INT_MAX );
-          int maxColorIndex = dp::checked_cast<int>(pIndexedFaceSet->color.staticCast<Color>()->color.size());
+          DP_ASSERT(std::static_pointer_cast<Color>(pIndexedFaceSet->color)->color.size() <= INT_MAX);
+          int maxColorIndex = dp::checked_cast<int>(std::static_pointer_cast<Color>(pIndexedFaceSet->color)->color.size());
           if ( maxColorIndex <= maxIndex )
           {
             onIncompatibleValues( maxIndex, maxColorIndex, "IndexedFaceSet", "coordIndex.size", "colors.max" );
@@ -5316,10 +5316,10 @@ IndexedFaceSetSharedPtr WRLLoader::readIndexedFaceSet( const string &nodeName )
         // retest colorIndex on emptiness: might be cleared above
         if ( pIndexedFaceSet->colorIndex.empty() )
         {
-          if ( pIndexedFaceSet->color.staticCast<Color>()->color.size() < numberOfFaces )
+          if (std::static_pointer_cast<Color>(pIndexedFaceSet->color)->color.size() < numberOfFaces)
           {
             onIncompatibleValues( numberOfFaces
-                                , dp::checked_cast<int>(pIndexedFaceSet->color.staticCast<Color>()->color.size())
+                                 , dp::checked_cast<int>(std::static_pointer_cast<Color>(pIndexedFaceSet->color)->color.size())
                                 , "IndexedFaceSet", "faces.size", "colors.size" );
             pIndexedFaceSet->color.reset();
           }
@@ -5368,7 +5368,7 @@ IndexedFaceSetSharedPtr WRLLoader::readIndexedFaceSet( const string &nodeName )
         // retest normalIndex on emptiness: might be cleared above
         if ( pIndexedFaceSet->normalIndex.empty() )
         {
-          int maxNormalIndex = dp::checked_cast<int>(pIndexedFaceSet->normal.staticCast<Normal>()->vector.size());
+          int maxNormalIndex = dp::checked_cast<int>(std::static_pointer_cast<Normal>(pIndexedFaceSet->normal)->vector.size());
           if ( maxNormalIndex <= maxIndex )
           {
             onIncompatibleValues( maxIndex, maxNormalIndex, "IndexedFaceSet", "coordIndex.max", "normals.size" );
@@ -5404,10 +5404,10 @@ IndexedFaceSetSharedPtr WRLLoader::readIndexedFaceSet( const string &nodeName )
         // retest normalIndex on emptiness: might be cleared above
         if ( pIndexedFaceSet->normalIndex.empty() )
         {
-          if ( pIndexedFaceSet->normal.staticCast<Normal>()->vector.size() < numberOfFaces )
+          if (std::static_pointer_cast<Normal>(pIndexedFaceSet->normal)->vector.size() < numberOfFaces)
           {
             onIncompatibleValues( numberOfFaces
-                                , dp::checked_cast<int>(pIndexedFaceSet->normal.staticCast<Normal>()->vector.size())
+                                 , dp::checked_cast<int>(std::static_pointer_cast<Normal>(pIndexedFaceSet->normal)->vector.size())
                                 , "IndexedFaceSet", "faces.size", "normals.size" );
             pIndexedFaceSet->normal.reset();
           }
@@ -5451,7 +5451,7 @@ IndexedFaceSetSharedPtr WRLLoader::readIndexedFaceSet( const string &nodeName )
       // retest texCoordIndex on emptiness: might be cleared above
       if ( pIndexedFaceSet->texCoordIndex.empty() )
       {
-        int maxTexCoordIndex = dp::checked_cast<int>(pIndexedFaceSet->texCoord.staticCast<TextureCoordinate>()->point.size());
+        int maxTexCoordIndex = dp::checked_cast<int>(std::static_pointer_cast<TextureCoordinate>(pIndexedFaceSet->texCoord)->point.size());
         if ( maxTexCoordIndex <= maxIndex )
         {
           onIncompatibleValues( maxIndex, maxTexCoordIndex, "IndexedFaceSet", "coordIndex.max", "texCoord.size" );
@@ -5461,10 +5461,10 @@ IndexedFaceSetSharedPtr WRLLoader::readIndexedFaceSet( const string &nodeName )
     }
 
     //  filter invalid indices
-    int numberOfPoints = dp::checked_cast<int>(pIndexedFaceSet->coord.staticCast<Coordinate>()->point.size());
-    int numberOfColors = pIndexedFaceSet->color ? dp::checked_cast<int>(pIndexedFaceSet->color.staticCast<Color>()->color.size()) : 0;
-    int numberOfNormals = pIndexedFaceSet->normal ? dp::checked_cast<int>(pIndexedFaceSet->normal.staticCast<Normal>()->vector.size()) : 0;
-    int numberOfTexCoords = pIndexedFaceSet->texCoord ? dp::checked_cast<int>(pIndexedFaceSet->texCoord.staticCast<TextureCoordinate>()->point.size()) : 0;
+    int numberOfPoints = dp::checked_cast<int>(std::static_pointer_cast<Coordinate>(pIndexedFaceSet->coord)->point.size());
+    int numberOfColors = pIndexedFaceSet->color ? dp::checked_cast<int>(std::static_pointer_cast<Color>(pIndexedFaceSet->color)->color.size()) : 0;
+    int numberOfNormals = pIndexedFaceSet->normal ? dp::checked_cast<int>(std::static_pointer_cast<Normal>(pIndexedFaceSet->normal)->vector.size()) : 0;
+    int numberOfTexCoords = pIndexedFaceSet->texCoord ? dp::checked_cast<int>(std::static_pointer_cast<TextureCoordinate>(pIndexedFaceSet->texCoord)->point.size()) : 0;
     for ( unsigned int i=0 ; i<pIndexedFaceSet->coordIndex.size() ; )
     {
       if ( pIndexedFaceSet->coordIndex[i] != -1 )
@@ -5707,7 +5707,7 @@ IndexedLineSetSharedPtr WRLLoader::readIndexedLineSet( const string &nodeName )
     if ( token == "color" )
     {
       readSFNode( pIndexedLineSet, pIndexedLineSet->color, getNextToken() );
-      if ( pIndexedLineSet->color && ! pIndexedLineSet->color.isPtrTo<Color>() )
+      if ( pIndexedLineSet->color && ! std::dynamic_pointer_cast<Color>(pIndexedLineSet->color) )
       {
         onUnsupportedToken( "IndexedLineSet.color", pIndexedLineSet->color->getType() );
         pIndexedLineSet->color.reset();
@@ -5716,7 +5716,7 @@ IndexedLineSetSharedPtr WRLLoader::readIndexedLineSet( const string &nodeName )
     else if ( token == "coord" )
     {
       readSFNode( pIndexedLineSet, pIndexedLineSet->coord, getNextToken() );
-      if ( pIndexedLineSet->coord && ! pIndexedLineSet->coord.isPtrTo<Coordinate>() )
+      if ( pIndexedLineSet->coord && ! std::dynamic_pointer_cast<Coordinate>(pIndexedLineSet->coord) )
       {
         onUnsupportedToken( "IndexedLineSet.coord", pIndexedLineSet->coord->getType() );
         pIndexedLineSet->coord.reset();
@@ -6379,8 +6379,8 @@ void  WRLLoader::readROUTE( const SFNode currentNode )
       onUnsupportedToken( "ROUTE", toAction );
     }
     else if (   ( toAction == "set_scale" )
-            &&  ! (   fromNode.isPtrTo<PositionInterpolator>()
-                  &&  isValidScaling( fromNode.staticCast<PositionInterpolator>() ) ) )
+            &&  ! (   std::dynamic_pointer_cast<PositionInterpolator>(fromNode)
+                   && isValidScaling(std::static_pointer_cast<PositionInterpolator>(fromNode))))
     {
       onInvalidValue( 0, "ROUTE eventInName", toAction );
     }
@@ -6390,85 +6390,85 @@ void  WRLLoader::readROUTE( const SFNode currentNode )
     }
     else
     {
-      if ( fromNode.isPtrTo<ColorInterpolator>() )
+      if ( std::dynamic_pointer_cast<ColorInterpolator>(fromNode) )
       {
         if ( fromAction != "value_changed" )
         {
           onUnsupportedToken( "ROUTE eventOutName", fromAction );
         }
-        else if ( ! toNode.isPtrTo<Color>() )
+        else if ( ! std::dynamic_pointer_cast<Color>(toNode) )
         {
           onUnsupportedToken( "ROUTE nodeInName", toNode->getType() );
         }
         else if ( ( toAction == "set_color" ) || ( toAction == "color" ) )
         {
-          toNode.staticCast<Color>()->set_color = fromNode.staticCast<ColorInterpolator>();
+          std::static_pointer_cast<Color>(toNode)->set_color = std::static_pointer_cast<ColorInterpolator>(fromNode);
         }
         else
         {
           onUnsupportedToken( "ROUTE eventInName", toAction );
         }
       }
-      else if ( fromNode.isPtrTo<CoordinateInterpolator>() )
+      else if ( std::dynamic_pointer_cast<CoordinateInterpolator>(fromNode) )
       {
         if ( fromAction != "value_changed" )
         {
           onUnsupportedToken( "ROUTE eventOutName", fromAction );
         }
-        else if ( ! toNode.isPtrTo<Coordinate>() )
+        else if ( ! std::dynamic_pointer_cast<Coordinate>(toNode) )
         {
           onUnsupportedToken( "ROUTE nodeInName", toNode->getType() );
         }
         else if ( ( toAction == "set_point" ) || ( toAction == "point" ) )
         {
-          toNode.staticCast<Coordinate>()->set_point = fromNode.staticCast<CoordinateInterpolator>();
+          std::static_pointer_cast<Coordinate>(toNode)->set_point = std::static_pointer_cast<CoordinateInterpolator>(fromNode);
         }
         else
         {
           onUnsupportedToken( "ROUTE eventInName", toAction );
         }
       }
-      else if ( fromNode.isPtrTo<NormalInterpolator>() )
+      else if ( std::dynamic_pointer_cast<NormalInterpolator>(fromNode) )
       {
         if ( fromAction != "value_changed" )
         {
           onUnsupportedToken( "ROUTE eventOutName", fromAction );
         }
-        else if ( ! toNode.isPtrTo<Normal>() )
+        else if ( ! std::dynamic_pointer_cast<Normal>(toNode) )
         {
           onUnsupportedToken( "ROUTE nodeInName", toNode->getType() );
         }
         else if ( ( toAction == "set_vector" ) || ( toAction == "vector" ) )
         {
-          toNode.staticCast<Normal>()->set_vector = fromNode.staticCast<NormalInterpolator>();
+          std::static_pointer_cast<Normal>(toNode)->set_vector = std::static_pointer_cast<NormalInterpolator>(fromNode);
         }
         else
         {
           onUnsupportedToken( "ROUTE eventInName", toAction );
         }
       }
-      else if ( fromNode.isPtrTo<OrientationInterpolator>() )
+      else if ( std::dynamic_pointer_cast<OrientationInterpolator>(fromNode) )
       {
         if ( fromAction != "value_changed" )
         {
           onUnsupportedToken( "ROUTE eventOutName", fromAction );
         }
-        if ( toNode.isPtrTo<vrml::Transform>() )
+        if ( std::dynamic_pointer_cast<vrml::Transform>(toNode) )
         {
           if ( ( toAction == "set_rotation" ) || ( toAction == "rotation" ) )
           {
-            toNode.staticCast<vrml::Transform>()->set_rotation = fromNode.staticCast<OrientationInterpolator>();
+            std::static_pointer_cast<vrml::Transform>(toNode)->set_rotation = std::static_pointer_cast<OrientationInterpolator>(fromNode);
           }
           else
           {
             onUnsupportedToken( "ROUTE eventInName", toAction );
           }
         }
-        else if ( toNode.isPtrTo<Viewpoint>() )
+        else if ( std::dynamic_pointer_cast<Viewpoint>(toNode) )
         {
           if ( ( toAction == "set_orientation" ) || ( toAction == "orientation" ) )
           {
-            toNode.staticCast<Viewpoint>()->set_orientation = fromNode.staticCast<OrientationInterpolator>();
+            std::static_pointer_cast<Viewpoint>(toNode)->set_orientation = std::static_pointer_cast<OrientationInterpolator>(fromNode);
           }
           else
           {
@@ -6480,36 +6480,36 @@ void  WRLLoader::readROUTE( const SFNode currentNode )
           onUnsupportedToken( "ROUTE nodeInName", toNode->getType() );
         }
       }
-      else if ( fromNode.isPtrTo<PositionInterpolator>() )
+      else if ( std::dynamic_pointer_cast<PositionInterpolator>(fromNode) )
       {
         if ( fromAction != "value_changed" )
         {
           onUnsupportedToken( "ROUTE eventOutName", fromAction );
         }
-        if ( toNode.isPtrTo<vrml::Transform>() )
+        if ( std::dynamic_pointer_cast<vrml::Transform>(toNode) )
         {
           if ( ( toAction == "set_center" ) || ( toAction == "center" ) )
           {
-            toNode.staticCast<vrml::Transform>()->set_center = fromNode.staticCast<PositionInterpolator>();
+            std::static_pointer_cast<vrml::Transform>(toNode)->set_center = std::static_pointer_cast<PositionInterpolator>(fromNode);
           }
           else if ( ( toAction == "set_scale" ) || ( toAction == "scale" ) )
           {
-            toNode.staticCast<vrml::Transform>()->set_scale = fromNode.staticCast<PositionInterpolator>();
+            std::static_pointer_cast<vrml::Transform>(toNode)->set_scale = std::static_pointer_cast<PositionInterpolator>(fromNode);
           }
           else if ( ( toAction == "set_translation" ) || ( toAction == "translation" ) )
           {
-            toNode.staticCast<vrml::Transform>()->set_translation = fromNode.staticCast<PositionInterpolator>();
+            std::static_pointer_cast<vrml::Transform>(toNode)->set_translation = std::static_pointer_cast<PositionInterpolator>(fromNode);
           }
           else
           {
             onUnsupportedToken( "ROUTE eventInName", toAction );
           }
         }
-        else if ( toNode.isPtrTo<Viewpoint>() )
+        else if ( std::dynamic_pointer_cast<Viewpoint>(toNode) )
         {
           if ( ( toAction == "set_position" ) || ( toAction == "position" ) )
           {
-            toNode.staticCast<Viewpoint>()->set_position = fromNode.staticCast<PositionInterpolator>();
+            std::static_pointer_cast<Viewpoint>(toNode)->set_position = std::static_pointer_cast<PositionInterpolator>(fromNode);
           }
           else
           {
@@ -6521,17 +6521,17 @@ void  WRLLoader::readROUTE( const SFNode currentNode )
           onUnsupportedToken( "ROUTE nodeInName", toNode->getType() );
         }
       }
-      else if ( fromNode.isPtrTo<TimeSensor>() )
+      else if ( std::dynamic_pointer_cast<TimeSensor>(fromNode) )
       {
         if ( fromAction != "fraction_changed" )
         {
           onUnsupportedToken( "ROUTE eventOutName", fromAction );
         }
-        else if ( toNode.isPtrTo<Interpolator>() )
+        else if ( std::dynamic_pointer_cast<Interpolator>(toNode) )
         {
           if ( ( toAction == "set_fraction" ) || ( toAction == "fraction" ) )
           {
-            toNode.staticCast<Interpolator>()->set_fraction = fromNode.staticCast<TimeSensor>();
+            std::static_pointer_cast<Interpolator>(toNode)->set_fraction = std::static_pointer_cast<TimeSensor>(fromNode);
           }
           else
           {
@@ -6623,7 +6623,7 @@ ScriptSharedPtr WRLLoader::readScript( const string &nodeName )
 #else
   onUnsupportedToken( "VRMLLoader", "Script" );
   ignoreBlock( "{", "}", getNextToken() );
-  return( ScriptSharedPtr::null );
+  return( ScriptSharedPtr() );
 #endif
 }
 
@@ -6727,7 +6727,7 @@ void  WRLLoader::readSFNode( const SFNode fatherNode, SFNode &n, string &token )
   }
   else if ( token == "NULL" )
   {
-    n = SFNode::null;
+    n = SFNode();
   }
   else if ( token == "USE" )
   {
@@ -6805,7 +6805,7 @@ vrml::ShapeSharedPtr WRLLoader::readShape( const string &nodeName )
     if ( token == "appearance" )
     {
       readSFNode( pShape, pShape->appearance, getNextToken() );
-      if ( pShape->appearance && ! pShape->appearance.isPtrTo<Appearance>() )
+      if ( pShape->appearance && ! std::dynamic_pointer_cast<Appearance>(pShape->appearance) )
       {
         onUnsupportedToken( "Shape.appearance", pShape->appearance->getType() );
         pShape->appearance.reset();
@@ -6818,7 +6818,7 @@ vrml::ShapeSharedPtr WRLLoader::readShape( const string &nodeName )
       {
         onEmptyToken( "Shape", "geometry" );
       }
-      else if ( ! pShape->geometry.isPtrTo<vrml::Geometry>() )
+      else if ( ! std::dynamic_pointer_cast<vrml::Geometry>(pShape->geometry) )
       {
         onUnsupportedToken( "Shape.geometry", pShape->geometry->getType() );
         pShape->geometry.reset();
@@ -7031,12 +7031,12 @@ void  WRLLoader::readStatements( void )
     }
     else if ( token == "ROUTE" )
     {
-      readROUTE( SFNode::null );
+      readROUTE( SFNode() );
     }
     else
     {
       SFNode  n;
-      readSFNode( SFNode::null, n, token );
+      readSFNode( SFNode(), n, token );
       if ( n )
       {
         m_topLevelGroup->children.push_back( n );

@@ -1,4 +1,4 @@
-// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -386,11 +386,11 @@ namespace dp
         {
           Vec3f cl = Vec3f( Vec4f( sphere.getCenter(), 1.0f ) * m_transformStack.getModelToWorld() ) - m_camera->getPosition();
           float cd = cl * m_camera->getDirection();
-          if ( m_camera.isPtrTo<FrustumCamera>() )
+          if ( std::dynamic_pointer_cast<FrustumCamera>(m_camera) )
           {
             //  if near/far clipping, intersection is valid only if the sphere is not behind the far plane
             //  and not in front of the near plane
-            FrustumCameraSharedPtr const& fc = m_camera.staticCast<FrustumCamera>();
+            FrustumCameraSharedPtr const& fc = std::static_pointer_cast<FrustumCamera>(m_camera);
             intersects = ( ( cd - r ) <= fc->getFarDistance() ) && ( fc->getNearDistance() <= ( cd + r ) );
           }
           else
@@ -419,9 +419,9 @@ namespace dp
         bool outOfView = m_camClipping;
         if ( m_camClipping )
         {
-          if ( m_camera.isPtrTo<FrustumCamera>() )
+          if ( std::dynamic_pointer_cast<FrustumCamera>(m_camera) )
           {
-            FrustumCameraSharedPtr const& fc = m_camera.staticCast<FrustumCamera>();
+            FrustumCameraSharedPtr const& fc = std::static_pointer_cast<FrustumCamera>(m_camera);
             outOfView = ( cdist < fc->getNearDistance() ) || ( fc->getFarDistance() < cdist );
           }
           else

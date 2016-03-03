@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2005
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -104,7 +104,7 @@ namespace dp
             }
           }
 
-          return result; 
+          return result;
         }
 
         bool  TrackballTransformManipulator::pan()
@@ -113,9 +113,9 @@ namespace dp
           int dyScreen = getLastY() - getCurrentY();
           if ( dxScreen || dyScreen )
           {
-            DP_ASSERT( getViewState()->getCamera().isPtrTo<FrustumCamera>() );
-            TransformSharedPtr transform = m_transformPath->getTail().staticCast<Transform>();
-            FrustumCameraSharedPtr const& camera = getViewState()->getCamera().staticCast<FrustumCamera>();
+            DP_ASSERT( std::dynamic_pointer_cast<FrustumCamera>(getViewState()->getCamera()) );
+            TransformSharedPtr transform = std::static_pointer_cast<Transform>(m_transformPath->getTail());
+            FrustumCameraSharedPtr const& camera = std::static_pointer_cast<FrustumCamera>(getViewState()->getCamera());
             if ( camera && transform )
             {
               unsigned int rtWidth = getRenderTarget()->getWidth();
@@ -144,7 +144,7 @@ namespace dp
                   {
                     dyScreen = 0;
                   }
-                  else 
+                  else
                   {
                     return false;
                   }
@@ -165,13 +165,13 @@ namespace dp
                 Vec4f viewCenter( centerWindowSize[0] * dxScreen / rtWidth
                                 , centerWindowSize[1] * dyScreen / rtHeight, 0.f, 0.f );
                 Vec4f modelDelta = viewCenter * v2w * w2m;
-        
+
                 // add the delta to the translation of the transform
                 Trafo trafo = transform->getTrafo();
                 trafo.setTranslation( trafo.getTranslation() + Vec3f( modelDelta ) );
                 transform->setTrafo( trafo );
 
-                return true;  
+                return true;
               }
             }
           }
@@ -182,9 +182,9 @@ namespace dp
         {
           if ( ( getCurrentX() != getLastX() ) || ( getCurrentY() != getLastY() ) )
           {
-            DP_ASSERT( getViewState()->getCamera().isPtrTo<FrustumCamera>() );
-            TransformSharedPtr transform = m_transformPath->getTail().staticCast<Transform>();
-            FrustumCameraSharedPtr const& camera = getViewState()->getCamera().staticCast<FrustumCamera>();
+            DP_ASSERT( std::dynamic_pointer_cast<FrustumCamera>(getViewState()->getCamera()) );
+            TransformSharedPtr transform = std::static_pointer_cast<Transform>(m_transformPath->getTail());
+            FrustumCameraSharedPtr const& camera = std::static_pointer_cast<FrustumCamera>(getViewState()->getCamera());
             if ( camera && transform )
             {
               unsigned int rtWidth    = getRenderTarget()->getWidth();
@@ -216,7 +216,7 @@ namespace dp
                 //  center of the object in screen space
                 Vec2f centerS( rtWidth * ( 1 + centerNS[0] ) / 2, rtHeight * ( 1 - centerNS[1] ) / 2 );
 
-                //  move the input points relative to the center 
+                //  move the input points relative to the center
                 //  move the input points absolutely
                 //Vec2f last( m_orbitCursor );
                 Vec2f last( getLastCursorPosition() );
@@ -241,7 +241,7 @@ namespace dp
                 float angle;
                 m_trackball.setSize( radius );
                 m_trackball.apply( p0, p1, axis, angle );
-        
+
                 float dx = p1[0]-p0[0];
                 float dy = p1[1]-p0[1];
 
@@ -258,11 +258,11 @@ namespace dp
                 }
                 else if ( m_activeLockAxis[static_cast<size_t>(Axis::Y)] )
                 {
-                  if ( dy < 0 ) 
+                  if ( dy < 0 )
                     axis = Vec3f(1.f, 0.f, 0.f);
-                  else if ( dy > 0) 
+                  else if ( dy > 0)
                     axis = Vec3f(-1.f, 0.f, 0.f);
-                  else 
+                  else
                     return false;
                 }
 
@@ -303,9 +303,9 @@ namespace dp
 
           if ( dyScreen )
           {
-            DP_ASSERT( getViewState()->getCamera().isPtrTo<FrustumCamera>() );
-            TransformSharedPtr transform = m_transformPath->getTail().staticCast<Transform>();
-            FrustumCameraSharedPtr const& camera = getViewState()->getCamera().staticCast<FrustumCamera>();
+            DP_ASSERT( std::dynamic_pointer_cast<FrustumCamera>(getViewState()->getCamera()) );
+            TransformSharedPtr transform = std::static_pointer_cast<Transform>(m_transformPath->getTail());
+            FrustumCameraSharedPtr const& camera = std::static_pointer_cast<FrustumCamera>(getViewState()->getCamera());
             if ( camera && transform )
             {
               unsigned int rtWidth = getRenderTarget()->getWidth();

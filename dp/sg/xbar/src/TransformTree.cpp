@@ -1,4 +1,4 @@
-// Copyright (c) 2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2015-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -192,7 +192,7 @@ namespace dp
         }
         m_dirtyTransforms.traverseBits([&](size_t index)
         {
-            m_transforms[index].local = m_transformInfos[index].object.inplaceCast<dp::sg::core::Transform>()->getMatrix();
+            m_transforms[index].local = std::static_pointer_cast<dp::sg::core::Transform>(m_transformInfos[index].object)->getMatrix();
             m_dirtyWorldMatrices.enableBit(index);
         } );
 
@@ -203,7 +203,7 @@ namespace dp
           {
             dp::math::Mat44f parentMatrix = m_transforms[billboardEntry.parent].world;
             parentMatrix.invert();
-            dp::math::Trafo t = m_transformInfos[billboardEntry.transform].object.inplaceCast<dp::sg::core::Billboard>()->getTrafo(camera, parentMatrix);
+            dp::math::Trafo t = std::static_pointer_cast<dp::sg::core::Billboard>(m_transformInfos[billboardEntry.transform].object)->getTrafo(camera, parentMatrix);
             m_transforms[billboardEntry.transform].local = t.getMatrix();
 
             m_transforms[billboardEntry.transform].world = m_transforms[billboardEntry.transform].local * m_transforms[billboardEntry.parent].world;

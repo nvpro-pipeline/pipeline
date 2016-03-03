@@ -203,15 +203,15 @@ namespace dp
 
       bool Billboard::isEquivalent( ObjectSharedPtr const& object, bool ignoreNames, bool deepCompare ) const
       {
-        if ( object == this )
+        if ( object.get() == this )
         {
           return( true );
         }
 
-        bool equi = object.isPtrTo<Billboard>() && Group::isEquivalent( object, ignoreNames, deepCompare );
+        bool equi = std::dynamic_pointer_cast<Billboard>(object) && Group::isEquivalent( object, ignoreNames, deepCompare );
         if ( equi )
         {
-          BillboardSharedPtr const& b = object.staticCast<Billboard>();
+          BillboardSharedPtr const& b = std::static_pointer_cast<Billboard>(object);
           equi = ( m_alignment == b->m_alignment )
               && ( ( m_alignment != Alignment::AXIS ) || ( m_rotationAxis == b->m_rotationAxis ) );
         }

@@ -1,4 +1,4 @@
-// Copyright (c) 2009-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2009-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -485,7 +485,7 @@ namespace dp
         triPatches->setVertexAttributeSet( vas );
 
         // Create a GeoNode and add the geometry
-        return GeoNodeSharedPtr::null;
+        return GeoNodeSharedPtr();
       }
 
       // ===========================================================================
@@ -578,7 +578,7 @@ namespace dp
         patches->setVertexAttributeSet( vas );
 
         // Create a GeoNode and add the geometry
-        return( GeoNodeSharedPtr::null );
+        return( GeoNodeSharedPtr() );
       }
 
       // ===========================================================================
@@ -1906,7 +1906,7 @@ namespace dp
               trafo.setTranslation( translation );
               dp::sg::core::TransformSharedPtr transform = dp::sg::core::Transform::create();
               transform->setTrafo( trafo );
-              transform->addChild( clone ? node->clone().inplaceCast<dp::sg::core::Node>() : node );
+              transform->addChild(clone ? std::static_pointer_cast<dp::sg::core::Node>(node->clone()) : node);
               group->addChild( transform );
 
               translation[2] += bboxSize[2];

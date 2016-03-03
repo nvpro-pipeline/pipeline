@@ -1,4 +1,4 @@
-// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -174,7 +174,7 @@ namespace dp
         SgRdrBackend::~SgRdrBackend()
         {
           //The Sg Renderer must be destroyed prior to destroying the window
-          m_renderer = dp::sg::renderer::rix::gl::SceneRendererSharedPtr::null;
+          m_renderer = dp::sg::renderer::rix::gl::SceneRendererSharedPtr();
           if ( m_windowId )
           {
             glutDestroyWindow( m_windowId );
@@ -220,7 +220,7 @@ namespace dp
 
           dp::ui::RenderTargetSharedPtr displayTarget = dp::gl::RenderTargetFB::create( dp::gl::RenderContext::create( dp::gl::RenderContext::Attach() ) );
           displayTarget->setSize(width, height);
-          displayTarget.inplaceCast<dp::gl::RenderTargetFB>()->setClearMask( dp::gl::TBM_COLOR_BUFFER | dp::gl::TBM_DEPTH_BUFFER );
+          std::static_pointer_cast<dp::gl::RenderTargetFB>(displayTarget)->setClearMask(dp::gl::TBM_COLOR_BUFFER | dp::gl::TBM_DEPTH_BUFFER);
 
           return displayTarget;
         }

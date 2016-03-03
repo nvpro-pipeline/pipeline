@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2015
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -37,11 +37,11 @@ using namespace dp::sg::core;
 using namespace std;
 
 
-namespace 
+namespace
 {
 
   template <unsigned int n, typename T>
-  void copyVertexDataNT( VertexAttributeSetSharedPtr const& dst, VertexAttributeSetSharedPtr const& src, VertexAttributeSet::AttributeID attrib, 
+  void copyVertexDataNT( VertexAttributeSetSharedPtr const& dst, VertexAttributeSetSharedPtr const& src, VertexAttributeSet::AttributeID attrib,
                          IndexSet::ConstIterator<unsigned int> indices, unsigned int count, unsigned int pri )
   {
     vector<Vecnt<n,T> > a;
@@ -52,7 +52,7 @@ namespace
     for ( unsigned int i = 0; i < count; i++ )
     {
       unsigned int idx = indices[i];
-      
+
       // Skip primitive restart index. Mind that there has been a destripping traverser applied before.
       if ( idx != pri )
       {
@@ -66,7 +66,7 @@ namespace
 
 
   template <unsigned int n>
-  void copyVertexDataN( VertexAttributeSetSharedPtr const& dst, VertexAttributeSetSharedPtr const& src, VertexAttributeSet::AttributeID attrib, 
+  void copyVertexDataN( VertexAttributeSetSharedPtr const& dst, VertexAttributeSetSharedPtr const& src, VertexAttributeSet::AttributeID attrib,
                         IndexSet::ConstIterator<unsigned int> indices, unsigned int count, unsigned int pri )
   {
     switch( src->getTypeOfVertexData( attrib ) )
@@ -180,7 +180,7 @@ namespace dp
         vash->setEnabled( attribute, ovas->isEnabled( attribute ) );
       }
 
-      p->setIndexSet( dp::sg::core::IndexSetSharedPtr::null );        // Remove the IndexSet from this primitive.
+      p->setIndexSet( dp::sg::core::IndexSetSharedPtr() );        // Remove the IndexSet from this primitive.
       p->setVertexAttributeSet( vash ); // Replace with the new de-indexed VertexAttributeSet.
       p->setElementRange( 0, ~0 );      // Use the whole VertexAttributeSet.
       setTreeModified();

@@ -133,9 +133,9 @@ namespace dp
       void BufferGL::getData( size_t srcOffset, size_t size, const core::BufferSharedPtr &dstBuffer , size_t dstOffset) const
       {
         // check if we support GL buffer copy at all, and if other obj is a BufferGL
-        if ( (m_stateFlags & State::CAPABILITY_COPY) && dstBuffer.isPtrTo<BufferGL>() )
+        if ( (m_stateFlags & State::CAPABILITY_COPY) && std::dynamic_pointer_cast<BufferGL>(dstBuffer) )
         {
-          copy( m_buffer, dstBuffer.staticCast<BufferGL>()->m_buffer, srcOffset, dstOffset, size );
+          copy( m_buffer, std::static_pointer_cast<BufferGL>(dstBuffer)->m_buffer, srcOffset, dstOffset, size );
         }
         else
         {
@@ -146,9 +146,9 @@ namespace dp
       void BufferGL::setData( size_t dstOffset, size_t size, const core::BufferSharedPtr &srcBuffer , size_t srcOffset)
       {
         // check if we support GL buffer copy at all, and if other obj is a BufferGL
-        if ( (m_stateFlags & State::CAPABILITY_COPY) && srcBuffer.isPtrTo<BufferGL>() )
+        if ( (m_stateFlags & State::CAPABILITY_COPY) && std::dynamic_pointer_cast<BufferGL>(srcBuffer) )
         {
-          copy( srcBuffer.staticCast<BufferGL>()->m_buffer, m_buffer, srcOffset, dstOffset, size );
+          copy( std::static_pointer_cast<BufferGL>(srcBuffer)->m_buffer, m_buffer, srcOffset, dstOffset, size );
         }
         else
         {

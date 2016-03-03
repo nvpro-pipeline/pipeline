@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -27,7 +27,6 @@
 #include <dp/Types.h>
 #include <dp/sg/core/TextureFile.h>
 #include <dp/util/Observer.h>
-#include <dp/util/WeakPtr.h>
 #include <boost/make_shared.hpp>
 
 namespace dp
@@ -65,7 +64,7 @@ namespace dp
         };
 
         static TextureFileCache & instance();
-        
+
         typedef std::map<std::string const, std::shared_ptr<Payload> > TextureFileMap;
         TextureFileMap m_cache;
       };
@@ -86,7 +85,7 @@ namespace dp
 
 
       TextureFileCache & TextureFileCache::instance()
-      { 
+      {
         static TextureFileCache cache;
         return cache;
       }
@@ -103,7 +102,7 @@ namespace dp
           PayloadSharedPtr payload = Payload::create();
           payload->m_filename = filename;
           TextureFileSharedPtr textureFile = std::shared_ptr<TextureFile>( new TextureFile( filename, textureTarget ) );
-          payload->m_textureFile = textureFile.getWeakPtr();
+          payload->m_textureFile = textureFile;
           textureFile->attach( &self, payload.operator->() );   // Big Hack !!
           it = self.m_cache.insert( std::make_pair( filename, payload) ).first;
           return textureFile;
@@ -111,8 +110,8 @@ namespace dp
         else
         {
           // else assert that the textureTarget hasn't changed.
-          DP_ASSERT( it->second->m_textureFile->getTextureTarget() == textureTarget );
-          return it->second->m_textureFile.getSharedPtr();
+          DP_ASSERT( it->second->m_textureFile.lock()->getTextureTarget() == textureTarget );
+          return it->second->m_textureFile.lock();
         }
       }
 
@@ -148,15 +147,15 @@ namespace dp
 
       bool TextureFile::isEquivalent( TextureSharedPtr const& texture, bool deepCompare ) const
       {
-        if ( texture == this )
+        if ( texture.get() == this )
         {
           return( true );
         }
 
-        bool equi = texture.isPtrTo<TextureFile>() && Texture::isEquivalent( texture, deepCompare );
+        bool equi = std::dynamic_pointer_cast<TextureFile>(texture) && Texture::isEquivalent( texture, deepCompare );
         if ( equi )
         {
-          TextureFileSharedPtr const& tf = texture.staticCast<TextureFile>();
+          TextureFileSharedPtr const& tf = std::static_pointer_cast<TextureFile>(texture);
           equi = ( m_filename == tf->m_filename );
         }
         return( equi );

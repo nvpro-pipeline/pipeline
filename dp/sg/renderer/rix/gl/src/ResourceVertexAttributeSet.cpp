@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -65,9 +65,9 @@ namespace dp
             m_resourceManager->unsubscribe( this );
           }
 
-          const dp::sg::core::HandledObjectSharedPtr& ResourceVertexAttributeSet::getHandledObject() const
+          dp::sg::core::HandledObjectSharedPtr ResourceVertexAttributeSet::getHandledObject() const
           {
-            return m_vertexAttributeSet.inplaceCast<dp::sg::core::HandledObject>();
+            return std::static_pointer_cast<dp::sg::core::HandledObject>(m_vertexAttributeSet);
           }
 
           void ResourceVertexAttributeSet::update()
@@ -85,7 +85,7 @@ namespace dp
             unsigned int currentStream = 0;
 
             std::vector<dp::sg::core::BufferSharedPtr> streams;
-      
+
             for ( unsigned int i = 0; i < 16; ++i ) // FIXME Must match MAX_ATTRIBUTES, but that is only defined in inc\RendererAPI\RendererGL.h
             {
               dp::sg::core::VertexAttribute va = m_vertexAttributeSet->getVertexAttribute( static_cast<dp::sg::core::VertexAttributeSet::AttributeID>(i) );
@@ -95,7 +95,7 @@ namespace dp
                 ResourceBufferSharedPtr resourceBuffer = ResourceBuffer::get(va.getBuffer(), m_resourceManager );
                 //resourceVertexAttributeSet->m_resourceBuffers.push_back( resourceBuffer );
                 resourceBuffers.push_back( resourceBuffer );
-          
+
                 std::vector<dp::sg::core::BufferSharedPtr>::iterator it = std::find( streams.begin(), streams.end(), va.getBuffer() );
                 if ( it == streams.end() )
                 {

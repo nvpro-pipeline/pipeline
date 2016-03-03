@@ -80,7 +80,7 @@ namespace dp
           }
 
           ShaderManager::ShaderManager( SceneTreeSharedPtr const& sceneTree, const ResourceManagerSharedPtr& resourceManager, TransparencyManagerSharedPtr const & transparencyManager )
-            : m_sceneTree( sceneTree.getWeakPtr() )
+            : m_sceneTree( sceneTree )
             , m_resourceManager( resourceManager )
             , m_environmentSampler( nullptr )
             , m_transparencyManager( transparencyManager )
@@ -96,7 +96,7 @@ namespace dp
             {
               m_environmentSampler = sampler;
 
-              m_environmentResourceSampler = sampler ? ResourceSampler::get( sampler, m_resourceManager ) : ResourceSamplerSharedPtr::null;
+              m_environmentResourceSampler = sampler ? ResourceSampler::get( sampler, m_resourceManager ) : ResourceSamplerSharedPtr();
               updateFragmentParameter( "sys_EnvironmentSampler", dp::rix::core::ContainerDataSampler( m_environmentResourceSampler ? m_environmentResourceSampler->m_samplerHandle : nullptr ) );
               bool enabled = !!m_environmentResourceSampler;
               updateFragmentParameter( "sys_EnvironmentSamplerEnabled", dp::rix::core::ContainerDataRaw( 0, &enabled, sizeof(bool) ) );
@@ -129,7 +129,7 @@ namespace dp
                                                                                   RenderPassType rpt )
           {
             DP_ASSERT( !"should not hit this path");
-            return ShaderManagerInstanceSharedPtr::null;
+            return ShaderManagerInstanceSharedPtr();
           }
 
           void ShaderManager::update( dp::sg::ui::ViewStateSharedPtr const& viewState )
@@ -224,7 +224,7 @@ namespace dp
           }
 
           ShaderManagerLights::ShaderManagerLights( SceneTreeSharedPtr const& sceneTree, const ResourceManagerSharedPtr& resourceManager )
-            : m_sceneTree( sceneTree.getWeakPtr() )
+            : m_sceneTree( sceneTree )
             , m_resourceManager( resourceManager )
           {
             // create light descriptor
@@ -296,7 +296,7 @@ namespace dp
             }
 
             // copy scene lights
-            dp::sg::xbar::SceneTreeSharedPtr sceneTree = m_sceneTree.getSharedPtr();
+            dp::sg::xbar::SceneTreeSharedPtr sceneTree = m_sceneTree.lock();
             DP_ASSERT( sceneTree );
             dp::sg::xbar::TransformTree::Transforms const & transforms = sceneTree->getTransformTree().getTransforms();
             std::set< ObjectTreeIndex > const & lightSources = sceneTree->getLightSources();
@@ -304,7 +304,7 @@ namespace dp
             {
               ObjectTreeNode& otn = sceneTree->getObjectTreeNode(*itLight);
 
-              dp::sg::core::LightSourceSharedPtr ls = otn.m_object.staticCast<dp::sg::core::LightSource>();
+              dp::sg::core::LightSourceSharedPtr ls = std::static_pointer_cast<dp::sg::core::LightSource>(otn.m_object);
 
               ShaderLight &light = lightState.lights[lightId];
 

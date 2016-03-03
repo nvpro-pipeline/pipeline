@@ -145,7 +145,7 @@ void TerrainRenderer::setDuration( double duration )
 
 void TerrainRenderer::paint()
 {
-  dp::sg::renderer::rix::gl::SceneRendererSharedPtr renderer = getSceneRenderer().staticCast<dp::sg::renderer::rix::gl::SceneRenderer>();
+  dp::sg::renderer::rix::gl::SceneRendererSharedPtr renderer = std::static_pointer_cast<dp::sg::renderer::rix::gl::SceneRenderer>(getSceneRenderer());
   if ( !m_renderEngine.empty() && renderer->getRenderEngine() != m_renderEngine )
   {
     std::cout << "Setting renderengine: " << m_renderEngine << std::endl;

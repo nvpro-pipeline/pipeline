@@ -815,19 +815,19 @@ namespace dp
 
           m_updateTimer.start();
 
-          PID_Mouse_Left = getProperty( "Mouse_Left" ); 
+          PID_Mouse_Left = getProperty( "Mouse_Left" );
           m_propMouse_Left = false;
 
-          PID_Mouse_Middle = getProperty( "Mouse_Middle" ); 
+          PID_Mouse_Middle = getProperty( "Mouse_Middle" );
           m_propMouse_Middle = false;
 
-          PID_Mouse_Right = getProperty( "Mouse_Right" ); 
+          PID_Mouse_Right = getProperty( "Mouse_Right" );
           m_propMouse_Right = false;
 
           PID_Mouse_Position = getProperty( "Mouse_Position" );
-          m_propMouse_Position = dp::math::Vec2i(0,0); 
+          m_propMouse_Position = dp::math::Vec2i(0,0);
 
-          PID_Mouse_Wheel = getProperty("Mouse_Wheel"); 
+          PID_Mouse_Wheel = getProperty("Mouse_Wheel");
           m_propMouse_Wheel = 0;
 
 
@@ -937,7 +937,7 @@ namespace dp
         void Widget::paint()
         {
           BindWidget bind( m_windowId );
-         
+
           if ( m_showFPS )
           {
             double elapsedSeconds = m_frameRateTimer.getTime();
@@ -1153,9 +1153,9 @@ namespace dp
           }
         }
 
-        dp::gl::RenderContextSharedPtr const& Widget::getRenderContext() const
+        dp::gl::RenderContextSharedPtr Widget::getRenderContext() const
         {
-          return m_renderTarget ? m_renderTarget->getRenderContext() : dp::gl::RenderContextSharedPtr::null;
+          return m_renderTarget ? m_renderTarget->getRenderContext() : dp::gl::RenderContextSharedPtr();
         }
 
         dp::gl::RenderTargetSharedPtr  const& Widget::getRenderTarget() const

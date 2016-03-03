@@ -34,7 +34,6 @@
 #include <dp/util/BitMask.h>
 #include <dp/util/Flags.h>
 #include <dp/util/StridedIterator.h>
-#include <dp/util/WeakPtr.h>
 #include <cstring>
 
 namespace dp

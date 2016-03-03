@@ -1,4 +1,4 @@
-// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -457,11 +457,11 @@ uint_t DPBFSaveTraverser::handleScene( SceneSharedPtr const& scene )
       for ( unsigned int i=0; i<scenePtr->numObjectLinks ; ++i )
       {
         // write offset
-        DP_ASSERT( m_objectOffsetMap.find( m_links[i].subject.getSharedPtr() ) != m_objectOffsetMap.end() );
-        DP_ASSERT( m_objectOffsetMap.find( m_links[i].observer.getSharedPtr() ) != m_objectOffsetMap.end() );
+        DP_ASSERT( m_objectOffsetMap.find( m_links[i].subject.lock() ) != m_objectOffsetMap.end() );
+        DP_ASSERT( m_objectOffsetMap.find( m_links[i].observer.lock() ) != m_objectOffsetMap.end() );
         links[i].linkID = m_links[i].id;
-        links[i].subject = m_objectOffsetMap[m_links[i].subject.getSharedPtr()];
-        links[i].observer = m_objectOffsetMap[m_links[i].observer.getSharedPtr()];
+        links[i].subject = m_objectOffsetMap[m_links[i].subject.lock()];
+        links[i].observer = m_objectOffsetMap[m_links[i].observer.lock()];
       }
     }
 
@@ -728,9 +728,9 @@ void DPBFSaveTraverser::handleSampler( const Sampler * p )
       pseudoAlloc(sizeof(texImage_t));    // a Sampler maintains a Texture
 
       const TextureSharedPtr & texture = p->getTexture();
-      if ( texture && texture.isPtrTo<TextureHost>() )
+      if ( texture && std::dynamic_pointer_cast<TextureHost>(texture) )
       {
-        TextureHostSharedPtr const& th = p->getTexture().staticCast<TextureHost>();
+        TextureHostSharedPtr const& th = std::static_pointer_cast<TextureHost>(p->getTexture());
         if ( ! th->getFileName().empty() )
         {
           // determine storage requirements for the image file name
@@ -752,11 +752,11 @@ void DPBFSaveTraverser::handleSampler( const Sampler * p )
 
       // ... texture image
       const TextureSharedPtr & texture = p->getTexture();
-      if ( texture && texture.isPtrTo<TextureHost>() )
+      if ( texture && std::dynamic_pointer_cast<TextureHost>(texture) )
       {
         Offset_AutoPtr<texImage_t> img(this, samplerPtr->texture);
 
-        TextureHostSharedPtr const& th = p->getTexture().staticCast<TextureHost>();
+        TextureHostSharedPtr const& th = std::static_pointer_cast<TextureHost>(p->getTexture());
         string file(th->getFileName());
         writeTexImage( file, th, img );
       }

@@ -127,13 +127,13 @@ namespace dp
         DP_GL_API virtual void unbind( AttachmentTarget target ) = 0;
       };
 
-      typedef dp::util::SharedPtr<Attachment> SharedAttachment;
+      typedef std::shared_ptr<Attachment> SharedAttachment;
 
       /*********************/
       /* AttachmentTexture */
       /*********************/
       class AttachmentTexture;
-      typedef dp::util::SharedPtr<AttachmentTexture> SharedAttachmentTexture;
+      typedef std::shared_ptr<AttachmentTexture> SharedAttachmentTexture;
 
       /** \brief Class to attach a dp::gl::Texture object to a RenderTargetFBO object.
           \sa nvgl::RenderTargetFBO::setAttachment */
@@ -264,7 +264,7 @@ namespace dp
       /* AttachmentRenderbuffer */
       /**************************/
       class AttachmentRenderbuffer;
-      typedef dp::util::SharedPtr<AttachmentRenderbuffer> SharedAttachmentRenderbuffer;
+      typedef std::shared_ptr<AttachmentRenderbuffer> SharedAttachmentRenderbuffer;
 
       /** \brief Class to attach an OpenGL renderbuffer to an nvgl::RenderTargetFBO.
           \sa nvgl::RenderTargetFBO::setAttachment */
@@ -326,9 +326,9 @@ namespace dp
       DP_GL_API static RenderTargetFBOSharedPtr create( const RenderContextSharedPtr &glContext );
 
       DP_GL_API virtual ~RenderTargetFBO();
- 
-      DP_GL_API virtual dp::util::ImageSharedPtr getImage( 
-        dp::PixelFormat pixelFormat = dp::PixelFormat::BGRA, 
+
+      DP_GL_API virtual dp::util::ImageSharedPtr getImage(
+        dp::PixelFormat pixelFormat = dp::PixelFormat::BGRA,
         dp::DataType pixelDataType = dp::DataType::UNSIGNED_INT_8,
         unsigned int index = 0 );
 
@@ -475,23 +475,23 @@ namespace dp
           x(0), y(0), width(0), height(0)
         {
         }
-      
+
         int x;
         int y;
         int width;
         int height;
       };
 
-   
-      DP_GL_API void blit( const RenderTargetFBOSharedPtr & destination, const BlitMask & mask = BlitMask::COLOR_BUFFER_BIT, 
+
+      DP_GL_API void blit( const RenderTargetFBOSharedPtr & destination, const BlitMask & mask = BlitMask::COLOR_BUFFER_BIT,
                           const BlitFilter & filter = BlitFilter::NEAREST );
-      DP_GL_API void blit( const RenderTargetFBSharedPtr & destination, const BlitMask & mask = BlitMask::COLOR_BUFFER_BIT, 
+      DP_GL_API void blit( const RenderTargetFBSharedPtr & destination, const BlitMask & mask = BlitMask::COLOR_BUFFER_BIT,
                           const BlitFilter & filter = BlitFilter::NEAREST );
-      DP_GL_API void blit( const RenderTargetFBOSharedPtr & destination, const BlitMask & mask, 
-                          const BlitFilter & filter, const BlitRegion & destRegion, 
+      DP_GL_API void blit( const RenderTargetFBOSharedPtr & destination, const BlitMask & mask,
+                          const BlitFilter & filter, const BlitRegion & destRegion,
                           const BlitRegion & srcRegion );
-      DP_GL_API void blit( const RenderTargetFBSharedPtr & destination, const BlitMask & mask, 
-                          const BlitFilter & filter, const BlitRegion & destRegion, 
+      DP_GL_API void blit( const RenderTargetFBSharedPtr & destination, const BlitMask & mask,
+                          const BlitFilter & filter, const BlitRegion & destRegion,
                           const BlitRegion & srcRegion );
 
       /** \brief Get the OpenGL framebuffer name of this object.
@@ -503,7 +503,7 @@ namespace dp
           \return true if framebuffer objects are supported, false otherwise.
       **/
       DP_GL_API static bool isSupported();
-    
+
       /** \brief Test if multiple rendertargets are supported.
           \return true if multiple rendertargets are supported, false otherwise.
       **/

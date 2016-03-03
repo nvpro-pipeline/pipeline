@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -88,7 +88,7 @@ namespace dp
               void setPayload( const PayloadSharedPtr &payload );
               const PayloadSharedPtr &getPayload() const;
 
-              virtual const dp::sg::core::HandledObjectSharedPtr& getHandledObject() const;
+              virtual dp::sg::core::HandledObjectSharedPtr getHandledObject() const;
 
             protected:
               Resource( );
@@ -140,7 +140,7 @@ namespace dp
             static ResourceManagerSharedPtr create( dp::rix::core::Renderer* renderer, dp::fx::Manager shaderManagerType );
             ~ResourceManager();
 
-            template <typename ResourceType> dp::util::SharedPtr<ResourceType> getResource( size_t key );
+            template <typename ResourceType> std::shared_ptr<ResourceType> getResource(size_t key);
             void registerResource( size_t key, const WeakResource &m_resource );
             void unregisterResource( size_t key );
 
@@ -169,11 +169,11 @@ namespace dp
 
           // TODO move actual code to cpp and write template wrapper for cast? What about ABI compatibility
           template <typename ResourceType>
-          dp::util::SharedPtr<ResourceType> ResourceManager::getResource( size_t key )
+          std::shared_ptr<ResourceType> ResourceManager::getResource(size_t key)
           {
             ResourceMap::iterator it = m_resources.find( key );
             DP_ASSERT( it == m_resources.end() || (it != m_resources.end() && dynamic_cast<ResourceType*>( it->second )));
-            return (it != m_resources.end()) ? dp::util::SharedPtr<Resource>(it->second->shared_from_this()).inplaceCast<ResourceType>() : dp::util::SharedPtr<ResourceType>::null;
+            return (it != m_resources.end()) ? std::static_pointer_cast<ResourceType>(std::shared_ptr<Resource>(it->second->shared_from_this())) : std::shared_ptr<ResourceType>();
           }
 
         } // namespace gl

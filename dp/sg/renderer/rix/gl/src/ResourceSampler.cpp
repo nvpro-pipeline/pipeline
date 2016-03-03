@@ -65,9 +65,9 @@ namespace dp
             m_resourceManager->unsubscribe( this );
           }
 
-          const dp::sg::core::HandledObjectSharedPtr& ResourceSampler::getHandledObject() const
+          dp::sg::core::HandledObjectSharedPtr ResourceSampler::getHandledObject() const
           {
-            return m_sampler.inplaceCast<dp::sg::core::HandledObject>();
+            return std::static_pointer_cast<dp::sg::core::HandledObject>(m_sampler);
           }
 
           void ResourceSampler::update()

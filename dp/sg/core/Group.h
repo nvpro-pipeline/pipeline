@@ -1,4 +1,4 @@
-// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -438,7 +438,6 @@ namespace dp
         Event( GroupSharedPtr const& group, Type type )
           : core::Event( core::Event::Type::GROUP )
           , m_group( group )
-          , m_child( NodeSharedPtr::null )
           , m_index( ~0 )
           , m_type( type )
         {
@@ -454,7 +453,7 @@ namespace dp
       private:
         GroupSharedPtr const& m_group;
         Type                  m_type;
-        const NodeSharedPtr&  m_child;
+        const NodeSharedPtr   m_child;
         unsigned int          m_index;
       };
 

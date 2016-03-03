@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -36,12 +36,12 @@ namespace dp
       class TreeResourceGroup
       {
       public:
-        static dp::util::SharedPtr<TreeResourceGroup<ResourceType>> create()
+        static std::shared_ptr<TreeResourceGroup<ResourceType>> create()
         {
           return( std::shared_ptr<TreeResourceGroup<ResourceType>>( new TreeResourceGroup<ResourceType>() ) );
         }
 
-        static dp::util::SharedPtr<TreeResourceGroup<ResourceType>> create( dp::util::SharedPtr<TreeResourceGroup<ResourceType>> const& rhs )
+        static std::shared_ptr<TreeResourceGroup<ResourceType>> create(std::shared_ptr<TreeResourceGroup<ResourceType>> const& rhs)
         {
           return( std::shared_ptr<TreeResourceGroup<ResourceType>>( new TreeResourceGroup<ResourceType>( rhs ) ) );
         }
@@ -51,24 +51,24 @@ namespace dp
         {
         }
 
-        TreeResourceGroup( dp::util::SharedPtr<TreeResourceGroup<ResourceType>> const& rhs )
+        TreeResourceGroup( std::shared_ptr<TreeResourceGroup<ResourceType>> const& rhs )
           : m_group( rhs->m_group )
         {
         }
 
       public:
-        void add( dp::util::SharedPtr<ResourceType> const& object )
+      void add(std::shared_ptr<ResourceType> const& object)
         {
           m_group.push_back( object );
         }
 
-        std::vector<dp::util::SharedPtr<ResourceType>> const& getVector() const
+      std::vector<std::shared_ptr<ResourceType>> const& getVector() const
         {
           return m_group;
         }
 
       protected:
-        std::vector<dp::util::SharedPtr<ResourceType>>  m_group;
+      std::vector<std::shared_ptr<ResourceType>>  m_group;
       };
 
     } // namespace xbar

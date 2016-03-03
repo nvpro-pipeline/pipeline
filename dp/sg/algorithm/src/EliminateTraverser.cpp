@@ -72,10 +72,10 @@ namespace dp
 
         NodeSharedPtr oldRoot(root);
         {
-          if (  ( ( m_eliminateTargets & Target::LOD )                                    && ( oldRoot.isPtrTo<LOD>() ) )
-            ||  ( ( m_eliminateTargets & ( Target::GROUP | Target::GROUP_SINGLE_CHILD ) ) && ( oldRoot.isPtrTo<Group>() ) ) )
+          if (  ( ( m_eliminateTargets & Target::LOD )                                    && ( std::dynamic_pointer_cast<LOD>(oldRoot) ) )
+            ||  ( ( m_eliminateTargets & ( Target::GROUP | Target::GROUP_SINGLE_CHILD ) ) && ( std::dynamic_pointer_cast<Group>(oldRoot) ) ) )
           {
-            GroupSharedPtr const& group = oldRoot.staticCast<Group>();
+            GroupSharedPtr const& group = std::static_pointer_cast<Group>(oldRoot);
             if ( m_scene &&  isOneChildCandidate( group ) ) // Apply this optimization only if we have valid scene handle,
                                                             // and root, as a group node, has only one child
             {
@@ -172,7 +172,7 @@ namespace dp
               &&  ( p->getIndexSet()->getNumberOfIndices() == p->getVertexAttributeSet()->getNumberOfVertices() )
               &&  isFlatIndexSet( p->getIndexSet(), p->getElementOffset(), p->getElementCount() ) )
           {
-            p->setIndexSet( IndexSetSharedPtr::null );
+            p->setIndexSet( IndexSetSharedPtr() );
             setTreeModified();
           }
         }
@@ -227,15 +227,15 @@ namespace dp
 
         for ( Group::ChildrenIterator gci = p->beginChildren() ; gci != p->endChildren() ; ++gci )
         {
-          if ( gci->isPtrTo<Group>() )
+          if ( std::dynamic_pointer_cast<Group>(*gci) )
           {
             bool isJoint = false;
-            if( gci->isPtrTo<Transform>() )
+            if( std::dynamic_pointer_cast<Transform>(*gci) )
             {
-              isJoint = gci->staticCast<Transform>()->isJoint();
+              isJoint = std::static_pointer_cast<Transform>(*gci)->isJoint();
             }
 
-            GroupSharedPtr const& group = gci->staticCast<Group>();
+            GroupSharedPtr const& group = std::static_pointer_cast<Group>(*gci);
             if (    ( getIgnoreNames() || group->getName().empty() )        // only unnamed or if names are to be ignored
                 &&  optimizationAllowed( group )                            // only if optimization is allowed
                 &&  (   (   ( group->getObjectCode() == ObjectCode::GROUP )          // replace a Group (and only a Group)
@@ -256,14 +256,14 @@ namespace dp
 
           for ( Group::ChildrenIterator gci = p->beginChildren() ; gci != p->endChildren() ; ++gci )
           {
-            if ( !gci->isPtrTo<Group>() || ( groups.find( gci->inplaceCast<dp::sg::core::Group>() ) == groups.end() ) )
+            if ( !std::dynamic_pointer_cast<Group>(*gci) || ( groups.find( std::static_pointer_cast<dp::sg::core::Group>(*gci) ) == groups.end() ) )
             {
               newChildren.push_back( *gci );
             }
             else
             {
-              DP_ASSERT( gci->isPtrTo<Group>() );
-              GroupSharedPtr const& group = gci->staticCast<Group>();
+              DP_ASSERT( std::dynamic_pointer_cast<Group>(*gci) );
+              GroupSharedPtr const& group = std::static_pointer_cast<Group>(*gci);
               for ( Group::ChildrenIterator grandChild = group->beginChildren() ; grandChild != group->endChildren() ; ++grandChild )
               {
                 (*grandChild)->addHints( group->getHints() );
@@ -291,9 +291,9 @@ namespace dp
 
         for ( Group::ChildrenIterator gci = p->beginChildren() ; gci != p->endChildren() ; ++gci )
         {
-          if( gci->isPtrTo<Group>() )
+          if( std::dynamic_pointer_cast<Group>(*gci) )
           {
-            GroupSharedPtr const& group = gci->staticCast<Group>();
+            GroupSharedPtr const& group = std::static_pointer_cast<Group>(*gci);
             if ( group->getObjectCode() == objectCode )
             {
               if ( isOneChildCandidate( group ) )

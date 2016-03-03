@@ -181,7 +181,7 @@ namespace dp
           void unifyGroups( dp::sg::core::Group *p );
           void unifyIndexSets( dp::sg::core::Primitive *p );
           void unifyLODs( dp::sg::core::Group *p );
-          const dp::sg::core::PipelineDataSharedPtr & unifyPipelineData( const dp::sg::core::PipelineDataSharedPtr & pipelineData );
+          dp::sg::core::PipelineDataSharedPtr unifyPipelineData( const dp::sg::core::PipelineDataSharedPtr & pipelineData );
           void unifyStateSet( dp::sg::core::GeoNode *p );
           void unifyVertexAttributeSet( dp::sg::core::Primitive *p );
 

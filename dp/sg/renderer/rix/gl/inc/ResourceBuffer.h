@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -50,7 +50,7 @@ namespace dp
             static ResourceBufferSharedPtr get( const dp::sg::core::BufferSharedPtr &buffer, const ResourceManagerSharedPtr& resourceManager );
             virtual ~ResourceBuffer();
 
-            virtual const dp::sg::core::HandledObjectSharedPtr& getHandledObject() const;
+            virtual dp::sg::core::HandledObjectSharedPtr getHandledObject() const;
             virtual void update();
 
             dp::rix::core::BufferSharedHandle  m_bufferHandle;

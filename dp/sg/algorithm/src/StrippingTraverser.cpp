@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2005
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -140,7 +140,7 @@ namespace dp
         }
         strippedIndices.pop_back();      // remove the last pri again
 
-        dp::sg::core::IndexSetSharedPtr strippedIndexSet = m_strip->getIndexSet().clone();
+        dp::sg::core::IndexSetSharedPtr strippedIndexSet = std::static_pointer_cast<dp::sg::core::IndexSet>(m_strip->getIndexSet()->clone());
         strippedIndexSet->setData( &strippedIndices[0], dp::checked_cast<unsigned int>(strippedIndices.size()) );
         strippedIndexSet->setPrimitiveRestartIndex( ~0 );
 

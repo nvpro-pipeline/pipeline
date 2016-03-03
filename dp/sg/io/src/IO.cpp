@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012-2015
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -58,8 +58,8 @@ namespace dp
         dp::util::FileFinder localFF( fileFinder );
         localFF.addSearchPath( dp::util::getCurrentPath() );
         localFF.addSearchPath( dp::util::getModulePath() );
-        
-        // receive the unique scene loader plug interface ID from the file extension 
+
+        // receive the unique scene loader plug interface ID from the file extension
         std::string ext = dp::util::getFileExtension( filename );
         dp::util::UPIID piid = dp::util::UPIID( ext.c_str(), dp::util::UPITID( UPITID_SCENE_LOADER, UPITID_VERSION ) );
 
@@ -69,7 +69,7 @@ namespace dp
           {
             throw std::runtime_error( std::string( "Scene Plugin not found: " + ext ) );
           }
-          SceneLoaderSharedPtr loader = plug.staticCast<SceneLoader>();
+          SceneLoaderSharedPtr loader = std::static_pointer_cast<SceneLoader>(plug);
           loader->setCallback( callback );
 
           // add the scene path, if it's not the current path (-> dir.empty()) and not yet added
@@ -93,7 +93,7 @@ namespace dp
           catch (...)
           {
             // TODO another non RAII pattern, callback should be passed to load
-            loader->setCallback( dp::util::PlugInCallbackSharedPtr::null );
+            loader->setCallback( dp::util::PlugInCallbackSharedPtr() );
             throw;
           }
           if ( !scene )
@@ -136,7 +136,7 @@ namespace dp
           dp::util::PlugInSharedPtr plug;
           if ( getInterface( fileFinder, piid, plug ) )
           {
-            SceneSaverSharedPtr ss = plug.staticCast<SceneSaver>();
+            SceneSaverSharedPtr ss = std::static_pointer_cast<SceneSaver>(plug);
             try
             {
               dp::sg::core::SceneSharedPtr scene( viewState->getScene() ); // DAR HACK Change SceneSaver interface later.
@@ -170,7 +170,7 @@ namespace dp
           dp::util::PlugInSharedPtr plug;
           if ( getInterface( fileFinder, piid, plug ) )
           {
-            TextureSaverSharedPtr ts = plug.staticCast<TextureSaver>();
+            TextureSaverSharedPtr ts = std::static_pointer_cast<TextureSaver>(plug);
             retval = ts->save( tih, filename );
           }
         }
@@ -201,7 +201,7 @@ namespace dp
             dp::util::PlugInSharedPtr plug;
             if ( getInterface( fileFinder, piid, plug ) )
             {
-              TextureLoaderSharedPtr tl = plug.staticCast<TextureLoader>();
+              TextureLoaderSharedPtr tl = std::static_pointer_cast<TextureLoader>(plug);
               tih = tl->load( foundFile );
             }
           }

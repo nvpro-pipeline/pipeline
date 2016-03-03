@@ -678,15 +678,15 @@ namespace dp
 
       bool VertexAttributeSet::isEquivalent( ObjectSharedPtr const& object, bool ignoreNames, bool deepCompare ) const
       {
-        if ( object == this )
+        if ( object.get() == this )
         {
           return( true );
         }
 
-        bool equi = object.isPtrTo<VertexAttributeSet>() && Object::isEquivalent( object, ignoreNames, deepCompare );
+        bool equi = std::dynamic_pointer_cast<VertexAttributeSet>(object) && Object::isEquivalent( object, ignoreNames, deepCompare );
         if ( equi )
         {
-          VertexAttributeSetSharedPtr const& vas = object.staticCast<VertexAttributeSet>();
+          VertexAttributeSetSharedPtr const& vas = std::static_pointer_cast<VertexAttributeSet>(object);
 
           equi = ( m_vattribs.size() == vas->m_vattribs.size() );
           for ( AttributeContainer::const_iterator thisit = m_vattribs.begin(), thatit = vas->m_vattribs.begin()

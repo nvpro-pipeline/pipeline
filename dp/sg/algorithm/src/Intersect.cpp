@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -47,7 +47,7 @@ namespace dp
         renderTarget->getSize( windowWidth, windowHeight );
 
         dp::sg::core::CameraSharedPtr pCam = viewStatePtr->getCamera();
-        if ( pCam && pCam.isPtrTo<dp::sg::core::FrustumCamera>() ) // requires a frustum camera attached to the ViewState
+        if ( pCam && std::dynamic_pointer_cast<dp::sg::core::FrustumCamera>(pCam) ) // requires a frustum camera attached to the ViewState
         {
           picker = std::make_shared<RayIntersectTraverser>();
 
@@ -55,7 +55,7 @@ namespace dp
           dp::math::Vec3f rayOrigin;
           dp::math::Vec3f rayDir;
 
-          pCam.staticCast<dp::sg::core::FrustumCamera>()->getPickRay( windowX, windowHeight - 1 - windowY, windowWidth, windowHeight, rayOrigin, rayDir );
+          std::static_pointer_cast<dp::sg::core::FrustumCamera>(pCam)->getPickRay( windowX, windowHeight - 1 - windowY, windowWidth, windowHeight, rayOrigin, rayDir );
 
           // run the intersect traverser for intersections with the given ray
           picker->setRay( rayOrigin, rayDir );

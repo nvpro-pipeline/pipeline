@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -52,7 +52,7 @@ namespace dp
 
             ~ResourceIndexSet();
 
-            virtual const dp::sg::core::HandledObjectSharedPtr& getHandledObject() const;
+            virtual dp::sg::core::HandledObjectSharedPtr getHandledObject() const;
             virtual void update();
 
             dp::rix::core::IndicesSharedHandle m_indicesHandle;

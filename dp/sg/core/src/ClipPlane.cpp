@@ -1,4 +1,4 @@
-// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -99,15 +99,15 @@ namespace dp
 
       bool ClipPlane::isEquivalent( ObjectSharedPtr const& object , bool ignoreNames, bool deepCompare) const
       {
-        if ( object == this )
+        if ( object.get() == this )
         {
           return( true );
         }
 
-        bool equi = object.isPtrTo<ClipPlane>() && Object::isEquivalent( object, ignoreNames, deepCompare );
+        bool equi = std::dynamic_pointer_cast<ClipPlane>(object) && Object::isEquivalent( object, ignoreNames, deepCompare );
         if ( equi )
         {
-          ClipPlaneSharedPtr const& plane = object.staticCast<ClipPlane>();
+          ClipPlaneSharedPtr const& plane = std::static_pointer_cast<ClipPlane>(object);
           equi = ( m_plane == plane->m_plane ) && ( m_enabled == plane->m_enabled );
         }
         return( equi );

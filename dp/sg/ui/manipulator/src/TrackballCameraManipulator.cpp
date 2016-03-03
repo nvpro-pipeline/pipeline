@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2013
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -392,7 +392,7 @@ namespace dp
 
               int currentX = getCurrentX();
               int currentY = getCurrentY();
-      
+
               Vec2f p0( (float(lastX) - halfWndX)  / halfWndX
                       , (float(halfWndY) - lastY)  / halfWndY);
 
@@ -458,7 +458,7 @@ namespace dp
             DP_ASSERT(getRenderTarget()->getHeight());
 
             CameraSharedPtr cameraHdl = m_viewState->getCamera();
-            if (cameraHdl && cameraHdl.isPtrTo<FrustumCamera>() )
+            if (cameraHdl && std::dynamic_pointer_cast<FrustumCamera>(cameraHdl) )
             {
               // calculate ray origin and direction from the input point
               int vpW = getRenderTarget()->getWidth();
@@ -466,7 +466,7 @@ namespace dp
               int pkX = getCurrentX();       // at mouse-up, not mouse-down
               int pkY = vpH - getCurrentY(); // pick point is lower-left-relative
 
-              cameraHdl.staticCast<FrustumCamera>()->getPickRay(pkX, pkY, vpW, vpH, rayOrigin, rayDir);
+              std::static_pointer_cast<FrustumCamera>(cameraHdl)->getPickRay(pkX, pkY, vpW, vpH, rayOrigin, rayDir);
 
               // run the intersect traverser for intersections with the given ray
               dp::sg::algorithm::RayIntersectTraverser picker;
@@ -508,7 +508,7 @@ namespace dp
             DP_ASSERT(getRenderTarget()->getHeight());
 
             CameraSharedPtr cameraHdl = m_viewState->getCamera();
-            if (cameraHdl && cameraHdl.isPtrTo<FrustumCamera>() )
+            if (cameraHdl && std::dynamic_pointer_cast<FrustumCamera>(cameraHdl) )
             {
               Vec3f rayOrigin;
               Vec3f rayDir;
@@ -532,8 +532,8 @@ namespace dp
 
                 GLint viewport[4];
                 unsigned int width, height;
-                getRenderTarget().inplaceCast<dp::gl::RenderTarget>()->getPosition( viewport[0], viewport[1] );
-                getRenderTarget().inplaceCast<dp::gl::RenderTarget>()->getSize( width, height );
+                std::static_pointer_cast<dp::gl::RenderTarget>(getRenderTarget())->getPosition(viewport[0], viewport[1]);
+                std::static_pointer_cast<dp::gl::RenderTarget>(getRenderTarget())->getSize(width, height);
                 width = GLint(width);
                 height = GLint(height);
 
@@ -543,7 +543,7 @@ namespace dp
                 dp::math::Vec3f pickPointFloat(pickPoint);
                 getViewState()->setTargetDistance( dp::math::length( camera->getPosition() - pickPointFloat ) );
 
-                cameraHdl.staticCast<FrustumCamera>()->getPickRay(pkX, pkY, vpW, vpH, rayOrigin, rayDir);
+                std::static_pointer_cast<FrustumCamera>(cameraHdl)->getPickRay(pkX, pkY, vpW, vpH, rayOrigin, rayDir);
                 camera->setPosition( rayOrigin );
                 camera->setDirection( rayDir );
 

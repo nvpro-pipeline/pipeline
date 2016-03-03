@@ -57,7 +57,7 @@ namespace dp
             {
               resourceTexture = std::shared_ptr<ResourceTexture>( new ResourceTexture( texture, resourceManager ) );
             }
-    
+
             return resourceTexture;
           }
 
@@ -139,7 +139,7 @@ namespace dp
             dp::rix::core::Renderer *renderer = m_resourceManager->getRenderer();
 
             // TODO assumes that all images have the same datatype
-      
+
             dp::rix::core::TextureType tt;
             size_t width = 0;
             size_t height = 0;
@@ -206,8 +206,8 @@ namespace dp
               DP_ASSERT( !"unknwon texture type");
               return nullptr;
             }
-      
-            // use SceniX capability to determine the best internal GL format and pass it in as GL format  
+
+            // use SceniX capability to determine the best internal GL format and pass it in as GL format
             dp::sg::gl::GLTexImageFmt texFormat;
             // get the user-provided requested GPU format
             dp::sg::core::TextureHost::TextureGPUFormat gpuFormat = texture->getTextureGPUFormat();
@@ -243,7 +243,7 @@ namespace dp
             }
 
             // getNumberOfMipmaps() does NOT include LOD 0 in SceniX!
-            // RiX generates mipmaps when numMipMapLevels == 0 and the Texture 
+            // RiX generates mipmaps when numMipMapLevels == 0 and the Texture
             unsigned int numMipMapLevels = texture->getNumberOfMipmaps();
             // If mipmaps are provided include the LOD 0 in the count for RiX.
             if (numMipMapLevels)
@@ -272,9 +272,9 @@ namespace dp
             }
           }
 
-          const dp::sg::core::HandledObjectSharedPtr& ResourceTexture::getHandledObject() const
+          dp::sg::core::HandledObjectSharedPtr ResourceTexture::getHandledObject() const
           {
-            return m_texture.inplaceCast<dp::sg::core::HandledObject>();
+            return std::static_pointer_cast<dp::sg::core::HandledObject>(m_texture);
           }
 
           void ResourceTexture::update()
@@ -286,10 +286,10 @@ namespace dp
 
             dp::rix::core::Renderer *renderer = m_resourceManager->getRenderer();
 
-            if ( m_texture.isPtrTo<dp::sg::core::TextureFile>() )
+            if ( std::dynamic_pointer_cast<dp::sg::core::TextureFile>(m_texture) )
             {
               // It's a file texture. Generate a TextureHost out of the TextureFile and upload it.
-              dp::sg::core::TextureFileSharedPtr const& textureFile = m_texture.staticCast<dp::sg::core::TextureFile>();
+              dp::sg::core::TextureFileSharedPtr const& textureFile = std::static_pointer_cast<dp::sg::core::TextureFile>(m_texture);
               dp::sg::core::TextureHostSharedPtr textureHost = dp::sg::io::loadTextureHost( textureFile->getFilename() );
               if ( textureHost )
               {
@@ -308,15 +308,15 @@ namespace dp
             }
 
             // TODO buffers are not being observed
-            else if ( m_texture.isPtrTo<dp::sg::core::TextureHost>() )
+            else if ( std::dynamic_pointer_cast<dp::sg::core::TextureHost>(m_texture) )
             {
-              dp::sg::core::TextureHostSharedPtr const& textureHost = m_texture.staticCast<dp::sg::core::TextureHost>();
+              dp::sg::core::TextureHostSharedPtr const& textureHost = std::static_pointer_cast<dp::sg::core::TextureHost>(m_texture);
               m_textureHandle = getRiXTexture( textureHost );
               updateRiXTexture( m_textureHandle, textureHost );
             }
-            else if ( m_texture.isPtrTo<dp::sg::gl::TextureGL>() )
+            else if ( std::dynamic_pointer_cast<dp::sg::gl::TextureGL>(m_texture) )
             {
-              dp::sg::gl::TextureGLSharedPtr const& textureGL = m_texture.staticCast<dp::sg::gl::TextureGL>();
+              dp::sg::gl::TextureGLSharedPtr const& textureGL = std::static_pointer_cast<dp::sg::gl::TextureGL>(m_texture);
               dp::rix::gl::TextureDescriptionGL td( getRiXTextureType(m_texture), dp::rix::core::InternalTextureFormat::NATIVE, dp::rix::gl::getDPPixelFormat( textureGL->getTexture()->getFormat() )
                                                   , dp::rix::gl::getDPDataType( textureGL->getTexture()->getType() ) );
               m_textureHandle = renderer->textureCreate( td );

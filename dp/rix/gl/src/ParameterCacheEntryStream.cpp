@@ -84,7 +84,7 @@ namespace dp
         class CacheEntrynt : public ParameterCacheEntryStream
         {
         public:
-          static dp::util::SharedPtr<CacheEntrynt> create( ProgramGLHandle program, int uniformLocation, size_t cacheOffset, size_t containerOffset, size_t arraySize );
+          static std::shared_ptr<CacheEntrynt> create( ProgramGLHandle program, int uniformLocation, size_t cacheOffset, size_t containerOffset, size_t arraySize );
           virtual void render( void const* cache ) const;
           virtual void update( void* cache, void const* container ) const;
 
@@ -97,7 +97,7 @@ namespace dp
 
 
         template<unsigned int n, typename T>
-        dp::util::SharedPtr<CacheEntrynt<n,T>> CacheEntrynt<n,T>::create( ProgramGLHandle program, int uniformLocation, size_t cacheOffset, size_t containerOffset, size_t arraySize )
+        std::shared_ptr<CacheEntrynt<n,T>> CacheEntrynt<n,T>::create( ProgramGLHandle program, int uniformLocation, size_t cacheOffset, size_t containerOffset, size_t arraySize )
         {
           return( std::shared_ptr<CacheEntrynt<n,T>>( new CacheEntrynt<n,T>( program, uniformLocation, cacheOffset, containerOffset, arraySize ) ) );
         }
@@ -129,7 +129,7 @@ namespace dp
         class CacheEntryntConversion : public ParameterCacheEntryStream
         {
         public:
-          static dp::util::SharedPtr<CacheEntryntConversion> create( ProgramGLHandle program, int32_t uniformLocation, size_t cacheOffset, size_t containerOffset, size_t arraySize );
+          static std::shared_ptr<CacheEntryntConversion> create(ProgramGLHandle program, int32_t uniformLocation, size_t cacheOffset, size_t containerOffset, size_t arraySize);
           virtual void render( const void* cache ) const;
           virtual void update( void* cache, const void* containerData ) const;
 
@@ -141,7 +141,7 @@ namespace dp
         };
 
         template<unsigned int n, typename T, typename SourceType>
-        dp::util::SharedPtr<CacheEntryntConversion<n, T, SourceType>> CacheEntryntConversion<n,T,SourceType>::create( ProgramGLHandle program, int32_t uniformLocation, size_t cacheOffset, size_t containerOffset, size_t arraySize )
+        std::shared_ptr<CacheEntryntConversion<n, T, SourceType>> CacheEntryntConversion<n, T, SourceType>::create(ProgramGLHandle program, int32_t uniformLocation, size_t cacheOffset, size_t containerOffset, size_t arraySize)
         {
           return( std::shared_ptr<CacheEntryntConversion<n,T,SourceType>>( new CacheEntryntConversion<n,T,SourceType>( program, uniformLocation, cacheOffset, containerOffset, arraySize ) ) );
         }
@@ -174,7 +174,7 @@ namespace dp
         class CacheEntrynmt : public ParameterCacheEntryStream
         {
         public:
-          static dp::util::SharedPtr<CacheEntrynmt> create( ProgramGLHandle /*program*/, int32_t m_uniformLocation, size_t m_cacheOffset, size_t m_containerOffset, size_t m_arraySize );
+          static std::shared_ptr<CacheEntrynmt> create(ProgramGLHandle /*program*/, int32_t m_uniformLocation, size_t m_cacheOffset, size_t m_containerOffset, size_t m_arraySize);
           virtual void render( const void* cache ) const;
           virtual void update( void* cache, void const* containerData ) const;
 
@@ -185,7 +185,7 @@ namespace dp
         };
 
         template<unsigned int n, unsigned int m, typename T>
-        dp::util::SharedPtr<CacheEntrynmt<n,m,T>> CacheEntrynmt<n,m,T>::create( ProgramGLHandle program, int32_t uniformLocation, size_t cacheOffset, size_t containerOffset, size_t arraySize )
+        std::shared_ptr<CacheEntrynmt<n, m, T>> CacheEntrynmt<n, m, T>::create(ProgramGLHandle program, int32_t uniformLocation, size_t cacheOffset, size_t containerOffset, size_t arraySize)
         {
           return( std::shared_ptr<CacheEntrynmt<n,m,T>>( new CacheEntrynmt<n,m,T>( program, uniformLocation, cacheOffset, containerOffset, arraySize ) ) );
         }
@@ -217,7 +217,7 @@ namespace dp
         class CacheEntrySampler : public ParameterCacheEntryStream
         {
         public:
-          static dp::util::SharedPtr<CacheEntrySampler> create( ProgramGLHandle program, dp::gl::Program::Uniform const& uniform, size_t cacheOffset, size_t containerOffset, size_t arraySize );
+          static std::shared_ptr<CacheEntrySampler> create(ProgramGLHandle program, dp::gl::Program::Uniform const& uniform, size_t cacheOffset, size_t containerOffset, size_t arraySize);
           virtual void render( void const* cache ) const;
           virtual void update( void* cache, void const* containerData ) const;
 
@@ -234,7 +234,7 @@ namespace dp
           CacheEntrySampler( ProgramGLHandle program, dp::gl::Program::Uniform const& uniform, size_t cacheOffset, size_t containerOffset, size_t arraySize );
         };
 
-        dp::util::SharedPtr<CacheEntrySampler> CacheEntrySampler::create( ProgramGLHandle program, dp::gl::Program::Uniform const& uniform, size_t cacheOffset, size_t containerOffset, size_t arraySize )
+        std::shared_ptr<CacheEntrySampler> CacheEntrySampler::create(ProgramGLHandle program, dp::gl::Program::Uniform const& uniform, size_t cacheOffset, size_t containerOffset, size_t arraySize)
         {
           return( std::shared_ptr<CacheEntrySampler>( new CacheEntrySampler( program, uniform, cacheOffset, containerOffset, arraySize ) ) );
         }
@@ -328,7 +328,7 @@ namespace dp
         class CacheEntryImage : public ParameterCacheEntryStream
         {
         public:
-          static dp::util::SharedPtr<CacheEntryImage> create( ProgramGLHandle program, int32_t uniformLocation, size_t cacheOffset, size_t containerOffset, size_t arraySize );
+          static std::shared_ptr<CacheEntryImage> create(ProgramGLHandle program, int32_t uniformLocation, size_t cacheOffset, size_t containerOffset, size_t arraySize);
           virtual void render( void const* cache ) const;
           virtual void update( void* cache, void const* containerData ) const;
 
@@ -348,7 +348,7 @@ namespace dp
           CacheEntryImage( ProgramGLHandle program, int32_t uniformLocation, size_t cacheOffset, size_t containerOffset, size_t arraySize );
         };
 
-        dp::util::SharedPtr<CacheEntryImage> CacheEntryImage::create( ProgramGLHandle program, int32_t uniformLocation, size_t cacheOffset, size_t containerOffset, size_t arraySize )
+        std::shared_ptr<CacheEntryImage> CacheEntryImage::create(ProgramGLHandle program, int32_t uniformLocation, size_t cacheOffset, size_t containerOffset, size_t arraySize)
         {
           return( std::shared_ptr<CacheEntryImage>( new CacheEntryImage( program, uniformLocation, cacheOffset, containerOffset, arraySize ) ) );
         }
@@ -401,7 +401,7 @@ namespace dp
         class CacheEntryBufferBinding : public ParameterCacheEntryStream
         {
         public:
-          static dp::util::SharedPtr<CacheEntryBufferBinding> create( int32_t bindingIndex, size_t cacheOffset, size_t containerOffset, size_t arraySize );
+          static std::shared_ptr<CacheEntryBufferBinding> create(int32_t bindingIndex, size_t cacheOffset, size_t containerOffset, size_t arraySize);
           virtual void render( void const* cache ) const;
           virtual void update( void* cache, void const* container ) const;
           void doUpdateConverted( void const* converted ) const;
@@ -420,7 +420,7 @@ namespace dp
         };
 
         template <GLenum BufferBinding>
-        dp::util::SharedPtr<CacheEntryBufferBinding<BufferBinding>> CacheEntryBufferBinding<BufferBinding>::create( int32_t bindingIndex, size_t cacheOffset, size_t containerOffset, size_t arraySize )
+        std::shared_ptr<CacheEntryBufferBinding<BufferBinding>> CacheEntryBufferBinding<BufferBinding>::create(int32_t bindingIndex, size_t cacheOffset, size_t containerOffset, size_t arraySize)
         {
           return( std::shared_ptr<CacheEntryBufferBinding<BufferBinding>>( new CacheEntryBufferBinding<BufferBinding>( bindingIndex, cacheOffset, containerOffset, arraySize ) ) );
         }
@@ -477,7 +477,7 @@ namespace dp
         class CacheEntryBufferBindingBindless : public ParameterCacheEntryStream
         {
         public:
-          static dp::util::SharedPtr<CacheEntryBufferBindingBindless> create( int32_t bindingIndex, size_t cacheOffset, size_t containerOffset, size_t arraySize );
+          static std::shared_ptr<CacheEntryBufferBindingBindless> create(int32_t bindingIndex, size_t cacheOffset, size_t containerOffset, size_t arraySize);
           virtual void render( void const* cache ) const;
           virtual void update( void* cache, void const* container ) const;
           void doUpdateConverted( void const* converted ) const;
@@ -495,7 +495,7 @@ namespace dp
         };
 
         template <GLenum BufferBinding>
-        dp::util::SharedPtr<CacheEntryBufferBindingBindless<BufferBinding>> CacheEntryBufferBindingBindless<BufferBinding>::create( int32_t bindingIndex, size_t cacheOffset, size_t containerOffset, size_t arraySize )
+        std::shared_ptr<CacheEntryBufferBindingBindless<BufferBinding>> CacheEntryBufferBindingBindless<BufferBinding>::create(int32_t bindingIndex, size_t cacheOffset, size_t containerOffset, size_t arraySize)
         {
           return( std::shared_ptr<CacheEntryBufferBindingBindless<BufferBinding>>( new CacheEntryBufferBindingBindless<BufferBinding>( bindingIndex, cacheOffset, containerOffset, arraySize ) ) );
         }
@@ -549,7 +549,7 @@ namespace dp
         class CacheEntryShaderBuffer : public ParameterCacheEntryStream
         {
         public:
-          static dp::util::SharedPtr<CacheEntryShaderBuffer> create( ProgramGLHandle program, int32_t uniformLocation, size_t cacheOffset, size_t containerOffset, size_t arraySize );
+          static std::shared_ptr<CacheEntryShaderBuffer> create(ProgramGLHandle program, int32_t uniformLocation, size_t cacheOffset, size_t containerOffset, size_t arraySize);
           virtual void render( void const* cache ) const;
           virtual void update( void* cache, void const* containerData ) const;
 
@@ -560,7 +560,7 @@ namespace dp
           GLint m_uniformLocation;
         };
 
-        dp::util::SharedPtr<CacheEntryShaderBuffer> CacheEntryShaderBuffer::create( UNUSED ProgramGLHandle program, int32_t uniformLocation, size_t cacheOffset, size_t containerOffset, UNUSED size_t arraySize )
+        std::shared_ptr<CacheEntryShaderBuffer> CacheEntryShaderBuffer::create(UNUSED ProgramGLHandle program, int32_t uniformLocation, size_t cacheOffset, size_t containerOffset, UNUSED size_t arraySize)
         {
           return( std::shared_ptr<CacheEntryShaderBuffer>( new CacheEntryShaderBuffer( program, uniformLocation, cacheOffset, containerOffset, arraySize ) ) );
         }
@@ -599,7 +599,7 @@ namespace dp
         // not a gl variable?
         if ( uniform.type == GL_NONE )
         {
-          return ParameterCacheEntryStreamSharedPtr::null;
+          return ParameterCacheEntryStreamSharedPtr();
         }
 
         size_t newArraySize = std::max( size_t(1), arraySize );
@@ -858,7 +858,7 @@ namespace dp
                           : ParameterCacheEntryStreamSharedPtr(CacheEntryBufferBinding<GL_UNIFORM_BUFFER>::create( binding.bufferIndex, cacheOffset, containerOffset, arraySize ));
         default:
           DP_ASSERT( !"unknown buffer binding type " );
-          return ParameterCacheEntryStreamSharedPtr::null;
+          return ParameterCacheEntryStreamSharedPtr();
         }
       }
 

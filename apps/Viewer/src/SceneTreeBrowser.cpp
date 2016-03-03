@@ -1,4 +1,4 @@
-// Copyright (c) 2013-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2013-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -148,7 +148,7 @@ void SceneTreeBrowser::contextMenuEvent( QContextMenuEvent * event )
 
       case ObjectCode::PRIMITIVE :
         {
-          VertexAttributeSetSharedPtr const& vas = currentItem->getObject().staticCast<Primitive>()->getVertexAttributeSet();
+          VertexAttributeSetSharedPtr const& vas = std::static_pointer_cast<Primitive>(currentItem->getObject())->getVertexAttributeSet();
           if ( !vas->getVertexAttribute( VertexAttributeSet::AttributeID::TEXCOORD0 ).getBuffer() )
           {
             QMenu * subMenu = menu.addMenu( "Generate Texture &Coordinates" );
@@ -173,7 +173,7 @@ void SceneTreeBrowser::contextMenuEvent( QContextMenuEvent * event )
 
       case ObjectCode::PARAMETER_GROUP_DATA :
         {
-          ParameterGroupDataSharedPtr const& parameterGroupData = currentItem->getObject().staticCast<ParameterGroupData>();
+          ParameterGroupDataSharedPtr const& parameterGroupData = std::static_pointer_cast<ParameterGroupData>(currentItem->getObject());
           std::vector<dp::fx::ParameterGroupSpec::iterator> samplerParameters = getEmptySamplerParameters( parameterGroupData );
           if ( ! samplerParameters.empty() )
           {
@@ -262,14 +262,14 @@ void SceneTreeBrowser::itemPressed( QTreeWidgetItem * item, int column )
   {
     // start drag'n'drop on EffectData
     // We don't set the EffectData as the MimeData, but the GeoNode, as both the material of the GeoNode and the geometry of the Primitive need to be copied!
-    dp::fx::EffectSpec::Type type = static_cast<SceneTreeItem*>(item)->getObject().staticCast<dp::sg::core::PipelineData>()->getEffectSpec()->getType();
+    dp::fx::EffectSpec::Type type = std::static_pointer_cast<dp::sg::core::PipelineData>(static_cast<SceneTreeItem*>(item)->getObject())->getEffectSpec()->getType();
     if ( type == dp::fx::EffectSpec::Type::PIPELINE )
     {
       DP_ASSERT( item->parent() );
       item = item->parent();
 
-      DP_ASSERT( static_cast<SceneTreeItem*>(item)->getObject().isPtrTo<GeoNode>() );
-      GeoNodeSharedPtr geoNode = static_cast<SceneTreeItem*>(item)->getObject().staticCast<GeoNode>();
+      DP_ASSERT( std::dynamic_pointer_cast<GeoNode>(static_cast<SceneTreeItem*>(item)->getObject()) );
+      GeoNodeSharedPtr geoNode = std::static_pointer_cast<GeoNode>(static_cast<SceneTreeItem*>(item)->getObject());
       QByteArray qba( reinterpret_cast<char*>(&geoNode), sizeof(void*) );
 
       QMimeData * mimeData = new QMimeData;
@@ -308,14 +308,14 @@ void SceneTreeBrowser::triggeredAddHeadlightMenu( QAction * action )
   lightSource->setName( name );
 
   DP_ASSERT( dynamic_cast<SceneTreeItem*>(m_tree->currentItem()) );
-  DP_ASSERT( static_cast<SceneTreeItem*>(m_tree->currentItem())->getObject().isPtrTo<Camera>() );
+  DP_ASSERT( std::dynamic_pointer_cast<Camera>(static_cast<SceneTreeItem*>(m_tree->currentItem())->getObject()) );
   ExecuteCommand( new CommandAddItem( static_cast<SceneTreeItem*>(m_tree->currentItem()), new SceneTreeItem( lightSource ) ) );
 }
 
 void SceneTreeBrowser::triggeredAddSamplerMenu( QAction * action )
 {
   DP_ASSERT( dynamic_cast<SceneTreeItem*>(m_tree->currentItem()) );
-  DP_ASSERT( static_cast<SceneTreeItem*>(m_tree->currentItem())->getObject().isPtrTo<ParameterGroupData>() );
+  DP_ASSERT( std::dynamic_pointer_cast<ParameterGroupData>(static_cast<SceneTreeItem*>(m_tree->currentItem())->getObject()) );
 
   SamplerSharedPtr sampler = Sampler::create();
   sampler->setName( action->text().toStdString() );
@@ -335,19 +335,19 @@ void SceneTreeBrowser::triggeredGenerateTangentSpace()
 {
   DP_ASSERT( dynamic_cast<SceneTreeItem*>(m_tree->currentItem()) && dynamic_cast<SceneTreeItem*>(m_tree->currentItem())->getObject() );
   SceneTreeItem * currentItem = static_cast<SceneTreeItem*>(m_tree->currentItem());
-  DP_ASSERT( currentItem->getObject().isPtrTo<Primitive>() );
+  DP_ASSERT( std::dynamic_pointer_cast<Primitive>(currentItem->getObject()) );
 
-  ExecuteCommand( new CommandGenerateTangentSpace( currentItem->getObject().staticCast<Primitive>() ) );
+  ExecuteCommand(new CommandGenerateTangentSpace(std::static_pointer_cast<Primitive>(currentItem->getObject())));
 }
 
 void SceneTreeBrowser::triggeredGenerateTextureCoordinatesMenu( QAction * action )
 {
   DP_ASSERT( dynamic_cast<SceneTreeItem*>(m_tree->currentItem()) && dynamic_cast<SceneTreeItem*>(m_tree->currentItem())->getObject() );
   SceneTreeItem * currentItem = static_cast<SceneTreeItem*>(m_tree->currentItem());
-  DP_ASSERT( currentItem->getObject().isPtrTo<Primitive>() );
+  DP_ASSERT( std::dynamic_pointer_cast<Primitive>(currentItem->getObject()) );
 
   TextureCoordType tct = static_cast<TextureCoordType>( action->data().toInt() );
-  ExecuteCommand( new CommandGenerateTextureCoordinates( currentItem->getObject().staticCast<Primitive>(), tct ) );
+  ExecuteCommand(new CommandGenerateTextureCoordinates(std::static_pointer_cast<Primitive>(currentItem->getObject()), tct));
 }
 
 const char * domainCodeToName( dp::fx::Domain domain )
@@ -371,15 +371,15 @@ void SceneTreeBrowser::triggeredReplaceByClone()
   SceneTreeItem * currentItem = static_cast<SceneTreeItem*>(m_tree->currentItem());
   DP_ASSERT( currentItem->parent() && dynamic_cast<SceneTreeItem*>(currentItem->parent()) );
 
-  ExecuteCommand( new CommandReplaceItem( static_cast<SceneTreeItem*>(currentItem->parent()), currentItem, new SceneTreeItem( currentItem->getObject().clone() ), &m_objectObserver ) );
+  ExecuteCommand(new CommandReplaceItem(static_cast<SceneTreeItem*>(currentItem->parent()), currentItem, new SceneTreeItem(std::static_pointer_cast<dp::sg::core::Object>(currentItem->getObject()->clone())), &m_objectObserver));
 }
 
 void SceneTreeBrowser::triggeredSaveEffectData()
 {
   DP_ASSERT( dynamic_cast<SceneTreeItem*>(m_tree->currentItem()) && dynamic_cast<SceneTreeItem*>(m_tree->currentItem())->getObject() );
-  DP_ASSERT( static_cast<SceneTreeItem*>(m_tree->currentItem())->getObject().isPtrTo<dp::sg::core::PipelineData>() );
+  DP_ASSERT( std::dynamic_pointer_cast<dp::sg::core::PipelineData>(static_cast<SceneTreeItem*>(m_tree->currentItem())->getObject()) );
 
-  dp::sg::core::PipelineDataSharedPtr const& pipelineData = static_cast<SceneTreeItem*>(m_tree->currentItem())->getObject().staticCast<dp::sg::core::PipelineData>();
+  dp::sg::core::PipelineDataSharedPtr const& pipelineData = std::static_pointer_cast<dp::sg::core::PipelineData>(static_cast<SceneTreeItem*>(m_tree->currentItem())->getObject());
   std::string pipelineName = pipelineData->getEffectSpec()->getName();
   QString fileName = QFileDialog::getSaveFileName( this, tr( "Save PipelineData" ), QString( pipelineName.c_str() ) + QString( ".xml" ), tr( "XML (*.xml)" ) );
   if ( !fileName.isEmpty() )
@@ -391,8 +391,8 @@ void SceneTreeBrowser::triggeredSaveEffectData()
 void SceneTreeBrowser::triggeredShowShaderPipeline()
 {
   DP_ASSERT( dynamic_cast<SceneTreeItem*>(m_tree->currentItem()) && dynamic_cast<SceneTreeItem*>(m_tree->currentItem())->getObject() );
-  DP_ASSERT( static_cast<SceneTreeItem*>(m_tree->currentItem())->getObject().isPtrTo<GeoNode>() );
-  GeoNodeSharedPtr const& geoNode = static_cast<SceneTreeItem*>(m_tree->currentItem())->getObject().staticCast<GeoNode>();
+  DP_ASSERT(std::static_pointer_cast<GeoNode>(static_cast<SceneTreeItem*>(m_tree->currentItem())->getObject()));
+  GeoNodeSharedPtr const& geoNode = std::static_pointer_cast<GeoNode>(static_cast<SceneTreeItem*>(m_tree->currentItem())->getObject());
 
   DP_ASSERT( GetApp() && GetApp()->getMainWindow() && GetApp()->getMainWindow()->getCurrentViewport() );
   ViewerRendererWidget * vrw = GetApp()->getMainWindow()->getCurrentViewport();

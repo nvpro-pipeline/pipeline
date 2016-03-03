@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -47,10 +47,10 @@ namespace dp
           public:
             /** \brief Fetch resource for the given object/resourceManager. If no resource exists it'll be created **/
             static ResourceTextureSharedPtr get( const dp::sg::core::TextureSharedPtr& texture, const ResourceManagerSharedPtr& resourceManager );
-      
+
             virtual ~ResourceTexture();
 
-            virtual const dp::sg::core::HandledObjectSharedPtr& getHandledObject() const;
+            virtual dp::sg::core::HandledObjectSharedPtr getHandledObject() const;
             virtual void update();
 
             dp::rix::core::TextureSharedHandle m_textureHandle;

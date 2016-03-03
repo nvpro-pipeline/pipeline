@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2014
+// Copyright (c) 2014-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -175,22 +175,22 @@ namespace dp
     inline void TextureBind::setImage1D( GLuint texture, GLenum target, GLint level, GLint internalFormat, GLsizei width, GLint border, GLenum format, GLenum type, GLvoid const* pixels )
     {
       TextureBinding tb( target, texture );
-      dp::gl::bind( GL_PIXEL_UNPACK_BUFFER, BufferSharedPtr::null );    // make sure, GL_PIXEL_UNPACK_BUFFER is unbound !
-      glTexImage1D( target, level, internalFormat, width, 0, format, type, pixels ); 
+      dp::gl::bind( GL_PIXEL_UNPACK_BUFFER, BufferSharedPtr() );    // make sure, GL_PIXEL_UNPACK_BUFFER is unbound !
+      glTexImage1D( target, level, internalFormat, width, 0, format, type, pixels );
     }
 
     inline void TextureBind::setImage2D( GLuint texture, GLenum target, GLint level, GLint internalFormat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, GLvoid const* pixels )
     {
       TextureBinding tb( target, texture );
-      dp::gl::bind( GL_PIXEL_UNPACK_BUFFER, BufferSharedPtr::null );    // make sure, GL_PIXEL_UNPACK_BUFFER is unbound !
-      glTexImage2D( target, level, internalFormat, width, height, 0, format, type, pixels ); 
+      dp::gl::bind( GL_PIXEL_UNPACK_BUFFER, BufferSharedPtr() );    // make sure, GL_PIXEL_UNPACK_BUFFER is unbound !
+      glTexImage2D( target, level, internalFormat, width, height, 0, format, type, pixels );
     }
 
     inline void TextureBind::setImage3D( GLuint texture, GLenum target, GLint level, GLint internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type, GLvoid const* pixels )
     {
       TextureBinding tb( target, texture );
-      dp::gl::bind( GL_PIXEL_UNPACK_BUFFER, BufferSharedPtr::null );    // make sure, GL_PIXEL_UNPACK_BUFFER is unbound !
-      glTexImage3D( target, level, internalFormat, width, height, depth, 0, format, type, pixels ); 
+      dp::gl::bind( GL_PIXEL_UNPACK_BUFFER, BufferSharedPtr() );    // make sure, GL_PIXEL_UNPACK_BUFFER is unbound !
+      glTexImage3D( target, level, internalFormat, width, height, depth, 0, format, type, pixels );
     }
 
     inline void TextureBind::setLODParameters( GLuint texture, GLenum target, float minLOD, float maxLOD, float LODBias )
@@ -234,21 +234,21 @@ namespace dp
     inline void TextureBind::setSubImage1D( GLuint texture, GLenum target, GLint level, GLint xOffset, GLsizei width, GLenum format, GLenum type, GLvoid const* pixels )
     {
       TextureBinding tb( target, texture );
-      dp::gl::bind( GL_PIXEL_UNPACK_BUFFER, BufferSharedPtr::null );    // make sure, GL_PIXEL_UNPACK_BUFFER is unbound !
+      dp::gl::bind( GL_PIXEL_UNPACK_BUFFER, BufferSharedPtr() );    // make sure, GL_PIXEL_UNPACK_BUFFER is unbound !
       glTexSubImage1D( target, level, xOffset, width, format, type, pixels );
     }
 
     inline void TextureBind::setSubImage2D( GLuint texture, GLenum target, GLint level, GLint xOffset, GLint yOffset, GLsizei width, GLsizei height, GLenum format, GLenum type, GLvoid const* pixels )
     {
       TextureBinding tb( target, texture );
-      dp::gl::bind( GL_PIXEL_UNPACK_BUFFER, BufferSharedPtr::null );    // make sure, GL_PIXEL_UNPACK_BUFFER is unbound !
+      dp::gl::bind( GL_PIXEL_UNPACK_BUFFER, BufferSharedPtr() );    // make sure, GL_PIXEL_UNPACK_BUFFER is unbound !
       glTexSubImage2D( target, level, xOffset, yOffset, width, height, format, type, pixels );
     }
 
     inline void TextureBind::setSubImage3D( GLuint texture, GLenum target, GLint level, GLint xOffset, GLint yOffset, GLint zOffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, GLvoid const* pixels )
     {
       TextureBinding tb( target, texture );
-      dp::gl::bind( GL_PIXEL_UNPACK_BUFFER, BufferSharedPtr::null );    // make sure, GL_PIXEL_UNPACK_BUFFER is unbound !
+      dp::gl::bind( GL_PIXEL_UNPACK_BUFFER, BufferSharedPtr() );    // make sure, GL_PIXEL_UNPACK_BUFFER is unbound !
       glTexSubImage3D( target, level, xOffset, yOffset, zOffset, width, height, depth, format, type, pixels );
     }
 

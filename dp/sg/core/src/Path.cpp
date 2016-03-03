@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2005
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -71,11 +71,11 @@ namespace dp
     #if !defined(NDEBUG)
         if ( !m_path.empty() )
         {
-          GroupSharedPtr const& pGroup = m_path.back().dynamicCast<Group>();
+          GroupSharedPtr const& pGroup = std::dynamic_pointer_cast<Group>(m_path.back());
           if ( pGroup )
           {
-            DP_ASSERT( object.isPtrTo<Node>() );
-            DP_ASSERT( pGroup->findChild( pGroup->beginChildren(), object.inplaceCast<Node>() ) != pGroup->endChildren() );
+            DP_ASSERT( std::dynamic_pointer_cast<Node>(object) );
+            DP_ASSERT( pGroup->findChild( pGroup->beginChildren(), std::static_pointer_cast<Node>(object) ) != pGroup->endChildren() );
           }
         }
     #endif
@@ -100,9 +100,9 @@ namespace dp
           for ( unsigned int i=0 ; i<getLength()-1 ; i++ )
           {
             ObjectSharedPtr obj = getFromHead( i );
-            if ( obj.isPtrTo<Transform>() )
+            if ( std::dynamic_pointer_cast<Transform>(obj) )
             {
-              Trafo const& trafo = obj.staticCast<Transform>()->getTrafo();
+              Trafo const& trafo = std::static_pointer_cast<Transform>(obj)->getTrafo();
               worldToModel *= trafo.getInverse();
               modelToWorld = trafo.getMatrix() * modelToWorld;
             }

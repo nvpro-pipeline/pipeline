@@ -95,11 +95,9 @@ namespace dp
         DP_ASSERT( layer < 6 );
 
         // compute target from layer in order +x,-x,+y,-y,+z,-z
-        getTexture().inplaceCast<dp::gl::TextureCubemap>()->setData( data, layer, mipMapLevel );
+        std::static_pointer_cast<dp::gl::TextureCubemap>(getTexture())->setData( data, layer, mipMapLevel );
       }
 
     } // namespace gl
   } // namespace rix
 } // namespace dp
-
-

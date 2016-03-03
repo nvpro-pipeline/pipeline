@@ -1,4 +1,4 @@
-// Copyright (c) 2010-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2010-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -51,7 +51,7 @@ namespace dp
       {
         setTraversalMaskOverride( ~0 );
 
-        m_generatorState = GeneratorState::create( m_sceneTree.getSharedPtr() );
+        m_generatorState = GeneratorState::create( m_sceneTree.lock() );
       }
 
       void SceneTreeGenerator::doApply( const dp::sg::core::NodeSharedPtr & root )
@@ -67,8 +67,8 @@ namespace dp
       void  SceneTreeGenerator::addClipPlane( const ClipPlaneWeakPtr& clipPlane )
       {
         ClipPlaneInstanceSharedPtr instance( ClipPlaneInstance::create() );
-        instance->m_clipPlane = clipPlane.getSharedPtr();
-        instance->m_transformIndex = m_sceneTree->getObjectTreeNode(m_generatorState->getParentObjectIndex()).m_transform;
+        instance->m_clipPlane = clipPlane.lock();
+        instance->m_transformIndex = m_sceneTree.lock()->getObjectTreeNode(m_generatorState->getParentObjectIndex()).m_transform;
         m_generatorState->addClipPlane( instance );
       }
 
@@ -100,7 +100,7 @@ namespace dp
             {
               ClipPlaneInstanceSharedPtr instance(ClipPlaneInstance::create());
               instance->m_clipPlane = *it;
-              instance->m_transformIndex = m_sceneTree->getObjectTreeNode(m_generatorState->getParentObjectIndex()).m_transform;
+              instance->m_transformIndex = m_sceneTree.lock()->getObjectTreeNode(m_generatorState->getParentObjectIndex()).m_transform;
               m_generatorState->addClipPlane( instance );
             }
           }

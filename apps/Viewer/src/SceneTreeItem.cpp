@@ -67,9 +67,9 @@ SceneTreeItem::SceneTreeItem(ObjectSharedPtr const & object)
       pixmap.load( ":/images/Transform.png" );
       break;
     case ObjectCode::LIGHT_SOURCE :
-      DP_ASSERT( m_object.isPtrTo<LightSource>() );
+      DP_ASSERT( std::dynamic_pointer_cast<LightSource>(m_object) );
       {
-        LightSourceSharedPtr const& lightSource = m_object.staticCast<LightSource>();
+        LightSourceSharedPtr const& lightSource = std::static_pointer_cast<LightSource>(m_object);
         if ( isStandardDirectedLight( lightSource ) )
         {
           pixmap.load( ":/images/DirectedLight.png" );
@@ -89,9 +89,9 @@ SceneTreeItem::SceneTreeItem(ObjectSharedPtr const & object)
       pixmap.load( ":/images/Drawable.png" );
       break;
     case ObjectCode::PRIMITIVE :
-      DP_ASSERT( m_object.isPtrTo<Primitive>() );
+      DP_ASSERT( std::dynamic_pointer_cast<Primitive>(m_object) );
       {
-        PrimitiveSharedPtr const& p = m_object.staticCast<Primitive>();
+        PrimitiveSharedPtr const& p = std::static_pointer_cast<Primitive>(m_object);
         switch( p->getPrimitiveType() )
         {
           case PrimitiveType::QUADS:
@@ -158,7 +158,7 @@ void SceneTreeItem::expandItem()
     {
       case ObjectCode::GEO_NODE :
         {
-          GeoNodeSharedPtr const& gn = m_object.staticCast<GeoNode>();
+          GeoNodeSharedPtr const& gn = std::static_pointer_cast<GeoNode>(m_object);
           if ( gn->getMaterialPipeline() )
           {
             addChild( new SceneTreeItem( gn->getMaterialPipeline() ) );
@@ -175,7 +175,7 @@ void SceneTreeItem::expandItem()
       case ObjectCode::TRANSFORM :
       case ObjectCode::BILLBOARD :
         {
-          GroupSharedPtr const& g = m_object.staticCast<Group>();
+          GroupSharedPtr const& g = std::static_pointer_cast<Group>(m_object);
           for ( Group::ChildrenIterator it = g->beginChildren() ; it != g->endChildren() ; ++it )
           {
             addChild( new SceneTreeItem( *it ) );
@@ -184,7 +184,7 @@ void SceneTreeItem::expandItem()
         break;
       case ObjectCode::LIGHT_SOURCE :
         {
-          LightSourceSharedPtr const& ls = m_object.staticCast<LightSource>();
+          LightSourceSharedPtr const& ls = std::static_pointer_cast<LightSource>(m_object);
           if ( ls->getLightPipeline() )
           {
             addChild( new SceneTreeItem( ls->getLightPipeline() ) );
@@ -195,7 +195,7 @@ void SceneTreeItem::expandItem()
       case ObjectCode::PERSPECTIVE_CAMERA :
       case ObjectCode::MATRIX_CAMERA :
         {
-          CameraSharedPtr const& c = m_object.staticCast<Camera>();
+          CameraSharedPtr const& c = std::static_pointer_cast<Camera>(m_object);
           for ( Camera::HeadLightIterator it = c->beginHeadLights() ; it != c->endHeadLights() ; ++it )
           {
             addChild( new SceneTreeItem( *it ) );
@@ -204,7 +204,7 @@ void SceneTreeItem::expandItem()
         break;
       case ObjectCode::PRIMITIVE :
         {
-          PrimitiveSharedPtr const& p = m_object.staticCast<Primitive>();
+          PrimitiveSharedPtr const& p = std::static_pointer_cast<Primitive>(m_object);
           if ( p->getIndexSet() )
           {
             addChild( new SceneTreeItem( p->getIndexSet() ) );
@@ -217,7 +217,7 @@ void SceneTreeItem::expandItem()
         break;
       case ObjectCode::PARAMETER_GROUP_DATA :
         {
-          ParameterGroupDataSharedPtr const& pgd = m_object.staticCast<ParameterGroupData>();
+          ParameterGroupDataSharedPtr const& pgd = std::static_pointer_cast<ParameterGroupData>(m_object);
           dp::fx::ParameterGroupSpecSharedPtr const & pgs = pgd->getParameterGroupSpec();
           for ( dp::fx::ParameterGroupSpec::iterator it = pgs->beginParameterSpecs() ; it != pgs->endParameterSpecs() ; ++it )
           {
@@ -231,7 +231,7 @@ void SceneTreeItem::expandItem()
         break;
       case ObjectCode::PIPELINE_DATA :
         {
-          dp::sg::core::PipelineDataSharedPtr const& pd = m_object.staticCast<dp::sg::core::PipelineData>();
+          dp::sg::core::PipelineDataSharedPtr const& pd = std::static_pointer_cast<dp::sg::core::PipelineData>(m_object);
           dp::fx::EffectSpecSharedPtr const & es = pd->getEffectSpec();
           for ( dp::fx::EffectSpec::iterator it = es->beginParameterGroupSpecs() ; it != es->endParameterGroupSpecs() ; ++it )
           {
@@ -244,7 +244,7 @@ void SceneTreeItem::expandItem()
         break;
       case ObjectCode::SCENE :
         {
-          SceneSharedPtr const& s = m_object.staticCast<Scene>();
+          SceneSharedPtr const& s = std::static_pointer_cast<Scene>(m_object);
           for ( Scene::CameraIterator it = s->beginCameras() ; it != s->endCameras() ; ++it )
           {
             addChild( new SceneTreeItem( *it ) );
@@ -280,9 +280,9 @@ void SceneTreeItem::setChildIndicatorPolicy()
   switch( objectCode )
   {
     case ObjectCode::GEO_NODE :
-      DP_ASSERT( m_object.isPtrTo<GeoNode>() );
+      DP_ASSERT( std::dynamic_pointer_cast<GeoNode>(m_object) );
       {
-        GeoNodeSharedPtr const& gn = m_object.staticCast<GeoNode>();
+        GeoNodeSharedPtr const& gn = std::static_pointer_cast<GeoNode>(m_object);
         showIndicator = ( gn->getMaterialPipeline() || gn->getPrimitive() );
       }
       break;
@@ -291,33 +291,33 @@ void SceneTreeItem::setChildIndicatorPolicy()
     case ObjectCode::SWITCH :
     case ObjectCode::TRANSFORM :
     case ObjectCode::BILLBOARD :
-      DP_ASSERT( m_object.isPtrTo<Group>() );
+      DP_ASSERT( std::dynamic_pointer_cast<Group>(m_object) );
       {
-        GroupSharedPtr const& g = m_object.staticCast<Group>();
+        GroupSharedPtr const& g = std::static_pointer_cast<Group>(m_object);
         showIndicator = ( g->getNumberOfChildren() || g->getNumberOfClipPlanes() );
       }
       break;
     case ObjectCode::LIGHT_SOURCE :
-      DP_ASSERT( m_object.isPtrTo<LightSource>() );
-      showIndicator = !!m_object.staticCast<LightSource>()->getLightPipeline();
+      DP_ASSERT( std::dynamic_pointer_cast<LightSource>(m_object) );
+      showIndicator = !!std::static_pointer_cast<LightSource>(m_object)->getLightPipeline();
       break;
     case ObjectCode::PERSPECTIVE_CAMERA :
     case ObjectCode::PARALLEL_CAMERA :
     case ObjectCode::MATRIX_CAMERA :
-      DP_ASSERT( m_object.isPtrTo<Camera>() );
-      showIndicator = ( 0 < m_object.staticCast<Camera>()->getNumberOfHeadLights() );
+      DP_ASSERT( std::dynamic_pointer_cast<Camera>(m_object) );
+      showIndicator = (0 < std::static_pointer_cast<Camera>(m_object)->getNumberOfHeadLights());
       break;
     case ObjectCode::PRIMITIVE :
-      DP_ASSERT( m_object.isPtrTo<Primitive>() );
+      DP_ASSERT( std::dynamic_pointer_cast<Primitive>(m_object) );
       {
-        PrimitiveSharedPtr const& p = m_object.staticCast<Primitive>();
+        PrimitiveSharedPtr const& p = std::static_pointer_cast<Primitive>(m_object);
         showIndicator = ( p->getIndexSet() || p->getVertexAttributeSet() );
       }
       break;
     case ObjectCode::PARAMETER_GROUP_DATA :
-      DP_ASSERT( m_object.isPtrTo<ParameterGroupData>() );
+      DP_ASSERT( std::dynamic_pointer_cast<ParameterGroupData>(m_object) );
       {
-        ParameterGroupDataSharedPtr const& pgd = m_object.staticCast<ParameterGroupData>();
+        ParameterGroupDataSharedPtr const& pgd = std::static_pointer_cast<ParameterGroupData>(m_object);
         dp::fx::ParameterGroupSpecSharedPtr const & pgs = pgd->getParameterGroupSpec();
         for ( dp::fx::ParameterGroupSpec::iterator it = pgs->beginParameterSpecs() ; it != pgs->endParameterSpecs() && !showIndicator ; ++it )
         {
@@ -327,13 +327,13 @@ void SceneTreeItem::setChildIndicatorPolicy()
       }
       break;
     case ObjectCode::PIPELINE_DATA :
-      DP_ASSERT( m_object.isPtrTo<dp::sg::core::PipelineData>() );
-      showIndicator = !!m_object.staticCast<dp::sg::core::PipelineData>()->getNumberOfParameterGroupData();
+      DP_ASSERT( std::dynamic_pointer_cast<dp::sg::core::PipelineData>(m_object) );
+      showIndicator = !!std::static_pointer_cast<dp::sg::core::PipelineData>(m_object)->getNumberOfParameterGroupData();
       break;
     case ObjectCode::SCENE :
-      DP_ASSERT( m_object.isPtrTo<Scene>() );
+      DP_ASSERT( std::dynamic_pointer_cast<Scene>(m_object) );
       {
-        SceneSharedPtr const& s = m_object.staticCast<Scene>();
+        SceneSharedPtr const& s = std::static_pointer_cast<Scene>(m_object);
         showIndicator = ( s->getNumberOfCameras() || s->getRootNode() );
       }
       break;
@@ -365,7 +365,7 @@ void SceneTreeItem::update()
     {
       case ObjectCode::GEO_NODE :
         {
-          GeoNodeSharedPtr const& gn = m_object.staticCast<GeoNode>();
+          GeoNodeSharedPtr const& gn = std::static_pointer_cast<GeoNode>(m_object);
           if ( gn->getMaterialPipeline() )
           {
             objects.insert( gn->getMaterialPipeline() );
@@ -382,7 +382,7 @@ void SceneTreeItem::update()
       case ObjectCode::TRANSFORM :
       case ObjectCode::BILLBOARD :
         {
-          GroupSharedPtr const& g = m_object.staticCast<Group>();
+          GroupSharedPtr const& g = std::static_pointer_cast<Group>(m_object);
           for ( Group::ChildrenIterator it = g->beginChildren() ; it != g->endChildren() ; ++it )
           {
             objects.insert( *it );
@@ -391,7 +391,7 @@ void SceneTreeItem::update()
         break;
       case ObjectCode::LIGHT_SOURCE :
         {
-          LightSourceSharedPtr const& ls = m_object.staticCast<LightSource>();
+          LightSourceSharedPtr const& ls = std::static_pointer_cast<LightSource>(m_object);
           if ( ls->getLightPipeline() )
           {
             objects.insert( ls->getLightPipeline() );
@@ -402,7 +402,7 @@ void SceneTreeItem::update()
       case ObjectCode::PERSPECTIVE_CAMERA :
       case ObjectCode::MATRIX_CAMERA :
         {
-          CameraSharedPtr const& c = m_object.staticCast<Camera>();
+          CameraSharedPtr const& c = std::static_pointer_cast<Camera>(m_object);
           for ( Camera::HeadLightIterator it = c->beginHeadLights() ; it != c->endHeadLights() ; ++it )
           {
             objects.insert( *it );
@@ -411,7 +411,7 @@ void SceneTreeItem::update()
         break;
       case ObjectCode::PRIMITIVE :
         {
-          PrimitiveSharedPtr const& p = m_object.staticCast<Primitive>();
+          PrimitiveSharedPtr const& p = std::static_pointer_cast<Primitive>(m_object);
           if ( p->getIndexSet() )
           {
             objects.insert( p->getIndexSet() );
@@ -424,7 +424,7 @@ void SceneTreeItem::update()
         break;
       case ObjectCode::PARAMETER_GROUP_DATA :
         {
-          ParameterGroupDataSharedPtr const& pgd = m_object.staticCast<ParameterGroupData>();
+          ParameterGroupDataSharedPtr const& pgd = std::static_pointer_cast<ParameterGroupData>(m_object);
           dp::fx::ParameterGroupSpecSharedPtr const & pgs = pgd->getParameterGroupSpec();
           for ( dp::fx::ParameterGroupSpec::iterator it = pgs->beginParameterSpecs() ; it != pgs->endParameterSpecs() ; ++it )
           {
@@ -437,7 +437,7 @@ void SceneTreeItem::update()
         break;
       case ObjectCode::PIPELINE_DATA :
         {
-          dp::sg::core::PipelineDataSharedPtr const& pd = m_object.staticCast<dp::sg::core::PipelineData>();
+          dp::sg::core::PipelineDataSharedPtr const& pd = std::static_pointer_cast<dp::sg::core::PipelineData>(m_object);
           dp::fx::EffectSpecSharedPtr const & es = pd->getEffectSpec();
           for ( dp::fx::EffectSpec::iterator it = es->beginParameterGroupSpecs() ; it != es->endParameterGroupSpecs() ; ++it )
           {
@@ -450,7 +450,7 @@ void SceneTreeItem::update()
         break;
       case ObjectCode::SCENE :
         {
-          SceneSharedPtr const& s = m_object.staticCast<Scene>();
+          SceneSharedPtr const& s = std::static_pointer_cast<Scene>(m_object);
           for ( Scene::CameraIterator it = s->beginCameras() ; it != s->endCameras() ; ++it )
           {
             objects.insert( *it );

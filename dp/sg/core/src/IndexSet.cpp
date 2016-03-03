@@ -1,4 +1,4 @@
-// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -223,15 +223,15 @@ namespace dp
 
       bool IndexSet::isEquivalent( ObjectSharedPtr const& object, bool ignoreNames, bool deepCompare ) const
       {
-        if ( object == this )
+        if ( object.get() == this )
         {
           return( true );
         }
 
-        bool equi = object.isPtrTo<IndexSet>() && Object::isEquivalent( object, ignoreNames, deepCompare );
+        bool equi = std::dynamic_pointer_cast<IndexSet>(object) && Object::isEquivalent( object, ignoreNames, deepCompare );
         if ( equi )
         {
-          IndexSetSharedPtr const& is = object.staticCast<IndexSet>();
+          IndexSetSharedPtr const& is = std::static_pointer_cast<IndexSet>(object);
 
           equi =    m_dataType              == is->m_dataType
                 &&  m_numberOfIndices       == is->m_numberOfIndices

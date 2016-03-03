@@ -33,7 +33,7 @@
 #include <dp/math/Matmnt.h>
 #include <dp/math/Vecnt.h>
 #include <dp/util/Flags.h>
-#include <dp/util/SharedPtr.h>
+#include <dp/util/PointerTypes.h>
 #include <test/rix/core/helpers/inc/Config.h>
 
 namespace dp
@@ -282,11 +282,11 @@ namespace dp
       template<unsigned int n>
       GeometryDataSharedPtr transformAttribute( math::Matmnt<n,n,float> matrix, AttributeID attribute
                                               , const GeometryDataSharedPtr& meshIn, bool bPositional = true
-                                              , GeometryDataSharedPtr meshOut = GeometryDataSharedPtr::null )
+                                              , GeometryDataSharedPtr meshOut = GeometryDataSharedPtr() )
       {
         DP_ASSERT( meshIn->checkConsistency() );
 
-        if( meshOut == GeometryDataSharedPtr::null )
+        if( meshOut == GeometryDataSharedPtr() )
         {
           meshOut = GeometryData::create(meshIn);
         }

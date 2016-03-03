@@ -1,4 +1,4 @@
-// Copyright (c) 2010-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2010-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -215,7 +215,7 @@ namespace dp
       glWindowPos2i(0,0);
       glReadBuffer( mode );
 
-      bool isBufferGL = buffer.isPtrTo<BufferGL>();
+      bool isBufferGL = std::dynamic_pointer_cast<BufferGL>(buffer);
       if ( isBufferGL )
       {
         GLint oldPBO;

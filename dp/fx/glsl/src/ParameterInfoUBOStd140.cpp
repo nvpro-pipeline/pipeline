@@ -1,4 +1,4 @@
-// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -284,7 +284,7 @@ namespace dp
           case PT_ENUM                   : return( std::make_shared<ParameterInfoVectorConversion<dp::fx::EnumSpec::StorageType, int, 1, 1>>( offset, arraySize ) );
           default:
             DP_ASSERT( !"Unsupported parametertype" );
-            return dp::fx::ParameterGroupLayout::ParameterInfoSharedPtr::null;
+            return dp::fx::ParameterGroupLayout::ParameterInfoSharedPtr();
         }
       }
 

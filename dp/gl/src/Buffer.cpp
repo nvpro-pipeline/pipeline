@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2015
+// Copyright (c) 2010-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -52,7 +52,7 @@ namespace dp
       }
 
 
-      class BufferCore : public Buffer 
+      class BufferCore : public Buffer
       {
       public:
         BufferCore(GLenum usage, GLenum defaultTarget);
@@ -205,7 +205,7 @@ namespace dp
         if (m_size)
         {
           glBindBuffer(m_target, m_id);
-          glGetBufferParameterui64vNV (m_target, GL_BUFFER_GPU_ADDRESS_NV, &m_address); 
+          glGetBufferParameterui64vNV (m_target, GL_BUFFER_GPU_ADDRESS_NV, &m_address);
           glMakeBufferResidentNV(m_target, GL_READ_ONLY);
         }
         else
@@ -234,7 +234,7 @@ namespace dp
       /************************************************************************/
       /* BufferCoreDSA                                                        */
       /************************************************************************/
-      class BufferCoreDSA : public Buffer 
+      class BufferCoreDSA : public Buffer
       {
       public:
         BufferCoreDSA(GLenum usage);
@@ -406,7 +406,7 @@ namespace dp
       /************************************************************************/
       /* BufferPersistentDSA                                                        */
       /************************************************************************/
-      class BufferPersistentDSA : public Buffer 
+      class BufferPersistentDSA : public Buffer
       {
       public:
         BufferPersistentDSA(GLenum usage);
@@ -671,14 +671,14 @@ namespace dp
 #if defined(GL_VERSION_4_5)
       if (GLEW_VERSION_4_5)
       {
-        DP_ASSERT( srcBuffer.dynamicCast<BufferCoreDSA>() || srcBuffer.dynamicCast<BufferPersistentDSA>() );
-        DP_ASSERT( dstBuffer.dynamicCast<BufferCoreDSA>() || dstBuffer.dynamicCast<BufferPersistentDSA>() );
+        DP_ASSERT(std::dynamic_pointer_cast<BufferCoreDSA>(srcBuffer) || std::dynamic_pointer_cast<BufferPersistentDSA>(srcBuffer));
+        DP_ASSERT(std::dynamic_pointer_cast<BufferCoreDSA>(dstBuffer) || std::dynamic_pointer_cast<BufferPersistentDSA>(dstBuffer));
         glNamedCopyBufferSubDataEXT( srcBuffer->getGLId(), dstBuffer->getGLId(), srcOffset, dstOffset, size );
       }
       else
 #endif
       {
-        DP_ASSERT( srcBuffer.dynamicCast<BufferCore>() && dstBuffer.dynamicCast<BufferCore>() );
+        DP_ASSERT(std::dynamic_pointer_cast<BufferCore>(srcBuffer) && std::dynamic_pointer_cast<BufferCore>(dstBuffer));
         glBindBuffer( GL_COPY_READ_BUFFER, srcBuffer->getGLId() );
         glBindBuffer( GL_COPY_WRITE_BUFFER, dstBuffer->getGLId() );
         glCopyBufferSubData( GL_COPY_READ_BUFFER, GL_COPY_WRITE_BUFFER, srcOffset, dstOffset, size );

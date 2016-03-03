@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2005
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -147,7 +147,7 @@ namespace dp
             convertQuadsToTriangles( IndexSet::ConstIterator<unsigned int>( m_triangulatedPrimitive->getIndexSet(), m_triangulatedPrimitive->getElementOffset() )
                                    , m_triangulatedPrimitive->getElementCount(), m_triangulatedPrimitive->getVertexAttributeSet(), newIndices
                                    , m_triangulatedPrimitive->getIndexSet()->getPrimitiveRestartIndex() );
-            IndexSetSharedPtr triangulatedIndexSet = m_triangulatedPrimitive->getIndexSet().clone();
+            IndexSetSharedPtr triangulatedIndexSet = std::static_pointer_cast<IndexSet>(m_triangulatedPrimitive->getIndexSet()->clone());
             triangulatedIndexSet->setData( &newIndices[0], dp::checked_cast<unsigned int>(newIndices.size()) );
             triangulatedIndexSet->setPrimitiveRestartIndex( ~0 );
           }

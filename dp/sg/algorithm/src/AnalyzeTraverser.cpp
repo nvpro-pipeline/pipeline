@@ -1,4 +1,4 @@
-// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -584,9 +584,9 @@ namespace dp
 
         for ( Group::ChildrenConstIterator gci = p->beginChildren() ; gci != p->endChildren() ; ++gci )
         {
-          if ( gci->isPtrTo<GeoNode>() )
+          if ( std::dynamic_pointer_cast<GeoNode>(*gci) )
           {
-            GeoNodeSharedPtr const& geoNode = gci->staticCast<GeoNode>();
+            GeoNodeSharedPtr const& geoNode = std::static_pointer_cast<GeoNode>(*gci);
 
             map<GeoNodeSharedPtr,vector<GeoNodeSharedPtr> >::iterator it;
             for ( it = geoNodes.begin() ; it != geoNodes.end() ; ++it )
@@ -603,9 +603,9 @@ namespace dp
               geoNodes[geoNode];
             }
           }
-          else if ( gci->isPtrTo<LOD>() )
+          else if ( std::dynamic_pointer_cast<LOD>(*gci) )
           {
-            LODSharedPtr const& lod = gci->staticCast<LOD>();
+            LODSharedPtr const& lod = std::static_pointer_cast<LOD>(*gci);
 
             map<LODSharedPtr,vector<LODSharedPtr> >::iterator it;
             for ( it = lods.begin() ; it != lods.end() ; ++it )
@@ -622,9 +622,9 @@ namespace dp
               lods[lod];
             }
           }
-          else if ( gci->isPtrTo<Transform>() )
+          else if ( std::dynamic_pointer_cast<Transform>(*gci) )
           {
-            TransformSharedPtr const& transform = gci->staticCast<Transform>();
+            TransformSharedPtr const& transform = std::static_pointer_cast<Transform>(*gci);
 
             map<TransformSharedPtr,vector<TransformSharedPtr> >::iterator it;
             for ( it = transforms.begin() ; it != transforms.end() ; ++it )
@@ -827,8 +827,8 @@ namespace dp
         //  - it's single child is not a joint
         if (    ( 1 == p->getNumberOfChildren() )
             &&  ( 0 == p->getNumberOfClipPlanes() )
-            &&  (   p->beginChildren()->isPtrTo<Transform>()
-                &&  !p->beginChildren()->staticCast<Transform>()->isJoint() ) )
+            &&  (   std::dynamic_pointer_cast<Transform>(*p->beginChildren())
+                &&  !std::static_pointer_cast<Transform>(*p->beginChildren())->isJoint() ) )
         {
           m_singleChildMap[p->getObjectCode()]++;
         }

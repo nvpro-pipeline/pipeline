@@ -2168,15 +2168,15 @@ namespace dp
 
       bool TextureHost::isEquivalent( TextureSharedPtr const& texture, bool deepCompare ) const
       {
-        if ( texture == this )
+        if ( texture.get() == this )
         {
           return( true );
         }
 
-        bool equi = texture.isPtrTo<TextureHost>() && Texture::isEquivalent( texture, deepCompare );
+        bool equi = std::dynamic_pointer_cast<TextureHost>(texture) && Texture::isEquivalent( texture, deepCompare );
         if ( equi )
         {
-          TextureHostSharedPtr const& th = texture.staticCast<TextureHost>();
+          TextureHostSharedPtr const& th = std::static_pointer_cast<TextureHost>(texture);
 
           equi =  ( th != nullptr )
               &&  ( m_creationFlags   == th->m_creationFlags )

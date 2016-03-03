@@ -1,4 +1,4 @@
-// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -202,7 +202,7 @@ namespace dp
 
       ResultSharedPtr ManagerImpl::groupCreateResult( GroupSharedPtr const& group )
       {
-        return( ResultBitSet::create( group.staticCast<GroupImpl>() ) );
+        return ResultBitSet::create( std::static_pointer_cast<GroupImpl>(group));
       }
 
       void ManagerImpl::initializeComputeShader()
@@ -222,7 +222,7 @@ namespace dp
       {
         dp::util::ProfileEntry p("cull");
 
-        const GroupImplSharedPtr& groupImpl = group.staticCast<GroupImpl>();
+        GroupImplSharedPtr groupImpl = std::static_pointer_cast<GroupImpl>(group);
 
         dp::math::Mat44f vp = viewProjection;
         dp::math::Mat44f modelViewProjection;
@@ -243,7 +243,7 @@ namespace dp
         glMemoryBarrier( GL_BUFFER_UPDATE_BARRIER_BIT ); // TODO This is way too slow to use, but correct.
         glMemoryBarrier( GL_SHADER_STORAGE_BARRIER_BIT );
         dp::gl::MappedBuffer<uint32_t> visibleShader( groupImpl->getOutputBuffer(), GL_MAP_READ_BIT );
-        result.staticCast<ResultBitSet>()->updateChanged( visibleShader );
+        std::static_pointer_cast<ResultBitSet>(result)->updateChanged( visibleShader );
       }
 
       Manager* Manager::create()

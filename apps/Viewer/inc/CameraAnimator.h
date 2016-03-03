@@ -1,4 +1,4 @@
-// Copyright (c) 2009-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2009-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -66,7 +66,7 @@ signals:
 private:
   void cameraMoveDurationFactor(double);
   double determineDurationFactor();
-  dp::sg::core::FrustumCameraSharedPtr const& findNextIterationCamera();
+  dp::sg::core::FrustumCameraSharedPtr findNextIterationCamera();
   void initCameraMove( dp::sg::core::FrustumCameraSharedPtr const& targetCam );
   void initCameraMoveToLight( dp::sg::core::LightSourceSharedPtr const& targetLight );
   void initCameraZoomAll();

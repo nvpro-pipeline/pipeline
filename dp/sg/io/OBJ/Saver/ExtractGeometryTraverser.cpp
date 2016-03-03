@@ -1,4 +1,4 @@
-// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -148,9 +148,9 @@ void  ExtractGeometryTraverser::handleGeoNode( const GeoNode * p )
       if ( sampler )
       {
         const TextureSharedPtr & texture = sampler->getTexture();
-        if ( texture && texture.isPtrTo<TextureHost>() )
+        if ( texture && std::dynamic_pointer_cast<TextureHost>(texture) )
         {
-          m_material.filename = texture.staticCast<TextureHost>()->getFileName();
+          m_material.filename = std::static_pointer_cast<TextureHost>(texture)->getFileName();
         }
       }
     }

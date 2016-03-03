@@ -1,4 +1,4 @@
-// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -201,7 +201,7 @@ class DPAFLoader : public dp::sg::io::SceneLoader
     
     template<typename T>          void            readPixelComponent( const std::string & token, T & pc );
     template<typename T>          unsigned char * readPixels( unsigned int nov );
-    template<typename ObjectType> void            storeNamedObject( const std::string & name, std::map<std::string, dp::util::SharedPtr<ObjectType> > & container, const dp::util::SharedPtr<ObjectType> & obj );
+    template<typename ObjectType> void            storeNamedObject( const std::string & name, std::map<std::string, std::shared_ptr<ObjectType> > & container, const std::shared_ptr<ObjectType> & obj );
 
   private :
     std::map<std::string,dp::sg::core::BillboardSharedPtr>          m_billboards;
@@ -238,8 +238,8 @@ class DPAFLoader : public dp::sg::io::SceneLoader
 
 template <typename ObjectType>
 inline void DPAFLoader::storeNamedObject( const std::string & name
-                                        , std::map<std::string, dp::util::SharedPtr<ObjectType> > & container
-                                        , dp::util::SharedPtr<ObjectType> const & obj )
+                                        , std::map<std::string, std::shared_ptr<ObjectType> > & container
+                                        , std::shared_ptr<ObjectType> const & obj )
 {
   if ( obj )
   {

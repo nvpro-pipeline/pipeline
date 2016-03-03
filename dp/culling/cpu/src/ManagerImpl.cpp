@@ -1,4 +1,4 @@
-// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -193,7 +193,7 @@ namespace dp
 
       ResultSharedPtr ManagerImpl::groupCreateResult( GroupSharedPtr const& group )
       {
-        return( ResultBitSet::create( group.staticCast<GroupBitSet>() ) );
+        return ResultBitSet::create(std::static_pointer_cast<GroupBitSet>(group));
       }
 
       inline void determineCullFlags( const dp::math::Vec4f &p, unsigned int & cfo, unsigned int & cfa )
@@ -467,7 +467,7 @@ namespace dp
       void ManagerImpl::cull( GroupSharedPtr const& group, ResultSharedPtr const& result, const dp::math::Mat44f& viewProjection )
       {
         dp::util::ProfileEntry p("cull");
-        GroupCPUSharedPtr const & groupImpl = group.staticCast<GroupCPU>();
+        GroupCPUSharedPtr const & groupImpl = std::static_pointer_cast<GroupCPU>(group);
 
         groupImpl->updateOBBs();
         std::vector<OBB> const &obbs = groupImpl->getOBBs();
@@ -514,7 +514,7 @@ namespace dp
           }
         }
 
-        result.staticCast<ResultBitSet>()->updateChanged( reinterpret_cast<uint32_t const*>( visible.getBits() ) );
+        std::static_pointer_cast<ResultBitSet>(result)->updateChanged( reinterpret_cast<uint32_t const*>( visible.getBits() ) );
       }
 
     } // namespace cpu

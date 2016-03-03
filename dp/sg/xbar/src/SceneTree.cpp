@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -201,7 +201,7 @@ namespace dp
           {
             ObjectTreeIndex index = *it;
 
-            SwitchSharedPtr ssp = m_objectTree.m_switchNodes[ index ].getSharedPtr();
+            SwitchSharedPtr ssp = m_objectTree.m_switchNodes[ index ].lock();
             DP_ASSERT( ssp );
 
             ObjectTreeIndex childIndex = m_objectTree[index].m_firstChild;
@@ -239,7 +239,7 @@ namespace dp
 
             Mat44f const & modelToWorld = m_transformTree.getWorldMatrix(node.m_transform);
             const Mat44f modelToView = modelToWorld * worldToView;
-            ObjectTreeIndex activeIndex = it->second->getLODToUse( modelToView, lodRangeScale );
+            ObjectTreeIndex activeIndex = it->second.lock()->getLODToUse( modelToView, lodRangeScale );
 
             ObjectTreeIndex childIndex = m_objectTree[index].m_firstChild;
             // counter for the i-th child
@@ -284,16 +284,16 @@ namespace dp
 
         ObjectTreeNode const & parentNode = m_objectTree[parentIndex];
         ObjectTreeNode & newNode = m_objectTree[index];
-        if (node.m_object.isPtrTo<dp::sg::core::Transform>())
+        if (std::dynamic_pointer_cast<dp::sg::core::Transform>(node.m_object))
         {
           newNode.m_transformParent = parentNode.m_transform;
-          newNode.m_transform = m_transformTree.addTransform(parentNode.m_transform, node.m_object.inplaceCast<dp::sg::core::Transform>());
+          newNode.m_transform = m_transformTree.addTransform(parentNode.m_transform, std::static_pointer_cast<dp::sg::core::Transform>(node.m_object));
           newNode.m_isTransform = true;
         }
-        else if(node.m_object.isPtrTo<dp::sg::core::Billboard>())
+        else if(std::dynamic_pointer_cast<dp::sg::core::Billboard>(node.m_object))
         {
           newNode.m_transformParent = parentNode.m_transform;
-          newNode.m_transform = m_transformTree.addBillboard(parentNode.m_transform, node.m_object.inplaceCast<dp::sg::core::Billboard>());
+          newNode.m_transform = m_transformTree.addBillboard(parentNode.m_transform, std::static_pointer_cast<dp::sg::core::Billboard>(node.m_object));
           newNode.m_isBillboard = true;
         }
 
@@ -303,13 +303,13 @@ namespace dp
       void SceneTree::addLOD( LODSharedPtr const& lod, ObjectTreeIndex index )
       {
         DP_ASSERT( m_objectTree.m_LODs.find(index) == m_objectTree.m_LODs.end() );
-        m_objectTree.m_LODs[index] = lod.getWeakPtr();
+        m_objectTree.m_LODs[index] = lod;
       }
 
       void SceneTree::addSwitch( const SwitchSharedPtr& s, ObjectTreeIndex index )
       {
         DP_ASSERT( m_objectTree.m_switchNodes.find(index) == m_objectTree.m_switchNodes.end() );
-        m_objectTree.m_switchNodes[index] = s.getWeakPtr();
+        m_objectTree.m_switchNodes[index] = s;
 
         // attach switch observer to switch
         m_switchObserver->attach( s, index );
@@ -347,7 +347,7 @@ namespace dp
           ++begin;
           ObjectTreeNode& current = m_objectTree[currentIndex];
 
-          if ( m_objectTree[currentIndex].m_object.isPtrTo<dp::sg::core::LightSource>() )
+          if ( std::dynamic_pointer_cast<dp::sg::core::LightSource>(m_objectTree[currentIndex].m_object) )
           {
             DP_VERIFY( m_lightSources.erase( currentIndex ) == 1 );
           }

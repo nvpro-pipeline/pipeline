@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -102,9 +102,9 @@ namespace dp
             return m_payload;
           }
 
-          const dp::sg::core::HandledObjectSharedPtr& ResourceManager::Resource::getHandledObject() const
+          dp::sg::core::HandledObjectSharedPtr ResourceManager::Resource::getHandledObject() const
           {
-            return dp::sg::core::HandledObjectSharedPtr::null;
+            return dp::sg::core::HandledObjectSharedPtr();
           }
 
           /*******************************/
@@ -223,7 +223,7 @@ namespace dp
               DP_ASSERT( !shared_from_this().unique() && "There's no reference to the ResourceManager left!" );
               Resource* res = it->second;
               m_resources.erase( it );
-              res->m_resourceManager = ResourceManagerSharedPtr::null;
+              res->m_resourceManager = ResourceManagerSharedPtr();
             }
           }
 

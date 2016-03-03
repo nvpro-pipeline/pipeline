@@ -1,4 +1,4 @@
-// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -131,7 +131,7 @@ XMLLoader::lookupFile( const string & file )
 {
   SceneSharedPtr scene;
 
-  map< string, SceneSharedPtr >::iterator iter = m_fileCache.find( file ); 
+  map< string, SceneSharedPtr >::iterator iter = m_fileCache.find( file );
 
   if( iter == m_fileCache.end() )
   {
@@ -192,7 +192,7 @@ XMLLoader::buildScene( GroupSharedPtr const& parent, TiXmlDocument & doc, TiXmlN
         if( pos || ori )
         {
           TransformSharedPtr transH( Transform::create() );
-          transH->addChild( root.clone() );
+          transH->addChild(std::static_pointer_cast<dp::sg::core::Node>(root->clone()));
           Trafo trafo;
 
           if( pos )
@@ -232,7 +232,7 @@ XMLLoader::buildScene( GroupSharedPtr const& parent, TiXmlDocument & doc, TiXmlN
 
             if( args == 4 )
             {
-              trafo.setOrientation( Quatf( x, y, z, w ) ); 
+              trafo.setOrientation( Quatf( x, y, z, w ) );
             }
           }
 
@@ -243,7 +243,7 @@ XMLLoader::buildScene( GroupSharedPtr const& parent, TiXmlDocument & doc, TiXmlN
         }
         else
         {
-          theNode = root.clone();
+          theNode = std::static_pointer_cast<dp::sg::core::Node>(root->clone());
         }
 
         if( note )
@@ -297,7 +297,7 @@ XMLLoader::load( std::string const& filename, dp::util::FileFinder const& fileFi
 
   TiXmlDocument doc( filename.c_str() );
 
-  m_viewState = viewState.getWeakPtr();
+  m_viewState = viewState;
 
   m_fileFinder = fileFinder;
 
@@ -324,7 +324,7 @@ XMLLoader::load( std::string const& filename, dp::util::FileFinder const& fileFi
   do
   {
     buildScene( hGroup, doc, child );
-  } while( child = child->NextSibling() ); 
+  } while( child = child->NextSibling() );
 
   // create toplevel scene
   hScene = Scene::create();

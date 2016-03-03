@@ -1,4 +1,4 @@
-// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -54,7 +54,7 @@ void DisplayNormalsTraverser::doApply( const dp::sg::core::NodeSharedPtr & root 
 
   if ( !m_normalsGeoNodes.top().empty() )
   {
-    DP_ASSERT( root.isPtrTo<dp::sg::core::GeoNode>() );
+    DP_ASSERT( std::dynamic_pointer_cast<dp::sg::core::GeoNode>(root) );
     DP_ASSERT( root->getName() != NORMALS_NAME );
     DP_ASSERT( m_normalsGeoNodes.top().size() == 1 );
     DP_ASSERT( m_normalsGeoNodes.top()[0].first == root );
@@ -155,7 +155,7 @@ void DisplayNormalsTraverser::checkNormals( dp::sg::core::Group * p )
       else
       {
         // there is no new normals dp::sg::core::GeoNode -> remove the dp::sg::core::Primitive of the current one as outdated
-        (++p->beginChildren())->staticCast<dp::sg::core::GeoNode>()->setPrimitive( dp::sg::core::PrimitiveSharedPtr() );
+        std::static_pointer_cast<dp::sg::core::GeoNode>(*(++p->beginChildren()))->setPrimitive(dp::sg::core::PrimitiveSharedPtr());
       }
     }
     else

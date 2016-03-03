@@ -162,7 +162,7 @@ void GLUTMinimal::paint()
 {
   try
   {
-    dp::sg::renderer::rix::gl::SceneRendererSharedPtr renderer = getSceneRenderer().staticCast<dp::sg::renderer::rix::gl::SceneRenderer>();
+    dp::sg::renderer::rix::gl::SceneRendererSharedPtr renderer = std::static_pointer_cast<dp::sg::renderer::rix::gl::SceneRenderer>(getSceneRenderer());
     if ( !m_renderEngine.empty() && renderer->getRenderEngine() != m_renderEngine )
     {
       std::cout << "Setting renderengine: " << m_renderEngine << std::endl;
@@ -420,7 +420,7 @@ void combineVertexAttributes( dp::sg::ui::ViewStateSharedPtr const& viewState )
   std::vector<dp::sg::core::ObjectSharedPtr> results = searchTraverser.getResults();
   for ( std::vector<dp::sg::core::ObjectSharedPtr>::iterator it = results.begin(); it != results.end(); ++it )
   {
-    it->inplaceCast<dp::sg::core::VertexAttributeSet>()->combineBuffers();
+    std::static_pointer_cast<dp::sg::core::VertexAttributeSet>(*it)->combineBuffers();
   }
 }
 
@@ -568,7 +568,7 @@ int runApp( options::variables_map const& opts )
     const std::vector<dp::sg::core::ObjectSharedPtr> &vp = searchTraverser.getResults();
     for ( size_t i=0 ; i<vp.size() ; i++ )
     {
-      vp[i].inplaceCast<dp::sg::core::GeoNode>()->setMaterialPipeline( replacement );
+      std::static_pointer_cast<dp::sg::core::GeoNode>(vp[i])->setMaterialPipeline(replacement);
     }
   }
 

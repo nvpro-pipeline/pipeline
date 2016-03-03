@@ -1,4 +1,4 @@
-// Copyright (c) 2009-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2009-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -108,7 +108,7 @@ GLUTAnimationWidget::GLUTAnimationWidget( const dp::gl::RenderContextFormat &for
 GLUTAnimationWidget::~GLUTAnimationWidget()
 {
   // Delete SceneRenderer here to cleanup resources before the OpenGL context dies
-  setSceneRenderer( SceneRendererSharedPtr::null );
+  setSceneRenderer( SceneRendererSharedPtr() );
 
   // Reset Manipulator
   setManipulator( 0 );
@@ -198,7 +198,7 @@ void combineVertexAttributes( dp::sg::ui::ViewStateSharedPtr const& viewState )
   std::vector<dp::sg::core::ObjectSharedPtr> results = searchTraverser.getResults();
   for ( std::vector<dp::sg::core::ObjectSharedPtr>::iterator it = results.begin(); it != results.end(); ++it )
   {
-    it->inplaceCast<dp::sg::core::VertexAttributeSet>()->combineBuffers();
+    std::static_pointer_cast<dp::sg::core::VertexAttributeSet>(*it)->combineBuffers();
   }
 }
 

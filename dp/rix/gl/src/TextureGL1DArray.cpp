@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2015
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -54,11 +54,9 @@ namespace dp
 
       void TextureGL1DArray::upload( unsigned int mipMapLevel, unsigned int layer, const void* data )
       {
-        getTexture().inplaceCast<dp::gl::Texture1DArray>()->setData( data, layer, mipMapLevel );
+        std::static_pointer_cast<dp::gl::Texture1DArray>(getTexture())->setData( data, layer, mipMapLevel );
       }
 
     } // namespace gl
   } // namespace rix
 } // namespace dp
-
-

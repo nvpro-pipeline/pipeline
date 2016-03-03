@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -103,10 +103,10 @@ namespace dp
         return true;
       }
 
-      if(  getWidth() != rhs.getWidth() 
+      if(  getWidth() != rhs.getWidth()
         || getHeight() != rhs.getHeight()
         || getBytesPerPixel() != rhs.getBytesPerPixel()
-        || getNumLayers() != rhs.getNumLayers() 
+        || getNumLayers() != rhs.getNumLayers()
         || getMipmapLevels() != rhs.getMipmapLevels() )
       {
         return false;
@@ -151,7 +151,7 @@ namespace dp
 
       size_t i = face * m_mipmapLevels + mipmapLevel;
       DP_ASSERT( i < m_data.size() );
-      
+
       return m_data[i].get();
     }
 
@@ -377,7 +377,7 @@ namespace dp
 #if defined(HAVE_IL)
       unsigned int imageID;
       ilGenImages( 1, (ILuint *) &imageID );
-      ilBindImage( imageID );  
+      ilBindImage( imageID );
 
       std::string fext = dp::util::getFileExtension( filename );
 
@@ -433,14 +433,14 @@ namespace dp
         ilActiveImage(0);
       }
 
-      DP_ASSERT(IL_NO_ERROR == ilGetError()); 
+      DP_ASSERT(IL_NO_ERROR == ilGetError());
 
       vector<const void*> rawData = image->getLayerDataArray();
 
       for( ILint face = 0; face < numLayers; ++face )
       {
         // DevIL frequently loses track of the current state
-        // 
+        //
         ilBindImage(imageID);
         if( layersAsFaces )
         {
@@ -491,7 +491,7 @@ namespace dp
 #if defined(HAVE_IL)
       unsigned int imageID;
       ilGenImages( 1, (ILuint *) &imageID );
-      ilBindImage( imageID );  
+      ilBindImage( imageID );
 
       if ( fileExists( filename ) )
       {
@@ -502,14 +502,14 @@ namespace dp
         ilLoadImage( (const ILstring) filename.c_str() );
 
         // DevIL frequently loses track of the current state
-        // 
+        //
         ilBindImage(imageID);
         if( layersAsFaces )
         {
           ilActiveImage(0);
         }
         //
-        DP_ASSERT(IL_NO_ERROR == ilGetError()); 
+        DP_ASSERT(IL_NO_ERROR == ilGetError());
 
 
         // image dimension in pixels
@@ -531,7 +531,7 @@ namespace dp
           for( ILint mipmap = 0; mipmap < (numMipmaps ? numMipmaps : 1); ++mipmap )
           {
             // DevIL frequently loses track of the current state
-            // 
+            //
             ilBindImage(imageID);
             if( layersAsFaces )
             {
@@ -563,7 +563,7 @@ namespace dp
       }
       else
       {
-        std::cerr << "ERROR: load image failed!\n";      
+        std::cerr << "ERROR: load image failed!\n";
         goto ERROREXIT;
       }
 
@@ -572,7 +572,7 @@ ERROREXIT:
       ilDeleteImages(1, &imageID);
       DP_ASSERT(IL_NO_ERROR == ilGetError());
 #endif
-      return( ImageSharedPtr::null );
+      return( ImageSharedPtr() );
     }
 
 #if defined(HAVE_IL)
@@ -598,5 +598,5 @@ ERROREXIT:
     static DevILInitShutdown* __dis = GlobalDeVILInitShutdown::instance();
 #endif
 
-  } // namespace util 
+  } // namespace util
 } // namespace dp

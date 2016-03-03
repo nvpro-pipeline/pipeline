@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010
+// Copyright (c) 2010-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -44,12 +44,12 @@ namespace dp
       {
         if ( m_manipulator )
         {
-          m_manipulator->setViewState( dp::sg::ui::ViewStateSharedPtr::null );
-          m_manipulator->setRenderTarget( dp::ui::RenderTargetSharedPtr::null );
+          m_manipulator->setViewState( dp::sg::ui::ViewStateSharedPtr() );
+          m_manipulator->setRenderTarget( dp::ui::RenderTargetSharedPtr() );
         }
         if ( m_renderer )
         {
-          m_renderer->setRenderTarget( dp::ui::RenderTargetSharedPtr::null );
+          m_renderer->setRenderTarget( dp::ui::RenderTargetSharedPtr() );
         }
       }
 

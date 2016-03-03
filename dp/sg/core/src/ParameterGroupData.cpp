@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -32,7 +32,6 @@
 #include <dp/sg/core/TextureFile.h>
 #include <dp/sg/core/TextureHost.h>
 #include <dp/util/File.h>
-#include <dp/util/WeakPtr.h>
 #include <boost/algorithm/string.hpp>
 
 using namespace dp::fx;
@@ -508,9 +507,9 @@ namespace dp
                 HandledObjectSharedPtr & ho = *reinterpret_cast<HandledObjectSharedPtr *>(&m_data[it->second+i*sizeof(HandledObjectSharedPtr)]);
                 if ( ho )
                 {
-                  if ( ho.isPtrTo<Sampler>() )
+                  if ( std::dynamic_pointer_cast<Sampler>(ho) )
                   {
-                    ho.staticCast<Sampler>()->detach( this );
+                    std::static_pointer_cast<Sampler>(ho)->detach( this );
                   }
                   ho.reset();
                 }
@@ -522,9 +521,9 @@ namespace dp
               HandledObjectSharedPtr & ho = *reinterpret_cast<HandledObjectSharedPtr *>(&m_data[it->second]);
               if ( ho )
               {
-                if ( ho.isPtrTo<Sampler>() )
+                if ( std::dynamic_pointer_cast<Sampler>(ho) )
                 {
-                  ho.staticCast<Sampler>()->detach( this );
+                  std::static_pointer_cast<Sampler>(ho)->detach( this );
                 }
                 ho.reset();
               }
@@ -662,15 +661,15 @@ namespace dp
 
       bool ParameterGroupData::isEquivalent( ObjectSharedPtr const& object, bool ignoreNames, bool deepCompare ) const
       {
-        if ( object == this )
+        if ( object.get() == this )
         {
           return( true );
         }
 
-        bool equi = object.isPtrTo<ParameterGroupData>() && Object::isEquivalent( object, ignoreNames, deepCompare );
+        bool equi = std::dynamic_pointer_cast<ParameterGroupData>(object) && Object::isEquivalent( object, ignoreNames, deepCompare );
         if ( equi )
         {
-          ParameterGroupDataSharedPtr const& pgd = object.staticCast<ParameterGroupData>();
+          ParameterGroupDataSharedPtr const& pgd = std::static_pointer_cast<ParameterGroupData>(object);
           if ( deepCompare )
           {
             equi = m_parameterGroupSpec->isEquivalent( pgd->m_parameterGroupSpec, ignoreNames, true );

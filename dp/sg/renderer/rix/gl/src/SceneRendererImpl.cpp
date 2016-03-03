@@ -1,4 +1,4 @@
-// Copyright (c) 2010-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2010-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -164,7 +164,7 @@ namespace dp
             {
               SceneRenderer::beginRendering( viewState, renderTarget );
 
-              dp::gl::RenderTargetSharedPtr renderTargetGL = renderTarget.staticCast<dp::gl::RenderTarget>();
+              dp::gl::RenderTargetSharedPtr renderTargetGL = std::static_pointer_cast<dp::gl::RenderTarget>(renderTarget);
 
               if ( !m_userRenderContext )
               {
@@ -206,7 +206,7 @@ namespace dp
           {
             if ( m_rendererInitialized )
             {
-              dp::gl::RenderTargetSharedPtr renderTargetGL = renderTarget.staticCast<dp::gl::RenderTarget>();
+              dp::gl::RenderTargetSharedPtr renderTargetGL = std::static_pointer_cast<dp::gl::RenderTarget>(renderTarget);
               renderTargetGL->endRendering();
 
               SceneRenderer::endRendering( viewState, renderTarget );
@@ -222,7 +222,7 @@ namespace dp
           {
             if ( m_rendererInitialized )
             {
-              dp::gl::RenderTargetSharedPtr renderTargetGL = renderTarget.staticCast<dp::gl::RenderTarget>();
+              dp::gl::RenderTargetSharedPtr renderTargetGL = std::static_pointer_cast<dp::gl::RenderTarget>(renderTarget);
 
               if (viewState->getSceneTree() != m_sceneTree)
               {
@@ -231,7 +231,7 @@ namespace dp
 
                 m_drawableManager = createDrawableManager( m_resourceManager );
                 m_drawableManager->setSceneTree( m_sceneTree );
-                m_drawableManager->setEnvironmentSampler( getEnvironmentRenderingEnabled() ? getEnvironmentSampler() : dp::sg::core::SamplerSharedPtr::null );
+                m_drawableManager->setEnvironmentSampler( getEnvironmentRenderingEnabled() ? getEnvironmentSampler() : dp::sg::core::SamplerSharedPtr() );
                 m_drawableManager->update( m_viewportSize );
 
                 DrawableManagerDefault* drawableManagerDefault = dynamic_cast<DrawableManagerDefault*>( m_drawableManager );
@@ -271,7 +271,7 @@ namespace dp
 
             // texture coord setup for mapping the backdrop
             //
-            dp::sg::core::FrustumCameraSharedPtr const& theCamera = viewState->getCamera().staticCast<dp::sg::core::FrustumCamera>();
+            dp::sg::core::FrustumCameraSharedPtr const& theCamera = std::static_pointer_cast<dp::sg::core::FrustumCamera>(viewState->getCamera());
 
             dp::math::Vec3f lookdir = theCamera->getDirection();
             DP_ASSERT( isNormalized( lookdir ) );
@@ -334,14 +334,14 @@ namespace dp
             DP_ASSERT( drawableManagerDefault );
 
             // update near/far plane before culling
-            if ( viewState->getAutoClipPlanes() && camera.isPtrTo<dp::sg::core::FrustumCamera>() )
+            if ( viewState->getAutoClipPlanes() && std::dynamic_pointer_cast<dp::sg::core::FrustumCamera>(camera) )
             {
               dp::math::Box3f bbox = drawableManagerDefault->getBoundingBox();
 
               if ( isValid( bbox ) )
               {
                 dp::math::Sphere3f bs( bbox.getCenter(), length( bbox.getSize() ) * 0.5f );
-                camera.staticCast<FrustumCamera>()->calcNearFarDistances( bs );
+                std::static_pointer_cast<FrustumCamera>(camera)->calcNearFarDistances(bs);
               }
             }
 
@@ -352,7 +352,7 @@ namespace dp
             drawableManagerDefault->cull( camera );
 
             NSIGHT_START_RANGE( "Frame" );
-            dp::gl::RenderTargetSharedPtr const& renderTargetGL = renderTarget.staticCast<dp::gl::RenderTarget>();
+            dp::gl::RenderTargetSharedPtr const& renderTargetGL = std::static_pointer_cast<dp::gl::RenderTarget>(renderTarget);
             dp::gl::TargetBufferMask clearMask = renderTargetGL->getClearMask();
             if ( getEnvironmentRenderingEnabled() )
             {
@@ -422,8 +422,8 @@ namespace dp
 
           void SceneRendererImpl::onEnvironmentRenderingEnabledChanged()
           {
-            DP_ASSERT( getRenderTarget().dynamicCast<dp::gl::RenderTarget>() );
-            dp::gl::RenderTargetSharedPtr glRenderTarget = getRenderTarget().staticCast<dp::gl::RenderTarget>();
+            DP_ASSERT( std::dynamic_pointer_cast<dp::gl::RenderTarget>(getRenderTarget()) );
+            dp::gl::RenderTargetSharedPtr glRenderTarget = std::static_pointer_cast<dp::gl::RenderTarget>(getRenderTarget());
             if ( getEnvironmentRenderingEnabled() )
             {
               m_environmentRenderer = dp::sg::renderer::rix::gl::FSQRenderer::create( glRenderTarget );
@@ -438,7 +438,7 @@ namespace dp
             }
             if ( m_drawableManager )
             {
-              m_drawableManager->setEnvironmentSampler( getEnvironmentRenderingEnabled() ? getEnvironmentSampler() : dp::sg::core::SamplerSharedPtr::null );
+              m_drawableManager->setEnvironmentSampler( getEnvironmentRenderingEnabled() ? getEnvironmentSampler() : dp::sg::core::SamplerSharedPtr() );
             }
           }
 

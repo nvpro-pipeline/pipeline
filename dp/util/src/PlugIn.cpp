@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2015
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -24,6 +24,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+#include <dp/Assert.h>
 #include <dp/util/PlugIn.h>
 #include <dp/util/File.h>
 #include <boost/tokenizer.hpp>
@@ -54,12 +55,12 @@ namespace dp
       data1[15] = '\0'; // terminate
     }
 
-    UPITID::UPITID(const UPITID& rhs) 
+    UPITID::UPITID(const UPITID& rhs)
     {
       memcpy(this, &rhs, sizeof(UPITID));
     }
 
-    UPIID::UPIID(const char idstr[16], UPITID pitid) 
+    UPIID::UPIID(const char idstr[16], UPITID pitid)
     : data1(pitid)
     {
       strncpy(data0, idstr, 15);
@@ -98,7 +99,7 @@ namespace dp
         if ( dynamicLibrary )
         {
           PFNQUERYPLUGINTERFACEPIIDS pfnQueryPlugInterfacePIIDs = (PFNQUERYPLUGINTERFACEPIIDS)dynamicLibrary->getSymbol("queryPlugInterfacePIIDs");
-          if ( pfnQueryPlugInterfacePIIDs ) 
+          if ( pfnQueryPlugInterfacePIIDs )
           {
             std::vector<UPIID> upiids;
             (*pfnQueryPlugInterfacePIIDs)(upiids);
@@ -188,7 +189,7 @@ namespace dp
     /* set file filter specified by filter */
     void PlugInServer::setFileFilterImpl(const std::string& filter)
     {
-      if ( !filter.empty() ) 
+      if ( !filter.empty() )
       {
         m_filter = filter;
       }
@@ -237,14 +238,14 @@ namespace dp
 
     void addPlugInSearchPath(const std::string& path)
     {
-      PIS::instance()->m_searchPath.push_back(path); 
+      PIS::instance()->m_searchPath.push_back(path);
       DP_ASSERT(PIS::instance()->m_searchPath.size()>0);
     }
 
     const std::vector<string>& getPlugInSearchPath()
-    {  
+    {
       DP_ASSERT(PIS::instance()->m_searchPath.size()>0);
-      return PIS::instance()->m_searchPath;  
+      return PIS::instance()->m_searchPath;
     }
   } // namespace util
 } // namespace dp

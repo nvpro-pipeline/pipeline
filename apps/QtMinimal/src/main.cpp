@@ -109,7 +109,7 @@ QtMinimalWidget::QtMinimalWidget( const dp::gl::RenderContextFormat &format )
 QtMinimalWidget::~QtMinimalWidget()
 {
   // Delete SceneRenderer here to cleanup resources before the OpenGL context dies
-  setSceneRenderer( dp::sg::ui::SceneRendererSharedPtr::null );
+  setSceneRenderer( dp::sg::ui::SceneRendererSharedPtr() );
 
   // Reset Manipulator
   setManipulator( 0 );
@@ -125,7 +125,7 @@ void QtMinimalWidget::keyPressEvent( QKeyEvent *event )
   }
   else if ( event->text().compare( "d" ) == 0 )
   {
-    dp::sg::renderer::rix::gl::SceneRendererSharedPtr const& renderer = getSceneRenderer().staticCast<dp::sg::renderer::rix::gl::SceneRenderer>();
+    dp::sg::renderer::rix::gl::SceneRendererSharedPtr const& renderer = std::static_pointer_cast<dp::sg::renderer::rix::gl::SceneRenderer>(getSceneRenderer());
     renderer->setDepthPass( ! renderer->getDepthPass() );
   }
   else if ( event->text().compare("s") == 0 )
@@ -248,7 +248,7 @@ void QtMinimalWidget::setShowFrameRate( bool showFPS )
 
 void QtMinimalWidget::onRenderTargetChanged( const dp::gl::RenderTargetSharedPtr &oldTarget, const dp::gl::RenderTargetSharedPtr &newTarget )
 {
-  dp::sg::renderer::rix::gl::SceneRendererSharedPtr sr = getSceneRenderer().dynamicCast<dp::sg::renderer::rix::gl::SceneRenderer>();
+  dp::sg::renderer::rix::gl::SceneRendererSharedPtr sr = std::static_pointer_cast<dp::sg::renderer::rix::gl::SceneRenderer>(getSceneRenderer());
   setSceneRenderer( dp::sg::renderer::rix::gl::SceneRenderer::create( sr->getRenderEngine().c_str(), sr->getShaderManager(), sr->getCullingMode(), sr->getTransparencyMode(), newTarget ) );
 }
 
@@ -267,7 +267,7 @@ void combineVertexAttributes( dp::sg::ui::ViewStateSharedPtr const& viewState )
   std::vector<dp::sg::core::ObjectSharedPtr> results = dp::sg::algorithm::searchClass( viewState->getScene()->getRootNode(), "class::dp::sg::core::VertexAttributeSet" );
   for ( std::vector<dp::sg::core::ObjectSharedPtr>::iterator it = results.begin(); it != results.end(); ++it )
   {
-    it->inplaceCast<dp::sg::core::VertexAttributeSet>()->combineBuffers();
+    std::static_pointer_cast<dp::sg::core::VertexAttributeSet>(*it)->combineBuffers();
   }
 }
 
@@ -481,7 +481,7 @@ int runApp( int argc, char *argv[], options::variables_map const& opts )
     const std::vector<dp::sg::core::ObjectSharedPtr> vp = dp::sg::algorithm::searchClass( viewState->getScene()->getRootNode(), "class dp::sg::core::GeoNode", true );
     for ( size_t i=0 ; i<vp.size() ; i++ )
     {
-      vp[i].inplaceCast<dp::sg::core::GeoNode>()->setMaterialPipeline( replacement );
+      std::static_pointer_cast<dp::sg::core::GeoNode>(vp[i])->setMaterialPipeline(replacement);
     }
   }
 
@@ -493,7 +493,7 @@ int runApp( int argc, char *argv[], options::variables_map const& opts )
     const std::vector<dp::sg::core::ObjectSharedPtr> vp = dp::sg::algorithm::searchClass( viewState->getScene()->getRootNode(), "class dp::sg::core::Primitive", true );
     for ( size_t i=0 ; i<vp.size() ; i++ )
     {
-      vp[i].inplaceCast<dp::sg::core::Primitive>()->generateTexCoords( tct, dp::sg::core::VertexAttributeSet::AttributeID::TEXCOORD0, false );
+      std::static_pointer_cast<dp::sg::core::Primitive>(vp[i])->generateTexCoords(tct, dp::sg::core::VertexAttributeSet::AttributeID::TEXCOORD0, false);
       // don't overwrite if there already are some texture coordinate                                                          ^^^^^
     }
   }
@@ -504,11 +504,11 @@ int runApp( int argc, char *argv[], options::variables_map const& opts )
     const std::vector<dp::sg::core::ObjectSharedPtr> vp = dp::sg::algorithm::searchClass( viewState->getScene()->getRootNode(), "class dp::sg::core::Primitive", true );
     for ( size_t i=0 ; i<vp.size() ; i++ )
     {
-      vp[i].inplaceCast<dp::sg::core::Primitive>()->generateTangentSpace( dp::sg::core::VertexAttributeSet::AttributeID::TEXCOORD0
-                                                                        , dp::sg::core::VertexAttributeSet::AttributeID::TANGENT
-                                                                        , dp::sg::core::VertexAttributeSet::AttributeID::BINORMAL
-                                                                        , false );
-      // don't overwrite if there already are some texture coordinate     ^^^^^
+      std::static_pointer_cast<dp::sg::core::Primitive>(vp[i])->generateTangentSpace(dp::sg::core::VertexAttributeSet::AttributeID::TEXCOORD0
+                                                                                    , dp::sg::core::VertexAttributeSet::AttributeID::TANGENT
+                                                                                    , dp::sg::core::VertexAttributeSet::AttributeID::BINORMAL
+                                                                                    , false );
+      // don't overwrite if there already are some texture coordinate                 ^^^^^
     }
   }
 

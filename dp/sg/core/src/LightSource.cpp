@@ -76,7 +76,7 @@ namespace dp
 
         if ( rhs.m_lightPipeline )
         {
-          m_lightPipeline = rhs.m_lightPipeline.clone();
+          m_lightPipeline = std::static_pointer_cast<dp::sg::core::PipelineData>(rhs.m_lightPipeline->clone());
           m_lightPipeline->attach( this );
         }
       }
@@ -120,7 +120,7 @@ namespace dp
           }
           if ( rhs.m_lightPipeline )
           {
-            m_lightPipeline = rhs.m_lightPipeline.clone();
+            m_lightPipeline = std::static_pointer_cast<dp::sg::core::PipelineData>(rhs.m_lightPipeline->clone());
             m_lightPipeline->attach( this );
           }
 
@@ -136,15 +136,15 @@ namespace dp
 
       bool LightSource::isEquivalent( ObjectSharedPtr const& object, bool ignoreNames, bool deepCompare ) const
       {
-        if ( object == this )
+        if ( object.get() == this )
         {
           return( true );
         }
 
-        bool equi = object.isPtrTo<LightSource>() && Node::isEquivalent( object, ignoreNames, deepCompare );
+        bool equi = std::dynamic_pointer_cast<LightSource>(object) && Node::isEquivalent( object, ignoreNames, deepCompare );
         if ( equi )
         {
-          LightSourceSharedPtr const& ls = object.staticCast<LightSource>();
+          LightSourceSharedPtr const& ls = std::static_pointer_cast<LightSource>(object);
 
           equi =    ( m_shadowCasting   == ls->m_shadowCasting )
                 &&  ( m_enabled         == ls->m_enabled       )

@@ -1,4 +1,4 @@
-// Copyright (c) 2010-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2010-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -88,12 +88,12 @@ namespace dp
 
         if ( rhs.m_indexSet )
         {
-          m_indexSet = rhs.m_indexSet.clone();
+          m_indexSet = std::static_pointer_cast<dp::sg::core::IndexSet>(rhs.m_indexSet->clone());
           m_indexSet->attach( this );
         }
         if ( rhs.m_vertexAttributeSet )
         {
-          m_vertexAttributeSet = rhs.m_vertexAttributeSet.clone();
+          m_vertexAttributeSet = std::static_pointer_cast<dp::sg::core::VertexAttributeSet>(rhs.m_vertexAttributeSet->clone());
           m_vertexAttributeSet->attach( this );
         }
 
@@ -267,15 +267,15 @@ namespace dp
 
       bool Primitive::isEquivalent( ObjectSharedPtr const& object, bool ignoreNames, bool deepCompare ) const
       {
-        if ( object == this )
+        if ( object.get() == this )
         {
           return( true );
         }
 
-        bool equi = object.isPtrTo<Primitive>() && BoundingVolumeObject::isEquivalent( object, ignoreNames, deepCompare );
+        bool equi = std::dynamic_pointer_cast<Primitive>(object) && BoundingVolumeObject::isEquivalent( object, ignoreNames, deepCompare );
         if ( equi )
         {
-          PrimitiveSharedPtr const& p = object.staticCast<Primitive>();
+          PrimitiveSharedPtr const& p = std::static_pointer_cast<Primitive>(object);
 
           equi = m_primitiveType        == p->m_primitiveType &&
                  m_elementOffset        == p->m_elementOffset &&

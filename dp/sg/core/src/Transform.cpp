@@ -234,15 +234,15 @@ namespace dp
 
       bool Transform::isEquivalent( ObjectSharedPtr const& object, bool ignoreNames, bool deepCompare ) const
       {
-        if ( object == this )
+        if ( object.get() == this )
         {
           return( true );
         }
 
-        bool equi = object.isPtrTo<Transform>() && Group::isEquivalent( object, ignoreNames, deepCompare );
+        bool equi = std::dynamic_pointer_cast<Transform>(object) && Group::isEquivalent( object, ignoreNames, deepCompare );
         if ( equi )
         {
-          TransformSharedPtr const& t = object.staticCast<Transform>();
+          TransformSharedPtr const& t = std::static_pointer_cast<Transform>(object);
           equi =    ( m_trafo == t->m_trafo )
                 &&  ! ( m_jointCount || t->m_jointCount );    // Joints can't be equivalent to each other or to non-joints!
         }

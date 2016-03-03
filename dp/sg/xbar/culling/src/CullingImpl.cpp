@@ -1,4 +1,4 @@
-// Copyright (c) 2013-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2013-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -115,17 +115,17 @@ namespace dp
 
         bool CullingImpl::resultIsVisible( ResultSharedPtr const & result, ObjectTreeIndex objectTreeIndex ) const
         {
-          return( m_culling->resultObjectIsVisible( result.staticCast<ResultImpl>()->getResult(), m_objects[objectTreeIndex] ) );
+          return( m_culling->resultObjectIsVisible( std::static_pointer_cast<ResultImpl>(result)->getResult(), m_objects[objectTreeIndex] ) );
         }
 
         std::vector<dp::sg::xbar::ObjectTreeIndex> const & CullingImpl::resultGetChangedIndices( ResultSharedPtr const & result ) const
         {
-          return( result.staticCast<ResultImpl>()->getChanged() );
+          return( std::static_pointer_cast<ResultImpl>(result)->getChanged() );
         }
 
         void CullingImpl::cull( ResultSharedPtr const & result, dp::math::Mat44f const & world2ViewProjection )
         {
-          ResultImplSharedPtr const & resultImpl = result.staticCast<ResultImpl>();
+          ResultImplSharedPtr const & resultImpl = std::static_pointer_cast<ResultImpl>(result);
           dp::sg::xbar::TransformTree::Transforms const & transforms = m_sceneTree->getTransformTree().getTransforms();
           if (!transforms.empty())
           {
@@ -140,7 +140,7 @@ namespace dp
           changedIndices.clear();
           for ( size_t index = 0;index < changedObjects.size(); ++index )
           {
-            PayloadSharedPtr const & p = m_culling->objectGetUserData(changedObjects[index]).staticCast<Payload>();
+            PayloadSharedPtr const & p = std::static_pointer_cast<Payload>(m_culling->objectGetUserData(changedObjects[index]));
 
             changedIndices.push_back( p->getObjectTreeIndex() );
           }
@@ -158,7 +158,7 @@ namespace dp
 
         void CullingImpl::updateBoundingBox( ObjectTreeIndex objectTreeIndex )
         {
-          dp::sg::core::GeoNodeSharedPtr geoNode = m_sceneTree->getObjectTreeNode( objectTreeIndex ).m_object.staticCast<dp::sg::core::GeoNode>();
+          dp::sg::core::GeoNodeSharedPtr geoNode = std::static_pointer_cast<dp::sg::core::GeoNode>(m_sceneTree->getObjectTreeNode( objectTreeIndex ).m_object);
           m_culling->objectSetBoundingBox( m_objects[objectTreeIndex], geoNode->getBoundingBox() );
         }
 

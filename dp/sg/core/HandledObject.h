@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2014
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -49,7 +49,7 @@ namespace dp
 
           virtual HandledObjectSharedPtr clone() const = 0;
 
-          template<typename T> dp::util::SharedPtr<T> getSharedPtr() const;
+          template<typename T> std::shared_ptr<T> getSharedPtr() const;
 
         protected:
           HandledObject();
@@ -81,10 +81,10 @@ namespace dp
       }
 
       template <typename T>
-      inline dp::util::SharedPtr<T> HandledObject::getSharedPtr() const
+      inline std::shared_ptr<T> HandledObject::getSharedPtr() const
       {
         DP_STATIC_ASSERT(( boost::is_base_of<HandledObject,T>::value ));
-        return( HandledObjectSharedPtr( const_cast<HandledObject*>(this)->shared_from_this() ).staticCast<T>() );
+        return std::static_pointer_cast<T>(const_cast<HandledObject*>(this)->shared_from_this());
       }
 
       //! Detects if the WeakPtr \a p is a WeakPtr to a specified (templated) type.
@@ -98,6 +98,3 @@ namespace dp
     }//namespace core
   }//namespace sg
 }//namespace dp
-
-    
-      

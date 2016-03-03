@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -69,7 +69,7 @@ namespace dp
           DPTSGRDR_API virtual ~SgRdrBackend();
           DPTSGRDR_API virtual dp::ui::RenderTargetSharedPtr createDisplay(int width, int height, bool visible);
 
-          DPTSGRDR_API virtual void render( dp::testfw::core::RenderData* renderData, dp::ui::RenderTargetSharedPtr renderTarget = dp::ui::RenderTargetSharedPtr::null );
+          DPTSGRDR_API virtual void render( dp::testfw::core::RenderData* renderData, dp::ui::RenderTargetSharedPtr renderTarget = dp::ui::RenderTargetSharedPtr() );
           DPTSGRDR_API virtual void finish();
 
           DPTSGRDR_API dp::sg::ui::SceneRendererSharedPtr getRenderer() const;

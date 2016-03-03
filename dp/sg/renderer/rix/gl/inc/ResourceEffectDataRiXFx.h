@@ -1,4 +1,4 @@
-// Copyright (c) 20012-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -55,7 +55,7 @@ namespace dp
             static ResourceEffectDataRiXFxSharedPtr get( const dp::sg::core::PipelineDataSharedPtr &effectData, const dp::rix::fx::ManagerSharedPtr& rixFx, const ResourceManagerSharedPtr& resourceManager );
             virtual ~ResourceEffectDataRiXFx();
 
-            virtual const dp::sg::core::HandledObjectSharedPtr& getHandledObject() const;
+            virtual dp::sg::core::HandledObjectSharedPtr getHandledObject() const;
             virtual void update();
 
             ResourceEffectDataRiXFx::GroupDatas getGroupDatas() const;

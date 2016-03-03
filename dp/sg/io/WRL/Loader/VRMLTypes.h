@@ -1,4 +1,4 @@
-// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -184,10 +184,10 @@ namespace vrml
       virtual const std::string & getType( void ) const;
 
     public:
-      MFFloat                         key;
-      bool                            interpreted;
-      dp::util::SharedPtr<TimeSensor> set_fraction;
-      std::vector<unsigned int>       steps;
+      MFFloat                     key;
+      bool                        interpreted;
+      std::shared_ptr<TimeSensor> set_fraction;
+      std::vector<unsigned int>   steps;
   };
 
   class Light : public Object

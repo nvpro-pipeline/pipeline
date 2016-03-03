@@ -607,7 +607,7 @@ namespace dp
         case GL_DEBUG_TYPE_PERFORMANCE:
           {
             if ( boost::algorithm::starts_with( message, "Program/shader state performance warning:" )
-              && boost::algorithm::ends_with( message, "is being recompiled based on GL state." ) )
+              && boost::algorithm::ends_with( message, "is going to be recompiled because the shader key based on GL state mismatches." ) )
             {
               DP_ASSERT( severity == GL_DEBUG_SEVERITY_MEDIUM );
               return;   //  ignore this performance message

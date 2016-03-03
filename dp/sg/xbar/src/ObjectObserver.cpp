@@ -1,4 +1,4 @@
-// Copyright (c) 2010-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2010-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -125,8 +125,8 @@ namespace dp
         bool handleAsGroup = true;
         if ( group->getObjectCode() == dp::sg::core::ObjectCode::SWITCH )
         {
-          DP_ASSERT( group.dynamicCast<dp::sg::core::Switch>() );
-          handleAsGroup = !!group.inplaceCast<dp::sg::core::Switch>()->getHints( dp::sg::core::Object::DP_SG_HINT_DYNAMIC );
+          DP_ASSERT(std::dynamic_pointer_cast<dp::sg::core::Switch>(group));
+          handleAsGroup = !!std::static_pointer_cast<dp::sg::core::Switch>(group)->getHints(dp::sg::core::Object::DP_SG_HINT_DYNAMIC);
         }
 
         if ( handleAsGroup )
@@ -142,8 +142,8 @@ namespace dp
         else
         {
           DP_ASSERT( group->getObjectCode() == dp::sg::core::ObjectCode::SWITCH );
-          DP_ASSERT( group.dynamicCast<dp::sg::core::Switch>() );
-          dp::sg::core::SwitchSharedPtr const& s = group.inplaceCast<dp::sg::core::Switch>();
+          DP_ASSERT(std::dynamic_pointer_cast<dp::sg::core::Switch>(group));
+          dp::sg::core::SwitchSharedPtr s = std::static_pointer_cast<dp::sg::core::Switch>(group);
           if ( ! s->isActive( index ) )
           {
             childIndex = ~0;

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2002-2009
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -226,9 +226,9 @@ namespace dp
           dp::sg::ui::ViewStateSharedPtr const& viewState = getViewState();
           if ( viewState )
           {
-            if ( viewState->getCamera().isPtrTo<PerspectiveCamera>() )
+            if ( std::dynamic_pointer_cast<PerspectiveCamera>(viewState->getCamera()) )
             {
-              PerspectiveCameraSharedPtr const& camera = viewState->getCamera().staticCast<PerspectiveCamera>();
+              PerspectiveCameraSharedPtr const& camera = std::static_pointer_cast<PerspectiveCamera>(viewState->getCamera());
 
               int dy = getCurrentY() - getLastY();
               float multiplier = 1.0f;
@@ -238,7 +238,7 @@ namespace dp
               {
                 // take accumulated deltas if user is wheeling
                 dy = getWheelTicks();
-         
+
                 // Temporary speedup/slowdown of mouse wheel dolly operation.
                 if (getKeyState() & DP_SHIFT) // Speedup has precedence.
                 {
@@ -255,7 +255,7 @@ namespace dp
               {
                 // take accumulated deltas if user is wheeling
                 dy = getWheelTicksDelta();
-         
+
                 // MMM - implement speed in sync
         #if 0
                 // Temporary speedup/slowdown of mouse wheel dolly operation.
@@ -439,7 +439,7 @@ namespace dp
               int lastY = getLastY();
               int currentX = getCurrentX();
               int currentY = getCurrentY();
-      
+
         #if 0
               if ( m_flags & DP_SPIN )
               {
@@ -487,9 +487,9 @@ namespace dp
           dp::sg::ui::ViewStateSharedPtr const& viewStateHdl = getViewState();
           if ( viewStateHdl )
           {
-            if ( viewStateHdl->getCamera().isPtrTo<FrustumCamera>() )
+            if ( std::dynamic_pointer_cast<FrustumCamera>(viewStateHdl->getCamera()) )
             {
-              FrustumCameraSharedPtr const& cameraHdl = viewStateHdl->getCamera().staticCast<FrustumCamera>();
+              FrustumCameraSharedPtr const& cameraHdl = std::static_pointer_cast<FrustumCamera>(viewStateHdl->getCamera());
 
               // calculate ray origin and direction from the input point
               int vpW = getRenderTarget()->getWidth();
@@ -531,9 +531,9 @@ namespace dp
           dp::sg::ui::ViewStateSharedPtr const& viewState = getViewState();
           if ( viewState )
           {
-            if ( viewState->getCamera().isPtrTo<PerspectiveCamera>() )
+            if ( std::dynamic_pointer_cast<PerspectiveCamera>(viewState->getCamera()) )
             {
-              PerspectiveCameraSharedPtr const& camera = viewState->getCamera().staticCast<PerspectiveCamera>();
+              PerspectiveCameraSharedPtr const& camera = std::static_pointer_cast<PerspectiveCamera>(viewState->getCamera());
 
               int vpW = getRenderTarget()->getWidth();
               int vpH = getRenderTarget()->getHeight();
@@ -565,7 +565,7 @@ namespace dp
 
                     // Change the camera position instead of direction to make this pivot point setting roll free.
                     camera->move(pivotNew - pivotOld, false); // world space
-            
+
                     // Also set the focus distance!
                     // Do not focus nearer than lens' lower focus limit.
                     dist = distance( camera->getPosition(), pivotNew);
@@ -588,13 +588,13 @@ namespace dp
           dp::sg::ui::ViewStateSharedPtr const& viewState = getViewState();
           if ( viewState )
           {
-            if ( viewState->getCamera().isPtrTo<PerspectiveCamera>() )
+            if ( std::dynamic_pointer_cast<PerspectiveCamera>(viewState->getCamera()) )
             {
-              PerspectiveCameraSharedPtr const& camera = viewState->getCamera().staticCast<PerspectiveCamera>();
+              PerspectiveCameraSharedPtr const& camera = std::static_pointer_cast<PerspectiveCamera>(viewState->getCamera());
 
               int vpW = getRenderTarget()->getWidth();
               int vpH = getRenderTarget()->getHeight();
-      
+
               if (vpW && vpH)
               {
                 int pkX = getCurrentX();           // at mouse-up, not mouse-down

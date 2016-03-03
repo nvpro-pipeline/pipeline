@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2014-2015
+// Copyright (c) 2014-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -67,7 +67,7 @@ namespace dp
         GLsizei m_depth;
 
         size_t  m_dataSize;
-    
+
         GLsizei m_xOffset;
         GLsizei m_yOffset;
         GLsizei m_zOffset;
@@ -96,11 +96,11 @@ namespace dp
         GLenum  m_texture;
       };
       typedef TexGLTransfer::PNFTEXGLUPLOAD TexGLUploadFunc;
-  
+
 
       TexGLTransfer::TexGLTransfer( GLenum texture, GLenum target, GLint level, GLenum internalFormat, GLenum dataFormat, GLenum dataType,
                                     const void *dataPtr,
-                                    GLsizei width, GLsizei height,  GLsizei depth, GLsizei dataSize ) 
+                                    GLsizei width, GLsizei height,  GLsizei depth, GLsizei dataSize )
        : m_texture(texture)
        , m_target(target)
        , m_level(level)
@@ -208,7 +208,7 @@ namespace dp
       {
         unsigned int bits = dp::math::max( w, h, d );
         unsigned int i=1;
-        while (bits >>= 1) 
+        while (bits >>= 1)
         {
           ++i;
         }
@@ -280,14 +280,14 @@ namespace dp
 
         switch( target )
         {
-          case GL_TEXTURE_1D: 
+          case GL_TEXTURE_1D:
             maxw = Texture1D::getMaximumSize();
             maxh = 1;
             maxd = 1;
             maxl = 0;
             break;
 
-          case GL_TEXTURE_2D: 
+          case GL_TEXTURE_2D:
             maxw = Texture2D::getMaximumSize();
             maxh = maxw;
             maxd = 1;
@@ -309,7 +309,7 @@ namespace dp
             maxl = 0;
             break;
 
-          case GL_TEXTURE_CUBE_MAP: 
+          case GL_TEXTURE_CUBE_MAP:
             maxw = TextureCubemap::getMaximumSize();
             maxh = maxw;
             maxd = 1;
@@ -327,7 +327,7 @@ namespace dp
             }
             break;
 
-          case GL_TEXTURE_2D_ARRAY_EXT: 
+          case GL_TEXTURE_2D_ARRAY_EXT:
             maxw = Texture2DArray::getMaximumSize();
             maxh = maxw;
             maxd = 1;
@@ -338,7 +338,7 @@ namespace dp
             }
             break;
 
-          case GL_TEXTURE_CUBE_MAP_ARRAY: 
+          case GL_TEXTURE_CUBE_MAP_ARRAY:
             maxw = TextureCubemapArray::getMaximumSize();
             maxh = maxw;
             maxd = 1;
@@ -377,8 +377,8 @@ namespace dp
 
         // either we dont require a check, or we are only valid
         // when extension exists, or we are power of two
-        powerOfTwoCheck = powerOfTwoCheck ? 
-          (!!GLEW_ARB_texture_non_power_of_two || 
+        powerOfTwoCheck = powerOfTwoCheck ?
+          (!!GLEW_ARB_texture_non_power_of_two ||
            (dp::math::isPowerOfTwo(w) && dp::math::isPowerOfTwo(h) && dp::math::isPowerOfTwo(d))) : true;
 
 
@@ -1152,7 +1152,7 @@ namespace dp
 
       TexGLTransfer upload( getGLId(), getTarget(), mipLevel, getInternalFormat(), getFormat(), getType(), data, getMipMapSize(m_width, mipLevel));
       // set m_dataSize for compressed format
-      upload.m_dataSize = getCompressedSize( getFormat(), upload.m_width, 1, 1 ); 
+      upload.m_dataSize = getCompressedSize( getFormat(), upload.m_width, 1, 1 );
       // format must match if compressed
       DP_ASSERT( !upload.m_dataSize || getFormat() == getInternalFormat() );
 
@@ -1214,14 +1214,14 @@ namespace dp
 
       TexGLTransfer upload( getGLId(), getTarget(), mipLevel, getInternalFormat(), getFormat(), getType(), data, getMipMapSize(m_width, mipLevel), 1);
       // set m_dataSize for compressed format
-      upload.m_dataSize = getCompressedSize( getFormat(), upload.m_width, 1, 1 ); 
+      upload.m_dataSize = getCompressedSize( getFormat(), upload.m_width, 1, 1 );
       // format must match if compressed
-      DP_ASSERT( !upload.m_dataSize || getFormat() == getInternalFormat() ); 
+      DP_ASSERT( !upload.m_dataSize || getFormat() == getInternalFormat() );
 
       if ( !isMipMapLevelDefined(mipLevel) )
       {
         TexGLTransfer uploadCreate = upload;
-        dp::gl::bind( GL_PIXEL_UNPACK_BUFFER, BufferSharedPtr::null );    // make sure, GL_PIXEL_UNPACK_BUFFER is unbound !
+        dp::gl::bind( GL_PIXEL_UNPACK_BUFFER, BufferSharedPtr() );    // make sure, GL_PIXEL_UNPACK_BUFFER is unbound !
         uploadCreate.m_dataSize *= m_layers;
         uploadCreate.m_height = m_layers;
         uploadCreate.m_dataPtr = nullptr;
@@ -1248,7 +1248,7 @@ namespace dp
         m_width = width;
         m_layers = layers;
 
-        getGLInterface()->setImage2D( getGLId(), getTarget(), 0, getInternalFormat(), width, layers, 0, getFormat(), getType(), 0 ); 
+        getGLInterface()->setImage2D( getGLId(), getTarget(), 0, getInternalFormat(), width, layers, 0, getFormat(), getType(), 0 );
 
         resetDefinedLevels();
         setMaxLevel( numberOfMipmaps( getWidth(), 1 , 1 ) );
@@ -1296,7 +1296,7 @@ namespace dp
     {
       DP_ASSERT( isMipMapLevelValid( mipLevel) );
 
-      TexGLTransfer upload( getGLId(), getTarget(), mipLevel, getInternalFormat(), getFormat(), getType(), data, 
+      TexGLTransfer upload( getGLId(), getTarget(), mipLevel, getInternalFormat(), getFormat(), getType(), data,
                             getMipMapSize( m_width, mipLevel ), getMipMapSize( m_height, mipLevel ) );
       // set m_dataSize for compressed format
       upload.m_dataSize = getCompressedSize( getFormat(), upload.m_width, upload.m_height, 1 );
@@ -1323,7 +1323,7 @@ namespace dp
         m_width = width;
         m_height = height;
 
-        getGLInterface()->setImage2D( getGLId(), getTarget(), 0, getInternalFormat(), width, height, 0, getFormat(), getType(), nullptr ); 
+        getGLInterface()->setImage2D( getGLId(), getTarget(), 0, getInternalFormat(), width, height, 0, getFormat(), getType(), nullptr );
 
         resetDefinedLevels();
         setMaxLevel( numberOfMipmaps( getWidth(), getWidth() , 1 ) );
@@ -1357,7 +1357,7 @@ namespace dp
 
     void TextureRectangle::setData( const void *data )
     {
-      TexGLTransfer upload( getGLId(), getTarget(), 0, getInternalFormat(), getFormat(), getType(), data, 
+      TexGLTransfer upload( getGLId(), getTarget(), 0, getInternalFormat(), getFormat(), getType(), data,
                             m_width, m_height );
       // set m_dataSize for compressed format
       upload.m_dataSize = getCompressedSize( getFormat(), upload.m_width, upload.m_height, 1 );
@@ -1383,7 +1383,7 @@ namespace dp
         m_width = width;
         m_height = height;
 
-        getGLInterface()->setImage2D( getGLId(), getTarget(), 0, getInternalFormat(), width, height, 0, getFormat(), getType(), 0 ); 
+        getGLInterface()->setImage2D( getGLId(), getTarget(), 0, getInternalFormat(), width, height, 0, getFormat(), getType(), 0 );
 
         resetDefinedLevels();
         setMaxLevel( 0 ); // rectangle textures must not have mipmaps
@@ -1421,7 +1421,7 @@ namespace dp
       DP_ASSERT( isMipMapLevelValid( mipLevel) );
       DP_ASSERT( layer < getLayers() );
 
-      TexGLTransfer upload( getGLId(), getTarget(), mipLevel, getInternalFormat(), getFormat(), getType(), data, 
+      TexGLTransfer upload( getGLId(), getTarget(), mipLevel, getInternalFormat(), getFormat(), getType(), data,
                             getMipMapSize( m_width, mipLevel ), getMipMapSize( m_height, mipLevel ) );
       // set m_dataSize for compressed format
       upload.m_dataSize = getCompressedSize( getFormat(), upload.m_width, upload.m_height, 1 );
@@ -1431,14 +1431,14 @@ namespace dp
       if ( !isMipMapLevelDefined(mipLevel) )
       {
         TexGLTransfer uploadCreate = upload;
-        dp::gl::bind( GL_PIXEL_UNPACK_BUFFER, BufferSharedPtr::null );    // make sure, GL_PIXEL_UNPACK_BUFFER is unbound !
+        dp::gl::bind( GL_PIXEL_UNPACK_BUFFER, BufferSharedPtr() );    // make sure, GL_PIXEL_UNPACK_BUFFER is unbound !
         uploadCreate.m_dataSize *= m_layers;
         uploadCreate.m_depth = m_layers;
         uploadCreate.m_dataPtr = nullptr;
         uploadCreate.doTransfer( 3, false );
         addDefinedLevel( mipLevel );
       }
-   
+
       upload.m_zOffset = layer;
       upload.doTransfer( 3, true );
 
@@ -1461,7 +1461,7 @@ namespace dp
         m_height = height;
         m_layers = layers;
 
-        getGLInterface()->setImage3D( getGLId(), getTarget(), 0, getInternalFormat(), width, height, layers, 0, getFormat(), getType(), 0 ); 
+        getGLInterface()->setImage3D( getGLId(), getTarget(), 0, getInternalFormat(), width, height, layers, 0, getFormat(), getType(), 0 );
 
         resetDefinedLevels();
         setMaxLevel( numberOfMipmaps( getWidth(), getWidth() , 1 ) );
@@ -1481,7 +1481,7 @@ namespace dp
       glGetIntegerv( GL_MAX_ARRAY_TEXTURE_LAYERS_EXT, &size );
       return size;
     }
-  
+
     bool Texture2DArray::isSupported()
     {
       return !!GLEW_EXT_texture_array;
@@ -1510,7 +1510,7 @@ namespace dp
     {
       DP_ASSERT( isMipMapLevelValid( mipLevel) );
 
-      TexGLTransfer upload( getGLId(), getTarget(), mipLevel, getInternalFormat(), getFormat(), getType(), data, 
+      TexGLTransfer upload( getGLId(), getTarget(), mipLevel, getInternalFormat(), getFormat(), getType(), data,
                             getMipMapSize( m_width, mipLevel ), getMipMapSize( m_height, mipLevel ), getMipMapSize( m_depth, mipLevel ) );
       // set m_dataSize for compressed format
       upload.m_dataSize = getCompressedSize( getFormat(), upload.m_width, upload.m_height, upload.m_depth );
@@ -1538,7 +1538,7 @@ namespace dp
         m_height = height;
         m_depth = depth;
 
-        getGLInterface()->setImage3D( getGLId(), getTarget(), 0, getInternalFormat(), width, height, depth, 0, getFormat(), getType(), 0 ); 
+        getGLInterface()->setImage3D( getGLId(), getTarget(), 0, getInternalFormat(), width, height, depth, 0, getFormat(), getType(), 0 );
 
         resetDefinedLevels();
         setMaxLevel( numberOfMipmaps( getWidth(), getWidth(), getDepth() ) );
@@ -1585,7 +1585,7 @@ namespace dp
       if ( !isMipMapLevelDefined(mipLevel) )
       {
         TexGLTransfer uploadCreate = upload;
-        dp::gl::bind( GL_PIXEL_UNPACK_BUFFER, BufferSharedPtr::null );    // make sure, GL_PIXEL_UNPACK_BUFFER is unbound !
+        dp::gl::bind( GL_PIXEL_UNPACK_BUFFER, BufferSharedPtr() );    // make sure, GL_PIXEL_UNPACK_BUFFER is unbound !
         uploadCreate.m_dataPtr = nullptr;
         for (unsigned int f = 0; f < 6; ++f)
         {
@@ -1617,7 +1617,7 @@ namespace dp
 
         for ( unsigned int face = 0;face < 6;++face )
         {
-          getGLInterface()->setImage2D( getGLId(), GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, 0, getInternalFormat(), width, height, 0, getFormat(), getType(), nullptr ); 
+          getGLInterface()->setImage2D( getGLId(), GL_TEXTURE_CUBE_MAP_POSITIVE_X + face, 0, getInternalFormat(), width, height, 0, getFormat(), getType(), nullptr );
         }
 
         resetDefinedLevels();
@@ -1656,7 +1656,7 @@ namespace dp
       DP_ASSERT( isMipMapLevelValid( mipLevel) );
       DP_ASSERT( layer < getLayers() );
 
-      TexGLTransfer upload( getGLId(), getTarget(), mipLevel, getInternalFormat(), getFormat(), getType(), data, 
+      TexGLTransfer upload( getGLId(), getTarget(), mipLevel, getInternalFormat(), getFormat(), getType(), data,
                             getMipMapSize( m_width, mipLevel ), getMipMapSize( m_height, mipLevel ) );
       // set m_dataSize for compressed format
       upload.m_dataSize = getCompressedSize( getFormat(), upload.m_width, upload.m_height, 1 );
@@ -1666,7 +1666,7 @@ namespace dp
       if ( !isMipMapLevelDefined(mipLevel) )
       {
         TexGLTransfer uploadCreate = upload;
-        dp::gl::bind( GL_PIXEL_UNPACK_BUFFER, BufferSharedPtr::null );    // make sure, GL_PIXEL_UNPACK_BUFFER is unbound !
+        dp::gl::bind( GL_PIXEL_UNPACK_BUFFER, BufferSharedPtr() );    // make sure, GL_PIXEL_UNPACK_BUFFER is unbound !
         uploadCreate.m_dataSize *= m_layers;
         uploadCreate.m_depth = m_layers;
         uploadCreate.m_dataPtr = nullptr;
@@ -1695,7 +1695,7 @@ namespace dp
         m_height = height;
         m_layers = layers;
 
-        getGLInterface()->setImage3D( getGLId(), getTarget(), 0, getInternalFormat(), width, height, layers , 0, getFormat(), getType(), 0 ); 
+        getGLInterface()->setImage3D( getGLId(), getTarget(), 0, getInternalFormat(), width, height, layers , 0, getFormat(), getType(), 0 );
 
         resetDefinedLevels();
         setMaxLevel( numberOfMipmaps( getWidth(), getWidth() , 1 ) );

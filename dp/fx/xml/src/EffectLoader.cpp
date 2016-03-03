@@ -149,7 +149,7 @@ namespace dp
         }
         // The DomainSpec's technique doesn't match the queried one.
         // Return nullptr so that it's going to be ignored.
-        return TechniqueSharedPtr::null;
+        return TechniqueSharedPtr();
       }
 
       DomainSpec::ParameterGroupSpecsContainer const & DomainSpec::getParameterGroups() const
@@ -460,7 +460,7 @@ namespace dp
       {
         snippets.clear();
 
-        dp::fx::xml::EffectSpecSharedPtr const& effectSpec = dp::fx::EffectLibrary::instance()->getEffectSpec( configuration.getName() ).inplaceCast<dp::fx::xml::EffectSpec>();
+        dp::fx::xml::EffectSpecSharedPtr effectSpec = std::static_pointer_cast<dp::fx::xml::EffectSpec>(dp::fx::EffectLibrary::instance()->getEffectSpec(configuration.getName()));
 
         // All other domains have only one set of code snippets per technique and ignore the signature.
 
@@ -1000,7 +1000,7 @@ namespace dp
           {
             throw std::runtime_error( "parameterGroupData for " + ref + " not found in global scope." );
           }
-          parameterGroupData = itpgd->second.staticCast<dp::fx::ParameterGroupDataPrivate>();
+          parameterGroupData = std::static_pointer_cast<dp::fx::ParameterGroupDataPrivate>(itpgd->second);
         }
         else
         {
@@ -1159,7 +1159,7 @@ namespace dp
       {
         ShaderPipelineImplSharedPtr shaderPipeline = ShaderPipelineImpl::create();
 
-        EffectSpecSharedPtr effectSpec = dp::fx::EffectLibrary::instance()->getEffectSpec( configuration.getName() ).staticCast<dp::fx::xml::EffectSpec>();
+        EffectSpecSharedPtr effectSpec = std::static_pointer_cast<dp::fx::xml::EffectSpec>(dp::fx::EffectLibrary::instance()->getEffectSpec(configuration.getName()));
         EffectSpec::DomainSpecs const & domainSpecs = effectSpec->getDomainSpecs();
 
         for ( EffectSpec::DomainSpecs::const_iterator it = domainSpecs.begin(); it != domainSpecs.end(); ++it )
@@ -1199,7 +1199,7 @@ namespace dp
       bool EffectLoader::effectHasTechnique( dp::fx::EffectSpecSharedPtr const& effectSpec, std::string const& techniqueName, bool /*rasterizer*/ )
       {
         bool hasTechnique = true;
-        EffectSpecSharedPtr xmlEffectSpec = effectSpec.staticCast<dp::fx::xml::EffectSpec>();
+        EffectSpecSharedPtr xmlEffectSpec = std::static_pointer_cast<dp::fx::xml::EffectSpec>(effectSpec);
         for ( EffectSpec::DomainSpecs::const_iterator it = xmlEffectSpec->getDomainSpecs().begin() ; it != xmlEffectSpec->getDomainSpecs().end() && hasTechnique ; ++it )
         {
             switch( it->second->getDomain() )

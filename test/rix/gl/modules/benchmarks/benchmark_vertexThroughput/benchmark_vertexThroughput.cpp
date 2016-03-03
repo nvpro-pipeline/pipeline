@@ -111,8 +111,8 @@ bool Benchmark_vertexThroughput::onInit()
   glEnable(GL_DEPTH_TEST);
   createScene();
 
-  DP_ASSERT( dynamic_cast<test::framework::RiXBackend*>(&(*m_backend)) )
-  m_displayTarget.inplaceCast<dp::gl::RenderTarget>()->setClearColor( 0.46f, 0.72f, 0.0f, 0.0f );
+  DP_ASSERT(dynamic_cast<test::framework::RiXBackend*>(&(*m_backend)));
+  std::static_pointer_cast<dp::gl::RenderTarget>(m_displayTarget)->setClearColor(0.46f, 0.72f, 0.0f, 0.0f);
 
   return true;
 }

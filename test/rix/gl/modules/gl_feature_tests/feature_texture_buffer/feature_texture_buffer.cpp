@@ -56,7 +56,7 @@ bool Feature_texture_buffer::onInit()
 {
   DP_ASSERT( dynamic_cast<rix::core::test::framework::RiXBackend*>(&(*m_backend)) );
   m_rix = static_cast<rix::core::test::framework::RiXBackend*>(&(*m_backend))->getRenderer();
-  m_displayTarget.inplaceCast<dp::gl::RenderTarget>()->setClearColor( 0.46f, 0.72f, 0.0f, 1.0f );
+  std::static_pointer_cast<dp::gl::RenderTarget>(m_displayTarget)->setClearColor(0.46f, 0.72f, 0.0f, 1.0f);
 
   m_renderData = new rix::core::test::framework::RenderDataRiX;
 

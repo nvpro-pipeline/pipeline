@@ -70,12 +70,12 @@ namespace dp
         *stereoViewState = *viewStatePtr;
         {
           // and assign a cloned camera
-          if ( stereoViewState->getCamera() && stereoViewState->getCamera().isPtrTo<FrustumCamera>() )
+          if ( stereoViewState->getCamera() && std::dynamic_pointer_cast<FrustumCamera>(stereoViewState->getCamera()) )
           {
             float direction = (eye == dp::ui::RenderTarget::StereoTarget::LEFT ) ? -1.0f : 1.0f;
             float eyeDistance = stereoViewState->getStereoEyeDistance();
             //  do the left pass first
-            FrustumCameraSharedPtr const& clonedCamera = stereoViewState->getCamera().clone().staticCast<FrustumCamera>();
+            FrustumCameraSharedPtr const& clonedCamera = std::static_pointer_cast<FrustumCamera>(stereoViewState->getCamera()->clone());
             {
               Vec2f windowOffset = clonedCamera->getWindowOffset();
               clonedCamera->setWindowOffset( Vec2f( windowOffset[0] + 0.5f * eyeDistance * (-direction), windowOffset[1] ) );
@@ -90,7 +90,7 @@ namespace dp
 
       DEFINE_STATIC_PROPERTY( SceneRenderer, PreserveTexturesAfterUpload );
       DEFINE_STATIC_PROPERTY( SceneRenderer, TraversalMaskOverride );
-  
+
       BEGIN_REFLECTION_INFO( SceneRenderer )
         DERIVE_STATIC_PROPERTIES( SceneRenderer, Renderer );
 
@@ -111,10 +111,10 @@ namespace dp
         m_viewState = viewState;
         if( m_viewState )
         {
-          if( m_viewState->getRendererOptions() != m_rendererOptions.getSharedPtr() )  
+          if( m_viewState->getRendererOptions() != m_rendererOptions.lock() )
           {
             // update renderer options
-            m_rendererOptions = m_viewState->getRendererOptions().getWeakPtr();
+            m_rendererOptions = m_viewState->getRendererOptions();
             addRendererOptions( m_viewState->getRendererOptions() );
           }
         }
@@ -134,9 +134,9 @@ namespace dp
 
         {
           // FIXME for compability now. Later viewstate is the only parameter
-          if ( viewState->getCamera() && viewState->getCamera().isPtrTo<FrustumCamera>() )
+          if ( viewState->getCamera() && std::dynamic_pointer_cast<FrustumCamera>(viewState->getCamera()) )
           {
-            viewState->getCamera().staticCast<FrustumCamera>()->setAspectRatio( curRenderTarget->getAspectRatio() );
+            std::static_pointer_cast<FrustumCamera>(viewState->getCamera())->setAspectRatio( curRenderTarget->getAspectRatio() );
           }
         }
 
@@ -186,10 +186,10 @@ namespace dp
         if ( viewState )
         {
           DP_ASSERT( viewState->getRendererOptions() );
-          if( viewState->getRendererOptions() && viewState->getRendererOptions() != m_rendererOptions.getSharedPtr() )
+          if( viewState->getRendererOptions() && viewState->getRendererOptions() != m_rendererOptions.lock() )
           {
             // update renderer options
-            m_rendererOptions = viewState->getRendererOptions().getWeakPtr();
+            m_rendererOptions = viewState->getRendererOptions();
             addRendererOptions( viewState->getRendererOptions() );
           }
         }

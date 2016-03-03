@@ -1,4 +1,4 @@
-// Copyright (c) 2010-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2010-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -156,7 +156,7 @@ namespace dp
           //
           void RendererFSQImpl::doRender( const dp::ui::RenderTargetSharedPtr &renderTarget )
           {
-            dp::gl::RenderTargetSharedPtr rtgl = renderTarget.staticCast<dp::gl::RenderTarget>();
+            dp::gl::RenderTargetSharedPtr rtgl = std::static_pointer_cast<dp::gl::RenderTarget>(renderTarget);
 
             if( !rtgl )
             {

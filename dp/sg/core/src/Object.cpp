@@ -203,7 +203,7 @@ namespace dp
 
       bool Object::isEquivalent(ObjectSharedPtr const& object, bool ignoreNames, bool deepCompare) const
       {
-        if (object == this)
+        if (object.get() == this)
         {
           return(true);
         }

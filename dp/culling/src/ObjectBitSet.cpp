@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012-2013
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -45,12 +45,12 @@ namespace dp
 
       void ObjectBitSet::setGroup( GroupBitSetSharedPtr const & group )
       {
-        m_group = group.getWeakPtr();
+        m_group = group;
       }
 
       GroupBitSetSharedPtr ObjectBitSet::getGroup() const
       {
-        return( m_group.getSharedPtr() );
+        return( m_group.lock() );
       }
 
   } // namespace culling

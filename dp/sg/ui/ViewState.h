@@ -41,14 +41,14 @@ namespace dp
     {
       DEFINE_PTR_TYPES( ViewState );
 
-      /*! \brief The ViewState class encapsulates view-specific state. 
+      /*! \brief The ViewState class encapsulates view-specific state.
        *  \par Namespace: dp::sg::core
        *  \remarks The ViewState encapsulates the view-specific information into one object.
        *  The ViewState defines how the user looks at the scene. It contains the camera and specific viewing
        *  settings like stereo view and does the bookkeeping of animation information.
        *  \n\n
-       *  dp::sg::ui::ViewState and dp::sg::core::Scene and dp::sg::ui::RendererOptions are the three major components that need 
-       *  to come together to produce a rendered image. 
+       *  dp::sg::ui::ViewState and dp::sg::core::Scene and dp::sg::ui::RendererOptions are the three major components that need
+       *  to come together to produce a rendered image.
        *  The scene contains basically the tree, the ViewState defines how to look at
        *  the tree, and the RendererOptions contains the parameters for the renderer which renders
        *  the final image.
@@ -65,9 +65,9 @@ namespace dp
         public:
           /*! \brief Make a flat copy of another ViewState.
            *  \param rhs Source ViewState. */
-          DP_SG_UI_API ViewState& operator=( const ViewState& rhs );   
+          DP_SG_UI_API ViewState& operator=( const ViewState& rhs );
 
-          /*! \brief Sets the Camera for this view. 
+          /*! \brief Sets the Camera for this view.
            *  \param camera The Camera to set.
            *  \remarks The given camera is used for the rendering.
            *  \sa getCamera */
@@ -83,8 +83,8 @@ namespace dp
           */
           DP_SG_UI_API const dp::sg::ui::RendererOptionsSharedPtr &getRendererOptions( ) const;
 
-          /*! \brief Returns the current Camera. 
-           *  \return The Camera which is used in this view. 
+          /*! \brief Returns the current Camera.
+           *  \return The Camera which is used in this view.
            *  If there is no Camera associated with this view, the function returns NULL.
            *  \sa setCamera */
           DP_SG_UI_API const dp::sg::core::CameraSharedPtr & getCamera() const;
@@ -101,97 +101,97 @@ namespace dp
            *  \sa getTargetDistance*/
           DP_SG_UI_API void setTargetDistance(float dist);
 
-          /*! \brief Test on automatic eye distance calculation.   
-           *  \return This function returns true when the distance is automatically calculated. 
+          /*! \brief Test on automatic eye distance calculation.
+           *  \return This function returns true when the distance is automatically calculated.
            *  \remarks This function can be used to test if the automatic eye distance
-           *  calculation for stereo is turned on. The automatic eye distance is calculated by  
+           *  calculation for stereo is turned on. The automatic eye distance is calculated by
            *  multiplying the adjustment factor by the focus distance of the camera.
            *  \sa setStereoAutomaticEyeDistanceAdjustment, getStereoAutomaticEyeDistanceFactor,
            *  setStereoAutomaticEyeDistanceFactor */
           DP_SG_UI_API bool isStereoAutomaticEyeDistanceAdjustment() const;
 
           /*! \brief Enable/Disable automatic eye distance adjustment.
-           *  \param state Pass in true to enable automatic eye distance calculation. 
-           *  \remarks The automatic eye distance is calculated by multiplying 
+           *  \param state Pass in true to enable automatic eye distance calculation.
+           *  \remarks The automatic eye distance is calculated by multiplying
            *  the adjustment factor by the focus distance of the camera.
            *  \sa isStereoAutomaticEyeDistanceAdjustment, getStereoAutomaticEyeDistanceFactor,
            *  setStereoAutomaticEyeDistanceFactor */
           DP_SG_UI_API void setStereoAutomaticEyeDistanceAdjustment(bool state);
 
           /*! \brief Get the automatic eye distance adjustment factor.
-           *  \return This function returns the eye distance adjustment factor. 
-           *  \remarks The automatic eye distance is calculated by multiplying 
-           *  the adjustment factor by the focus distance of the camera.\n 
+           *  \return This function returns the eye distance adjustment factor.
+           *  \remarks The automatic eye distance is calculated by multiplying
+           *  the adjustment factor by the focus distance of the camera.\n
            *  \par Example
            *  \sa setStereoAutomaticEyeDistanceAdjustment, getStereoAutomaticEyeDistanceFactor,
            *  setStereoAutomaticEyeDistanceFactor */
           DP_SG_UI_API float getStereoAutomaticEyeDistanceFactor() const;
-      
+
           /*! \brief Set the automatic eye distance adjustment factor.
-           *  \param factor Distance factor. 
-           *  \remarks The automatic eye distance is calculated by multiplying 
-           *  the adjustment factor by the focus distance of the camera.\n 
+           *  \param factor Distance factor.
+           *  \remarks The automatic eye distance is calculated by multiplying
+           *  the adjustment factor by the focus distance of the camera.\n
            *  The default value is 0.03 (3%). This value represents the following setup:\n
-           *  A person with an eye distance of about six cm sitting in front of the monitor, 
-           *  where the monitor is about one meter away. This setup leads to very natural stereo 
+           *  A person with an eye distance of about six cm sitting in front of the monitor,
+           *  where the monitor is about one meter away. This setup leads to very natural stereo
            *  impression.\n
            *  \sa isStereoAutomaticEyeDistanceAdjustment, getStereoAutomaticEyeDistanceFactor,
            *  setStereoAutomaticEyeDistanceFactor */
           DP_SG_UI_API void setStereoAutomaticEyeDistanceFactor(float factor);
 
-          /*! \brief Get the eye distance for stereo rendering. 
-           *  \return This function returns the eye distance. If the camera of this ViewState is not 
+          /*! \brief Get the eye distance for stereo rendering.
+           *  \return This function returns the eye distance. If the camera of this ViewState is not
            *  valid, the behavior is undefined.
-           *  \remarks The eye distance can be automatically calculated or manually set by the 
-           *  application. Make sure that a valid camera is defined when asking for the eye distance 
+           *  \remarks The eye distance can be automatically calculated or manually set by the
+           *  application. Make sure that a valid camera is defined when asking for the eye distance
            *  since the the automatic eye distance calculation is based on the focus distance of
            *  the camera of this ViewState.
-           *  \sa setStereoEyeDistance, 
+           *  \sa setStereoEyeDistance,
            *  isStereoAutomaticEyeDistanceAdjustment, isStereoAutomaticEyeDistanceAdjustment,
            *  getStereoAutomaticEyeDistanceFactor,  setStereoAutomaticEyeDistanceFactor */
           DP_SG_UI_API float getStereoEyeDistance() const;
 
-          /*! \brief Set the eye distance for stereo rendering. 
-           *  \param distance Distance between the left and the right eye. 
+          /*! \brief Set the eye distance for stereo rendering.
+           *  \param distance Distance between the left and the right eye.
            *  \remarks This function manually sets the eye distance for stereo rendering.
-           *  \sa setStereoEyeDistance, 
+           *  \sa setStereoEyeDistance,
            *  isStereoAutomaticEyeDistanceAdjustment, isStereoAutomaticEyeDistanceAdjustment,
            *  getStereoAutomaticEyeDistanceFactor,  setStereoAutomaticEyeDistanceFactor */
           DP_SG_UI_API void setStereoEyeDistance(float distance);
 
           /*! \brief Function to reverse the left and the right eye for stereo rendering.
-           *  \param state \c true puts the image for the left eye onto the right eye framebuffer and vice versa. 
+           *  \param state \c true puts the image for the left eye onto the right eye framebuffer and vice versa.
            *  The default state is \c false.
            *  \sa isStereoReversedEyes */
           DP_SG_UI_API void setStereoReversedEyes( bool state );
 
-          /*! \brief Test on reversed eyes in stereo rendering. 
-           *  \return This function returns true when the left and the right eye are reversed. 
-           *  \remarks If the eyes are reversed you will see the image for the left eye on the 
+          /*! \brief Test on reversed eyes in stereo rendering.
+           *  \return This function returns true when the left and the right eye are reversed.
+           *  \remarks If the eyes are reversed you will see the image for the left eye on the
            *  right eye and vice versa.
            *  \sa setStereoReversedEyes */
           DP_SG_UI_API bool isStereoReversedEyes() const;
-      
+
           /*! \brief Set the LOD range scale factor.
-           *  \param factor The factor to scale the LOD scale ranges. The default value is 1.f, 
+           *  \param factor The factor to scale the LOD scale ranges. The default value is 1.f,
            *  so the unscaled ranges are used.
            *  \remarks This function sets a scaling factor for LOD ranges of the LOD nodes in the tree.\n
-           *  The scale factor can be used to globally scale the ranges without changing the LOD node 
-           *  ranges directly. This can be used, for example, for scenes that were initially created for viewing 
+           *  The scale factor can be used to globally scale the ranges without changing the LOD node
+           *  ranges directly. This can be used, for example, for scenes that were initially created for viewing
            *  on small monitors. You can use this scaling to fine-tune these scenes for large projection
-           *  walls by scaling the LOD levels to switch later to a lower resolution representation. 
+           *  walls by scaling the LOD levels to switch later to a lower resolution representation.
            *  \sa LOD::getLODToUse, getLODRangeScale */
           DP_SG_UI_API void setLODRangeScale(float factor);
 
           //! Get the LOD range scale factor
           /** Default value is 1.0, so the unscaled ranges are used. */
           /*! \brief Get the LOD range scale factor.
-           *  \return The LOD range scale factor for all the LOD nodes in the tree. 
+           *  \return The LOD range scale factor for all the LOD nodes in the tree.
            *  By default this factor is 1.f, so unscaled ranges of the LOD node will be used.
-           *  \remarks The scale factor can be used to globally scale the ranges without changing the LOD node 
-           *  ranges directly. This can be used, for example, for scenes that were initially created for viewing 
+           *  \remarks The scale factor can be used to globally scale the ranges without changing the LOD node
+           *  ranges directly. This can be used, for example, for scenes that were initially created for viewing
            *  on small monitors. You can use this scaling to fine-tune these scenes for large projection
-           *  walls by scaling the LOD levels to switch later to a lower resolution representation. 
+           *  walls by scaling the LOD levels to switch later to a lower resolution representation.
            *  \sa LOD::getLODToUse, setLODRangeScale */
           DP_SG_UI_API float getLODRangeScale() const;
 
@@ -201,7 +201,7 @@ namespace dp
            *  determine whether nodes in the scene (and therefore possibly the entire subgraph) are traversed, and/or rendered.  Traversers
            *  and renderers will use the traversal mask stored in the ViewState along with their TraversalMaskOverride's.  See
            *  Traverser::setTraversalMask or SceneRenderer::setTraversalMask for more information.
-           *  \note The default traversal mask is ~0 so that all objects will be traversed/rendered.  Setting the traversal mask to 0 
+           *  \note The default traversal mask is ~0 so that all objects will be traversed/rendered.  Setting the traversal mask to 0
            *  will cause no nodes to be traversed/rendered.
            *  \sa getTraversalMask, Object::setTraversalMask, Traverser::setTraversalMask, SceneRenderer::setTraversalMask */
           DP_SG_UI_API void setTraversalMask( unsigned int mask );
@@ -215,7 +215,7 @@ namespace dp
            *  \return The Scene of this ViewState.
            *  \deprecated
           */
-          DP_SG_UI_API dp::sg::core::SceneSharedPtr const& getScene() const;
+          DP_SG_UI_API dp::sg::core::SceneSharedPtr getScene() const;
 
           /*! \brief Set the dp::sg::xbar::SceneTree of the ViewState
           *   \param sceneTree The new SceneTree.
@@ -257,11 +257,11 @@ namespace dp
           END_DECLARE_STATIC_PROPERTIES
 
         protected:
-          /*! \brief Default-constructs a ViewState. 
+          /*! \brief Default-constructs a ViewState.
            *  \remarks After instantiation, the ViewState has the following properties:
-           *   - no animation running 
+           *   - no animation running
            *   - no camera defined
-           *   - no stereo 
+           *   - no stereo
            *   - no LOD range scaling
            *   - no cull information */
           DP_SG_UI_API ViewState();
@@ -275,7 +275,7 @@ namespace dp
           dp::sg::core::CameraSharedPtr        m_camera;          //!< this camera renders the tree
           dp::sg::ui::RendererOptionsSharedPtr m_rendererOptions; //!< RenderOptions object for SceneRenderers
           unsigned int                         m_traversalMask;   //!< Current Traversal mask
-      
+
           float                         m_targetDistance;
           bool                          m_stereoAutomaticEyeDistanceAdjustment;
           float                         m_stereoAutomaticEyeDistanceFactor;
@@ -307,7 +307,7 @@ namespace dp
 
       inline void ViewState::setStereoAutomaticEyeDistanceAdjustment( bool state )
       {
-        if ( m_stereoAutomaticEyeDistanceAdjustment != state ) 
+        if ( m_stereoAutomaticEyeDistanceAdjustment != state )
         {
           m_stereoAutomaticEyeDistanceAdjustment = state;
           notify( PropertyEvent( this, PID_StereoAutomaticEyeDistanceAdjustment ) );
@@ -371,7 +371,7 @@ namespace dp
           notify( PropertyEvent( this, PID_LODRangeScale ) );
         }
       }
-  
+
       inline float ViewState::getLODRangeScale() const
       {
         return m_scaleLODRange;

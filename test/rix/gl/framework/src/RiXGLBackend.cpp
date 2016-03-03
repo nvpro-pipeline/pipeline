@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -85,19 +85,19 @@ namespace dp
           }
 
           dp::ui::RenderTargetSharedPtr RiXGLBackend::createDisplay( int width, int height, bool visible )
-          {            
+          {
             glutInitDisplayMode( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH | GLUT_ALPHA | GLUT_BORDERLESS );
             glutInitWindowSize( width, height );
             glutInitWindowPosition(0, 0);
-            
+
             m_windowId = glutCreateWindow( "DPT" );
 
             glewInit();
             m_context = dp::gl::RenderContext::create( dp::gl::RenderContext::Attach() );
 
             dp::ui::RenderTargetSharedPtr displayTarget = createContextedRenderTarget<dp::gl::RenderTargetFB>(m_context);
-            displayTarget.inplaceCast<dp::gl::RenderTargetFB>()->setSwapBuffersEnabled( true );
-            displayTarget.inplaceCast<dp::gl::RenderTargetFB>()->setClearMask( dp::gl::TBM_COLOR_BUFFER | dp::gl::TBM_DEPTH_BUFFER );
+            std::static_pointer_cast<dp::gl::RenderTargetFB>(displayTarget)->setSwapBuffersEnabled( true );
+            std::static_pointer_cast<dp::gl::RenderTargetFB>(displayTarget)->setClearMask( dp::gl::TBM_COLOR_BUFFER | dp::gl::TBM_DEPTH_BUFFER );
 
             m_context->makeCurrent();
 

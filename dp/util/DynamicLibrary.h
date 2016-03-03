@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -27,7 +27,7 @@
 #pragma once
 
 #include <dp/util/Config.h>
-#include <dp/util/SharedPtr.h>
+#include <dp/util/PointerTypes.h>
 #include <string>
 
 namespace dp

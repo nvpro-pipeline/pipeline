@@ -1,4 +1,4 @@
-// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -61,12 +61,12 @@ namespace dp
 
         if ( rhs.m_pipelineData )
         {
-          m_pipelineData = rhs.m_pipelineData.clone();
+          m_pipelineData = std::static_pointer_cast<dp::sg::core::PipelineData>(rhs.m_pipelineData->clone());
           m_pipelineData->attach( this );
         }
         if ( rhs.m_primitive )
         {
-          m_primitive = rhs.m_primitive.clone();
+          m_primitive = std::static_pointer_cast<dp::sg::core::Primitive>(rhs.m_primitive->clone());
           m_primitive->attach( this );
         }
       }
@@ -145,7 +145,7 @@ namespace dp
             {
               m_pipelineData->detach( this );
             }
-            m_pipelineData = rhs.m_pipelineData.clone();
+            m_pipelineData = std::static_pointer_cast<dp::sg::core::PipelineData>(rhs.m_pipelineData->clone());
             if ( m_pipelineData )
             {
               m_pipelineData->attach( this );
@@ -158,7 +158,7 @@ namespace dp
             {
               m_primitive->detach( this );
             }
-            m_primitive = rhs.m_primitive.clone();
+            m_primitive = std::static_pointer_cast<dp::sg::core::Primitive>(rhs.m_primitive->clone());
             if ( m_primitive )
             {
               m_primitive->attach( this );
@@ -171,15 +171,15 @@ namespace dp
 
       bool GeoNode::isEquivalent( ObjectSharedPtr const& object, bool ignoreNames, bool deepCompare ) const
       {
-        if ( object == this )
+        if ( object.get() == this )
         {
           return( true );
         }
 
-        bool equi = object.isPtrTo<GeoNode>() && Node::isEquivalent( object, ignoreNames, deepCompare );
+        bool equi = std::dynamic_pointer_cast<GeoNode>(object) && Node::isEquivalent( object, ignoreNames, deepCompare );
         if ( equi )
         {
-          GeoNodeSharedPtr const& gn = object.staticCast<GeoNode>();
+          GeoNodeSharedPtr const& gn = std::static_pointer_cast<GeoNode>(object);
           if ( deepCompare )
           {
             equi = ( !!m_pipelineData == !!gn->m_pipelineData ) && ( !!m_primitive == !!gn->m_primitive );

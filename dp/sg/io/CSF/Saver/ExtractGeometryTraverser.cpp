@@ -1,4 +1,4 @@
-// Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -60,7 +60,7 @@ ExtractGeometryTraverser::ExtractGeometryTraverser()
   m_materials.push_back(csfsgmaterial);
   m_materialIDX = 0;
 
-  m_materialMap.insert(CSFSGMaterialHashPair(dp::sg::core::PipelineDataSharedPtr::null,m_materialIDX));
+  m_materialMap.insert(CSFSGMaterialHashPair(dp::sg::core::PipelineDataSharedPtr(),m_materialIDX));
 
   CSFSGNode csfsgroot;
   csfsgroot.geometryIDX = -1;

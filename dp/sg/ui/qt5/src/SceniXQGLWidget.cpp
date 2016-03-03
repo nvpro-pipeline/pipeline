@@ -54,17 +54,17 @@ namespace dp
         public:
           SceniXQGLWidgetPrivate( SceniXQGLWidget *parent, const dp::gl::RenderContextFormat &format, SceniXQGLWidgetPrivate *shareWidget );
           virtual ~SceniXQGLWidgetPrivate();
-          
+
           const dp::gl::RenderContextSharedPtr & getRenderContext() const;
           const dp::gl::RenderTargetSharedPtr  & getRenderTarget() const;
-          
+
           QPaintEngine *paintEngine() const;
-          
+
         protected:
           void initialize();
           virtual void paintEvent( QPaintEvent * paintEvent );
-          virtual void resizeEvent( QResizeEvent *resizeEvent ); 
-          
+          virtual void resizeEvent( QResizeEvent *resizeEvent );
+
           dp::gl::RenderTargetSharedPtr   m_renderTarget;
           bool                            m_initialized;
           SceniXQGLWidgetPrivate        * m_shareWidget;
@@ -923,19 +923,19 @@ namespace dp
 
           setMouseTracking( true );
 
-          PID_Mouse_Left = getProperty( "Mouse_Left" ); 
+          PID_Mouse_Left = getProperty( "Mouse_Left" );
           m_propMouse_Left = false;
 
-          PID_Mouse_Middle = getProperty( "Mouse_Middle" ); 
+          PID_Mouse_Middle = getProperty( "Mouse_Middle" );
           m_propMouse_Middle = false;
 
-          PID_Mouse_Right = getProperty( "Mouse_Right" ); 
+          PID_Mouse_Right = getProperty( "Mouse_Right" );
           m_propMouse_Right = false;
 
           PID_Mouse_Position = getProperty( "Mouse_Position" );
-          m_propMouse_Position = dp::math::Vec2i(0,0); 
+          m_propMouse_Position = dp::math::Vec2i(0,0);
 
-          PID_Mouse_Wheel = getProperty("Mouse_Wheel"); 
+          PID_Mouse_Wheel = getProperty("Mouse_Wheel");
           m_propMouse_Wheel = 0;
 
         #define INIT_KEY(key) m_prop##key = false; m_keyProperties[ Qt::key ] = KeyInfo(getProperty(#key), &SceniXQGLWidget::m_prop##key, #key); m_keyInfos.push_back( KeyInfo( getProperty(#key), &SceniXQGLWidget::m_prop##key, #key ) );
@@ -1396,9 +1396,9 @@ namespace dp
         {
           setAttribute( Qt::WA_NativeWindow );
           setAttribute( Qt::WA_PaintOnScreen ); // don't let qt paint anything on screen
-          
+
 #if defined(DP_OS_WINDOWS)
-          dp::gl::RenderContextSharedPtr renderContextGL = dp::gl::RenderContext::create( dp::gl::RenderContext::FromHWND( (HWND)winId(), &m_format, m_shareWidget ? m_shareWidget->getRenderContext() : dp::gl::RenderContextSharedPtr::null ) );
+          dp::gl::RenderContextSharedPtr renderContextGL = dp::gl::RenderContext::create( dp::gl::RenderContext::FromHWND( (HWND)winId(), &m_format, m_shareWidget ? m_shareWidget->getRenderContext() : dp::gl::RenderContextSharedPtr() ) );
 #elif defined(DP_OS_LINUX)
           // TODO support format
           dp::gl::RenderContextSharedPtr renderContextGL = dp::gl::RenderContext::create( dp::gl::RenderContext::FromDrawable( QX11Info::display(), QX11Info::appScreen(), winId(), m_shareWidget ? m_shareWidget->getRenderContext() : dp::gl::RenderContextSharedPtr::null ) );
@@ -1501,7 +1501,7 @@ namespace dp
           if ( format != getFormat() )
           {
             valid = format.isAvailable();
-            if (valid) 
+            if (valid)
             {
               // create a new gl viewport with the new format
               SceniXQGLWidgetPrivate *oldWidget = m_glWidget;

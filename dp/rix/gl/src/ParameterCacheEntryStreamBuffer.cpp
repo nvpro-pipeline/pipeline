@@ -43,7 +43,7 @@ namespace dp
       class CacheEntryMatrix : public ParameterCacheEntryStreamBuffer
       {
       public:
-        static dp::util::SharedPtr<CacheEntryMatrix> create( dp::gl::Program::Uniform const& uniformInfo, size_t containerOffset, size_t size );
+        static std::shared_ptr<CacheEntryMatrix> create(dp::gl::Program::Uniform const& uniformInfo, size_t containerOffset, size_t size);
         virtual void update( void * cache, void const * container ) const;
 
         size_t getSize() const { return m_size; }
@@ -58,7 +58,7 @@ namespace dp
       };
 
       template <int n, int m, typename SourceType, typename DestType>
-      dp::util::SharedPtr<CacheEntryMatrix<n,m,SourceType, DestType>> CacheEntryMatrix<n, m, SourceType, DestType>::create( dp::gl::Program::Uniform const& uniformInfo, size_t containerOffset, size_t size )
+      std::shared_ptr<CacheEntryMatrix<n, m, SourceType, DestType>> CacheEntryMatrix<n, m, SourceType, DestType>::create(dp::gl::Program::Uniform const& uniformInfo, size_t containerOffset, size_t size)
       {
         return( std::shared_ptr<CacheEntryMatrix<n,m,SourceType,DestType>>( new CacheEntryMatrix<n,m,SourceType,DestType>( uniformInfo, containerOffset, size ) ) );
       }

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -134,18 +134,18 @@ namespace dp
       DP_FX_API virtual void getEffectNames( std::vector<std::string>& names ) = 0;
       DP_FX_API virtual void getEffectNames( const std::string & filename, EffectSpec::Type type, std::vector<std::string> & names ) const = 0;
 
-      DP_FX_API virtual const EffectSpecSharedPtr& getEffectSpec( std::string const& effectName ) const = 0;
+      DP_FX_API virtual EffectSpecSharedPtr getEffectSpec( std::string const& effectName ) const = 0;
       DP_FX_API virtual std::string const& getEffectFile( std::string const& effectName ) const = 0;
 
-      DP_FX_API virtual const ParameterGroupSpecSharedPtr & getParameterGroupSpec( const std::string & pgsName ) const = 0;
+      DP_FX_API virtual ParameterGroupSpecSharedPtr getParameterGroupSpec( const std::string & pgsName ) const = 0;
 
-      DP_FX_API virtual const EnumSpecSharedPtr & getEnumSpec( const std::string & enumName ) const = 0;
+      DP_FX_API virtual EnumSpecSharedPtr getEnumSpec( const std::string & enumName ) const = 0;
 
       DP_FX_API virtual dp::fx::ParameterGroupLayoutSharedPtr getParameterGroupLayout( const dp::fx::ParameterGroupSpecSharedPtr& spec, dp::fx::Manager manager );
 
-      DP_FX_API virtual const ParameterGroupDataSharedPtr& getParameterGroupData( const std::string& name ) const = 0;
+      DP_FX_API virtual ParameterGroupDataSharedPtr getParameterGroupData( const std::string& name ) const = 0;
 
-      DP_FX_API virtual const EffectDataSharedPtr& getEffectData( const std::string& name ) const = 0;
+      DP_FX_API virtual EffectDataSharedPtr getEffectData( const std::string& name ) const = 0;
 
       DP_FX_API virtual ShaderPipelineSharedPtr generateShaderPipeline( const dp::fx::ShaderPipelineConfiguration& configuration ) = 0;
 

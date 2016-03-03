@@ -285,7 +285,7 @@ namespace dp
                 DP_ASSERT( false );
                 break;
             }
-            p->setIndexSet( IndexSetSharedPtr::null );
+            p->setIndexSet( IndexSetSharedPtr() );
             DP_ASSERT( !p->isIndexed() );
           }
 

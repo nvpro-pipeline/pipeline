@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -126,7 +126,7 @@ namespace dp
           DrawableManagerDefault::~DrawableManagerDefault()
           {
             // reset resources
-            setSceneTree( SceneTreeSharedPtr::null );
+            setSceneTree( SceneTreeSharedPtr() );
             detachEffectDataObserver();
             m_effectDataObserver.reset();
           }
@@ -143,7 +143,7 @@ namespace dp
             m_instances.push_back( Instance() );
             Instance &di = m_instances.back();
             di.m_handle = handle;
-            di.m_geoNode = geoNode.getSharedPtr();
+            di.m_geoNode = geoNode.lock();
             di.m_objectTreeIndex = objectTreeIndex;
             di.m_transformIndex = objectTreeNode.m_transform;
             di.m_transparent = false;
@@ -169,8 +169,8 @@ namespace dp
 
           void DrawableManagerDefault::removeDrawableInstance( DrawableManager::Handle handle )
           {
-            DP_ASSERT( handle.isPtrTo<DefaultHandleData>() );
-            DefaultHandleDataSharedPtr const& handleData = handle.staticCast<DefaultHandleData>();
+            DP_ASSERT( std::dynamic_pointer_cast<DefaultHandleData>(handle) );
+            DefaultHandleDataSharedPtr const& handleData = std::static_pointer_cast<DefaultHandleData>(handle);
 
             // TODO really remove data
             dp::rix::core::Renderer *renderer = m_resourceManager->getRenderer();
@@ -211,8 +211,8 @@ namespace dp
 
           void DrawableManagerDefault::updateDrawableInstance( DrawableManager::Handle handle )
           {
-            DP_ASSERT( handle.isPtrTo<DefaultHandleData>() );
-            DefaultHandleDataSharedPtr const& handleData = handle.staticCast<DefaultHandleData>();
+            DP_ASSERT( std::dynamic_pointer_cast<DefaultHandleData>(handle) );
+            DefaultHandleDataSharedPtr const& handleData = std::static_pointer_cast<DefaultHandleData>(handle);
 
             dp::rix::core::Renderer *renderer = m_resourceManager->getRenderer();
 
@@ -306,12 +306,12 @@ namespace dp
                 {
                   renderer->renderGroupRemoveGeometryInstance( m_renderGroups[di.m_transparent][static_cast<size_t>(RenderGroupPass::DEPTH)], di.m_geometryInstanceDepthPass );
                 }
-                di.m_resourcePrimitive = ResourcePrimitiveSharedPtr::null;
+                di.m_resourcePrimitive = ResourcePrimitiveSharedPtr();
                 di.m_geometryInstance = nullptr;
                 di.m_geometryInstanceDepthPass = nullptr;
                 di.m_currentRenderGroup = nullptr;
-                di.m_smartShaderObject = ShaderManagerInstanceSharedPtr::null;
-                di.m_smartShaderObjectDepthPass = ShaderManagerInstanceSharedPtr::null;
+                di.m_smartShaderObject = ShaderManagerInstanceSharedPtr();
+                di.m_smartShaderObjectDepthPass = ShaderManagerInstanceSharedPtr();
                 di.m_currentPipelineData.reset();
               }
             }
@@ -319,8 +319,8 @@ namespace dp
 
           void DrawableManagerDefault::setDrawableInstanceActive( Handle handle, bool active )
           {
-            DP_ASSERT( handle.isPtrTo<DefaultHandleData>() );
-            DefaultHandleDataSharedPtr const& handleData = handle.staticCast<DefaultHandleData>();
+            DP_ASSERT( std::dynamic_pointer_cast<DefaultHandleData>(handle) );
+            DefaultHandleDataSharedPtr const& handleData = std::static_pointer_cast<DefaultHandleData>(handle);
 
             dp::rix::core::Renderer *renderer = m_resourceManager->getRenderer();
             Instance& di = m_instances[handleData->m_index];
@@ -333,8 +333,8 @@ namespace dp
 
           void DrawableManagerDefault::setDrawableInstanceTraversalMask( Handle handle, uint32_t traversalMask )
           {
-            DP_ASSERT( handle.isPtrTo<DefaultHandleData>() );
-            DefaultHandleDataSharedPtr const& handleData = handle.staticCast<DefaultHandleData>();
+            DP_ASSERT( std::dynamic_pointer_cast<DefaultHandleData>(handle) );
+            DefaultHandleDataSharedPtr const& handleData = std::static_pointer_cast<DefaultHandleData>(handle);
 
             dp::rix::core::Renderer *renderer = m_resourceManager->getRenderer();
             Instance& di = m_instances[handleData->m_index];
@@ -361,8 +361,8 @@ namespace dp
 
               for ( size_t index = 0;index < changed.size(); ++index )
               {
-                DP_ASSERT( getDrawableInstance( changed[index] ).isPtrTo<DefaultHandleData>() );
-                DefaultHandleDataSharedPtr const& defaultHandleData = getDrawableInstance( changed[index] ).staticCast<DefaultHandleData>();
+                DP_ASSERT( std::dynamic_pointer_cast<DefaultHandleData>(getDrawableInstance( changed[index] )) );
+                DefaultHandleDataSharedPtr const& defaultHandleData = std::static_pointer_cast<DefaultHandleData>(getDrawableInstance( changed[index] ));
                 Instance & instance = m_instances[defaultHandleData->m_index];
 
                 bool newVisible = m_cullingManager->resultIsVisible( m_cullingResult, changed[index] );

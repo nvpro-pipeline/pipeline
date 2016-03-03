@@ -1,3 +1,4 @@
+// Copyright (c) 2009-2016, NVIDIA CORPORATION. All rights reserved.
 // Copyright NVIDIA Corporation 2009-2013
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
@@ -53,7 +54,7 @@ namespace dp
           //{
           //  m_appTraverser->setSkinningProcessor( AppTraverser::SKINNING_PROCESSOR_GPUG80GL );
           //}
- 
+
           m_todTimer.start();
           m_lastTime = m_todTimer.getTime();
         }
@@ -75,7 +76,7 @@ namespace dp
 
           glEnable( GL_DEPTH_TEST );
 
-          getRenderTarget().inplaceCast<dp::gl::RenderTarget>()->setClearMask( dp::gl::TBM_COLOR_BUFFER | dp::gl::TBM_DEPTH_BUFFER );
+          std::static_pointer_cast<dp::gl::RenderTarget>(getRenderTarget())->setClearMask(dp::gl::TBM_COLOR_BUFFER | dp::gl::TBM_DEPTH_BUFFER);
           if ( m_manipulator )
           {
             m_manipulator->setRenderTarget( getRenderTarget() );
