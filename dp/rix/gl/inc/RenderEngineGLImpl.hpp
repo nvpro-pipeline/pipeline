@@ -40,16 +40,16 @@ namespace dp
       template <typename VertexCache> class RenderEngineGLImpl;
 
       template<typename VertexCache>
-      RenderEngineGL* renderEngineCreate(std::map<std::string, std::string> const & options)
+      RenderEngineGL* renderEngineCreate(std::map<std::string, std::string> const & options, dp::rix::gl::RiXGL* rix)
       {
-        return new RenderEngineGLImpl<VertexCache>(options);
+        return new RenderEngineGLImpl<VertexCache>(options, rix);
       }
 
       template <typename VertexCache>
       class RenderEngineGLImpl : public RenderEngineGL, public VertexAttributeCache<VertexCache>
       {
       public:
-        RenderEngineGLImpl(std::map<std::string, std::string> const & options);
+        RenderEngineGLImpl(std::map<std::string, std::string> const & options, dp::rix::gl::RiXGL* rix);
 
         virtual void beginRender();
         virtual void render( RenderGroupGLSharedHandle const & groupHandle, dp::rix::core::RenderOptions const & renderOptions );
@@ -57,7 +57,7 @@ namespace dp
         virtual void endRender();
         virtual RenderGroupGL::SmartCache createCache( RenderGroupGLSharedHandle const & renderGroupGL, ProgramPipelineGLSharedHandle const & programPipeline );
 
-      protected: 
+      protected:
         typedef typename ProgramPipelineGroupCache<VertexCache>::AttributeCacheEntry AttributeCacheEntry;
         typedef typename ProgramPipelineGroupCache<VertexCache>::GeometryInstanceCache GeometryInstanceCache;
         typedef typename ProgramPipelineGroupCache<VertexCache>::GeometryInstanceCacheEntry GeometryInstanceCacheEntry;
@@ -79,8 +79,9 @@ namespace dp
         bool                    m_batchedUpdates;
         BufferMode              m_bufferMode;
         RenderGroupCache*       m_currentProgramPipelineCache;
+        dp::rix::gl::RiXGL*     m_rix;
 
-        // the following is needed for gcc name lookup 
+        // the following is needed for gcc name lookup
         using VertexAttributeCache< VertexCache >::beginFrame;
         using VertexAttributeCache< VertexCache >::endFrame;
         using VertexAttributeCache< VertexCache >::renderGeometryInstance;
@@ -97,8 +98,9 @@ namespace dp
       };
 
       template <typename VertexCache>
-      RenderEngineGLImpl<VertexCache>::RenderEngineGLImpl(std::map<std::string, std::string> const & options) 
+      RenderEngineGLImpl<VertexCache>::RenderEngineGLImpl(std::map<std::string, std::string> const & options, dp::rix::gl::RiXGL* rix)
         : m_currentProgramPipelineCache( nullptr )
+        , m_rix(rix)
       {
         auto itUniformBufferUnifiedMemory = options.find("uniformBufferUnifiedMemory");
         m_useUniformBufferUnifiedMemory = itUniformBufferUnifiedMemory != options.end() && itUniformBufferUnifiedMemory->second == "true";
@@ -227,7 +229,7 @@ namespace dp
             generateCache( renderGroupCache );
             groupHandle->m_dirtyList.clear();
           }
-          else 
+          else
           {
             renderGroupCache->updateConvertedCache();
           }
@@ -352,7 +354,7 @@ namespace dp
       template <typename VertexCache>
       RenderGroupGL::SmartCache RenderEngineGLImpl<VertexCache>::createCache( RenderGroupGLSharedHandle const & renderGroupGL, ProgramPipelineGLSharedHandle const & programPipeline )
       {
-        return new RenderGroupCache( renderGroupGL.get(), programPipeline.get(), m_useUniformBufferUnifiedMemory, m_bufferMode, m_batchedUpdates );
+        return new RenderGroupCache( renderGroupGL.get(), programPipeline.get(), m_useUniformBufferUnifiedMemory, m_bufferMode, m_batchedUpdates, m_rix->getNumberOfGPUs() );
       }
 
     } // namespace gl

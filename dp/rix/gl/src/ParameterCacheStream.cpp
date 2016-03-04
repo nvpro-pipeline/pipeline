@@ -29,8 +29,11 @@
 #include <dp/rix/gl/inc/ParameterRendererUniform.h>
 #include <dp/rix/gl/inc/ParameterRendererBuffer.h>
 #include <dp/rix/gl/inc/ParameterRendererBufferAddressRange.h>
+#include <dp/rix/gl/inc/ParameterRendererBufferAddressRangeMulticast.h>
 #include <dp/rix/gl/inc/ParameterRendererBufferDSA.h>
+#include <dp/rix/gl/inc/ParameterRendererBufferMulticast.h>
 #include <dp/rix/gl/inc/ParameterRendererBufferRange.h>
+#include <dp/rix/gl/inc/ParameterRendererBufferRangeMulticast.h>
 #include <dp/rix/gl/inc/ParameterRendererPersistentBufferMapping.h>
 #include <dp/rix/gl/inc/ParameterRendererPersistentBufferMappingUnifiedMemory.h>
 #include <dp/util/Array.h>
@@ -47,13 +50,14 @@ namespace dp
       /* ParameterCache                                                       */
       /************************************************************************/
       ParameterCache<ParameterCacheStream>::ParameterCache( ProgramPipelineGLHandle programPipeline, std::vector<ContainerDescriptorGLHandle> const &descriptors
-                                                          , bool useUniformBufferUnifiedMemory, BufferMode bufferMode, bool batchedUpdates)
+                                                          , bool useUniformBufferUnifiedMemory, BufferMode bufferMode, bool batchedUpdates, uint32_t numberOfGPUs)
         : m_containerLocationsValid(0)
         , m_programPipeline( programPipeline )
         , m_descriptors( descriptors )
         , m_useUniformBufferUnifiedMemory(useUniformBufferUnifiedMemory)
         , m_batchedUpdates(batchedUpdates)
         , m_bufferMode(bufferMode)
+        , m_numberOfGPUs(numberOfGPUs)
       {
         switch(m_bufferMode)
         {
@@ -115,13 +119,21 @@ namespace dp
             case BufferMode::BUFFER_SUBDATA:
               {
                 dp::gl::BufferSharedPtr ubo = dp::gl::Buffer::create(dp::gl::Buffer::CORE, GL_STREAM_DRAW, GL_UNIFORM_BUFFER);
-                if ( glNamedBufferSubDataEXT /** GLEW_EXT_direct_state_access, glew has a bug not reporting this extension because the double versions are missing **/)
+                if (m_descriptors[i]->m_multicast)
                 {
-                  parameterState.m_parameterRenderer.reset( new ParameterRendererBufferDSA( parameterCacheEntries, ubo, GL_UNIFORM_BUFFER, binding, 0, blockSize, m_useUniformBufferUnifiedMemory ) );
+                  unsigned int containerSize = m_descriptors[i]->m_size;
+                  parameterState.m_parameterRenderer.reset(new ParameterRendererBufferMulticast(parameterCacheEntries, m_uboDataUBO, GL_UNIFORM_BUFFER, binding, 0, blockSize, m_useUniformBufferUnifiedMemory, containerSize, m_numberOfGPUs));
                 }
                 else
                 {
-                  parameterState.m_parameterRenderer.reset( new ParameterRendererBuffer( parameterCacheEntries, ubo, GL_UNIFORM_BUFFER, binding, 0, blockSize, m_useUniformBufferUnifiedMemory ) );
+                  if (glNamedBufferSubDataEXT /** GLEW_EXT_direct_state_access, glew has a bug not reporting this extension because the double versions are missing **/)
+                  {
+                    parameterState.m_parameterRenderer.reset(new ParameterRendererBufferDSA(parameterCacheEntries, ubo, GL_UNIFORM_BUFFER, binding, 0, blockSize, m_useUniformBufferUnifiedMemory));
+                  }
+                  else
+                  {
+                    parameterState.m_parameterRenderer.reset(new ParameterRendererBuffer(parameterCacheEntries, ubo, GL_UNIFORM_BUFFER, binding, 0, blockSize, m_useUniformBufferUnifiedMemory));
+                  }
                 }
                 ubo->setSize(blockSize);
 
@@ -132,16 +144,33 @@ namespace dp
             case BufferMode::BIND_BUFFER_RANGE:
               if ( m_useUniformBufferUnifiedMemory )
               {
-                parameterState.m_parameterRenderer.reset( new ParameterRendererBufferAddressRange( parameterCacheEntries, m_uboDataUBO, GL_UNIFORM_BUFFER_ADDRESS_NV, binding, blockSize, m_batchedUpdates ) );
+                if (m_descriptors[i]->m_multicast)
+                {
+                  unsigned int containerSize = m_descriptors[i]->m_size;
+                  parameterState.m_parameterRenderer.reset(new ParameterRendererBufferAddressRangeMulticast(parameterCacheEntries, m_uboDataUBO, GL_UNIFORM_BUFFER_ADDRESS_NV, binding, blockSize, m_batchedUpdates, containerSize, m_numberOfGPUs));
+                }
+                else
+                {
+                  parameterState.m_parameterRenderer.reset(new ParameterRendererBufferAddressRange(parameterCacheEntries, m_uboDataUBO, GL_UNIFORM_BUFFER_ADDRESS_NV, binding, blockSize, m_batchedUpdates));
+                }
               }
               else
               {
-                parameterState.m_parameterRenderer.reset( new ParameterRendererBufferRange( parameterCacheEntries, m_uboDataUBO, GL_UNIFORM_BUFFER, binding, blockSize, m_batchedUpdates ) );
+                if (m_descriptors[i]->m_multicast)
+                {
+                  unsigned int containerSize = m_descriptors[i]->m_size;
+                  parameterState.m_parameterRenderer.reset(new ParameterRendererBufferRangeMulticast(parameterCacheEntries, m_uboDataUBO, GL_UNIFORM_BUFFER, binding, blockSize, containerSize, m_numberOfGPUs));
+                }
+                else
+                {
+                  parameterState.m_parameterRenderer.reset(new ParameterRendererBufferRange(parameterCacheEntries, m_uboDataUBO, GL_UNIFORM_BUFFER, binding, blockSize, m_batchedUpdates));
+                }
               }
 
               m_isUBOData.push_back(true);
               break;
             case BufferMode::PERSISTENT_BUFFER_MAPPING:
+              assert(!m_descriptors[i]->m_multicast);
               if ( m_useUniformBufferUnifiedMemory )
               {
                 parameterState.m_parameterRenderer.reset(new ParameterRendererPersistentBufferMappingUnifiedMemory(parameterCacheEntries, m_uboDataUBO, GL_UNIFORM_BUFFER_ADDRESS_NV, binding, blockSize));
@@ -180,13 +209,21 @@ namespace dp
             case BufferMode::BUFFER_SUBDATA:
               {
                 dp::gl::BufferSharedPtr ubo = dp::gl::Buffer::create(dp::gl::Buffer::CORE, GL_STREAM_DRAW, GL_UNIFORM_BUFFER);
-                if ( glNamedBufferSubDataEXT /** GLEW_EXT_direct_state_access, glew has a bug not reporting this extension because the double versions are missing **/)
+                if (m_descriptors[i]->m_multicast)
                 {
-                  parameterState.m_parameterRenderer.reset( new ParameterRendererBufferDSA( parameterCacheEntries, ubo, GL_SHADER_STORAGE_BUFFER, binding, 0, blockSize, m_useUniformBufferUnifiedMemory ) );
+                  unsigned int containerSize = m_descriptors[i]->m_size;
+                  parameterState.m_parameterRenderer.reset(new ParameterRendererBufferRangeMulticast(parameterCacheEntries, m_uboDataUBO, GL_SHADER_STORAGE_BUFFER, binding, blockSize, containerSize, m_numberOfGPUs));
                 }
                 else
                 {
-                  parameterState.m_parameterRenderer.reset( new ParameterRendererBuffer( parameterCacheEntries, ubo, GL_SHADER_STORAGE_BUFFER, binding, 0, blockSize, m_useUniformBufferUnifiedMemory ) );
+                  if ( glNamedBufferSubDataEXT /** GLEW_EXT_direct_state_access, glew has a bug not reporting this extension because the double versions are missing **/)
+                  {
+                    parameterState.m_parameterRenderer.reset( new ParameterRendererBufferDSA( parameterCacheEntries, ubo, GL_SHADER_STORAGE_BUFFER, binding, 0, blockSize, m_useUniformBufferUnifiedMemory ) );
+                  }
+                  else
+                  {
+                    parameterState.m_parameterRenderer.reset( new ParameterRendererBuffer( parameterCacheEntries, ubo, GL_SHADER_STORAGE_BUFFER, binding, 0, blockSize, m_useUniformBufferUnifiedMemory ) );
+                  }
                 }
                 ubo->setSize(blockSize);
 
@@ -195,7 +232,15 @@ namespace dp
               }
               break;
             case BufferMode::BIND_BUFFER_RANGE:
-              parameterState.m_parameterRenderer.reset( new ParameterRendererBufferRange( parameterCacheEntries, m_uboDataUBO, GL_SHADER_STORAGE_BUFFER, binding, blockSize, m_batchedUpdates) );
+              if (m_descriptors[i]->m_multicast)
+              {
+                unsigned int containerSize = m_descriptors[i]->m_size;
+                parameterState.m_parameterRenderer.reset(new ParameterRendererBufferRangeMulticast(parameterCacheEntries, m_uboDataUBO, GL_SHADER_STORAGE_BUFFER, binding, blockSize, containerSize, m_numberOfGPUs));
+              }
+              else
+              {
+                parameterState.m_parameterRenderer.reset(new ParameterRendererBufferRange(parameterCacheEntries, m_uboDataUBO, GL_SHADER_STORAGE_BUFFER, binding, blockSize, m_batchedUpdates));
+              }
               m_isUBOData.push_back(true);
               break;
             default:

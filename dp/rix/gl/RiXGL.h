@@ -336,10 +336,12 @@ namespace dp
 
         ID  aquireContainerID();
         void      releaseUniqueContainerID(ID);
+        uint32_t  getNumberOfGPUs() { return m_numberOfGPUs; } // get number of GPUs for multicast extension
 
       private:
         RenderEngineGL* m_renderEngine;
         std::string     m_renderEngineName;
+        uint32_t        m_numberOfGPUs; // number of GPUs for multicast extension
 
         bool m_isRendering;
 

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2015
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -60,7 +60,7 @@ namespace dp
           unsigned int  m_offset;         // offset inside container m_data
         };
 
-        ContainerDescriptorGL( RiXGL *renderer, size_t numParameters, dp::rix::core::ProgramParameter* parameters );
+        ContainerDescriptorGL( RiXGL *renderer, size_t numParameters, dp::rix::core::ProgramParameter* parameters, bool multicast );
 
         dp::rix::core::ContainerEntry generateEntry( unsigned short index )
         {
@@ -92,6 +92,7 @@ namespace dp
         static unsigned int        m_freeId;
         std::vector<ParameterInfo> m_parameterInfos;
         unsigned int               m_size;
+        bool                       m_multicast;
 
         RiXGL*                     m_renderer;
       };
@@ -135,7 +136,7 @@ namespace dp
         struct ParameterDataBuffer
         {
           // specified by user
-          BufferGLHandle m_bufferHandle; 
+          BufferGLHandle m_bufferHandle;
           size_t         m_offset;
           size_t         m_length;
 

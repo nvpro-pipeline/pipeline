@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -24,11 +24,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#pragma once
-
-#include <dp/rix/core/RiX.h>
-#include <RenderGroupGL.h>
-
+#include <dp/rix/gl/inc/ParameterRendererBufferMulticast.h>
 
 namespace dp
 {
@@ -37,27 +33,30 @@ namespace dp
     namespace gl
     {
 
-      typedef RenderEngineGL*(*RenderEngineCreator)(std::map<std::string, std::string> const & options, dp::rix::gl::RiXGL *rix);
-
-      typedef std::map<std::string, RenderEngineCreator> RenderEngineMap;
-
-      RenderEngineMap &getRenderEngineMap();
-      RenderEngineGL* getRenderEngine(const char *options, dp::rix::gl::RiXGL *rix);
-      bool registerRenderEngine( const char *renderEngine, RenderEngineCreator creator );
-
-      class RenderEngineGL
+      ParameterRendererBufferMulticast::ParameterRendererBufferMulticast(ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::BufferSharedPtr const& ubo, GLenum target
+                                                                        , size_t uboBinding, size_t uboOffset, GLsizeiptr uboBlockSize
+                                                                        , bool useUniformBufferUnifiedMemory, size_t containerSize, uint32_t numberOfGPUs)
+        : ParameterRendererBuffer(parameterCacheEntries, ubo, target, uboBinding, uboOffset, uboBlockSize, useUniformBufferUnifiedMemory)
+        , m_containerSize(containerSize)
+        , m_numberOfGPUs(numberOfGPUs)
       {
-      public:
-        virtual ~RenderEngineGL() {};
+        glLGPUNamedBufferSubDataNVX = (PFNGLLGPUNAMEDBUFFERSUBDATANVXPROC)wglGetProcAddress("glLGPUNamedBufferSubDataNVX");
+        assert(glLGPUNamedBufferSubDataNVX && "multicast extension not supported");
+      }
 
-        virtual void beginRender() = 0;
-        virtual void render( RenderGroupGLSharedHandle const & groupHandle, dp::rix::core::RenderOptions const & renderOptions = dp::rix::core::RenderOptions() ) = 0;
-        virtual void render( RenderGroupGLSharedHandle const & groupHandle, dp::rix::core::GeometryInstanceSharedHandle const * gis, size_t numGIs, dp::rix::core::RenderOptions const & renderOptions = dp::rix::core::RenderOptions() ) = 0;
-        virtual void endRender() = 0;
-        virtual RenderGroupGL::SmartCache createCache( RenderGroupGLSharedHandle const & renderGroupGL, ProgramPipelineGLSharedHandle const & programPipeline ) = 0;
+      void ParameterRendererBufferMulticast::render( void const* cache )
+      {
+        char const* basePtr = reinterpret_cast<char const*>(cache);
+        for (uint32_t gpuId = 0;gpuId < m_numberOfGPUs;++gpuId)
+        {
+          glLGPUNamedBufferSubDataNVX(1 << gpuId, m_ubo->getGLId(), m_uboOffset, m_uboBlockSize, basePtr );
+          basePtr += m_containerSize;
+        }
+      }
 
-      };
     } // namespace gl
   } // namespace rix
 } // namespace dp
+
+
 

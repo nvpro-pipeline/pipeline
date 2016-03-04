@@ -31,8 +31,11 @@ set( SOURCES
   src/ParameterRenderer.cpp
   src/ParameterRendererBuffer.cpp
   src/ParameterRendererBufferAddressRange.cpp
+  src/ParameterRendererBufferAddressRangeMulticast.cpp
   src/ParameterRendererBufferDSA.cpp
+  src/ParameterRendererBufferMulticast.cpp
   src/ParameterRendererBufferRange.cpp
+  src/ParameterRendererBufferRangeMulticast.cpp
   src/ParameterRendererPersistentBufferMapping.cpp
   src/ParameterRendererPersistentBufferMappingUnifiedMemory.cpp
   src/ParameterRendererUniform.cpp
@@ -43,7 +46,6 @@ set( SOURCES
   src/RenderEngineGL.cpp
   src/RenderEngineGLBindless.cpp
   src/RenderEngineGLBindlessVAO.cpp
-  src/RenderEngineGLIndirect.cpp
   src/RenderEngineGLVBO.cpp
   src/RenderEngineGLVBOVAO.cpp
   src/RenderEngineGLBindlessVertexAttribBinding.cpp
@@ -85,8 +87,11 @@ set(HEADERS
   inc/ParameterRenderer.h
   inc/ParameterRendererBuffer.h
   inc/ParameterRendererBufferAddressRange.h
+  inc/ParameterRendererBufferAddressRangeMulticast.h
   inc/ParameterRendererBufferDSA.h
+  inc/ParameterRendererBufferMulticast.h
   inc/ParameterRendererBufferRange.h
+  inc/ParameterRendererBufferRangeMulticast.h
   inc/ParameterRendererPersistentBufferMapping.h
   inc/ParameterRendererPersistentBufferMappingUnifiedMemory.h
   inc/ParameterRendererStream.h
@@ -102,7 +107,6 @@ set(HEADERS
   inc/RenderEngineGLImpl.hpp
   inc/RenderEngineGLBindless.h
   inc/RenderEngineGLBindlessVAO.h
-  inc/RenderEngineGLIndirect.h
   inc/RenderEngineGLVBO.h
   inc/RenderEngineGLVBOVAO.h
   inc/RenderEngineGLBindlessVertexAttribBinding.h

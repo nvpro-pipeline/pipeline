@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -26,9 +26,7 @@
 
 #pragma once
 
-#include <dp/rix/core/RiX.h>
-#include <RenderGroupGL.h>
-
+#include <dp/rix/gl/inc/ParameterRendererBuffer.h>
 
 namespace dp
 {
@@ -37,26 +35,29 @@ namespace dp
     namespace gl
     {
 
-      typedef RenderEngineGL*(*RenderEngineCreator)(std::map<std::string, std::string> const & options, dp::rix::gl::RiXGL *rix);
+      // private, required until extension has been added to glew
+      typedef void (GLAPIENTRY * PFNGLLGPUNAMEDBUFFERSUBDATANVXPROC) (GLbitfield gpuMask, GLuint buffer, GLintptr offset, GLsizeiptr size, const GLvoid *data);
 
-      typedef std::map<std::string, RenderEngineCreator> RenderEngineMap;
-
-      RenderEngineMap &getRenderEngineMap();
-      RenderEngineGL* getRenderEngine(const char *options, dp::rix::gl::RiXGL *rix);
-      bool registerRenderEngine( const char *renderEngine, RenderEngineCreator creator );
-
-      class RenderEngineGL
+      /************************************************************************/
+      /* ParameterRendererBufferDSA                                           */
+      /************************************************************************/
+      class ParameterRendererBufferMulticast : public ParameterRendererBuffer
       {
       public:
-        virtual ~RenderEngineGL() {};
+        ParameterRendererBufferMulticast(ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::BufferSharedPtr const& ubo, GLenum target
+          , size_t uboBinding, size_t uboOffset, GLsizeiptr uboBlockSize
+          , bool useUniformBufferUnifiedMemory, size_t containerSize, uint32_t numberOfGPUs);
 
-        virtual void beginRender() = 0;
-        virtual void render( RenderGroupGLSharedHandle const & groupHandle, dp::rix::core::RenderOptions const & renderOptions = dp::rix::core::RenderOptions() ) = 0;
-        virtual void render( RenderGroupGLSharedHandle const & groupHandle, dp::rix::core::GeometryInstanceSharedHandle const * gis, size_t numGIs, dp::rix::core::RenderOptions const & renderOptions = dp::rix::core::RenderOptions() ) = 0;
-        virtual void endRender() = 0;
-        virtual RenderGroupGL::SmartCache createCache( RenderGroupGLSharedHandle const & renderGroupGL, ProgramPipelineGLSharedHandle const & programPipeline ) = 0;
+        virtual void render(void const* cache);
 
+      private:
+        size_t   m_containerSize;
+        uint32_t m_numberOfGPUs;
+
+        // private, added until glew supports the extension
+        PFNGLLGPUNAMEDBUFFERSUBDATANVXPROC glLGPUNamedBufferSubDataNVX;
       };
+
     } // namespace gl
   } // namespace rix
 } // namespace dp

@@ -66,13 +66,23 @@ namespace dp
   {
     namespace gl
     {
+
+      typedef void (GLAPIENTRY * PFNGLLGPUNAMEDBUFFERSUBDATANVXPROC) (GLbitfield gpuMask, GLuint buffer, GLintptr offset, GLsizeiptr size, const GLvoid *data);
+      typedef void (GLAPIENTRY * PFNGLLGPUCOPYIMAGESUBDATANVXPROC) (GLuint sourceGpu, GLbitfield destinationGpuMask, GLuint srcName, GLuint srcTarget, GLint srcLevel, GLint srcX, GLint srcY, GLint srcZ, GLuint dstName, GLuint dstTarget, GLint dstLevel, GLint dstX, GLint dstY, GLint dstZ, GLsizei width, GLsizei height, GLsizei depth);
+      typedef void (GLAPIENTRY * PFNGLLGPUINTERLOCKNVXPROC) (void);
+
+      extern DP_GL_API PFNGLLGPUNAMEDBUFFERSUBDATANVXPROC glLGPUNamedBufferSubDataNVX;
+      extern DP_GL_API PFNGLLGPUCOPYIMAGESUBDATANVXPROC glLGPUCopyImageSubDataNVX;
+      extern DP_GL_API PFNGLLGPUINTERLOCKNVXPROC glLGPUInterlockNVX;
+
       /**************/
       /* RiXGL */
       /**************/
       RiXGL::RiXGL( const char *renderEngine )
+        : m_numberOfGPUs(1)
       {
         m_renderEngineName = renderEngine ? renderEngine : "Bindless";
-        m_renderEngine = getRenderEngine( m_renderEngineName.c_str() );
+        m_renderEngine = getRenderEngine( m_renderEngineName.c_str(), this );
         m_isRendering = false;
       }
 
@@ -168,7 +178,7 @@ namespace dp
         {
           DP_ASSERT( dynamic_cast<const dp::rix::core::ProgramParameterDescriptorCommon*>(&programParameterDescriptor) );
           dp::rix::core::ProgramParameterDescriptorCommon const & descriptor = static_cast<dp::rix::core::ProgramParameterDescriptorCommon const &>(programParameterDescriptor);
-          return new ContainerDescriptorGL( this, descriptor.m_numParameters, descriptor.m_parameters );
+          return new ContainerDescriptorGL( this, descriptor.m_numParameters, descriptor.m_parameters, descriptor.m_multicast );
         }
         default:
           DP_ASSERT( !"unsupported parameter descriptor" );
@@ -673,6 +683,13 @@ namespace dp
             glEnable(GL_DEBUG_OUTPUT);
           }
 #endif
+
+          if (dp::gl::isExtensionExported("GL_NVX_linked_gpu_multicast"))
+          {
+            std::cout << "GL_NVX_linked_gpu_multicast supported!\n";
+            const GLenum GL_MAX_LGPU_GPUS_NVX = 0x92BA;
+            glGetIntegerv(GL_MAX_LGPU_GPUS_NVX, (GLint*)(&m_numberOfGPUs));
+          }
 
           initBufferBinding();
         }

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2015
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -22,7 +22,6 @@
 // OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
 
 #include <RenderEngineGL.h>
 
@@ -61,7 +60,7 @@ namespace dp
         return false;
       }
 
-      RenderEngineGL* getRenderEngine( const char *renderEngineOptions )
+      RenderEngineGL* getRenderEngine( const char *renderEngineOptions, dp::rix::gl::RiXGL *rix )
       {
         std::map<std::string, std::string> options;
         std::vector<std::string> tokens;
@@ -88,7 +87,7 @@ namespace dp
         RenderEngineMap::iterator it = renderEngineMap.find(itRenderEngine != options.end() ? itRenderEngine->second : "VAB");
         if ( it != renderEngineMap.end() )
         {
-          return it->second(options);
+          return it->second(options, rix);
         }
         DP_ASSERT( !"renderEngine not found!" );
         return nullptr;
@@ -97,4 +96,3 @@ namespace dp
     } // namespace gl
   } // namespace rix
 } // namespace dp
- 

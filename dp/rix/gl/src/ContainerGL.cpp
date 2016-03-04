@@ -280,9 +280,10 @@ namespace dp
       // initialize the first used id to something > 0
       unsigned int ContainerDescriptorGL::m_freeId = 42;
 
-      ContainerDescriptorGL::ContainerDescriptorGL( RiXGL* renderer, size_t numParameters, ProgramParameter* parameters )
+      ContainerDescriptorGL::ContainerDescriptorGL( RiXGL* renderer, size_t numParameters, ProgramParameter* parameters, bool multicast )
         : m_id( m_freeId++ << 16 )
         , m_size(0)
+        , m_multicast(multicast)
         , m_renderer(renderer)
       {
         for ( size_t i = 0; i < numParameters; ++i )
@@ -315,7 +316,7 @@ namespace dp
         m_uniqueID = renderer->aquireContainerID();
         if ( m_size )
         {
-          m_data = malloc( m_size );
+          m_data = malloc( m_size * renderer->getNumberOfGPUs());
           // must be initialized with 0 so that pointer references can
           // be detected properly
           memset( m_data, 0, m_size );
@@ -412,7 +413,8 @@ namespace dp
       {
         size_t size = containerData.m_size;
         size_t offset = containerData.m_offset;
-        const void *data = containerData.m_data;
+        void const* data = containerData.m_data;
+        char* basePtr = reinterpret_cast<char*>(m_data) + containerData.m_gpuId * m_size;
 
         if ( size + offset <= parameterInfo.m_size )
         {
@@ -473,7 +475,7 @@ namespace dp
           case ContainerParameterType::BUFFER_ADDRESS:
           case ContainerParameterType::CALLBACK_:
             {
-              memcpy( static_cast<char*>(m_data) + parameterInfo.m_offset + offset, data, size );
+              memcpy( basePtr + parameterInfo.m_offset + offset, data, size );
             }
             break;
           default:

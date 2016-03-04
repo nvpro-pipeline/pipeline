@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -122,7 +122,7 @@ namespace dp
         };
 
         ProgramPipelineGroupCache( RenderGroupGLHandle renderGroup, ProgramPipelineGLHandle programPipeline
-                                 , bool useUniformBufferUnifiedMemory, BufferMode bufferMode, bool batchedUpdates);
+                                 , bool useUniformBufferUnifiedMemory, BufferMode bufferMode, bool batchedUpdates, uint32_t numberOfGPUs);
         ~ProgramPipelineGroupCache();
 
         void activate();
@@ -148,16 +148,19 @@ namespace dp
         dp::util::BitArray                     m_geometryInstanceVisibility;
         std::unique_ptr<GeometryInstanceCache> m_geometryInstanceCache;
 
+        uint32_t                               m_numberOfGPUs; // Number of GPUs for multicast extension
+
       private:
         std::unique_ptr<GeometryInstanceObserver> m_geometryInstanceObserver;
       };
 
       template <typename VertexCache>
       ProgramPipelineGroupCache<VertexCache>::ProgramPipelineGroupCache( RenderGroupGLHandle renderGroup, ProgramPipelineGLHandle programPipeline
-                                                                       , bool useUniformBufferUnifiedMemory, BufferMode bufferMode, bool batchedUpdates )
+                                                                       , bool useUniformBufferUnifiedMemory, BufferMode bufferMode, bool batchedUpdates, uint32_t numberOfGPUs )
         : RenderGroupGL::Cache( renderGroup, programPipeline )
-        , ProgramParameterCache<PCT>( renderGroup, programPipeline, useUniformBufferUnifiedMemory, bufferMode, batchedUpdates )
+        , ProgramParameterCache<PCT>( renderGroup, programPipeline, useUniformBufferUnifiedMemory, bufferMode, batchedUpdates, numberOfGPUs )
         , m_geometryInstanceCache( nullptr )
+        , m_numberOfGPUs(numberOfGPUs)
       {
         const RenderGroupGL::ContainerMap& globalContainers = renderGroup->getGlobalContainers();
         for( RenderGroupGL::ContainerMap::const_iterator it = globalContainers.begin(); it != globalContainers.end(); ++it )

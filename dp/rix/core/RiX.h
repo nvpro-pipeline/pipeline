@@ -525,15 +525,17 @@ namespace dp
 
       struct ProgramParameterDescriptorCommon : public ProgramParameterDescriptor
       {
-        ProgramParameterDescriptorCommon( ProgramParameter* parameters, size_t numParameters )
+        ProgramParameterDescriptorCommon( ProgramParameter* parameters, size_t numParameters, bool multicast = false )
           : ProgramParameterDescriptor( ProgramParameterDescriptorType::COMMON )
           , m_parameters( parameters )
           , m_numParameters( numParameters )
+          , m_multicast(multicast)
         {
         }
 
         ProgramParameter* m_parameters;
         size_t            m_numParameters;
+        bool              m_multicast;
       };
 
       struct ProgramShader
@@ -597,17 +599,19 @@ namespace dp
 
       struct ContainerDataRaw : public ContainerData
       {
-        ContainerDataRaw( size_t offset, const void *data, size_t size )
-          : ContainerData( ContainerDataType::RAW )
-          , m_offset( offset )
-          , m_data( data )
-          , m_size( size )
+        ContainerDataRaw(size_t offset, const void *data, size_t size, uint32_t gpuId = 0)
+          : ContainerData(ContainerDataType::RAW)
+          , m_offset(offset)
+          , m_data(data)
+          , m_size(size)
+          , m_gpuId(gpuId)
         {
         }
 
         size_t      m_offset;
         const void* m_data;
         size_t      m_size;
+        uint32_t    m_gpuId;
       };
 
       struct ContainerDataBuffer : public ContainerData

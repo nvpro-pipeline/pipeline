@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2013-2015
+// Copyright (c) 2013-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -77,11 +77,13 @@ namespace dp
         typedef std::vector<ParameterState> ParameterStates;
 
         /** \brief Construct ParameterCache for the given ProgramPipeline
+            \param numberOfGPUs Number of GPUs for multicast mode
         **/
         ParameterCache( ProgramPipelineGLHandle programPipeline, std::vector<ContainerDescriptorGLHandle> const& descriptors
                       , bool useUniformBufferUnifiedMemory
                       , BufferMode bufferMode
-                      , bool batchedUpdates);
+                      , bool batchedUpdates
+                      , uint32_t numberOfGPUs);
         virtual ~ParameterCache();
 
         /** \brief Clear all allocations in the cache **/
@@ -141,6 +143,8 @@ namespace dp
 
         std::vector< bool >                   m_isUBOData; // determines for each descriptor if the corresponding data should be copied to the UBO
         std::vector< size_t >                 m_dataSizes; // required size for container data cache for given index
+
+        uint32_t                              m_numberOfGPUs; // number of GPUs for multicast
 
         // allocation state
         size_t m_currentUniformOffset;
