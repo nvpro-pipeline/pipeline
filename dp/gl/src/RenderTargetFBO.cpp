@@ -37,6 +37,7 @@ namespace dp
       , m_framebuffer( 0 )
       , m_stereoTarget( StereoTarget::LEFT )
       , m_stereoEnabled( false )
+      , m_multicastEnabled(false)
       , m_currentlyBoundAttachments( 0 )
     {
       DP_ASSERT( glContext );
@@ -180,19 +181,27 @@ namespace dp
 
     bool RenderTargetFBO::setAttachment( AttachmentTarget target, const SharedAttachment &attachment, StereoTarget stereoTarget )
     {
-      int stereoId = getStereoTargetId( stereoTarget );
-
-      m_attachments[stereoId][target] = attachment;
-
-      if ( isCurrent() )
+      if (m_stereoTarget == StereoTarget::LEFT_AND_RIGHT)
       {
-        attachment->bind( target );
+        setAttachment(target, attachment, StereoTarget::LEFT);
+        setAttachment(target, attachment, StereoTarget::RIGHT);
       }
       else
       {
-        // keep track of changed attachments. This reduces the number of bind calls in bindAttachments()
-        // which is being called on beginRendering().
-        m_attachmentChanges[stereoId][target] = attachment;
+        int stereoId = getStereoTargetId(stereoTarget);
+
+        m_attachments[stereoId][target] = attachment;
+
+        if ( isCurrent() )
+        {
+          attachment->bind( target );
+        }
+        else
+        {
+          // keep track of changed attachments. This reduces the number of bind calls in bindAttachments()
+          // which is being called on beginRendering().
+          m_attachmentChanges[stereoId][target] = attachment;
+        }
       }
       return true;
     }
@@ -205,6 +214,14 @@ namespace dp
         return 0;
       case StereoTarget::RIGHT:
         return 1;
+      case StereoTarget::LEFT_AND_RIGHT:
+        if (!isMulticastEnabled())
+        {
+          throw std::runtime_error("Invalid stereoTarget LEFT_AND_RIGHT");
+        }
+        // for multicast LEFT_AND_RIGHT is the left eye
+        return 0;
+        break;
       default:
         DP_ASSERT( 0 && "invalid stereoTarget" );
         return 0;
@@ -262,8 +279,13 @@ namespace dp
 
     void RenderTargetFBO::resizeAttachments( StereoTarget stereoTarget )
     {
-      int stereoId = getStereoTargetId( stereoTarget );
+      if (stereoTarget == StereoTarget::LEFT_AND_RIGHT)
+      {
+        resizeAttachments(StereoTarget::LEFT);
+        resizeAttachments(StereoTarget::RIGHT);
+      }
 
+      int stereoId = getStereoTargetId( stereoTarget );
       for (AttachmentMap::iterator it = m_attachments[stereoId].begin(); it != m_attachments[stereoId].end(); ++it)
       {
         it->second->resize( getWidth(), getHeight() );
@@ -338,7 +360,14 @@ namespace dp
 
     void RenderTargetFBO::setClearColor( GLclampf r, GLclampf g, GLclampf b, GLclampf a, unsigned int index /*= 0 */ )
     {
-      m_attachmentsClearColor[ getStereoTargetId(m_stereoTarget) ][index] = dp::math::Vec4f(r, g, b, a);
+      if (m_stereoTarget == StereoTarget::LEFT_AND_RIGHT)
+      {
+        m_attachmentsClearColor[0][index] = m_attachmentsClearColor[1][index] = dp::math::Vec4f(r, g, b, a);
+      }
+      else
+      {
+        m_attachmentsClearColor[getStereoTargetId(m_stereoTarget)][index] = dp::math::Vec4f(r, g, b, a);
+      }
     }
 
 
@@ -674,6 +703,29 @@ namespace dp
       return /*!!GLEW_ARB_framebuffer_object ||*/ !!GLEW_EXT_framebuffer_blit;
     }
 
+    bool RenderTargetFBO::isMulticastSupported()
+    {
+      return dp::gl::isExtensionExported("GL_NVX_linked_gpu_multicast");
+    }
+
+    void RenderTargetFBO::setMulticastEnabled(bool enabled)
+    {
+      if (!enabled && !isMulticastSupported())
+      {
+        throw std::runtime_error("Trying to enabled multicast which is not supported.");
+      }
+      m_multicastEnabled = enabled;
+      if (!m_multicastEnabled && m_stereoTarget == StereoTarget::LEFT_AND_RIGHT)
+      {
+        setStereoTarget(StereoTarget::LEFT);
+      }
+    }
+
+    bool RenderTargetFBO::isMulticastEnabled() const
+    {
+      return m_multicastEnabled;
+    }
+
     // Stereo API
     void RenderTargetFBO::setStereoEnabled( bool stereoEnabled )
     {
@@ -698,8 +750,12 @@ namespace dp
     {
       if ( stereoTarget != m_stereoTarget )
       {
-        if (  (!m_stereoEnabled && stereoTarget != StereoTarget::LEFT)          // only mono target supported for non stereo mode
-            ||( m_stereoEnabled && stereoTarget == StereoTarget::LEFT_AND_RIGHT ) ) // not supported to render on left/right target at the same time
+        if (!m_stereoEnabled && stereoTarget != StereoTarget::LEFT)          // only mono target supported for non stereo mode
+        {
+          return false;
+        }
+
+        if (m_stereoEnabled && (stereoTarget == StereoTarget::LEFT_AND_RIGHT) && !isMulticastEnabled())
         {
           return false;
         }
@@ -707,8 +763,17 @@ namespace dp
         m_stereoTarget = stereoTarget;
         if ( isCurrent() )
         {
-          resizeAttachments( stereoTarget );
-          bindAttachments( stereoTarget );
+          if (stereoTarget == StereoTarget::LEFT_AND_RIGHT)
+          {
+            resizeAttachments(StereoTarget::LEFT);
+            resizeAttachments(StereoTarget::RIGHT);
+            bindAttachments(StereoTarget::LEFT);
+          }
+          else
+          {
+            resizeAttachments( stereoTarget );
+            bindAttachments( stereoTarget );
+          }
         }
       }
       return true;
@@ -761,6 +826,8 @@ namespace dp
 
     bool RenderTargetFBO::beginRendering()
     {
+      assert(m_stereoTarget == StereoTarget::LEFT_AND_RIGHT && isMulticastEnabled() || m_stereoTarget != StereoTarget::LEFT_AND_RIGHT);
+
       makeCurrent();
 
       glViewport( m_x, m_y, m_width, m_height );
@@ -789,6 +856,27 @@ namespace dp
       }
 
       return true;
+    }
+
+    void RenderTargetFBO::endRendering()
+    {
+      if (isMulticastEnabled() && m_stereoTarget == StereoTarget::LEFT_AND_RIGHT)
+      {
+        glLGPUInterlockNVX();
+
+        uint32_t fromGPU = 1;
+        uint32_t toGPU = 0;
+
+        std::shared_ptr<dp::gl::Texture> textureLeft = std::static_pointer_cast<AttachmentTexture>(m_attachments[0][AttachmentTarget::COLOR0])->getTexture();
+        std::shared_ptr<dp::gl::Texture> textureRight = std::static_pointer_cast<AttachmentTexture>(m_attachments[1][AttachmentTarget::COLOR0])->getTexture();
+
+        glLGPUCopyImageSubDataNVX(fromGPU, 1 << toGPU, textureLeft->getGLId(), GL_TEXTURE_2D, 0, 0, 0, 0, textureRight->getGLId(), GL_TEXTURE_2D, 0, 0, 0, 0, getWidth(), getHeight(), 1);
+
+        glLGPUInterlockNVX();
+      }
+
+      makeNoncurrent();
+
     }
 
   } // namespace gl

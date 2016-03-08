@@ -208,7 +208,7 @@ void CFRPipeline::resize( size_t width, size_t height )
 
 
 // Mind, this is called for left and right eye independently.
-void CFRPipeline::doRender(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget)
+void CFRPipeline::doRender(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget, std::vector<dp::sg::core::CameraSharedPtr> const &)
 {
   const dp::gl::RenderTargetSharedPtr renderTargetGL = std::static_pointer_cast<dp::gl::RenderTarget>(renderTarget);
   DP_ASSERT( renderTargetGL );

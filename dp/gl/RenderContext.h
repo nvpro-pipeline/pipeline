@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2009-2011
+// Copyright (c) 2009-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -39,13 +39,27 @@
 #include <stack>
 #include <map>
 
+// private in dp::gl until glew supports this extension
+#ifndef GL_MAX_LGPU_GPUS_NVX
+#define GL_MAX_LGPU_GPUS_NVX                                0x92BA
+#endif
+
 namespace dp
 {
   namespace gl
   {
     class ShareGroupImpl;
 
-    /** \brief RenderContext wraps an OpenGL context. 
+    // private in dp::gl until glew supports this extension
+    typedef void (GLAPIENTRY * PFNGLLGPUNAMEDBUFFERSUBDATANVXPROC) (GLbitfield gpuMask, GLuint buffer, GLintptr offset, GLsizeiptr size, const GLvoid *data);
+    typedef void (GLAPIENTRY * PFNGLLGPUCOPYIMAGESUBDATANVXPROC) (GLuint sourceGpu, GLbitfield destinationGpuMask, GLuint srcName, GLuint srcTarget, GLint srcLevel, GLint srcX, GLint srcY, GLint srcZ, GLuint dstName, GLuint dstTarget, GLint dstLevel, GLint dstX, GLint dstY, GLint dstZ, GLsizei width, GLsizei height, GLsizei depth);
+    typedef void (GLAPIENTRY * PFNGLLGPUINTERLOCKNVXPROC) (void);
+    DP_GL_API extern PFNGLLGPUNAMEDBUFFERSUBDATANVXPROC glLGPUNamedBufferSubDataNVX;
+    DP_GL_API extern PFNGLLGPUCOPYIMAGESUBDATANVXPROC glLGPUCopyImageSubDataNVX;
+    DP_GL_API extern PFNGLLGPUINTERLOCKNVXPROC glLGPUInterlockNVX;
+
+
+    /** \brief RenderContext wraps an OpenGL context.
     **/
     class RenderContext : public std::enable_shared_from_this<RenderContext>
     {

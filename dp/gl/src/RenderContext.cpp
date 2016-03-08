@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2009-2015
+// Copyright (c) 2009-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -41,6 +41,12 @@ namespace dp
 {
   namespace gl
   {
+
+    // private in dp::gl until glew supports this extension
+    PFNGLLGPUNAMEDBUFFERSUBDATANVXPROC glLGPUNamedBufferSubDataNVX(nullptr);
+    PFNGLLGPUCOPYIMAGESUBDATANVXPROC glLGPUCopyImageSubDataNVX(nullptr);
+    PFNGLLGPUINTERLOCKNVXPROC glLGPUInterlockNVX(nullptr);
+
     namespace {
       struct ThreadData
       {
@@ -88,6 +94,11 @@ namespace dp
           m_gpuMask.push_back(gpu);
         }
       }
+
+      // private in dp::gl until glew supports this extension
+      glLGPUNamedBufferSubDataNVX = (PFNGLLGPUNAMEDBUFFERSUBDATANVXPROC)wglGetProcAddress("glLGPUNamedBufferSubDataNVX");
+      glLGPUCopyImageSubDataNVX = (PFNGLLGPUCOPYIMAGESUBDATANVXPROC)wglGetProcAddress("glLGPUCopyImageSubDataNVX");
+      glLGPUInterlockNVX = (PFNGLLGPUINTERLOCKNVXPROC)wglGetProcAddress("glLGPUInterlockNVX");
 
     }
   #elif defined(DP_OS_LINUX)
@@ -261,7 +272,7 @@ namespace dp
           devices.push_back(device);
         }
       }
-      
+
       return devices;
     }
 
@@ -309,8 +320,8 @@ namespace dp
       RegisterClass( &wc );
 
       // create a dummy OpenGL Window
-      HWND hwnd = CreateWindow( 
-        "ScenixGL", "ScenixGL", 
+      HWND hwnd = CreateWindow(
+        "ScenixGL", "ScenixGL",
         WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_POPUP,
         0, 0, width, height,
         NULL, NULL, GetModuleHandle( NULL ), NULL );
@@ -433,7 +444,7 @@ namespace dp
     }
 
   // WIN32
-  #endif 
+  #endif
 
   #if defined(DP_OS_LINUX)
 
@@ -717,7 +728,7 @@ namespace dp
   #endif
       }
   #elif defined(DP_OS_LINUX)
-      assert(0 && "not yet supported"); 
+      assert(0 && "not yet supported");
       /*
       Display *display = XOpenDisplay( creation.getContext() ? DisplayString(creation.getContext()->m_context->m_context ) : creation.getDisplay() );
       DP_ASSERT( display );
@@ -912,7 +923,7 @@ namespace dp
   #elif defined(DP_OS_LINUX)
       : context(rhs.context)
       , drawable(rhs.drawable)
-      , display(rhs.display)      
+      , display(rhs.display)
   #endif
       , renderContextGL( rhs.renderContextGL )
     {
@@ -1083,7 +1094,7 @@ namespace dp
       boost::mutex::scoped_lock lock( m_mutex );
 
       // keep context current for the lifetime of the thread
-    
+
       do
       {
         if ( !m_exit )

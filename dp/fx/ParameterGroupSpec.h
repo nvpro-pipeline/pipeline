@@ -48,8 +48,12 @@ namespace dp
         typedef ParameterSpecsContainer::const_iterator iterator;
 
       public:
-        DP_FX_API static ParameterGroupSpecSharedPtr create( const std::string & name
-                                                       , const std::vector<ParameterSpec> & specs );
+        /** \brief Create a new parameter group specification
+            \param name Name of the specification. This name will be used as buffer name during code generation
+            \param specs A vector of parameters in this group
+            \param multicast Specifies whether each GPU will get its own copy of data in environments with multiple GPUs.
+        **/
+        DP_FX_API static ParameterGroupSpecSharedPtr create(const std::string & name, const std::vector<ParameterSpec> & specs, bool multicast = false);
         DP_FX_API virtual ~ParameterGroupSpec();
 
       public:
@@ -63,8 +67,10 @@ namespace dp
         dp::util::HashKey getHashKey() const;
         bool isEquivalent( const ParameterGroupSpecSharedPtr & p, bool ignoreNames, bool deepCompare ) const;
 
+        bool isMulticast() const { return m_multicast; }
+
       protected:
-        DP_FX_API ParameterGroupSpec( const std::string & name, const std::vector<ParameterSpec> & specs );
+        DP_FX_API ParameterGroupSpec(const std::string & name, const std::vector<ParameterSpec> & specs, bool multicast);
         DP_FX_API ParameterGroupSpec( const ParameterGroupSpec &rhs );
         DP_FX_API ParameterSpec & operator=( const ParameterSpec & rhs );
 
@@ -73,6 +79,7 @@ namespace dp
         dp::util::HashKey       m_hashKey;
         std::string             m_name;
         ParameterSpecsContainer m_specs;
+        bool                    m_multicast;
     };
 
 
@@ -112,10 +119,11 @@ namespace dp
 
     inline bool ParameterGroupSpec::isEquivalent( const ParameterGroupSpecSharedPtr & p, bool ignoreNames, bool /*deepCompare*/ ) const
     {
-      return(   ( this->shared_from_this() == p )
-            ||  (   ( ignoreNames ? true : m_name == p->m_name )
-                &&  ( m_dataSize == p->m_dataSize )
-                &&  ( m_specs == p->m_specs ) ) );
+      return(   ( this->shared_from_this() == p)
+            ||  (     (ignoreNames ? true : m_name == p->m_name)
+                  &&  (                     m_dataSize  == p->m_dataSize )
+                  &&  (                     m_specs     == p->m_specs    )
+                  &&  (                     m_multicast == p->m_multicast) ) );
     }
 
 

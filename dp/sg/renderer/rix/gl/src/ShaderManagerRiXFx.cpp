@@ -235,9 +235,10 @@ namespace dp
           {
           }
 
-          ShaderManagerRiXFx::ShaderManagerRiXFx( SceneTreeSharedPtr const& sceneTree, dp::fx::Manager managerType, const ResourceManagerSharedPtr& resourceManager, TransparencyManagerSharedPtr const & transparencyManager )
+          ShaderManagerRiXFx::ShaderManagerRiXFx( SceneTreeSharedPtr const& sceneTree, dp::fx::Manager managerType, const ResourceManagerSharedPtr& resourceManager, TransparencyManagerSharedPtr const & transparencyManager, bool multicast )
             : ShaderManager( sceneTree, resourceManager, transparencyManager )
             , m_shaderManagerLights( sceneTree, resourceManager )
+            , m_multicast(multicast)
           {
             // create RiXFx Manager
             m_rixFxManager = dp::rix::fx::Manager::create( managerType, m_renderer );
@@ -249,7 +250,7 @@ namespace dp
             std::vector<dp::fx::ParameterSpec> parameterSpecs;
             parameterSpecs.push_back( ParameterSpec( "sys_ViewProjMatrix", PT_MATRIX4x4 | PT_FLOAT32, dp::util::Semantic::VALUE ) );
             parameterSpecs.push_back( ParameterSpec( "sys_ViewMatrixI",    PT_MATRIX4x4 | PT_FLOAT32, dp::util::Semantic::VALUE ) );
-            dp::fx::ParameterGroupSpecSharedPtr groupSpecCamera = ParameterGroupSpec::create( "sys_camera", parameterSpecs );
+            dp::fx::ParameterGroupSpecSharedPtr groupSpecCamera = ParameterGroupSpec::create( "sys_camera", parameterSpecs, m_multicast );
 
             // Get iterators for fast updates later
             m_itViewProjMatrix = groupSpecCamera->findParameterSpec( "sys_ViewProjMatrix" );
@@ -292,10 +293,18 @@ namespace dp
             getTransparencyManager()->addFragmentCodeSnippets( true, true,  m_additionalCodeSnippets[RGL_TRANSPARENT][static_cast<size_t>(RenderGroupPass::DEPTH)][dp::fx::Domain::FRAGMENT] );
           }
 
-          void ShaderManagerRiXFx::updateCameraState( Mat44f const & worldToProj, Mat44f const & viewToWorld )
+          void ShaderManagerRiXFx::updateCameraState(std::vector<dp::sg::core::CameraSharedPtr> const & cameras)
           {
-            m_rixFxManager->groupDataSetValue( m_groupDataCamera, m_itViewProjMatrix, dp::rix::core::ContainerDataRaw(0, &worldToProj, sizeof(worldToProj) ) );
-            m_rixFxManager->groupDataSetValue( m_groupDataCamera, m_itViewMatrixI,    dp::rix::core::ContainerDataRaw(0, &viewToWorld, sizeof(viewToWorld) ) );
+            for (size_t index = 0;index < cameras.size(); ++index)
+            {
+              std::shared_ptr<dp::sg::core::Camera> const & camera = cameras[index];
+
+              dp::math::Mat44f worldToProj = camera->getWorldToViewMatrix() * camera->getProjection();
+              dp::math::Mat44f viewToWorld = camera->getViewToWorldMatrix();
+
+              m_rixFxManager->groupDataSetValue(m_groupDataCamera, m_itViewProjMatrix, dp::rix::core::ContainerDataRaw(0, &worldToProj, sizeof(worldToProj), uint32_t(index)));
+              m_rixFxManager->groupDataSetValue(m_groupDataCamera, m_itViewMatrixI, dp::rix::core::ContainerDataRaw(0, &viewToWorld, sizeof(viewToWorld), uint32_t(index)));
+            }
 
             // TODO don't call from here, but at a generic update call
             updateTransforms();

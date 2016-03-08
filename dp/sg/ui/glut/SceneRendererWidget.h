@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -42,7 +42,7 @@ namespace dp
         class SceneRendererWidget : public Widget,  public SceniXSceneRendererWidget
         {
         public:
-          DP_SG_UI_GLUT_API SceneRendererWidget();
+          DP_SG_UI_GLUT_API SceneRendererWidget(bool stereo = false);
           DP_SG_UI_GLUT_API virtual ~SceneRendererWidget();
 
           DP_SG_UI_GLUT_API virtual void triggerRepaint();

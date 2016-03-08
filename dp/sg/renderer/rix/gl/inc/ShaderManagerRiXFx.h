@@ -1,4 +1,4 @@
-// Copyright (c) 2012-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -47,9 +47,9 @@ namespace dp
           class ShaderManagerRiXFx : public ShaderManager
           {
           public:
-            ShaderManagerRiXFx( dp::sg::xbar::SceneTreeSharedPtr const& sceneTree, dp::fx::Manager managerType, const ResourceManagerSharedPtr& resourceManager, TransparencyManagerSharedPtr const & transparencyManager );
+            ShaderManagerRiXFx(dp::sg::xbar::SceneTreeSharedPtr const& sceneTree, dp::fx::Manager managerType, const ResourceManagerSharedPtr& resourceManager, TransparencyManagerSharedPtr const & transparencyManager, bool multicast);
 
-            virtual void updateCameraState( const dp::math::Mat44f& worldToProj, const dp::math::Mat44f& viewToWorld );
+            virtual void updateCameraState(std::vector<dp::sg::core::CameraSharedPtr> const & cameras);
             virtual void updateTransforms();
             virtual void updateLights( dp::sg::ui::ViewStateSharedPtr const& vs );
 
@@ -91,6 +91,8 @@ namespace dp
             std::map<std::string, dp::rix::core::ProgramHandle> m_mapEffectsToPrograms;
 
             dp::rix::fx::SourceFragments m_additionalCodeSnippets[RGL_COUNT][int(RenderGroupPass::COUNT)];    // code snippets for opaque|transparent and color|depth pass
+
+            bool m_multicast;
           };
 
         } // namespace gl

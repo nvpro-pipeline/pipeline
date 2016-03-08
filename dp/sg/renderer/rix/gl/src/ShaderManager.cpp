@@ -132,11 +132,10 @@ namespace dp
             return ShaderManagerInstanceSharedPtr();
           }
 
-          void ShaderManager::update( dp::sg::ui::ViewStateSharedPtr const& viewState )
+          void ShaderManager::update(dp::sg::ui::ViewStateSharedPtr const& viewState, std::vector<dp::sg::core::CameraSharedPtr> const & cameras)
           {
-            updateLights( viewState);
-            dp::sg::core::CameraSharedPtr const& camera = viewState->getCamera();
-            updateCameraState( camera->getWorldToViewMatrix() * camera->getProjection(), camera->getViewToWorldMatrix() );
+            updateLights(viewState);
+            updateCameraState(cameras);
           }
 
           /************************************************************************/

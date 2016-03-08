@@ -110,7 +110,8 @@ namespace dp
           DrawableManagerDefault::DrawableManagerDefault( const ResourceManagerSharedPtr & resourceManager
                                                         , TransparencyManagerSharedPtr const & transparencyManager
                                                         , dp::fx::Manager shaderManagerType
-                                                        , dp::culling::Mode cullingMode )
+                                                        , dp::culling::Mode cullingMode
+                                                        , bool multicast)
             : dp::sg::xbar::DrawableManager( )
             , m_resourceManager( resourceManager )
             , m_shaderManager( nullptr )
@@ -120,6 +121,7 @@ namespace dp
             , m_activeTraversalMask( ~0 )
             , m_viewportSize( 0, 0 )
             , m_transparencyManager( transparencyManager )
+            , m_multicast(multicast)
           {
           }
 
@@ -428,10 +430,10 @@ namespace dp
             return( !m_transparentDIs.empty() );
           }
 
-          void DrawableManagerDefault::update( dp::sg::ui::ViewStateSharedPtr const& viewState )
+          void DrawableManagerDefault::update(dp::sg::ui::ViewStateSharedPtr const& viewState, std::vector<dp::sg::core::CameraSharedPtr> const & cameras)
           {
-            setActiveTraversalMask( viewState->getTraversalMask() );
-            m_shaderManager->update( viewState );
+            setActiveTraversalMask(viewState->getTraversalMask());
+            m_shaderManager->update(viewState, cameras);
             DrawableManager::update();
           }
 
@@ -541,10 +543,10 @@ namespace dp
               case dp::fx::Manager::UNIFORM_BUFFER_OBJECT_RIX_FX:
               case dp::fx::Manager::SHADER_STORAGE_BUFFER_OBJECT:
               case dp::fx::Manager::SHADER_STORAGE_BUFFER_OBJECT_RIX:
-                m_shaderManager.reset( new ShaderManagerRiXFx( getSceneTree(), m_shaderManagerType, m_resourceManager, m_transparencyManager ) );
+                m_shaderManager.reset( new ShaderManagerRiXFx( getSceneTree(), m_shaderManagerType, m_resourceManager, m_transparencyManager, m_multicast ) );
                 break;
               default:
-                m_shaderManager.reset( new ShaderManagerRiXFx( getSceneTree(), dp::fx::Manager::UNIFORM, m_resourceManager, m_transparencyManager ) );
+                m_shaderManager.reset( new ShaderManagerRiXFx( getSceneTree(), dp::fx::Manager::UNIFORM, m_resourceManager, m_transparencyManager, m_multicast ) );
               }
 
               dp::rix::core::Renderer *renderer = m_resourceManager->getRenderer();

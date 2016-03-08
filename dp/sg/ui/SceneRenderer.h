@@ -1,4 +1,4 @@
-// Copyright (c) 2010-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2010-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -166,7 +166,7 @@ namespace dp
             \param viewState The dp::sg::ui::ViewState to use to render the frame.
             \param renderTarget The RenderTarget to use to render the frame.
         **/
-        DP_SG_UI_API virtual void doRender( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget ) = 0;
+        DP_SG_UI_API virtual void doRender( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget, std::vector<dp::sg::core::CameraSharedPtr> const & cameras ) = 0;
 
         DP_SG_UI_API virtual void onEnvironmentRenderingEnabledChanged();
         DP_SG_UI_API virtual void onEnvironmentSamplerChanged();

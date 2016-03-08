@@ -687,7 +687,6 @@ namespace dp
           if (dp::gl::isExtensionExported("GL_NVX_linked_gpu_multicast"))
           {
             std::cout << "GL_NVX_linked_gpu_multicast supported!\n";
-            const GLenum GL_MAX_LGPU_GPUS_NVX = 0x92BA;
             glGetIntegerv(GL_MAX_LGPU_GPUS_NVX, (GLint*)(&m_numberOfGPUs));
           }
 

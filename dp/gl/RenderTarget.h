@@ -1,4 +1,4 @@
-// Copyright (c) 2010-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2010-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -132,6 +132,11 @@ namespace dp
                                                                  , dp::DataType pixelDataType = dp::DataType::UNSIGNED_INT_8 );
 
       DP_GL_API virtual bool isValid();
+
+      /** \brief Test if multicast support is enabled. With multicast support it is possible to render the left and right eye
+                 for stereo rendering within a single pass with a different camera matrix per eye.
+      **/
+      DP_GL_API virtual bool isMulticastSupported() const;
 
       /** \brief Get the OpenGL context used by this RenderTarget
           \return RenderContext used by this RenderTarget

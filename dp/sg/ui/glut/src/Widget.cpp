@@ -552,7 +552,7 @@ namespace dp
           };
         } // namespace
 
-        Widget::Widget( int x, int y )
+        Widget::Widget( int x, int y, bool stereo )
           : m_showFPS( false )
           , m_fps( 0.0f )
           , m_frameCount( 0 )
@@ -834,7 +834,7 @@ namespace dp
           glutInitWindowPosition( x, y );
           glutInitWindowSize( dp::checked_cast<int>(m_width), dp::checked_cast<int>(m_height) );
 
-          glutInitDisplayMode( GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH | GLUT_ALPHA );
+          glutInitDisplayMode( GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH | GLUT_ALPHA | (stereo * GLUT_STEREO ) );
           m_windowId = glutCreateWindow( "SceniX minimal GLUT example" );
           glutSetWindowData( this );
           glutDisplayFunc( &renderFunction );

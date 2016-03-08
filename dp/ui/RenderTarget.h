@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2011
+// Copyright (c) 2010-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -38,11 +38,11 @@ namespace dp
     /** \brief An dp::ui::RenderTarget specifies a render surface to be used in conjunction with an dp::sg::ui::Renderer.
                devtech platform supports RenderTargets for OpenGL (dp::gl::RenderTargetFB, dp::gl::RenderTargetFBO) .
 
-               After a Renderer's render command has been executed, the rendered image can be queried from the 
+               After a Renderer's render command has been executed, the rendered image can be queried from the
                RenderTarget as an dp::sg::core::TextureHost by calling RenderTarget::getTextureHost.
 
                A RenderTarget is also prepared to support stereoscopic rendering in conjunction with dp::sg::ui::SceneRenderer.
-        \remarks For mono rendering the LEFT surface is used as default. 
+        \remarks For mono rendering the LEFT surface is used as default.
     **/
     class RenderTarget
     {
@@ -98,8 +98,8 @@ namespace dp
           \return A TextureHostSharedPtr containing a texture with the content of the surface.
           \remarks If a RenderTarget cannot support this operation it returns a null object.
       **/
-      DP_UI_API virtual dp::sg::core::TextureHostSharedPtr getImage( 
-            dp::sg::core::Image::PixelFormat pixelFormat = dp::sg::core::Image::PixelFormat::BGR, 
+      DP_UI_API virtual dp::sg::core::TextureHostSharedPtr getImage(
+            dp::sg::core::Image::PixelFormat pixelFormat = dp::sg::core::Image::PixelFormat::BGR,
             dp::sg::core::Image::PixelDataType pixelDataType = dp::sg::core::Image::PixelDataType::UNSIGNED_BYTE ) = 0;
   #else
       /** \brief Fetch pixels of the surface in a TextureHost.
@@ -124,6 +124,15 @@ namespace dp
           \return true If the RenderTarget has stereo enabled, false otherwise.
       **/
       DP_UI_API virtual bool isStereoEnabled() const;
+
+      // Multicast API
+      /** \brief Determine whether multicast rendering is supported on this RenderTarget.
+      **/
+      DP_UI_API virtual bool isMulticastSupported() const;
+
+      /** \brief Determine whether multicast rendering is enabled on this RenderTarget.
+      **/
+      DP_UI_API virtual bool isMulticastEnabled() const;
 
       /** \brief Choose stereo surface to render on.
           \param target LEFT, RIGHT or LEFT_AND_RIGHT for the corresponding surface.

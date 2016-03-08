@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2012
+// Copyright (c) 2012-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -38,10 +38,9 @@ namespace dp
   namespace fx
   {
 
-    ParameterGroupSpecSharedPtr ParameterGroupSpec::create( const string & name
-                                                          , const vector<ParameterSpec> & specs )
+    ParameterGroupSpecSharedPtr ParameterGroupSpec::create(const string & name, const vector<ParameterSpec> & specs, bool multicast)
     {
-      return( std::shared_ptr<ParameterGroupSpec>( new ParameterGroupSpec( name, specs ) ) );
+      return( std::shared_ptr<ParameterGroupSpec>(new ParameterGroupSpec(name, specs, multicast)));
     }
 
     bool specSorter( vector<ParameterSpec>::const_iterator it0
@@ -52,10 +51,10 @@ namespace dp
       return( ( ps1 < ps0 ) || ( ( ps0 == ps1 ) && ( it0->getName() < it1->getName() ) ) );
     }
 
-    ParameterGroupSpec::ParameterGroupSpec( const string & name
-                                          , const vector<ParameterSpec> & specs )
+    ParameterGroupSpec::ParameterGroupSpec(const string & name, const vector<ParameterSpec> & specs, bool multicast)
       : m_dataSize(0)
       , m_name(name)
+      , m_multicast(multicast)
     {
 #if !defined(NDEBUG)
       // check that no parameter name occurs more than once
@@ -96,6 +95,7 @@ namespace dp
         hg.update( reinterpret_cast<const unsigned char *>(&tmp), sizeof(tmp) );
         tmp = it->first.getArraySize();
         hg.update( reinterpret_cast<const unsigned char *>(&tmp), sizeof(tmp) );
+        hg.update( reinterpret_cast<const unsigned char *>(&m_multicast), sizeof(m_multicast) );
       }
       hg.finalize( (unsigned int *)&m_hashKey );
     }

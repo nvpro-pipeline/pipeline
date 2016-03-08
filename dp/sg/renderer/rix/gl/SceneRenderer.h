@@ -1,4 +1,4 @@
-// Copyright (c) 2010-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2010-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -91,7 +91,7 @@ namespace dp
             **/
             DP_SG_RDR_RIX_GL_API virtual void deletePrimitiveCaches() = 0;
 
-            DP_SG_RDR_RIX_GL_API virtual dp::sg::xbar::DrawableManager *createDrawableManager( const ResourceManagerSharedPtr &resourceManager ) const = 0;
+            DP_SG_RDR_RIX_GL_API virtual dp::sg::xbar::DrawableManager *createDrawableManager( const ResourceManagerSharedPtr &resourceManager, bool multicast ) const = 0;
             DP_SG_RDR_RIX_GL_API virtual dp::sg::xbar::DrawableManager* getDrawableManager() const = 0;
 
           protected:

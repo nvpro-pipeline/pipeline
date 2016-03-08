@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -104,7 +104,7 @@ namespace dp
 
             virtual void updateFragmentParameter( std::string const & name, dp::rix::core::ContainerDataRaw const & data ) = 0;
             virtual void updateFragmentParameter( std::string const & name, dp::rix::core::ContainerDataSampler const & data ) = 0;
-            void update( dp::sg::ui::ViewStateSharedPtr const& vs );
+            void update( dp::sg::ui::ViewStateSharedPtr const& vs, std::vector<dp::sg::core::CameraSharedPtr> const & cameras );
 
             virtual void updateTransforms() = 0;
 
@@ -121,7 +121,7 @@ namespace dp
 
           protected:
             virtual void updateLights( dp::sg::ui::ViewStateSharedPtr const& vs ) = 0;
-            virtual void updateCameraState( dp::math::Mat44f const & worldToProj, dp::math::Mat44f const & viewToWorld ) = 0;
+            virtual void updateCameraState(std::vector<dp::sg::core::CameraSharedPtr> const & cameras) = 0;
 
             virtual void addSystemContainers( ShaderManagerInstanceSharedPtr const & shaderObject ) = 0;
             virtual void addSystemContainers( ShaderManagerRenderGroupSharedPtr const & renderGroup ) = 0;

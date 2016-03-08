@@ -63,7 +63,7 @@ namespace dp
 
             if ( programParameters.size() )  // Means m_descriptor == null for effects without parameters.
             {
-              m_descriptor = renderer->containerDescriptorCreate( dp::rix::core::ProgramParameterDescriptorCommon( &programParameters[0], programParameters.size() ) );
+              m_descriptor = renderer->containerDescriptorCreate( dp::rix::core::ProgramParameterDescriptorCommon( &programParameters[0], programParameters.size(), parameterGroupSpec->isMulticast() ) );
             }
 
             /************************************************************************/

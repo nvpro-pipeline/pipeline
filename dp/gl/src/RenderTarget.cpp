@@ -415,5 +415,10 @@ namespace dp
       return m_current;
     }
 
+    bool RenderTarget::isMulticastSupported() const
+    {
+      return false;
+    }
+
   }
 }  // namespace nvgl

@@ -145,31 +145,45 @@ namespace dp
           m_stereoViewStateProvider = FrustumStereoViewStateProvider::create();
         }
 
-        beginRendering( viewState, curRenderTarget );
         if ( curRenderTarget->isStereoEnabled() )
         {
-          ViewStateSharedPtr stereoViewState;
-
-          if ( stereoTarget == dp::ui::RenderTarget::StereoTarget::LEFT || stereoTarget == dp::ui::RenderTarget::StereoTarget::LEFT_AND_RIGHT )
+          ViewStateSharedPtr viewStateLeft = m_stereoViewStateProvider->getViewState(viewState, dp::ui::RenderTarget::StereoTarget::LEFT);
+          ViewStateSharedPtr viewStateRight = m_stereoViewStateProvider->getViewState(viewState, dp::ui::RenderTarget::StereoTarget::RIGHT);
+          if (renderTarget->isMulticastEnabled() && stereoTarget == dp::ui::RenderTarget::StereoTarget::LEFT_AND_RIGHT)
           {
-            curRenderTarget->setStereoTarget( dp::ui::RenderTarget::StereoTarget::LEFT );
-            stereoViewState = m_stereoViewStateProvider->getViewState( viewState, dp::ui::RenderTarget::StereoTarget::LEFT );
-            doRender( stereoViewState, curRenderTarget );
+            curRenderTarget->setStereoTarget(dp::ui::RenderTarget::StereoTarget::LEFT_AND_RIGHT);
+            beginRendering(viewState, curRenderTarget);
+            doRender(viewState, curRenderTarget, { viewStateLeft->getCamera(), viewStateRight->getCamera() });
+            endRendering(viewState, curRenderTarget);
+          }
+          else
+          {
+            if (stereoTarget == dp::ui::RenderTarget::StereoTarget::LEFT || stereoTarget == dp::ui::RenderTarget::StereoTarget::LEFT_AND_RIGHT)
+            {
+              curRenderTarget->setStereoTarget(dp::ui::RenderTarget::StereoTarget::LEFT);
+              beginRendering(viewState, curRenderTarget);
+              doRender(viewStateLeft, curRenderTarget, { viewStateLeft->getCamera() });
+              endRendering(viewState, curRenderTarget);
+            }
+
+            if (stereoTarget == dp::ui::RenderTarget::StereoTarget::RIGHT || stereoTarget == dp::ui::RenderTarget::StereoTarget::LEFT_AND_RIGHT)
+            {
+              curRenderTarget->setStereoTarget(dp::ui::RenderTarget::StereoTarget::RIGHT);
+              beginRendering(viewState, curRenderTarget);
+              doRender(viewStateRight, curRenderTarget, { viewStateRight->getCamera() });
+              endRendering(viewState, curRenderTarget);
+            }
           }
 
-          if ( stereoTarget == dp::ui::RenderTarget::StereoTarget::RIGHT || stereoTarget == dp::ui::RenderTarget::StereoTarget::LEFT_AND_RIGHT )
-          {
-            curRenderTarget->setStereoTarget( dp::ui::RenderTarget::StereoTarget::RIGHT );
-            stereoViewState = m_stereoViewStateProvider->getViewState( viewState, dp::ui::RenderTarget::StereoTarget::RIGHT );
-            doRender( stereoViewState, curRenderTarget );
-          }
         }
         else
         {
           DP_ASSERT( stereoTarget == dp::ui::RenderTarget::StereoTarget::LEFT  || stereoTarget == dp::ui::RenderTarget::StereoTarget::LEFT_AND_RIGHT );
-          doRender( viewState, curRenderTarget );
+          curRenderTarget->setStereoTarget(dp::ui::RenderTarget::StereoTarget::LEFT);
+          beginRendering(viewState, curRenderTarget);
+          doRender( viewState, curRenderTarget, {viewState->getCamera()} );
+          endRendering(viewState, curRenderTarget);
         }
-        endRendering( viewState, curRenderTarget );
       }
 
       void SceneRenderer::doRender( const dp::ui::RenderTargetSharedPtr &renderTarget )

@@ -160,23 +160,23 @@ bool SceneRendererPipeline::init(const dp::gl::RenderContextSharedPtr &renderCon
 }
 
 // Mind, this is called for left and right eye independently.
-void SceneRendererPipeline::doRender(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget)
+void SceneRendererPipeline::doRender(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget, std::vector<dp::sg::core::CameraSharedPtr> const & cameras)
 {
   if ( m_tonemapperEnabled )
   {
-    doRenderTonemap( viewState, renderTarget );
+    doRenderTonemap( viewState, renderTarget, cameras );
   }
   else
   {
-    doRenderStandard( viewState, renderTarget );
+    doRenderStandard( viewState, renderTarget, cameras );
   }
   if (m_highlighting)
   {
-    doRenderHighlight( viewState, renderTarget );
+    doRenderHighlight( viewState, renderTarget, cameras );
   }
 }
 
-void SceneRendererPipeline::doRenderStandard(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget)
+void SceneRendererPipeline::doRenderStandard(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget, std::vector<dp::sg::core::CameraSharedPtr> const & cameras)
 {
   // Call the current scene renderer and render the whole scene into the main render target (tonemapFBO).
   DP_ASSERT( viewState->getTraversalMask() == ~0 );
@@ -186,7 +186,7 @@ void SceneRendererPipeline::doRenderStandard(dp::sg::ui::ViewStateSharedPtr cons
   m_sceneRenderer->render(viewState, renderTarget, renderTarget->getStereoTarget());
 }
 
-void SceneRendererPipeline::doRenderTonemap(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget)
+void SceneRendererPipeline::doRenderTonemap(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget, std::vector<dp::sg::core::CameraSharedPtr> const & cameras)
 {
   dp::gl::RenderTargetSharedPtr const & renderTargetGL = std::static_pointer_cast<dp::gl::RenderTarget>(renderTarget);
   dp::gl::TargetBufferMask clearMask = renderTargetGL->getClearMask();
@@ -225,7 +225,7 @@ void SceneRendererPipeline::doRenderTonemap(dp::sg::ui::ViewStateSharedPtr const
   renderTargetGL->setClearMask( clearMask );
 }
 
-void SceneRendererPipeline::doRenderHighlight(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget)
+void SceneRendererPipeline::doRenderHighlight(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget, std::vector<dp::sg::core::CameraSharedPtr> const & cameras)
 {
   // only call this if objects need to be rendered highlighted
   DP_ASSERT(m_highlighting);

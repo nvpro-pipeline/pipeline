@@ -26,6 +26,7 @@
 
 #include <dp/DP.h>
 #include <dp/fx/EffectLibrary.h>
+#include <dp/sg/core/Camera.h>
 #include <dp/sg/core/PipelineData.h>
 #include <dp/sg/renderer/rix/gl/TransparencyManagerNone.h>
 #include <dp/sg/renderer/rix/gl/TransparencyManagerOITAll.h>
@@ -110,6 +111,7 @@ namespace dp
             , m_cullingMode( cullingMode )
             , m_cullingEnabled( true )
             , m_viewportSize( 0, 0 )
+            , m_multicastEnabled(false)
           {
             if ( renderTarget )
             {
@@ -218,18 +220,19 @@ namespace dp
             m_depthPass = depthPass;
           }
 
-          void SceneRendererImpl::doRender( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget )
+          void SceneRendererImpl::doRender( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget, std::vector<dp::sg::core::CameraSharedPtr> const & cameras )
           {
             if ( m_rendererInitialized )
             {
               dp::gl::RenderTargetSharedPtr renderTargetGL = std::static_pointer_cast<dp::gl::RenderTarget>(renderTarget);
 
-              if (viewState->getSceneTree() != m_sceneTree)
+              if (viewState->getSceneTree() != m_sceneTree || m_multicastEnabled != renderTarget->isMulticastEnabled())
               {
                 delete m_drawableManager;
                 m_sceneTree = viewState->getSceneTree();
+                m_multicastEnabled = renderTarget->isMulticastEnabled();
 
-                m_drawableManager = createDrawableManager( m_resourceManager );
+                m_drawableManager = createDrawableManager( m_resourceManager, m_multicastEnabled );
                 m_drawableManager->setSceneTree( m_sceneTree );
                 m_drawableManager->setEnvironmentSampler( getEnvironmentRenderingEnabled() ? getEnvironmentSampler() : dp::sg::core::SamplerSharedPtr() );
                 m_drawableManager->update( m_viewportSize );
@@ -251,12 +254,13 @@ namespace dp
                 m_resourceManager->updateResources();
               }
 
-              doRenderDrawables( viewState, renderTargetGL );            }
+              doRenderDrawables( viewState, renderTargetGL, cameras );
+            }
           }
 
-          DrawableManager* SceneRendererImpl::createDrawableManager( const ResourceManagerSharedPtr &resourceManager ) const
+          DrawableManager* SceneRendererImpl::createDrawableManager(const ResourceManagerSharedPtr &resourceManager, bool multicast) const
           {
-            DrawableManagerDefault * dmd = new DrawableManagerDefault( resourceManager, m_transparencyManager, m_shaderManager, m_cullingMode );
+            DrawableManagerDefault * dmd = new DrawableManagerDefault( resourceManager, m_transparencyManager, m_shaderManager, m_cullingMode, multicast );
             dmd->setEnvironmentSampler( getEnvironmentSampler() );
             dmd->setCullingEnabled( m_cullingEnabled );
 
@@ -326,7 +330,7 @@ namespace dp
             NSIGHT_STOP_RANGE();
           }
 
-          void SceneRendererImpl::doRenderDrawables( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::gl::RenderTargetSharedPtr const& renderTarget )
+          void SceneRendererImpl::doRenderDrawables( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::gl::RenderTargetSharedPtr const& renderTarget, std::vector<dp::sg::core::CameraSharedPtr> const & cameras )
           {
             CameraSharedPtr camera = viewState->getCamera();
 
@@ -346,7 +350,7 @@ namespace dp
             }
 
             // update the viewstate after updating the near/far planes of the camera
-            ((DrawableManagerDefault*)m_drawableManager)->update( viewState );
+            ((DrawableManagerDefault*)m_drawableManager)->update( viewState, cameras );
 
             // cull
             drawableManagerDefault->cull( camera );

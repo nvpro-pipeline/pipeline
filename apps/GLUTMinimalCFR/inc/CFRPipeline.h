@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -66,7 +66,7 @@ public:
   virtual dp::fx::Manager getShaderManager() const;
 
 protected:
-  virtual void doRender(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget);
+  virtual void doRender(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget, std::vector<dp::sg::core::CameraSharedPtr> const & cameras);
   virtual void onEnvironmentSamplerChanged();
   virtual void onEnvironmentRenderingEnabledChanged();
 

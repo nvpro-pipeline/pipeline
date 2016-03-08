@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2010-2015
+// Copyright (c) 2010-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -52,7 +52,7 @@ namespace dp
           /** \brief SceneRendererGL is an OpenGL 3.0 based renderer. The OpenGL context used during the first render call
                     must not be changed for successive calls. It is necessary to remove all references to this object before
                     the attached OpenGL context gets destroyed. Deleting this object after destroying the corresponding OpenGL
-                    context will result in a crash during resource cleanup. OpenGL resources like VBOs, display lists and 
+                    context will result in a crash during resource cleanup. OpenGL resources like VBOs, display lists and
                     textures will be shared between multiple SceneRendererImpl objects if the corresponding OpenGL contexts
                     are being shared.
           **/
@@ -78,7 +78,7 @@ namespace dp
             virtual ~SceneRendererImpl();
 
             /** \brief Add all supported options to the RendererOptions container.
-                \param rendererOptions A container for RendererOptions 
+                \param rendererOptions A container for RendererOptions
             **/
             virtual void addRendererOptions( const dp::sg::ui::RendererOptionsSharedPtr &rendererOptions );
 
@@ -98,10 +98,10 @@ namespace dp
             virtual void beginRendering( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget );
             virtual void endRendering( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget );
 
-            virtual void doRender( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget );
+            virtual void doRender( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::ui::RenderTargetSharedPtr const& renderTarget, std::vector<dp::sg::core::CameraSharedPtr> const & cameras );
 
-            virtual void doRenderDrawables( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::gl::RenderTargetSharedPtr const& renderTarget );
-            virtual dp::sg::xbar::DrawableManager *createDrawableManager( const ResourceManagerSharedPtr &resourceManager ) const;
+            virtual void doRenderDrawables( dp::sg::ui::ViewStateSharedPtr const& viewState, dp::gl::RenderTargetSharedPtr const& renderTarget, std::vector<dp::sg::core::CameraSharedPtr> const & cameras );
+            virtual dp::sg::xbar::DrawableManager *createDrawableManager( const ResourceManagerSharedPtr &resourceManager, bool multicast ) const;
             dp::sg::xbar::DrawableManager* getDrawableManager() const { return m_drawableManager; }
 
             virtual void onEnvironmentRenderingEnabledChanged();
@@ -144,6 +144,7 @@ namespace dp
             dp::culling::Mode                        m_cullingMode;
 
             bool                                     m_cullingEnabled;
+            bool                                     m_multicastEnabled;
 
             dp::math::Vec2ui                         m_viewportSize;
 

@@ -1,4 +1,4 @@
- // Copyright NVIDIA Corporation 2002-2011
+// Copyright (c) 2002-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -54,7 +54,7 @@ namespace dp
       {
         public:
           /*! \brief The container type of the cameras */
-          typedef std::vector<CameraSharedPtr>                                            CameraContainer;
+          typedef std::vector<dp::sg::core::CameraSharedPtr>                                            CameraContainer;
 
           /*! \brief The iterator over the CameraContainer */
           typedef ConstIterator<Scene,CameraContainer::iterator>                 CameraIterator;
@@ -99,13 +99,13 @@ namespace dp
           DP_SG_CORE_API void setBackColor( const dp::math::Vec4f & color );
 
            /*! \brief return the handle to background texture image.
-          *  \return A TextureHost 
+          *  \return A TextureHost
           *  \sa setBackImage */
           DP_SG_CORE_API const TextureHostSharedPtr & getBackImage() const;
 
           /*! brief Set the background texture image
            * \param image The TextureHost to be set as background.
-           * \remarks The reference count for \a image is incremented. The texture is applied to the entire viewport. 
+           * \remarks The reference count for \a image is incremented. The texture is applied to the entire viewport.
            * \sa getBackImage */
           DP_SG_CORE_API void setBackImage( const TextureHostSharedPtr & image );
 
@@ -186,7 +186,7 @@ namespace dp
            *  \return The bounding box of the scene. If the root node is invalid, the bounding box
            *  is invalid. */
           DP_SG_CORE_API virtual dp::math::Box3f getBoundingBox() const;
-      
+
           /*! \brief Get the bounding sphere of the scene.
            *  \return The bounding sphere of the scene. If the root node is invalid, the bounding sphere
            *  is invalid. */
@@ -195,7 +195,7 @@ namespace dp
         protected:
           /*! \brief Default-constructs a Scene.
            *  \remarks The Scene initially has an ambient color of light grey (0.2, 0.2, 0.2), and a
-           *  background color of medium grey (0.4, 0.4, 0.4). By default there are no cameras, 
+           *  background color of medium grey (0.4, 0.4, 0.4). By default there are no cameras,
            *  no camera animations, and no tree object attached to the Scene. */
           DP_SG_CORE_API Scene();
 

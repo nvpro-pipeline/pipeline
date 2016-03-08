@@ -68,7 +68,7 @@ namespace dp
 
         typedef std::shared_ptr<HandleData> Handle;
 
-        DP_SG_XBAR_API virtual void update( dp::sg::ui::ViewStateSharedPtr const& viewState ) = 0;
+        DP_SG_XBAR_API virtual void update( dp::sg::ui::ViewStateSharedPtr const& viewState, std::vector<dp::sg::core::CameraSharedPtr> const & cameras ) = 0;
         DP_SG_XBAR_API virtual void update( dp::math::Vec2ui const & viewportSize ) = 0;
 
         DP_SG_XBAR_API virtual void setEnvironmentSampler( const dp::sg::core::SamplerSharedPtr & samper ) = 0;

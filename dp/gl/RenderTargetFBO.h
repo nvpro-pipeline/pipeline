@@ -335,6 +335,7 @@ namespace dp
       DP_GL_API virtual bool isValid();
 
       DP_GL_API virtual bool beginRendering();
+      DP_GL_API virtual void endRendering();
 
       // Stereo API
       /** \brief Change stereo state on this RenderTargetFBO.
@@ -514,6 +515,22 @@ namespace dp
       **/
       DP_GL_API static bool isBlitSupported();
 
+      /** \brief Test it isMulticastSupported
+          \return true if GL_NVX_linked_gpu_multicast is supported
+      **/
+      DP_GL_API static bool isMulticastSupported();
+
+      /** \brief Set multicast state for this FBO
+          \param enabled If enabled is true multicast will be enabled, otherwise it'll be disabled
+          \remarks If multicast is not supported this function will throw a std::runtime_error
+      **/
+      DP_GL_API void setMulticastEnabled(bool enabled);
+
+      /** \brief Check multicast state for this FBO
+          \return true if multicast extension is enabled for this FBO
+      **/
+      DP_GL_API virtual bool isMulticastEnabled() const;
+
     protected:
       DP_GL_API int getStereoTargetId( StereoTarget stereoTarget ) const; // 0 -> left eye/mono, 1 -> right eye, assert on LEFT_AND_RIGHT
 
@@ -543,8 +560,10 @@ namespace dp
 
       // Stereo API
       bool         m_stereoEnabled;
+      bool         m_multicastEnabled;
       StereoTarget m_stereoTarget;
       int          m_currentlyBoundAttachments;
+
     };
   } // namespace gl
 } // namespace dp

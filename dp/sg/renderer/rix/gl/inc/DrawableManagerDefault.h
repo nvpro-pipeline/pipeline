@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -178,7 +178,8 @@ namespace dp
             DrawableManagerDefault( const ResourceManagerSharedPtr & resourceManager
                                   , TransparencyManagerSharedPtr const & transparencyManager
                                   , dp::fx::Manager shaderManagerType = dp::fx::Manager::SHADERBUFFER
-                                  , dp::culling::Mode cullingMode = dp::culling::Mode::AUTO );
+                                  , dp::culling::Mode cullingMode = dp::culling::Mode::AUTO
+                                  , bool multicast = false);
             virtual ~DrawableManagerDefault();
 
             virtual Handle addDrawableInstance( dp::sg::core::GeoNodeWeakPtr geoNode, dp::sg::xbar::ObjectTreeIndex objectTreeIndex );
@@ -194,7 +195,7 @@ namespace dp
 
             virtual std::map<dp::fx::Domain,std::string> getShaderSources( const dp::sg::core::GeoNodeSharedPtr & geoNode, bool depthPass ) const;
 
-            virtual void update( dp::sg::ui::ViewStateSharedPtr const& viewState);
+            virtual void update(dp::sg::ui::ViewStateSharedPtr const& viewState, std::vector<dp::sg::core::CameraSharedPtr> const & cameras);
             virtual void update( dp::math::Vec2ui const & viewportSize );
 
             virtual void cull( const dp::sg::core::CameraSharedPtr &camera );
@@ -258,6 +259,8 @@ namespace dp
             dp::sg::core::SamplerSharedPtr  m_environmentSampler;
             dp::math::Vec2ui                m_viewportSize;
             TransparencyManagerSharedPtr    m_transparencyManager;
+
+            bool                            m_multicast;
           };
 
         } // namespace gl

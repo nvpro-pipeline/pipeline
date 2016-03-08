@@ -49,6 +49,7 @@ namespace dp
       {
         glLGPUNamedBufferSubDataNVX = (PFNGLLGPUNAMEDBUFFERSUBDATANVXPROC)wglGetProcAddress("glLGPUNamedBufferSubDataNVX");
         assert(glLGPUNamedBufferSubDataNVX && "multicast extension not supported");
+        glGetIntegerv(GL_MAX_LGPU_GPUS_NVX, (GLint*)(&m_numberOfGPUs));
       }
 
       void ParameterRendererBufferAddressRangeMulticast::activate()

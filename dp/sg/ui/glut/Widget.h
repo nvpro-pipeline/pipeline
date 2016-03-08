@@ -44,7 +44,7 @@ namespace dp
         class Widget : public HumanInterfaceDevice
         {
         public:
-          DP_SG_UI_GLUT_API Widget( int x = -1, int y = -1 );
+          DP_SG_UI_GLUT_API Widget( int x = -1, int y = -1, bool stereo = false );
           DP_SG_UI_GLUT_API virtual ~Widget();
 
           DP_SG_UI_GLUT_API dp::gl::RenderContextSharedPtr getRenderContext() const;
