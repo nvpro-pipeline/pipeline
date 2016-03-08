@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2015
+// Copyright (c) 2015-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -54,7 +54,7 @@ namespace dp
                                 , dp::math::Vec3ui const& dstStride = dp::math::Vec3ui( 0, 0, 0 )
                                 , dp::math::Vec3ui const& dstExtent = dp::math::Vec3ui( 0, 0, 0 )
                                 , dp::math::Vec3ui const& srcOffset = dp::math::Vec3ui( 0, 0, 0 )
-                                , dp::cuda::StreamSharedPtr const& stream = dp::cuda::StreamSharedPtr::null );
+                                , dp::cuda::StreamSharedPtr const& stream = dp::cuda::StreamSharedPtr() );
 
         DP_CUDA_API void setData( void const* srcData
                                 , dp::math::Vec3ui const& srcOffset = dp::math::Vec3ui( 0, 0, 0 )
@@ -66,7 +66,7 @@ namespace dp
                                 , dp::math::Vec3ui const& srcStride = dp::math::Vec3ui( 0, 0, 0 )
                                 , dp::math::Vec3ui const& srcExtent = dp::math::Vec3ui( 0, 0, 0 )
                                 , dp::math::Vec3ui const& dstOffset = dp::math::Vec3ui( 0, 0, 0 )
-                                , dp::cuda::StreamSharedPtr const& stream = dp::cuda::StreamSharedPtr::null );
+                                , dp::cuda::StreamSharedPtr const& stream = dp::cuda::StreamSharedPtr() );
 
         DP_CUDA_API void fill( int value
                              , dp::math::Vec3ui const& offset = dp::math::Vec3ui( 0, 0, 0 )

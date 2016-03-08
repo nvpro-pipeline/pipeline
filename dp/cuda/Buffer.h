@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2015
+// Copyright (c) 2015-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -45,15 +45,15 @@ namespace dp
       public:
         DP_CUDA_API void getData( void * data, size_t size );
         DP_CUDA_API void getData( size_t bufferOffset, void * data, size_t size );
-        DP_CUDA_API void getData( dp::cuda::BufferHostSharedPtr const& data, dp::cuda::StreamSharedPtr const& stream = dp::cuda::StreamSharedPtr::null );
-        DP_CUDA_API void getData( dp::cuda::BufferHostSharedPtr const& data, size_t offset, size_t size, dp::cuda::StreamSharedPtr const& stream = dp::cuda::StreamSharedPtr::null );
-        DP_CUDA_API void getData( size_t bufferOffset, dp::cuda::BufferHostSharedPtr const& data, size_t offset, size_t size, dp::cuda::StreamSharedPtr const& stream = dp::cuda::StreamSharedPtr::null );
+        DP_CUDA_API void getData( dp::cuda::BufferHostSharedPtr const& data, dp::cuda::StreamSharedPtr const& stream = dp::cuda::StreamSharedPtr() );
+        DP_CUDA_API void getData( dp::cuda::BufferHostSharedPtr const& data, size_t offset, size_t size, dp::cuda::StreamSharedPtr const& stream = dp::cuda::StreamSharedPtr() );
+        DP_CUDA_API void getData( size_t bufferOffset, dp::cuda::BufferHostSharedPtr const& data, size_t offset, size_t size, dp::cuda::StreamSharedPtr const& stream = dp::cuda::StreamSharedPtr() );
 
         DP_CUDA_API void setData( void const* data, size_t size );
         DP_CUDA_API void setData( size_t bufferOffset, void const* data, size_t size );
-        DP_CUDA_API void setData( dp::cuda::BufferHostSharedPtr const& data, dp::cuda::StreamSharedPtr const& stream = dp::cuda::StreamSharedPtr::null );
-        DP_CUDA_API void setData( dp::cuda::BufferHostSharedPtr const& data, size_t offset, size_t size, dp::cuda::StreamSharedPtr const& stream = dp::cuda::StreamSharedPtr::null );
-        DP_CUDA_API void setData( size_t bufferOffset, dp::cuda::BufferHostSharedPtr const& data, size_t offset, size_t size, dp::cuda::StreamSharedPtr const& stream = dp::cuda::StreamSharedPtr::null );
+        DP_CUDA_API void setData( dp::cuda::BufferHostSharedPtr const& data, dp::cuda::StreamSharedPtr const& stream = dp::cuda::StreamSharedPtr() );
+        DP_CUDA_API void setData( dp::cuda::BufferHostSharedPtr const& data, size_t offset, size_t size, dp::cuda::StreamSharedPtr const& stream = dp::cuda::StreamSharedPtr() );
+        DP_CUDA_API void setData( size_t bufferOffset, dp::cuda::BufferHostSharedPtr const& data, size_t offset, size_t size, dp::cuda::StreamSharedPtr const& stream = dp::cuda::StreamSharedPtr() );
 
         DP_CUDA_API void fill( int value, size_t count, size_t offset = 0 );
 

@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2015
+// Copyright (c) 2015-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -48,7 +48,7 @@ namespace dp
         DP_CUDA_API bool isBlocking() const;
         DP_CUDA_API bool isCompleted() const;
         DP_CUDA_API bool isTimingDisabled() const;
-        DP_CUDA_API void record( StreamSharedPtr const& stream = StreamSharedPtr::null );
+        DP_CUDA_API void record( StreamSharedPtr const& stream = StreamSharedPtr() );
         DP_CUDA_API void synchronize();
 
       protected:

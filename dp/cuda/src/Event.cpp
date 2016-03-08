@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2015
+// Copyright (c) 2015-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -24,6 +24,8 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+#include <dp/Assert.h>
+#include <dp/cuda/Config.h>
 #include <dp/cuda/Event.h>
 #include <dp/cuda/Stream.h>
 
@@ -39,7 +41,7 @@ namespace dp
     Event::Event( unsigned int flags )
       : m_flags( flags )
     {
-      DP_ASSERT( ( m_flags & ~( cudaEventDefault | cudaEventBlockingSync | cudaEventDisableTiming | cudaEventInterprocess ) ) == 0 )
+      DP_ASSERT((m_flags & ~(cudaEventDefault | cudaEventBlockingSync | cudaEventDisableTiming | cudaEventInterprocess)) == 0);
       CUDA_VERIFY( cudaEventCreateWithFlags( &m_event, m_flags ) );
     }
 
