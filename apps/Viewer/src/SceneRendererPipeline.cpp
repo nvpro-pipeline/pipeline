@@ -448,13 +448,8 @@ void SceneRendererPipeline::setTonemapperValues( const TonemapperValues& values 
 
 void SceneRendererPipeline::initBackdrop()
 {
-  dp::sg::core::SamplerSharedPtr environmentSampler = dp::sg::core::Sampler::create( GetApp()->getEnvironmentSampler()->getTexture() );
-  environmentSampler->setWrapModes( dp::sg::core::TextureWrapMode::REPEAT, dp::sg::core::TextureWrapMode::CLAMP_TO_EDGE, dp::sg::core::TextureWrapMode::REPEAT );
-  environmentSampler->setMagFilterMode( dp::sg::core::TextureMagFilterMode::LINEAR );
-  environmentSampler->setMinFilterMode( dp::sg::core::TextureMinFilterMode::LINEAR );
-
   DP_ASSERT( m_sceneRenderer );
-  m_sceneRenderer->setEnvironmentSampler( environmentSampler );
+  m_sceneRenderer->setEnvironmentSampler(GetApp()->getEnvironmentSampler());
 }
 
 void SceneRendererPipeline::initTonemapper()

@@ -195,7 +195,6 @@ Viewer::Viewer( int & argc, char ** argv )
   connect( m_preferences, SIGNAL(environmentTextureNameChanged(const QString&)), this, SLOT(setEnvironmentTextureName(const QString&)) );
 
   dp::sg::core::TextureFileSharedPtr textureFile = dp::sg::core::TextureFile::create( m_preferences->getEnvironmentTextureName().toStdString(), dp::sg::core::TextureTarget::TEXTURE_2D );
-  textureFile->incrementMipmapUseCount();
 
   m_environmentSampler = dp::sg::core::Sampler::create( textureFile );
   m_environmentSampler->setMagFilterMode( dp::sg::core::TextureMagFilterMode::LINEAR );
@@ -233,7 +232,6 @@ void Viewer::setEnvironmentEnabledChanged()
 void Viewer::setEnvironmentTextureName( const QString & name )
 {
   dp::sg::core::TextureFileSharedPtr textureFile = dp::sg::core::TextureFile::create( name.toStdString(), dp::sg::core::TextureTarget::TEXTURE_2D );
-  textureFile->incrementMipmapUseCount();
 
   m_environmentSampler->setTexture( textureFile );
 
