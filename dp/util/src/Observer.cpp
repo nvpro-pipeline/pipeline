@@ -1,4 +1,4 @@
-// Copyright NVIDIA Corporation 2011-2015
+// Copyright (c) 2011-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -64,8 +64,16 @@ namespace dp
       Observers::iterator it = std::find(m_observers.begin(), m_observers.end(), std::make_pair(observer, payload) );
       if ( it != m_observers.end() )
       {
-        // mark this entry as invalid instead of deleting it
-        it->first = nullptr;
+        if (m_inNotify)
+        {
+          // mark this entry as invalid instead of deleting it
+          it->first = nullptr;
+        }
+        else
+        {
+          *it = m_observers.back();
+          m_observers.pop_back();
+        }
       }
     }
 
@@ -83,8 +91,9 @@ namespace dp
         size_t idx;
         size_t last = m_observers.size() - 1;
         size_t deletedElements = 0;
-         
-        for ( idx = 0; idx <= last; ++idx )
+
+        m_inNotify = true;
+        for (idx = 0; idx <= last; ++idx)
         {
           if( !m_observers[idx].first )
           {
@@ -119,6 +128,8 @@ namespace dp
         {
           m_observers.resize( m_observers.size() - deletedElements );
         }
+
+        m_inNotify = false;
       }
     }
 

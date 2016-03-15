@@ -75,8 +75,8 @@ namespace dp
       // Do not copy the list of observers during copy/assignment.
       // The observers won't know about the 'new' attachment and thus
       // it cannot detach itself;
-      Subject() {}
-      Subject( Subject const& ) {}
+      Subject() : m_inNotify(false) {}
+      Subject( Subject const& ) : m_inNotify(false) {}
       Subject& operator=( const Subject& /* rhs */ ) { return *this; }
 
       DP_UTIL_API virtual ~Subject();
@@ -94,6 +94,7 @@ namespace dp
 
     private:
       Observers m_observers;
+      bool      m_inNotify;
     };
 
     DEFINE_PTR_TYPES( Subject );
