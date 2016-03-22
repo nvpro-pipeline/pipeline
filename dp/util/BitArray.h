@@ -300,7 +300,10 @@ namespace dp
       if ( m_size )
       {
         size_t usedBitsInLastElement = m_size % StorageBitsPerElement;
-        m_bits[determineNumberOfElements() - 1] &= ~BitStorageType(0) >> ((StorageBitsPerElement - usedBitsInLastElement) & (StorageBitsPerElement - 1));
+        if (usedBitsInLastElement)
+        {
+          m_bits[determineNumberOfElements() - 1] &= ~BitStorageType(0) >> ((StorageBitsPerElement - usedBitsInLastElement) & (StorageBitsPerElement - 1));
+        }
       }
     }
 
@@ -309,7 +312,10 @@ namespace dp
       if ( m_size )
       {
         size_t usedBitsInLastElement = m_size % StorageBitsPerElement;
-        m_bits[determineNumberOfElements() - 1] |= ~BitStorageType(0) << usedBitsInLastElement;
+        if (usedBitsInLastElement)
+        {
+          m_bits[determineNumberOfElements() - 1] |= ~BitStorageType(0) << usedBitsInLastElement;
+        }
       }
     }
 
