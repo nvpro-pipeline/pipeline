@@ -311,7 +311,7 @@ XMLLoader::load( std::string const& filename, dp::util::FileFinder const& fileFi
   SceneSharedPtr hScene;
   if ( !(doc.LoadFile() && doc.FirstChild() ) )
   {
-    throw std::runtime_error( std::string( "Failed to load file " + filename ) );
+    throw std::runtime_error( std::string( "Failed to load file <" + filename + ">" ) );
   }
 
   // create toplevel group

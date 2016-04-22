@@ -1310,12 +1310,17 @@ namespace
 {
   bool registerEffectLibrary()
   {
-    dp::fx::EffectLibraryImpl *eli = dynamic_cast<dp::fx::EffectLibraryImpl*>( dp::fx::EffectLibrary::instance() );
-    DP_ASSERT( eli );
-    if ( eli )
+    try
     {
+      dp::fx::EffectLibraryImpl *eli = dynamic_cast<dp::fx::EffectLibraryImpl*>( dp::fx::EffectLibrary::instance() );
+      DP_ASSERT( eli );
+
       eli->registerEffectLoader( dp::fx::xml::EffectLoader::create( eli ), ".xml" );
       return true;
+    }
+    catch( std::exception e )
+    {
+      std::cerr << "Runtime error: " << e.what() << std::endl;
     }
     return false;
   }

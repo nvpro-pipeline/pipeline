@@ -228,7 +228,7 @@ SceneSharedPtr DPAFLoader::load( const string& filename, dp::util::FileFinder co
 
   if ( !scene )
   {
-    throw std::runtime_error( "Failed to load file " + filename + ". Scene is empty" );
+    throw std::runtime_error( "Failed to load file <" + filename + ">. Scene is empty" );
   }
 
   return( scene );                   // and return that scene

@@ -2,6 +2,22 @@ cmake_minimum_required(VERSION 2.8)
 
 PROJECT( Pipeline )
 
+# check for DPHOME environment variable, use source root directory as fallback
+if ( "$ENV{DPHOME}" STREQUAL "" )
+  set(DP_HOME "${CMAKE_SOURCE_DIR}")
+else()
+  file(TO_CMAKE_PATH "$ENV{DPHOME}" DP_HOME)
+endif()
+
+# check for DP_3RDPARTY_PATH environment variable, use DPHOME/3rdparty as fallback
+if ( "$ENV{DP_3RDPARTY_PATH}" STREQUAL "" )
+  set(DP_3RDPARTY_PATH "${DP_HOME}/3rdparty")
+else()
+  file(TO_CMAKE_PATH "$ENV{DP_3RDPARTY_PATH}" DP_3RDPARTY_PATH)
+endif()
+
+add_definitions(-DDP_HOME_FALLBACK=\"${DP_HOME}\")
+
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake")
 include("dp")
 include("dp3rdParty")
@@ -23,18 +39,6 @@ if( USE_CUDA )
 endif()
 
 SET( USE_BOOST ON CACHE BOOL "Use the Boost 3rd party library" )
-
-# check for DPHOME environment variable
-if ( "$ENV{DPHOME}" STREQUAL "" )
-  message( FATAL_ERROR "DPHOME environment variable not set!" )
-endif()
-file(TO_CMAKE_PATH "$ENV{DPHOME}" DP_HOME)
-
-# check for DP_3RDPARTY_PATH environment variable
-if ( "$ENV{DP_3RDPARTY_PATH}" STREQUAL "" )
-  message( FATAL_ERROR "DP_3RDPARTY_PATH environment variable not set!" )
-endif()
-file(TO_CMAKE_PATH "$ENV{DP_3RDPARTY_PATH}" DP_3RDPARTY_PATH)
 
 file(TO_CMAKE_PATH "$ENV{BUILD_TOOLS_DIR}" BUILD_TOOLS_DIR)
 

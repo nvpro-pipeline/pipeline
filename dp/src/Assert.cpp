@@ -46,7 +46,7 @@ namespace dp
     if ( g_userAssertCallback )
     {
       std::stringstream text;
-      text << "Assertion Failed: " << expr << "\nFile: " << file << ", Line: " << line;
+      text << "Assertion Failed: " << expr << "\nFile: <" << file << ">, Line: " << line;
 
       // If the user callback returns zero, simply continue.
       if ( g_userAssertCallback( text.str().c_str() ) == 0 )
@@ -72,7 +72,7 @@ namespace dp
       _assert(expr, file, line);
     # endif
       #else
-      printf( "assert( %s ) failed!\nFile: %s, Line: %d\n", expr, file, line );
+      printf( "assert( %s ) failed!\nFile: <%s>, Line: %d\n", expr, file, line );
       fflush(stdout);
     # if defined(ABORT_ON_ASSERTION_FAILED)
       // c-runtime spec conform but annoying somehow

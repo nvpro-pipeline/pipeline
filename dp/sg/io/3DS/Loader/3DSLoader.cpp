@@ -128,7 +128,7 @@ SceneSharedPtr ThreeDSLoader::load( std::string const& filename, dp::util::FileF
   Lib3dsFile *f = lib3ds_file_open( filename.c_str() );
   if ( !f )
   {
-    throw std::runtime_error( std::string("Failed to load 3ds file: " + filename ) );
+    throw std::runtime_error( std::string("Failed to load 3ds file: <" + filename + ">" ) );
   }
 
   // the file was successfully parsed and the 3ds data structure has been loaded into memory
@@ -210,8 +210,8 @@ ThreeDSLoader::buildScene( GroupSharedPtr const& parent, Lib3dsFile * data )
     node = data->nodes;
 
     // print a notice to the console and continue
-    INVOKE_CALLBACK(onUnLocalizedMessage("3DSLoader warning","3ds file " + std::string(data->name) +
-                                               " did not contain scene node hierarchy. Inserted all geometry at the top level.\n"));
+    INVOKE_CALLBACK(onUnLocalizedMessage("3DSLoader warning","3ds file <" + std::string(data->name) + "> "
+                                               + "did not contain scene node hierarchy. Inserted all geometry at the top level.\n"));
   }
 
   // the number of frames in the animation is one plus the recorded number in the file

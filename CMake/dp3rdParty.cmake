@@ -1,7 +1,5 @@
 include("dp")
 
-file( TO_CMAKE_PATH "$ENV{DP_3RDPARTY_PATH}" DP_3RDPARTY_PATH)
-
 if( UNIX )
   set(Boost_USE_STATIC_LIBS       OFF)
   set(Boost_USE_MULTITHREADED      ON)

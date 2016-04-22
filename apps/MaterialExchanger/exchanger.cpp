@@ -48,6 +48,8 @@ int main( int argc, char *argv[] )
               << "  and materialsFile is an XML file with the EffectData to use.\n"
               << "  Replaces all EffectData in the scene with a name like \"*fx\"\n"
               << "  with a material from the materialsFile with the same name without \"fx\"\n";
+
+    return( -1 );
   }
 
   std::string sceneFile = argv[1];

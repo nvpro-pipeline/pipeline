@@ -50,14 +50,26 @@ namespace dp
 
         // load standard effects required for the scenegraph
         bool success = true;
+        dp::util::FileFinder fileFinder;
 
-        dp::util::FileFinder fileFinder( dp::home() + "/media/dpfx" );
-
+        // If home()/media/dpfx does not exist, the user has to fix it.
         try
         {
-          success &= dp::fx::EffectLibrary::instance()->loadEffects( dp::home() + "/media/effects/xml/standard_lights.xml", fileFinder );
-          success &= dp::fx::EffectLibrary::instance()->loadEffects( dp::home() + "/media/effects/xml/standard_material.xml", fileFinder );
-          success &= dp::fx::EffectLibrary::instance()->loadEffects( dp::home() + "/media/effects/xml/collada.xml", fileFinder );
+          boost::filesystem::path mediaDpfx = boost::filesystem::path( dp::home() ) / boost::filesystem::path( "media/dpfx" );
+          if( boost::filesystem::exists( mediaDpfx ) )
+          {
+            fileFinder.addSearchPath( dp::home() );
+          }
+          else
+          {
+            std::cout << "Cannot find the media/dpfx directory. Move the executable to the directory where media is located, "
+                      << "or set the DPHOME environment variable to that directory." << std::endl;
+            success = false;
+          }
+
+          success &= dp::fx::EffectLibrary::instance()->loadEffects( "/media/effects/xml/standard_lights.xml", fileFinder );
+          success &= dp::fx::EffectLibrary::instance()->loadEffects( "/media/effects/xml/standard_material.xml", fileFinder );
+          success &= dp::fx::EffectLibrary::instance()->loadEffects( "/media/effects/xml/collada.xml", fileFinder );
           DP_ASSERT(success && "EffectLibrary::loadLibrary failed.");
         }
         catch(std::runtime_error & e)
@@ -67,7 +79,7 @@ namespace dp
         }
         catch (...)
         {
-          std::cout << "caught unknown exception: " << std::endl;
+          std::cout << "caught unknown exception " << std::endl;
           success = false;
         }
 

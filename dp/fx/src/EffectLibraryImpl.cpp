@@ -55,9 +55,17 @@ namespace dp
 
     EffectLibraryImpl::EffectLibraryImpl()
     {
-      // set default search paths
-      m_fileFinder.addSearchPath( dp::home() + "/media/dpfx" );
-      m_fileFinder.addSearchPath( dp::home() + "/media/effects" );
+      try
+      {
+        // set default search paths
+        m_fileFinder.addSearchPath( dp::home() + "/media/dpfx" );
+        m_fileFinder.addSearchPath( dp::home() + "/media/effects" );
+      }
+      catch( std::exception e )
+      {
+        std::cerr << "Exception in EffectLibrary: " << e.what() << std::endl
+                  << "loading effects might not work" << std::endl;
+      }
     }
 
     EffectLibraryImpl::~EffectLibraryImpl()
@@ -136,7 +144,7 @@ namespace dp
       }
       else
       {
-        std::cerr << "no loader for effect file " << file << " available." << std::endl;
+        std::cerr << "no loader for effect file <" << file << "> available." << std::endl;
         return false;
       }
     }

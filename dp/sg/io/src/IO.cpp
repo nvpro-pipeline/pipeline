@@ -98,7 +98,7 @@ namespace dp
           }
           if ( !scene )
           {
-            throw std::runtime_error( std::string("Failed to load scene: " + filename ) );
+            throw std::runtime_error( std::string("Failed to load scene: <" + filename + ">" ) );
           }
 
           // create a new viewstate if necessary
@@ -204,10 +204,25 @@ namespace dp
               TextureLoaderSharedPtr tl = std::static_pointer_cast<TextureLoader>(plug);
               tih = tl->load( foundFile );
             }
+            else
+            {
+              throw std::runtime_error( std::string( "file <" + filename + "> was found, but no loader for this file format!" ) );
+            }
           }
 
           // FIXME interface needs to be released since the cleanup order (first dp::sg::core, then dp::util) causes problems upon destruction.
           dp::util::releaseInterface(piid);
+        }
+        else
+        {
+          std::string errorMessage;
+          std::vector<std::string> searchPathes = localFF.getSearchPaths();
+          errorMessage = "Could not find texture file <" + filename + ">. Searched in the following pathes:\n";
+          for( auto it = searchPathes.begin(); it != searchPathes.end(); ++it )
+          {
+            errorMessage += *it + "\n";
+          }
+          throw std::runtime_error( errorMessage );
         }
 
         return tih;

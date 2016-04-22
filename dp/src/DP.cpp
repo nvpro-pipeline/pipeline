@@ -27,6 +27,7 @@
 #include <dp/DP.h>
 #include <dp/util/File.h>
 #include <boost/filesystem.hpp>
+#include <iostream>
 
 #if defined(DP_OS_LINUX)
 #include <linux/limits.h>
@@ -36,32 +37,79 @@
 
 namespace dp
 {
+  // helper function to check if the given path includes the global config file:
+  bool dpCfgExistsInPath( const std::string &path )
+  {
+    boost::filesystem::path file = boost::filesystem::path( path ) / boost::filesystem::path( "dp.cfg" );
+    return boost::filesystem::exists( file );
+  }
 
   std::string home()
   {
-    boost::filesystem::path home;
-    if ( getenv( "DPHOME" ) )
+    // Find the home, the path where the assets, shaders etc. are located.
+    // 1. Use $DPHOME if set.
+    // 2. Otherwise check if the dp.cfg is located where this dll is located, then use that path.
+    // 3. Last resort is to look for the dp.cfg at a CMAKE defined location. 
+    static boost::filesystem::path home;
+
+    // as long as dp.cfg has not been found, no valid home was found
+    static bool dpCfgFound = false;
+
+    // only search for the path once
+    if( dpCfgFound )
     {
-      home = std::string( getenv( "DPHOME" ) );
+      return home.string();
     }
-    else
+
+    // 1:
+    if( getenv( "DPHOME" ) )
+    {
+      std::string dpHomeEnvironment = std::string( getenv( "DPHOME" ) );
+      if( dpCfgExistsInPath( dpHomeEnvironment ) )
+      {
+        home = dpHomeEnvironment;
+        dpCfgFound = true;
+      }
+      else
+      {
+        std::cerr << "The path pointed at by $DPHOME does not contain the file <dp.cfg>." << std::endl
+                  << "Path: <" << dpHomeEnvironment << ">" << std::endl;
+      }
+    }
+
+    // 2:
+    if (!dpCfgFound)
     {
 #if defined(DP_OS_WINDOWS)
       TCHAR binaryPath[MAX_PATH];
-      if(0 == GetModuleFileName(0, binaryPath, MAX_PATH))
+      if( ( 0 != GetModuleFileName(0, binaryPath, MAX_PATH) ) && ( dpCfgExistsInPath( binaryPath ) ) )
 #elif defined(DP_OS_LINUX)
       char binaryPath[PATH_MAX];
-      if ( -1 == readlink ("/proc/self/exe", binaryPath, PATH_MAX) )
+      if( ( -1 != readlink ("/proc/self/exe", binaryPath, PATH_MAX) ) && ( dpCfgExistsInPath( binaryPath ) ) )
 #else
   #error("unsupported os");
 #endif
       {
-        throw std::runtime_error( "cannot determine current path" );
+        home = binaryPath;
+        home.remove_filename();
+        dpCfgFound = true;
       }
-      home = binaryPath;
-      home.remove_filename();
+    }
+  
+    // 3:
+    if(( !dpCfgFound ) && ( dpCfgExistsInPath( DP_HOME_FALLBACK ) ))
+    {
+      home = DP_HOME_FALLBACK;
+      dpCfgFound = true;
+    }
+    
+    if( !dpCfgFound )
+    {
+      throw std::runtime_error( "Cannot determine path of home. dp.cfg was searched at $DPHOME,"
+                                " the binary location of the dp library and the source directory at compile time." );
     }
 
+    std::cout << "found home at location: " << home.string() << std::endl;
     return home.string();
   }
 

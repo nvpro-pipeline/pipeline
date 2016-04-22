@@ -281,11 +281,21 @@ int runApp( options::variables_map const& opts )
   );
   renderer->setCullingEnabled( false );
 
+  if (opts["resolution"].empty()) {
+    std::cerr << "--resolution is mandatory, see --help for all options" << std::endl;
+    return -1;
+  }
+
   dp::math::Vec3f offset( 0.0f, 0.0f, 0.0f );
   std::vector<float> resolution = opts["resolution"].as<std::vector<float> >();
+  if (resolution.size() != 3) {
+    std::cerr << "--resolution needs 3 parameters x,y,height" << std::endl;
+    return -1;
+  }
+
   if ( !opts["offset"].empty() )
   {
-    std::vector<float> ov = opts["resolution"].as<std::vector<float> >();
+    std::vector<float> ov = opts["offset"].as<std::vector<float> >();
     if ( ov.size() == 3 )
     {
       offset[0] = ov[0];
@@ -294,8 +304,13 @@ int runApp( options::variables_map const& opts )
     }
     else
     {
-      std::cerr << "resolution argument count is wrong, skipping." << std::endl;
+      std::cerr << "offset argument count is wrong, skipping." << std::endl;
     }
+  }
+
+  if (opts["heightmap"].empty() || opts["texturemap"].empty()) {
+    std::cerr << "--heightmap and --texturemap are mandatory, see --help for all options" << std::endl;
+    return -1;
   }
 
   dp::sg::ui::ViewStateSharedPtr viewStateHandle = loadTerrain( opts["heightmap"].as<std::string>(), opts["texturemap"].as<std::string>(), dp::math::Vec3f(resolution[0], resolution[1], resolution[2]), offset );
@@ -376,9 +391,9 @@ int main(int argc, char *argv[])
 
   options::options_description od("Usage: TerrainRendering");
   od.add_options()
-    ( "heightmap", options::value<std::string>(), "height map to use" )
-    ( "texturemap", options::value<std::string>(), "texture map to use" )
-    ( "resolution", options::value<std::vector<float> >()->multitoken(), "resolution of the height map (--resolution x y height)" )
+    ( "heightmap", options::value<std::string>(), "height map to use (mandatory)" )
+    ( "texturemap", options::value<std::string>(), "texture map to use (mandatory)" )
+    ( "resolution", options::value<std::vector<float> >()->multitoken(), "resolution of the height map (--resolution x y height) (mandatory)" )
     ( "offset", options::value<std::vector<float> >()->multitoken(), "offset of the height map in the world space (--offset x y z)" )
     ( "stereo", "enable stereo" )
     ( "continuous", "enable continuous rendering" )
@@ -414,6 +429,7 @@ int main(int argc, char *argv[])
     if ( !opts["help"].empty() )
     {
       std::cout << od << std::endl;
+      return 0;
     }
 
     result = runApp( opts );
@@ -423,6 +439,18 @@ int main(int argc, char *argv[])
     std::cerr << "Unknown option: " << e.get_option_name() << ". ";
     std::cout << od << std::endl;
     std::cerr << "Press enter to continue." << std::endl;
+    std::string line;
+    getline( std::cin, line );
+  }
+  catch( std::runtime_error e )
+  {
+    std::cerr << "Runtime error: " << e.what() << std::endl;
+    std::string line;
+    getline( std::cin, line );
+  }
+  catch( ... )
+  {
+    std::cerr << "Unknown exception" << std::endl;
     std::string line;
     getline( std::cin, line );
   }
