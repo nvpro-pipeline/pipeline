@@ -407,7 +407,7 @@ namespace dp
                 info.gi = instance.m_geometryInstance.get();
 
                 Vec4f center = instance.m_boundingBoxLower + 0.5 * instance.m_boundingBoxExtent;
-                center = center * getSceneTree()->getTransformTree().getWorldMatrix(instance.m_transformIndex);
+                center = center * getSceneTree()->getTransformTree().getTree().getWorldMatrix(instance.m_transformIndex);
                 Vec3f distance = Vec3f(center) - cameraPosition;
                 info.squaredDistance = lengthSquared(distance);
                 sortInfo.push_back( info );

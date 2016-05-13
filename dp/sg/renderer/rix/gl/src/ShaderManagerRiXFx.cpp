@@ -114,18 +114,18 @@ namespace dp
             groupSpecs.push_back(m_groupSpecWorldMatrices);
             m_effectSpecMatrices = dp::fx::EffectSpec::create( "sys_matrices", dp::fx::EffectSpec::Type::UNKNOWN, groupSpecs);
 
-            m_sceneTree->getTransformTree().attach(this);
+            m_sceneTree->getTransformTree().getTree().attach(this);
           }
 
           ShaderManagerTransformsRiXFx::~ShaderManagerTransformsRiXFx()
           {
-            m_sceneTree->getTransformTree().detach(this);
+            m_sceneTree->getTransformTree().getTree().detach(this);
           }
 
           void ShaderManagerTransformsRiXFx::onNotify(dp::util::Event const & event, dp::util::Payload * payload)
           {
-            dp::sg::xbar::TransformTree::EventTransform const & eventTransform = static_cast<dp::sg::xbar::TransformTree::EventTransform const &>(event);
-            dp::util::BitArray changedTransforms = eventTransform.getChangedWorldMatrices();
+            dp::transform::Tree::EventWorldMatricesChanged const & eventWorldMatrices = static_cast<dp::transform::Tree::EventWorldMatricesChanged const &>(event);
+            dp::util::BitArray changedTransforms = eventWorldMatrices.getDirtyWorldMatrices();
             changedTransforms.resize(m_dirtyWorldMatrices.getSize(), false);
             changedTransforms &= m_usedTransforms; // Remove the unused transforms from the bitmask. They don't need an update.
             m_dirtyWorldMatrices |= changedTransforms;
@@ -143,7 +143,7 @@ namespace dp
             // keep same size as transform tree for a 1-1 mapping of transforms
             if ( m_transformGroupDatas.size() <= transformIndex )
             {
-              m_transformGroupDatas.resize( m_sceneTree->getTransformTree().getTransforms().size());
+              m_transformGroupDatas.resize( m_sceneTree->getTransformTree().getTree().getTransformCount());
               m_dirtyWorldMatrices.resize(m_transformGroupDatas.size());
               m_usedTransforms.resize(m_transformGroupDatas.size());
             }
@@ -173,11 +173,10 @@ namespace dp
           {
             dp::rix::core::Renderer *renderer = m_resourceManager->getRenderer();
 
-            TransformTree::Transforms const & transforms = m_sceneTree->getTransformTree().getTransforms();
+            dp::math::Mat44f const * transforms = m_sceneTree->getTransformTree().getTree().getWorldMatrices();
             m_dirtyWorldMatrices.traverseBits([&] (size_t index)
             {
-              dp::math::Mat44f const & worldMatrix = transforms[index].world;
-              updateTransformNode(m_rixFxManager, m_transformGroupDatas[index], worldMatrix);
+              updateTransformNode(m_rixFxManager, m_transformGroupDatas[index], transforms[index]);
             } );
             m_dirtyWorldMatrices.clear();
           }

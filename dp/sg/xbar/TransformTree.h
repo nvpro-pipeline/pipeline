@@ -1,4 +1,4 @@
-// Copyright (c) 2015, NVIDIA CORPORATION. All rights reserved.
+// Copyright (c) 2015-2016, NVIDIA CORPORATION. All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
 // are met:
@@ -29,6 +29,7 @@
 #include <dp/math/Matmnt.h>
 #include <dp/util/BitArray.h>
 #include <dp/sg/core/CoreTypes.h>
+#include <dp/transform/Tree.h>
 
 namespace dp
 {
@@ -42,7 +43,7 @@ namespace dp
 
       typedef uint32_t TransformIndex;
 
-      class TransformTree : public dp::util::Subject
+      class TransformTree
       {
       public:
         struct Transform {
@@ -52,23 +53,8 @@ namespace dp
 
         typedef std::vector<Transform> Transforms;
 
-        /** \brief EventTransform is being used to notify changes of the world matrices **/
-        class EventTransform : public dp::util::Event
-        {
-        public:
-          EventTransform(dp::util::BitArray const & changedWorldMatrices)
-            : m_changedWorldMatrices(changedWorldMatrices)
-          {
-          }
-
-          dp::util::BitArray const & getChangedWorldMatrices() const { return m_changedWorldMatrices; }
-
-        private:
-          dp::util::BitArray const & m_changedWorldMatrices;
-        };
-
         TransformTree();
-        ~TransformTree();
+        virtual ~TransformTree();
 
         TransformIndex addTransform(TransformIndex parentIndex, dp::sg::core::TransformSharedPtr const & transform);
         void removeTransform(TransformIndex transformIndex);
@@ -79,62 +65,28 @@ namespace dp
         //! \brief Recompute the values in the transform tree
         void compute(dp::sg::core::CameraSharedPtr const & camera);
 
-        dp::math::Mat44f const & getWorldMatrix(TransformIndex transformIndex) const { return m_transforms[transformIndex].world; }
-        Transforms const & getTransforms() const { return m_transforms; }
-
-        //! \brief Get index of the virtual root node
-        TransformIndex getSentinel() const { return 0; }
+        dp::transform::Tree & getTree() { return m_tree; }
 
       private:
         //! \brief Resize data structures to new size
         void resizeDataStructures(size_t newSize);
 
-        TransformIndex allocateIndex();
-        void freeIndex(TransformIndex transformIndex);
-        bool isValidIndex(TransformIndex transformIndex)
-        {
-          return transformIndex < m_transformFreeVector.getSize() && !m_transformFreeVector.getBit(transformIndex);
-        }
-
-        dp::util::BitArray m_transformFreeVector; // free if bit is true, occupied otherwise
-        dp::util::BitArray m_dirtyTransforms; // true if a transform has been changed
-        dp::util::BitArray m_dirtyWorldMatrices; // a bitarray which specifies which world matrices has changed during the last compute iteration
-
-        Transforms m_transforms; // array with all transforms
-
-        struct TransformListEntry {
-          unsigned int parent;    // index to parent transform in transform array
-          unsigned int transform; // index to transform in transform array
-        };
-
-        struct BillboardListEntry {
-          unsigned int parent;    // index to parent transform in transform array
-          unsigned int transform; // index to transform in transform array
-          dp::sg::core::BillboardSharedPtr billboard; // billboard to use for computation
-        };
-
-        typedef std::vector<TransformListEntry> TransformListEntries;
-        typedef std::vector<BillboardListEntry> BillboardListEntries;
-
-        struct TransformLevel {
-          TransformListEntries transformListEntries;
-          BillboardListEntries billboardListEntries;
-        };
-
-        typedef std::vector<TransformLevel> TransformLevels;
-        TransformLevels m_transformLevels;
-
         // internal transform information
         struct TransformInfo {
           dp::sg::core::ObjectSharedPtr object;
-          uint32_t                      level;
         };
 
-        typedef std::vector<TransformInfo> TransformInfos;
-        TransformInfos m_transformInfos;
+        // per object data structures
+        typedef std::vector<dp::sg::core::ObjectSharedPtr> Objects;
 
+        Objects m_objects;
+        dp::util::BitArray m_dirtyTransforms; // true if a transform has been changed
+
+        // observer
         TransformObserverSharedPtr m_transformObserver;
-        bool m_firstCompute;
+
+        // data structure which keeps all transforms
+        dp::transform::Tree m_tree;
       };
 
     } // namespace xbar

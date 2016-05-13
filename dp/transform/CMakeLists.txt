@@ -1,4 +1,4 @@
-# Copyright (c) 2002-2015, NVIDIA CORPORATION. All rights reserved.
+# Copyright (c) 2016, NVIDIA CORPORATION. All rights reserved.
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
 # are met:
@@ -23,55 +23,28 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-find_package( Boost COMPONENTS system filesystem REQUIRED )
+project(DPTransform)
 
-add_definitions(
-  "-D_CRT_SECURE_NO_WARNINGS"
-  "-D_SCL_SECURE_NO_WARNINGS"
-)
+add_definitions("-DDP_TRANSFORM_EXPORTS")
 
-#includes
-include_directories(
-  ${Boost_INCLUDE_DIRS}
-)
+include_directories(${DP_HOME})
 
 set(PUBLIC_HEADERS
-  Assert.h
   Config.h
-  DP.h
-  Types.h
-  Exception.h
+  Tree.h
 )
 
 #let cmake determine linker language
 set(SOURCES
-  src/Assert.cpp
-  src/DP.cpp
-  src/Exception.cpp
+  src/Tree.cpp
 )
 
 source_group(sources FILES ${SOURCES})
 source_group("" FILES ${PUBLIC_HEADERS})
 
-add_subdirectory( util )
-
-add_library(DP SHARED
+add_library(DPTransform SHARED
   ${PUBLIC_HEADERS}
   ${SOURCES}
 )
 
-target_link_libraries(DP ${Boost_LIBRARIES} )
-
-set_target_properties( DP PROPERTIES COMPILE_DEFINITIONS DP_EXPORTS )
-
-if (USE_CUDA)
-  add_subdirectory( cuda )
-endif()
-add_subdirectory( culling )
-add_subdirectory( fx )
-add_subdirectory( gl )
-add_subdirectory( math )
-add_subdirectory( rix )
-add_subdirectory( transform )
-add_subdirectory( sg )
-add_subdirectory( ui )
+target_link_libraries(DPTransform DPMath)

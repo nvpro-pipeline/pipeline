@@ -129,6 +129,7 @@ target_link_libraries( DPSgCore
   DPFx
   DPMath
   DPUtil
+  DPTransform
 )
 
 set_target_properties( DPSgCore PROPERTIES FOLDER "SG" )

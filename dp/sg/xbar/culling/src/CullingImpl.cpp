@@ -126,11 +126,8 @@ namespace dp
         void CullingImpl::cull( ResultSharedPtr const & result, dp::math::Mat44f const & world2ViewProjection )
         {
           ResultImplSharedPtr const & resultImpl = std::static_pointer_cast<ResultImpl>(result);
-          dp::sg::xbar::TransformTree::Transforms const & transforms = m_sceneTree->getTransformTree().getTransforms();
-          if (!transforms.empty())
-          {
-            m_culling->groupSetMatrices(m_cullingGroup, &transforms[0].world, transforms.size(), sizeof(transforms[0]));
-          }
+          dp::math::Mat44f const * transforms = m_sceneTree->getTransformTree().getTree().getWorldMatrices();
+          m_culling->groupSetMatrices(m_cullingGroup, transforms, m_sceneTree->getTransformTree().getTree().getTransformCount(), sizeof(transforms[0]));
           m_culling->cull( m_cullingGroup, resultImpl->getResult(), world2ViewProjection );
 
           std::vector<dp::culling::ObjectSharedPtr> const & changedObjects = m_culling->resultGetChanged( resultImpl->getResult() );
@@ -148,11 +145,8 @@ namespace dp
 
         dp::math::Box3f CullingImpl::getBoundingBox()
         {
-          dp::sg::xbar::TransformTree::Transforms const & transforms = m_sceneTree->getTransformTree().getTransforms();
-          if (!transforms.empty())
-          {
-            m_culling->groupSetMatrices(m_cullingGroup, &transforms[0].world, transforms.size(), sizeof(transforms[0]));
-          }
+          dp::math::Mat44f const * transforms = m_sceneTree->getTransformTree().getTree().getWorldMatrices();
+          m_culling->groupSetMatrices(m_cullingGroup, transforms, m_sceneTree->getTransformTree().getTree().getTransformCount(), sizeof(transforms[0]));
           return m_culling->getBoundingBox(m_cullingGroup);
         }
 
@@ -222,8 +216,8 @@ namespace dp
 
         void CullingImpl::TransformObserver::onNotify(dp::util::Event const & event, dp::util::Payload * payload)
         {
-          dp::sg::xbar::TransformTree::EventTransform const & eventTransform = static_cast<dp::sg::xbar::TransformTree::EventTransform const&>(event);
-          eventTransform.getChangedWorldMatrices().traverseBits([&](size_t index)
+          dp::transform::Tree::EventWorldMatricesChanged const & eventWorldMatrices = static_cast<dp::transform::Tree::EventWorldMatricesChanged const&>(event);
+          eventWorldMatrices.getDirtyWorldMatrices().traverseBits([&](size_t index)
           {
             m_cullingImpl.m_culling->groupMatrixChanged(m_cullingImpl.m_cullingGroup, index);
           } );

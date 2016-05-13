@@ -98,7 +98,7 @@ namespace dp
 
         // push a sentinel root group in the vector to avoid special cases for the real root-node later on
         ObjectTreeNode objectTreeSentinel;
-        objectTreeSentinel.m_transform = m_transformTree.getSentinel();
+        objectTreeSentinel.m_transform = m_transformTree.getTree().getRoot();
         objectTreeSentinel.m_transformParent = -1;
         objectTreeSentinel.m_clipPlaneGroup = ClipPlaneGroup::create();
         m_objectTreeSentinel = m_objectTree.insertNode( objectTreeSentinel, ~0, ~0 );
@@ -237,7 +237,7 @@ namespace dp
             ObjectTreeIndex index = it->first;
             const ObjectTreeNode& node = m_objectTree[ index ];
 
-            Mat44f const & modelToWorld = m_transformTree.getWorldMatrix(node.m_transform);
+            Mat44f const & modelToWorld = m_transformTree.getTree().getWorldMatrix(node.m_transform);
             const Mat44f modelToView = modelToWorld * worldToView;
             ObjectTreeIndex activeIndex = it->second.lock()->getLODToUse( modelToView, lodRangeScale );
 

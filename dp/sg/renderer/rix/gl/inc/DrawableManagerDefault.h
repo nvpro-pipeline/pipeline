@@ -226,7 +226,6 @@ namespace dp
               DrawableManagerDefault* m_drawableManager;
             };
 
-            void onTransformChanged( dp::sg::xbar::TransformTree::EventTransform const& event );
             void detachEffectDataObserver();
             virtual void onSceneTreeChanged();
 
