@@ -24,6 +24,7 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+#include <dp/DP.h>
 #include <dp/sg/xbar/SceneTree.h>
 #include <dp/sg/renderer/rix/gl/inc/ResourceTexture.h>
 #include <dp/sg/renderer/rix/gl/inc/ResourceManager.h>
@@ -290,7 +291,7 @@ namespace dp
             {
               // It's a file texture. Generate a TextureHost out of the TextureFile and upload it.
               dp::sg::core::TextureFileSharedPtr const& textureFile = std::static_pointer_cast<dp::sg::core::TextureFile>(m_texture);
-              dp::sg::core::TextureHostSharedPtr textureHost = dp::sg::io::loadTextureHost( textureFile->getFilename() );
+              dp::sg::core::TextureHostSharedPtr textureHost = dp::sg::io::loadTextureHost(textureFile->getFilename(), dp::util::FileFinder{ dp::home() });
               if ( textureHost )
               {
                 textureHost->setTextureTarget( textureFile->getTextureTarget() );
