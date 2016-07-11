@@ -92,8 +92,9 @@ endif(WIN32)
 
 # add subdirectories in the end so that 'if available' linking works.
 add_subdirectory( glsl )
+add_subdirectory( mdl )
 add_subdirectory( xml )
 
 if (TARGET DPFxXML)
-  target_link_libraries(DPFx DPFxXML)
+  target_link_libraries(DPFx DPFxMDL DPFxXML)
 endif()
