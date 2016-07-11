@@ -95,6 +95,10 @@ add_subdirectory( glsl )
 add_subdirectory( mdl )
 add_subdirectory( xml )
 
+if (TARGET DPFxMDL)
+  target_link_libraries(DPFx DPFxMDL)
+endif()
+
 if (TARGET DPFxXML)
   target_link_libraries(DPFx DPFxMDL DPFxXML)
 endif()
