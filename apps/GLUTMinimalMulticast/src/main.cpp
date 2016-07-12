@@ -23,6 +23,9 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#if defined(_MSC_VER)
+#pragma warning(disable: 4996)
+#endif
 
 #include <GL/glew.h>
 #include <GL/freeglut.h>
@@ -722,7 +725,11 @@ int runApp( options::variables_map const& opts )
 int main(int argc, char *argv[])
 {
   // Enable NVX multicast extension
-  _putenv("GL_NVX_LINKED_GPU_MULTICAST=1");
+  // putenv accepts a char* instead of a const char*
+  char enableMulticastString[128];
+  strncpy(enableMulticastString,  "GL_NVX_LINKED_GPU_MULTICAST=1", sizeof(enableMulticastString));
+  putenv(enableMulticastString);
+  
   int result = -1;
   try
   {

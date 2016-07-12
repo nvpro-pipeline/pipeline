@@ -1401,7 +1401,7 @@ namespace dp
           dp::gl::RenderContextSharedPtr renderContextGL = dp::gl::RenderContext::create( dp::gl::RenderContext::FromHWND( (HWND)winId(), &m_format, m_shareWidget ? m_shareWidget->getRenderContext() : dp::gl::RenderContextSharedPtr() ) );
 #elif defined(DP_OS_LINUX)
           // TODO support format
-          dp::gl::RenderContextSharedPtr renderContextGL = dp::gl::RenderContext::create( dp::gl::RenderContext::FromDrawable( QX11Info::display(), QX11Info::appScreen(), winId(), m_shareWidget ? m_shareWidget->getRenderContext() : dp::gl::RenderContextSharedPtr::null ) );
+          dp::gl::RenderContextSharedPtr renderContextGL = dp::gl::RenderContext::create( dp::gl::RenderContext::FromDrawable( QX11Info::display(), QX11Info::appScreen(), winId(), m_shareWidget ? m_shareWidget->getRenderContext() : dp::gl::RenderContextSharedPtr() ) );
 #endif
           m_renderTarget = dp::gl::RenderTargetFB::create( renderContextGL );
         }

@@ -40,9 +40,8 @@ namespace dp
         , m_containerSize(containerSize)
         , m_numberOfGPUs(numberOfGPUs)
       {
-        glLGPUNamedBufferSubDataNVX = (PFNGLLGPUNAMEDBUFFERSUBDATANVXPROC)wglGetProcAddress("glLGPUNamedBufferSubDataNVX");
+        glLGPUNamedBufferSubDataNVX = (PFNGLLGPUNAMEDBUFFERSUBDATANVXPROC)glGetProcAddress("glLGPUNamedBufferSubDataNVX");
         assert(glLGPUNamedBufferSubDataNVX && "multicast extension not supported");
-        glGetIntegerv(GL_MAX_LGPU_GPUS_NVX, (GLint*)(&m_numberOfGPUs));
       }
 
       void ParameterRendererBufferMulticast::render( void const* cache )

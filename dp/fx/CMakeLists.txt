@@ -100,5 +100,5 @@ if (TARGET DPFxMDL)
 endif()
 
 if (TARGET DPFxXML)
-  target_link_libraries(DPFx DPFxMDL DPFxXML)
+  target_link_libraries(DPFx DPFxXML)
 endif()

@@ -165,8 +165,8 @@ namespace dp
       LinkId LinkManager::link(dp::sg::core::ObjectSharedPtr const & srcObject, dp::util::PropertyId srcProperty,
                                dp::sg::core::ObjectSharedPtr const & dstObject, dp::util::PropertyId  dstProperty)
       {
-        DP_ASSERT( srcObject->getPropertyType(srcProperty) == static_cast<Property::Type>(TypedPropertyEnum<T>::type) );
-        DP_ASSERT( dstObject->getPropertyType(dstProperty) == static_cast<Property::Type>(TypedPropertyEnum<T>::type) );
+        DP_ASSERT( srcObject->getPropertyType(srcProperty) == static_cast<dp::util::Property::Type>(dp::util::TypedPropertyEnum<T>::type) );
+        DP_ASSERT( dstObject->getPropertyType(dstProperty) == static_cast<dp::util::Property::Type>(dp::util::TypedPropertyEnum<T>::type) );
 
         LinkId link = new LinkImpl<T>(srcObject, srcProperty, dstObject, dstProperty);
         storeLink(link);

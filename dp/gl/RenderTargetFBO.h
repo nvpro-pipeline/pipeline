@@ -518,7 +518,7 @@ namespace dp
       /** \brief Test it isMulticastSupported
           \return true if GL_NVX_linked_gpu_multicast is supported
       **/
-      DP_GL_API static bool isMulticastSupported();
+      DP_GL_API bool isMulticastSupported();
 
       /** \brief Set multicast state for this FBO
           \param enabled If enabled is true multicast will be enabled, otherwise it'll be disabled

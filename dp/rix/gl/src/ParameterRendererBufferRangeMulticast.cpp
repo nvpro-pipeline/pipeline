@@ -43,11 +43,11 @@ namespace dp
         , m_uboBinding( GLint(bindingIndex) )
         , m_uboBlockSize( bindingLength )
         , m_containerSize(containerSize)
+        , m_numberOfGPUs(numGPUs)
         , m_cacheData( new uint8_t[bindingLength] )
       {
-        glLGPUNamedBufferSubDataNVX = (PFNGLLGPUNAMEDBUFFERSUBDATANVXPROC)wglGetProcAddress("glLGPUNamedBufferSubDataNVX");
+        glLGPUNamedBufferSubDataNVX = (PFNGLLGPUNAMEDBUFFERSUBDATANVXPROC)glGetProcAddress("glLGPUNamedBufferSubDataNVX");
         assert(glLGPUNamedBufferSubDataNVX && "multicast extension not supported");
-        glGetIntegerv(GL_MAX_LGPU_GPUS_NVX, (GLint*)(&m_numberOfGPUs));
       }
 
       void ParameterRendererBufferRangeMulticast::activate()

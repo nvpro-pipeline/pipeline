@@ -52,12 +52,12 @@ namespace dp
       ParameterCache<ParameterCacheStream>::ParameterCache( ProgramPipelineGLHandle programPipeline, std::vector<ContainerDescriptorGLHandle> const &descriptors
                                                           , bool useUniformBufferUnifiedMemory, BufferMode bufferMode, bool batchedUpdates, uint32_t numberOfGPUs)
         : m_containerLocationsValid(0)
+        , m_numberOfGPUs(numberOfGPUs)
         , m_programPipeline( programPipeline )
         , m_descriptors( descriptors )
         , m_useUniformBufferUnifiedMemory(useUniformBufferUnifiedMemory)
         , m_batchedUpdates(batchedUpdates)
         , m_bufferMode(bufferMode)
-        , m_numberOfGPUs(numberOfGPUs)
       {
         switch(m_bufferMode)
         {

@@ -51,6 +51,15 @@
 // Define for how many attributes RiXGL is compiled
 #define RIX_GL_MAX_ATTRIBUTES 16
 
+#if defined(DP_OS_WINDOWS)
+#define glGetProcAddress(x) wglGetProcAddress(x)
+#elif defined(DP_OS_LINUX)
+#define glGetProcAddress(x) glXGetProcAddress(reinterpret_cast<GLubyte const*>(x))
+#else
+#error Unsupported OS
+#endif
+
+
 namespace dp
 {
   namespace rix

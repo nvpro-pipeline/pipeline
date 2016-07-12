@@ -35,8 +35,8 @@ namespace dp
     {
 
       ParameterRendererBufferAddressRangeMulticast::ParameterRendererBufferAddressRangeMulticast(ParameterCacheEntryStreamBuffers const& parameterCacheEntries, dp::gl::BufferSharedPtr const& buffer
-                                                                              , GLenum target, size_t bindingIndex, GLsizeiptr bindingLength
-                                                                              , bool batchedUpdates, size_t containerSize, uint32_t numberOfGPUs)
+                                                                                                , GLenum target, size_t bindingIndex, GLsizeiptr bindingLength
+                                                                                                , bool /*batchedUpdates*/, size_t containerSize, uint32_t numberOfGPUs)
         : ParameterRendererStreamBuffer(parameterCacheEntries)
         , m_target(target)
         , m_buffer(buffer)
@@ -47,9 +47,8 @@ namespace dp
         , m_numberOfGPUs(numberOfGPUs)
         , m_cacheData(new uint8_t[m_bindingLength])
       {
-        glLGPUNamedBufferSubDataNVX = (PFNGLLGPUNAMEDBUFFERSUBDATANVXPROC)wglGetProcAddress("glLGPUNamedBufferSubDataNVX");
+        glLGPUNamedBufferSubDataNVX = (PFNGLLGPUNAMEDBUFFERSUBDATANVXPROC)glGetProcAddress("glLGPUNamedBufferSubDataNVX");
         assert(glLGPUNamedBufferSubDataNVX && "multicast extension not supported");
-        glGetIntegerv(GL_MAX_LGPU_GPUS_NVX, (GLint*)(&m_numberOfGPUs));
       }
 
       void ParameterRendererBufferAddressRangeMulticast::activate()

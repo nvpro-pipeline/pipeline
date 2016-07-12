@@ -1300,7 +1300,7 @@ void DPAFSaveTraverser::handleIndexSet( const IndexSet * p )
       }
       fprintf( m_fh, "IndexSet\t%s\n{\n", name.c_str() );
       fprintf( m_fh, "\tnumberOfIndices\t%u\n",       p->getNumberOfIndices() );
-      fprintf( m_fh, "\tdataType\t%d\n",              p->getIndexDataType() );
+      fprintf( m_fh, "\tdataType\t%d\n",              static_cast<int>(p->getIndexDataType()) );
       fprintf( m_fh, "\tprimitiveRestartIndex\t%u\n", p->getPrimitiveRestartIndex() );
       fprintf( m_fh, "\tindices\t[\n" );
       Buffer::DataReadLock reader( p->getBuffer() );
@@ -2381,8 +2381,8 @@ void DPAFSaveTraverser::vertexAttributeSetData( const VertexAttributeSet * p )
       DP_ASSERT( p->getNumberOfVertexData(id) <= UINT_MAX );
       DP_ASSERT( m_storedBuffers.find( p->getVertexBuffer(id) ) != m_storedBuffers.end() );
 
-      fprintf( m_fh, "\tvattrib%u\t%u\t%u\t%s\t%u\t%u\t%u\n", i, 
-        p->getSizeOfVertexData(id), p->getTypeOfVertexData(id)
+      fprintf( m_fh, "\tvattrib%u\t%u\t%u\t%s\t%u\t%u\t%u\n", i
+        , p->getSizeOfVertexData(id), static_cast<unsigned int>(p->getTypeOfVertexData(id))
         , m_storedBuffers[p->getVertexBuffer(id)].c_str()
         , p->getOffsetOfVertexData(id), p->getStrideOfVertexData(id)
         , count);
