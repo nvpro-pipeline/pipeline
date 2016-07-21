@@ -111,7 +111,7 @@ static std::string domainString( dp::fx::Domain domain )
     case dp::fx::Domain::TESSELLATION_EVALUATION : return( "teev" );
     case dp::fx::Domain::GEOMETRY                : return( "geom" );
     case dp::fx::Domain::FRAGMENT                : return( "frag" );
-    default                                     : return( "xxxx" );
+    default                                      : return( "xxxx" );
   }
 }
 
@@ -127,6 +127,9 @@ void MaterialLoaderTestWidget::paint()
     std::cout << "MaterialLoaderTest: using effect <" << m_effectNames[idx] << ">";
     m_geoNode->setMaterialPipeline(dp::sg::core::PipelineData::create(dp::fx::EffectLibrary::instance()->getEffectData(m_effectNames[idx])));
 
+    assert(m_effectNames[idx].find_last_of(':') != std::string::npos);
+    std::string effectStem = m_effectNames[idx].substr(m_effectNames[idx].find_last_of(':') + 1);
+
     dp::sg::ui::glut::SceneRendererWidget::paint();
 
     if (m_saveShaders)
@@ -135,7 +138,12 @@ void MaterialLoaderTestWidget::paint()
       for (auto const& it : sources)
       {
         std::string effectFile = dp::fx::EffectLibrary::instance()->getEffectFile(m_effectNames[idx]);
-        dp::util::saveStringToFile(dp::util::getFilePath(effectFile) + "\\" + dp::util::getFileStem(effectFile) + "." + domainString(it.first) + ".glsl", it.second);
+        std::string fileStem = (dp::util::getFileStem(effectFile));
+        if (fileStem != effectStem)
+        {
+          fileStem += "_" + effectStem;
+        }
+        dp::util::saveStringToFile(dp::util::getFilePath(effectFile) + "\\" + fileStem + "." + domainString(it.first) + ".glsl", it.second);
       }
     }
 
