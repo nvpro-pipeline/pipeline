@@ -40,6 +40,72 @@ namespace dp
     namespace core
     {
 
+      template <typename NormalOp>
+      void dispatchCalculateNormals(Buffer::ConstIterator<Vec3f>::Type const& vertices,
+                                    dp::sg::core::IndexSetSharedPtr const& indexSet,
+                                    uint32_t count,
+                                    uint32_t offset,
+                                    std::vector<Vec3f> & normals,
+                                    NormalOp op = {})
+      {
+        switch (indexSet->getIndexDataType())
+        {
+        case dp::DataType::INT_8:
+          op.eval<uint8_t>(vertices, indexSet, count, offset, normals);
+          break;
+        case dp::DataType::INT_16:
+          op.eval<int16_t>(vertices, indexSet, count, offset, normals);
+          break;
+        case dp::DataType::INT_32:
+          op.eval<int32_t>(vertices, indexSet, count, offset, normals);
+          break;
+        case dp::DataType::UNSIGNED_INT_8:
+          op.eval<uint8_t>(vertices, indexSet, count, offset, normals);
+          break;
+        case dp::DataType::UNSIGNED_INT_16:
+          op.eval<uint16_t>(vertices, indexSet, count, offset, normals);
+          break;
+        case dp::DataType::UNSIGNED_INT_32:
+          op.eval<uint32_t>(vertices, indexSet, count, offset, normals);
+          break;
+        default:
+          DP_ASSERT(!"unsupported datatype");
+        }
+      }
+
+      template <typename TangentOp>
+      void dispatchCalculateTangents(VertexAttributeSetSharedPtr const& vas,
+                                     VertexAttributeSet::AttributeID tc, dp::sg::core::IndexSetSharedPtr const& indexSet,
+                                     uint32_t count,
+                                     uint32_t offset,
+                                     std::vector<Vec3f> & normals,
+                                     TangentOp op = {})
+      {
+        switch (indexSet->getIndexDataType())
+        {
+        case dp::DataType::INT_8:
+          op.eval<uint8_t>(vas, tc, indexSet, count, offset, normals);
+          break;
+        case dp::DataType::INT_16:
+          op.eval<int16_t>(vas, tc, indexSet, count, offset, normals);
+          break;
+        case dp::DataType::INT_32:
+          op.eval<int32_t>(vas, tc, indexSet, count, offset, normals);
+          break;
+        case dp::DataType::UNSIGNED_INT_8:
+          op.eval<uint8_t>(vas, tc, indexSet, count, offset, normals);
+          break;
+        case dp::DataType::UNSIGNED_INT_16:
+          op.eval<uint16_t>(vas, tc, indexSet, count, offset, normals);
+          break;
+        case dp::DataType::UNSIGNED_INT_32:
+          op.eval<uint32_t>(vas, tc, indexSet, count, offset, normals);
+          break;
+        default:
+          DP_ASSERT(!"unsupported datatype");
+        }
+      }
+
       BEGIN_REFLECTION_INFO( Primitive )
         DERIVE_STATIC_PROPERTIES( Primitive, Object );
       END_REFLECTION_INFO
@@ -345,27 +411,36 @@ namespace dp
 
           switch( m_indexSet->getIndexDataType() )
           {
-            case dp::DataType::UNSIGNED_INT_32:
-              m_cachedNumberOfPrimitiveRestarts = scanForPrimitiveRestart<unsigned int>( reader.getPtr<unsigned int>(),
-                                                                                         elementOffset, elementCount, prIndex );
-              break;
+          case dp::DataType::INT_8:
+            m_cachedNumberOfPrimitiveRestarts = scanForPrimitiveRestart<int8_t>(reader.getPtr<int8_t>(), elementOffset, elementCount, prIndex);
+            break;
 
-            case dp::DataType::UNSIGNED_INT_16:
-              m_cachedNumberOfPrimitiveRestarts = scanForPrimitiveRestart<unsigned short>( reader.getPtr<unsigned short>(),
-                                                                                           elementOffset, elementCount, prIndex );
-              break;
+          case dp::DataType::INT_16:
+            m_cachedNumberOfPrimitiveRestarts = scanForPrimitiveRestart<int16_t>(reader.getPtr<int16_t>(), elementOffset, elementCount, prIndex);
+            break;
 
-            case dp::DataType::UNSIGNED_INT_8:
-              m_cachedNumberOfPrimitiveRestarts = scanForPrimitiveRestart<unsigned char>( reader.getPtr<unsigned char>(),
-                                                                                          elementOffset, elementCount, prIndex );
-              break;
+          case dp::DataType::INT_32:
+            m_cachedNumberOfPrimitiveRestarts = scanForPrimitiveRestart<int32_t>(reader.getPtr<int32_t>(), elementOffset, elementCount, prIndex);
+            break;
 
-            default:
-              DP_ASSERT( !"INVALID INDEX TYPE" );
-              return 0;
+          case dp::DataType::UNSIGNED_INT_8:
+            m_cachedNumberOfPrimitiveRestarts = scanForPrimitiveRestart<uint8_t>(reader.getPtr<uint8_t>(), elementOffset, elementCount, prIndex);
+            break;
+
+          case dp::DataType::UNSIGNED_INT_16:
+            m_cachedNumberOfPrimitiveRestarts = scanForPrimitiveRestart<uint16_t>(reader.getPtr<uint16_t>(), elementOffset, elementCount, prIndex);
+            break;
+
+          case dp::DataType::UNSIGNED_INT_32:
+            m_cachedNumberOfPrimitiveRestarts = scanForPrimitiveRestart<uint32_t>(reader.getPtr<uint32_t>(), elementOffset, elementCount, prIndex);
+            break;
+
+          default:
+            DP_ASSERT(!"INVALID INDEX TYPE");
+            return 0;
           }
         }
-        else if( !isIndexed() )
+        else if(!isIndexed())
         {
           // if we aren't indexed, there can be no primitive restarts
           m_cachedNumberOfPrimitiveRestarts = 0;
@@ -485,8 +560,9 @@ namespace dp
         }
       }
 
-      template <typename IndexType> Box3f getBoundingBoxForIndices( const IndexSetSharedPtr &indexSet, unsigned int offset, unsigned int count
-                                                                  , unsigned int primitiveRestartIndex, const Buffer::ConstIterator<Vec3f>::Type &points )
+      template <typename IndexType>
+      Box3f getBoundingBoxForIndices( const IndexSetSharedPtr &indexSet, unsigned int offset, unsigned int count
+                                    , unsigned int primitiveRestartIndex, const Buffer::ConstIterator<Vec3f>::Type &points )
       {
         Box3f bbox;
 
@@ -523,22 +599,22 @@ namespace dp
           switch (indexSet->getIndexDataType() )
           {
           case dp::DataType::UNSIGNED_INT_32:
-            bbox = getBoundingBoxForIndices<unsigned int>( indexSet, offset, count, prIdx, points );
+            bbox = getBoundingBoxForIndices<uint32_t>( indexSet, offset, count, prIdx, points );
             break;
           case dp::DataType::INT_32:
-            bbox = getBoundingBoxForIndices<int>( indexSet, offset, count, prIdx, points );
+            bbox = getBoundingBoxForIndices<int32_t>( indexSet, offset, count, prIdx, points );
             break;
           case dp::DataType::UNSIGNED_INT_16:
-            bbox = getBoundingBoxForIndices<unsigned short>( indexSet, offset, count, prIdx, points );
+            bbox = getBoundingBoxForIndices<uint16_t>( indexSet, offset, count, prIdx, points );
             break;
           case dp::DataType::INT_16:
-            bbox = getBoundingBoxForIndices<short>( indexSet, offset, count, prIdx, points );
+            bbox = getBoundingBoxForIndices<int16_t>( indexSet, offset, count, prIdx, points );
             break;
           case dp::DataType::UNSIGNED_INT_8:
-            bbox = getBoundingBoxForIndices<unsigned char>( indexSet, offset, count, prIdx, points );
+            bbox = getBoundingBoxForIndices<uint8_t>( indexSet, offset, count, prIdx, points );
             break;
           case dp::DataType::INT_8:
-            bbox = getBoundingBoxForIndices<char>( indexSet, offset, count, prIdx, points );
+            bbox = getBoundingBoxForIndices<int8_t>( indexSet, offset, count, prIdx, points );
             break;
           default:
             DP_ASSERT( 0 && "unsupported datatype for indexset");
@@ -556,6 +632,46 @@ namespace dp
         return bbox;
       }
 
+      template <typename IndexType>
+      float computeMinRadius(IndexSetSharedPtr const& indexSet,
+                             uint32_t count,
+                             uint32_t offset,
+                             Buffer::ConstIterator<Vec3f>::Type const& points,
+                             Vec3f const& center,
+                             size_t numberOfVertices)
+      {
+        IndexSet::ConstIterator<IndexType> indices(indexSet, offset);
+        float minRadius = 0.f;
+
+        unsigned int primitiveRestartIndex = indexSet->getPrimitiveRestartIndex();
+
+        bool invalidIndices = false;
+        for (uint32_t i = 0; i < count; i++)
+        {
+          IndexType index = indices[i];
+
+          if ((index != primitiveRestartIndex) && (index < numberOfVertices))
+          {
+            float d = lengthSquared(points[index] - center);
+            if (minRadius < d)
+            {
+              minRadius = d;
+            }
+          }
+          else
+          {
+            invalidIndices |= (index != primitiveRestartIndex);
+          }
+        }
+        if (invalidIndices)
+        {
+          std::cerr << "Primitive contains out of range indices" << std::endl;
+          DP_ASSERT(false);
+        }
+
+        return minRadius;
+      }
+
       Sphere3f Primitive::calculateBoundingSphere() const
       {
         unsigned int offset = getElementOffset();
@@ -571,33 +687,28 @@ namespace dp
         float minRadius = 0.f;
         if( isIndexed() )
         {
-          IndexSet::ConstIterator<unsigned int> indices( m_indexSet, offset );
-
-          unsigned int primitiveRestartIndex = m_indexSet->getPrimitiveRestartIndex();
-          size_t numberOfVertices = m_vertexAttributeSet->getNumberOfVertices();
-
-          bool invalidIndices = false;
-          for( unsigned int i = 0; i < count; i ++ )
+          switch (m_indexSet->getIndexDataType())
           {
-            unsigned int index = indices[i];
-
-            if ( (index != primitiveRestartIndex) && (index < numberOfVertices) )
-            {
-              float d = lengthSquared( points[index] - center );
-              if( minRadius < d )
-              {
-                minRadius = d;
-              }
-            }
-            else
-            {
-              invalidIndices |= ( index != primitiveRestartIndex );
-            }
-          }
-          if ( invalidIndices )
-          {
-            std::cerr << "Primitive " << getName() << " contains out of range indices" << std::endl;
-            DP_ASSERT( false );
+          case dp::DataType::INT_8:
+            minRadius = computeMinRadius<int8_t>(m_indexSet, count, offset, points, center, m_vertexAttributeSet->getNumberOfVertices());
+            break;
+          case dp::DataType::INT_16:
+            minRadius = computeMinRadius<int16_t>(m_indexSet, count, offset, points, center, m_vertexAttributeSet->getNumberOfVertices());
+            break;
+          case dp::DataType::INT_32:
+            minRadius = computeMinRadius<int32_t>(m_indexSet, count, offset, points, center, m_vertexAttributeSet->getNumberOfVertices());
+            break;
+          case dp::DataType::UNSIGNED_INT_8:
+            minRadius = computeMinRadius<uint8_t>(m_indexSet, count, offset, points, center, m_vertexAttributeSet->getNumberOfVertices());
+            break;
+          case dp::DataType::UNSIGNED_INT_16:
+            minRadius = computeMinRadius<uint16_t>(m_indexSet, count, offset, points, center, m_vertexAttributeSet->getNumberOfVertices());
+            break;
+          case dp::DataType::UNSIGNED_INT_32:
+            minRadius = computeMinRadius<uint32_t>(m_indexSet, count, offset, points, center, m_vertexAttributeSet->getNumberOfVertices());
+            break;
+          default:
+            DP_ASSERT(!"unsupported datatype");
           }
         }
         else
@@ -660,45 +771,58 @@ namespace dp
                m_elementCount;                          // Use user defined count.
       }
 
-      void Primitive::calculateNormalsPolygon( Buffer::ConstIterator<Vec3f>::Type & vertices, std::vector<Vec3f> & normals )
+      struct calculateNormalsPolygonWithIndices
       {
-        unsigned int count  = getElementCount();
-        unsigned int offset = getElementOffset();
-
-        if ( m_indexSet )
+        template <typename IndexType>
+        void eval(Buffer::ConstIterator<Vec3f>::Type const& vertices,
+                  dp::sg::core::IndexSetSharedPtr const& indexSet,
+                  uint32_t count,
+                  uint32_t offset,
+                  std::vector<Vec3f> & normals)
         {
           // calculate an average normal on each face
-          unsigned int pri = m_indexSet->getPrimitiveRestartIndex();
-          IndexSet::ConstIterator<unsigned int> indices( m_indexSet, offset );
+          unsigned int pri = indexSet->getPrimitiveRestartIndex();
+          IndexSet::ConstIterator<IndexType> indices(indexSet, offset);
 
-          Vec3f faceNormal = Vec3f( 0.0f, 0.0f, 0.0f );
-          DP_ASSERT( ( indices[0] != pri ) && ( indices[1] != pri ) );
-          unsigned int i0 = 0;
-          for ( unsigned int i=2 ; i<count ; i++ )
+          Vec3f faceNormal = Vec3f(0.0f, 0.0f, 0.0f);
+          DP_ASSERT((indices[0] != pri) && (indices[1] != pri));
+          uint32_t i0 = 0;
+          for (uint32_t i = 2; i < count; i++)
           {
-            if ( indices[i] == pri )
+            if (indices[i] == pri)
             {
-              for ( unsigned int j=i0 ; j<i ; j++ )
+              for (uint32_t j = i0; j < i; j++)
               {
                 normals[indices[j]] += faceNormal;
               }
-              faceNormal = Vec3f( 0.0f, 0.0f, 0.0f );
-              i0 = i+1;
+              faceNormal = Vec3f(0.0f, 0.0f, 0.0f);
+              i0 = i + 1;
               i += 2;
             }
             else
             {
-              faceNormal += ( vertices[indices[i-1]] - vertices[indices[i0]] )
-                          ^ ( vertices[indices[i  ]] - vertices[indices[i0]] );
+              faceNormal += (vertices[indices[i - 1]] - vertices[indices[i0]])
+                          ^ (vertices[indices[i    ]] - vertices[indices[i0]]);
             }
           }
-          if ( indices[count-1] != pri )
+          if (indices[count - 1] != pri)
           {
-            for ( unsigned int j=i0 ; j<count ; j++ )
+            for (uint32_t j = i0; j < count; j++)
             {
               normals[indices[j]] += faceNormal;
             }
           }
+        }
+      };
+
+      void Primitive::calculateNormalsPolygon( Buffer::ConstIterator<Vec3f>::Type & vertices, std::vector<Vec3f> & normals )
+      {
+        uint32_t count  = getElementCount();
+        uint32_t offset = getElementOffset();
+
+        if ( m_indexSet )
+        {
+          dispatchCalculateNormals<calculateNormalsPolygonWithIndices>(vertices, m_indexSet, count, offset, normals);
         }
         else
         {
@@ -714,28 +838,41 @@ namespace dp
         }
       }
 
+      struct calculateNormalsQuadWithIndices {
+        template <typename IndexType>
+        void eval(Buffer::ConstIterator<Vec3f>::Type const& vertices,
+                  dp::sg::core::IndexSetSharedPtr const& indexSet,
+                  uint32_t count,
+                  uint32_t offset,
+                  std::vector<Vec3f> & normals)
+        {
+          // calculate the normals for each facet
+          IndexSet::ConstIterator<IndexType> indices(indexSet, offset);
+          for (uint32_t i = 0; i < count; i += 4)
+          {
+            //  determine the face normal
+            Vec3f faceNormal = (vertices[indices[i + 2]] - vertices[indices[i + 0]])
+                             ^ (vertices[indices[i + 3]] - vertices[indices[i + 1]]);
+
+            //  and accumulate it to the three vertices of the facet
+            for (uint32_t j = 0; j < 4; j++)
+            {
+              normals[indices[i + j]] += faceNormal;
+            }
+          }
+        }
+      };
+
+
       void Primitive::calculateNormalsQuad( Buffer::ConstIterator<Vec3f>::Type & vertices, std::vector<Vec3f> & normals )
       {
-        unsigned int count  = getElementCount();
-        unsigned int offset = getElementOffset();
+        uint32_t count  = getElementCount();
+        uint32_t offset = getElementOffset();
         DP_ASSERT( count % 4 == 0 );
 
         if ( m_indexSet )
         {
-          // calculate the normals for each facet
-          IndexSet::ConstIterator<unsigned int> indices( m_indexSet, offset );
-          for ( unsigned int i=0 ; i<count ; i+=4 )
-          {
-            //  determine the face normal
-            Vec3f faceNormal =  ( vertices[indices[i+2]] - vertices[indices[i+0]] )
-                              ^ ( vertices[indices[i+3]] - vertices[indices[i+1]] );
-
-            //  and accumulate it to the three vertices of the facet
-            for ( unsigned int j=0 ; j<4 ; j++ )
-            {
-              normals[indices[i+j]] += faceNormal;
-            }
-          }
+          dispatchCalculateNormals<calculateNormalsQuadWithIndices>(vertices, m_indexSet, count, offset, normals);
         }
         else
         {
@@ -753,6 +890,43 @@ namespace dp
         }
       }
 
+      struct calculateNormalsQuadStripWithIndices
+      {
+        template <typename IndexType>
+        void eval(Buffer::ConstIterator<Vec3f>::Type const& vertices,
+                  dp::sg::core::IndexSetSharedPtr const& indexSet,
+                  uint32_t count,
+                  uint32_t offset,
+                  std::vector<Vec3f> & normals)
+        {
+          // calculate the normals for each facet
+          unsigned int pri = indexSet->getPrimitiveRestartIndex();
+          IndexSet::ConstIterator<IndexType> indices(indexSet, offset);
+
+          DP_ASSERT((indices[0] != pri) && (indices[1] != pri) && (indices[2] != pri));
+          for (uint32_t i = 3; i < count; i += 2)
+          {
+            if (indices[i] == pri)
+            {
+              DP_ASSERT((indices[i + 1] != pri) && (indices[i + 2] != pri) && (indices[i + 3] != pri));
+              i += 2;   // advance to end of first quad in next strip
+            }
+            else
+            {
+              //  determine the face normal
+              Vec3f faceNormal = (vertices[indices[i - 0]] - vertices[indices[i - 3]])
+                               ^ (vertices[indices[i - 1]] - vertices[indices[i - 2]]);
+
+              //  and accumulate it to the four vertices of the facet
+              for (uint32_t j = 0; j < 4; j++)
+              {
+                normals[indices[i - j]] += faceNormal;
+              }
+            }
+          }
+        }
+      };
+
       void Primitive::calculateNormalsQuadStrip( Buffer::ConstIterator<Vec3f>::Type & vertices, std::vector<Vec3f> & normals )
       {
         unsigned int count  = getElementCount();
@@ -760,31 +934,7 @@ namespace dp
 
         if ( m_indexSet )
         {
-          // calculate the normals for each facet
-          unsigned int pri = m_indexSet->getPrimitiveRestartIndex();
-          IndexSet::ConstIterator<unsigned int> indices( m_indexSet, offset );
-
-          DP_ASSERT( ( indices[0] != pri ) && ( indices[1] != pri ) && ( indices[2] != pri ) );
-          for ( unsigned int i=3 ; i<count ; i+=2 )
-          {
-            if ( indices[i] == pri )
-            {
-              DP_ASSERT( ( indices[i+1] != pri ) && ( indices[i+2] != pri ) && ( indices[i+3] != pri ) );
-              i += 2;   // advance to end of first quad in next strip
-            }
-            else
-            {
-              //  determine the face normal
-              Vec3f faceNormal =  ( vertices[indices[i-0]] - vertices[indices[i-3]] )
-                                ^ ( vertices[indices[i-1]] - vertices[indices[i-2]] );
-
-              //  and accumulate it to the four vertices of the facet
-              for ( unsigned int j=0 ; j<4 ; j++ )
-              {
-                normals[indices[i-j]] += faceNormal;
-              }
-            }
-          }
+          dispatchCalculateNormals<calculateNormalsQuadStripWithIndices>(vertices, m_indexSet, count, offset, normals);
         }
         else
         {
@@ -802,6 +952,31 @@ namespace dp
         }
       }
 
+      struct calculateNormalsTriangleWithIndices
+      {
+        template <typename IndexType>
+        void eval(Buffer::ConstIterator<Vec3f>::Type const& vertices,
+                  dp::sg::core::IndexSetSharedPtr const& indexSet,
+                  uint32_t count,
+                  uint32_t offset,
+                  std::vector<Vec3f> & normals)
+        {
+          IndexSet::ConstIterator<IndexType> indices(indexSet, offset);
+          for (uint32_t i = 0; i < count; i += 3)
+          {
+            //  determine the face normal
+            Vec3f faceNormal = (vertices[indices[i + 1]] - vertices[indices[i + 0]])
+                             ^ (vertices[indices[i + 2]] - vertices[indices[i + 0]]);
+
+            //  and accumulate it to the three vertices of the facet
+            for (uint32_t j = 0; j < 3; j++)
+            {
+              normals[indices[i + j]] += faceNormal;
+            }
+          }
+        }
+      };
+
       void Primitive::calculateNormalsTriangle( Buffer::ConstIterator<Vec3f>::Type & vertices, std::vector<Vec3f> & normals )
       {
         unsigned int count  = getElementCount();
@@ -810,26 +985,15 @@ namespace dp
 
         if ( m_indexSet )
         {
-          IndexSet::ConstIterator<unsigned int> indices( m_indexSet, offset );
-          for ( unsigned int i=0 ; i<count ; i+=3 )
-          {
-            //  determine the face normal
-            Vec3f faceNormal =  ( vertices[indices[i+1]] - vertices[indices[i+0]] )
-                              ^ ( vertices[indices[i+2]] - vertices[indices[i+0]] );
-
-            //  and accumulate it to the three vertices of the facet
-            for ( unsigned int j=0 ; j<3 ; j++ )
-            {
-              normals[indices[i+j]] += faceNormal;
-            }
-          }
+          dispatchCalculateNormals<calculateNormalsTriangleWithIndices>(vertices, m_indexSet, count, offset, normals);
         }
         else
         {
           for ( size_t i=offset ; i<offset+count ; i+=3 )
           {
             // determine the face normal
-            Vec3f faceNormal = ( vertices[i+1] - vertices[i+0] ) ^ ( vertices[i+2] - vertices[i+0] );
+            Vec3f faceNormal = ( vertices[i+1] - vertices[i+0] )
+                             ^ ( vertices[i+2] - vertices[i+0] );
 
             // each vertex normal just gets the face normal
             for ( unsigned int j=0 ; j<3 ; j++ )
@@ -840,28 +1004,30 @@ namespace dp
         }
       }
 
-      void Primitive::calculateNormalsTriFan( Buffer::ConstIterator<Vec3f>::Type & vertices, std::vector<Vec3f> & normals )
+      struct calculateNormalsTriFanWithIndices
       {
-        unsigned int count  = getElementCount();
-        unsigned int offset = getElementOffset();
-
-        if ( m_indexSet )
+        template <typename IndexType>
+        void eval(Buffer::ConstIterator<Vec3f>::Type const& vertices,
+                  dp::sg::core::IndexSetSharedPtr const& indexSet,
+                  uint32_t count,
+                  uint32_t offset,
+                  std::vector<Vec3f> & normals)
         {
           // calculate the normals for each facet
-          unsigned int pri = m_indexSet->getPrimitiveRestartIndex();
-          IndexSet::ConstIterator<unsigned int> indices( m_indexSet, offset );
+          unsigned int pri = indexSet->getPrimitiveRestartIndex();
+          IndexSet::ConstIterator<IndexType> indices(indexSet, offset);
 
           unsigned int start = 0;
-          DP_ASSERT( ( indices[start] != pri ) && ( indices[start+1] != pri ) );
-          Vec3f edge1 = vertices[indices[start+1]] - vertices[indices[start]];
-          for ( unsigned int i=2 ; i<count ; i++ )
+          DP_ASSERT((indices[start] != pri) && (indices[start + 1] != pri));
+          Vec3f edge1 = vertices[indices[start + 1]] - vertices[indices[start]];
+          for (uint32_t i = 2; i < count; i++)
           {
-            if ( indices[i] == pri )
+            if (indices[i] == pri)
             {
-              DP_ASSERT( i+2 < count );
+              DP_ASSERT(i + 2 < count);
               start = i + 1;
-              DP_ASSERT( ( indices[start] != pri ) && ( indices[start+1] != pri ) );
-              edge1 = vertices[indices[start+1]] - vertices[indices[start]];
+              DP_ASSERT((indices[start] != pri) && (indices[start + 1] != pri));
+              edge1 = vertices[indices[start + 1]] - vertices[indices[start]];
               i += 2;   // advance to end of first triangle in next strip
             }
             else
@@ -873,10 +1039,21 @@ namespace dp
 
               //  and accumulate it to the three vertices of the facet
               normals[indices[start]] += faceNormal;
-              normals[indices[i-1]] += faceNormal;
+              normals[indices[i - 1]] += faceNormal;
               normals[indices[i]] += faceNormal;
             }
           }
+        }
+      };
+
+      void Primitive::calculateNormalsTriFan( Buffer::ConstIterator<Vec3f>::Type & vertices, std::vector<Vec3f> & normals )
+      {
+        unsigned int count  = getElementCount();
+        unsigned int offset = getElementOffset();
+
+        if ( m_indexSet )
+        {
+          dispatchCalculateNormals<calculateNormalsTriFanWithIndices>(vertices, m_indexSet, count, offset, normals);
         }
         else
         {
@@ -896,6 +1073,50 @@ namespace dp
         }
       }
 
+      struct calculateNormalsTriStripWithIndices
+      {
+        template <typename IndexType>
+        void eval(Buffer::ConstIterator<Vec3f>::Type const& vertices,
+                  dp::sg::core::IndexSetSharedPtr const& indexSet,
+                  uint32_t count,
+                  uint32_t offset,
+                  std::vector<Vec3f> & normals)
+        {
+          // calculate the normals for each facet
+          unsigned int pri = indexSet->getPrimitiveRestartIndex();
+          IndexSet::ConstIterator<IndexType> indices(indexSet, offset);
+
+          DP_ASSERT((indices[0] != pri) && (indices[1] != pri));
+          for (uint32_t i = 2, j = 0; i < count; i++, j++)
+          {
+            if (indices[i] == pri)
+            {
+              DP_ASSERT((indices[i + 1] != pri) && (indices[i + 2] != pri));
+              i += 2;   // advance to end of first triangle in next strip
+              j = ~0;   // reset j such that it's zero on next iteration
+            }
+            else
+            {
+              Vec3f faceNormal;
+              if (j & 1)
+              { // odd normals
+                faceNormal = (vertices[indices[i - 0]] - vertices[indices[i - 2]])
+                           ^ (vertices[indices[i - 1]] - vertices[indices[i - 2]]);
+              }
+              else
+              { // even normals
+                faceNormal = (vertices[indices[i - 1]] - vertices[indices[i - 2]])
+                           ^ (vertices[indices[i - 0]] - vertices[indices[i - 2]]);
+              }
+              for (uint32_t k = 0; k < 3; k++)
+              {
+                normals[indices[i - 2 + k]] += faceNormal;
+              }
+            }
+          }
+        }
+      };
+
       void Primitive::calculateNormalsTriStrip( Buffer::ConstIterator<Vec3f>::Type & vertices, std::vector<Vec3f> & normals )
       {
         unsigned int count  = getElementCount();
@@ -903,38 +1124,7 @@ namespace dp
 
         if ( m_indexSet )
         {
-          // calculate the normals for each facet
-          unsigned int pri = m_indexSet->getPrimitiveRestartIndex();
-          IndexSet::ConstIterator<unsigned int> indices( m_indexSet, offset );
-
-          DP_ASSERT( ( indices[0] != pri ) && ( indices[1] != pri ) );
-          for ( unsigned int i=2, j=0 ; i<count ; i++, j++ )
-          {
-            if ( indices[i] == pri )
-            {
-              DP_ASSERT( ( indices[i+1] != pri ) && ( indices[i+2] != pri ) );
-              i += 2;   // advance to end of first triangle in next strip
-              j = ~0;   // reset j such that it's zero on next iteration
-            }
-            else
-            {
-              Vec3f faceNormal;
-              if ( j & 1 )
-              { // odd normals
-                faceNormal =  ( vertices[indices[i-0]] - vertices[indices[i-2]] )
-                            ^ ( vertices[indices[i-1]] - vertices[indices[i-2]] );
-              }
-              else
-              { // even normals
-                faceNormal =  ( vertices[indices[i-1]] - vertices[indices[i-2]] )
-                            ^ ( vertices[indices[i-0]] - vertices[indices[i-2]] );
-              }
-              for ( unsigned int k=0 ; k<3 ; k++ )
-              {
-                normals[indices[i-2+k]] += faceNormal;
-              }
-            }
-          }
+          dispatchCalculateNormals<calculateNormalsTriStripWithIndices>(vertices, m_indexSet, count, offset, normals);
         }
         else
         {
@@ -1062,6 +1252,31 @@ namespace dp
         tangents[i] += dTex1[1] * edge0 - dTex0[1] * edge1;
       }
 
+
+      struct calculateTangentsQuadWithIndices
+      {
+        template <typename IndexType>
+        void eval(VertexAttributeSetSharedPtr const& vas,
+                  VertexAttributeSet::AttributeID tc,
+                  dp::sg::core::IndexSetSharedPtr const& indexSet,
+                  uint32_t count,
+                  uint32_t offset,
+                  std::vector<Vec3f> & tangents)
+        {
+          unsigned int pri = indexSet->getPrimitiveRestartIndex();
+          IndexSet::ConstIterator<IndexType> indices(indexSet, offset);
+
+          for (uint32_t i = 3; i < count; i += 4)
+          {
+            DP_ASSERT((indices[i - 3] != pri) && (indices[i - 2] != pri) && (indices[i - 1] != pri) && (indices[i] != pri));
+            calculateTangent(vas, tc, indices[i - 3], indices[i - 2], indices[i], tangents);
+            calculateTangent(vas, tc, indices[i - 2], indices[i - 1], indices[i - 3], tangents);
+            calculateTangent(vas, tc, indices[i - 1], indices[i], indices[i - 2], tangents);
+            calculateTangent(vas, tc, indices[i], indices[i - 3], indices[i - 1], tangents);
+          }
+        }
+      };
+
       void Primitive::calculateTangentsQuad( VertexAttributeSetSharedPtr const& vas, VertexAttributeSet::AttributeID tc, std::vector<Vec3f> & tangents )
       {
         unsigned int offset = getElementOffset();
@@ -1070,17 +1285,7 @@ namespace dp
 
         if ( m_indexSet )
         {
-          unsigned int pri = m_indexSet->getPrimitiveRestartIndex();
-          IndexSet::ConstIterator<unsigned int> indices( m_indexSet, offset );
-
-          for ( unsigned int i=3 ; i<count ; i+=4 )
-          {
-            DP_ASSERT( ( indices[i-3] != pri ) && ( indices[i-2] != pri ) && ( indices[i-1] != pri ) && ( indices[i] != pri ) );
-            calculateTangent( vas, tc, indices[i-3], indices[i-2], indices[i], tangents );
-            calculateTangent( vas, tc, indices[i-2], indices[i-1], indices[i-3], tangents );
-            calculateTangent( vas, tc, indices[i-1], indices[i], indices[i-2], tangents );
-            calculateTangent( vas, tc, indices[i], indices[i-3], indices[i-1], tangents );
-          }
+          dispatchCalculateTangents<calculateTangentsQuadWithIndices>(vas, tc, m_indexSet, count, offset, tangents);
         }
         else
         {
@@ -1094,6 +1299,36 @@ namespace dp
         }
       }
 
+
+      struct calculateTangentsQuadStripWithIndices
+      {
+        template <typename IndexType>
+        void eval(VertexAttributeSetSharedPtr const& vas,
+                  VertexAttributeSet::AttributeID tc,
+                  dp::sg::core::IndexSetSharedPtr const& indexSet,
+                  uint32_t count,
+                  uint32_t offset,
+                  std::vector<Vec3f> & tangents)
+        {
+          // calculate the tangents and binormals for each facet
+          unsigned int pri = indexSet->getPrimitiveRestartIndex();
+          IndexSet::ConstIterator<IndexType> indices(indexSet, offset);
+
+          for (uint32_t i = 3; i < count; i += 2)
+          {
+            DP_ASSERT((indices[i - 3] != pri) && (indices[i - 2] != pri) && (indices[i - 1] != pri) && (indices[i] != pri));
+            calculateTangent(vas, tc, indices[i - 3], indices[i - 2], indices[i - 1], tangents);
+            calculateTangent(vas, tc, indices[i - 2], indices[i], indices[i - 3], tangents);
+            calculateTangent(vas, tc, indices[i - 1], indices[i - 3], indices[i], tangents);
+            calculateTangent(vas, tc, indices[i], indices[i - 1], indices[i - 2], tangents);
+            if ((i + 1 < count) && (indices[i + 1] == pri))
+            {
+              i += 3;
+            }
+          }
+        }
+      };
+
       void Primitive::calculateTangentsQuadStrip( VertexAttributeSetSharedPtr const& vas, VertexAttributeSet::AttributeID tc, std::vector<Vec3f> & tangents )
       {
         unsigned int offset = getElementOffset();
@@ -1101,22 +1336,7 @@ namespace dp
 
         if ( m_indexSet )
         {
-          // calculate the tangents and binormals for each facet
-          unsigned int pri = m_indexSet->getPrimitiveRestartIndex();
-          IndexSet::ConstIterator<unsigned int> indices( m_indexSet, offset );
-
-          for ( unsigned int i=3 ; i<count ; i+=2 )
-          {
-            DP_ASSERT( ( indices[i-3] != pri ) && ( indices[i-2] != pri ) && ( indices[i-1] != pri ) && ( indices[i] != pri ) );
-            calculateTangent( vas, tc, indices[i-3], indices[i-2], indices[i-1], tangents );
-            calculateTangent( vas, tc, indices[i-2], indices[i], indices[i-3], tangents );
-            calculateTangent( vas, tc, indices[i-1], indices[i-3], indices[i], tangents );
-            calculateTangent( vas, tc, indices[i], indices[i-1], indices[i-2], tangents );
-            if ( ( i+1 < count ) && ( indices[i+1] == pri ) )
-            {
-              i += 3;
-            }
-          }
+          dispatchCalculateTangents<calculateTangentsQuadStripWithIndices>(vas, tc, m_indexSet, count, offset, tangents);
         }
         else
         {
@@ -1130,6 +1350,30 @@ namespace dp
         }
       }
 
+
+      struct calculateTangentsTriangleWithIndices
+      {
+        template <typename IndexType>
+        void eval(VertexAttributeSetSharedPtr const& vas,
+                  VertexAttributeSet::AttributeID tc,
+                  dp::sg::core::IndexSetSharedPtr const& indexSet,
+                  uint32_t count,
+                  uint32_t offset,
+                  std::vector<Vec3f> & tangents)
+        {
+          unsigned int pri = indexSet->getPrimitiveRestartIndex();
+          IndexSet::ConstIterator<IndexType> indices(indexSet, offset);
+
+          for (uint32_t i = 2; i < count; i += 3)
+          {
+            DP_ASSERT((indices[i - 2] != pri) && (indices[i - 1] != pri) && (indices[i] != pri));
+            calculateTangent(vas, tc, indices[i - 2], indices[i - 1], indices[i], tangents);
+            calculateTangent(vas, tc, indices[i - 1], indices[i], indices[i - 2], tangents);
+            calculateTangent(vas, tc, indices[i], indices[i - 2], indices[i - 1], tangents);
+          }
+        }
+      };
+
       void Primitive::calculateTangentsTriangle( VertexAttributeSetSharedPtr const& vas, VertexAttributeSet::AttributeID tc, std::vector<Vec3f> & tangents )
       {
         unsigned int offset = getElementOffset();
@@ -1138,16 +1382,7 @@ namespace dp
 
         if ( m_indexSet )
         {
-          unsigned int pri = m_indexSet->getPrimitiveRestartIndex();
-          IndexSet::ConstIterator<unsigned int> indices( m_indexSet, offset );
-
-          for ( unsigned int i=2 ; i<count ; i+=3 )
-          {
-            DP_ASSERT( ( indices[i-2] != pri ) && ( indices[i-1] != pri ) && ( indices[i] != pri ) );
-            calculateTangent( vas, tc, indices[i-2], indices[i-1], indices[i], tangents );
-            calculateTangent( vas, tc, indices[i-1], indices[i], indices[i-2], tangents );
-            calculateTangent( vas, tc, indices[i], indices[i-2], indices[i-1], tangents );
-          }
+          dispatchCalculateTangents<calculateTangentsTriangleWithIndices>(vas, tc, m_indexSet, count, offset, tangents);
         }
         else
         {
@@ -1160,6 +1395,39 @@ namespace dp
         }
       }
 
+
+      struct calculateTangentsTriFanWithIndices
+      {
+        template <typename IndexType>
+        void eval(VertexAttributeSetSharedPtr const& vas,
+                  VertexAttributeSet::AttributeID tc,
+                  dp::sg::core::IndexSetSharedPtr const& indexSet,
+                  uint32_t count,
+                  uint32_t offset,
+                  std::vector<Vec3f> & tangents)
+        {
+          // calculate the tangents for each facet
+          unsigned int pri = indexSet->getPrimitiveRestartIndex();
+          IndexSet::ConstIterator<IndexType> indices(indexSet, offset);
+
+          for (uint32_t i = 2, j = 0; i < count; i++)
+          {
+            if (indices[i] == pri)
+            {
+              j = i + 1;
+              i += 2;
+            }
+            else
+            {
+              DP_ASSERT((indices[j] != pri) && (indices[i - 1] != pri));
+              calculateTangent(vas, tc, indices[j], indices[i - 1], indices[i], tangents);
+              calculateTangent(vas, tc, indices[i - 1], indices[i], indices[j], tangents);
+              calculateTangent(vas, tc, indices[i], indices[j], indices[i - 1], tangents);
+            }
+          }
+        }
+      };
+
       void Primitive::calculateTangentsTriFan( VertexAttributeSetSharedPtr const& vas, VertexAttributeSet::AttributeID tc, std::vector<Vec3f> & tangents )
       {
         unsigned int offset = getElementOffset();
@@ -1167,25 +1435,7 @@ namespace dp
 
         if ( m_indexSet )
         {
-          // calculate the tangents for each facet
-          unsigned int pri = m_indexSet->getPrimitiveRestartIndex();
-          IndexSet::ConstIterator<unsigned int> indices( m_indexSet, offset );
-
-          for ( unsigned int i=2, j=0 ; i<count ; i++ )
-          {
-            if ( indices[i] == pri )
-            {
-              j = i+1;
-              i += 2;
-            }
-            else
-            {
-              DP_ASSERT( ( indices[j] != pri ) && ( indices[i-1] != pri ) );
-              calculateTangent( vas, tc, indices[j], indices[i-1], indices[i], tangents );
-              calculateTangent( vas, tc, indices[i-1], indices[i], indices[j], tangents );
-              calculateTangent( vas, tc, indices[i], indices[j], indices[i-1], tangents );
-            }
-          }
+          dispatchCalculateTangents<calculateTangentsTriFanWithIndices>(vas, tc, m_indexSet, count, offset, tangents);
         }
         else
         {
@@ -1198,6 +1448,49 @@ namespace dp
         }
       }
 
+
+      struct calculateTangentsTriStripWithIndices
+      {
+        template <typename IndexType>
+        void eval(VertexAttributeSetSharedPtr const& vas,
+                  VertexAttributeSet::AttributeID tc,
+                  dp::sg::core::IndexSetSharedPtr const& indexSet,
+                  uint32_t count,
+                  uint32_t offset,
+                  std::vector<Vec3f> & tangents)
+        {
+          // calculate the tangents for each facet
+          unsigned int pri = indexSet->getPrimitiveRestartIndex();
+          IndexSet::ConstIterator<IndexType> indices(indexSet, offset);
+
+          DP_ASSERT((indices[0] != pri) && (indices[1] != pri));
+          for (uint32_t i = 2, j = 0; i < count; i++, j++)
+          {
+            if (indices[i] == pri)
+            {
+              i += 2;   // advance to end of first triangle in next strip
+              j = ~0;   // reset j such that it's zero on next iteration
+            }
+            else
+            {
+              DP_ASSERT((indices[i - 2] != pri) && (indices[i - 1] != pri));
+              if (j & 1)
+              { // odd triangle
+                calculateTangent(vas, tc, indices[i - 2], indices[i], indices[i - 1], tangents);
+                calculateTangent(vas, tc, indices[i - 1], indices[i - 2], indices[i], tangents);
+                calculateTangent(vas, tc, indices[i], indices[i - 1], indices[i - 2], tangents);
+              }
+              else
+              { // even triangle
+                calculateTangent(vas, tc, indices[i - 2], indices[i - 1], indices[i], tangents);
+                calculateTangent(vas, tc, indices[i - 1], indices[i], indices[i - 2], tangents);
+                calculateTangent(vas, tc, indices[i], indices[i - 2], indices[i - 1], tangents);
+              }
+            }
+          }
+        }
+      };
+
       void Primitive::calculateTangentsTriStrip( VertexAttributeSetSharedPtr const& vas, VertexAttributeSet::AttributeID tc
                                                , std::vector<Vec3f> & tangents )
       {
@@ -1206,35 +1499,7 @@ namespace dp
 
         if ( m_indexSet )
         {
-          // calculate the tangents for each facet
-          unsigned int pri = m_indexSet->getPrimitiveRestartIndex();
-          IndexSet::ConstIterator<unsigned int> indices( m_indexSet, offset );
-
-          DP_ASSERT( ( indices[0] != pri ) && ( indices[1] != pri ) );
-          for ( unsigned int i=2, j=0 ; i<count ; i++, j++ )
-          {
-            if ( indices[i] == pri )
-            {
-              i += 2;   // advance to end of first triangle in next strip
-              j = ~0;   // reset j such that it's zero on next iteration
-            }
-            else
-            {
-              DP_ASSERT( ( indices[i-2] != pri ) && ( indices[i-1] != pri ) );
-              if ( j & 1 )
-              { // odd triangle
-                calculateTangent( vas, tc, indices[i-2], indices[i], indices[i-1], tangents );
-                calculateTangent( vas, tc, indices[i-1], indices[i-2], indices[i], tangents );
-                calculateTangent( vas, tc, indices[i], indices[i-1], indices[i-2], tangents );
-              }
-              else
-              { // even triangle
-                calculateTangent( vas, tc, indices[i-2], indices[i-1], indices[i], tangents );
-                calculateTangent( vas, tc, indices[i-1], indices[i], indices[i-2], tangents );
-                calculateTangent( vas, tc, indices[i], indices[i-2], indices[i-1], tangents );
-              }
-            }
-          }
+          dispatchCalculateTangents<calculateTangentsTriStripWithIndices>(vas, tc, m_indexSet, count, offset, tangents);
         }
         else
         {
@@ -1259,6 +1524,38 @@ namespace dp
       void Primitive::generateTangentSpace( VertexAttributeSet::AttributeID tc, VertexAttributeSet::AttributeID tg, VertexAttributeSet::AttributeID bn, bool overwrite )
       {
         calculateTangentSpace( tc, tg, bn, overwrite );
+      }
+
+      template <typename IndexType>
+      void initTangentSpace(IndexSetSharedPtr const& indexSet,
+                            uint32_t count,
+                            uint32_t offset,
+                            std::vector<dp::math::Vec3f> &tangents)
+      {
+        IndexSet::ConstIterator<IndexType> indices(indexSet, offset);
+        for (uint32_t i = 0; i < count; i++)
+        {
+          tangents[indices[i]] = Vec3f(0.0f, 0.0f, 0.0f);
+        }
+      }
+
+      template <typename IndexType>
+      void normalizeTangentsAndComputeBinormals(IndexSetSharedPtr const& indexSet,
+                                              uint32_t count,
+                                              uint32_t offset,
+                                              Buffer::ConstIterator<Vec3f>::Type normals,
+                                              std::vector<dp::math::Vec3f> &tangents,
+                                              std::vector<dp::math::Vec3f> &binormals)
+      {
+        IndexSet::ConstIterator<IndexType> indices(indexSet, offset);
+        for (uint32_t i = 0; i < count; i++)
+        {
+          IndexType idx = indices[i];
+          tangents[idx].normalize();
+          tangents[idx].orthonormalize(normals[idx]);
+          //  the binormal is orthogonal to the normal and the tangent
+          binormals[idx] = normals[idx] ^ tangents[idx];
+        }
       }
 
       void Primitive::calculateTangentSpace( VertexAttributeSet::AttributeID tc, VertexAttributeSet::AttributeID tg, VertexAttributeSet::AttributeID bn, bool overwrite )
@@ -1301,10 +1598,28 @@ namespace dp
           unsigned int count  = getElementCount();
           if ( m_indexSet )
           {
-            IndexSet::ConstIterator<unsigned int> indices( m_indexSet, offset );
-            for ( unsigned int i=0 ; i<count ; i++ )
+            switch (m_indexSet->getIndexDataType())
             {
-              tangents[indices[i]] = Vec3f( 0.0f, 0.0f, 0.0f );
+            case dp::DataType::INT_8:
+              initTangentSpace<int8_t>(m_indexSet, count, offset, tangents);
+              break;
+            case dp::DataType::INT_16:
+              initTangentSpace<int16_t>(m_indexSet, count, offset, tangents);
+              break;
+            case dp::DataType::INT_32:
+              initTangentSpace<int32_t>(m_indexSet, count, offset, tangents);
+              break;
+            case dp::DataType::UNSIGNED_INT_8:
+              initTangentSpace<uint8_t>(m_indexSet, count, offset, tangents);
+              break;
+            case dp::DataType::UNSIGNED_INT_16:
+              initTangentSpace<uint16_t>(m_indexSet, count, offset, tangents);
+              break;
+            case dp::DataType::UNSIGNED_INT_32:
+              initTangentSpace<uint32_t>(m_indexSet, count, offset, tangents);
+              break;
+            default:
+              DP_ASSERT(!"unsupported datatype");
             }
           }
           else
@@ -1357,14 +1672,29 @@ namespace dp
           Buffer::ConstIterator<Vec3f>::Type normals = m_vertexAttributeSet->getNormals();
           if ( m_indexSet )
           {
-            IndexSet::ConstIterator<unsigned int> indices( m_indexSet, offset );
-            for ( unsigned int i=0 ; i<count ; i++ )
+            // calculate the normals, depending on primitive type
+            switch (m_indexSet->getIndexDataType())
             {
-              unsigned int idx = indices[i];
-              tangents[idx].normalize();
-              tangents[idx].orthonormalize( normals[idx] );
-              //  the binormal is orthogonal to the normal and the tangent
-              binormals[idx] = normals[idx] ^ tangents[idx];
+            case dp::DataType::INT_8:
+              normalizeTangentsAndComputeBinormals<int8_t>(m_indexSet, count, offset, normals, tangents, binormals);
+              break;
+            case dp::DataType::INT_16:
+              normalizeTangentsAndComputeBinormals<int16_t>(m_indexSet, count, offset, normals, tangents, binormals);
+              break;
+            case dp::DataType::INT_32:
+              normalizeTangentsAndComputeBinormals<int32_t>(m_indexSet, count, offset, normals, tangents, binormals);
+              break;
+            case dp::DataType::UNSIGNED_INT_8:
+              normalizeTangentsAndComputeBinormals<uint8_t>(m_indexSet, count, offset, normals, tangents, binormals);
+              break;
+            case dp::DataType::UNSIGNED_INT_16:
+              normalizeTangentsAndComputeBinormals<uint16_t>(m_indexSet, count, offset, normals, tangents, binormals);
+              break;
+            case dp::DataType::UNSIGNED_INT_32:
+              normalizeTangentsAndComputeBinormals<uint32_t>(m_indexSet, count, offset, normals, tangents, binormals);
+              break;
+            default:
+              DP_ASSERT(!"unsupported datatype");
             }
           }
           else
