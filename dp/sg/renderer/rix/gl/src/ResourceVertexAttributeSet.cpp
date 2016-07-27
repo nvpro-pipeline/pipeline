@@ -83,6 +83,7 @@ namespace dp
             std::vector<ResourceBufferSharedPtr> resourceBuffers;
 
             unsigned int currentStream = 0;
+            unsigned int nonStreamedAttributes = 0;
 
             std::vector<dp::sg::core::BufferSharedPtr> streams;
 
@@ -93,23 +94,35 @@ namespace dp
               if ( va.getBuffer() && va.getVertexDataCount() == numVertices )
               {
                 ResourceBufferSharedPtr resourceBuffer = ResourceBuffer::get(va.getBuffer(), m_resourceManager );
-                //resourceVertexAttributeSet->m_resourceBuffers.push_back( resourceBuffer );
                 resourceBuffers.push_back( resourceBuffer );
 
-                std::vector<dp::sg::core::BufferSharedPtr>::iterator it = std::find( streams.begin(), streams.end(), va.getBuffer() );
-                if ( it == streams.end() )
+                // detect streams only with base offset == 0
+                // a more sophisticated detection would try to find buffers with the same stride
+                // whose offsets are all in the range [min(buffers.offset), min(buffers.offset)+stride-attributeSize]
+                if (  va.getVertexDataOffsetInBytes() < va.getVertexDataStrideInBytes()
+                   && getSizeOf(va.getVertexDataType()) != va.getVertexDataStrideInBytes())
                 {
-                  currentStream = static_cast<unsigned int>(streams.size());
-                  streams.push_back( va.getBuffer() );
+                  std::vector<dp::sg::core::BufferSharedPtr>::iterator it = std::find( streams.begin(), streams.end(), va.getBuffer() );
+                  if ( it == streams.end() )
+                  {
+                    currentStream = static_cast<unsigned int>(streams.size());
+                    streams.push_back( va.getBuffer() );
+                  }
+                  else
+                  {
+                    currentStream = static_cast<unsigned int>(std::distance( streams.begin(), it ));
+                  }
                 }
                 else
                 {
-                  currentStream = static_cast<unsigned int>(std::distance( streams.begin(), it ));
+                  currentStream = streams.size() + nonStreamedAttributes;
+                  ++nonStreamedAttributes;
                 }
 
-                vertexInfos.push_back( dp::rix::core::VertexFormatInfo( i, va.getVertexDataType(), va.getVertexDataSize(), false, currentStream, va.getVertexDataOffsetInBytes(), va.getVertexDataStrideInBytes()));
+                size_t attributeOffset = va.getVertexDataOffsetInBytes() % va.getVertexDataStrideInBytes();
+                vertexInfos.push_back( dp::rix::core::VertexFormatInfo( i, va.getVertexDataType(), va.getVertexDataSize(), false, currentStream, attributeOffset, va.getVertexDataStrideInBytes()));
 
-                renderer->vertexDataSet( vertexData, currentStream, resourceBuffer->m_bufferHandle, 0, numVertices );
+                renderer->vertexDataSet( vertexData, currentStream, resourceBuffer->m_bufferHandle, va.getVertexDataOffsetInBytes() - attributeOffset, numVertices );
               }
 
             }
