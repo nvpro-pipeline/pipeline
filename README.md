@@ -47,6 +47,7 @@ This project is mainly developed using NVIDIA graphics hardware on Windows 7 x64
 
 * For Windows
   * Clone the repository.
+  * Execute git submodule update --init --recursive to get some 3rdparty dependencies.
   * Launch the Visual Studio Desktop Command line for the compiler and architecture you want to build.
   * Launch 3rdPartyBuild.cmd. This will download and/or build all required dependencies. This might take some time.
   * Optional: Install Qt from http://qt.io. The build system will detect the Qt version installed through the registry keys created by the installer of the qt-project.
@@ -56,6 +57,7 @@ This project is mainly developed using NVIDIA graphics hardware on Windows 7 x64
   * Open the solution generated in the builds folder and rebuild all.
 * For Linux
   * Clone the repository.
+  * Execute git submodule update --init --recursive to get some 3rdparty dependencies.
   * Install devil, glut, and boost system and filesystem libraries.
   * Create a folder named "builds" below the nvpro-pipeline project directory.
   * Change directory to the folder named "builds".

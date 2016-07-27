@@ -151,6 +151,7 @@ include_directories(${Boost_INCLUDE_DIR})
 #  add_definitions("-DHAVE_NVPMAPI")
 #endif()
 
+add_subdirectory(3rdparty)
 add_subdirectory( dp )
 
 if( WIN32 AND BUILD_DPT )
