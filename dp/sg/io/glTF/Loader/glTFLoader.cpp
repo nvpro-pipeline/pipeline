@@ -280,7 +280,7 @@ uint32_t getNumberOfComponents(std::string const &type)
   if (type == "MAT2")
     return 4;
   if (type == "MAT3")
-    return 12;
+    return 9;
   if (type == "MAT4")
     return 16;
   throw std::runtime_error("unknown datatype");
