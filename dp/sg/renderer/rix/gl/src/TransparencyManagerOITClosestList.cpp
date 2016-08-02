@@ -180,14 +180,16 @@ namespace dp
             glGetQueryObjectuiv( m_samplesPassedQuery, GL_QUERY_RESULT, &counter );
 
             unsigned int fragmentsBufferSize = counter * 4 * sizeof(GLuint);
+
+            bool result = true;
             if ( m_fragmentsTextureGL->getBuffer()->getSize() < fragmentsBufferSize )
             {
               m_fragmentsCountFactor = (float)counter / ( getViewportSize()[0] * getViewportSize()[1] );
               m_fragmentsTextureGL->getBuffer()->setSize(fragmentsBufferSize);
-              return( false );
+              result = false;
             }
 
-            return( TransparencyManager::endTransparentPass() );
+            return( TransparencyManager::endTransparentPass() && result);
           }
 
           void TransparencyManagerOITClosestList::initializeParameterContainer( dp::rix::core::Renderer * renderer, dp::math::Vec2ui const & viewportSize )
