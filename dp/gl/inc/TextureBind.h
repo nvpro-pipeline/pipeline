@@ -260,8 +260,27 @@ namespace dp
       glTexParameteri( target, GL_TEXTURE_WRAP_R, wrapR );
     }
 
+    namespace
+    {
+      inline GLenum getTextureBindingBaseTarget(GLenum target)
+      {
+        switch (target)
+        {
+        case GL_TEXTURE_CUBE_MAP_POSITIVE_X:
+        case GL_TEXTURE_CUBE_MAP_NEGATIVE_X:
+        case GL_TEXTURE_CUBE_MAP_POSITIVE_Y:
+        case GL_TEXTURE_CUBE_MAP_NEGATIVE_Y:
+        case GL_TEXTURE_CUBE_MAP_POSITIVE_Z:
+        case GL_TEXTURE_CUBE_MAP_NEGATIVE_Z:
+          return(GL_TEXTURE_CUBE_MAP);
+        default:
+          return target;
+        }
+      }
+    }
+
     inline TextureBinding::TextureBinding( GLenum target, GLuint texture )
-      : m_target( target )
+      : m_target( getTextureBindingBaseTarget(target) )
     {
       glGetIntegerv( getBindingTargetFromTarget( target ), &m_oldBinding );
       glBindTexture( m_target, texture );
