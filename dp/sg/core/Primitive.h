@@ -110,10 +110,10 @@ namespace dp
       {
         public:
           DP_SG_CORE_API static PrimitiveSharedPtr create( PrimitiveType pt );
-
           DP_SG_CORE_API static PrimitiveSharedPtr create( PatchesType pt, PatchesMode pm = PatchesMode::TRIANGLES );
 
           DP_SG_CORE_API virtual HandledObjectSharedPtr clone() const;
+          DP_SG_CORE_API PrimitiveSharedPtr cloneAs(PrimitiveType pt);
 
           DP_SG_CORE_API virtual ~Primitive();
 

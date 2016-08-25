@@ -604,18 +604,15 @@ namespace dp
             }
             DP_ASSERT( newPrimitiveType != PrimitiveType::UNINITIALIZED )
             DP_ASSERT( !newIndices.empty() );
-            IndexSetSharedPtr newIndexSet = IndexSet::create();
-            if ( p->getIndexSet() )
-            {
-              *newIndexSet = *p->getIndexSet();
-            }
+
+            IndexSetSharedPtr newIndexSet = p->getIndexSet() ? std::static_pointer_cast<dp::sg::core::IndexSet>(p->getIndexSet()->clone()) : IndexSet::create();
             newIndexSet->setData( &newIndices[0], dp::checked_cast<unsigned int>(newIndices.size()) );
             newIndexSet->setPrimitiveRestartIndex( ~0 );
-            PrimitiveSharedPtr primitive = Primitive::create( newPrimitiveType );
-            *primitive = *p;
-            primitive->setInstanceCount( p->getInstanceCount() );
-            primitive->setVertexAttributeSet( p->getVertexAttributeSet() );
-            primitive->setIndexSet( newIndexSet );
+
+            PrimitiveSharedPtr primitive = p->cloneAs(newPrimitiveType);
+            primitive->setIndexSet(newIndexSet);
+            primitive->setElementRange(0, newIndexSet->getNumberOfIndices());
+
             it = m_primitiveMap.insert( std::make_pair( p, primitive ) ).first;
           }
           m_primitive = it->second;

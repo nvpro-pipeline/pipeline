@@ -126,7 +126,14 @@ namespace dp
         return( std::shared_ptr<Primitive>( new Primitive( *this ) ) );
       }
 
-      Primitive::Primitive( PrimitiveType primitiveType, PatchesType patchesType, PatchesMode patchesMode )
+      PrimitiveSharedPtr Primitive::cloneAs(PrimitiveType primitiveType)
+      {
+        PrimitiveSharedPtr primitive(new Primitive(*this));
+        primitive->m_primitiveType = primitiveType;
+        return primitive;
+      }
+
+      Primitive::Primitive(PrimitiveType primitiveType, PatchesType patchesType, PatchesMode patchesMode)
         : m_primitiveType( primitiveType )
         , m_patchesType( patchesType )
         , m_patchesMode( patchesMode )

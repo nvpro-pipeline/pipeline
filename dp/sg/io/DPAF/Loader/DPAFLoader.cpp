@@ -1192,7 +1192,7 @@ bool  DPAFLoader::readLightSourceToken( LightSourceSharedPtr const& light, const
   {
     light->setEnabled( readBool() );
   }
-  else if ( token == "lightEffect" )
+  else if ( token == "lightPipeline" )
   {
     string name = readName( getNextToken() );
     if ( m_pipelineData.find( name ) != m_pipelineData.end() )
@@ -1201,7 +1201,7 @@ bool  DPAFLoader::readLightSourceToken( LightSourceSharedPtr const& light, const
     }
     else
     {
-      onUndefinedToken( "LightSource.lightEffect", token );
+      onUndefinedToken( "LightSource.lightPipeline", token );
     }
   }
   else if ( token == "shadowCasting" )
