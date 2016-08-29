@@ -3926,7 +3926,7 @@ bool  WRLLoader::isValidScaling( PositionInterpolatorSharedPtr const& pPositionI
 
 bool  WRLLoader::isValidScaling( const SFVec3f &sfVec3f ) const
 {
-  return( ( FLT_EPSILON < sfVec3f[0] ) && ( FLT_EPSILON < sfVec3f[1] ) && ( FLT_EPSILON < sfVec3f[2] ) );
+  return( ( FLT_EPSILON < abs(sfVec3f[0]) ) && ( FLT_EPSILON < abs(sfVec3f[1]) ) && ( FLT_EPSILON < abs(sfVec3f[2]) ) );
 }
 
 SceneSharedPtr WRLLoader::load( string const& filename, dp::util::FileFinder const& fileFinder, dp::sg::ui::ViewStateSharedPtr & viewState )
