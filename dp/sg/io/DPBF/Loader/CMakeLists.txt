@@ -36,4 +36,4 @@ target_link_libraries( DPBFLoader
   DPSgIO
 )
 
-set_target_properties( DPBFLoader PROPERTIES SUFFIX ".nxm" FOLDER "Loaders" )
+set_target_properties( DPBFLoader PROPERTIES SUFFIX ".nxm" FOLDER "DP/SG/IO" )

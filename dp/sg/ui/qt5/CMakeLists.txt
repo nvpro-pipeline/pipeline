@@ -63,7 +63,7 @@ if( Qt5Widgets_FOUND )
 
   CopyGLEW( DPSgUIQt5 "${DP_BINARY_PATH}" )
 
-  set_target_properties( DPSgUIQt5 PROPERTIES FOLDER "SG" )
+  set_target_properties( DPSgUIQt5 PROPERTIES FOLDER "DP/SG/UI" )
 else()
   message("Qt5Widgets not found, skipping dp::sg::ui::qt5")
 endif()

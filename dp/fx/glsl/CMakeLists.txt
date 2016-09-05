@@ -45,7 +45,7 @@ add_library(DPFxGLSL STATIC
   ${SOURCES}
 )
 
-set_target_properties( DPFxGLSL PROPERTIES FOLDER "Fx" )
+set_target_properties( DPFxGLSL PROPERTIES FOLDER "DP/Fx" )
 
 if(UNIX)
   set_target_properties( DPFxGLSL PROPERTIES COMPILE_FLAGS -fPIC )

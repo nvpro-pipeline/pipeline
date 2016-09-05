@@ -37,4 +37,4 @@ target_link_libraries( OBJSaver
   DPSgIO
 )
 
-set_target_properties( OBJSaver PROPERTIES SUFFIX ".nxm" FOLDER "Savers" )
+set_target_properties( OBJSaver PROPERTIES SUFFIX ".nxm" FOLDER "DP/SG/IO" )

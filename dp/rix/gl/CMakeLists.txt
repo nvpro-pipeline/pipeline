@@ -162,5 +162,5 @@ if(WIN32)
   CopyGLEW( RiXGL "${DP_BINARY_PATH}" )
 endif()
 
-set_target_properties( RiXGL PROPERTIES SUFFIX ".rdr" FOLDER "RiX" )
+set_target_properties( RiXGL PROPERTIES SUFFIX ".rdr" FOLDER "DP/RiX" )
 

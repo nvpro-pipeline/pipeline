@@ -40,4 +40,4 @@ target_link_libraries( PLYLoader
   DPSgIO
 )
 
-set_target_properties( PLYLoader PROPERTIES SUFFIX ".nxm" FOLDER "Loaders" )
+set_target_properties( PLYLoader PROPERTIES SUFFIX ".nxm" FOLDER "DP/SG/IO" )

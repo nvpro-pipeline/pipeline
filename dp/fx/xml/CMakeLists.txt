@@ -33,7 +33,7 @@ if (TINYXML_FOUND)
 
   target_link_libraries( DPFxXML DPUtil DPFxGLSL ${TINYXML_LIBRARIES} )
 
-  set_target_properties( DPFxXML PROPERTIES FOLDER "Fx" )
+  set_target_properties( DPFxXML PROPERTIES FOLDER "DP/Fx" )
 
   if(UNIX)
     set_target_properties( DPFxXML PROPERTIES COMPILE_FLAGS -fPIC )

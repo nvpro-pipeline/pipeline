@@ -40,4 +40,4 @@ target_link_libraries( DPAFSaver
   DPSgIO
 )
 
-set_target_properties( DPAFSaver PROPERTIES SUFFIX ".nxm" FOLDER "Savers" )
+set_target_properties( DPAFSaver PROPERTIES SUFFIX ".nxm" FOLDER "DP/SG/IO" )

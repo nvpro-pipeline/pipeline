@@ -57,6 +57,6 @@ add_library( DPSgXbar OBJECT
   ${XBAR_PRIVATE_HEADERS}
 )
 
-set_target_properties( DPSgXbar PROPERTIES FOLDER "SG" )
+set_target_properties( DPSgXbar PROPERTIES FOLDER "DP/SG/Xbar" )
 
 add_subdirectory( culling )

@@ -79,4 +79,6 @@ target_link_libraries( DPGL
   ${Boost_LIBRARIES}
 )
 
+set_target_properties( DPGL PROPERTIES FOLDER "DP" )
+
 CopyGLEW( DPGL "${DP_BINARY_PATH}" )

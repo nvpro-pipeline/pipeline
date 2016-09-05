@@ -49,7 +49,7 @@ if (TINYXML_FOUND)
     set_target_properties( XMLLoader PROPERTIES LINK_FLAGS_DEBUG "/NODEFAULTLIB:msvcrt" )
   endif(WIN32)
 
-  set_target_properties( XMLLoader PROPERTIES SUFFIX ".nxm" FOLDER "Loaders")
+  set_target_properties( XMLLoader PROPERTIES SUFFIX ".nxm" FOLDER "DP/SG/IO")
 else()
   message("TinyXML not found, disabling XMLLoader")
 endif()

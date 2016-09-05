@@ -132,7 +132,7 @@ target_link_libraries( DPSgCore
   DPTransform
 )
 
-set_target_properties( DPSgCore PROPERTIES FOLDER "SG" )
+set_target_properties( DPSgCore PROPERTIES FOLDER "DP/SG" )
 
 if( BUILD_DPT )
 #  add_subdirectory( test )

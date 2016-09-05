@@ -120,7 +120,7 @@ target_link_libraries( DPSgRdrRiXGL
   ${NV_TOOLS_EXT_LIB}
 )
 
-set_target_properties( DPSgRdrRiXGL PROPERTIES FOLDER "SG" )
+set_target_properties( DPSgRdrRiXGL PROPERTIES FOLDER "DP/SG/Renderer" )
 
 CopyNV_TOOLS_EXT( DPSgRdrRiXGL )
 

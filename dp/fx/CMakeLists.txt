@@ -81,7 +81,7 @@ target_link_libraries( DPFx DPFxGLSL DP DPUtil ${TINYXML_LIBS} )
 
 set_property(TARGET DPFx PROPERTY LINK_INTERFACE_LIBRARIES "")
 
-set_target_properties( DPFx PROPERTIES FOLDER "Fx" )
+set_target_properties( DPFx PROPERTIES FOLDER "DP/Fx" )
 if (WIN32)
   if (LARGE_ADDRESS_AWARE)
     set_target_properties( DPFx PROPERTIES LINK_FLAGS /LARGEADDRESSAWARE )

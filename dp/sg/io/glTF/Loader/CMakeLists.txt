@@ -59,7 +59,7 @@ if (TARGET jsoncpp_lib_static)
     set_target_properties( glTFLoader PROPERTIES LINK_FLAGS_DEBUG "/NODEFAULTLIB:msvcrt" )
   endif(WIN32)
 
-  set_target_properties( glTFLoader PROPERTIES SUFFIX ".nxm" FOLDER "Loaders")
+  set_target_properties( glTFLoader PROPERTIES SUFFIX ".nxm" FOLDER "DP/SG/IO")
 else()
   message("jsoncpp not found, disabling glTFLoader")
 endif()

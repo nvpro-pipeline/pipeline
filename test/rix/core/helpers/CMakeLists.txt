@@ -40,4 +40,4 @@ target_link_libraries( DPHelpers
   DPMath
 )
   
-set_target_properties( DPHelpers PROPERTIES FOLDER "DPT/RiX/Core")
+set_target_properties( DPHelpers PROPERTIES FOLDER "test/rix/core")

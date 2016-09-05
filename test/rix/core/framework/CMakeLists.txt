@@ -34,7 +34,7 @@ add_library( DPTRiX SHARED
    ${DPTRIX_PUBLIC_HEADERS}
 )
 
-set_target_properties( DPTRiX PROPERTIES FOLDER "DPT/RiX/Core" )
+set_target_properties( DPTRiX PROPERTIES FOLDER "test/rix/core" )
 
 target_link_libraries( DPTRiX
   DPTcore

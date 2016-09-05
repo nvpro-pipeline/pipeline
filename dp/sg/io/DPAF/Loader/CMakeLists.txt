@@ -39,4 +39,4 @@ target_link_libraries( DPAFLoader
   DPSgIO
 )
 
-set_target_properties( DPAFLoader PROPERTIES SUFFIX ".nxm" FOLDER "Loaders" )
+set_target_properties( DPAFLoader PROPERTIES SUFFIX ".nxm" FOLDER "DP/SG/IO" )

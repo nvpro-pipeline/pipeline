@@ -44,4 +44,4 @@ target_link_libraries( DPSgGenerator
   DPSgIO
 )
 
-set_target_properties( DPSgGenerator PROPERTIES FOLDER "SG" )
+set_target_properties( DPSgGenerator PROPERTIES FOLDER "DP/SG" )

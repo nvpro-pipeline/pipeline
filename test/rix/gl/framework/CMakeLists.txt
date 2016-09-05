@@ -41,7 +41,7 @@ if (GLUT_FOUND)
      ${DPTRIXGL_PUBLIC_HEADERS}
   )
 
-  set_target_properties( DPTRiXGL PROPERTIES SUFFIX ".bkd" FOLDER "DPT/RiX/GL" )
+  set_target_properties( DPTRiXGL PROPERTIES SUFFIX ".bkd" FOLDER "test/rix/gl" )
 
   target_link_libraries( DPTRiXGL 
     ${GLUT_LIBRARIES}

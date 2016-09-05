@@ -56,7 +56,7 @@ if ( MDL_SDK_FOUND AND TINYXML_FOUND )
 
   CopyMDL_SDK( DPFxMDL )
   
-  set_target_properties( DPFxMDL PROPERTIES FOLDER "Fx" )
+  set_target_properties( DPFxMDL PROPERTIES FOLDER "DP/Fx" )
 
   if(UNIX)
     set_target_properties( DPFxMDL PROPERTIES COMPILE_FLAGS -fPIC )

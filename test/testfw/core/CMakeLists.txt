@@ -72,4 +72,4 @@ target_link_libraries( DPTcore
 
 add_dependencies( DPTcore DPUtil )
 
-set_target_properties( DPTcore PROPERTIES FOLDER "DPT")
+set_target_properties( DPTcore PROPERTIES FOLDER "test/testfw")

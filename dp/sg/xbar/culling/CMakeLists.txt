@@ -45,5 +45,5 @@ target_link_libraries( DPSgXbarCulling
   DPCullingOpenGL
 )
 
-set_target_properties( DPSgXbarCulling PROPERTIES FOLDER "SG/XBAR" )
+set_target_properties( DPSgXbarCulling PROPERTIES FOLDER "DP/SG/Xbar" )
 set_target_properties( DPSgXbarCulling PROPERTIES COMPILE_DEFINITIONS DP_SG_XBAR_CULLING_EXPORTS )

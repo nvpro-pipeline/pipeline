@@ -51,7 +51,7 @@ target_link_libraries( DPCullingOpenGL
 
 set_property(TARGET DPCullingOpenGL PROPERTY LINK_INTERFACE_LIBRARIES "")
 
-set_target_properties( DPCullingOpenGL PROPERTIES FOLDER "Culling" )
+set_target_properties( DPCullingOpenGL PROPERTIES FOLDER "DP/Culling" )
 
 if(UNIX)
   set_target_properties( DPCullingOpenGL PROPERTIES COMPILE_FLAGS -fPIC )

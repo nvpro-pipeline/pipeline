@@ -37,4 +37,4 @@ target_link_libraries( ILTexLoader
   ${IL_LIBRARIES}
 )
 
-set_target_properties( ILTexLoader PROPERTIES SUFFIX ".nxm" FOLDER "Loaders" )
+set_target_properties( ILTexLoader PROPERTIES SUFFIX ".nxm" FOLDER "DP/SG/IO" )

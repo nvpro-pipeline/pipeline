@@ -41,5 +41,5 @@ if(WIN32)
       DPSgIO
     )
 
-    set_target_properties( CSFSaver PROPERTIES SUFFIX ".nxm" FOLDER "Savers" )
+    set_target_properties( CSFSaver PROPERTIES SUFFIX ".nxm" FOLDER "DP/SG/IO" )
 endif()

@@ -39,4 +39,4 @@ target_link_libraries( WRLLoader
   DPSgIO
 )
 
-set_target_properties( WRLLoader PROPERTIES SUFFIX ".nxm" FOLDER "Loaders" )
+set_target_properties( WRLLoader PROPERTIES SUFFIX ".nxm" FOLDER "DP/SG/IO" )

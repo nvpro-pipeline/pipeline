@@ -49,4 +49,4 @@ add_dependencies( DPTapp DPTcore DPFx )
 source_group(headers FILES ${DPTAPP_HEADERS})
 source_group(sources FILES ${DPTAPP_SOURCES})
 
-set_target_properties( DPTapp PROPERTIES FOLDER "DPT" )
+set_target_properties( DPTapp PROPERTIES FOLDER "test/testfw" )

@@ -63,4 +63,4 @@ target_link_libraries( DPSgUIManipulator
   ${GLEW_LIBRARY}
 )
 
-set_target_properties( DPSgUIManipulator PROPERTIES FOLDER "SG" )
+set_target_properties( DPSgUIManipulator PROPERTIES FOLDER "DP/SG/UI" )

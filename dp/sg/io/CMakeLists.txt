@@ -52,4 +52,4 @@ target_link_libraries( DPSgIO
   DPUtil
 )
 
-set_target_properties( DPSgIO PROPERTIES FOLDER "SG" )
+set_target_properties( DPSgIO PROPERTIES FOLDER "DP/SG" )

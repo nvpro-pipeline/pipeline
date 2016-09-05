@@ -39,7 +39,7 @@ if(HOOPS_FOUND)
     DPSgIO
   )
            
-  set_target_properties( HOOPSLoader PROPERTIES SUFFIX ".nxm" FOLDER "Loaders")
+  set_target_properties( HOOPSLoader PROPERTIES SUFFIX ".nxm" FOLDER "DP/SG/IO")
 
   #
   # Copy dlls if they have changed.  Note, we don't need all of them, but we 

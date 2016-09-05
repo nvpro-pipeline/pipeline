@@ -45,5 +45,5 @@ target_link_libraries( DPCulling DPCullingCPU DPCullingOpenGL )
 
 set_property(TARGET DPCulling PROPERTY LINK_INTERFACE_LIBRARIES "")
 
-set_target_properties( DPCulling PROPERTIES FOLDER "Culling" )
+set_target_properties( DPCulling PROPERTIES FOLDER "DP/Culling" )
 

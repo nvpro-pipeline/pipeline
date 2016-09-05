@@ -41,7 +41,7 @@ if (LIB3DS_FOUND)
     ${LIB3DS_LIBRARIES}
   )
 
-  set_target_properties( 3DSLoader PROPERTIES SUFFIX ".nxm" FOLDER "Loaders")
+  set_target_properties( 3DSLoader PROPERTIES SUFFIX ".nxm" FOLDER "DP/SG/IO")
 else()
   message("lib3ds not found. Skipping 3DSLoader")
 endif()

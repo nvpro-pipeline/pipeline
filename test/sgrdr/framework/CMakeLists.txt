@@ -40,7 +40,7 @@ if (GLUT_FOUND)
      ${DPTSGRDR_PUBLIC_HEADERS}
   )
 
-  set_target_properties( DPTSgRdr PROPERTIES SUFFIX ".bkd" FOLDER "DPT/SgRdr" )
+  set_target_properties( DPTSgRdr PROPERTIES SUFFIX ".bkd" FOLDER "test/sgrdr" )
 
   target_link_libraries( DPTSgRdr 
     ${GLUT_LIBRARIES}

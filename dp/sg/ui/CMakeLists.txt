@@ -45,4 +45,4 @@ add_subdirectory( manipulator )
 add_subdirectory( qt5 )
 add_subdirectory(glut)
 
-set_target_properties( DPSgUI PROPERTIES FOLDER "SG" )
+set_target_properties( DPSgUI PROPERTIES FOLDER "DP/SG/UI" )

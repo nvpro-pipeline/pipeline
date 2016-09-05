@@ -56,3 +56,5 @@ add_library(DPMath SHARED
 if (WIN32)
   target_link_libraries( DPMath DPUtil )
 endif()
+
+set_target_properties( DPMath PROPERTIES FOLDER "DP" )

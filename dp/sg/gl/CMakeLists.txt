@@ -50,4 +50,4 @@ target_link_libraries( DPSgGL
 CopyGLEW( DPSgGL  "${DP_BINARY_PATH}" )
 
 
-set_target_properties( DPSgGL PROPERTIES FOLDER "SG" )
+set_target_properties( DPSgGL PROPERTIES FOLDER "DP/SG" )

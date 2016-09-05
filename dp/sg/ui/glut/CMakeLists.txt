@@ -51,7 +51,7 @@ if (GLUT_FOUND)
   CopyGLEW( DPSgUIGLUT "${DP_BINARY_PATH}" )
   CopyGLUT( DPSgUIGLUT "${DP_BINARY_PATH}" )
 
-  set_target_properties( DPSgUIGLUT PROPERTIES FOLDER "SG" )
+  set_target_properties( DPSgUIGLUT PROPERTIES FOLDER "DP/SG/UI" )
 else()
   message("GLUT not found, disalbing DpSgUIGLUT.")
 endif()

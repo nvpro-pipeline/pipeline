@@ -31,7 +31,7 @@ add_library(DPCullingCPU STATIC
 
 target_link_libraries( DPCullingCPU DPUtil DPMath )
 
-set_target_properties( DPCullingCPU PROPERTIES FOLDER "Culling" )
+set_target_properties( DPCullingCPU PROPERTIES FOLDER "DP/Culling" )
 
 if(UNIX)
   set_target_properties( DPCullingCPU PROPERTIES COMPILE_FLAGS -fPIC )

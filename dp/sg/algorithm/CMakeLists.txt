@@ -78,4 +78,4 @@ add_library( DPSgAlgorithm OBJECT
   ${PUBLIC_HEADERS}
 )
 
-set_target_properties( DPSgAlgorithm PROPERTIES FOLDER "SG" )
+set_target_properties( DPSgAlgorithm PROPERTIES FOLDER "DP/SG" )

@@ -30,4 +30,4 @@ add_library( DPSgAnimation OBJECT
   ${PUBLIC_HEADERS}
 )
 
-set_target_properties( DPSgAnimation PROPERTIES FOLDER "SG" )
+set_target_properties( DPSgAnimation PROPERTIES FOLDER "DP/SG" )

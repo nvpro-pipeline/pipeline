@@ -16,4 +16,4 @@ add_library( DPTestManager STATIC
 
 add_dependencies( DPTestManager DPTcore )
   
-set_target_properties( DPTestManager PROPERTIES FOLDER "DPT" LINK_INTERFACE_LIBRARIES "")
+set_target_properties( DPTestManager PROPERTIES FOLDER "test/testfw" LINK_INTERFACE_LIBRARIES "")

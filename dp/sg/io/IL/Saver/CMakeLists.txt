@@ -34,4 +34,4 @@ target_link_libraries( ILTexSaver
   ${IL_LIBRARIES}
 )
 
-set_target_properties( ILTexSaver PROPERTIES SUFFIX ".nxm" FOLDER "Savers")
+set_target_properties( ILTexSaver PROPERTIES SUFFIX ".nxm" FOLDER "DP/SG/IO")

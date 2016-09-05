@@ -59,7 +59,7 @@ target_link_libraries( RiXFx
  RiXCore
 )
 
-set_target_properties( RiXFx PROPERTIES FOLDER "RiX"  )
+set_target_properties( RiXFx PROPERTIES FOLDER "DP/RiX"  )
 
 if (WIN32 AND CMAKE_COMPILER_IS_GNUCC)
   # GCC requires the declspec(export) keyword behind the class keyword to export the vtable ( class declspec(export) MyKlass {} ). 

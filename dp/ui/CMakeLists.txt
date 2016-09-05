@@ -37,3 +37,5 @@ add_library( DPUI SHARED
 target_link_libraries( DPUI
   DPUtil
 )
+
+set_target_properties( DPUI PROPERTIES FOLDER "DP" )

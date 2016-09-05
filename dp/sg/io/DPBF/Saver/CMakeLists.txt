@@ -40,4 +40,4 @@ target_link_libraries( DPBFSaver
   DPSgIO
 )
 
-set_target_properties( DPBFSaver PROPERTIES SUFFIX ".nxm" FOLDER "Savers" )
+set_target_properties( DPBFSaver PROPERTIES SUFFIX ".nxm" FOLDER "DP/SG/IO" )

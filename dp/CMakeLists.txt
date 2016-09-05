@@ -64,6 +64,8 @@ target_link_libraries(DP ${Boost_LIBRARIES} )
 
 set_target_properties( DP PROPERTIES COMPILE_DEFINITIONS DP_EXPORTS )
 
+set_target_properties( DP PROPERTIES FOLDER "DP" )
+
 if (USE_CUDA)
   add_subdirectory( cuda )
 endif()

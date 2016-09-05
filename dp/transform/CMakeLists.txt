@@ -48,3 +48,5 @@ add_library(DPTransform SHARED
 )
 
 target_link_libraries(DPTransform DPMath)
+
+set_target_properties( DPTransform PROPERTIES FOLDER "DP" )

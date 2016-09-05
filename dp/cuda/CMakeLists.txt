@@ -50,6 +50,9 @@ if (CUDA_FOUND)
     DPGL
     DPUtil
   )
+  
+  set_target_properties( DPCUDA PROPERTIES FOLDER "DP/CUDA" )
+  
 else()
   message("CUDA not found, disabling DPCUDA")
 endif()
