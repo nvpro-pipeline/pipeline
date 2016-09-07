@@ -65,6 +65,7 @@ class OptimizerDialog : public QDialog
     QCheckBox * m_combineLODRangesButton;
     QCheckBox * m_combineTransformsButton;
     QCheckBox * m_unifyEffectDataButton;
+    QCheckBox * m_unifyBuffersButton;
     QCheckBox * m_unifyGeoNodesButton;
     QCheckBox * m_unifyGroupsButton;
     QCheckBox * m_unifyIndexSetsButton;

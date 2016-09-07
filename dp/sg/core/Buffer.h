@@ -33,6 +33,7 @@
 #include <dp/sg/core/HandledObject.h>
 #include <dp/util/BitMask.h>
 #include <dp/util/Flags.h>
+#include <dp/util/HashGenerator.h>
 #include <dp/util/StridedIterator.h>
 #include <cstring>
 
@@ -108,6 +109,10 @@ namespace dp
         /** \brief Get whether buffer is managed by internal system or user
         **/
         DP_SG_CORE_API bool isManagedBySystem() const;
+
+        DP_SG_CORE_API dp::util::HashKey getHashKey() const;
+
+        DP_SG_CORE_API bool isEquivalent(const BufferSharedPtr & p, bool ignoreNames, bool deepCompare) const;
 
         /** \brief Object to acquire a thread-safe read access to the buffer's data.
          *  \sa WriteLock
@@ -275,9 +280,11 @@ namespace dp
         void unlockRead() const;
 
       private:
-        mutable int   m_lockCount;
-        mutable void* m_mappedPtr;
-        bool          m_managedBySystem;
+        mutable int               m_lockCount;
+        mutable void*             m_mappedPtr;
+        bool                      m_managedBySystem;
+        mutable dp::util::HashKey m_hashKey;
+        mutable bool              m_hashKeyValid;
       };
 
       inline Buffer::MapModeMask operator|( Buffer::MapMode bit0, Buffer::MapMode bit1 )
@@ -318,6 +325,7 @@ namespace dp
           unmap();
 
           free( tmpData );
+          m_hashKeyValid = false;
         }
         else
         {
@@ -332,6 +340,7 @@ namespace dp
           m_mappedPtr = map( mapMode );
         }
         ++m_lockCount;
+        m_hashKeyValid = false;
         return m_mappedPtr;
       }
 
@@ -342,6 +351,7 @@ namespace dp
           m_mappedPtr = map( mapMode, 0, getSize() );
         }
         ++m_lockCount;
+        m_hashKeyValid = false;
         return (char *)m_mappedPtr + offset;
       }
 
@@ -367,6 +377,7 @@ namespace dp
 
       inline void Buffer::unlock()
       {
+        assert(!m_hashKeyValid);
         --m_lockCount;
         if (!m_lockCount)
         {

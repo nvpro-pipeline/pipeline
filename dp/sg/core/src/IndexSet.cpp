@@ -240,15 +240,7 @@ namespace dp
 
           if ( equi && m_buffer )
           {
-            equi = ( m_buffer == is->m_buffer );
-
-            if ( !equi && deepCompare )
-            {
-              unsigned int numBytes = dp::checked_cast<unsigned int>( dp::getSizeOf( m_dataType ) * m_numberOfIndices );
-              Buffer::DataReadLock rhsBuffer( m_buffer );
-              Buffer::DataReadLock lhsBuffer( is->m_buffer );
-              equi = ( memcmp( rhsBuffer.getPtr(), lhsBuffer.getPtr(), numBytes ) == 0 );
-            }
+            equi = (m_buffer == is->m_buffer) || (deepCompare && m_buffer->isEquivalent(is->m_buffer, ignoreNames, deepCompare));
           }
         }
         return( equi );

@@ -65,20 +65,20 @@ namespace dp
         public:
           enum class Target
           {
-            GEONODE               = BIT0,   //!< UnifyTarget dp::sg::core::GeoNode: unify identical GeoNode objects into one.
-            GROUP                 = BIT1,   //!< UnifyTarget dp::sg::core::Group: unify identical Group objects into one.
-            INDEX_SET             = BIT2,   //!< UnifyTarget dp::sg::core::IndexSet: unify identical IndexSet objects into one.
-            LOD                   = BIT3,   //!< UnifyTarget dp::sg::core::LOD: unify identical LOD objects into one.
-            PARAMETER_GROUP_DATA  = BIT4,   //!< UnifyTarget dp::sg::core::ParameterGroupData: unify identical ParameterGroupData objects into one.
-            PIPELINE_DATA         = BIT5,   //!< UnifyTarget dp::sg::core::PipelineData: unify identical EffectData objects into one.
-            PRIMITIVE             = BIT6,   //!< UnifyTarget dp::sg::core::Primitive: unify identical Primitive objects into one.
-            SAMPLER               = BIT7,   //!< UnifyTarget dp::sg::core::Sampler: unify identical Sampler objects into one.
-            TEXTURE               = BIT8,  //!< UnifyTarget dp::sg::core::Texture: unify identical Texture objects into one.
-            TRAFO_ANIMATION       = BIT9,  //!< UnifyTarget dp::sg::core::Animation<dp::math::Trafo>: unify identical Animations on Trafo into one.
-            VERTEX_ATTRIBUTE_SET  = BIT10,  //!< UnifyTarget dp::sg::core::VertexAttributeSet: unify identical VertexAttributeSet objects into one.
-            VERTICES              = BIT11,  //!< UnifyTarget Vertices: unify identical Vertices (with an epsilon) into one.
-            ALL                   = ( GEONODE | GROUP | INDEX_SET | LOD | PARAMETER_GROUP_DATA | PIPELINE_DATA | PRIMITIVE
-                                     | SAMPLER | TEXTURE | TRAFO_ANIMATION | VERTEX_ATTRIBUTE_SET | VERTICES )
+            BUFFER                = BIT0,   //!< UnifyTarget dp::sg::core::Buffer: unify identical Buffer objects into one.
+            GEONODE               = BIT1,   //!< UnifyTarget dp::sg::core::GeoNode: unify identical GeoNode objects into one.
+            GROUP                 = BIT2,   //!< UnifyTarget dp::sg::core::Group: unify identical Group objects into one.
+            INDEX_SET             = BIT3,   //!< UnifyTarget dp::sg::core::IndexSet: unify identical IndexSet objects into one.
+            LOD                   = BIT4,   //!< UnifyTarget dp::sg::core::LOD: unify identical LOD objects into one.
+            PARAMETER_GROUP_DATA  = BIT5,   //!< UnifyTarget dp::sg::core::ParameterGroupData: unify identical ParameterGroupData objects into one.
+            PIPELINE_DATA         = BIT6,   //!< UnifyTarget dp::sg::core::PipelineData: unify identical EffectData objects into one.
+            PRIMITIVE             = BIT7,   //!< UnifyTarget dp::sg::core::Primitive: unify identical Primitive objects into one.
+            SAMPLER               = BIT8,   //!< UnifyTarget dp::sg::core::Sampler: unify identical Sampler objects into one.
+            TEXTURE               = BIT9,   //!< UnifyTarget dp::sg::core::Texture: unify identical Texture objects into one.
+            TRAFO_ANIMATION       = BIT10,  //!< UnifyTarget dp::sg::core::Animation<dp::math::Trafo>: unify identical Animations on Trafo into one.
+            VERTEX_ATTRIBUTE_SET  = BIT11,  //!< UnifyTarget dp::sg::core::VertexAttributeSet: unify identical VertexAttributeSet objects into one.
+            VERTICES              = BIT12,  //!< UnifyTarget Vertices: unify identical Vertices (with an epsilon) into one.
+            ALL                   = BUFFER | GEONODE | GROUP | INDEX_SET | LOD | PARAMETER_GROUP_DATA | PIPELINE_DATA | PRIMITIVE | SAMPLER | TEXTURE | TRAFO_ANIMATION | VERTEX_ATTRIBUTE_SET | VERTICES
           };                                 //!< Enum to specify the object types to unify.
 
           typedef dp::util::Flags<Target> TargetMask;
@@ -131,6 +131,8 @@ namespace dp
            *  \remarks After traversal of the Group, identical children are unified. */
           DP_SG_ALGORITHM_API virtual void handleGroup( dp::sg::core::Group * group );
 
+          DP_SG_ALGORITHM_API virtual void handleIndexSet(dp::sg::core::IndexSet * indexSet);
+
           /*! \brief Overload of the \link ExclusiveTraverser::handleLOD LOD \endlink method.
            *  \param lod A pointer to the write-locked \link dp::sg::core::LOD LOD \endlink to handle.
            *  \remarks After traversal of the LOD as a Group, identical children are unified. */
@@ -176,6 +178,8 @@ namespace dp
 
         private:
           void checkPrimitive( std::multimap<dp::util::HashKey,dp::sg::core::PrimitiveSharedPtr> & v, dp::sg::core::Primitive * p );
+          void unifyBuffers(dp::sg::core::IndexSet *p);
+          void unifyBuffers(dp::sg::core::VertexAttributeSet *p);
           void unifyChildren( dp::sg::core::Group *p );
           void unifyGeoNodes( dp::sg::core::Group *p );
           void unifyGroups( dp::sg::core::Group *p );
@@ -184,6 +188,7 @@ namespace dp
           dp::sg::core::PipelineDataSharedPtr unifyPipelineData( const dp::sg::core::PipelineDataSharedPtr & pipelineData );
           void unifyStateSet( dp::sg::core::GeoNode *p );
           void unifyVertexAttributeSet( dp::sg::core::Primitive *p );
+          void unifyVertices(dp::sg::core::VertexAttributeSet *p);
 
         private:
           // map an old VAS to a new one and the corresponding mapping of indices
@@ -206,7 +211,8 @@ namespace dp
           float                                                                       m_epsilon;
           std::multimap<dp::util::HashKey,dp::sg::core::GeoNodeSharedPtr>             m_geoNodes;
           std::multimap<dp::util::HashKey,dp::sg::core::GroupSharedPtr>               m_groups;
-          std::multimap<dp::util::HashKey,dp::sg::core::IndexSetSharedPtr>            m_indexSets;
+          std::multimap<dp::util::HashKey, dp::sg::core::BufferSharedPtr>             m_indexBuffers;
+          std::multimap<dp::util::HashKey, dp::sg::core::IndexSetSharedPtr>           m_indexSets;
           std::vector<dp::sg::core::LODSharedPtr>                                     m_LODs;
           std::set<const void *>                                                      m_objects;      //!< A set of pointers to hold all objects already encountered.
           std::multimap<dp::util::HashKey,dp::sg::core::ParameterGroupDataSharedPtr>  m_parameterGroupData;
@@ -218,6 +224,7 @@ namespace dp
           TargetMask                                                                  m_unifyTargets;
           VASReplacementMap                                                           m_vasReplacements;
           std::multimap<dp::util::HashKey,dp::sg::core::VertexAttributeSetSharedPtr>  m_vertexAttributeSets;
+          std::multimap<dp::util::HashKey, dp::sg::core::BufferSharedPtr>             m_vertexBuffers;
       };
 
       inline UnifyTraverser::TargetMask operator|( UnifyTraverser::Target bit0, UnifyTraverser::Target bit1 )

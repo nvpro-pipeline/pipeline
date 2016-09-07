@@ -25,6 +25,7 @@
 
 
 #include <dp/sg/core/Buffer.h>
+#include <dp/util/HashGeneratorMurMur.h>
 
 namespace dp
 {
@@ -37,6 +38,7 @@ namespace dp
         : m_lockCount(0)
         , m_mappedPtr(nullptr)
         , m_managedBySystem(true)
+        , m_hashKeyValid(false)
       {
       }
 
@@ -60,6 +62,7 @@ namespace dp
         void* to = map( MapMode::WRITE, dst_offset, size );
         memcpy( to, src_data, size );
         unmap();
+        m_hashKeyValid = false;
       }
 
 
@@ -87,6 +90,37 @@ namespace dp
 
         src_buffer->unmapRead();
         unmap();
+        m_hashKeyValid = false;
+      }
+
+      dp::util::HashKey Buffer::getHashKey() const
+      {
+        if (!m_hashKeyValid)
+        {
+          dp::util::HashGeneratorMurMur hg;
+          hg.update(reinterpret_cast<const unsigned char *>(lockRead()), dp::checked_cast<unsigned int>(getSize()));
+          unlockRead();
+          hg.finalize((unsigned int *)&m_hashKey);
+          m_hashKeyValid = true;
+        }
+        return(m_hashKey);
+      }
+
+      bool Buffer::isEquivalent(const BufferSharedPtr & p, bool ignoreNames, bool deepCompare) const
+      {
+        if (p.get() == this)
+        {
+          return(true);
+        }
+
+        bool equi = (getSize() == p->getSize());
+        if (equi)
+        {
+          DataReadLock lhs(getSharedPtr<Buffer>());
+          DataReadLock rhs(p);
+          equi = (memcmp(lhs.getPtr(), rhs.getPtr(), getSize()) == 0);
+        }
+        return(equi);
       }
 
     } // namespace core

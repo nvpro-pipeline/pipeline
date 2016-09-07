@@ -693,90 +693,22 @@ namespace dp
               ; equi && ( thisit != m_vattribs.end() ) && ( thatit != vas->m_vattribs.end() )
               ; ++thisit, ++thatit )
           {
-            equi =  ( thisit->first == thatit->first )
-                &&  ( thisit->second.getVertexDataCount() == thatit->second.getVertexDataCount() )
-                &&  ( thisit->second.getVertexDataSize()  == thatit->second.getVertexDataSize() )
-                &&  ( thisit->second.getVertexDataType()  == thatit->second.getVertexDataType() );
+            equi = (thisit->first == thatit->first)
+                && (thisit->second.getVertexDataBytes() == thatit->second.getVertexDataBytes())
+                && (thisit->second.getVertexDataCount() == thatit->second.getVertexDataCount())
+                && (thisit->second.getVertexDataOffsetInBytes() == thatit->second.getVertexDataOffsetInBytes())
+                && (thisit->second.getVertexDataSize() == thatit->second.getVertexDataSize())
+                && (thisit->second.getVertexDataStrideInBytes() == thatit->second.getVertexDataStrideInBytes())
+                && (thisit->second.getVertexDataType() == thatit->second.getVertexDataType());
           }
           if ( equi )
           {
-            if ( !deepCompare )
+            for ( AttributeContainer::const_iterator thisit = m_vattribs.begin(), thatit = vas->m_vattribs.begin()
+                ; equi && thisit != m_vattribs.end() && thatit != vas->m_vattribs.end()
+                ; ++thisit, ++thatit )
             {
-              for ( AttributeContainer::const_iterator thisit = m_vattribs.begin(), thatit = vas->m_vattribs.begin()
-                  ; equi && thisit != m_vattribs.end() && thatit != vas->m_vattribs.end()
-                  ; ++thisit, ++thatit )
-              {
-                equi =  ( thisit->second.getBuffer() == thatit->second.getBuffer() )
-                    &&  ( thisit->second.getVertexDataStrideInBytes() == thatit->second.getVertexDataStrideInBytes() )
-                    // FIMXE nyi && ( thisit->second.getVertexDataOffsetInBytes() == thatit->second.getVertexDataOffsetInBytes() )
-                    ;
-              }
-            }
-            else
-            {
-              for ( AttributeContainer::const_iterator thisit = m_vattribs.begin(), thatit = vas->m_vattribs.begin()
-                  ; equi && thisit != m_vattribs.end() && thatit != vas->m_vattribs.end()
-                  ; ++thisit, ++thatit )
-              {
-                dp::DataType type = thisit->second.getVertexDataType();
-                size_t vertexDataCount = thisit->second.getVertexDataCount();
-                size_t vertexDataBytes = thisit->second.getVertexDataBytes();
-
-                if ( type != dp::DataType::UNKNOWN )
-                {
-                  if ( isIntegerType(type) )
-                  {
-                    Buffer::ConstIterator<char>::Type lhsData = getVertexData<char>(thisit->first);
-                    Buffer::ConstIterator<char>::Type rhsData = vas->getVertexData<char>(thisit->first);
-
-                    for ( size_t i = 0; equi && i < vertexDataCount; ++i )
-                    {
-                      equi = !memcmp(&lhsData[0], &rhsData[0], vertexDataBytes );
-                      ++lhsData;
-                      ++rhsData;
-                    }
-                  }
-                  else
-                  {
-                    unsigned int numComps = thisit->second.getVertexDataCount() * thisit->second.getVertexDataSize();
-                    if ( type == dp::DataType::FLOAT_32 )
-                    {
-                      Buffer::ConstIterator<float>::Type lhsData = getVertexData<float>(thisit->first);
-                      Buffer::ConstIterator<float>::Type rhsData = vas->getVertexData<float>(thisit->first);
-
-                      for ( size_t i = 0; equi && i < vertexDataCount && equi; ++i )
-                      {
-                        const float *lhs = &lhsData[0];
-                        const float *rhs = &rhsData[0];
-                        for ( unsigned int j = 0; equi && j < numComps && equi ; ++j )
-                        {
-                          equi = ( fabsf(lhs[j] - rhs[j]) <= FLT_EPSILON );
-                        }
-                        ++lhsData;
-                        ++rhsData;
-                      }
-                    }
-                    else
-                    {
-                      DP_ASSERT(type==dp::DataType::FLOAT_64);
-                      Buffer::ConstIterator<double>::Type lhsData = getVertexData<double>(thisit->first);
-                      Buffer::ConstIterator<double>::Type rhsData = vas->getVertexData<double>(thisit->first);
-
-                      for ( size_t i = 0; equi && i < vertexDataCount && equi; ++i )
-                      {
-                        const double *lhs = &lhsData[0];
-                        const double *rhs = &rhsData[0];
-                        for ( unsigned int j = 0; equi && j < numComps && equi ; ++j )
-                        {
-                          equi = ( fabs(lhs[j] - rhs[j]) <= DBL_EPSILON );
-                        }
-                        ++lhsData;
-                        ++rhsData;
-                      }
-                    }
-                  }
-                }
-              }
+              equi = (thisit->second.getBuffer() == thatit->second.getBuffer())
+                || (deepCompare && thisit->second.getBuffer()->isEquivalent(thatit->second.getBuffer(), ignoreNames, deepCompare));
             }
           }
         }

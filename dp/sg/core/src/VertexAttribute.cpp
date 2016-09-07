@@ -226,47 +226,11 @@ namespace dp
         hg.update( reinterpret_cast<const unsigned char *>(&m_size), sizeof(m_size) );
         hg.update( reinterpret_cast<const unsigned char *>(&m_type), sizeof(m_type) );
         hg.update( reinterpret_cast<const unsigned char *>(&m_bytes), sizeof(m_bytes) );
-        if ( m_buffer )
+        hg.update(reinterpret_cast<const unsigned char *>(&m_offset), sizeof(m_offset));
+        hg.update(reinterpret_cast<const unsigned char *>(&m_strideInBytes), sizeof(m_strideInBytes));
+        if (m_buffer)
         {
-          Buffer::DataReadLock lock( m_buffer, m_offset, m_count * m_strideInBytes);
-          const unsigned char *ptr = lock.getPtr<unsigned char>();
-          if ( isIntegerType( m_type ) )
-          {
-            for ( size_t i=0 ; i<m_count ; ++i )
-            {
-              hg.update( ptr, m_bytes );
-              ptr += m_strideInBytes;
-            }
-          }
-          // on float and double data, just take all but the lowest byte to calculate the hash
-          // that allows for more advanced approximate compares
-          else if ( m_type == dp::DataType::FLOAT_32 )
-          {
-            for ( size_t i=0 ; i<m_count ; ++i )
-            {
-              const unsigned char *p = ptr;
-              for ( size_t j=0 ; j<m_size ; ++j )
-              {
-                hg.update( p, sizeof(float)-1 );
-                p += sizeof(float);
-              }
-              ptr += m_strideInBytes;
-            }
-          }
-          else
-          {
-            DP_ASSERT( m_type == dp::DataType::FLOAT_64 );
-            for ( size_t i=0 ; i<m_count ; ++i )
-            {
-              const unsigned char *p = ptr;
-              for ( size_t j=0 ; j<m_size ; ++j )
-              {
-                hg.update( p, sizeof(double) - 1 );
-                p += sizeof(double);
-              }
-              ptr += m_strideInBytes;
-            }
-          }
+          hg.update(m_buffer);
         }
       }
 

@@ -314,6 +314,19 @@ namespace dp
         }
       }
 
+      void UnifyTraverser::handleIndexSet(IndexSet *p)
+      {
+        pair<set<const void*>::iterator, bool> pitb = m_objects.insert(p);
+        if (pitb.second)
+        {
+          OptimizeTraverser::handleIndexSet(p);
+          if (optimizationAllowed(p->getSharedPtr<IndexSet>()) && (m_unifyTargets & Target::BUFFER))
+          {
+            unifyBuffers(p);
+          }
+        }
+      }
+
       void UnifyTraverser::handleLOD( LOD *p )
       {
         pair<set<const void *>::iterator,bool> pitb = m_objects.insert( p );
@@ -491,137 +504,90 @@ namespace dp
         {
           OptimizeTraverser::handleVertexAttributeSet( p );
           // Check if optimization is allowed
-          if ( optimizationAllowed( p->getSharedPtr<VertexAttributeSet>() ) && (m_unifyTargets & Target::VERTICES) )
+          if (optimizationAllowed(p->getSharedPtr<VertexAttributeSet>()))
           {
-            VertexAttributeSetSharedPtr vas = p->getSharedPtr<VertexAttributeSet>();
-            unsigned int n = p->getNumberOfVertices();
-
-            //  handle VAS with more than one vertex only
-            if ( 1 < n )
+            if (m_unifyTargets & Target::BUFFER)
             {
-              // ***************************************************************
-              // the algorithm currently only works for float-typed vertex data!
-              // ***************************************************************
-              for ( unsigned int i=0 ; i<static_cast<unsigned int>(VertexAttributeSet::AttributeID::VERTEX_ATTRIB_COUNT) ; i++ )
+              unifyBuffers(p);
+            }
+            if (m_unifyTargets & Target::VERTICES)
+            {
+              unifyVertices(p);
+            }
+          }
+        }
+      }
+
+      void UnifyTraverser::unifyBuffers(IndexSet *p)
+      {
+        BufferSharedPtr buffer = p->getBuffer();
+        if (buffer)
+        {
+          HashKey hashKey = buffer->getHashKey();
+          typedef multimap<HashKey, BufferSharedPtr>::const_iterator I;
+          pair<I, I> itp = m_indexBuffers.equal_range(hashKey);
+
+          bool found = false;
+          for (I it = itp.first; it != itp.second && !found; ++it)
+          {
+            found = (buffer == it->second) || buffer->isEquivalent(it->second, getIgnoreNames(), false);
+            if (found && (buffer != it->second))
+            {
+              p->setBuffer(it->second, p->getNumberOfIndices(), p->getIndexDataType(), p->getPrimitiveRestartIndex());
+            }
+          }
+#if CHECK_HASH_RESULTS
+          bool checkFound = false;
+          for (I it = m_indexBuffers.begin(); it != m_indexBuffers.end() && !checkFound; ++it)
+          {
+            checkFound = (buffer == it->second) || buffer->isEquivalent(it->second, getIgnoreNames(), false);
+            DP_ASSERT(!checkFound || (buffer == it->second));
+          }
+          DP_ASSERT(found == checkFound);
+#endif
+          if (!found)
+          {
+            m_indexBuffers.insert(make_pair(hashKey, buffer));
+          }
+        }
+      }
+
+      void UnifyTraverser::unifyBuffers(VertexAttributeSet *p)
+      {
+        for (unsigned int i = 0; i < static_cast<unsigned int>(VertexAttributeSet::AttributeID::VERTEX_ATTRIB_COUNT); i++)
+        {
+          VertexAttributeSet::AttributeID attribute = static_cast<VertexAttributeSet::AttributeID>(i);
+          if (p->getNumberOfVertexData(attribute))
+          {
+            VertexAttribute va = p->getVertexAttribute(attribute);
+
+            BufferSharedPtr buffer = va.getBuffer();
+            HashKey hashKey = buffer->getHashKey();
+            typedef multimap<HashKey, BufferSharedPtr>::const_iterator I;
+            pair<I, I> itp = m_vertexBuffers.equal_range(hashKey);
+
+            bool found = false;
+            for (I it = itp.first; it != itp.second && !found; ++it)
+            {
+              found = (buffer == it->second) || buffer->isEquivalent(it->second, getIgnoreNames(), false);
+              if (found && (buffer != it->second))
               {
-                dp::DataType type = p->getTypeOfVertexData(static_cast<VertexAttributeSet::AttributeID>(i));
-                if (  type != dp::DataType::UNKNOWN // no data is ok!
-                   && type != dp::DataType::FLOAT_32 )
-                {
-                  DP_ASSERT( !"This algorithm currently only works for float-typed vertex data!" );
-                  return;
-                }
+                va.setData(va.getVertexDataSize(), va.getVertexDataType(), it->second, va.getVertexDataOffsetInBytes(), va.getVertexDataStrideInBytes(), va.getVertexDataCount());
+                p->swapVertexData(attribute, va);
               }
-              // ***************************************************************
-              // ***************************************************************
-
-              //  count the dimension of the VertexAttributeSet
-              unsigned int  dimension = 0;
-              for ( unsigned int i=0 ; i<static_cast<unsigned int>(VertexAttributeSet::AttributeID::VERTEX_ATTRIB_COUNT) ; i++ )
-              {
-                VertexAttributeSet::AttributeID id = static_cast<VertexAttributeSet::AttributeID>(i);
-                if ( p->getNumberOfVertexData( id ) )
-                {
-                  dimension += p->getSizeOfVertexData( id );
-                }
-              }
-
-              vector<float> valueDataIn( n * dimension );
-              vector<float*> valuesIn( n );
-              for ( size_t i=0, j=0 ; i<valuesIn.size() ; i++, j+=dimension )
-              {
-                valuesIn[i] = &valueDataIn[j];
-              }
-
-              //  fill valuesIn with the vertex attribute data
-              for ( unsigned int i=0, j=0 ; i<static_cast<unsigned int>(VertexAttributeSet::AttributeID::VERTEX_ATTRIB_COUNT) ; i++ )
-              {
-                VertexAttributeSet::AttributeID id = static_cast<VertexAttributeSet::AttributeID>(i);
-                if ( p->getNumberOfVertexData( id ) != 0 )
-                {
-                  unsigned int dim = p->getSizeOfVertexData( id );
-                  Buffer::ConstIterator<float>::Type vad = p->getVertexData<float>( id );
-                  for ( unsigned int k=0 ; k<n ; k++ )
-                  {
-                    const float *value = &vad[k];
-                    for ( unsigned int l=0 ; l<dim ; l++ )
-                    {
-                      valuesIn[k][j+l] = value[l];
-                    }
-                  }
-                  j += dim;
-                }
-              }
-
-              VUTOctreeNode * octree = new VUTOctreeNode();
-              octree->init( boundingBox<3, float, Buffer::ConstIterator<Vec3f>::Type >( p->getVertices(), p->getNumberOfVertices() )
-                          , std::max( (unsigned int)32, (unsigned int)pow( p->getNumberOfVertices(), 0.25 ) ) );
-              unsigned int count = dp::checked_cast<unsigned int>(valuesIn.size());
-              for ( unsigned int i=0 ; i<count ; i++ )
-              {
-                octree->addVertex( valuesIn, i, dimension, m_epsilon );
-              }
-              unsigned int pointCount = octree->getNumberOfPoints();
-
-              //  if there are less points only
-              if ( pointCount < n )
-              {
-                //  initialize the index mapping to undefined
-                vector<unsigned int>  indexMap( n );
-                for ( unsigned int i=0 ; i<n ; i++ )
-                {
-                  indexMap[i] = ~0;
-                }
-
-                //  create the vector of vertex attribute valuesIn
-                vector<float> valueDataOut( pointCount * dimension );
-                vector<float*> valuesOut( pointCount );
-                for ( size_t i=0, j=0 ; i<valuesOut.size() ; i++, j+=dimension )
-                {
-                  valuesOut[i] = &valueDataOut[j];
-                }
-
-                // fill valuesOut and the indexMap
-                unsigned int index = 0;
-                octree->mapValues( valuesIn, valuesOut, dimension, indexMap, index );
-                delete octree;
-
-                //  create a new VertexAttributeSet with the condensed data
-                VertexAttributeSetSharedPtr newVAS = VertexAttributeSet::create();
-                for ( unsigned int i=0, j=0 ; i<static_cast<unsigned int>(VertexAttributeSet::AttributeID::VERTEX_ATTRIB_COUNT) ; i++ )
-                {
-                  VertexAttributeSet::AttributeID id = static_cast<VertexAttributeSet::AttributeID>(i);
-                  if ( p->getNumberOfVertexData( id ) )
-                  {
-                    unsigned int dim = p->getSizeOfVertexData( id );
-                    vector<float> vad( dim * valuesOut.size() );
-                    for ( size_t k=0 ; k<valuesOut.size() ; k++ )
-                    {
-                      for ( unsigned int l=0 ; l<dim ; l++ )
-                      {
-                        vad[dim*k+l] = valuesOut[k][j+l];
-                      }
-                    }
-                    newVAS->setVertexData( id, dim, dp::DataType::FLOAT_32, &vad[0], 0, dp::checked_cast<unsigned int>(vad.size()/dim) );
-
-                    // inherit enable states from source attrib
-                    // normalize-enable state only meaningful for generic aliases!
-                    newVAS->setEnabled(id, p->isEnabled(id)); // conventional
-
-                    id = static_cast<VertexAttributeSet::AttributeID>(i+16);    // generic
-                    newVAS->setEnabled(id, p->isEnabled(id));
-                    newVAS->setNormalizeEnabled(id, p->isNormalizeEnabled(id));
-                    j += dim;
-                  }
-                }
-
-                DP_ASSERT( m_vasReplacements.find( vas ) == m_vasReplacements.end() );
-                m_vasReplacements[vas] = VASReplacement( newVAS, indexMap );
-              }
-              else
-              {
-                delete octree;
-              }
+            }
+#if CHECK_HASH_RESULTS
+            bool checkFound = false;
+            for (I it = m_vertexBuffers.begin(); it != m_vertexBuffers.end() && !checkFound; ++it)
+            {
+              checkFound = (buffer == it->second) || buffer->isEquivalent(it->second, getIgnoreNames(), false);
+              DP_ASSERT(!checkFound || (buffer == it->second));
+            }
+            DP_ASSERT(found == checkFound);
+#endif
+            if (!found)
+            {
+              m_vertexBuffers.insert(make_pair(hashKey, buffer));
             }
           }
         }
@@ -873,7 +839,141 @@ namespace dp
         }
       }
 
-      void UnifyTraverser::unifyVertexAttributeSet( Primitive *p )
+      void UnifyTraverser::unifyVertices(VertexAttributeSet *p)
+      {
+        VertexAttributeSetSharedPtr vas = p->getSharedPtr<VertexAttributeSet>();
+        unsigned int n = p->getNumberOfVertices();
+
+        //  handle VAS with more than one vertex only
+        if (1 < n)
+        {
+          // ***************************************************************
+          // the algorithm currently only works for float-typed vertex data!
+          // ***************************************************************
+          for (unsigned int i = 0; i<static_cast<unsigned int>(VertexAttributeSet::AttributeID::VERTEX_ATTRIB_COUNT); i++)
+          {
+            dp::DataType type = p->getTypeOfVertexData(static_cast<VertexAttributeSet::AttributeID>(i));
+            if (type != dp::DataType::UNKNOWN // no data is ok!
+              && type != dp::DataType::FLOAT_32)
+            {
+              DP_ASSERT(!"This algorithm currently only works for float-typed vertex data!");
+              return;
+            }
+          }
+          // ***************************************************************
+          // ***************************************************************
+
+          //  count the dimension of the VertexAttributeSet
+          unsigned int  dimension = 0;
+          for (unsigned int i = 0; i<static_cast<unsigned int>(VertexAttributeSet::AttributeID::VERTEX_ATTRIB_COUNT); i++)
+          {
+            VertexAttributeSet::AttributeID id = static_cast<VertexAttributeSet::AttributeID>(i);
+            if (p->getNumberOfVertexData(id))
+            {
+              dimension += p->getSizeOfVertexData(id);
+            }
+          }
+
+          vector<float> valueDataIn(n * dimension);
+          vector<float*> valuesIn(n);
+          for (size_t i = 0, j = 0; i<valuesIn.size(); i++, j += dimension)
+          {
+            valuesIn[i] = &valueDataIn[j];
+          }
+
+          //  fill valuesIn with the vertex attribute data
+          for (unsigned int i = 0, j = 0; i<static_cast<unsigned int>(VertexAttributeSet::AttributeID::VERTEX_ATTRIB_COUNT); i++)
+          {
+            VertexAttributeSet::AttributeID id = static_cast<VertexAttributeSet::AttributeID>(i);
+            if (p->getNumberOfVertexData(id) != 0)
+            {
+              unsigned int dim = p->getSizeOfVertexData(id);
+              Buffer::ConstIterator<float>::Type vad = p->getVertexData<float>(id);
+              for (unsigned int k = 0; k<n; k++)
+              {
+                const float *value = &vad[k];
+                for (unsigned int l = 0; l<dim; l++)
+                {
+                  valuesIn[k][j + l] = value[l];
+                }
+              }
+              j += dim;
+            }
+          }
+
+          VUTOctreeNode * octree = new VUTOctreeNode();
+          octree->init(boundingBox<3, float, Buffer::ConstIterator<Vec3f>::Type >(p->getVertices(), p->getNumberOfVertices())
+            , std::max((unsigned int)32, (unsigned int)pow(p->getNumberOfVertices(), 0.25)));
+          unsigned int count = dp::checked_cast<unsigned int>(valuesIn.size());
+          for (unsigned int i = 0; i<count; i++)
+          {
+            octree->addVertex(valuesIn, i, dimension, m_epsilon);
+          }
+          unsigned int pointCount = octree->getNumberOfPoints();
+
+          //  if there are less points only
+          if (pointCount < n)
+          {
+            //  initialize the index mapping to undefined
+            vector<unsigned int>  indexMap(n);
+            for (unsigned int i = 0; i<n; i++)
+            {
+              indexMap[i] = ~0;
+            }
+
+            //  create the vector of vertex attribute valuesIn
+            vector<float> valueDataOut(pointCount * dimension);
+            vector<float*> valuesOut(pointCount);
+            for (size_t i = 0, j = 0; i<valuesOut.size(); i++, j += dimension)
+            {
+              valuesOut[i] = &valueDataOut[j];
+            }
+
+            // fill valuesOut and the indexMap
+            unsigned int index = 0;
+            octree->mapValues(valuesIn, valuesOut, dimension, indexMap, index);
+            delete octree;
+
+            //  create a new VertexAttributeSet with the condensed data
+            VertexAttributeSetSharedPtr newVAS = VertexAttributeSet::create();
+            for (unsigned int i = 0, j = 0; i<static_cast<unsigned int>(VertexAttributeSet::AttributeID::VERTEX_ATTRIB_COUNT); i++)
+            {
+              VertexAttributeSet::AttributeID id = static_cast<VertexAttributeSet::AttributeID>(i);
+              if (p->getNumberOfVertexData(id))
+              {
+                unsigned int dim = p->getSizeOfVertexData(id);
+                vector<float> vad(dim * valuesOut.size());
+                for (size_t k = 0; k<valuesOut.size(); k++)
+                {
+                  for (unsigned int l = 0; l<dim; l++)
+                  {
+                    vad[dim*k + l] = valuesOut[k][j + l];
+                  }
+                }
+                newVAS->setVertexData(id, dim, dp::DataType::FLOAT_32, &vad[0], 0, dp::checked_cast<unsigned int>(vad.size() / dim));
+
+                // inherit enable states from source attrib
+                // normalize-enable state only meaningful for generic aliases!
+                newVAS->setEnabled(id, p->isEnabled(id)); // conventional
+
+                id = static_cast<VertexAttributeSet::AttributeID>(i + 16);    // generic
+                newVAS->setEnabled(id, p->isEnabled(id));
+                newVAS->setNormalizeEnabled(id, p->isNormalizeEnabled(id));
+                j += dim;
+              }
+            }
+
+            DP_ASSERT(m_vasReplacements.find(vas) == m_vasReplacements.end());
+            m_vasReplacements[vas] = VASReplacement(newVAS, indexMap);
+          }
+          else
+          {
+            delete octree;
+          }
+        }
+      }
+
+      void UnifyTraverser::unifyVertexAttributeSet(Primitive *p)
       {
         DP_ASSERT( m_unifyTargets & Target::VERTEX_ATTRIBUTE_SET );
         DP_ASSERT( p && p->getVertexAttributeSet() );
