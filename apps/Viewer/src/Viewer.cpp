@@ -458,6 +458,7 @@ void Viewer::outputStatistics()
     DP_ASSERT( totalPatches <= stats->m_statPrimitives.m_faces );
 
     std::stringstream ss;
+    ss.imbue(std::locale(""));    // use the locale of the environment to (hopefully) get some thousands separators here
     ss << "Vertices: " << (int)totalVertices << "  Faces: " << (int) stats->m_statPrimitives.m_faces - totalPatches;
     if ( totalPatches )
     {
