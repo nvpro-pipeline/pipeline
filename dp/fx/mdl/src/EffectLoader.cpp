@@ -553,7 +553,7 @@ namespace dp
           snippets.push_back( std::make_shared<dp::fx::StringSnippet>( oss.str() ) );
         }
         {
-          std::string environ = surfaceData.scattering;
+          std::string environment = surfaceData.scattering;
           static std::set<std::string> environmentFunctions = 
           {
             { "backscatteringGlossyReflectionBSDF"  },
@@ -565,12 +565,12 @@ namespace dp
           };
           for ( std::set<std::string>::const_iterator it = environmentFunctions.begin(); it != environmentFunctions.end(); ++it )
           {
-            boost::algorithm::replace_all( environ, *it, *it + "Environment" );
+            boost::algorithm::replace_all( environment, *it, *it + "Environment" );
           }
           std::ostringstream oss;
           oss << "vec4 evalEnvironment" << postFix << "( in vec3 normal )" << std::endl
               << "{" << std::endl
-              << "  return( " << ( ( environ == surfaceData.scattering ) ? "vec4(0,0,0,1)" : environ ) << " );" << std::endl
+              << "  return( " << ( ( environment == surfaceData.scattering ) ? "vec4(0,0,0,1)" : environment ) << " );" << std::endl
               << "}" << std::endl << std::endl;
           snippets.push_back( std::make_shared<dp::fx::StringSnippet>( oss.str() ) );
         }

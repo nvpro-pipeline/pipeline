@@ -238,7 +238,7 @@ namespace dp
           void vectorEnd();
 
         private:
-          typedef struct Argument
+          struct Argument
           {
             Argument()
             {}
