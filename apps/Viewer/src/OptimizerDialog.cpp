@@ -32,6 +32,7 @@
 #include <dp/sg/algorithm/UnifyTraverser.h>
 #include <dp/sg/algorithm/Optimize.h>
 #include "OptimizerDialog.h"
+#include "Log.h"
 #include "Viewer.h"
 
 using namespace dp::sg::core;
@@ -298,9 +299,13 @@ void OptimizerDialog::accept()
   }
 
   GetApp()->setOverrideCursor( Qt::WaitCursor );
+  dp::util::Timer timer;
+  timer.start();
   dp::sg::algorithm::optimizeScene( m_scene, m_ignoreNamesButton->isChecked(), m_identityToGroupButton->isChecked()
                , combineFlags, eliminateFlags, unifyFlags, epsilon
                , m_vertexCacheOptimizeButton->isChecked() );
+  timer.stop();
+  LogMessage("Optimizing took %f seconds.\n", timer.getTime());
   GetApp()->restoreOverrideCursor();
 
   QDialog::accept();

@@ -33,7 +33,11 @@
 #include <dp/sg/core/Sampler.h>
 #include <dp/sg/core/Switch.h>
 #include <dp/sg/core/Transform.h>
+#include <dp/sg/algorithm/Search.h>
 #include <dp/sg/algorithm/UnifyTraverser.h>
+#include <dp/util/Memory.h>
+
+#include <thread>
 
 #define CHECK_HASH_RESULTS  0
 
@@ -56,79 +60,6 @@ namespace dp
   {
     namespace algorithm
     {
-
-      bool areSimilarFirst( const float * v0, const float * v1, float eps );
-      bool areSimilarLast( const float * v0, const float * v1, unsigned int dimension, float eps );
-
-      class VUTOctreeIndices;
-      class VUTOctreeSubNodes;
-
-      class VUTOctreeNode
-      {
-        public :
-          ~VUTOctreeNode();
-
-        public:
-          void addIndexList( const vector<vector<unsigned int> > & indexList );
-          void addVertex( const vector<float*> &vertices, unsigned int index, unsigned int dimension, float tol, unsigned int level = 0 );
-          void distributeData( const vector<float *> & vertices, float tol );
-          unsigned int getNumberOfPoints( void ) const;
-          void init( const Box3f & bbox, unsigned int maxIndicesPerOctel );
-          void mapValues( const vector<float *> &valuesIn, vector<float *> & valuesOut, unsigned int dimension, vector<unsigned int> &indexMap, unsigned int &index );
-
-        private :
-          //  the octel encloses the m_box, m_center caches the center of m_box.
-          //  an octel holds either m_data with point informations or eight pointers to the sub-octels
-          Box3f               m_box;
-          Vec3f               m_center;
-          VUTOctreeSubNodes * m_nodes;
-          VUTOctreeIndices  * m_data;           //  pointer to the data of this octel
-      };
-
-      class VUTOctreeIndices
-      {
-        public:
-          typedef list<vector<vector<unsigned int> > > IndexContainer;
-
-        public:
-          VUTOctreeIndices( unsigned int maxIndices );
-          ~VUTOctreeIndices();
-
-        public:
-          void addIndexList( const vector<vector<unsigned int> > & indexList );
-          bool addVertex( const vector<float*> &vertices, unsigned int index, unsigned int dimension, float tol );
-          void clear( void );    // clear the indices, without deletion!
-          IndexContainer::const_iterator getIndexListBegin() const;
-          IndexContainer::const_iterator getIndexListEnd() const;
-          unsigned int  getMaxIndices( void ) const;
-          unsigned int  getNumberOfPoints( void ) const;
-          void mapValues( const vector<float *> & valuesIn, vector<float *> & valuesOut, unsigned int dimension, vector<unsigned int> &indexMap, unsigned int &index );
-
-        private:
-          //  indices is a vector that is allowed to grow up to m_maxIndices
-          //  each element of m_indices[i][j] is the index of a vertex in an valuesIn buffer
-          //  each element of m_indices[i] holds the indices of all vertices with the same position, but maybe
-          //    different attributes
-          //  each element of m_indices holds the indices of all vertices in that octel
-          IndexContainer  m_indices;
-          unsigned int    m_maxIndices;
-      };
-
-      class VUTOctreeSubNodes
-      {
-        public:
-          VUTOctreeSubNodes( const Box3f & box, const Vec3f & center, unsigned int maxIndicesPerOctel );
-
-        public:
-          void addIndexList( const vector<vector<unsigned int> > & indexList, const vector<float*> &vertices, const Vec3f & center );
-          void addVertex( const vector<float*> &vertices, unsigned int index, unsigned int dimension, float tol, unsigned int level, const Vec3f & center );
-          unsigned int getNumberOfPoints() const;
-          void mapValues( const vector<float *> & valuesIn, vector<float *> & valuesOut, unsigned int dimension, vector<unsigned int> &indexMap, unsigned int &index );
-
-        private:
-          VUTOctreeNode nodes[2][2][2];
-      };
-
       DEFINE_STATIC_PROPERTY( UnifyTraverser, UnifyTargets );
       DEFINE_STATIC_PROPERTY( UnifyTraverser, Epsilon );
 
@@ -153,6 +84,24 @@ namespace dp
         DP_ASSERT(   m_pipelineData.empty() && m_geoNodes.empty() && m_groups.empty() && m_indexSets.empty()
                     && m_LODs.empty() && m_parameterGroupData.empty() && m_primitives.empty() && m_samplers.empty()
                     && m_textures.empty() && m_vertexAttributeSets.empty() );
+
+        if (m_unifyTargets & Target::VERTICES)
+        {
+          std::vector<dp::sg::core::ObjectSharedPtr> results = dp::sg::algorithm::searchClass(root, "class dp::sg::core::VertexAttributeSet");
+          m_unifyVerticesIndex = 0;
+
+          unsigned int threadCount = std::min<unsigned int>(std::thread::hardware_concurrency(), dp::checked_cast<unsigned int>(results.size()));
+          std::vector<std::thread> threads;
+          for (unsigned int i = 0; i < threadCount; i++)
+          {
+            threads.push_back(std::thread(&UnifyTraverser::unifyVerticesThreadFunction, this, results));
+          }
+          for (unsigned int i = 0; i < threadCount; i++)
+          {
+            DP_ASSERT(threads[i].joinable());
+            threads[i].join();
+          }
+        }
 
         OptimizeTraverser::doApply( root );
 
@@ -404,7 +353,7 @@ namespace dp
               IndexSet::ConstIterator<unsigned int> oldIndices( oldIndexSet, p->getElementOffset() );
               for ( size_t i=0 ; i<newIndices.size() ; i++ )
               {
-                DP_ASSERT( oldIndices[i] < it->second.m_indexMap.size() );
+                DP_ASSERT((oldIndices[i] == pri) || (oldIndices[i] < it->second.m_indexMap.size()));
                 newIndices[i] = ( oldIndices[i] == pri ) ? pri : it->second.m_indexMap[oldIndices[i]];
               }
               newIndexSet->setData( &newIndices[0], dp::checked_cast<unsigned int>(newIndices.size()) );
@@ -509,10 +458,6 @@ namespace dp
             if (m_unifyTargets & Target::BUFFER)
             {
               unifyBuffers(p);
-            }
-            if (m_unifyTargets & Target::VERTICES)
-            {
-              unifyVertices(p);
             }
           }
         }
@@ -839,10 +784,9 @@ namespace dp
         }
       }
 
-      void UnifyTraverser::unifyVertices(VertexAttributeSet *p)
+      void UnifyTraverser::unifyVertices(VertexAttributeSetSharedPtr const& vas)
       {
-        VertexAttributeSetSharedPtr vas = p->getSharedPtr<VertexAttributeSet>();
-        unsigned int n = p->getNumberOfVertices();
+        unsigned int n = vas->getNumberOfVertices();
 
         //  handle VAS with more than one vertex only
         if (1 < n)
@@ -852,7 +796,7 @@ namespace dp
           // ***************************************************************
           for (unsigned int i = 0; i<static_cast<unsigned int>(VertexAttributeSet::AttributeID::VERTEX_ATTRIB_COUNT); i++)
           {
-            dp::DataType type = p->getTypeOfVertexData(static_cast<VertexAttributeSet::AttributeID>(i));
+            dp::DataType type = vas->getTypeOfVertexData(static_cast<VertexAttributeSet::AttributeID>(i));
             if (type != dp::DataType::UNKNOWN // no data is ok!
               && type != dp::DataType::FLOAT_32)
             {
@@ -868,97 +812,134 @@ namespace dp
           for (unsigned int i = 0; i<static_cast<unsigned int>(VertexAttributeSet::AttributeID::VERTEX_ATTRIB_COUNT); i++)
           {
             VertexAttributeSet::AttributeID id = static_cast<VertexAttributeSet::AttributeID>(i);
-            if (p->getNumberOfVertexData(id))
+            if (vas->getNumberOfVertexData(id))
             {
-              dimension += p->getSizeOfVertexData(id);
+              dimension += vas->getSizeOfVertexData(id);
             }
           }
 
-          vector<float> valueDataIn(n * dimension);
-          vector<float*> valuesIn(n);
-          for (size_t i = 0, j = 0; i<valuesIn.size(); i++, j += dimension)
-          {
-            valuesIn[i] = &valueDataIn[j];
-          }
-
           //  fill valuesIn with the vertex attribute data
+          vector<float> valuesIn(n * dimension);
           for (unsigned int i = 0, j = 0; i<static_cast<unsigned int>(VertexAttributeSet::AttributeID::VERTEX_ATTRIB_COUNT); i++)
           {
             VertexAttributeSet::AttributeID id = static_cast<VertexAttributeSet::AttributeID>(i);
-            if (p->getNumberOfVertexData(id) != 0)
+            if (vas->getNumberOfVertexData(id) != 0)
             {
-              unsigned int dim = p->getSizeOfVertexData(id);
-              Buffer::ConstIterator<float>::Type vad = p->getVertexData<float>(id);
-              for (unsigned int k = 0; k<n; k++)
-              {
-                const float *value = &vad[k];
-                for (unsigned int l = 0; l<dim; l++)
-                {
-                  valuesIn[k][j + l] = value[l];
-                }
-              }
+              unsigned int dim = vas->getSizeOfVertexData(id);
+              Buffer::ConstIterator<float>::Type vad = vas->getVertexData<float>(id);
+              dp::util::stridedMemcpy(valuesIn.data(), j * sizeof(float), dimension * sizeof(float), &vad[0], 0, dim * sizeof(float), dim * sizeof(float), n);
               j += dim;
             }
           }
 
-          VUTOctreeNode * octree = new VUTOctreeNode();
-          octree->init(boundingBox<3, float, Buffer::ConstIterator<Vec3f>::Type >(p->getVertices(), p->getNumberOfVertices())
-            , std::max((unsigned int)32, (unsigned int)pow(p->getNumberOfVertices(), 0.25)));
-          unsigned int count = dp::checked_cast<unsigned int>(valuesIn.size());
-          for (unsigned int i = 0; i<count; i++)
+          // initialize the indices vector to sort
+          std::vector<unsigned int> indices(n);
+          unsigned int i = 0;
+          std::generate(indices.begin(), indices.end(), [&i] { return i++; });
+
+          // just sort for first component of values (x-coordinate of position)
+          std::sort(indices.begin(), indices.end(), [&valuesIn, dimension](unsigned int const& a, unsigned int const& b){ return valuesIn[a*dimension] < valuesIn[b*dimension]; });
+
+          // reserve enough space for the output
+          std::vector<float> valuesOut;
+          valuesOut.reserve(n * dimension);
+          std::vector<float> currentVertex(dimension);
+          unsigned int outIndex = 0;
+          std::vector<unsigned int> indexMap(n, ~0);
+
+          // gather the reduced stuff, if any
+          for (unsigned int i = 0; i < n; i++)
           {
-            octree->addVertex(valuesIn, i, dimension, m_epsilon);
+            if (indices[i] != ~0)
+            {
+              memcpy(currentVertex.data(), &valuesIn[indices[i] * dimension], dimension * sizeof(float));
+              indexMap[indices[i]] = outIndex;
+              unsigned int count = 1;
+              for (unsigned int j = i + 1; j < n; j++)
+              {
+                if (indices[j] != ~0)
+                {
+                  if (valuesIn[indices[j] * dimension] - valuesIn[indices[i] * dimension] <= m_epsilon)
+                  {
+                    bool similar = true;
+                    for (unsigned int k = 1; k < dimension && similar; k++)
+                    {
+                      similar = (abs(valuesIn[indices[j] * dimension + k] - valuesIn[indices[i] * dimension + k]) <= m_epsilon);
+                    }
+                    if (similar)
+                    {
+                      for (unsigned int k = 0; k < dimension; k++)
+                      {
+                        currentVertex[k] += valuesIn[indices[j] * dimension + k];
+                      }
+                      indexMap[indices[j]] = outIndex;
+                      indices[j] = ~0;
+                      count++;
+                    }
+                  }
+                  else
+                  {
+                    // due to sorting, all further components have a delta larger than m_epsilon
+                    // -> break inner loop as vertices "equal" to valuesIn[indices[i]] are identified, handle those equals and continue with next vertex
+                    break;
+                  }
+                }
+              }
+              indices[i] = ~0;
+              if (1 < count)
+              {
+                for (unsigned int k = 0; k < dimension; k++)
+                {
+                  valuesOut.push_back(currentVertex[k] / count);
+                }
+              }
+              else
+              {
+                for (unsigned int k = 0; k < dimension; k++)
+                {
+                  valuesOut.push_back(currentVertex[k]);
+                }
+              }
+              outIndex++;
+            }
           }
-          unsigned int pointCount = octree->getNumberOfPoints();
-
-          //  if there are less points only
-          if (pointCount < n)
+#if !defined(NDEBUG)
+          // assert that all indices have been remapped
+          for (unsigned int i = 0; i < n; i++)
           {
-            //  initialize the index mapping to undefined
-            vector<unsigned int>  indexMap(n);
-            for (unsigned int i = 0; i<n; i++)
-            {
-              indexMap[i] = ~0;
-            }
+            DP_ASSERT(indexMap[i] != ~0);
+            DP_ASSERT(indices[i] == ~0);
+          }
+#endif
 
-            //  create the vector of vertex attribute valuesIn
-            vector<float> valueDataOut(pointCount * dimension);
-            vector<float*> valuesOut(pointCount);
-            for (size_t i = 0, j = 0; i<valuesOut.size(); i++, j += dimension)
-            {
-              valuesOut[i] = &valueDataOut[j];
-            }
-
-            // fill valuesOut and the indexMap
-            unsigned int index = 0;
-            octree->mapValues(valuesIn, valuesOut, dimension, indexMap, index);
-            delete octree;
-
+          // if at least one point was reduced...
+          if (outIndex < n)
+          {
             //  create a new VertexAttributeSet with the condensed data
             VertexAttributeSetSharedPtr newVAS = VertexAttributeSet::create();
             for (unsigned int i = 0, j = 0; i<static_cast<unsigned int>(VertexAttributeSet::AttributeID::VERTEX_ATTRIB_COUNT); i++)
             {
               VertexAttributeSet::AttributeID id = static_cast<VertexAttributeSet::AttributeID>(i);
-              if (p->getNumberOfVertexData(id))
+              if (vas->getNumberOfVertexData(id))
               {
-                unsigned int dim = p->getSizeOfVertexData(id);
-                vector<float> vad(dim * valuesOut.size());
-                for (size_t k = 0; k<valuesOut.size(); k++)
+                unsigned int dim = vas->getSizeOfVertexData(id);
+                vector<float> vad(dim * outIndex);
+                for (size_t k = 0; k<outIndex; k++)
                 {
                   for (unsigned int l = 0; l<dim; l++)
                   {
-                    vad[dim*k + l] = valuesOut[k][j + l];
+                    vad[dim*k + l] = valuesOut[k*dimension + j + l];
                   }
                 }
                 newVAS->setVertexData(id, dim, dp::DataType::FLOAT_32, &vad[0], 0, dp::checked_cast<unsigned int>(vad.size() / dim));
 
                 // inherit enable states from source attrib
                 // normalize-enable state only meaningful for generic aliases!
-                newVAS->setEnabled(id, p->isEnabled(id)); // conventional
+                newVAS->setEnabled(id, vas->isEnabled(id)); // conventional
 
                 id = static_cast<VertexAttributeSet::AttributeID>(i + 16);    // generic
-                newVAS->setEnabled(id, p->isEnabled(id));
-                newVAS->setNormalizeEnabled(id, p->isNormalizeEnabled(id));
+                newVAS->setEnabled(id, vas->isEnabled(id));
+                newVAS->setNormalizeEnabled(id, vas->isNormalizeEnabled(id));
                 j += dim;
               }
             }
@@ -966,10 +947,14 @@ namespace dp
             DP_ASSERT(m_vasReplacements.find(vas) == m_vasReplacements.end());
             m_vasReplacements[vas] = VASReplacement(newVAS, indexMap);
           }
-          else
-          {
-            delete octree;
-          }
+        }
+      }
+
+      void UnifyTraverser::unifyVerticesThreadFunction(std::vector<dp::sg::core::ObjectSharedPtr> const& results)
+      {
+        for (unsigned int i = m_unifyVerticesIndex.fetch_add(1); i < results.size(); i = m_unifyVerticesIndex.fetch_add(1))
+        {
+          unifyVertices(std::static_pointer_cast<dp::sg::core::VertexAttributeSet>(results[i]));
         }
       }
 
@@ -1014,302 +999,6 @@ namespace dp
         if ( ! found )
         {
           m_vertexAttributeSets.insert( make_pair( hashKey, vertexAttributeSet ) );
-        }
-      }
-
-      //  Compare the first three components of arrays of float
-      //  These are the position of a vertex
-      bool areSimilarFirst( const float * v0, const float * v1, float eps )
-      {
-        for ( unsigned int i=0 ; i<3 ; i++ )
-        {
-          if ( eps < fabsf( v0[i] - v1[i] ) )
-          {
-            return( false );
-          }
-        }
-        return( true );
-      }
-
-      //  Compare all but the first three components of two arrays of float
-      //  These are the vertex attributes without position
-      bool areSimilarLast( const float * v0, const float * v1, unsigned int n, float eps )
-      {
-        DP_ASSERT( 3 <= n );
-        for ( unsigned int i=3 ; i<n ; i++ )
-        {
-          if ( eps < fabsf( v0[i] - v1[i] ) )
-          {
-            return( false );
-          }
-        }
-        return( true );
-      }
-
-      VUTOctreeIndices::VUTOctreeIndices( unsigned int maxIndices )
-        : m_maxIndices(maxIndices)
-      {
-      }
-
-      VUTOctreeIndices::~VUTOctreeIndices( void )
-      {
-      }
-
-      bool  VUTOctreeIndices::addVertex( const vector<float *> &vertices, unsigned int index, unsigned int dimension, float tol )
-      {
-        const float * v = vertices[index];
-        bool inserted = false;
-        for ( IndexContainer::iterator it = m_indices.begin() ; it != m_indices.end() ; ++it )
-        {
-          //  determine if the vertex v is already represented in this octel
-          if ( areSimilarFirst( v, vertices[(*it)[0][0]], tol ) )
-          {
-            //  the vertex v has a similar position as a previously encountered vertex
-            for ( size_t j=0 ; j<it->size() ; j++ )
-            {
-              //  determine if one of those vertices with the same position also has the same attributes
-              if ( areSimilarLast( v, vertices[(*it)[j][0]], dimension, tol ) )
-              {
-                //  the vertex v also has similar attributes as a previously encountered vertex
-                //  => push the index of v and break the inner loop
-                (*it)[j].push_back( index );
-                inserted = true;
-                break;
-              }
-            }
-            if ( ! inserted )
-            {
-              //  there is no previously encountered vertex with similar attributes
-              //  => push the index of v into a new vector of indices and break the loop
-              it->push_back( vector<unsigned int>() );
-              it->back().push_back( index );
-              inserted = true;
-              break;
-            }
-          }
-        }
-        if ( ! inserted && ( m_indices.size() < m_maxIndices ) )
-        {
-          //  there is no previously encountered vertex with the same position and there is still space for a new
-          //  set of indices => push the index of v into a new vector of indices...
-          m_indices.push_back( vector<vector<unsigned int> >() );
-          m_indices.back().push_back( vector<unsigned int>() );
-          m_indices.back().back().push_back( index );
-          inserted = true;
-        }
-        return( inserted );
-      }
-
-      void VUTOctreeIndices::addIndexList( const vector<vector<unsigned int> > & indexList )
-      {
-        //  push the new indexList
-        DP_ASSERT( m_indices.size() < m_maxIndices );
-        m_indices.push_back( indexList );
-      }
-
-      void VUTOctreeIndices::clear( void )
-      {
-        //  clear the indices without deleting all the contents; these should already be pushed into other
-        //  VUTOctreeIndices elements
-        m_indices.clear();
-      }
-
-      VUTOctreeIndices::IndexContainer::const_iterator VUTOctreeIndices::getIndexListBegin() const
-      {
-        return( m_indices.begin() );
-      }
-
-      VUTOctreeIndices::IndexContainer::const_iterator VUTOctreeIndices::getIndexListEnd() const
-      {
-        return( m_indices.end() );
-      }
-
-      unsigned int VUTOctreeIndices::getMaxIndices( void ) const
-      {
-        return( m_maxIndices );
-      }
-
-      unsigned int VUTOctreeIndices::getNumberOfPoints( void ) const
-      {
-        //  get the number of different points in that octel
-        size_t nop = 0;
-        for ( IndexContainer::const_iterator it = m_indices.begin() ; it != m_indices.end() ; ++it )
-        {
-          nop += it->size();
-        }
-        return( dp::checked_cast<unsigned int>(nop) );
-      }
-
-      void VUTOctreeIndices::mapValues( const vector<float *> & valuesIn, vector<float *> & valuesOut, unsigned int dimension, vector<unsigned int> &indexMap, unsigned int &index )
-      {
-        // loop over all vertices in the octel
-        for ( IndexContainer::const_iterator it = m_indices.begin() ; it != m_indices.end() ; ++it )
-        {
-          DP_ASSERT( it->size() );
-          // loop over all vertices with equal position (at least one)
-          for ( size_t j=0 ; j<it->size() ; j++ )
-          {
-            DP_ASSERT( (*it)[j].size() );
-            //  get the index of the first vertex in the set of similar vertices
-            size_t first = (*it)[j][0];
-            //  get the first vertex into the valuesOut vector
-            memcpy( valuesOut[index], valuesIn[first], dimension * sizeof(float) );
-            //  and store it's new index into the indexMap
-            indexMap[first] = index;
-            if ( 1 < (*it)[j].size() )
-            {
-              //  there are more than one similar vertices
-              //  => calculate the representation as the average of all of them
-              for ( size_t k=1 ; k<(*it)[j].size() ; k++ )
-              {
-                size_t next = (*it)[j][k];
-                for ( unsigned int d=0 ; d<dimension ; d++ )
-                {
-                  valuesOut[index][d] += valuesIn[next][d];
-                }
-                indexMap[next] = index;
-              }
-              for ( unsigned int d=0 ; d<dimension ; d++ )
-              {
-                valuesOut[index][d] /= (float)((*it)[j].size());
-              }
-            }
-            index++;
-          }
-        }
-      }
-
-      VUTOctreeSubNodes::VUTOctreeSubNodes( const Box3f & box, const Vec3f & center, unsigned int maxIndicesPerOctel )
-      {
-        const Vec3f & lower = box.getLower();
-        const Vec3f & upper = box.getUpper();
-
-        nodes[0][0][0].init( Box3f( Vec3f( lower[0], lower[1], lower[2] ), Vec3f( center[0], center[1], center[2] ) ), maxIndicesPerOctel );
-        nodes[0][0][1].init( Box3f( Vec3f( lower[0], lower[1], center[2] ), Vec3f( center[0], center[1], upper[2] ) ), maxIndicesPerOctel );
-        nodes[0][1][0].init( Box3f( Vec3f( lower[0], center[1], lower[2] ), Vec3f( center[0], upper[1], center[2] ) ), maxIndicesPerOctel );
-        nodes[0][1][1].init( Box3f( Vec3f( lower[0], center[1], center[2] ), Vec3f( center[0], upper[1], upper[2] ) ), maxIndicesPerOctel );
-        nodes[1][0][0].init( Box3f( Vec3f( center[0], lower[1], lower[2] ), Vec3f( upper[0], center[1], center[2] ) ), maxIndicesPerOctel );
-        nodes[1][0][1].init( Box3f( Vec3f( center[0], lower[1], center[2] ), Vec3f( upper[0], center[1], upper[2] ) ), maxIndicesPerOctel );
-        nodes[1][1][0].init( Box3f( Vec3f( center[0], center[1], lower[2] ), Vec3f( upper[0], upper[1], center[2] ) ), maxIndicesPerOctel );
-        nodes[1][1][1].init( Box3f( Vec3f( center[0], center[1], center[2] ), Vec3f( upper[0], upper[1], upper[2] ) ), maxIndicesPerOctel );
-      }
-
-      void VUTOctreeSubNodes::addIndexList( const vector<vector<unsigned int> > & indexList, const vector<float*> &vertices, const Vec3f & center )
-      {
-        const float * v = vertices[indexList[0][0]];
-        nodes[center[0]<=v[0]][center[1]<=v[1]][center[2]<=v[2]].addIndexList( indexList );
-      }
-
-      void VUTOctreeSubNodes::addVertex( const vector<float*> &vertices, unsigned int index, unsigned int dimension, float tol, unsigned int level, const Vec3f & center )
-      {
-        const float * v = vertices[index];
-        nodes[center[0]<=v[0]][center[1]<=v[1]][center[2]<=v[2]].addVertex( vertices, index, dimension, tol, level );
-      }
-
-      unsigned int VUTOctreeSubNodes::getNumberOfPoints() const
-      {
-        return( nodes[0][0][0].getNumberOfPoints()
-              + nodes[0][0][1].getNumberOfPoints()
-              + nodes[0][1][0].getNumberOfPoints()
-              + nodes[0][1][1].getNumberOfPoints()
-              + nodes[1][0][0].getNumberOfPoints()
-              + nodes[1][0][1].getNumberOfPoints()
-              + nodes[1][1][0].getNumberOfPoints()
-              + nodes[1][1][1].getNumberOfPoints() );
-      }
-
-      void VUTOctreeSubNodes::mapValues( const vector<float *> & valuesIn, vector<float *> & valuesOut, unsigned int dimension, vector<unsigned int> &indexMap, unsigned int &index )
-      {
-        nodes[0][0][0].mapValues( valuesIn, valuesOut, dimension, indexMap, index );
-        nodes[0][0][1].mapValues( valuesIn, valuesOut, dimension, indexMap, index );
-        nodes[0][1][0].mapValues( valuesIn, valuesOut, dimension, indexMap, index );
-        nodes[0][1][1].mapValues( valuesIn, valuesOut, dimension, indexMap, index );
-        nodes[1][0][0].mapValues( valuesIn, valuesOut, dimension, indexMap, index );
-        nodes[1][0][1].mapValues( valuesIn, valuesOut, dimension, indexMap, index );
-        nodes[1][1][0].mapValues( valuesIn, valuesOut, dimension, indexMap, index );
-        nodes[1][1][1].mapValues( valuesIn, valuesOut, dimension, indexMap, index );
-      }
-
-      VUTOctreeNode::~VUTOctreeNode( void )
-      {
-        if ( m_data )
-        {
-          delete m_data;
-        }
-        else
-        {
-          DP_ASSERT( m_nodes );
-          delete m_nodes;
-        }
-      }
-
-      void VUTOctreeNode::addVertex( const vector<float *> &vertices, unsigned int index, unsigned int dimension, float tol, unsigned int level )
-      {
-        if ( m_data )
-        {
-          //  the octel holds data, so try to add the vertex here
-          if ( ! m_data->addVertex( vertices, index, dimension, tol ) )
-          {
-            //  the vertex couldn't be added, so distribute the data of this octel
-            distributeData( vertices, tol );
-            //  and add the vertex to the appropriate sub-octel
-            m_nodes->addVertex( vertices, index, dimension, tol, level+1, m_center );
-          }
-        }
-        else
-        {
-          //  the octel is not a leave, so add the vertex to the appropriat sub-octel
-          m_nodes->addVertex( vertices, index, dimension, tol, level+1, m_center );
-        }
-      }
-
-      void VUTOctreeNode::addIndexList( const vector<vector<unsigned int> > & indexList )
-      {
-        DP_ASSERT( m_data );
-        m_data->addIndexList( indexList );
-      }
-
-      void VUTOctreeNode::distributeData( const vector<float *> & vertices, float tol )
-      {
-        unsigned int maxIndicesPerOctel = m_data->getMaxIndices();
-
-        //  create the eight sub-octels with half the size
-        m_nodes = new VUTOctreeSubNodes( m_box, m_center, maxIndicesPerOctel );
-
-        //  distribute the index lists into the sub-octels
-        for ( VUTOctreeIndices::IndexContainer::const_iterator it = m_data->getIndexListBegin() ; it != m_data->getIndexListEnd() ; ++it )
-        {
-          m_nodes->addIndexList( *it, vertices, m_center );
-        }
-
-        //  clear the m_data to make clear, this octel is not a leave anymore
-        m_data->clear();
-        delete m_data;
-        m_data = NULL;
-      }
-
-      unsigned int VUTOctreeNode::getNumberOfPoints( void ) const
-      {
-        return( m_data ? m_data->getNumberOfPoints() : m_nodes->getNumberOfPoints() );
-      }
-
-      void VUTOctreeNode::init( const Box3f & bbox, unsigned int maxIndicesPerOctel )
-      {
-        m_box = bbox;
-        m_center = bbox.getCenter();
-        m_data = new VUTOctreeIndices( maxIndicesPerOctel );
-        m_nodes = NULL;
-      }
-
-      void VUTOctreeNode::mapValues( const vector<float *> & valuesIn, vector<float *> & valuesOut, unsigned int dimension, vector<unsigned int> &indexMap, unsigned int &index )
-      {
-        if ( m_data )
-        {
-          m_data->mapValues( valuesIn, valuesOut, dimension, indexMap, index );
-        }
-        else
-        {
-          m_nodes->mapValues( valuesIn, valuesOut, dimension, indexMap, index );
         }
       }
 

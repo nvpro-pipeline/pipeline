@@ -31,6 +31,7 @@
 #include <dp/sg/core/Primitive.h>
 #include <dp/util/Flags.h>
 
+#include <atomic>
 #include <list>
 #include <vector>
 #include <utility>
@@ -188,7 +189,8 @@ namespace dp
           dp::sg::core::PipelineDataSharedPtr unifyPipelineData( const dp::sg::core::PipelineDataSharedPtr & pipelineData );
           void unifyStateSet( dp::sg::core::GeoNode *p );
           void unifyVertexAttributeSet( dp::sg::core::Primitive *p );
-          void unifyVertices(dp::sg::core::VertexAttributeSet *p);
+          void unifyVertices(dp::sg::core::VertexAttributeSetSharedPtr const& vas);
+          void unifyVerticesThreadFunction(std::vector<dp::sg::core::ObjectSharedPtr> const& results);
 
         private:
           // map an old VAS to a new one and the corresponding mapping of indices
@@ -222,6 +224,7 @@ namespace dp
           std::multimap<dp::util::HashKey,dp::sg::core::SamplerSharedPtr>             m_samplers;
           std::multimap<dp::util::HashKey,dp::sg::core::TextureSharedPtr>             m_textures;
           TargetMask                                                                  m_unifyTargets;
+          std::atomic<unsigned int>                                                   m_unifyVerticesIndex;
           VASReplacementMap                                                           m_vasReplacements;
           std::multimap<dp::util::HashKey,dp::sg::core::VertexAttributeSetSharedPtr>  m_vertexAttributeSets;
           std::multimap<dp::util::HashKey, dp::sg::core::BufferSharedPtr>             m_vertexBuffers;
