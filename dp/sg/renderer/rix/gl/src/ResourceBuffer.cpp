@@ -51,7 +51,7 @@ namespace dp
               resourceBuffer = std::shared_ptr<ResourceBuffer>( new ResourceBuffer( buffer, resourceManager ) );
               if ( std::dynamic_pointer_cast<dp::sg::gl::BufferGL>(buffer) )
               {
-                dp::sg::gl::BufferGLSharedPtr const& buffergl = std::static_pointer_cast<dp::sg::gl::BufferGL>(buffer);
+                dp::sg::gl::BufferGLSharedPtr buffergl = std::static_pointer_cast<dp::sg::gl::BufferGL>(buffer);
                 dp::rix::gl::BufferDescriptionGL bufferDescription( dp::rix::gl::UsageHint::STATIC_DRAW, buffergl->getBuffer() );
 
                 resourceBuffer->m_bufferHandle = resourceManager->getRenderer()->bufferCreate( bufferDescription );

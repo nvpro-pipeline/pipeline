@@ -45,7 +45,7 @@ static bool useSSE = false;
 #endif
 
 #if defined(DP_ARCH_ARM_32)
-#define NEON
+//#define NEON
 #endif
 
 #if defined(NEON)
@@ -467,7 +467,7 @@ namespace dp
       void ManagerImpl::cull( GroupSharedPtr const& group, ResultSharedPtr const& result, const dp::math::Mat44f& viewProjection )
       {
         dp::util::ProfileEntry p("cull");
-        GroupCPUSharedPtr const & groupImpl = std::static_pointer_cast<GroupCPU>(group);
+        GroupCPUSharedPtr groupImpl = std::static_pointer_cast<GroupCPU>(group);
 
         groupImpl->updateOBBs();
         std::vector<OBB> const &obbs = groupImpl->getOBBs();

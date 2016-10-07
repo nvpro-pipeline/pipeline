@@ -211,7 +211,7 @@ namespace dp
         bool equi = std::dynamic_pointer_cast<Billboard>(object) && Group::isEquivalent( object, ignoreNames, deepCompare );
         if ( equi )
         {
-          BillboardSharedPtr const& b = std::static_pointer_cast<Billboard>(object);
+          BillboardSharedPtr b = std::static_pointer_cast<Billboard>(object);
           equi = ( m_alignment == b->m_alignment )
               && ( ( m_alignment != Alignment::AXIS ) || ( m_rotationAxis == b->m_rotationAxis ) );
         }

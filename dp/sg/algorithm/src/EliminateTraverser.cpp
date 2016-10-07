@@ -75,7 +75,7 @@ namespace dp
           if (  ( ( m_eliminateTargets & Target::LOD )                                    && ( std::dynamic_pointer_cast<LOD>(oldRoot) ) )
             ||  ( ( m_eliminateTargets & ( Target::GROUP | Target::GROUP_SINGLE_CHILD ) ) && ( std::dynamic_pointer_cast<Group>(oldRoot) ) ) )
           {
-            GroupSharedPtr const& group = std::static_pointer_cast<Group>(oldRoot);
+            GroupSharedPtr group = std::static_pointer_cast<Group>(oldRoot);
             if ( m_scene &&  isOneChildCandidate( group ) ) // Apply this optimization only if we have valid scene handle,
                                                             // and root, as a group node, has only one child
             {
@@ -235,7 +235,7 @@ namespace dp
               isJoint = std::static_pointer_cast<Transform>(*gci)->isJoint();
             }
 
-            GroupSharedPtr const& group = std::static_pointer_cast<Group>(*gci);
+            GroupSharedPtr group = std::static_pointer_cast<Group>(*gci);
             if (    ( getIgnoreNames() || group->getName().empty() )        // only unnamed or if names are to be ignored
                 &&  optimizationAllowed( group )                            // only if optimization is allowed
                 &&  (   (   ( group->getObjectCode() == ObjectCode::GROUP )          // replace a Group (and only a Group)
@@ -263,7 +263,7 @@ namespace dp
             else
             {
               DP_ASSERT( std::dynamic_pointer_cast<Group>(*gci) );
-              GroupSharedPtr const& group = std::static_pointer_cast<Group>(*gci);
+              GroupSharedPtr group = std::static_pointer_cast<Group>(*gci);
               for ( Group::ChildrenIterator grandChild = group->beginChildren() ; grandChild != group->endChildren() ; ++grandChild )
               {
                 (*grandChild)->addHints( group->getHints() );
@@ -293,7 +293,7 @@ namespace dp
         {
           if( std::dynamic_pointer_cast<Group>(*gci) )
           {
-            GroupSharedPtr const& group = std::static_pointer_cast<Group>(*gci);
+            GroupSharedPtr group = std::static_pointer_cast<Group>(*gci);
             if ( group->getObjectCode() == objectCode )
             {
               if ( isOneChildCandidate( group ) )

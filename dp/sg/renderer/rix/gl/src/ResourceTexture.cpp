@@ -290,7 +290,7 @@ namespace dp
             if ( std::dynamic_pointer_cast<dp::sg::core::TextureFile>(m_texture) )
             {
               // It's a file texture. Generate a TextureHost out of the TextureFile and upload it.
-              dp::sg::core::TextureFileSharedPtr const& textureFile = std::static_pointer_cast<dp::sg::core::TextureFile>(m_texture);
+              dp::sg::core::TextureFileSharedPtr textureFile = std::static_pointer_cast<dp::sg::core::TextureFile>(m_texture);
               dp::sg::core::TextureHostSharedPtr textureHost = dp::sg::io::loadTextureHost(textureFile->getFilename(), dp::util::FileFinder{ dp::home() });
               if ( textureHost )
               {
@@ -311,13 +311,13 @@ namespace dp
             // TODO buffers are not being observed
             else if ( std::dynamic_pointer_cast<dp::sg::core::TextureHost>(m_texture) )
             {
-              dp::sg::core::TextureHostSharedPtr const& textureHost = std::static_pointer_cast<dp::sg::core::TextureHost>(m_texture);
+              dp::sg::core::TextureHostSharedPtr textureHost = std::static_pointer_cast<dp::sg::core::TextureHost>(m_texture);
               m_textureHandle = getRiXTexture( textureHost );
               updateRiXTexture( m_textureHandle, textureHost );
             }
             else if ( std::dynamic_pointer_cast<dp::sg::gl::TextureGL>(m_texture) )
             {
-              dp::sg::gl::TextureGLSharedPtr const& textureGL = std::static_pointer_cast<dp::sg::gl::TextureGL>(m_texture);
+              dp::sg::gl::TextureGLSharedPtr textureGL = std::static_pointer_cast<dp::sg::gl::TextureGL>(m_texture);
               dp::rix::gl::TextureDescriptionGL td( getRiXTextureType(m_texture), dp::rix::core::InternalTextureFormat::NATIVE, dp::rix::gl::getDPPixelFormat( textureGL->getTexture()->getFormat() )
                                                   , dp::rix::gl::getDPDataType( textureGL->getTexture()->getType() ) );
               m_textureHandle = renderer->textureCreate( td );

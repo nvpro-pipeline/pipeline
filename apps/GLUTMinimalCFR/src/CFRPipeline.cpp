@@ -248,8 +248,8 @@ void CFRPipeline::doRender(dp::sg::ui::ViewStateSharedPtr const& viewState, dp::
 
     GpuData& gpuData = m_gpuData[i];
 
-    const dp::gl::RenderTargetFBO::SharedAttachment &attachment = std::static_pointer_cast<dp::gl::RenderTargetFBO>(gpuData.m_renderTarget)->getAttachment(dp::gl::RenderTargetFBO::AttachmentTarget::COLOR0);
-    const dp::gl::RenderTargetFBO::SharedAttachmentTexture &texAtt = std::static_pointer_cast<dp::gl::RenderTargetFBO::AttachmentTexture>(attachment);
+    const dp::gl::RenderTargetFBO::SharedAttachment attachment = std::static_pointer_cast<dp::gl::RenderTargetFBO>(gpuData.m_renderTarget)->getAttachment(dp::gl::RenderTargetFBO::AttachmentTarget::COLOR0);
+    const dp::gl::RenderTargetFBO::SharedAttachmentTexture texAtt = std::static_pointer_cast<dp::gl::RenderTargetFBO::AttachmentTexture>(attachment);
 
     DP_ASSERT( texAtt );
 

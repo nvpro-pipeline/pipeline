@@ -228,7 +228,7 @@ namespace dp
           {
             if ( std::dynamic_pointer_cast<PerspectiveCamera>(viewState->getCamera()) )
             {
-              PerspectiveCameraSharedPtr const& camera = std::static_pointer_cast<PerspectiveCamera>(viewState->getCamera());
+              PerspectiveCameraSharedPtr camera = std::static_pointer_cast<PerspectiveCamera>(viewState->getCamera());
 
               int dy = getCurrentY() - getLastY();
               float multiplier = 1.0f;
@@ -518,7 +518,7 @@ namespace dp
           {
             viewStateHdl->setTargetDistance(hitDistance);
 
-            CameraSharedPtr const& camera = viewStateHdl->getCamera();
+            CameraSharedPtr camera = viewStateHdl->getCamera();
             camera->setPosition(rayOrigin);
             camera->setDirection(rayDir);
           }
@@ -533,7 +533,7 @@ namespace dp
           {
             if ( std::dynamic_pointer_cast<PerspectiveCamera>(viewState->getCamera()) )
             {
-              PerspectiveCameraSharedPtr const& camera = std::static_pointer_cast<PerspectiveCamera>(viewState->getCamera());
+              PerspectiveCameraSharedPtr camera = std::static_pointer_cast<PerspectiveCamera>(viewState->getCamera());
 
               int vpW = getRenderTarget()->getWidth();
               int vpH = getRenderTarget()->getHeight();
@@ -590,7 +590,7 @@ namespace dp
           {
             if ( std::dynamic_pointer_cast<PerspectiveCamera>(viewState->getCamera()) )
             {
-              PerspectiveCameraSharedPtr const& camera = std::static_pointer_cast<PerspectiveCamera>(viewState->getCamera());
+              PerspectiveCameraSharedPtr camera = std::static_pointer_cast<PerspectiveCamera>(viewState->getCamera());
 
               int vpW = getRenderTarget()->getWidth();
               int vpH = getRenderTarget()->getHeight();

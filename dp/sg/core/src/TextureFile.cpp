@@ -155,7 +155,7 @@ namespace dp
         bool equi = std::dynamic_pointer_cast<TextureFile>(texture) && Texture::isEquivalent( texture, deepCompare );
         if ( equi )
         {
-          TextureFileSharedPtr const& tf = std::static_pointer_cast<TextureFile>(texture);
+          TextureFileSharedPtr tf = std::static_pointer_cast<TextureFile>(texture);
           equi = ( m_filename == tf->m_filename );
         }
         return( equi );

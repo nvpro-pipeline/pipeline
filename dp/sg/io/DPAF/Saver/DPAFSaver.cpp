@@ -1873,7 +1873,7 @@ void DPAFSaveTraverser::handleSampler( const Sampler * p )
       const TextureSharedPtr & texture = p->getTexture();
       if ( texture && std::dynamic_pointer_cast<TextureHost>(texture) )
       {
-        TextureHostSharedPtr const& textureHost = std::static_pointer_cast<TextureHost>(texture);
+        TextureHostSharedPtr const textureHost = std::static_pointer_cast<TextureHost>(texture);
         if ( textureHost->getFileName().empty() )
         {
           textureImage( textureHost );
@@ -1885,7 +1885,7 @@ void DPAFSaveTraverser::handleSampler( const Sampler * p )
       objectData( p );
       if ( texture && std::dynamic_pointer_cast<TextureHost>(texture) )
       {
-        TextureHostSharedPtr const& textureHost = std::static_pointer_cast<TextureHost>(texture);
+        TextureHostSharedPtr const textureHost = std::static_pointer_cast<TextureHost>(texture);
         if ( textureHost->getFileName().empty() )
         {
           DP_ASSERT( m_textureImageNames.find(textureHost) != m_textureImageNames.end() );

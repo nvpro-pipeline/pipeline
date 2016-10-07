@@ -125,7 +125,7 @@ namespace dp
 
         void CullingImpl::cull( ResultSharedPtr const & result, dp::math::Mat44f const & world2ViewProjection )
         {
-          ResultImplSharedPtr const & resultImpl = std::static_pointer_cast<ResultImpl>(result);
+          ResultImplSharedPtr resultImpl = std::static_pointer_cast<ResultImpl>(result);
           dp::math::Mat44f const * transforms = m_sceneTree->getTransformTree().getTree().getWorldMatrices();
           m_culling->groupSetMatrices(m_cullingGroup, transforms, m_sceneTree->getTransformTree().getTree().getTransformCount(), sizeof(transforms[0]));
           m_culling->cull( m_cullingGroup, resultImpl->getResult(), world2ViewProjection );
@@ -137,7 +137,7 @@ namespace dp
           changedIndices.clear();
           for ( size_t index = 0;index < changedObjects.size(); ++index )
           {
-            PayloadSharedPtr const & p = std::static_pointer_cast<Payload>(m_culling->objectGetUserData(changedObjects[index]));
+            PayloadSharedPtr p = std::static_pointer_cast<Payload>(m_culling->objectGetUserData(changedObjects[index]));
 
             changedIndices.push_back( p->getObjectTreeIndex() );
           }

@@ -764,7 +764,7 @@ namespace dp
       {
         snippets.clear();
 
-        dp::fx::mdl::EffectSpecSharedPtr const& effectSpec = std::static_pointer_cast<dp::fx::mdl::EffectSpec>(dp::fx::EffectLibrary::instance()->getEffectSpec(configuration.getName()));
+        dp::fx::mdl::EffectSpecSharedPtr effectSpec = std::static_pointer_cast<dp::fx::mdl::EffectSpec>(dp::fx::EffectLibrary::instance()->getEffectSpec(configuration.getName()));
 
         // All other domains have only one set of code snippets per technique and ignore the signature.
         dp::fx::Domain signatureDomain = Domain::FRAGMENT;

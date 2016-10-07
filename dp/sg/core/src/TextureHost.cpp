@@ -2176,7 +2176,7 @@ namespace dp
         bool equi = std::dynamic_pointer_cast<TextureHost>(texture) && Texture::isEquivalent( texture, deepCompare );
         if ( equi )
         {
-          TextureHostSharedPtr const& th = std::static_pointer_cast<TextureHost>(texture);
+          TextureHostSharedPtr th = std::static_pointer_cast<TextureHost>(texture);
 
           equi =  ( th != nullptr )
               &&  ( m_creationFlags   == th->m_creationFlags )

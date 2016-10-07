@@ -358,7 +358,7 @@ void ScenePropertiesWidget::stateChangedBool( int state )
 void ScenePropertiesWidget::textureSelectionClicked( bool checked )
 {
   DP_ASSERT( std::dynamic_pointer_cast<dp::sg::core::Sampler>(m_object) );
-  dp::sg::core::SamplerSharedPtr const& sampler = std::static_pointer_cast<dp::sg::core::Sampler>(m_object);
+  dp::sg::core::SamplerSharedPtr sampler = std::static_pointer_cast<dp::sg::core::Sampler>(m_object);
 
   QString textureFile = GetApp()->getMainWindow()->getTextureFile( textureTargetToType( sampler->getTexture()->getTextureTarget() ) );
   if ( ! textureFile.isEmpty() )

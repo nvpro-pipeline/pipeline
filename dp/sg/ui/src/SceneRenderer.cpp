@@ -75,7 +75,7 @@ namespace dp
             float direction = (eye == dp::ui::RenderTarget::StereoTarget::LEFT ) ? -1.0f : 1.0f;
             float eyeDistance = stereoViewState->getStereoEyeDistance();
             //  do the left pass first
-            FrustumCameraSharedPtr const& clonedCamera = std::static_pointer_cast<FrustumCamera>(stereoViewState->getCamera()->clone());
+            FrustumCameraSharedPtr clonedCamera = std::static_pointer_cast<FrustumCamera>(stereoViewState->getCamera()->clone());
             {
               Vec2f windowOffset = clonedCamera->getWindowOffset();
               clonedCamera->setWindowOffset( Vec2f( windowOffset[0] + 0.5f * eyeDistance * (-direction), windowOffset[1] ) );

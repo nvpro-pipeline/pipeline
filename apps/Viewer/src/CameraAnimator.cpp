@@ -94,7 +94,7 @@ double clampDeviation( float start, float end, float part, double minTime )
 
 void CameraAnimator::orbitCamera( unsigned int axisID, bool cameraRelative, float radians )
 {
-  dp::sg::core::FrustumCameraSharedPtr const& fch = std::static_pointer_cast<dp::sg::core::FrustumCamera>(m_viewState->getCamera());
+  dp::sg::core::FrustumCameraSharedPtr fch = std::static_pointer_cast<dp::sg::core::FrustumCamera>(m_viewState->getCamera());
   float targetDistance = m_viewState->getTargetDistance();
   dp::math::Vec3f axis( (axisID & BIT0) ? 1.0f : 0.0f,
                         (axisID & BIT1) ? 1.0f : 0.0f,
@@ -251,7 +251,7 @@ void CameraAnimator::moveCamera( double t )
   }
 
   DP_ASSERT( std::dynamic_pointer_cast<dp::sg::core::FrustumCamera>(m_viewState->getCamera()) );
-  dp::sg::core::FrustumCameraSharedPtr const& fch = std::static_pointer_cast<dp::sg::core::FrustumCamera>(m_viewState->getCamera());
+  dp::sg::core::FrustumCameraSharedPtr fch = std::static_pointer_cast<dp::sg::core::FrustumCamera>(m_viewState->getCamera());
   fch->setOrientation( orientation );
   fch->setPosition( position );
   fch->setNearDistance( nearDistance );

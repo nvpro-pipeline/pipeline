@@ -669,7 +669,7 @@ namespace dp
         bool equi = std::dynamic_pointer_cast<ParameterGroupData>(object) && Object::isEquivalent( object, ignoreNames, deepCompare );
         if ( equi )
         {
-          ParameterGroupDataSharedPtr const& pgd = std::static_pointer_cast<ParameterGroupData>(object);
+          ParameterGroupDataSharedPtr pgd = std::static_pointer_cast<ParameterGroupData>(object);
           if ( deepCompare )
           {
             equi = m_parameterGroupSpec->isEquivalent( pgd->m_parameterGroupSpec, ignoreNames, true );

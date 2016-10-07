@@ -277,7 +277,7 @@ namespace dp
         bool equi = std::dynamic_pointer_cast<Group>(object) && Node::isEquivalent( object, ignoreNames, deepCompare );
         if ( equi )
         {
-          GroupSharedPtr const& g = std::static_pointer_cast<Group>(object);
+          GroupSharedPtr g = std::static_pointer_cast<Group>(object);
           equi =   ( m_children.size()   == g->m_children.size() )
                 && ( m_clipPlanes.size() == g->m_clipPlanes.size() );
           if ( deepCompare )

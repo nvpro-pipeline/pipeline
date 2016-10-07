@@ -339,7 +339,7 @@ namespace dp
         bool equi = std::dynamic_pointer_cast<Switch>(object) && Group::isEquivalent( object, ignoreNames, deepCompare );
         if ( equi )
         {
-          SwitchSharedPtr const& s = std::static_pointer_cast<Switch>(object);
+          SwitchSharedPtr s = std::static_pointer_cast<Switch>(object);
           equi = ( m_activeMaskKey == s->m_activeMaskKey &&
                    m_masks == s->m_masks );
         }

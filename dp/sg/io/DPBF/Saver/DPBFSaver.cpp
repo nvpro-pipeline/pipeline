@@ -730,7 +730,7 @@ void DPBFSaveTraverser::handleSampler( const Sampler * p )
       const TextureSharedPtr & texture = p->getTexture();
       if ( texture && std::dynamic_pointer_cast<TextureHost>(texture) )
       {
-        TextureHostSharedPtr const& th = std::static_pointer_cast<TextureHost>(p->getTexture());
+        TextureHostSharedPtr th = std::static_pointer_cast<TextureHost>(p->getTexture());
         if ( ! th->getFileName().empty() )
         {
           // determine storage requirements for the image file name
@@ -756,7 +756,7 @@ void DPBFSaveTraverser::handleSampler( const Sampler * p )
       {
         Offset_AutoPtr<texImage_t> img(this, samplerPtr->texture);
 
-        TextureHostSharedPtr const& th = std::static_pointer_cast<TextureHost>(p->getTexture());
+        TextureHostSharedPtr th = std::static_pointer_cast<TextureHost>(p->getTexture());
         string file(th->getFileName());
         writeTexImage( file, th, img );
       }

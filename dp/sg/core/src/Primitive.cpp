@@ -51,22 +51,22 @@ namespace dp
         switch (indexSet->getIndexDataType())
         {
         case dp::DataType::INT_8:
-          op.eval<uint8_t>(vertices, indexSet, count, offset, normals);
+          op.template eval<uint8_t>(vertices, indexSet, count, offset, normals);
           break;
         case dp::DataType::INT_16:
-          op.eval<int16_t>(vertices, indexSet, count, offset, normals);
+          op.template eval<int16_t>(vertices, indexSet, count, offset, normals);
           break;
         case dp::DataType::INT_32:
-          op.eval<int32_t>(vertices, indexSet, count, offset, normals);
+          op.template eval<int32_t>(vertices, indexSet, count, offset, normals);
           break;
         case dp::DataType::UNSIGNED_INT_8:
-          op.eval<uint8_t>(vertices, indexSet, count, offset, normals);
+          op.template eval<uint8_t>(vertices, indexSet, count, offset, normals);
           break;
         case dp::DataType::UNSIGNED_INT_16:
-          op.eval<uint16_t>(vertices, indexSet, count, offset, normals);
+          op.template eval<uint16_t>(vertices, indexSet, count, offset, normals);
           break;
         case dp::DataType::UNSIGNED_INT_32:
-          op.eval<uint32_t>(vertices, indexSet, count, offset, normals);
+          op.template eval<uint32_t>(vertices, indexSet, count, offset, normals);
           break;
         default:
           DP_ASSERT(!"unsupported datatype");
@@ -84,22 +84,22 @@ namespace dp
         switch (indexSet->getIndexDataType())
         {
         case dp::DataType::INT_8:
-          op.eval<uint8_t>(vas, tc, indexSet, count, offset, normals);
+          op.template eval<uint8_t>(vas, tc, indexSet, count, offset, normals);
           break;
         case dp::DataType::INT_16:
-          op.eval<int16_t>(vas, tc, indexSet, count, offset, normals);
+          op.template eval<int16_t>(vas, tc, indexSet, count, offset, normals);
           break;
         case dp::DataType::INT_32:
-          op.eval<int32_t>(vas, tc, indexSet, count, offset, normals);
+          op.template eval<int32_t>(vas, tc, indexSet, count, offset, normals);
           break;
         case dp::DataType::UNSIGNED_INT_8:
-          op.eval<uint8_t>(vas, tc, indexSet, count, offset, normals);
+          op.template eval<uint8_t>(vas, tc, indexSet, count, offset, normals);
           break;
         case dp::DataType::UNSIGNED_INT_16:
-          op.eval<uint16_t>(vas, tc, indexSet, count, offset, normals);
+          op.template eval<uint16_t>(vas, tc, indexSet, count, offset, normals);
           break;
         case dp::DataType::UNSIGNED_INT_32:
-          op.eval<uint32_t>(vas, tc, indexSet, count, offset, normals);
+          op.template eval<uint32_t>(vas, tc, indexSet, count, offset, normals);
           break;
         default:
           DP_ASSERT(!"unsupported datatype");
@@ -348,7 +348,7 @@ namespace dp
         bool equi = std::dynamic_pointer_cast<Primitive>(object) && BoundingVolumeObject::isEquivalent( object, ignoreNames, deepCompare );
         if ( equi )
         {
-          PrimitiveSharedPtr const& p = std::static_pointer_cast<Primitive>(object);
+          PrimitiveSharedPtr p = std::static_pointer_cast<Primitive>(object);
 
           equi = m_primitiveType        == p->m_primitiveType &&
                  m_elementOffset        == p->m_elementOffset &&

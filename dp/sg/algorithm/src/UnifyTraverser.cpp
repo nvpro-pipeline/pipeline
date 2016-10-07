@@ -621,7 +621,7 @@ namespace dp
         {
           if ( std::dynamic_pointer_cast<GeoNode>(*gci) )
           {
-            GeoNodeSharedPtr const& geoNode = std::static_pointer_cast<GeoNode>(*gci);
+            GeoNodeSharedPtr geoNode = std::static_pointer_cast<GeoNode>(*gci);
             {
               if ( optimizationAllowed( geoNode ) )
               {
@@ -667,7 +667,7 @@ namespace dp
         {
           if ( std::dynamic_pointer_cast<Group>(*gci) )
           {
-            GroupSharedPtr const& group = std::static_pointer_cast<Group>(*gci);
+            GroupSharedPtr group = std::static_pointer_cast<Group>(*gci);
             {
               if ( optimizationAllowed( group ) )
               {
@@ -755,7 +755,7 @@ namespace dp
           if ( std::dynamic_pointer_cast<LOD>(*gci) )
           {
             bool optimizable = false, found = false;
-            LODSharedPtr const& lod = std::static_pointer_cast<LOD>(*gci);
+            LODSharedPtr lod = std::static_pointer_cast<LOD>(*gci);
             {
               optimizable = optimizationAllowed( lod );
               if( optimizable )

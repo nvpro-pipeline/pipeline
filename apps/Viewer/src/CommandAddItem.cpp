@@ -171,7 +171,7 @@ bool add( dp::sg::core::ObjectSharedPtr const& parent, dp::sg::core::ObjectShare
     case dp::sg::core::ObjectCode::PARAMETER_GROUP_DATA :
       DP_ASSERT( child->getObjectCode() == dp::sg::core::ObjectCode::SAMPLER );
       {
-        dp::sg::core::ParameterGroupDataSharedPtr const& pgd = std::static_pointer_cast<dp::sg::core::ParameterGroupData>(parent);
+        dp::sg::core::ParameterGroupDataSharedPtr pgd = std::static_pointer_cast<dp::sg::core::ParameterGroupData>(parent);
         const dp::fx::ParameterGroupSpecSharedPtr & pgs = pgd->getParameterGroupSpec();
         dp::fx::ParameterGroupSpec::iterator it = pgs->findParameterSpec(std::static_pointer_cast<dp::sg::core::Sampler>(child)->getName());
         DP_ASSERT( it != pgs->endParameterSpecs() );
@@ -253,7 +253,7 @@ bool remove( dp::sg::core::ObjectSharedPtr const& parent, dp::sg::core::ObjectSh
     case dp::sg::core::ObjectCode::PARAMETER_GROUP_DATA :
       DP_ASSERT( child->getObjectCode() == dp::sg::core::ObjectCode::SAMPLER );
       {
-        dp::sg::core::ParameterGroupDataSharedPtr const& pgd = std::static_pointer_cast<dp::sg::core::ParameterGroupData>(parent);
+        dp::sg::core::ParameterGroupDataSharedPtr pgd = std::static_pointer_cast<dp::sg::core::ParameterGroupData>(parent);
         const dp::fx::ParameterGroupSpecSharedPtr & pgs = pgd->getParameterGroupSpec();
         dp::fx::ParameterGroupSpec::iterator it = pgs->findParameterSpec(std::static_pointer_cast<dp::sg::core::Sampler>(child)->getName());
         DP_ASSERT( it != pgs->endParameterSpecs() );
@@ -269,8 +269,8 @@ bool remove( dp::sg::core::ObjectSharedPtr const& parent, dp::sg::core::ObjectSh
     case dp::sg::core::ObjectCode::PIPELINE_DATA :
       DP_ASSERT( std::dynamic_pointer_cast<dp::sg::core::ParameterGroupData>(child) );
       {
-        dp::sg::core::ParameterGroupDataSharedPtr const& pgd = std::static_pointer_cast<dp::sg::core::ParameterGroupData>(child);
-        dp::sg::core::PipelineDataSharedPtr const& pd = std::static_pointer_cast<dp::sg::core::PipelineData>(parent);
+        dp::sg::core::ParameterGroupDataSharedPtr pgd = std::static_pointer_cast<dp::sg::core::ParameterGroupData>(child);
+        dp::sg::core::PipelineDataSharedPtr pd = std::static_pointer_cast<dp::sg::core::PipelineData>(parent);
         dp::fx::EffectSpecSharedPtr const & es = pd->getEffectSpec();
         DP_ASSERT( es->findParameterGroupSpec( pgd->getParameterGroupSpec() ) != es->endParameterGroupSpecs() );
         std::static_pointer_cast<dp::sg::core::PipelineData>(parent)->setParameterGroupData(es->findParameterGroupSpec(pgd->getParameterGroupSpec()), dp::sg::core::ParameterGroupDataSharedPtr());

@@ -531,7 +531,7 @@ void setLights( size_t counter = ~0 )
 {
   if( !g_lightSources[0] )
   {
-    dp::sg::core::GroupSharedPtr const& rootPtr = std::static_pointer_cast<dp::sg::core::Group>(g_viewState->getScene()->getRootNode());
+    dp::sg::core::GroupSharedPtr rootPtr = std::static_pointer_cast<dp::sg::core::Group>(g_viewState->getScene()->getRootNode());
     DP_ASSERT( rootPtr );
 
     // add own lights to the root node

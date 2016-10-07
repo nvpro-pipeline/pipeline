@@ -179,7 +179,7 @@ namespace dp
         bool equi = std::dynamic_pointer_cast<GeoNode>(object) && Node::isEquivalent( object, ignoreNames, deepCompare );
         if ( equi )
         {
-          GeoNodeSharedPtr const& gn = std::static_pointer_cast<GeoNode>(object);
+          GeoNodeSharedPtr gn = std::static_pointer_cast<GeoNode>(object);
           if ( deepCompare )
           {
             equi = ( !!m_pipelineData == !!gn->m_pipelineData ) && ( !!m_primitive == !!gn->m_primitive );

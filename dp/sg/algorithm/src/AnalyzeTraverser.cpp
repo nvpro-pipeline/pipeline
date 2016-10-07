@@ -586,7 +586,7 @@ namespace dp
         {
           if ( std::dynamic_pointer_cast<GeoNode>(*gci) )
           {
-            GeoNodeSharedPtr const& geoNode = std::static_pointer_cast<GeoNode>(*gci);
+            GeoNodeSharedPtr geoNode = std::static_pointer_cast<GeoNode>(*gci);
 
             map<GeoNodeSharedPtr,vector<GeoNodeSharedPtr> >::iterator it;
             for ( it = geoNodes.begin() ; it != geoNodes.end() ; ++it )
@@ -605,7 +605,7 @@ namespace dp
           }
           else if ( std::dynamic_pointer_cast<LOD>(*gci) )
           {
-            LODSharedPtr const& lod = std::static_pointer_cast<LOD>(*gci);
+            LODSharedPtr lod = std::static_pointer_cast<LOD>(*gci);
 
             map<LODSharedPtr,vector<LODSharedPtr> >::iterator it;
             for ( it = lods.begin() ; it != lods.end() ; ++it )
@@ -624,7 +624,7 @@ namespace dp
           }
           else if ( std::dynamic_pointer_cast<Transform>(*gci) )
           {
-            TransformSharedPtr const& transform = std::static_pointer_cast<Transform>(*gci);
+            TransformSharedPtr transform = std::static_pointer_cast<Transform>(*gci);
 
             map<TransformSharedPtr,vector<TransformSharedPtr> >::iterator it;
             for ( it = transforms.begin() ; it != transforms.end() ; ++it )

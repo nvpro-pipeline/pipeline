@@ -125,7 +125,7 @@ void QtMinimalWidget::keyPressEvent( QKeyEvent *event )
   }
   else if ( event->text().compare( "d" ) == 0 )
   {
-    dp::sg::renderer::rix::gl::SceneRendererSharedPtr const& renderer = std::static_pointer_cast<dp::sg::renderer::rix::gl::SceneRenderer>(getSceneRenderer());
+    dp::sg::renderer::rix::gl::SceneRendererSharedPtr renderer = std::static_pointer_cast<dp::sg::renderer::rix::gl::SceneRenderer>(getSceneRenderer());
     renderer->setDepthPass( ! renderer->getDepthPass() );
   }
   else if ( event->text().compare("s") == 0 )

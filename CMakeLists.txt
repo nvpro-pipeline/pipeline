@@ -44,14 +44,6 @@ file(TO_CMAKE_PATH "$ENV{BUILD_TOOLS_DIR}" BUILD_TOOLS_DIR)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMake" "${DP_3RDPARTY_PATH}/CMake")
 
-if ( "${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "armv7l")
-  set(DP_ARCH "${CMAKE_SYSTEM_PROCESSOR}" CACHE STRING "CPU Architecture" )
-elseif( CMAKE_SIZEOF_VOID_P EQUAL 8 )
-  set (DP_ARCH "amd64" CACHE STRING "CPU Architecture")
-else ()
-  set (DP_ARCH "x86" CACHE STRING "CPU Architecture")
-endif()
-
 find_package( Boost REQUIRED )
 
 if(UNIX) 
@@ -87,8 +79,8 @@ endif()
 
 if(UNIX)
   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
- 
-  if (DP_ARCH STREQUAL "amd64")
+
+  if (${DP_ARCH} STREQUAL "amd64")
     set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -msse4.1")
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse4.1")
   endif()

@@ -1339,7 +1339,7 @@ void WRLLoader::determineTexGen( IndexedFaceSetSharedPtr const& pIndexedFaceSet
   DP_ASSERT( pIndexedFaceSet && parameterGroupData );
   DP_ASSERT( std::dynamic_pointer_cast<Coordinate>(pIndexedFaceSet->coord) );
 
-  MFVec3f const& point = std::static_pointer_cast<Coordinate>(pIndexedFaceSet->coord)->point;
+  MFVec3f point = std::static_pointer_cast<Coordinate>(pIndexedFaceSet->coord)->point;
   SFVec3f min = point[0];
   SFVec3f max = min;
   for ( size_t i=1 ; i<point.size() ; i++ )
@@ -1836,7 +1836,7 @@ SceneSharedPtr WRLLoader::import( const string &filename )
           for ( Scene::CameraIterator scci = m_scene->beginCameras() ; scci != m_scene->endCameras() ; ++scci )
           {
             DP_ASSERT( std::dynamic_pointer_cast<PerspectiveCamera>(*scci) );
-            PerspectiveCameraSharedPtr const& pc = std::static_pointer_cast<PerspectiveCamera>(*scci);
+            PerspectiveCameraSharedPtr pc = std::static_pointer_cast<PerspectiveCamera>(*scci);
             pc->calcNearFarDistances( bs );
             pc->setFocusDistance( 0.5f * ( pc->getNearDistance() + pc->getFarDistance() ) );
           }
@@ -2773,7 +2773,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
   DP_ASSERT( std::dynamic_pointer_cast<Coordinate>(pIndexedFaceSet->coord) );
   DP_ASSERT( !pIndexedFaceSet->normal || std::dynamic_pointer_cast<Normal>(pIndexedFaceSet->normal) );
   DP_ASSERT( !pIndexedFaceSet->color || std::dynamic_pointer_cast<Color>(pIndexedFaceSet->color) );
-  CoordinateSharedPtr const& pCoordinate = std::static_pointer_cast<Coordinate>(pIndexedFaceSet->coord);
+  CoordinateSharedPtr pCoordinate = std::static_pointer_cast<Coordinate>(pIndexedFaceSet->coord);
 
   VertexAttributeSetSharedPtr vash;
 #if defined(KEEP_ANIMATION)
@@ -2812,7 +2812,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
     //  set the animated normals
     if ( pIndexedFaceSet->normal && std::static_pointer_cast<Normal>(pIndexedFaceSet->normal)->set_vector )
     {
-      NormalSharedPtr const& pNormal = std::static_pointer_cast<Normal>(pIndexedFaceSet->normal);
+      NormalSharedPtr pNormal = std::static_pointer_cast<Normal>(pIndexedFaceSet->normal);
       DP_ASSERT( pNormal->interpreted );
       DP_ASSERT( pCoordinate->set_point->key == pNormal->set_vector->key );
 
@@ -2887,7 +2887,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
     //  set the animated colors
     if ( pIndexedFaceSet->color && std::static_pointer_cast<Color>(pIndexedFaceSet->color)->set_color )
     {
-      ColorSharedPtr const& pColor = std::static_pointer_cast<Color>(pIndexedFaceSet->color);
+      ColorSharedPtr pColor = std::static_pointer_cast<Color>(pIndexedFaceSet->color);
       DP_ASSERT( pColor->interpreted );
       DP_ASSERT( pCoordinate->set_point->key == pColor->set_color->key );
 
@@ -2976,7 +2976,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
     //  set the normals
     if ( pIndexedFaceSet->normal )
     {
-      NormalSharedPtr const& pNormal = std::static_pointer_cast<Normal>(pIndexedFaceSet->normal);
+      NormalSharedPtr pNormal = std::static_pointer_cast<Normal>(pIndexedFaceSet->normal);
       vector<Vec3f> normals;
       if ( pIndexedFaceSet->normalPerVertex )
       {
@@ -3006,7 +3006,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
     //  set the texture coordinates
     if ( pIndexedFaceSet->texCoord )
     {
-      TextureCoordinateSharedPtr const& pTextureCoordinate = std::static_pointer_cast<TextureCoordinate>(pIndexedFaceSet->texCoord);
+      TextureCoordinateSharedPtr pTextureCoordinate = std::static_pointer_cast<TextureCoordinate>(pIndexedFaceSet->texCoord);
       vector<Vec2f> texCoords;
       gatherPerVertex<Vec2f>( texCoords, pTextureCoordinate->point,
                               pIndexedFaceSet->texCoordIndex.empty()
@@ -3019,7 +3019,7 @@ VertexAttributeSetSharedPtr WRLLoader::interpretVertexAttributeSet( IndexedFaceS
     //  set the colors
     if ( pIndexedFaceSet->color )
     {
-      ColorSharedPtr const& pColor = std::static_pointer_cast<Color>(pIndexedFaceSet->color);
+      ColorSharedPtr pColor = std::static_pointer_cast<Color>(pIndexedFaceSet->color);
       vector<Vec3f> colors;
       if ( pIndexedFaceSet->colorPerVertex )
       {
@@ -3073,7 +3073,7 @@ void  WRLLoader::interpretIndexedLineSet( IndexedLineSetSharedPtr const& pIndexe
     iset->setData( &indices[0] , dp::checked_cast<unsigned int>(indices.size()) );
 
     DP_ASSERT( std::dynamic_pointer_cast<Coordinate>(pIndexedLineSet->coord) );
-    CoordinateSharedPtr const& pCoordinate = std::static_pointer_cast<Coordinate>(pIndexedLineSet->coord);
+    CoordinateSharedPtr pCoordinate = std::static_pointer_cast<Coordinate>(pIndexedLineSet->coord);
     DP_ASSERT( pCoordinate && ! pCoordinate->set_point );
     vector<Vec3f> vertices( ic );
     for ( size_t i=0, j=0 ; i<pIndexedLineSet->coordIndex.size() ; i++ )
@@ -3088,7 +3088,7 @@ void  WRLLoader::interpretIndexedLineSet( IndexedLineSetSharedPtr const& pIndexe
 
     if ( pIndexedLineSet->color )
     {
-      ColorSharedPtr const& pColor = std::static_pointer_cast<Color>(pIndexedLineSet->color);
+      ColorSharedPtr pColor = std::static_pointer_cast<Color>(pIndexedLineSet->color);
       vector<Vec3f> colors( vertices.size() );
       if ( pIndexedLineSet->colorPerVertex )
       {
@@ -3328,7 +3328,7 @@ void  WRLLoader::interpretPointSet( PointSetSharedPtr const& pPointSet, vector<P
     VertexAttributeSetSharedPtr cvas = VertexAttributeSet::create();
 
     DP_ASSERT( std::dynamic_pointer_cast<Coordinate>(pPointSet->coord) );
-    CoordinateSharedPtr const& pCoordinate = std::static_pointer_cast<Coordinate>(pPointSet->coord);
+    CoordinateSharedPtr pCoordinate = std::static_pointer_cast<Coordinate>(pPointSet->coord);
     DP_ASSERT( pCoordinate->point.size() < UINT_MAX );
     vector<Vec3f> vertices( pCoordinate->point.size() );
     for ( unsigned i=0 ; i<pCoordinate->point.size() ; i++ )
@@ -3340,7 +3340,7 @@ void  WRLLoader::interpretPointSet( PointSetSharedPtr const& pPointSet, vector<P
     if ( pPointSet->color )
     {
       DP_ASSERT( std::dynamic_pointer_cast<Color>(pPointSet->color) );
-      ColorSharedPtr const& pColor = std::static_pointer_cast<Color>(pPointSet->color);
+      ColorSharedPtr pColor = std::static_pointer_cast<Color>(pPointSet->color);
       DP_ASSERT( pCoordinate->point.size() <= pColor->color.size() );
       vector<Vec3f> colors( pCoordinate->point.size() );
       for ( size_t i=0 ; i<pCoordinate->point.size() ; i++ )
@@ -4943,7 +4943,7 @@ void  WRLLoader::readIndex( vector<SFInt32> &mf )
 bool removeCollinearPoint( IndexedFaceSetSharedPtr const& pIndexedFaceSet, unsigned int i0, unsigned int i1, unsigned int i2 )
 {
   DP_ASSERT( std::dynamic_pointer_cast<Coordinate>(pIndexedFaceSet->coord) );
-  CoordinateSharedPtr const& pC = std::static_pointer_cast<Coordinate>(pIndexedFaceSet->coord);
+  CoordinateSharedPtr pC = std::static_pointer_cast<Coordinate>(pIndexedFaceSet->coord);
   Vec3f e0 = pC->point[pIndexedFaceSet->coordIndex[i1]] - pC->point[pIndexedFaceSet->coordIndex[i0]];
   Vec3f e1 = pC->point[pIndexedFaceSet->coordIndex[i2]] - pC->point[pIndexedFaceSet->coordIndex[i1]];
   if ( length( e0 ^ e1 ) <= FLT_EPSILON )
@@ -4952,7 +4952,7 @@ bool removeCollinearPoint( IndexedFaceSetSharedPtr const& pIndexedFaceSet, unsig
     if ( pIndexedFaceSet->color && pIndexedFaceSet->colorPerVertex && ! pIndexedFaceSet->colorIndex.empty() )
     {
       DP_ASSERT( std::dynamic_pointer_cast<Color>(pIndexedFaceSet->color) );
-      ColorSharedPtr const& pColor = std::static_pointer_cast<Color>(pIndexedFaceSet->color);
+      ColorSharedPtr pColor = std::static_pointer_cast<Color>(pIndexedFaceSet->color);
       Vec3f dc0 = pColor->color[pIndexedFaceSet->colorIndex[i1]] - pColor->color[pIndexedFaceSet->colorIndex[i0]];
       Vec3f dc1 = pColor->color[pIndexedFaceSet->colorIndex[i2]] - pColor->color[pIndexedFaceSet->colorIndex[i1]];
       remove = ( length( dc0 / length( e0 ) - dc1 / length( e1 ) ) < FLT_EPSILON );
@@ -4960,7 +4960,7 @@ bool removeCollinearPoint( IndexedFaceSetSharedPtr const& pIndexedFaceSet, unsig
     if ( remove && pIndexedFaceSet->normal && pIndexedFaceSet->normalPerVertex && ! pIndexedFaceSet->normalIndex.empty() )
     {
       DP_ASSERT( std::dynamic_pointer_cast<Normal>(pIndexedFaceSet->normal) );
-      NormalSharedPtr const& pNormal = std::static_pointer_cast<Normal>(pIndexedFaceSet->normal);
+      NormalSharedPtr pNormal = std::static_pointer_cast<Normal>(pIndexedFaceSet->normal);
       Vec3f nxn0 = pNormal->vector[pIndexedFaceSet->normalIndex[i0]] ^ pNormal->vector[pIndexedFaceSet->normalIndex[i1]];
       Vec3f nxn1 = pNormal->vector[pIndexedFaceSet->normalIndex[i1]] ^ pNormal->vector[pIndexedFaceSet->normalIndex[i2]];
       float c0 = pNormal->vector[pIndexedFaceSet->normalIndex[i0]] * pNormal->vector[pIndexedFaceSet->normalIndex[i1]];
@@ -4971,7 +4971,7 @@ bool removeCollinearPoint( IndexedFaceSetSharedPtr const& pIndexedFaceSet, unsig
     if ( remove && pIndexedFaceSet->texCoord && ! pIndexedFaceSet->texCoordIndex.empty() )
     {
       DP_ASSERT( std::dynamic_pointer_cast<TextureCoordinate>(pIndexedFaceSet->texCoord) );
-      TextureCoordinateSharedPtr const& pTextureCoordinate = std::static_pointer_cast<TextureCoordinate>(pIndexedFaceSet->texCoord);
+      TextureCoordinateSharedPtr pTextureCoordinate = std::static_pointer_cast<TextureCoordinate>(pIndexedFaceSet->texCoord);
       Vec2f dt0 = pTextureCoordinate->point[pIndexedFaceSet->texCoordIndex[i1]] - pTextureCoordinate->point[pIndexedFaceSet->texCoordIndex[i0]];
       Vec2f dt1 = pTextureCoordinate->point[pIndexedFaceSet->texCoordIndex[i2]] - pTextureCoordinate->point[pIndexedFaceSet->texCoordIndex[i1]];
       remove = ( length( dt0 / length( e0 ) - dt1 / length( e1 ) ) < FLT_EPSILON );
@@ -5002,7 +5002,7 @@ bool removeCollinearPoint( IndexedFaceSetSharedPtr const& pIndexedFaceSet, unsig
 bool removeRedundantPoint( IndexedFaceSetSharedPtr const& pIndexedFaceSet, unsigned int i0, unsigned int i1 )
 {
   DP_ASSERT( std::dynamic_pointer_cast<Coordinate>(pIndexedFaceSet->coord) );
-  CoordinateSharedPtr const& pC = std::static_pointer_cast<Coordinate>(pIndexedFaceSet->coord);
+  CoordinateSharedPtr pC = std::static_pointer_cast<Coordinate>(pIndexedFaceSet->coord);
   if (    ( pIndexedFaceSet->coordIndex[i0] == pIndexedFaceSet->coordIndex[i1] )
       ||  ( length( pC->point[pIndexedFaceSet->coordIndex[i1]] - pC->point[pIndexedFaceSet->coordIndex[i0]] ) < FLT_EPSILON ) )
   {
@@ -5010,7 +5010,7 @@ bool removeRedundantPoint( IndexedFaceSetSharedPtr const& pIndexedFaceSet, unsig
     if ( pIndexedFaceSet->color && pIndexedFaceSet->colorPerVertex && ! pIndexedFaceSet->colorIndex.empty() )
     {
       DP_ASSERT( std::dynamic_pointer_cast<Color>(pIndexedFaceSet->color) );
-      ColorSharedPtr const& pColor = std::static_pointer_cast<Color>(pIndexedFaceSet->color);
+      ColorSharedPtr pColor = std::static_pointer_cast<Color>(pIndexedFaceSet->color);
       remove =    ( pIndexedFaceSet->colorIndex[i0] == pIndexedFaceSet->colorIndex[i1] )
                || ( length( pColor->color[pIndexedFaceSet->colorIndex[i1]] - pColor->color[pIndexedFaceSet->colorIndex[i0]] ) < FLT_EPSILON );
       DP_ASSERT( remove );    // never encountered this
@@ -5018,14 +5018,14 @@ bool removeRedundantPoint( IndexedFaceSetSharedPtr const& pIndexedFaceSet, unsig
     if ( remove && pIndexedFaceSet->normal && pIndexedFaceSet->normalPerVertex && ! pIndexedFaceSet->normalIndex.empty() )
     {
       DP_ASSERT( std::dynamic_pointer_cast<Normal>(pIndexedFaceSet->normal) );
-      NormalSharedPtr const& pNormal = std::static_pointer_cast<Normal>(pIndexedFaceSet->normal);
+      NormalSharedPtr pNormal = std::static_pointer_cast<Normal>(pIndexedFaceSet->normal);
       remove =    ( pIndexedFaceSet->normalIndex[i0] == pIndexedFaceSet->normalIndex[i1] )
                || ( length( pNormal->vector[pIndexedFaceSet->normalIndex[i1]] - pNormal->vector[pIndexedFaceSet->normalIndex[i0]] ) < FLT_EPSILON );
     }
     if ( remove && pIndexedFaceSet->texCoord && ! pIndexedFaceSet->texCoordIndex.empty() )
     {
       DP_ASSERT( std::dynamic_pointer_cast<TextureCoordinate>(pIndexedFaceSet->texCoord) );
-      TextureCoordinateSharedPtr const& pTextureCoordinate = std::static_pointer_cast<TextureCoordinate>(pIndexedFaceSet->texCoord);
+      TextureCoordinateSharedPtr pTextureCoordinate = std::static_pointer_cast<TextureCoordinate>(pIndexedFaceSet->texCoord);
       remove =    ( pIndexedFaceSet->texCoordIndex[i0] == pIndexedFaceSet->texCoordIndex[i1] )
                || ( length( pTextureCoordinate->point[pIndexedFaceSet->texCoordIndex[i1]] - pTextureCoordinate->point[pIndexedFaceSet->texCoordIndex[i0]] ) < FLT_EPSILON );
       DP_ASSERT( remove );    // never encountered this

@@ -203,7 +203,7 @@ namespace dp
         bool equi = std::dynamic_pointer_cast<LOD>(object) && Group::isEquivalent( object, ignoreNames, deepCompare );
         if ( equi )
         {
-          LODSharedPtr const& l = std::static_pointer_cast<LOD>(object);
+          LODSharedPtr l = std::static_pointer_cast<LOD>(object);
           equi =    ( m_center        == l->m_center        )
                 &&  ( m_ranges        == l->m_ranges        )
                 &&  ( m_isRangeLocked == l->m_isRangeLocked )

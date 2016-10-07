@@ -275,7 +275,7 @@ namespace dp
 
             // texture coord setup for mapping the backdrop
             //
-            dp::sg::core::FrustumCameraSharedPtr const& theCamera = std::static_pointer_cast<dp::sg::core::FrustumCamera>(viewState->getCamera());
+            dp::sg::core::FrustumCameraSharedPtr theCamera = std::static_pointer_cast<dp::sg::core::FrustumCamera>(viewState->getCamera());
 
             dp::math::Vec3f lookdir = theCamera->getDirection();
             DP_ASSERT( isNormalized( lookdir ) );
@@ -356,7 +356,7 @@ namespace dp
             drawableManagerDefault->cull( camera );
 
             NSIGHT_START_RANGE( "Frame" );
-            dp::gl::RenderTargetSharedPtr const& renderTargetGL = std::static_pointer_cast<dp::gl::RenderTarget>(renderTarget);
+            dp::gl::RenderTargetSharedPtr renderTargetGL = std::static_pointer_cast<dp::gl::RenderTarget>(renderTarget);
             dp::gl::TargetBufferMask clearMask = renderTargetGL->getClearMask();
             if ( getEnvironmentRenderingEnabled() )
             {

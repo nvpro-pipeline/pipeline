@@ -84,7 +84,7 @@ bool CommandReplaceItem::doReplace( SceneTreeItem * oldChild, SceneTreeItem * ne
     case ObjectCode::TRANSFORM :
     case ObjectCode::BILLBOARD :
       {
-        GroupSharedPtr const& g = std::static_pointer_cast<Group>(m_parent->getObject());
+        GroupSharedPtr g = std::static_pointer_cast<Group>(m_parent->getObject());
         if ( std::dynamic_pointer_cast<Node>(newChild->getObject()) )
         {
           DP_ASSERT(g->findChild(g->beginChildren(), std::static_pointer_cast<Node>(oldChild->getObject())) != g->endChildren());
@@ -113,7 +113,7 @@ bool CommandReplaceItem::doReplace( SceneTreeItem * oldChild, SceneTreeItem * ne
     case ObjectCode::PARAMETER_GROUP_DATA :
       DP_ASSERT( newChild->getObject()->getObjectCode() == ObjectCode::SAMPLER );
       {
-        ParameterGroupDataSharedPtr const& pgd = std::static_pointer_cast<ParameterGroupData>(m_parent->getObject());
+        ParameterGroupDataSharedPtr pgd = std::static_pointer_cast<ParameterGroupData>(m_parent->getObject());
         const dp::fx::ParameterGroupSpecSharedPtr & pgs = pgd->getParameterGroupSpec();
         dp::fx::ParameterGroupSpec::iterator it = pgs->findParameterSpec(std::static_pointer_cast<Sampler>(newChild->getObject())->getName());
         DP_ASSERT( it != pgs->endParameterSpecs() );
@@ -135,7 +135,7 @@ bool CommandReplaceItem::doReplace( SceneTreeItem * oldChild, SceneTreeItem * ne
     case ObjectCode::SCENE :
       if ( std::dynamic_pointer_cast<Camera>(m_newChild->getObject()) )
       {
-        SceneSharedPtr const& s = std::static_pointer_cast<Scene>(m_parent->getObject());
+        SceneSharedPtr s = std::static_pointer_cast<Scene>(m_parent->getObject());
         s->removeCamera(std::static_pointer_cast<Camera>(oldChild->getObject()));
         s->addCamera(std::static_pointer_cast<Camera>(newChild->getObject()));
       }
@@ -161,7 +161,7 @@ bool CommandReplaceItem::doReplace( SceneTreeItem * oldChild, SceneTreeItem * ne
   m_parent->setChildIndicatorPolicy();
   GetApp()->outputStatistics();
 
-  ObjectSharedPtr const& s = std::static_pointer_cast<Object>(oldChild->getObject());
+  ObjectSharedPtr s = std::static_pointer_cast<Object>(oldChild->getObject());
   if ( s->isAttached( m_observer ) )
   {
     s->detach( m_observer );

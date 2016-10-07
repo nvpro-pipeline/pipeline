@@ -302,7 +302,7 @@ namespace dp
           {
             if ( std::dynamic_pointer_cast<GeoNode>(*gci) && optimizationAllowed( *gci ) )
             {
-              GeoNodeSharedPtr const& geoNode = std::static_pointer_cast<GeoNode>(*gci);
+              GeoNodeSharedPtr geoNode = std::static_pointer_cast<GeoNode>(*gci);
 
               map<GeoNodeSharedPtr,vector<GeoNodeSharedPtr> >::iterator it;
               for ( it = geoNodes.begin() ; it != geoNodes.end() ; ++it )
@@ -405,7 +405,7 @@ namespace dp
         {
           if( std::dynamic_pointer_cast<LOD>(*gci) )
           {
-            LODSharedPtr const& lod = std::static_pointer_cast<LOD>(*gci);
+            LODSharedPtr lod = std::static_pointer_cast<LOD>(*gci);
             if( optimizationAllowed( lod ) )
             {
               unsigned int j = 0;
@@ -536,7 +536,7 @@ namespace dp
           if ( ((*gci)->getObjectCode() == ObjectCode::TRANSFORM) && optimizationAllowed( *gci ) )
           {
             //  gather Transforms in compatible bins
-            TransformSharedPtr const& transform = std::static_pointer_cast<Transform>(*gci);
+            TransformSharedPtr transform = std::static_pointer_cast<Transform>(*gci);
 
             HashKey hashKey;
             HashGeneratorMurMur hg;

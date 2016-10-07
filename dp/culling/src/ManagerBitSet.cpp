@@ -49,7 +49,7 @@ static bool useSSE = false;
 #endif
 
 #if defined(DP_ARCH_ARM_32)
-#define NEON
+//#define NEON
 #endif
 
 #if defined(NEON)
@@ -215,7 +215,7 @@ namespace dp
 #elif defined(NEON)
         if ( useNEON )
         {
-          const GroupBitSetSharedPtr& groupImpl = std::static_pointer_cast<GroupBitSet>(group);
+          GroupBitSetSharedPtr groupImpl = std::static_pointer_cast<GroupBitSet>(group);
 
           float32x4_t minValue = vdupq_n_f32( std::numeric_limits<float>::max() );
           float32x4_t maxValue = vdupq_n_f32( -std::numeric_limits<float>::max() );
@@ -267,7 +267,7 @@ namespace dp
 #endif
       // CPU fallback
       {
-        const GroupBitSetSharedPtr& groupImpl = std::static_pointer_cast<GroupBitSet>(group);
+        GroupBitSetSharedPtr groupImpl = std::static_pointer_cast<GroupBitSet>(group);
 
         dp::math::Box4f boundingBox;
 

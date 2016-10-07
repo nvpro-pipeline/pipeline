@@ -148,7 +148,7 @@ void SceneTreeBrowser::contextMenuEvent( QContextMenuEvent * event )
 
       case ObjectCode::PRIMITIVE :
         {
-          VertexAttributeSetSharedPtr const& vas = std::static_pointer_cast<Primitive>(currentItem->getObject())->getVertexAttributeSet();
+          VertexAttributeSetSharedPtr vas = std::static_pointer_cast<Primitive>(currentItem->getObject())->getVertexAttributeSet();
           if ( !vas->getVertexAttribute( VertexAttributeSet::AttributeID::TEXCOORD0 ).getBuffer() )
           {
             QMenu * subMenu = menu.addMenu( "Generate Texture &Coordinates" );
@@ -173,7 +173,7 @@ void SceneTreeBrowser::contextMenuEvent( QContextMenuEvent * event )
 
       case ObjectCode::PARAMETER_GROUP_DATA :
         {
-          ParameterGroupDataSharedPtr const& parameterGroupData = std::static_pointer_cast<ParameterGroupData>(currentItem->getObject());
+          ParameterGroupDataSharedPtr parameterGroupData = std::static_pointer_cast<ParameterGroupData>(currentItem->getObject());
           std::vector<dp::fx::ParameterGroupSpec::iterator> samplerParameters = getEmptySamplerParameters( parameterGroupData );
           if ( ! samplerParameters.empty() )
           {
@@ -379,7 +379,7 @@ void SceneTreeBrowser::triggeredSaveEffectData()
   DP_ASSERT( dynamic_cast<SceneTreeItem*>(m_tree->currentItem()) && dynamic_cast<SceneTreeItem*>(m_tree->currentItem())->getObject() );
   DP_ASSERT( std::dynamic_pointer_cast<dp::sg::core::PipelineData>(static_cast<SceneTreeItem*>(m_tree->currentItem())->getObject()) );
 
-  dp::sg::core::PipelineDataSharedPtr const& pipelineData = std::static_pointer_cast<dp::sg::core::PipelineData>(static_cast<SceneTreeItem*>(m_tree->currentItem())->getObject());
+  dp::sg::core::PipelineDataSharedPtr pipelineData = std::static_pointer_cast<dp::sg::core::PipelineData>(static_cast<SceneTreeItem*>(m_tree->currentItem())->getObject());
   std::string pipelineName = pipelineData->getEffectSpec()->getName();
   QString fileName = QFileDialog::getSaveFileName( this, tr( "Save PipelineData" ), QString( pipelineName.c_str() ) + QString( ".xml" ), tr( "XML (*.xml)" ) );
   if ( !fileName.isEmpty() )
@@ -392,7 +392,7 @@ void SceneTreeBrowser::triggeredShowShaderPipeline()
 {
   DP_ASSERT( dynamic_cast<SceneTreeItem*>(m_tree->currentItem()) && dynamic_cast<SceneTreeItem*>(m_tree->currentItem())->getObject() );
   DP_ASSERT(std::static_pointer_cast<GeoNode>(static_cast<SceneTreeItem*>(m_tree->currentItem())->getObject()));
-  GeoNodeSharedPtr const& geoNode = std::static_pointer_cast<GeoNode>(static_cast<SceneTreeItem*>(m_tree->currentItem())->getObject());
+  GeoNodeSharedPtr geoNode = std::static_pointer_cast<GeoNode>(static_cast<SceneTreeItem*>(m_tree->currentItem())->getObject());
 
   DP_ASSERT( GetApp() && GetApp()->getMainWindow() && GetApp()->getMainWindow()->getCurrentViewport() );
   ViewerRendererWidget * vrw = GetApp()->getMainWindow()->getCurrentViewport();

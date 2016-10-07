@@ -50,7 +50,7 @@ namespace
             const dp::sg::core::TextureSharedPtr & texture = sampler->getTexture();
             DP_ASSERT( texture );
             DP_ASSERT( std::dynamic_pointer_cast<dp::sg::core::TextureFile>(texture) );
-            dp::sg::core::TextureFileSharedPtr const& textureFile = std::static_pointer_cast<dp::sg::core::TextureFile>(texture);
+            dp::sg::core::TextureFileSharedPtr textureFile = std::static_pointer_cast<dp::sg::core::TextureFile>(texture);
             std::string filename = textureFile->getFilename();
 
             char*& destination = *reinterpret_cast<char**>(&m_data[it->second]);
@@ -287,7 +287,7 @@ namespace dp
         bool equi = std::dynamic_pointer_cast<PipelineData>(object) && Object::isEquivalent( object, ignoreNames, deepCompare );
         if ( equi )
         {
-          PipelineDataSharedPtr const& ed = std::static_pointer_cast<PipelineData>(object);
+          PipelineDataSharedPtr ed = std::static_pointer_cast<PipelineData>(object);
 
           equi = ( m_effectSpec->getNumberOfParameterGroupSpecs() == ed->m_effectSpec->getNumberOfParameterGroupSpecs() );
           if ( equi )

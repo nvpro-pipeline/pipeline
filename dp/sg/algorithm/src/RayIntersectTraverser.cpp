@@ -390,7 +390,7 @@ namespace dp
           {
             //  if near/far clipping, intersection is valid only if the sphere is not behind the far plane
             //  and not in front of the near plane
-            FrustumCameraSharedPtr const& fc = std::static_pointer_cast<FrustumCamera>(m_camera);
+            FrustumCameraSharedPtr fc = std::static_pointer_cast<FrustumCamera>(m_camera);
             intersects = ( ( cd - r ) <= fc->getFarDistance() ) && ( fc->getNearDistance() <= ( cd + r ) );
           }
           else
@@ -421,7 +421,7 @@ namespace dp
         {
           if ( std::dynamic_pointer_cast<FrustumCamera>(m_camera) )
           {
-            FrustumCameraSharedPtr const& fc = std::static_pointer_cast<FrustumCamera>(m_camera);
+            FrustumCameraSharedPtr fc = std::static_pointer_cast<FrustumCamera>(m_camera);
             outOfView = ( cdist < fc->getNearDistance() ) || ( fc->getFarDistance() < cdist );
           }
           else

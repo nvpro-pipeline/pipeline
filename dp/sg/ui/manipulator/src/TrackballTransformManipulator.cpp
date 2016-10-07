@@ -115,7 +115,7 @@ namespace dp
           {
             DP_ASSERT( std::dynamic_pointer_cast<FrustumCamera>(getViewState()->getCamera()) );
             TransformSharedPtr transform = std::static_pointer_cast<Transform>(m_transformPath->getTail());
-            FrustumCameraSharedPtr const& camera = std::static_pointer_cast<FrustumCamera>(getViewState()->getCamera());
+            FrustumCameraSharedPtr camera = std::static_pointer_cast<FrustumCamera>(getViewState()->getCamera());
             if ( camera && transform )
             {
               unsigned int rtWidth = getRenderTarget()->getWidth();
@@ -184,7 +184,7 @@ namespace dp
           {
             DP_ASSERT( std::dynamic_pointer_cast<FrustumCamera>(getViewState()->getCamera()) );
             TransformSharedPtr transform = std::static_pointer_cast<Transform>(m_transformPath->getTail());
-            FrustumCameraSharedPtr const& camera = std::static_pointer_cast<FrustumCamera>(getViewState()->getCamera());
+            FrustumCameraSharedPtr camera = std::static_pointer_cast<FrustumCamera>(getViewState()->getCamera());
             if ( camera && transform )
             {
               unsigned int rtWidth    = getRenderTarget()->getWidth();
@@ -305,7 +305,7 @@ namespace dp
           {
             DP_ASSERT( std::dynamic_pointer_cast<FrustumCamera>(getViewState()->getCamera()) );
             TransformSharedPtr transform = std::static_pointer_cast<Transform>(m_transformPath->getTail());
-            FrustumCameraSharedPtr const& camera = std::static_pointer_cast<FrustumCamera>(getViewState()->getCamera());
+            FrustumCameraSharedPtr camera = std::static_pointer_cast<FrustumCamera>(getViewState()->getCamera());
             if ( camera && transform )
             {
               unsigned int rtWidth = getRenderTarget()->getWidth();

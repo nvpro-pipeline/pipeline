@@ -7,6 +7,9 @@ if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/jsoncpp)
   set_target_properties( jsoncpp_lib_static PROPERTIES FOLDER "3rdparty")
 
   #configure assimp
+  if (UNIX)
+    add_compile_options(-fPIC)
+  endif()
   add_subdirectory(assimp)
 
 endif()

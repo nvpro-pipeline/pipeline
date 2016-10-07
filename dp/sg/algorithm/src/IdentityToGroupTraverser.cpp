@@ -58,7 +58,7 @@ namespace dp
 
         if ( m_scene && root->getObjectCode() == ObjectCode::TRANSFORM )
         {
-          TransformSharedPtr const& th = std::static_pointer_cast<Transform>(root);
+          TransformSharedPtr th = std::static_pointer_cast<Transform>(root);
           m_scene->setRootNode( createGroupFromTransform( th ) );
           setTreeModified();
         }
@@ -139,7 +139,7 @@ namespace dp
         bool ok = false;
         if( std::dynamic_pointer_cast<Transform>(nh) )
         {
-          TransformSharedPtr const& t = std::static_pointer_cast<Transform>(nh);
+          TransformSharedPtr t = std::static_pointer_cast<Transform>(nh);
           ok =    ( getIgnoreNames() || t->getName().empty() )
               &&  optimizationAllowed( t )
               &&  !t->isJoint()

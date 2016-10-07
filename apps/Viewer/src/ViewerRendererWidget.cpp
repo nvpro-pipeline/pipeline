@@ -602,7 +602,7 @@ ViewerRendererWidget::intersectObject( const dp::sg::core::NodeSharedPtr & baseS
   // requires a camera attached to the ViewState
   if ( std::dynamic_pointer_cast<FrustumCamera>(m_viewState->getCamera()) )
   {
-    FrustumCameraSharedPtr const& pCam = std::static_pointer_cast<FrustumCamera>(m_viewState->getCamera());
+    FrustumCameraSharedPtr pCam = std::static_pointer_cast<FrustumCamera>(m_viewState->getCamera());
 
     // calculate ray origin and direction from the input point
     Vec3f rayOrigin;
@@ -826,7 +826,7 @@ static void nameCamera( CameraSharedPtr camWP, const std::string & baseName, uns
 
 void ViewerRendererWidget::addCamera()
 {
-  PerspectiveCameraSharedPtr const& pcamh = std::static_pointer_cast<PerspectiveCamera>(m_viewState->getCamera());
+  PerspectiveCameraSharedPtr pcamh = std::static_pointer_cast<PerspectiveCamera>(m_viewState->getCamera());
   SceneSharedPtr const& ssh = m_viewState->getScene();
 
   if( pcamh )
@@ -852,7 +852,7 @@ void ViewerRendererWidget::moveSelectedObject()
 
   bool modified = false;
 
-  PerspectiveCameraSharedPtr const& pcam = std::static_pointer_cast<PerspectiveCamera>(m_viewState->getCamera());
+  PerspectiveCameraSharedPtr pcam = std::static_pointer_cast<PerspectiveCamera>(m_viewState->getCamera());
 
   // ensure we have an object highlighted!
   DP_ASSERT( m_highlightedObject );
@@ -895,7 +895,7 @@ void ViewerRendererWidget::moveSelectedObject()
 
     case ObjectCode::PERSPECTIVE_CAMERA:
     {
-      PerspectiveCameraSharedPtr const& pc = std::static_pointer_cast<PerspectiveCamera>(m_highlightedObject);
+      PerspectiveCameraSharedPtr pc = std::static_pointer_cast<PerspectiveCamera>(m_highlightedObject);
       pc->setPosition( pcam->getPosition() );
       pc->setOrientation( pcam->getOrientation() );
       modified = true;
@@ -1304,7 +1304,7 @@ void ViewerRendererWidget::setOITDepth( unsigned int depth )
   if ( m_oitDepth != depth )
   {
     m_oitDepth = depth;
-    dp::sg::renderer::rix::gl::SceneRendererSharedPtr const& sceneRenderer = std::static_pointer_cast<dp::sg::renderer::rix::gl::SceneRenderer>(getSceneRenderer());
+    dp::sg::renderer::rix::gl::SceneRendererSharedPtr sceneRenderer = std::static_pointer_cast<dp::sg::renderer::rix::gl::SceneRenderer>(getSceneRenderer());
     if ( sceneRenderer )
     {
       sceneRenderer->getTransparencyManager()->setLayersCount( m_oitDepth );

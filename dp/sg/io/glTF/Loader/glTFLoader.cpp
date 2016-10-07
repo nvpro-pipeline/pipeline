@@ -52,12 +52,13 @@
 
 #include <dp/fx/EffectLibrary.h>
 
-#include <gl/GL.h>
+#include <GL/gl.h>
 
 #include <boost/algorithm/string.hpp>
 
 // stl headers
 #include <algorithm>
+#include <fstream>
 
 using namespace dp::sg::core;
 using namespace dp::math;
@@ -166,7 +167,7 @@ glTFLoader::load( std::string const& filename, dp::util::FileFinder const& fileF
     Json::Value const& children = nodes[nodeName]["children"];
     if (children.isArray())
     {
-      dp::sg::core::TransformSharedPtr& transform = std::static_pointer_cast<dp::sg::core::Transform>(state.nodes[nodeName]);
+      dp::sg::core::TransformSharedPtr transform = std::static_pointer_cast<dp::sg::core::Transform>(state.nodes[nodeName]);
       for (auto const& child : children)
       {
         transform->addChild(state.nodes[child.asString()]);

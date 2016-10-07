@@ -144,7 +144,7 @@ namespace dp
         bool equi = std::dynamic_pointer_cast<LightSource>(object) && Node::isEquivalent( object, ignoreNames, deepCompare );
         if ( equi )
         {
-          LightSourceSharedPtr const& ls = std::static_pointer_cast<LightSource>(object);
+          LightSourceSharedPtr ls = std::static_pointer_cast<LightSource>(object);
 
           equi =    ( m_shadowCasting   == ls->m_shadowCasting )
                 &&  ( m_enabled         == ls->m_enabled       )

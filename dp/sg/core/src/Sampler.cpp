@@ -231,7 +231,7 @@ namespace dp
         bool equi = std::dynamic_pointer_cast<Sampler>(object) && Object::isEquivalent( object, ignoreNames, deepCompare );
         if ( equi )
         {
-          SamplerSharedPtr const& s = std::static_pointer_cast<Sampler>(object);
+          SamplerSharedPtr s = std::static_pointer_cast<Sampler>(object);
           equi =    ( !!m_texture     == !!s->m_texture )
                 &&  ( m_borderColor   == s->m_borderColor )
                 &&  ( m_magFilterMode == s->m_magFilterMode )
