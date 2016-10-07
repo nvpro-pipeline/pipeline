@@ -275,7 +275,9 @@ namespace dp
         m_isValid = ( m_fileMapping != NULL );
         if ( m_isValid )
         {
-          m_mappingSize = GetFileSize( m_file, NULL );
+          DWORD sizeHi = 0;
+          DWORD sizeLo = GetFileSize( m_file, &sizeHi );
+          m_mappingSize = (static_cast<size_t>(sizeHi) << 32) | sizeLo;
         }
         else
         {
