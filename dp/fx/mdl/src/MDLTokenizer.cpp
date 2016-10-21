@@ -479,7 +479,8 @@ namespace dp
           mi::base::Handle<mi::neuraylib::IExpression_list const> arguments = mi::base::make_handle(call->get_arguments());
           for (mi::Size i = 0; i<arguments->get_size(); i++)
           {
-            tokenizeArgument(i, arguments->get_name(i), mi::base::make_handle(arguments->get_expression(i)), mi::base::make_handle(defaults->get_expression(i)));
+            tokenizeArgument(i, arguments->get_name(i), mi::base::make_handle(arguments->get_expression(i)),
+                             mi::base::make_handle(defaults->get_expression(functionDefinition->get_parameter_name(i))));
           }
           callEnd();
         }
