@@ -5013,7 +5013,6 @@ bool removeRedundantPoint( IndexedFaceSetSharedPtr const& pIndexedFaceSet, unsig
       ColorSharedPtr pColor = std::static_pointer_cast<Color>(pIndexedFaceSet->color);
       remove =    ( pIndexedFaceSet->colorIndex[i0] == pIndexedFaceSet->colorIndex[i1] )
                || ( length( pColor->color[pIndexedFaceSet->colorIndex[i1]] - pColor->color[pIndexedFaceSet->colorIndex[i0]] ) < FLT_EPSILON );
-      DP_ASSERT( remove );    // never encountered this
     }
     if ( remove && pIndexedFaceSet->normal && pIndexedFaceSet->normalPerVertex && ! pIndexedFaceSet->normalIndex.empty() )
     {
@@ -5028,7 +5027,6 @@ bool removeRedundantPoint( IndexedFaceSetSharedPtr const& pIndexedFaceSet, unsig
       TextureCoordinateSharedPtr pTextureCoordinate = std::static_pointer_cast<TextureCoordinate>(pIndexedFaceSet->texCoord);
       remove =    ( pIndexedFaceSet->texCoordIndex[i0] == pIndexedFaceSet->texCoordIndex[i1] )
                || ( length( pTextureCoordinate->point[pIndexedFaceSet->texCoordIndex[i1]] - pTextureCoordinate->point[pIndexedFaceSet->texCoordIndex[i0]] ) < FLT_EPSILON );
-      DP_ASSERT( remove );    // never encountered this
     }
 
     if ( remove )
