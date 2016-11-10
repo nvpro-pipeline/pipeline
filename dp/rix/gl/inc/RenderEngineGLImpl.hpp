@@ -77,6 +77,7 @@ namespace dp
 
         bool                    m_useUniformBufferUnifiedMemory;
         bool                    m_batchedUpdates;
+        bool                    m_filterSamplers;
         BufferMode              m_bufferMode;
         RenderGroupCache*       m_currentProgramPipelineCache;
         dp::rix::gl::RiXGL*     m_rix;
@@ -107,6 +108,9 @@ namespace dp
 
         auto itBatchedUpdates = options.find("batchedUpdates");
         m_batchedUpdates = itBatchedUpdates != options.end() && itBatchedUpdates->second == "true";
+
+        auto itFilterSamplers = options.find("filterSamplers");
+        m_filterSamplers = itFilterSamplers != options.end() && itFilterSamplers->second == "true";
 
         auto itBufferMode = options.find("bufferMode");
         if (itBufferMode != options.end())
@@ -354,7 +358,7 @@ namespace dp
       template <typename VertexCache>
       RenderGroupGL::SmartCache RenderEngineGLImpl<VertexCache>::createCache( RenderGroupGLSharedHandle const & renderGroupGL, ProgramPipelineGLSharedHandle const & programPipeline )
       {
-        return new RenderGroupCache( renderGroupGL.get(), programPipeline.get(), m_useUniformBufferUnifiedMemory, m_bufferMode, m_batchedUpdates, m_rix->getNumberOfGPUs() );
+        return new RenderGroupCache( renderGroupGL.get(), programPipeline.get(), m_useUniformBufferUnifiedMemory, m_bufferMode, m_batchedUpdates, m_filterSamplers, m_rix->getNumberOfGPUs() );
       }
 
     } // namespace gl

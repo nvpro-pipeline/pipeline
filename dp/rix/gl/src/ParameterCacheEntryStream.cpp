@@ -58,6 +58,11 @@ namespace dp
 
       }
 
+      void ParameterCacheEntryStream::resetState()
+      {
+
+      }
+
       namespace
       {
         /************************************************************************/
@@ -271,6 +276,186 @@ namespace dp
           CacheInfo* cacheInfo = reinterpret_cast<CacheInfo*>( cacheData );
 
           for ( size_t index = 0;index < m_arraySize;++index )
+          {
+            SamplerHandle const& sampler = parameterDataSampler[index].m_samplerHandle;
+            TextureGLHandle texture = sampler ? sampler->getTexture().get() : nullptr;
+            cacheInfo[index].m_textureId = texture ? texture->getTexture()->getGLId() : 0;
+
+#if RIX_GL_SAMPLEROBJECT_SUPPORT == 1
+            SamplerStateGLHandle samplerState = sampler ? sampler->getSamplerState().get() : nullptr;
+            cacheInfo[index].m_samplerId = samplerState ? samplerState->m_id : 0;
+#endif
+          }
+        }
+
+        /************************************************************************/
+        /* ParameterSampler DSA                                                 */
+        /************************************************************************/
+        class CacheEntrySamplerDSA : public ParameterCacheEntryStream
+        {
+        public:
+          static std::shared_ptr<CacheEntrySamplerDSA> create(ProgramGLHandle program, dp::gl::Program::Uniform const& uniform, size_t cacheOffset, size_t containerOffset, size_t arraySize);
+          virtual void render(void const* cache) const;
+          virtual void update(void* cache, void const* containerData) const;
+
+          struct CacheInfo
+          {
+            GLint m_textureId;
+            GLint m_samplerId;
+          };
+
+          int    m_unit;
+
+        protected:
+          CacheEntrySamplerDSA(ProgramGLHandle program, dp::gl::Program::Uniform const& uniform, size_t cacheOffset, size_t containerOffset, size_t arraySize);
+        };
+
+        std::shared_ptr<CacheEntrySamplerDSA> CacheEntrySamplerDSA::create(ProgramGLHandle program, dp::gl::Program::Uniform const& uniform, size_t cacheOffset, size_t containerOffset, size_t arraySize)
+        {
+          return(std::shared_ptr<CacheEntrySamplerDSA>(new CacheEntrySamplerDSA(program, uniform, cacheOffset, containerOffset, arraySize)));
+        }
+
+        CacheEntrySamplerDSA::CacheEntrySamplerDSA(ProgramGLHandle program, dp::gl::Program::Uniform const& uniform, size_t cacheOffset, size_t containerOffset, size_t arraySize)
+          : ParameterCacheEntryStream(cacheOffset, containerOffset, arraySize, sizeof(CacheInfo) * arraySize)
+        {
+          glGetUniformiv(program->getProgram()->getGLId(), uniform.location, &m_unit);
+        }
+
+        void CacheEntrySamplerDSA::render(void const* cache) const
+        {
+          void const* offsetData = static_cast<char const*>(cache) + m_cacheOffset;
+
+          CacheInfo const* cacheInfo = reinterpret_cast<CacheInfo const*>(offsetData);
+
+          uint32_t unit = m_unit;
+          for (unsigned int i = 0; i < m_arraySize; ++i)
+          {
+            glBindTextureUnit(unit, cacheInfo->m_textureId);
+            glBindSampler(unit, cacheInfo->m_samplerId);
+            ++unit;
+            ++cacheInfo;
+          }
+        }
+
+        void CacheEntrySamplerDSA::update(void* cache, void const* container) const
+        {
+          void const* containerOffset = reinterpret_cast<char const*>(container) + m_containerOffset;
+          void *cacheData = reinterpret_cast<char *>(cache) + m_cacheOffset;
+
+          ContainerGL::ParameterDataSampler const* parameterDataSampler = reinterpret_cast<const ContainerGL::ParameterDataSampler*>(containerOffset);
+          CacheInfo* cacheInfo = reinterpret_cast<CacheInfo*>(cacheData);
+
+          for (size_t index = 0; index < m_arraySize; ++index)
+          {
+            SamplerHandle const& sampler = parameterDataSampler[index].m_samplerHandle;
+            TextureGLHandle texture = sampler ? sampler->getTexture().get() : nullptr;
+            cacheInfo[index].m_textureId = texture ? texture->getTexture()->getGLId() : 0;
+
+#if RIX_GL_SAMPLEROBJECT_SUPPORT == 1
+            SamplerStateGLHandle samplerState = sampler ? sampler->getSamplerState().get() : nullptr;
+            cacheInfo[index].m_samplerId = samplerState ? samplerState->m_id : 0;
+#endif
+          }
+        }
+
+
+        /************************************************************************/
+        /* ParameterSampler DSA with filter                                     */
+        /************************************************************************/
+        template <int arrayCount, bool filter>
+        class CacheEntrySamplerDSAFilter : public ParameterCacheEntryStream
+        {
+        public:
+          static std::shared_ptr<CacheEntrySamplerDSAFilter> create(ProgramGLHandle program, dp::gl::Program::Uniform const& uniform, size_t cacheOffset, size_t containerOffset, size_t arraySize);
+          virtual void resetState();
+          virtual void render(void const* cache) const;
+          virtual void update(void* cache, void const* containerData) const;
+
+          struct CacheInfo
+          {
+            GLint m_textureId;
+            GLint m_samplerId;
+          };
+
+          int    m_unit;
+          mutable CacheInfo m_state[arrayCount];
+
+        protected:
+          CacheEntrySamplerDSAFilter(ProgramGLHandle program, dp::gl::Program::Uniform const& uniform, size_t cacheOffset, size_t containerOffset, size_t arraySize);
+        };
+
+        template <int arrayCount, bool filter>
+        std::shared_ptr<CacheEntrySamplerDSAFilter<arrayCount, filter>> CacheEntrySamplerDSAFilter<arrayCount, filter>::create(ProgramGLHandle program, dp::gl::Program::Uniform const& uniform, size_t cacheOffset, size_t containerOffset, size_t arraySize)
+        {
+          return(std::shared_ptr<CacheEntrySamplerDSAFilter<arrayCount, filter>>(new CacheEntrySamplerDSAFilter<arrayCount, filter>(program, uniform, cacheOffset, containerOffset, arraySize)));
+        }
+
+        template <int arrayCount, bool filter>
+        CacheEntrySamplerDSAFilter<arrayCount, filter>::CacheEntrySamplerDSAFilter(ProgramGLHandle program, dp::gl::Program::Uniform const& uniform, size_t cacheOffset, size_t containerOffset, size_t arraySize)
+          : ParameterCacheEntryStream(cacheOffset, containerOffset, arraySize, sizeof(CacheInfo) * arraySize)
+        {
+          // get texture unit and target for sampler
+          glGetUniformiv(program->getProgram()->getGLId(), uniform.location, &m_unit);
+        }
+
+        template <int arrayCount, bool filter>
+        void CacheEntrySamplerDSAFilter<arrayCount, filter>::resetState()
+        {
+          for (uint32_t i = 0; i < arrayCount; ++i)
+          {
+            m_state[i].m_textureId = 0;
+            m_state[i].m_samplerId = 0;
+          }
+        }
+
+        template <int arrayCount, bool filter>
+        void CacheEntrySamplerDSAFilter<arrayCount, filter>::render(void const* cache) const
+        {
+          void const* offsetData = static_cast<char const*>(cache) + m_cacheOffset;
+
+          CacheInfo const* cacheInfo = reinterpret_cast<CacheInfo const*>(offsetData);
+
+          uint32_t unit = m_unit;
+          if (filter)
+          {
+            for (unsigned int i = 0; i < arrayCount; ++i)
+            {
+              if (m_state[i].m_textureId != cacheInfo->m_textureId)
+              {
+                m_state[i].m_textureId = cacheInfo->m_textureId;
+                glBindTextureUnit(unit, cacheInfo->m_textureId);
+              }
+              if (m_state[i].m_samplerId != cacheInfo->m_samplerId)
+              {
+                m_state[i].m_samplerId = cacheInfo->m_samplerId;
+                glBindSampler(unit, cacheInfo->m_samplerId);
+              }
+              ++unit;
+              ++cacheInfo;
+            }
+          }
+          else
+          {
+            for (unsigned int i = 0; i < arrayCount; ++i)
+            {
+              glBindTextureUnit(unit, cacheInfo->m_textureId);
+              glBindSampler(unit, cacheInfo->m_samplerId);
+              ++unit;
+              ++cacheInfo;
+            }
+          }
+        }
+
+        template <int arrayCount, bool filter>
+        void CacheEntrySamplerDSAFilter<arrayCount, filter>::update(void* cache, void const* container) const
+        {
+          void const* containerOffset = reinterpret_cast<char const*>(container) + m_containerOffset;
+          void *cacheData = reinterpret_cast<char *>(cache) + m_cacheOffset;
+
+          ContainerGL::ParameterDataSampler const* parameterDataSampler = reinterpret_cast<const ContainerGL::ParameterDataSampler*>(containerOffset);
+          CacheInfo* cacheInfo = reinterpret_cast<CacheInfo*>(cacheData);
+
+          for (size_t index = 0; index < arrayCount; ++index)
           {
             SamplerHandle const& sampler = parameterDataSampler[index].m_samplerHandle;
             TextureGLHandle texture = sampler ? sampler->getTexture().get() : nullptr;
@@ -592,7 +777,7 @@ namespace dp
 
       ParameterCacheEntryStreamSharedPtr createParameterCacheEntryStream( dp::rix::gl::ProgramGLHandle program, dp::rix::core::ContainerParameterType containerParameterType
                                                                           , dp::gl::Program::Uniform const& uniform, size_t cacheOffset
-                                                                          , size_t containerOffset, size_t arraySize )
+                                                                          , size_t containerOffset, size_t arraySize, bool filterSamplers )
       {
         ParameterCacheEntryStreamSharedPtr parameterCacheEntry;
 
@@ -820,7 +1005,55 @@ namespace dp
           break;
         case dp::rix::core::ContainerParameterType::SAMPLER:
           DP_ASSERT( dp::gl::isSamplerType( uniform.type ) );
-          parameterCacheEntry = CacheEntrySampler::create( program, uniform, cacheOffset, containerOffset, newArraySize );
+#if defined(GL_VERSION_4_5)
+          if (GLEW_VERSION_4_5 || GL_ARB_direct_state_access)
+          {
+            if (newArraySize > 0 && newArraySize <= 4)
+            {
+              if (filterSamplers)
+              {
+                switch (newArraySize) {
+                case 1:
+                  parameterCacheEntry = CacheEntrySamplerDSAFilter<1, true>::create(program, uniform, cacheOffset, containerOffset, newArraySize);
+                  break;
+                case 2:
+                  parameterCacheEntry = CacheEntrySamplerDSAFilter<2, true>::create(program, uniform, cacheOffset, containerOffset, newArraySize);
+                  break;
+                case 3:
+                  parameterCacheEntry = CacheEntrySamplerDSAFilter<3, true>::create(program, uniform, cacheOffset, containerOffset, newArraySize);
+                  break;
+                case 4:
+                  parameterCacheEntry = CacheEntrySamplerDSAFilter<4, true>::create(program, uniform, cacheOffset, containerOffset, newArraySize);
+                  break;
+                default:
+                  assert(!"will never hit this");
+                  break;
+                }
+              }
+              else
+              {
+                switch (newArraySize) {
+                case 1:
+                  parameterCacheEntry = CacheEntrySamplerDSAFilter<1, false>::create(program, uniform, cacheOffset, containerOffset, newArraySize);
+                  break;
+                case 2:
+                  parameterCacheEntry = CacheEntrySamplerDSAFilter<2, false>::create(program, uniform, cacheOffset, containerOffset, newArraySize);
+                  break;
+                case 3:
+                  parameterCacheEntry = CacheEntrySamplerDSAFilter<3, false>::create(program, uniform, cacheOffset, containerOffset, newArraySize);
+                  break;
+                case 4:
+                  parameterCacheEntry = CacheEntrySamplerDSAFilter<4, false>::create(program, uniform, cacheOffset, containerOffset, newArraySize);
+                  break;
+                }
+              }
+            }
+          }
+          else
+#endif
+          {
+            parameterCacheEntry = CacheEntrySampler::create(program, uniform, cacheOffset, containerOffset, newArraySize);
+          }
           break;
         case dp::rix::core::ContainerParameterType::IMAGE:
           DP_ASSERT( dp::gl::isImageType( uniform.type ) );
@@ -862,7 +1095,7 @@ namespace dp
         }
       }
 
-      ParameterCacheEntryStreams createParameterCacheEntryStreams( dp::rix::gl::ProgramGLHandle program, dp::rix::gl::ContainerDescriptorGLHandle descriptor, bool bindlessUBO )
+      ParameterCacheEntryStreams createParameterCacheEntryStreams( dp::rix::gl::ProgramGLHandle program, dp::rix::gl::ContainerDescriptorGLHandle descriptor, bool bindlessUBO, bool filterSamplers )
       {
         std::vector<ParameterCacheEntryStreamSharedPtr> parameterCacheEntries;
         size_t cacheOffset = 0;
@@ -875,7 +1108,7 @@ namespace dp
             // is it a uniform?
             if ( uniform.location != -1 )
             {
-              parameterCacheEntries.push_back( createParameterCacheEntryStream( program, it->m_type, uniform, cacheOffset, it->m_offset, it->m_arraySize ) );
+              parameterCacheEntries.push_back( createParameterCacheEntryStream( program, it->m_type, uniform, cacheOffset, it->m_offset, it->m_arraySize, filterSamplers ) );
               cacheOffset += parameterCacheEntries.back()->getSize();
             }
           }

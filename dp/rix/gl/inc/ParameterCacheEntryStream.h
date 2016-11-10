@@ -42,6 +42,8 @@ namespace dp
       public:
         virtual void render( void const* cache ) const = 0;
         virtual void update( void * cache, void const * container ) const = 0;
+        /** \brief Reset internal state used for state filtering **/
+        virtual void resetState();
 
         size_t getSize() const { return m_size; }
 
@@ -57,7 +59,7 @@ namespace dp
 
       typedef std::vector<ParameterCacheEntryStreamSharedPtr> ParameterCacheEntryStreams;
 
-      ParameterCacheEntryStreams createParameterCacheEntryStreams( dp::rix::gl::ProgramGLHandle program, dp::rix::gl::ContainerDescriptorGLHandle descriptor, bool bindlessUBO );
+      ParameterCacheEntryStreams createParameterCacheEntryStreams( dp::rix::gl::ProgramGLHandle program, dp::rix::gl::ContainerDescriptorGLHandle descriptor, bool bindlessUBO, bool filterSamplers );
 
     } // namespace gl
   } // namespace rix

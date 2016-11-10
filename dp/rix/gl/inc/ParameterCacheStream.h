@@ -83,6 +83,7 @@ namespace dp
                       , bool useUniformBufferUnifiedMemory
                       , BufferMode bufferMode
                       , bool batchedUpdates
+                      , bool filterSamplers
                       , uint32_t numberOfGPUs);
         virtual ~ParameterCache();
 
@@ -155,6 +156,7 @@ namespace dp
 
         bool       m_useUniformBufferUnifiedMemory; // GL_NV_uniform_buffer_unified_memory is enabled and must be used
         bool       m_batchedUpdates;                // use shader to batch buffer updates
+        bool       m_filterSamplers;                // filter redundant sampler/texture binds
         BufferMode m_bufferMode;                    // Mode to use when switching between parameters when using UBOs and SSBOs
       };
 

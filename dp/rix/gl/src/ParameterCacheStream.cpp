@@ -50,13 +50,14 @@ namespace dp
       /* ParameterCache                                                       */
       /************************************************************************/
       ParameterCache<ParameterCacheStream>::ParameterCache( ProgramPipelineGLHandle programPipeline, std::vector<ContainerDescriptorGLHandle> const &descriptors
-                                                          , bool useUniformBufferUnifiedMemory, BufferMode bufferMode, bool batchedUpdates, uint32_t numberOfGPUs)
+                                                          , bool useUniformBufferUnifiedMemory, BufferMode bufferMode, bool batchedUpdates, bool filterSamplers, uint32_t numberOfGPUs)
         : m_containerLocationsValid(0)
         , m_numberOfGPUs(numberOfGPUs)
         , m_programPipeline( programPipeline )
         , m_descriptors( descriptors )
         , m_useUniformBufferUnifiedMemory(useUniformBufferUnifiedMemory)
         , m_batchedUpdates(batchedUpdates)
+        , m_filterSamplers(filterSamplers)
         , m_bufferMode(bufferMode)
       {
         switch(m_bufferMode)
@@ -251,7 +252,7 @@ namespace dp
           }
           else
           {
-            ParameterCacheEntryStreams parameterCacheEntries = createParameterCacheEntryStreams( program, m_descriptors[i], m_useUniformBufferUnifiedMemory );
+            ParameterCacheEntryStreams parameterCacheEntries = createParameterCacheEntryStreams( program, m_descriptors[i], m_useUniformBufferUnifiedMemory, m_filterSamplers );
             parameterState.m_parameterRenderer.reset( new ParameterRendererUniform( parameterCacheEntries ) );
             parameterState.m_numParameterObjects = parameterCacheEntries.size();
             m_isUBOData.push_back(false);

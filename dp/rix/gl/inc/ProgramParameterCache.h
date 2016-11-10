@@ -51,7 +51,7 @@ namespace dp
         typedef typename ParameterCache<ParameterCacheType>::ContainerLocations  ContainerLocations;
 
         ProgramParameterCache( RenderGroupGLHandle renderGroup, ProgramPipelineGLHandle pipeline
-                             , bool useUniformBufferUnifiedMemory, BufferMode bufferMode, bool batchedUpdates, uint32_t numberOfGPUs );
+                             , bool useUniformBufferUnifiedMemory, BufferMode bufferMode, bool batchedUpdates, bool filterSamplers, uint32_t numberOfGPUs );
         ~ProgramParameterCache();
 
         virtual void useContainer(  ContainerGLHandle container );
@@ -122,18 +122,20 @@ namespace dp
         std::vector<ContainerGLSharedHandle> m_containers;                    // All known containers, shared as they're being observed
         bool                                 m_useUniformBufferUnifiedMemory; // Use unified_buffer_unified_memory extension for UBO bindings
         bool                                 m_batchedUpdates;                // Use shader to batch updates to buffers
+        bool                                 m_filterSamplers;                // Filter redundant sampler/texture binds
         BufferMode                           m_bufferMode;                    // Method to use when switching between UBO or SSBO parameters
         uint32_t                             m_numberOfGPUs;                  // Number of GPUs for multicast extension
       };
 
       template <typename ParameterCacheType>
       ProgramParameterCache<ParameterCacheType>::ProgramParameterCache( RenderGroupGLHandle renderGroup, ProgramPipelineGLHandle programPipeline
-                                                                      , bool useUniformBufferUnifiedMemory, BufferMode bufferMode, bool batchedUpdates, uint32_t numberOfGPUs)
+                                                                      , bool useUniformBufferUnifiedMemory, BufferMode bufferMode, bool batchedUpdates, bool filterSamplers, uint32_t numberOfGPUs)
         : m_uniformDataDirty( true )
         , m_programPipeline( programPipeline )
         , m_useUniformBufferUnifiedMemory(useUniformBufferUnifiedMemory)
         , m_batchedUpdates(batchedUpdates)
         , m_bufferMode(bufferMode)
+        , m_filterSamplers(filterSamplers)
         , m_numberOfGPUs(numberOfGPUs)
       {
         m_containerObserver.reset( new ContainerObserver( *this ) );
@@ -145,7 +147,7 @@ namespace dp
         {
           descriptors.push_back( (*it).m_descriptor );
         }
-        m_parameterCache.reset( new ParameterCache<ParameterCacheType>( programPipeline, descriptors, useUniformBufferUnifiedMemory, bufferMode, batchedUpdates, numberOfGPUs ) );
+        m_parameterCache.reset( new ParameterCache<ParameterCacheType>( programPipeline, descriptors, useUniformBufferUnifiedMemory, bufferMode, batchedUpdates, filterSamplers, numberOfGPUs ) );
 
         const RenderGroupGL::ContainerMap& globalContainers = renderGroup->getGlobalContainers();
         for( RenderGroupGL::ContainerMap::const_iterator it = globalContainers.begin(); it != globalContainers.end(); ++it )
@@ -319,7 +321,7 @@ namespace dp
         {
           descriptors.push_back( it->container->m_descriptor.get() );
         }
-        m_parameterCacheGlobal.reset( new ParameterCache<ParameterCacheType>( m_programPipeline.get(), descriptors, m_useUniformBufferUnifiedMemory, m_bufferMode, m_batchedUpdates, m_numberOfGPUs ) );
+        m_parameterCacheGlobal.reset( new ParameterCache<ParameterCacheType>( m_programPipeline.get(), descriptors, m_useUniformBufferUnifiedMemory, m_bufferMode, m_batchedUpdates, m_filterSamplers, m_numberOfGPUs ) );
 
         m_parameterCacheGlobal->allocationBegin();
         size_t index = 0;

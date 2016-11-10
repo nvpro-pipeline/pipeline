@@ -122,7 +122,7 @@ namespace dp
         };
 
         ProgramPipelineGroupCache( RenderGroupGLHandle renderGroup, ProgramPipelineGLHandle programPipeline
-                                 , bool useUniformBufferUnifiedMemory, BufferMode bufferMode, bool batchedUpdates, uint32_t numberOfGPUs);
+                                 , bool useUniformBufferUnifiedMemory, BufferMode bufferMode, bool batchedUpdates, bool filterSamplers, uint32_t numberOfGPUs);
         ~ProgramPipelineGroupCache();
 
         void activate();
@@ -156,9 +156,9 @@ namespace dp
 
       template <typename VertexCache>
       ProgramPipelineGroupCache<VertexCache>::ProgramPipelineGroupCache( RenderGroupGLHandle renderGroup, ProgramPipelineGLHandle programPipeline
-                                                                       , bool useUniformBufferUnifiedMemory, BufferMode bufferMode, bool batchedUpdates, uint32_t numberOfGPUs )
+                                                                       , bool useUniformBufferUnifiedMemory, BufferMode bufferMode, bool batchedUpdates, bool filterSamplers, uint32_t numberOfGPUs )
         : RenderGroupGL::Cache( renderGroup, programPipeline )
-        , ProgramParameterCache<PCT>( renderGroup, programPipeline, useUniformBufferUnifiedMemory, bufferMode, batchedUpdates, numberOfGPUs )
+        , ProgramParameterCache<PCT>( renderGroup, programPipeline, useUniformBufferUnifiedMemory, bufferMode, batchedUpdates, filterSamplers, numberOfGPUs )
         , m_geometryInstanceCache( nullptr )
         , m_numberOfGPUs(numberOfGPUs)
       {

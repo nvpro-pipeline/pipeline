@@ -45,7 +45,19 @@ namespace dp
 
       void ParameterRendererUniform::activate( )
       {
+        if (m_parameters.size())
+        {
+          // TODO ensure that render is called only on non-empty containers
+          size_t numParameters = m_numParameterObjects;
+          ParameterCacheEntryStreamSharedPtr const* parameterObject = m_parameters.data();
+          ParameterCacheEntryStreamSharedPtr const* const parameterObjectEnd = parameterObject + numParameters;
 
+          do
+          {
+            (*parameterObject)->resetState();
+            ++parameterObject;
+          } while (parameterObject != parameterObjectEnd);
+        }
       }
 
       void ParameterRendererUniform::render( void const* cache)
