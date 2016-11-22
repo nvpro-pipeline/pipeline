@@ -222,7 +222,7 @@ void GLSLBuilder::buildSourceElementEnums( TiXmlElement * parent, std::set<std::
 void GLSLBuilder::buildSourceElementEvalIOR( TiXmlElement * parent, std::string const& ior )
 {
   std::ostringstream oss;
-  oss << "float evalIOR()" << std::endl
+  oss << "float evalIOR( in vec3 normal )" << std::endl
       << "{" << std::endl
       << "  return( mdl_math_luminance( " << ior << " ) );" << std::endl
       << "}" << std::endl << std::endl;
@@ -233,7 +233,7 @@ void GLSLBuilder::buildSourceElementEvalSurface( TiXmlElement * parent, dp::fx::
 {
   {
     std::ostringstream oss;
-    oss << "vec4 evalColor" << postFix << "()" << std::endl
+    oss << "vec4 evalColor" << postFix << "( in vec3 normal )" << std::endl
         << "{" << std::endl
         << "  return( " << surfaceData.scattering << " );" << std::endl
         << "}" << std::endl << std::endl;
@@ -241,7 +241,7 @@ void GLSLBuilder::buildSourceElementEvalSurface( TiXmlElement * parent, dp::fx::
   }
   {
     std::ostringstream oss;
-    oss << "vec3 evalMaterialEmissive" << postFix << "()" << std::endl
+    oss << "vec3 evalMaterialEmissive" << postFix << "( in vec3 normal )" << std::endl
         << "{" << std::endl
         << "  return( ( " << surfaceData.emission << " ).intensity );" << std::endl
         << "}" << std::endl << std::endl;
@@ -263,7 +263,7 @@ void GLSLBuilder::buildSourceElementEvalSurface( TiXmlElement * parent, dp::fx::
       boost::algorithm::replace_all( environString, *it, *it + "Environment" );
     }
     std::ostringstream oss;
-    oss << "vec4 evalEnvironment" << postFix << "()" << std::endl
+    oss << "vec4 evalEnvironment" << postFix << "( in vec3 normal )" << std::endl
         << "{" << std::endl
         << "  return( " << ( ( environString == surfaceData.scattering ) ? "vec4(0,0,0,1)" : environString ) << " );" << std::endl
         << "}" << std::endl << std::endl;
@@ -409,7 +409,7 @@ void GLSLBuilder::buildSourceElementEvalGeometry( TiXmlElement * parent, dp::fx:
   {
     {
       std::ostringstream oss;
-      oss << "float evalCutoutOpacity()" << std::endl
+      oss << "float evalCutoutOpacity( in vec3 normal )" << std::endl
           << "{" << std::endl
           << "  return( clamp( " << geometryData.cutoutOpacity << ", 0.0f, 1.0f ) );" << std::endl
           << "}" << std::endl << std::endl;
@@ -417,7 +417,7 @@ void GLSLBuilder::buildSourceElementEvalGeometry( TiXmlElement * parent, dp::fx:
     }
     {
       std::ostringstream oss;
-      oss << "vec3 evalNormal()" << std::endl
+      oss << "vec3 evalNormal( in vec3 normal )" << std::endl
           << "{" << std::endl
           << "  return( " << geometryData.normal << " );" << std::endl
           << "}" << std::endl << std::endl;
@@ -431,7 +431,7 @@ void GLSLBuilder::buildSourceElementGlobals( TiXmlElement * parent, dp::fx::Doma
   std::ostringstream oss;
   oss << std::endl
       << "// Global variables" << std::endl
-      << "vec3 normal;" << std::endl
+      << "vec3 stateNormal;" << std::endl
       << "vec3 texCoord0;" << std::endl
       << "vec3 tangent;" << std::endl
       << "vec3 binormal;" << std::endl;

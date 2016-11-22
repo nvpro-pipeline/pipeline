@@ -407,11 +407,12 @@ namespace dp
       bool MaterialBuilder::enumTypeBegin( std::string const& name, size_t size )
       {
         DP_ASSERT( m_currentMaterial != m_materials.end() );
-        bool traverse = (m_currentMaterial->second.enums.find(name) == m_currentMaterial->second.enums.end());
+        std::string enumName = convertColons(convertName(name));
+        bool traverse = (m_currentMaterial->second.enums.find(enumName) == m_currentMaterial->second.enums.end());
         if (traverse)
         {
           DP_ASSERT(m_currentEnum == m_currentMaterial->second.enums.end());
-          m_currentEnum = m_currentMaterial->second.enums.insert(std::make_pair(convertColons(convertName(name)), EnumData())).first;
+          m_currentEnum = m_currentMaterial->second.enums.insert(std::make_pair(enumName, EnumData())).first;
           m_currentEnum->second.name = m_currentEnum->first;
           m_currentEnum->second.values.reserve(size);
         }
