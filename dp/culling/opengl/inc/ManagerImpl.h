@@ -55,7 +55,7 @@ namespace dp
         /************************************************************************/
         /* OpenGL resources                                                     */
         /************************************************************************/
-        dp::gl::ProgramInstanceSharedPtr  m_program;
+        dp::gl::ProgramSharedPtr          m_program;
         GLint                             m_uniformViewProjection;
         bool                              m_shaderInitialized;
       };

@@ -48,9 +48,10 @@
 
 DP_STATIC_ASSERT( (WORKGROUP_SIZE % 32) == 0 );
 
-#define OBJECT_BINDING 0
-#define MATRIX_BINDING 1
-#define VISIBILITY_BINDING 2
+// HACK when starting with offset 0 OBJECT_BINDING is not visible to the shader, find out why
+#define OBJECT_BINDING 1
+#define MATRIX_BINDING 2
+#define VISIBILITY_BINDING 3
 
 //#define NO_GLSL_BARRIER
 
@@ -117,28 +118,21 @@ static const char* shader =
 "  uint cfa = 0xffffffff;\n"
 "\n"
 "  mat4 modelViewProjection = viewProjection * modelView;\n"
-"  vec4 vectors[8];\n"
-"  vectors[0] = modelViewProjection * lower;\n"
+"  vec4 point = modelViewProjection * lower; determineCullFlags( point, cfo, cfa );\n"
 "\n"
 "  vec4 x = extent.x * modelViewProjection[0];\n"
 "  vec4 y = extent.y * modelViewProjection[1];\n"
 "  vec4 z = extent.z * modelViewProjection[2];\n"
 "\n"
-"  vectors[1] = vectors[0] + x;\n"
-"  vectors[2] = vectors[0] + y;\n"
-"  vectors[3] = vectors[1] + y;\n"
-"  vectors[4] = vectors[0] + z;\n"
-"  vectors[5] = vectors[1] + z;\n"
-"  vectors[6] = vectors[2] + z;\n"
-"  vectors[7] = vectors[3] + z;\n"
+"  point = point + x; determineCullFlags( point, cfo, cfa );\n"
+"  point = point + y; determineCullFlags( point, cfo, cfa );\n"
+"  point = point - x; determineCullFlags( point, cfo, cfa );\n"
+"  point = point + z; determineCullFlags( point, cfo, cfa );\n"
+"  point = point + x; determineCullFlags( point, cfo, cfa );\n"
+"  point = point - x; determineCullFlags( point, cfo, cfa );\n"
+"  point = point + x; determineCullFlags( point, cfo, cfa );\n"
 "\n"
-"  for ( uint i = 0;i < 8; ++i )\n"
-"  {\n"
-"    determineCullFlags( vectors[i], cfo, cfa );\n"
-"  }\n"
-
-"\n"
-"  return (cfo == 0) || (cfa == 0);\n"
+"  return cfo == 0 || cfa == 0;\n"
 "}\n"
 "\n"
 "uniform mat4 viewProjection;\n"
@@ -147,7 +141,7 @@ static const char* shader =
 "  uint index = gl_GlobalInvocationID.x * 32;\n"
 "  uint visibleMask = 0;\n"
 "  uint bit = 1u;\n"
-//"  for ( uint count = 0;count < 32;++count )\n"
+"  for ( uint count = 0;count < 32;++count )\n"
 "  {\n"
 "    uint globalIndex = index + count;\n"
 "    visibleMask = visibleMask | (isVisible( viewProjection, matrices[objects[globalIndex].matrix], objects[globalIndex].lowerLeft, objects[globalIndex].extent ) ? bit : 0);\n"
@@ -214,7 +208,7 @@ namespace dp
           dp::gl::ProgramSharedPtr program = dp::gl::Program::create( dp::gl::ComputeShader::create( shader ) );
           m_shaderInitialized = true;
           m_uniformViewProjection = program->getActiveUniform( program->getActiveUniformIndex( "viewProjection" ) ).location;
-          m_program = dp::gl::ProgramInstance::create( program );
+          m_program = program;
         }
       }
 
@@ -233,7 +227,7 @@ namespace dp
         // initialize output buffer
         size_t numberOfWorkingGroups = (groupImpl->getObjectCount() + WORKGROUP_SIZE - 1) / WORKGROUP_SIZE;
 
-        m_program->apply();
+        glUseProgram(m_program->getGLId());
         glUniformMatrix4fv( m_uniformViewProjection, 1, false, viewProjection[0].getPtr() );
 
         glBindBufferBase( GL_SHADER_STORAGE_BUFFER, OBJECT_BINDING, groupImpl->getInputBuffer()->getGLId() );
