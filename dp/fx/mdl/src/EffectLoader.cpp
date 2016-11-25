@@ -604,16 +604,16 @@ namespace dp
         return( it->second );
       }
 
-      dp::fx::ParameterSpec createParameterSpec( ParameterData const& pd, std::map<std::string,dp::fx::EnumSpecSharedPtr> const& enumSpecs )
+      dp::fx::ParameterSpec createParameterSpec(ParameterData const& pd, std::map<std::string, dp::fx::EnumSpecSharedPtr> const& enumSpecs)
       {
-        std::map<std::string,dp::fx::EnumSpecSharedPtr>::const_iterator it = enumSpecs.find( pd.type );
-        if ( it != enumSpecs.end() )
+        std::map<std::string, dp::fx::EnumSpecSharedPtr>::const_iterator it = enumSpecs.find(pd.type);
+        if (it != enumSpecs.end())
         {
-          return( dp::fx::ParameterSpec( pd.name, it->second, 0, pd.value, pd.annotations ) );
+          return(dp::fx::ParameterSpec(pd.name, it->second, 0, pd.value, pd.annotations));
         }
         else
         {
-          return( dp::fx::ParameterSpec( pd.name, getType( pd.type ), dp::util::stringToSemantic( pd.semantic), 0, pd.value, pd.annotations) );
+          return(dp::fx::ParameterSpec(pd.name, getType(pd.type), dp::util::stringToSemantic(pd.semantic), 0, pd.value, pd.annotations));
         }
       }
 
@@ -656,7 +656,14 @@ namespace dp
                 for ( std::set<unsigned int>::const_iterator pit = sit->second.parameters.begin() ; pit != sit->second.parameters.end() ; ++pit )
                 {
                   DP_ASSERT( *pit < mit->second.parameters.size() );
-                  params.push_back( createParameterSpec( mit->second.parameters[*pit], enumSpecs ) );
+                  DP_ASSERT(mit->second.parameters[*pit].first < mit->second.parameterData.size());
+                  DP_ASSERT((mit->second.parameters[*pit].second == ~0) || (mit->second.parameters[*pit].second < mit->second.parameterData.size()));
+
+                  params.push_back(createParameterSpec(mit->second.parameterData[mit->second.parameters[*pit].first], enumSpecs));
+                  if (mit->second.parameters[*pit].second != ~0)
+                  {
+                    params.push_back(createParameterSpec(mit->second.parameterData[mit->second.parameters[*pit].second], enumSpecs));
+                  }
                 }
 
                 dp::fx::ParameterGroupSpecSharedPtr pgs = dp::fx::ParameterGroupSpec::create( mit->first + "_" + dp::fx::getDomainName( sit->first ) + "_parameters", params );

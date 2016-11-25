@@ -65,7 +65,7 @@ void GLSLBuilder::buildEffect( TiXmlElement * parent, dp::fx::Domain domain, std
 
   std::map<dp::fx::Domain,dp::fx::mdl::StageData>::const_iterator stage = material->second.stageData.find( domain );
   DP_ASSERT( stage != material->second.stageData.end() );
-  buildParameterGroup( vertexEffectElement, stage->second.parameters, material->second.parameters, material->first );
+  buildParameterGroup( vertexEffectElement, stage->second.parameters, material->second.parameters, material->second.parameterData, material->first );
   buildTechniqueForward( vertexEffectElement, stage, material->second );
   buildTechniqueDepthPass( vertexEffectElement, stage, material->second );
 
@@ -138,7 +138,8 @@ void GLSLBuilder::buildParameter( TiXmlElement * parent, dp::fx::mdl::ParameterD
   parent->LinkEndChild( parameterElement );
 }
 
-void GLSLBuilder::buildParameterGroup( TiXmlElement * parent, std::set<unsigned int> const& stageParameters, std::vector<dp::fx::mdl::ParameterData> const& materialParameters, std::string const& materialName )
+void GLSLBuilder::buildParameterGroup( TiXmlElement * parent, std::set<unsigned int> const& stageParameters, std::vector<std::pair<size_t,size_t>> const& materialParameters,
+                                      std::vector<dp::fx::mdl::ParameterData> const& parameterData, std::string const& materialName )
 {
   if ( !stageParameters.empty() )
   {
@@ -147,8 +148,14 @@ void GLSLBuilder::buildParameterGroup( TiXmlElement * parent, std::set<unsigned 
     parameterGroupElement->SetAttribute( "id", id.c_str() );
     for ( std::set<unsigned int>::const_iterator it = stageParameters.begin() ; it != stageParameters.end() ; ++it )
     {
-      DP_ASSERT( *it < materialParameters.size() );
-      buildParameter( parameterGroupElement, materialParameters[*it] );
+      DP_ASSERT(( *it < materialParameters.size() ) && (materialParameters[*it].first < parameterData.size()));
+      buildParameter( parameterGroupElement, parameterData[materialParameters[*it].first] );
+
+      if (materialParameters[*it].second != ~0)
+      {
+        DP_ASSERT(materialParameters[*it].second < parameterData.size());
+        buildParameter(parameterGroupElement, parameterData[materialParameters[*it].second]);
+      }
     }
     parent->LinkEndChild( parameterGroupElement );
   }

@@ -1,6 +1,6 @@
 
 //interpreting the color values of a bitmap as a vector in tangent space
-vec3 mdl_base_tangentSpaceNormalTexture( in sampler2D sampler, in float gamma, in float factor, in bool flipTangentU, in bool flipTangentV, in _base_textureCoordinateInfo uvw
+vec3 mdl_base_tangentSpaceNormalTexture( in texture2D tex, in float factor, in bool flipTangentU, in bool flipTangentV, in _base_textureCoordinateInfo uvw
                                        , in vec2 cropU, in vec2 cropV, in int wrapU, in int wrapV, in bool clip, in float scale, in float offset )
 {
   vec3 ret;
@@ -34,7 +34,7 @@ vec3 mdl_base_tangentSpaceNormalTexture( in sampler2D sampler, in float gamma, i
 
     vec3 tangentU = normalize( flipU ? -uvw.tangentU : uvw.tangentU );
     vec3 tangentV = normalize( flipV ? -uvw.tangentV : uvw.tangentV );
-    vec3 tangent = factor * ( 2.0f * texture( sampler, uvw.position.xy ).xyz - 1.0f );
+    vec3 tangent = factor * ( 2.0f * texture( tex.sampler, uvw.position.xy ).xyz - 1.0f );
     vec3 normal = normalize( cross( tangentU, tangentV ) );
     ret = normalize( tangent.x * tangentU + tangent.y * tangentV + ( tangent.z + ( 1.0f - factor ) ) * normal );
   }

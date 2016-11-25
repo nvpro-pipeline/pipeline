@@ -106,12 +106,37 @@ namespace dp
             DP_ASSERT( functionData.functionDependencies.find( name ) == functionData.functionDependencies.end() );
             functionData.functionDependencies.insert( name );
           }
+          else if (type == "structure")
+          {
+            DP_ASSERT(functionData.structureDependencies.find(name) == functionData.structureDependencies.end());
+            functionData.structureDependencies.insert(name);
+          }
           else
           {
-            DP_ASSERT( type == "varying" );
-            DP_ASSERT( functionData.varyingDependencies.find( name ) == functionData.varyingDependencies.end() );
-            functionData.varyingDependencies.insert( name );
+            DP_ASSERT(type == "varying");
+            DP_ASSERT(functionData.varyingDependencies.find(name) == functionData.varyingDependencies.end());
+            functionData.varyingDependencies.insert(name);
           }
+        }
+      }
+
+      void parseConfigStructure(TiXmlElement * structureElement, std::map<std::string, StructureData> & structures)
+      {
+        DP_ASSERT(structureElement->Attribute("name"));
+        std::string structureName = structureElement->Attribute("name");
+        DP_ASSERT(structures.find(structureName) == structures.end());
+        StructureData & structureData = structures[structureName];
+        structureData.name = structureName;
+
+        // parse structure members
+        for (TiXmlElement * element = structureElement->FirstChildElement(); element; element = element->NextSiblingElement())
+        {
+          DP_ASSERT(element->Value());
+          std::string value = element->Value();
+          DP_ASSERT(value == "member");
+
+          DP_ASSERT(element->Attribute("type") && element->Attribute("name"));
+          structureData.members.push_back(std::make_pair(element->Attribute("type"), element->Attribute("name")));
         }
       }
 
@@ -147,6 +172,8 @@ namespace dp
           { "mdl_math_cos", "cos"   },
           { "mdl_math_max", "max"   },
           { "mdl_math_sin", "sin"   },
+          { "mdl_float",    "float" },
+          { "mdl_float2",   "vec2"  },
           { "mdl_float3",   "vec3"  },
           { "mdl_float4x4", "mat4"  }
         };
@@ -198,6 +225,10 @@ namespace dp
             if ( strcmp( element->Value(), "function" ) == 0 )
             {
               parseConfigFunction( element, m_functions );
+            }
+            else if (strcmp(element->Value(), "structure") == 0)
+            {
+              parseConfigStructure(element, m_structures);
             }
             else
             {
@@ -506,7 +537,6 @@ namespace dp
 
       void MaterialBuilder::fileEnd()
       {
-        m_temporarySamplerMap.clear();
       }
 
       bool MaterialBuilder::materialBegin( std::string const& name, dp::math::Vec4ui const& hash )
@@ -532,8 +562,6 @@ namespace dp
       void MaterialBuilder::materialEnd()
       {
         m_currentMaterial = m_materials.end();
-        m_temporaryBuddies.clear();
-        m_temporarySamplerMap.clear();
       }
 
       bool MaterialBuilder::matrixBegin( std::string const& type )
@@ -607,25 +635,38 @@ namespace dp
           semantic = "COLOR";
         }
 
-        if ( ( type == "sampler2D" ) || ( type == "sampler3D" ) )
+        if (type == "texture2D")
         {
-          DP_ASSERT( !value.empty() );
-          std::string fileName = m_fileFinder.findRecursive( value );
-          m_currentMaterial->second.parameters.push_back( ParameterData( type, name, fileName.empty() ? value : fileName, "VALUE", annotations ) );
+          DP_ASSERT(!value.empty());
+          size_t start = value.find("( ");
+          size_t stop = value.rfind(", ");
+          DP_ASSERT((start != std::string::npos) && (stop != std::string::npos));
+
+          std::string fileName = m_fileFinder.findRecursive(value.substr(start + 2, stop - start - 2));
+          m_currentMaterial->second.parameterData.push_back(ParameterData("sampler2D", name, fileName.empty() ? value : fileName, "VALUE", annotations));
+
+          start = stop;
+          stop = value.rfind(" )");
+          DP_ASSERT((start != std::string::npos) && (stop != std::string::npos));
+
+          m_currentMaterial->second.parameterData.push_back(ParameterData("float", name + "Gamma", value.substr(start + 2, stop - start - 2), "VALUE", "_anno_hidden()"));
+          m_currentMaterial->second.parameters.push_back(std::make_pair(m_currentMaterial->second.parameterData.size() - 2, m_currentMaterial->second.parameterData.size() - 1));
         }
         else
         {
-          m_currentMaterial->second.parameters.push_back( ParameterData( type, name, stripParameterValue( value ), semantic, annotations ) );
+          if (type == "sampler3D")
+          {
+            DP_ASSERT(!value.empty());
+            std::string fileName = m_fileFinder.findRecursive(value);
+            m_currentMaterial->second.parameterData.push_back(ParameterData(type, name, fileName.empty() ? value : fileName, "VALUE", annotations));
+          }
+          else
+          {
+            m_currentMaterial->second.parameterData.push_back(ParameterData(type, name, stripParameterValue(value), semantic, annotations));
+          }
+          m_currentMaterial->second.parameters.push_back(std::make_pair(m_currentMaterial->second.parameterData.size() - 1, ~0));
         }
-        m_currentMaterial->second.parameterIndirection.push_back( dp::checked_cast<unsigned int>(m_currentMaterial->second.parameters.size()) - 1 );
 
-        if ( m_currentCall.top()->arguments.size() == 2 )
-        {
-          DP_ASSERT( m_currentCall.top()->arguments.back().first == "float" );
-          DP_ASSERT( m_currentCall.top()->arguments.back().second.arguments.empty() );
-          std::string gammaName = name + "Gamma";
-          m_currentMaterial->second.parameters.push_back( ParameterData( "float", gammaName, m_currentCall.top()->arguments.back().second.name, "VALUE", "_anno_hidden()" ) );
-        }
         m_currentCall.pop();
         m_argument.clear();
         m_insideParameter = false;
@@ -635,31 +676,34 @@ namespace dp
       {
         DP_ASSERT( m_currentMaterial != m_materials.end() );
         DP_ASSERT( !m_currentCall.empty() );
-        DP_ASSERT( idx < m_currentMaterial->second.parameterIndirection.size() );
+        DP_ASSERT(idx < m_currentMaterial->second.parameters.size());
 
-        unsigned int redirectedIndex = m_currentMaterial->second.parameterIndirection[idx];
-        DP_ASSERT( redirectedIndex < m_currentMaterial->second.parameters.size() );
-
-        ParameterData const& pd = m_currentMaterial->second.parameters[redirectedIndex];
-        m_currentCall.top()->arguments.push_back( std::make_pair( pd.type, Argument( pd.name ) ) );
-        m_currentStage->parameters.insert( redirectedIndex );
-
-        if ( pd.type == "sampler2D" )
+        DP_ASSERT(m_currentMaterial->second.parameters[idx].first < m_currentMaterial->second.parameterData.size());
+        ParameterData const& pd = m_currentMaterial->second.parameterData[m_currentMaterial->second.parameters[idx].first];
+        if (m_currentMaterial->second.parameters[idx].second == ~0)
         {
-          ++redirectedIndex;
-          DP_ASSERT( std::find( m_currentMaterial->second.parameterIndirection.begin(), m_currentMaterial->second.parameterIndirection.end(), redirectedIndex ) == m_currentMaterial->second.parameterIndirection.end() );
-          DP_ASSERT( redirectedIndex < m_currentMaterial->second.parameters.size() );
-          ParameterData const& secondPD = m_currentMaterial->second.parameters[redirectedIndex];
-          DP_ASSERT( secondPD.type == "float" );
-          m_currentCall.top()->arguments.push_back( std::make_pair( secondPD.type, Argument( secondPD.name ) ) );
-          m_currentStage->parameters.insert( redirectedIndex );
+          m_currentCall.top()->arguments.push_back(std::make_pair(pd.type, Argument(pd.name)));
+          if (m_currentMaterial->second.enums.find(pd.type) != m_currentMaterial->second.enums.end())
+          {
+            DP_ASSERT(m_currentStage);
+            m_currentStage->enums.insert(pd.type);
+            m_currentCall.top()->arguments.back().first = "int";    // replace all enum types by "int"!
+          }
         }
-        else if ( m_currentMaterial->second.enums.find( pd.type ) != m_currentMaterial->second.enums.end() )
+        else
         {
-          DP_ASSERT( m_currentStage );
-          m_currentStage->enums.insert( pd.type );
-          m_currentCall.top()->arguments.back().first = "int";    // replace all enum types by "int"!
+          DP_ASSERT(m_currentMaterial->second.parameters[idx].second < m_currentMaterial->second.parameterData.size());
+          ParameterData const& secondPD = m_currentMaterial->second.parameterData[m_currentMaterial->second.parameters[idx].second];
+
+          DP_ASSERT((pd.type == "sampler2D") && (secondPD.type == "float"));    // make "sure", it's a texture2D!
+          if (structureBegin("texture2D"))
+          {
+            m_currentCall.top()->arguments.push_back(std::make_pair(pd.type, Argument(pd.name)));
+            m_currentCall.top()->arguments.push_back(std::make_pair(secondPD.type, Argument(secondPD.name)));
+            structureEnd();
+          }
         }
+        m_currentStage->parameters.insert(idx);
       }
 
       void MaterialBuilder::referenceTemporary( unsigned int idx )
@@ -667,27 +711,22 @@ namespace dp
         DP_ASSERT( m_currentMaterial != m_materials.end() );
         DP_ASSERT( !m_currentCall.empty() );
 
-        std::map<unsigned int,std::string>::const_iterator it = m_temporarySamplerMap.find( idx );
-        if ( it != m_temporarySamplerMap.end() )
-        {
-          m_currentCall.top()->arguments.push_back( std::make_pair( "sampler2D", Argument( it->second ) ) );
-        }
-
         std::map<unsigned int, TemporaryData>::const_iterator tit = m_currentMaterial->second.temporaries.find(idx);
         DP_ASSERT(tit != m_currentMaterial->second.temporaries.end());
 
-        std::ostringstream oss;
-        oss << "temporary" << idx;
-
-        m_currentCall.top()->arguments.push_back(std::make_pair(tit->second.type, oss.str()));
-        m_currentStage->append( m_currentMaterial->second.temporaries[idx].stage );
-        m_currentStage->temporaries.insert( idx );
-
-        std::map<unsigned int, unsigned int>::const_iterator bit = m_temporaryBuddies.find( idx );
-        if ( bit != m_temporaryBuddies.end() )
+        if (tit->second.type == "texture2D")
         {
-          m_currentStage->temporaries.insert( bit->second );
+          m_currentCall.top()->arguments.push_back(std::make_pair(tit->second.type, tit->second.eval));
         }
+        else
+        {
+          std::ostringstream oss;
+          oss << "temporary" << idx;
+
+          m_currentCall.top()->arguments.push_back(std::make_pair(tit->second.type, oss.str()));
+          m_currentStage->temporaries.insert(idx);
+        }
+        m_currentStage->append(m_currentMaterial->second.temporaries[idx].stage);
       }
 
       bool MaterialBuilder::structureBegin( std::string const& type )
@@ -772,54 +811,16 @@ namespace dp
         DP_ASSERT( m_currentTemporaryIdx != ~0 );
         DP_ASSERT( m_currentStage == &m_temporaryStage );
         DP_ASSERT( m_currentCall.size() == 1 );
+        DP_ASSERT(m_currentCall.top()->arguments.size() == 1);
 
-        if ( m_currentCall.top()->arguments.size() == 1 )
-        {
-          // create an entry in the temporaries map
-          TemporaryData td;
-          td.stage = m_temporaryStage;
-          m_temporaryStage.clear();
-          td.type = m_currentCall.top()->arguments.back().first;
-          td.eval = resolveArgument( m_currentCall.top()->arguments.back().second );
+        // create an entry in the temporaries map
+        TemporaryData td;
+        td.stage = m_temporaryStage;
+        m_temporaryStage.clear();
+        td.type = m_currentCall.top()->arguments.back().first;
+        td.eval = resolveArgument( m_currentCall.top()->arguments.back().second );
 
-          m_currentMaterial->second.temporaries.insert( std::make_pair( m_currentTemporaryIdx, td ) );
-        }
-        else
-        {
-          DP_ASSERT( m_currentCall.top()->arguments.size() == 2 );
-          if ( m_currentCall.top()->arguments[0].first == "sampler2D" )
-          {
-            // sampler2D can't be used as temporaries
-            DP_ASSERT( m_temporarySamplerMap.find( m_currentTemporaryIdx ) == m_temporarySamplerMap.end() );
-            m_temporarySamplerMap[m_currentTemporaryIdx] = resolveArgument( m_currentCall.top()->arguments[0].second );
-
-            // create an entry in the temporaries map with index m_currentTemporaryIdx for the gamma
-            TemporaryData td;
-            td.stage = m_temporaryStage;
-            m_temporaryStage.clear();
-            td.type = m_currentCall.top()->arguments[1].first;
-            td.eval = resolveArgument( m_currentCall.top()->arguments[1].second );
-            m_currentMaterial->second.temporaries.insert( std::make_pair( m_currentTemporaryIdx, td ) );
-          }
-          else
-          {
-            DP_ASSERT( ( m_currentCall.top()->arguments[0].first == "vec4" ) && ( m_currentCall.top()->arguments[1].first == "_materialEmission" ) );
-            // create two entries in the temporaries map, one with index m_currentTemporaryIdx, one with index ( UINT_MAX - m_currentTemporaryIdx )
-            TemporaryData td;
-            td.stage = m_temporaryStage;
-            m_temporaryStage.clear();
-            td.type = m_currentCall.top()->arguments[0].first;
-            td.eval = resolveArgument( m_currentCall.top()->arguments[0].second );
-            m_currentMaterial->second.temporaries.insert( std::make_pair( m_currentTemporaryIdx, td ) );
-
-            td.type = m_currentCall.top()->arguments[1].first;
-            td.eval = resolveArgument( m_currentCall.top()->arguments[1].second );
-            m_currentMaterial->second.temporaries.insert( std::make_pair( std::numeric_limits<unsigned int>::max() - m_currentTemporaryIdx, td ) );
-
-            DP_ASSERT( m_temporaryBuddies.find( m_currentTemporaryIdx ) == m_temporaryBuddies.end() );
-            m_temporaryBuddies[m_currentTemporaryIdx] = std::numeric_limits<unsigned int>::max() - m_currentTemporaryIdx;
-          }
-        }
+        m_currentMaterial->second.temporaries.insert( std::make_pair( m_currentTemporaryIdx, td ) );
 
         m_currentCall.pop();
         m_argument.clear();
@@ -846,7 +847,8 @@ namespace dp
           usedName = oss.str();
 
           m_currentStage->parameters.insert( dp::checked_cast<unsigned int>( m_currentMaterial->second.parameters.size() ) );
-          m_currentMaterial->second.parameters.push_back( ParameterData( "sampler3D", usedName, value, "VALUE", "_anno_hidden()" ) );
+          m_currentMaterial->second.parameterData.push_back( ParameterData( "sampler3D", usedName, value, "VALUE", "_anno_hidden()" ) );
+          m_currentMaterial->second.parameters.push_back(std::make_pair(m_currentMaterial->second.parameterData.size() - 1, ~0));
         }
         m_currentCall.top()->arguments.push_back( std::make_pair( "sampler3D", Argument( usedName ) ) );
       }
@@ -903,7 +905,8 @@ namespace dp
           usedName = oss.str();
 
           m_currentStage->parameters.insert( dp::checked_cast<unsigned int>( m_currentMaterial->second.parameters.size() ) );
-          m_currentMaterial->second.parameters.push_back( ParameterData( "lightProfile", usedName, value, "VALUE", "_anno_hidden()" ) );
+          m_currentMaterial->second.parameterData.push_back( ParameterData( "lightProfile", usedName, value, "VALUE", "_anno_hidden()" ) );
+          m_currentMaterial->second.parameters.push_back(std::make_pair(m_currentMaterial->second.parameterData.size() - 1, ~0));
         }
         m_currentCall.top()->arguments.push_back( std::make_pair( "lightProfile", Argument( usedName ) ) );
       }
@@ -943,14 +946,27 @@ namespace dp
           usedName = oss.str();
 
           m_currentStage->parameters.insert( dp::checked_cast<unsigned int>( m_currentMaterial->second.parameters.size() ) );
-          m_currentMaterial->second.parameters.push_back( ParameterData( "sampler2D", usedName, name, "VALUE", "_anno_hidden()" ) );
+          m_currentMaterial->second.parameterData.push_back( ParameterData( "sampler2D", usedName, name, "VALUE", "_anno_hidden()" ) );
 
           std::string gammaName = usedName + "Gamma";
           m_currentStage->parameters.insert( dp::checked_cast<unsigned int>( m_currentMaterial->second.parameters.size() ) );
-          m_currentMaterial->second.parameters.push_back( ParameterData( "float", gammaName, gammaString, "VALUE", "_anno_hidden()" ) );
+          m_currentMaterial->second.parameterData.push_back( ParameterData( "float", gammaName, gammaString, "VALUE", "_anno_hidden()" ) );
+
+          m_currentMaterial->second.parameters.push_back(std::make_pair(m_currentMaterial->second.parameterData.size() - 2, m_currentMaterial->second.parameterData.size() - 1));
         }
-        m_currentCall.top()->arguments.push_back( std::make_pair( "sampler2D", Argument( usedName ) ) );
-        m_currentCall.top()->arguments.push_back( std::make_pair( "float", Argument( gammaString ) ) );
+
+        DP_ASSERT(m_structures.find("texture2D") != m_structures.end());
+        m_currentMaterial->second.structures.insert(std::make_pair("texture2D", m_structures["texture2D"]));
+        if (m_currentStage)
+        {
+          m_currentStage->structures.insert("texture2D");
+        }
+        if (structureBegin("texture2D"))
+        {
+          m_currentCall.top()->arguments.push_back(std::make_pair("sampler2D", Argument(usedName)));    // valueSampler2D
+          m_currentCall.top()->arguments.push_back(std::make_pair("float", Argument(gammaString)));     // valueFloat
+          structureEnd();
+        }
       }
 
       bool MaterialBuilder::vectorBegin( std::string const& type )
@@ -993,7 +1009,6 @@ namespace dp
           surfaceData.scattering = "( " + result + " ).scattering";
           surfaceData.emission   = "( " + result + " ).emission";
         }
-        DP_ASSERT( m_temporaryBuddies.empty() );
       }
 
       MaterialBuilder::Argument & MaterialBuilder::getTargetArg( Argument & arg, size_t idx ) const
@@ -1040,7 +1055,19 @@ namespace dp
         if ( remapIt != remapArgumentFunctions.end() )
         {
           DP_ASSERT( ( remapIt->second.second < remapIt->second.first ) && ( remapIt->second.first <= arg.arguments.size() ) );
-          if ( arg.arguments[remapIt->second.second].second.name == "mdl_df_normalizedMix" )
+          Argument & targetArg = getTargetArg(arg, remapIt->second.second);
+          if (targetArg.name == "mdl_operator?")
+          {
+            DP_ASSERT(targetArg.arguments.size() == 3);
+            DP_ASSERT(!targetArg.arguments[1].second.empty());
+            DP_ASSERT(targetArg.arguments[1].second.arguments.back().first == arg.arguments[remapIt->second.first].first);
+            targetArg.arguments[1].second.arguments.back() = arg.arguments[remapIt->second.first];
+
+            DP_ASSERT(!targetArg.arguments[2].second.empty());
+            DP_ASSERT(targetArg.arguments[2].second.arguments.back().first == arg.arguments[remapIt->second.first].first);
+            targetArg.arguments[2].second.arguments.back() = arg.arguments[remapIt->second.first];
+          }
+          else if (targetArg.name == "mdl_df_normalizedMix")
           {
             // this is very special !!
             DP_ASSERT( arg.arguments[remapIt->second.second].second.arguments.size() == 1 );
@@ -1055,14 +1082,10 @@ namespace dp
               arg.arguments[remapIt->second.second].second.arguments[0].second.arguments[i].second.arguments[1].second.arguments.back() = arg.arguments[remapIt->second.first];
             }
           }
-          else
+          else if (!targetArg.arguments.empty())
           {
-            Argument & targetArg = getTargetArg( arg, remapIt->second.second );
-            if (!targetArg.arguments.empty())
-            {
-              DP_ASSERT(targetArg.arguments.back().first == arg.arguments[remapIt->second.first].first);
-              targetArg.arguments.back() = arg.arguments[remapIt->second.first];
-            }
+            DP_ASSERT(targetArg.arguments.back().first == arg.arguments[remapIt->second.first].first);
+            targetArg.arguments.back() = arg.arguments[remapIt->second.first];
           }
         }
 
@@ -1120,23 +1143,24 @@ namespace dp
               break;
             case 3 :
               DP_ASSERT( arg.name == "mdl_operator?" );
-              result += resolveArgument( arg.arguments[0].second, true ) + " ? " + resolveArgument( arg.arguments[1].second, true ) + " : " + resolveArgument( arg.arguments[2].second, true );
+              result += resolveArgument(arg.arguments[0].second, true) + " ? " + resolveArgument(arg.arguments[1].second, true) + " : " + resolveArgument(arg.arguments[2].second, true);
               break;
             default :
               DP_ASSERT( false );
               break;
           }
         }
-        else if ( arg.name == "mdl_tex_operator?" )
+        else if (boost::algorithm::ends_with(arg.name, "operator?"))
         {
+          DP_ASSERT((arg.name == "mdl_base_operator?") || (arg.name == "mdl_tex_operator?"));
           DP_ASSERT( arg.arguments.size() == 3 );
-          result += resolveArgument( arg.arguments[0].second, true ) + " ? " + resolveArgument( arg.arguments[1].second, true ) + " : " + resolveArgument( arg.arguments[2].second, true );
+          result += resolveArgument(arg.arguments[0].second, true) + " ? " + resolveArgument(arg.arguments[1].second, true) + " : " + resolveArgument(arg.arguments[2].second, true);
         }
         else if ( !arg.arguments.empty() && ( arg.name.find( '.' ) != std::string::npos ) )
         {
           // args with arguments (i.e. function calls) with '.'
           DP_ASSERT(arg.arguments.size() == 1);
-          result += resolveArgument( arg.arguments[0].second ) + arg.name.substr( arg.name.find( '.' ) );
+          result += resolveArgument( arg.arguments[0].second, true ) + arg.name.substr( arg.name.find( '.' ) );
         }
         else
         {
@@ -1162,7 +1186,7 @@ namespace dp
       {
         static const std::set<std::string> ignoreCalls =
         {
-          "abs", "cos", "mat4", "max", "mdl_materialGeometry", "sin", "vec3"
+          "abs", "cos", "float", "mat4", "max", "mdl_materialGeometry", "sin", "vec2", "vec3"
         };
 
         if ( !m_insideAnnotation && ( name.find_first_of( "+-*/.[?&!=<@" ) == std::string::npos ) && ( ignoreCalls.find( name ) == ignoreCalls.end() ) )
@@ -1178,7 +1202,14 @@ namespace dp
                 triggerTokenizeFunctionReturnType(unconvertName(convertUnderscores(*fdit)));
                 storeFunctionCall( *fdit );
               }
-              m_currentMaterial->second.varyings.insert( fit->second.varyingDependencies.begin(), fit->second.varyingDependencies.end() );
+              for (std::set<std::string>::const_iterator sdit = fit->second.structureDependencies.begin(); sdit != fit->second.structureDependencies.end(); ++sdit)
+              {
+                std::map<std::string, StructureData>::const_iterator sit = m_structures.find(*sdit);
+                DP_ASSERT(sit != m_structures.end());
+                m_currentMaterial->second.structures.insert(*sit);
+                m_currentStage->structures.insert(sit->first);
+              }
+              m_currentMaterial->second.varyings.insert(fit->second.varyingDependencies.begin(), fit->second.varyingDependencies.end());
             }
             m_currentStage->functions.push_back( name );
           }

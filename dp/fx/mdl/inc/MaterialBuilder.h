@@ -157,24 +157,24 @@ namespace dp
           , transparent( false )
         {}
 
-        std::vector<ParameterData>            parameters;
+        std::vector<ParameterData>              parameterData;
+        std::vector<std::pair<size_t, size_t>>  parameters;
 
-        std::map<unsigned int, TemporaryData> temporaries;
+        std::map<unsigned int, TemporaryData>   temporaries;
 
-        std::string                           thinWalled;
-        SurfaceData                           surfaceData;
-        SurfaceData                           backfaceData;
-        std::string                           ior;
-        //VolumeData                            volumeData;   No volume data gathered!
-        GeometryData                          geometryData;
+        std::string                             thinWalled;
+        SurfaceData                             surfaceData;
+        SurfaceData                             backfaceData;
+        std::string                             ior;
+        //VolumeData                              volumeData;   No volume data gathered!
+        GeometryData                            geometryData;
 
-        std::map<std::string,EnumData>        enums;
-        unsigned int                          maxTemporaryIndex;
-        std::vector<unsigned int>             parameterIndirection;
-        std::map<dp::fx::Domain, StageData>   stageData;
-        std::map<std::string,StructureData>   structures;
-        bool                                  transparent;
-        std::set<std::string>                 varyings;
+        std::map<std::string,EnumData>          enums;
+        unsigned int                            maxTemporaryIndex;
+        std::map<dp::fx::Domain, StageData>     stageData;
+        std::map<std::string,StructureData>     structures;
+        bool                                    transparent;
+        std::set<std::string>                   varyings;
       };
 
       struct FunctionData
@@ -182,8 +182,9 @@ namespace dp
         FunctionData()
         {}
 
-        std::set<std::string>       functionDependencies;
-        std::set<std::string>       varyingDependencies;
+        std::set<std::string> functionDependencies;
+        std::set<std::string> structureDependencies;
+        std::set<std::string> varyingDependencies;
       };
 
 
@@ -283,9 +284,8 @@ namespace dp
           bool                                          m_insideAnnotation;
           bool                                          m_insideParameter;
           std::map<std::string,MaterialData>            m_materials;
+          std::map<std::string, StructureData>          m_structures;
           std::stack<StructureData>                     m_structureStack;
-          std::map<unsigned int,unsigned int>           m_temporaryBuddies;
-          std::map<unsigned int,std::string>            m_temporarySamplerMap;
           StageData                                     m_temporaryStage;
       };
 

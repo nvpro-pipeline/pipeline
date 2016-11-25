@@ -52,7 +52,7 @@ class GLSLBuilder
     void buildEffect( TiXmlElement * parent, dp::fx::Domain domain, std::map<std::string,dp::fx::mdl::MaterialData>::const_iterator material );
     void buildEnums( TiXmlElement * parent, std::map<std::string,dp::fx::mdl::MaterialData> const& materials );
     void buildParameter( TiXmlElement * parent, dp::fx::mdl::ParameterData const& pd );
-    void buildParameterGroup( TiXmlElement * parent, std::set<unsigned int> const& stageParameters, std::vector<dp::fx::mdl::ParameterData> const& materialParameters, std::string const& materialName );
+    void buildParameterGroup( TiXmlElement * parent, std::set<unsigned int> const& stageParameters, std::vector<std::pair<size_t,size_t>> const& materialParameters, std::vector<dp::fx::mdl::ParameterData> const& parameterData, std::string const& materialName );
     void buildPipelineSpec( TiXmlElement * parent, std::string const& baseName );
     void buildSourceElement( TiXmlElement * parent, std::string const& source );
     void buildSourceElement( TiXmlElement * parent, std::string const& input, std::string const& name, std::string const& location );

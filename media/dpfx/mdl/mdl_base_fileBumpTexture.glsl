@@ -46,7 +46,7 @@ float interpolateTexelSpace( sampler2D sampler, vec4 st, ivec4 texi, int bumpSou
 }
 
 // compute a normal based on a heightfield style bump texture
-vec3 mdl_base_fileBumpTexture( in sampler2D sampler, in float gamma, in float factor, in int bumpSource, in _base_textureCoordinateInfo uvw
+vec3 mdl_base_fileBumpTexture( in texture2D tex, in float factor, in int bumpSource, in _base_textureCoordinateInfo uvw
                              , in vec2 cropU, in vec2 cropV, in int wrapU, in int wrapV, in vec3 normal, in bool clip )
 {
   vec3 ret;
@@ -57,7 +57,7 @@ vec3 mdl_base_fileBumpTexture( in sampler2D sampler, in float gamma, in float fa
   }
   else
   {
-    ivec2 texSize = textureSize( sampler, 0 );
+    ivec2 texSize = textureSize( tex.sampler, 0 );
     ivec2 cropOffset = texSize * ivec2( cropU.x, cropV.x );
     ivec2 cropTexSize = texSize * ivec2( cropU.y - cropU.x, cropV.y - cropV.x );
     vec2 tex2 = uvw.position.xy * cropTexSize;
@@ -70,10 +70,10 @@ vec3 mdl_base_fileBumpTexture( in sampler2D sampler, in float gamma, in float fa
     lerp *= lerp * lerp * ( lerp * ( lerp * 6.0f - 15.0f ) + 10.0f );   //smootherstep
     vec4 st = vec4( lerp.x * lerp.y, lerp.x * ( 1.0f - lerp.y ), ( 1.0f - lerp.x ) * ( 1.0f - lerp.y ), ( 1.0f - lerp.x ) * lerp.y );
 
-    vec2 bump = factor * vec2( interpolateTexelSpace( sampler, st, ivec4( texi0.x, texi1.y, texi1.x, texi2.y ), bumpSource )
-                             - interpolateTexelSpace( sampler, st, ivec4( texi2.x, texi1.y, texi3.x, texi2.y ), bumpSource )
-                             , interpolateTexelSpace( sampler, st, ivec4( texi1.x, texi0.y, texi2.x, texi1.y ), bumpSource )
-                             - interpolateTexelSpace( sampler, st, ivec4( texi1.x, texi2.y, texi2.x, texi3.y ), bumpSource ) );
+    vec2 bump = factor * vec2( interpolateTexelSpace( tex.sampler, st, ivec4( texi0.x, texi1.y, texi1.x, texi2.y ), bumpSource )
+                             - interpolateTexelSpace( tex.sampler, st, ivec4( texi2.x, texi1.y, texi3.x, texi2.y ), bumpSource )
+                             , interpolateTexelSpace( tex.sampler, st, ivec4( texi1.x, texi0.y, texi2.x, texi1.y ), bumpSource )
+                             - interpolateTexelSpace( tex.sampler, st, ivec4( texi1.x, texi2.y, texi2.x, texi3.y ), bumpSource ) );
 
     ret = normalize( normal + uvw.tangentU * bump.x + uvw.tangentV * bump.y );
   }
