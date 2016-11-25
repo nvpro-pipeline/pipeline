@@ -246,12 +246,15 @@ namespace dp
 
       MDLTokenizer::~MDLTokenizer()
       {
-        m_database.reset();
+        // throw away everything before m_neuray is shut down
         m_mdlValueFactory.reset();
         m_mdlExpressionFactory.reset();
         m_mdlFactory.reset();
-        m_mdlCompiler.reset();    // throw away before m_neuray is shut down
-        m_neuray->shutdown();
+        m_transaction->commit();
+        m_transaction.reset();
+        m_mdlCompiler.reset();
+        m_database.reset();
+        DP_VERIFY(m_neuray->shutdown() == 0);
       }
 
       bool MDLTokenizer::checkDefaultField(std::string const& fieldName, mi::base::Handle<mi::neuraylib::IExpression const> const& expression)
