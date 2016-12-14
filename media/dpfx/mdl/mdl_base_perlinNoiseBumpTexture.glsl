@@ -20,8 +20,10 @@ vec3 mdl_base_perlinNoiseBumpTexture( in _base_textureCoordinateInfo uvw, in flo
 
   float bump_factor = -factor;
 
-  return( normalize( normal   * ( abs( ( results[3] - results[0] ) * bump_factor ) + 1.0f )
-                      + uvw.tangentU * ( results[1] - results[0] ) * bump_factor
-                      + uvw.tangentV * ( results[2] - results[0] ) * bump_factor ) );
+  vec3 tangentV = normalize(cross(normal, uvw.tangentU)); 
+  vec3 tangentU = normalize(cross(uvw.tangentV, normal));
+  return( normalize( normal * ( abs( ( results[3] - results[0] ) * bump_factor ) + 1.0f )
+                      + tangentU * ( results[1] - results[0] ) * bump_factor
+                      + tangentV * ( results[2] - results[0] ) * bump_factor ) );
 }
 
