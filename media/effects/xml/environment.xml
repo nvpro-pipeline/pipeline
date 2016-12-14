@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<library>
+  <effect id="environmentBackdrop_vs" domain="vertex">
+    <technique type="forward">
+      <glsl signature="v3f_t24f">
+        <source input="vec4" name="attrPosition" location="0"/>
+        <source input="vec4" name="attrTexCoord2" location="10"/>
+        <source output="vec3" name="varTexCoord0"/>
+        <source file="environment/environmentBackdropVertex.glsl" />
+      </glsl>
+    </technique>
+  </effect>
+
+  <effect id="environmentBackdrop_fs" domain="fragment">
+    <parameterGroup id="environmentBackdropParameters">
+      <parameter type="sampler2D" name="environment" semantic="OBJECT">
+        <state id="magFilter" value="linear"/>
+        <state id="minFilter" value="linear"/>
+      </parameter>
+    </parameterGroup>
+      <technique type="forward">
+      <glsl signature="v3f_t24f">
+        <source input="vec3" name="varTexCoord0"/>
+        <source output="vec4" name="Color" location="0"/>
+        <source file="environment/environmentBackdropFragment.glsl"/>
+      </glsl>
+    </technique>
+  </effect>
+  
+  <PipelineSpec id="environmentBackdrop"
+                vertex="environmentBackdrop_vs"
+                fragment="environmentBackdrop_fs" />
+</library>
+                

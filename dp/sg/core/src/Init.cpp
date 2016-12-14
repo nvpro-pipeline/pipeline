@@ -67,6 +67,7 @@ namespace dp
             success = false;
           }
 
+          success &= dp::fx::EffectLibrary::instance()->loadEffects( "/media/effects/xml/environment.xml", fileFinder);
           success &= dp::fx::EffectLibrary::instance()->loadEffects( "/media/effects/xml/standard_lights.xml", fileFinder );
           success &= dp::fx::EffectLibrary::instance()->loadEffects( "/media/effects/xml/standard_material.xml", fileFinder );
           success &= dp::fx::EffectLibrary::instance()->loadEffects( "/media/effects/xml/collada.xml", fileFinder );

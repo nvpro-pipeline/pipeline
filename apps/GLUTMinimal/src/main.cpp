@@ -404,6 +404,11 @@ void GLUTMinimal::onSceneRendererChanged( const dp::sg::ui::SceneRendererSharedP
   if ( sceneRenderer )
   {
     m_shaderManager = sceneRenderer->getShaderManager();
+    if (sceneRenderer->getEnvironmentSampler())
+    {
+      sceneRenderer->setRenderTarget(getRenderTarget());
+      sceneRenderer->setEnvironmentRenderingEnabled(true);
+    }
   }
 }
 
