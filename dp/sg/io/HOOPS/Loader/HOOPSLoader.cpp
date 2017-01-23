@@ -98,7 +98,7 @@ static char * cadFormats[] =
   ".step",        // STEP
   ".stl",         // Stereo Lithography
   ".stp",         // STEP
-  ".vda"          // VDA-FS
+  ".vda",          // VDA-FS
   ".vrml",        // VRML V1.0 and V2.0
 //  ".wrl",         // VRML V1.0 and V2.0
   ".x_b",         // Siemens: Parasolid
