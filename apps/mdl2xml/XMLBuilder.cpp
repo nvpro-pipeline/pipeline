@@ -151,6 +151,7 @@ bool XMLBuilder::enumTypeBegin( std::string const& name, size_t size )
   bool traverse = (m_enums.find(name) == m_enums.end());
   if (traverse)
   {
+    m_enums.insert(name);
     m_enumElement = new TiXmlElement("enum");
     m_enumElement->SetAttribute("name", name.c_str());
   }
@@ -359,6 +360,7 @@ bool XMLBuilder::structureTypeBegin( std::string const& name )
   bool traverse = (m_structures.find(name) == m_structures.end());
   if (traverse)
   {
+    m_structures.insert(name);
     m_structureStack.push(new TiXmlElement("struct"));
     m_structureStack.top()->SetAttribute("name", name.c_str());
   }
