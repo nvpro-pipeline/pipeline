@@ -44,9 +44,11 @@ class MaterialBrowser : public QDockWidget
     void materialCatalogPathChanged( QString const& path );
 
   private:
+    void addChildren(QTreeWidgetItem* item, QString const& filePath);
     void initMaterialCatalog( QString const& path );
 
   private:
     QTreeWidget * m_catalog;
+    QStringList   m_filterList;
 };
 

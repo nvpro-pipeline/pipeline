@@ -41,6 +41,12 @@ MaterialBrowser::MaterialBrowser( const QString & title, QWidget * parent )
   setObjectName( title );
   setAcceptDrops( true );
 
+  std::vector<std::string> extensions = dp::fx::EffectLibrary::instance()->getRegisteredExtensions();
+  for (std::vector<std::string>::const_iterator it = extensions.begin(); it != extensions.end(); ++it)
+  {
+    m_filterList.push_back(QString("*") + it->c_str());
+  }
+
   m_catalog = new QTreeWidget();
   m_catalog->setHeaderHidden( true );
   initMaterialCatalog( GetApp()->getPreferences()->getMaterialCatalogPath() );
@@ -56,10 +62,58 @@ MaterialBrowser::~MaterialBrowser()
 {
 }
 
-void MaterialBrowser::catalogItemCollapsed( QTreeWidgetItem * item )
+void MaterialBrowser::addChildren(QTreeWidgetItem* item, QString const& filePath)
+{
+  QFileInfoList fil = QDir(filePath).entryInfoList(m_filterList, QDir::AllDirs | QDir::Files | QDir::NoDotAndDotDot, QDir::DirsFirst);
+  for (int i = 0; i<fil.size(); i++)
+  {
+    QString filePath = fil[i].absoluteFilePath();
+    if (fil[i].isDir())
+    {
+      QTreeWidgetItem * childItem = new QTreeWidgetItem();
+      childItem->setData(0, Qt::UserRole, filePath);
+      childItem->setText(0, filePath.section('/', -1));
+      childItem->setChildIndicatorPolicy(QTreeWidgetItem::ShowIndicator);
+      if (item)
+      {
+        item->addChild(childItem);
+      }
+      else
+      {
+        m_catalog->addTopLevelItem(childItem);
+      }
+    }
+    else
+    {
+      std::string fp = filePath.toStdString();
+      dp::util::FileFinder fileFinder(GetApp()->getPreferences()->getMaterialCatalogPath().toStdString());
+      fileFinder.addSearchPaths(GetApp()->getPreferences()->getSearchPathsAsStdVector());
+      dp::fx::EffectLibrary::instance()->loadEffects(fp, fileFinder);
+
+      std::vector<std::string> materialNames;
+      dp::fx::EffectLibrary::instance()->getEffectNames(fp, dp::fx::EffectSpec::Type::PIPELINE, materialNames);
+      for (std::vector<std::string>::const_iterator it = materialNames.begin(); it != materialNames.end(); ++it)
+      {
+        QTreeWidgetItem * childItem = new QTreeWidgetItem();
+        childItem->setData(0, Qt::UserRole, QString(it->c_str()));
+        childItem->setText(0, QString(dp::fx::stripNameSpaces(*it).c_str()));
+        if (item)
+        {
+          item->addChild(childItem);
+        }
+        else
+        {
+          m_catalog->addTopLevelItem(childItem);
+        }
+      }
+    }
+  }
+}
+
+void MaterialBrowser::catalogItemCollapsed(QTreeWidgetItem * item)
 {
   QList<QTreeWidgetItem*> children = item->takeChildren();
-  for ( int i=0 ; i<children.size() ; i++ )
+  for (int i = 0; i<children.size(); i++)
   {
     delete children[i];
   }
@@ -69,45 +123,7 @@ void MaterialBrowser::catalogItemExpanded(QTreeWidgetItem * item)
 {
   GetApp()->setOverrideCursor( Qt::WaitCursor );
 
-  std::vector<std::string> extensions = dp::fx::EffectLibrary::instance()->getRegisteredExtensions();
-
-  QStringList filterList;
-  for ( std::vector<std::string>::const_iterator it = extensions.begin() ; it != extensions.end() ; ++it )
-  {
-    filterList.push_back( QString( "*" ) + it->c_str() );
-  }
-
-  QString filePath = item->data( 0, Qt::UserRole ).toString();
-  QFileInfoList fil = QDir( filePath ).entryInfoList( filterList, QDir::AllDirs | QDir::Files | QDir::NoDotAndDotDot, QDir::DirsFirst );
-  for ( int i=0 ; i<fil.size() ; i++ )
-  {
-    QString filePath = fil[i].absoluteFilePath();
-    if ( fil[i].isDir() )
-    {
-      QTreeWidgetItem * childItem = new QTreeWidgetItem();
-      childItem->setData( 0, Qt::UserRole, filePath );
-      childItem->setText( 0, filePath.section( '/', -1 ) );
-      childItem->setChildIndicatorPolicy( QTreeWidgetItem::ShowIndicator );
-      item->addChild( childItem );
-    }
-    else
-    {
-      std::string fp = filePath.toStdString();
-      dp::util::FileFinder fileFinder( GetApp()->getPreferences()->getMaterialCatalogPath().toStdString() );
-      fileFinder.addSearchPaths( GetApp()->getPreferences()->getSearchPathsAsStdVector() );
-      dp::fx::EffectLibrary::instance()->loadEffects( fp, fileFinder );
-
-      std::vector<std::string> materialNames;
-      dp::fx::EffectLibrary::instance()->getEffectNames( fp, dp::fx::EffectSpec::Type::PIPELINE, materialNames );
-      for ( std::vector<std::string>::const_iterator it = materialNames.begin() ; it != materialNames.end() ; ++it )
-      {
-        QTreeWidgetItem * childItem = new QTreeWidgetItem();
-        childItem->setData( 0, Qt::UserRole, QString( it->c_str() ) );
-        childItem->setText(0, QString(dp::fx::stripNameSpaces(*it).c_str()));
-        item->addChild( childItem );
-      }
-    }
-  }
+  addChildren(item, item->data(0, Qt::UserRole).toString());
 
   GetApp()->restoreOverrideCursor();
 }
@@ -132,17 +148,7 @@ void MaterialBrowser::catalogItemPressed( QTreeWidgetItem * item, int column )
 
 void MaterialBrowser::initMaterialCatalog( QString const & path )
 {
-  QFileInfoList topLevelList = QDir( path ).entryInfoList( QDir::Dirs | QDir::NoDotAndDotDot );
-  for ( int i=0 ; i<topLevelList.size() ; i++ )
-  {
-    DP_ASSERT( topLevelList[i].isDir() );
-    QTreeWidgetItem * topLevelItem = new QTreeWidgetItem();
-    topLevelItem->setChildIndicatorPolicy( QTreeWidgetItem::ShowIndicator );
-    topLevelItem->setData( 0, Qt::UserRole, topLevelList[i].absoluteFilePath() );
-    topLevelItem->setText( 0, topLevelList[i].absoluteFilePath().section( '/', -1 ) );
-
-    m_catalog->addTopLevelItem( topLevelItem );
-  }
+  addChildren(nullptr, path);
 }
 
 void MaterialBrowser::materialCatalogPathChanged( QString const& path )
