@@ -1654,7 +1654,7 @@ inline dp::DataType DPBFLoader::convertDataType( unsigned int dataType )
       return dp::DataType::FLOAT_32; // was DP_FLOAT
     case 7:
       return dp::DataType::FLOAT_64; // was DP_DOUBLE
-    case ~0:
+    case ~0u:
       return dp::DataType::UNKNOWN;
     }
     DP_ASSERT( !"unsupported datatype");
